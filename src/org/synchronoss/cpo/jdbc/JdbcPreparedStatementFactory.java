@@ -37,8 +37,8 @@ import org.synchronoss.cpo.CpoException;
 import org.synchronoss.cpo.CpoReleasible;
 
 /**
- * JdbcCpoAdapter is an interface for a set of routines that are responsible for managing value
- * objects from a datasource.
+ * JdbcPreparedStatementFactory is the object that encapsulates the creation of the actual
+ * PreparedStatement for the JDBC driver. 
  *
  * @author david berry
  */
@@ -60,35 +60,45 @@ public class JdbcPreparedStatementFactory implements CpoReleasible {
     private Collection bindValues_=null;
 
     /**
-     * DOCUMENT ME!
+     * Used to build the PreparedStatement that is used by CPO to create the 
+     * actual JDBC PreparedStatement.
      *
-     * @param conn DOCUMENT ME!
-     * @param jca
-     * @param jq DOCUMENT ME!
-     * @param obj DOCUMENT ME!
-     * @param additionalSql DOCUMENT ME!
+     * The constructor is called by the internal CPO framework. This is not to be used by
+     * users of CPO. Programmers that build Transforms may need to use this object to get access
+     * to the actual connection. 
+     * 
+     * @param conn The actual jdbc connection that will be used to create the callable statement.
+     * @param jca The JdbcCpoAdapter that is controlling this transaction 
+     * @param jq The JdbcQuery that is being executed
+     * @param obj The pojo that is being acted upon
+     * @param additionalSql Additional sql to be appended to the JdbcQuery sql that is used to create the 
+     *        actual JDBC PreparedStatement
      *
-     *
-     * @throws CpoException DOCUMENT ME!
-     * @throws SQLException DOCUMENT ME!
+     * @throws CpoException if a CPO error occurs
+     * @throws SQLException if a JDBC error occurs
      */
     public JdbcPreparedStatementFactory(Connection conn, JdbcCpoAdapter jca, JdbcQuery jq, Object obj, String additionalSql) throws CpoException{
         this(conn, jca, jq, obj, additionalSql, null);
     }
 
     /**
-     * DOCUMENT ME!
+     * Used to build the PreparedStatement that is used by CPO to create the 
+     * actual JDBC PreparedStatement.
      *
-     * @param conn DOCUMENT ME!
-     * @param jca
-     * @param jq DOCUMENT ME!
-     * @param obj DOCUMENT ME!
-     * @param additionalSql DOCUMENT ME!
-     * @param bindValues DOCUMENT ME!
+     * The constructor is called by the internal CPO framework. This is not to be used by
+     * users of CPO. Programmers that build Transforms may need to use this object to get access
+     * to the actual connection. 
+     * 
+     * @param conn The actual jdbc connection that will be used to create the callable statement.
+     * @param jca The JdbcCpoAdapter that is controlling this transaction 
+     * @param jq The JdbcQuery that is being executed
+     * @param obj The pojo that is being acted upon
+     * @param additionalSql Additional sql to be appended to the JdbcQuery sql that is used to create the 
+     *        actual JDBC PreparedStatement
+     * @param bindValues additional bind values from a dynamic where statement
      *
-     *
-     * @throws CpoException DOCUMENT ME!
-     * @throws SQLException DOCUMENT ME!
+     * @throws CpoException if a CPO error occurs
+     * @throws SQLException if a JDBC error occurs
      */
     public JdbcPreparedStatementFactory(Connection conn, JdbcCpoAdapter jca, JdbcQuery jq, Object obj,
         String additionalSql, Collection bindValues) throws CpoException {
@@ -112,17 +122,33 @@ public class JdbcPreparedStatementFactory implements CpoReleasible {
 
     }
     
-    public PreparedStatement getPreparedStatement(){
+    /**
+     * Returns the jdbc prepared statment associated with this 
+     * object
+     */
+     public PreparedStatement getPreparedStatement(){
         return ps_;
     }
-    public void setPreparedStatement(PreparedStatement ps){
+    protected void setPreparedStatement(PreparedStatement ps){
         ps_ = ps;
     }
+    
+    /**
+     * Adds a releasible object to this object. The release method
+     * on the releasible will be called when the PreparedStatement 
+     * is executed.
+     * 
+     */
     public void AddReleasible(CpoReleasible releasible){
         if (releasible!=null)
             releasibles.add(releasible);
         
     }
+
+    /**
+     * Called by the CPO framework. This method calls the <code>release</code>
+     * on all the CpoReleasible associated with this object
+     */
     public void release() throws CpoException{
         Iterator it = releasibles.iterator();
         while (it.hasNext()){
@@ -135,6 +161,11 @@ public class JdbcPreparedStatementFactory implements CpoReleasible {
         }
     }
     
+    /**
+     * Called by the CPO Framework. Binds all the attibutes from the class 
+     * for the CPO meta parameters and the parameters from the dynamic where.
+     *
+     */
     public void bindParameters(Object obj) throws CpoException {
     	int j=0;
         ArrayList parameters=getJdbcQuery().getParameterList();

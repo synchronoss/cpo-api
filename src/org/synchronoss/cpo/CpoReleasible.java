@@ -24,9 +24,19 @@
  
 package org.synchronoss.cpo;
 
+/**
+ * CpoReleasible is a class that can be called during a CpoTransform when there are
+ * resources that need to released after the current prepared statement is processed.
+ *
+ * examples are in the the TransformBlob where there are Oracle resources that must 
+ * exist until the statement is executed.
+ */
 
 public interface CpoReleasible {
 
-    public void release() throws CpoException;
+/**
+ *  release is called by the CPO framework. A transform can register a CpoReleasible that
+ *  will be called when the current prepared or callable statement has been executed.
+ */    public void release() throws CpoException;
 
 }

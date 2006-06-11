@@ -25,9 +25,20 @@ package org.synchronoss.cpo;
  *
  */
 public interface CpoTrxAdapter extends CpoAdapter {
+    
+    /**
+     * Commits the current jdbc connection behind the CpoTrxAdapter
+     */
     public void commit() throws CpoException;
     
+    /**
+     * Rollback the current jdbc connection behind the CpoTrxAdapter
+     */
     public void rollback() throws CpoException;
-    
+
+    /**
+     * Closes the current jdbc connection behind the CpoTrxAdapter. All
+     * subsequent calls to the CpoTrxAdapter will throw an exception.
+     */
     public void close() throws CpoException;
 }

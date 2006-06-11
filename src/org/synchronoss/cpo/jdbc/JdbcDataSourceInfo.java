@@ -34,10 +34,10 @@ import javax.naming.Context;
  *
  */
 public class JdbcDataSourceInfo {
-    public static final int               URL_CONNECTION = 1;
-    public static final int         URL_PROPS_CONNECTION = 2;
-    public static final int URL_USER_PASSWORD_CONNECTION = 3;
-    public static final int              JNDI_CONNECTION = 4;
+    private static final int               URL_CONNECTION = 1;
+    private static final int         URL_PROPS_CONNECTION = 2;
+    private static final int URL_USER_PASSWORD_CONNECTION = 3;
+    private static final int              JNDI_CONNECTION = 4;
     
     private int    connectionType_ = 0;
     
@@ -64,13 +64,28 @@ public class JdbcDataSourceInfo {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-	
+        
+        /**
+         * Creates a JdbcDataSourceInfo from a JNDIName that represents the 
+         * datasource in the application server.
+         *
+         * @param JndiName The JndiName of the app server datasource
+         *
+         */
 	public JdbcDataSourceInfo(String JndiName) {
 		setConnectionType(JNDI_CONNECTION);
 		setJndiName(JndiName);
 		setDataSourceName(JndiName);
 	}
-	
+
+        /**
+         * Creates a JdbcDataSourceInfo from a JNDIName that represents the 
+         * datasource in the application server.
+         *
+         * @param JndiName The JndiName of the app server datasource
+         * @param ctx - The context for which the Jndi Lookup should use.
+         *
+         */
 	public JdbcDataSourceInfo(String JndiName, Context ctx){
 		setConnectionType(JNDI_CONNECTION);
 		setJndiName(JndiName);
@@ -78,6 +93,18 @@ public class JdbcDataSourceInfo {
 		setDataSourceName(JndiName);
 	}
 	
+        /**
+         * Creates a JdbcDataSourceInfo from a Jdbc Driver
+         *
+         * @param driver The text name of the driver
+         * @param url - The url that points to the database.
+         * @int initialConnections - The initial number of connections to be  
+         *                       created in the connection pool
+         * @int maxConnections - The max number of connections of the 
+         *                       connection pool
+         * @int waitIfBusy - If the maxConnections are in use do you wait for a 
+         *                   connection to free up or throw an exception 
+         */
     public JdbcDataSourceInfo(String driver, String url,
 			int initialConnections, int maxConnections, boolean waitIfBusy)
 			throws SQLException {
@@ -91,6 +118,19 @@ public class JdbcDataSourceInfo {
 		setDataSourceName(url);
 	}
 
+        /**
+         * Creates a JdbcDataSourceInfo from a Jdbc Driver
+         *
+         * @param driver The text name of the driver
+         * @param url - The url that points to the database.
+         * @properties - The connection properties for connecting to the database
+         * @int initialConnections - The initial number of connections to be  
+         *                       created in the connection pool
+         * @int maxConnections - The max number of connections of the 
+         *                       connection pool
+         * @int waitIfBusy - If the maxConnections are in use do you wait for a 
+         *                   connection to free up or throw an exception 
+         */
 	public JdbcDataSourceInfo(String driver, String url, Properties properties,
 			int initialConnections, int maxConnections, boolean waitIfBusy)
 			throws SQLException {
@@ -104,6 +144,20 @@ public class JdbcDataSourceInfo {
 		setDataSourceName(BuildDataSourceName(url, properties));
 	}
 
+        /**
+         * Creates a JdbcDataSourceInfo from a Jdbc Driver
+         *
+         * @param driver The text name of the driver
+         * @param url - The url that points to the database.
+         * @username - The username for connecting to the database
+         * @password - The password for connectinf to the database
+         * @int initialConnections - The initial number of connections to be  
+         *                       created in the connection pool
+         * @int maxConnections - The max number of connections of the 
+         *                       connection pool
+         * @int waitIfBusy - If the maxConnections are in use do you wait for a 
+         *                   connection to free up or throw an exception 
+         */
 	public JdbcDataSourceInfo(String driver, String url, String username,
 			String password, int initialConnections, int maxConnections,
 			boolean waitIfBusy) throws SQLException {
@@ -119,34 +173,58 @@ public class JdbcDataSourceInfo {
 		setDataSourceName(url+username);
 	}
 
+        /**
+         * Returns the name of the jdbc driver
+         */
 	public String getDriver() {
 		return driver_;
 	}
 
+        /**
+         * Returns the url to be used to connect to the database
+         */
 	public String getUrl() {
 		return url_;
 	}
 
+        /**
+         * Returns the username to connect to the database
+         */
 	public String getUserName() {
 		return username_;
 	}
 
+        /**
+         * Returns the password to connect to the database
+         */
 	public String getPassword() {
 		return password_;
 	}
 
+        /**
+         * Returns the database connection properties
+         */
 	public Properties getProperties() {
 		return properties_;
 	}
 
+        /**
+         * Returns the max connections for the connection pool
+         */
 	public int getMaxConnections() {
 		return maxConnections_;
 	}
 
+        /**
+         * Returns whether to wait for an available connection
+         */
 	public boolean getWaitIfBusy() {
 		return waitIfBusy_;
 	}
 
+        /**
+         * Returns the type of connection to the database.
+         */
 	public int getConnectionType() {
 		return connectionType_;
 	}
@@ -210,9 +288,9 @@ public class JdbcDataSourceInfo {
 		this.jndiName_ = jndiName_;
 	}
 
-	/**
-	 * @return Returns the initialConnections_.
-	 */
+        /**
+         * Returns the number of initial connections to the database.
+         */
 	public int getInitialConnections() {
 		return initialConnections_;
 	}

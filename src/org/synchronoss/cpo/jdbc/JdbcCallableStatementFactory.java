@@ -35,8 +35,8 @@ import org.synchronoss.cpo.CpoException;
 import org.synchronoss.cpo.CpoReleasible;
 
 /**
- * JdbcCpoAdapter is an interface for a set of routines that are responsible for managing value
- * objects from a datasource.
+ * JdbcCallableStatementFactory is the object that encapsulates the creation of the actual
+ * CallableStatement for the JDBC driver. 
  *
  * @author david berry
  */
@@ -57,15 +57,20 @@ public class JdbcCallableStatementFactory implements CpoReleasible {
  
 
     /**
-     * DOCUMENT ME!
+     * Used to build the CallableStatement that is used by CPO to create the 
+     * actual JDBC CallableStatement.
      *
-     * @param conn DOCUMENT ME!
-     * @param jca
-     * @param jq DOCUMENT ME!
-     * @param obj DOCUMENT ME!
+     * The constructor is called by the internal CPO framework. This is not to be used by
+     * users of CPO. Programmers that build Transforms may need to use this object to get access
+     * to the actual connection. 
+     * 
+     * @param conn The actual jdbc connection that will be used to create the callable statement.
+     * @param jca The JdbcCpoAdapter that is controlling this transaction 
+     * @param jq The JdbcQuery that is being executed
+     * @param obj The pojo that is being acted upon
      *
-    * @throws CpoException DOCUMENT ME!
-     * @throws SQLException DOCUMENT ME!
+     * @throws CpoException if a CPO error occurs
+     * @throws SQLException if a JDBC error occurs
      */
     public JdbcCallableStatementFactory(Connection conn, JdbcCpoAdapter jca, JdbcQuery jq, Object obj) throws CpoException {
         CallableStatement cstmt = null;
@@ -102,22 +107,43 @@ public class JdbcCallableStatementFactory implements CpoReleasible {
 
     }
     
+    /**
+     * returns the jdbc callable statment associated with this 
+     * object
+     */
     public CallableStatement getCallableStatement(){
         return cs_;
     }
-    public void setCallableStatement(CallableStatement cs){
+    
+    protected void setCallableStatement(CallableStatement cs){
         cs_= cs;
     }
+    
+    /**
+     * returns the Out parameters from the callable statement
+     * 
+     */
     public ArrayList getOutParameters(){
         return outParameters;
     }
 
+    /**
+     * Adds a releasible object to this object. The release method
+     * on the releasible will be called when the callableStatement 
+     * is executed.
+     * 
+     */
     public void AddReleasible(CpoReleasible releasible){
         if (releasible!=null)
             releasibles.add(releasible);
         
     }
-    public void release() throws CpoException {
+
+    /**
+     * Called by the CPO framework. This method calls the <code>release</code>
+     * on all the CpoReleasible associated with this object
+     */
+     public void release() throws CpoException {
         Iterator it = releasibles.iterator();
         while (it.hasNext()){
             try{

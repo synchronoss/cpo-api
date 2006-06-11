@@ -139,7 +139,12 @@ public class JdbcCpoAdapter implements CpoAdapter{
     
     private boolean batchUpdatesSupported_=false;
     
-
+/**
+ * Creates a JdbcCpoAdapter.
+ *
+ * @param jdsi This datasource will be used for both the metadata 
+ * and the transaction database.
+ */
     public JdbcCpoAdapter(JdbcDataSourceInfo jdsi)
             throws CpoException {
             
@@ -151,16 +156,31 @@ public class JdbcCpoAdapter implements CpoAdapter{
         metaEqualsWrite_=true;
         
     }
-
-    public JdbcCpoAdapter(JdbcDataSourceInfo jdsiMeta, JdbcDataSourceInfo jdsiWrite)
+    
+/**
+ * Creates a JdbcCpoAdapter.
+ *
+ * @param jdsiMeta This datasource that identifies the cpo metadata datasource 
+ * @param jdsiTrx The datasoruce that identifies the transaction database.
+ */
+    public JdbcCpoAdapter(JdbcDataSourceInfo jdsiMeta, JdbcDataSourceInfo jdsiTrx)
             throws CpoException {
         setMetaDataSource(getDataSource(jdsiMeta));
-        setWriteDataSource(getDataSource(jdsiWrite));
+        setWriteDataSource(getDataSource(jdsiTrx));
         setMetaDataSourceName(jdsiMeta.getDataSourceName());
         setReadDataSource(getWriteDataSource());
         processDatabaseMetaData();
     }
 
+/**
+ * Creates a JdbcCpoAdapter.
+ *
+ * @param jdsiMeta This datasource that identifies the cpo metadata datasource 
+ * @param jdsiWrite The datasource that identifies the transaction database
+ *                  for write transactions.
+ * @param jdsiRead The datasource that identifies the transaction database
+ *                  for read-only transactions.
+ */
     public JdbcCpoAdapter(JdbcDataSourceInfo jdsiMeta, JdbcDataSourceInfo jdsiWrite, JdbcDataSourceInfo jdsiRead)
             throws CpoException {
         setMetaDataSource(getDataSource(jdsiMeta));
@@ -170,7 +190,7 @@ public class JdbcCpoAdapter implements CpoAdapter{
         processDatabaseMetaData();
     }
     
-    public JdbcCpoAdapter(DataSource metaSource, String metaSourceName, Connection c, boolean batchSupported)
+    private JdbcCpoAdapter(DataSource metaSource, String metaSourceName, Connection c, boolean batchSupported)
         throws CpoException {
         setMetaDataSource(metaSource);
         setStaticConnection(c);

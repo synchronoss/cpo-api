@@ -34,10 +34,10 @@ import javax.naming.Context;
  *
  */
 public class JdbcDataSourceInfo {
-    private static final int               URL_CONNECTION = 1;
-    private static final int         URL_PROPS_CONNECTION = 2;
-    private static final int URL_USER_PASSWORD_CONNECTION = 3;
-    private static final int              JNDI_CONNECTION = 4;
+    public static final int               URL_CONNECTION = 1;
+    public static final int         URL_PROPS_CONNECTION = 2;
+    public static final int URL_USER_PASSWORD_CONNECTION = 3;
+    public static final int              JNDI_CONNECTION = 4;
     
     private int    connectionType_ = 0;
     

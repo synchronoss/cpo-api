@@ -190,7 +190,7 @@ public class JdbcCpoAdapter implements CpoAdapter{
         processDatabaseMetaData();
     }
     
-    private JdbcCpoAdapter(DataSource metaSource, String metaSourceName, Connection c, boolean batchSupported)
+    public JdbcCpoAdapter(DataSource metaSource, String metaSourceName, Connection c, boolean batchSupported)
         throws CpoException {
         setMetaDataSource(metaSource);
         setStaticConnection(c);

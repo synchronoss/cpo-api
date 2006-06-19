@@ -34,10 +34,10 @@ import javax.naming.Context;
  *
  */
 public class JdbcDataSourceInfo {
-    public static final int               URL_CONNECTION = 1;
-    public static final int         URL_PROPS_CONNECTION = 2;
-    public static final int URL_USER_PASSWORD_CONNECTION = 3;
-    public static final int              JNDI_CONNECTION = 4;
+    protected static final int               URL_CONNECTION = 1;
+    protected static final int         URL_PROPS_CONNECTION = 2;
+    protected static final int URL_USER_PASSWORD_CONNECTION = 3;
+    protected static final int              JNDI_CONNECTION = 4;
     
     private int    connectionType_ = 0;
     
@@ -98,11 +98,11 @@ public class JdbcDataSourceInfo {
          *
          * @param driver The text name of the driver
          * @param url - The url that points to the database.
-         * @int initialConnections - The initial number of connections to be  
+         * @param initialConnections - The initial number of connections to be  
          *                       created in the connection pool
-         * @int maxConnections - The max number of connections of the 
+         * @param maxConnections - The max number of connections of the 
          *                       connection pool
-         * @int waitIfBusy - If the maxConnections are in use do you wait for a 
+         * @param waitIfBusy - If the maxConnections are in use do you wait for a 
          *                   connection to free up or throw an exception 
          */
     public JdbcDataSourceInfo(String driver, String url,
@@ -123,12 +123,12 @@ public class JdbcDataSourceInfo {
          *
          * @param driver The text name of the driver
          * @param url - The url that points to the database.
-         * @properties - The connection properties for connecting to the database
-         * @int initialConnections - The initial number of connections to be  
+         * @param properties - The connection properties for connecting to the database
+         * @param initialConnections - The initial number of connections to be  
          *                       created in the connection pool
-         * @int maxConnections - The max number of connections of the 
+         * @param maxConnections - The max number of connections of the 
          *                       connection pool
-         * @int waitIfBusy - If the maxConnections are in use do you wait for a 
+         * @param waitIfBusy - If the maxConnections are in use do you wait for a 
          *                   connection to free up or throw an exception 
          */
 	public JdbcDataSourceInfo(String driver, String url, Properties properties,
@@ -149,13 +149,13 @@ public class JdbcDataSourceInfo {
          *
          * @param driver The text name of the driver
          * @param url - The url that points to the database.
-         * @username - The username for connecting to the database
-         * @password - The password for connectinf to the database
-         * @int initialConnections - The initial number of connections to be  
+         * @param username - The username for connecting to the database
+         * @param password - The password for connectinf to the database
+         * @param initialConnections - The initial number of connections to be  
          *                       created in the connection pool
-         * @int maxConnections - The max number of connections of the 
+         * @param maxConnections - The max number of connections of the 
          *                       connection pool
-         * @int waitIfBusy - If the maxConnections are in use do you wait for a 
+         * @param waitIfBusy - If the maxConnections are in use do you wait for a 
          *                   connection to free up or throw an exception 
          */
 	public JdbcDataSourceInfo(String driver, String url, String username,

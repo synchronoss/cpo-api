@@ -32,13 +32,15 @@ import org.synchronoss.cpo.CpoTrxAdapter;
 public class JdbcCpoTrxAdapter extends JdbcCpoAdapter implements CpoTrxAdapter {
     /** Version Id for this class. */
     private static final long serialVersionUID=1L;
+    
+    private JdbcCpoTrxAdapter(){}
+    
+    protected JdbcCpoTrxAdapter(DataSource metaSource, String metaSourceName, Connection c, 
+                    boolean batchSupported) throws CpoException {
+            super(metaSource, metaSourceName, c, batchSupported);
+            // TODO Auto-generated constructor stub
+    }
 
-
-	public JdbcCpoTrxAdapter(DataSource metaSource, String metaSourceName, Connection c, 
-			boolean batchSupported) throws CpoException {
-		super(metaSource, metaSourceName, c, batchSupported);
-		// TODO Auto-generated constructor stub
-	}
     public void commit() throws CpoException {
     	Connection writeConnection = getStaticConnection();
     	if (writeConnection!=null){

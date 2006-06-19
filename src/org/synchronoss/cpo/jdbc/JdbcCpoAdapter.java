@@ -139,6 +139,8 @@ public class JdbcCpoAdapter implements CpoAdapter{
     
     private boolean batchUpdatesSupported_=false;
     
+    protected JdbcCpoAdapter(){}
+    
 /**
  * Creates a JdbcCpoAdapter.
  *
@@ -190,7 +192,7 @@ public class JdbcCpoAdapter implements CpoAdapter{
         processDatabaseMetaData();
     }
     
-    public JdbcCpoAdapter(DataSource metaSource, String metaSourceName, Connection c, boolean batchSupported)
+    protected JdbcCpoAdapter(DataSource metaSource, String metaSourceName, Connection c, boolean batchSupported)
         throws CpoException {
         setMetaDataSource(metaSource);
         setStaticConnection(c);

@@ -974,25 +974,37 @@ public interface CpoAdapter extends java.io.Serializable {
      * class SomeObject so = new SomeObject();<br>
      * class CpoAdapter cpo = null;<br>
      * <br>
+     * 		</code><ul><code>
      * 		try {<br>
+     * 			</code><ul><code>
      * 			cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));<br>
+     * 			</code></ul><code>
      * 		} catch (CpoException ce) {<br>
+     * 			</code><ul><code>
      * 			// Handle the error<br>
      * 			cpo = null;<br>
+     * 			</code></ul><code>
      * 		}<br>
-     *<br> 		
+     * 		<br>
      * 		if (cpo!=null) {<br>
+     * 			</code><ul><code>
      * 			so.setId(1);<br>
      * 			so.setName("SomeName");<br>
      * 			try{<br>
+     * 				</code><ul><code>
      * 				cpo.persistObject(so);<br>
+     * 				</code></ul><code>
      * 			} catch (CpoException ce) {<br>
-     * 				// Handle the error<br>
+     * 				</code><ul><code>
+     * 				// Handle the error
+     * 				</code></ul><code>
      * 			}<br>
+     * 			</code></ul><code>
      * 		}<br>
-     *</code> <br>		
+     * 		</code></ul><code>
+     *</code> 		
      * <br>
-     *
+     * 
      * @param obj This is an object that has been defined within the metadata of the datasource. If
      *        the class is not defined an exception will be thrown.
      *
@@ -1014,29 +1026,41 @@ public interface CpoAdapter extends java.io.Serializable {
      * in the datasource.<br>
      * <br>
      * Example:<br>
-     * <br><code>
+     * <code><br>
      * class SomeObject so = new SomeObject();<br>
      * class CpoAdapter cpo = null;<br>
      * <br>
+     * 		</code><ul><code>
      * 		try {<br>
+     * 			</code><ul><code>
      * 			cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));<br>
+     * 			</code></ul><code>
      * 		} catch (CpoException ce) {<br>
+     * 			</code><ul><code>
      * 			// Handle the error<br>
      * 			cpo = null;<br>
+     * 			</code></ul><code>
      * 		}<br>
-     *<br> 		
+     * 		<br>
      * 		if (cpo!=null) {<br>
+     * 			</code><ul><code>
      * 			so.setId(1);<br>
      * 			so.setName("SomeName");<br>
      * 			try{<br>
-     * 				cpo.persistObject("PersistSomeObject",so);<br>
+     * 				</code><ul><code>
+     * 				cpo.persistObject("persistSomeObject",so);<br>
+     * 				</code></ul><code>
      * 			} catch (CpoException ce) {<br>
-     * 				// Handle the error<br>
+     * 				</code><ul><code>
+     * 				// Handle the error
+     * 				</code></ul><code>
      * 			}<br>
+     * 			</code></ul><code>
      * 		}<br>
-     *</code> <br>		
+     * 		</code></ul><code>
+     *</code> 		
      * <br>
-     *
+     * 
      * @param name The name which identifies which EXISTS, INSERT, and UPDATE Query groups to
      *        execute to persist the object.
      * @param obj This is an object that has been defined within the metadata of the datasource. If
@@ -1338,29 +1362,40 @@ public interface CpoAdapter extends java.io.Serializable {
      * an exception will be thrown
      * <br>
      * Example:<br>
-     * <br><code>
+     * <code><br>
      * class SomeObject so = new SomeObject();<br>
      * class CpoAdapter cpo = null;<br>
      * <br>
+     * 		</code><ul><code>
      * 		try {<br>
+     * 			</code><ul><code>
      * 			cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));<br>
+     * 			</code></ul><code>
      * 		} catch (CpoException ce) {<br>
+     * 			</code><ul><code>
      * 			// Handle the error<br>
      * 			cpo = null;<br>
+     * 			</code></ul><code>
      * 		}<br>
-     *<br> 		
+     * 		<br>
      * 		if (cpo!=null) {<br>
+     * 			</code><ul><code>
      * 			so.setId(1);<br>
      * 			so.setName("SomeName");<br>
      * 			try{<br>
+     * 				</code><ul><code>
      * 				cpo.updateObject(so);<br>
+     * 				</code></ul><code>
      * 			} catch (CpoException ce) {<br>
-     * 				// Handle the error<br>
+     * 				</code><ul><code>
+     * 				// Handle the error
+     * 				</code></ul><code>
      * 			}<br>
+     * 			</code></ul><code>
      * 		}<br>
-     *</code> <br>		
+     * 		</code></ul><code>
+     *</code> 		
      * <br>
-     *
      * 
      * @param obj This is an object that has been defined within the metadata of the datasource. If
      *        the class is not defined an exception will be thrown.
@@ -1377,29 +1412,41 @@ public interface CpoAdapter extends java.io.Serializable {
      * an exception will be thrown
      * <br>
      * Example:<br>
-     * <br><code>
+     * <code><br>
      * class SomeObject so = new SomeObject();<br>
      * class CpoAdapter cpo = null;<br>
      * <br>
+     * 		</code><ul><code>
      * 		try {<br>
+     * 			</code><ul><code>
      * 			cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));<br>
+     * 			</code></ul><code>
      * 		} catch (CpoException ce) {<br>
+     * 			</code><ul><code>
      * 			// Handle the error<br>
      * 			cpo = null;<br>
+     * 			</code></ul><code>
      * 		}<br>
-     *<br> 		
+     * 		<br>
      * 		if (cpo!=null) {<br>
+     * 			</code><ul><code>
      * 			so.setId(1);<br>
      * 			so.setName("SomeName");<br>
      * 			try{<br>
-     * 				cpo.updateObject("UpdateSomeObject",so);<br>
+     * 				</code><ul><code>
+     * 				cpo.updateObject("updateSomeObject",so);<br>
+     * 				</code></ul><code>
      * 			} catch (CpoException ce) {<br>
-     * 				// Handle the error<br>
+     * 				</code><ul><code>
+     * 				// Handle the error
+     * 				</code></ul><code>
      * 			}<br>
+     * 			</code></ul><code>
      * 		}<br>
-     *</code> <br>		
+     * 		</code></ul><code>
+     *</code> 		
      * <br>
-     *
+     * 
      * @param name The <code>String</code> name of the UPDATE Query group that will be used to create the object
      *             in the datasource. <code>null</code> signifies that the default rules will be used.
      * @param obj This is an object that has been defined within the metadata of the datasource. If

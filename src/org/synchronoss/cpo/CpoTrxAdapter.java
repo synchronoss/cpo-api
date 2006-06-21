@@ -21,23 +21,25 @@
 package org.synchronoss.cpo;
 
 /**
- * @author david.berry
+ * CpoTrxAdapter adds commit, rollback, and close functionality to the methods already
+ * in CpoAdapter. This allows the user to control the transaction boundries of CPO.
  *
+ * @author david berry
  */
 public interface CpoTrxAdapter extends CpoAdapter {
     
     /**
-     * Commits the current jdbc connection behind the CpoTrxAdapter
+     * Commits the current transaction behind the CpoTrxAdapter
      */
     public void commit() throws CpoException;
     
     /**
-     * Rollback the current jdbc connection behind the CpoTrxAdapter
+     * Rollback the current transaction behind the CpoTrxAdapter
      */
     public void rollback() throws CpoException;
 
     /**
-     * Closes the current jdbc connection behind the CpoTrxAdapter. All
+     * Closes the current transaction behind the CpoTrxAdapter. All
      * subsequent calls to the CpoTrxAdapter will throw an exception.
      */
     public void close() throws CpoException;

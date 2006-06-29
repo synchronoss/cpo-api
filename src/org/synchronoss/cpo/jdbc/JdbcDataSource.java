@@ -106,54 +106,56 @@ public class JdbcDataSource implements DataSource {
     throws SQLException {
         Connection connection = null;
         
-        synchronized(availableConnections) {
+        for(;;){
         
-	    	for(;;){
-	    		if (availableConnections.isEmpty())
-	    			break;
-	    		connection = (Connection) availableConnections.lastElement();
-	    		availableConnections.removeElement(connection);
-	    		
-	    		if (connection.isClosed() || isConnectionInvalid(connection)) {
-	    			connection=null;
-	    		} else {
-	                busyConnections.addElement(connection);
-	                connection = new JdbcConnection(this, connection);
-	                break;
-	    		}
-	    	}
-    
-		     if(connection==null) {
-	
-	            // Three possible cases:
-	            // 1) You haven't reached maxConnections limit. So
-	            //    establish one in the background if there isn't
-	            //    already one pending, then wait for
-	            //    the next available connection (whether or not
-	            //    it was the newly established one).
-	            // 2) You reached maxConnections limit and waitIfBusy
-	            //    flag is false. Throw SQLException in such a case.
-	            // 3) You reached maxConnections limit and waitIfBusy
-	            //    flag is true. Then do the same thing as in second
-	            //    part of step 1: wait for next available connection.
-	
-	            if((totalConnections() < getDataSourceInfo().getMaxConnections())) {
-	            	availableConnections.addElement(makeNewConnection());
-	             } else if(!getDataSourceInfo().getWaitIfBusy()) {
-	                throw new SQLException("Connection limit reached");
-	            }
-	                      
-	            while (availableConnections.isEmpty()) {
-	            }
-	            
-	    		connection = (Connection) availableConnections.lastElement();
-	    		availableConnections.removeElement(connection);
-	    		busyConnections.addElement(connection);
-	            connection = new JdbcConnection(this, connection);
-	        }
+            synchronized(availableConnections) { 
+                for(;;){
+                    if (availableConnections.isEmpty())
+                            break;
+                    connection = (Connection) availableConnections.lastElement();
+                    availableConnections.removeElement(connection);
+
+                    if (connection.isClosed() || isConnectionInvalid(connection)) {
+                            connection=null;
+                    } else {
+                        busyConnections.addElement(connection);
+                        break;
+                    }
+                }
+            }
+
+            if(connection==null) {
+
+                // Three possible cases:
+                // 1) You haven't reached maxConnections limit. So
+                //    establish one in the background if there isn't
+                //    already one pending, then wait for
+                //    the next available connection (whether or not
+                //    it was the newly established one).
+                // 2) You reached maxConnections limit and waitIfBusy
+                //    flag is false. Throw SQLException in such a case.
+                // 3) You reached maxConnections limit and waitIfBusy
+                //    flag is true. Then do the same thing as in second
+                //    part of step 1: wait for next available connection.
+
+                synchronized(availableConnections) {        
+
+                    if((totalConnections() < getDataSourceInfo().getMaxConnections())) {
+                        availableConnections.addElement(makeNewConnection());
+                     } else if(!getDataSourceInfo().getWaitIfBusy()) {
+                        throw new SQLException("Connection limit reached");
+                    }
+                }
+
+                while (availableConnections.isEmpty()) {
+                    Thread.currentThread().yield();
+                }
+           } else {
+                break; // we have a connection so get out of the outer loop
+           }
         }
 
-        return connection;
+        return new JdbcConnection(this, connection);
     }
 
     // This explicitly makes a new connection. Called in

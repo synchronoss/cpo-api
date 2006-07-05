@@ -197,6 +197,7 @@ public class JdbcCpoAdapter implements CpoAdapter{
         setMetaDataSource(metaSource);
         setStaticConnection(c);
         setMetaDataSourceName(metaSourceName);
+        batchUpdatesSupported_ = batchSupported;
     }
 
     private DataSource getDataSource(JdbcDataSourceInfo jdsi) throws CpoException {
@@ -220,10 +221,10 @@ public class JdbcCpoAdapter implements CpoAdapter{
         return ds;
     }
     
-    private void processDatabaseMetaData(){
-        
+    private void processDatabaseMetaData() throws CpoException {
+        Connection c=null;
         try{
-            Connection c = getWriteConnection();
+            c = getWriteConnection();
             DatabaseMetaData dmd = c.getMetaData();
             
             // do all the tests here
@@ -231,7 +232,9 @@ public class JdbcCpoAdapter implements CpoAdapter{
             
             this.closeConnection(c);
         }catch (Exception e){
-            
+            throw new CpoException("Could Not Retrieve Database Meta Data");
+        }finally {
+            closeConnection(c);
         }
     }
 
@@ -1427,7 +1430,7 @@ public class JdbcCpoAdapter implements CpoAdapter{
      * @return DOCUMENT ME!
      *
      * @throws CpoException Thrown if there are errors accessing the datasource
-    *
+     *
      * @see #existsObject
      * @see #insertObject
      * @see #updateObject
@@ -1495,7 +1498,7 @@ public class JdbcCpoAdapter implements CpoAdapter{
      * @return DOCUMENT ME!
      *
      * @throws CpoException Thrown if there are errors accessing the datasource
-    *
+     *
      * @see #existsObject
      * @see #insertObject
      * @see #updateObject
@@ -1608,6 +1611,42 @@ public class JdbcCpoAdapter implements CpoAdapter{
         Collection orderBy) throws CpoException {
         return processSelectGroup(name, criteria, result, where, orderBy, false);
     }
+    
+    /**
+     * Retrieves the Object from the datasource. This method returns an Iterator immediately. The 
+     * iterator will get filled asynchronously by the cpo framework. The framework will stop supplying
+     * the iterator with objects if the objectBufferSize is reached.
+     * 
+     * If the consumer of the iterator is processing records faster than the framework is filling it,
+     * then the iterator will wait until it has data to provide.
+     *
+     * @param name The filter name which tells the datasource which objects should be returned. The
+     *        name also signifies what data in the object will be  populated.
+     * @param criteria This is an object that has been defined within the metadata of the
+     *        datasource. If the class is not defined an exception will be thrown. If the object
+     *        does not exist in the datasource, an exception will be thrown. This object is used
+     *        to specify the parameters used to retrieve the  collection of objects.
+     * @param result This is an object that has been defined within the metadata of the datasource.
+     *        If the class is not defined an exception will be thrown. If the object does not
+     *        exist in the datasource, an exception will be thrown. This object is used to specify
+     *        the object type that will be returned in the  collection.
+     * @param where The <code>CpoWhere</code> object that defines the constraints that should be
+     *              used when retrieving objects
+     * @param orderBy The <code>CpoOrderBy</code> object that defines the order in which objects
+     *                should be returned
+     * @param objectBufferSize the maximum number of objects that the Iterator is allowed to cache.
+     *        Once reached, the CPO framework will halt processing records from the datasource.
+     *
+     * @return An iterator that will be fed objects from the CPO framework.
+     *
+     * @throws CpoException Thrown if there are errors accessing the datasource
+     */
+    public Iterator retrieveObjects(String name, Object criteria, Object result, CpoWhere where,
+        Collection orderBy, int objectBufferSize) throws CpoException {
+        return new JdbcCpoIterator(100);
+        //return processSelectGroup(name, criteria, result, where, orderBy, false);
+    }
+
 
     /**
      * Allows you to perform a series of object interactions with the database. This method
@@ -1896,7 +1935,7 @@ public class JdbcCpoAdapter implements CpoAdapter{
      * 
      * @param coll This is a collection of objects that have been defined within  the metadata of
      *        the datasource. If the class is not defined an exception will be thrown.
-
+     *
      * @return The number of objects updated in the datasource
      *
      * @throws CpoException Thrown if there are errors accessing the datasource
@@ -2486,6 +2525,10 @@ public class JdbcCpoAdapter implements CpoAdapter{
                 meta=getMetaConnection();
             }
             result=processSelectGroup(obj, groupName, c, meta);
+            
+            // The select may have a for update clause on it
+            // Since the connection is cached we need to get rid of this
+            commitConnection(c);
         } catch(Exception e) {
             // Any exception has to try to rollback the work;
             try {
@@ -2674,6 +2717,21 @@ public class JdbcCpoAdapter implements CpoAdapter{
                 meta=getMetaConnection();
             }
             resultSet=processSelectGroup(name, criteria, result, where, orderBy, con, meta, useRetrieve);
+            // The select may have a for update clause on it
+            // Since the connection is cached we need to get rid of this
+            commitConnection(con);
+        } catch(Exception e) {
+            // Any exception has to try to rollback the work;
+            try {
+                rollbackConnection(con);
+            } catch(Exception re) {
+            }
+            
+            if (e instanceof CpoException)
+                throw (CpoException)e;
+            else
+            throw new CpoException("processSelectGroup(String name, Object criteria, Object result,CpoWhere where, Collection orderBy, boolean useRetrieve) failed",
+                e);
         } finally {
             closeConnection(con);
             closeConnection(meta);

@@ -89,7 +89,7 @@ public class RollbackTestTrx extends TestCase {
         metaPassword_ = b.getString(PROP_METAPASSWORD).trim();
         
         try {
-            jdbcCpo_ = new JdbcCpoAdapter(new JdbcDataSourceInfo(metaDriver_,metaUrl_, metaUser_, metaPassword_,1,1,false),new JdbcDataSourceInfo(dbDriver_,dbUrl_, dbUser_, dbPassword_,1,1,false));
+            jdbcCpo_ = new JdbcCpoAdapter(new JdbcDataSourceInfo(metaDriver_,metaUrl_, metaUser_, metaPassword_,1,1,false),new JdbcDataSourceInfo(dbDriver_,dbUrl_, dbUser_, dbPassword_,1,2,false));
             jdbcIdo_ = jdbcCpo_.getCpoTrxAdapter();
             assertNotNull(method+"CpoAdapter is null", jdbcIdo_);
         } catch(Exception e) {
@@ -99,7 +99,9 @@ public class RollbackTestTrx extends TestCase {
         vo.setAttrVarChar("Test");
         try{
              jdbcIdo_.insertObject(vo);
+             jdbcIdo_.commit();
         } catch (Exception e) {
+            try{jdbcIdo_.rollback();}catch (Exception e1){}
             e.printStackTrace();
             fail(method+e.getMessage());
         }
@@ -112,10 +114,14 @@ public class RollbackTestTrx extends TestCase {
         ValueObject vo = new ValueObject(1);
         try{
              jdbcIdo_.deleteObject(vo);
+             jdbcIdo_.commit();
         } catch (Exception e) {
+            try{jdbcIdo_.rollback();}catch (Exception e1){}
             e.printStackTrace();
+        } finally {
+            try{jdbcIdo_.close();}catch (Exception e1){}
+            jdbcIdo_=null;
         }
-        jdbcIdo_=null;
     }
 
     /**

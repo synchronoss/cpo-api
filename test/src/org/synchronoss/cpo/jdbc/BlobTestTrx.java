@@ -462,17 +462,19 @@ public class BlobTestTrx extends TestCase {
             try{
                 jdbcIdo_.deleteObjects("deleteLVO",al);
                 jdbcIdo_.commit();
-                jdbcIdo_.close();
             } catch (Exception ie){
                 logger.error("error deleting lobs");
                 try{jdbcIdo_.rollback();}catch(Exception e){}
                 try{jdbcIdo_.close();}catch(Exception e){}
                 fail(ie.getMessage());
+            } finally {
+                try{jdbcIdo_.close();}catch (Exception e1){}
+                jdbcIdo_=null;
             }
+        } else {
+            try{jdbcIdo_.close();}catch (Exception e1){}
+            jdbcIdo_=null;
         }
-        
-        jdbcIdo_=null;
-        
 
 
     }

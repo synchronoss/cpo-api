@@ -1,5 +1,5 @@
 /**
- * RollbackTest.java  
+ * SelectForUpdateTest.java  
  * 
  *  Copyright (C) 2006  David E. Berry
  *
@@ -102,13 +102,32 @@ public class SelectForUpdateTest extends TestCase {
         } catch(Exception e) {
             logger.debug(e.getLocalizedMessage());
         }
+        ValueObject vo = new ValueObject(1);
+        try{
+             jdbcIdo_.insertObject(vo);
+             jdbcIdo_.commit();
+        } catch (Exception e) {
+            try{jdbcIdo_.rollback();} catch (Exception e1){};
+            e.printStackTrace();
+            fail(method+e.getMessage());
+        }
     }
 
     /**
      * DOCUMENT ME!
      */
     public void tearDown() {
-        jdbcIdo_=null;
+        ValueObject vo = new ValueObject(1);
+        try{
+             jdbcIdo_.deleteObject(vo);
+             jdbcIdo_.commit();
+        } catch (Exception e) {
+            try{jdbcIdo_.rollback();} catch (Exception e1){};
+            e.printStackTrace();
+        } finally {
+            try{jdbcIdo_.close();}catch (Exception e1){}
+            jdbcIdo_=null;
+        }
     }
 
     /**
@@ -116,14 +135,9 @@ public class SelectForUpdateTest extends TestCase {
      */
     public void testSelect4UpdateSingleObject() {
         if (hasSelect4UpdateSupport) {
-            String method = "testRollbackProcessUpdateCollection:";
-            ValueObject vo = new ValueObject(2);
+            String method = "testSelect4UpdateSingleObject:";
             ValueObject vo2 = new ValueObject(1);
-            ArrayList al = new ArrayList();
-
-            al.add(vo);
-            al.add(vo2);
-
+ 
             try{
                 jdbcIdo_.retrieveObject("SelectForUpdate",vo2);
             } catch (Exception e) {
@@ -146,7 +160,7 @@ public class SelectForUpdateTest extends TestCase {
                     fail(method+"Rollback failed:"+ce.getLocalizedMessage());
 
                 }
-                fail(method+"Insert should have thrown an exception");
+                fail(method+"Commit should have worked.");
             }
             try{
                 jdbcCpo_.retrieveObject("Select4UpdateNoWait",vo2);

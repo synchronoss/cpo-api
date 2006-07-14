@@ -2300,7 +2300,7 @@ public class JdbcCpoAdapter implements CpoAdapter{
      */
     protected void closeConnection(Connection connection) {
         try {
-            if((connection!=null)&&connection!=writeConnection_) {
+            if((connection!=null)&&(connection.isClosed()==false)&&connection!=writeConnection_) {
                 connection.close();
             }
         } catch(SQLException e) {

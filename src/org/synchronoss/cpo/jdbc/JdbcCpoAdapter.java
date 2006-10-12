@@ -2634,7 +2634,7 @@ public class JdbcCpoAdapter implements CpoAdapter{
                         recordsExist=true;
                         recordCount++;
                         for(k=1; k<=rsmd.getColumnCount(); k++) {
-                            attribute=(JdbcAttribute) (jmcAttrMap.get(rsmd.getColumnName(k).toUpperCase()));
+                            attribute=(JdbcAttribute) (jmcAttrMap.get(rsmd.getColumnName(k)));
                             
                             if(attribute!=null) {
                                 attribute.invokeSetter(rObj, rs, k);
@@ -2846,7 +2846,7 @@ public class JdbcCpoAdapter implements CpoAdapter{
                 } catch(Exception e) {
                 }
 
-                logger.info("=================== "+resultSet.size()+" Records - Class=<"+criteria.getClass()+"> Type=<"+JdbcCpoAdapter.LIST_GROUP+"> Name=<"+name+"> ====================");
+                logger.info("=================== "+resultSet.size()+" Records - Class=<"+criteria.getClass()+"> Type=<"+JdbcCpoAdapter.LIST_GROUP+"> Name=<"+name+"> Result=<"+result.getClass()+"> ====================");
             }
         } catch(SQLException e) {
             String msg=
@@ -3262,7 +3262,7 @@ public class JdbcCpoAdapter implements CpoAdapter{
      */
     private void loadAttributeMap(String name, Connection c, JdbcMetaClass jmc)
         throws CpoException {
-        String sql="select UPPER(cam.column_name), cam.attribute, cc.class_id, cam.column_type, cam.db_table, cam.db_column, cam.transform_class from cpo_attribute_map cam, cpo_class cc where cc.name = ? and cam.class_id = cc.class_id";
+        String sql="select cam.column_name, cam.attribute, cc.class_id, cam.column_type, cam.db_table, cam.db_column, cam.transform_class from cpo_attribute_map cam, cpo_class cc where cc.name = ? and cam.class_id = cc.class_id";
         PreparedStatement ps=null;
         ResultSet rs=null;
         HashMap aMap=null;
@@ -3370,7 +3370,7 @@ public class JdbcCpoAdapter implements CpoAdapter{
         StringBuffer sqlBuffer=new StringBuffer();
         sqlBuffer.append("select ");
         sqlBuffer.append(
-            " innr.group_type,innr.name,innr.query_id,innr.query_seq query_seq,cqt.sql_text,innr.param_seq param_seq,  cam.attribute, UPPER(cam.column_name), cam.column_type, innr.param_type ");
+            " innr.group_type,innr.name,innr.query_id,innr.query_seq query_seq,cqt.sql_text,innr.param_seq param_seq,  cam.attribute, cam.column_name, cam.column_type, innr.param_type ");
         sqlBuffer.append("from ");
         sqlBuffer.append("  cpo_query_text cqt,  ");
         sqlBuffer.append(

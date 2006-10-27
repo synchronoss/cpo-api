@@ -182,7 +182,10 @@ public class JdbcCpoWhere extends Node implements CpoWhere{
             }
             
             if (getAttributeFunction()!=null){
-                sb.append(buildFunction(getAttributeFunction(),attribute.getName(),fullyQualifiedColumn));
+            	if (attribute!=null)
+            		sb.append(buildFunction(getAttributeFunction(),attribute.getName(),fullyQualifiedColumn));
+            	else
+            		sb.append(getAttributeFunction());
             } else {
                 sb.append(fullyQualifiedColumn);
             }
@@ -198,16 +201,21 @@ public class JdbcCpoWhere extends Node implements CpoWhere{
 
             if(getValue()!=null) {
                 if (getValueFunction()!=null){
-                    sb.append(buildFunction(getValueFunction(), attribute.getName(),"?"));
+                    sb.append(buildFunction(getValueFunction(), attribute==null?getAttribute():attribute.getName(),"?"));
                 } else {
                     sb.append("?");        // add the parameter, we will bind it later.
                 }
             } else if(getRightAttribute()!=null) {
                 attribute = (JdbcAttribute) jmc.getColumnMap().get(getRightAttribute());
-                String fullyQualifiedColumn = attribute.getDbTable()+"."+attribute.getDbColumn();
+                String fullyQualifiedColumn = null;
+                if (attribute==null){
+                	fullyQualifiedColumn=getRightAttribute();
+                } else {
+                	fullyQualifiedColumn=attribute.getDbTable()+"."+attribute.getDbColumn();
+                }
 
                 if (getRightAttributeFunction()!=null) {
-                    sb.append(buildFunction(getRightAttributeFunction(),attribute.getName(),fullyQualifiedColumn));
+                    sb.append(buildFunction(getRightAttributeFunction(),attribute==null?getAttribute():attribute.getName(),fullyQualifiedColumn));
                 } else {
                     sb.append(fullyQualifiedColumn);
                 }

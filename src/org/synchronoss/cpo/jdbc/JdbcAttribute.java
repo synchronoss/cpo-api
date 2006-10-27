@@ -167,13 +167,13 @@ public class JdbcAttribute extends java.lang.Object implements java.io.Serializa
             setGetters(findMethods(jmc, getGetterName(),0,true));
         }
         catch (CpoException ce1){
-            failedMessage.append(ce1.getMessage()+"\r\n");
+            failedMessage.append(ce1.getMessage());
         }
         try{
             setSetters(findMethods(jmc, getSetterName(),1,false));
         }
         catch (Exception ce2){
-            failedMessage.append(ce2.getMessage()+"\r\n");
+            failedMessage.append(ce2.getMessage());
         }
 
         if(failedMessage.length()>0) {
@@ -448,8 +448,18 @@ public class JdbcAttribute extends java.lang.Object implements java.io.Serializa
         Method[] m = null;
         
         try{
-        	if (className!=null){
-	            transformClass = Class.forName(className);
+        	if (className!=null && className.length()>0){
+	            try {
+	            	transformClass = Class.forName(className);
+	            } catch (Exception e){
+	            	String msg=e.getLocalizedMessage();
+	            	if (msg==null&&e.getCause()!=null)
+	            		msg=e.getCause().getLocalizedMessage();
+	            	
+	                logger.error("Invalid Transform Class specified:<"+className+">");
+	                throw new CpoException("Invalid Transform Class specified:<"+className+">:");
+	            }
+	            
 	            this.transformObject_ = transformClass.newInstance();
 	            m=transformClass.getMethods();
 	
@@ -471,8 +481,8 @@ public class JdbcAttribute extends java.lang.Object implements java.io.Serializa
 	            }
 	            
 	            if (transformIn_==null && transformPSOut_==null&&transformCSOut_==null){
-	                logger.error("Invalid Transform Class specified");
-	                throw new CpoException("Invalid Transform Class specified");
+	                logger.error("Invalid Transform Class specified:<"+className+">: Abstract Methods not Found");
+	                throw new CpoException("Invalid Transform Class specified:<"+className+">: Abstract Methods not Found");
 	            }
 	            
         	}

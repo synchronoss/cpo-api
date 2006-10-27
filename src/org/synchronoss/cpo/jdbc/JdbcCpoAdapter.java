@@ -3296,14 +3296,15 @@ public class JdbcCpoAdapter implements CpoAdapter{
                             cMap.put(attribute.getName(), attribute);
                         } catch(CpoException ce) {
                             failed=true;
-                            failedMessage.append(ce.getMessage());
-                            failedMessage.append("\r\n");
+                            String msg = ce.getLocalizedMessage();
+                            if (msg==null&&ce.getCause()!=null)
+                            	msg = ce.getCause().getLocalizedMessage();
+                            failedMessage.append(msg);
                         }
                     } while(rs.next());
 
                     if(failed==true) {
-                        throw new CpoException("\r\nError processing Attributes for:"+name+"\r\n"+
-                            failedMessage.toString());
+                        throw new CpoException("Error processing Attributes for:"+name+failedMessage.toString());
                     }
                 } else {
                     throw new CpoException("No Attributes found for class:"+name);

@@ -70,6 +70,7 @@ public class InsertObjectTest extends TestCase {
 
     private CpoAdapter jdbcIdo_ = null;
     
+    private boolean hasMilliSupport = true;
     
     public InsertObjectTest(String name) {
         super(name);
@@ -94,6 +95,11 @@ public class InsertObjectTest extends TestCase {
         metaDriver_ = b.getString(PROP_METADRIVER).trim();
         metaUser_ = b.getString(PROP_METAUSER).trim();
         metaPassword_ = b.getString(PROP_METAPASSWORD).trim();
+
+        if ("com.mysql.jdbc.Driver".equals(dbDriver_)){
+        	hasMilliSupport = false;
+        }
+        
         
         try{
             jdbcIdo_ = new CpoAdapterBean(new JdbcCpoAdapter(new JdbcDataSourceInfo(metaDriver_,metaUrl_, metaUser_, metaPassword_,1,1,false),new JdbcDataSourceInfo(dbDriver_,dbUrl_, dbUser_, dbPassword_,1,1,false)));
@@ -103,13 +109,19 @@ public class InsertObjectTest extends TestCase {
         }
     }
     
-    public void testExistsObject() {
-        String method = "testExistsObject:";
+    public void testInsertObject() {
+        String method = "testInsertObject:";
         ValueObject valObj = new ValueObject(5);
         
         valObj.setAttrVarChar("testInsert");
         valObj.setAttrInteger(3);
-        valObj.setAttrTimestamp(new Timestamp(System.currentTimeMillis()));
+        Timestamp ts = new Timestamp(System.currentTimeMillis());
+        
+        if (!hasMilliSupport)
+        	ts.setNanos(0);
+
+        valObj.setAttrDateTime(ts);
+        
         valObj.setAttrBit(true);
         
         al.add(valObj);
@@ -126,7 +138,7 @@ public class InsertObjectTest extends TestCase {
             assertTrue("Ids do not match", vo.getId()==valObj.getId());
             assertTrue("Integers do not match", vo.getAttrInteger()==valObj.getAttrInteger());
             assertEquals("Strings do not match", vo.getAttrVarChar(), valObj.getAttrVarChar());
-            assertEquals("Timestamps do not match", vo.getAttrTimestamp(), valObj.getAttrTimestamp());
+            assertEquals("Timestamps do not match", vo.getAttrDateTime(), valObj.getAttrDateTime());
             assertTrue("boolean not stored correctly", vo.getAttrBit());
             
        } catch (Exception e) {

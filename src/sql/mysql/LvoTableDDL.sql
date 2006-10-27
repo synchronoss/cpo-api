@@ -22,12 +22,13 @@
 ----------------------------------------------
 -- LOB_TEST
 ----------------------------------------------
-DROP TABLE IF EXISTS LOB_TEST
+DROP TABLE IF EXISTS lob_test
 ;
-CREATE TABLE IF NOT EXISTS LOB_TEST (
-       LOB_ID               INT NOT NULL,
-       B_LOB                MEDIUMBLOB NULL,
-       C_LOB                MEDIUMTEXT NULL
+CREATE TABLE IF NOT EXISTS lob_test (
+       lob_id               INT NOT NULL,
+       b_lob                MEDIUMBLOB NULL,
+       b_lob2                MEDIUMBLOB NULL,
+       c_lob                MEDIUMTEXT NULL
 )
 ENGINE = 'InnoDB';
 

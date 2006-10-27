@@ -87,11 +87,11 @@ public class CpoException extends Exception  {
      * exception if there is one.
      */
     public String getMessage() {
-        StringBuffer msg=new StringBuffer("\r\n");
+        StringBuffer msg=new StringBuffer("\n");
 
         msg.append(super.getMessage());
         if(detail != null) {
-            msg.append("\r\n");
+            msg.append("\n");
             msg.append(detail.getMessage());
         }
         return msg.toString();

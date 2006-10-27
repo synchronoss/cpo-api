@@ -143,6 +143,12 @@ public class SelectForUpdateTest extends TestCase {
             } catch (Exception e) {
                 fail(method+"Select For Update should work:"+e.getLocalizedMessage());
             }
+            
+            try{
+                jdbcIdo_.retrieveObject("SelectForUpdate",vo2);
+            } catch (Exception e) {
+                fail(method+"Select For Update should work:"+e.getLocalizedMessage());
+            }
 
             try{
                 jdbcCpo_.retrieveObject("Select4UpdateNoWait",vo2);

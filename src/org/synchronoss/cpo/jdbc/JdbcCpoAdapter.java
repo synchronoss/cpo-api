@@ -3050,7 +3050,7 @@ public class JdbcCpoAdapter implements CpoAdapter{
             logger.info("=================== BATCH - "+numRows+" Updates - Class=<"+arr[0].getClass()+"> Type=<"+groupType+"> Name=<"+groupName+"> =========================");
 
             if(numRows>0) {
-                updateCount++;
+                updateCount=numRows;
             }
         } catch (CpoException ce) {
             throw ce; // just send it on. No need to attach anymore info

@@ -160,7 +160,8 @@ public class InsertObjectTest extends TestCase {
         al.add(new ValueObject(3));
         al.add(new ValueObject(4));
         try{
-            jdbcIdo_.insertObjects(al);
+            long inserts = jdbcIdo_.insertObjects(al);
+            assertEquals("inserts performed do not equal inserts requested", inserts, 4);
         } catch (Exception e) {
             e.printStackTrace();
             fail(method+e.getMessage());

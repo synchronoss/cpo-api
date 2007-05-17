@@ -278,7 +278,7 @@ public class JdbcAttribute extends java.lang.Object implements java.io.Serializa
             }
         }
         
-        throw new CpoException("invokeSetter: Could not find a Setter for "+obj.getClass());
+        throw new CpoException("invokeSetter: Could not find a Setter for "+obj.getClass()+": Column<"+this.getDbName()+"> Attribute<"+this.getName()+">");
     }
     
     public void invokeSetter(Object obj, CallableStatement cs, int idx) throws CpoException {

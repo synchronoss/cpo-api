@@ -103,8 +103,10 @@ public class SelectForUpdateTest extends TestCase {
             logger.debug(e.getLocalizedMessage());
         }
         ValueObject vo = new ValueObject(1);
+        ValueObject vo2 = new ValueObject(2);
         try{
-             jdbcIdo_.insertObject(vo);
+            jdbcIdo_.insertObject(vo);
+            jdbcIdo_.insertObject(vo2);
              jdbcIdo_.commit();
         } catch (Exception e) {
             try{jdbcIdo_.rollback();} catch (Exception e1){};
@@ -118,8 +120,10 @@ public class SelectForUpdateTest extends TestCase {
      */
     public void tearDown() {
         ValueObject vo = new ValueObject(1);
-        try{
-             jdbcIdo_.deleteObject(vo);
+        ValueObject vo2 = new ValueObject(2);
+       try{
+           jdbcIdo_.deleteObject(vo);
+           jdbcIdo_.deleteObject(vo2);
              jdbcIdo_.commit();
         } catch (Exception e) {
             try{jdbcIdo_.rollback();} catch (Exception e1){};
@@ -178,5 +182,46 @@ public class SelectForUpdateTest extends TestCase {
         }
     }
     
+    public void testSelect4UpdateExists() {
+        if (hasSelect4UpdateSupport) {
+            String method = "testSelect4UpdateExists:";
+            ValueObject vo2 = new ValueObject(1);
+ 
+            try{
+            	long count = jdbcIdo_.existsObject("SelectForUpdateExistZero",vo2);
+                assertTrue("Two objects should have been returned", count==0);
+            } catch (Exception e) {
+                fail(method+"Select For Update should work:"+e.getLocalizedMessage());
+            }
+
+            try{
+                long count = jdbcIdo_.existsObject("SelectForUpdateExistSingle",vo2);
+                assertTrue("One object should have been returned", count==1);
+            } catch (Exception e) {
+                fail(method+"Select For Update should work:"+e.getLocalizedMessage());
+            }
+            
+            try{
+            	long count = jdbcIdo_.existsObject("SelectForUpdateExistAll",vo2);
+                assertTrue("Two objects should have been returned", count==2);
+            } catch (Exception e) {
+                fail(method+"Select For Update should work:"+e.getLocalizedMessage());
+            }
+
+            try{
+                jdbcIdo_.commit();
+            } catch (Exception e) {
+                try {
+                    jdbcIdo_.rollback();
+                } catch (CpoException ce){
+                    fail(method+"Rollback failed:"+ce.getLocalizedMessage());
+
+                }
+                fail(method+"Commit should have worked.");
+            }
+        } else {
+            fail(dbDriver_+" does not support Select For Update");
+        }
+    }    
  
 }

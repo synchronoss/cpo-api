@@ -1114,41 +1114,44 @@ public class JdbcCpoAdapter implements CpoAdapter{
                 jq=(JdbcQuery) queryGroup.get(i);
                 JdbcPreparedStatementFactory jpsf = new JdbcPreparedStatementFactory(con, this, jq, obj, null);
                 ps=jpsf.getPreparedStatement();
-
-                // insertion in
-                // exists
+                
+                long qCount=0; // set the results for this query to 0
+                
                 logger.info(jq.getText());
                 rs=ps.executeQuery();
                 jpsf.release();
                 rsmd=rs.getMetaData();
 
-                if(rsmd.getColumnCount()!=1) {
-                    throw new CpoException("EXIST query group must return exactly one column:"+
-                        jq.getText());
+                // see if they are using the count(*) logic
+                if(rsmd.getColumnCount()==1) {
+                    if(rs.next()) {
+                        try {
+                            qCount=rs.getLong(1); // get the number of objects
+                                                     // that exist
+                        } catch(Exception e) {
+                            // Exists result not an int so bail to record counter
+                        	qCount=1;
+                        }
+                        if(rs.next()) {
+                            // EXIST query has more than one record so not a count(*)
+                            qCount=2;
+                        }
+                   }
+                }
+                 
+                while(rs.next()) {
+                	qCount++;
                 }
 
-                if(rs.next()) {
-                    try {
-                        objCount+=rs.getLong(1); // get the number of objects
-                                                 // that exist
-                    } catch(Exception e) {
-                        throw new CpoException("EXISTS result not an int:"+jq.getText(), e);
-                    }
-                } else {
-                    throw new CpoException("EXIST query must return exactly one record:"+
-                        jq.getText());
-                }
-
-                if(rs.next()) {
-                    throw new CpoException("EXIST query must return exactly one record:"+
-                        jq.getText());
-                }
+                objCount+=qCount;
 
                 rs.close();
                 ps.close();
                 rs=null;
                 ps=null;
             }
+            
+            
         } catch(SQLException e) {
             String msg="existsObject(name, obj, con) failed:";
             if (jq!=null) 

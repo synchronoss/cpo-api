@@ -120,7 +120,7 @@ public class InsertObjectTest extends TestCase {
         if (!hasMilliSupport)
         	ts.setNanos(0);
 
-        valObj.setAttrDateTime(ts);
+        valObj.setAttrDatetime(ts);
         
         valObj.setAttrBit(true);
         
@@ -138,7 +138,7 @@ public class InsertObjectTest extends TestCase {
             assertTrue("Ids do not match", vo.getId()==valObj.getId());
             assertTrue("Integers do not match", vo.getAttrInteger()==valObj.getAttrInteger());
             assertEquals("Strings do not match", vo.getAttrVarChar(), valObj.getAttrVarChar());
-            assertEquals("Timestamps do not match", vo.getAttrDateTime(), valObj.getAttrDateTime());
+            assertEquals("Timestamps do not match", vo.getAttrDatetime(), valObj.getAttrDatetime());
             assertTrue("boolean not stored correctly", vo.getAttrBit());
             
        } catch (Exception e) {

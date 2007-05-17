@@ -135,7 +135,7 @@ public class ValueObject extends java.lang.Object implements java.io.Serializabl
         return attrTimestamp_;
     }
 
-    public Timestamp getAttrDateTime() {
+    public Timestamp getAttrDatetime() {
         return attrDateTime_;
     }
 
@@ -235,7 +235,7 @@ public class ValueObject extends java.lang.Object implements java.io.Serializabl
         attrTimestamp_=attrTimestamp;
     }
 
-    public void setAttrDateTime(Timestamp attrDateTime) {
+    public void setAttrDatetime(Timestamp attrDateTime) {
         attrDateTime_=attrDateTime;
     }
 

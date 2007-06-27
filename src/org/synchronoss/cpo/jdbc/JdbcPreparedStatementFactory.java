@@ -103,15 +103,16 @@ public class JdbcPreparedStatementFactory implements CpoReleasible {
     public JdbcPreparedStatementFactory(Connection conn, JdbcCpoAdapter jca, JdbcQuery jq, Object obj,
         String additionalSql, Collection bindValues) throws CpoException {
        String sql=jq.getText()+((additionalSql==null) ? "" : additionalSql);
+       Logger localLogger = obj==null?logger:Logger.getLogger(obj.getClass().getName());
 
-        logger.info("JdbcQuery SQL = <"+sql+">");
+       localLogger.info("JdbcQuery SQL = <"+sql+">");
 
         PreparedStatement pstmt = null;
         
         try {
             pstmt=conn.prepareStatement(sql);
         } catch (SQLException se){
-          	logger.error("Error Instantiating JdbcPreparedStatementFactory"+se.getLocalizedMessage());
+        	localLogger.error("Error Instantiating JdbcPreparedStatementFactory"+se.getLocalizedMessage());
           	throw new CpoException(se);
         }
         setPreparedStatement(pstmt);

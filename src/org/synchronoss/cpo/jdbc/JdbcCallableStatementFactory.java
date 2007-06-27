@@ -76,11 +76,12 @@ public class JdbcCallableStatementFactory implements CpoReleasible {
         CallableStatement cstmt = null;
         JdbcParameter parameter = null;
         JdbcAttribute attribute = null;
+        Logger localLogger = obj==null?logger:Logger.getLogger(obj.getClass().getName());
         
         try {
             outParameters=jq.getParameterList();
 
-            logger.debug("SQL = <"+jq.getText()+">");
+            localLogger.debug("SQL = <"+jq.getText()+">");
 
             // prepare the Callable Statement
             cstmt=conn.prepareCall(jq.getText());
@@ -95,13 +96,13 @@ public class JdbcCallableStatementFactory implements CpoReleasible {
                 }
 
                 if(parameter.isOutParameter()) {
-                    logger.debug("Setting OUT parameter "+j+" as Type "+attribute.getJavaSqlType());
+                	localLogger.debug("Setting OUT parameter "+j+" as Type "+attribute.getJavaSqlType());
                     cstmt.registerOutParameter(j+1, attribute.getJavaSqlType());
                 }
             }
     
         } catch (Exception e){
-            logger.error("Error Instantiating JdbcCallableStatementFactory"+e.getLocalizedMessage());
+        	localLogger.error("Error Instantiating JdbcCallableStatementFactory"+e.getLocalizedMessage());
             throw new CpoException(e);
         }
 

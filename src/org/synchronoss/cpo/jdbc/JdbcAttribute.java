@@ -84,7 +84,7 @@ public class JdbcAttribute extends java.lang.Object implements java.io.Serializa
      */
     public JdbcAttribute(JdbcMetaClass jmc, String name, String javaSqlTypeName, String dbName, String dbTable, String dbColumn, String transformClass)
     throws CpoException {
-        logger.debug("Adding Attribute for class "+jmc.getJmcClass().getName()+": "+name+"("+dbName+","+dbTable+","+dbColumn+","+transformClass+")");
+        Logger.getLogger(jmc.getJmcClass().getName()).debug("Adding Attribute for class "+jmc.getJmcClass().getName()+": "+name+"("+dbName+","+dbTable+","+dbColumn+","+transformClass+")");
         setName(name);
         setTransformClass(transformClass);
         initMethods(jmc);
@@ -233,6 +233,7 @@ public class JdbcAttribute extends java.lang.Object implements java.io.Serializa
         JavaSqlMethod jdbcMethod = null;
         Object param = null;
         Class paramClass = null;
+        Logger localLogger = obj==null?logger:Logger.getLogger(obj.getClass().getName());
         
         if (getSetters().length==0) 
             throw new CpoException("There are no setters");
@@ -247,10 +248,10 @@ public class JdbcAttribute extends java.lang.Object implements java.io.Serializa
                     param = transformIn(param);
                     paramClass = transformIn_.getReturnType();
                 } catch (IllegalAccessException iae){
-                    logger.debug("Error Invoking ResultSet Method: "+iae.getLocalizedMessage());
+                	localLogger.debug("Error Invoking ResultSet Method: "+iae.getLocalizedMessage());
                     throw new CpoException(iae);
                 } catch (InvocationTargetException ite){
-                    logger.debug("Error Invoking ResultSet Method: "+ite.getCause().getLocalizedMessage());
+                	localLogger.debug("Error Invoking ResultSet Method: "+ite.getCause().getLocalizedMessage());
                     throw new CpoException(ite.getCause());
                 }
 
@@ -272,9 +273,9 @@ public class JdbcAttribute extends java.lang.Object implements java.io.Serializa
                     return;
                 }
             } catch (IllegalAccessException iae){
-                logger.debug("Error Invoking Setter Method: "+iae.getLocalizedMessage());
+            	localLogger.debug("Error Invoking Setter Method: "+iae.getLocalizedMessage());
             } catch (InvocationTargetException ite){
-                logger.debug("Error Invoking Setter Method: "+ite.getCause().getLocalizedMessage());
+            	localLogger.debug("Error Invoking Setter Method: "+ite.getCause().getLocalizedMessage());
             }
         }
         
@@ -285,6 +286,7 @@ public class JdbcAttribute extends java.lang.Object implements java.io.Serializa
         JavaSqlMethod jdbcMethod = null;
         Object param = null;
         Class paramClass = null;
+        Logger localLogger = obj==null?logger:Logger.getLogger(obj.getClass().getName());
         
         if (getSetters().length==0) 
             throw new CpoException("There are no setters");
@@ -299,10 +301,10 @@ public class JdbcAttribute extends java.lang.Object implements java.io.Serializa
                 param = transformIn(param);
                 paramClass = transformIn_.getReturnType();
             } catch (IllegalAccessException iae){
-                logger.debug("Error Invoking CallableStatement Method: "+iae.getLocalizedMessage());
+            	localLogger.debug("Error Invoking CallableStatement Method: "+iae.getLocalizedMessage());
                 throw new CpoException(iae);
             } catch (InvocationTargetException ite){
-                logger.debug("Error Invoking CallableStatement Method: "+ite.getCause().getLocalizedMessage());
+            	localLogger.debug("Error Invoking CallableStatement Method: "+ite.getCause().getLocalizedMessage());
                 throw new CpoException(ite.getCause());
             }
         }
@@ -325,9 +327,9 @@ public class JdbcAttribute extends java.lang.Object implements java.io.Serializa
                     return;
                 }   
             } catch (IllegalAccessException iae){
-                logger.debug("Error Invoking Setter Method: "+iae.getLocalizedMessage());
+            	localLogger.debug("Error Invoking Setter Method: "+iae.getLocalizedMessage());
             } catch (InvocationTargetException ite){
-                logger.debug("Error Invoking Setter Method: "+ite.getCause().getLocalizedMessage());
+            	localLogger.debug("Error Invoking Setter Method: "+ite.getCause().getLocalizedMessage());
             }
         }
         
@@ -337,7 +339,8 @@ public class JdbcAttribute extends java.lang.Object implements java.io.Serializa
     public void invokeGetter(JdbcCallableStatementFactory jcsf, Object obj, int idx) throws CpoException {
         Object param = null;
         JavaSqlMethod jdbcMethod = null;
-        
+        Logger localLogger = obj==null?logger:Logger.getLogger(obj.getClass().getName());
+         
         try{
             if (hasTransformPS){
                 param = transformOut(jcsf, getGetters()[0].invoke(obj, (Object[])null));
@@ -348,7 +351,7 @@ public class JdbcAttribute extends java.lang.Object implements java.io.Serializa
             }
         	int length = 0;
         	
-            logger.info(this.dbName_+"="+param);
+        	localLogger.info(this.dbName_+"="+param);
 
         	switch (jdbcMethod.getMethodType()) {
         	case JavaSqlMethod.METHOD_TYPE_BASIC:
@@ -367,9 +370,9 @@ public class JdbcAttribute extends java.lang.Object implements java.io.Serializa
         	}
             return;
         } catch (IllegalAccessException iae){
-                logger.debug("Error Invoking Getter Method: "+iae.getLocalizedMessage());
+        	localLogger.debug("Error Invoking Getter Method: "+iae.getLocalizedMessage());
         } catch (InvocationTargetException ite){
-                logger.debug("Error Invoking Getter Method: "+ite.getCause().getLocalizedMessage());
+        	localLogger.debug("Error Invoking Getter Method: "+ite.getCause().getLocalizedMessage());
         }
         
         throw new CpoException("invokeGetter: Could not find a Getter for "+obj.getClass());
@@ -379,9 +382,10 @@ public class JdbcAttribute extends java.lang.Object implements java.io.Serializa
         Object param = null;
         JavaSqlMethod jdbcMethod = null;
         String msg = null;
+        Logger localLogger = obj==null?logger:Logger.getLogger(obj.getClass().getName());
         try{
             if (hasTransformPS){
-            		logger.debug("Calling Transform:"+transformPSOut_.getClass().getName());
+            	localLogger.debug("Calling Transform:"+transformPSOut_.getClass().getName());
                     param = transformOut(jpsf, getGetters()[0].invoke(obj, (Object[])null));
                     jdbcMethod = JavaSqlMethods.getJavaSqlMethod(transformPSOut_.getReturnType());
                     if (jdbcMethod==null)
@@ -390,7 +394,7 @@ public class JdbcAttribute extends java.lang.Object implements java.io.Serializa
                     jdbcMethod = JavaSqlMethods.getJavaSqlMethod(getGetters()[0].getReturnType());
                    param = getGetters()[0].invoke(obj, (Object[])null);
                     if (jdbcMethod==null) {
-                        logger.debug("jdbcMethod is null");
+                    	localLogger.debug("jdbcMethod is null");
                         throw new CpoException("Error Retrieveing Jdbc Method for type: "+getGetters()[0].getReturnType().getName());
                     }
            }
@@ -402,7 +406,7 @@ public class JdbcAttribute extends java.lang.Object implements java.io.Serializa
         } 
         
         if (msg==null){
-          logger.info(this.dbName_+"="+param);
+        	localLogger.info(this.dbName_+"="+param);
             try{
             	switch (jdbcMethod.getMethodType()) {
             	case JavaSqlMethod.METHOD_TYPE_BASIC:
@@ -429,7 +433,7 @@ public class JdbcAttribute extends java.lang.Object implements java.io.Serializa
         }
         
         if (msg!=null){
-            logger.error(msg);
+        	localLogger.error(msg);
             throw new CpoException(msg);
         }
     }
@@ -446,6 +450,7 @@ public class JdbcAttribute extends java.lang.Object implements java.io.Serializa
     protected void setTransformClass(String className) throws CpoException {
         Class transformClass=null;
         Method[] m = null;
+        Logger localLogger = className==null?logger:Logger.getLogger(className);
         
         try{
         	if (className!=null && className.length()>0){
@@ -456,7 +461,7 @@ public class JdbcAttribute extends java.lang.Object implements java.io.Serializa
 	            	if (msg==null&&e.getCause()!=null)
 	            		msg=e.getCause().getLocalizedMessage();
 	            	
-	                logger.error("Invalid Transform Class specified:<"+className+">");
+	            	localLogger.error("Invalid Transform Class specified:<"+className+">");
 	                throw new CpoException("Invalid Transform Class specified:<"+className+">:");
 	            }
 	            
@@ -481,7 +486,7 @@ public class JdbcAttribute extends java.lang.Object implements java.io.Serializa
 	            }
 	            
 	            if (transformIn_==null && transformPSOut_==null&&transformCSOut_==null){
-	                logger.error("Invalid Transform Class specified:<"+className+">: Abstract Methods not Found");
+	            	localLogger.error("Invalid Transform Class specified:<"+className+">: Abstract Methods not Found");
 	                throw new CpoException("Invalid Transform Class specified:<"+className+">: Abstract Methods not Found");
 	            }
 	            
@@ -489,7 +494,7 @@ public class JdbcAttribute extends java.lang.Object implements java.io.Serializa
         } catch (CpoException ce ){
         	throw ce;
         } catch (Exception e){
-            logger.debug("Error Setting Transform Class: "+e.getLocalizedMessage());
+        	localLogger.debug("Error Setting Transform Class: "+e.getLocalizedMessage());
             this.transformObject_ = null;
             this.transformIn_ = null;
             this.transformCSOut_=null;
@@ -506,10 +511,10 @@ public class JdbcAttribute extends java.lang.Object implements java.io.Serializa
             try{
                 retObj = transformIn_.invoke(transformObject_,new Object[] {datasourceObject});
             } catch (IllegalAccessException iae){
-                logger.error("Error Invoking transformIn: "+transformIn_.getName()+iae.getLocalizedMessage());
+                Logger.getLogger(transformIn_.getName()).error("Error Invoking transformIn: "+transformIn_.getName()+iae.getLocalizedMessage());
                 throw new CpoException(iae);
             } catch (InvocationTargetException ite){
-                logger.error("Error Invoking transformIn: "+transformIn_.getName()+ite.getCause().getLocalizedMessage());
+            	Logger.getLogger(transformIn_.getName()).error("Error Invoking transformIn: "+transformIn_.getName()+ite.getCause().getLocalizedMessage());
                 throw new CpoException(ite.getCause());
             }
         }
@@ -523,10 +528,10 @@ public class JdbcAttribute extends java.lang.Object implements java.io.Serializa
             try{
                 retObj = transformPSOut_.invoke(transformObject_,new Object[] {jpsf, attributeObject});
             } catch (IllegalAccessException iae){
-                logger.error("Error Invoking transformOut: "+transformPSOut_.getName()+iae.getLocalizedMessage());
+            	Logger.getLogger(transformPSOut_.getName()).error("Error Invoking transformOut: "+transformPSOut_.getName()+iae.getLocalizedMessage());
                 throw new CpoException(iae);
             } catch (InvocationTargetException ite){
-                logger.error("Error Invoking transformOut: "+transformPSOut_.getName()+ite.getCause().getLocalizedMessage());
+            	Logger.getLogger(transformPSOut_.getName()).error("Error Invoking transformOut: "+transformPSOut_.getName()+ite.getCause().getLocalizedMessage());
                 throw new CpoException(ite.getCause());
             }
         }
@@ -540,10 +545,10 @@ public class JdbcAttribute extends java.lang.Object implements java.io.Serializa
             try{
                 retObj = transformCSOut_.invoke(transformObject_,new Object[] {jcsf, attributeObject});
             } catch (IllegalAccessException iae){
-                logger.error("Error Invoking transformOut: "+transformCSOut_.getName()+iae.getLocalizedMessage());
+            	Logger.getLogger(transformCSOut_.getName()).error("Error Invoking transformOut: "+transformCSOut_.getName()+iae.getLocalizedMessage());
                 throw new CpoException(iae);
             } catch (InvocationTargetException ite){
-                logger.error("Error Invoking transformOut: "+transformCSOut_.getName()+ite.getCause().getLocalizedMessage());
+            	Logger.getLogger(transformCSOut_.getName()).error("Error Invoking transformOut: "+transformCSOut_.getName()+ite.getCause().getLocalizedMessage());
                 throw new CpoException(ite.getCause());
             }
         }

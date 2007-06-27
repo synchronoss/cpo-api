@@ -1105,11 +1105,13 @@ public class JdbcCpoAdapter implements CpoAdapter{
         ArrayList queryGroup=null;
         long objCount=0;
         int i=0;
+        Logger localLogger = logger;
 
         try {
             jmc=getMetaClass(obj, metaCon);
             queryGroup=jmc.getQueryGroup(JdbcCpoAdapter.EXIST_GROUP, name);
-
+            localLogger = Logger.getLogger(jmc.getJmcClass().getName());
+            
             for(i=0; i<queryGroup.size(); i++) {
                 jq=(JdbcQuery) queryGroup.get(i);
                 JdbcPreparedStatementFactory jpsf = new JdbcPreparedStatementFactory(con, this, jq, obj, null);
@@ -1117,7 +1119,7 @@ public class JdbcCpoAdapter implements CpoAdapter{
                 
                 long qCount=0; // set the results for this query to 0
                 
-                logger.info(jq.getText());
+                localLogger.info(jq.getText());
                 rs=ps.executeQuery();
                 jpsf.release();
                 rsmd=rs.getMetaData();
@@ -1157,7 +1159,7 @@ public class JdbcCpoAdapter implements CpoAdapter{
             if (jq!=null) 
                 msg+=jq.getText();
             
-            logger.error(msg, e);
+            localLogger.error(msg, e);
             throw new CpoException(msg, e);
         } finally {
             if(rs!=null) {
@@ -2111,7 +2113,7 @@ public class JdbcCpoAdapter implements CpoAdapter{
                 if(jmc==null) {
                     jmc=loadMetaClass(objClass, className, c);
                     metaClassMap.put(className, jmc);
-                    logger.debug("Loading Class:"+className);
+                    Logger.getLogger(className).debug("Loading Class:"+className);
                 }
             }
         }
@@ -2415,7 +2417,8 @@ public class JdbcCpoAdapter implements CpoAdapter{
         JdbcMetaClass jmcCriteria=null;
         JdbcMetaClass jmcResult=null;
         Object returnObject=null;
-
+        Logger localLogger=criteria==null?logger:Logger.getLogger(criteria.getClass().getName());
+        
         //Object[] setterArgs = {null};
         Class jmcClass=null;
         ArrayList parameters=null;
@@ -2431,7 +2434,7 @@ public class JdbcCpoAdapter implements CpoAdapter{
             jmcCriteria=getMetaClass(criteria, metaCon);
             jmcResult=getMetaClass(result, metaCon);
             queryGroup=(ArrayList) jmcCriteria.getQueryGroup(JdbcCpoAdapter.EXECUTE_GROUP, name);
-            logger.info("===================processExecuteGroup ("+name+") Count<"+
+            localLogger.info("===================processExecuteGroup ("+name+") Count<"+
                 queryGroup.size()+">=========================");
 
             jmcClass=jmcResult.getJmcClass();
@@ -2450,7 +2453,7 @@ public class JdbcCpoAdapter implements CpoAdapter{
                 
                 jcsf = new JdbcCallableStatementFactory(conn, this, jq, criteria);
                 
-                logger.debug("Executing Call:"+jmcCriteria.getName()+":"+name);
+                localLogger.debug("Executing Call:"+jmcCriteria.getName()+":"+name);
                 
                 cstmt = jcsf.getCallableStatement();
 
@@ -2458,7 +2461,7 @@ public class JdbcCpoAdapter implements CpoAdapter{
                 
                 jcsf.release();
 
-                logger.debug("Processing Call:"+jmcCriteria.getName()+":"+name);
+                localLogger.debug("Processing Call:"+jmcCriteria.getName()+":"+name);
 
                 // Add Code here to go through the parameters, find record sets,
                 // and process them
@@ -2486,7 +2489,7 @@ public class JdbcCpoAdapter implements CpoAdapter{
         }catch(SQLException e) {
             String msg="ProcessExecuteGroup(String name, Object criteria, Object result, Connection conn) failed. SQL=";
                 if (jq!=null) msg+=jq.getText();
-            logger.error(msg, e);
+                localLogger.error(msg, e);
             throw new CpoException(msg, e);
         } finally {
             if (cstmt!=null){
@@ -2576,6 +2579,7 @@ public class JdbcCpoAdapter implements CpoAdapter{
         JdbcAttribute attribute=null;
         Object criteriaObj = obj;
         boolean recordsExist=false;
+        Logger localLogger=obj==null?logger:Logger.getLogger(obj.getClass().getName());
         
         int recordCount=0;
         int attributesSet=0;
@@ -2590,15 +2594,15 @@ public class JdbcCpoAdapter implements CpoAdapter{
             queryGroup=jmc.getQueryGroup(JdbcCpoAdapter.RETRIEVE_GROUP, groupName);
             jmcAttrMap=jmc.getAttributeMap();
 
-            logger.info("=================== Class=<"+criteriaObj.getClass()+"> Type=<"+JdbcCpoAdapter.RETRIEVE_GROUP+"> Name=<"+groupName+"> =========================");
+            localLogger.info("=================== Class=<"+criteriaObj.getClass()+"> Type=<"+JdbcCpoAdapter.RETRIEVE_GROUP+"> Name=<"+groupName+"> =========================");
            
             try{
                 rObj=jmc.getJmcClass().newInstance();
             }catch(IllegalAccessException iae){
                 if (obj!=null)
-                    logger.error("=================== Could not access default constructor for Class=<"+obj.getClass()+"> ==================");
+                	localLogger.error("=================== Could not access default constructor for Class=<"+obj.getClass()+"> ==================");
                 else
-                    logger.error("=================== Could not access default constructor for class ==================");
+                	localLogger.error("=================== Could not access default constructor for class ==================");
 
                 throw new CpoException("Unable to access the constructor of the Return Object",iae);
             }catch(InstantiationException iae){
@@ -2647,7 +2651,7 @@ public class JdbcCpoAdapter implements CpoAdapter{
 
                         if(rs.next()) {
                             String msg="ProcessSelectGroup(Object, String) failed: Multiple Records Returned";
-                            logger.error(msg);
+                            localLogger.error(msg);
                             throw new CpoException(msg);
                         }
                     }
@@ -2663,14 +2667,14 @@ public class JdbcCpoAdapter implements CpoAdapter{
             
             if (!recordsExist) {
                 rObj=null;
-                logger.info("=================== 0 Records - 0 Attributes - Class=<"+criteriaObj.getClass()+"> Type=<"+JdbcCpoAdapter.RETRIEVE_GROUP+"> Name=<"+groupName+"> =========================");
+                localLogger.info("=================== 0 Records - 0 Attributes - Class=<"+criteriaObj.getClass()+"> Type=<"+JdbcCpoAdapter.RETRIEVE_GROUP+"> Name=<"+groupName+"> =========================");
             } else {
-                logger.info("=================== "+recordCount+" Records - "+attributesSet+" Attributes - Class=<"+criteriaObj.getClass()+">  Type=<"+JdbcCpoAdapter.RETRIEVE_GROUP+"> Name=<"+groupName+"> =========================");
+            	localLogger.info("=================== "+recordCount+" Records - "+attributesSet+" Attributes - Class=<"+criteriaObj.getClass()+">  Type=<"+JdbcCpoAdapter.RETRIEVE_GROUP+"> Name=<"+groupName+"> =========================");
             }
 
         } catch(SQLException e) {
             String msg="ProcessSeclectGroup(Object) failed: "+e.getMessage();
-            logger.error(msg, e);
+            localLogger.error(msg, e);
             rObj=null;
             throw new CpoException(msg, e);
         } finally {
@@ -2760,6 +2764,7 @@ public class JdbcCpoAdapter implements CpoAdapter{
     protected Collection processSelectGroup(String name, Object criteria, Object result,
         CpoWhere where, Collection orderBy, Connection con, Connection metaCon, boolean useRetrieve)
         throws CpoException {
+        Logger localLogger=criteria==null?logger:Logger.getLogger(criteria.getClass().getName());
         PreparedStatement ps=null;
         ArrayList queryGroup=null;
         JdbcQuery jq=null;
@@ -2783,10 +2788,10 @@ public class JdbcCpoAdapter implements CpoAdapter{
             jmcCriteria=getMetaClass(criteria, metaCon);
             jmcResult=getMetaClass(result, metaCon);
             if (useRetrieve){
-                logger.info("=================== Class=<"+criteria.getClass()+"> Type=<"+JdbcCpoAdapter.RETRIEVE_GROUP+"> Name=<"+name+"> =========================");
+            	localLogger.info("=================== Class=<"+criteria.getClass()+"> Type=<"+JdbcCpoAdapter.RETRIEVE_GROUP+"> Name=<"+name+"> =========================");
                 queryGroup=(ArrayList) jmcCriteria.getQueryGroup(JdbcCpoAdapter.RETRIEVE_GROUP, name);
             } else {
-                logger.info("=================== Class=<"+criteria.getClass()+"> Type=<"+JdbcCpoAdapter.LIST_GROUP+"> Name=<"+name+"> =========================");
+            	localLogger.info("=================== Class=<"+criteria.getClass()+"> Type=<"+JdbcCpoAdapter.LIST_GROUP+"> Name=<"+name+"> =========================");
                 queryGroup=(ArrayList) jmcCriteria.getQueryGroup(JdbcCpoAdapter.LIST_GROUP, name);
             }
             sqlText=buildSql(jmcCriteria, "", where, orderBy, bindValues);
@@ -2797,12 +2802,12 @@ public class JdbcCpoAdapter implements CpoAdapter{
                 jpsf = new JdbcPreparedStatementFactory(con, this, jq, criteria, sqlText, bindValues);
                 ps=jpsf.getPreparedStatement();
 
-                logger.debug("Retrieving Records");
+                localLogger.debug("Retrieving Records");
 
                 rs=ps.executeQuery();
                 jpsf.release();
 
-                logger.debug("Processing Records");
+                localLogger.debug("Processing Records");
 
                 rsmd=rs.getMetaData();
 
@@ -2821,9 +2826,9 @@ public class JdbcCpoAdapter implements CpoAdapter{
                         obj=jmcClass.newInstance();
                     }catch(IllegalAccessException iae){
                         if (result!=null)
-                            logger.error("=================== Could not access default constructor for Class=<"+result.getClass()+"> ==================");
+                        	localLogger.error("=================== Could not access default constructor for Class=<"+result.getClass()+"> ==================");
                         else
-                            logger.error("=================== Could not access default constructor for class ==================");
+                        	localLogger.error("=================== Could not access default constructor for class ==================");
 
                         throw new CpoException("Unable to access the constructor of the Return Object",iae);
                     }catch(InstantiationException iae){
@@ -2849,13 +2854,13 @@ public class JdbcCpoAdapter implements CpoAdapter{
                 } catch(Exception e) {
                 }
 
-                logger.info("=================== "+resultSet.size()+" Records - Class=<"+criteria.getClass()+"> Type=<"+JdbcCpoAdapter.LIST_GROUP+"> Name=<"+name+"> Result=<"+result.getClass()+"> ====================");
+                localLogger.info("=================== "+resultSet.size()+" Records - Class=<"+criteria.getClass()+"> Type=<"+JdbcCpoAdapter.LIST_GROUP+"> Name=<"+name+"> Result=<"+result.getClass()+"> ====================");
             }
         } catch(SQLException e) {
             String msg=
                 "ProcessSelectGroup(String name, Object criteria, Object result, CpoWhere where, Collection orderBy, Connection con) failed. SQL="+
                 sqlText+" Error:";
-            logger.error(msg, e);
+            localLogger.error(msg, e);
             throw new CpoException(msg, e);
         } finally {
             if(rs!=null) {
@@ -2937,6 +2942,7 @@ public class JdbcCpoAdapter implements CpoAdapter{
      */
     protected long processUpdateGroup(Object obj, String groupType, String groupName, Connection con, Connection metaCon)
         throws CpoException {
+        Logger localLogger=obj==null?logger:Logger.getLogger(obj.getClass().getName());
         JdbcMetaClass jmc=null;
         ArrayList queryGroup=null;
         PreparedStatement ps=null;
@@ -2948,7 +2954,7 @@ public class JdbcCpoAdapter implements CpoAdapter{
         try {
             jmc=getMetaClass(obj, metaCon);
             queryGroup=jmc.getQueryGroup(getGroupType(obj, groupType, groupName, con, metaCon), groupName);
-            logger.info("=================== Class=<"+obj.getClass()+"> Type=<"+groupType+"> Name=<"+groupName+"> =========================");
+            localLogger.info("=================== Class=<"+obj.getClass()+"> Type=<"+groupType+"> Name=<"+groupName+"> =========================");
 
             int numRows=0;
 
@@ -2960,7 +2966,7 @@ public class JdbcCpoAdapter implements CpoAdapter{
                 jpsf.release();
                 ps.close();
             }
-            logger.info("=================== "+numRows+" Updates - Class=<"+obj.getClass()+"> Type=<"+groupType+"> Name=<"+groupName+"> =========================");
+            localLogger.info("=================== "+numRows+" Updates - Class=<"+obj.getClass()+"> Type=<"+groupType+"> Name=<"+groupName+"> =========================");
 
             if(numRows>0) {
                 updateCount++;
@@ -2970,8 +2976,8 @@ public class JdbcCpoAdapter implements CpoAdapter{
         } catch(SQLException e) {
             String msg="ProcessUpdateGroup failed:"+groupType+","+groupName+","+
                 obj.getClass().getName();
-            logger.error("bound values:"+this.parameterToString(jq, obj));
-            logger.error(msg, e);
+            localLogger.error("bound values:"+this.parameterToString(jq, obj));
+            localLogger.error(msg, e);
             throw new CpoException(msg, e);
         } finally {
             if(ps!=null) {
@@ -3008,16 +3014,19 @@ public class JdbcCpoAdapter implements CpoAdapter{
         JdbcPreparedStatementFactory jpsf=null;
         long updateCount=0;
         int[] updates=null;
+        Logger localLogger=logger;
 
         try {
             jmc=getMetaClass(arr[0], metaCon);
             queryGroup=jmc.getQueryGroup(getGroupType(arr[0], groupType, groupName, con, metaCon), groupName);
-            logger.info("=================== BATCH - Class=<"+arr[0].getClass()+"> Type=<"+groupType+"> Name=<"+groupName+"> =========================");
+            localLogger = Logger.getLogger(jmc.getJmcClass().getName());
+            
 
             int numRows=0;
             
             // Only Batch if there is only one query 
             if (queryGroup.size()==1){
+                localLogger.info("=================== BATCH - Class=<"+arr[0].getClass()+"> Type=<"+groupType+"> Name=<"+groupName+"> =========================");
                 jq = (JdbcQuery) queryGroup.get(0);
                 jpsf = new JdbcPreparedStatementFactory(con, this, jq, arr[0], null);
                 ps=jpsf.getPreparedStatement();
@@ -3037,8 +3046,10 @@ public class JdbcCpoAdapter implements CpoAdapter{
                         numRows++;
                     }
                 }
-            
+                localLogger.info("=================== BATCH - "+numRows+" Updates - Class=<"+arr[0].getClass()+"> Type=<"+groupType+"> Name=<"+groupName+"> =========================");
+           
             } else {
+                localLogger.info("=================== Class=<"+arr[0].getClass()+"> Type=<"+groupType+"> Name=<"+groupName+"> =========================");
                 for(int j=0; j<arr.length; j++){
                     for(int i=0; i<queryGroup.size(); i++) {
                         jq=(JdbcQuery) queryGroup.get(i);
@@ -3049,8 +3060,8 @@ public class JdbcCpoAdapter implements CpoAdapter{
                         ps.close();
                     }
                 }
+                localLogger.info("=================== "+numRows+" Updates - Class=<"+arr[0].getClass()+"> Type=<"+groupType+"> Name=<"+groupName+"> =========================");
             }
-            logger.info("=================== BATCH - "+numRows+" Updates - Class=<"+arr[0].getClass()+"> Type=<"+groupType+"> Name=<"+groupName+"> =========================");
 
             if(numRows>0) {
                 updateCount=numRows;
@@ -3060,8 +3071,8 @@ public class JdbcCpoAdapter implements CpoAdapter{
         } catch(SQLException e) {
             String msg="ProcessUpdateGroup failed:"+groupType+","+groupName+","+
             arr[0].getClass().getName();
-            logger.error("bound values:"+this.parameterToString(jq, arr[0]));
-            logger.error(msg, e);
+            localLogger.error("bound values:"+this.parameterToString(jq, arr[0]));
+            localLogger.error(msg, e);
             throw new CpoException(msg, e);
         } finally {
             if(ps!=null) {
@@ -3279,6 +3290,7 @@ public class JdbcCpoAdapter implements CpoAdapter{
         StringBuffer failedMessage=new StringBuffer();
 
         if((c!=null) && (jmc!=null)) {
+        	Logger localLogger = Logger.getLogger(jmc.getJmcClass().getName());
             try {
                 ps=c.prepareStatement(sql);
                 ps.setString(1, name);
@@ -3314,11 +3326,11 @@ public class JdbcCpoAdapter implements CpoAdapter{
                 }
             } catch(CpoException ce) {
                 String msg="loadAttributeMap() failed:'"+sql+"' classname:"+name;
-                logger.error(msg, ce);
+                localLogger.error(msg, ce);
                 throw ce;
             } catch(Exception e) {
                 String msg="loadAttributeMap() failed:'"+sql+"' classname:"+name;
-                logger.error(msg, e);
+                localLogger.error(msg, e);
                 throw new CpoException(msg, e);
             } finally {
                 if(rs!=null) {
@@ -3399,6 +3411,7 @@ public class JdbcCpoAdapter implements CpoAdapter{
         String groupType=null;
 
         if((c!=null) && (jmc!=null)) {
+        	Logger localLogger = Logger.getLogger(jmc.getJmcClass().getName());
             try {
                 id = jmc.getClassId();
                 ps=c.prepareStatement(sql);
@@ -3416,7 +3429,7 @@ public class JdbcCpoAdapter implements CpoAdapter{
                         jq.setType(rs.getString(1));
 
                         jmc.addQueryToGroup(jq);
-                        logger.debug("Added QueryGroup:"+jmc.getName()+":"+jq.getType()+":"+
+                        localLogger.debug("Added QueryGroup:"+jmc.getName()+":"+jq.getType()+":"+
                             jq.getName());
                     }
 
@@ -3426,14 +3439,14 @@ public class JdbcCpoAdapter implements CpoAdapter{
                     if(attribute==null) {
                         // There may be queries with no params
                         newSeq=1000;
-                        logger.debug("No Parameters for "+groupType+":"+jq.getName());
+                        localLogger.debug("No Parameters for "+groupType+":"+jq.getName());
 
                         //throw new CpoException("Cannot Add Null Parameter to
                         // Parameter List");
                     } else {
                         JdbcParameter parameter=new JdbcParameter(attribute, rs.getString(10));
                         jq.getParameterList().add(parameter);
-                        logger.debug("Added Parameter:"+
+                        localLogger.debug("Added Parameter:"+
                             attribute.getName() //+ ":" + attribute.getDbName() + ":"
                             //+ attribute.getDbType() + ":"
                             +parameter.getType());
@@ -3443,7 +3456,7 @@ public class JdbcCpoAdapter implements CpoAdapter{
                 }
             }  catch(SQLException e) {
                 String msg="loadQueryGroups() falied:"+sql+":"+id;
-                logger.error(msg, e);
+                localLogger.error(msg, e);
                 throw new CpoException(msg, e);
             } finally {
                 if(rs!=null) {

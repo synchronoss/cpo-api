@@ -85,7 +85,7 @@ public class ExecuteTest extends TestCase {
         metaUser_ = b.getString(PROP_METAUSER).trim();
         metaPassword_ = b.getString(PROP_METAPASSWORD).trim();
         
-        if ("com.mysql.jdbc.Driver".equals(dbDriver_)||"org.hsqldb.jdbcDriver".equals(dbDriver_)){
+        if ("org.hsqldb.jdbcDriver".equals(dbDriver_)){
             hasCallSupport = false;
         }
 

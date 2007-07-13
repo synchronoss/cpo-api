@@ -49,7 +49,7 @@ public class CachedPreparedStatementTest extends TestCase {
     private static final String PROP_DBUSER="dbUser";
     private static final String PROP_DBPASSWORD="dbPassword";
     private static final String stmt="select * from value_object";
-    private static final String cstmt="{?= call xor(1,1)}";
+    private static final String cstmt="{?= call power(3,3)}";
     private CpoAdapter jdbcIdo_=null;
     private String dbDriver_=null;
     private String dbPassword_=null;
@@ -94,7 +94,7 @@ public class CachedPreparedStatementTest extends TestCase {
         metaUser_ = b.getString(PROP_METAUSER).trim();
         metaPassword_ = b.getString(PROP_METAPASSWORD).trim();
         
-        if ("com.mysql.jdbc.Driver".equals(dbDriver_)||"org.hsqldb.jdbcDriver".equals(dbDriver_)){
+        if ("org.hsqldb.jdbcDriver".equals(dbDriver_)){
         	hasCallSupport = false;
         }
 

@@ -80,7 +80,7 @@ public class ExecuteTestTrx extends TestCase {
         dbUser_=b.getString(PROP_DBUSER).trim();
         dbPassword_=b.getString(PROP_DBPASSWORD).trim();
 
-        if ("com.mysql.jdbc.Driver".equals(dbDriver_)||"org.hsqldb.jdbcDriver".equals(dbDriver_)){
+        if ("org.hsqldb.jdbcDriver".equals(dbDriver_)){
             hasCallSupport = false;
         }
 

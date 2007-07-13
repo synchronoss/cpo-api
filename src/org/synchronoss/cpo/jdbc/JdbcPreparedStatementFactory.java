@@ -35,6 +35,8 @@ import java.util.Iterator;
 import org.apache.log4j.Logger;
 import org.synchronoss.cpo.CpoException;
 import org.synchronoss.cpo.CpoReleasible;
+import org.synchronoss.cpo.CpoWhere;
+
 
 /**
  * JdbcPreparedStatementFactory is the object that encapsulates the creation of the actual
@@ -58,6 +60,9 @@ public class JdbcPreparedStatementFactory implements CpoReleasible {
     private JdbcQuery jq_ = null;
     
     private Collection bindValues_=null;
+    
+    private static final String WHERE_MARKER = "__CPO_WHERE__";
+    private static final String ORDERBY_MARKER = "__CPO_ORDERBY__";
 
     /**
      * Used to build the PreparedStatement that is used by CPO to create the 
@@ -71,14 +76,34 @@ public class JdbcPreparedStatementFactory implements CpoReleasible {
      * @param jca The JdbcCpoAdapter that is controlling this transaction 
      * @param jq The JdbcQuery that is being executed
      * @param obj The pojo that is being acted upon
-     * @param additionalSql Additional sql to be appended to the JdbcQuery sql that is used to create the 
-     *        actual JDBC PreparedStatement
+    *
+     * @throws CpoException if a CPO error occurs
+     * @throws SQLException if a JDBC error occurs
+     */
+    public JdbcPreparedStatementFactory(Connection conn, JdbcCpoAdapter jca, JdbcMetaClass jmcCriteria, JdbcQuery jq, Object obj) throws CpoException{
+        this(conn, jca, jmcCriteria, jq, obj, null, null, null);
+    }
+
+    /**
+     * Used to build the PreparedStatement that is used by CPO to create the 
+     * actual JDBC PreparedStatement.
+     *
+     * The constructor is called by the internal CPO framework. This is not to be used by
+     * users of CPO. Programmers that build Transforms may need to use this object to get access
+     * to the actual connection. 
+     * 
+     * @param conn The actual jdbc connection that will be used to create the callable statement.
+     * @param jca The JdbcCpoAdapter that is controlling this transaction 
+     * @param jq The JdbcQuery that is being executed
+     * @param obj The pojo that is being acted upon
+     * @param where a cpoWhere to be added to the queryText from the query group
+     * @param orderBy an orderBy to be added to the queryText from the query group
      *
      * @throws CpoException if a CPO error occurs
      * @throws SQLException if a JDBC error occurs
      */
-    public JdbcPreparedStatementFactory(Connection conn, JdbcCpoAdapter jca, JdbcQuery jq, Object obj, String additionalSql) throws CpoException{
-        this(conn, jca, jq, obj, additionalSql, null);
+    public JdbcPreparedStatementFactory(Connection conn, JdbcCpoAdapter jca, JdbcMetaClass jmcCriteria, JdbcQuery jq, Object obj, CpoWhere where, Collection orderBy) throws CpoException{
+        this(conn, jca, jmcCriteria, jq, obj, where, orderBy, null);
     }
 
     /**
@@ -100,9 +125,9 @@ public class JdbcPreparedStatementFactory implements CpoReleasible {
      * @throws CpoException if a CPO error occurs
      * @throws SQLException if a JDBC error occurs
      */
-    public JdbcPreparedStatementFactory(Connection conn, JdbcCpoAdapter jca, JdbcQuery jq, Object obj,
-        String additionalSql, Collection bindValues) throws CpoException {
-       String sql=jq.getText()+((additionalSql==null) ? "" : additionalSql);
+    public JdbcPreparedStatementFactory(Connection conn, JdbcCpoAdapter jca, JdbcMetaClass jmcCriteria, JdbcQuery jq, Object obj,
+    		CpoWhere where, Collection orderBy, Collection bindValues) throws CpoException {
+      String sql=buildSql(jmcCriteria, jq.getText(), where, orderBy, bindValues);
        Logger localLogger = obj==null?logger:Logger.getLogger(obj.getClass().getName());
 
        localLogger.info("JdbcQuery SQL = <"+sql+">");
@@ -122,7 +147,91 @@ public class JdbcPreparedStatementFactory implements CpoReleasible {
         bindParameters(obj);
 
     }
+    /**
+     * DOCUMENT ME!
+     *
+     * @param jmc DOCUMENT ME!
+     * @param sql DOCUMENT ME!
+     * @param where DOCUMENT ME!
+     * @param orderBy DOCUMENT ME!
+     * @param bindValues DOCUMENT ME!
+     *
+     * @return DOCUMENT ME!
+     *
+     * @throws CpoException DOCUMENT ME!
+     */
+    private String buildSql(JdbcMetaClass jmc, String sql, CpoWhere where, Collection orderBy,
+        Collection bindValues) throws CpoException {
+        StringBuffer sqlText=new StringBuffer();
+
+        Iterator obIt=null;
+        JdbcCpoOrderBy ob=null;
+        JdbcWhereBuilder jwb=new JdbcWhereBuilder(jmc);
+        JdbcCpoWhere jcw=(JdbcCpoWhere) where;
+
+        sqlText.append(sql);
+
+        // do the where stuff here when ready
+        if(jcw!=null) {
+            try{
+                jcw.acceptDFVisitor(jwb);
+            } catch (Exception e){
+                throw new CpoException("Unable to build WHERE clause",e);
+            }
+            
+            if (sqlText.indexOf(WHERE_MARKER)==-1)
+                sqlText.append(jwb.getWhereClause());
+            else 
+                sqlText = replaceMarker(sqlText, WHERE_MARKER,jwb.getWhereClause());
+            
+            bindValues.addAll(jwb.getBindValues());
+        }
+
+        // do the order by stuff now
+        if(orderBy!=null) {
+            StringBuffer obBuff = new StringBuffer();
+            obIt=orderBy.iterator();
+
+            if(obIt.hasNext()) {
+                obBuff.append(" ORDER BY ");
+                ob=(JdbcCpoOrderBy) obIt.next();
+                obBuff.append(ob.toString(jmc));
+            }
+
+            while(obIt.hasNext()) {
+                obBuff.append(", ");
+                ob=(JdbcCpoOrderBy) obIt.next();
+                obBuff.append(ob.toString(jmc));
+            }
+            
+            if (sqlText.indexOf(ORDERBY_MARKER)==-1){
+                sqlText.append(obBuff);
+            }
+            else {
+                sqlText=replaceMarker(sqlText, ORDERBY_MARKER, obBuff.toString());
+            }
+        }
+        
+        return sqlText.toString();
+    }
     
+    protected StringBuffer replaceMarker(StringBuffer source, String marker, String replace){
+        int attrOffset = 0;
+        int fromIndex = 0;
+        int mLength=marker.length();
+
+        if(source!=null && source.length()>0) {
+            while((attrOffset=source.indexOf(marker, fromIndex))!=-1){
+                     source.replace(attrOffset,attrOffset+mLength, replace);
+                     fromIndex+=attrOffset+mLength;
+            }
+        }
+
+        return source;
+
+    }
+
+   
     /**
      * Returns the jdbc prepared statment associated with this 
      * object

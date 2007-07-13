@@ -68,9 +68,6 @@ public class JdbcCpoAdapter implements CpoAdapter{
             "CREATE", "UPDATE", "DELETE", "RETRIEVE", "LIST", "PERSIST", "EXIST", "EXECUTE"
         };
     
-    private static final String WHERE_MARKER = "__CPO_WHERE__";
-    private static final String ORDERBY_MARKER = "__CPO_ORDERBY__";
-    
 
     // Query Group Name Constants
 
@@ -1114,7 +1111,7 @@ public class JdbcCpoAdapter implements CpoAdapter{
             
             for(i=0; i<queryGroup.size(); i++) {
                 jq=(JdbcQuery) queryGroup.get(i);
-                JdbcPreparedStatementFactory jpsf = new JdbcPreparedStatementFactory(con, this, jq, obj, null);
+                JdbcPreparedStatementFactory jpsf = new JdbcPreparedStatementFactory(con, this, jmc, jq, obj);
                 ps=jpsf.getPreparedStatement();
                 
                 long qCount=0; // set the results for this query to 0
@@ -2613,7 +2610,7 @@ public class JdbcCpoAdapter implements CpoAdapter{
             for(i=0; i<queryGroup.size(); i++) {
                 jq=(JdbcQuery) queryGroup.get(i);
 
-                JdbcPreparedStatementFactory jpsf = new JdbcPreparedStatementFactory(con, this, jq, criteriaObj, null);
+                JdbcPreparedStatementFactory jpsf = new JdbcPreparedStatementFactory(con, this, jmc, jq, criteriaObj);
                 ps=jpsf.getPreparedStatement();
 
                 // insertions on
@@ -2778,7 +2775,7 @@ public class JdbcCpoAdapter implements CpoAdapter{
         ArrayList resultSet=new ArrayList();
         Class jmcClass=null;
         HashMap jmcAttrMap=null;
-        String sqlText=null;
+        //String sqlText=null;
         Collection bindValues=new ArrayList();
         JdbcAttribute[] attributes=null;
         JdbcPreparedStatementFactory jpsf=null;
@@ -2794,12 +2791,11 @@ public class JdbcCpoAdapter implements CpoAdapter{
             	localLogger.info("=================== Class=<"+criteria.getClass()+"> Type=<"+JdbcCpoAdapter.LIST_GROUP+"> Name=<"+name+"> =========================");
                 queryGroup=(ArrayList) jmcCriteria.getQueryGroup(JdbcCpoAdapter.LIST_GROUP, name);
             }
-            sqlText=buildSql(jmcCriteria, "", where, orderBy, bindValues);
 
             for(i=0; i<queryGroup.size(); i++) {
                 jq=(JdbcQuery) queryGroup.get(i);
 
-                jpsf = new JdbcPreparedStatementFactory(con, this, jq, criteria, sqlText, bindValues);
+                jpsf = new JdbcPreparedStatementFactory(con, this, jmcCriteria, jq, criteria, where, orderBy, bindValues);
                 ps=jpsf.getPreparedStatement();
 
                 localLogger.debug("Retrieving Records");
@@ -2858,8 +2854,7 @@ public class JdbcCpoAdapter implements CpoAdapter{
             }
         } catch(SQLException e) {
             String msg=
-                "ProcessSelectGroup(String name, Object criteria, Object result, CpoWhere where, Collection orderBy, Connection con) failed. SQL="+
-                sqlText+" Error:";
+                "ProcessSelectGroup(String name, Object criteria, Object result, CpoWhere where, Collection orderBy, Connection con) failed. Error:";
             localLogger.error(msg, e);
             throw new CpoException(msg, e);
         } finally {
@@ -2960,7 +2955,7 @@ public class JdbcCpoAdapter implements CpoAdapter{
 
             for(i=0; i<queryGroup.size(); i++) {
                 jq=(JdbcQuery) queryGroup.get(i);
-                jpsf = new JdbcPreparedStatementFactory(con, this, jq, obj, null);
+                jpsf = new JdbcPreparedStatementFactory(con, this, jmc, jq, obj);
                 ps=jpsf.getPreparedStatement();
                 numRows+=ps.executeUpdate();
                 jpsf.release();
@@ -3028,7 +3023,7 @@ public class JdbcCpoAdapter implements CpoAdapter{
             if (queryGroup.size()==1){
                 localLogger.info("=================== BATCH - Class=<"+arr[0].getClass()+"> Type=<"+groupType+"> Name=<"+groupName+"> =========================");
                 jq = (JdbcQuery) queryGroup.get(0);
-                jpsf = new JdbcPreparedStatementFactory(con, this, jq, arr[0], null);
+                jpsf = new JdbcPreparedStatementFactory(con, this, jmc, jq, arr[0]);
                 ps=jpsf.getPreparedStatement();
                 ps.addBatch();
                 for (int j=1; j<arr.length; j++){
@@ -3053,7 +3048,7 @@ public class JdbcCpoAdapter implements CpoAdapter{
                 for(int j=0; j<arr.length; j++){
                     for(int i=0; i<queryGroup.size(); i++) {
                         jq=(JdbcQuery) queryGroup.get(i);
-                        jpsf = new JdbcPreparedStatementFactory(con, this, jq, arr[j], null);
+                        jpsf = new JdbcPreparedStatementFactory(con, this, jmc, jq, arr[j]);
                         ps=jpsf.getPreparedStatement();
                         numRows+=ps.executeUpdate();
                         jpsf.release();
@@ -3179,88 +3174,6 @@ public class JdbcCpoAdapter implements CpoAdapter{
         }
 
         return updateCount;
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param jmc DOCUMENT ME!
-     * @param sql DOCUMENT ME!
-     * @param where DOCUMENT ME!
-     * @param orderBy DOCUMENT ME!
-     * @param bindValues DOCUMENT ME!
-     *
-     * @return DOCUMENT ME!
-     *
-     * @throws CpoException DOCUMENT ME!
-     */
-    private String buildSql(JdbcMetaClass jmc, String sql, CpoWhere where, Collection orderBy,
-        Collection bindValues) throws CpoException {
-        StringBuffer sqlText=new StringBuffer();
-
-        Iterator obIt=null;
-        JdbcCpoOrderBy ob=null;
-        JdbcWhereBuilder jwb=new JdbcWhereBuilder(jmc);
-        JdbcCpoWhere jcw=(JdbcCpoWhere) where;
-
-        sqlText.append(sql);
-
-        // do the where stuff here when ready
-        if(jcw!=null) {
-            try{
-                jcw.acceptDFVisitor(jwb);
-            } catch (Exception e){
-                throw new CpoException("Unable to build WHERE clause",e);
-            }
-            
-            if (sqlText.indexOf(WHERE_MARKER)==-1)
-                sqlText.append(jwb.getWhereClause());
-            else 
-                sqlText = replaceMarker(sqlText, WHERE_MARKER,jwb.getWhereClause());
-            
-            bindValues.addAll(jwb.getBindValues());
-        }
-
-        // do the order by stuff now
-        if(orderBy!=null) {
-            StringBuffer obBuff = new StringBuffer();
-            obIt=orderBy.iterator();
-
-            if(obIt.hasNext()) {
-                obBuff.append(" ORDER BY ");
-                ob=(JdbcCpoOrderBy) obIt.next();
-                obBuff.append(ob.toString(jmc));
-            }
-
-            while(obIt.hasNext()) {
-                obBuff.append(", ");
-                ob=(JdbcCpoOrderBy) obIt.next();
-                obBuff.append(ob.toString(jmc));
-            }
-            
-            if (sqlText.indexOf(ORDERBY_MARKER)==-1)
-                sqlText.append(obBuff);
-            else
-                sqlText=replaceMarker(sqlText, ORDERBY_MARKER, obBuff.toString());
-        }
-
-        return sqlText.toString();
-    }
-    
-    protected StringBuffer replaceMarker(StringBuffer source, String marker, String replace){
-        int attrOffset = 0;
-        int fromIndex = 0;
-        int mLength=marker.length();
-
-        if(source!=null && source.length()>0) {
-            while((attrOffset=source.indexOf(marker, fromIndex))!=-1){
-                     source.replace(attrOffset,attrOffset+mLength-1, replace);
-                     fromIndex+=attrOffset+mLength;
-            }
-        }
-
-        return source;
-
     }
 
     /**

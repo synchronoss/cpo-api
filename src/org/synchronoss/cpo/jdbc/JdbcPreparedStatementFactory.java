@@ -137,7 +137,7 @@ public class JdbcPreparedStatementFactory implements CpoReleasible {
         try {
             pstmt=conn.prepareStatement(sql);
         } catch (SQLException se){
-        	localLogger.error("Error Instantiating JdbcPreparedStatementFactory"+se.getLocalizedMessage());
+        	localLogger.error("Error Instantiating JdbcPreparedStatementFactory SQL=<"+sql+">"+se.getLocalizedMessage());
           	throw new CpoException(se);
         }
         setPreparedStatement(pstmt);
@@ -185,31 +185,38 @@ public class JdbcPreparedStatementFactory implements CpoReleasible {
                 sqlText = replaceMarker(sqlText, WHERE_MARKER,jwb.getWhereClause());
             
             bindValues.addAll(jwb.getBindValues());
+        } else {
+        	sqlText = replaceMarker(sqlText, WHERE_MARKER,"");
         }
 
         // do the order by stuff now
         if(orderBy!=null) {
             StringBuffer obBuff = new StringBuffer();
             obIt=orderBy.iterator();
-
-            if(obIt.hasNext()) {
-                obBuff.append(" ORDER BY ");
-                ob=(JdbcCpoOrderBy) obIt.next();
-                obBuff.append(ob.toString(jmc));
-            }
-
-            while(obIt.hasNext()) {
-                obBuff.append(", ");
-                ob=(JdbcCpoOrderBy) obIt.next();
-                obBuff.append(ob.toString(jmc));
-            }
             
+            try {
+	            if(obIt.hasNext()) {
+	                obBuff.append(" ORDER BY ");
+	                ob=(JdbcCpoOrderBy) obIt.next();
+	                obBuff.append(ob.toString(jmc));
+	            }
+	
+	            while(obIt.hasNext()) {
+	                obBuff.append(", ");
+	                ob=(JdbcCpoOrderBy) obIt.next();
+	                obBuff.append(ob.toString(jmc));
+	            }
+            } catch (CpoException ce) {
+            	throw new CpoException("Error Processing OrderBy Attribute<"+ce.getLocalizedMessage()+"> not Found. JDBC Query=<"+sqlText.toString()+obBuff.toString()+">");
+            }
             if (sqlText.indexOf(ORDERBY_MARKER)==-1){
                 sqlText.append(obBuff);
             }
             else {
                 sqlText=replaceMarker(sqlText, ORDERBY_MARKER, obBuff.toString());
             }
+        } else {
+            sqlText=replaceMarker(sqlText, ORDERBY_MARKER, "");
         }
         
         return sqlText.toString();

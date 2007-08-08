@@ -26,6 +26,7 @@ package org.synchronoss.cpo.jdbc;
 
 import java.util.HashMap;
 
+import org.synchronoss.cpo.CpoException;
 import org.synchronoss.cpo.CpoOrderBy;
 
 
@@ -124,7 +125,7 @@ public class JdbcCpoOrderBy implements CpoOrderBy {
         this.function = s;
     }
 
-    public String toString(JdbcMetaClass jmc) {
+    public String toString(JdbcMetaClass jmc) throws CpoException {
         StringBuffer sb = new StringBuffer();
         String function = null;
         String attribute = null;
@@ -138,6 +139,9 @@ public class JdbcCpoOrderBy implements CpoOrderBy {
         function = this.getFunction();
         if(attribute != null && attribute.length()>0) {
             jdbcAttribute = (JdbcAttribute) columnMap.get(attribute);
+            if (jdbcAttribute == null) {
+            	throw new CpoException(attribute);
+            }
             sb.append(" ");
 
             column = jdbcAttribute.getDbName();

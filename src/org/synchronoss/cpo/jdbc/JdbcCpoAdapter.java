@@ -2966,8 +2966,6 @@ public class JdbcCpoAdapter implements CpoAdapter{
             if(numRows>0) {
                 updateCount++;
             }
-        } catch (CpoException ce) {
-            throw ce; // just send it on. No need to attach anymore info
         } catch(SQLException e) {
             String msg="ProcessUpdateGroup failed:"+groupType+","+groupName+","+
                 obj.getClass().getName();
@@ -3061,8 +3059,6 @@ public class JdbcCpoAdapter implements CpoAdapter{
             if(numRows>0) {
                 updateCount=numRows;
             }
-        } catch (CpoException ce) {
-            throw ce; // just send it on. No need to attach anymore info
         } catch(SQLException e) {
             String msg="ProcessUpdateGroup failed:"+groupType+","+groupName+","+
             arr[0].getClass().getName();

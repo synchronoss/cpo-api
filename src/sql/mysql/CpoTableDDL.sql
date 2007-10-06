@@ -32,7 +32,8 @@ CREATE TABLE IF NOT EXISTS cpo_query_parameter (
        userid               varchar(50), 
        createdate           date
    ) 
-ENGINE = 'InnoDB';
+ENGINE=InnoDB
+default character set = utf8;
 
 ----------------------------------------------
 -- CPO_QUERY_PARAMETER_REV
@@ -48,7 +49,8 @@ CREATE TABLE IF NOT EXISTS cpo_query_parameter_rev (
        createdate           date,
        revision             NUMERIC
    ) 
-ENGINE = 'InnoDB';
+ENGINE=InnoDB
+default character set = utf8;
 
 ----------------------------------------------
 -- CPO_ATTRIBUTE_MAP
@@ -67,8 +69,8 @@ CREATE TABLE IF NOT EXISTS cpo_attribute_map (
        userid               varchar(50), 
        createdate           date
 )
-ENGINE = 'InnoDB';
-
+ENGINE=InnoDB
+default character set = utf8;
 
 ----------------------------------------------
 -- CPO_ATTRIBUTE_MAP_REV
@@ -88,7 +90,8 @@ CREATE TABLE IF NOT EXISTS cpo_attribute_map_rev (
        createdate           date,
        revision             NUMERIC
 )
-ENGINE = 'InnoDB';
+ENGINE=InnoDB
+default character set = utf8;
 
 ----------------------------------------------
 -- CPO_QUERY
@@ -104,7 +107,8 @@ CREATE TABLE IF NOT EXISTS cpo_query (
        userid               varchar(50), 
        createdate           date
 )
-ENGINE = 'InnoDB';
+ENGINE=InnoDB
+default character set = utf8;
 
 ----------------------------------------------
 -- CPO_QUERY_REV
@@ -121,7 +125,8 @@ CREATE TABLE IF NOT EXISTS cpo_query_rev (
        createdate           date,
        revision             NUMERIC
 )
-ENGINE = 'InnoDB';
+ENGINE=InnoDB
+default character set = utf8;
 
 ----------------------------------------------
 -- CPO_QUERY_GROUP
@@ -136,7 +141,8 @@ CREATE TABLE IF NOT EXISTS cpo_query_group (
        userid               varchar(50), 
        createdate           date
 )
-ENGINE = 'InnoDB';
+ENGINE=InnoDB
+default character set = utf8;
 
 ----------------------------------------------
 -- CPO_QUERY_GROUP_REV
@@ -152,7 +158,8 @@ CREATE TABLE IF NOT EXISTS cpo_query_group_rev (
        createdate           date,
        revision             numeric
 )
-ENGINE = 'InnoDB';
+ENGINE=InnoDB
+default character set = utf8;
 
 ----------------------------------------------
 -- CPO_QUERY_TEXT
@@ -167,7 +174,8 @@ CREATE TABLE IF NOT EXISTS cpo_query_text (
        userid               varchar(50), 
        createdate           date
 )
-ENGINE = 'InnoDB';
+ENGINE=InnoDB
+default character set = utf8;
 
 ----------------------------------------------
 -- CPO_QUERY_TEXT_REV
@@ -183,7 +191,8 @@ CREATE TABLE IF NOT EXISTS cpo_query_text_rev (
        createdate           date,
        revision             numeric
 )
-ENGINE = 'InnoDB';
+ENGINE=InnoDB
+default character set = utf8;
 
 ----------------------------------------------
 -- CPO_CLASS
@@ -197,7 +206,8 @@ CREATE TABLE IF NOT EXISTS cpo_class (
        userid               varchar(50), 
        createdate           date
 )
-ENGINE = 'InnoDB';
+ENGINE=InnoDB
+default character set = utf8;
 
 ----------------------------------------------
 -- CPO_CLASS
@@ -212,7 +222,8 @@ CREATE TABLE IF NOT EXISTS cpo_class_rev (
        createdate           date,
        revision             numeric
 )
-ENGINE = 'InnoDB';
+ENGINE=InnoDB
+default character set = utf8;
 
 ----------------------------------------------
 -- Multi Part Primary Keys

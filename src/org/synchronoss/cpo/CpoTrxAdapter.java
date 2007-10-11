@@ -43,4 +43,9 @@ public interface CpoTrxAdapter extends CpoAdapter {
      * subsequent calls to the CpoTrxAdapter will throw an exception.
      */
     public void close() throws CpoException;
+    
+    /**
+     * Returns true if the TrxAdapter has been closed, false if it is still active
+     */
+    public boolean isClosed() throws CpoException;
 }

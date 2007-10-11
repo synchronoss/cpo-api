@@ -126,6 +126,8 @@ public class JdbcCpoAdapter implements CpoAdapter{
     
     /** DOCUMENT ME! */
     private String metaDataSourceName_=null;
+    
+    private String dbTablePrefix="";
 
     /** DOCUMENT ME! */
 
@@ -146,7 +148,8 @@ public class JdbcCpoAdapter implements CpoAdapter{
  */
     public JdbcCpoAdapter(JdbcDataSourceInfo jdsi)
             throws CpoException {
-            
+        
+    	setDbTablePrefix(jdsi.getDbTablePrefix());
         setMetaDataSource(getDataSource(jdsi));
         setMetaDataSourceName(jdsi.getDataSourceName());
         setWriteDataSource(getMetaDataSource());
@@ -164,6 +167,8 @@ public class JdbcCpoAdapter implements CpoAdapter{
  */
     public JdbcCpoAdapter(JdbcDataSourceInfo jdsiMeta, JdbcDataSourceInfo jdsiTrx)
             throws CpoException {
+
+    	setDbTablePrefix(jdsiMeta.getDbTablePrefix());
         setMetaDataSource(getDataSource(jdsiMeta));
         setWriteDataSource(getDataSource(jdsiTrx));
         setMetaDataSourceName(jdsiMeta.getDataSourceName());
@@ -182,6 +187,7 @@ public class JdbcCpoAdapter implements CpoAdapter{
  */
     public JdbcCpoAdapter(JdbcDataSourceInfo jdsiMeta, JdbcDataSourceInfo jdsiWrite, JdbcDataSourceInfo jdsiRead)
             throws CpoException {
+    	setDbTablePrefix(jdsiMeta.getDbTablePrefix());
         setMetaDataSource(getDataSource(jdsiMeta));
         setWriteDataSource(getDataSource(jdsiWrite));
         setReadDataSource(getDataSource(jdsiRead));
@@ -189,8 +195,9 @@ public class JdbcCpoAdapter implements CpoAdapter{
         processDatabaseMetaData();
     }
     
-    protected JdbcCpoAdapter(DataSource metaSource, String metaSourceName, Connection c, boolean batchSupported)
+    protected JdbcCpoAdapter(DataSource metaSource, String metaSourceName, Connection c, boolean batchSupported, String dbTablePrefix)
         throws CpoException {
+    	setDbTablePrefix(dbTablePrefix);
         setMetaDataSource(metaSource);
         setStaticConnection(c);
         setMetaDataSourceName(metaSourceName);
@@ -3185,7 +3192,10 @@ public class JdbcCpoAdapter implements CpoAdapter{
      */
     private void loadAttributeMap(String name, Connection c, JdbcMetaClass jmc)
         throws CpoException {
-        String sql="select cam.column_name, cam.attribute, cc.class_id, cam.column_type, cam.db_table, cam.db_column, cam.transform_class from cpo_attribute_map cam, cpo_class cc where cc.name = ? and cam.class_id = cc.class_id";
+        String select="select cam.column_name, cam.attribute, cc.class_id, cam.column_type, cam.db_table, cam.db_column, cam.transform_class from ";
+        String table1="cpo_attribute_map cam, ";
+        String table2="cpo_class cc where cc.name = ? and cam.class_id = cc.class_id";
+        String sql=select+getDbTablePrefix()+table1+getDbTablePrefix()+table2;
         PreparedStatement ps=null;
         ResultSet rs=null;
         HashMap aMap=null;
@@ -3193,6 +3203,8 @@ public class JdbcCpoAdapter implements CpoAdapter{
         String classId=null;
         String dbType=null;
 
+        logger.debug("loadAttribute Sql <"+sql+">");
+        
         //JdbcParameter jp=null;
         JdbcAttribute attribute=null;
         boolean failed=false;
@@ -3297,20 +3309,29 @@ public class JdbcCpoAdapter implements CpoAdapter{
         sqlBuffer.append(
             " innr.group_type,innr.name,innr.query_id,innr.query_seq query_seq,cqt.sql_text,innr.param_seq param_seq,  cam.attribute, cam.column_name, cam.column_type, innr.param_type ");
         sqlBuffer.append("from ");
-        sqlBuffer.append("  cpo_query_text cqt,  ");
+        sqlBuffer.append(getDbTablePrefix());
+        sqlBuffer.append("cpo_query_text cqt,  ");
         sqlBuffer.append(
             "  (select cqg.group_type, cqg.name, cq.query_id, cq.seq_no query_seq,cqp.seq_no param_seq, cqp.attribute_id, cqp.param_type,cq.text_id,cq.seq_no,cqg.group_id ");
-        sqlBuffer.append("   from cpo_query_group cqg, cpo_query cq ");
-        sqlBuffer.append("   left outer join cpo_query_parameter cqp ");
+        sqlBuffer.append("from ");
+        sqlBuffer.append(getDbTablePrefix());
+        sqlBuffer.append("cpo_query_group cqg, ");
+        sqlBuffer.append(getDbTablePrefix());
+        sqlBuffer.append("cpo_query cq ");
+        sqlBuffer.append("   left outer join ");
+        sqlBuffer.append(getDbTablePrefix());
+        sqlBuffer.append("cpo_query_parameter cqp ");
         sqlBuffer.append("   on cq.query_id = cqp.query_id ");
         sqlBuffer.append("   where cqg.class_id = ? ");
         sqlBuffer.append("   and cqg.group_id = cq.group_id ) innr ");
-        sqlBuffer.append(
-            "left outer join cpo_attribute_map cam on innr.attribute_id = cam.attribute_id ");
+        sqlBuffer.append(" left outer join ");
+        sqlBuffer.append(getDbTablePrefix());
+        sqlBuffer.append("cpo_attribute_map cam on innr.attribute_id = cam.attribute_id ");
         sqlBuffer.append("where cqt.text_id = innr.text_id ");
         sqlBuffer.append("order by innr.group_id asc, innr.query_seq asc, innr.param_seq  asc");
 
         String sql=sqlBuffer.toString();
+        logger.debug("loadQueryGroup Sql <"+sql+">");
 
         PreparedStatement ps=null;
         ResultSet rs=null;
@@ -3503,6 +3524,15 @@ public class JdbcCpoAdapter implements CpoAdapter{
      * @see CpoTrxAdapter
      */
     public CpoTrxAdapter getCpoTrxAdapter() throws CpoException {
-        return new JdbcCpoTrxAdapter(getMetaDataSource(), getMetaDataSourceName(), getWriteConnection(), batchUpdatesSupported_);
+        return new JdbcCpoTrxAdapter(getMetaDataSource(), getMetaDataSourceName(), getWriteConnection(), batchUpdatesSupported_, getDbTablePrefix());
     }
+
+	public String getDbTablePrefix() {
+		return dbTablePrefix;
+	}
+
+	public void setDbTablePrefix(String dbTablePrefix) {
+		this.dbTablePrefix = dbTablePrefix;
+	}
+
 }

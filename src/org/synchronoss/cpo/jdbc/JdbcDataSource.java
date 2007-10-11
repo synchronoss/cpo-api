@@ -55,7 +55,7 @@ public class JdbcDataSource implements DataSource {
     private HashMap connectionMap_ = new HashMap();
     
     private JdbcDataSourceInfo dataSourceInfo=null;
-
+    
     private Vector availableConnections = null;
     private Vector      busyConnections = null;
 

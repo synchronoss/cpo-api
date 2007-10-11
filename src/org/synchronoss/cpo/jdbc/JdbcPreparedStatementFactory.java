@@ -51,6 +51,8 @@ public class JdbcPreparedStatementFactory implements CpoReleasible {
     /** DOCUMENT ME! */
     private static Logger logger=Logger.getLogger(JdbcPreparedStatementFactory.class.getName());
     
+    private Logger localLogger=null;
+    
     private PreparedStatement ps_ = null;
     
     private JdbcPreparedStatementFactory(){}
@@ -128,7 +130,9 @@ public class JdbcPreparedStatementFactory implements CpoReleasible {
     public JdbcPreparedStatementFactory(Connection conn, JdbcCpoAdapter jca, JdbcMetaClass jmcCriteria, JdbcQuery jq, Object obj,
     		CpoWhere where, Collection orderBy, Collection bindValues) throws CpoException {
       String sql=buildSql(jmcCriteria, jq.getText(), where, orderBy, bindValues);
-       Logger localLogger = obj==null?logger:Logger.getLogger(obj.getClass().getName());
+      
+       localLogger = obj==null?logger:Logger.getLogger(obj.getClass().getName());
+
 
        localLogger.info("JdbcQuery SQL = <"+sql+">");
 
@@ -272,7 +276,7 @@ public class JdbcPreparedStatementFactory implements CpoReleasible {
             try{
                 ((CpoReleasible)it.next()).release();
             } catch(CpoException ce) {
-                logger.error("Error Releasing Prepared Statement Transform Object",ce);
+                localLogger.error("Error Releasing Prepared Statement Transform Object",ce);
                 throw ce;
             }
         }
@@ -322,15 +326,15 @@ public class JdbcPreparedStatementFactory implements CpoReleasible {
                     if (jsm != null){
                         try{
                         	if (ja==null)
-                        		logger.debug(bindAttr.getName()+"="+bindObject);
+                        		localLogger.debug(bindAttr.getName()+"="+bindObject);
                         	else
-                        		logger.debug(ja.getDbName()+"="+bindObject);
+                        		localLogger.debug(ja.getDbName()+"="+bindObject);
                             jsm.getPsSetter().invoke(this.getPreparedStatement(), new Object[]{new Integer(j++),bindObject});
                         } catch (IllegalAccessException iae){
-                            logger.error("Error Accessing Prepared Statement Setter: "+iae.getLocalizedMessage());
+                        	localLogger.error("Error Accessing Prepared Statement Setter: "+iae.getLocalizedMessage());
                             throw new CpoException(iae);
                         } catch (InvocationTargetException ite){
-                            logger.error("Error Invoking Prepared Statement Setter: "+ite.getCause().getLocalizedMessage());
+                        	localLogger.error("Error Invoking Prepared Statement Setter: "+ite.getCause().getLocalizedMessage());
                             throw new CpoException(ite.getCause());
                         }
                     } else {

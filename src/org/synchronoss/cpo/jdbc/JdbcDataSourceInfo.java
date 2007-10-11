@@ -55,6 +55,8 @@ public class JdbcDataSourceInfo {
     private boolean waitIfBusy_ = false;
     
     private String dataSourceName = null;
+    
+    private String dbTablePrefix="";
 
 
 	/**
@@ -77,6 +79,23 @@ public class JdbcDataSourceInfo {
 		setJndiName(JndiName);
 		setDataSourceName(JndiName);
 	}
+	
+    /**
+     * Creates a JdbcDataSourceInfo from a JNDIName that represents the 
+     * datasource in the application server.
+     *
+     * @param JndiName The JndiName of the app server datasource
+     * @tablePrefix The prefix added to the cpo tables in the metadata source
+     *
+     */
+	public JdbcDataSourceInfo(String JndiName, String tablePrefix) {
+		setConnectionType(JNDI_CONNECTION);
+		setJndiName(JndiName);
+		setDataSourceName(JndiName);
+		if (tablePrefix!=null){
+			setDbTablePrefix(tablePrefix);
+		}
+	}
 
         /**
          * Creates a JdbcDataSourceInfo from a JNDIName that represents the 
@@ -91,6 +110,25 @@ public class JdbcDataSourceInfo {
 		setJndiName(JndiName);
 		setJndiCtx(ctx);
 		setDataSourceName(JndiName);
+	}
+	
+    /**
+     * Creates a JdbcDataSourceInfo from a JNDIName that represents the 
+     * datasource in the application server.
+     *
+     * @param JndiName The JndiName of the app server datasource
+     * @param ctx - The context for which the Jndi Lookup should use.
+     * @tablePrefix The prefix added to the cpo tables in the metadata source
+     *
+     */
+	public JdbcDataSourceInfo(String JndiName, Context ctx, String tablePrefix){
+		setConnectionType(JNDI_CONNECTION);
+		setJndiName(JndiName);
+		setJndiCtx(ctx);
+		setDataSourceName(JndiName);
+		if (tablePrefix!=null){
+			setDbTablePrefix(tablePrefix);
+		}
 	}
 	
         /**
@@ -118,6 +156,35 @@ public class JdbcDataSourceInfo {
 		setDataSourceName(url);
 	}
 
+    /**
+     * Creates a JdbcDataSourceInfo from a Jdbc Driver
+     *
+     * @param driver The text name of the driver
+     * @param url - The url that points to the database.
+     * @param initialConnections - The initial number of connections to be  
+     *                       created in the connection pool
+     * @param maxConnections - The max number of connections of the 
+     *                       connection pool
+     * @param waitIfBusy - If the maxConnections are in use do you wait for a 
+     *                   connection to free up or throw an exception 
+     * @tablePrefix The prefix added to the cpo tables in the metadata source
+     */
+	public JdbcDataSourceInfo(String driver, String url,
+			int initialConnections, int maxConnections, boolean waitIfBusy, String tablePrefix)
+			throws SQLException {
+	
+		setDriver(driver);
+		setUrl(url);
+		setConnectionType(URL_CONNECTION);
+		setInitialConnections(initialConnections);
+		setMaxConnections(maxConnections);
+		setWaitIfBusy(waitIfBusy);
+		setDataSourceName(url);
+		if (tablePrefix!=null){
+			setDbTablePrefix(tablePrefix);
+		}
+	}
+	
         /**
          * Creates a JdbcDataSourceInfo from a Jdbc Driver
          *
@@ -143,6 +210,36 @@ public class JdbcDataSourceInfo {
 		setWaitIfBusy(waitIfBusy);
 		setDataSourceName(BuildDataSourceName(url, properties));
 	}
+	
+    /**
+     * Creates a JdbcDataSourceInfo from a Jdbc Driver
+     *
+     * @param driver The text name of the driver
+     * @param url - The url that points to the database.
+     * @param properties - The connection properties for connecting to the database
+     * @param initialConnections - The initial number of connections to be  
+     *                       created in the connection pool
+     * @param maxConnections - The max number of connections of the 
+     *                       connection pool
+     * @param waitIfBusy - If the maxConnections are in use do you wait for a 
+     *                   connection to free up or throw an exception 
+     * @tablePrefix The prefix added to the cpo tables in the metadata source
+     */
+public JdbcDataSourceInfo(String driver, String url, Properties properties,
+		int initialConnections, int maxConnections, boolean waitIfBusy, String tablePrefix)
+		throws SQLException {
+	setDriver(driver);
+	setUrl(url);
+	setProperties(properties);
+	setConnectionType(URL_PROPS_CONNECTION);
+	setInitialConnections(initialConnections);
+	setMaxConnections(maxConnections);
+	setWaitIfBusy(waitIfBusy);
+	setDataSourceName(BuildDataSourceName(url, properties));
+	if (tablePrefix!=null){
+		setDbTablePrefix(tablePrefix);
+	}
+}
 
         /**
          * Creates a JdbcDataSourceInfo from a Jdbc Driver
@@ -171,6 +268,39 @@ public class JdbcDataSourceInfo {
 		setMaxConnections(maxConnections);
 		setWaitIfBusy(waitIfBusy);
 		setDataSourceName(url+username);
+	}
+
+    /**
+     * Creates a JdbcDataSourceInfo from a Jdbc Driver
+     *
+     * @param driver The text name of the driver
+     * @param url - The url that points to the database.
+     * @param username - The username for connecting to the database
+     * @param password - The password for connectinf to the database
+     * @param initialConnections - The initial number of connections to be  
+     *                       created in the connection pool
+     * @param maxConnections - The max number of connections of the 
+     *                       connection pool
+     * @param waitIfBusy - If the maxConnections are in use do you wait for a 
+     *                   connection to free up or throw an exception 
+     * @tablePrefix The prefix added to the cpo tables in the metadata source
+     */
+	public JdbcDataSourceInfo(String driver, String url, String username,
+			String password, int initialConnections, int maxConnections,
+			boolean waitIfBusy, String tablePrefix) throws SQLException {
+	
+		setConnectionType(URL_USER_PASSWORD_CONNECTION);
+		setDriver(driver);
+		setUrl(url);
+		setUserName(username);
+		setPassword(password);
+		setInitialConnections(initialConnections);
+		setMaxConnections(maxConnections);
+		setWaitIfBusy(waitIfBusy);
+		setDataSourceName(url+username);
+		if (tablePrefix!=null){
+			setDbTablePrefix(tablePrefix);
+		}
 	}
 
         /**
@@ -314,6 +444,20 @@ public class JdbcDataSourceInfo {
 	 */
 	protected void setDataSourceName(String dataSourceName) {
 		this.dataSourceName = dataSourceName;
+	}
+
+	/**
+	 * @return Returns the dataSourceName.
+	 */
+	public String getDbTablePrefix() {
+		return this.dbTablePrefix;
+	}
+
+	/**
+	 * @param dataSourceName The dataSourceName to set.
+	 */
+	protected void setDbTablePrefix(String dbTablePrefix) {
+		this.dbTablePrefix = dbTablePrefix;
 	}
 	
     /**

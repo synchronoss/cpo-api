@@ -385,7 +385,7 @@ public class JdbcAttribute extends java.lang.Object implements java.io.Serializa
         Logger localLogger = obj==null?logger:Logger.getLogger(obj.getClass().getName());
         try{
             if (hasTransformPS){
-            	localLogger.debug("Calling Transform:"+transformPSOut_.getClass().getName());
+            	localLogger.debug("Calling Transform:"+transformPSOut_.getName());
                     param = transformOut(jpsf, getGetters()[0].invoke(obj, (Object[])null));
                     jdbcMethod = JavaSqlMethods.getJavaSqlMethod(transformPSOut_.getReturnType());
                     if (jdbcMethod==null)

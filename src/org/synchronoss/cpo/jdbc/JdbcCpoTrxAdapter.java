@@ -36,8 +36,8 @@ public class JdbcCpoTrxAdapter extends JdbcCpoAdapter implements CpoTrxAdapter {
     private JdbcCpoTrxAdapter(){}
     
     protected JdbcCpoTrxAdapter(DataSource metaSource, String metaSourceName, Connection c, 
-                    boolean batchSupported) throws CpoException {
-            super(metaSource, metaSourceName, c, batchSupported);
+                    boolean batchSupported, String dbTablePrefix) throws CpoException {
+            super(metaSource, metaSourceName, c, batchSupported, dbTablePrefix);
             // TODO Auto-generated constructor stub
     }
 
@@ -65,6 +65,18 @@ public class JdbcCpoTrxAdapter extends JdbcCpoAdapter implements CpoTrxAdapter {
     	}else{
     		throw new CpoException ("Transaction Object has been Closed");
     	}
+    }
+    
+    public boolean isClosed()  throws CpoException {
+    	Connection writeConnection = getStaticConnection();
+    	boolean closed = false;
+    	
+    	try{
+    		closed = (writeConnection == null || writeConnection.isClosed());
+    	} catch (Exception e) {
+    		throw new CpoException (e.getMessage());
+    	}
+    	return closed;
     }
     
     public void close() {

@@ -227,20 +227,23 @@ public class JdbcPreparedStatementFactory implements CpoReleasible {
     }
     
     protected StringBuffer replaceMarker(StringBuffer source, String marker, String replace){
-        int attrOffset = 0;
-        int fromIndex = 0;
-        int mLength=marker.length();
+      int attrOffset = 0;
+      int fromIndex = 0;
+      int mLength=marker.length();
+      int rLength=replace.length();
+      
+      //OUT.debug("starting string <"+source.toString()+">");
+      if(source!=null && source.length()>0) {
+          while((attrOffset=source.indexOf(marker, fromIndex))!=-1){
+                   source.replace(attrOffset,attrOffset+mLength, replace);
+                   fromIndex=attrOffset+rLength;
+          }
+      }
+      //OUT.debug("ending string <"+source.toString()+">");
 
-        if(source!=null && source.length()>0) {
-            while((attrOffset=source.indexOf(marker, fromIndex))!=-1){
-                     source.replace(attrOffset,attrOffset+mLength, replace);
-                     fromIndex+=attrOffset+mLength;
-            }
-        }
+      return source;
 
-        return source;
-
-    }
+  }
 
    
     /**

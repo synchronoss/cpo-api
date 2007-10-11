@@ -99,6 +99,7 @@ public class InsertObjectTest extends TestCase {
         if ("com.mysql.jdbc.Driver".equals(dbDriver_)){
         	hasMilliSupport = false;
         }
+
         
         
         try{

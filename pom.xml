@@ -1,18 +1,15 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/maven-v4_0_0.xsd">
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.synchronoss</groupId>
   <artifactId>cpo</artifactId>
-  <packaging>jar</packaging>
-  <version>2.1.2-SNAPSHOT</version>
   <name>CPO</name>
+  <version>2.1.2-SNAPSHOT</version>
   <description>CPO is the persistence layer that is used within SNCR products and services</description>
-  <scm>
-    <connection>scm:svn:https://cpo.svn.sourceforge.net/svnroot/cpo</connection>
-    <developerConnection>scm:svn:https://cpo.svn.sourceforge.net/svnroot/cpo</developerConnection>
-    <url>https://cpo.svn.sourceforge.net/svnroot/cpo</url>
-  </scm>
+  <issueManagement>
+    <system>SourceForge</system>
+    <url>http://sourceforge.net/projects/cpo</url>
+  </issueManagement>
   <developers>
     <developer>
       <name>David Berry</name>
@@ -24,17 +21,16 @@
       <timezone>EST</timezone>
     </developer>
   </developers>
-  <issueManagement>
-    <system>SourceForge</system>
-    <url>http://sourceforge.net/projects/cpo</url>
-  </issueManagement>
+  <scm>
+    <connection>scm:svn:https://cpo.svn.sourceforge.net/svnroot/cpo</connection>
+    <developerConnection>scm:svn:https://cpo.svn.sourceforge.net/svnroot/cpo</developerConnection>
+    <url>https://cpo.svn.sourceforge.net/svnroot/cpo</url>
+  </scm>
   <build>
     <pluginManagement>
       <plugins>
         <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-compiler-plugin</artifactId>
-          <!-- best lock down version of the plugin too -->
           <configuration>
             <source>1.5</source>
             <target>1.5</target>
@@ -42,41 +38,12 @@
         </plugin>
       </plugins>
     </pluginManagement>
-    
     <plugins>
-          <plugin>
+      <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>sql-maven-plugin</artifactId>
-      	<version>1.0</version>
-      <dependencies>
-          <!-- specify the dependent jdbc driver here -->
-		    <dependency>
-		      <groupId>com.oracle</groupId>
-		      <artifactId>ojdbc14</artifactId>
-		      <version>10.2.0.5</version>
-		    </dependency>
-        </dependencies>
-
-        <!-- common configuration shared by all executions -->
-        <configuration>
-           <username>sncrarch</username>
-           <password>sncrarch</password>
-           <!-- You can comment out username/password configurations and 
-                have maven to look them up in your settings.xml using ${settingsKey}
-           <settingsKeys>databaseKey</settingsKeys>
-           -->
-           <autocommit>true</autocommit>
-          	<driver>oracle.jdbc.driver.OracleDriver</driver>
-            <url>jdbc:oracle:thin:@pamdfsr2cl1v1:1521:dcig1</url>
-           <onError>continue</onError>
-           <!--all executions are ignored if -Dmaven.test.skip=true-->
-           <!-- <skip>${maven.test.skip}</skip>
-             -->
-             <skip>true</skip>
-        </configuration>
- 
-       <executions>
-
+        <version>1.0</version>
+        <executions>
           <execution>
             <id>create-data</id>
             <phase>process-test-resources</phase>
@@ -84,7 +51,7 @@
               <goal>execute</goal>
             </goals>
             <configuration>
-            <onError>continue</onError>
+              <onError>continue</onError>
               <srcFiles>
                 <srcFile>src/test/sql/oracle/dropCpoTables.sql</srcFile>
                 <srcFile>src/test/sql/oracle/dropTestTables.sql</srcFile>
@@ -95,9 +62,23 @@
               </srcFiles>
             </configuration>
           </execution>
-
         </executions>
-
+        <dependencies>
+          <dependency>
+            <groupId>com.oracle</groupId>
+            <artifactId>ojdbc14</artifactId>
+            <version>10.2.0.5</version>
+          </dependency>
+        </dependencies>
+        <configuration>
+          <username>sncrarch</username>
+          <password>sncrarch</password>
+          <autocommit>true</autocommit>
+          <driver>oracle.jdbc.driver.OracleDriver</driver>
+          <url>jdbc:oracle:thin:@pamdfsr2cl1v1:1521:dcig1</url>
+          <onError>continue</onError>
+          <skip>true</skip>
+        </configuration>
       </plugin>
     </plugins>
   </build>
@@ -133,10 +114,15 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-		<groupId>mysql</groupId>
-		<artifactId>mysql-connector-java</artifactId>
-		<version>5.0.4</version>
-      	<scope>test</scope>
+      <groupId>mysql</groupId>
+      <artifactId>mysql-connector-java</artifactId>
+      <version>5.0.4</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>mysql</groupId>
+      <artifactId>mysql-connector-java</artifactId>
+      <version>5.0.5</version>
     </dependency>
   </dependencies>
   <reporting>
@@ -156,11 +142,9 @@
         </reportSets>
       </plugin>
       <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-plugin-plugin</artifactId>
       </plugin>
       <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-report-plugin</artifactId>
         <version>2.3</version>
       </plugin>
@@ -189,3 +173,4 @@
     </plugins>
   </reporting>
 </project>
+

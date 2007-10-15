@@ -24,7 +24,6 @@ package org.synchronoss.cpo.jdbc;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.Locale;
 import java.util.PropertyResourceBundle;
 import java.util.ResourceBundle;
@@ -61,7 +60,7 @@ public class OrderByTest extends TestCase {
     private String dbPassword_=null;
     private String dbUrl_=null;
     private String dbUser_=null;
-    private ArrayList al = new ArrayList();
+    private ArrayList<ValueObject> al = new ArrayList<ValueObject>();
 
     /**
      * Creates a new RollbackTest object.
@@ -132,20 +131,18 @@ public class OrderByTest extends TestCase {
      */
     public void testOrderByAscending() {
         String method = "testOrderByAscending:";
-        Collection col = null;
+        Collection<ValueObject> col = null;
         
         
         try{
             CpoOrderBy cob = jdbcIdo_.newOrderBy("id",true);
-            Collection colCob = new ArrayList();
+            Collection<CpoOrderBy> colCob = new ArrayList<CpoOrderBy>();
             colCob.add(cob);
             ValueObject valObj = new ValueObject();
             col = jdbcIdo_.retrieveObjects("TestOrderByRetrieve",valObj,valObj,null,colCob);
             
-            Iterator it = col.iterator();
             int id = 1;
-            while(it.hasNext()){
-                ValueObject vo = (ValueObject)it.next();
+            for(ValueObject vo:col) {
                 assertEquals(id,vo.getId());
                 id++;
             }
@@ -159,18 +156,16 @@ public class OrderByTest extends TestCase {
      */
     public void testOrderByDescending() {
         String method = "testOrderByDescending:";
-        Collection col = null;
+        Collection<ValueObject> col = null;
         
         try{
             CpoOrderBy cob = jdbcIdo_.newOrderBy("id",false,null);
-            Collection colCob = new ArrayList();
+            Collection<CpoOrderBy> colCob = new ArrayList<CpoOrderBy>();
             colCob.add(cob);
             ValueObject valObj = new ValueObject();
             col = jdbcIdo_.retrieveObjects("TestOrderByRetrieve",valObj,valObj,null,colCob);
-            Iterator it = col.iterator();
             int id = 5;
-            while(it.hasNext()){
-                ValueObject vo = (ValueObject)it.next();
+            for(ValueObject vo:col) {
                 assertEquals(id,vo.getId());
                 id--;
             }
@@ -183,7 +178,7 @@ public class OrderByTest extends TestCase {
 
     public void testOrderByFunction() {
         String method = "testOrderByAscending:";
-        Collection col = null;
+        Collection<ValueObject> col = null;
         
         ValueObject vobj = new ValueObject(-6);
         try{
@@ -194,15 +189,13 @@ public class OrderByTest extends TestCase {
         }
         try{
             CpoOrderBy cob = jdbcIdo_.newOrderBy("id",true,"ABS(id)");
-            Collection colCob = new ArrayList();
+            Collection<CpoOrderBy> colCob = new ArrayList<CpoOrderBy>();
             colCob.add(cob);
             ValueObject valObj = new ValueObject();
             col = jdbcIdo_.retrieveObjects("TestOrderByRetrieve",valObj,valObj,null,colCob);
             
-            Iterator it = col.iterator();
             int id = 1;
-            while(it.hasNext()){
-                ValueObject vo = (ValueObject)it.next();
+            for(ValueObject vo:col) {
                 int voId = vo.getId();
                 if(voId < 0) {
                     voId*=-1;

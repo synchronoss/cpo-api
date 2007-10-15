@@ -29,7 +29,7 @@ public class GUID  {
   private SecureRandom seeder;
   SecureRandom sr;
   String guidMidValue;
-  private static Category OUT = Category.getInstance(GUID.class);
+  private static Logger OUT = Logger.getLogger(GUID.class);
 
   private GUID() {
     initGuid();

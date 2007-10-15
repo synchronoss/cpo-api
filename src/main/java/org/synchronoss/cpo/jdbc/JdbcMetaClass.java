@@ -37,14 +37,14 @@ import org.synchronoss.cpo.CpoException;
  * @author david berry
  */
 
-public class JdbcMetaClass extends java.lang.Object implements java.io.Serializable, java.lang.Cloneable {
+public class JdbcMetaClass<T> extends java.lang.Object implements java.io.Serializable, java.lang.Cloneable {
 
     /**
      * Version Id for this class.
      */
     private static final long serialVersionUID = 1L;
     
-    private Class objClass = null;
+    private Class<T> objClass = null;
 
     //private Constructor objCtor = null;
 
@@ -54,7 +54,7 @@ public class JdbcMetaClass extends java.lang.Object implements java.io.Serializa
     private String classId = null;
 
     /**
-     * The fully qualifed class name that this meta is used for. i.e.
+     * The fully qualified class name that this meta is used for. i.e.
      */
     private String name = null;
 
@@ -63,22 +63,22 @@ public class JdbcMetaClass extends java.lang.Object implements java.io.Serializa
      * the id is the columnName of the attribute in the database
      * the value is the attribute name for the class being described 
      */
-    private HashMap attributeMap = new HashMap();
+    private HashMap<String,JdbcAttribute> attributeMap = new HashMap<String,JdbcAttribute>();
 
     /**
      * columnMap contains a Map of String Objects
      * the id is the attributeName of the attribute in the database
      * the value is the column name for the class being described 
      */
-    private HashMap columnMap = new HashMap();
+    private HashMap<String,JdbcAttribute> columnMap = new HashMap<String,JdbcAttribute>();
 
     /**
      * queryGroup is a hashMap that contains a hashMap of jdbcQuery Lists that are used 
      * by this object to persist and retrieve it into a jdbc datasource. 
      */
-    private HashMap queryGroups = new HashMap();
+    private HashMap<String, HashMap<String, ArrayList<JdbcQuery>>> queryGroups = new HashMap<String, HashMap<String, ArrayList<JdbcQuery>>>();
 
-    public JdbcMetaClass(Class c, String s) throws CpoException{
+    public JdbcMetaClass(Class<T> c, String s) throws CpoException{
         setJmcClass(c);
         setName(s);
     }
@@ -99,60 +99,60 @@ public class JdbcMetaClass extends java.lang.Object implements java.io.Serializa
         this.name=s;
     }
 
-    public HashMap getAttributeMap(){
+    public HashMap<String,JdbcAttribute> getAttributeMap(){
         return this.attributeMap;
     }
 
 
-    public HashMap getColumnMap(){
+    public HashMap<String,JdbcAttribute> getColumnMap(){
         return this.columnMap;
     }
 
   
-    public HashMap getQueryGroups(){
+    public HashMap<String, HashMap<String, ArrayList<JdbcQuery>>> getQueryGroups(){
         return this.queryGroups;
     }
 
-    public Class getJmcClass(){
+    public Class<T> getJmcClass(){
         return objClass;
     }
 
-    public void setJmcClass(Class c){
+    public void setJmcClass(Class<T> c){
         objClass = c;
     }
 
     public void addQueryToGroup(JdbcQuery jq) {
-        HashMap qgs = this.getQueryGroups();
+        HashMap<String, HashMap<String, ArrayList<JdbcQuery>>> qgs = this.getQueryGroups();
         String qgType = jq.getType();
         String qgName = jq.getName();
-        HashMap qg = (HashMap)qgs.get(qgType);
-        ArrayList al = null;
+        HashMap<String, ArrayList<JdbcQuery>> qg = qgs.get(qgType);
+        ArrayList<JdbcQuery> al = null;
 
         if(qg==null) {
-            qg=new HashMap();
+            qg=new HashMap<String, ArrayList<JdbcQuery>>();
             qgs.put(qgType,qg);
         }
 
-        al = (ArrayList)qg.get(qgName);
+        al = qg.get(qgName);
 
         if(al==null) {
-            al=new ArrayList();
+            al=new ArrayList<JdbcQuery>();
             qg.put(qgName, al);
         }
 
         al.add(jq);
     }
 
-    public ArrayList getQueryGroup(String qgType, String qgName) throws CpoException {
-        HashMap qgs = this.getQueryGroups();
-        HashMap qg = (HashMap)qgs.get(qgType);
-        ArrayList al = null;
+    public ArrayList<JdbcQuery> getQueryGroup(String qgType, String qgName) throws CpoException {
+    	HashMap<String, HashMap<String, ArrayList<JdbcQuery>>> qgs = this.getQueryGroups();
+    	HashMap<String, ArrayList<JdbcQuery>> qg = qgs.get(qgType);
+    	ArrayList<JdbcQuery> al = null;
 
         if(qg==null) {
             throw new CpoException("No <"+qgType+"> Query Group defined for "+name );
         }
 
-        al = (ArrayList)qg.get(qgName);
+        al = qg.get(qgName);
 
         if(al==null) {
             throw new CpoException(qgType+" Query Group <"+qgName+"> not defined for "+name );

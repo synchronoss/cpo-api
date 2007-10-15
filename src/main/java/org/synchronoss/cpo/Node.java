@@ -48,12 +48,13 @@ import org.synchronoss.cpo.INodeVisitor;
  * @author David E. Berry
  * @version 1.0
  */
-public class Node implements Serializable, Cloneable, Comparable {
+public class Node implements Serializable, Cloneable, Comparable<Node> {
     /** Version Id for this class. */
     private static final long serialVersionUID=1L;
 
     private static final int CHILD_NODE = 0;
-    private static final int PARENT_NODE = 1;
+//    private static final int PARENT_NODE = 1;
+    
     /**
      * The parent node for this Node
      */
@@ -273,10 +274,10 @@ public class Node implements Serializable, Cloneable, Comparable {
      */
     public void addChildSort(Node node) throws ChildNodeException
     {
-        addChildSort(node, (Comparator) null);
+        addChildSort(node, null);
     }
 
-    public void addChildSort(Node node, Comparator c) throws ChildNodeException
+    public void addChildSort(Node node, Comparator<Node> c) throws ChildNodeException
     {
         Node lastChild = null;
         Node currNode=null;
@@ -318,7 +319,7 @@ public class Node implements Serializable, Cloneable, Comparable {
         }
     }
 
-    protected int doCompare(Node n1, Node n2, Comparator c) {
+    protected int doCompare(Node n1, Node n2, Comparator<Node> c) {
         int rc;
 
         if(c!=null)
@@ -582,9 +583,9 @@ public class Node implements Serializable, Cloneable, Comparable {
         return count;
     }
 
-    public List getChildList() {
+    public List<Node> getChildList() {
         Node currNode;
-        ArrayList al = new ArrayList();
+        ArrayList<Node> al = new ArrayList<Node>();
 
         //Do we have any children
         if(!isLeaf()) {
@@ -622,7 +623,7 @@ public class Node implements Serializable, Cloneable, Comparable {
         return thisClone;
     }
 
-    public int compareTo(Object o) {
+    public int compareTo(Node o) {
 
         int rc;
 
@@ -636,7 +637,7 @@ public class Node implements Serializable, Cloneable, Comparable {
         return rc;
     }
 
-    public boolean equals(Object o) {
+    public boolean equals(Node o) {
         return this==o;
     }
 }

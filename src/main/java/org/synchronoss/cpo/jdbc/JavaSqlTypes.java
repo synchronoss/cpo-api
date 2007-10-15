@@ -24,6 +24,7 @@
 
 package org.synchronoss.cpo.jdbc;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -45,44 +46,44 @@ public class JavaSqlTypes extends java.lang.Object implements java.io.Serializab
     
                                                                      // JDK 1.4.2 Values
 
-   private static JavaSqlType[] jdbcTypes = {   
-        new JavaSqlType(java.sql.Types.CHAR, "CHAR", java.lang.String.class), // 1
-        new JavaSqlType(java.sql.Types.LONGVARCHAR, "LONGVARCHAR", java.lang.String.class), // -1
-        new JavaSqlType(java.sql.Types.VARCHAR, "VARCHAR", java.lang.String.class), // 12
-        new JavaSqlType(java.sql.Types.DECIMAL, "DECIMAL", java.math.BigDecimal.class), // 3
-        new JavaSqlType(java.sql.Types.NUMERIC, "NUMERIC", java.math.BigDecimal.class), // 2
-        new JavaSqlType(java.sql.Types.TINYINT, "TINYINT", byte.class), // -6
-        new JavaSqlType(java.sql.Types.SMALLINT, "SMALLINT", short.class), // 5
-        new JavaSqlType(java.sql.Types.INTEGER, "INTEGER", int.class), // 4
-        new JavaSqlType(java.sql.Types.BIGINT, "BIGINT", long.class), // -5
-        new JavaSqlType(java.sql.Types.REAL, "REAL", float.class), // 7
-        new JavaSqlType(java.sql.Types.FLOAT, "FLOAT", double.class), // 6
-        new JavaSqlType(java.sql.Types.DOUBLE, "DOUBLE", double.class), // 8
-        new JavaSqlType(java.sql.Types.BINARY, "BINARY", byte[].class), // -2
-        new JavaSqlType(java.sql.Types.VARBINARY, "VARBINARY", byte[].class), // -3
-        new JavaSqlType(java.sql.Types.LONGVARBINARY, "LONGVARBINARY", byte[].class), // -4
-        new JavaSqlType(java.sql.Types.DATE, "DATE", java.sql.Date.class), // 91
-        new JavaSqlType(java.sql.Types.TIME, "TIME", java.sql.Time.class), // 92
-        new JavaSqlType(java.sql.Types.TIMESTAMP, "TIMESTAMP", java.sql.Timestamp.class), // 93
-        new JavaSqlType(java.sql.Types.CLOB, "CLOB", java.sql.Clob.class), // 2005
-        new JavaSqlType(java.sql.Types.BLOB, "BLOB", java.sql.Blob.class), // 2004
-        new JavaSqlType(java.sql.Types.ARRAY, "ARRAY", java.sql.Array.class), // 2003
-        new JavaSqlType(java.sql.Types.REF, "REF", java.sql.Ref.class), // 2006
-        new JavaSqlType(java.sql.Types.DISTINCT, "DISTINCT", java.lang.Object.class), // 2001
-        new JavaSqlType(java.sql.Types.STRUCT, "STRUCT", java.lang.Object.class), // 2002
-        new JavaSqlType(java.sql.Types.OTHER, "OTHER", java.lang.Object.class), // 1111
-        new JavaSqlType(java.sql.Types.JAVA_OBJECT, "JAVA_OBJECT", java.lang.Object.class), // 2000
-        new JavaSqlType(java.sql.Types.DATALINK, "DATALINK", java.net.URL.class), // 70
-        new JavaSqlType(java.sql.Types.BIT, "BIT", boolean.class), // -7
-        new JavaSqlType(java.sql.Types.BOOLEAN, "BOOLEAN", boolean.class), //16
+   private static JavaSqlType<?>[] jdbcTypes = {   
+        new JavaSqlType<String>(java.sql.Types.CHAR, "CHAR", String.class), // 1
+        new JavaSqlType<String>(java.sql.Types.LONGVARCHAR, "LONGVARCHAR", String.class), // -1
+        new JavaSqlType<String>(java.sql.Types.VARCHAR, "VARCHAR", String.class), // 12
+        new JavaSqlType<BigDecimal>(java.sql.Types.DECIMAL, "DECIMAL", BigDecimal.class), // 3
+        new JavaSqlType<BigDecimal>(java.sql.Types.NUMERIC, "NUMERIC", BigDecimal.class), // 2
+        new JavaSqlType<Byte>(java.sql.Types.TINYINT, "TINYINT", byte.class), // -6
+        new JavaSqlType<Short>(java.sql.Types.SMALLINT, "SMALLINT", short.class), // 5
+        new JavaSqlType<Integer>(java.sql.Types.INTEGER, "INTEGER", int.class), // 4
+        new JavaSqlType<Long>(java.sql.Types.BIGINT, "BIGINT", long.class), // -5
+        new JavaSqlType<Float>(java.sql.Types.REAL, "REAL", float.class), // 7
+        new JavaSqlType<Double>(java.sql.Types.FLOAT, "FLOAT", double.class), // 6
+        new JavaSqlType<Double>(java.sql.Types.DOUBLE, "DOUBLE", double.class), // 8
+        new JavaSqlType<byte[]>(java.sql.Types.BINARY, "BINARY", byte[].class), // -2
+        new JavaSqlType<byte[]>(java.sql.Types.VARBINARY, "VARBINARY", byte[].class), // -3
+        new JavaSqlType<byte[]>(java.sql.Types.LONGVARBINARY, "LONGVARBINARY", byte[].class), // -4
+        new JavaSqlType<java.sql.Date>(java.sql.Types.DATE, "DATE", java.sql.Date.class), // 91
+        new JavaSqlType<java.sql.Time>(java.sql.Types.TIME, "TIME", java.sql.Time.class), // 92
+        new JavaSqlType<java.sql.Timestamp>(java.sql.Types.TIMESTAMP, "TIMESTAMP", java.sql.Timestamp.class), // 93
+        new JavaSqlType<java.sql.Clob>(java.sql.Types.CLOB, "CLOB", java.sql.Clob.class), // 2005
+        new JavaSqlType<java.sql.Blob>(java.sql.Types.BLOB, "BLOB", java.sql.Blob.class), // 2004
+        new JavaSqlType<java.sql.Array>(java.sql.Types.ARRAY, "ARRAY", java.sql.Array.class), // 2003
+        new JavaSqlType<java.sql.Ref>(java.sql.Types.REF, "REF", java.sql.Ref.class), // 2006
+        new JavaSqlType<Object>(java.sql.Types.DISTINCT, "DISTINCT", Object.class), // 2001
+        new JavaSqlType<Object>(java.sql.Types.STRUCT, "STRUCT", Object.class), // 2002
+        new JavaSqlType<Object>(java.sql.Types.OTHER, "OTHER", Object.class), // 1111
+        new JavaSqlType<Object>(java.sql.Types.JAVA_OBJECT, "JAVA_OBJECT", Object.class), // 2000
+        new JavaSqlType<java.net.URL>(java.sql.Types.DATALINK, "DATALINK", java.net.URL.class), // 70
+        new JavaSqlType<Boolean>(java.sql.Types.BIT, "BIT", boolean.class), // -7
+        new JavaSqlType<Boolean>(java.sql.Types.BOOLEAN, "BOOLEAN", boolean.class), //16
         
         // Now for the dbspecific types needed to generate the class from a query.
-        new JavaSqlType(100, "VARCHAR_IGNORECASE", java.lang.String.class) // HSQLDB TYPE for VARCHAR_IGNORE_CASE
+        new JavaSqlType<String>(100, "VARCHAR_IGNORECASE", java.lang.String.class) // HSQLDB TYPE for VARCHAR_IGNORE_CASE
 
     };
    
-    private static HashMap javaSqlTypeMap = null;
-    private static HashMap javaSqlTypeNameMap = null;
+    private static HashMap<Integer,JavaSqlType<?>> javaSqlTypeMap = null;
+    private static HashMap<String,JavaSqlType<?>> javaSqlTypeNameMap = null;
 
     private JavaSqlTypes(){
     }
@@ -97,20 +98,20 @@ public class JavaSqlTypes extends java.lang.Object implements java.io.Serializab
     }
 */    
     public static int getJavaSqlType(String javaSqlTypeName){
-        JavaSqlType jdbcType = (JavaSqlType) getJdbcTypeNameMap().get(javaSqlTypeName);
+        JavaSqlType<?> jdbcType = getJdbcTypeNameMap().get(javaSqlTypeName);
         if (jdbcType == null)
             return java.sql.Types.NULL;
         else
             return jdbcType.getJavaSqlType();
     }
     
-    public static Class getSqlTypeClass(int javaSqlType){
+    public static Class<?> getSqlTypeClass(int javaSqlType){
         return getSqlTypeClass(new Integer(javaSqlType));
     }
     
     
-    public static Class getSqlTypeClass(Integer javaSqlType){
-        JavaSqlType jdbcType = (JavaSqlType) getJdbcTypeMap().get(javaSqlType);
+    public static Class<?> getSqlTypeClass(Integer javaSqlType){
+        JavaSqlType<?> jdbcType = getJdbcTypeMap().get(javaSqlType);
         if (jdbcType == null)
             return null;
         else
@@ -118,45 +119,43 @@ public class JavaSqlTypes extends java.lang.Object implements java.io.Serializab
     }
     
     
-    public static Class getSqlTypeClass(String javaSqlTypeName){
-        JavaSqlType jdbcType = (JavaSqlType) getJdbcTypeNameMap().get(javaSqlTypeName);
+    public static Class<?> getSqlTypeClass(String javaSqlTypeName){
+        JavaSqlType<?> jdbcType = getJdbcTypeNameMap().get(javaSqlTypeName);
         if (jdbcType == null)
             return null;
         else
             return jdbcType.getJavaClass();
     }
     
-    public static Collection getSqlTypes() {
-        ArrayList al = new ArrayList();
+    public static Collection<String> getSqlTypes() {
+        ArrayList<String> al = new ArrayList<String>();
         // need to put the keySet into an arraylist. The inner class is not serializable 
         al.addAll(getJdbcTypeNameMap().keySet());
         return al;
     }
     
     private static void initMaps(){
-        int i;
-    
         synchronized(jdbcTypes) {
             if(javaSqlTypeMap==null) {
-                javaSqlTypeMap = new HashMap();
-                javaSqlTypeNameMap = new HashMap();
-                for(i=0;i<jdbcTypes.length;i++) {
-                    javaSqlTypeMap.put(new Integer(jdbcTypes[i].getJavaSqlType()), jdbcTypes[i]);
-                    javaSqlTypeNameMap.put(jdbcTypes[i].getJavaSqlTypeName(), jdbcTypes[i]);
+                javaSqlTypeMap = new HashMap<Integer,JavaSqlType<?>>();
+                javaSqlTypeNameMap = new HashMap<String,JavaSqlType<?>>();
+                for(JavaSqlType<?> jst:jdbcTypes) {
+                    javaSqlTypeMap.put(new Integer(jst.getJavaSqlType()), jst);
+                    javaSqlTypeNameMap.put(jst.getJavaSqlTypeName(), jst);
                 }
             }
         }
     }
     
     
-    private static HashMap getJdbcTypeMap(){
+    private static HashMap<Integer,JavaSqlType<?>> getJdbcTypeMap(){
         if (javaSqlTypeMap==null)
             initMaps();
         return javaSqlTypeMap;
     }
     
 
-    private static HashMap getJdbcTypeNameMap(){
+    private static HashMap<String,JavaSqlType<?>> getJdbcTypeNameMap(){
         if (javaSqlTypeNameMap==null)
             initMaps();
         return javaSqlTypeNameMap;

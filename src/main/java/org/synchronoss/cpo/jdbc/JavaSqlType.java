@@ -31,7 +31,7 @@ package org.synchronoss.cpo.jdbc;
  * @author david berry
  */
 
-public class JavaSqlType extends java.lang.Object implements java.io.Serializable, java.lang.Cloneable {
+public class JavaSqlType<T> extends java.lang.Object implements java.io.Serializable, java.lang.Cloneable {
 
 
 	/**
@@ -41,13 +41,13 @@ public class JavaSqlType extends java.lang.Object implements java.io.Serializabl
 	
     private int     javaSqlType_ = java.sql.Types.NULL;
     private String    javaSqlTypeName_ = null;
-    private Class     javaClass_ = null;
+    private Class<T>     javaClass_ = null;
 
     
-    private JavaSqlType(){}
+    private JavaSqlType (){}
     
 
-    public JavaSqlType(int javaSqlType, String javaSqlTypeName, Class javaClass){
+    public JavaSqlType(int javaSqlType, String javaSqlTypeName, Class<T> javaClass){
         setJavaSqlType(javaSqlType);
         setJavaSqlTypeName(javaSqlTypeName);
         setJavaClass(javaClass);
@@ -61,7 +61,7 @@ public class JavaSqlType extends java.lang.Object implements java.io.Serializabl
         javaSqlTypeName_ = javaSqlTypeName;
     }
 
-    public void setJavaClass(Class javaClass){
+    public void setJavaClass(Class<T> javaClass){
         javaClass_ = javaClass;
     }
 
@@ -73,7 +73,7 @@ public class JavaSqlType extends java.lang.Object implements java.io.Serializabl
         return javaSqlTypeName_;
     }
  
-    public Class getJavaClass(){
+    public Class<T> getJavaClass(){
         return javaClass_;
     }
     

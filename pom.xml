@@ -3,9 +3,9 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.synchronoss</groupId>
   <artifactId>cpo</artifactId>
-  <name>CPO</name>
+  <name>cpo</name>
   <version>2.1.2-SNAPSHOT</version>
-  <description>CPO is the persistence layer that is used within SNCR products and services</description>
+  <description>CPO is a persistence layer that is thin wrapper around JDBC that consumes and produces POJOs</description>
   <issueManagement>
     <system>SourceForge</system>
     <url>http://sourceforge.net/projects/cpo</url>
@@ -118,11 +118,6 @@
       <artifactId>mysql-connector-java</artifactId>
       <version>5.0.4</version>
       <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>mysql</groupId>
-      <artifactId>mysql-connector-java</artifactId>
-      <version>5.0.5</version>
     </dependency>
   </dependencies>
   <reporting>

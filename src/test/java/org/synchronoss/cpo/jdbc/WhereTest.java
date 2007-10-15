@@ -61,7 +61,7 @@ public class WhereTest extends TestCase {
     private String dbPassword_=null;
     private String dbUrl_=null;
     private String dbUser_=null;
-    private ArrayList al = new ArrayList();
+    private ArrayList<ValueObject> al = new ArrayList<ValueObject>();
 
     /**
      * Creates a new RollbackTest object.
@@ -133,7 +133,7 @@ public class WhereTest extends TestCase {
     
     public void testStaticWhere() {
         String method = "testStaticWhere:";
-        Collection col = null;
+        Collection<ValueObject> col = null;
         CpoWhere cw = null;
         
         
@@ -152,7 +152,7 @@ public class WhereTest extends TestCase {
     }
     public void testValueWhere() {
         String method = "testValueWhere:";
-        Collection col = null;
+        Collection<ValueObject> col = null;
         CpoWhere cw = null;
         
         
@@ -170,7 +170,7 @@ public class WhereTest extends TestCase {
     }
     public void testIsNullWhere() {
         String method = "testIsNullWhere:";
-        Collection col = null;
+        Collection<ValueObject> col = null;
         CpoWhere cw = null;
         
         
@@ -189,7 +189,7 @@ public class WhereTest extends TestCase {
     
     public void testAttributeFunction() {
         String method = "testAttributeFunction:";
-        Collection col = null;
+        Collection<ValueObject> col = null;
         CpoWhere cw = null;
         
         
@@ -211,7 +211,7 @@ public class WhereTest extends TestCase {
 
     public void testValueFunction() {
         String method = "testValueFunction:";
-        Collection col = null;
+        Collection<ValueObject> col = null;
         CpoWhere cw = null;
         
         
@@ -234,7 +234,7 @@ public class WhereTest extends TestCase {
    
     public void testAndWhere() {
         String method = "testAndWhere:";
-        Collection col = null;
+        Collection<ValueObject> col = null;
         CpoWhere cw = null;
         CpoWhere cw1 = null;
         CpoWhere cw2 = null;
@@ -273,7 +273,7 @@ public class WhereTest extends TestCase {
 
     public void testOrWhere() {
         String method = "testOrWhere:";
-        Collection col = null;
+        Collection<ValueObject> col = null;
         CpoWhere cw = null;
         CpoWhere cw1 = null;
         CpoWhere cw2 = null;
@@ -315,7 +315,7 @@ public class WhereTest extends TestCase {
 
     public void testRightAttributeFunction() {
         String method = "testRightAttributeFunction:";
-        Collection col = null;
+        Collection<ValueObject> col = null;
         CpoWhere cw = null;
         
         
@@ -342,7 +342,7 @@ public class WhereTest extends TestCase {
 
     public void testRightAttribute() {
         String method = "testRightAttribute:";
-        Collection col = null;
+        Collection<ValueObject> col = null;
         CpoWhere cw = null;
         
         
@@ -368,7 +368,7 @@ public class WhereTest extends TestCase {
     
     public void testMultipleBindWhere() {
         String method = "testAndWhere:";
-        Collection col = null;
+        Collection<ValueObject> col = null;
         CpoWhere cw = null;
         CpoWhere cw1 = null;
         CpoWhere cw2 = null;
@@ -398,7 +398,7 @@ public class WhereTest extends TestCase {
     
     public void testLikeWhere() {
         String method = "testAndWhere:";
-        Collection col = null;
+        Collection<ValueObject> col = null;
         CpoWhere cw = null;
         CpoWhere cw1 = null;
         CpoWhere cw2 = null;
@@ -427,7 +427,7 @@ public class WhereTest extends TestCase {
     }
     public void testLikeWhereStrings() {
         String method = "testAndWhere:";
-        Collection col = null;
+        Collection<ValueObject> col = null;
         CpoWhere cw = null;
         CpoWhere cw1 = null;
         CpoWhere cw2 = null;
@@ -456,7 +456,7 @@ public class WhereTest extends TestCase {
     }
         public void testNonAttributeWhere() {
             String method = "testAndWhere:";
-            Collection col = null;
+            Collection<ValueObject> col = null;
             CpoWhere cw = null;
             CpoWhere cw1 = null;
             

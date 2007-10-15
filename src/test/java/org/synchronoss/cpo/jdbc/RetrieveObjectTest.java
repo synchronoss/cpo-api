@@ -67,7 +67,7 @@ public class RetrieveObjectTest extends TestCase {
     
     private CpoAdapter jdbcIdo_ = null;
     
-    private ArrayList al = new ArrayList();
+    private ArrayList<ValueObject> al = new ArrayList<ValueObject>();
     
     public RetrieveObjectTest(String name) {
         super(name);
@@ -116,7 +116,7 @@ public class RetrieveObjectTest extends TestCase {
     
     public void testRetrieveObjects() {
         String method = "testOrderByAscending:";
-        Collection col = null;
+        Collection<ValueObject> col = null;
         
         
         try{
@@ -137,7 +137,7 @@ public class RetrieveObjectTest extends TestCase {
         ValueObject rvo = null;
         
         try{
-            rvo = (ValueObject) jdbcIdo_.retrieveObject(vo);
+            rvo = jdbcIdo_.retrieveObject(vo);
             assertNotNull(method+"Returned Value object is null");
             assertNotSame(method+"ValueObjects are the same",vo,rvo);
             assertEquals(method+"Strings are not the same", rvo.getAttrVarChar(),"Test");
@@ -157,7 +157,7 @@ public class RetrieveObjectTest extends TestCase {
         ValueObject rvo = null;
         
         try{
-            rvo = (ValueObject) jdbcIdo_.retrieveObject(vo);
+            rvo = jdbcIdo_.retrieveObject(vo);
             assertNull(method+"Returned Value object is Not Null",rvo);
         } catch (Exception e) {
             e.printStackTrace();

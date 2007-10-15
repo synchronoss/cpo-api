@@ -35,6 +35,6 @@ import java.util.Collection;
 public interface CpoSqlAdapter
     extends java.io.Serializable {
 
-    public Collection getSqlTypes() throws CpoException, RemoteException;
-    public Class getSqlTypeClass(String typeName) throws CpoException, RemoteException;
+    public Collection<String> getSqlTypes() throws CpoException, RemoteException;
+    public Class<?> getSqlTypeClass(String typeName) throws CpoException, RemoteException;
 }

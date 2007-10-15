@@ -66,7 +66,7 @@ public class InsertObjectTest extends TestCase {
     private String     dbUser_ = null;
     private String dbPassword_ = null;
     
-    private ArrayList al = new ArrayList();
+    private ArrayList<ValueObject> al = new ArrayList<ValueObject>();
 
     private CpoAdapter jdbcIdo_ = null;
     
@@ -135,7 +135,7 @@ public class InsertObjectTest extends TestCase {
         }
         
         try{
-            ValueObject vo = (ValueObject)jdbcIdo_.retrieveObject(null,valObj,valObj,null,null);
+            ValueObject vo = jdbcIdo_.retrieveObject(null,valObj,valObj,null,null);
             assertTrue("Ids do not match", vo.getId()==valObj.getId());
             assertTrue("Integers do not match", vo.getAttrInteger()==valObj.getAttrInteger());
             assertEquals("Strings do not match", vo.getAttrVarChar(), valObj.getAttrVarChar());
@@ -169,7 +169,7 @@ public class InsertObjectTest extends TestCase {
         }
 
         try{
-            Collection col = jdbcIdo_.retrieveObjects(null,vo,vo,null,null);
+            Collection<ValueObject> col = jdbcIdo_.retrieveObjects(null,vo,vo,null,null);
 
             assertTrue(method+"Invalid number of objects returned", col.size()==al.size());
         } catch (Exception e) {

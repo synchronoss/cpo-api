@@ -37,24 +37,24 @@ import org.synchronoss.cpo.Node;
  * @author david berry
  */
 
-public class JdbcWhereBuilder implements INodeVisitor {
+public class JdbcWhereBuilder<T> implements INodeVisitor {
 
     private StringBuffer whereClause = new StringBuffer();
-    private JdbcMetaClass jmc = null;
-    private Collection bindValues = new ArrayList();
+    private JdbcMetaClass<T> jmc = null;
+    private Collection<BindAttribute> bindValues = new ArrayList<BindAttribute>();
 
     public String getWhereClause(){
         return whereClause.toString();
     }
 
-    public Collection getBindValues(){
+    public Collection<BindAttribute> getBindValues(){
         return this.bindValues;
     }
 
     private JdbcWhereBuilder(){
     }
 
-    public JdbcWhereBuilder(JdbcMetaClass jmc){
+    public JdbcWhereBuilder(JdbcMetaClass<T> jmc){
         this.jmc = jmc;
     }
 

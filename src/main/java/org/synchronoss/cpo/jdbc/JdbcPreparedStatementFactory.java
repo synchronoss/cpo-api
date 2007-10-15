@@ -34,6 +34,7 @@ import java.util.Iterator;
 
 import org.apache.log4j.Logger;
 import org.synchronoss.cpo.CpoException;
+import org.synchronoss.cpo.CpoOrderBy;
 import org.synchronoss.cpo.CpoReleasible;
 import org.synchronoss.cpo.CpoWhere;
 
@@ -57,11 +58,11 @@ public class JdbcPreparedStatementFactory implements CpoReleasible {
     
     private JdbcPreparedStatementFactory(){}
     
-    private ArrayList releasibles = new ArrayList();
+    private ArrayList<CpoReleasible> releasibles = new ArrayList<CpoReleasible>();
     
     private JdbcQuery jq_ = null;
     
-    private Collection bindValues_=null;
+    private Collection<BindAttribute> bindValues_=null;
     
     private static final String WHERE_MARKER = "__CPO_WHERE__";
     private static final String ORDERBY_MARKER = "__CPO_ORDERBY__";
@@ -82,7 +83,7 @@ public class JdbcPreparedStatementFactory implements CpoReleasible {
      * @throws CpoException if a CPO error occurs
      * @throws SQLException if a JDBC error occurs
      */
-    public JdbcPreparedStatementFactory(Connection conn, JdbcCpoAdapter jca, JdbcMetaClass jmcCriteria, JdbcQuery jq, Object obj) throws CpoException{
+    public <T> JdbcPreparedStatementFactory(Connection conn, JdbcCpoAdapter jca, JdbcMetaClass<T> jmcCriteria, JdbcQuery jq, T obj) throws CpoException{
         this(conn, jca, jmcCriteria, jq, obj, null, null, null);
     }
 
@@ -104,7 +105,7 @@ public class JdbcPreparedStatementFactory implements CpoReleasible {
      * @throws CpoException if a CPO error occurs
      * @throws SQLException if a JDBC error occurs
      */
-    public JdbcPreparedStatementFactory(Connection conn, JdbcCpoAdapter jca, JdbcMetaClass jmcCriteria, JdbcQuery jq, Object obj, CpoWhere where, Collection orderBy) throws CpoException{
+    public <T> JdbcPreparedStatementFactory(Connection conn, JdbcCpoAdapter jca, JdbcMetaClass<T> jmcCriteria, JdbcQuery jq, T obj, CpoWhere where, Collection<CpoOrderBy> orderBy) throws CpoException{
         this(conn, jca, jmcCriteria, jq, obj, where, orderBy, null);
     }
 
@@ -127,8 +128,8 @@ public class JdbcPreparedStatementFactory implements CpoReleasible {
      * @throws CpoException if a CPO error occurs
      * @throws SQLException if a JDBC error occurs
      */
-    public JdbcPreparedStatementFactory(Connection conn, JdbcCpoAdapter jca, JdbcMetaClass jmcCriteria, JdbcQuery jq, Object obj,
-    		CpoWhere where, Collection orderBy, Collection bindValues) throws CpoException {
+    public <T> JdbcPreparedStatementFactory(Connection conn, JdbcCpoAdapter jca, JdbcMetaClass<T> jmcCriteria, JdbcQuery jq, T obj,
+    		CpoWhere where, Collection<CpoOrderBy> orderBy, Collection<BindAttribute> bindValues) throws CpoException {
       String sql=buildSql(jmcCriteria, jq.getText(), where, orderBy, bindValues);
       
        localLogger = obj==null?logger:Logger.getLogger(obj.getClass().getName());
@@ -164,13 +165,13 @@ public class JdbcPreparedStatementFactory implements CpoReleasible {
      *
      * @throws CpoException DOCUMENT ME!
      */
-    private String buildSql(JdbcMetaClass jmc, String sql, CpoWhere where, Collection orderBy,
-        Collection bindValues) throws CpoException {
+    private <T> String buildSql(JdbcMetaClass<T> jmc, String sql, CpoWhere where, Collection<CpoOrderBy> orderBy,
+        Collection<BindAttribute> bindValues) throws CpoException {
         StringBuffer sqlText=new StringBuffer();
 
-        Iterator obIt=null;
+        Iterator<CpoOrderBy> obIt=null;
         JdbcCpoOrderBy ob=null;
-        JdbcWhereBuilder jwb=new JdbcWhereBuilder(jmc);
+        JdbcWhereBuilder<T> jwb=new JdbcWhereBuilder<T>(jmc);
         JdbcCpoWhere jcw=(JdbcCpoWhere) where;
 
         sqlText.append(sql);
@@ -201,13 +202,13 @@ public class JdbcPreparedStatementFactory implements CpoReleasible {
             try {
 	            if(obIt.hasNext()) {
 	                obBuff.append(" ORDER BY ");
-	                ob=(JdbcCpoOrderBy) obIt.next();
+	                ob= (JdbcCpoOrderBy)obIt.next();
 	                obBuff.append(ob.toString(jmc));
 	            }
 	
 	            while(obIt.hasNext()) {
 	                obBuff.append(", ");
-	                ob=(JdbcCpoOrderBy) obIt.next();
+	                ob= (JdbcCpoOrderBy)obIt.next();
 	                obBuff.append(ob.toString(jmc));
 	            }
             } catch (CpoException ce) {
@@ -274,10 +275,9 @@ public class JdbcPreparedStatementFactory implements CpoReleasible {
      * on all the CpoReleasible associated with this object
      */
     public void release() throws CpoException{
-        Iterator it = releasibles.iterator();
-        while (it.hasNext()){
+    	for(CpoReleasible releasible:releasibles){
             try{
-                ((CpoReleasible)it.next()).release();
+            	releasible.release();
             } catch(CpoException ce) {
                 localLogger.error("Error Releasing Prepared Statement Transform Object",ce);
                 throw ce;
@@ -292,11 +292,11 @@ public class JdbcPreparedStatementFactory implements CpoReleasible {
      */
     public void bindParameters(Object obj) throws CpoException {
     	int j=0;
-        ArrayList parameters=getJdbcQuery().getParameterList();
+        ArrayList<JdbcParameter> parameters=getJdbcQuery().getParameterList();
         JdbcParameter parameter=null;
         JdbcAttribute attribute=null;
         int preparedStatementArgNum=0;
-        Collection bindValues = getBindValues();
+        Collection<BindAttribute> bindValues = getBindValues();
         
         for(j=0; j<parameters.size(); j++) {
             preparedStatementArgNum++;
@@ -315,17 +315,18 @@ public class JdbcPreparedStatementFactory implements CpoReleasible {
         j++;
 
         if(bindValues!=null) {
-            Iterator valuesIt=bindValues.iterator();
+            //Iterator<BindAttribute> valuesIt=bindValues.iterator();
 
-            if(valuesIt!=null) {
-                while(valuesIt.hasNext()) {
-                    BindAttribute bindAttr=(BindAttribute)valuesIt.next();
+            //if(valuesIt!=null) {
+            //    while(valuesIt.hasNext()) {
+            //        BindAttribute bindAttr=(BindAttribute)valuesIt.next();
+                    for(BindAttribute bindAttr:bindValues){
                     Object bindObject = bindAttr.getBindObject();
                     JdbcAttribute ja = bindAttr.getJdbcAttribute();
 
                     
                     // check to see if we are getting a cpo value object or an object that can be put directly in the statement (String, BigDecimal, etc)
-                    JavaSqlMethod jsm = JavaSqlMethods.getJavaSqlMethod(bindObject.getClass());
+                    JavaSqlMethod<?> jsm = JavaSqlMethods.getJavaSqlMethod(bindObject.getClass());
                     if (jsm != null){
                         try{
                         	if (ja==null)
@@ -345,7 +346,7 @@ public class JdbcPreparedStatementFactory implements CpoReleasible {
                     }
 
                 }
-            }
+//            }
         }
    	
     }
@@ -353,14 +354,14 @@ public class JdbcPreparedStatementFactory implements CpoReleasible {
 	/**
 	 * @return Returns the bindValues_.
 	 */
-	protected Collection getBindValues() {
+	protected Collection<BindAttribute> getBindValues() {
 		return bindValues_;
 	}
 
 	/**
 	 * @param bindValues_ The bindValues_ to set.
 	 */
-	protected void setBindValues(Collection bindValues_) {
+	protected void setBindValues(Collection<BindAttribute> bindValues_) {
 		this.bindValues_ = bindValues_;
 	}
 

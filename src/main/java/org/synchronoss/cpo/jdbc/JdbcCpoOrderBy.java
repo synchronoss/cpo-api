@@ -125,14 +125,14 @@ public class JdbcCpoOrderBy implements CpoOrderBy {
         this.function = s;
     }
 
-    public String toString(JdbcMetaClass jmc) throws CpoException {
+    public String toString(JdbcMetaClass<?> jmc) throws CpoException {
         StringBuffer sb = new StringBuffer();
         String function = null;
         String attribute = null;
         String column = null;
         int attrOffset = 0;
         int fromIndex = 0;
-        HashMap columnMap = jmc.getColumnMap();
+        HashMap<String,JdbcAttribute> columnMap = jmc.getColumnMap();
         JdbcAttribute jdbcAttribute=null;
 
         attribute = this.getAttribute();

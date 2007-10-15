@@ -25,7 +25,6 @@
 package org.synchronoss.cpo.jdbc;
 
 
-import java.util.ArrayList;
 import java.util.Locale;
 import java.util.PropertyResourceBundle;
 import java.util.ResourceBundle;
@@ -82,7 +81,6 @@ public class BlobTest extends TestCase {
     private char[] testClob = "This is a test Clob used for testing clobs".toCharArray();
     private byte[] testBlob2 = null;
     private char[] testClob2 = "This is a second test Clob used for testing clobs".toCharArray();
-    ArrayList al = new ArrayList();
 
     public BlobTest(String name) {
         super(name);
@@ -157,7 +155,7 @@ public class BlobTest extends TestCase {
             }
             
             try{
-                lvo2 = (LobValueObject) jdbcIdo_.retrieveObject("retrieveLVO",lvo);
+                lvo2 = jdbcIdo_.retrieveObject("retrieveLVO",lvo);
                 String blob1 = new String(lvo.getBLob());
                 String blob2 = new String(lvo2.getBLob());
                 
@@ -177,7 +175,7 @@ public class BlobTest extends TestCase {
                 lvo2.setBLob(testBlob2);
                 lvo2.setCLob(testClob2);
                 jdbcIdo_.updateObject("updateLVO",lvo2);
-                lvo2 = (LobValueObject) jdbcIdo_.retrieveObject("retrieveLVO",lvo);
+                lvo2 = jdbcIdo_.retrieveObject("retrieveLVO",lvo);
                 String blob1 = new String(testBlob2);
                 String blob2 = new String(lvo2.getBLob());
                 
@@ -234,7 +232,7 @@ public class BlobTest extends TestCase {
             }
             
             try{
-                lvo2 = (LobValueObject) jdbcIdo_.retrieveObject("retrieveLVO",lvo);
+                lvo2 = jdbcIdo_.retrieveObject("retrieveLVO",lvo);
                 String blob1 = new String(lvo.getBLob2());
                 String blob2 = new String(lvo2.getBLob2());
                 
@@ -248,7 +246,7 @@ public class BlobTest extends TestCase {
             try{
                 lvo2.setBLob2(testBlob);
                 jdbcIdo_.updateObject("updateLVO",lvo2);
-                lvo2 = (LobValueObject) jdbcIdo_.retrieveObject("retrieveLVO",lvo);
+                lvo2 = jdbcIdo_.retrieveObject("retrieveLVO",lvo);
                 String blob1 = new String(testBlob);
                 String blob2 = new String(lvo2.getBLob2());
                 
@@ -334,7 +332,7 @@ public class BlobTest extends TestCase {
             }
             
             try{
-                lvo2 = (LobValueObject) jdbcIdo_.retrieveObject("retrieveLVO",lvo);
+                lvo2 = jdbcIdo_.retrieveObject("retrieveLVO",lvo);
                 byte blob1[] = lvo.getBLob();
                 byte blob2[] = lvo2.getBLob();
                 
@@ -353,7 +351,7 @@ public class BlobTest extends TestCase {
                 lvo2.setBLob(testBlob2);
                 lvo2.setCLob(testClob2);
                 jdbcIdo_.updateObject("updateLVO",lvo2);
-                lvo2 = (LobValueObject) jdbcIdo_.retrieveObject("retrieveLVO",lvo);
+                lvo2 = jdbcIdo_.retrieveObject("retrieveLVO",lvo);
                 byte blob1[] = testBlob2;
                 byte blob2[] = lvo2.getBLob();
 
@@ -397,7 +395,7 @@ public class BlobTest extends TestCase {
             }
             
             try{
-                lvo2 = (LobValueObject) jdbcIdo_.retrieveObject("retrieveLVO",lvo);
+                lvo2 = jdbcIdo_.retrieveObject("retrieveLVO",lvo);
                 
                 assertNull(lvo2.getBLob());
                 assertNull(lvo2.getBLob2());
@@ -412,7 +410,7 @@ public class BlobTest extends TestCase {
                 lvo2.setBLob(null);
                 lvo2.setCLob(null);
                 jdbcIdo_.updateObject("updateLVO",lvo2);
-                lvo2 = (LobValueObject) jdbcIdo_.retrieveObject("retrieveLVO",lvo);
+                lvo2 = jdbcIdo_.retrieveObject("retrieveLVO",lvo);
                 
                 assertNull(lvo2.getBLob());
                 assertNull(lvo2.getBLob2());
@@ -431,14 +429,6 @@ public class BlobTest extends TestCase {
     
 
     public void tearDown() {
-        if (!al.isEmpty()){
-            try{
-                jdbcIdo_.deleteObjects("deleteLVO",al);
-            } catch (Exception ie){
-                logger.error("error deleting lobs");
-                fail(ie.getMessage());
-            }
-        }
         
         jdbcIdo_=null;
         

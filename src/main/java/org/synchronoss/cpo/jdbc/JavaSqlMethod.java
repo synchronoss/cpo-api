@@ -25,6 +25,9 @@
 package org.synchronoss.cpo.jdbc;
 
 import java.lang.reflect.Method;
+import java.sql.CallableStatement;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 
 import org.apache.log4j.Logger;
 import org.synchronoss.cpo.CpoException;
@@ -35,7 +38,7 @@ import org.synchronoss.cpo.CpoException;
  * @author david berry
  */
 
-public class JavaSqlMethod extends java.lang.Object implements java.io.Serializable, java.lang.Cloneable {
+public class JavaSqlMethod<T> extends java.lang.Object implements java.io.Serializable, java.lang.Cloneable {
 
 
 	private static Logger logger = Logger.getLogger(JavaSqlMethod.class.getName());
@@ -50,8 +53,8 @@ public class JavaSqlMethod extends java.lang.Object implements java.io.Serializa
 	public static final int METHOD_TYPE_READER = 2;
 	
 	
-    private Class     javaClass_ = null;
-    private Class	  javaSqlMethodClass_ = null;
+    private Class<T>     javaClass_ = null;
+    private Class<T>	  javaSqlMethodClass_ = null;
     private Method       rsGetter_ = null;
     private Method       psSetter_ = null;
     private Method       csGetter_ = null;
@@ -59,15 +62,15 @@ public class JavaSqlMethod extends java.lang.Object implements java.io.Serializa
     private String         dbType_ = null;
     private int        methodType_ = METHOD_TYPE_BASIC;
 
-    private static final Class psc = java.sql.PreparedStatement.class;
-    private static final Class rsc = java.sql.ResultSet.class;
-	private static final Class csc = java.sql.CallableStatement.class;
+    private static final Class<PreparedStatement> psc = PreparedStatement.class;
+    private static final Class<ResultSet> rsc = ResultSet.class;
+	private static final Class<CallableStatement> csc = CallableStatement.class;
 	
     
     private JavaSqlMethod(){}
     
 
-    public JavaSqlMethod(int methodType, Class javaClass,Class javaSqlMethodClass,String getterName, String setterName) {
+    public JavaSqlMethod(int methodType, Class<T> javaClass,Class<T> javaSqlMethodClass,String getterName, String setterName) {
     	
     	try {
 	    	setMethodType(methodType);
@@ -82,10 +85,10 @@ public class JavaSqlMethod extends java.lang.Object implements java.io.Serializa
 	    }
     }
 
-    public void setJavaClass(Class javaClass){
+    public void setJavaClass(Class<T> javaClass){
     	this.javaClass_=javaClass;
     }
-    public void setJavaSqlMethodClass(Class javaSqlMethodClass){
+    public void setJavaSqlMethodClass(Class<T> javaSqlMethodClass){
     	this.javaSqlMethodClass_=javaSqlMethodClass;
     }
     
@@ -133,11 +136,11 @@ public class JavaSqlMethod extends java.lang.Object implements java.io.Serializa
     }
    
 
-    public Class getJavaClass(){
+    public Class<T> getJavaClass(){
         return javaClass_;
     }
     
-    public Class getJavaSqlMethodClass(){
+    public Class<T> getJavaSqlMethodClass(){
         return javaSqlMethodClass_;
     }
     

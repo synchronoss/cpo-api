@@ -31,7 +31,6 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.TreeMap;
 import java.util.Vector;
 
@@ -52,15 +51,14 @@ public class JdbcDataSource implements DataSource {
     private int timeout_ = 0;
     
     //HashMap for storing PreparedStatement and Callable Statment HashMaps
-    private HashMap connectionMap_ = new HashMap();
+    private HashMap<Connection, HashMap<String, PreparedStatement>> connectionPSMap_ = new HashMap<Connection, HashMap<String, PreparedStatement>>();
+    private HashMap<Connection, HashMap<String, CallableStatement>> connectionCSMap_ = new HashMap<Connection, HashMap<String, CallableStatement>>();
     
     private JdbcDataSourceInfo dataSourceInfo=null;
     
-    private Vector availableConnections = null;
-    private Vector      busyConnections = null;
+    private Vector<Connection> availableConnections = null;
+    private Vector<Connection>      busyConnections = null;
 
-    private boolean connectionPending = false;
-    
     private JdbcDataSource(){
     	
     }
@@ -74,8 +72,8 @@ public class JdbcDataSource implements DataSource {
 
         int newConnections = initialConnections > getDataSourceInfo().getMaxConnections() ? getDataSourceInfo().getMaxConnections():initialConnections;
 
-        availableConnections = new Vector();
-        busyConnections = new Vector();
+        availableConnections = new Vector<Connection>();
+        busyConnections = new Vector<Connection>();
         for(int i=0; i<newConnections; i++) {
             availableConnections.addElement(makeNewConnection());
         }
@@ -215,16 +213,14 @@ public class JdbcDataSource implements DataSource {
 
     protected synchronized void closeAllConnections() {
         closeConnections(availableConnections);
-        availableConnections = new Vector();
+        availableConnections = new Vector<Connection>();
         closeConnections(busyConnections);
-        busyConnections = new Vector();
+        busyConnections = new Vector<Connection>();
     }
 
-    private void closeConnections(Vector connections) {
+    private void closeConnections(Vector<Connection> connections) {
         try {
-            for(int i=0; i<connections.size(); i++) {
-                Connection connection =
-                (Connection)connections.elementAt(i);
+            for(Connection connection:connections){
                 if(!connection.isClosed()) {
                     connection.close();
                 }
@@ -286,13 +282,13 @@ public class JdbcDataSource implements DataSource {
     
     public CallableStatement getCachedCallableStatement(Connection c, String sql, String key) throws SQLException {
     	CallableStatement cs = null;
-    	HashMap csMap = (HashMap) connectionMap_.get(c);
+    	HashMap<String, CallableStatement> csMap = connectionCSMap_.get(c);
     	
     	if (csMap!=null){
     		cs = (CallableStatement)csMap.get(key);
     	} else {
-    		csMap = new HashMap();
-    		connectionMap_.put(c, csMap);
+    		csMap = new HashMap<String, CallableStatement>();
+    		connectionCSMap_.put(c, csMap);
     	}
     	
     	if (cs==null){
@@ -310,13 +306,13 @@ public class JdbcDataSource implements DataSource {
     
     public PreparedStatement getCachedPreparedStatement(Connection c, String sql, String key)  throws SQLException {
     	PreparedStatement ps = null;
-    	HashMap psMap = (HashMap) connectionMap_.get(c);
+    	HashMap<String, PreparedStatement> psMap = connectionPSMap_.get(c);
     	
     	if (psMap!=null){
     		ps = (PreparedStatement)psMap.get(key);
     	} else {
-    		psMap = new HashMap();
-    		connectionMap_.put(c, psMap);
+    		psMap = new HashMap<String, PreparedStatement> ();
+    		connectionPSMap_.put(c, psMap);
     	}
     	
     	if (ps==null){
@@ -379,21 +375,19 @@ public class JdbcDataSource implements DataSource {
     
     private String buildStatement(String sql, int[] columnIdx) {
         StringBuffer stmnt=new StringBuffer(sql);
-        TreeMap treeMap=new TreeMap();
+        TreeMap<Integer, Integer> treeMap=new TreeMap<Integer, Integer>();
         
         for (int i=0; i<columnIdx.length; i++){
         	Integer col = new Integer(columnIdx[i]);
         	treeMap.put(col,col);
         }
         
-        Iterator it=treeMap.values().iterator();
-
         // Use a tree map so that the properties are sorted. This way if we have
         // the same datasource with the same properties but in different order,
         // we will generate the same key.
-        while(it.hasNext()) {
+        for(Integer i:treeMap.values()){
         	stmnt.append("|");
-        	stmnt.append((Integer) it.next());
+        	stmnt.append(i);
         }
 
         return stmnt.toString();
@@ -401,19 +395,17 @@ public class JdbcDataSource implements DataSource {
     
     private String buildStatement(String sql, String[] columnNames) {
         StringBuffer stmnt=new StringBuffer(sql);
-        TreeMap treeMap=new TreeMap();
+        TreeMap<String, String> treeMap=new TreeMap<String, String>();
         
         for (int i=0; i<columnNames.length; i++)
         	treeMap.put(columnNames[i],columnNames[i]);
         
-        Iterator it=treeMap.values().iterator();
-
         // Use a tree map so that the properties are sorted. This way if we have
         // the same datasource with the same properties but in different order,
         // we will generate the same key.
-        while(it.hasNext()) {
+        for(String s:treeMap.values()){
         	stmnt.append("|");
-        	stmnt.append((String) it.next());
+        	stmnt.append(s);
         }
 
         return stmnt.toString();

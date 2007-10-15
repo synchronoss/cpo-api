@@ -23,18 +23,17 @@
  */
 package org.synchronoss.cpo;
 
-import java.util.ArrayList;
 import java.util.Iterator;
 
 
-public interface CpoIterator extends Iterator {
-    public boolean add(Object obj);
+public interface CpoIterator<T> extends Iterator<T> {
+    public boolean add(T obj);
     
-    public boolean addfinal(Object obj);
+    public boolean addfinal(T obj);
     
     public boolean hasNext();
     
-    public Object next();
+    public T next();
     
     public void remove();
     

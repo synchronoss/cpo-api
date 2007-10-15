@@ -28,7 +28,6 @@ import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Iterator;
 
 import org.apache.log4j.Logger;
 import org.synchronoss.cpo.CpoException;
@@ -51,9 +50,9 @@ public class JdbcCallableStatementFactory implements CpoReleasible {
     
     private JdbcCallableStatementFactory(){}
     
-    private ArrayList releasibles = new ArrayList();
+    private ArrayList<CpoReleasible> releasibles = new ArrayList<CpoReleasible>();
     
-    private ArrayList outParameters = new ArrayList();
+    private ArrayList<JdbcParameter> outParameters = new ArrayList<JdbcParameter>();
  
 
     /**
@@ -74,7 +73,6 @@ public class JdbcCallableStatementFactory implements CpoReleasible {
      */
     public JdbcCallableStatementFactory(Connection conn, JdbcCpoAdapter jca, JdbcQuery jq, Object obj) throws CpoException {
         CallableStatement cstmt = null;
-        JdbcParameter parameter = null;
         JdbcAttribute attribute = null;
         Logger localLogger = obj==null?logger:Logger.getLogger(obj.getClass().getName());
         
@@ -86,19 +84,20 @@ public class JdbcCallableStatementFactory implements CpoReleasible {
             // prepare the Callable Statement
             cstmt=conn.prepareCall(jq.getText());
             setCallableStatement(cstmt);
-
-            for(int j=0; j<outParameters.size(); j++) {
-                parameter=(JdbcParameter) outParameters.get(j);
+            
+            int j=1;
+            for(JdbcParameter parameter:outParameters) {
                 attribute=parameter.getAttribute();
 
                 if(parameter.isInParameter()) {
-                    attribute.invokeGetter(this, obj, j+1);
+                    attribute.invokeGetter(this, obj, j);
                 }
 
                 if(parameter.isOutParameter()) {
                 	localLogger.debug("Setting OUT parameter "+j+" as Type "+attribute.getJavaSqlType());
-                    cstmt.registerOutParameter(j+1, attribute.getJavaSqlType());
+                    cstmt.registerOutParameter(j, attribute.getJavaSqlType());
                 }
+                j++;
             }
     
         } catch (Exception e){
@@ -124,7 +123,7 @@ public class JdbcCallableStatementFactory implements CpoReleasible {
      * returns the Out parameters from the callable statement
      * 
      */
-    public ArrayList getOutParameters(){
+    public ArrayList<JdbcParameter> getOutParameters(){
         return outParameters;
     }
 
@@ -145,10 +144,9 @@ public class JdbcCallableStatementFactory implements CpoReleasible {
      * on all the CpoReleasible associated with this object
      */
      public void release() throws CpoException {
-        Iterator it = releasibles.iterator();
-        while (it.hasNext()){
+        for (CpoReleasible releasible:releasibles){
             try{
-                ((CpoReleasible)it.next()).release();
+            	releasible.release();
             } catch(CpoException ce) {
                 logger.error("Error Releasing Callable Statement Transform Object",ce);
                 throw ce;

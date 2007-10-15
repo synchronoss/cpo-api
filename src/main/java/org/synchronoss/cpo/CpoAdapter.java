@@ -187,7 +187,7 @@ public interface CpoAdapter extends java.io.Serializable {
      *
      * @throws CpoException Thrown if there are errors accessing the datasource
      */
-    public long insertObject(Object obj) throws CpoException;
+    public <T> long insertObject(T obj) throws CpoException;
 
     /**
      * Creates the Object in the datasource. The assumption is that the object does not exist in
@@ -239,7 +239,7 @@ public interface CpoAdapter extends java.io.Serializable {
      *
      * @throws CpoException Thrown if there are errors accessing the datasource
      */
-    public long insertObject(String name, Object obj) throws CpoException;
+    public <T> long insertObject(String name, T obj) throws CpoException;
 
 
     /**
@@ -303,7 +303,7 @@ public interface CpoAdapter extends java.io.Serializable {
      *
      * @throws CpoException Thrown if there are errors accessing the datasource
      */
-    public long insertObjects(Collection coll)
+    public <T> long insertObjects(Collection<T> coll)
         throws CpoException;
 
     /**
@@ -368,7 +368,7 @@ public interface CpoAdapter extends java.io.Serializable {
      *
      * @throws CpoException Thrown if there are errors accessing the datasource
      */
-    public long insertObjects(String name, Collection coll)
+    public <T> long insertObjects(String name, Collection<T> coll)
         throws CpoException;
 
 
@@ -420,7 +420,7 @@ public interface CpoAdapter extends java.io.Serializable {
      *
      * @throws CpoException Thrown if there are errors accessing the datasource
      */
-    public long deleteObject(Object obj) throws CpoException;
+    public <T> long deleteObject(T obj) throws CpoException;
 
     /**
      * Removes the Object from the datasource. The assumption is that the object exists in the
@@ -471,7 +471,7 @@ public interface CpoAdapter extends java.io.Serializable {
      *
      * @throws CpoException Thrown if there are errors accessing the datasource
     */
-    public long deleteObject(String name, Object obj) throws CpoException;
+    public <T> long deleteObject(String name, T obj) throws CpoException;
 
     /**
      * Removes the Objects contained in the collection from the datasource. The  assumption is that
@@ -532,7 +532,7 @@ public interface CpoAdapter extends java.io.Serializable {
      *
      * @throws CpoException Thrown if there are errors accessing the datasource
      */
-    public long deleteObjects(Collection coll)
+    public <T> long deleteObjects(Collection<T> coll)
         throws CpoException;
 
     /**
@@ -595,7 +595,7 @@ public interface CpoAdapter extends java.io.Serializable {
      *
      * @throws CpoException Thrown if there are errors accessing the datasource
      */
-    public long deleteObjects(String name, Collection coll)
+    public <T> long deleteObjects(String name, Collection<T> coll)
         throws CpoException;
 
     /**
@@ -651,7 +651,7 @@ public interface CpoAdapter extends java.io.Serializable {
      *
      * @throws CpoException Thrown if there are errors accessing the datasource
      */
-    public Object executeObject(Object obj)
+    public <T> T executeObject(T obj)
         throws CpoException;
 
     /**
@@ -708,7 +708,7 @@ public interface CpoAdapter extends java.io.Serializable {
      *
      * @throws CpoException DOCUMENT ME!
      */
-    public Object executeObject(String name, Object object)
+    public <T> T executeObject(String name, T object)
     throws CpoException;
 
     /**
@@ -767,7 +767,7 @@ public interface CpoAdapter extends java.io.Serializable {
      *
      * @throws CpoException Thrown if there are errors accessing the datasource
      */
-    public Object executeObject(String name, Object criteria, Object result)
+    public <T,C> T executeObject(String name, C criteria, T result)
         throws CpoException;
 
 
@@ -828,7 +828,7 @@ public interface CpoAdapter extends java.io.Serializable {
      *
      * @throws CpoException Thrown if there are errors accessing the datasource
      */
-    public long existsObject(Object obj) throws CpoException;
+    public <T> long existsObject(T obj) throws CpoException;
     
     /**
      * The CpoAdapter will check to see if this object exists in the datasource.
@@ -888,7 +888,7 @@ public interface CpoAdapter extends java.io.Serializable {
      *
      * @throws CpoException Thrown if there are errors accessing the datasource
      */
-    public long existsObject(String name, Object obj) throws CpoException;
+    public <T> long existsObject(String name, T obj) throws CpoException;
 
     /**
      * <code>newOrderBy</code> allows you to dynamically change the order of the objects in the resulting 
@@ -942,7 +942,7 @@ public interface CpoAdapter extends java.io.Serializable {
      *
      * @throws CpoException Thrown if there are errors accessing the datasource
      */
-    public CpoWhere newWhere(int logical, String attr, int comp, Object value)
+    public <T> CpoWhere newWhere(int logical, String attr, int comp, T value)
         throws CpoException;
 
     /**
@@ -958,7 +958,7 @@ public interface CpoAdapter extends java.io.Serializable {
      *
      * @throws CpoException Thrown if there are errors accessing the datasource
      */
-    public CpoWhere newWhere(int logical, String attr, int comp, Object value, boolean not)
+    public <T> CpoWhere newWhere(int logical, String attr, int comp, T value, boolean not)
         throws CpoException;
 
 
@@ -1016,7 +1016,7 @@ public interface CpoAdapter extends java.io.Serializable {
      * @see #insertObject
      * @see #updateObject
      */
-    public long persistObject(Object obj)
+    public <T> long persistObject(T obj)
         throws CpoException;
 
     /**
@@ -1073,7 +1073,7 @@ public interface CpoAdapter extends java.io.Serializable {
      * @see #insertObject
      * @see #updateObject
      */
-    public long persistObject(String name, Object obj)
+    public <T> long persistObject(String name, T obj)
         throws CpoException;
 
     /**
@@ -1138,7 +1138,7 @@ public interface CpoAdapter extends java.io.Serializable {
      * @see #insertObject
      * @see #updateObject
      */
-    public long persistObjects(Collection coll)
+    public <T> long persistObjects(Collection<T> coll)
         throws CpoException;
 
     /**
@@ -1204,7 +1204,7 @@ public interface CpoAdapter extends java.io.Serializable {
      * @see #insertObject
      * @see #updateObject
      */
-    public long persistObjects(String name, Collection coll)
+    public <T> long persistObjects(String name, Collection<T> coll)
         throws CpoException;
 
     /**
@@ -1222,7 +1222,7 @@ public interface CpoAdapter extends java.io.Serializable {
      *
      * @throws CpoException Thrown if there are errors accessing the datasource
      */
-    public Object retrieveObject(Object obj)
+    public <T> T retrieveObject(T obj)
         throws CpoException;
 
      /**
@@ -1239,7 +1239,7 @@ public interface CpoAdapter extends java.io.Serializable {
      *
      * @throws CpoException Thrown if there are errors accessing the datasource
      */
-    public Object retrieveObject(String name, Object obj)
+    public <T> T  retrieveObject(String name, T obj)
         throws CpoException;
     
     /**
@@ -1265,8 +1265,8 @@ public interface CpoAdapter extends java.io.Serializable {
      *
      * @throws CpoException Thrown if there are errors accessing the datasource
      */    
-    public Object retrieveObject(String name, Object criteria, Object result, CpoWhere where,
-        Collection orderBy) throws CpoException;
+    public <T,C> T  retrieveObject(String name, C criteria, T result, CpoWhere where,
+        Collection<CpoOrderBy> orderBy) throws CpoException;
     
 
     /**
@@ -1292,8 +1292,8 @@ public interface CpoAdapter extends java.io.Serializable {
      *
      * @throws CpoException Thrown if there are errors accessing the datasource
      */
-    public Collection retrieveObjects(String name, Object criteria, Object result, CpoWhere where,
-        Collection orderBy) throws CpoException;
+    public <T,C> Collection<T> retrieveObjects(String name, C criteria, T result, CpoWhere where,
+        Collection<CpoOrderBy> orderBy) throws CpoException;
 
     /**
      * Allows you to perform a series of object interactions with the database. This method
@@ -1354,7 +1354,7 @@ public interface CpoAdapter extends java.io.Serializable {
      *
      * @throws CpoException Thrown if there are errors accessing the datasource
      */
-   public long transactObjects(Collection coll) throws CpoException;
+   public <T> long transactObjects(Collection<CpoObject<T>> coll) throws CpoException;
 
     /**
      * Update the Object in the datasource. The CpoAdapter will check to see if the object
@@ -1404,7 +1404,7 @@ public interface CpoAdapter extends java.io.Serializable {
      *
      * @throws CpoException Thrown if there are errors accessing the datasource
      */
-    public long updateObject(Object obj) throws CpoException;
+    public <T> long updateObject(T obj) throws CpoException;
 
     /**
      * Update the Object in the datasource. The CpoAdapter will check to see if the object
@@ -1456,7 +1456,7 @@ public interface CpoAdapter extends java.io.Serializable {
      *
      * @throws CpoException Thrown if there are errors accessing the datasource
      */
-    public long updateObject(String name, Object obj) throws CpoException;
+    public <T> long updateObject(String name, T obj) throws CpoException;
 
     /**
      * Updates a collection of Objects in the datasource. The assumption is that the objects
@@ -1516,7 +1516,7 @@ public interface CpoAdapter extends java.io.Serializable {
      *
      * @throws CpoException Thrown if there are errors accessing the datasource
      */
-    public long updateObjects(Collection coll)
+    public <T> long updateObjects(Collection<T> coll)
         throws CpoException;
 
     /**
@@ -1578,7 +1578,7 @@ public interface CpoAdapter extends java.io.Serializable {
      *
      * @throws CpoException Thrown if there are errors accessing the datasource
      */
-    public long updateObjects(String name, Collection coll)
+    public <T> long updateObjects(String name, Collection<T> coll)
         throws CpoException;
 
     /**

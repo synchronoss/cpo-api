@@ -24,6 +24,7 @@
 package org.synchronoss.cpo;
 
 
+
 /**
  * CpoObject is used in conjunction with the <code>transactObjects</method> to perform a 
  * transactions without having to deal with commit, or rollback.
@@ -81,7 +82,7 @@ package org.synchronoss.cpo;
  * @author david berry
  */
 
-public class CpoObject extends java.lang.Object implements java.io.Serializable, java.lang.Cloneable {
+public class CpoObject<T> extends java.lang.Object implements java.io.Serializable, java.lang.Cloneable {
 
 //    private static Logger logger = Logger.getLogger(CpoObject.class.getName());
 
@@ -92,7 +93,7 @@ public class CpoObject extends java.lang.Object implements java.io.Serializable,
     
 
     private int operation_ = -1;
-    private Object object_ = null;
+    private T object_ = null;
     private String   name_ = null;
 
     private CpoObject(){}
@@ -114,7 +115,7 @@ public class CpoObject extends java.lang.Object implements java.io.Serializable,
      *
      * @param object - The populated object for which CPO will be called. 
      */
-    public CpoObject(int operation, String name, Object object){
+    public CpoObject(int operation, String name, T object){
         setOperation(operation);
         setName(name);
         setObject(object);
@@ -128,7 +129,7 @@ public class CpoObject extends java.lang.Object implements java.io.Serializable,
         name_ = name;
     }
 
-    protected void setObject(Object object){
+    protected void setObject(T object){
         object_ = object;
     }
 
@@ -166,8 +167,9 @@ public class CpoObject extends java.lang.Object implements java.io.Serializable,
      *
      * @return The populated object for which CPO will be called.  
      */
-    public Object getObject(){
+    public T getObject(){
         return object_;
     }
+
 
 }

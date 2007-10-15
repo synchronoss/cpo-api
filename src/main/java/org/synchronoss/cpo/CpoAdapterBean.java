@@ -53,10 +53,9 @@ public class CpoAdapterBean
     private static final String PROP_FACTORYCLASS = "factoryClassName";
     private static final String PROP_LOADERROR = "error.loading.cpofactory";
 
-
-    private SessionContext ctx_=null;
-
     private CpoAdapter adapter_ = null;
+    
+    private SessionContext ctx_=null;
     
     public CpoAdapterBean(CpoAdapter cpo){
     	adapter_=cpo;
@@ -88,13 +87,13 @@ public class CpoAdapterBean
         return adapter_;
     }
 
-    public Class getAdapterClass()
+    public Class<?> getAdapterClass()
         throws CpoException{
 
         return getAdapter().getClass();
     }
 
-    public Object executeAdapterMethod(String name, Class[] parameterTypes, Object[] args)
+    public Object executeAdapterMethod(String name, Class<?>[] parameterTypes, Object[] args)
         throws CpoException{
         Method meth = null;
         Object obj = null;
@@ -113,7 +112,7 @@ public class CpoAdapterBean
         throws CpoException {
 
         String factoryClassName = null;
-        Class factory = null;
+        Class<?> factory = null;
         CpoFactory cpoFactory = null;
         CpoAdapter cpoAdapter = null;
         ResourceBundle b = null;
@@ -145,7 +144,7 @@ public class CpoAdapterBean
      *               metadata of the datasource. If the class is not defined
      *               an exception will be thrown.
      */
-    public long insertObject(Object obj) throws CpoException{
+    public <T> long insertObject(T obj) throws CpoException{
         return getAdapter().insertObject(null,obj);
     }
 
@@ -158,7 +157,7 @@ public class CpoAdapterBean
      *               metadata of the datasource. If the class is not defined
      *               an exception will be thrown.
      */
-    public long insertObject(String name, Object obj) throws CpoException{
+    public <T> long insertObject(String name, T obj) throws CpoException{
         return getAdapter().insertObject(name,obj);
     }
 
@@ -175,7 +174,7 @@ public class CpoAdapterBean
      *               the metadata of the datasource. If the class is not defined
      *               an exception will be thrown.
      */
-    public long insertObjects(Collection coll) throws CpoException{
+    public <T> long insertObjects(Collection<T> coll) throws CpoException{
         return getAdapter().insertObjects(null,coll);
     }
 
@@ -192,7 +191,7 @@ public class CpoAdapterBean
      *               the metadata of the datasource. If the class is not defined
      *               an exception will be thrown.
      */
-    public long insertObjects(String name, Collection coll) throws CpoException{
+    public <T> long insertObjects(String name, Collection<T> coll) throws CpoException{
         return getAdapter().insertObjects(name,coll);
     }
 
@@ -209,7 +208,7 @@ public class CpoAdapterBean
      *               object is used to specify the search criteria, the output 
      *               object is populated with the results of the query.
      */
-    public Object retrieveObject(Object obj) throws CpoException{
+    public <T> T retrieveObject(T obj) throws CpoException{
         return(getAdapter().retrieveObject(null,obj));
     }
 
@@ -226,7 +225,7 @@ public class CpoAdapterBean
      *               object is used to specify the search criteria, the output 
      *               object is populated with the results of the query.
      */
-    public Object retrieveObject(String name, Object obj) throws CpoException{
+    public <T> T retrieveObject(String name, T obj) throws CpoException{
         return(getAdapter().retrieveObject(name,obj));
     }
 
@@ -244,7 +243,7 @@ public class CpoAdapterBean
      *               object is used to specify the search criteria, the output 
      *               object is populated with the results of the query.
      */
-    public Object retrieveObject(String name, Object criteria, Object result, CpoWhere where, Collection orderBy) throws CpoException{
+    public <T,C> T retrieveObject(String name, C criteria, T result, CpoWhere where, Collection<CpoOrderBy> orderBy) throws CpoException{
       return getAdapter().retrieveObject(name,criteria,result,where, orderBy);
     }
     /**
@@ -270,7 +269,7 @@ public class CpoAdapterBean
      *                 that was passed in. If no objects match the criteria, an empty
      *                 collection will be returned
      */
-    public Collection retrieveObjects(String name, Object criteria, Object result, CpoWhere where, Collection orderBy)  throws CpoException {
+    public <T,C> Collection<T> retrieveObjects(String name, C criteria, T result, CpoWhere where, Collection<CpoOrderBy> orderBy)  throws CpoException {
         return getAdapter().retrieveObjects(name,criteria,result,where, orderBy);
     }
 
@@ -283,7 +282,7 @@ public class CpoAdapterBean
      *               metadata of the datasource. If the class is not defined
      *               an exception will be thrown.
      */
-    public long updateObject(Object obj) throws CpoException{
+    public <T> long updateObject(T obj) throws CpoException{
         return getAdapter().updateObject(null,obj);
     }
 
@@ -296,7 +295,7 @@ public class CpoAdapterBean
      *               metadata of the datasource. If the class is not defined
      *               an exception will be thrown.
      */
-    public long updateObject(String name, Object obj) throws CpoException{
+    public <T> long updateObject(String name, T obj) throws CpoException{
         return getAdapter().updateObject(name,obj);
     }
 
@@ -314,7 +313,7 @@ public class CpoAdapterBean
      *               the metadata of the datasource. If the class is not defined
      *               an exception will be thrown.
      */
-    public long updateObjects(Collection coll) throws CpoException{
+    public <T> long updateObjects(Collection<T> coll) throws CpoException{
         return getAdapter().updateObjects(null,coll);
     }
     
@@ -332,7 +331,7 @@ public class CpoAdapterBean
      *               the metadata of the datasource. If the class is not defined
      *               an exception will be thrown.
      */
-    public long updateObjects(String name, Collection coll) throws CpoException{
+    public <T> long updateObjects(String name, Collection<T> coll) throws CpoException{
         return getAdapter().updateObjects(name,coll);
     }
 
@@ -346,7 +345,7 @@ public class CpoAdapterBean
      *               an exception will be thrown. If the object does not exist in
      *               the datasource an exception will be thrown.
      */
-    public long deleteObject(Object obj) throws CpoException{
+    public <T> long deleteObject(T obj) throws CpoException{
         return getAdapter().deleteObject(null,obj);
     }
 
@@ -360,7 +359,7 @@ public class CpoAdapterBean
      *               an exception will be thrown. If the object does not exist in
      *               the datasource an exception will be thrown.
      */
-    public long deleteObject(String name, Object obj) throws CpoException{
+    public <T> long deleteObject(String name, T obj) throws CpoException{
         return getAdapter().deleteObject(name,obj);
     }
 
@@ -376,7 +375,7 @@ public class CpoAdapterBean
      *               the metadata of the datasource. If the class is not defined
      *               an exception will be thrown.
      */
-    public long deleteObjects(Collection coll) throws CpoException{
+    public <T> long deleteObjects(Collection<T> coll) throws CpoException{
         return getAdapter().deleteObjects(null,coll);
     }
 
@@ -392,7 +391,7 @@ public class CpoAdapterBean
      *               the metadata of the datasource. If the class is not defined
      *               an exception will be thrown.
      */
-    public long deleteObjects(String name, Collection coll) throws CpoException{
+    public <T> long deleteObjects(String name, Collection<T> coll) throws CpoException{
         return getAdapter().deleteObjects(name,coll);
     }
 
@@ -414,7 +413,7 @@ public class CpoAdapterBean
      * 
      * @exception    An exception is thrown if existsObject() returns a value > 1
      */
-    public long persistObject(Object obj) throws CpoException{
+    public <T> long persistObject(T obj) throws CpoException{
         return getAdapter().persistObject(null,obj);
     }
     
@@ -435,7 +434,7 @@ public class CpoAdapterBean
      * 
      * @exception    An exception is thrown if existsObject() returns a value > 1
      */
-    public long persistObject(String name, Object obj) throws CpoException{
+    public <T> long persistObject(String name, T obj) throws CpoException{
         return getAdapter().persistObject(name,obj);
     }
     
@@ -462,7 +461,7 @@ public class CpoAdapterBean
      * @see #insertObject
      * @see #updateObject
      */
-    public long persistObjects(Collection coll) throws CpoException{
+    public <T> long persistObjects(Collection<T> coll) throws CpoException{
         return getAdapter().persistObjects(null,coll);
     }
 
@@ -488,7 +487,7 @@ public class CpoAdapterBean
      * @see #insertObject
      * @see #updateObject
      */
-    public long persistObjects(String name, Collection coll) throws CpoException{
+    public <T> long persistObjects(String name, Collection<T> coll) throws CpoException{
         return getAdapter().persistObjects(name,coll);
     }
 
@@ -507,7 +506,7 @@ public class CpoAdapterBean
      * @exception    An exception will be thrown if there is a column count != 1
      * @exception    An exception will be thrown if the column returned  cannot be converted to an int
      */
-    public long existsObject(Object obj) throws CpoException{
+    public <T> long existsObject(T obj) throws CpoException{
         return getAdapter().existsObject(null,obj);
     }
     
@@ -525,7 +524,7 @@ public class CpoAdapterBean
      * @exception    An exception will be thrown if there is a column count != 1
      * @exception    An exception will be thrown if the column returned  cannot be converted to an int
      */
-    public long existsObject(String name, Object obj) throws CpoException{
+    public <T> long existsObject(String name, T obj) throws CpoException{
         return getAdapter().existsObject(name,obj);
     }
     
@@ -551,7 +550,7 @@ public class CpoAdapterBean
      * 
      * @return         A result object populate with the OUT parameters
      */
-    public Object executeObject(Object object)  throws CpoException
+    public <T> T executeObject(T object)  throws CpoException
     {
         return getAdapter().executeObject(null,object, object);    
     }
@@ -572,7 +571,7 @@ public class CpoAdapterBean
      *
      * @throws CpoException DOCUMENT ME!
      */
-    public Object executeObject(String name, Object object)  throws CpoException
+    public <T> T executeObject(String name, T object)  throws CpoException
     {
         return getAdapter().executeObject(name,object, object);    
     }
@@ -597,7 +596,7 @@ public class CpoAdapterBean
      *                 collection and contain the result set data or the OUT Parameters.
      * @return         A result object populate with the OUT parameters
      */
-    public Object executeObject(String name, Object criteria, Object result)  throws CpoException
+    public <T,C> T executeObject(String name, C criteria, T result)  throws CpoException
     {
         return getAdapter().executeObject(name,criteria, result);    
     }
@@ -614,10 +613,10 @@ public class CpoAdapterBean
     public CpoWhere newWhere() throws CpoException{
         return getAdapter().newWhere();
     }
-    public CpoWhere newWhere(int logical, String attr, int comp, Object value) throws CpoException{
+    public <T> CpoWhere newWhere(int logical, String attr, int comp, T value) throws CpoException{
         return getAdapter().newWhere(logical, attr,comp,value);
     }
-    public CpoWhere newWhere(int logical, String attr, int comp, Object value, boolean not) throws CpoException{
+    public <T> CpoWhere newWhere(int logical, String attr, int comp, T value, boolean not) throws CpoException{
         return getAdapter().newWhere(logical, attr,comp,value, not);
     }
 
@@ -631,7 +630,7 @@ public class CpoAdapterBean
         getAdapter().clearMetaClass();
     }
 
-    public long transactObjects(Collection coll) throws CpoException{
+    public <T> long transactObjects(Collection<CpoObject<T>> coll) throws CpoException{
         return getAdapter().transactObjects(coll);
     }
     public CpoTrxAdapter getCpoTrxAdapter() throws CpoException {

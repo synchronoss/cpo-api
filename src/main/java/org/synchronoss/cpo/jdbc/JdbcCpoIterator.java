@@ -27,18 +27,18 @@ import java.util.ArrayList;
 import org.synchronoss.cpo.CpoIterator;
 
 
-public class JdbcCpoIterator implements CpoIterator {
+public class JdbcCpoIterator<T> implements CpoIterator<T> {
     private boolean closed = false;
     private boolean empty = true;
     private int bufSize = 0;
     
-    private ArrayList list = new ArrayList();
+    private ArrayList<T> list = new ArrayList<T>();
     
     protected JdbcCpoIterator(int objectBufferSize){
         bufSize=objectBufferSize;
     }
     
-    public boolean add(Object obj){
+    public boolean add(T obj){
         boolean added = false;
         if (obj!=null){
             synchronized(list){
@@ -52,7 +52,7 @@ public class JdbcCpoIterator implements CpoIterator {
         return added;
     }
     
-    public boolean addfinal(Object obj){
+    public boolean addfinal(T obj){
         boolean added = false;
         if (obj!=null){
             synchronized(list){
@@ -77,8 +77,8 @@ public class JdbcCpoIterator implements CpoIterator {
             return false;
     }
     
-    public Object next(){
-        Object obj=null;
+    public T next(){
+        T obj=null;
         
         synchronized(list){
             obj=list.remove(0);

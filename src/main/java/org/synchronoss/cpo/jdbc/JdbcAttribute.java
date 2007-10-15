@@ -82,7 +82,7 @@ public class JdbcAttribute extends java.lang.Object implements java.io.Serializa
      * @param jmc
      * @param name
      */
-    public JdbcAttribute(JdbcMetaClass jmc, String name, String javaSqlTypeName, String dbName, String dbTable, String dbColumn, String transformClass)
+    public <T> JdbcAttribute(JdbcMetaClass<T> jmc, String name, String javaSqlTypeName, String dbName, String dbTable, String dbColumn, String transformClass)
     throws CpoException {
         Logger.getLogger(jmc.getJmcClass().getName()).debug("Adding Attribute for class "+jmc.getJmcClass().getName()+": "+name+"("+dbName+","+dbTable+","+dbColumn+","+transformClass+")");
         setName(name);
@@ -158,7 +158,7 @@ public class JdbcAttribute extends java.lang.Object implements java.io.Serializa
         setterName_ = setterName;
     }
 
-    private void initMethods(JdbcMetaClass jmc) throws CpoException {
+    private <T> void initMethods(JdbcMetaClass<T> jmc) throws CpoException {
         StringBuffer failedMessage = new StringBuffer();
         setGetterName(buildMethodName("get",getName()));
         setSetterName(buildMethodName("set",getName()));
@@ -181,7 +181,7 @@ public class JdbcAttribute extends java.lang.Object implements java.io.Serializa
         }
     }
 
-    static protected Method[] findMethods(JdbcMetaClass jmc, String methodName, int args, boolean hasReturn)
+    static protected <T> Method[] findMethods(JdbcMetaClass<T> jmc, String methodName, int args, boolean hasReturn)
     throws CpoException{
         Method m[] = null;
         int count = 0;
@@ -230,9 +230,9 @@ public class JdbcAttribute extends java.lang.Object implements java.io.Serializa
     }
     
     public void invokeSetter(Object obj, ResultSet rs, int idx) throws CpoException {
-        JavaSqlMethod jdbcMethod = null;
+        JavaSqlMethod<?> jdbcMethod = null;
         Object param = null;
-        Class paramClass = null;
+        Class<?> paramClass = null;
         Logger localLogger = obj==null?logger:Logger.getLogger(obj.getClass().getName());
         
         if (getSetters().length==0) 
@@ -285,9 +285,9 @@ public class JdbcAttribute extends java.lang.Object implements java.io.Serializa
     }
     
     public void invokeSetter(Object obj, CallableStatement cs, int idx) throws CpoException {
-        JavaSqlMethod jdbcMethod = null;
+        JavaSqlMethod<?> jdbcMethod = null;
         Object param = null;
-        Class paramClass = null;
+        Class<?> paramClass = null;
         Logger localLogger = obj==null?logger:Logger.getLogger(obj.getClass().getName());
         
         if (getSetters().length==0) 
@@ -342,7 +342,7 @@ public class JdbcAttribute extends java.lang.Object implements java.io.Serializa
     
     public void invokeGetter(JdbcCallableStatementFactory jcsf, Object obj, int idx) throws CpoException {
         Object param = null;
-        JavaSqlMethod jdbcMethod = null;
+        JavaSqlMethod<?> jdbcMethod = null;
         Logger localLogger = obj==null?logger:Logger.getLogger(obj.getClass().getName());
          
         try{
@@ -385,7 +385,7 @@ public class JdbcAttribute extends java.lang.Object implements java.io.Serializa
     
     public void invokeGetter(JdbcPreparedStatementFactory jpsf, Object obj, int idx) throws CpoException {
         Object param = null;
-        JavaSqlMethod jdbcMethod = null;
+        JavaSqlMethod<?> jdbcMethod = null;
         String msg = null;
         Logger localLogger = obj==null?logger:Logger.getLogger(obj.getClass().getName());
         try{
@@ -453,7 +453,7 @@ public class JdbcAttribute extends java.lang.Object implements java.io.Serializa
     }
     
     protected void setTransformClass(String className) throws CpoException {
-        Class transformClass=null;
+        Class<?> transformClass=null;
         Method[] m = null;
         Logger localLogger = className==null?logger:Logger.getLogger(className);
         

@@ -73,14 +73,14 @@ public class JdbcCpoWhere extends Node implements CpoWhere{
     private boolean not = false;
     private String staticValue_ = null;
 
-    public JdbcCpoWhere(int logical, String attr, int comp, Object value){
+    public <T> JdbcCpoWhere(int logical, String attr, int comp, T value){
         setLogical(logical);
         setAttribute(attr);
         setComparison(comp);
         setValue(value);
     }
 
-    public JdbcCpoWhere(int logical, String attr, int comp, Object value, boolean not){
+    public <T> JdbcCpoWhere(int logical, String attr, int comp, T value, boolean not){
         setLogical(logical);
         setAttribute(attr);
         setComparison(comp);
@@ -148,7 +148,7 @@ public class JdbcCpoWhere extends Node implements CpoWhere{
         this.not=b;
     }
 
-    public String toString(JdbcMetaClass jmc)  throws CpoException {
+    public String toString(JdbcMetaClass<?> jmc)  throws CpoException {
         StringBuffer sb = new StringBuffer();
         JdbcAttribute attribute = null;
 

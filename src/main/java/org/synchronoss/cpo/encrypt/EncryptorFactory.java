@@ -31,7 +31,7 @@ public class EncryptorFactory {
     public static Encryptor getEncryptor(String className) throws ClassNotFoundException, InstantiationException, IllegalAccessException {
         logger.debug("Entering getEncryptor(" + className + ")");
         Encryptor enc= null;        
-            Class c = Class.forName(className);
+            Class<?> c = Class.forName(className);
             Object o = c.newInstance();
             enc = (Encryptor)o;
             logger.debug("Created encryptor with class " + enc.getClass());

@@ -24,7 +24,6 @@
 package org.synchronoss.cpo;
 
 import java.rmi.RemoteException;
-import java.sql.Connection;
 import java.util.Collection;
 
 /**
@@ -98,7 +97,7 @@ public interface CpoAdapterRemote extends java.io.Serializable {
      * @throws RemoteException Thrown if using dataPersist as an EJB and an Error
      *                         occurs.
      */
-    public long insertObject(Object obj) throws CpoException, RemoteException;
+    public <T> long insertObject(T obj) throws CpoException, RemoteException;
 
     /**
      * Creates the Object in the datasource. The assumption is that the object does not exist in
@@ -114,28 +113,7 @@ public interface CpoAdapterRemote extends java.io.Serializable {
      * @throws RemoteException Thrown if using dataPersist as an EJB and an Error
      *                         occurs.
      */
-    public long insertObject(String name, Object obj) throws CpoException, RemoteException;
-
-    /**
-     * Creates the Object in the datasource. The assumption is that the object does not exist in
-     * the datasource.  This method creates and stores the object in the datasource
-     * @param name The <code>String</code> name of the CREATE Query group that will be used to create the object
-     *             in the datasource. <code>null</code> signifies that the default rules will be used.
-     * @param obj This is an object that has been defined within the metadata of the datasource. If
-     *        the class is not defined an exception will be thrown.
-     * @param c The datasource connection that will be used to create the object in the datasource. 
-     * 
-     * @return The number of objects created in the datasource
-     *
-     * @throws CpoException Thrown if there are errors accessing the datasource
-     * @throws RemoteException Thrown if using dataPersist as an EJB and an Error
-     *                         occurs.
-     *
-     * @deprecated Connection based objects are supported for backward compatibility and will be
-     *             made private in a future release
-     */
-    public long insertObject(String name, Object obj, Connection c)
-        throws CpoException, RemoteException;
+    public <T> long insertObject(String name, T obj) throws CpoException, RemoteException;
 
     /**
      * Iterates through a collection of Objects, creates and stores them in the datasource.  The
@@ -156,7 +134,7 @@ public interface CpoAdapterRemote extends java.io.Serializable {
      * @throws RemoteException Thrown if using dataPersist as an EJB and an Error
      *                         occurs.
      */
-    public long insertObjects(Collection coll)
+    public <T> long insertObjects(Collection<T> coll)
         throws CpoException, RemoteException;
 
     /**
@@ -179,34 +157,9 @@ public interface CpoAdapterRemote extends java.io.Serializable {
      * @throws RemoteException Thrown if using dataPersist as an EJB and an Error
      *                         occurs.
      */
-    public long insertObjects(String name, Collection coll)
+    public <T> long insertObjects(String name, Collection<T> coll)
         throws CpoException, RemoteException;
 
-    /**
-     * Iterates through a collection of Objects, creates and stores them in the datasource.  The
-     * assumption is that the objects contained in the collection do not exist in the  datasource.
-     * 
-     * This method creates and stores the objects in the datasource. The objects in the
-     * collection will be treated as one transaction, assuming the datasource supports transactions.
-     * 
-     * This means that if one of the objects fail being created in the datasource then the CpoAdapter should stop
-     * processing the remainder of the collection, and if supported, rollback all the objects created thus far.
-     * @param name The <code>String</code> name of the CREATE Query group that will be used to create the object
-     *             in the datasource. <code>null</code> signifies that the default rules will be used.
-     * @param coll This is a collection of objects that have been defined within the metadata of
-     *        the datasource. If the class is not defined an exception will be thrown.
-     * @param c The datasource connection that will be used to create the object in the datasource. 
-     * @return The number of objects created in the datasource
-     *
-     * @throws CpoException Thrown if there are errors accessing the datasource
-     * @throws RemoteException Thrown if using dataPersist as an EJB and an Error
-     *                         occurs.
-     *                         
-     * @deprecated Connection based objects are supported for backward compatibility and will be
-     *             made private in a future release
-     */
-    public long insertObjects(String name, Collection coll, Connection c)
-        throws CpoException, RemoteException;
 
     /**
      * Removes the Object from the datasource. The assumption is that the object exists in the
@@ -222,7 +175,7 @@ public interface CpoAdapterRemote extends java.io.Serializable {
      * @throws RemoteException Thrown if using dataPersist as an EJB and an Error
      *                         occurs.
      */
-    public long deleteObject(Object obj) throws CpoException, RemoteException;
+    public <T> long deleteObject(T obj) throws CpoException, RemoteException;
 
     /**
      * Removes the Object from the datasource. The assumption is that the object exists in the
@@ -238,28 +191,7 @@ public interface CpoAdapterRemote extends java.io.Serializable {
      * @throws RemoteException Thrown if using dataPersist as an EJB and an Error
      *                         occurs.
      */
-    public long deleteObject(String name, Object obj) throws CpoException, RemoteException;
-
-    /**
-     * Removes the Object from the datasource. The assumption is that the object exists in the
-     * datasource.  This method stores the object in the datasource
-     * @param name The <code>String</code> name of the DELETE Query group that will be used to create the object
-     *             in the datasource. <code>null</code> signifies that the default rules will be used.
-     * @param obj This is an object that has been defined within the metadata of the datasource. If
-     *        the class is not defined an exception will be thrown. If the object does not exist
-     *        in the datasource an exception will be thrown.
-     * @param c The datasource connection that will be used to delete the object in the datasource. 
-     * @return The number of objects deleted from the datasource
-     *
-     * @throws CpoException Thrown if there are errors accessing the datasource
-     * @throws RemoteException Thrown if using dataPersist as an EJB and an Error
-     *                         occurs.
-     *                         
-     * @deprecated Connection based objects are supported for backward compatibility and will be
-     *             made private in a future release
-     */
-    public long deleteObject(String name, Object obj, Connection c)
-        throws CpoException, RemoteException;
+    public <T> long deleteObject(String name, T obj) throws CpoException, RemoteException;
 
     /**
      * Removes the Objects contained in the collection from the datasource. The  assumption is that
@@ -279,7 +211,7 @@ public interface CpoAdapterRemote extends java.io.Serializable {
      * @throws RemoteException Thrown if using dataPersist as an EJB and an Error
      *                         occurs.
      */
-    public long deleteObjects(Collection coll)
+    public <T> long deleteObjects(Collection<T> coll)
         throws CpoException, RemoteException;
 
     /**
@@ -300,33 +232,7 @@ public interface CpoAdapterRemote extends java.io.Serializable {
      * @throws RemoteException Thrown if using dataPersist as an EJB and an Error
      *                         occurs.
      */
-    public long deleteObjects(String name, Collection coll)
-        throws CpoException, RemoteException;
-
-    /**
-     * Removes the Objects contained in the collection from the datasource. The  assumption is that
-     * the object exists in the datasource.  This method stores the objects contained in the
-     * collection in the datasource. The objects in the collection will be treated as one transaction, 
-     * assuming the datasource supports transactions.
-     * 
-     * This means that if one of the objects fail being deleted in the datasource then the CpoAdapter should stop
-     * processing the remainder of the collection, and if supported, rollback all the objects deleted thus far.
-     * @param coll This is a collection of objects that have been defined within  the metadata of
-     *        the datasource. If the class is not defined an exception will be thrown.
-     * @param name The <code>String</code> name of the DELETE Query group that will be used to create the object
-     *             in the datasource. <code>null</code> signifies that the default rules will be used.
-     * @param c The datasource connection that will be used to delete the object in the datasource. 
-     *
-     * @return The number of objects deleted from the datasource
-     *
-     * @throws CpoException Thrown if there are errors accessing the datasource
-     * @throws RemoteException Thrown if using dataPersist as an EJB and an Error
-     *                         occurs.
-     *                         
-     * @deprecated Connection based objects are supported for backward compatibility and will be
-     *             made private in a future release
-     */
-    public long deleteObjects(String name, Collection coll, Connection c)
+    public <T> long deleteObjects(String name, Collection<T> coll)
         throws CpoException, RemoteException;
 
     /**
@@ -346,7 +252,7 @@ public interface CpoAdapterRemote extends java.io.Serializable {
      * @throws RemoteException Thrown if using dataPersist as an EJB and an Error
      *                         occurs.
      */
-    public Object executeObject(Object obj)
+    public <T> T executeObject(T obj)
         throws CpoException, RemoteException;
 
     /**
@@ -365,7 +271,7 @@ public interface CpoAdapterRemote extends java.io.Serializable {
      *
      * @throws CpoException DOCUMENT ME!
      */
-    public Object executeObject(String name, Object object)
+    public <T> T executeObject(String name, T object)
     throws CpoException,RemoteException;
 
     /**
@@ -388,34 +294,7 @@ public interface CpoAdapterRemote extends java.io.Serializable {
      * @throws RemoteException Thrown if using dataPersist as an EJB and an Error
      *                         occurs.
      */
-    public Object executeObject(String name, Object criteria, Object result)
-        throws CpoException, RemoteException;
-
-    /**
-     * Executes an Object that represents an executable object within the datasource. 
-     * It is assumed that the object exists in the datasource. If the object does not exist, an exception will be thrown
-     * @param name The <code>String</code> name of the EXECUTE Query group that will be used to create the object
-     *             in the datasource. <code>null</code> signifies that the default rules will be used.
-     * @param criteria This is an object that has been defined within the metadata of the
-     *        datasource. If the class is not defined an exception will be thrown. If the object
-     *        does not exist in the datasource, an exception will be thrown. This object is used
-     *        to populate the IN parameters used to retrieve the  collection of objects.
-     * @param result This is an object that has been defined within the metadata of the datasource.
-     *        If the class is not defined an exception will be thrown. If the object does not
-     *        exist in the datasource, an exception will be thrown. This object defines  the
-     *        object type that will be created, filled with the return data and returned from this
-     *        method.
-     * @param c The datasource connection that will be used to execute the object in the datasource. 
-     * @return An object populated with the out parameters
-     *
-     * @throws CpoException Thrown if there are errors accessing the datasource
-     * @throws RemoteException Thrown if using dataPersist as an EJB and an Error
-     *                         occurs.
-     *                         
-     * @deprecated Connection based objects are supported for backward compatibility and will be
-     *             made private in a future release
-     */
-    public Object executeObject(String name, Object criteria, Object result, Connection c)
+    public <T,C> T executeObject(String name, C criteria, T result)
         throws CpoException, RemoteException;
 
     /**
@@ -430,7 +309,7 @@ public interface CpoAdapterRemote extends java.io.Serializable {
      * @throws RemoteException Thrown if using dataPersist as an EJB and an Error
      *                         occurs.
      */
-    public long existsObject(Object obj) throws CpoException, RemoteException;
+    public <T> long existsObject(T obj) throws CpoException, RemoteException;
     
     /**
      * The CpoAdapter will check to see if this object exists in the datasource.
@@ -445,27 +324,8 @@ public interface CpoAdapterRemote extends java.io.Serializable {
      * @throws RemoteException Thrown if using dataPersist as an EJB and an Error
      *                         occurs.
      */
-    public long existsObject(String name, Object obj) throws CpoException, RemoteException;
+    public <T> long existsObject(String name, T obj) throws CpoException, RemoteException;
 
-    /**
-     * The CpoAdapter will check to see if this object exists in the datasource.
-     * @param name The <code>String</code> name of the EXISTS Query group that will be used to create the object
-     *             in the datasource. <code>null</code> signifies that the default rules will be used.
-     * @param obj This is an object that has been defined within the metadata of the datasource. If
-     *        the class is not defined an exception will be thrown. This object will be searched for inside the
-     *        datasource.
-     * @param c The datasource connection that will be used to delete the object in the datasource. 
-     * @return The number of objects that exist in the datasource that match the specified object
-     *
-     * @throws CpoException Thrown if there are errors accessing the datasource
-     * @throws RemoteException Thrown if using dataPersist as an EJB and an Error
-     *                         occurs.
-     *
-     * @deprecated Connection based objects are supported for backward compatibility and will be
-     *             made private in a future release
-     */
-    public long existsObject(String name, Object obj, Connection c)
-        throws CpoException, RemoteException;
 
     /**
      * DOCUMENT ME!
@@ -495,7 +355,7 @@ public interface CpoAdapterRemote extends java.io.Serializable {
      * @throws RemoteException Thrown if using dataPersist as an EJB and an Error
      *                         occurs.
      */
-    public CpoOrderBy newOrderBy(String attribute, boolean ascending, String function)
+    public <T> CpoOrderBy newOrderBy(String attribute, boolean ascending, String function)
         throws CpoException, RemoteException;
 
     /**
@@ -523,7 +383,7 @@ public interface CpoAdapterRemote extends java.io.Serializable {
      * @throws RemoteException Thrown if using dataPersist as an EJB and an Error
      *                         occurs.
      */
-    public CpoWhere newWhere(int logical, String attr, int comp, Object value)
+    public <T> CpoWhere newWhere(int logical, String attr, int comp, T value)
         throws CpoException, RemoteException;
 
     /**
@@ -541,7 +401,7 @@ public interface CpoAdapterRemote extends java.io.Serializable {
      * @throws RemoteException Thrown if using dataPersist as an EJB and an Error
      *                         occurs.
      */
-    public CpoWhere newWhere(int logical, String attr, int comp, Object value, boolean not)
+    public <T> CpoWhere newWhere(int logical, String attr, int comp, T value, boolean not)
         throws CpoException, RemoteException;
 
 
@@ -564,29 +424,7 @@ public interface CpoAdapterRemote extends java.io.Serializable {
      * @see #insertObject
      * @see #updateObject
      */
-    public long persistObject(Object obj)
-        throws CpoException, RemoteException;
-
-    /**
-     * Persists the Object into the datasource. The CpoAdapter will check to see if this object
-     * exists in the datasource. If it exists, the object is updated in the datasource If the
-     * object does not exist, then it is created in the datasource.  This method stores the object
-     * in the datasource
-     * @param name The name which identifies which EXISTS, INSERT, and UPDATE Query groups to
-     *        execute to persist the object.
-     * @param obj This is an object that has been defined within the metadata of the datasource. If
-     *        the class is not defined an exception will be thrown.
-     * @return A count of the number of objects persisted
-     *
-     * @throws CpoException Thrown if there are errors accessing the datasource
-     * @throws RemoteException Thrown if using dataPersist as an EJB and an Error
-     *                         occurs.
-     *
-     * @see #existsObject
-     * @see #insertObject
-     * @see #updateObject
-     */
-    public long persistObject(String name, Object obj)
+    public <T> long persistObject(T obj)
         throws CpoException, RemoteException;
 
     /**
@@ -598,7 +436,6 @@ public interface CpoAdapterRemote extends java.io.Serializable {
      *        execute to persist the object.
      * @param obj This is an object that has been defined within the metadata of the datasource. If
      *        the class is not defined an exception will be thrown.
-     * @param c The datasource connection that will be used to persist the object in the datasource. 
      * @return A count of the number of objects persisted
      *
      * @throws CpoException Thrown if there are errors accessing the datasource
@@ -608,11 +445,8 @@ public interface CpoAdapterRemote extends java.io.Serializable {
      * @see #existsObject
      * @see #insertObject
      * @see #updateObject
-     *
-     * @deprecated Connection based objects are supported for backward compatibility and will be
-     *             made private in a future release
      */
-    public long persistObject(String name, Object obj, Connection c)
+    public <T> long persistObject(String name, T obj)
         throws CpoException, RemoteException;
 
     /**
@@ -637,7 +471,7 @@ public interface CpoAdapterRemote extends java.io.Serializable {
      * @see #insertObject
      * @see #updateObject
      */
-    public long persistObjects(Collection coll)
+    public <T> long persistObjects(Collection<T> coll)
         throws CpoException, RemoteException;
 
     /**
@@ -661,23 +495,7 @@ public interface CpoAdapterRemote extends java.io.Serializable {
      * @see #insertObject
      * @see #updateObject
      */
-    public long persistObjects(String name, Collection coll)
-        throws CpoException, RemoteException;
-
-    /**
-     * DOCUMENT ME!
-     * @param name DOCUMENT ME!
-     * @param coll DOCUMENT ME!
-     * @param c DOCUMENT ME!
-     * @return DOCUMENT ME!
-     *
-     * @throws CpoException Thrown if there are errors accessing the datasource
-     * @throws RemoteException Thrown if using dataPersist as an EJB and an Error
-     *                         occurs.
-     * @deprecated Connection based objects are supported for backward compatibility and will be
-     *             made private in a future release
-     */
-    public long persistObjects(String name, Collection coll, Connection c)
+    public <T> long persistObjects(String name, Collection<T> coll)
         throws CpoException, RemoteException;
 
     /**
@@ -696,7 +514,7 @@ public interface CpoAdapterRemote extends java.io.Serializable {
      * @throws RemoteException Thrown if using dataPersist as an EJB and an Error
      *                         occurs.
      */
-    public Object retrieveObject(Object obj)
+    public <T> T retrieveObject(T obj)
         throws CpoException, RemoteException;
 
      /**
@@ -714,7 +532,7 @@ public interface CpoAdapterRemote extends java.io.Serializable {
      * @throws RemoteException Thrown if using dataPersist as an EJB and an Error
      *                         occurs.
      */
-    public Object retrieveObject(String name, Object obj)
+    public <T> T retrieveObject(String name, T obj)
         throws CpoException, RemoteException;
     
     /**
@@ -732,45 +550,10 @@ public interface CpoAdapterRemote extends java.io.Serializable {
      * @throws RemoteException Thrown if using dataPersist as an EJB and an Error
      *                         occurs.
      */    
-    public Object retrieveObject(String name, Object criteria, Object result, CpoWhere where,
-        Collection orderBy) throws CpoException, RemoteException;
+    public <T,C> T retrieveObject(String name, C criteria, T result, CpoWhere where,
+        Collection<? extends CpoOrderBy> orderBy) throws CpoException, RemoteException;
     
     /**
-     * DOCUMENT ME!
-     * @param name DOCUMENT ME!
-     * @param obj DOCUMENT ME!
-     * @param c DOCUMENT ME!
-     * @return DOCUMENT ME!
-     *
-     * @throws CpoException Thrown if there are errors accessing the datasource
-     * @throws RemoteException Thrown if using dataPersist as an EJB and an Error
-     *                         occurs.
-     *
-     * @deprecated Connection based objects are supported for backward compatibility and  will be
-     *             removed in a future release
-     */
-    public Object retrieveObject(String name, Object criteria, Object result, CpoWhere where,
-        Collection orderBy, Connection conn) throws CpoException, RemoteException;
-
-
-    /**
-     * DOCUMENT ME!
-     * @param name DOCUMENT ME!
-     * @param obj DOCUMENT ME!
-     * @param c DOCUMENT ME!
-     * @return DOCUMENT ME!
-     *
-     * @throws CpoException Thrown if there are errors accessing the datasource
-     * @throws RemoteException Thrown if using dataPersist as an EJB and an Error
-     *                         occurs.
-     *
-     * @deprecated Connection based objects are supported for backward compatibility and  will be
-     *             removed in a future release
-     */
-    public Object retrieveObject(String name, Object obj, Connection c)
-        throws CpoException, RemoteException;
-
-    /**
      * Retrieves the Object from the datasource. The assumption is that the object exists in the
      * datasource.
      * @param name The filter name which tells the datasource which objects should be returned. The
@@ -793,37 +576,8 @@ public interface CpoAdapterRemote extends java.io.Serializable {
      * @throws RemoteException Thrown if using dataPersist as an EJB and an Error
      *                         occurs.
      */
-    public Collection retrieveObjects(String name, Object criteria, Object result, CpoWhere where,
-        Collection orderBy) throws CpoException, RemoteException;
-
-    /**
-     * Retrieves the Object from the datasource. The assumption is that the object exists in the
-     * datasource.
-     * @param name The filter name which tells the datasource which objects should be returned. The
-     *        name also signifies what data in the object will be  populated.
-     * @param criteria This is an object that has been defined within the metadata of the
-     *        datasource. If the class is not defined an exception will be thrown. If the object
-     *        does not exist in the datasource, an exception will be thrown. This object is used
-     *        to specify the parameters used to retrieve the  collection of objects.
-     * @param result This is an object that has been defined within the metadata of the datasource.
-     *        If the class is not defined an exception will be thrown. If the object does not
-     *        exist in the datasource, an exception will be thrown. This object is used to specify
-     *        the object type that will be returned in the  collection.
-     * @param where DOCUMENT ME!
-     * @param orderBy DOCUMENT ME!
-     * @return A collection of objects will be returned that meet the criteria  specified by obj.
-     *         The objects will be of the same type as the Object  that was passed in. If no
-     *         objects match the criteria, an empty collection will be returned
-     *
-     * @throws CpoException Thrown if there are errors accessing the datasource
-     * @throws RemoteException Thrown if using dataPersist as an EJB and an Error
-     *                         occurs.
-     *
-     * @deprecated Connection based objects are supported for backward compatibility and will be
-     *             made private in a future release
-     */
-    public Collection retrieveObjects(String name, Object criteria, Object result, CpoWhere where,
-        Collection orderBy, Connection c) throws CpoException, RemoteException;
+    public <T,C> T retrieveObjects(String name, C criteria, T result, CpoWhere where,
+        Collection<? extends CpoOrderBy> orderBy) throws CpoException, RemoteException;
 
     /**
      * DOCUMENT ME!
@@ -836,22 +590,7 @@ public interface CpoAdapterRemote extends java.io.Serializable {
      * @throws RemoteException Thrown if using dataPersist as an EJB and an Error
      *                         occurs.
      */
-    public long transactObjects(Collection coll) throws CpoException, RemoteException;
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param coll DOCUMENT ME!
-     * @param c DOCUMENT ME!
-     *
-     * @return DOCUMENT ME!
-     *
-     * @throws CpoException Thrown if there are errors accessing the datasource
-     * @throws RemoteException Thrown if using dataPersist as an EJB and an Error
-     *                         occurs.
-     */
-    public long transactObjects(Collection coll, Connection c)
-        throws CpoException, RemoteException;
+    public <T> long transactObjects(Collection<CpoObject<T>> coll) throws CpoException, RemoteException;
 
     /**
      * Update the Object in the datasource. The CpoAdapter will check to see if the object
@@ -867,7 +606,7 @@ public interface CpoAdapterRemote extends java.io.Serializable {
      * @throws RemoteException Thrown if using dataPersist as an EJB and an Error
      *                         occurs.
      */
-    public long updateObject(Object obj) throws CpoException, RemoteException;
+    public <T> long updateObject(T obj) throws CpoException, RemoteException;
 
     /**
      * Update the Object in the datasource. The CpoAdapter will check to see if the object
@@ -884,29 +623,7 @@ public interface CpoAdapterRemote extends java.io.Serializable {
      * @throws RemoteException Thrown if using dataPersist as an EJB and an Error
      *                         occurs.
      */
-    public long updateObject(String name, Object obj) throws CpoException, RemoteException;
-
-    /**
-     * Update the Object in the datasource. The CpoAdapter will check to see if the object
-     * exists in the datasource. If it exists then the object will be updated. If it does not exist,
-     * an exception will be thrown
-     * @param name The <code>String</code> name of the UPDATE Query group that will be used to create the object
-     *             in the datasource. <code>null</code> signifies that the default rules will be used.
-     * @param obj This is an object that has been defined within the metadata of the datasource. If
-     *        the class is not defined an exception will be thrown.
-     * @param c The datasource connection that will be used to update the object in the datasource. 
-     * 
-     * @return The number of objects updated in the datasource
-     *
-     * @throws CpoException Thrown if there are errors accessing the datasource
-     * @throws RemoteException Thrown if using dataPersist as an EJB and an Error
-     *                         occurs.
-     *
-     * @deprecated Connection based objects are supported for backward compatibility and will be
-     *             made private in a future release
-     */
-    public long updateObject(String name, Object obj, Connection c)
-        throws CpoException, RemoteException;
+    public <T> long updateObject(String name, T obj) throws CpoException, RemoteException;
 
     /**
      * Updates a collection of Objects in the datasource. The assumption is that the objects
@@ -924,7 +641,7 @@ public interface CpoAdapterRemote extends java.io.Serializable {
      * @throws RemoteException Thrown if using dataPersist as an EJB and an Error
      *                         occurs.
      */
-    public long updateObjects(Collection coll)
+    public <T> long updateObjects(Collection<T> coll)
         throws CpoException, RemoteException;
 
     /**
@@ -944,30 +661,6 @@ public interface CpoAdapterRemote extends java.io.Serializable {
      * @throws RemoteException Thrown if using dataPersist as an EJB and an Error
      *                         occurs.
      */
-    public long updateObjects(String name, Collection coll)
-        throws CpoException, RemoteException;
-
-    /**
-     * Updates a collection of Objects in the datasource. The assumption is that the objects
-     * contained in the collection exist in the datasource.  This method stores the object in the
-     * datasource. The objects in the collection will be treated as one transaction, meaning that
-     * if one of the objects fail being updated in the datasource then the entire collection will
-     * be rolled back, if supported by the datasource.  
-     * @param name The <code>String</code> name of the UPDATE Query group that will be used to create the object
-     *             in the datasource. <code>null</code> signifies that the default rules will be used.
-     * @param coll This is a collection of objects that have been defined within  the metadata of
-     *        the datasource. If the class is not defined an exception will be thrown.
-     * @param c The datasource connection that will be used to updare the objects in the datasource. 
-     * 
-     * @return The number of objects updated in the datasource
-     *
-     * @throws CpoException Thrown if there are errors accessing the datasource
-     * @throws RemoteException Thrown if using dataPersist as an EJB and an Error
-     *                         occurs.
-     *
-     * @deprecated Connection based objects are supported for backward compatibility and will be
-     *             made private in a future release
-     */
-    public long updateObjects(String name, Collection coll, Connection c)
+    public <T> long updateObjects(String name, Collection<T> coll)
         throws CpoException, RemoteException;
 }

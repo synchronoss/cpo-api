@@ -24,13 +24,6 @@
  
 package org.synchronoss.cpo.transform.jdbc;
 
-import java.io.CharArrayWriter;
-import java.io.Reader;
-import java.io.Writer;
-import java.sql.Clob;
-
-import oracle.sql.CLOB;
-
 import org.apache.log4j.Logger;
 import org.synchronoss.cpo.CpoException;
 import org.synchronoss.cpo.jdbc.JdbcPreparedStatementFactory;

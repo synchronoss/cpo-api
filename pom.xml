@@ -4,7 +4,7 @@
   <groupId>org.synchronoss</groupId>
   <artifactId>cpo</artifactId>
   <name>cpo</name>
-  <version>2.1.2-SNAPSHOT</version>
+  <version>3.0-SNAPSHOT</version>
   <description>CPO is a persistence layer that is thin wrapper around JDBC that consumes and produces POJOs</description>
   <issueManagement>
     <system>SourceForge</system>
@@ -79,6 +79,23 @@
           <onError>continue</onError>
           <skip>true</skip>
         </configuration>
+      </plugin>
+      <plugin>
+        <artifactId>maven-assembly-plugin</artifactId>
+        <configuration>
+       <descriptors>
+          <descriptor>src/assemble/bin-assembly.xml</descriptor>
+          </descriptors>
+        </configuration>
+        <executions>
+        <execution>
+        <id>dist</id>
+        <phase>package</phase>
+        <goals>
+        <goal>attached</goal>
+        </goals>
+        </execution>
+        </executions>
       </plugin>
     </plugins>
   </build>

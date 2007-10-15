@@ -239,7 +239,7 @@ public class JdbcAttribute extends java.lang.Object implements java.io.Serializa
             throw new CpoException("There are no setters");
         
         if (hasTransformIn){
-    		localLogger.debug("Calling Transform In:"+transformIn_.getDeclaringClass().getName());
+    		localLogger.info("Calling Transform In:"+transformIn_.getDeclaringClass().getName());
     		
                 // Get the JavaSqlMethod for the class that we are passing into the transform
                 jdbcMethod = JavaSqlMethods.getJavaSqlMethod(transformIn_.getParameterTypes()[0]);
@@ -294,7 +294,7 @@ public class JdbcAttribute extends java.lang.Object implements java.io.Serializa
             throw new CpoException("There are no setters");
 
         if (hasTransformCS){
-    		localLogger.debug("Calling Transform In:"+transformIn_.getDeclaringClass().getName());
+    		localLogger.info("Calling Transform In:"+transformIn_.getDeclaringClass().getName());
     		
             // Get the jdbcType for the class that we are passing into the transform
             jdbcMethod = JavaSqlMethods.getJavaSqlMethod(transformIn_.getParameterTypes()[0]);
@@ -347,7 +347,7 @@ public class JdbcAttribute extends java.lang.Object implements java.io.Serializa
          
         try{
             if (hasTransformPS){
-            	localLogger.debug("Calling Transform Out:"+transformCSOut_.getDeclaringClass().getName());
+            	localLogger.info("Calling Transform Out:"+transformCSOut_.getDeclaringClass().getName());
                 param = transformOut(jcsf, getGetters()[0].invoke(obj, (Object[])null));
                 jdbcMethod = JavaSqlMethods.getJavaSqlMethod(transformCSOut_.getReturnType());
             } else {
@@ -390,7 +390,7 @@ public class JdbcAttribute extends java.lang.Object implements java.io.Serializa
         Logger localLogger = obj==null?logger:Logger.getLogger(obj.getClass().getName());
         try{
             if (hasTransformPS){
-            	localLogger.debug("Calling Transform Out:"+transformPSOut_.getDeclaringClass().getName());
+            	localLogger.info("Calling Transform Out:"+transformPSOut_.getDeclaringClass().getName());
                     param = transformOut(jpsf, getGetters()[0].invoke(obj, (Object[])null));
                     jdbcMethod = JavaSqlMethods.getJavaSqlMethod(transformPSOut_.getReturnType());
                     if (jdbcMethod==null)

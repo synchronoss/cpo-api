@@ -6,6 +6,17 @@
   <name>cpo</name>
   <version>3.0-SNAPSHOT</version>
   <description>CPO is a persistence layer that is thin wrapper around JDBC that consumes and produces POJOs</description>
+<licenses>
+  <license>
+    <name>GNU Lesser General Public License</name>
+    <url>http://www.gnu.org/licenses/lgpl.txt</url>
+    <distribution>repo,manual</distribution>
+    <comments>This library is free software; you can redistribute it and/or
+ 	modify it under the terms of the GNU Lesser General Public
+ 	License as published by the Free Software Foundation; either
+ 	version 2.1 of the License, or (at your option) any later version.</comments>
+  </license>
+</licenses>  
   <issueManagement>
     <system>SourceForge</system>
     <url>http://sourceforge.net/projects/cpo</url>
@@ -21,6 +32,23 @@
       <timezone>EST</timezone>
     </developer>
   </developers>
+  <distributionManagement>
+    <!-- Site omitted - each project must provide their own -->
+    <repository>
+      <id>sncr-repository</id>
+      <name>SNCR Repository</name>
+      <url>http://pastisr0005.synchronoss.net:8081/artifactory/libs-releases</url>
+    </repository>
+    <snapshotRepository>
+          <id>sncr-snapshots</id>
+      <name>SNCR Snapshot Repository</name>
+      <url>http://pastisr0005.synchronoss.net:8081/artifactory/libs-snapshots</url>
+        </snapshotRepository>
+    <site>
+      <id>sncr-sites</id>
+      <url>file:///usr/local/apache2/htdocs</url>
+    </site>
+  </distributionManagement>
   <scm>
     <connection>scm:svn:https://cpo.svn.sourceforge.net/svnroot/cpo</connection>
     <developerConnection>scm:svn:https://cpo.svn.sourceforge.net/svnroot/cpo</developerConnection>

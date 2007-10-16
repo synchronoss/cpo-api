@@ -37,12 +37,12 @@
     <repository>
       <id>sncr-repository</id>
       <name>SNCR Repository</name>
-      <url>http://pastisr0005.synchronoss.net:8081/artifactory/libs-releases</url>
+      <url>http://mavenrepo.synchronoss.net:8081/artifactory/libs-releases</url>
     </repository>
     <snapshotRepository>
           <id>sncr-snapshots</id>
       <name>SNCR Snapshot Repository</name>
-      <url>http://pastisr0005.synchronoss.net:8081/artifactory/libs-snapshots</url>
+      <url>http://mavenrepo.synchronoss.net:8081/artifactory/libs-snapshots</url>
         </snapshotRepository>
     <site>
       <id>sncr-sites</id>

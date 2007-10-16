@@ -46,7 +46,7 @@
         </snapshotRepository>
     <site>
       <id>sncr-sites</id>
-      <url>file:///usr/local/apache2/htdocs</url>
+      <url>file:///usr/local/apache2/htdocs/cpo-sourceforge</url>
     </site>
   </distributionManagement>
   <scm>

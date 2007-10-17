@@ -138,7 +138,7 @@ public class JdbcDataSource implements DataSource {
 
                 synchronized(availableConnections) {        
 
-                    if((totalConnections() < getDataSourceInfo().getMaxConnections())) {
+                    if(getDataSourceInfo().getMaxConnections()>0 && totalConnections() < getDataSourceInfo().getMaxConnections()) {
                         availableConnections.addElement(makeNewConnection());
                      } else if(!getDataSourceInfo().getWaitIfBusy()) {
                         throw new SQLException("Connection limit reached");

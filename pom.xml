@@ -52,8 +52,8 @@
     </site>
   </distributionManagement>
   <scm>
-    <connection>scm:svn:https://cpo.svn.sourceforge.net/svnroot/cpo</connection>
-    <developerConnection>scm:svn:https://cpo.svn.sourceforge.net/svnroot/cpo</developerConnection>
+    <connection>scm:svn:https://cpo.svn.sourceforge.net/svnroot/cpo/api</connection>
+    <developerConnection>scm:svn:https://cpo.svn.sourceforge.net/svnroot/cpo/api</developerConnection>
     <url>https://cpo.svn.sourceforge.net/svnroot/cpo</url>
   </scm>
   <build>

@@ -1,22 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.synchronoss</groupId>
   <artifactId>cpo</artifactId>
   <name>cpo</name>
   <version>3.0.1-SNAPSHOT</version>
-  <description>CPO is a persistence layer that is thin wrapper around JDBC that consumes and produces POJOs</description>
-<licenses>
-  <license>
-    <name>GNU Lesser General Public License</name>
-    <url>http://www.gnu.org/licenses/lgpl.txt</url>
-    <distribution>repo,manual</distribution>
-    <comments>This library is free software; you can redistribute it and/or
- 	modify it under the terms of the GNU Lesser General Public
- 	License as published by the Free Software Foundation; either
- 	version 2.1 of the License, or (at your option) any later version.</comments>
-  </license>
-</licenses>  
+  <description>CPO is a persistence layer that is thin wrapper around JDBC that consumes and
+    produces POJOs</description>
+  <licenses>
+    <license>
+      <name>GNU Lesser General Public License</name>
+      <url>http://www.gnu.org/licenses/lgpl.txt</url>
+      <distribution>repo,manual</distribution>
+      <comments>This library is free software; you can redistribute it and/or modify it under the
+        terms of the GNU Lesser General Public License as published by the Free Software Foundation;
+        either version 2.1 of the License, or (at your option) any later version.</comments>
+    </license>
+  </licenses>
   <issueManagement>
     <system>SourceForge</system>
     <url>http://sourceforge.net/projects/cpo</url>
@@ -35,15 +37,15 @@
   <distributionManagement>
     <!-- Site omitted - each project must provide their own -->
     <repository>
-      <id>sncr-repository</id>
+      <id>internal</id>
       <name>SNCR Repository</name>
-      <url>http://mavenrepo.synchronoss.net:8081/artifactory/libs-releases</url>
+      <url>dav:http://mavenrepo.synchronoss.net:8080/archiva/repository/internal</url>
     </repository>
     <snapshotRepository>
-          <id>sncr-snapshots</id>
+      <id>internal</id>
       <name>SNCR Snapshot Repository</name>
-      <url>http://mavenrepo.synchronoss.net:8081/artifactory/libs-snapshots</url>
-        </snapshotRepository>
+      <url>dav:http://mavenrepo.synchronoss.net:8080/archiva/repository/internal</url>
+    </snapshotRepository>
     <site>
       <id>sncr-sites</id>
       <url>file:///usr/local/apache2/htdocs/cpo-sourceforge</url>
@@ -55,6 +57,13 @@
     <url>https://cpo.svn.sourceforge.net/svnroot/cpo</url>
   </scm>
   <build>
+    <extensions>
+      <extension>
+        <groupId>org.apache.maven.wagon</groupId>
+        <artifactId>wagon-webdav</artifactId>
+        <version>1.0-beta-2</version>
+      </extension>
+    </extensions>
     <pluginManagement>
       <plugins>
         <plugin>
@@ -111,18 +120,18 @@
       <plugin>
         <artifactId>maven-assembly-plugin</artifactId>
         <configuration>
-       <descriptors>
-          <descriptor>src/assemble/bin-assembly.xml</descriptor>
+          <descriptors>
+            <descriptor>src/assemble/bin-assembly.xml</descriptor>
           </descriptors>
         </configuration>
         <executions>
-        <execution>
-        <id>dist</id>
-        <phase>package</phase>
-        <goals>
-        <goal>attached</goal>
-        </goals>
-        </execution>
+          <execution>
+            <id>dist</id>
+            <phase>package</phase>
+            <goals>
+              <goal>attached</goal>
+            </goals>
+          </execution>
         </executions>
       </plugin>
     </plugins>
@@ -213,4 +222,3 @@
     </plugins>
   </reporting>
 </project>
-

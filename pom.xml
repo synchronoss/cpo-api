@@ -34,17 +34,23 @@
       <timezone>EST</timezone>
     </developer>
   </developers>
+  <profiles>
+    <profile>
+      <id>DEPLOY</id>
+      <distributionManagement>
+        <repository>
+          <id>sncr-libs-releases</id>
+          <name>SNCR Repository</name>
+          <url>http://mavenrepo.synchronoss.net:8081/artifactory/libs-releases</url>
+        </repository>
+      </distributionManagement>
+    </profile>
+  </profiles>
   <distributionManagement>
-    <!-- Site omitted - each project must provide their own -->
-    <repository>
-      <id>internal</id>
-      <name>SNCR Repository</name>
-      <url>dav:http://mavenrepo.synchronoss.net:8080/archiva/repository/internal</url>
-    </repository>
     <snapshotRepository>
-      <id>internal</id>
+      <id>sncr-libs-snapshots</id>
       <name>SNCR Snapshot Repository</name>
-      <url>dav:http://mavenrepo.synchronoss.net:8080/archiva/repository/internal</url>
+      <url>http://mavenrepo.synchronoss.net:8081/artifactory/libs-snapshots</url>
     </snapshotRepository>
     <site>
       <id>sncr-sites</id>

@@ -236,7 +236,8 @@ public class JdbcCpoAdapter implements CpoAdapter{
             
             this.closeConnection(c);
         }catch (Exception e){
-            throw new CpoException("Could Not Retrieve Database Meta Data");
+            logger.fatal(e,e);
+            throw new CpoException("Could Not Retrieve Database Meta Data",e);
         }finally {
             closeConnection(c);
         }

@@ -98,7 +98,7 @@
               <srcFiles>
                 <srcFile>src/test/sql/oracle/dropCpoTables.sql</srcFile>
                 <srcFile>src/test/sql/oracle/dropTestTables.sql</srcFile>
-                <srcFile>sncr/db/createDB.sql</srcFile>
+                <srcFile>src/test/sql/oracle/CpoTableDDL.sql</srcFile>
                 <srcFile>src/test/sql/oracle/LvoTableDDL.sql</srcFile>
                 <srcFile>src/test/sql/oracle/ValueObjectDDL.sql</srcFile>
                 <srcFile>src/test/sql/oracle/cpoJunit.sql</srcFile>
@@ -120,7 +120,7 @@
           <driver>oracle.jdbc.driver.OracleDriver</driver>
           <url>jdbc:oracle:thin:@pamdfsr2cl1v1:1521:dcig1</url>
           <onError>continue</onError>
-          <skip>true</skip>
+          <skip>false</skip>
         </configuration>
       </plugin>
       <plugin>

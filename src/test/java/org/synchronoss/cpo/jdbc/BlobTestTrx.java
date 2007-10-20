@@ -115,7 +115,7 @@ public class BlobTestTrx extends TestCase {
         
         
         try{
-            jdbcCpo_ = new JdbcCpoAdapter(new JdbcDataSourceInfo(metaDriver_,metaUrl_, metaUser_, metaPassword_,1,1,false),new JdbcDataSourceInfo(dbDriver_,dbUrl_, dbUser_, dbPassword_,1,1,false));
+            jdbcCpo_ = new JdbcCpoAdapter(new JdbcDataSourceInfo(metaDriver_,metaUrl_, metaUser_, metaPassword_,1,1,false, "TEST_"),new JdbcDataSourceInfo(dbDriver_,dbUrl_, dbUser_, dbPassword_,1,1,false, "TEST_"));
             jdbcIdo_=jdbcCpo_.getCpoTrxAdapter();
             assertNotNull(method+"IdoAdapter is null",jdbcIdo_);
         } catch (Exception e) {

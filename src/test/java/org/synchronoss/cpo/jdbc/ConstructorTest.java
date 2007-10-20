@@ -105,7 +105,7 @@ public class ConstructorTest extends TestCase {
 
         String method = "testConstructorWriteUrlUserPwd:";
         try{
-            jdbcIdo_ = new CpoAdapterBean(new JdbcCpoAdapter(new JdbcDataSourceInfo(metaDriver_,metaUrl_, metaUser_, metaPassword_,1,1,false),new JdbcDataSourceInfo(dbDriver_,dbUrl_, dbUser_, dbPassword_,1,1,false)));
+            jdbcIdo_ = new CpoAdapterBean(new JdbcCpoAdapter(new JdbcDataSourceInfo(metaDriver_,metaUrl_, metaUser_, metaPassword_,1,1,false, "TEST_"),new JdbcDataSourceInfo(dbDriver_,dbUrl_, dbUser_, dbPassword_,1,1,false, "TEST_")));
             if (jdbcIdo_==null) fail(method+"Unable to create CpoAdapter Bean");
         } catch (Exception e) {
             fail(method+e.getMessage());
@@ -116,7 +116,7 @@ public class ConstructorTest extends TestCase {
 
         String method = "testConstructorWriteUrlUserPwdSettings:";
         try{
-            jdbcIdo_ = new CpoAdapterBean(new JdbcCpoAdapter(new JdbcDataSourceInfo(metaDriver_,metaUrl_, metaUser_, metaPassword_,1,1,false),new JdbcDataSourceInfo(dbDriver_,dbUrl_, dbUser_, dbPassword_,1,1,false)));
+            jdbcIdo_ = new CpoAdapterBean(new JdbcCpoAdapter(new JdbcDataSourceInfo(metaDriver_,metaUrl_, metaUser_, metaPassword_,1,1,false, "TEST_"),new JdbcDataSourceInfo(dbDriver_,dbUrl_, dbUser_, dbPassword_,1,1,false, "TEST_")));
             if (jdbcIdo_==null) fail(method+"Unable to create CpoAdapter Bean");
         } catch (Exception e) {
             fail(method+e.getMessage());
@@ -130,7 +130,7 @@ public class ConstructorTest extends TestCase {
         
         if (dbUserUrl_!=null){
 	        try{
-	            jdbcIdo_ = new CpoAdapterBean(new JdbcCpoAdapter(new JdbcDataSourceInfo(metaDriver_,metaUrl_, metaUser_, metaPassword_,1,1,false),new JdbcDataSourceInfo(dbDriver_,dbUserUrl_,1,1,false)));
+	            jdbcIdo_ = new CpoAdapterBean(new JdbcCpoAdapter(new JdbcDataSourceInfo(metaDriver_,metaUrl_, metaUser_, metaPassword_,1,1,false, "TEST_"),new JdbcDataSourceInfo(dbDriver_,dbUserUrl_,1,1,false, "TEST_")));
 	            if (jdbcIdo_==null) fail(method+"Unable to create CpoAdapter Bean");
 	        } catch (Exception e) {
 	            fail(method+e.getMessage());
@@ -143,7 +143,7 @@ public class ConstructorTest extends TestCase {
         String method = "testConstructorWriteUrlSettings:";
         if (dbUserUrl_!=null){
 	        try{
-	            jdbcIdo_ = new CpoAdapterBean(new JdbcCpoAdapter(new JdbcDataSourceInfo(metaDriver_,metaUrl_, metaUser_, metaPassword_,1,1,false),new JdbcDataSourceInfo(dbDriver_,dbUserUrl_,1,1,false)));
+	            jdbcIdo_ = new CpoAdapterBean(new JdbcCpoAdapter(new JdbcDataSourceInfo(metaDriver_,metaUrl_, metaUser_, metaPassword_,1,1,false, "TEST_"),new JdbcDataSourceInfo(dbDriver_,dbUserUrl_,1,1,false, "TEST_")));
 	            if (jdbcIdo_==null) fail(method+"Unable to create CpoAdapter Bean");
 	        } catch (Exception e) {
 	            fail(method+e.getMessage());
@@ -157,8 +157,8 @@ public class ConstructorTest extends TestCase {
         JdbcDataSourceInfo jdsi = null;
         if (dbUserUrl_!=null){
 	        try{
-	        	jdsi = new JdbcDataSourceInfo(dbDriver_,dbUserUrl_,1,1,false);
-	            jdbcIdo_ = new CpoAdapterBean(new JdbcCpoAdapter(new JdbcDataSourceInfo(metaDriver_,metaUrl_, metaUser_, metaPassword_,1,1,false),jdsi,jdsi));
+	        	jdsi = new JdbcDataSourceInfo(dbDriver_,dbUserUrl_,1,1,false, "TEST_");
+	            jdbcIdo_ = new CpoAdapterBean(new JdbcCpoAdapter(new JdbcDataSourceInfo(metaDriver_,metaUrl_, metaUser_, metaPassword_,1,1,false, "TEST_"),jdsi,jdsi));
 	            if (jdbcIdo_==null) fail(method+"Unable to create CpoAdapter Bean");
 	        } catch (Exception e) {
 	            fail(method+e.getMessage());
@@ -171,8 +171,8 @@ public class ConstructorTest extends TestCase {
         String method = "testConstructorReadWriteUrlUserPwd:";
         JdbcDataSourceInfo jdsi = null; 
         try{
-        	jdsi = new JdbcDataSourceInfo(dbDriver_,dbUrl_, dbUser_, dbPassword_,1,1,false);
-            jdbcIdo_ = new CpoAdapterBean(new JdbcCpoAdapter(new JdbcDataSourceInfo(metaDriver_,metaUrl_, metaUser_, metaPassword_,1,1,false),jdsi,jdsi));
+        	jdsi = new JdbcDataSourceInfo(dbDriver_,dbUrl_, dbUser_, dbPassword_,1,1,false, "TEST_");
+            jdbcIdo_ = new CpoAdapterBean(new JdbcCpoAdapter(new JdbcDataSourceInfo(metaDriver_,metaUrl_, metaUser_, metaPassword_,1,1,false, "TEST_"),jdsi,jdsi));
             if (jdbcIdo_==null) fail(method+"Unable to create CpoAdapter Bean");
         } catch (Exception e) {
             fail(method+e.getMessage());
@@ -188,7 +188,7 @@ public class ConstructorTest extends TestCase {
         props.put("password", dbPassword_);
         
         try{
-            jdbcIdo_ = new CpoAdapterBean(new JdbcCpoAdapter(new JdbcDataSourceInfo(metaDriver_,metaUrl_, metaUser_, metaPassword_,1,1,false),new JdbcDataSourceInfo(dbDriver_,dbUrl_, props,1,1,false)));
+            jdbcIdo_ = new CpoAdapterBean(new JdbcCpoAdapter(new JdbcDataSourceInfo(metaDriver_,metaUrl_, metaUser_, metaPassword_,1,1,false, "TEST_"),new JdbcDataSourceInfo(dbDriver_,dbUrl_, props,1,1,false, "TEST_")));
             if (jdbcIdo_==null) fail(method+"Unable to create CpoAdapter Bean");
         } catch (Exception e) {
             fail(method+e.getMessage());
@@ -203,7 +203,7 @@ public class ConstructorTest extends TestCase {
         props.put("password", dbPassword_);
 
         try{
-            jdbcIdo_ = new CpoAdapterBean(new JdbcCpoAdapter(new JdbcDataSourceInfo(metaDriver_,metaUrl_, metaUser_, metaPassword_,1,1,false),new JdbcDataSourceInfo(dbDriver_,dbUrl_, props,1,1,false)));
+            jdbcIdo_ = new CpoAdapterBean(new JdbcCpoAdapter(new JdbcDataSourceInfo(metaDriver_,metaUrl_, metaUser_, metaPassword_,1,1,false, "TEST_"),new JdbcDataSourceInfo(dbDriver_,dbUrl_, props,1,1,false, "TEST_")));
             if (jdbcIdo_==null) fail(method+"Unable to create CpoAdapter Bean");
         } catch (Exception e) {
             fail(method+e.getMessage());
@@ -219,7 +219,7 @@ public class ConstructorTest extends TestCase {
         JdbcDataSourceInfo jdsi = null;
         
         try{
-        	jdsi = new JdbcDataSourceInfo(dbDriver_,dbUrl_, props,1,1,false);
+        	jdsi = new JdbcDataSourceInfo(dbDriver_,dbUrl_, props,1,1,false, "TEST_");
             jdbcIdo_ = new CpoAdapterBean(new JdbcCpoAdapter(jdsi,jdsi,jdsi));
             if (jdbcIdo_==null) fail(method+"Unable to create CpoAdapter Bean");
         } catch (Exception e) {

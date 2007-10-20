@@ -95,7 +95,7 @@ public class SelectForUpdateTest extends TestCase {
         }
         
         try {
-            jdbcCpo_ = new JdbcCpoAdapter(new JdbcDataSourceInfo(metaDriver_,metaUrl_, metaUser_, metaPassword_,1,1,false),new JdbcDataSourceInfo(dbDriver_,dbUrl_, dbUser_, dbPassword_,1,2,false));
+            jdbcCpo_ = new JdbcCpoAdapter(new JdbcDataSourceInfo(metaDriver_,metaUrl_, metaUser_, metaPassword_,1,1,false, "TEST_"),new JdbcDataSourceInfo(dbDriver_,dbUrl_, dbUser_, dbPassword_,1,2,false, "TEST_"));
             jdbcIdo_ = jdbcCpo_.getCpoTrxAdapter();
             assertNotNull(method+"CpoAdapter is null", jdbcIdo_);
         } catch(Exception e) {

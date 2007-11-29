@@ -64,7 +64,6 @@ public class JdbcDataSourceInfo {
 	 */
 	private JdbcDataSourceInfo() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
         
         /**
@@ -454,7 +453,7 @@ public JdbcDataSourceInfo(String driver, String url, Properties properties,
 	}
 
 	/**
-	 * @param dataSourceName The dataSourceName to set.
+	 * @param dbTablePrefix The table prefix to set.
 	 */
 	protected void setDbTablePrefix(String dbTablePrefix) {
 		this.dbTablePrefix = dbTablePrefix;

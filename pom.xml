@@ -125,7 +125,7 @@
           <password>sncrarch</password>
           <autocommit>true</autocommit>
           <driver>oracle.jdbc.driver.OracleDriver</driver>
-          <url>jdbc:oracle:thin:@pamdfsr2cl1v1:1521:dcig1</url>
+          <url>jdbc:oracle:thin:@pamdfsr2cl1v1.synchronoss.net:1521:dcig1</url>
           <onError>continue</onError>
           <skip>false</skip>
         </configuration>

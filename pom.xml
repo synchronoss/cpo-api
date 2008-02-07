@@ -3,7 +3,7 @@
   <groupId>org.synchronoss</groupId>
   <artifactId>cpo</artifactId>
   <name>cpo</name>
-  <version>3.1-SNAPSHOT</version>
+  <version>3.1</version>
   <description>CPO is a persistence layer that is thin wrapper around JDBC that consumes and
     produces POJOs</description>
   <licenses>
@@ -55,9 +55,9 @@
     </site>
   </distributionManagement>
   <scm>
-    <connection>scm:svn:https://cpo.svn.sourceforge.net/svnroot/cpo/api</connection>
-    <developerConnection>scm:svn:https://cpo.svn.sourceforge.net/svnroot/cpo/api</developerConnection>
-    <url>https://cpo.svn.sourceforge.net/svnroot/cpo</url>
+    <connection>scm:svn:https://cpo.svn.sourceforge.net/svnroot/cpo/api/tags/cpo-3.1</connection>
+    <developerConnection>scm:svn:https://cpo.svn.sourceforge.net/svnroot/cpo/api/tags/cpo-3.1</developerConnection>
+    <url>https://cpo.svn.sourceforge.net/svnroot/cpo/tags/cpo-3.1</url>
   </scm>
   <build>
     <extensions>
@@ -125,7 +125,7 @@
           <password>sncrarch</password>
           <autocommit>true</autocommit>
           <driver>oracle.jdbc.driver.OracleDriver</driver>
-          <url>jdbc:oracle:thin:@pamdfsr2cl1v1:1521:dcig1</url>
+          <url>jdbc:oracle:thin:@pamdfsr2cl1v1.synchronoss.net:1521:dcig1</url>
           <onError>continue</onError>
           <skip>false</skip>
         </configuration>

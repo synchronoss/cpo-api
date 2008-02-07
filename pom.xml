@@ -3,7 +3,7 @@
   <groupId>org.synchronoss</groupId>
   <artifactId>cpo</artifactId>
   <name>cpo</name>
-  <version>3.0.2-SNAPSHOT</version>
+  <version>3.1-SNAPSHOT</version>
   <description>CPO is a persistence layer that is thin wrapper around JDBC that consumes and
     produces POJOs</description>
   <licenses>

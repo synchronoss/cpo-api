@@ -145,6 +145,7 @@ public class JdbcCpoAdapter implements CpoAdapter{
  *
  * @param jdsi This datasource will be used for both the metadata 
  * and the transaction database.
+ * @throws org.synchronoss.cpo.CpoException exception
  */
     public JdbcCpoAdapter(JdbcDataSourceInfo jdsi)
             throws CpoException {
@@ -164,6 +165,7 @@ public class JdbcCpoAdapter implements CpoAdapter{
  *
  * @param jdsiMeta This datasource that identifies the cpo metadata datasource 
  * @param jdsiTrx The datasoruce that identifies the transaction database.
+ * @throws org.synchronoss.cpo.CpoException exception
  */
     public JdbcCpoAdapter(JdbcDataSourceInfo jdsiMeta, JdbcDataSourceInfo jdsiTrx)
             throws CpoException {
@@ -184,6 +186,7 @@ public class JdbcCpoAdapter implements CpoAdapter{
  *                  for write transactions.
  * @param jdsiRead The datasource that identifies the transaction database
  *                  for read-only transactions.
+ * @throws org.synchronoss.cpo.CpoException exception
  */
     public JdbcCpoAdapter(JdbcDataSourceInfo jdsiMeta, JdbcDataSourceInfo jdsiWrite, JdbcDataSourceInfo jdsiRead)
             throws CpoException {
@@ -205,7 +208,7 @@ public class JdbcCpoAdapter implements CpoAdapter{
     }
 
     private DataSource getDataSource(JdbcDataSourceInfo jdsi) throws CpoException {
-        DataSource ds = null;
+        DataSource ds;
         
         try{
             if (jdsi.getConnectionType()==JdbcDataSourceInfo.JNDI_CONNECTION){
@@ -250,11 +253,10 @@ public class JdbcCpoAdapter implements CpoAdapter{
      *
      * @param obj The object whose metadata must be cleared
      *
-     * @throws CpoException Thrown if there are errors accessing the datasource
      */
     public void clearMetaClass(Object obj) {
-        String className=null;
-        Class<?> objClass=null;
+        String className;
+        Class<?> objClass;
 
         if(obj!=null) {
             objClass=obj.getClass();
@@ -270,10 +272,9 @@ public class JdbcCpoAdapter implements CpoAdapter{
      * @param className The fully qualified class name for the class that needs its
      *                  metadata cleared.
      *
-     * @throws CpoException Thrown if there are errors accessing the datasource
      */
     public void clearMetaClass(String className) {
-    	HashMap<String,JdbcMetaClass<?>> metaClassMap=null;
+    	HashMap<String,JdbcMetaClass<?>> metaClassMap;
 
         synchronized(getDataSourceMap()) {
             metaClassMap=getMetaClassMap();
@@ -285,10 +286,9 @@ public class JdbcCpoAdapter implements CpoAdapter{
      * Clears the metadata for all classes. The metadata will be lazy-loaded from 
      * the metadata repository as classes are accessed.
      *
-     * @throws CpoException Thrown if there are errors accessing the datasource
     */
     public void clearMetaClass() {
-    	HashMap<String,JdbcMetaClass<?>> metaClassMap=null;
+    	HashMap<String,JdbcMetaClass<?>> metaClassMap;
 
         synchronized(getDataSourceMap()) {
             metaClassMap=getMetaClassMap();
@@ -1096,6 +1096,7 @@ public class JdbcCpoAdapter implements CpoAdapter{
      * @param obj This is an object that has been defined within the metadata of the datasource. If
      *        the class is not defined an exception will be thrown.
      * @param con The datasource Connection with which to check if the object exists
+     * @param metaCon metadataconnection
      * @return The int value of the first column returned in the record set
      *
      * @exception CpoException exception will be thrown if the Query Group has a query count != 1
@@ -1104,12 +1105,12 @@ public class JdbcCpoAdapter implements CpoAdapter{
         throws CpoException {
         PreparedStatement ps=null;
         ResultSet rs=null;
-        ResultSetMetaData rsmd=null;
+        ResultSetMetaData rsmd;
         JdbcQuery jq=null;
-        JdbcMetaClass<T> jmc=null;
-        ArrayList<JdbcQuery> queryGroup=null;
+        JdbcMetaClass<T> jmc;
+        ArrayList<JdbcQuery> queryGroup;
         long objCount=0;
-        int i=0;
+        int i;
         Logger localLogger = logger;
 
         try {
@@ -1118,7 +1119,7 @@ public class JdbcCpoAdapter implements CpoAdapter{
             localLogger = Logger.getLogger(jmc.getJmcClass().getName());
             
             for(i=0; i<queryGroup.size(); i++) {
-                jq=(JdbcQuery) queryGroup.get(i);
+                jq=queryGroup.get(i);
                 JdbcPreparedStatementFactory jpsf = new JdbcPreparedStatementFactory(con, this, jmc, jq, obj);
                 ps=jpsf.getPreparedStatement();
                 
@@ -1756,12 +1757,12 @@ public class JdbcCpoAdapter implements CpoAdapter{
      * DOCUMENT ME!
      *
      * @param coll DOCUMENT ME!
+     * @param meta metadata conn
      * @param c DOCUMENT ME!
      *
      * @return DOCUMENT ME!
      *
      * @throws CpoException DOCUMENT ME!
-     * @throws RemoteException DOCUMENT ME!
      *
      */
     protected  <T> long transactObjects(Collection<CpoObject<T>> coll, Connection c, Connection meta)
@@ -1774,7 +1775,7 @@ public class JdbcCpoAdapter implements CpoAdapter{
                 updateCount+=processUpdateGroup(cpoObject.getObject(),
                     GROUP_IDS[cpoObject.getOperation()], cpoObject.getName(), c, meta);
             } else {
-                updateCount+=processUpdateGroup((Object) cpoObject.getObject(),
+                updateCount+=processUpdateGroup(cpoObject.getObject(),
                     GROUP_IDS[cpoObject.getOperation()], cpoObject.getName(), c, meta);
             }
         }
@@ -2064,6 +2065,7 @@ public class JdbcCpoAdapter implements CpoAdapter{
      * @param name DOCUMENT ME!
      * @param c DOCUMENT ME!
      *
+     * @param meta metadata conn
      * @return DOCUMENT ME!
      *
      * @throws CpoException DOCUMENT ME!
@@ -2071,7 +2073,7 @@ public class JdbcCpoAdapter implements CpoAdapter{
     protected <T> String getGroupType(T obj, String type, String name, Connection c, Connection meta)
         throws CpoException {
         String retType=type;
-        long objCount=-1;
+        long objCount;
 
         if(JdbcCpoAdapter.PERSIST_GROUP.equals(retType)==true) {
             objCount=existsObject(name, obj, c, meta);
@@ -2093,15 +2095,16 @@ public class JdbcCpoAdapter implements CpoAdapter{
      *
      * @param obj DOCUMENT ME!
      *
+     * @param c connection
      * @return DOCUMENT ME!
      *
      * @throws CpoException DOCUMENT ME!
      */
     protected <T> JdbcMetaClass<T> getMetaClass(T obj, Connection c) throws CpoException {
         JdbcMetaClass<T> jmc=null;
-        String className=null;
-        Class<?> classObj = null;
-        HashMap<String,JdbcMetaClass<?>> metaClassMap=null;
+        String className;
+        Class<?> classObj;
+        HashMap<String,JdbcMetaClass<?>> metaClassMap;
 
         if(obj!=null) {
         	classObj=obj.getClass();
@@ -2250,7 +2253,7 @@ public class JdbcCpoAdapter implements CpoAdapter{
      * @throws CpoException DOCUMENT ME!
      */
     protected Connection getMetaConnection() throws CpoException {
-        Connection connection=null;
+        Connection connection;
 
         try {
             connection=getMetaDataSource().getConnection();
@@ -2406,6 +2409,7 @@ public class JdbcCpoAdapter implements CpoAdapter{
      * @param result DOCUMENT ME!
      * @param conn DOCUMENT ME!
      *
+     * @param metaCon metadata connection
      * @return DOCUMENT ME!
      *
      * @throws CpoException DOCUMENT ME!
@@ -2413,23 +2417,23 @@ public class JdbcCpoAdapter implements CpoAdapter{
     protected <T,C> T processExecuteGroup(String name, C criteria, T result,
         Connection conn, Connection metaCon) throws CpoException {
         CallableStatement cstmt=null;
-        ArrayList<JdbcQuery> queryGroup=null;
+        ArrayList<JdbcQuery> queryGroup;
         JdbcQuery jq=null;
-        JdbcMetaClass<C> jmcCriteria=null;
-        JdbcMetaClass<T> jmcResult=null;
+        JdbcMetaClass<C> jmcCriteria;
+        JdbcMetaClass<T> jmcResult;
         T returnObject=null;
         Logger localLogger=criteria==null?logger:Logger.getLogger(criteria.getClass().getName());
         
         //Object[] setterArgs = {null};
-        Class<T> jmcClass=null;
-        ArrayList<JdbcParameter> parameters=null;
-        JdbcParameter parameter=null;
-        JdbcAttribute attribute=null;
+        Class<T> jmcClass;
+        ArrayList<JdbcParameter> parameters;
+        JdbcParameter parameter;
+        JdbcAttribute attribute;
         JdbcCallableStatementFactory jcsf=null;
 
         //Object[] getterArgs = {};
-        int j=0;
-        int i=0;
+        int j;
+        int i;
 
         try {
             jmcCriteria=getMetaClass(criteria, metaCon);
@@ -2450,7 +2454,7 @@ public class JdbcCpoAdapter implements CpoAdapter{
             // Loop through the queries and process each one
             for(i=0; i<queryGroup.size(); i++) {
                 // Get the current call
-                jq=(JdbcQuery) queryGroup.get(i);
+                jq=queryGroup.get(i);
                 
                 jcsf = new JdbcCallableStatementFactory(conn, this, jq, criteria);
                 
@@ -2476,7 +2480,7 @@ public class JdbcCpoAdapter implements CpoAdapter{
                 parameters = jcsf.getOutParameters();
                 if(!parameters.isEmpty()) {
                     for(j=0; j<parameters.size(); j++) {
-                        parameter=(JdbcParameter) parameters.get(j);
+                        parameter=parameters.get(j);
 
                         if(parameter.isOutParameter()) {
                             attribute=parameter.getAttribute();
@@ -2565,6 +2569,7 @@ public class JdbcCpoAdapter implements CpoAdapter{
      * @param groupName DOCUMENT ME!
      * @param con DOCUMENT ME!
      *
+     * @param metaCon metadata connection
      * @return DOCUMENT ME!
      *
      * @throws CpoException DOCUMENT ME!
@@ -2573,11 +2578,11 @@ public class JdbcCpoAdapter implements CpoAdapter{
         throws CpoException {
         PreparedStatement ps=null;
         ResultSet rs=null;
-        ResultSetMetaData rsmd=null;
-        JdbcQuery jq=null;
-        JdbcMetaClass<T> jmc=null;
-        ArrayList<JdbcQuery> queryGroup=null;
-        JdbcAttribute attribute=null;
+        ResultSetMetaData rsmd;
+        JdbcQuery jq;
+        JdbcMetaClass<T> jmc;
+        ArrayList<JdbcQuery> queryGroup;
+        JdbcAttribute attribute;
         T criteriaObj = obj;
         boolean recordsExist=false;
         Logger localLogger=obj==null?logger:Logger.getLogger(obj.getClass().getName());
@@ -2587,7 +2592,7 @@ public class JdbcCpoAdapter implements CpoAdapter{
 
         int i;
         int k;
-        HashMap<String, JdbcAttribute> jmcAttrMap=null;
+        HashMap<String, JdbcAttribute> jmcAttrMap;
         T rObj=null;
 
         try {
@@ -2612,7 +2617,7 @@ public class JdbcCpoAdapter implements CpoAdapter{
 
 
             for(i=0; i<queryGroup.size(); i++) {
-                jq=(JdbcQuery) queryGroup.get(i);
+                jq=queryGroup.get(i);
 
                 JdbcPreparedStatementFactory jpsf = new JdbcPreparedStatementFactory(con, this, jmc, jq, criteriaObj);
                 ps=jpsf.getPreparedStatement();
@@ -2631,7 +2636,7 @@ public class JdbcCpoAdapter implements CpoAdapter{
                         while(rs.next()) {
                             recordsExist=true;
                             recordCount++;
-                            attribute=(JdbcAttribute) (jmcAttrMap.get(rs.getString(1)));
+                            attribute=jmcAttrMap.get(rs.getString(1));
 
                             if(attribute!=null) {
                                 attribute.invokeSetter(rObj, rs, 2);
@@ -2642,7 +2647,7 @@ public class JdbcCpoAdapter implements CpoAdapter{
                         recordsExist=true;
                         recordCount++;
                         for(k=1; k<=rsmd.getColumnCount(); k++) {
-                            attribute=(JdbcAttribute) (jmcAttrMap.get(rsmd.getColumnName(k)));
+                            attribute=jmcAttrMap.get(rsmd.getColumnName(k));
                             
                             if(attribute!=null) {
                                 attribute.invokeSetter(rObj, rs, k);
@@ -2707,6 +2712,7 @@ public class JdbcCpoAdapter implements CpoAdapter{
      * @param where DOCUMENT ME!
      * @param orderBy DOCUMENT ME!
      *
+     * @param useRetrieve DOCUMENT ME!
      * @return DOCUMENT ME!
      *
      * @throws CpoException DOCUMENT ME!
@@ -2758,6 +2764,8 @@ public class JdbcCpoAdapter implements CpoAdapter{
      * @param orderBy DOCUMENT ME!
      * @param con DOCUMENT ME!
      *
+     * @param metaCon DOCUMENT ME!
+     * @param useRetrieve DOCUMENT ME!
      * @return DOCUMENT ME!
      *
      * @throws CpoException DOCUMENT ME!
@@ -2767,23 +2775,23 @@ public class JdbcCpoAdapter implements CpoAdapter{
         throws CpoException {
         Logger localLogger=criteria==null?logger:Logger.getLogger(criteria.getClass().getName());
         PreparedStatement ps=null;
-        ArrayList<JdbcQuery> queryGroup=null;
-        JdbcQuery jq=null;
-        JdbcMetaClass<C> jmcCriteria=null;
-        JdbcMetaClass<T> jmcResult=null;
+        ArrayList<JdbcQuery> queryGroup;
+        JdbcQuery jq;
+        JdbcMetaClass<C> jmcCriteria;
+        JdbcMetaClass<T> jmcResult;
         ResultSet rs=null;
-        ResultSetMetaData rsmd=null;
-        int columnCount=0;
-        int k=0;
-        T obj=null;
+        ResultSetMetaData rsmd;
+        int columnCount;
+        int k;
+        T obj;
         ArrayList<T> resultSet=new ArrayList<T>();
-        Class<T> jmcClass=null;
-        HashMap<String, JdbcAttribute> jmcAttrMap=null;
+        Class<T> jmcClass;
+        HashMap<String, JdbcAttribute> jmcAttrMap;
         //String sqlText=null;
         Collection<BindAttribute> bindValues=new ArrayList<BindAttribute>();
-        JdbcAttribute[] attributes=null;
-        JdbcPreparedStatementFactory jpsf=null;
-        int i=0;
+        JdbcAttribute[] attributes;
+        JdbcPreparedStatementFactory jpsf;
+        int i;
 
         try {
             jmcCriteria=getMetaClass(criteria, metaCon);
@@ -2797,7 +2805,7 @@ public class JdbcCpoAdapter implements CpoAdapter{
             }
 
             for(i=0; i<queryGroup.size(); i++) {
-                jq=(JdbcQuery) queryGroup.get(i);
+                jq=queryGroup.get(i);
 
                 jpsf = new JdbcPreparedStatementFactory(con, this, jmcCriteria, jq, criteria, where, orderBy, bindValues);
                 ps=jpsf.getPreparedStatement();
@@ -2935,6 +2943,7 @@ public class JdbcCpoAdapter implements CpoAdapter{
      * @param groupName DOCUMENT ME!
      * @param con DOCUMENT ME!
      *
+     * @param metaCon DOCUMENT ME!
      * @return DOCUMENT ME!
      *
      * @throws CpoException DOCUMENT ME!
@@ -2942,8 +2951,8 @@ public class JdbcCpoAdapter implements CpoAdapter{
     protected <T> long processUpdateGroup(T obj, String groupType, String groupName, Connection con, Connection metaCon)
         throws CpoException {
         Logger localLogger=obj==null?logger:Logger.getLogger(obj.getClass().getName());
-        JdbcMetaClass<T> jmc=null;
-        ArrayList<JdbcQuery> queryGroup=null;
+        JdbcMetaClass<T> jmc;
+        ArrayList<JdbcQuery> queryGroup;
         PreparedStatement ps=null;
         JdbcQuery jq=null;
         JdbcPreparedStatementFactory jpsf=null;
@@ -2958,7 +2967,7 @@ public class JdbcCpoAdapter implements CpoAdapter{
             int numRows=0;
 
             for(i=0; i<queryGroup.size(); i++) {
-                jq=(JdbcQuery) queryGroup.get(i);
+                jq=queryGroup.get(i);
                 jpsf = new JdbcPreparedStatementFactory(con, this, jmc, jq, obj);
                 ps=jpsf.getPreparedStatement();
                 numRows+=ps.executeUpdate();
@@ -2993,24 +3002,25 @@ public class JdbcCpoAdapter implements CpoAdapter{
     /**
      * DOCUMENT ME!
      *
-     * @param obj DOCUMENT ME!
+     * @param arr DOCUMENT ME!
      * @param groupType DOCUMENT ME!
      * @param groupName DOCUMENT ME!
      * @param con DOCUMENT ME!
      *
+     * @param metaCon DOCUMENT ME!
      * @return DOCUMENT ME!
      *
      * @throws CpoException DOCUMENT ME!
      */
     protected <T> long processBatchUpdateGroup(T[] arr, String groupType, String groupName, Connection con, Connection metaCon)
         throws CpoException {
-        JdbcMetaClass<T> jmc=null;
-        ArrayList<JdbcQuery> queryGroup=null;
+        JdbcMetaClass<T> jmc;
+        ArrayList<JdbcQuery> queryGroup;
         PreparedStatement ps=null;
         JdbcQuery jq=null;
         JdbcPreparedStatementFactory jpsf=null;
         long updateCount=0;
-        int[] updates=null;
+        int[] updates;
         Logger localLogger=logger;
 
         try {
@@ -3024,7 +3034,7 @@ public class JdbcCpoAdapter implements CpoAdapter{
             // Only Batch if there is only one query 
             if (queryGroup.size()==1){
                 localLogger.info("=================== BATCH - Class=<"+arr[0].getClass()+"> Type=<"+groupType+"> Name=<"+groupName+"> =========================");
-                jq = (JdbcQuery) queryGroup.get(0);
+                jq = queryGroup.get(0);
                 jpsf = new JdbcPreparedStatementFactory(con, this, jmc, jq, arr[0]);
                 ps=jpsf.getPreparedStatement();
                 ps.addBatch();
@@ -3049,7 +3059,7 @@ public class JdbcCpoAdapter implements CpoAdapter{
                 localLogger.info("=================== Class=<"+arr[0].getClass()+"> Type=<"+groupType+"> Name=<"+groupName+"> =========================");
                 for(int j=0; j<arr.length; j++){
                     for(int i=0; i<queryGroup.size(); i++) {
-                        jq=(JdbcQuery) queryGroup.get(i);
+                        jq=queryGroup.get(i);
                         jpsf = new JdbcPreparedStatementFactory(con, this, jmc, jq, arr[j]);
                         ps=jpsf.getPreparedStatement();
                         numRows+=ps.executeUpdate();
@@ -3139,6 +3149,7 @@ public class JdbcCpoAdapter implements CpoAdapter{
      * @param groupName DOCUMENT ME!
      * @param con DOCUMENT ME!
      *
+     * @param meta DOCUMENT ME!
      * @return DOCUMENT ME!
      *
      * @throws CpoException DOCUMENT ME!
@@ -3169,8 +3180,6 @@ public class JdbcCpoAdapter implements CpoAdapter{
      * @param c DOCUMENT ME!
      * @param jmc DOCUMENT ME!
      *
-     * @return DOCUMENT ME!
-     *
      * @throws CpoException DOCUMENT ME!
      */
     private <T> void loadAttributeMap(String name, Connection c, JdbcMetaClass<T> jmc)
@@ -3181,15 +3190,15 @@ public class JdbcCpoAdapter implements CpoAdapter{
         String sql=select+getDbTablePrefix()+table1+getDbTablePrefix()+table2;
         PreparedStatement ps=null;
         ResultSet rs=null;
-        HashMap<String, JdbcAttribute> aMap=null;
-        HashMap<String, JdbcAttribute> cMap=null;
-        String classId=null;
-        String dbType=null;
+        HashMap<String, JdbcAttribute> aMap;
+        HashMap<String, JdbcAttribute> cMap;
+        String classId;
+        String dbType;
 
         logger.debug("loadAttribute Sql <"+sql+">");
         
         //JdbcParameter jp=null;
-        JdbcAttribute attribute=null;
+        JdbcAttribute attribute;
         boolean failed=false;
         StringBuffer failedMessage=new StringBuffer();
 
@@ -3260,13 +3269,14 @@ public class JdbcCpoAdapter implements CpoAdapter{
      * @param objClass DOCUMENT ME!
      * @param name DOCUMENT ME!
      *
+     * @param c connection to be used
      * @return DOCUMENT ME!
      *
      * @throws CpoException DOCUMENT ME!
      */
     private <T> JdbcMetaClass<T> loadMetaClass(Class<T> objClass, String name, Connection c)
         throws CpoException {
-        JdbcMetaClass<T> jmc=null;
+        JdbcMetaClass<T> jmc;
 
             jmc=new JdbcMetaClass<T>(objClass, name);
             loadAttributeMap(name, c, jmc);
@@ -3278,7 +3288,6 @@ public class JdbcCpoAdapter implements CpoAdapter{
     /**
      * DOCUMENT ME!
      *
-     * @param id DOCUMENT ME!
      * @param c DOCUMENT ME!
      * @param jmc DOCUMENT ME!
      *
@@ -3319,7 +3328,7 @@ public class JdbcCpoAdapter implements CpoAdapter{
         PreparedStatement ps=null;
         ResultSet rs=null;
         int oldSeq=1000;
-        int newSeq=0;
+        int newSeq;
         JdbcQuery jq=null;
         String groupType=null;
 
@@ -3346,8 +3355,7 @@ public class JdbcCpoAdapter implements CpoAdapter{
                             jq.getName());
                     }
 
-                    JdbcAttribute attribute=(JdbcAttribute) jmc.getAttributeMap().get(rs.getString(
-                                8));
+                    JdbcAttribute attribute=jmc.getAttributeMap().get(rs.getString(8));
 
                     if(attribute==null) {
                         // There may be queries with no params
@@ -3393,17 +3401,16 @@ public class JdbcCpoAdapter implements CpoAdapter{
      * DOCUMENT ME!
      *
      * @param jq DOCUMENT ME!
-     * @param obj DOCUMENT ME!
      *
      * @return DOCUMENT ME!
      */
     private String parameterToString(JdbcQuery jq) {
-        ArrayList<JdbcParameter> parameters=null;
+        ArrayList<JdbcParameter> parameters;
         int j;
-        JdbcParameter parameter=null;
-        JdbcAttribute attribute=null;
-        int type=-1;
-        Class<?> c=null;
+        JdbcParameter parameter;
+        JdbcAttribute attribute;
+        int type;
+        Class<?> c;
         StringBuffer sb=new StringBuffer("Parameter list for ");
 
         if(jq==null) {
@@ -3414,7 +3421,7 @@ public class JdbcCpoAdapter implements CpoAdapter{
         parameters=jq.getParameterList();
 
         for(j=1; j<=parameters.size(); j++) {
-            parameter=(JdbcParameter) parameters.get(j-1);
+            parameter=parameters.get(j-1);
 
             if(parameter!=null) {
                 try {

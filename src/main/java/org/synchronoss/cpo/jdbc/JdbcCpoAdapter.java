@@ -263,8 +263,8 @@ public class JdbcCpoAdapter implements CpoAdapter {
       DatabaseMetaData dmd = c.getMetaData();
 
       // do all the tests here
-//            batchUpdatesSupported_ = dmd.supportsBatchUpdates();
-      batchUpdatesSupported_ = false;
+            batchUpdatesSupported_ = dmd.supportsBatchUpdates();
+//      batchUpdatesSupported_ = false;
 
       this.closeConnection(c);
     } catch (Exception e) {
@@ -3098,8 +3098,17 @@ public class JdbcCpoAdapter implements CpoAdapter {
 
     if (!coll.isEmpty()) {
       Object[] arr = coll.toArray();
+      
+      Object obj1 = arr[0];
+      boolean allEqual=true;
+      for (int i=1; i<arr.length; i++){
+          if (!obj1.getClass().getName().equals(arr[i].getClass().getName())){
+              allEqual=false;
+              break;
+          }
+      }
 
-      if (batchUpdatesSupported_ && !JdbcCpoAdapter.PERSIST_GROUP.equals(groupType)) {
+      if (allEqual && batchUpdatesSupported_ && !JdbcCpoAdapter.PERSIST_GROUP.equals(groupType)) {
         updateCount = processBatchUpdateGroup(arr, groupType, groupName, con, meta);
       } else {
         for (int i = 0; i < arr.length; i++) {

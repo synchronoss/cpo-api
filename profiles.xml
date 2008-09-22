@@ -34,16 +34,16 @@
       </activation>
       <properties>
         <cpo.test.sqldir>src/test/sql/oracle</cpo.test.sqldir>
-		<cpo.db.user>sncrarch</cpo.db.user>
-		<cpo.db.pswd>sncrarch</cpo.db.pswd>
+		<cpo.db.user>cpo</cpo.db.user>
+		<cpo.db.pswd>cpo</cpo.db.pswd>
         <cpo.db.host>pamdfsr2cl1v1.synchronoss.net</cpo.db.host>
         <cpo.db.port>1521</cpo.db.port>
         <cpo.db.database>dcig1</cpo.db.database>
         <cpo.db.url>jdbc:oracle:thin:@${cpo.db.host}:${cpo.db.port}:${cpo.db.database}</cpo.db.url>
         <cpo.db.userurl>jdbc:oracle:thin:${cpo.db.user}/${cpo.db.pswd}@${cpo.db.host}:${cpo.db.port}:${cpo.db.database}</cpo.db.userurl>
         <cpo.db.driver>oracle.jdbc.driver.OracleDriver</cpo.db.driver>
-		<cpo.meta.user>sncrarch</cpo.meta.user>
-		<cpo.meta.pswd>sncrarch</cpo.meta.pswd>
+		<cpo.meta.user>cpometa</cpo.meta.user>
+		<cpo.meta.pswd>cpometa</cpo.meta.pswd>
         <cpo.meta.host>pamdfsr2cl1v1.synchronoss.net</cpo.meta.host>
         <cpo.meta.port>1521</cpo.meta.port>
         <cpo.meta.database>dcig1</cpo.meta.database>

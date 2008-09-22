@@ -30,7 +30,7 @@
     <profile>
       <id>oracle10g</id>
       <activation>
-        <activeByDefault>false</activeByDefault>
+        <activeByDefault>true</activeByDefault>
       </activation>
       <properties>
         <cpo.test.sqldir>src/test/sql/oracle</cpo.test.sqldir>

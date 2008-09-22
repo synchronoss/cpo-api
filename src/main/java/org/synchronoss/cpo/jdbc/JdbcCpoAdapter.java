@@ -324,43 +324,33 @@ public class JdbcCpoAdapter implements CpoAdapter {
 
   /**
    * Creates the Object in the datasource. The assumption is that the object does not exist in
-   * the datasource.  This method creates and stores the object in the datasource.<br>
-   * <br>
-   * Example:<br>
-   * <code><br>
-   * class SomeObject so = new SomeObject();<br>
-   * class CpoAdapter cpo = null;<br>
-   * <br>
-   * </code><ul><code>
-   * try {<br>
-   * </code><ul><code>
-   * cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));<br>
-   * </code></ul><code>
-   * } catch (CpoException ce) {<br>
-   * </code><ul><code>
-   * // Handle the error<br>
-   * cpo = null;<br>
-   * </code></ul><code>
-   * }<br>
-   * <br>
-   * if (cpo!=null) {<br>
-   * </code><ul><code>
-   * so.setId(1);<br>
-   * so.setName("SomeName");<br>
-   * try{<br>
-   * </code><ul><code>
-   * cpo.insertObject(so);<br>
-   * </code></ul><code>
-   * } catch (CpoException ce) {<br>
-   * </code><ul><code>
-   * // Handle the error
-   * </code></ul><code>
-   * }<br>
-   * </code></ul><code>
-   * }<br>
-   * </code></ul><code>
-   * </code>
-   * <br>
+   * the datasource.  This method creates and stores the object in the datasource.
+   * 
+   * <pre>Example:<code>
+   * 
+   * class SomeObject so = new SomeObject();
+   * class CpoAdapter cpo = null;
+   * 
+   * try {
+   * 	cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));
+   * } catch (CpoException ce) {
+   * 	// Handle the error
+   * 	cpo = null;
+   * }
+   * 
+   * if (cpo!=null) {
+   * 	so.setId(1);
+   * 	so.setName("SomeName");
+   * 	try{
+   * 		cpo.insertObject(so);
+   * 	} catch (CpoException ce) {
+   * 		// Handle the error
+   * 
+   * 	}
+   * }
+   *</code>
+   *</pre>
+   * 
    *
    * @param obj This is an object that has been defined within the metadata of the datasource. If
    *            the class is not defined an exception will be thrown.
@@ -374,46 +364,35 @@ public class JdbcCpoAdapter implements CpoAdapter {
   /**
    * Creates the Object in the datasource. The assumption is that the object does not exist in
    * the datasource.  This method creates and stores the object in the datasource
-   * <br>
-   * Example:<br>
-   * <code><br>
-   * class SomeObject so = new SomeObject();<br>
-   * class CpoAdapter cpo = null;<br>
-   * <br>
-   * </code><ul><code>
-   * try {<br>
-   * </code><ul><code>
-   * cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));<br>
-   * </code></ul><code>
-   * } catch (CpoException ce) {<br>
-   * </code><ul><code>
-   * // Handle the error<br>
-   * cpo = null;<br>
-   * </code></ul><code>
-   * }<br>
-   * <br>
-   * if (cpo!=null) {<br>
-   * </code><ul><code>
-   * so.setId(1);<br>
-   * so.setName("SomeName");<br>
-   * try{<br>
-   * </code><ul><code>
-   * cpo.insertObject("IDNameInsert",so);<br>
-   * </code></ul><code>
-   * } catch (CpoException ce) {<br>
-   * </code><ul><code>
-   * // Handle the error
-   * </code></ul><code>
-   * }<br>
-   * </code></ul><code>
-   * }<br>
-   * </code></ul><code>
-   * </code>
-   * <br>
+   * 
+   * <pre>Example:<code>
+   * 
+   * class SomeObject so = new SomeObject();
+   * class CpoAdapter cpo = null;
+   * 
+   * try {
+   * 	cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));
+   * } catch (CpoException ce) {
+   * 	// Handle the error
+   * 	cpo = null;
+   * }
+   * 
+   * if (cpo!=null) {
+   * 	so.setId(1);
+   * 	so.setName("SomeName");
+   * 	try{
+   * 		cpo.insertObject("IDNameInsert",so);
+   * 	} catch (CpoException ce) {
+   * 		// Handle the error
+   * 	}
+   * }
+   *</code>
+   *</pre>
+   * 
    *
-   * @param name The <code>String</code> name of the CREATE Query group that will be used to create the object
-   *             in the datasource. <code>null</code> signifies that the default rules will be used which is
-   *             equivalent to <code>insertObject(Object obj);</code>
+   * @param name The String name of the CREATE Query group that will be used to create the object
+   *             in the datasource. null signifies that the default rules will be used which is
+   *             equivalent to insertObject(Object obj);
    * @param obj  This is an object that has been defined within the metadata of the datasource. If
    *             the class is not defined an exception will be thrown.
    * @return The number of objects created in the datasource
@@ -426,56 +405,42 @@ public class JdbcCpoAdapter implements CpoAdapter {
   /**
    * Iterates through a collection of Objects, creates and stores them in the datasource.  The
    * assumption is that the objects contained in the collection do not exist in the  datasource.
-   * <p/>
+   * 
    * This method creates and stores the objects in the datasource. The objects in the
    * collection will be treated as one transaction, assuming the datasource supports transactions.
-   * <p/>
+   * 
    * This means that if one of the objects fail being created in the datasource then the CpoAdapter will stop
    * processing the remainder of the collection and rollback all the objects created thus far. Rollback is
    * on the underlying datasource's support of rollback.
-   * <br>
-   * Example:<br>
-   * <code><br>
-   * class SomeObject so = null;<br>
-   * class CpoAdapter cpo = null;<br>
-   * <br>
-   * </code><ul><code>
-   * try {<br>
-   * </code><ul><code>
-   * cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));<br>
-   * </code></ul><code>
-   * } catch (CpoException ce) {<br>
-   * </code><ul><code>
-   * // Handle the error<br>
-   * cpo = null;<br>
-   * </code></ul><code>
-   * }<br>
-   * <br>
-   * if (cpo!=null) {<br>
-   * </code><ul><code>
-   * ArrayList al = new ArrayList();<br>
-   * for (int i=0; i<3; i++){<br>
-   * </code><ul><code>
-   * so = new SomeObject();<br>
-   * so.setId(1);<br>
-   * so.setName("SomeName");<br>
-   * al.add(so);<br>
-   * }<br>
-   * </code></ul><code>
-   * try{<br>
-   * </code><ul><code>
-   * cpo.insertObjects(al);<br>
-   * </code></ul><code>
-   * } catch (CpoException ce) {<br>
-   * </code><ul><code>
-   * // Handle the error<br>
-   * </code></ul><code>
-   * }<br>
-   * </code></ul><code>
-   * }<br>
-   * </code></ul><code>
-   * </code>
-   * <br>
+   * 
+   * <pre>Example:<code>
+   * 
+   * class SomeObject so = null;
+   * class CpoAdapter cpo = null;
+   * 
+   * try {
+   * 	cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));
+   * } catch (CpoException ce) {
+   * 	// Handle the error
+   * 	cpo = null;
+   * }
+   * 
+   * if (cpo!=null) {
+   * 	ArrayList al = new ArrayList();
+   * 	for (int i=0; i<3; i++){
+   * 		so = new SomeObject();
+   * 		so.setId(1);
+   * 		so.setName("SomeName");
+   * 		al.add(so);
+   * 	}
+   * 	try{
+   * 		cpo.insertObjects(al);
+   * 	} catch (CpoException ce) {
+   * 		// Handle the error
+   * 	}
+   * }
+   *</code>
+   *</pre>
    *
    * @param coll This is a collection of objects that have been defined within the metadata of
    *             the datasource. If the class is not defined an exception will be thrown.
@@ -490,58 +455,43 @@ public class JdbcCpoAdapter implements CpoAdapter {
   /**
    * Iterates through a collection of Objects, creates and stores them in the datasource.  The
    * assumption is that the objects contained in the collection do not exist in the  datasource.
-   * <p/>
+   * 
    * This method creates and stores the objects in the datasource. The objects in the
    * collection will be treated as one transaction, assuming the datasource supports transactions.
-   * <p/>
+   * 
    * This means that if one of the objects fail being created in the datasource then the CpoAdapter should stop
    * processing the remainder of the collection, and if supported, rollback all the objects created thus far.
-   * <br>
-   * Example:<br>
-   * <code><br>
-   * class SomeObject so = null;<br>
-   * class CpoAdapter cpo = null;<br>
-   * <br>
-   * </code><ul><code>
-   * try {<br>
-   * </code><ul><code>
-   * cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));<br>
-   * </code></ul><code>
-   * } catch (CpoException ce) {<br>
-   * </code><ul><code>
-   * // Handle the error<br>
-   * cpo = null;<br>
-   * </code></ul><code>
-   * }<br>
-   * <br>
-   * if (cpo!=null) {<br>
-   * </code><ul><code>
-   * ArrayList al = new ArrayList();<br>
-   * for (int i=0; i<3; i++){<br>
-   * </code><ul><code>
-   * so = new SomeObject();<br>
-   * so.setId(1);<br>
-   * so.setName("SomeName");<br>
-   * al.add(so);<br>
-   * }<br>
-   * </code></ul><code>
-   * try{<br>
-   * </code><ul><code>
-   * cpo.insertObjects("IdNameInsert",al);<br>
-   * </code></ul><code>
-   * } catch (CpoException ce) {<br>
-   * </code><ul><code>
-   * // Handle the error<br>
-   * </code></ul><code>
-   * }<br>
-   * </code></ul><code>
-   * }<br>
-   * </code></ul><code>
-   * </code>
-   * <br>
+   * 
+   * <pre>Example:<code>
+   * 
+   * class SomeObject so = null;
+   * class CpoAdapter cpo = null;
+   * 
+   * try {
+   * 	cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));
+   * } catch (CpoException ce) {
+   * 	// Handle the error
+   * 	cpo = null;
+   * }
+   * if (cpo!=null) {
+   * 	ArrayList al = new ArrayList();
+   * 	for (int i=0; i<3; i++){
+   * 		so = new SomeObject();
+   * 		so.setId(1);
+   * 		so.setName("SomeName");
+   * 		al.add(so);
+   * 	}
+   * 	try{
+   * 		cpo.insertObjects("IdNameInsert",al);
+   * 	} catch (CpoException ce) {
+   * 		// Handle the error
+   * 	}
+   * }
+   *</code>
+   *</pre>
    *
-   * @param name The <code>String</code> name of the CREATE Query group that will be used to create the object
-   *             in the datasource. <code>null</code> signifies that the default rules will be used.
+   * @param name The String name of the CREATE Query group that will be used to create the object
+   *             in the datasource. null signifies that the default rules will be used.
    * @param coll This is a collection of objects that have been defined within the metadata of
    *             the datasource. If the class is not defined an exception will be thrown.
    * @return The number of objects created in the datasource
@@ -555,42 +505,30 @@ public class JdbcCpoAdapter implements CpoAdapter {
   /**
    * Removes the Object from the datasource. The assumption is that the object exists in the
    * datasource.  This method stores the object in the datasource
-   * <br>
-   * Example:<br>
-   * <code><br>
-   * class SomeObject so = new SomeObject();<br>
-   * class CpoAdapter cpo = null;<br>
-   * <br>
-   * </code><ul><code>
-   * try {<br>
-   * </code><ul><code>
-   * cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));<br>
-   * </code></ul><code>
-   * } catch (CpoException ce) {<br>
-   * </code><ul><code>
-   * // Handle the error<br>
-   * cpo = null;<br>
-   * </code></ul><code>
-   * }<br>
-   * <br>
-   * if (cpo!=null) {<br>
-   * </code><ul><code>
-   * so.setId(1);<br>
-   * so.setName("SomeName");<br>
-   * try{<br>
-   * </code><ul><code>
-   * cpo.deleteObject(so);<br>
-   * </code></ul><code>
-   * } catch (CpoException ce) {<br>
-   * </code><ul><code>
-   * // Handle the error
-   * </code></ul><code>
-   * }<br>
-   * </code></ul><code>
-   * }<br>
-   * </code></ul><code>
-   * </code>
-   * <br>
+   * 
+   * <pre>Example:<code>
+   * 
+   * class SomeObject so = new SomeObject();
+   * class CpoAdapter cpo = null;
+   * 
+   * try {
+   * 	cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));
+   * } catch (CpoException ce) {
+   * 	// Handle the error
+   * 	cpo = null;
+   * }
+   * 
+   * if (cpo!=null) {
+   * 	so.setId(1);
+   * 	so.setName("SomeName");
+   * 	try{
+   * 		cpo.deleteObject(so);
+   * 	} catch (CpoException ce) {
+   * 		// Handle the error
+   * 	}
+   * }
+   *</code>
+   *</pre>
    *
    * @param obj This is an object that has been defined within the metadata of the datasource. If
    *            the class is not defined an exception will be thrown. If the object does not exist
@@ -605,45 +543,33 @@ public class JdbcCpoAdapter implements CpoAdapter {
   /**
    * Removes the Object from the datasource. The assumption is that the object exists in the
    * datasource.  This method stores the object in the datasource
-   * <br>
-   * Example:<br>
-   * <code><br>
-   * class SomeObject so = new SomeObject();<br>
-   * class CpoAdapter cpo = null;<br>
-   * <br>
-   * </code><ul><code>
-   * try {<br>
-   * </code><ul><code>
-   * cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));<br>
-   * </code></ul><code>
-   * } catch (CpoException ce) {<br>
-   * </code><ul><code>
-   * // Handle the error<br>
-   * cpo = null;<br>
-   * </code></ul><code>
-   * }<br>
-   * <br>
-   * if (cpo!=null) {<br>
-   * </code><ul><code>
-   * so.setId(1);<br>
-   * so.setName("SomeName");<br>
-   * try{<br>
-   * </code><ul><code>
-   * cpo.deleteObject("DeleteById",so);<br>
-   * </code></ul><code>
-   * } catch (CpoException ce) {<br>
-   * </code><ul><code>
-   * // Handle the error
-   * </code></ul><code>
-   * }<br>
-   * </code></ul><code>
-   * }<br>
-   * </code></ul><code>
-   * </code>
-   * <br>
+   * 
+   * <pre>Example:<code>
+   * 
+   * class SomeObject so = new SomeObject();
+   * class CpoAdapter cpo = null;
+   * 
+   * try {
+   * 	cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));
+   * } catch (CpoException ce) {
+   * 	// Handle the error
+   * 	cpo = null;
+   * }
+   * 
+   * if (cpo!=null) {
+   * 	so.setId(1);
+   * 	so.setName("SomeName");
+   * 	try{
+   * 		cpo.deleteObject("DeleteById",so);
+   * 	} catch (CpoException ce) {
+   * 	// Handle the error
+   * 	}
+   * }
+   *</code>
+   *</pre>
    *
-   * @param name The <code>String</code> name of the DELETE Query group that will be used to create the object
-   *             in the datasource. <code>null</code> signifies that the default rules will be used.
+   * @param name The String name of the DELETE Query group that will be used to create the object
+   *             in the datasource. null signifies that the default rules will be used.
    * @param obj  This is an object that has been defined within the metadata of the datasource. If
    *             the class is not defined an exception will be thrown. If the object does not exist
    *             in the datasource an exception will be thrown.
@@ -659,52 +585,38 @@ public class JdbcCpoAdapter implements CpoAdapter {
    * the object exists in the datasource.  This method stores the objects contained in the
    * collection in the datasource. The objects in the collection will be treated as one transaction,
    * assuming the datasource supports transactions.
-   * <p/>
+   * 
    * This means that if one of the objects fail being deleted in the datasource then the CpoAdapter should stop
    * processing the remainder of the collection, and if supported, rollback all the objects deleted thus far.
-   * <br>
-   * Example:<br>
-   * <code><br>
-   * class SomeObject so = null;<br>
-   * class CpoAdapter cpo = null;<br>
-   * <br>
-   * </code><ul><code>
-   * try {<br>
-   * </code><ul><code>
-   * cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));<br>
-   * </code></ul><code>
-   * } catch (CpoException ce) {<br>
-   * </code><ul><code>
-   * // Handle the error<br>
-   * cpo = null;<br>
-   * </code></ul><code>
-   * }<br>
-   * <br>
-   * if (cpo!=null) {<br>
-   * </code><ul><code>
-   * ArrayList al = new ArrayList();<br>
-   * for (int i=0; i<3; i++){<br>
-   * </code><ul><code>
-   * so = new SomeObject();<br>
-   * so.setId(1);<br>
-   * so.setName("SomeName");<br>
-   * al.add(so);<br>
-   * }<br>
-   * </code></ul><code>
-   * try{<br>
-   * </code><ul><code>
-   * cpo.deleteObjects(al);<br>
-   * </code></ul><code>
-   * } catch (CpoException ce) {<br>
-   * </code><ul><code>
-   * // Handle the error<br>
-   * </code></ul><code>
-   * }<br>
-   * </code></ul><code>
-   * }<br>
-   * </code></ul><code>
-   * </code>
-   * <br>
+   * 
+   * <pre>Example:<code>
+   * 
+   * class SomeObject so = null;
+   * class CpoAdapter cpo = null;
+   * 
+   * try {
+   * 	cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));
+   * } catch (CpoException ce) {
+   * 	// Handle the error
+   * 	cpo = null;
+   * }
+   * 
+   * if (cpo!=null) {
+   * 	ArrayList al = new ArrayList();
+   * 	for (int i=0; i<3; i++){
+   * 		so = new SomeObject();
+   * 		so.setId(1);
+   * 		so.setName("SomeName");
+   * 		al.add(so);
+   * 	}
+   * 	try{
+   * 		cpo.deleteObjects(al);
+   * 	} catch (CpoException ce) {
+   * 		// Handle the error
+   * 	}
+   * }
+   *</code>
+   *</pre>
    *
    * @param coll This is a collection of objects that have been defined within  the metadata of
    *             the datasource. If the class is not defined an exception will be thrown.
@@ -721,55 +633,42 @@ public class JdbcCpoAdapter implements CpoAdapter {
    * the object exists in the datasource.  This method stores the objects contained in the
    * collection in the datasource. The objects in the collection will be treated as one transaction,
    * assuming the datasource supports transactions.
-   * <p/>
+   * 
    * This means that if one of the objects fail being deleted in the datasource then the CpoAdapter should stop
    * processing the remainder of the collection, and if supported, rollback all the objects deleted thus far.
-   * <br>
-   * Example:<br>
-   * <code><br>
-   * class SomeObject so = null;<br>
-   * class CpoAdapter cpo = null;<br>
-   * <br>
-   * </code><ul><code>
-   * try {<br>
-   * </code><ul><code>
-   * cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));<br>
-   * </code></ul><code>
-   * } catch (CpoException ce) {<br>
-   * </code><ul><code>
-   * // Handle the error<br>
-   * cpo = null;<br>
-   * </code></ul><code>
-   * }<br>
-   * <br>
-   * if (cpo!=null) {<br>
-   * </code><ul><code>
-   * ArrayList al = new ArrayList();<br>
-   * for (int i=0; i<3; i++){<br>
-   * </code><ul><code>
-   * so = new SomeObject();<br>
-   * so.setId(1);<br>
-   * so.setName("SomeName");<br>
-   * al.add(so);<br>
-   * }<br>
-   * </code></ul><code>
-   * try{<br>
-   * </code><ul><code>
-   * cpo.deleteObjects("IdNameDelete",al);<br>
-   * </code></ul><code>
-   * } catch (CpoException ce) {<br>
-   * </code><ul><code>
-   * // Handle the error<br>
-   * </code></ul><code>
-   * }<br>
-   * </code></ul><code>
-   * }<br>
-   * </code></ul><code>
-   * </code>
-   * <br>
+   * 
+   * <pre>Example:<code>
+   * 
+   * class SomeObject so = null;
+   * class CpoAdapter cpo = null;
+   * 
+   * try {
+   * 	cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));
+   * } catch (CpoException ce) {
+   * 	// Handle the error
+   * 	cpo = null;
+   * }
+   * 
+   * if (cpo!=null) {
+   * 	ArrayList al = new ArrayList();
+   * 	for (int i=0; i<3; i++){
+   * 		so = new SomeObject();
+   * 		so.setId(1);
+   * 		so.setName("SomeName");
+   * 		al.add(so);
+   * 	}
+   * 
+   * 	try{
+   * 		cpo.deleteObjects("IdNameDelete",al);
+   * 	} catch (CpoException ce) {
+   * 		// Handle the error
+   * 	}
+   * }
+   *</code>
+   *</pre>
    *
-   * @param name The <code>String</code> name of the DELETE Query group that will be used to create the object
-   *             in the datasource. <code>null</code> signifies that the default rules will be used.
+   * @param name The String name of the DELETE Query group that will be used to create the object
+   *             in the datasource. null signifies that the default rules will be used.
    * @param coll This is a collection of objects that have been defined within  the metadata of
    *             the datasource. If the class is not defined an exception will be thrown.
    * @return The number of objects deleted from the datasource
@@ -784,48 +683,36 @@ public class JdbcCpoAdapter implements CpoAdapter {
    * Executes an Object whose metadata will call an executable within the datasource.
    * It is assumed that the executable object exists in the metadatasource. If the executable does not exist,
    * an exception will be thrown.
-   * <br>
-   * Example:<br>
-   * <code><br>
-   * class SomeObject so = new SomeObject();<br>
-   * class CpoAdapter cpo = null;<br>
-   * <br>
-   * </code><ul><code>
-   * try {<br>
-   * </code><ul><code>
-   * cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));<br>
-   * </code></ul><code>
-   * } catch (CpoException ce) {<br>
-   * </code><ul><code>
-   * // Handle the error<br>
-   * cpo = null;<br>
-   * </code></ul><code>
-   * }<br>
-   * <br>
-   * if (cpo!=null) {<br>
-   * </code><ul><code>
-   * so.setId(1);<br>
-   * so.setName("SomeName");<br>
-   * try{<br>
-   * </code><ul><code>
-   * cpo.executeObject(so);<br>
-   * </code></ul><code>
-   * } catch (CpoException ce) {<br>
-   * </code><ul><code>
-   * // Handle the error
-   * </code></ul><code>
-   * }<br>
-   * </code></ul><code>
-   * }<br>
-   * </code></ul><code>
-   * </code>
-   * <br>
+   * 
+   * <pre>Example:<code>
+   * 
+   * class SomeObject so = new SomeObject();
+   * class CpoAdapter cpo = null;
+   * 
+   * try {
+   * 	cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));
+   * } catch (CpoException ce) {
+   * 	// Handle the error
+   * 	cpo = null;
+   * }
+   * 
+   * if (cpo!=null) {
+   * 	so.setId(1);
+   * 	so.setName("SomeName");
+   * 	try{
+   * 		cpo.executeObject(so);
+   * 	} catch (CpoException ce) {
+   * 		// Handle the error
+   * 	}
+   * }
+   *</code>
+   *</pre>
    *
-   * @param object This is an <code>Object</code> that has been defined within the metadata of the
+   * @param object This is an Object that has been defined within the metadata of the
    *               datasource. If the class is not defined an exception will be thrown. If the object
    *               does not exist in the datasource, an exception will be thrown. This object is used
    *               to populate the IN parameters used to executed the datasource object.
-   *               <p/>
+   *               
    *               An object of this type will be created and filled with the returned data from the value_object.
    *               This newly created object will be returned from this method.
    * @return An object populated with the OUT parameters returned from the executable object
@@ -840,42 +727,30 @@ public class JdbcCpoAdapter implements CpoAdapter {
    * Executes an Object whose metadata will call an executable within the datasource.
    * It is assumed that the executable object exists in the metadatasource. If the executable does not exist,
    * an exception will be thrown.
-   * <br>
-   * Example:<br>
-   * <code><br>
-   * class SomeObject so = new SomeObject();<br>
-   * class CpoAdapter cpo = null;<br>
-   * <br>
-   * </code><ul><code>
-   * try {<br>
-   * </code><ul><code>
-   * cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));<br>
-   * </code></ul><code>
-   * } catch (CpoException ce) {<br>
-   * </code><ul><code>
-   * // Handle the error<br>
-   * cpo = null;<br>
-   * </code></ul><code>
-   * }<br>
-   * <br>
-   * if (cpo!=null) {<br>
-   * </code><ul><code>
-   * so.setId(1);<br>
-   * so.setName("SomeName");<br>
-   * try{<br>
-   * </code><ul><code>
-   * cpo.executeObject("execNotifyProc",so);<br>
-   * </code></ul><code>
-   * } catch (CpoException ce) {<br>
-   * </code><ul><code>
-   * // Handle the error
-   * </code></ul><code>
-   * }<br>
-   * </code></ul><code>
-   * }<br>
-   * </code></ul><code>
-   * </code>
-   * <br>
+   * 
+   * <pre>Example:<code>
+   * 
+   * class SomeObject so = new SomeObject();
+   * class CpoAdapter cpo = null;
+   * 
+   * try {
+   * 	cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));
+   * } catch (CpoException ce) {
+   * 	// Handle the error
+   * 	cpo = null;
+   * }
+   * 
+   * if (cpo!=null) {
+   * 	so.setId(1);
+   * 	so.setName("SomeName");
+   * 	try{
+   * 		cpo.executeObject("execNotifyProc",so);
+   * 	} catch (CpoException ce) {
+   * 	// Handle the error
+   * 	}
+   * }
+   *</code>
+   *</pre>
    *
    * @param name   The filter name which tells the datasource which objects should be returned. The
    *               name also signifies what data in the object will be populated.
@@ -896,46 +771,34 @@ public class JdbcCpoAdapter implements CpoAdapter {
   /**
    * Executes an Object that represents an executable object within the datasource.
    * It is assumed that the object exists in the datasource. If the object does not exist, an exception will be thrown
-   * <br>
-   * Example:<br>
-   * <code><br>
-   * class SomeObject so = new SomeObject();<br>
-   * class SomeResult sr = new SomeResult();<br>
-   * class CpoAdapter cpo = null;<br>
-   * <br>
-   * </code><ul><code>
-   * try {<br>
-   * </code><ul><code>
-   * cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));<br>
-   * </code></ul><code>
-   * } catch (CpoException ce) {<br>
-   * </code><ul><code>
-   * // Handle the error<br>
-   * cpo = null;<br>
-   * </code></ul><code>
-   * }<br>
-   * <br>
-   * if (cpo!=null) {<br>
-   * </code><ul><code>
-   * so.setId(1);<br>
-   * so.setName("SomeName");<br>
-   * try{<br>
-   * </code><ul><code>
-   * sr = (SomeResult)cpo.executeObject("execNotifyProc",so, sr);
-   * </code></ul><code>
-   * } catch (CpoException ce) {<br>
-   * </code><ul><code>
-   * // Handle the error
-   * </code></ul><code>
-   * }<br>
-   * </code></ul><code>
-   * }<br>
-   * </code></ul><code>
-   * </code>
-   * <br>
+   * 
+   * <pre>Example:<code>
+   * 
+   * class SomeObject so = new SomeObject();
+   * class SomeResult sr = new SomeResult();
+   * class CpoAdapter cpo = null;
+   * 
+   * try {
+   * 	cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));
+   * } catch (CpoException ce) {
+   * 	// Handle the error
+   * 	cpo = null;
+   * }
+   * 
+   * if (cpo!=null) {
+   * 	so.setId(1);
+   * 	so.setName("SomeName");
+   * 	try{
+   * 		sr = (SomeResult)cpo.executeObject("execNotifyProc",so, sr);
+   * 	} catch (CpoException ce) {
+   * 		// Handle the error
+   * 	}
+   * }
+   *</code>
+   *</pre>
    *
-   * @param name     The <code>String</code> name of the EXECUTE Query group that will be used to create the object
-   *                 in the datasource. <code>null</code> signifies that the default rules will be used.
+   * @param name     The String name of the EXECUTE Query group that will be used to create the object
+   *                 in the datasource. null signifies that the default rules will be used.
    * @param criteria This is an object that has been defined within the metadata of the
    *                 datasource. If the class is not defined an exception will be thrown. If the object
    *                 does not exist in the datasource, an exception will be thrown. This object is used
@@ -955,52 +818,36 @@ public class JdbcCpoAdapter implements CpoAdapter {
 
   /**
    * The CpoAdapter will check to see if this object exists in the datasource.
-   * <br>
-   * Example:<br>
-   * <code><br>
-   * class SomeObject so = new SomeObject();<br>
-   * long count = 0;<br>
-   * class CpoAdapter cpo = null;<br>
-   * <br>
-   * </code><ul><code>
-   * try {<br>
-   * </code><ul><code>
-   * cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));<br>
-   * </code></ul><code>
-   * } catch (CpoException ce) {<br>
-   * </code><ul><code>
-   * // Handle the error<br>
-   * cpo = null;<br>
-   * </code></ul><code>
-   * }<br>
-   * <br>
-   * if (cpo!=null) {<br>
-   * </code><ul><code>
-   * so.setId(1);<br>
-   * so.setName("SomeName");<br>
-   * try{<br>
-   * </code><ul><code>
-   * count = cpo.existsObject(so);<br>
-   * if (count>0) {<br>
-   * </code><ul><code>
-   * // object exists<br>
-   * </code></ul><code>
-   * } else {<br>
-   * </code><ul><code>
-   * // object does not exist<br>
-   * </code></ul><code>
-   * }<br>
-   * </code></ul><code>
-   * } catch (CpoException ce) {<br>
-   * </code><ul><code>
-   * // Handle the error
-   * </code></ul><code>
-   * }<br>
-   * </code></ul><code>
-   * }<br>
-   * </code></ul><code>
-   * </code>
-   * <br>
+   * 
+   * <pre>Example:<code>
+   * 
+   * class SomeObject so = new SomeObject();
+   * long count = 0;
+   * class CpoAdapter cpo = null;
+   * 
+   * try {
+   * 	cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));
+   * } catch (CpoException ce) {
+   * 	// Handle the error
+   * 	cpo = null;
+   * }
+   * 
+   * if (cpo!=null) {
+   * 	so.setId(1);
+   * 	so.setName("SomeName");
+   * 	try{
+   * 		count = cpo.existsObject(so);
+   * 		if (count>0) {
+   * 			// object exists
+   * 		} else {
+   * 			// object does not exist
+   * 		}
+   * 	} catch (CpoException ce) {
+   * 		// Handle the error
+   * 	}
+   * }
+   *</code>
+   *</pre>
    *
    * @param obj This is an object that has been defined within the metadata of the datasource. If
    *            the class is not defined an exception will be thrown. This object will be searched for inside the
@@ -1014,55 +861,39 @@ public class JdbcCpoAdapter implements CpoAdapter {
 
   /**
    * The CpoAdapter will check to see if this object exists in the datasource.
-   * <br>
-   * Example:<br>
-   * <code><br>
-   * class SomeObject so = new SomeObject();<br>
-   * long count = 0;<br>
-   * class CpoAdapter cpo = null;<br>
-   * <br>
-   * </code><ul><code>
-   * try {<br>
-   * </code><ul><code>
-   * cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));<br>
-   * </code></ul><code>
-   * } catch (CpoException ce) {<br>
-   * </code><ul><code>
-   * // Handle the error<br>
-   * cpo = null;<br>
-   * </code></ul><code>
-   * }<br>
-   * <br>
-   * if (cpo!=null) {<br>
-   * </code><ul><code>
-   * so.setId(1);<br>
-   * so.setName("SomeName");<br>
-   * try{<br>
-   * </code><ul><code>
-   * count = cpo.existsObject("SomeExistCheck",so);<br>
-   * if (count>0) {<br>
-   * </code><ul><code>
-   * // object exists<br>
-   * </code></ul><code>
-   * } else {<br>
-   * </code><ul><code>
-   * // object does not exist<br>
-   * </code></ul><code>
-   * }<br>
-   * </code></ul><code>
-   * } catch (CpoException ce) {<br>
-   * </code><ul><code>
-   * // Handle the error
-   * </code></ul><code>
-   * }<br>
-   * </code></ul><code>
-   * }<br>
-   * </code></ul><code>
-   * </code>
-   * <br>
+   * 
+   * <pre>Example:<code>
+   * 
+   * class SomeObject so = new SomeObject();
+   * long count = 0;
+   * class CpoAdapter cpo = null;
+   * 
+   * try {
+   * 	cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));
+   * } catch (CpoException ce) {
+   * 	// Handle the error
+   * 	cpo = null;
+   * }
+   * 
+   * if (cpo!=null) {
+   * 	so.setId(1);
+   * 	so.setName("SomeName");
+   * 	try{
+   * 		count = cpo.existsObject("SomeExistCheck",so);
+   * 		if (count>0) {
+   * 			// object exists
+   * 		} else {
+   * 			// object does not exist
+   * 		}
+   * 	} catch (CpoException ce) {
+   * 		// Handle the error
+   * 	}
+   * }
+   *</code>
+   *</pre>
    *
-   * @param name The <code>String</code> name of the EXISTS Query group that will be used to create the object
-   *             in the datasource. <code>null</code> signifies that the default rules will be used.
+   * @param name The String name of the EXISTS Query group that will be used to create the object
+   *             in the datasource. null signifies that the default rules will be used.
    * @param obj  This is an object that has been defined within the metadata of the datasource. If
    *             the class is not defined an exception will be thrown. This object will be searched for inside the
    *             datasource.
@@ -1191,7 +1022,7 @@ public class JdbcCpoAdapter implements CpoAdapter {
   }
 
   /**
-   * <code>newOrderBy</code> allows you to dynamically change the order of the objects in the resulting
+   * newOrderBy allows you to dynamically change the order of the objects in the resulting
    * collection. This allows you to apply user input in determining the order of the collection
    *
    * @param attribute The name of the attribute from the pojo that will be sorted.
@@ -1205,7 +1036,7 @@ public class JdbcCpoAdapter implements CpoAdapter {
   }
 
   /**
-   * <code>newOrderBy</code> allows you to dynamically change the order of the objects in the resulting
+   * newOrderBy allows you to dynamically change the order of the objects in the resulting
    * collection. This allows you to apply user input in determining the order of the collection
    *
    * @param attribute The name of the attribute from the pojo that will be sorted.
@@ -1267,42 +1098,30 @@ public class JdbcCpoAdapter implements CpoAdapter {
    * object does not exist, then it is created in the datasource.  This method stores the object
    * in the datasource. This method uses the default EXISTS, CREATE, and UPDATE query groups specified
    * for this object.
-   * <br>
-   * Example:<br>
-   * <code><br>
-   * class SomeObject so = new SomeObject();<br>
-   * class CpoAdapter cpo = null;<br>
-   * <br>
-   * </code><ul><code>
-   * try {<br>
-   * </code><ul><code>
-   * cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));<br>
-   * </code></ul><code>
-   * } catch (CpoException ce) {<br>
-   * </code><ul><code>
-   * // Handle the error<br>
-   * cpo = null;<br>
-   * </code></ul><code>
-   * }<br>
-   * <br>
-   * if (cpo!=null) {<br>
-   * </code><ul><code>
-   * so.setId(1);<br>
-   * so.setName("SomeName");<br>
-   * try{<br>
-   * </code><ul><code>
-   * cpo.persistObject(so);<br>
-   * </code></ul><code>
-   * } catch (CpoException ce) {<br>
-   * </code><ul><code>
-   * // Handle the error
-   * </code></ul><code>
-   * }<br>
-   * </code></ul><code>
-   * }<br>
-   * </code></ul><code>
-   * </code>
-   * <br>
+   * 
+   * <pre>Example:<code>
+   * 
+   * class SomeObject so = new SomeObject();
+   * class CpoAdapter cpo = null;
+   * 
+   * try {
+   * 	cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));
+   * } catch (CpoException ce) {
+   * 	// Handle the error
+   * 	cpo = null;
+   * }
+   * 
+   * if (cpo!=null) {
+   * 	so.setId(1);
+   * 	so.setName("SomeName");
+   * 	try{
+   * 		cpo.persistObject(so);
+   * 	} catch (CpoException ce) {
+   * 		// Handle the error
+   * 	}
+   * }
+   *</code>
+   *</pre>
    *
    * @param obj This is an object that has been defined within the metadata of the datasource. If
    *            the class is not defined an exception will be thrown.
@@ -1321,43 +1140,31 @@ public class JdbcCpoAdapter implements CpoAdapter {
    * Persists the Object into the datasource. The CpoAdapter will check to see if this object
    * exists in the datasource. If it exists, the object is updated in the datasource If the
    * object does not exist, then it is created in the datasource.  This method stores the object
-   * in the datasource.<br>
-   * <br>
-   * Example:<br>
-   * <code><br>
-   * class SomeObject so = new SomeObject();<br>
-   * class CpoAdapter cpo = null;<br>
-   * <br>
-   * </code><ul><code>
-   * try {<br>
-   * </code><ul><code>
-   * cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));<br>
-   * </code></ul><code>
-   * } catch (CpoException ce) {<br>
-   * </code><ul><code>
-   * // Handle the error<br>
-   * cpo = null;<br>
-   * </code></ul><code>
-   * }<br>
-   * <br>
-   * if (cpo!=null) {<br>
-   * </code><ul><code>
-   * so.setId(1);<br>
-   * so.setName("SomeName");<br>
-   * try{<br>
-   * </code><ul><code>
-   * cpo.persistObject("persistSomeObject",so);<br>
-   * </code></ul><code>
-   * } catch (CpoException ce) {<br>
-   * </code><ul><code>
-   * // Handle the error
-   * </code></ul><code>
-   * }<br>
-   * </code></ul><code>
-   * }<br>
-   * </code></ul><code>
-   * </code>
-   * <br>
+   * in the datasource.
+   * 
+   * <pre>Example:<code>
+   * 
+   * class SomeObject so = new SomeObject();
+   * class CpoAdapter cpo = null;
+   * 
+   * try {
+   * 	cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));
+   * } catch (CpoException ce) {
+   * 	// Handle the error
+   * 	cpo = null;
+   * }
+   * 
+   * if (cpo!=null) {
+   * 	so.setId(1);
+   * 	so.setName("SomeName");
+   * 	try{
+   * 		cpo.persistObject("persistSomeObject",so);
+   * 	} catch (CpoException ce) {
+   * 		// Handle the error
+   * 	}
+   * }
+   *</code>
+   *</pre>
    *
    * @param name The name which identifies which EXISTS, INSERT, and UPDATE Query groups to
    *             execute to persist the object.
@@ -1381,49 +1188,35 @@ public class JdbcCpoAdapter implements CpoAdapter {
    * object in the datasource. The objects in the collection will be treated as one transaction,
    * meaning that if one  of the objects fail being inserted or updated in the datasource then
    * the entire collection will be rolled back.
-   * <br>
-   * Example:<br>
-   * <code><br>
-   * class SomeObject so = null;<br>
-   * class CpoAdapter cpo = null;<br>
-   * <br>
-   * </code><ul><code>
-   * try {<br>
-   * </code><ul><code>
-   * cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));<br>
-   * </code></ul><code>
-   * } catch (CpoException ce) {<br>
-   * </code><ul><code>
-   * // Handle the error<br>
-   * cpo = null;<br>
-   * </code></ul><code>
-   * }<br>
-   * <br>
-   * if (cpo!=null) {<br>
-   * </code><ul><code>
-   * ArrayList al = new ArrayList();<br>
-   * for (int i=0; i<3; i++){<br>
-   * </code><ul><code>
-   * so = new SomeObject();<br>
-   * so.setId(1);<br>
-   * so.setName("SomeName");<br>
-   * al.add(so);<br>
-   * }<br>
-   * </code></ul><code>
-   * try{<br>
-   * </code><ul><code>
-   * cpo.persistObjects(al);<br>
-   * </code></ul><code>
-   * } catch (CpoException ce) {<br>
-   * </code><ul><code>
-   * // Handle the error<br>
-   * </code></ul><code>
-   * }<br>
-   * </code></ul><code>
-   * }<br>
-   * </code></ul><code>
-   * </code>
-   * <br>
+   * 
+   * <pre>Example:<code>
+   * 
+   * class SomeObject so = null;
+   * class CpoAdapter cpo = null;
+   * 
+   * try {
+   * 	cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));
+   * } catch (CpoException ce) {
+   * 	// Handle the error
+   * 	cpo = null;
+   * }
+   * 
+   * if (cpo!=null) {
+   * 	ArrayList al = new ArrayList();
+   * 	for (int i=0; i<3; i++){
+   * 		so = new SomeObject();
+   * 		so.setId(1);
+   * 		so.setName("SomeName");
+   * 		al.add(so);
+   * 	}
+   * 	try{
+   * 		cpo.persistObjects(al);
+   * 	} catch (CpoException ce) {
+   * 		// Handle the error
+   * 	}
+   * }
+   *</code>
+   *</pre>
    *
    * @param coll This is a collection of objects that have been defined within  the metadata of
    *             the datasource. If the class is not defined an exception will be thrown.
@@ -1445,49 +1238,35 @@ public class JdbcCpoAdapter implements CpoAdapter {
    * object in the datasource. The objects in the collection will be treated as one transaction,
    * meaning that if one  of the objects fail being inserted or updated in the datasource then
    * the entire collection will be rolled back.
-   * <br>
-   * Example:<br>
-   * <code><br>
-   * class SomeObject so = null;<br>
-   * class CpoAdapter cpo = null;<br>
-   * <br>
-   * </code><ul><code>
-   * try {<br>
-   * </code><ul><code>
-   * cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));<br>
-   * </code></ul><code>
-   * } catch (CpoException ce) {<br>
-   * </code><ul><code>
-   * // Handle the error<br>
-   * cpo = null;<br>
-   * </code></ul><code>
-   * }<br>
-   * <br>
-   * if (cpo!=null) {<br>
-   * </code><ul><code>
-   * ArrayList al = new ArrayList();<br>
-   * for (int i=0; i<3; i++){<br>
-   * </code><ul><code>
-   * so = new SomeObject();<br>
-   * so.setId(1);<br>
-   * so.setName("SomeName");<br>
-   * al.add(so);<br>
-   * }<br>
-   * </code></ul><code>
-   * try{<br>
-   * </code><ul><code>
-   * cpo.persistObjects("myPersist",al);<br>
-   * </code></ul><code>
-   * } catch (CpoException ce) {<br>
-   * </code><ul><code>
-   * // Handle the error<br>
-   * </code></ul><code>
-   * }<br>
-   * </code></ul><code>
-   * }<br>
-   * </code></ul><code>
-   * </code>
-   * <br>
+   * 
+   * <pre>Example:<code>
+   * 
+   * class SomeObject so = null;
+   * class CpoAdapter cpo = null;
+   * 
+   * try {
+   * 	cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));
+   * } catch (CpoException ce) {
+   * 	// Handle the error
+   * 	cpo = null;
+   * }
+   * 
+   * if (cpo!=null) {
+   * 	ArrayList al = new ArrayList();
+   * 	for (int i=0; i<3; i++){
+   * 		so = new SomeObject();
+   * 		so.setId(1);
+   * 		so.setName("SomeName");
+   * 		al.add(so);
+   * 	}
+   * 	try{
+   * 		cpo.persistObjects("myPersist",al);
+   * 	} catch (CpoException ce) {
+   * 		// Handle the error
+   * 	}
+   * }
+   *</code>
+   *</pre>
    *
    * @param name The name which identifies which EXISTS, INSERT, and UPDATE Query groups to
    *             execute to persist the object.
@@ -1561,9 +1340,9 @@ public class JdbcCpoAdapter implements CpoAdapter {
    *                 If the class is not defined an exception will be thrown. If the object does not
    *                 exist in the datasource, an exception will be thrown. This object is used to specify
    *                 the object type that will be returned in the  collection.
-   * @param where    The <code>CpoWhere</code> object that defines the constraints that should be
+   * @param where    The CpoWhere object that defines the constraints that should be
    *                 used when retrieving objects
-   * @param orderBy  The <code>CpoOrderBy</code> object that defines the order in which objects
+   * @param orderBy  The CpoOrderBy object that defines the order in which objects
    *                 should be returned
    * @return An object of the same type as the result parameter that is filled in as specified
    *         the metadata for the retireve.
@@ -1592,9 +1371,9 @@ public class JdbcCpoAdapter implements CpoAdapter {
    *                 If the class is not defined an exception will be thrown. If the object does not
    *                 exist in the datasource, an exception will be thrown. This object is used to specify
    *                 the object type that will be returned in the  collection.
-   * @param where    The <code>CpoWhere</code> object that defines the constraints that should be
+   * @param where    The CpoWhere object that defines the constraints that should be
    *                 used when retrieving objects
-   * @param orderBy  The <code>CpoOrderBy</code> object that defines the order in which objects
+   * @param orderBy  The CpoOrderBy object that defines the order in which objects
    *                 should be returned
    * @return A collection of objects will be returned that meet the criteria  specified by obj.
    *         The objects will be of the same type as the Object  that was passed in. If no
@@ -1624,9 +1403,9 @@ public class JdbcCpoAdapter implements CpoAdapter {
    *        If the class is not defined an exception will be thrown. If the object does not
    *        exist in the datasource, an exception will be thrown. This object is used to specify
    *        the object type that will be returned in the  collection.
-   * @param where The <code>CpoWhere</code> object that defines the constraints that should be
+   * @param where The CpoWhere object that defines the constraints that should be
    *              used when retrieving objects
-   * @param orderBy The <code>CpoOrderBy</code> object that defines the order in which objects
+   * @param orderBy The CpoOrderBy object that defines the order in which objects
    *                should be returned
    * @param objectBufferSize the maximum number of objects that the Iterator is allowed to cache.
    *        Once reached, the CPO framework will halt processing records from the datasource.
@@ -1646,55 +1425,42 @@ public class JdbcCpoAdapter implements CpoAdapter {
   /**
    * Allows you to perform a series of object interactions with the database. This method
    * pre-dates CpoTrxAdapter and can be used without a programmer needing to remember to call
-   * <code>commit()</code> or <code>rollback()</code>.
-   * <br>
-   * Example:<br>
-   * <code><br>
-   * class SomeObject so = null;<br>
-   * class CpoAdapter cpo = null;<br>
-   * <br>
-   * </code><ul><code>
-   * try {<br>
-   * </code><ul><code>
-   * cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));<br>
-   * </code></ul><code>
-   * } catch (CpoException ce) {<br>
-   * </code><ul><code>
-   * // Handle the error<br>
-   * cpo = null;<br>
-   * </code></ul><code>
-   * }<br>
-   * <br>
-   * if (cpo!=null) {<br>
-   * </code><ul><code>
-   * ArrayList al = new ArrayList();<br>
-   * so = new SomeObject();<br>
-   * so.setId(1);<br>
-   * so.setName("SomeName");<br>
-   * CpoObject cobj = new CpoObject(CpoAdapter.CREATE,"MyCreate",so);<br>
-   * al.add(cobj);<br>
-   * so = new SomeObject();<br>
-   * so.setId(3);<br>
-   * so.setName("New Name");<br>
-   * CpoObject cobj = new CpoObject(CpoAdapter.PERSIST,"MyPersist",so);<br>
-   * al.add(cobj);<br>
-   * </code></ul><code>
-   * try{<br>
-   * </code><ul><code>
-   * cpo.transactObjects(al);<br>
-   * </code></ul><code>
-   * } catch (CpoException ce) {<br>
-   * </code><ul><code>
-   * // Handle the error<br>
-   * </code></ul><code>
-   * }<br>
-   * </code></ul><code>
-   * }<br>
-   * </code></ul><code>
-   * </code>
-   * <br>
+   * commit() or rollback().
+   * 
+   * <pre>Example:<code>
+   * 
+   * class SomeObject so = null;
+   * class CpoAdapter cpo = null;
+   * 
+   * try {
+   * 	cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));
+   * } catch (CpoException ce) {
+   * 	// Handle the error
+   * 	cpo = null;
+   * }
+   * 
+   * if (cpo!=null) {
+   * 	ArrayList al = new ArrayList();
+   * 	so = new SomeObject();
+   * 	so.setId(1);
+   * 	so.setName("SomeName");
+   * 	CpoObject cobj = new CpoObject(CpoAdapter.CREATE,"MyCreate",so);
+   * 	al.add(cobj);
+   * 	so = new SomeObject();
+   * 	so.setId(3);
+   * 	so.setName("New Name");
+   * 	CpoObject cobj = new CpoObject(CpoAdapter.PERSIST,"MyPersist",so);
+   * 	al.add(cobj);
+   * 	try{
+   * 		cpo.transactObjects(al);
+   * 	} catch (CpoException ce) {
+   * 		// Handle the error
+   * 	}
+   * }
+   *</code>
+   *</pre>
    *
-   * @param coll This is a collection of <code>CpoObject</code> objects that have been defined within  the metadata of
+   * @param coll This is a collection of CpoObject objects that have been defined within  the metadata of
    *             the datasource. If the class is not defined an exception will be thrown.
    * @return The number of objects updated in the datasource
    * @throws CpoException Thrown if there are errors accessing the datasource
@@ -1764,42 +1530,30 @@ public class JdbcCpoAdapter implements CpoAdapter {
    * Update the Object in the datasource. The CpoAdapter will check to see if the object
    * exists in the datasource. If it exists then the object will be updated. If it does not exist,
    * an exception will be thrown
-   * <br>
-   * Example:<br>
-   * <code><br>
-   * class SomeObject so = new SomeObject();<br>
-   * class CpoAdapter cpo = null;<br>
-   * <br>
-   * </code><ul><code>
-   * try {<br>
-   * </code><ul><code>
-   * cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));<br>
-   * </code></ul><code>
-   * } catch (CpoException ce) {<br>
-   * </code><ul><code>
-   * // Handle the error<br>
-   * cpo = null;<br>
-   * </code></ul><code>
-   * }<br>
-   * <br>
-   * if (cpo!=null) {<br>
-   * </code><ul><code>
-   * so.setId(1);<br>
-   * so.setName("SomeName");<br>
-   * try{<br>
-   * </code><ul><code>
-   * cpo.updateObject(so);<br>
-   * </code></ul><code>
-   * } catch (CpoException ce) {<br>
-   * </code><ul><code>
-   * // Handle the error
-   * </code></ul><code>
-   * }<br>
-   * </code></ul><code>
-   * }<br>
-   * </code></ul><code>
-   * </code>
-   * <br>
+   * 
+   * <pre>Example:<code>
+   * 
+   * class SomeObject so = new SomeObject();
+   * class CpoAdapter cpo = null;
+   * 
+   * try {
+   * 	cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));
+   * } catch (CpoException ce) {
+   * 	// Handle the error
+   * 	cpo = null;
+   * }
+   * 
+   * if (cpo!=null) {
+   * 	so.setId(1);
+   * 	so.setName("SomeName");
+   * 	try{
+   * 		cpo.updateObject(so);
+   * 	} catch (CpoException ce) {
+   * 		// Handle the error
+   * 	}
+   * }
+   *</code>
+   *</pre>
    *
    * @param obj This is an object that has been defined within the metadata of the datasource. If
    *            the class is not defined an exception will be thrown.
@@ -1814,45 +1568,33 @@ public class JdbcCpoAdapter implements CpoAdapter {
    * Update the Object in the datasource. The CpoAdapter will check to see if the object
    * exists in the datasource. If it exists then the object will be updated. If it does not exist,
    * an exception will be thrown
-   * <br>
-   * Example:<br>
-   * <code><br>
-   * class SomeObject so = new SomeObject();<br>
-   * class CpoAdapter cpo = null;<br>
-   * <br>
-   * </code><ul><code>
-   * try {<br>
-   * </code><ul><code>
-   * cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));<br>
-   * </code></ul><code>
-   * } catch (CpoException ce) {<br>
-   * </code><ul><code>
-   * // Handle the error<br>
-   * cpo = null;<br>
-   * </code></ul><code>
-   * }<br>
-   * <br>
-   * if (cpo!=null) {<br>
-   * </code><ul><code>
-   * so.setId(1);<br>
-   * so.setName("SomeName");<br>
-   * try{<br>
-   * </code><ul><code>
-   * cpo.updateObject("updateSomeObject",so);<br>
-   * </code></ul><code>
-   * } catch (CpoException ce) {<br>
-   * </code><ul><code>
-   * // Handle the error
-   * </code></ul><code>
-   * }<br>
-   * </code></ul><code>
-   * }<br>
-   * </code></ul><code>
-   * </code>
-   * <br>
+   * 
+   * <pre>Example:<code>
+   * 
+   * class SomeObject so = new SomeObject();
+   * class CpoAdapter cpo = null;
+   * 
+   * try {
+   * 	cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));
+   * } catch (CpoException ce) {
+   * 	// Handle the error
+   * 	cpo = null;
+   * }
+   * 
+   * if (cpo!=null) {
+   * 	so.setId(1);
+   * 	so.setName("SomeName");
+   * 	try{
+   * 		cpo.updateObject("updateSomeObject",so);
+   * 	} catch (CpoException ce) {
+   * 		// Handle the error
+   * 	}
+   * }
+   *</code>
+   *</pre>
    *
-   * @param name The <code>String</code> name of the UPDATE Query group that will be used to create the object
-   *             in the datasource. <code>null</code> signifies that the default rules will be used.
+   * @param name The String name of the UPDATE Query group that will be used to create the object
+   *             in the datasource. null signifies that the default rules will be used.
    * @param obj  This is an object that has been defined within the metadata of the datasource. If
    *             the class is not defined an exception will be thrown.
    * @return The number of objects updated in the datasource
@@ -1868,49 +1610,35 @@ public class JdbcCpoAdapter implements CpoAdapter {
    * datasource. The objects in the collection will be treated as one transaction, meaning that
    * if one of the objects fail being updated in the datasource then the entire collection will
    * be rolled back, if supported by the datasource.
-   * <br>
-   * Example:<br>
-   * <code><br>
-   * class SomeObject so = null;<br>
-   * class CpoAdapter cpo = null;<br>
-   * <br>
-   * </code><ul><code>
-   * try {<br>
-   * </code><ul><code>
-   * cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));<br>
-   * </code></ul><code>
-   * } catch (CpoException ce) {<br>
-   * </code><ul><code>
-   * // Handle the error<br>
-   * cpo = null;<br>
-   * </code></ul><code>
-   * }<br>
-   * <br>
-   * if (cpo!=null) {<br>
-   * </code><ul><code>
-   * ArrayList al = new ArrayList();<br>
-   * for (int i=0; i<3; i++){<br>
-   * </code><ul><code>
-   * so = new SomeObject();<br>
-   * so.setId(1);<br>
-   * so.setName("SomeName");<br>
-   * al.add(so);<br>
-   * }<br>
-   * </code></ul><code>
-   * try{<br>
-   * </code><ul><code>
-   * cpo.updateObjects(al);<br>
-   * </code></ul><code>
-   * } catch (CpoException ce) {<br>
-   * </code><ul><code>
-   * // Handle the error<br>
-   * </code></ul><code>
-   * }<br>
-   * </code></ul><code>
-   * }<br>
-   * </code></ul><code>
-   * </code>
-   * <br>
+   * 
+   * <pre>Example:<code>
+   * 
+   * class SomeObject so = null;
+   * class CpoAdapter cpo = null;
+   * 
+   * try {
+   * 	cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));
+   * } catch (CpoException ce) {
+   * 	// Handle the error
+   * 	cpo = null;
+   * }
+   * 
+   * if (cpo!=null) {
+   * 	ArrayList al = new ArrayList();
+   * 	for (int i=0; i<3; i++){
+   * 		so = new SomeObject();
+   * 		so.setId(1);
+   * 		so.setName("SomeName");
+   * 		al.add(so);
+   * 	}
+   * 	try{
+   * 		cpo.updateObjects(al);
+   * 	} catch (CpoException ce) {
+   * 		// Handle the error
+   * 	}
+   * }
+   *</code>
+   *</pre>
    *
    * @param coll This is a collection of objects that have been defined within  the metadata of
    *             the datasource. If the class is not defined an exception will be thrown.
@@ -1928,52 +1656,38 @@ public class JdbcCpoAdapter implements CpoAdapter {
    * datasource. The objects in the collection will be treated as one transaction, meaning that
    * if one of the objects fail being updated in the datasource then the entire collection will
    * be rolled back, if supported by the datasource.
-   * <br>
-   * Example:<br>
-   * <code><br>
-   * class SomeObject so = null;<br>
-   * class CpoAdapter cpo = null;<br>
-   * <br>
-   * </code><ul><code>
-   * try {<br>
-   * </code><ul><code>
-   * cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));<br>
-   * </code></ul><code>
-   * } catch (CpoException ce) {<br>
-   * </code><ul><code>
-   * // Handle the error<br>
-   * cpo = null;<br>
-   * </code></ul><code>
-   * }<br>
-   * <br>
-   * if (cpo!=null) {<br>
-   * </code><ul><code>
-   * ArrayList al = new ArrayList();<br>
-   * for (int i=0; i<3; i++){<br>
-   * </code><ul><code>
-   * so = new SomeObject();<br>
-   * so.setId(1);<br>
-   * so.setName("SomeName");<br>
-   * al.add(so);<br>
-   * }<br>
-   * </code></ul><code>
-   * try{<br>
-   * </code><ul><code>
-   * cpo.updateObjects("myUpdate",al);<br>
-   * </code></ul><code>
-   * } catch (CpoException ce) {<br>
-   * </code><ul><code>
-   * // Handle the error<br>
-   * </code></ul><code>
-   * }<br>
-   * </code></ul><code>
-   * }<br>
-   * </code></ul><code>
-   * </code>
-   * <br>
+   * 
+   * <pre>Example:<code>
+   * 
+   * class SomeObject so = null;
+   * class CpoAdapter cpo = null;
+   * 
+   * try {
+   * 	cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));
+   * } catch (CpoException ce) {
+   * 	// Handle the error
+   * 	cpo = null;
+   * }
+   * 
+   * if (cpo!=null) {
+   * 	ArrayList al = new ArrayList();
+   * 	for (int i=0; i<3; i++){
+   * 		so = new SomeObject();
+   * 		so.setId(1);
+   * 		so.setName("SomeName");
+   * 		al.add(so);
+   * 	}
+   * 	try{
+   * 		cpo.updateObjects("myUpdate",al);
+   * 	} catch (CpoException ce) {
+   * 		// Handle the error
+   * 	}
+   * }
+   *</code>
+   *</pre>
    *
-   * @param name The <code>String</code> name of the UPDATE Query group that will be used to create the object
-   *             in the datasource. <code>null</code> signifies that the default rules will be used.
+   * @param name The String name of the UPDATE Query group that will be used to create the object
+   *             in the datasource. null signifies that the default rules will be used.
    * @param coll This is a collection of objects that have been defined within  the metadata of
    *             the datasource. If the class is not defined an exception will be thrown.
    * @return The number of objects updated in the datasource
@@ -3397,53 +3111,38 @@ public class JdbcCpoAdapter implements CpoAdapter {
   /**
    * Provides a mechanism for the user to obtain a CpoTrxAdapter object. This object allows the
    * to control when commits and rollbacks occur on CPO.
-   * <p/>
-   * <br>
-   * Example:<br>
-   * <code><br>
-   * class SomeObject so = null;<br>
-   * class CpoAdapter cpo = null;<br>
-   * class CpoTrxAdapter cpoTrx = null;<br>
-   * <br>
-   * </code><ul><code>
-   * try {<br>
-   * </code><ul><code>
-   * cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));<br>
-   * cpoTrx = cpo.getCpoTrxAdapter();<br>
-   * </code></ul><code>
-   * } catch (CpoException ce) {<br>
-   * </code><ul><code>
-   * // Handle the error<br>
-   * cpo = null;<br>
-   * </code></ul><code>
-   * }<br>
-   * <br>
-   * if (cpo!=null) {<br>
-   * </code><ul><code>
-   * try{<br>
-   * </code><ul><code>
-   * for (int i=0; i<3; i++){<br>
-   * </code><ul><code>
-   * so = new SomeObject();<br>
-   * so.setId(1);<br>
-   * so.setName("SomeName");<br>
-   * cpo.updateObject("myUpdate",so);<br>
-   * <p/>
-   * </code></ul><code>
-   * }<br>
-   * cpoTrx.commit();<br>
-   * </code></ul><code>
-   * } catch (CpoException ce) {<br>
-   * </code><ul><code>
-   * // Handle the error<br>
-   * cpoTrx.rollback();<br>
-   * </code></ul><code>
-   * }<br>
-   * </code></ul><code>
-   * }<br>
-   * </code></ul><code>
-   * </code>
-   * <br>
+   * 
+   * 
+   * <pre>Example:<code>
+   * 
+   * class SomeObject so = null;
+   * class CpoAdapter cpo = null;
+   * class CpoTrxAdapter cpoTrx = null;
+   * 
+   * try {
+   * 	cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));
+   * 	cpoTrx = cpo.getCpoTrxAdapter();
+   * } catch (CpoException ce) {
+   * 	// Handle the error
+   * 	cpo = null;
+   * }
+   * 
+   * if (cpo!=null) {
+   * 	try{
+   * 		for (int i=0; i<3; i++){
+   * 			so = new SomeObject();
+   * 			so.setId(1);
+   * 			so.setName("SomeName");
+   * 			cpo.updateObject("myUpdate",so);
+   * 		}
+   * 		cpoTrx.commit();
+   * 	} catch (CpoException ce) {
+   * 		// Handle the error
+   * 		cpoTrx.rollback();
+   * 	}
+   * }
+   *</code>
+   *</pre>
    *
    * @return A CpoTrxAdapter to manage the transactionality of CPO
    * @throws CpoException Thrown if there are errors accessing the datasource

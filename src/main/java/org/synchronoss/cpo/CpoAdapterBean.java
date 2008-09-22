@@ -187,6 +187,8 @@ public class CpoAdapterBean
      * in the collection will be treated as one transaction, meaning that if one 
      * of the objects fail being created in the datasource then the entire collection
      * will be rolled back
+     * @param name   The the context name for which group of operations will be called to
+     *               process this insert.
      * @param coll   This is a collection of objects that have been defined within 
      *               the metadata of the datasource. If the class is not defined
      *               an exception will be thrown.
@@ -218,6 +220,8 @@ public class CpoAdapterBean
      * 
      * If the retrieve query defined for this objects returns more than one row,
      * an exception will be thrown.
+     * @param name   The the context name for which group of operations will be called to
+     *               process this retrieve.
      * @param obj    This is an object that has been defined within the
      *               metadata of the datasource. If the class is not defined
      *               an exception will be thrown. If the object does not exist
@@ -236,12 +240,20 @@ public class CpoAdapterBean
      * 
      * If the retrieve query defined for this objects returns more than one row,
      * an exception will be thrown.
-     * @param obj    This is an object that has been defined within the
-     *               metadata of the datasource. If the class is not defined
-     *               an exception will be thrown. If the object does not exist
-     *               in the datasource, an exception will be thrown. The input 
-     *               object is used to specify the search criteria, the output 
-     *               object is populated with the results of the query.
+     * @param name     The the context name for which group of operations will be called to
+     *                 process this retrieve.
+     * @param criteria This is an object that has been defined within the
+     *                 metadata of the datasource. If the class is not defined
+     *                 an exception will be thrown. If the object does not exist
+     *                 in the datasource, an exception will be thrown. This object
+     *                 is used to specify the parameters used to retrieve the 
+     *                 collection of objects.
+     * @param result   This is an object that has been defined within the
+     *                 metadata of the datasource. If the class is not defined
+     *                 an exception will be thrown. If the object does not exist
+     *                 in the datasource, an exception will be thrown. This object
+     *                 is used to specify the object type that will be returned in the 
+     *                 collection.
      */
     public <T,C> T retrieveObject(String name, C criteria, T result, CpoWhere where, Collection<CpoOrderBy> orderBy) throws CpoException{
       return getAdapter().retrieveObject(name,criteria,result,where, orderBy);
@@ -249,9 +261,8 @@ public class CpoAdapterBean
     /**
      * Retrieves the Object from the datasource. The assumption
      * is that the object exists in the datasource.
-     * @param name     The filter name which tells the datasource which objects should be
-     *                 returned. The name also signifies what data in the object will be 
-     *                 populated.
+     * @param name     The the context name for which group of operations will be called to
+     *                 process this retrieve.
      * @param criteria This is an object that has been defined within the
      *                 metadata of the datasource. If the class is not defined
      *                 an exception will be thrown. If the object does not exist

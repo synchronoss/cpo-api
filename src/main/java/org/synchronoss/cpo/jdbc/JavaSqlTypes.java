@@ -29,6 +29,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 
+import oracle.jdbc.OracleTypes;
+
 
 
 /**
@@ -77,6 +79,7 @@ public class JavaSqlTypes extends java.lang.Object implements java.io.Serializab
         new JavaSqlType<Boolean>(java.sql.Types.BIT, "BIT", boolean.class), // -7
         new JavaSqlType<Boolean>(java.sql.Types.BOOLEAN, "BOOLEAN", boolean.class), //16
         
+        
         // Now for the dbspecific types needed to generate the class from a query.
         new JavaSqlType<String>(100, "VARCHAR_IGNORECASE", java.lang.String.class) // HSQLDB TYPE for VARCHAR_IGNORE_CASE
 
@@ -97,10 +100,24 @@ public class JavaSqlTypes extends java.lang.Object implements java.io.Serializab
         return jdbcType;
     }
 */    
+    public static JavaSqlType<?> getJavaSqlType(int javaSqlType){
+        JavaSqlType<?> jdbcType = getJdbcTypeMap().get(javaSqlType);
+        if (jdbcType == null)
+        	// oracle likes to send back crazy SQL Types sometimes
+        	// Sending back null just breaks the requesting code. 
+        	// Will send back VarChar to use get string. This should work
+            return getJdbcTypeMap().get(java.sql.Types.VARCHAR);
+        else
+            return jdbcType;
+    }
+    
     public static int getJavaSqlType(String javaSqlTypeName){
         JavaSqlType<?> jdbcType = getJdbcTypeNameMap().get(javaSqlTypeName);
         if (jdbcType == null)
-            return java.sql.Types.NULL;
+        	// oracle likes to send back crazy SQL Types sometimes
+        	// Sending back null just breaks the requesting code. 
+        	// Will send back VarChar to use get string. This should work
+            return java.sql.Types.VARCHAR;
         else
             return jdbcType.getJavaSqlType();
     }
@@ -112,18 +129,25 @@ public class JavaSqlTypes extends java.lang.Object implements java.io.Serializab
     
     public static Class<?> getSqlTypeClass(Integer javaSqlType){
         JavaSqlType<?> jdbcType = getJdbcTypeMap().get(javaSqlType);
-        if (jdbcType == null)
-            return null;
-        else
-            return jdbcType.getJavaClass();
+        if (jdbcType == null) {
+        	// oracle likes to send back crazy SQL Types sometimes
+        	// Sending back null just breaks the requesting code. 
+        	// Will send back VarChar to use get string. This should work
+            jdbcType = getJdbcTypeMap().get(java.sql.Types.VARCHAR); //
+        }
+        
+        return jdbcType.getJavaClass();
     }
     
     
     public static Class<?> getSqlTypeClass(String javaSqlTypeName){
         JavaSqlType<?> jdbcType = getJdbcTypeNameMap().get(javaSqlTypeName);
-        if (jdbcType == null)
-            return null;
-        else
+        if (jdbcType == null) {
+        	// oracle likes to send back crazy SQL Types sometimes
+        	// Sending back null just breaks the requesting code. 
+        	// Will send back VarChar to use get string. This should work
+            jdbcType = getJdbcTypeMap().get(java.sql.Types.VARCHAR); //
+        }
             return jdbcType.getJavaClass();
     }
     

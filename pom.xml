@@ -60,6 +60,12 @@
     <url>https://cpo.svn.sourceforge.net/svnroot/cpo/api/tags/cpo-3.1.1</url>
   </scm>
   <build>
+    <testResources>
+      <testResource>
+        <directory>src/test/resources</directory>
+        <filtering>true</filtering>
+      </testResource>
+    </testResources>
     <extensions>
       <extension>
         <groupId>org.apache.maven.wagon</groupId>
@@ -95,20 +101,43 @@
         <version>1.0</version>
         <executions>
           <execution>
+            <id>create-metadata-tables</id>
+            <phase>process-test-resources</phase>
+            <goals>
+              <goal>execute</goal>
+            </goals>
+            <configuration>
+	          <username>${cpo.meta.user}</username>
+	          <password>${cpo.meta.pswd}</password>
+	          <autocommit>true</autocommit>
+	          <driver>${cpo.meta.driver}</driver>
+	          <url>${cpo.meta.url}</url>
+              <onError>continue</onError>
+              <srcFiles>
+                <srcFile>${cpo.test.sqldir}/dropCpoTables.sql</srcFile>
+                <srcFile>${cpo.test.sqldir}/CpoTableDDL.sql</srcFile>
+                <srcFile>${cpo.test.sqldir}/cpoJunit.sql</srcFile>
+              </srcFiles>
+            </configuration>
+          </execution>
+         <execution>
             <id>create-data</id>
             <phase>process-test-resources</phase>
             <goals>
               <goal>execute</goal>
             </goals>
             <configuration>
+	          <username>${cpo.db.user}</username>
+	          <password>${cpo.db.pswd}</password>
+	          <autocommit>true</autocommit>
+	          <delimiter>;</delimiter>
+	          <driver>${cpo.db.driver}</driver>
+	          <url>${cpo.db.url}</url>
               <onError>continue</onError>
               <srcFiles>
-                <srcFile>src/test/sql/oracle/dropCpoTables.sql</srcFile>
-                <srcFile>src/test/sql/oracle/dropTestTables.sql</srcFile>
-                <srcFile>src/test/sql/oracle/CpoTableDDL.sql</srcFile>
-                <srcFile>src/test/sql/oracle/LvoTableDDL.sql</srcFile>
-                <srcFile>src/test/sql/oracle/ValueObjectDDL.sql</srcFile>
-                <srcFile>src/test/sql/oracle/cpoJunit.sql</srcFile>
+                <srcFile>${cpo.test.sqldir}/dropTestTables.sql</srcFile>
+                <srcFile>${cpo.test.sqldir}/LvoTableDDL.sql</srcFile>
+                <srcFile>${cpo.test.sqldir}/ValueObjectDDL.sql</srcFile>
               </srcFiles>
             </configuration>
           </execution>
@@ -119,14 +148,18 @@
             <artifactId>ojdbc14</artifactId>
             <version>10.2.0.5</version>
           </dependency>
+			<dependency>
+			    <groupId>postgresql</groupId>
+			    <artifactId>postgresql</artifactId>
+			    <version>8.3-603.jdbc3</version>
+			</dependency>    
+		    <dependency>
+		      <groupId>mysql</groupId>
+		      <artifactId>mysql-connector-java</artifactId>
+		      <version>5.1.6</version>
+		    </dependency>
         </dependencies>
         <configuration>
-          <username>sncrarch</username>
-          <password>sncrarch</password>
-          <autocommit>true</autocommit>
-          <driver>oracle.jdbc.driver.OracleDriver</driver>
-          <url>jdbc:oracle:thin:@pamdfsr2cl1v1.synchronoss.net:1521:dcig1</url>
-          <onError>continue</onError>
           <skip>false</skip>
         </configuration>
       </plugin>
@@ -174,6 +207,12 @@
       <version>1.3.1</version>
       <scope>provided</scope>
     </dependency>
+	<dependency>
+	    <groupId>postgresql</groupId>
+	    <artifactId>postgresql</artifactId>
+	    <version>8.3-603.jdbc3</version>
+      	<scope>test</scope>
+	</dependency>    
     <dependency>
       <groupId>hsqldb</groupId>
       <artifactId>hsqldb</artifactId>
@@ -183,7 +222,7 @@
     <dependency>
       <groupId>mysql</groupId>
       <artifactId>mysql-connector-java</artifactId>
-      <version>5.0.4</version>
+      <version>5.1.6</version>
       <scope>test</scope>
     </dependency>
   </dependencies>

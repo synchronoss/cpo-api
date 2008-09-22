@@ -49,6 +49,9 @@ public class SelectForUpdateTest extends TestCase {
     private static final String PROP_METACONNECTION = "metaUrl";
     private static final String       PROP_METAUSER = "metaUser";
     private static final String   PROP_METAPASSWORD = "metaPassword";
+    private static final String   PROP_METAPREFIX = "metaPrefix";
+
+    private String   metaPrefix_ = null;
     private String      metaUrl_ = null;
     private String   metaDriver_ = null;
     private String     metaUser_ = null;
@@ -89,15 +92,17 @@ public class SelectForUpdateTest extends TestCase {
         metaDriver_ = b.getString(PROP_METADRIVER).trim();
         metaUser_ = b.getString(PROP_METAUSER).trim();
         metaPassword_ = b.getString(PROP_METAPASSWORD).trim();
+        metaPrefix_ = b.getString(PROP_METAPREFIX).trim();
         
         if ("org.hsqldb.jdbcDriver".equals(dbDriver_)){
             hasSelect4UpdateSupport = false;
         }
         
         try {
-            jdbcCpo_ = new JdbcCpoAdapter(new JdbcDataSourceInfo(metaDriver_,metaUrl_, metaUser_, metaPassword_,1,1,false, "TEST_"),new JdbcDataSourceInfo(dbDriver_,dbUrl_, dbUser_, dbPassword_,1,2,false, "TEST_"));
+            jdbcCpo_ = new JdbcCpoAdapter(new JdbcDataSourceInfo(metaDriver_,metaUrl_, metaUser_, metaPassword_,1,1,false, metaPrefix_),new JdbcDataSourceInfo(dbDriver_,dbUrl_, dbUser_, dbPassword_,1,2,false));
+            assertNotNull(method+"CpoAdapter is null", jdbcCpo_);
             jdbcIdo_ = jdbcCpo_.getCpoTrxAdapter();
-            assertNotNull(method+"CpoAdapter is null", jdbcIdo_);
+            assertNotNull(method+"CpoTrxAdapter is null", jdbcIdo_);
         } catch(Exception e) {
             logger.debug(e.getLocalizedMessage());
         }

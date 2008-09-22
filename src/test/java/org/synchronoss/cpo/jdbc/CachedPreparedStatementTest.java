@@ -61,6 +61,9 @@ public class CachedPreparedStatementTest extends TestCase {
     private static final String PROP_METACONNECTION = "metaUrl";
     private static final String       PROP_METAUSER = "metaUser";
     private static final String   PROP_METAPASSWORD = "metaPassword";
+    private static final String   PROP_METAPREFIX = "metaPrefix";
+
+    private String   metaPrefix_ = null;
     private String      metaUrl_ = null;
     private String   metaDriver_ = null;
     private String     metaUser_ = null;
@@ -93,13 +96,14 @@ public class CachedPreparedStatementTest extends TestCase {
         metaDriver_ = b.getString(PROP_METADRIVER).trim();
         metaUser_ = b.getString(PROP_METAUSER).trim();
         metaPassword_ = b.getString(PROP_METAPASSWORD).trim();
+        metaPrefix_ = b.getString(PROP_METAPREFIX).trim();
         
         if ("org.hsqldb.jdbcDriver".equals(dbDriver_)){
         	hasCallSupport = false;
         }
 
         try {
-            jdbcIdo_ = new JdbcCpoAdapter(new JdbcDataSourceInfo(metaDriver_,metaUrl_, metaUser_, metaPassword_,1,1,false, "TEST_"),new JdbcDataSourceInfo(dbDriver_,dbUrl_, dbUser_, dbPassword_,1,3,false, "TEST_"));
+            jdbcIdo_ = new JdbcCpoAdapter(new JdbcDataSourceInfo(metaDriver_,metaUrl_, metaUser_, metaPassword_,1,1,false, metaPrefix_),new JdbcDataSourceInfo(dbDriver_,dbUrl_, dbUser_, dbPassword_,1,3,false));
             assertNotNull(method+"CpoAdapter is null", jdbcIdo_);
         } catch(Exception e) {
             fail(method+e.getMessage());

@@ -1,4 +1,5 @@
 
+drop function power;
 drop table TEST_cpo_query_parameter_rev;
 drop table TEST_cpo_query_parameter;
 drop table TEST_cpo_query_rev;

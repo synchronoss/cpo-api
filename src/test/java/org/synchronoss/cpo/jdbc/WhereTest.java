@@ -206,7 +206,7 @@ public class WhereTest extends TestCase {
           
             assertTrue("Col size is "+col.size(), col.size()==1);
             ValueObject rvo = (ValueObject) col.iterator().next();
-            assertTrue(rvo.getId() == -6);
+            assertTrue("-6 != "+rvo.getId(), rvo.getId() == -6);
         } catch (Exception e) {
             e.printStackTrace();
             fail(method+e.getMessage());
@@ -228,7 +228,7 @@ public class WhereTest extends TestCase {
           
             assertTrue("Col size is "+col.size(), col.size()==1);
             ValueObject rvo = (ValueObject) col.iterator().next();
-            assertTrue(rvo.getId() == 1);
+            assertTrue("1 != "+rvo.getId(), rvo.getId() == 1);
         } catch (Exception e) {
             e.printStackTrace();
             fail(method+e.getMessage());
@@ -337,7 +337,7 @@ public class WhereTest extends TestCase {
           
             assertTrue("Col size is "+col.size(), col.size()==1);
             ValueObject rvo = (ValueObject) col.iterator().next();
-            assertTrue(rvo.getId() == 1);
+            assertTrue("1 != "+rvo.getId(), rvo.getId() == 1);
         } catch (Exception e) {
             e.printStackTrace();
             fail(method+e.getMessage());
@@ -362,7 +362,7 @@ public class WhereTest extends TestCase {
           
             assertTrue("Col size is "+col.size(), col.size()==1);
             ValueObject rvo = (ValueObject) col.iterator().next();
-            assertTrue(rvo.getId() == 1);
+            assertTrue("1 != "+rvo.getId(), rvo.getId() == 1);
         } catch (Exception e) {
             e.printStackTrace();
             fail(method+e.getMessage());
@@ -371,7 +371,7 @@ public class WhereTest extends TestCase {
 
     
     public void testMultipleBindWhere() {
-        String method = "testAndWhere:";
+        String method = "testMultipleBindWhere:";
         Collection<ValueObject> col = null;
         CpoWhere cw = null;
         CpoWhere cw1 = null;
@@ -401,7 +401,7 @@ public class WhereTest extends TestCase {
     }
     
     public void testLikeWhere() {
-        String method = "testAndWhere:";
+        String method = "testLikeWhere:";
         Collection<ValueObject> col = null;
         CpoWhere cw = null;
         CpoWhere cw1 = null;
@@ -430,7 +430,7 @@ public class WhereTest extends TestCase {
         }
     }
     public void testLikeWhereStrings() {
-        String method = "testAndWhere:";
+        String method = "testLikeWhereStrings:";
         Collection<ValueObject> col = null;
         CpoWhere cw = null;
         CpoWhere cw1 = null;
@@ -459,7 +459,7 @@ public class WhereTest extends TestCase {
         }
     }
         public void testNonAttributeWhere() {
-            String method = "testAndWhere:";
+            String method = "testNonAttributeWhere:";
             Collection<ValueObject> col = null;
             CpoWhere cw = null;
             CpoWhere cw1 = null;

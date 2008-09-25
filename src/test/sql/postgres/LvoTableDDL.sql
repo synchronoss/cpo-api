@@ -22,9 +22,9 @@
 ----------------------------------------------
 -- LOB_TEST
 ----------------------------------------------
-CREATE TABLE LOB_TEST (
-       LOB_ID               INT NOT NULL
-       ,B_LOB                BLOB NULL
-       ,B_LOB2               BLOB NULL
-       ,C_LOB                CLOB NULL
-);
+-- CREATE TABLE LOB_TEST (
+--        LOB_ID               INT NOT NULL
+--        ,B_LOB                BLOB NULL
+--        ,B_LOB2               BLOB NULL
+--        ,C_LOB                CLOB NULL
+-- );

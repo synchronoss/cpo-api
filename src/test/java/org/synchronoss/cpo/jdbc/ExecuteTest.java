@@ -28,6 +28,7 @@ import java.util.ResourceBundle;
 
 import junit.framework.TestCase;
 
+import org.apache.log4j.Logger;
 import org.synchronoss.cpo.CpoAdapter;
 import org.synchronoss.cpo.CpoAdapterBean;
 
@@ -37,6 +38,7 @@ import org.synchronoss.cpo.CpoAdapterBean;
  * @author david berry
  */
 public class ExecuteTest extends TestCase {
+    private static Logger logger = Logger.getLogger(ExecuteTest.class.getName());
     private static final String PROP_FILE="org.synchronoss.cpo.jdbc.jdbc";
     private static final String PROP_DBDRIVER="dbDriver";
     private static final String PROP_DBCONNECTION="dbUrl";
@@ -89,15 +91,15 @@ public class ExecuteTest extends TestCase {
         metaPassword_ = b.getString(PROP_METAPASSWORD).trim();
         metaPrefix_ = b.getString(PROP_METAPREFIX).trim();
         
-        if ("org.hsqldb.jdbcDriver".equals(dbDriver_)){
-            hasCallSupport = false;
-        }
-
         try {
             jdbcIdo_ = new CpoAdapterBean(new JdbcCpoAdapter(new JdbcDataSourceInfo(metaDriver_,metaUrl_, metaUser_, metaPassword_,0,1,false, metaPrefix_),new JdbcDataSourceInfo(dbDriver_,dbUrl_, dbUser_, dbPassword_,1,1,false)));
             assertNotNull(method+"CpoAdapter is null", jdbcIdo_);
         } catch(Exception e) {
             fail(method+e.getMessage());
+        }
+        
+        if ("org.hsqldb.jdbcDriver".equals(dbDriver_)){
+        	hasCallSupport = false;
         }
     }
 
@@ -139,7 +141,7 @@ public class ExecuteTest extends TestCase {
                 fail(method+e.getMessage());
             }
         } else {
-            fail(dbDriver_+" does not support CallableStatements");
+        	logger.error(dbDriver_+" does not support CallableStatements");
         }
     }
     

@@ -182,7 +182,7 @@ public class SelectForUpdateTest extends TestCase {
                 fail(method+"SelectForUpdateNoWait should success:"+e.getLocalizedMessage());
             }
         } else {
-            fail(dbDriver_+" does not support Select For Update");
+        	logger.error(dbDriver_+" does not support Select For Update");
         }
     }
     
@@ -193,21 +193,21 @@ public class SelectForUpdateTest extends TestCase {
  
             try{
             	long count = jdbcIdo_.existsObject("SelectForUpdateExistZero",vo2);
-                assertTrue("Two objects should have been returned", count==0);
+                assertTrue("Zero objects should have been returned", count==0);
             } catch (Exception e) {
                 fail(method+"Select For Update should work:"+e.getLocalizedMessage());
             }
 
             try{
                 long count = jdbcIdo_.existsObject("SelectForUpdateExistSingle",vo2);
-                assertTrue("One object should have been returned", count==1);
+                assertTrue("One object should have been returned, got "+count, count==1);
             } catch (Exception e) {
                 fail(method+"Select For Update should work:"+e.getLocalizedMessage());
             }
             
             try{
             	long count = jdbcIdo_.existsObject("SelectForUpdateExistAll",vo2);
-                assertTrue("Two objects should have been returned", count==2);
+                assertTrue("Two objects should have been returned, got "+count, count==2);
             } catch (Exception e) {
                 fail(method+"Select For Update should work:"+e.getLocalizedMessage());
             }
@@ -224,7 +224,7 @@ public class SelectForUpdateTest extends TestCase {
                 fail(method+"Commit should have worked.");
             }
         } else {
-            fail(dbDriver_+" does not support Select For Update");
+        	logger.error(dbDriver_+" does not support Select For Update");
         }
     }    
  

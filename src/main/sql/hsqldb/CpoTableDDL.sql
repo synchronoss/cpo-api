@@ -22,8 +22,6 @@
 ----------------------------------------------
 -- CPO_QUERY_PARAMETER
 ----------------------------------------------
-DROP TABLE  IF EXISTS CPO_QUERY_PARAMETER
-;
 CREATE TABLE CPO_QUERY_PARAMETER (
        attribute_id         VARCHAR(36) NOT NULL,
        query_id             VARCHAR(36) NOT NULL,
@@ -36,8 +34,6 @@ CREATE TABLE CPO_QUERY_PARAMETER (
 ----------------------------------------------
 -- CPO_QUERY_PARAMETER_REV
 ----------------------------------------------
-DROP TABLE  IF EXISTS CPO_QUERY_PARAMETER_REV
-;
 CREATE TABLE CPO_QUERY_PARAMETER_REV (
        attribute_id         VARCHAR(36) NOT NULL,
        query_id             VARCHAR(36) NOT NULL,
@@ -51,8 +47,6 @@ CREATE TABLE CPO_QUERY_PARAMETER_REV (
 ----------------------------------------------
 -- CPO_ATTRIBUTE_MAP
 ----------------------------------------------
-DROP TABLE IF EXISTS CPO_ATTRIBUTE_MAP
-;
 CREATE TABLE CPO_ATTRIBUTE_MAP (
        attribute_id         VARCHAR(36) NOT NULL PRIMARY KEY,
        class_id             VARCHAR(36) NOT NULL,
@@ -70,8 +64,6 @@ CREATE TABLE CPO_ATTRIBUTE_MAP (
 ----------------------------------------------
 -- CPO_ATTRIBUTE_MAP_REV
 ----------------------------------------------
-DROP TABLE IF EXISTS CPO_ATTRIBUTE_MAP_REV
-;
 CREATE TABLE CPO_ATTRIBUTE_MAP_REV (
        attribute_id         VARCHAR(36) NOT NULL,
        class_id             VARCHAR(36) NOT NULL,
@@ -89,8 +81,6 @@ CREATE TABLE CPO_ATTRIBUTE_MAP_REV (
 ----------------------------------------------
 -- CPO_QUERY
 ----------------------------------------------
-DROP  TABLE IF EXISTS CPO_QUERY
-;
 CREATE TABLE CPO_QUERY (
        query_id             VARCHAR(36) NOT NULL PRIMARY KEY,
        group_id             VARCHAR(36) NOT NULL,
@@ -104,8 +94,6 @@ CREATE TABLE CPO_QUERY (
 ----------------------------------------------
 -- CPO_QUERY_REV
 ----------------------------------------------
-DROP  TABLE IF EXISTS CPO_QUERY_REV
-;
 CREATE TABLE CPO_QUERY_REV (
        query_id             VARCHAR(36) NOT NULL,
        group_id             VARCHAR(36) NOT NULL,
@@ -120,8 +108,6 @@ CREATE TABLE CPO_QUERY_REV (
 ----------------------------------------------
 -- CPO_QUERY_GROUP
 ----------------------------------------------
-DROP TABLE IF EXISTS CPO_QUERY_GROUP
-;
 CREATE TABLE CPO_QUERY_GROUP (
        group_id             VARCHAR(36) NOT NULL PRIMARY KEY,
        class_id             VARCHAR(36) NOT NULL,
@@ -134,8 +120,6 @@ CREATE TABLE CPO_QUERY_GROUP (
 ----------------------------------------------
 -- CPO_QUERY_GROUP_REV
 ----------------------------------------------
-DROP TABLE IF EXISTS CPO_QUERY_GROUP_REV
-;
 CREATE TABLE CPO_QUERY_GROUP_REV (
        group_id             VARCHAR(36) NOT NULL,
        class_id             VARCHAR(36) NOT NULL,
@@ -149,9 +133,6 @@ CREATE TABLE CPO_QUERY_GROUP_REV (
 ----------------------------------------------
 -- CPO_QUERY_TEXT
 ----------------------------------------------
-DROP TABLE IF EXISTS CPO_QUERY_TEXT
- ;
-
 CREATE TABLE CPO_QUERY_TEXT (
        text_id              VARCHAR(36) NOT NULL PRIMARY KEY,
        sql_text             VARCHAR(8000) NULL,
@@ -163,9 +144,6 @@ CREATE TABLE CPO_QUERY_TEXT (
 ----------------------------------------------
 -- CPO_QUERY_TEXT_REV
 ----------------------------------------------
-DROP TABLE IF EXISTS CPO_QUERY_TEXT_REV
- ;
-
 CREATE TABLE CPO_QUERY_TEXT_REV (
        text_id              VARCHAR(36) NOT NULL PRIMARY KEY,
        sql_text             VARCHAR(8000) NULL,
@@ -178,9 +156,6 @@ CREATE TABLE CPO_QUERY_TEXT_REV (
 ----------------------------------------------
 -- CPO_CLASS
 ----------------------------------------------
-DROP  TABLE IF EXISTS CPO_CLASS 
-;
-
 CREATE TABLE CPO_CLASS (
        class_id             VARCHAR(36) NOT NULL PRIMARY KEY,
        name                 VARCHAR(1023) NOT NULL,
@@ -191,9 +166,6 @@ CREATE TABLE CPO_CLASS (
 ----------------------------------------------
 -- CPO_CLASS
 ----------------------------------------------
-DROP  TABLE IF EXISTS CPO_CLASS_REV 
-;
-
 CREATE TABLE CPO_CLASS_REV (
        class_id             VARCHAR(36) NOT NULL PRIMARY KEY,
        name                 VARCHAR(1023) NOT NULL,

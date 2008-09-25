@@ -113,7 +113,7 @@ public class BlobTestTrx extends TestCase {
         metaPassword_ = b.getString(PROP_METAPASSWORD).trim();
         metaPrefix_ = b.getString(PROP_METAPREFIX).trim();
         
-        if ("org.hsqldb.jdbcDriver".equals(dbDriver_)){
+        if ("org.hsqldb.jdbcDriver".equals(dbDriver_) || "org.postgresql.Driver".equals(dbDriver_)){
             hasBlobSupport = false;
         }
         

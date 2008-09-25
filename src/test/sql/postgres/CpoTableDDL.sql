@@ -20,9 +20,9 @@
 -- */
 
 ----------------------------------------------
--- CPO_QUERY_PARAMETER
+-- TEST_CPO_QUERY_PARAMETER
 ----------------------------------------------
-CREATE TABLE CPO_QUERY_PARAMETER (
+CREATE TABLE TEST_CPO_QUERY_PARAMETER (
        attribute_id         VARCHAR(36) NOT NULL,
        query_id             VARCHAR(36) NOT NULL,
        seq_no               NUMERIC(9) NOT NULL,
@@ -32,9 +32,9 @@ CREATE TABLE CPO_QUERY_PARAMETER (
    ); 
 
 ----------------------------------------------
--- CPO_QUERY_PARAMETER_REV
+-- TEST_CPO_QUERY_PARAMETER_REV
 ----------------------------------------------
-CREATE TABLE CPO_QUERY_PARAMETER_REV (
+CREATE TABLE TEST_CPO_QUERY_PARAMETER_REV (
        attribute_id         VARCHAR(36) NOT NULL,
        query_id             VARCHAR(36) NOT NULL,
        seq_no               NUMERIC(9) NOT NULL,
@@ -45,9 +45,9 @@ CREATE TABLE CPO_QUERY_PARAMETER_REV (
    ); 
 
 ----------------------------------------------
--- CPO_ATTRIBUTE_MAP
+-- TEST_CPO_ATTRIBUTE_MAP
 ----------------------------------------------
-CREATE TABLE CPO_ATTRIBUTE_MAP (
+CREATE TABLE TEST_CPO_ATTRIBUTE_MAP (
        attribute_id         VARCHAR(36) NOT NULL PRIMARY KEY,
        class_id             VARCHAR(36) NOT NULL,
        column_name          VARCHAR(40) NOT NULL,
@@ -62,9 +62,9 @@ CREATE TABLE CPO_ATTRIBUTE_MAP (
 
 
 ----------------------------------------------
--- CPO_ATTRIBUTE_MAP_REV
+-- TEST_CPO_ATTRIBUTE_MAP_REV
 ----------------------------------------------
-CREATE TABLE CPO_ATTRIBUTE_MAP_REV (
+CREATE TABLE TEST_CPO_ATTRIBUTE_MAP_REV (
        attribute_id         VARCHAR(36) NOT NULL,
        class_id             VARCHAR(36) NOT NULL,
        column_name          VARCHAR(40) NOT NULL,
@@ -79,9 +79,9 @@ CREATE TABLE CPO_ATTRIBUTE_MAP_REV (
 );
 
 ----------------------------------------------
--- CPO_QUERY
+-- TEST_CPO_QUERY
 ----------------------------------------------
-CREATE TABLE CPO_QUERY (
+CREATE TABLE TEST_CPO_QUERY (
        query_id             VARCHAR(36) NOT NULL PRIMARY KEY,
        group_id             VARCHAR(36) NOT NULL,
        text_id              VARCHAR(36) NOT NULL,
@@ -92,9 +92,9 @@ CREATE TABLE CPO_QUERY (
 );
 
 ----------------------------------------------
--- CPO_QUERY_REV
+-- TEST_CPO_QUERY_REV
 ----------------------------------------------
-CREATE TABLE CPO_QUERY_REV (
+CREATE TABLE TEST_CPO_QUERY_REV (
        query_id             VARCHAR(36) NOT NULL,
        group_id             VARCHAR(36) NOT NULL,
        text_id              VARCHAR(36) NOT NULL,
@@ -106,9 +106,9 @@ CREATE TABLE CPO_QUERY_REV (
 );
 
 ----------------------------------------------
--- CPO_QUERY_GROUP
+-- TEST_CPO_QUERY_GROUP
 ----------------------------------------------
-CREATE TABLE CPO_QUERY_GROUP (
+CREATE TABLE TEST_CPO_QUERY_GROUP (
        group_id             VARCHAR(36) NOT NULL PRIMARY KEY,
        class_id             VARCHAR(36) NOT NULL,
        group_type           VARCHAR(10) NOT NULL,
@@ -118,9 +118,9 @@ CREATE TABLE CPO_QUERY_GROUP (
 );
 
 ----------------------------------------------
--- CPO_QUERY_GROUP_REV
+-- TEST_CPO_QUERY_GROUP_REV
 ----------------------------------------------
-CREATE TABLE CPO_QUERY_GROUP_REV (
+CREATE TABLE TEST_CPO_QUERY_GROUP_REV (
        group_id             VARCHAR(36) NOT NULL,
        class_id             VARCHAR(36) NOT NULL,
        group_type           VARCHAR(10) NOT NULL,
@@ -131,9 +131,9 @@ CREATE TABLE CPO_QUERY_GROUP_REV (
 );
 
 ----------------------------------------------
--- CPO_QUERY_TEXT
+-- TEST_CPO_QUERY_TEXT
 ----------------------------------------------
-CREATE TABLE CPO_QUERY_TEXT (
+CREATE TABLE TEST_CPO_QUERY_TEXT (
        text_id              VARCHAR(36) NOT NULL PRIMARY KEY,
        sql_text             VARCHAR(8000) NULL,
        description          VARCHAR(1023) NULL,
@@ -142,9 +142,9 @@ CREATE TABLE CPO_QUERY_TEXT (
 );
 
 ----------------------------------------------
--- CPO_QUERY_TEXT_REV
+-- TEST_CPO_QUERY_TEXT_REV
 ----------------------------------------------
-CREATE TABLE CPO_QUERY_TEXT_REV (
+CREATE TABLE TEST_CPO_QUERY_TEXT_REV (
        text_id              VARCHAR(36) NOT NULL PRIMARY KEY,
        sql_text             VARCHAR(8000) NULL,
        description          VARCHAR(1023) NULL,
@@ -154,9 +154,9 @@ CREATE TABLE CPO_QUERY_TEXT_REV (
 );
 
 ----------------------------------------------
--- CPO_CLASS
+-- TEST_CPO_CLASS
 ----------------------------------------------
-CREATE TABLE CPO_CLASS (
+CREATE TABLE TEST_CPO_CLASS (
        class_id             VARCHAR(36) NOT NULL PRIMARY KEY,
        name                 VARCHAR(1023) NOT NULL,
        userid               varchar(50), 
@@ -164,9 +164,9 @@ CREATE TABLE CPO_CLASS (
 );
 
 ----------------------------------------------
--- CPO_CLASS
+-- TEST_CPO_CLASS
 ----------------------------------------------
-CREATE TABLE CPO_CLASS_REV (
+CREATE TABLE TEST_CPO_CLASS_REV (
        class_id             VARCHAR(36) NOT NULL PRIMARY KEY,
        name                 VARCHAR(1023) NOT NULL,
        userid               varchar(50), 
@@ -177,31 +177,31 @@ CREATE TABLE CPO_CLASS_REV (
 ----------------------------------------------
 -- Primary Keys
 ----------------------------------------------
-ALTER TABLE CPO_QUERY_PARAMETER
+ALTER TABLE TEST_CPO_QUERY_PARAMETER
         ADD CONSTRAINT PK_CQP_ATTR_QRY_SEQ PRIMARY KEY (attribute_id, query_id, seq_no);
 
 ----------------------------------------------
 -- Foreign Keys
 ----------------------------------------------
-ALTER TABLE CPO_ATTRIBUTE_MAP
-       ADD CONSTRAINT FK_CAM_CLASS_ID FOREIGN KEY (class_id) REFERENCES CPO_CLASS(class_id);
+ALTER TABLE TEST_CPO_ATTRIBUTE_MAP
+       ADD CONSTRAINT FK_CAM_CLASS_ID FOREIGN KEY (class_id) REFERENCES TEST_CPO_CLASS(class_id);
 
-ALTER TABLE CPO_ATTRIBUTE_MAP
+ALTER TABLE TEST_CPO_ATTRIBUTE_MAP
        ADD CONSTRAINT UNIQUE_ATTR_CLASS UNIQUE(attribute_id,class_id);
 
-ALTER TABLE CPO_QUERY
-       ADD CONSTRAINT FK_CQ_GROUP_ID FOREIGN KEY (group_id) REFERENCES CPO_QUERY_GROUP(group_id);
+ALTER TABLE TEST_CPO_QUERY
+       ADD CONSTRAINT FK_CQ_GROUP_ID FOREIGN KEY (group_id) REFERENCES TEST_CPO_QUERY_GROUP(group_id);
 
-ALTER TABLE CPO_QUERY
-       ADD CONSTRAINT FK_CQ_TEXT_ID FOREIGN KEY (text_id) REFERENCES CPO_QUERY_TEXT(text_id);
+ALTER TABLE TEST_CPO_QUERY
+       ADD CONSTRAINT FK_CQ_TEXT_ID FOREIGN KEY (text_id) REFERENCES TEST_CPO_QUERY_TEXT(text_id);
 
-ALTER TABLE CPO_QUERY_GROUP
-       ADD CONSTRAINT FK_CQG_CLASS_ID FOREIGN KEY (class_id) REFERENCES CPO_CLASS(class_id);
+ALTER TABLE TEST_CPO_QUERY_GROUP
+       ADD CONSTRAINT FK_CQG_CLASS_ID FOREIGN KEY (class_id) REFERENCES TEST_CPO_CLASS(class_id);
 
-ALTER TABLE CPO_QUERY_PARAMETER
-       ADD CONSTRAINT FK_CQP_ATTRIBUTE_ID FOREIGN KEY (attribute_id) REFERENCES CPO_ATTRIBUTE_MAP(attribute_id);
+ALTER TABLE TEST_CPO_QUERY_PARAMETER
+       ADD CONSTRAINT FK_CQP_ATTRIBUTE_ID FOREIGN KEY (attribute_id) REFERENCES TEST_CPO_ATTRIBUTE_MAP(attribute_id);
 
-ALTER TABLE CPO_QUERY_PARAMETER
-       ADD CONSTRAINT FK_CQP_QUERY_ID FOREIGN KEY (query_id) REFERENCES CPO_QUERY(query_id);
+ALTER TABLE TEST_CPO_QUERY_PARAMETER
+       ADD CONSTRAINT FK_CQP_QUERY_ID FOREIGN KEY (query_id) REFERENCES TEST_CPO_QUERY(query_id);
 
 COMMIT;

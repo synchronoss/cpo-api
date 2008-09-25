@@ -2956,12 +2956,12 @@ public class JdbcCpoAdapter implements CpoAdapter {
     StringBuffer sqlBuffer = new StringBuffer();
     sqlBuffer.append("select ");
     sqlBuffer.append(
-        " innr.group_type,innr.name,innr.query_id,innr.query_seq query_seq,cqt.sql_text,innr.param_seq param_seq,  cam.attribute, cam.column_name, cam.column_type, innr.param_type ");
+        " innr.group_type,innr.name,innr.query_id,innr.query_seq as query_seq,cqt.sql_text,innr.param_seq as param_seq,  cam.attribute, cam.column_name, cam.column_type, innr.param_type ");
     sqlBuffer.append("from ");
     sqlBuffer.append(getDbTablePrefix());
     sqlBuffer.append("cpo_query_text cqt,  ");
     sqlBuffer.append(
-        "  (select cqg.group_type, cqg.name, cq.query_id, cq.seq_no query_seq,cqp.seq_no param_seq, cqp.attribute_id, cqp.param_type,cq.text_id,cq.seq_no,cqg.group_id ");
+        "  (select cqg.group_type, cqg.name, cq.query_id, cq.seq_no as query_seq,cqp.seq_no as param_seq, cqp.attribute_id, cqp.param_type,cq.text_id,cq.seq_no,cqg.group_id ");
     sqlBuffer.append("from ");
     sqlBuffer.append(getDbTablePrefix());
     sqlBuffer.append("cpo_query_group cqg, ");

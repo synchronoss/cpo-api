@@ -86,22 +86,74 @@
       </activation>
       <properties>
         <cpo.test.sqldir>src/test/sql/hsqldb</cpo.test.sqldir>
-		<cpo.db.user>sa</cpo.db.user>
-		<cpo.db.pswd>sa001</cpo.db.pswd>
+		<cpo.db.user>cpo</cpo.db.user>
+		<cpo.db.pswd>cpo</cpo.db.pswd>
         <cpo.db.host>localhost</cpo.db.host>
         <cpo.db.port></cpo.db.port>
-        <cpo.db.database>cpoTest</cpo.db.database>
+        <cpo.db.database>cpo</cpo.db.database>
         <cpo.db.url>jdbc:hsqldb:hsql://${cpo.db.host}/${cpo.db.database}</cpo.db.url>
-        <cpo.db.userurl>jdbc:mysql://${cpo.db.host}/${cpo.db.database};user=${cpo.db.user};password=${cpo.db.pswd}</cpo.db.userurl>
+        <cpo.db.userurl>jdbc:hsqldb:hsql://${cpo.db.host}/${cpo.db.database};user=${cpo.db.user};password=${cpo.db.pswd}</cpo.db.userurl>
         <cpo.db.driver>org.hsqldb.jdbcDriver</cpo.db.driver>
-		<cpo.meta.user>sa</cpo.meta.user>
-		<cpo.meta.pswd>sa001</cpo.meta.pswd>
+		<cpo.meta.user>cpometa</cpo.meta.user>
+		<cpo.meta.pswd>cpometa</cpo.meta.pswd>
         <cpo.meta.host>localhost</cpo.meta.host>
         <cpo.meta.port></cpo.meta.port>
-        <cpo.meta.database>cpoTest</cpo.meta.database>
-        <cpo.meta.url>jdbc:hsqldb:hsql://${cpo.db.host}/${cpo.db.database}</cpo.meta.url>
-        <cpo.meta.userurl>jdbc:mysql://${cpo.db.host}/${cpo.db.database};user=${cpo.db.user};password=${cpo.db.pswd}</cpo.meta.userurl>
+        <cpo.meta.database>cpometa</cpo.meta.database>
+        <cpo.meta.url>jdbc:hsqldb:hsql://${cpo.meta.host}/${cpo.meta.database}</cpo.meta.url>
+        <cpo.meta.userurl>jdbc:hsqldb:hsql://${cpo.meta.host}/${cpo.meta.database};user=${cpo.meta.user};password=${cpo.meta.pswd}</cpo.meta.userurl>
         <cpo.meta.driver>org.hsqldb.jdbcDriver</cpo.meta.driver>
+        <cpo.meta.prefix>TEST_</cpo.meta.prefix>
+      </properties>
+    </profile>
+    <profile>
+      <id>hsqldbfile</id>
+      <activation>
+        <activeByDefault>false</activeByDefault>
+      </activation>
+      <properties>
+        <cpo.test.sqldir>src/test/sql/hsqldb</cpo.test.sqldir>
+		<cpo.db.user>sa</cpo.db.user>
+		<cpo.db.pswd></cpo.db.pswd>
+        <cpo.db.host>localhost</cpo.db.host>
+        <cpo.db.port></cpo.db.port>
+        <cpo.db.database>src/test/sql/hsqldb/db/cpo</cpo.db.database>
+        <cpo.db.url>jdbc:hsqldb:file:${cpo.db.database}</cpo.db.url>
+        <cpo.db.userurl>jdbc:hsqldb:file:${cpo.db.database};user=${cpo.db.user};password=${cpo.db.pswd}</cpo.db.userurl>
+        <cpo.db.driver>org.hsqldb.jdbcDriver</cpo.db.driver>
+		<cpo.meta.user>sa</cpo.meta.user>
+		<cpo.meta.pswd></cpo.meta.pswd>
+        <cpo.meta.host>localhost</cpo.meta.host>
+        <cpo.meta.port></cpo.meta.port>
+        <cpo.meta.database>src/test/sql/hsqldb/db/cpometa</cpo.meta.database>
+        <cpo.meta.url>jdbc:hsqldb:file:${cpo.meta.database}</cpo.meta.url>
+        <cpo.meta.userurl>jdbc:hsqldb:file:${cpo.meta.database};user=${cpo.meta.user};password=${cpo.meta.pswd}</cpo.meta.userurl>
+        <cpo.meta.driver>org.hsqldb.jdbcDriver</cpo.meta.driver>
+        <cpo.meta.prefix>TEST_</cpo.meta.prefix>
+      </properties>
+    </profile>
+    <profile>
+      <id>postgres</id>
+      <activation>
+        <activeByDefault>false</activeByDefault>
+      </activation>
+      <properties>
+        <cpo.test.sqldir>src/test/sql/postgres</cpo.test.sqldir>
+		<cpo.db.user>cpo</cpo.db.user>
+		<cpo.db.pswd>cpo</cpo.db.pswd>
+        <cpo.db.host>localhost</cpo.db.host>
+        <cpo.db.port>5432</cpo.db.port>
+        <cpo.db.database>cpo</cpo.db.database>
+        <cpo.db.url>jdbc:postgresql://${cpo.db.host}:${cpo.db.port}/${cpo.db.database}</cpo.db.url>
+        <cpo.db.userurl>jdbc:postgresql://${cpo.db.host}:${cpo.db.port}/${cpo.db.database}?user=${cpo.db.user}&amp;password=${cpo.db.pswd}</cpo.db.userurl>
+        <cpo.db.driver>org.postgresql.Driver</cpo.db.driver>
+		<cpo.meta.user>cpometa</cpo.meta.user>
+		<cpo.meta.pswd>cpometa</cpo.meta.pswd>
+        <cpo.meta.host>localhost</cpo.meta.host>
+        <cpo.meta.port>5432</cpo.meta.port>
+        <cpo.meta.database>cpometa</cpo.meta.database>
+        <cpo.meta.url>jdbc:postgresql://${cpo.meta.host}:${cpo.meta.port}/${cpo.meta.database}</cpo.meta.url>
+        <cpo.meta.userurl>jdbc:postgresql://${cpo.meta.host}:${cpo.meta.port}/${cpo.meta.database}?user=${cpo.meta.user}&amp;password=${cpo.meta.pswd}</cpo.meta.userurl>
+        <cpo.meta.driver>org.postgresql.Driver</cpo.meta.driver>
         <cpo.meta.prefix>TEST_</cpo.meta.prefix>
       </properties>
     </profile>

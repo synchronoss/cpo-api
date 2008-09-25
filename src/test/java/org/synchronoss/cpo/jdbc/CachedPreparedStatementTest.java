@@ -98,10 +98,6 @@ public class CachedPreparedStatementTest extends TestCase {
         metaPassword_ = b.getString(PROP_METAPASSWORD).trim();
         metaPrefix_ = b.getString(PROP_METAPREFIX).trim();
         
-        if ("org.hsqldb.jdbcDriver".equals(dbDriver_)){
-        	hasCallSupport = false;
-        }
-
         try {
             jdbcIdo_ = new JdbcCpoAdapter(new JdbcDataSourceInfo(metaDriver_,metaUrl_, metaUser_, metaPassword_,1,1,false, metaPrefix_),new JdbcDataSourceInfo(dbDriver_,dbUrl_, dbUser_, dbPassword_,1,3,false));
             assertNotNull(method+"CpoAdapter is null", jdbcIdo_);

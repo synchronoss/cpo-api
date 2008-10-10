@@ -1,9 +1,3 @@
-delete from TEST_cpo_query_parameter;
-delete from TEST_cpo_attribute_map;
-delete from TEST_cpo_query;
-delete from TEST_cpo_query_text;
-delete from TEST_cpo_query_group;
-delete from TEST_cpo_class;
 delete from TEST_cpo_query_parameter where query_id = '2571de03-0a07-3238-018c-6cbc4cecaa2c';
 delete from TEST_cpo_query where query_id = '2571de03-0a07-3238-018c-6cbc4cecaa2c';
 delete from TEST_cpo_query where group_id = '256cfe18-0a07-3238-018c-6cbcccff836a';
@@ -213,6 +207,7 @@ insert into TEST_cpo_attribute_map (attribute_id, class_id, column_name, attribu
 insert into TEST_cpo_attribute_map (attribute_id, class_id, column_name, attribute, column_type, db_column, db_table,transform_class) values ('b079d37c-0a07-2346-00fb-cb70670a52a4','b079d2fa-0a07-2346-00fb-cb702782dbc4','attr_date','attrDate','DATE',null,null,null);
 insert into TEST_cpo_attribute_map (attribute_id, class_id, column_name, attribute, column_type, db_column, db_table,transform_class) values ('8f5d1c34-0a0e-1e77-0050-152f7c8719ee','b079d2fa-0a07-2346-00fb-cb702782dbc4','attr_datetime','attrDatetime','TIMESTAMP',null,null,null);
 insert into TEST_cpo_attribute_map (attribute_id, class_id, column_name, attribute, column_type, db_column, db_table,transform_class) values ('b079d386-0a07-2346-00fb-cb709f88f688','b079d2fa-0a07-2346-00fb-cb702782dbc4','attr_decimal','attrDecimal','DECIMAL',null,null,null);
+insert into TEST_cpo_attribute_map (attribute_id, class_id, column_name, attribute, column_type, db_column, db_table,transform_class) values ('e884cbea-c0a8-0103-00eb-5cdc95f3f974','b079d2fa-0a07-2346-00fb-cb702782dbc4','attr_double','attrDouble','DOUBLE','','','');
 insert into TEST_cpo_attribute_map (attribute_id, class_id, column_name, attribute, column_type, db_column, db_table,transform_class) values ('b079d386-0a07-2346-00fb-cb70d1452673','b079d2fa-0a07-2346-00fb-cb702782dbc4','attr_integer','attrInteger','INTEGER',null,null,'org.synchronoss.cpo.transform.jdbc.TransformNoOp');
 insert into TEST_cpo_attribute_map (attribute_id, class_id, column_name, attribute, column_type, db_column, db_table,transform_class) values ('b079d386-0a07-2346-00fb-cb708ff4c25f','b079d2fa-0a07-2346-00fb-cb702782dbc4','attr_numeric','attrNumeric','NUMERIC',null,null,null);
 insert into TEST_cpo_attribute_map (attribute_id, class_id, column_name, attribute, column_type, db_column, db_table,transform_class) values ('b079d386-0a07-2346-00fb-cb701e351cd9','b079d2fa-0a07-2346-00fb-cb702782dbc4','attr_smallint','attrSmallInt','SMALLINT','attr_smallint','value_object',null);
@@ -265,7 +260,7 @@ insert into TEST_cpo_query (query_id, group_id, text_id, seq_no) values ('6251b4
 insert into TEST_cpo_query_parameter (attribute_id, query_id, seq_no,param_type) values ('b079d30e-0a07-2346-00fb-cb70284b51ce','6251b40d-0a0e-0045-0036-50ed1c4d6a84','1','IN');
 insert into TEST_cpo_query_group (group_id, class_id, group_type, name) values ('6ace813c-0a0e-0043-00e4-d0cdec32bc22','b079d2fa-0a07-2346-00fb-cb702782dbc4','EXECUTE','TestExecuteObject');
 insert into TEST_cpo_query (query_id, group_id, text_id, seq_no) values ('6ace92a5-0a0e-0043-00e4-d0cd9cba8889','6ace813c-0a0e-0043-00e4-d0cdec32bc22','6ace397e-0a0e-0043-00e4-d0cd3e857349','0');
-insert into TEST_cpo_query_parameter (attribute_id, query_id, seq_no,param_type) values ('b079d386-0a07-2346-00fb-cb70d1452673','6ace92a5-0a0e-0043-00e4-d0cd9cba8889','1','OUT');
+insert into TEST_cpo_query_parameter (attribute_id, query_id, seq_no,param_type) values ('e884cbea-c0a8-0103-00eb-5cdc95f3f974','6ace92a5-0a0e-0043-00e4-d0cd9cba8889','1','OUT');
 insert into TEST_cpo_query_parameter (attribute_id, query_id, seq_no,param_type) values ('b079d386-0a07-2346-00fb-cb70d1452673','6ace92a5-0a0e-0043-00e4-d0cd9cba8889','2','IN');
 insert into TEST_cpo_query_parameter (attribute_id, query_id, seq_no,param_type) values ('b079d386-0a07-2346-00fb-cb70d1452673','6ace92a5-0a0e-0043-00e4-d0cd9cba8889','3','IN');
 insert into TEST_cpo_query_group (group_id, class_id, group_type, name) values ('8f676a85-0a0e-1e77-0050-152fd4abf546','b079d2fa-0a07-2346-00fb-cb702782dbc4','LIST','TestWhereRetrieve');
@@ -289,6 +284,6 @@ insert into TEST_cpo_query (query_id, group_id, text_id, seq_no) values ('d32c1c
 insert into TEST_cpo_query (query_id, group_id, text_id, seq_no) values ('d32e12a4-0a0e-0045-00ba-6c1319a1de72','d32c0ca6-0a0e-0045-00ba-6c13efc1e520','d329975c-0a0e-0045-00ba-6c1397d6e8c9','1');
 insert into TEST_cpo_query_group (group_id, class_id, group_type, name) values ('f398efae-0a07-2346-010d-4f27f58a3f44','b079d2fa-0a07-2346-00fb-cb702782dbc4','EXECUTE','TestExecuteObjectNoTransform');
 insert into TEST_cpo_query (query_id, group_id, text_id, seq_no) values ('f3990886-0a07-2346-010d-4f27f3a16567','f398efae-0a07-2346-010d-4f27f58a3f44','6ace397e-0a0e-0043-00e4-d0cd3e857349','0');
-insert into TEST_cpo_query_parameter (attribute_id, query_id, seq_no,param_type) values ('b079d386-0a07-2346-00fb-cb701e351cd9','f3990886-0a07-2346-010d-4f27f3a16567','1','OUT');
+insert into TEST_cpo_query_parameter (attribute_id, query_id, seq_no,param_type) values ('e884cbea-c0a8-0103-00eb-5cdc95f3f974','f3990886-0a07-2346-010d-4f27f3a16567','1','OUT');
 insert into TEST_cpo_query_parameter (attribute_id, query_id, seq_no,param_type) values ('b079d386-0a07-2346-00fb-cb701e351cd9','f3990886-0a07-2346-010d-4f27f3a16567','2','IN');
 insert into TEST_cpo_query_parameter (attribute_id, query_id, seq_no,param_type) values ('b079d386-0a07-2346-00fb-cb701e351cd9','f3990886-0a07-2346-010d-4f27f3a16567','3','IN');

@@ -30,6 +30,7 @@ import java.util.ResourceBundle;
 import junit.framework.TestCase;
 
 import org.synchronoss.cpo.CpoAdapter;
+import org.synchronoss.cpo.CpoAdapterBean;
 import org.synchronoss.cpo.CpoException;
 import org.synchronoss.cpo.CpoObject;
 import org.synchronoss.cpo.CpoTrxAdapter;
@@ -40,30 +41,9 @@ import org.synchronoss.cpo.CpoTrxAdapter;
  * @author david berry
  */
 public class RollbackTestTrx extends TestCase {
-    private static final String PROP_FILE="org.synchronoss.cpo.jdbc.jdbc";
-    private static final String PROP_DBDRIVER="dbDriver";
-    private static final String PROP_DBCONNECTION="dbUrl";
-    private static final String PROP_DBUSER="dbUser";
-    private static final String PROP_DBPASSWORD="dbPassword";
-    private static final String     PROP_METADRIVER = "metaDriver";
-    private static final String PROP_METACONNECTION = "metaUrl";
-    private static final String       PROP_METAUSER = "metaUser";
-    private static final String   PROP_METAPASSWORD = "metaPassword";
-    private static final String   PROP_METAPREFIX = "metaPrefix";
-
-    private String   metaPrefix_ = null;
-    private String      metaUrl_ = null;
-    private String   metaDriver_ = null;
-    private String     metaUser_ = null;
-    private String metaPassword_ = null;
-
 
     private CpoAdapter jdbcCpo_=null;
     private CpoTrxAdapter jdbcIdo_=null;
-    private String dbDriver_=null;
-    private String dbPassword_=null;
-    private String dbUrl_=null;
-    private String dbUser_=null;
 
     /**
      * Creates a new RollbackTest object.
@@ -79,21 +59,9 @@ public class RollbackTestTrx extends TestCase {
      */
     public void setUp() {
         String method="setUp:";
-        ResourceBundle b=PropertyResourceBundle.getBundle(PROP_FILE, Locale.getDefault(),
-                this.getClass().getClassLoader());
-        dbUrl_=b.getString(PROP_DBCONNECTION).trim();
-        dbDriver_=b.getString(PROP_DBDRIVER).trim();
-        dbUser_=b.getString(PROP_DBUSER).trim();
-        dbPassword_=b.getString(PROP_DBPASSWORD).trim();
-
-        metaUrl_ = b.getString(PROP_METACONNECTION).trim();
-        metaDriver_ = b.getString(PROP_METADRIVER).trim();
-        metaUser_ = b.getString(PROP_METAUSER).trim();
-        metaPassword_ = b.getString(PROP_METAPASSWORD).trim();
-        metaPrefix_ = b.getString(PROP_METAPREFIX).trim();
         
         try {
-            jdbcCpo_ = new JdbcCpoAdapter(new JdbcDataSourceInfo(metaDriver_,metaUrl_, metaUser_, metaPassword_,1,1,false, metaPrefix_),new JdbcDataSourceInfo(dbDriver_,dbUrl_, dbUser_, dbPassword_,1,2,false));
+          jdbcCpo_ = new JdbcCpoFactory().newCpoAdapter();
             jdbcIdo_ = jdbcCpo_.getCpoTrxAdapter();
             assertNotNull(method+"CpoAdapter is null", jdbcIdo_);
         } catch(Exception e) {
@@ -131,7 +99,7 @@ public class RollbackTestTrx extends TestCase {
     /**
      * DOCUMENT ME!
      */
-    public void testRollbackProcessUpdateCollection() {
+    public void testTrxRollbackProcessUpdateCollection() {
         String method = "testRollbackProcessUpdateCollection:";
         ValueObject vo = new ValueObject(2);
         ValueObject vo2 = new ValueObject(1);
@@ -164,7 +132,7 @@ public class RollbackTestTrx extends TestCase {
     /**
      * DOCUMENT ME!
      */
-    public void testSingleRollback() {
+    public void testTrxSingleRollback() {
         String method = "testSingleRollback:";
         ValueObject vo = new ValueObject(2);
         try{
@@ -191,7 +159,7 @@ public class RollbackTestTrx extends TestCase {
     /**
      * DOCUMENT ME!
      */
-    public void testRollbackTransactObjects() {
+    public void testTrxRollbackTransactObjects() {
         String method = "testRollbackProcessUpdateCollection:";
         ValueObject vo = new ValueObject(2);
         ValueObject vo2 = new ValueObject(1);

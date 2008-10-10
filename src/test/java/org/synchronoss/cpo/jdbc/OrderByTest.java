@@ -40,29 +40,8 @@ import org.synchronoss.cpo.CpoOrderBy;
  * @author david berry
  */
 public class OrderByTest extends TestCase {
-    private static final String PROP_FILE="org.synchronoss.cpo.jdbc.jdbc";
-    private static final String PROP_DBDRIVER="dbDriver";
-    private static final String PROP_DBCONNECTION="dbUrl";
-    private static final String PROP_DBUSER="dbUser";
-    private static final String PROP_DBPASSWORD="dbPassword";
-    private static final String     PROP_METADRIVER = "metaDriver";
-    private static final String PROP_METACONNECTION = "metaUrl";
-    private static final String       PROP_METAUSER = "metaUser";
-    private static final String   PROP_METAPASSWORD = "metaPassword";
-    private static final String   PROP_METAPREFIX = "metaPrefix";
-
-    private String   metaPrefix_ = null;
-    private String      metaUrl_ = null;
-    private String   metaDriver_ = null;
-    private String     metaUser_ = null;
-    private String metaPassword_ = null;
-
 
     private CpoAdapter jdbcIdo_=null;
-    private String dbDriver_=null;
-    private String dbPassword_=null;
-    private String dbUrl_=null;
-    private String dbUser_=null;
     private ArrayList<ValueObject> al = new ArrayList<ValueObject>();
 
     /**
@@ -79,21 +58,9 @@ public class OrderByTest extends TestCase {
      */
     public void setUp() {
         String method="setUp:";
-        ResourceBundle b=PropertyResourceBundle.getBundle(PROP_FILE, Locale.getDefault(),
-                this.getClass().getClassLoader());
-        dbUrl_=b.getString(PROP_DBCONNECTION).trim();
-        dbDriver_=b.getString(PROP_DBDRIVER).trim();
-        dbUser_=b.getString(PROP_DBUSER).trim();
-        dbPassword_=b.getString(PROP_DBPASSWORD).trim();
-
-        metaUrl_ = b.getString(PROP_METACONNECTION).trim();
-        metaDriver_ = b.getString(PROP_METADRIVER).trim();
-        metaUser_ = b.getString(PROP_METAUSER).trim();
-        metaPassword_ = b.getString(PROP_METAPASSWORD).trim();
-        metaPrefix_ = b.getString(PROP_METAPREFIX).trim();
         
         try {
-            jdbcIdo_ = new CpoAdapterBean(new JdbcCpoAdapter(new JdbcDataSourceInfo(metaDriver_,metaUrl_, metaUser_, metaPassword_,1,1,false, metaPrefix_),new JdbcDataSourceInfo(dbDriver_,dbUrl_, dbUser_, dbPassword_,1,1,false)));
+          jdbcIdo_ = new CpoAdapterBean(new JdbcCpoFactory().newCpoAdapter());
             assertNotNull(method+"CpoAdapter is null", jdbcIdo_);
             // Add the test valueObjects
         } catch(Exception e) {

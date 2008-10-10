@@ -39,29 +39,12 @@ import org.synchronoss.cpo.CpoAdapterBean;
  */
 public class ExecuteTest extends TestCase {
     private static Logger logger = Logger.getLogger(ExecuteTest.class.getName());
-    private static final String PROP_FILE="org.synchronoss.cpo.jdbc.jdbc";
+    private static final String PROP_FILE="jdbcCpoFactory";
     private static final String PROP_DBDRIVER="dbDriver";
-    private static final String PROP_DBCONNECTION="dbUrl";
-    private static final String PROP_DBUSER="dbUser";
-    private static final String PROP_DBPASSWORD="dbPassword";
-    private static final String     PROP_METADRIVER = "metaDriver";
-    private static final String PROP_METACONNECTION = "metaUrl";
-    private static final String       PROP_METAUSER = "metaUser";
-    private static final String   PROP_METAPASSWORD = "metaPassword";
-    private static final String   PROP_METAPREFIX = "metaPrefix";
-
-    private String   metaPrefix_ = null;
-    private String      metaUrl_ = null;
-    private String   metaDriver_ = null;
-    private String     metaUser_ = null;
-    private String metaPassword_ = null;
-
+    private static final String PROP_DB_CALLS_SUPPORTED="dbCallsSupported";
 
     private CpoAdapter jdbcIdo_=null;
     private String dbDriver_=null;
-    private String dbPassword_=null;
-    private String dbUrl_=null;
-    private String dbUser_=null;
     private boolean hasCallSupport = true;
 
     /**
@@ -80,26 +63,14 @@ public class ExecuteTest extends TestCase {
         String method="setUp:";
         ResourceBundle b=PropertyResourceBundle.getBundle(PROP_FILE, Locale.getDefault(),
                 this.getClass().getClassLoader());
-        dbUrl_=b.getString(PROP_DBCONNECTION).trim();
         dbDriver_=b.getString(PROP_DBDRIVER).trim();
-        dbUser_=b.getString(PROP_DBUSER).trim();
-        dbPassword_=b.getString(PROP_DBPASSWORD).trim();
-
-        metaUrl_ = b.getString(PROP_METACONNECTION).trim();
-        metaDriver_ = b.getString(PROP_METADRIVER).trim();
-        metaUser_ = b.getString(PROP_METAUSER).trim();
-        metaPassword_ = b.getString(PROP_METAPASSWORD).trim();
-        metaPrefix_ = b.getString(PROP_METAPREFIX).trim();
+        hasCallSupport = new Boolean(b.getString(PROP_DB_CALLS_SUPPORTED).trim());
         
         try {
-            jdbcIdo_ = new CpoAdapterBean(new JdbcCpoAdapter(new JdbcDataSourceInfo(metaDriver_,metaUrl_, metaUser_, metaPassword_,0,1,false, metaPrefix_),new JdbcDataSourceInfo(dbDriver_,dbUrl_, dbUser_, dbPassword_,1,1,false)));
+          jdbcIdo_ = new CpoAdapterBean(new JdbcCpoFactory().newCpoAdapter());
             assertNotNull(method+"CpoAdapter is null", jdbcIdo_);
         } catch(Exception e) {
             fail(method+e.getMessage());
-        }
-        
-        if ("org.hsqldb.jdbcDriver".equals(dbDriver_)){
-        	hasCallSupport = false;
         }
     }
 
@@ -123,7 +94,7 @@ public class ExecuteTest extends TestCase {
             try{
                 rvo = (ValueObject) jdbcIdo_.executeObject("TestExecuteObject",vo);
                 assertNotNull(method+"Returned Value object is null");
-                assertTrue("power(3,3)="+rvo.getAttrInteger(),rvo.getAttrInteger()==27);
+                assertTrue("power(3,3)="+rvo.getAttrDouble(),rvo.getAttrDouble()==27);
             } catch (Exception e) {
                 e.printStackTrace();
                 fail(method+e.getMessage());
@@ -135,7 +106,7 @@ public class ExecuteTest extends TestCase {
                 vo.setAttrSmallInt(3);
                 rvo = (ValueObject) jdbcIdo_.executeObject("TestExecuteObjectNoTransform",vo);
                 assertNotNull(method+"Returned Value object is null");
-                assertTrue("power(3,3)="+rvo.getAttrSmallInt(),rvo.getAttrSmallInt()==27);
+                assertTrue("power(3,3)="+rvo.getAttrDouble(),rvo.getAttrDouble()==27);
             } catch (Exception e) {
                 e.printStackTrace();
                 fail(method+e.getMessage());

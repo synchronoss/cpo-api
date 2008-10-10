@@ -47,8 +47,8 @@ public class ValueObject extends java.lang.Object implements java.io.Serializabl
 
     private int              attrInteger_ = 0;
     private int                  attrInt_ = 0;
-    private BigDecimal        attrDouble_ = null;
-    private BigDecimal         attrFloat_ = null;
+    private double        attrDouble_ = 0.0;
+    private float         attrFloat_ = 0;
     private String           attrVarChar_ = null;
     private String attrVarCharIgnoreCase_ = null;
     private String              attrChar_ = null;
@@ -95,11 +95,11 @@ public class ValueObject extends java.lang.Object implements java.io.Serializabl
         return attrInt_; 
     }
 
-    public BigDecimal getAttrDouble() {
+    public double getAttrDouble() {
         return attrDouble_; 
     }
 
-    public BigDecimal getAttrFloat() {
+    public double getAttrFloat() {
         return attrFloat_; 
     }
 
@@ -195,11 +195,11 @@ public class ValueObject extends java.lang.Object implements java.io.Serializabl
         attrInt_=attrInt; 
     }
 
-    public void setAttrDouble(BigDecimal attrDouble) {
+    public void setAttrDouble(double attrDouble) {
         attrDouble_=attrDouble; 
     }
 
-    public void setAttrFloat(BigDecimal attrFloat) {
+    public void setAttrFloat(float attrFloat) {
         attrFloat_=attrFloat; 
     }
 

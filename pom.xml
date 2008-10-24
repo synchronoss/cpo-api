@@ -63,7 +63,7 @@
     </snapshotRepository>
     <site>
       <id>components-site</id>
-      <url>scp://wiki.synchronoss.net/home/components/public_html</url>
+      <url>scp://wiki.synchronoss.net/home/components/public_html/cpo-sourceforge</url>
     </site>
   </distributionManagement>
   <scm>

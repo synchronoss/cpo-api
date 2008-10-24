@@ -16,6 +16,7 @@
         either version 2.1 of the License, or (at your option) any later version.</comments>
     </license>
   </licenses>
+<profiles>
   <profile>
     <id>DEPLOY</id>
     <build>
@@ -35,7 +36,8 @@
       </plugins>
     </build>
   </profile>
-  <issueManagement>
+</profiles>
+	  <issueManagement>
     <system>SourceForge</system>
     <url>http://sourceforge.net/projects/cpo</url>
   </issueManagement>

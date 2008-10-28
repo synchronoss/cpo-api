@@ -24,18 +24,32 @@
 package org.synchronoss.cpo.jdbc;
 
 
-import org.apache.log4j.Logger;
-import org.synchronoss.cpo.*;
+import java.sql.CallableStatement;
+import java.sql.Connection;
+import java.sql.DatabaseMetaData;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.BlockingQueue;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
-import java.sql.*;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Iterator;
+
+import org.apache.log4j.Logger;
+import org.synchronoss.cpo.CpoAdapter;
+import org.synchronoss.cpo.CpoException;
+import org.synchronoss.cpo.CpoObject;
+import org.synchronoss.cpo.CpoOrderBy;
+import org.synchronoss.cpo.CpoTrxAdapter;
+import org.synchronoss.cpo.CpoWhere;
 
 /**
  * JdbcCpoAdapter is an interface for a set of routines that are responsible for managing value
@@ -1414,13 +1428,16 @@ public class JdbcCpoAdapter implements CpoAdapter {
    *
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
-  /*
-      public <T,C> Iterator<T> retrieveObjects(String name, C criteria, T result, CpoWhere where,
-          Collection<JdbcCpoOrderBy> orderBy, int objectBufferSize) throws CpoException {
-          return new JdbcCpoIterator<T>(100);
-          //return processSelectGroup(name, criteria, result, where, orderBy, false);
-      }
-  */
+//    public <T,C> BlockingQueue<T> asyncRetrieveObjects(String name, C criteria, T result, CpoWhere where,
+//        Collection<JdbcCpoOrderBy> orderBy, int queueSize) throws CpoException {
+//      BlockingQueue<T> bq = null;
+//      try{
+//        bq = new ArrayBlockingQueue<T>(queueSize);
+//      } catch (Exception e) {
+//        throw new CpoException("Error processing retrieveObjectsImmediate: "+e.getLocalizedMessage());
+//      }
+//      return bq;
+//    }
 
   /**
    * Allows you to perform a series of object interactions with the database. This method
@@ -3099,14 +3116,6 @@ public class JdbcCpoAdapter implements CpoAdapter {
 
     return sb.toString();
   }
-
-//    public Class getSqlTypeClass(String javaSqlTypeName){
-//        return JavaSqlTypes.getSqlTypeClass(javaSqlTypeName);
-//    }
-
-//    public Collection getSqlTypes() {
-//        return JavaSqlTypes.getSqlTypes();
-//    }
 
   /**
    * Provides a mechanism for the user to obtain a CpoTrxAdapter object. This object allows the

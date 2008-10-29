@@ -3,7 +3,7 @@
   <groupId>org.synchronoss</groupId>
   <artifactId>cpo</artifactId>
   <name>cpo</name>
-  <version>3.3-SNAPSHOT</version>
+  <version>3.3</version>
   <description>CPO is a persistence layer that is thin wrapper around JDBC that consumes and
     produces POJOs</description>
   <licenses>
@@ -18,7 +18,7 @@
   </licenses>
 <profiles>
   <profile>
-    <id>DEPLOY</id>
+    <id>RELEASE</id>
     <build>
       <plugins>
         <plugin>
@@ -69,9 +69,9 @@
     </site>
   </distributionManagement>
   <scm>
-    <connection>scm:svn:https://cpo.svn.sourceforge.net/svnroot/cpo/api/trunk</connection>
-    <developerConnection>scm:svn:https://cpo.svn.sourceforge.net/svnroot/cpo/api/trunk</developerConnection>
-    <url>https://cpo.svn.sourceforge.net/svnroot/cpo/api/trunk</url>
+    <connection>scm:svn:https://cpo.svn.sourceforge.net/svnroot/cpo/api/tags/cpo-3.3</connection>
+    <developerConnection>scm:svn:https://cpo.svn.sourceforge.net/svnroot/cpo/api/tags/cpo-3.3</developerConnection>
+    <url>https://cpo.svn.sourceforge.net/svnroot/cpo/api/tags/cpo-3.3</url>
   </scm>
   <build>
     <testResources>
@@ -96,7 +96,7 @@
           <configuration>
             <goals>deploy</goals>
             <useReleaseProfile>false</useReleaseProfile>
-            <arguments>-PDEPLOY,defaultdb</arguments>
+            <arguments>-PRELEASE,oracle</arguments>
           </configuration>
         </plugin>
         <plugin>

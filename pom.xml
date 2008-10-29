@@ -18,7 +18,7 @@
   </licenses>
 <profiles>
   <profile>
-    <id>RELEASE</id>
+    <id>DEPLOY</id>
     <build>
       <plugins>
         <plugin>
@@ -96,7 +96,7 @@
           <configuration>
             <goals>deploy</goals>
             <useReleaseProfile>false</useReleaseProfile>
-            <arguments>-PRELEASE,oracle</arguments>
+            <arguments>-PDEPLOY,oracle</arguments>
           </configuration>
         </plugin>
         <plugin>

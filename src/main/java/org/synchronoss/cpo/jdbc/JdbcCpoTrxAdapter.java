@@ -23,6 +23,7 @@ package org.synchronoss.cpo.jdbc;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.HashMap;
 
 import javax.sql.DataSource;
 
@@ -33,12 +34,23 @@ public class JdbcCpoTrxAdapter extends JdbcCpoAdapter implements CpoTrxAdapter {
     /** Version Id for this class. */
     private static final long serialVersionUID=1L;
     
+    /**
+     * DOCUMENT ME!
+     */
+    // Default Connection. Only used JdbcCpoTrxAdapter
+    private Connection writeConnection_ = null;
+
+    // map to keep track of busy connections
+    private static HashMap<Connection, Connection> busyMap_ = new HashMap<Connection,Connection>();
+    
+    
     @SuppressWarnings("unused")
     private JdbcCpoTrxAdapter(){}
     
     protected JdbcCpoTrxAdapter(DataSource metaSource, String metaSourceName, Connection c, 
                     boolean batchSupported, String dbTablePrefix) throws CpoException {
-            super(metaSource, metaSourceName, c, batchSupported, dbTablePrefix);
+            super(metaSource, metaSourceName, batchSupported, dbTablePrefix);
+            setStaticConnection(c);
             // TODO Auto-generated constructor stub
     }
 
@@ -123,6 +135,49 @@ public class JdbcCpoTrxAdapter extends JdbcCpoAdapter implements CpoTrxAdapter {
         	}
         } catch (Exception e) {}
     }
+    
+    @Override
+    protected Connection getStaticConnection() throws CpoException {
+      if (writeConnection_!=null){
+        if (isConnectionBusy(writeConnection_)){
+          throw new CpoException("Error Connection Busy");
+        } else {
+          setConnectionBusy(writeConnection_);
+        }
+      }
+      return writeConnection_;
+    }
 
+    @Override
+    protected boolean isStaticConnection(Connection c) {
+      return (writeConnection_==c);  
+    }
+    
+    @Override
+    protected void setStaticConnection(Connection c) {
+      writeConnection_ = c;
+    }
+
+    @Override
+    protected boolean isConnectionBusy(Connection c) {
+      synchronized(busyMap_){
+        Connection test = busyMap_.get(c);
+        return test!=null;
+      }
+    }
+
+    @Override
+    protected void setConnectionBusy(Connection c) {
+      synchronized(busyMap_){
+        busyMap_.put(c,c);
+      }
+    }
+    
+    @Override
+    protected void clearConnectionBusy(Connection c) {
+      synchronized(busyMap_){
+        busyMap_.remove(c);
+      }
+    }
     
 }

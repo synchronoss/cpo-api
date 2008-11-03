@@ -118,8 +118,6 @@ public class JdbcCpoAdapter implements CpoAdapter {
    */
   private static final String EXECUTE_GROUP = GROUP_IDS[CpoAdapter.EXECUTE];
 
-  private static HashMap<Connection, Connection> busyMap_ = new HashMap<Connection,Connection>();
-  
   // Metadata Cache Objects
 
   
@@ -129,13 +127,6 @@ public class JdbcCpoAdapter implements CpoAdapter {
   private static HashMap<String, HashMap<String, JdbcMetaClass<?>>> dataSourceMap_ = new HashMap<String, HashMap<String, JdbcMetaClass<?>>>(); // Contains the
   // metaClassMap for
   // each datasource
-
-  // Default Connection. Only used for one constructor.
-
-  /**
-   * DOCUMENT ME!
-   */
-  private Connection writeConnection_ = null;
 
   /**
    * DOCUMENT ME!
@@ -244,11 +235,10 @@ public class JdbcCpoAdapter implements CpoAdapter {
     processDatabaseMetaData();
   }
 
-  protected JdbcCpoAdapter(DataSource metaSource, String metaSourceName, Connection c, boolean batchSupported, String dbTablePrefix)
+  protected JdbcCpoAdapter(DataSource metaSource, String metaSourceName, boolean batchSupported, String dbTablePrefix)
       throws CpoException {
     setDbTablePrefix(dbTablePrefix);
     setMetaDataSource(metaSource);
-    setStaticConnection(c);
     setMetaDataSourceName(metaSourceName);
     batchUpdatesSupported_ = batchSupported;
   }
@@ -1914,22 +1904,20 @@ public class JdbcCpoAdapter implements CpoAdapter {
   }
 
   protected Connection getStaticConnection() throws CpoException {
-    if (writeConnection_!=null){
-      if (isConnectionBusy(writeConnection_)){
-        throw new CpoException("Error Connection Busy");
-      } else {
-        setConnectionBusy(writeConnection_);
-      }
-    }
-    return writeConnection_;
+    // do nothing for JdbcCpoAdapter
+    // overridden by JdbcTrxAdapter
+   return null;
   }
 
   protected boolean isStaticConnection(Connection c) {
-    return (writeConnection_==c);  
+    // do nothing for JdbcCpoAdapter
+    // overridden by JdbcTrxAdapter
+    return false;  
   }
   
   protected void setStaticConnection(Connection c) {
-    writeConnection_ = c;
+    // do nothing for JdbcCpoAdapter
+    // overridden by JdbcTrxAdapter
   }
 
   /**
@@ -3258,22 +3246,19 @@ public class JdbcCpoAdapter implements CpoAdapter {
   }
 
   protected boolean isConnectionBusy(Connection c) {
-    synchronized(busyMap_){
-      Connection test = busyMap_.get(c);
-      return test!=null;
-    }
+    // do nothing for JdbcCpoAdapter
+    // overridden by JdbcTrxAdapter
+    return false;
   }
 
   protected void setConnectionBusy(Connection c) {
-    synchronized(busyMap_){
-      busyMap_.put(c,c);
-    }
+    // do nothing for JdbcCpoAdapter
+    // overridden by JdbcTrxAdapter
   }
   
   protected void clearConnectionBusy(Connection c) {
-    synchronized(busyMap_){
-      busyMap_.remove(c);
-    }
+    // do nothing for JdbcCpoAdapter
+    // overridden by JdbcTrxAdapter
   }
     
 }

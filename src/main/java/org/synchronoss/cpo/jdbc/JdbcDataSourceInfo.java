@@ -62,7 +62,8 @@ public class JdbcDataSourceInfo {
 	/**
 	 * 
 	 */
-	private JdbcDataSourceInfo() {
+	@SuppressWarnings("unused")
+  private JdbcDataSourceInfo() {
 		super();
 	}
         

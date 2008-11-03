@@ -44,6 +44,7 @@ public class JdbcCpoOrderBy implements CpoOrderBy {
     private String attribute;
     private String function;
 
+    @SuppressWarnings("unused")
     private JdbcCpoOrderBy(){
     }
 

@@ -23,14 +23,10 @@
 package org.synchronoss.cpo.jdbc;
 
 import java.util.ArrayList;
-import java.util.Locale;
-import java.util.PropertyResourceBundle;
-import java.util.ResourceBundle;
 
 import junit.framework.TestCase;
 
 import org.synchronoss.cpo.CpoAdapter;
-import org.synchronoss.cpo.CpoAdapterBean;
 import org.synchronoss.cpo.CpoException;
 import org.synchronoss.cpo.CpoObject;
 import org.synchronoss.cpo.CpoTrxAdapter;
@@ -61,7 +57,7 @@ public class RollbackTestTrx extends TestCase {
         String method="setUp:";
         
         try {
-          jdbcCpo_ = new JdbcCpoFactory().newCpoAdapter();
+          jdbcCpo_ = JdbcCpoFactory.getCpoAdapter();
             jdbcIdo_ = jdbcCpo_.getCpoTrxAdapter();
             assertNotNull(method+"CpoAdapter is null", jdbcIdo_);
         } catch(Exception e) {

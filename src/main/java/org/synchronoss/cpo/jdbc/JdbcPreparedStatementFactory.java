@@ -56,6 +56,7 @@ public class JdbcPreparedStatementFactory implements CpoReleasible {
     
     private PreparedStatement ps_ = null;
     
+    @SuppressWarnings("unused")
     private JdbcPreparedStatementFactory(){}
     
     private ArrayList<CpoReleasible> releasibles = new ArrayList<CpoReleasible>();

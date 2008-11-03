@@ -24,10 +24,6 @@
 
 package org.synchronoss.cpo.jdbc;
 
-import java.util.Locale;
-import java.util.PropertyResourceBundle;
-import java.util.ResourceBundle;
-
 import junit.framework.TestCase;
 
 import org.synchronoss.cpo.CpoAdapter;
@@ -61,7 +57,7 @@ public class ExistObjectTest extends TestCase {
         String method = "setUp:";
         
         try{
-          jdbcIdo_ = new CpoAdapterBean(new JdbcCpoFactory().newCpoAdapter());
+          jdbcIdo_ = new CpoAdapterBean(JdbcCpoFactory.getCpoAdapter());
             assertNotNull(method+"IdoAdapter is null",jdbcIdo_);
         } catch (Exception e) {
             fail(method+e.getMessage());

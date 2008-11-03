@@ -26,14 +26,14 @@ package org.synchronoss.cpo.jdbc;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Locale;
-import java.util.PropertyResourceBundle;
-import java.util.ResourceBundle;
 
 import junit.framework.TestCase;
 
+import org.apache.log4j.Logger;
 import org.synchronoss.cpo.CpoAdapter;
 import org.synchronoss.cpo.CpoAdapterBean;
+import org.synchronoss.cpo.CpoResultSet;
+import org.synchronoss.cpo.CpoTrxAdapter;
 
 /**
  * RetrieveObjectTest is a JUnit test class for testing the
@@ -43,7 +43,7 @@ import org.synchronoss.cpo.CpoAdapterBean;
  */
 
 public class RetrieveObjectTest extends TestCase {
-    
+  private static Logger logger = Logger.getLogger(RetrieveObjectTest.class.getName());
     private CpoAdapter jdbcIdo_ = null;
     
     private ArrayList<ValueObject> al = new ArrayList<ValueObject>();
@@ -64,7 +64,7 @@ public class RetrieveObjectTest extends TestCase {
         String method = "setUp:";
         
         try{
-          jdbcIdo_ = new CpoAdapterBean(new JdbcCpoFactory().newCpoAdapter());
+          jdbcIdo_ = JdbcCpoFactory.getCpoAdapter();
             assertNotNull(method+"IdoAdapter is null",jdbcIdo_);
         } catch (Exception e) {
             fail(method+e.getMessage());
@@ -76,6 +76,11 @@ public class RetrieveObjectTest extends TestCase {
         al.add(new ValueObject(3));
         al.add(new ValueObject(4));
         al.add(new ValueObject(5));
+        al.add(new ValueObject(6));
+        al.add(new ValueObject(7));
+        al.add(new ValueObject(8));
+        al.add(new ValueObject(9));
+        al.add(new ValueObject(10));
         try{
             jdbcIdo_.insertObjects("TestOrderByInsert",al);
         } catch (Exception e) {
@@ -85,20 +90,157 @@ public class RetrieveObjectTest extends TestCase {
     }
     
     public void testRetrieveObjects() {
-        String method = "testOrderByAscending:";
+        String method = "testRetrieveObjects:";
         Collection<ValueObject> col = null;
         
         
         try{
             ValueObject valObj = new ValueObject();
             col = jdbcIdo_.retrieveObjects(null,valObj,valObj,null,null);
-            assertTrue("Col size is "+col.size(), col.size()==5);
+            assertTrue("Col size is "+col.size(), col.size()==al.size());
 
         } catch (Exception e) {
             e.printStackTrace();
             fail(method+e.getMessage());
         }
     }
+    
+    public void testRetrieveObjectsNoWaitSize2() {
+      String method = "testRetrieveObjectsNoWaitSize2:";
+      CpoResultSet<ValueObject> crs = null;
+      int count=0;
+      
+      try{
+          ValueObject valObj = new ValueObject();
+          crs = jdbcIdo_.retrieveObjects(null,valObj,valObj,null,null, 2);
+          logger.debug("Returned from retrieveObjects");
+          for(ValueObject vo: crs){
+            count++;
+            logger.debug("Retrieved Object #"+count);
+          }
+          assertTrue("Result size is "+count, count==al.size());
+
+      } catch (Exception e) {
+          e.printStackTrace();
+          fail(method+e.getMessage());
+      }
+  }
+    public void testRetrieveObjectsNoWaitSize9() {
+      String method = "testRetrieveObjectsNoWaitSize9:";
+      CpoResultSet<ValueObject> crs = null;
+      int count=0;
+      
+      try{
+          ValueObject valObj = new ValueObject();
+          crs = jdbcIdo_.retrieveObjects(null,valObj,valObj,null,null, 9);
+          for(ValueObject vo: crs){
+            count++;
+          }
+          assertTrue("Result size is "+count, count==al.size());
+
+      } catch (Exception e) {
+          e.printStackTrace();
+          fail(method+e.getMessage());
+      }
+  }
+    public void testRetrieveObjectsNoWaitSize10() {
+      String method = "testRetrieveObjectsNoWaitSize10:";
+      CpoResultSet<ValueObject> crs = null;
+      int count=0;
+      
+      try{
+          ValueObject valObj = new ValueObject();
+          crs = jdbcIdo_.retrieveObjects(null,valObj,valObj,null,null, 10);
+          for(ValueObject vo: crs){
+            count++;
+          }
+          assertTrue("Result size is "+count, count==al.size());
+
+      } catch (Exception e) {
+          e.printStackTrace();
+          fail(method+e.getMessage());
+      }
+  }
+    public void testRetrieveObjectsNoWaitSize11() {
+      String method = "testRetrieveObjectsNoWaitSize11:";
+      CpoResultSet<ValueObject> crs = null;
+      int count=0;
+      
+      try{
+          ValueObject valObj = new ValueObject();
+          crs = jdbcIdo_.retrieveObjects(null,valObj,valObj,null,null, 11);
+          for(ValueObject vo: crs){
+            count++;
+          }
+          assertTrue("Result size is "+count, count==al.size());
+
+      } catch (Exception e) {
+          e.printStackTrace();
+          fail(method+e.getMessage());
+      }
+  }
+ 
+    public void testConnectionBusy() {
+      String method = "testConnectionBusy:";
+      CpoResultSet<ValueObject> crs = null;
+      int count=0;
+      CpoTrxAdapter trx=null;
+      
+      try{
+        trx = jdbcIdo_.getCpoTrxAdapter();
+
+        ValueObject valObj = new ValueObject();
+        crs = trx.retrieveObjects(null,valObj,valObj,null,null, 11);
+        
+        //start this trx
+        for(ValueObject vo: crs){
+          count++;
+          break;
+        }
+        
+        // Let's see if it lets me do two trxs at once
+        try{
+          Collection<ValueObject> coll = trx.retrieveObjects(null,valObj,valObj,null,null);
+          fail(method+"Cpo allowed me to reuse a busy connection");
+        } catch (Exception busy){
+          // THis should happen
+          logger.debug("Got the busy exception like expected");
+        }
+        
+        //cleanup the first trx
+        for(ValueObject vo: crs){
+          count++;
+        }
+        assertTrue("Result size is "+count, count==al.size());
+
+      } catch (Exception e) {
+          e.printStackTrace();
+          fail(method+e.getMessage());
+      } finally {
+        try {trx.close();} catch(Exception e){}
+      }
+  }
+
+    public void testRetrieveObjectsNoWaitSize20() {
+      String method = "testRetrieveObjectsNoWaitSize20:";
+      CpoResultSet<ValueObject> crs = null;
+      int count=0;
+      
+      try{
+          ValueObject valObj = new ValueObject();
+          crs = jdbcIdo_.retrieveObjects(null,valObj,valObj,null,null, 11);
+          logger.debug("Returned from retrieveObjects");
+          for(ValueObject vo: crs){
+            count++;
+            logger.debug("Retrieved Object #"+count);
+          }
+          assertTrue("Result size is "+count, count==al.size());
+
+      } catch (Exception e) {
+          e.printStackTrace();
+          fail(method+e.getMessage());
+      }
+  }
 
     public void testRetrieveObject(){
 
@@ -122,7 +264,7 @@ public class RetrieveObjectTest extends TestCase {
 
     public void testNullRetrieveObject(){
 
-        String method = "testRetrieveObject:";
+        String method = "testNullRetrieveObject:";
         ValueObject vo = new ValueObject(100);
         ValueObject rvo = null;
         

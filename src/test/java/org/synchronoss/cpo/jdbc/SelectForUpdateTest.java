@@ -41,8 +41,8 @@ import org.synchronoss.cpo.CpoTrxAdapter;
 public class SelectForUpdateTest extends TestCase {
 	private static final Logger logger = Logger.getLogger(SelectForUpdateTest.class.getName());
     private static final String PROP_FILE="jdbcCpoFactory";
-    private static final String PROP_DBDRIVER="dbDriver";
-    private static final String PROP_DB_SELECT4UPDATE="dbSelect4Update";
+    private static final String PROP_DBDRIVER="default.dbDriver";
+    private static final String PROP_DB_SELECT4UPDATE="default.dbSelect4Update";
 
     private CpoAdapter jdbcCpo_=null;
     private CpoTrxAdapter jdbcIdo_=null;
@@ -71,7 +71,7 @@ public class SelectForUpdateTest extends TestCase {
         hasSelect4UpdateSupport = new Boolean(b.getString(PROP_DB_SELECT4UPDATE).trim());
         
         try {
-          jdbcCpo_ = new JdbcCpoFactory().newCpoAdapter();
+          jdbcCpo_ = JdbcCpoFactory.getCpoAdapter();
             assertNotNull(method+"CpoAdapter is null", jdbcCpo_);
             jdbcIdo_ = jdbcCpo_.getCpoTrxAdapter();
             assertNotNull(method+"CpoTrxAdapter is null", jdbcIdo_);

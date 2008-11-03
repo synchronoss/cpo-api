@@ -59,9 +59,8 @@ public class JdbcDataSource implements DataSource {
     private Vector<Connection> availableConnections = null;
     private Vector<Connection>      busyConnections = null;
 
-    private JdbcDataSource(){
-    	
-    }
+    @SuppressWarnings("unused")
+    private JdbcDataSource(){}
 
     public JdbcDataSource(JdbcDataSourceInfo jdsi) throws SQLException {
     	setDataSourceInfo(jdsi);

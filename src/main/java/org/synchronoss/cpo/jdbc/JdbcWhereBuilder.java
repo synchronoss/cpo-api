@@ -51,6 +51,7 @@ public class JdbcWhereBuilder<T> implements INodeVisitor {
         return this.bindValues;
     }
 
+    @SuppressWarnings("unused")
     private JdbcWhereBuilder(){
     }
 

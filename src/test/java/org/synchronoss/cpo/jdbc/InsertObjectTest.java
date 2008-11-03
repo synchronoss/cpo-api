@@ -46,11 +46,9 @@ import org.synchronoss.cpo.CpoAdapterBean;
 public class InsertObjectTest extends TestCase {
     private static final String PROP_FILE = "jdbcCpoFactory";
 
-    private static final String     PROP_DBDRIVER = "dbDriver";
-    private static final String PROP_DB_MILLI_SUPPORTED="dbMilliSupport";
-    
-    private String   dbDriver_ = null;
-    
+    private static final String     PROP_DBDRIVER = "default.dbDriver";
+    private static final String PROP_DB_MILLI_SUPPORTED="default.dbMilliSupport";
+        
     private ArrayList<ValueObject> al = new ArrayList<ValueObject>();
 
     private CpoAdapter jdbcIdo_ = null;
@@ -72,12 +70,11 @@ public class InsertObjectTest extends TestCase {
     public void setUp() {
         String method = "setUp:";
         ResourceBundle b = PropertyResourceBundle.getBundle(PROP_FILE,Locale.getDefault(), this.getClass().getClassLoader());
-        dbDriver_ = b.getString(PROP_DBDRIVER).trim();
 
         hasMilliSupport = new Boolean(b.getString(PROP_DB_MILLI_SUPPORTED).trim());
         
         try{
-          jdbcIdo_ = new CpoAdapterBean(new JdbcCpoFactory().newCpoAdapter());
+          jdbcIdo_ = new CpoAdapterBean(JdbcCpoFactory.getCpoAdapter());
             assertNotNull(method+"IdoAdapter is null",jdbcIdo_);
         } catch (Exception e) {
             fail(method+e.getMessage());

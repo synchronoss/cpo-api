@@ -25,7 +25,6 @@
 package org.synchronoss.cpo.jdbc;
 
 import java.util.Locale;
-import java.util.MissingResourceException;
 import java.util.Properties;
 import java.util.PropertyResourceBundle;
 import java.util.ResourceBundle;
@@ -45,17 +44,17 @@ import org.synchronoss.cpo.CpoAdapterBean;
 public class ConstructorTest extends TestCase {
     private static final String PROP_FILE = "jdbcCpoFactory";
 
-    private static final String   PROP_DBDRIVER = "dbDriver";
-    private static final String      PROP_DBURL = "dbUrl";
-    private static final String      PROP_DBUSERURL = "dbUserUrl";
-    private static final String     PROP_DBUSER = "dbUser";
-    private static final String PROP_DBPASSWORD = "dbPassword";
-    private static final String     PROP_METADRIVER = "metaDriver";
-    private static final String PROP_METACONNECTION = "metaUrl";
-    private static final String       PROP_METAUSER = "metaUser";
-    private static final String    PROP_METAUSERURL = "metaUserUrl";
-    private static final String   PROP_METAPASSWORD = "metaPassword";
-    private static final String   PROP_TABLEPREFIX = "tablePrefix";
+    private static final String   PROP_DBDRIVER = "default.dbDriver";
+    private static final String      PROP_DBURL = "default.dbUrl";
+    private static final String      PROP_DBUSERURL = "default.dbUserUrl";
+    private static final String     PROP_DBUSER = "default.dbUser";
+    private static final String PROP_DBPASSWORD = "default.dbPassword";
+    private static final String     PROP_METADRIVER = "default.metaDriver";
+    private static final String PROP_METACONNECTION = "default.metaUrl";
+    private static final String       PROP_METAUSER = "default.metaUser";
+    private static final String    PROP_METAUSERURL = "default.metaUserUrl";
+    private static final String   PROP_METAPASSWORD = "default.metaPassword";
+    private static final String   PROP_TABLEPREFIX = "default.tablePrefix";
 
     private String   tablePrefix_ = null;
     private String      metaUrl_ = null;

@@ -67,6 +67,7 @@ public class JavaSqlMethod<T> extends java.lang.Object implements java.io.Serial
 	private static final Class<CallableStatement> csc = CallableStatement.class;
 	
     
+    @SuppressWarnings("unused")
     private JavaSqlMethod(){}
     
 

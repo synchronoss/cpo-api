@@ -24,9 +24,6 @@ package org.synchronoss.cpo.jdbc;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Locale;
-import java.util.PropertyResourceBundle;
-import java.util.ResourceBundle;
 
 import junit.framework.TestCase;
 
@@ -60,7 +57,7 @@ public class WhereTest extends TestCase {
         String method="setUp:";
         
         try {
-          jdbcIdo_ = new CpoAdapterBean(new JdbcCpoFactory().newCpoAdapter());
+          jdbcIdo_ = new CpoAdapterBean(JdbcCpoFactory.getCpoAdapter());
             assertNotNull(method+"CpoAdapter is null", jdbcIdo_);
         } catch(Exception e) {
             fail(method+e.getMessage());

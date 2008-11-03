@@ -1079,6 +1079,32 @@ public interface CpoAdapter extends java.io.Serializable {
         Collection<CpoOrderBy> orderBy) throws CpoException;
 
     /**
+     * Retrieves the Object from the datasource. The assumption is that the object exists in the
+     * datasource.
+     * @param name The filter name which tells the datasource which objects should be returned. The
+     *     name also signifies what data in the object will be  populated.
+     * @param criteria This is an object that has been defined within the metadata of the
+     *     datasource. If the class is not defined an exception will be thrown. If the object
+     *     does not exist in the datasource, an exception will be thrown. This object is used
+     *     to specify the parameters used to retrieve the  collection of objects.
+     * @param result This is an object that has been defined within the metadata of the datasource.
+     *     If the class is not defined an exception will be thrown. If the object does not
+     *     exist in the datasource, an exception will be thrown. This object is used to specify
+     *     the object type that will be returned in the  collection.
+     * @param where The CpoWhere object that defines the constraints that should be
+     *           used when retrieving objects
+     * @param orderBy The CpoOrderBy object that defines the order in which objects
+     *             should be returned
+     * @param the queue size of the buffer that it uses to send the objects from the producer to the 
+     *        consumer.
+     * @return A CpoResultSet that can be iterated through
+     *
+     * @throws CpoException Thrown if there are errors accessing the datasource
+     */
+    public <T,C> CpoResultSet<T> retrieveObjects(String name, C criteria, T result, CpoWhere where,
+        Collection<CpoOrderBy> orderBy, int queueSize) throws CpoException;
+
+    /**
      * Allows you to perform a series of object interactions with the database. This method
      * pre-dates CpoTrxAdapter and can be used without a programmer needing to remember to call
      * commit() or rollback(). 

@@ -69,7 +69,8 @@ public class JdbcPreparedStatement implements PreparedStatement {
 	
 	private PreparedStatement ps_ = null;
 	
-	private JdbcPreparedStatement(){
+	@SuppressWarnings("unused")
+  private JdbcPreparedStatement(){
 		
 	}
 	

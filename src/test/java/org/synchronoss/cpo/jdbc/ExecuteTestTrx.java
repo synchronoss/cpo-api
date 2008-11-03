@@ -40,8 +40,8 @@ import org.synchronoss.cpo.CpoAdapterBean;
 public class ExecuteTestTrx extends TestCase {
     private static Logger logger = Logger.getLogger(ExecuteTestTrx.class.getName());
     private static final String PROP_FILE="jdbcCpoFactory";
-    private static final String PROP_DBDRIVER="dbDriver";
-    private static final String PROP_DB_CALLS_SUPPORTED="dbCallsSupported";
+    private static final String PROP_DBDRIVER="default.dbDriver";
+    private static final String PROP_DB_CALLS_SUPPORTED="default.dbCallsSupported";
 
     private CpoAdapter jdbcIdo_=null;
     private String dbDriver_=null;
@@ -67,7 +67,7 @@ public class ExecuteTestTrx extends TestCase {
         hasCallSupport = new Boolean(b.getString(PROP_DB_CALLS_SUPPORTED).trim());
         
         try {
-          jdbcIdo_ = new CpoAdapterBean(new JdbcCpoFactory().newCpoAdapter());
+          jdbcIdo_ = new CpoAdapterBean(JdbcCpoFactory.getCpoAdapter());
             assertNotNull(method+"CpoAdapter is null", jdbcIdo_);
         } catch(Exception e) {
             fail(method+e.getMessage());
@@ -84,7 +84,7 @@ public class ExecuteTestTrx extends TestCase {
     /**
      * DOCUMENT ME!
      */
-    public void testExecute() {
+    public void testExecuteTrx() {
         if (hasCallSupport==true){
             String method = "testExecuteObject:";
             ValueObject vo = new ValueObject(1);

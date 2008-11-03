@@ -35,8 +35,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.BlockingQueue;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -45,9 +43,12 @@ import javax.sql.DataSource;
 
 import org.apache.log4j.Logger;
 import org.synchronoss.cpo.CpoAdapter;
+import org.synchronoss.cpo.CpoArrayResultSet;
+import org.synchronoss.cpo.CpoBlockingResultSet;
 import org.synchronoss.cpo.CpoException;
 import org.synchronoss.cpo.CpoObject;
 import org.synchronoss.cpo.CpoOrderBy;
+import org.synchronoss.cpo.CpoResultSet;
 import org.synchronoss.cpo.CpoTrxAdapter;
 import org.synchronoss.cpo.CpoWhere;
 
@@ -117,8 +118,11 @@ public class JdbcCpoAdapter implements CpoAdapter {
    */
   private static final String EXECUTE_GROUP = GROUP_IDS[CpoAdapter.EXECUTE];
 
+  private static HashMap<Connection, Connection> busyMap_ = new HashMap<Connection,Connection>();
+  
   // Metadata Cache Objects
 
+  
   /**
    * DOCUMENT ME!
    */
@@ -175,7 +179,7 @@ public class JdbcCpoAdapter implements CpoAdapter {
   private boolean metaEqualsWrite_ = false;
 
   private boolean batchUpdatesSupported_ = false;
-
+  
   protected JdbcCpoAdapter() {
   }
 
@@ -1428,16 +1432,14 @@ public class JdbcCpoAdapter implements CpoAdapter {
    *
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
-//    public <T,C> BlockingQueue<T> asyncRetrieveObjects(String name, C criteria, T result, CpoWhere where,
-//        Collection<JdbcCpoOrderBy> orderBy, int queueSize) throws CpoException {
-//      BlockingQueue<T> bq = null;
-//      try{
-//        bq = new ArrayBlockingQueue<T>(queueSize);
-//      } catch (Exception e) {
-//        throw new CpoException("Error processing retrieveObjectsImmediate: "+e.getLocalizedMessage());
-//      }
-//      return bq;
-//    }
+    public <T,C> CpoResultSet<T> retrieveObjects(String name, C criteria, T result, CpoWhere where,
+        Collection<CpoOrderBy> orderBy, int queueSize) throws CpoException {
+      CpoBlockingResultSet<T> resultSet = new CpoBlockingResultSet<T>(queueSize);
+      RetrieverThread<T,C> retrieverThread = new RetrieverThread<T,C>(name, criteria, result, where, orderBy, false, resultSet);
+        
+      retrieverThread.start();
+      return resultSet;
+    }
 
   /**
    * Allows you to perform a series of object interactions with the database. This method
@@ -1840,7 +1842,7 @@ public class JdbcCpoAdapter implements CpoAdapter {
    * @throws CpoException DOCUMENT ME!
    */
   protected Connection getReadConnection() throws CpoException {
-    Connection connection = writeConnection_;
+    Connection connection = getStaticConnection();
 
     if (connection == null) {
       try {
@@ -1895,7 +1897,7 @@ public class JdbcCpoAdapter implements CpoAdapter {
    * @throws CpoException DOCUMENT ME!
    */
   protected Connection getWriteConnection() throws CpoException {
-    Connection connection = writeConnection_;
+    Connection connection = getStaticConnection();
 
     if (connection == null) {
       try {
@@ -1911,11 +1913,21 @@ public class JdbcCpoAdapter implements CpoAdapter {
     return connection;
   }
 
-  protected Connection getStaticConnection() {
+  protected Connection getStaticConnection() throws CpoException {
+    if (writeConnection_!=null){
+      if (isConnectionBusy(writeConnection_)){
+        throw new CpoException("Error Connection Busy");
+      } else {
+        setConnectionBusy(writeConnection_);
+      }
+    }
     return writeConnection_;
   }
 
-
+  protected boolean isStaticConnection(Connection c) {
+    return (writeConnection_==c);  
+  }
+  
   protected void setStaticConnection(Connection c) {
     writeConnection_ = c;
   }
@@ -2001,7 +2013,9 @@ public class JdbcCpoAdapter implements CpoAdapter {
    */
   protected void closeConnection(Connection connection) {
     try {
-      if ((connection != null) && (connection.isClosed() == false) && connection != writeConnection_) {
+      if (isStaticConnection(connection)){
+        clearConnectionBusy(connection);
+      } else if ((connection != null) && (connection.isClosed() == false)) {
         connection.close();
       }
     } catch (SQLException e) {
@@ -2015,7 +2029,7 @@ public class JdbcCpoAdapter implements CpoAdapter {
    */
   protected void commitConnection(Connection connection) {
     try {
-      if (connection != null && connection != writeConnection_) {
+      if (connection != null && !isStaticConnection(connection)) {
         connection.commit();
       }
     } catch (SQLException e) {
@@ -2029,7 +2043,7 @@ public class JdbcCpoAdapter implements CpoAdapter {
    */
   protected void rollbackConnection(Connection connection) {
     try {
-      if (connection != null && connection != writeConnection_) {
+      if (connection != null && !isStaticConnection(connection)) {
         connection.rollback();
       }
     } catch (SQLException e) {
@@ -2401,7 +2415,7 @@ public class JdbcCpoAdapter implements CpoAdapter {
                                                     CpoWhere where, Collection<CpoOrderBy> orderBy, boolean useRetrieve) throws CpoException {
     Connection con = null;
     Connection meta = null;
-    Collection<T> resultSet = new ArrayList<T>();
+    CpoArrayResultSet<T> resultSet = new CpoArrayResultSet<T>();
 
     try {
       con = getReadConnection();
@@ -2410,7 +2424,7 @@ public class JdbcCpoAdapter implements CpoAdapter {
       } else {
         meta = getMetaConnection();
       }
-      resultSet = processSelectGroup(name, criteria, result, where, orderBy, con, meta, useRetrieve);
+      processSelectGroup(name, criteria, result, where, orderBy, con, meta, useRetrieve, resultSet);
       // The select may have a for update clause on it
       // Since the connection is cached we need to get rid of this
       commitConnection(con);
@@ -2434,6 +2448,40 @@ public class JdbcCpoAdapter implements CpoAdapter {
     return resultSet;
   }
 
+  protected <T, C> void processSelectGroup(String name, C criteria, T result,
+      CpoWhere where, Collection<CpoOrderBy> orderBy, boolean useRetrieve, CpoResultSet<T> resultSet) throws CpoException {
+    Connection con = null;
+    Connection meta = null;
+
+    try {
+      con = getReadConnection();
+      if (metaEqualsWrite_) {
+        meta = con;
+      } else {
+        meta = getMetaConnection();
+      }
+      processSelectGroup(name, criteria, result, where, orderBy, con, meta, useRetrieve, resultSet);
+      // The select may have a for update clause on it
+      // Since the connection is cached we need to get rid of this
+      commitConnection(con);
+    } catch (Exception e) {
+      // Any exception has to try to rollback the work;
+      try {
+        rollbackConnection(con);
+      } catch (Exception re) {
+      }
+
+      if (e instanceof CpoException)
+        throw (CpoException) e;
+      else
+        throw new CpoException("processSelectGroup(String name, Object criteria, Object result,CpoWhere where, Collection orderBy, boolean useRetrieve) failed",
+            e);
+    } finally {
+      closeConnection(con);
+      closeConnection(meta);
+    }
+  }
+
   /**
    * DOCUMENT ME!
    *
@@ -2448,8 +2496,8 @@ public class JdbcCpoAdapter implements CpoAdapter {
    * @return DOCUMENT ME!
    * @throws CpoException DOCUMENT ME!
    */
-  protected <T, C> Collection<T> processSelectGroup(String name, C criteria, T result,
-                                                    CpoWhere where, Collection<CpoOrderBy> orderBy, Connection con, Connection metaCon, boolean useRetrieve)
+  protected <T, C> void processSelectGroup(String name, C criteria, T result,
+                                                    CpoWhere where, Collection<CpoOrderBy> orderBy, Connection con, Connection metaCon, boolean useRetrieve, CpoResultSet<T> resultSet)
       throws CpoException {
     Logger localLogger = criteria == null ? logger : Logger.getLogger(criteria.getClass().getName());
     PreparedStatement ps = null;
@@ -2462,7 +2510,7 @@ public class JdbcCpoAdapter implements CpoAdapter {
     int columnCount;
     int k;
     T obj;
-    ArrayList<T> resultSet = new ArrayList<T>();
+    //ArrayList<T> resultSet = new ArrayList<T>();
     Class<T> jmcClass;
     HashMap<String, JdbcAttribute> jmcAttrMap;
     //String sqlText=null;
@@ -2527,7 +2575,12 @@ public class JdbcCpoAdapter implements CpoAdapter {
             }
           }
 
-          resultSet.add(obj);
+          try {
+            resultSet.put(obj);
+          } catch (InterruptedException e) {
+            localLogger.error("Retriever Thread was interrupted", e);
+            break;
+          }
         }
 
         try {
@@ -2562,8 +2615,6 @@ public class JdbcCpoAdapter implements CpoAdapter {
         }
       }
     }
-
-    return resultSet;
   }
 
   /**
@@ -3168,5 +3219,61 @@ public class JdbcCpoAdapter implements CpoAdapter {
   public void setDbTablePrefix(String dbTablePrefix) {
     this.dbTablePrefix = dbTablePrefix;
   }
+  
+  private class RetrieverThread<T,C> extends Thread {
+    String name;
+    C criteria;
+    T result;
+    CpoWhere where;
+    Collection<CpoOrderBy> orderBy;
+    boolean useRetrieve;
+    CpoBlockingResultSet<T> resultSet;
+    Thread callingThread = null;
+    
+    public RetrieverThread(String name, C criteria, T result,
+        CpoWhere where, Collection<CpoOrderBy> orderBy, boolean useRetrieve, CpoBlockingResultSet<T> resultSet){
+      this.name=name;
+      this.criteria = criteria;
+      this.result = result;
+      this.where = where;
+      this.orderBy = orderBy;
+      this.useRetrieve = useRetrieve;
+      this.resultSet = resultSet;
+      callingThread = Thread.currentThread();
+    }
 
+    public void run() {
+      try {
+        processSelectGroup(name, criteria, result, where, orderBy, false, resultSet);
+      } catch (CpoException e) {
+        // TODO Auto-generated catch block
+        e.printStackTrace();
+      } finally {
+        resultSet.setDone(true);
+        // Interrupt the thread in case it is in a wait
+        callingThread.interrupt();
+
+      }
+    }
+  }
+
+  protected boolean isConnectionBusy(Connection c) {
+    synchronized(busyMap_){
+      Connection test = busyMap_.get(c);
+      return test!=null;
+    }
+  }
+
+  protected void setConnectionBusy(Connection c) {
+    synchronized(busyMap_){
+      busyMap_.put(c,c);
+    }
+  }
+  
+  protected void clearConnectionBusy(Connection c) {
+    synchronized(busyMap_){
+      busyMap_.remove(c);
+    }
+  }
+    
 }

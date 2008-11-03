@@ -34,7 +34,6 @@ import junit.framework.TestCase;
 
 import org.apache.log4j.Logger;
 import org.synchronoss.cpo.CpoAdapter;
-import org.synchronoss.cpo.CpoAdapterBean;
 import org.synchronoss.cpo.CpoTrxAdapter;
 
 
@@ -87,7 +86,7 @@ public class BlobTestTrx extends TestCase {
         hasBlobSupport = new Boolean(b.getString(PROP_DB_BLOBS_SUPPORTED).trim());
 
         try{
-            jdbcCpo_ = new JdbcCpoFactory().newCpoAdapter();
+            jdbcCpo_ = JdbcCpoFactory.getCpoAdapter();
             jdbcIdo_=jdbcCpo_.getCpoTrxAdapter();
             assertNotNull(method+"IdoAdapter is null",jdbcIdo_);
         } catch (Exception e) {
@@ -95,7 +94,7 @@ public class BlobTestTrx extends TestCase {
         }
     }
 
-    public void testGZipBlobInsertandDelete(){
+    public void testGZipBlobInsertandDeleteTrx(){
         
         if (hasBlobSupport){
         
@@ -178,7 +177,7 @@ public class BlobTestTrx extends TestCase {
     }
 
 
-    public void testBlobInsertandDelete(){
+    public void testBlobInsertandDeleteTrx(){
         
         if (hasBlobSupport){
         
@@ -292,7 +291,7 @@ public class BlobTestTrx extends TestCase {
     }
 */
     
-    public void testEmptyGZipBlobInsertandDelete(){
+    public void testEmptyGZipBlobInsertandDeleteTrx(){
         
         if (hasBlobSupport){
         
@@ -364,7 +363,7 @@ public class BlobTestTrx extends TestCase {
         
     }
 
-    public void testNullGZipBlobInsertandDelete(){
+    public void testNullGZipBlobInsertandDeleteTrx(){
         
         if (hasBlobSupport){
         

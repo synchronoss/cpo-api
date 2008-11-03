@@ -47,8 +47,8 @@ import org.synchronoss.cpo.CpoAdapterBean;
 public class BlobTest extends TestCase {
     private static Logger logger = Logger.getLogger(BlobTest.class.getName());
     private static final String PROP_FILE="jdbcCpoFactory";
-    private static final String PROP_DBDRIVER="dbDriver";
-    private static final String PROP_DB_BLOBS_SUPPORTED="dbBlobsSupported";
+    private static final String PROP_DBDRIVER="default.dbDriver";
+    private static final String PROP_DB_BLOBS_SUPPORTED="default.dbBlobsSupported";
     
     private String dbDriver_=null;
     private boolean hasBlobSupport=true;
@@ -84,7 +84,7 @@ public class BlobTest extends TestCase {
         hasBlobSupport = new Boolean(b.getString(PROP_DB_BLOBS_SUPPORTED).trim());
           
         try{
-            jdbcIdo_ = new CpoAdapterBean(new JdbcCpoFactory().newCpoAdapter());
+            jdbcIdo_ = new CpoAdapterBean(JdbcCpoFactory.getCpoAdapter());
             assertNotNull(method+"IdoAdapter is null",jdbcIdo_);
         } catch (Exception e) {
             fail(method+e.getMessage());

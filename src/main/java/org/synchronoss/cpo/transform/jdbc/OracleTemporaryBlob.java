@@ -37,6 +37,7 @@ import org.synchronoss.cpo.CpoReleasible;
 public class OracleTemporaryBlob implements CpoReleasible {
 	private BLOB blob_=null;
 
+  @SuppressWarnings("unused")
 	private OracleTemporaryBlob(){}
 	
 	public OracleTemporaryBlob(BLOB blob){

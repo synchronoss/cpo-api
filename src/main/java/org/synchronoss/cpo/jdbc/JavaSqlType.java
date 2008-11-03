@@ -44,6 +44,7 @@ public class JavaSqlType<T> extends java.lang.Object implements java.io.Serializ
     private Class<T>     javaClass_ = null;
 
     
+    @SuppressWarnings("unused")
     private JavaSqlType (){}
     
 

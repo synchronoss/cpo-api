@@ -96,6 +96,7 @@ public class CpoObject<T> extends java.lang.Object implements java.io.Serializab
     private T object_ = null;
     private String   name_ = null;
 
+    @SuppressWarnings("unused")
     private CpoObject(){}
 
     /**

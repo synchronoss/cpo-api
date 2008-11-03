@@ -33,6 +33,7 @@ public class JdbcCpoTrxAdapter extends JdbcCpoAdapter implements CpoTrxAdapter {
     /** Version Id for this class. */
     private static final long serialVersionUID=1L;
     
+    @SuppressWarnings("unused")
     private JdbcCpoTrxAdapter(){}
     
     protected JdbcCpoTrxAdapter(DataSource metaSource, String metaSourceName, Connection c, 
@@ -48,6 +49,8 @@ public class JdbcCpoTrxAdapter extends JdbcCpoAdapter implements CpoTrxAdapter {
 	    		writeConnection.commit();
 	    	} catch (SQLException se) {
 	    		throw new CpoException (se.getMessage());
+	    	} finally {
+	    	  clearConnectionBusy(writeConnection);
 	    	}
     	}else{
     		throw new CpoException ("Transaction Object has been Closed");
@@ -61,7 +64,9 @@ public class JdbcCpoTrxAdapter extends JdbcCpoAdapter implements CpoTrxAdapter {
 	    		writeConnection.rollback();
 	    	} catch (Exception e) {
 	    		throw new CpoException (e.getMessage());
-	    	}
+        } finally {
+          clearConnectionBusy(writeConnection);
+        }
     	}else{
     		throw new CpoException ("Transaction Object has been Closed");
     	}
@@ -75,20 +80,26 @@ public class JdbcCpoTrxAdapter extends JdbcCpoAdapter implements CpoTrxAdapter {
     		closed = (writeConnection == null || writeConnection.isClosed());
     	} catch (Exception e) {
     		throw new CpoException (e.getMessage());
+    	} finally {
+        clearConnectionBusy(writeConnection);
     	}
     	return closed;
     }
     
-    public void close() {
+    public void close() throws CpoException {
     	Connection writeConnection = getStaticConnection();
     	if (writeConnection != null) {
-    		try {
-    			writeConnection.rollback();
-    		} catch (Exception e) {}
-    		try {
-    			writeConnection.close();
-    			setStaticConnection(null);
-    		} catch (Exception e) {}
+    	  try {
+      		try {
+      			writeConnection.rollback();
+      		} catch (Exception e) {}
+      		try {
+      			writeConnection.close();
+      		} catch (Exception e) {}
+    	  } finally{
+          setStaticConnection(null);
+          clearConnectionBusy(writeConnection);
+    	  }
     	}
     }
     
@@ -96,10 +107,10 @@ public class JdbcCpoTrxAdapter extends JdbcCpoAdapter implements CpoTrxAdapter {
      * DOCUMENT ME!
      */
     protected void finalize() {
-    	Connection writeConnection = getStaticConnection();
-
+    	Connection writeConnection = null;
         try {
         	super.finalize();
+        	writeConnection = getStaticConnection();
         } catch (Throwable e) {}
         try {
         	if (writeConnection!=null && !writeConnection.isClosed()) {
@@ -113,4 +124,5 @@ public class JdbcCpoTrxAdapter extends JdbcCpoAdapter implements CpoTrxAdapter {
         } catch (Exception e) {}
     }
 
+    
 }

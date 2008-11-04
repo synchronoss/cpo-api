@@ -137,6 +137,7 @@ public class JdbcConnection implements Connection {
     int TRANSACTION_SERIALIZABLE = 8;
 
     // Lock down the default constructor
+    @SuppressWarnings("unused")
     private JdbcConnection() {
     }
 
@@ -641,7 +642,7 @@ public class JdbcConnection implements Connection {
      * @since 1.2
      * @see #setTypeMap
      */
-    public java.util.Map getTypeMap() throws SQLException {
+    public java.util.Map<String, Class<?>> getTypeMap() throws SQLException {
         return getConnection().getTypeMap();
     }
 
@@ -659,7 +660,7 @@ public class JdbcConnection implements Connection {
      * @since 1.2
      * @see #getTypeMap
      */
-    public void setTypeMap(java.util.Map map) throws SQLException {
+    public void setTypeMap(java.util.Map<String, Class<?>> map) throws SQLException {
         getConnection().setTypeMap(map);
     }
 

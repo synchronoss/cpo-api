@@ -104,7 +104,8 @@ public class TransformBlob {
                 newBlob = BLOB.createTemporary(jpsf.getPreparedStatement().getConnection(), false, BLOB.DURATION_SESSION);
                 jpsf.AddReleasible(new OracleTemporaryBlob(newBlob));
                 
-                OutputStream os = newBlob.getBinaryOutputStream();
+                //OutputStream os = newBlob.getBinaryOutputStream();
+                OutputStream os = newBlob.setBinaryStream(0);
                 os.write(attributeObject);
                 os.close();
             }

@@ -24,7 +24,6 @@
  
 package org.synchronoss.cpo.transform.jdbc;
 
-import org.apache.log4j.Logger;
 import org.synchronoss.cpo.CpoException;
 import org.synchronoss.cpo.jdbc.JdbcPreparedStatementFactory;
 
@@ -37,7 +36,6 @@ import org.synchronoss.cpo.jdbc.JdbcPreparedStatementFactory;
  */
 
 public class TransformCharArray {
-    private static Logger logger = Logger.getLogger(TransformCharArray.class.getName());
 
     public TransformCharArray(){}
 

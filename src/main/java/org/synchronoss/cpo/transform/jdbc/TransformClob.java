@@ -100,7 +100,7 @@ public class TransformClob {
                         newClob = CLOB.createTemporary(jpsf.getPreparedStatement().getConnection(), false, CLOB.DURATION_SESSION);
                         jpsf.AddReleasible(new OracleTemporaryClob(newClob));
                         
-                        Writer cos = newClob.getCharacterOutputStream(); 
+                        Writer cos = newClob.setCharacterStream(0); 
                         cos.write(attributeObject);
                         cos.close();
                     }

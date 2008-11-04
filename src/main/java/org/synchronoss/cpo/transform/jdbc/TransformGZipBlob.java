@@ -125,7 +125,7 @@ public class TransformGZipBlob {
                 newBlob = BLOB.createTemporary(jpsf.getPreparedStatement().getConnection(), false, BLOB.DURATION_SESSION);
                 jpsf.AddReleasible(new OracleTemporaryBlob(newBlob));
                 
-                OutputStream bos = newBlob.getBinaryOutputStream();
+                OutputStream bos = newBlob.setBinaryStream(0);
                 bos.write(baos.toByteArray());
                 bos.close();
             }

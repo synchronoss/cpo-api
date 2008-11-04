@@ -470,8 +470,8 @@ public JdbcDataSourceInfo(String driver, String url, Properties properties,
      */
     private String BuildDataSourceName(String url, Properties properties) {
         StringBuffer dsName=new StringBuffer(url);
-        TreeMap treeMap=new TreeMap(properties);
-        Iterator<String> it=treeMap.values().iterator();
+        TreeMap<Object,Object> treeMap=new TreeMap<Object,Object>(properties);
+        Iterator<Object> it=treeMap.values().iterator();
 
         // Use a tree map so that the properties are sorted. This way if we have
         // the same datasource with the same properties but in different order,

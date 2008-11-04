@@ -48,6 +48,7 @@ public class JdbcCallableStatementFactory implements CpoReleasible {
     
     private CallableStatement cs_ = null;
     
+    @SuppressWarnings("unused")
     private JdbcCallableStatementFactory(){}
     
     private ArrayList<CpoReleasible> releasibles = new ArrayList<CpoReleasible>();

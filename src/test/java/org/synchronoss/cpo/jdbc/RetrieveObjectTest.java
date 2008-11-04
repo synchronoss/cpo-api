@@ -31,7 +31,6 @@ import junit.framework.TestCase;
 
 import org.apache.log4j.Logger;
 import org.synchronoss.cpo.CpoAdapter;
-import org.synchronoss.cpo.CpoAdapterBean;
 import org.synchronoss.cpo.CpoResultSet;
 import org.synchronoss.cpo.CpoTrxAdapter;
 
@@ -115,7 +114,8 @@ public class RetrieveObjectTest extends TestCase {
           crs = jdbcIdo_.retrieveObjects(null,valObj,valObj,null,null, 2);
           logger.debug("Returned from retrieveObjects");
           for(ValueObject vo: crs){
-            count++;
+            if (vo!=null)
+              count++;
             logger.debug("Retrieved Object #"+count);
           }
           assertTrue("Result size is "+count, count==al.size());
@@ -134,7 +134,8 @@ public class RetrieveObjectTest extends TestCase {
           ValueObject valObj = new ValueObject();
           crs = jdbcIdo_.retrieveObjects(null,valObj,valObj,null,null, 9);
           for(ValueObject vo: crs){
-            count++;
+            if (vo!=null)
+              count++;
           }
           assertTrue("Result size is "+count, count==al.size());
 
@@ -152,7 +153,8 @@ public class RetrieveObjectTest extends TestCase {
           ValueObject valObj = new ValueObject();
           crs = jdbcIdo_.retrieveObjects(null,valObj,valObj,null,null, 10);
           for(ValueObject vo: crs){
-            count++;
+            if (vo!=null)
+              count++;
           }
           assertTrue("Result size is "+count, count==al.size());
 
@@ -170,7 +172,8 @@ public class RetrieveObjectTest extends TestCase {
           ValueObject valObj = new ValueObject();
           crs = jdbcIdo_.retrieveObjects(null,valObj,valObj,null,null, 11);
           for(ValueObject vo: crs){
-            count++;
+            if (vo!=null)
+              count++;
           }
           assertTrue("Result size is "+count, count==al.size());
 
@@ -194,13 +197,14 @@ public class RetrieveObjectTest extends TestCase {
         
         //start this trx
         for(ValueObject vo: crs){
-          count++;
+          if (vo!=null)
+            count++;
           break;
         }
         
         // Let's see if it lets me do two trxs at once
         try{
-          Collection<ValueObject> coll = trx.retrieveObjects(null,valObj,valObj,null,null);
+          trx.retrieveObjects(null,valObj,valObj,null,null);
           fail(method+"Cpo allowed me to reuse a busy connection");
         } catch (Exception busy){
           // THis should happen
@@ -209,7 +213,8 @@ public class RetrieveObjectTest extends TestCase {
         
         //cleanup the first trx
         for(ValueObject vo: crs){
-          count++;
+          if (vo!=null)
+            count++;
         }
         assertTrue("Result size is "+count, count==al.size());
 
@@ -231,7 +236,8 @@ public class RetrieveObjectTest extends TestCase {
           crs = jdbcIdo_.retrieveObjects(null,valObj,valObj,null,null, 11);
           logger.debug("Returned from retrieveObjects");
           for(ValueObject vo: crs){
-            count++;
+            if (vo!=null)
+              count++;
             logger.debug("Retrieved Object #"+count);
           }
           assertTrue("Result size is "+count, count==al.size());

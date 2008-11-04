@@ -411,7 +411,7 @@ public class JdbcCallableStatement extends JdbcPreparedStatement implements Call
      * @see #setObject
      * @since 1.2
      */
-    public Object getObject(int i, java.util.Map map)
+    public Object getObject(int i, java.util.Map<String, Class<?>> map)
     throws SQLException{
     	return getCallableStatement().getObject(i, map);
     }
@@ -1440,7 +1440,7 @@ public class JdbcCallableStatement extends JdbcPreparedStatement implements Call
      * @see #setObject
      * @since 1.4
      */
-    public Object getObject(String parameterName, java.util.Map map)
+    public Object getObject(String parameterName, java.util.Map<String, Class<?>> map)
     throws SQLException{
     	return getCallableStatement().getObject(parameterName, map);
     }

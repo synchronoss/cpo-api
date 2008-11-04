@@ -46,7 +46,6 @@ import org.synchronoss.cpo.CpoAdapterBean;
 public class InsertObjectTest extends TestCase {
     private static final String PROP_FILE = "jdbcCpoFactory";
 
-    private static final String     PROP_DBDRIVER = "default.dbDriver";
     private static final String PROP_DB_MILLI_SUPPORTED="default.dbMilliSupport";
         
     private ArrayList<ValueObject> al = new ArrayList<ValueObject>();

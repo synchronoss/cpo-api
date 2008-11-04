@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 public class CpoArrayResultSet<E> extends ArrayList<E> implements CpoResultSet<E> {
+  boolean canceled=false;
   public CpoArrayResultSet() {
     super();
     // TODO Auto-generated constructor stub
@@ -22,13 +23,21 @@ public class CpoArrayResultSet<E> extends ArrayList<E> implements CpoResultSet<E
   private static final long serialVersionUID = 1L;
 
   public void put(E e) throws InterruptedException{
+    if (canceled)
+      throw new InterruptedException();
     add(e);
   }
   
   public E take() throws InterruptedException{
+    if (canceled)
+      throw new InterruptedException();
     if (size()>0)
       return remove(0);
     else 
       return null;
+  }
+  
+  public void cancel(){
+    canceled=true;
   }
 }

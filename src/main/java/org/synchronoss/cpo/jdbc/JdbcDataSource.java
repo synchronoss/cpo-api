@@ -145,7 +145,7 @@ public class JdbcDataSource implements DataSource {
                 }
 
                 while (availableConnections.isEmpty()) {
-                    Thread.currentThread().yield();
+                    Thread.yield();
                 }
            } else {
                 break; // we have a connection so get out of the outer loop

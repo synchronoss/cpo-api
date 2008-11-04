@@ -1,6 +1,7 @@
 package org.synchronoss.cpo;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.concurrent.ArrayBlockingQueue;
@@ -14,6 +15,8 @@ public class CpoBlockingResultSet<E> implements CpoResultSet<E>, Iterator<E> {
   private AtomicInteger aInt = new AtomicInteger(0);
   private ThreadLocal<E> tlObj = new ThreadLocal<E>();
   ArrayBlockingQueue<E> abe = null;
+  HashMap<Thread, Thread> producers = new HashMap<Thread, Thread>();
+  HashMap<Thread, Thread> consumers = new HashMap<Thread, Thread>();
   boolean done = false;
   
   public CpoBlockingResultSet(int capacity) {
@@ -32,6 +35,7 @@ public class CpoBlockingResultSet<E> implements CpoResultSet<E>, Iterator<E> {
   }
   
   public void put(E e) throws InterruptedException{
+    producers.put(Thread.currentThread(), Thread.currentThread());
     logger.debug("Put Called");
     abe.put(e);
     aInt.incrementAndGet();
@@ -101,7 +105,7 @@ public class CpoBlockingResultSet<E> implements CpoResultSet<E>, Iterator<E> {
   }
 
   public E take() throws InterruptedException {
-    // TODO Auto-generated method stub
+    consumers.put(Thread.currentThread(), Thread.currentThread());
     logger.debug("Take Called");
     return abe.take();
   }
@@ -112,5 +116,19 @@ public class CpoBlockingResultSet<E> implements CpoResultSet<E>, Iterator<E> {
 
   public void setDone(boolean done) {
     this.done = done;
+  }
+  
+  public void cancel(){
+    setDone(true);
+    for(Thread t : consumers.values()){
+      if (t != Thread.currentThread()){
+        t.interrupt();
+      }
+    }
+    for(Thread t : producers.values()){
+      if (t != Thread.currentThread()){
+        t.interrupt();
+      }
+    }
   }
 }

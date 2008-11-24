@@ -1,11 +1,13 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.synchronoss</groupId>
   <artifactId>cpo</artifactId>
   <name>cpo</name>
   <version>3.4-SNAPSHOT</version>
   <description>CPO is a persistence layer that is thin wrapper around JDBC that consumes and
-    produces POJOs</description>
+    produces POJOs
+  </description>
   <licenses>
     <license>
       <name>GNU Lesser General Public License</name>
@@ -13,40 +15,81 @@
       <distribution>repo,manual</distribution>
       <comments>This library is free software; you can redistribute it and/or modify it under the
         terms of the GNU Lesser General Public License as published by the Free Software Foundation;
-        either version 2.1 of the License, or (at your option) any later version.</comments>
+        either version 2.1 of the License, or (at your option) any later version.
+      </comments>
     </license>
   </licenses>
-<profiles>
-  <profile>
-    <id>DEPLOY</id>
-    <build>
-      <plugins>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-javadoc-plugin</artifactId>
-          <executions>
-            <execution>
-              <id>attach-javadocs</id>
-              <goals>
-                <goal>jar</goal>
-              </goals>
-            </execution>
-          </executions>
-        </plugin>
-      </plugins>
-    </build>
-  </profile>
-</profiles>
-	  <issueManagement>
+  <properties>
+    <currentVersion>${project.version}</currentVersion>
+  </properties>
+  <ciManagement>
+    <system>teamcity</system>
+    <url>http://continuous.synchronoss.net:8111/viewType.html?buildTypeId=bt2</url>
+  </ciManagement>
+  <profiles>
+    <profile>
+      <id>DEPLOY</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-javadoc-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>attach-javadocs</id>
+                <goals>
+                  <goal>jar</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
+  <issueManagement>
     <system>SourceForge</system>
     <url>http://sourceforge.net/projects/cpo</url>
   </issueManagement>
+  <mailingLists>
+    <mailingList>
+      <name>CPO Users List</name>
+      <subscribe>cpo-users-subscribe@lists.sourceforge.net</subscribe>
+      <unsubscribe>cpo-users-unsubscribe@lists.sourceforge.net</unsubscribe>
+      <post>cpo-users@lists.sourceforge.net</post>
+      <archive>http://lists.sourceforge.net/mailman/listinfo/cpo-users</archive>
+    </mailingList>
+  </mailingLists>
   <developers>
     <developer>
       <name>David Berry</name>
-      <email>berryware@users.sourceforge.net</email>
+      <email>berryware@N0SP4M.users.sourceforge.net</email>
       <roles>
         <role>architect</role>
+        <role>developer</role>
+      </roles>
+      <timezone>EST</timezone>
+    </developer>
+    <developer>
+      <name>Jay Colson</name>
+      <email>jcolson@N0SP4M.users.sourceforge.net</email>
+      <roles>
+        <role>developer</role>
+      </roles>
+      <timezone>EST</timezone>
+    </developer>
+    <developer>
+      <name>Eric Fedok</name>
+      <email>efedok@N0SP4M.users.sourceforge.net</email>
+      <roles>
+        <role>developer</role>
+      </roles>
+      <timezone>EST</timezone>
+    </developer>
+    <developer>
+      <name>Michael Bellomo</name>
+      <email>curly72@N0SP4M.users.sourceforge.net</email>
+      <roles>
         <role>developer</role>
       </roles>
       <timezone>EST</timezone>
@@ -64,14 +107,15 @@
       <url>http://mavenrepo.synchronoss.net:8081/artifactory/libs-snapshots</url>
     </snapshotRepository>
     <site>
-      <id>components-site</id>
-      <url>scp://wiki.synchronoss.net/home/components/public_html/cpo-sourceforge</url>
+      <!-- must create a shell for your account at sourceforge by execing: ssh -t <username>,<project name>@shell.sf.net create-->
+      <id>sf-cpo-site</id>
+      <url>scp://shell.sourceforge.net/home/groups/c/cp/cpo/htdocs</url>
     </site>
   </distributionManagement>
   <scm>
-    <connection>scm:svn:https://cpo.svn.sourceforge.net/svnroot/cpo/api/tags/cpo-3.3</connection>
-    <developerConnection>scm:svn:https://cpo.svn.sourceforge.net/svnroot/cpo/api/tags/cpo-3.3</developerConnection>
-    <url>https://cpo.svn.sourceforge.net/svnroot/cpo/api/tags/cpo-3.3</url>
+    <connection>scm:svn:https://cpo.svn.sourceforge.net/svnroot/cpo/api/trunk</connection>
+    <developerConnection>scm:svn:https://cpo.svn.sourceforge.net/svnroot/cpo/api/trunk</developerConnection>
+    <url>https://cpo.svn.sourceforge.net/svnroot/cpo/api/trunk</url>
   </scm>
   <build>
     <testResources>
@@ -137,7 +181,7 @@
       </plugins>
     </pluginManagement>
     <plugins>
-	  <plugin>
+      <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-release-plugin</artifactId>
         <configuration>
@@ -157,11 +201,11 @@
               <goal>execute</goal>
             </goals>
             <configuration>
-	          <username>${cpo.meta.user}</username>
-	          <password>${cpo.meta.pswd}</password>
-	          <autocommit>true</autocommit>
-	          <driver>${cpo.meta.driver}</driver>
-	          <url>${cpo.meta.url}</url>
+              <username>${cpo.meta.user}</username>
+              <password>${cpo.meta.pswd}</password>
+              <autocommit>true</autocommit>
+              <driver>${cpo.meta.driver}</driver>
+              <url>${cpo.meta.url}</url>
               <onError>continue</onError>
               <srcFiles>
                 <srcFile>${cpo.test.sqldir}/dropCpoTables.sql</srcFile>
@@ -171,19 +215,19 @@
               </srcFiles>
             </configuration>
           </execution>
-         <execution>
+          <execution>
             <id>create-data</id>
             <phase>process-test-resources</phase>
             <goals>
               <goal>execute</goal>
             </goals>
             <configuration>
-	          <username>${cpo.db.user}</username>
-	          <password>${cpo.db.pswd}</password>
-	          <autocommit>true</autocommit>
-	          <delimiter>;</delimiter>
-	          <driver>${cpo.db.driver}</driver>
-	          <url>${cpo.db.url}</url>
+              <username>${cpo.db.user}</username>
+              <password>${cpo.db.pswd}</password>
+              <autocommit>true</autocommit>
+              <delimiter>;</delimiter>
+              <driver>${cpo.db.driver}</driver>
+              <url>${cpo.db.url}</url>
               <onError>continue</onError>
               <srcFiles>
                 <srcFile>${cpo.test.sqldir}/dropTestTables.sql</srcFile>
@@ -200,21 +244,21 @@
             <artifactId>ojdbc14</artifactId>
             <version>10.2.0.5</version>
           </dependency>
-			<dependency>
-			    <groupId>postgresql</groupId>
-			    <artifactId>postgresql</artifactId>
-			    <version>8.3-603.jdbc3</version>
-			</dependency>    
-		    <dependency>
-		      <groupId>mysql</groupId>
-		      <artifactId>mysql-connector-java</artifactId>
-		      <version>5.1.6</version>
-		    </dependency>
-		    <dependency>
-		      <groupId>hsqldb</groupId>
-		      <artifactId>hsqldb</artifactId>
-		      <version>1.8.0.7</version>
-		    </dependency>
+          <dependency>
+            <groupId>postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>8.3-603.jdbc3</version>
+          </dependency>
+          <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>5.1.6</version>
+          </dependency>
+          <dependency>
+            <groupId>hsqldb</groupId>
+            <artifactId>hsqldb</artifactId>
+            <version>1.8.0.7</version>
+          </dependency>
         </dependencies>
         <configuration>
           <skip>false</skip>
@@ -264,12 +308,12 @@
       <version>1.3.1</version>
       <scope>provided</scope>
     </dependency>
-	<dependency>
-	    <groupId>postgresql</groupId>
-	    <artifactId>postgresql</artifactId>
-	    <version>8.3-603.jdbc3</version>
-      	<scope>test</scope>
-	</dependency>    
+    <dependency>
+      <groupId>postgresql</groupId>
+      <artifactId>postgresql</artifactId>
+      <version>8.3-603.jdbc3</version>
+      <scope>test</scope>
+    </dependency>
     <dependency>
       <groupId>hsqldb</groupId>
       <artifactId>hsqldb</artifactId>
@@ -368,11 +412,11 @@
           </additionalparam>
         </configuration>
       </plugin>
-	      <plugin>
-	        <groupId>org.codehaus.mojo</groupId>
-	        <artifactId>cobertura-maven-plugin</artifactId>
-	        <version>2.2</version>
-	      </plugin>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>cobertura-maven-plugin</artifactId>
+        <version>2.2</version>
+      </plugin>
       <!--<plugin>
            <groupId>net.sf</groupId>
            <artifactId>stat-scm</artifactId>

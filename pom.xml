@@ -8,6 +8,7 @@
   <description>CPO is a persistence layer that is thin wrapper around JDBC that consumes and
     produces POJOs
   </description>
+  <url>http://cpo.sourceforge.net/</url>
   <licenses>
     <license>
       <name>GNU Lesser General Public License</name>

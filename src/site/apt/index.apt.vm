@@ -11,6 +11,10 @@ Home - CPO ${currentVersion}
 
   {{{about.html}About CPO}}
 
+* Example Usage Information
+
+  Please review the test case source code from the navigation on the left in order to review how to use CPO.
+
 * News
 
   * CPO Artifacts Uploaded to Sourceforge - 11/24/08

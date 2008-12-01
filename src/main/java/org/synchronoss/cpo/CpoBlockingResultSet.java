@@ -12,6 +12,7 @@ import org.apache.log4j.Logger;
 public class CpoBlockingResultSet<E> implements CpoResultSet<E>, Iterator<E> {
   private static Logger logger = Logger.getLogger(CpoBlockingResultSet.class.getName());
   private static final long serialVersionUID = 1L;
+  private int capacity=0;
   private AtomicInteger aInt = new AtomicInteger(0);
   private ThreadLocal<E> tlObj = new ThreadLocal<E>();
   ArrayBlockingQueue<E> abe = null;
@@ -20,16 +21,19 @@ public class CpoBlockingResultSet<E> implements CpoResultSet<E>, Iterator<E> {
   boolean done = false;
   
   public CpoBlockingResultSet(int capacity) {
+    this.capacity = capacity;
     abe = new ArrayBlockingQueue<E>(capacity);
   }
 
   public CpoBlockingResultSet(int capacity, boolean fair,
       Collection<? extends E> c) {
+    this.capacity = capacity;
     abe = new ArrayBlockingQueue<E>(capacity, fair, c);
     // TODO Auto-generated constructor stub
   }
 
   public CpoBlockingResultSet(int capacity, boolean fair) {
+    this.capacity = capacity;
     abe = new ArrayBlockingQueue<E>(capacity, fair);
     // TODO Auto-generated constructor stub
   }
@@ -131,4 +135,9 @@ public class CpoBlockingResultSet<E> implements CpoResultSet<E>, Iterator<E> {
       }
     }
   }
+  
+  public int getFetchSize(){
+    return capacity;
+  }
+
 }

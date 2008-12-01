@@ -184,15 +184,7 @@ public class JdbcCpoAdapter implements CpoAdapter {
    */
   public JdbcCpoAdapter(JdbcDataSourceInfo jdsi)
       throws CpoException {
-
-    setDbTablePrefix(jdsi.getDbTablePrefix());
-    setMetaDataSource(getDataSource(jdsi));
-    setMetaDataSourceName(jdsi.getDataSourceName());
-    setWriteDataSource(getMetaDataSource());
-    setReadDataSource(getMetaDataSource());
-    processDatabaseMetaData();
-    metaEqualsWrite_ = true;
-
+    this(null,jdsi);
   }
 
   /**
@@ -205,11 +197,19 @@ public class JdbcCpoAdapter implements CpoAdapter {
    */
   public JdbcCpoAdapter(JdbcDataSourceInfo jdsiMeta, JdbcDataSourceInfo jdsiTrx)
       throws CpoException {
-
-    setDbTablePrefix(jdsiMeta.getDbTablePrefix());
-    setMetaDataSource(getDataSource(jdsiMeta));
+    
+    if (jdsiMeta!=null) {
+      setDbTablePrefix(jdsiMeta.getDbTablePrefix());
+      setMetaDataSource(getDataSource(jdsiMeta));
+      setMetaDataSourceName(jdsiMeta.getDataSourceName());
+    } else {
+      setDbTablePrefix(jdsiTrx.getDbTablePrefix());
+      setMetaDataSource(getDataSource(jdsiTrx));
+      setMetaDataSourceName(jdsiTrx.getDataSourceName());
+      metaEqualsWrite_ = true;
+    }
+    
     setWriteDataSource(getDataSource(jdsiTrx));
-    setMetaDataSourceName(jdsiMeta.getDataSourceName());
     setReadDataSource(getWriteDataSource());
     processDatabaseMetaData();
   }
@@ -1796,15 +1796,26 @@ public class JdbcCpoAdapter implements CpoAdapter {
       classObj = obj.getClass();
       className = classObj.getName();
 
-      synchronized (getDataSourceMap()) {
-        metaClassMap = getMetaClassMap();
-        jmc = (JdbcMetaClass<T>) metaClassMap.get(className);
-
-        if (jmc == null) {
-          jmc = (JdbcMetaClass<T>) loadMetaClass(classObj, className, c);
-          metaClassMap.put(className, jmc);
-          Logger.getLogger(className).debug("Loading Class:" + className);
+      while(jmc==null && classObj!=null){
+        synchronized (getDataSourceMap()) {
+          metaClassMap = getMetaClassMap();
+          jmc = (JdbcMetaClass<T>) metaClassMap.get(className);
+  
+          if (jmc == null) {
+            try {
+              jmc = (JdbcMetaClass<T>) loadMetaClass(classObj, className, c);
+              metaClassMap.put(className, jmc);
+              Logger.getLogger(className).debug("Loading Class:" + className);
+            } catch (CpoException ce) {
+              jmc = null;
+              classObj = classObj.getSuperclass();
+              className = classObj.getName();
+            }
+          }
         }
+      }
+      if (jmc==null){
+        throw new CpoException("No Metadata found for class:" + obj.getClass().getName());
       }
     }
 
@@ -2506,7 +2517,7 @@ public class JdbcCpoAdapter implements CpoAdapter {
     JdbcAttribute[] attributes;
     JdbcPreparedStatementFactory jpsf;
     int i;
-
+    
     try {
       jmcCriteria = getMetaClass(criteria, metaCon);
       jmcResult = getMetaClass(result, metaCon);
@@ -2523,6 +2534,7 @@ public class JdbcCpoAdapter implements CpoAdapter {
 
         jpsf = new JdbcPreparedStatementFactory(con, this, jmcCriteria, jq, criteria, where, orderBy, bindValues);
         ps = jpsf.getPreparedStatement();
+        ps.setFetchSize(resultSet.getFetchSize());
 
         localLogger.debug("Retrieving Records");
 

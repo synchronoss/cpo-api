@@ -40,4 +40,8 @@ public class CpoArrayResultSet<E> extends ArrayList<E> implements CpoResultSet<E
   public void cancel(){
     canceled=true;
   }
+  
+  public int getFetchSize(){
+    return 10;
+  }
 }

@@ -6,4 +6,5 @@ public interface CpoResultSet<E> extends Iterable<E>{
   public E take() throws InterruptedException;
   public int size();
   public void cancel();
+  public int getFetchSize();
 }

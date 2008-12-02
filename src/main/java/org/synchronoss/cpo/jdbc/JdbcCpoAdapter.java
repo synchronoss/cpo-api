@@ -1789,33 +1789,36 @@ public class JdbcCpoAdapter implements CpoAdapter {
   protected <T> JdbcMetaClass<T> getMetaClass(T obj, Connection c) throws CpoException {
     JdbcMetaClass<T> jmc = null;
     String className;
+    String requestedName;
     Class<?> classObj;
+    Class<?> requestedClass;
     HashMap<String, JdbcMetaClass<?>> metaClassMap;
 
     if (obj != null) {
-      classObj = obj.getClass();
-      className = classObj.getName();
+      requestedClass = obj.getClass();
+      classObj = requestedClass;
+      requestedName = requestedClass.getName();
+      className = requestedName;
 
-      while(jmc==null && classObj!=null){
-        synchronized (getDataSourceMap()) {
-          metaClassMap = getMetaClassMap();
-          jmc = (JdbcMetaClass<T>) metaClassMap.get(className);
-  
-          if (jmc == null) {
-            try {
-              jmc = (JdbcMetaClass<T>) loadMetaClass(classObj, className, c);
-              metaClassMap.put(className, jmc);
-              Logger.getLogger(className).debug("Loading Class:" + className);
-            } catch (CpoException ce) {
-              jmc = null;
-              classObj = classObj.getSuperclass();
-              className = classObj.getName();
-            }
+      synchronized (getDataSourceMap()) {
+        metaClassMap = getMetaClassMap();
+        jmc = (JdbcMetaClass<T>) metaClassMap.get(className);
+        while(jmc==null && classObj!=null){
+          try {
+            jmc = (JdbcMetaClass<T>) loadMetaClass(requestedClass, className, c);
+            // reset the class name to the original 
+            jmc.setName(requestedName);
+            metaClassMap.put(requestedName, jmc);
+            Logger.getLogger(requestedName).debug("Loading Class:" + requestedName);
+          } catch (CpoException ce) {
+            jmc = null;
+            classObj = classObj.getSuperclass();
+            className = classObj.getName();
           }
         }
-      }
-      if (jmc==null){
-        throw new CpoException("No Metadata found for class:" + obj.getClass().getName());
+        if (jmc==null){
+          throw new CpoException("No Metadata found for class:" + requestedName);
+        }
       }
     }
 

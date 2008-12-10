@@ -31,6 +31,8 @@ package org.synchronoss.cpo;
  *
  * A series of CpoObjects are defined and stored in a collection and then the collection 
  * is passed into <code>transactObjects</code>.
+ * 
+ * This Object has been deprecated. Use a CpoTrxAdapter to manage transactions.
  *
  *<br>
  * Example<br>
@@ -80,8 +82,11 @@ package org.synchronoss.cpo;
  * <br>
  * 
  * @author david berry
+ * 
+ * @deprecated
  */
 
+@Deprecated
 public class CpoObject<T> extends java.lang.Object implements java.io.Serializable, java.lang.Cloneable {
 
 //    private static Logger logger = Logger.getLogger(CpoObject.class.getName());

@@ -1473,7 +1473,9 @@ public class JdbcCpoAdapter implements CpoAdapter {
    *             the datasource. If the class is not defined an exception will be thrown.
    * @return The number of objects updated in the datasource
    * @throws CpoException Thrown if there are errors accessing the datasource
+   * @deprecated
    */
+    @Deprecated
   public <T> long transactObjects(Collection<CpoObject<T>> coll) throws CpoException {
     Connection c = null;
     Connection meta = null;
@@ -1516,7 +1518,9 @@ public class JdbcCpoAdapter implements CpoAdapter {
    * @param c    DOCUMENT ME!
    * @return DOCUMENT ME!
    * @throws CpoException DOCUMENT ME!
+   * @deprecated
    */
+    @Deprecated
   protected <T> long transactObjects(Collection<CpoObject<T>> coll, Connection c, Connection meta)
       throws CpoException {
     long updateCount = 0;

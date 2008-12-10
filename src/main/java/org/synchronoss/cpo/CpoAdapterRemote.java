@@ -589,7 +589,9 @@ public interface CpoAdapterRemote extends java.io.Serializable {
      * @throws CpoException Thrown if there are errors accessing the datasource
      * @throws RemoteException Thrown if using dataPersist as an EJB and an Error
      *                         occurs.
+     * @deprecated
      */
+    @Deprecated
     public <T> long transactObjects(Collection<CpoObject<T>> coll) throws CpoException, RemoteException;
 
     /**

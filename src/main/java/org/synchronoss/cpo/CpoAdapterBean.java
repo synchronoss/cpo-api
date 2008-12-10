@@ -599,6 +599,10 @@ public class CpoAdapterBean
         JdbcCpoFactory.getCpoAdapter().clearMetaClass();
     }
 
+    /**
+     * @deprecated
+     */
+    @Deprecated
     public <T> long transactObjects(Collection<CpoObject<T>> coll) throws CpoException{
         return JdbcCpoFactory.getCpoAdapter().transactObjects(coll);
     }

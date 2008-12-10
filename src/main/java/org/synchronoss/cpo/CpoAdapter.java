@@ -1150,7 +1150,10 @@ public interface CpoAdapter extends java.io.Serializable {
      * @return The number of objects updated in the datasource
      *
      * @throws CpoException Thrown if there are errors accessing the datasource
+     * 
+     * @deprecated
      */
+    @Deprecated
    public <T> long transactObjects(Collection<CpoObject<T>> coll) throws CpoException;
 
     /**

@@ -11,6 +11,14 @@ Home - CPO ${currentVersion}
 
   {{{about.html}About CPO}}
 
+* Where are the cpo maven repositories?
+
+  Right here on sourceforge!
+
+  Snapshots: http://cpo.sourceforge.net/sf-cpo-snapshots
+
+  Releases: http://cpo.sourceforge.net/sf-cpo-releases
+
 * Example Usage Information
 
   Please review the test case source code from the navigation on the left in order to review how to use CPO.

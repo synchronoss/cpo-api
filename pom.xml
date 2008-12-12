@@ -27,27 +27,6 @@
     <system>teamcity</system>
     <url>http://continuous.synchronoss.net:8111/viewType.html?buildTypeId=bt2</url>
   </ciManagement>
-  <profiles>
-    <profile>
-      <id>DEPLOY</id>
-      <build>
-        <plugins>
-          <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-javadoc-plugin</artifactId>
-            <executions>
-              <execution>
-                <id>attach-javadocs</id>
-                <goals>
-                  <goal>jar</goal>
-                </goals>
-              </execution>
-            </executions>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>
-  </profiles>
   <issueManagement>
     <system>SourceForge</system>
     <url>http://sourceforge.net/projects/cpo</url>
@@ -186,8 +165,8 @@
         <artifactId>maven-release-plugin</artifactId>
         <configuration>
           <goals>deploy</goals>
-          <useReleaseProfile>false</useReleaseProfile>
-          <arguments>-PDEPLOY</arguments>
+          <useReleaseProfile>true</useReleaseProfile>
+          <releaseProfiles>oracle</releaseProfiles>
         </configuration>
       </plugin>
       <plugin>

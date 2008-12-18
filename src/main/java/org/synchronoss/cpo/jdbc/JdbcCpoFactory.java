@@ -25,7 +25,7 @@ import org.synchronoss.cpo.CpoException;
  * @author david berry
  */
 public class JdbcCpoFactory {
-  private static HashMap<String, JdbcDsiEntry> propMap = new HashMap<String, JdbcDsiEntry>();
+  private static HashMap<String, CpoAdapter> propMap = new HashMap<String, CpoAdapter>();
   private static Logger logger=Logger.getLogger(JdbcCpoFactory.class.getName());
   
   private static final String PROP_FILE = "jdbcCpoFactory";
@@ -58,14 +58,18 @@ public class JdbcCpoFactory {
   }
 	
 	public static CpoAdapter getCpoAdapter(String context) throws CpoException {
-	  JdbcDsiEntry ds = null;
 	  if (context==null)
 	    context = DEFAULT_CONTEXT;
 	  
+	  CpoAdapter cpo = propMap.get(context);
+    if (cpo!=null)
+      return cpo;
+	  
 	  synchronized(propMap){
-	    ds= propMap.get(context);
-	    if (ds!=null)
-	      return new JdbcCpoAdapter(ds.getMetaInfo(),ds.getDbInfo());
+	    // check again
+	    cpo= propMap.get(context);
+	    if (cpo!=null)
+	      return cpo;
 	    
   	  String     tablePrefix_ = null;
   	  String metaDatasource_ = null;
@@ -141,12 +145,13 @@ public class JdbcCpoFactory {
       if (metaInfo==null && dbInfo==null){
         throw new CpoException("Unable to create CpoAdapter, Invalid Datasource Information Provided: "+context);
       } else if (metaInfo==null){
-        propMap.put(context, new JdbcDsiEntry(metaInfo, dbInfo));
-        return new JdbcCpoAdapter(dbInfo);
+        cpo = new JdbcCpoAdapter(dbInfo);
+        propMap.put(context, cpo);
+        return cpo;
       }
-      
-      propMap.put(context, new JdbcDsiEntry(metaInfo, dbInfo));
-      return new JdbcCpoAdapter(metaInfo,dbInfo);
+      cpo = new JdbcCpoAdapter(metaInfo,dbInfo);
+      propMap.put(context, cpo);
+      return cpo;
 	  }
 	}
 	

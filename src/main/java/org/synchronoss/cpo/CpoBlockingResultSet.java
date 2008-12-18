@@ -1,10 +1,9 @@
 package org.synchronoss.cpo;
 
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
-import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.apache.log4j.Logger;
@@ -15,33 +14,20 @@ public class CpoBlockingResultSet<E> implements CpoResultSet<E>, Iterator<E> {
   private int capacity=0;
   private AtomicInteger aInt = new AtomicInteger(0);
   private ThreadLocal<E> tlObj = new ThreadLocal<E>();
-  ArrayBlockingQueue<E> abe = null;
+  LinkedBlockingQueue<E> lbq = null;
   HashMap<Thread, Thread> producers = new HashMap<Thread, Thread>();
   HashMap<Thread, Thread> consumers = new HashMap<Thread, Thread>();
   boolean done = false;
   
   public CpoBlockingResultSet(int capacity) {
     this.capacity = capacity;
-    abe = new ArrayBlockingQueue<E>(capacity);
-  }
-
-  public CpoBlockingResultSet(int capacity, boolean fair,
-      Collection<? extends E> c) {
-    this.capacity = capacity;
-    abe = new ArrayBlockingQueue<E>(capacity, fair, c);
-    // TODO Auto-generated constructor stub
-  }
-
-  public CpoBlockingResultSet(int capacity, boolean fair) {
-    this.capacity = capacity;
-    abe = new ArrayBlockingQueue<E>(capacity, fair);
-    // TODO Auto-generated constructor stub
+    lbq = new LinkedBlockingQueue<E>(capacity);
   }
   
   public void put(E e) throws InterruptedException{
     producers.put(Thread.currentThread(), Thread.currentThread());
     logger.debug("Put Called");
-    abe.put(e);
+    lbq.put(e);
     aInt.incrementAndGet();
   }
   
@@ -49,14 +35,14 @@ public class CpoBlockingResultSet<E> implements CpoResultSet<E>, Iterator<E> {
     logger.debug("hasNext Called");
     E ret=tlObj.get();
     
-    if (isDone() && abe.size()==0 && ret==null)
+    if (isDone() && lbq.size()==0 && ret==null)
       return false;
 
     if (ret==null){
       try{
         tlObj.set(take());
       } catch (InterruptedException ie){
-        if (isDone() && abe.size()==0)
+        if (isDone() && lbq.size()==0)
           return false;
         else {
           try {
@@ -88,7 +74,7 @@ public class CpoBlockingResultSet<E> implements CpoResultSet<E>, Iterator<E> {
         ret=take();
       } catch (InterruptedException ie){
         // maintain the interrupt
-        if (isDone()&&abe.size()==0)
+        if (isDone()&&lbq.size()==0)
           throw new NoSuchElementException();
         else {
           try {
@@ -111,7 +97,7 @@ public class CpoBlockingResultSet<E> implements CpoResultSet<E>, Iterator<E> {
   public E take() throws InterruptedException {
     consumers.put(Thread.currentThread(), Thread.currentThread());
     logger.debug("Take Called");
-    return abe.take();
+    return lbq.take();
   }
 
   public boolean isDone() {

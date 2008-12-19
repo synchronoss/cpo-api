@@ -1425,7 +1425,7 @@ public class JdbcCpoAdapter implements CpoAdapter {
     public <T,C> CpoResultSet<T> retrieveObjects(String name, C criteria, T result, CpoWhere where,
         Collection<CpoOrderBy> orderBy, int queueSize) throws CpoException {
       CpoBlockingResultSet<T> resultSet = new CpoBlockingResultSet<T>(queueSize);
-      RetrieverThread<T,C> retrieverThread = new RetrieverThread<T,C>(name, criteria, result, where, orderBy, false, resultSet);
+      Thread retrieverThread = new Thread(Thread.currentThread().getThreadGroup(), new RetrieverThread<T,C>(name, criteria, result, where, orderBy, false, resultSet));
         
       retrieverThread.start();
       return resultSet;
@@ -3259,7 +3259,6 @@ public class JdbcCpoAdapter implements CpoAdapter {
         resultSet.setDone(true);
         // Interrupt the thread in case it is in a wait
         callingThread.interrupt();
-
       }
     }
   }

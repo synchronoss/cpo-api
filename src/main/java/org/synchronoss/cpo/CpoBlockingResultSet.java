@@ -42,14 +42,23 @@ public class CpoBlockingResultSet<E> implements CpoResultSet<E>, Iterator<E> {
       try{
         tlObj.set(take());
       } catch (InterruptedException ie){
+        if (!isDone()) {
+          // This is a real interrupt not just me signaling that the 
+          // the sender is done sending
+          //maintain the interrupt
+          Thread.currentThread().interrupt();
+          return false;
+        }
+        
         if (isDone() && lbq.size()==0)
           return false;
-        else {
-          try {
-            tlObj.set(take());
-          }catch (InterruptedException ie2){
-            return false;
-          }
+        
+        try {
+          tlObj.set(take());
+        }catch (InterruptedException ie2){
+          // Once again must be a real interrupt not a signal
+          Thread.currentThread().interrupt();
+          return false;
         }
       }
     }
@@ -73,13 +82,22 @@ public class CpoBlockingResultSet<E> implements CpoResultSet<E>, Iterator<E> {
       try{
         ret=take();
       } catch (InterruptedException ie){
-        // maintain the interrupt
-        if (isDone()&&lbq.size()==0)
+        if (!isDone()) {
+          // This is a real interrupt not just me signaling that the 
+          // the sender is done sending
+          //maintain the interrupt
+          Thread.currentThread().interrupt();
           throw new NoSuchElementException();
-        else {
+        }
+
+        if (lbq.size()==0) {
+          throw new NoSuchElementException();
+        } else {
           try {
             ret = take();
           }catch (InterruptedException ie2){
+            // Once again must be a real interrupt not a signal
+            Thread.currentThread().interrupt();
             throw new NoSuchElementException();
           }
         }

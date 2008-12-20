@@ -127,16 +127,11 @@ public class CpoBlockingResultSet<E> implements CpoResultSet<E>, Iterator<E> {
   }
   
   public void cancel(){
-    setDone(true);
     for(Thread t : consumers.values()){
-      if (t != Thread.currentThread()){
         t.interrupt();
-      }
     }
     for(Thread t : producers.values()){
-      if (t != Thread.currentThread()){
         t.interrupt();
-      }
     }
   }
   

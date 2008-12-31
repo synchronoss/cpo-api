@@ -956,6 +956,8 @@ public class JdbcCpoAdapter implements CpoAdapter {
     int i;
     Logger localLogger = logger;
 
+    if (obj==null) throw new CpoException("NULL Object passed into existsObject");
+    
     try {
       jmc = getMetaClass(obj, metaCon);
       queryGroup = jmc.getQueryGroup(JdbcCpoAdapter.EXIST_GROUP, name);
@@ -2141,6 +2143,8 @@ public class JdbcCpoAdapter implements CpoAdapter {
     int j;
     int i;
 
+    if (criteria==null||result==null) throw new CpoException("NULL Object passed into executeObject");
+    
     try {
       jmcCriteria = getMetaClass(criteria, metaCon);
       jmcResult = getMetaClass(result, metaCon);
@@ -2297,6 +2301,8 @@ public class JdbcCpoAdapter implements CpoAdapter {
     HashMap<String, JdbcAttribute> jmcAttrMap;
     T rObj = null;
 
+    if (obj==null) throw new CpoException("NULL Object passed into retrieveObject");
+    
     try {
       jmc = getMetaClass(criteriaObj, metaCon);
       queryGroup = jmc.getQueryGroup(JdbcCpoAdapter.RETRIEVE_GROUP, groupName);
@@ -2525,6 +2531,8 @@ public class JdbcCpoAdapter implements CpoAdapter {
     JdbcPreparedStatementFactory jpsf;
     int i;
     
+    if (criteria==null||result==null) throw new CpoException("NULL Object passed into retrieveObject or retrieveObjects");
+    
     try {
       jmcCriteria = getMetaClass(criteria, metaCon);
       jmcResult = getMetaClass(result, metaCon);
@@ -2691,6 +2699,8 @@ public class JdbcCpoAdapter implements CpoAdapter {
     int i;
     long updateCount = 0;
 
+    if (obj==null) throw new CpoException("NULL Object passed into insertObject, deleteObject, updateObject, or persistObject");
+    
     try {
       jmc = getMetaClass(obj, metaCon);
       queryGroup = jmc.getQueryGroup(getGroupType(obj, groupType, groupName, con, metaCon), groupName);
@@ -3029,31 +3039,25 @@ public class JdbcCpoAdapter implements CpoAdapter {
       throws CpoException {
     String id = null;
     StringBuffer sqlBuffer = new StringBuffer();
-    sqlBuffer.append("select ");
-    sqlBuffer.append(
-        " innr.group_type,innr.name,innr.query_id,innr.query_seq as query_seq,cqt.sql_text,innr.param_seq as param_seq,  cam.attribute, cam.column_name, cam.column_type, innr.param_type ");
-    sqlBuffer.append("from ");
+    //Uncomment when we remove the query_text_table
+    sqlBuffer.append("select cqg.group_type,cqg.name,cq.query_id,cq.seq_no as query_seq,cq.sql_text,cqp.seq_no as param_seq,");
+    // Comment this out when we remove the query_text table
+    //sqlBuffer.append("select cqg.group_type,cqg.name,cq.query_id,cq.seq_no as query_seq,cqt.sql_text,cqp.seq_no as param_seq,");
+    sqlBuffer.append("cam.attribute,cam.column_name,cam.column_type,cqp.param_type from ");
     sqlBuffer.append(getDbTablePrefix());
-    sqlBuffer.append("cpo_query_text cqt,  ");
-    sqlBuffer.append(
-        "  (select cqg.group_type, cqg.name, cq.query_id, cq.seq_no as query_seq,cqp.seq_no as param_seq, cqp.attribute_id, cqp.param_type,cq.text_id,cq.seq_no,cqg.group_id ");
-    sqlBuffer.append("from ");
+    sqlBuffer.append("cpo_query_group cqg left outer join ");
     sqlBuffer.append(getDbTablePrefix());
-    sqlBuffer.append("cpo_query_group cqg, ");
+    sqlBuffer.append("cpo_query cq on cqg.group_id = cq.group_id left outer join ");
+    // Comment this out when we remove the query_text table
+    //sqlBuffer.append(getDbTablePrefix());
+    //sqlBuffer.append("cpo_query_text cqt on cq.text_id = cqt.text_id left outer join ");
+    // End query_text table
     sqlBuffer.append(getDbTablePrefix());
-    sqlBuffer.append("cpo_query cq ");
-    sqlBuffer.append("   left outer join ");
+    sqlBuffer.append("cpo_query_parameter cqp on cq.query_id = cqp.query_id left outer join ");
     sqlBuffer.append(getDbTablePrefix());
-    sqlBuffer.append("cpo_query_parameter cqp ");
-    sqlBuffer.append("   on cq.query_id = cqp.query_id ");
-    sqlBuffer.append("   where cqg.class_id = ? ");
-    sqlBuffer.append("   and cqg.group_id = cq.group_id ) innr ");
-    sqlBuffer.append(" left outer join ");
-    sqlBuffer.append(getDbTablePrefix());
-    sqlBuffer.append("cpo_attribute_map cam on innr.attribute_id = cam.attribute_id ");
-    sqlBuffer.append("where cqt.text_id = innr.text_id ");
-    sqlBuffer.append("order by innr.group_id asc, innr.query_seq asc, innr.param_seq  asc");
-
+    sqlBuffer.append("cpo_attribute_map cam on cqp.attribute_id = cam.attribute_id where cqg.class_id=? ");
+    sqlBuffer.append("order by cqg.group_id, cq.seq_no, cqp.seq_no");
+    
     String sql = sqlBuffer.toString();
     logger.debug("loadQueryGroup Sql <" + sql + ">");
 

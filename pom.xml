@@ -93,9 +93,9 @@
     </site>
   </distributionManagement>
   <scm>
-    <connection>scm:svn:https://cpo.svn.sourceforge.net/svnroot/cpo/api/tags/cpo-3.5</connection>
-    <developerConnection>scm:svn:https://cpo.svn.sourceforge.net/svnroot/cpo/api/tags/cpo-3.5</developerConnection>
-    <url>https://cpo.svn.sourceforge.net/svnroot/cpo/api/tags/cpo-3.5</url>
+    <connection>scm:svn:https://cpo.svn.sourceforge.net/svnroot/cpo/api/branches/cpo-3.5</connection>
+    <developerConnection>scm:svn:https://cpo.svn.sourceforge.net/svnroot/cpo/api/branches/cpo-3.5</developerConnection>
+    <url>https://cpo.svn.sourceforge.net/svnroot/cpo/api/branches/cpo-3.5</url>
   </scm>
   <build>
     <testResources>

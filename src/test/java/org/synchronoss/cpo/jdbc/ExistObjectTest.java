@@ -28,6 +28,7 @@ import junit.framework.TestCase;
 
 import org.synchronoss.cpo.CpoAdapter;
 import org.synchronoss.cpo.CpoAdapterBean;
+import org.synchronoss.cpo.CpoWhere;
 
 /**
  * RetrieveObjectTest is a JUnit test class for testing the
@@ -63,6 +64,8 @@ public class ExistObjectTest extends TestCase {
             fail(method+e.getMessage());
         }
         ValueObject vo = new ValueObject(1);
+        vo.setAttrVarChar("WHERE");
+        
         try{
              jdbcIdo_.insertObject(vo);
         } catch (Exception e) {
@@ -95,6 +98,31 @@ public class ExistObjectTest extends TestCase {
 
     }
 
+    public void testExistObjectWhere() {
+      String method = "testExistObject:";
+      
+      
+      try{
+          ValueObject valObj = new ValueObject(1);
+          CpoWhere where = jdbcIdo_.newWhere(CpoWhere.LOGIC_AND, "attrVarChar", CpoWhere.COMP_EQ, "WHERE");
+          long count = jdbcIdo_.existsObject(null,valObj, where);
+           assertTrue("Object not Found", count==1);
+      } catch (Exception e) {
+          e.printStackTrace();
+          fail(method+e.getMessage());
+      }
+      
+      try{
+          ValueObject valObj = new ValueObject(1);
+          CpoWhere where = jdbcIdo_.newWhere(CpoWhere.LOGIC_AND, "attrVarChar", CpoWhere.COMP_EQ, "NOWHERE");
+          long count = jdbcIdo_.existsObject(null,valObj,where);
+          assertTrue("Object Found", count==0);
+     } catch (Exception e) {
+         e.printStackTrace();
+         fail(method+e.getMessage());
+     }
+
+  }
 
     public void tearDown() {
         //String method="tearDown:";

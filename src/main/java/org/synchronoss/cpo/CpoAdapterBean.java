@@ -493,6 +493,55 @@ public class CpoAdapterBean
         return JdbcCpoFactory.getCpoAdapter().existsObject(name,obj);
     }
     
+    /**
+     * The CpoAdapter will check to see if this object exists in the datasource.
+     * 
+     * <pre>Example:<code>
+     * 
+     * class SomeObject so = new SomeObject();
+     * long count = 0;
+     * class CpoAdapter cpo = null;
+     * 
+     *  
+     *  try {
+     *    cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));
+     *  } catch (CpoException ce) {
+     *    // Handle the error
+     *    cpo = null;
+     *  }
+     *  
+     *  if (cpo!=null) {
+     *    so.setId(1);
+     *    so.setName("SomeName");
+     *    try{
+     *      CpoWhere where = cpo.newCpoWhere(CpoWhere.LOGIC_NONE, id, CpoWhere.COMP_EQ);
+     *      count = cpo.existsObject("SomeExistCheck",so, where);
+     *      if (count>0) {
+     *        // object exists
+     *      } else {
+     *        // object does not exist
+     *      }
+     *    } catch (CpoException ce) {
+     *      // Handle the error
+     *    }
+     *  }
+     *</code>
+     *</pre>
+     * 
+     * @param name The String name of the EXISTS Query group that will be used to create the object
+     *          in the datasource. null signifies that the default rules will be used.
+     * @param obj This is an object that has been defined within the metadata of the datasource. If
+     *     the class is not defined an exception will be thrown. This object will be searched for inside the
+     *     datasource.
+     * @param where A CpoWhere object that passes in run-time constraints to the query that performs the 
+     *      the exist
+     * @return The number of objects that exist in the datasource that match the specified object
+     *
+     * @throws CpoException Thrown if there are errors accessing the datasource
+     */
+    public <T> long existsObject(String name, T obj, CpoWhere where) throws CpoException{
+        return JdbcCpoFactory.getCpoAdapter().existsObject(name,obj, where);
+    }
     
     /**
      * Executes an Object whose MetaData contains a stored procedure. An assumption is that

@@ -63,7 +63,7 @@ public class JdbcPreparedStatementFactory implements CpoReleasible {
     
     private JdbcQuery jq_ = null;
     
-    private Collection<BindAttribute> bindValues_=null;
+    private Collection<BindAttribute> bindValues_= new ArrayList<BindAttribute>();
     
     private static final String WHERE_MARKER = "__CPO_WHERE__";
     private static final String ORDERBY_MARKER = "__CPO_ORDERBY__";
@@ -85,30 +85,9 @@ public class JdbcPreparedStatementFactory implements CpoReleasible {
      * @throws SQLException if a JDBC error occurs
      */
     public <T> JdbcPreparedStatementFactory(Connection conn, JdbcCpoAdapter jca, JdbcMetaClass<T> jmcCriteria, JdbcQuery jq, T obj) throws CpoException{
-        this(conn, jca, jmcCriteria, jq, obj, null, null, null);
+        this(conn, jca, jmcCriteria, jq, obj, null, null);
     }
 
-    /**
-     * Used to build the PreparedStatement that is used by CPO to create the 
-     * actual JDBC PreparedStatement.
-     *
-     * The constructor is called by the internal CPO framework. This is not to be used by
-     * users of CPO. Programmers that build Transforms may need to use this object to get access
-     * to the actual connection. 
-     * 
-     * @param conn The actual jdbc connection that will be used to create the callable statement.
-     * @param jca The JdbcCpoAdapter that is controlling this transaction 
-     * @param jq The JdbcQuery that is being executed
-     * @param obj The pojo that is being acted upon
-     * @param where a cpoWhere to be added to the queryText from the query group
-     * @param orderBy an orderBy to be added to the queryText from the query group
-     *
-     * @throws CpoException if a CPO error occurs
-     * @throws SQLException if a JDBC error occurs
-     */
-    public <T> JdbcPreparedStatementFactory(Connection conn, JdbcCpoAdapter jca, JdbcMetaClass<T> jmcCriteria, JdbcQuery jq, T obj, CpoWhere where, Collection<CpoOrderBy> orderBy) throws CpoException{
-        this(conn, jca, jmcCriteria, jq, obj, where, orderBy, null);
-    }
 
     /**
      * Used to build the PreparedStatement that is used by CPO to create the 
@@ -124,14 +103,13 @@ public class JdbcPreparedStatementFactory implements CpoReleasible {
      * @param obj The pojo that is being acted upon
      * @param additionalSql Additional sql to be appended to the JdbcQuery sql that is used to create the 
      *        actual JDBC PreparedStatement
-     * @param bindValues additional bind values from a dynamic where statement
      *
      * @throws CpoException if a CPO error occurs
      * @throws SQLException if a JDBC error occurs
      */
     public <T> JdbcPreparedStatementFactory(Connection conn, JdbcCpoAdapter jca, JdbcMetaClass<T> jmcCriteria, JdbcQuery jq, T obj,
-    		CpoWhere where, Collection<CpoOrderBy> orderBy, Collection<BindAttribute> bindValues) throws CpoException {
-      String sql=buildSql(jmcCriteria, jq.getText(), where, orderBy, bindValues);
+    		CpoWhere where, Collection<CpoOrderBy> orderBy) throws CpoException {
+      String sql=buildSql(jmcCriteria, jq.getText(), where, orderBy);
       
        localLogger = obj==null?logger:Logger.getLogger(obj.getClass().getName());
 
@@ -148,7 +126,6 @@ public class JdbcPreparedStatementFactory implements CpoReleasible {
         }
         setPreparedStatement(pstmt);
         setJdbcQuery(jq);
-        setBindValues(bindValues);
 
         bindParameters(obj);
 
@@ -160,14 +137,12 @@ public class JdbcPreparedStatementFactory implements CpoReleasible {
      * @param sql DOCUMENT ME!
      * @param where DOCUMENT ME!
      * @param orderBy DOCUMENT ME!
-     * @param bindValues DOCUMENT ME!
      *
      * @return DOCUMENT ME!
      *
      * @throws CpoException DOCUMENT ME!
      */
-    private <T> String buildSql(JdbcMetaClass<T> jmc, String sql, CpoWhere where, Collection<CpoOrderBy> orderBy,
-        Collection<BindAttribute> bindValues) throws CpoException {
+    private <T> String buildSql(JdbcMetaClass<T> jmc, String sql, CpoWhere where, Collection<CpoOrderBy> orderBy) throws CpoException {
         StringBuffer sqlText=new StringBuffer();
 
         Iterator<CpoOrderBy> obIt=null;
@@ -190,7 +165,7 @@ public class JdbcPreparedStatementFactory implements CpoReleasible {
             else 
                 sqlText = replaceMarker(sqlText, WHERE_MARKER,jwb.getWhereClause());
             
-            bindValues.addAll(jwb.getBindValues());
+            bindValues_.addAll(jwb.getBindValues());
         } else {
         	sqlText = replaceMarker(sqlText, WHERE_MARKER,"");
         }
@@ -357,13 +332,6 @@ public class JdbcPreparedStatementFactory implements CpoReleasible {
 	 */
 	protected Collection<BindAttribute> getBindValues() {
 		return bindValues_;
-	}
-
-	/**
-	 * @param bindValues_ The bindValues_ to set.
-	 */
-	protected void setBindValues(Collection<BindAttribute> bindValues_) {
-		this.bindValues_ = bindValues_;
 	}
 
 	/**

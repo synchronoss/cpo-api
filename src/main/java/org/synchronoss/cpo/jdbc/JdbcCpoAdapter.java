@@ -909,6 +909,56 @@ public class JdbcCpoAdapter implements CpoAdapter {
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
   public <T> long existsObject(String name, T obj) throws CpoException {
+    return this.existsObject(name, obj, null);
+  }
+
+  /**
+   * The CpoAdapter will check to see if this object exists in the datasource.
+   * 
+   * <pre>Example:<code>
+   * 
+   * class SomeObject so = new SomeObject();
+   * long count = 0;
+   * class CpoAdapter cpo = null;
+   * 
+   *  
+   *  try {
+   *    cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));
+   *  } catch (CpoException ce) {
+   *    // Handle the error
+   *    cpo = null;
+   *  }
+   *  
+   *  if (cpo!=null) {
+   *    so.setId(1);
+   *    so.setName("SomeName");
+   *    try{
+   *      CpoWhere where = cpo.newCpoWhere(CpoWhere.LOGIC_NONE, id, CpoWhere.COMP_EQ);
+   *      count = cpo.existsObject("SomeExistCheck",so, where);
+   *      if (count>0) {
+   *        // object exists
+   *      } else {
+   *        // object does not exist
+   *      }
+   *    } catch (CpoException ce) {
+   *      // Handle the error
+   *    }
+   *  }
+   *</code>
+   *</pre>
+   * 
+   * @param name The String name of the EXISTS Query group that will be used to create the object
+   *          in the datasource. null signifies that the default rules will be used.
+   * @param obj This is an object that has been defined within the metadata of the datasource. If
+   *     the class is not defined an exception will be thrown. This object will be searched for inside the
+   *     datasource.
+   * @param where A CpoWhere object that passes in run-time constraints to the query that performs the 
+   *      the exist
+   * @return The number of objects that exist in the datasource that match the specified object
+   *
+   * @throws CpoException Thrown if there are errors accessing the datasource
+   */
+  public <T> long existsObject(String name, T obj, CpoWhere where) throws CpoException {
     Connection c = null;
     Connection meta = null;
     long objCount = -1;
@@ -921,7 +971,7 @@ public class JdbcCpoAdapter implements CpoAdapter {
       } else {
         meta = getMetaConnection();
       }
-      objCount = existsObject(name, obj, c, meta);
+      objCount = existsObject(name, obj, c, meta, where);
     } catch (Exception e) {
       throw new CpoException("existsObjects(String, Object) failed", e);
     } finally {
@@ -944,7 +994,7 @@ public class JdbcCpoAdapter implements CpoAdapter {
    * @return The int value of the first column returned in the record set
    * @throws CpoException exception will be thrown if the Query Group has a query count != 1
    */
-  protected <T> long existsObject(String name, T obj, Connection con, Connection metaCon)
+  protected <T> long existsObject(String name, T obj, Connection con, Connection metaCon, CpoWhere where)
       throws CpoException {
     PreparedStatement ps = null;
     ResultSet rs = null;
@@ -963,7 +1013,7 @@ public class JdbcCpoAdapter implements CpoAdapter {
 
       for (i = 0; i < queryGroup.size(); i++) {
         jq = queryGroup.get(i);
-        JdbcPreparedStatementFactory jpsf = new JdbcPreparedStatementFactory(con, this, jmc, jq, obj);
+        JdbcPreparedStatementFactory jpsf = new JdbcPreparedStatementFactory(con, this, jmc, jq, obj, where, null);
         ps = jpsf.getPreparedStatement();
 
         long qCount = 0; // set the results for this query to 0
@@ -1768,7 +1818,7 @@ public class JdbcCpoAdapter implements CpoAdapter {
     long objCount;
 
     if (JdbcCpoAdapter.PERSIST_GROUP.equals(retType) == true) {
-      objCount = existsObject(name, obj, c, meta);
+      objCount = existsObject(name, obj, c, meta, null);
 
       if (objCount == 0) {
         retType = JdbcCpoAdapter.CREATE_GROUP;
@@ -2516,11 +2566,8 @@ public class JdbcCpoAdapter implements CpoAdapter {
     int columnCount;
     int k;
     T obj;
-    //ArrayList<T> resultSet = new ArrayList<T>();
     Class<T> jmcClass;
     HashMap<String, JdbcAttribute> jmcAttrMap;
-    //String sqlText=null;
-    Collection<BindAttribute> bindValues = new ArrayList<BindAttribute>();
     JdbcAttribute[] attributes;
     JdbcPreparedStatementFactory jpsf;
     int i;
@@ -2539,7 +2586,7 @@ public class JdbcCpoAdapter implements CpoAdapter {
       for (i = 0; i < queryGroup.size(); i++) {
         jq = queryGroup.get(i);
 
-        jpsf = new JdbcPreparedStatementFactory(con, this, jmcCriteria, jq, criteria, where, orderBy, bindValues);
+        jpsf = new JdbcPreparedStatementFactory(con, this, jmcCriteria, jq, criteria, where, orderBy);
         ps = jpsf.getPreparedStatement();
         ps.setFetchSize(resultSet.getFetchSize());
 

@@ -202,7 +202,7 @@ public class JdbcPreparedStatementFactory implements CpoReleasible {
             
             try {
 	            if(obIt.hasNext()) {
-	                obBuff.append(" ORDER BY ");
+	                obBuff.append(" ORDER BY");
 	                ob= (JdbcCpoOrderBy)obIt.next();
 	                obBuff.append(ob.toString(jmc));
 	            }

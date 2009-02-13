@@ -156,10 +156,9 @@ public class JdbcCpoWhere extends Node implements CpoWhere{
         if(getLogical()!=CpoWhere.LOGIC_NONE){
             sb.append(" ");
             sb.append(logicals[getLogical()]);
-        } else {
-            if (!hasParent()) { // This is the root where clause
-                sb.append("WHERE");
-            }
+        } else if (!hasParent()){
+          // This is the root where clause
+            sb.append("WHERE");
         }
 
         if(getNot()==true) {
@@ -167,23 +166,22 @@ public class JdbcCpoWhere extends Node implements CpoWhere{
         }
 
         if(getAttribute()!=null){
-            sb.append(" ");
+            if (sb.length()>0)
+              sb.append(" ");
             String fullyQualifiedColumn=null;
 
             attribute = (JdbcAttribute) jmc.getColumnMap().get(getAttribute());
             if(attribute==null) {
                 // This is not an attribute on the cpo bean passed to the retrieveObjects method.
                 // treat it as the column name
-                fullyQualifiedColumn = getAttribute();
+                fullyQualifiedColumn=getAttribute();
             } else {
-                fullyQualifiedColumn = attribute.getDbTable()+"."+attribute.getDbColumn();
-                if (fullyQualifiedColumn.equalsIgnoreCase("null.null"))
-                	throw new CpoException("DBTable and DbColumn not defined for attribute:"+attribute.getName());
+              fullyQualifiedColumn=buildColumnName(attribute);
             }
             
             if (getAttributeFunction()!=null){
             	if (attribute!=null)
-            		sb.append(buildFunction(getAttributeFunction(),attribute.getName(),fullyQualifiedColumn));
+            		sb.append(buildFunction(getAttributeFunction(),attribute.getName(),fullyQualifiedColumn.toString()));
             	else
             		sb.append(getAttributeFunction());
             } else {
@@ -211,7 +209,7 @@ public class JdbcCpoWhere extends Node implements CpoWhere{
                 if (attribute==null){
                 	fullyQualifiedColumn=getRightAttribute();
                 } else {
-                	fullyQualifiedColumn=attribute.getDbTable()+"."+attribute.getDbColumn();
+                  fullyQualifiedColumn=buildColumnName(attribute);
                 }
 
                 if (getRightAttributeFunction()!=null) {
@@ -220,7 +218,6 @@ public class JdbcCpoWhere extends Node implements CpoWhere{
                     sb.append(fullyQualifiedColumn);
                 }
              } else if(getStaticValue()!=null) {
-                sb.append(" ");
                 sb.append(getStaticValue());
              }
         }
@@ -271,6 +268,22 @@ public class JdbcCpoWhere extends Node implements CpoWhere{
         }
 
         return sb.toString();
+    }
+    
+    private String buildColumnName(JdbcAttribute attribute){
+      StringBuffer columnName = new StringBuffer();
+      
+      if (attribute.getDbTable()!=null){
+        columnName.append(attribute.getDbTable());
+        columnName.append(".");
+      }
+      if (attribute.getDbColumn()!=null) {
+        columnName.append(attribute.getDbColumn());
+      } else {
+        columnName.append(attribute.getDbName());
+      }
+      
+      return columnName.toString();
     }
 
 }

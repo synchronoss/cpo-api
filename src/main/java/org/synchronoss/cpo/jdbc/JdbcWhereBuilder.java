@@ -67,9 +67,12 @@ public class JdbcWhereBuilder<T> implements INodeVisitor {
     */
     public boolean visitBegin(Node node) throws Exception{
         JdbcCpoWhere jcw = (JdbcCpoWhere) node;
-        whereClause.append(" ");
         whereClause.append(jcw.toString(jmc));
-        whereClause.append(" (");
+        if (jcw.hasParent())
+          whereClause.append(" (");
+        else 
+          whereClause.append(" ");
+          
         return true;
     }
 
@@ -90,6 +93,8 @@ public class JdbcWhereBuilder<T> implements INodeVisitor {
     * @return a boolean (false) to end visit or (true) to continue visiting
     */
     public boolean visitEnd(Node node) throws Exception{
+      JdbcCpoWhere jcw = (JdbcCpoWhere) node;
+      if (jcw.hasParent())
         whereClause.append(")");
         return true;
     }
@@ -104,7 +109,6 @@ public class JdbcWhereBuilder<T> implements INodeVisitor {
     public boolean visit(Node node) throws Exception{
         JdbcCpoWhere jcw = (JdbcCpoWhere) node;
         JdbcAttribute attribute = null;
-        whereClause.append(" ");
         whereClause.append(jcw.toString(jmc));
         if(jcw.getValue() != null) {
             attribute = (JdbcAttribute) jmc.getColumnMap().get(jcw.getAttribute());

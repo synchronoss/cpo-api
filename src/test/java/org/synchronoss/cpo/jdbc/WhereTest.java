@@ -65,6 +65,7 @@ public class WhereTest extends TestCase {
         ValueObject vo = new ValueObject(1);
         vo.setAttrVarChar("Test");
         vo.setAttrSmallInt(1);
+        vo.setAttrInteger(1);
         al.add(vo);
         al.add(new ValueObject(2));
         al.add(new ValueObject(3));
@@ -135,6 +136,36 @@ public class WhereTest extends TestCase {
             fail(method+e.getMessage());
         }
     }
+    
+    
+    public void testNestedWhere() {
+      String method = "testValueWhere:";
+      Collection<ValueObject> col = null;
+      CpoWhere cw = null;
+      
+      
+      try{
+          ValueObject valObj = new ValueObject(-6);
+          cw = jdbcIdo_.newWhere();
+          cw.addWhere(jdbcIdo_.newWhere(CpoWhere.LOGIC_NONE, "id", CpoWhere.COMP_EQ, valObj));
+          
+          CpoWhere cwAnd = jdbcIdo_.newWhere();
+          cwAnd.setLogical(CpoWhere.LOGIC_OR);
+          valObj = new ValueObject(2);
+          cwAnd.addWhere(jdbcIdo_.newWhere(CpoWhere.LOGIC_NONE, "id", CpoWhere.COMP_EQ, valObj));
+          valObj = new ValueObject(3);
+          cwAnd.addWhere(jdbcIdo_.newWhere(CpoWhere.LOGIC_OR, "id", CpoWhere.COMP_EQ, valObj));
+          
+          cw.addWhere(cwAnd); 
+          col = jdbcIdo_.retrieveObjects("TestWhereRetrieve",valObj,valObj,cw,null);
+          
+          assertTrue("Col size is "+col.size(), col.size()==3);
+      } catch (Exception e) {
+          e.printStackTrace();
+          fail(method+e.getMessage());
+      }
+    }
+
     public void testIsNullWhere() {
         String method = "testIsNullWhere:";
         Collection<ValueObject> col = null;

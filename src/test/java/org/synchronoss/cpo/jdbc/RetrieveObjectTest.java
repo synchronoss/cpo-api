@@ -233,7 +233,7 @@ public class RetrieveObjectTest extends TestCase {
       
       try{
           ValueObject valObj = new ValueObject();
-          crs = jdbcIdo_.retrieveObjects(null,valObj,valObj,null,null, 11);
+          crs = jdbcIdo_.retrieveObjects(null,valObj,valObj,null,null, 20);
           logger.debug("Returned from retrieveObjects");
           for(ValueObject vo: crs){
             if (vo!=null)

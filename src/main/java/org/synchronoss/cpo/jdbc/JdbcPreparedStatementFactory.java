@@ -34,6 +34,7 @@ import java.util.Iterator;
 
 import org.apache.log4j.Logger;
 import org.synchronoss.cpo.CpoException;
+import org.synchronoss.cpo.CpoNativeQuery;
 import org.synchronoss.cpo.CpoOrderBy;
 import org.synchronoss.cpo.CpoReleasible;
 import org.synchronoss.cpo.CpoWhere;
@@ -85,7 +86,7 @@ public class JdbcPreparedStatementFactory implements CpoReleasible {
      * @throws SQLException if a JDBC error occurs
      */
     public <T> JdbcPreparedStatementFactory(Connection conn, JdbcCpoAdapter jca, JdbcMetaClass<T> jmcCriteria, JdbcQuery jq, T obj) throws CpoException{
-        this(conn, jca, jmcCriteria, jq, obj, null, null);
+        this(conn, jca, jmcCriteria, jq, obj, null, null, null);
     }
 
 
@@ -108,8 +109,8 @@ public class JdbcPreparedStatementFactory implements CpoReleasible {
      * @throws SQLException if a JDBC error occurs
      */
     public <T> JdbcPreparedStatementFactory(Connection conn, JdbcCpoAdapter jca, JdbcMetaClass<T> jmcCriteria, JdbcQuery jq, T obj,
-    		CpoWhere where, Collection<CpoOrderBy> orderBy) throws CpoException {
-      String sql=buildSql(jmcCriteria, jq.getText(), where, orderBy);
+    		CpoWhere where, Collection<CpoOrderBy> orderBy, Collection<CpoNativeQuery> nativeQueries) throws CpoException {
+      String sql=buildSql(jmcCriteria, jq.getText(), where, orderBy, nativeQueries);
       
        localLogger = obj==null?logger:Logger.getLogger(obj.getClass().getName());
 
@@ -142,7 +143,7 @@ public class JdbcPreparedStatementFactory implements CpoReleasible {
      *
      * @throws CpoException DOCUMENT ME!
      */
-    private <T> String buildSql(JdbcMetaClass<T> jmc, String sql, CpoWhere where, Collection<CpoOrderBy> orderBy) throws CpoException {
+    private <T> String buildSql(JdbcMetaClass<T> jmc, String sql, CpoWhere where, Collection<CpoOrderBy> orderBy, Collection<CpoNativeQuery> nativeQueries) throws CpoException {
         StringBuffer sqlText=new StringBuffer();
 
         Iterator<CpoOrderBy> obIt=null;
@@ -166,8 +167,6 @@ public class JdbcPreparedStatementFactory implements CpoReleasible {
                 sqlText = replaceMarker(sqlText, WHERE_MARKER,jwb.getWhereClause());
             
             bindValues_.addAll(jwb.getBindValues());
-        } else {
-        	sqlText = replaceMarker(sqlText, WHERE_MARKER,"");
         }
 
         // do the order by stuff now
@@ -196,9 +195,21 @@ public class JdbcPreparedStatementFactory implements CpoReleasible {
             else {
                 sqlText=replaceMarker(sqlText, ORDERBY_MARKER, obBuff.toString());
             }
-        } else {
-            sqlText=replaceMarker(sqlText, ORDERBY_MARKER, "");
         }
+        
+        if (nativeQueries != null){
+          for (CpoNativeQuery cnq : nativeQueries){
+            if (cnq.getMarker()==null || sqlText.indexOf(cnq.getMarker())==-1){
+              sqlText.append(" ");
+              sqlText.append(cnq.getNativeText());
+            } else {
+              sqlText=replaceMarker(sqlText, cnq.getMarker(), cnq.getNativeText());
+            }
+          }
+        }
+        
+        sqlText = replaceMarker(sqlText, WHERE_MARKER,"");
+        sqlText=replaceMarker(sqlText, ORDERBY_MARKER, "");
         
         return sqlText.toString();
     }
@@ -296,7 +307,7 @@ public class JdbcPreparedStatementFactory implements CpoReleasible {
             //if(valuesIt!=null) {
             //    while(valuesIt.hasNext()) {
             //        BindAttribute bindAttr=(BindAttribute)valuesIt.next();
-                    for(BindAttribute bindAttr:bindValues){
+             for(BindAttribute bindAttr:bindValues){
                     Object bindObject = bindAttr.getBindObject();
                     JdbcAttribute ja = bindAttr.getJdbcAttribute();
 
@@ -321,7 +332,7 @@ public class JdbcPreparedStatementFactory implements CpoReleasible {
                         ja.invokeGetter(this, bindObject, j++);
                     }
 
-                }
+               }
 //            }
         }
    	

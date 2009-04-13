@@ -111,7 +111,7 @@ public class RetrieveObjectTest extends TestCase {
       
       try{
           ValueObject valObj = new ValueObject();
-          crs = jdbcIdo_.retrieveObjects(null,valObj,valObj,null,null, 2);
+          crs = jdbcIdo_.retrieveObjects(null,valObj,valObj,null,null, null, 2);
           logger.debug("Returned from retrieveObjects");
           for(ValueObject vo: crs){
             if (vo!=null)
@@ -132,7 +132,7 @@ public class RetrieveObjectTest extends TestCase {
       
       try{
           ValueObject valObj = new ValueObject();
-          crs = jdbcIdo_.retrieveObjects(null,valObj,valObj,null,null, 9);
+          crs = jdbcIdo_.retrieveObjects(null,valObj,valObj,null,null, null, 9);
           for(ValueObject vo: crs){
             if (vo!=null)
               count++;
@@ -151,7 +151,7 @@ public class RetrieveObjectTest extends TestCase {
       
       try{
           ValueObject valObj = new ValueObject();
-          crs = jdbcIdo_.retrieveObjects(null,valObj,valObj,null,null, 10);
+          crs = jdbcIdo_.retrieveObjects(null,valObj,valObj,null,null, null,10);
           for(ValueObject vo: crs){
             if (vo!=null)
               count++;
@@ -170,7 +170,7 @@ public class RetrieveObjectTest extends TestCase {
       
       try{
           ValueObject valObj = new ValueObject();
-          crs = jdbcIdo_.retrieveObjects(null,valObj,valObj,null,null, 11);
+          crs = jdbcIdo_.retrieveObjects(null,valObj,valObj,null,null,null,11);
           for(ValueObject vo: crs){
             if (vo!=null)
               count++;
@@ -193,7 +193,7 @@ public class RetrieveObjectTest extends TestCase {
         trx = jdbcIdo_.getCpoTrxAdapter();
 
         ValueObject valObj = new ValueObject();
-        crs = trx.retrieveObjects(null,valObj,valObj,null,null, 11);
+        crs = trx.retrieveObjects(null,valObj,valObj,null,null,null,11);
         
         //start this trx
         for(ValueObject vo: crs){
@@ -233,7 +233,7 @@ public class RetrieveObjectTest extends TestCase {
       
       try{
           ValueObject valObj = new ValueObject();
-          crs = jdbcIdo_.retrieveObjects(null,valObj,valObj,null,null, 11);
+          crs = jdbcIdo_.retrieveObjects(null,valObj,valObj,null,null,null,11);
           logger.debug("Returned from retrieveObjects");
           for(ValueObject vo: crs){
             if (vo!=null)

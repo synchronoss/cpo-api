@@ -24,6 +24,7 @@
 package org.synchronoss.cpo.jdbc;
 
 
+import java.io.StringReader;
 import java.lang.reflect.InvocationTargetException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -31,6 +32,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Set;
 import java.util.Map.Entry;
 
@@ -64,8 +66,6 @@ public class JdbcPreparedStatementFactory implements CpoReleasible {
     
     private ArrayList<CpoReleasible> releasibles = new ArrayList<CpoReleasible>();
     
-    private JdbcQuery jq_ = null;
-        
     private static final String WHERE_MARKER = "__CPO_WHERE__";
     private static final String ORDERBY_MARKER = "__CPO_ORDERBY__";
 
@@ -122,7 +122,7 @@ public class JdbcPreparedStatementFactory implements CpoReleasible {
       Collection<CpoNativeQuery> nativeQueries) throws CpoException {
 
     // get the list of bindValues from the query parameters
-    Collection<BindAttribute> bindValues = getBindValues(jq, obj);
+    List<BindAttribute> bindValues = getBindValues(jq, obj);
 
     String sql = buildSql(jmcCriteria, jq.getText(), wheres, orderBy, nativeQueries, bindValues);
 
@@ -156,7 +156,7 @@ public class JdbcPreparedStatementFactory implements CpoReleasible {
      *
      * @throws CpoException DOCUMENT ME!
      */
-    private <T> String buildSql(JdbcMetaClass<T> jmc, String sql, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeQuery> nativeQueries, Collection<BindAttribute> bindValues) throws CpoException {
+    private <T> String buildSql(JdbcMetaClass<T> jmc, String sql, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeQuery> nativeQueries, List<BindAttribute> bindValues) throws CpoException {
         StringBuilder sqlText=new StringBuilder();
 
         sqlText.append(sql);
@@ -173,12 +173,12 @@ public class JdbcPreparedStatementFactory implements CpoReleasible {
                 throw new CpoException("Unable to build WHERE clause",e);
             }
             
-            if (sqlText.indexOf(jcw.getName())==-1)
+            if (sqlText.indexOf(jcw.getName())==-1) {
                 sqlText.append(jwb.getWhereClause());
-            else 
-                sqlText = replaceMarker(sqlText, jcw.getName(),jwb.getWhereClause());
-            
-            bindValues.addAll(jwb.getBindValues());
+                bindValues.addAll(jwb.getBindValues());
+            } else {
+                sqlText = replaceMarker(sqlText, jcw.getName(), jwb, bindValues);
+            }
           }
         }
 
@@ -227,7 +227,7 @@ public class JdbcPreparedStatementFactory implements CpoReleasible {
         return sqlText.toString();
     }
     
-    protected StringBuilder replaceMarker(StringBuilder source, String marker, String replace){
+    private StringBuilder replaceMarker(StringBuilder source, String marker, String replace){
       int attrOffset = 0;
       int fromIndex = 0;
       int mLength=marker.length();
@@ -243,9 +243,57 @@ public class JdbcPreparedStatementFactory implements CpoReleasible {
       //OUT.debug("ending string <"+source.toString()+">");
 
       return source;
+    }
 
-  }
+    private <T> StringBuilder replaceMarker(StringBuilder source, String marker, JdbcWhereBuilder<T> jwb, List<BindAttribute> bindValues){
+      int attrOffset = 0;
+      int fromIndex = 0;
+      int mLength=marker.length();
+      String replace = jwb.getWhereClause();
+      int rLength=replace.length();
+      Collection<BindAttribute> jwbBindValues = jwb.getBindValues();
+      
+      //OUT.debug("starting string <"+source.toString()+">");
+      if(source!=null && source.length()>0) {
+          while((attrOffset=source.indexOf(marker, fromIndex))!=-1){
+            source.replace(attrOffset,attrOffset+mLength, replace);
+            fromIndex=attrOffset+rLength;
+            bindValues.addAll(countBindMarkers(source.substring(0, attrOffset)), jwbBindValues);
+          }
+      }
+      //OUT.debug("ending string <"+source.toString()+">");
 
+      return source;
+    }
+    
+    private int countBindMarkers(String source){
+      StringReader reader = null;
+      int rc=-1;
+      int qMarks=0;
+      boolean inDoubleQuotes=false;
+      boolean inSingleQuotes=false;
+      
+      if (source != null) {
+        reader = new StringReader(source);
+        
+        try{
+          do {
+            rc = reader.read();
+            if (((char)rc)=='\''){
+              inSingleQuotes = !inSingleQuotes;
+            } else if (((char)rc)=='"') {
+              inDoubleQuotes = !inDoubleQuotes;
+            } else if (!inSingleQuotes && !inDoubleQuotes && ((char)rc)=='?') {
+              qMarks++;
+            }
+          } while (rc != -1);
+        } catch(Exception e){
+          logger.error("error counting bind markers");
+        }
+      }
+      
+      return qMarks;
+    }
    
     /**
      * Returns the jdbc prepared statment associated with this 
@@ -267,7 +315,6 @@ public class JdbcPreparedStatementFactory implements CpoReleasible {
     public void AddReleasible(CpoReleasible releasible){
         if (releasible!=null)
             releasibles.add(releasible);
-        
     }
 
     /**
@@ -290,19 +337,19 @@ public class JdbcPreparedStatementFactory implements CpoReleasible {
    * CPO meta parameters and the parameters from the dynamic where.
    * 
    */
-    protected Collection<BindAttribute> getBindValues(JdbcQuery jq, Object obj) throws CpoException {
-    Collection<BindAttribute> bindValues = new ArrayList<BindAttribute>();
-    ArrayList<JdbcParameter> parameters = jq.getParameterList();
-    JdbcParameter parameter = null;
-    for (int j = 0; j < parameters.size(); j++) {
-      parameter = (JdbcParameter) parameters.get(j);
-      if (parameter == null) {
-        throw new CpoException("JdbcParameter is null!");
+    protected List<BindAttribute> getBindValues(JdbcQuery jq, Object obj) throws CpoException {
+      List<BindAttribute> bindValues = new ArrayList<BindAttribute>();
+      ArrayList<JdbcParameter> parameters = jq.getParameterList();
+      JdbcParameter parameter = null;
+      for (int j = 0; j < parameters.size(); j++) {
+        parameter = (JdbcParameter) parameters.get(j);
+        if (parameter == null) {
+          throw new CpoException("JdbcParameter is null!");
+        }
+        bindValues.add(new BindAttribute(parameter.getAttribute(), obj));
       }
-      bindValues.add(new BindAttribute(parameter.getAttribute(), obj));
+      return bindValues;
     }
-    return bindValues;
-  }
 
   /**
    * Called by the CPO Framework. Binds all the attibutes from the class for the

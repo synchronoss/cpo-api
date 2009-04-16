@@ -26,6 +26,7 @@ package org.synchronoss.cpo;
 
 import java.lang.reflect.Method;
 import java.rmi.RemoteException;
+import java.util.ArrayList;
 import java.util.Collection;
 
 import javax.ejb.SessionBean;
@@ -187,7 +188,6 @@ public class CpoAdapterBean
         return(JdbcCpoFactory.getCpoAdapter().retrieveObject(name,obj));
     }
 
-
     /**
      * Retrieves the Object from the datasource. The assumption
      * is that the object exists in the datasource.
@@ -209,8 +209,8 @@ public class CpoAdapterBean
      *                 is used to specify the object type that will be returned in the 
      *                 collection.
      */
-    public <T,C> T retrieveObject(String name, C criteria, T result, CpoWhere where, Collection<CpoOrderBy> orderBy) throws CpoException{
-      return JdbcCpoFactory.getCpoAdapter().retrieveObject(name,criteria,result,where, orderBy);
+    public <T,C> T retrieveObject(String name, C criteria, T result, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy) throws CpoException{
+      return JdbcCpoFactory.getCpoAdapter().retrieveObject(name,criteria,result,wheres, orderBy);
     }
     /**
      * Retrieves the Object from the datasource. The assumption
@@ -233,8 +233,8 @@ public class CpoAdapterBean
      *                 is used to specify the object type that will be returned in the 
      *                 collection.
      */
-    public <T,C> T retrieveObject(String name, C criteria, T result, CpoWhere where, Collection<CpoOrderBy> orderBy, Collection<CpoNativeQuery> nativeQuery) throws CpoException{
-      return JdbcCpoFactory.getCpoAdapter().retrieveObject(name,criteria,result,where, orderBy,nativeQuery);
+    public <T,C> T retrieveObject(String name, C criteria, T result, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeQuery> nativeQuery) throws CpoException{
+      return JdbcCpoFactory.getCpoAdapter().retrieveObject(name,criteria,result,wheres, orderBy,nativeQuery);
     }
     
     /**
@@ -259,8 +259,8 @@ public class CpoAdapterBean
      *                 that was passed in. If no objects match the criteria, an empty
      *                 collection will be returned
      */
-    public <T,C> Collection<T> retrieveObjects(String name, C criteria, T result, CpoWhere where, Collection<CpoOrderBy> orderBy)  throws CpoException {
-        return JdbcCpoFactory.getCpoAdapter().retrieveObjects(name,criteria,result,where, orderBy);
+    public <T,C> Collection<T> retrieveObjects(String name, C criteria, T result, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy)  throws CpoException {
+        return JdbcCpoFactory.getCpoAdapter().retrieveObjects(name,criteria,result,wheres, orderBy);
     }
 
     /**
@@ -285,8 +285,8 @@ public class CpoAdapterBean
      *                 that was passed in. If no objects match the criteria, an empty
      *                 collection will be returned
      */
-    public <T,C> Collection<T> retrieveObjects(String name, C criteria, T result, CpoWhere where, Collection<CpoOrderBy> orderBy, Collection<CpoNativeQuery> nativeQuery)  throws CpoException {
-        return JdbcCpoFactory.getCpoAdapter().retrieveObjects(name,criteria,result,where, orderBy, nativeQuery);
+    public <T,C> Collection<T> retrieveObjects(String name, C criteria, T result, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeQuery> nativeQuery)  throws CpoException {
+        return JdbcCpoFactory.getCpoAdapter().retrieveObjects(name,criteria,result,wheres, orderBy, nativeQuery);
     }
 
     /**
@@ -584,14 +584,14 @@ public class CpoAdapterBean
      * @param obj This is an object that has been defined within the metadata of the datasource. If
      *     the class is not defined an exception will be thrown. This object will be searched for inside the
      *     datasource.
-     * @param where A CpoWhere object that passes in run-time constraints to the query that performs the 
+     * @param wheres A Collection of CpoWhere objects that pass in run-time constraints to the query that performs the 
      *      the exist
      * @return The number of objects that exist in the datasource that match the specified object
      *
      * @throws CpoException Thrown if there are errors accessing the datasource
      */
-    public <T> long existsObject(String name, T obj, CpoWhere where) throws CpoException{
-        return JdbcCpoFactory.getCpoAdapter().existsObject(name,obj, where);
+    public <T> long existsObject(String name, T obj, Collection<CpoWhere> wheres) throws CpoException{
+        return JdbcCpoFactory.getCpoAdapter().existsObject(name,obj, wheres);
     }
     
     /**
@@ -666,9 +666,9 @@ public class CpoAdapterBean
         return JdbcCpoFactory.getCpoAdapter().executeObject(name,criteria, result);    
     }
     
-    public <T,C> CpoResultSet<T> retrieveObjects(String name, C criteria, T result, CpoWhere where,
+    public <T,C> CpoResultSet<T> retrieveObjects(String name, C criteria, T result, Collection<CpoWhere> wheres,
         Collection<CpoOrderBy> orderBy, Collection<CpoNativeQuery> nativeQuery, int queueSize) throws CpoException {
-      return JdbcCpoFactory.getCpoAdapter().retrieveObjects(name,criteria, result, where, orderBy, nativeQuery, queueSize);    
+      return JdbcCpoFactory.getCpoAdapter().retrieveObjects(name,criteria, result, wheres, orderBy, nativeQuery, queueSize);    
     }
     
     public CpoOrderBy newOrderBy(String attribute, boolean ascending) throws CpoException{

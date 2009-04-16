@@ -72,6 +72,8 @@ public class JdbcCpoWhere extends Node implements CpoWhere{
     private String valueFunction = null;
     private boolean not = false;
     private String staticValue_ = null;
+    private String name = "__CPO_WHERE__";
+
 
     public <T> JdbcCpoWhere(int logical, String attr, int comp, T value){
         setLogical(logical);
@@ -273,4 +275,11 @@ public class JdbcCpoWhere extends Node implements CpoWhere{
         return sb.toString();
     }
 
+    public String getName() {
+      return name;
+    }
+
+    public void setName(String name) {
+      this.name = name;
+    }
 }

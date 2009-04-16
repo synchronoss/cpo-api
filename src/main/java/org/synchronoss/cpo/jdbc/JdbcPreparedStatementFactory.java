@@ -30,7 +30,9 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
+import java.util.HashMap;
+import java.util.Set;
+import java.util.Map.Entry;
 
 import org.apache.log4j.Logger;
 import org.synchronoss.cpo.CpoException;
@@ -68,6 +70,7 @@ public class JdbcPreparedStatementFactory implements CpoReleasible {
     
     private static final String WHERE_MARKER = "__CPO_WHERE__";
     private static final String ORDERBY_MARKER = "__CPO_ORDERBY__";
+
 
     /**
      * Used to build the PreparedStatement that is used by CPO to create the 
@@ -109,8 +112,8 @@ public class JdbcPreparedStatementFactory implements CpoReleasible {
      * @throws SQLException if a JDBC error occurs
      */
     public <T> JdbcPreparedStatementFactory(Connection conn, JdbcCpoAdapter jca, JdbcMetaClass<T> jmcCriteria, JdbcQuery jq, T obj,
-    		CpoWhere where, Collection<CpoOrderBy> orderBy, Collection<CpoNativeQuery> nativeQueries) throws CpoException {
-      String sql=buildSql(jmcCriteria, jq.getText(), where, orderBy, nativeQueries);
+    		Collection <CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeQuery> nativeQueries) throws CpoException {
+      String sql=buildSql(jmcCriteria, jq.getText(), wheres, orderBy, nativeQueries);
       
        localLogger = obj==null?logger:Logger.getLogger(obj.getClass().getName());
 
@@ -143,57 +146,56 @@ public class JdbcPreparedStatementFactory implements CpoReleasible {
      *
      * @throws CpoException DOCUMENT ME!
      */
-    private <T> String buildSql(JdbcMetaClass<T> jmc, String sql, CpoWhere where, Collection<CpoOrderBy> orderBy, Collection<CpoNativeQuery> nativeQueries) throws CpoException {
-        StringBuffer sqlText=new StringBuffer();
-
-        Iterator<CpoOrderBy> obIt=null;
-        JdbcCpoOrderBy ob=null;
-        JdbcWhereBuilder<T> jwb=new JdbcWhereBuilder<T>(jmc);
-        JdbcCpoWhere jcw=(JdbcCpoWhere) where;
+    private <T> String buildSql(JdbcMetaClass<T> jmc, String sql, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeQuery> nativeQueries) throws CpoException {
+        StringBuilder sqlText=new StringBuilder();
 
         sqlText.append(sql);
 
-        // do the where stuff here when ready
-        if(jcw!=null) {
+        if (wheres != null){
+          for (CpoWhere where: wheres){
+            JdbcWhereBuilder<T> jwb=new JdbcWhereBuilder<T>(jmc);
+            JdbcCpoWhere jcw=(JdbcCpoWhere) where;
+  
+          // do the where stuff here when ready
             try{
                 jcw.acceptDFVisitor(jwb);
             } catch (Exception e){
                 throw new CpoException("Unable to build WHERE clause",e);
             }
             
-            if (sqlText.indexOf(WHERE_MARKER)==-1)
+            if (sqlText.indexOf(jcw.getName())==-1)
                 sqlText.append(jwb.getWhereClause());
             else 
-                sqlText = replaceMarker(sqlText, WHERE_MARKER,jwb.getWhereClause());
+                sqlText = replaceMarker(sqlText, jcw.getName(),jwb.getWhereClause());
             
             bindValues_.addAll(jwb.getBindValues());
+          }
         }
 
         // do the order by stuff now
         if(orderBy!=null) {
-            StringBuffer obBuff = new StringBuffer();
-            obIt=orderBy.iterator();
-            
+          HashMap<String, StringBuilder> mapOrderBy = new HashMap<String, StringBuilder>();
             try {
-	            if(obIt.hasNext()) {
-	                obBuff.append(" ORDER BY ");
-	                ob= (JdbcCpoOrderBy)obIt.next();
-	                obBuff.append(ob.toString(jmc));
-	            }
-	
-	            while(obIt.hasNext()) {
-	                obBuff.append(", ");
-	                ob= (JdbcCpoOrderBy)obIt.next();
-	                obBuff.append(ob.toString(jmc));
-	            }
+              for (CpoOrderBy ob : orderBy){
+                StringBuilder sb = mapOrderBy.get(ob.getName());
+                if (sb==null){
+                  sb = new StringBuilder(" ORDER BY ");
+                  mapOrderBy.put(ob.getName(),sb);
+                }
+                sb.append(((JdbcCpoOrderBy)ob).toString(jmc));
+              }
             } catch (CpoException ce) {
-            	throw new CpoException("Error Processing OrderBy Attribute<"+ce.getLocalizedMessage()+"> not Found. JDBC Query=<"+sqlText.toString()+obBuff.toString()+">");
+            	throw new CpoException("Error Processing OrderBy Attribute<"+ce.getLocalizedMessage()+"> not Found. JDBC Query=<"+sqlText.toString()+">");
             }
-            if (sqlText.indexOf(ORDERBY_MARKER)==-1){
-                sqlText.append(obBuff);
-            }
-            else {
-                sqlText=replaceMarker(sqlText, ORDERBY_MARKER, obBuff.toString());
+            
+            Set<Entry<String, StringBuilder>> entries = mapOrderBy.entrySet();
+            for(Entry<String, StringBuilder> entry: entries){
+              if (sqlText.indexOf(entry.getKey())==-1){
+                  sqlText.append(entry.getValue().toString());
+              }
+              else {
+                  sqlText=replaceMarker(sqlText, entry.getKey(), entry.getValue().toString());
+              }
             }
         }
         
@@ -208,13 +210,14 @@ public class JdbcPreparedStatementFactory implements CpoReleasible {
           }
         }
         
+        // left for backwards compatibility
         sqlText = replaceMarker(sqlText, WHERE_MARKER,"");
         sqlText=replaceMarker(sqlText, ORDERBY_MARKER, "");
         
         return sqlText.toString();
     }
     
-    protected StringBuffer replaceMarker(StringBuffer source, String marker, String replace){
+    protected StringBuilder replaceMarker(StringBuilder source, String marker, String replace){
       int attrOffset = 0;
       int fromIndex = 0;
       int mLength=marker.length();
@@ -317,9 +320,9 @@ public class JdbcPreparedStatementFactory implements CpoReleasible {
                     if (jsm != null){
                         try{
                         	if (ja==null)
-                        		localLogger.debug(bindAttr.getName()+"="+bindObject);
+                        		localLogger.info(bindAttr.getName()+"="+bindObject);
                         	else
-                        		localLogger.debug(ja.getDbName()+"="+bindObject);
+                        		localLogger.info(ja.getDbName()+"="+bindObject);
                             jsm.getPsSetter().invoke(this.getPreparedStatement(), new Object[]{new Integer(j++),bindObject});
                         } catch (IllegalAccessException iae){
                         	localLogger.error("Error Accessing Prepared Statement Setter: "+iae.getLocalizedMessage());

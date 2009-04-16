@@ -764,13 +764,13 @@ public interface CpoAdapter extends java.io.Serializable {
      * @param obj This is an object that has been defined within the metadata of the datasource. If
      *     the class is not defined an exception will be thrown. This object will be searched for inside the
      *     datasource.
-     * @param where A CpoWhere object that passes in run-time constraints to the query that performs the 
+     * @param wheres A collection of CpoWhere objects that pass in run-time constraints to the query that performs the 
      *      the exist
      * @return The number of objects that exist in the datasource that match the specified object
      *
      * @throws CpoException Thrown if there are errors accessing the datasource
      */
-    public <T> long existsObject(String name, T obj, CpoWhere where) throws CpoException;
+    public <T> long existsObject(String name, T obj, Collection<CpoWhere> wheres) throws CpoException;
 
     
     /**
@@ -1088,7 +1088,7 @@ public interface CpoAdapter extends java.io.Serializable {
      *     If the class is not defined an exception will be thrown. If the object does not
      *     exist in the datasource, an exception will be thrown. This object is used to specify
      *     the object type that will be returned in the  collection.
-     * @param where The CpoWhere object that defines the constraints that should be
+     * @param wheres A collection of CpoWhere objects that define the constraints that should be
      *           used when retrieving objects
      * @param orderBy The CpoOrderBy object that defines the order in which objects
      *             should be returned
@@ -1097,7 +1097,7 @@ public interface CpoAdapter extends java.io.Serializable {
      *
      * @throws CpoException Thrown if there are errors accessing the datasource
      */    
-    public <T,C> T  retrieveObject(String name, C criteria, T result, CpoWhere where,
+    public <T,C> T  retrieveObject(String name, C criteria, T result, Collection<CpoWhere> wheres,
         Collection<CpoOrderBy> orderBy) throws CpoException;
     
     /**
@@ -1114,7 +1114,7 @@ public interface CpoAdapter extends java.io.Serializable {
      *     If the class is not defined an exception will be thrown. If the object does not
      *     exist in the datasource, an exception will be thrown. This object is used to specify
      *     the object type that will be returned in the  collection.
-     * @param where The CpoWhere object that defines the constraints that should be
+     * @param wheres A collection of CpoWhere objects that define the constraints that should be
      *           used when retrieving objects
      * @param orderBy The CpoOrderBy object that defines the order in which objects
      *             should be returned
@@ -1125,7 +1125,7 @@ public interface CpoAdapter extends java.io.Serializable {
      *
      * @throws CpoException Thrown if there are errors accessing the datasource
      */    
-    public <T,C> T  retrieveObject(String name, C criteria, T result, CpoWhere where,
+    public <T,C> T  retrieveObject(String name, C criteria, T result, Collection<CpoWhere> wheres,
         Collection<CpoOrderBy> orderBy, Collection<CpoNativeQuery> nativeQueries) throws CpoException;
 
     /**
@@ -1141,7 +1141,7 @@ public interface CpoAdapter extends java.io.Serializable {
      *     If the class is not defined an exception will be thrown. If the object does not
      *     exist in the datasource, an exception will be thrown. This object is used to specify
      *     the object type that will be returned in the  collection.
-     * @param where The CpoWhere object that defines the constraints that should be
+     * @param wheres A collection of CpoWhere objects that define the constraints that should be
      *           used when retrieving objects
      * @param orderBy The CpoOrderBy object that defines the order in which objects
      *             should be returned
@@ -1151,7 +1151,7 @@ public interface CpoAdapter extends java.io.Serializable {
      *
      * @throws CpoException Thrown if there are errors accessing the datasource
      */
-    public <T,C> Collection<T> retrieveObjects(String name, C criteria, T result, CpoWhere where,
+    public <T,C> Collection<T> retrieveObjects(String name, C criteria, T result, Collection<CpoWhere> wheres,
         Collection<CpoOrderBy> orderBy) throws CpoException;
 
     /**
@@ -1167,7 +1167,7 @@ public interface CpoAdapter extends java.io.Serializable {
      *     If the class is not defined an exception will be thrown. If the object does not
      *     exist in the datasource, an exception will be thrown. This object is used to specify
      *     the object type that will be returned in the  collection.
-     * @param where The CpoWhere object that defines the constraints that should be
+     * @param wheres A collection of CpoWhere objects that define the constraints that should be
      *           used when retrieving objects
      * @param orderBy The CpoOrderBy object that defines the order in which objects
      *             should be returned
@@ -1179,7 +1179,7 @@ public interface CpoAdapter extends java.io.Serializable {
      *
      * @throws CpoException Thrown if there are errors accessing the datasource
      */
-    public <T,C> Collection<T> retrieveObjects(String name, C criteria, T result, CpoWhere where,
+    public <T,C> Collection<T> retrieveObjects(String name, C criteria, T result, Collection<CpoWhere> wheres,
         Collection<CpoOrderBy> orderBy, Collection<CpoNativeQuery> nativeQueries) throws CpoException;
 
     /**
@@ -1195,7 +1195,7 @@ public interface CpoAdapter extends java.io.Serializable {
      *     If the class is not defined an exception will be thrown. If the object does not
      *     exist in the datasource, an exception will be thrown. This object is used to specify
      *     the object type that will be returned in the  collection.
-     * @param where The CpoWhere object that defines the constraints that should be
+     * @param wheres A collection of CpoWhere objects that define the constraints that should be
      *           used when retrieving objects
      * @param orderBy The CpoOrderBy object that defines the order in which objects
      *             should be returned
@@ -1207,7 +1207,7 @@ public interface CpoAdapter extends java.io.Serializable {
      *
      * @throws CpoException Thrown if there are errors accessing the datasource
      */
-    public <T,C> CpoResultSet<T> retrieveObjects(String name, C criteria, T result, CpoWhere where,
+    public <T,C> CpoResultSet<T> retrieveObjects(String name, C criteria, T result, Collection<CpoWhere> wheres,
         Collection<CpoOrderBy> orderBy, Collection<CpoNativeQuery> nativeQueries, int queueSize) throws CpoException;
 
     /**

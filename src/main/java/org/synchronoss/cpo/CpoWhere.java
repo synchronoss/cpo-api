@@ -83,4 +83,20 @@ public interface CpoWhere {
 
     public boolean isLeaf();
 
+    /**
+     * Gets a string representing the name of this instance of the 
+     * CpoOrderBy
+     * 
+     * @return String The name of the CpoOrderBy
+     */
+    public String getName();
+
+    /**
+     * Sets a string representing the name of this instance of the 
+     * CpoOrderBy
+     * 
+     * @param s The name of the CpoOrderBy
+     */
+    public void setName(String s);
+
 }

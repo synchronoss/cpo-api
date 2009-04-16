@@ -34,6 +34,7 @@ public class BindAttribute {
 	private JdbcAttribute ja_ = null;
 	private Object bindObject_ = null;
 	private String name_ = null;
+	private int index_ = 0;
 	
 	public BindAttribute(JdbcAttribute ja, Object bindObject){
 		ja_=ja;
@@ -56,5 +57,13 @@ public class BindAttribute {
 	public String getName(){
 		return name_;
 	}
+
+  public int getIndex() {
+    return index_;
+  }
+
+  public void setIndex(int index_) {
+    this.index_ = index_;
+  }
 
 }

@@ -24,6 +24,8 @@
 
 package org.synchronoss.cpo.jdbc;
 
+import java.util.ArrayList;
+
 import junit.framework.TestCase;
 
 import org.synchronoss.cpo.CpoAdapter;
@@ -105,7 +107,9 @@ public class ExistObjectTest extends TestCase {
       try{
           ValueObject valObj = new ValueObject(1);
           CpoWhere where = jdbcIdo_.newWhere(CpoWhere.LOGIC_AND, "attrVarChar", CpoWhere.COMP_EQ, "WHERE");
-          long count = jdbcIdo_.existsObject(null,valObj, where);
+          ArrayList<CpoWhere> wheres = new ArrayList<CpoWhere>();
+          wheres.add(where);
+          long count = jdbcIdo_.existsObject(null,valObj, wheres);
            assertTrue("Object not Found", count==1);
       } catch (Exception e) {
           e.printStackTrace();
@@ -115,7 +119,9 @@ public class ExistObjectTest extends TestCase {
       try{
           ValueObject valObj = new ValueObject(1);
           CpoWhere where = jdbcIdo_.newWhere(CpoWhere.LOGIC_AND, "attrVarChar", CpoWhere.COMP_EQ, "NOWHERE");
-          long count = jdbcIdo_.existsObject(null,valObj,where);
+          ArrayList<CpoWhere> wheres = new ArrayList<CpoWhere>();
+          wheres.add(where);
+          long count = jdbcIdo_.existsObject(null,valObj,wheres);
           assertTrue("Object Found", count==0);
      } catch (Exception e) {
          e.printStackTrace();

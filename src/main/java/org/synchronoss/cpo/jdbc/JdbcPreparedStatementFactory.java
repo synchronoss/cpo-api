@@ -65,9 +65,7 @@ public class JdbcPreparedStatementFactory implements CpoReleasible {
     private ArrayList<CpoReleasible> releasibles = new ArrayList<CpoReleasible>();
     
     private JdbcQuery jq_ = null;
-    
-    private Collection<BindAttribute> bindValues_= new ArrayList<BindAttribute>();
-    
+        
     private static final String WHERE_MARKER = "__CPO_WHERE__";
     private static final String ORDERBY_MARKER = "__CPO_ORDERBY__";
 
@@ -94,46 +92,58 @@ public class JdbcPreparedStatementFactory implements CpoReleasible {
 
 
     /**
-     * Used to build the PreparedStatement that is used by CPO to create the 
-     * actual JDBC PreparedStatement.
-     *
-     * The constructor is called by the internal CPO framework. This is not to be used by
-     * users of CPO. Programmers that build Transforms may need to use this object to get access
-     * to the actual connection. 
-     * 
-     * @param conn The actual jdbc connection that will be used to create the callable statement.
-     * @param jca The JdbcCpoAdapter that is controlling this transaction 
-     * @param jq The JdbcQuery that is being executed
-     * @param obj The pojo that is being acted upon
-     * @param additionalSql Additional sql to be appended to the JdbcQuery sql that is used to create the 
-     *        actual JDBC PreparedStatement
-     *
-     * @throws CpoException if a CPO error occurs
-     * @throws SQLException if a JDBC error occurs
-     */
-    public <T> JdbcPreparedStatementFactory(Connection conn, JdbcCpoAdapter jca, JdbcMetaClass<T> jmcCriteria, JdbcQuery jq, T obj,
-    		Collection <CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeQuery> nativeQueries) throws CpoException {
-      String sql=buildSql(jmcCriteria, jq.getText(), wheres, orderBy, nativeQueries);
-      
-       localLogger = obj==null?logger:Logger.getLogger(obj.getClass().getName());
+   * Used to build the PreparedStatement that is used by CPO to create the
+   * actual JDBC PreparedStatement.
+   * 
+   * The constructor is called by the internal CPO framework. This is not to be
+   * used by users of CPO. Programmers that build Transforms may need to use
+   * this object to get access to the actual connection.
+   * 
+   * @param conn
+   *          The actual jdbc connection that will be used to create the
+   *          callable statement.
+   * @param jca
+   *          The JdbcCpoAdapter that is controlling this transaction
+   * @param jq
+   *          The JdbcQuery that is being executed
+   * @param obj
+   *          The pojo that is being acted upon
+   * @param additionalSql
+   *          Additional sql to be appended to the JdbcQuery sql that is used to
+   *          create the actual JDBC PreparedStatement
+   * 
+   * @throws CpoException
+   *           if a CPO error occurs
+   * @throws SQLException
+   *           if a JDBC error occurs
+   */
+  public <T> JdbcPreparedStatementFactory(Connection conn, JdbcCpoAdapter jca, JdbcMetaClass<T> jmcCriteria,
+      JdbcQuery jq, T obj, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy,
+      Collection<CpoNativeQuery> nativeQueries) throws CpoException {
 
+    // get the list of bindValues from the query parameters
+    Collection<BindAttribute> bindValues = getBindValues(jq, obj);
 
-       localLogger.info("JdbcQuery SQL = <"+sql+">");
+    String sql = buildSql(jmcCriteria, jq.getText(), wheres, orderBy, nativeQueries, bindValues);
 
-        PreparedStatement pstmt = null;
-        
-        try {
-            pstmt=conn.prepareStatement(sql);
-        } catch (SQLException se){
-        	localLogger.error("Error Instantiating JdbcPreparedStatementFactory SQL=<"+sql+">"+se.getLocalizedMessage());
-          	throw new CpoException(se);
-        }
-        setPreparedStatement(pstmt);
-        setJdbcQuery(jq);
+    localLogger = obj == null ? logger : Logger.getLogger(obj.getClass().getName());
 
-        bindParameters(obj);
+    localLogger.info("JdbcQuery SQL = <" + sql + ">");
 
+    PreparedStatement pstmt = null;
+
+    try {
+      pstmt = conn.prepareStatement(sql);
+    } catch (SQLException se) {
+      localLogger
+          .error("Error Instantiating JdbcPreparedStatementFactory SQL=<" + sql + ">" + se.getLocalizedMessage());
+      throw new CpoException(se);
     }
+    setPreparedStatement(pstmt);
+    
+    setBindValues(bindValues);
+
+  }
     /**
      * DOCUMENT ME!
      *
@@ -146,7 +156,7 @@ public class JdbcPreparedStatementFactory implements CpoReleasible {
      *
      * @throws CpoException DOCUMENT ME!
      */
-    private <T> String buildSql(JdbcMetaClass<T> jmc, String sql, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeQuery> nativeQueries) throws CpoException {
+    private <T> String buildSql(JdbcMetaClass<T> jmc, String sql, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeQuery> nativeQueries, Collection<BindAttribute> bindValues) throws CpoException {
         StringBuilder sqlText=new StringBuilder();
 
         sqlText.append(sql);
@@ -168,7 +178,7 @@ public class JdbcPreparedStatementFactory implements CpoReleasible {
             else 
                 sqlText = replaceMarker(sqlText, jcw.getName(),jwb.getWhereClause());
             
-            bindValues_.addAll(jwb.getBindValues());
+            bindValues.addAll(jwb.getBindValues());
           }
         }
 
@@ -276,90 +286,64 @@ public class JdbcPreparedStatementFactory implements CpoReleasible {
     }
     
     /**
-     * Called by the CPO Framework. Binds all the attibutes from the class 
-     * for the CPO meta parameters and the parameters from the dynamic where.
-     *
-     */
-    public void bindParameters(Object obj) throws CpoException {
-    	int j=0;
-        ArrayList<JdbcParameter> parameters=getJdbcQuery().getParameterList();
-        JdbcParameter parameter=null;
-        JdbcAttribute attribute=null;
-        int preparedStatementArgNum=0;
-        Collection<BindAttribute> bindValues = getBindValues();
-        
-        for(j=0; j<parameters.size(); j++) {
-            preparedStatementArgNum++;
-            parameter=(JdbcParameter) parameters.get(j);
+   * Called by the CPO Framework. Binds all the attibutes from the class for the
+   * CPO meta parameters and the parameters from the dynamic where.
+   * 
+   */
+    protected Collection<BindAttribute> getBindValues(JdbcQuery jq, Object obj) throws CpoException {
+    Collection<BindAttribute> bindValues = new ArrayList<BindAttribute>();
+    ArrayList<JdbcParameter> parameters = jq.getParameterList();
+    JdbcParameter parameter = null;
+    for (int j = 0; j < parameters.size(); j++) {
+      parameter = (JdbcParameter) parameters.get(j);
+      if (parameter == null) {
+        throw new CpoException("JdbcParameter is null!");
+      }
+      bindValues.add(new BindAttribute(parameter.getAttribute(), obj));
+    }
+    return bindValues;
+  }
 
-            if(parameter==null) {
-                throw new CpoException("JdbcParameter is null!");
-            }
+  /**
+   * Called by the CPO Framework. Binds all the attibutes from the class for the
+   * CPO meta parameters and the parameters from the dynamic where.
+   * 
+   */
+  protected void setBindValues(Collection<BindAttribute> bindValues) throws CpoException {
 
-            attribute=parameter.getAttribute();
-            
+    if (bindValues != null) {
+      int index=1;
+      
+      //runs through the bind attributes and binds them to the prepared statement
+      // They must be in correct order.
+      for (BindAttribute bindAttr : bindValues) {
+        Object bindObject = bindAttr.getBindObject();
+        JdbcAttribute ja = bindAttr.getJdbcAttribute();
 
-            attribute.invokeGetter(this, obj, preparedStatementArgNum);
+        // check to see if we are getting a cpo value object or an object that
+        // can be put directly in the statement (String, BigDecimal, etc)
+        JavaSqlMethod<?> jsm = JavaSqlMethods.getJavaSqlMethod(bindObject.getClass());
+        if (jsm != null) {
+          try {
+            if (ja == null)
+              localLogger.info(bindAttr.getName() + "=" + bindObject);
+            else
+              localLogger.info(ja.getDbName() + "=" + bindObject);
+            jsm.getPsSetter().invoke(this.getPreparedStatement(), new Object[] { index++, bindObject });
+          } catch (IllegalAccessException iae) {
+            localLogger.error("Error Accessing Prepared Statement Setter: " + iae.getLocalizedMessage());
+            throw new CpoException(iae);
+          } catch (InvocationTargetException ite) {
+            localLogger.error("Error Invoking Prepared Statement Setter: " + ite.getCause().getLocalizedMessage());
+            throw new CpoException(ite.getCause());
+          }
+        } else {
+          ja.invokeGetter(this, bindObject, index++);
         }
-
-        j++;
-
-        if(bindValues!=null) {
-            //Iterator<BindAttribute> valuesIt=bindValues.iterator();
-
-            //if(valuesIt!=null) {
-            //    while(valuesIt.hasNext()) {
-            //        BindAttribute bindAttr=(BindAttribute)valuesIt.next();
-             for(BindAttribute bindAttr:bindValues){
-                    Object bindObject = bindAttr.getBindObject();
-                    JdbcAttribute ja = bindAttr.getJdbcAttribute();
-
-                    
-                    // check to see if we are getting a cpo value object or an object that can be put directly in the statement (String, BigDecimal, etc)
-                    JavaSqlMethod<?> jsm = JavaSqlMethods.getJavaSqlMethod(bindObject.getClass());
-                    if (jsm != null){
-                        try{
-                        	if (ja==null)
-                        		localLogger.info(bindAttr.getName()+"="+bindObject);
-                        	else
-                        		localLogger.info(ja.getDbName()+"="+bindObject);
-                            jsm.getPsSetter().invoke(this.getPreparedStatement(), new Object[]{new Integer(j++),bindObject});
-                        } catch (IllegalAccessException iae){
-                        	localLogger.error("Error Accessing Prepared Statement Setter: "+iae.getLocalizedMessage());
-                            throw new CpoException(iae);
-                        } catch (InvocationTargetException ite){
-                        	localLogger.error("Error Invoking Prepared Statement Setter: "+ite.getCause().getLocalizedMessage());
-                            throw new CpoException(ite.getCause());
-                        }
-                    } else {
-                        ja.invokeGetter(this, bindObject, j++);
-                    }
-
-               }
-//            }
-        }
-   	
+      }
     }
 
-	/**
-	 * @return Returns the bindValues_.
-	 */
-	protected Collection<BindAttribute> getBindValues() {
-		return bindValues_;
-	}
+  }
 
-	/**
-	 * @return Returns the jq_.
-	 */
-	protected JdbcQuery getJdbcQuery() {
-		return jq_;
-	}
-
-	/**
-	 * @param jq_ The jq_ to set.
-	 */
-	protected void setJdbcQuery(JdbcQuery jq_) {
-		this.jq_ = jq_;
-	}
 
 }

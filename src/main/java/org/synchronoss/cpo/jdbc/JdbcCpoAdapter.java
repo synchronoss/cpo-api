@@ -2881,7 +2881,8 @@ public class JdbcCpoAdapter implements CpoAdapter {
         ps = jpsf.getPreparedStatement();
         ps.addBatch();
         for (int j = 1; j < arr.length; j++) {
-          jpsf.bindParameters(arr[j]);
+//          jpsf.bindParameters(arr[j]);
+          jpsf.setBindValues(jpsf.getBindValues(jq, arr[j]));
           ps.addBatch();
         }
         updates = ps.executeBatch();

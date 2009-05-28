@@ -136,6 +136,17 @@ public interface CpoAdapter extends java.io.Serializable {
      * Clears the metadata for all classes. The metadata will be lazy-loaded from 
      * the metadata repository as classes are accessed.
      *
+     * @param all true - clear all classes for all datasources.
+     *            false - clear all classes for the current datasource.
+     *
+     * @throws CpoException Thrown if there are errors accessing the datasource
+    */
+    public void clearMetaClass(boolean all) throws CpoException;
+
+    /**
+     * Clears the metadata for all classes for the current datasource. The metadata will be lazy-loaded from 
+     * the metadata repository as classes are accessed.
+     *
      * @throws CpoException Thrown if there are errors accessing the datasource
     */
     public void clearMetaClass() throws CpoException;

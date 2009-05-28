@@ -698,6 +698,9 @@ public class CpoAdapterBean
     public void clearMetaClass() throws CpoException{
         JdbcCpoFactory.getCpoAdapter().clearMetaClass();
     }
+    public void clearMetaClass(boolean all) throws CpoException{
+      JdbcCpoFactory.getCpoAdapter().clearMetaClass(all);
+    }
 
     /**
      * @deprecated

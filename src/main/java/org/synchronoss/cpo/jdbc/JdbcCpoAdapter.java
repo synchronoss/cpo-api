@@ -319,16 +319,35 @@ public class JdbcCpoAdapter implements CpoAdapter {
   }
 
   /**
-   * Clears the metadata for all classes. The metadata will be lazy-loaded from
+   * Clears the metadata for all classes. The metadata will be lazy-loaded from 
    * the metadata repository as classes are accessed.
-   */
-  public void clearMetaClass() {
-    HashMap<String, JdbcMetaClass<?>> metaClassMap;
-
+   *
+   * @param all true - clear all classes for all datasources.
+   *            false - clear all classes for the current datasource.
+   *
+   * @throws CpoException Thrown if there are errors accessing the datasource
+  */
+  public void clearMetaClass(boolean all) {
     synchronized (getDataSourceMap()) {
-      metaClassMap = getMetaClassMap();
-      metaClassMap.clear();
+      if (all==false) {
+        HashMap<String, JdbcMetaClass<?>> metaClassMap = getMetaClassMap();
+        metaClassMap.clear();
+      } else {
+        for (HashMap<String, JdbcMetaClass<?>> metamap : getDataSourceMap().values()){
+          metamap.clear();
+        }
+      }
     }
+  }
+  
+  /**
+   * Clears the metadata for all classes for the current datasource. The metadata will be lazy-loaded from 
+   * the metadata repository as classes are accessed.
+   *
+   * @throws CpoException Thrown if there are errors accessing the datasource
+  */
+  public void clearMetaClass() {
+    clearMetaClass(false);
   }
 
   /**

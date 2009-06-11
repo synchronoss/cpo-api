@@ -3,7 +3,7 @@
   <groupId>org.synchronoss</groupId>
   <artifactId>cpo</artifactId>
   <name>cpo</name>
-  <version>3.9</version>
+  <version>3.9-SNAPSHOT</version>
   <description>CPO is a persistence layer that is thin wrapper around JDBC that consumes and
     produces POJOs
   </description>
@@ -93,9 +93,9 @@
     </site>
   </distributionManagement>
   <scm>
-    <connection>scm:svn:https://cpo.svn.sourceforge.net/svnroot/cpo/api/tags/cpo-3.9</connection>
-    <developerConnection>scm:svn:https://cpo.svn.sourceforge.net/svnroot/cpo/api/tags/cpo-3.9</developerConnection>
-    <url>https://cpo.svn.sourceforge.net/svnroot/cpo/api/tags/cpo-3.9</url>
+    <connection>scm:svn:https://cpo.svn.sourceforge.net/svnroot/cpo/api/branches/cpo-3.5</connection>
+    <developerConnection>scm:svn:https://cpo.svn.sourceforge.net/svnroot/cpo/api/branches/cpo-3.5</developerConnection>
+    <url>https://cpo.svn.sourceforge.net/svnroot/cpo/api/branches/cpo-3.5</url>
   </scm>
   <build>
     <testResources>

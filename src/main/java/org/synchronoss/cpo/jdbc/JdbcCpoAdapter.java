@@ -1489,8 +1489,8 @@ public class JdbcCpoAdapter implements CpoAdapter {
    *         objects match the criteria, an empty collection will be returned
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
-  public <T, C> Collection<T> retrieveObjects(String name, C criteria, T result, Collection<CpoWhere> wheres,
-                                              Collection<CpoOrderBy> orderBy) throws CpoException {
+  public <T, C> Collection<T> retrieveObjects(String name, C criteria, Collection<CpoWhere> wheres,
+                                              Collection<CpoOrderBy> orderBy, T result) throws CpoException {
     return processSelectGroup(name, criteria, result, wheres, orderBy, null, false);
   }
 
@@ -1519,8 +1519,8 @@ public class JdbcCpoAdapter implements CpoAdapter {
    *         objects match the criteria, an empty collection will be returned
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
-  public <T, C> Collection<T> retrieveObjects(String name, C criteria, T result, Collection<CpoWhere> wheres,
-                                              Collection<CpoOrderBy> orderBy, Collection<CpoNativeQuery> nativeQueries) throws CpoException {
+  public <T, C> Collection<T> retrieveObjects(String name, C criteria, Collection<CpoWhere> wheres,
+                                              Collection<CpoOrderBy> orderBy, Collection<CpoNativeQuery> nativeQueries, T result) throws CpoException {
     return processSelectGroup(name, criteria, result, wheres, orderBy, nativeQueries, false);
   }
 
@@ -1555,8 +1555,8 @@ public class JdbcCpoAdapter implements CpoAdapter {
    *
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
-    public <T,C> CpoResultSet<T> retrieveObjects(String name, C criteria, T result, Collection<CpoWhere> wheres,
-        Collection<CpoOrderBy> orderBy, Collection<CpoNativeQuery> nativeQueries, int queueSize) throws CpoException {
+    public <T,C> CpoResultSet<T> retrieveObjects(String name, C criteria, Collection<CpoWhere> wheres,
+        Collection<CpoOrderBy> orderBy, Collection<CpoNativeQuery> nativeQueries, T result, int queueSize) throws CpoException {
       CpoBlockingResultSet<T> resultSet = new CpoBlockingResultSet<T>(queueSize);
       RetrieverThread<T,C> retrieverThread = new RetrieverThread<T,C>(name, criteria, result, wheres, orderBy, nativeQueries, false, resultSet);
         

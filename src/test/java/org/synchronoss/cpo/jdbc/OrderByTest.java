@@ -107,7 +107,7 @@ public class OrderByTest extends TestCase {
             Collection<CpoOrderBy> colCob = new ArrayList<CpoOrderBy>();
             colCob.add(cob);
             ValueObject valObj = new ValueObject();
-            col = jdbcIdo_.retrieveObjects("TestOrderByRetrieve",valObj,valObj,null,colCob);
+            col = jdbcIdo_.retrieveObjects("TestOrderByRetrieve",valObj,null,colCob,valObj);
             
             int id = 1;
             for(ValueObject vo:col) {
@@ -131,7 +131,7 @@ public class OrderByTest extends TestCase {
             Collection<CpoOrderBy> colCob = new ArrayList<CpoOrderBy>();
             colCob.add(cob);
             ValueObject valObj = new ValueObject();
-            col = jdbcIdo_.retrieveObjects("TestOrderByRetrieve",valObj,valObj,null,colCob);
+            col = jdbcIdo_.retrieveObjects("TestOrderByRetrieve",valObj,null,colCob,valObj);
             int id = 5;
             for(ValueObject vo:col) {
                 assertEquals(id,vo.getId());
@@ -160,7 +160,7 @@ public class OrderByTest extends TestCase {
             Collection<CpoOrderBy> colCob = new ArrayList<CpoOrderBy>();
             colCob.add(cob);
             ValueObject valObj = new ValueObject();
-            col = jdbcIdo_.retrieveObjects("TestOrderByRetrieve",valObj,valObj,null,colCob);
+            col = jdbcIdo_.retrieveObjects("TestOrderByRetrieve",valObj,null,colCob,valObj);
             
             int id = 1;
             for(ValueObject vo:col) {

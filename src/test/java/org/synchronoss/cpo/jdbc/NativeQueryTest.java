@@ -115,7 +115,7 @@ public class NativeQueryTest extends TestCase {
           cnqAl.add(new CpoNativeQuery("__CPO_WHERE__", "WHERE ID = 2 OR ID = 3"));
 
           ValueObject valObj = new ValueObject(3);
-            col = jdbcIdo_.retrieveObjects("TestWhereRetrieve",valObj,valObj,null,null,cnqAl);
+            col = jdbcIdo_.retrieveObjects("TestWhereRetrieve",valObj,null,null,cnqAl,valObj);
             
             assertTrue("Col size is "+col.size(), col.size()==2);
             

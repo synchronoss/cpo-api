@@ -1162,8 +1162,8 @@ public interface CpoAdapter extends java.io.Serializable {
      *
      * @throws CpoException Thrown if there are errors accessing the datasource
      */
-    public <T,C> Collection<T> retrieveObjects(String name, C criteria, T result, Collection<CpoWhere> wheres,
-        Collection<CpoOrderBy> orderBy) throws CpoException;
+    public <T,C> Collection<T> retrieveObjects(String name, C criteria, Collection<CpoWhere> wheres,
+        Collection<CpoOrderBy> orderBy, T result) throws CpoException;
 
     /**
      * Retrieves the Object from the datasource. The assumption is that the object exists in the
@@ -1190,8 +1190,8 @@ public interface CpoAdapter extends java.io.Serializable {
      *
      * @throws CpoException Thrown if there are errors accessing the datasource
      */
-    public <T,C> Collection<T> retrieveObjects(String name, C criteria, T result, Collection<CpoWhere> wheres,
-        Collection<CpoOrderBy> orderBy, Collection<CpoNativeQuery> nativeQueries) throws CpoException;
+    public <T,C> Collection<T> retrieveObjects(String name, C criteria, Collection<CpoWhere> wheres,
+        Collection<CpoOrderBy> orderBy, Collection<CpoNativeQuery> nativeQueries, T result) throws CpoException;
 
     /**
      * Retrieves the Object from the datasource. The assumption is that the object exists in the
@@ -1218,8 +1218,8 @@ public interface CpoAdapter extends java.io.Serializable {
      *
      * @throws CpoException Thrown if there are errors accessing the datasource
      */
-    public <T,C> CpoResultSet<T> retrieveObjects(String name, C criteria, T result, Collection<CpoWhere> wheres,
-        Collection<CpoOrderBy> orderBy, Collection<CpoNativeQuery> nativeQueries, int queueSize) throws CpoException;
+    public <T,C> CpoResultSet<T> retrieveObjects(String name, C criteria, Collection<CpoWhere> wheres,
+        Collection<CpoOrderBy> orderBy, Collection<CpoNativeQuery> nativeQueries, T result, int queueSize) throws CpoException;
 
     /**
      * Allows you to perform a series of object interactions with the database. This method

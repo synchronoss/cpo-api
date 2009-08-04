@@ -191,6 +191,8 @@ public class JdbcPreparedStatementFactory implements CpoReleasible {
                 if (sb==null){
                   sb = new StringBuilder(" ORDER BY ");
                   mapOrderBy.put(ob.getName(),sb);
+                } else {
+                  sb.append(",");
                 }
                 sb.append(((JdbcCpoOrderBy)ob).toString(jmc));
               }

@@ -104,8 +104,10 @@ public class OrderByTest extends TestCase {
         
         try{
             CpoOrderBy cob = jdbcIdo_.newOrderBy("id",true);
+            CpoOrderBy cob1 = jdbcIdo_.newOrderBy("attrVarChar",true);
             Collection<CpoOrderBy> colCob = new ArrayList<CpoOrderBy>();
             colCob.add(cob);
+            colCob.add(cob1);
             ValueObject valObj = new ValueObject();
             col = jdbcIdo_.retrieveObjects("TestOrderByRetrieve",valObj,null,colCob,valObj);
             
@@ -128,8 +130,10 @@ public class OrderByTest extends TestCase {
         
         try{
             CpoOrderBy cob = jdbcIdo_.newOrderBy("id",false,null);
+            CpoOrderBy cob2 = jdbcIdo_.newOrderBy("attrVarChar",false,null);
             Collection<CpoOrderBy> colCob = new ArrayList<CpoOrderBy>();
             colCob.add(cob);
+            colCob.add(cob2);
             ValueObject valObj = new ValueObject();
             col = jdbcIdo_.retrieveObjects("TestOrderByRetrieve",valObj,null,colCob,valObj);
             int id = 5;

@@ -43,6 +43,7 @@ public class JdbcCpoOrderBy implements CpoOrderBy {
     private boolean ascending;
     private String attribute;
     private String function;
+    private String name = "__CPO_ORDERBY__";
 
     @SuppressWarnings("unused")
     private JdbcCpoOrderBy(){
@@ -167,6 +168,14 @@ public class JdbcCpoOrderBy implements CpoOrderBy {
         }
 
         return sb.toString();
+    }
+
+    public String getName() {
+      return name;
+    }
+
+    public void setName(String name) {
+      this.name = name;
     }
 
 }

@@ -42,7 +42,7 @@ public class InvalidParameterTest extends TestCase {
     
     try{
         ValueObject valObj = new ValueObject();
-        col = jdbcIdo_.retrieveObjects("BadContext",valObj,null,null,valObj);
+        col = jdbcIdo_.retrieveObjects("BadContext",valObj);
         fail(method+"Test got to unreachable code");
     } catch (CpoException ce) {
       //This is what I am expecting so let it go
@@ -61,7 +61,7 @@ public class InvalidParameterTest extends TestCase {
     
     try{
         ValueObject valObj = null;
-        col = jdbcIdo_.retrieveObjects(null,valObj,null,null,valObj);
+        col = jdbcIdo_.retrieveObjects(null,valObj);
         fail(method+"Test got to unreachable code");
     } catch (CpoException ce) {
       //This is what I am expecting so let it go
@@ -120,7 +120,7 @@ public class InvalidParameterTest extends TestCase {
     try{
       LobValueObject lvo = new LobValueObject();
       logger.debug("Calling the NULL List");
-      lvos = jdbcIdo_.retrieveObjects(null,lvo,null,null,lvo);
+      lvos = jdbcIdo_.retrieveObjects(null,lvo);
       logger.debug("Called the NULL List");
       fail(method+"Test got to unreachable code");
     } catch (CpoException ce) {

@@ -136,6 +136,17 @@ public interface CpoAdapter extends java.io.Serializable {
      * Clears the metadata for all classes. The metadata will be lazy-loaded from 
      * the metadata repository as classes are accessed.
      *
+     * @param all true - clear all classes for all datasources.
+     *            false - clear all classes for the current datasource.
+     *
+     * @throws CpoException Thrown if there are errors accessing the datasource
+    */
+    public void clearMetaClass(boolean all) throws CpoException;
+
+    /**
+     * Clears the metadata for all classes for the current datasource. The metadata will be lazy-loaded from 
+     * the metadata repository as classes are accessed.
+     *
      * @throws CpoException Thrown if there are errors accessing the datasource
     */
     public void clearMetaClass() throws CpoException;
@@ -725,6 +736,55 @@ public interface CpoAdapter extends java.io.Serializable {
     public <T> long existsObject(String name, T obj) throws CpoException;
 
     /**
+     * The CpoAdapter will check to see if this object exists in the datasource.
+     * 
+     * <pre>Example:<code>
+     * 
+     * class SomeObject so = new SomeObject();
+     * long count = 0;
+     * class CpoAdapter cpo = null;
+     * 
+     *  
+     *  try {
+     *    cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));
+     *  } catch (CpoException ce) {
+     *    // Handle the error
+     *    cpo = null;
+     *  }
+     *  
+     *  if (cpo!=null) {
+     *    so.setId(1);
+     *    so.setName("SomeName");
+     *    try{
+     *      CpoWhere where = cpo.newCpoWhere(CpoWhere.LOGIC_NONE, id, CpoWhere.COMP_EQ);
+     *      count = cpo.existsObject("SomeExistCheck",so, where);
+     *      if (count>0) {
+     *        // object exists
+     *      } else {
+     *        // object does not exist
+     *      }
+     *    } catch (CpoException ce) {
+     *      // Handle the error
+     *    }
+     *  }
+     *</code>
+     *</pre>
+     * 
+     * @param name The String name of the EXISTS Query group that will be used to create the object
+     *          in the datasource. null signifies that the default rules will be used.
+     * @param obj This is an object that has been defined within the metadata of the datasource. If
+     *     the class is not defined an exception will be thrown. This object will be searched for inside the
+     *     datasource.
+     * @param wheres A collection of CpoWhere objects that pass in run-time constraints to the query that performs the 
+     *      the exist
+     * @return The number of objects that exist in the datasource that match the specified object
+     *
+     * @throws CpoException Thrown if there are errors accessing the datasource
+     */
+    public <T> long existsObject(String name, T obj, Collection<CpoWhere> wheres) throws CpoException;
+
+    
+    /**
      * newOrderBy allows you to dynamically change the order of the objects in the resulting 
      * collection. This allows you to apply user input in determining the order of the collection
      *
@@ -1039,7 +1099,7 @@ public interface CpoAdapter extends java.io.Serializable {
      *     If the class is not defined an exception will be thrown. If the object does not
      *     exist in the datasource, an exception will be thrown. This object is used to specify
      *     the object type that will be returned in the  collection.
-     * @param where The CpoWhere object that defines the constraints that should be
+     * @param wheres A collection of CpoWhere objects that define the constraints that should be
      *           used when retrieving objects
      * @param orderBy The CpoOrderBy object that defines the order in which objects
      *             should be returned
@@ -1048,9 +1108,36 @@ public interface CpoAdapter extends java.io.Serializable {
      *
      * @throws CpoException Thrown if there are errors accessing the datasource
      */    
-    public <T,C> T  retrieveObject(String name, C criteria, T result, CpoWhere where,
+    public <T,C> T  retrieveObject(String name, C criteria, T result, Collection<CpoWhere> wheres,
         Collection<CpoOrderBy> orderBy) throws CpoException;
     
+    /**
+     * Retrieves the Object from the datasource. The assumption is that the object exists in the
+     * datasource.  If the retrieve query defined for this objects returns more than one row, an
+     * exception will be thrown.
+     * @param name The filter name which tells the datasource which objects should be returned. The
+     *     name also signifies what data in the object will be  populated.
+     * @param criteria This is an object that has been defined within the metadata of the
+     *     datasource. If the class is not defined an exception will be thrown. If the object
+     *     does not exist in the datasource, an exception will be thrown. This object is used
+     *     to specify the parameters used to retrieve the  collection of objects.
+     * @param result This is an object that has been defined within the metadata of the datasource.
+     *     If the class is not defined an exception will be thrown. If the object does not
+     *     exist in the datasource, an exception will be thrown. This object is used to specify
+     *     the object type that will be returned in the  collection.
+     * @param wheres A collection of CpoWhere objects that define the constraints that should be
+     *           used when retrieving objects
+     * @param orderBy The CpoOrderBy object that defines the order in which objects
+     *             should be returned
+     * @param nativeQueries Native query text that will be used to augment the query text stored in 
+     *             the meta data. This text will be embedded at run-time
+     * @return An object of the same type as the result parameter that is filled in as specified
+     *      the metadata for the retireve.
+     *
+     * @throws CpoException Thrown if there are errors accessing the datasource
+     */    
+    public <T,C> T  retrieveObject(String name, C criteria, T result, Collection<CpoWhere> wheres,
+        Collection<CpoOrderBy> orderBy, Collection<CpoNativeQuery> nativeQueries) throws CpoException;
 
     /**
      * Retrieves the Object from the datasource. The assumption is that the object exists in the
@@ -1065,7 +1152,7 @@ public interface CpoAdapter extends java.io.Serializable {
      *     If the class is not defined an exception will be thrown. If the object does not
      *     exist in the datasource, an exception will be thrown. This object is used to specify
      *     the object type that will be returned in the  collection.
-     * @param where The CpoWhere object that defines the constraints that should be
+     * @param wheres A collection of CpoWhere objects that define the constraints that should be
      *           used when retrieving objects
      * @param orderBy The CpoOrderBy object that defines the order in which objects
      *             should be returned
@@ -1075,8 +1162,8 @@ public interface CpoAdapter extends java.io.Serializable {
      *
      * @throws CpoException Thrown if there are errors accessing the datasource
      */
-    public <T,C> Collection<T> retrieveObjects(String name, C criteria, T result, CpoWhere where,
-        Collection<CpoOrderBy> orderBy) throws CpoException;
+    public <T,C> Collection<T> retrieveObjects(String name, C criteria, Collection<CpoWhere> wheres,
+        Collection<CpoOrderBy> orderBy, T result) throws CpoException;
 
     /**
      * Retrieves the Object from the datasource. The assumption is that the object exists in the
@@ -1091,18 +1178,48 @@ public interface CpoAdapter extends java.io.Serializable {
      *     If the class is not defined an exception will be thrown. If the object does not
      *     exist in the datasource, an exception will be thrown. This object is used to specify
      *     the object type that will be returned in the  collection.
-     * @param where The CpoWhere object that defines the constraints that should be
+     * @param wheres A collection of CpoWhere objects that define the constraints that should be
      *           used when retrieving objects
      * @param orderBy The CpoOrderBy object that defines the order in which objects
      *             should be returned
+     * @param nativeQueries Native query text that will be used to augment the query text stored in 
+     *             the meta data. This text will be embedded at run-time
+     * @return A collection of objects will be returned that meet the criteria  specified by obj.
+     *      The objects will be of the same type as the Object  that was passed in. If no
+     *      objects match the criteria, an empty collection will be returned
+     *
+     * @throws CpoException Thrown if there are errors accessing the datasource
+     */
+    public <T,C> Collection<T> retrieveObjects(String name, C criteria, Collection<CpoWhere> wheres,
+        Collection<CpoOrderBy> orderBy, Collection<CpoNativeQuery> nativeQueries, T result) throws CpoException;
+
+    /**
+     * Retrieves the Object from the datasource. The assumption is that the object exists in the
+     * datasource.
+     * @param name The filter name which tells the datasource which objects should be returned. The
+     *     name also signifies what data in the object will be  populated.
+     * @param criteria This is an object that has been defined within the metadata of the
+     *     datasource. If the class is not defined an exception will be thrown. If the object
+     *     does not exist in the datasource, an exception will be thrown. This object is used
+     *     to specify the parameters used to retrieve the  collection of objects.
+     * @param result This is an object that has been defined within the metadata of the datasource.
+     *     If the class is not defined an exception will be thrown. If the object does not
+     *     exist in the datasource, an exception will be thrown. This object is used to specify
+     *     the object type that will be returned in the  collection.
+     * @param wheres A collection of CpoWhere objects that define the constraints that should be
+     *           used when retrieving objects
+     * @param orderBy The CpoOrderBy object that defines the order in which objects
+     *             should be returned
+     * @param nativeQueries Native query text that will be used to augment the query text stored in 
+     *             the meta data. This text will be embedded at run-time
      * @param the queue size of the buffer that it uses to send the objects from the producer to the 
      *        consumer.
      * @return A CpoResultSet that can be iterated through
      *
      * @throws CpoException Thrown if there are errors accessing the datasource
      */
-    public <T,C> CpoResultSet<T> retrieveObjects(String name, C criteria, T result, CpoWhere where,
-        Collection<CpoOrderBy> orderBy, int queueSize) throws CpoException;
+    public <T,C> CpoResultSet<T> retrieveObjects(String name, C criteria, Collection<CpoWhere> wheres,
+        Collection<CpoOrderBy> orderBy, Collection<CpoNativeQuery> nativeQueries, T result, int queueSize) throws CpoException;
 
     /**
      * Allows you to perform a series of object interactions with the database. This method

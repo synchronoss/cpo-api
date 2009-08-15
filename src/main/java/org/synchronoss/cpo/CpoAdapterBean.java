@@ -26,6 +26,7 @@ package org.synchronoss.cpo;
 
 import java.lang.reflect.Method;
 import java.rmi.RemoteException;
+import java.util.ArrayList;
 import java.util.Collection;
 
 import javax.ejb.SessionBean;
@@ -187,7 +188,6 @@ public class CpoAdapterBean
         return(JdbcCpoFactory.getCpoAdapter().retrieveObject(name,obj));
     }
 
-
     /**
      * Retrieves the Object from the datasource. The assumption
      * is that the object exists in the datasource.
@@ -209,9 +209,34 @@ public class CpoAdapterBean
      *                 is used to specify the object type that will be returned in the 
      *                 collection.
      */
-    public <T,C> T retrieveObject(String name, C criteria, T result, CpoWhere where, Collection<CpoOrderBy> orderBy) throws CpoException{
-      return JdbcCpoFactory.getCpoAdapter().retrieveObject(name,criteria,result,where, orderBy);
+    public <T,C> T retrieveObject(String name, C criteria, T result, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy) throws CpoException{
+      return JdbcCpoFactory.getCpoAdapter().retrieveObject(name,criteria,result,wheres, orderBy);
     }
+    /**
+     * Retrieves the Object from the datasource. The assumption
+     * is that the object exists in the datasource.
+     * 
+     * If the retrieve query defined for this objects returns more than one row,
+     * an exception will be thrown.
+     * @param name     The the context name for which group of operations will be called to
+     *                 process this retrieve.
+     * @param criteria This is an object that has been defined within the
+     *                 metadata of the datasource. If the class is not defined
+     *                 an exception will be thrown. If the object does not exist
+     *                 in the datasource, an exception will be thrown. This object
+     *                 is used to specify the parameters used to retrieve the 
+     *                 collection of objects.
+     * @param result   This is an object that has been defined within the
+     *                 metadata of the datasource. If the class is not defined
+     *                 an exception will be thrown. If the object does not exist
+     *                 in the datasource, an exception will be thrown. This object
+     *                 is used to specify the object type that will be returned in the 
+     *                 collection.
+     */
+    public <T,C> T retrieveObject(String name, C criteria, T result, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeQuery> nativeQuery) throws CpoException{
+      return JdbcCpoFactory.getCpoAdapter().retrieveObject(name,criteria,result,wheres, orderBy,nativeQuery);
+    }
+    
     /**
      * Retrieves the Object from the datasource. The assumption
      * is that the object exists in the datasource.
@@ -234,8 +259,34 @@ public class CpoAdapterBean
      *                 that was passed in. If no objects match the criteria, an empty
      *                 collection will be returned
      */
-    public <T,C> Collection<T> retrieveObjects(String name, C criteria, T result, CpoWhere where, Collection<CpoOrderBy> orderBy)  throws CpoException {
-        return JdbcCpoFactory.getCpoAdapter().retrieveObjects(name,criteria,result,where, orderBy);
+    public <T,C> Collection<T> retrieveObjects(String name, C criteria, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, T result)  throws CpoException {
+        return JdbcCpoFactory.getCpoAdapter().retrieveObjects(name,criteria,wheres, orderBy,result);
+    }
+
+    /**
+     * Retrieves the Object from the datasource. The assumption
+     * is that the object exists in the datasource.
+     * @param name     The the context name for which group of operations will be called to
+     *                 process this retrieve.
+     * @param criteria This is an object that has been defined within the
+     *                 metadata of the datasource. If the class is not defined
+     *                 an exception will be thrown. If the object does not exist
+     *                 in the datasource, an exception will be thrown. This object
+     *                 is used to specify the parameters used to retrieve the 
+     *                 collection of objects.
+     * @param result   This is an object that has been defined within the
+     *                 metadata of the datasource. If the class is not defined
+     *                 an exception will be thrown. If the object does not exist
+     *                 in the datasource, an exception will be thrown. This object
+     *                 is used to specify the object type that will be returned in the 
+     *                 collection.
+     * @return         A collection of objects will be returned that meet the criteria 
+     *                 specified by obj. The objects will be of the same type as the Object 
+     *                 that was passed in. If no objects match the criteria, an empty
+     *                 collection will be returned
+     */
+    public <T,C> Collection<T> retrieveObjects(String name, C criteria, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeQuery> nativeQuery, T result)  throws CpoException {
+        return JdbcCpoFactory.getCpoAdapter().retrieveObjects(name,criteria,wheres, orderBy, nativeQuery,result);
     }
 
     /**
@@ -493,6 +544,55 @@ public class CpoAdapterBean
         return JdbcCpoFactory.getCpoAdapter().existsObject(name,obj);
     }
     
+    /**
+     * The CpoAdapter will check to see if this object exists in the datasource.
+     * 
+     * <pre>Example:<code>
+     * 
+     * class SomeObject so = new SomeObject();
+     * long count = 0;
+     * class CpoAdapter cpo = null;
+     * 
+     *  
+     *  try {
+     *    cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));
+     *  } catch (CpoException ce) {
+     *    // Handle the error
+     *    cpo = null;
+     *  }
+     *  
+     *  if (cpo!=null) {
+     *    so.setId(1);
+     *    so.setName("SomeName");
+     *    try{
+     *      CpoWhere where = cpo.newCpoWhere(CpoWhere.LOGIC_NONE, id, CpoWhere.COMP_EQ);
+     *      count = cpo.existsObject("SomeExistCheck",so, where);
+     *      if (count>0) {
+     *        // object exists
+     *      } else {
+     *        // object does not exist
+     *      }
+     *    } catch (CpoException ce) {
+     *      // Handle the error
+     *    }
+     *  }
+     *</code>
+     *</pre>
+     * 
+     * @param name The String name of the EXISTS Query group that will be used to create the object
+     *          in the datasource. null signifies that the default rules will be used.
+     * @param obj This is an object that has been defined within the metadata of the datasource. If
+     *     the class is not defined an exception will be thrown. This object will be searched for inside the
+     *     datasource.
+     * @param wheres A Collection of CpoWhere objects that pass in run-time constraints to the query that performs the 
+     *      the exist
+     * @return The number of objects that exist in the datasource that match the specified object
+     *
+     * @throws CpoException Thrown if there are errors accessing the datasource
+     */
+    public <T> long existsObject(String name, T obj, Collection<CpoWhere> wheres) throws CpoException{
+        return JdbcCpoFactory.getCpoAdapter().existsObject(name,obj, wheres);
+    }
     
     /**
      * Executes an Object whose MetaData contains a stored procedure. An assumption is that
@@ -566,9 +666,9 @@ public class CpoAdapterBean
         return JdbcCpoFactory.getCpoAdapter().executeObject(name,criteria, result);    
     }
     
-    public <T,C> CpoResultSet<T> retrieveObjects(String name, C criteria, T result, CpoWhere where,
-        Collection<CpoOrderBy> orderBy, int queueSize) throws CpoException {
-      return JdbcCpoFactory.getCpoAdapter().retrieveObjects(name,criteria, result, where, orderBy, queueSize);    
+    public <T,C> CpoResultSet<T> retrieveObjects(String name, C criteria, Collection<CpoWhere> wheres,
+        Collection<CpoOrderBy> orderBy, Collection<CpoNativeQuery> nativeQuery, T result, int queueSize) throws CpoException {
+      return JdbcCpoFactory.getCpoAdapter().retrieveObjects(name,criteria, wheres, orderBy, nativeQuery, result, queueSize);
     }
     
     public CpoOrderBy newOrderBy(String attribute, boolean ascending) throws CpoException{
@@ -597,6 +697,9 @@ public class CpoAdapterBean
     }
     public void clearMetaClass() throws CpoException{
         JdbcCpoFactory.getCpoAdapter().clearMetaClass();
+    }
+    public void clearMetaClass(boolean all) throws CpoException{
+      JdbcCpoFactory.getCpoAdapter().clearMetaClass(all);
     }
 
     /**

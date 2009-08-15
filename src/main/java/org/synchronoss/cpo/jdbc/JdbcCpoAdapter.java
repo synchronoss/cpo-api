@@ -46,6 +46,7 @@ import org.synchronoss.cpo.CpoAdapter;
 import org.synchronoss.cpo.CpoArrayResultSet;
 import org.synchronoss.cpo.CpoBlockingResultSet;
 import org.synchronoss.cpo.CpoException;
+import org.synchronoss.cpo.CpoNativeQuery;
 import org.synchronoss.cpo.CpoObject;
 import org.synchronoss.cpo.CpoOrderBy;
 import org.synchronoss.cpo.CpoResultSet;
@@ -318,16 +319,35 @@ public class JdbcCpoAdapter implements CpoAdapter {
   }
 
   /**
-   * Clears the metadata for all classes. The metadata will be lazy-loaded from
+   * Clears the metadata for all classes. The metadata will be lazy-loaded from 
    * the metadata repository as classes are accessed.
-   */
-  public void clearMetaClass() {
-    HashMap<String, JdbcMetaClass<?>> metaClassMap;
-
+   *
+   * @param all true - clear all classes for all datasources.
+   *            false - clear all classes for the current datasource.
+   *
+   * @throws CpoException Thrown if there are errors accessing the datasource
+  */
+  public void clearMetaClass(boolean all) {
     synchronized (getDataSourceMap()) {
-      metaClassMap = getMetaClassMap();
-      metaClassMap.clear();
+      if (all==false) {
+        HashMap<String, JdbcMetaClass<?>> metaClassMap = getMetaClassMap();
+        metaClassMap.clear();
+      } else {
+        for (HashMap<String, JdbcMetaClass<?>> metamap : getDataSourceMap().values()){
+          metamap.clear();
+        }
+      }
     }
+  }
+  
+  /**
+   * Clears the metadata for all classes for the current datasource. The metadata will be lazy-loaded from 
+   * the metadata repository as classes are accessed.
+   *
+   * @throws CpoException Thrown if there are errors accessing the datasource
+  */
+  public void clearMetaClass() {
+    clearMetaClass(false);
   }
 
   /**
@@ -909,6 +929,56 @@ public class JdbcCpoAdapter implements CpoAdapter {
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
   public <T> long existsObject(String name, T obj) throws CpoException {
+    return this.existsObject(name, obj, null);
+  }
+
+  /**
+   * The CpoAdapter will check to see if this object exists in the datasource.
+   * 
+   * <pre>Example:<code>
+   * 
+   * class SomeObject so = new SomeObject();
+   * long count = 0;
+   * class CpoAdapter cpo = null;
+   * 
+   *  
+   *  try {
+   *    cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));
+   *  } catch (CpoException ce) {
+   *    // Handle the error
+   *    cpo = null;
+   *  }
+   *  
+   *  if (cpo!=null) {
+   *    so.setId(1);
+   *    so.setName("SomeName");
+   *    try{
+   *      CpoWhere where = cpo.newCpoWhere(CpoWhere.LOGIC_NONE, id, CpoWhere.COMP_EQ);
+   *      count = cpo.existsObject("SomeExistCheck",so, where);
+   *      if (count>0) {
+   *        // object exists
+   *      } else {
+   *        // object does not exist
+   *      }
+   *    } catch (CpoException ce) {
+   *      // Handle the error
+   *    }
+   *  }
+   *</code>
+   *</pre>
+   * 
+   * @param name The String name of the EXISTS Query group that will be used to create the object
+   *          in the datasource. null signifies that the default rules will be used.
+   * @param obj This is an object that has been defined within the metadata of the datasource. If
+   *     the class is not defined an exception will be thrown. This object will be searched for inside the
+   *     datasource.
+   * @param where A CpoWhere object that passes in run-time constraints to the query that performs the 
+   *      the exist
+   * @return The number of objects that exist in the datasource that match the specified object
+   *
+   * @throws CpoException Thrown if there are errors accessing the datasource
+   */
+  public <T> long existsObject(String name, T obj, Collection<CpoWhere> wheres) throws CpoException {
     Connection c = null;
     Connection meta = null;
     long objCount = -1;
@@ -921,7 +991,7 @@ public class JdbcCpoAdapter implements CpoAdapter {
       } else {
         meta = getMetaConnection();
       }
-      objCount = existsObject(name, obj, c, meta);
+      objCount = existsObject(name, obj, c, meta, wheres);
     } catch (Exception e) {
       throw new CpoException("existsObjects(String, Object) failed", e);
     } finally {
@@ -944,7 +1014,7 @@ public class JdbcCpoAdapter implements CpoAdapter {
    * @return The int value of the first column returned in the record set
    * @throws CpoException exception will be thrown if the Query Group has a query count != 1
    */
-  protected <T> long existsObject(String name, T obj, Connection con, Connection metaCon)
+  protected <T> long existsObject(String name, T obj, Connection con, Connection metaCon, Collection<CpoWhere> wheres)
       throws CpoException {
     PreparedStatement ps = null;
     ResultSet rs = null;
@@ -965,7 +1035,7 @@ public class JdbcCpoAdapter implements CpoAdapter {
 
       for (i = 0; i < queryGroup.size(); i++) {
         jq = queryGroup.get(i);
-        JdbcPreparedStatementFactory jpsf = new JdbcPreparedStatementFactory(con, this, jmc, jq, obj);
+        JdbcPreparedStatementFactory jpsf = new JdbcPreparedStatementFactory(con, this, jmc, jq, obj, wheres, null, null);
         ps = jpsf.getPreparedStatement();
 
         long qCount = 0; // set the results for this query to 0
@@ -1335,6 +1405,7 @@ public class JdbcCpoAdapter implements CpoAdapter {
     return (o);
   }
 
+  
   /**
    * Retrieves the Object from the datasource. The assumption is that the object exists in the
    * datasource.  If the retrieve query defined for this objects returns more than one row, an
@@ -1350,7 +1421,7 @@ public class JdbcCpoAdapter implements CpoAdapter {
    *                 If the class is not defined an exception will be thrown. If the object does not
    *                 exist in the datasource, an exception will be thrown. This object is used to specify
    *                 the object type that will be returned in the  collection.
-   * @param where    The CpoWhere object that defines the constraints that should be
+   * @param wheres   A collection of CpoWhere objects that define the constraints that should be
    *                 used when retrieving objects
    * @param orderBy  The CpoOrderBy object that defines the order in which objects
    *                 should be returned
@@ -1358,9 +1429,39 @@ public class JdbcCpoAdapter implements CpoAdapter {
    *         the metadata for the retireve.
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
-  public <T, C> T retrieveObject(String name, C criteria, T result, CpoWhere where,
+  public <T, C> T retrieveObject(String name, C criteria, T result, Collection<CpoWhere> wheres,
                                  Collection<CpoOrderBy> orderBy) throws CpoException {
-    Iterator<T> it = processSelectGroup(name, criteria, result, where, orderBy, true).iterator();
+      return retrieveObject(name, criteria, result, wheres, orderBy, null);
+  }
+
+  /**
+   * Retrieves the Object from the datasource. The assumption is that the object exists in the
+   * datasource.  If the retrieve query defined for this objects returns more than one row, an
+   * exception will be thrown.
+   *
+   * @param name     The filter name which tells the datasource which objects should be returned. The
+   *                 name also signifies what data in the object will be  populated.
+   * @param criteria This is an object that has been defined within the metadata of the
+   *                 datasource. If the class is not defined an exception will be thrown. If the object
+   *                 does not exist in the datasource, an exception will be thrown. This object is used
+   *                 to specify the parameters used to retrieve the  collection of objects.
+   * @param result   This is an object that has been defined within the metadata of the datasource.
+   *                 If the class is not defined an exception will be thrown. If the object does not
+   *                 exist in the datasource, an exception will be thrown. This object is used to specify
+   *                 the object type that will be returned in the  collection.
+   * @param wheres   A collection of CpoWhere objects that define the constraints that should be
+   *                 used when retrieving objects
+   * @param orderBy  The CpoOrderBy object that defines the order in which objects
+   *                 should be returned
+   * @param nativeQueries Native query text that will be used to augment the query text stored in 
+   *             the meta data. This text will be embedded at run-time
+   * @return An object of the same type as the result parameter that is filled in as specified
+   *         the metadata for the retireve.
+   * @throws CpoException Thrown if there are errors accessing the datasource
+   */
+  public <T,C> T  retrieveObject(String name, C criteria, T result, Collection<CpoWhere> wheres,
+      Collection<CpoOrderBy> orderBy, Collection<CpoNativeQuery> nativeQueries) throws CpoException {
+    Iterator<T> it = processSelectGroup(name, criteria, result, wheres, orderBy, nativeQueries, true).iterator();
     if (it.hasNext())
       return it.next();
     else
@@ -1381,7 +1482,7 @@ public class JdbcCpoAdapter implements CpoAdapter {
    *                 If the class is not defined an exception will be thrown. If the object does not
    *                 exist in the datasource, an exception will be thrown. This object is used to specify
    *                 the object type that will be returned in the  collection.
-   * @param where    The CpoWhere object that defines the constraints that should be
+   * @param wheres   A collection of CpoWhere objects that define the constraints that should be
    *                 used when retrieving objects
    * @param orderBy  The CpoOrderBy object that defines the order in which objects
    *                 should be returned
@@ -1390,9 +1491,39 @@ public class JdbcCpoAdapter implements CpoAdapter {
    *         objects match the criteria, an empty collection will be returned
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
-  public <T, C> Collection<T> retrieveObjects(String name, C criteria, T result, CpoWhere where,
-                                              Collection<CpoOrderBy> orderBy) throws CpoException {
-    return processSelectGroup(name, criteria, result, where, orderBy, false);
+  public <T, C> Collection<T> retrieveObjects(String name, C criteria, Collection<CpoWhere> wheres,
+                                              Collection<CpoOrderBy> orderBy, T result) throws CpoException {
+    return processSelectGroup(name, criteria, result, wheres, orderBy, null, false);
+  }
+
+  /**
+   * Retrieves the Object from the datasource. The assumption is that the object exists in the
+   * datasource.
+   *
+   * @param name     The filter name which tells the datasource which objects should be returned. The
+   *                 name also signifies what data in the object will be  populated.
+   * @param criteria This is an object that has been defined within the metadata of the
+   *                 datasource. If the class is not defined an exception will be thrown. If the object
+   *                 does not exist in the datasource, an exception will be thrown. This object is used
+   *                 to specify the parameters used to retrieve the  collection of objects.
+   * @param result   This is an object that has been defined within the metadata of the datasource.
+   *                 If the class is not defined an exception will be thrown. If the object does not
+   *                 exist in the datasource, an exception will be thrown. This object is used to specify
+   *                 the object type that will be returned in the  collection.
+   * @param wheres   A collection of CpoWhere objects that define the constraints that should be
+   *                 used when retrieving objects
+   * @param orderBy  The CpoOrderBy object that defines the order in which objects
+   *                 should be returned
+   * @param nativeQueries Native query text that will be used to augment the query text stored in 
+   *             the meta data. This text will be embedded at run-time
+   * @return A collection of objects will be returned that meet the criteria  specified by obj.
+   *         The objects will be of the same type as the Object  that was passed in. If no
+   *         objects match the criteria, an empty collection will be returned
+   * @throws CpoException Thrown if there are errors accessing the datasource
+   */
+  public <T, C> Collection<T> retrieveObjects(String name, C criteria, Collection<CpoWhere> wheres,
+                                              Collection<CpoOrderBy> orderBy, Collection<CpoNativeQuery> nativeQueries, T result) throws CpoException {
+    return processSelectGroup(name, criteria, result, wheres, orderBy, nativeQueries, false);
   }
 
   /**
@@ -1413,10 +1544,12 @@ public class JdbcCpoAdapter implements CpoAdapter {
    *        If the class is not defined an exception will be thrown. If the object does not
    *        exist in the datasource, an exception will be thrown. This object is used to specify
    *        the object type that will be returned in the  collection.
-   * @param where The CpoWhere object that defines the constraints that should be
-   *              used when retrieving objects
+   * @param wheres   A collection of CpoWhere objects that define the constraints that should be
+   *                 used when retrieving objects
    * @param orderBy The CpoOrderBy object that defines the order in which objects
    *                should be returned
+   * @param nativeQueries Native query text that will be used to augment the query text stored in 
+   *             the meta data. This text will be embedded at run-time
    * @param objectBufferSize the maximum number of objects that the Iterator is allowed to cache.
    *        Once reached, the CPO framework will halt processing records from the datasource.
    *
@@ -1424,10 +1557,10 @@ public class JdbcCpoAdapter implements CpoAdapter {
    *
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
-    public <T,C> CpoResultSet<T> retrieveObjects(String name, C criteria, T result, CpoWhere where,
-        Collection<CpoOrderBy> orderBy, int queueSize) throws CpoException {
+    public <T,C> CpoResultSet<T> retrieveObjects(String name, C criteria, Collection<CpoWhere> wheres,
+        Collection<CpoOrderBy> orderBy, Collection<CpoNativeQuery> nativeQueries, T result, int queueSize) throws CpoException {
       CpoBlockingResultSet<T> resultSet = new CpoBlockingResultSet<T>(queueSize);
-      Thread retrieverThread = new Thread(Thread.currentThread().getThreadGroup(), new RetrieverThread<T,C>(name, criteria, result, where, orderBy, false, resultSet));
+      RetrieverThread<T,C> retrieverThread = new RetrieverThread<T,C>(name, criteria, result, wheres, orderBy, nativeQueries, false, resultSet);
         
       retrieverThread.start();
       return resultSet;
@@ -1770,7 +1903,7 @@ public class JdbcCpoAdapter implements CpoAdapter {
     long objCount;
 
     if (JdbcCpoAdapter.PERSIST_GROUP.equals(retType) == true) {
-      objCount = existsObject(name, obj, c, meta);
+      objCount = existsObject(name, obj, c, meta, null);
 
       if (objCount == 0) {
         retType = JdbcCpoAdapter.CREATE_GROUP;
@@ -2424,7 +2557,7 @@ public class JdbcCpoAdapter implements CpoAdapter {
    * @throws CpoException DOCUMENT ME!
    */
   protected <T, C> Collection<T> processSelectGroup(String name, C criteria, T result,
-                                                    CpoWhere where, Collection<CpoOrderBy> orderBy, boolean useRetrieve) throws CpoException {
+      Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeQuery> nativeQueries, boolean useRetrieve) throws CpoException {
     Connection con = null;
     Connection meta = null;
     CpoArrayResultSet<T> resultSet = new CpoArrayResultSet<T>();
@@ -2436,7 +2569,7 @@ public class JdbcCpoAdapter implements CpoAdapter {
       } else {
         meta = getMetaConnection();
       }
-      processSelectGroup(name, criteria, result, where, orderBy, con, meta, useRetrieve, resultSet);
+      processSelectGroup(name, criteria, result, wheres, orderBy, nativeQueries, con, meta, useRetrieve, resultSet);
       // The select may have a for update clause on it
       // Since the connection is cached we need to get rid of this
       commitConnection(con);
@@ -2461,7 +2594,7 @@ public class JdbcCpoAdapter implements CpoAdapter {
   }
 
   protected <T, C> void processSelectGroup(String name, C criteria, T result,
-      CpoWhere where, Collection<CpoOrderBy> orderBy, boolean useRetrieve, CpoResultSet<T> resultSet) throws CpoException {
+      Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeQuery> nativeQueries, boolean useRetrieve, CpoResultSet<T> resultSet) throws CpoException {
     Connection con = null;
     Connection meta = null;
 
@@ -2472,7 +2605,7 @@ public class JdbcCpoAdapter implements CpoAdapter {
       } else {
         meta = getMetaConnection();
       }
-      processSelectGroup(name, criteria, result, where, orderBy, con, meta, useRetrieve, resultSet);
+      processSelectGroup(name, criteria, result, wheres, orderBy, nativeQueries, con, meta, useRetrieve, resultSet);
       // The select may have a for update clause on it
       // Since the connection is cached we need to get rid of this
       commitConnection(con);
@@ -2509,7 +2642,7 @@ public class JdbcCpoAdapter implements CpoAdapter {
    * @throws CpoException DOCUMENT ME!
    */
   protected <T, C> void processSelectGroup(String name, C criteria, T result,
-                                                    CpoWhere where, Collection<CpoOrderBy> orderBy, Connection con, Connection metaCon, boolean useRetrieve, CpoResultSet<T> resultSet)
+      Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeQuery> nativeQueries, Connection con, Connection metaCon, boolean useRetrieve, CpoResultSet<T> resultSet)
       throws CpoException {
     Logger localLogger = criteria == null ? logger : Logger.getLogger(criteria.getClass().getName());
     PreparedStatement ps = null;
@@ -2522,11 +2655,8 @@ public class JdbcCpoAdapter implements CpoAdapter {
     int columnCount;
     int k;
     T obj;
-    //ArrayList<T> resultSet = new ArrayList<T>();
     Class<T> jmcClass;
     HashMap<String, JdbcAttribute> jmcAttrMap;
-    //String sqlText=null;
-    Collection<BindAttribute> bindValues = new ArrayList<BindAttribute>();
     JdbcAttribute[] attributes;
     JdbcPreparedStatementFactory jpsf;
     int i;
@@ -2547,7 +2677,7 @@ public class JdbcCpoAdapter implements CpoAdapter {
       for (i = 0; i < queryGroup.size(); i++) {
         jq = queryGroup.get(i);
 
-        jpsf = new JdbcPreparedStatementFactory(con, this, jmcCriteria, jq, criteria, where, orderBy, bindValues);
+        jpsf = new JdbcPreparedStatementFactory(con, this, jmcCriteria, jq, criteria, wheres, orderBy, nativeQueries);
         ps = jpsf.getPreparedStatement();
         ps.setFetchSize(resultSet.getFetchSize());
 
@@ -2780,7 +2910,8 @@ public class JdbcCpoAdapter implements CpoAdapter {
         ps = jpsf.getPreparedStatement();
         ps.addBatch();
         for (int j = 1; j < arr.length; j++) {
-          jpsf.bindParameters(arr[j]);
+//          jpsf.bindParameters(arr[j]);
+          jpsf.setBindValues(jpsf.getBindValues(jq, arr[j]));
           ps.addBatch();
         }
         updates = ps.executeBatch();
@@ -3235,27 +3366,29 @@ public class JdbcCpoAdapter implements CpoAdapter {
     String name;
     C criteria;
     T result;
-    CpoWhere where;
+    Collection<CpoWhere> wheres;
     Collection<CpoOrderBy> orderBy;
+    Collection<CpoNativeQuery> nativeQueries;
     boolean useRetrieve;
     CpoBlockingResultSet<T> resultSet;
     Thread callingThread = null;
     
     public RetrieverThread(String name, C criteria, T result,
-        CpoWhere where, Collection<CpoOrderBy> orderBy, boolean useRetrieve, CpoBlockingResultSet<T> resultSet){
+        Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeQuery> nativeQueries, boolean useRetrieve, CpoBlockingResultSet<T> resultSet){
       this.name=name;
       this.criteria = criteria;
       this.result = result;
-      this.where = where;
+      this.wheres = wheres;
       this.orderBy = orderBy;
       this.useRetrieve = useRetrieve;
       this.resultSet = resultSet;
+      this.nativeQueries = nativeQueries;
       callingThread = Thread.currentThread();
     }
 
     public void run() {
       try {
-        processSelectGroup(name, criteria, result, where, orderBy, false, resultSet);
+        processSelectGroup(name, criteria, result, wheres, orderBy, nativeQueries, false, resultSet);
       } catch (CpoException e) {
         // TODO Auto-generated catch block
         e.printStackTrace();

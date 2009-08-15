@@ -95,7 +95,7 @@ public class RetrieveObjectTest extends TestCase {
         
         try{
             ValueObject valObj = new ValueObject();
-            col = jdbcIdo_.retrieveObjects(null,valObj,valObj,null,null);
+            col = jdbcIdo_.retrieveObjects(null,valObj,null,null,valObj);
             assertTrue("Col size is "+col.size(), col.size()==al.size());
 
         } catch (Exception e) {
@@ -111,7 +111,7 @@ public class RetrieveObjectTest extends TestCase {
       
       try{
           ValueObject valObj = new ValueObject();
-          crs = jdbcIdo_.retrieveObjects(null,valObj,valObj,null,null, 2);
+          crs = jdbcIdo_.retrieveObjects(null,valObj,null,null, null,valObj, 2);
           logger.debug("Returned from retrieveObjects");
           for(ValueObject vo: crs){
             if (vo!=null)
@@ -132,7 +132,7 @@ public class RetrieveObjectTest extends TestCase {
       
       try{
           ValueObject valObj = new ValueObject();
-          crs = jdbcIdo_.retrieveObjects(null,valObj,valObj,null,null, 9);
+          crs = jdbcIdo_.retrieveObjects(null,valObj,null,null, null,valObj, 9);
           for(ValueObject vo: crs){
             if (vo!=null)
               count++;
@@ -151,7 +151,7 @@ public class RetrieveObjectTest extends TestCase {
       
       try{
           ValueObject valObj = new ValueObject();
-          crs = jdbcIdo_.retrieveObjects(null,valObj,valObj,null,null, 10);
+          crs = jdbcIdo_.retrieveObjects(null,valObj,null,null, null,valObj,10);
           for(ValueObject vo: crs){
             if (vo!=null)
               count++;
@@ -170,7 +170,7 @@ public class RetrieveObjectTest extends TestCase {
       
       try{
           ValueObject valObj = new ValueObject();
-          crs = jdbcIdo_.retrieveObjects(null,valObj,valObj,null,null, 11);
+          crs = jdbcIdo_.retrieveObjects(null,valObj,null,null,null,valObj,11);
           for(ValueObject vo: crs){
             if (vo!=null)
               count++;
@@ -193,7 +193,7 @@ public class RetrieveObjectTest extends TestCase {
         trx = jdbcIdo_.getCpoTrxAdapter();
 
         ValueObject valObj = new ValueObject();
-        crs = trx.retrieveObjects(null,valObj,valObj,null,null, 11);
+        crs = trx.retrieveObjects(null,valObj,null,null,null,valObj,11);
         
         //start this trx
         for(ValueObject vo: crs){
@@ -204,7 +204,7 @@ public class RetrieveObjectTest extends TestCase {
         
         // Let's see if it lets me do two trxs at once
         try{
-          trx.retrieveObjects(null,valObj,valObj,null,null);
+          trx.retrieveObjects(null,valObj,null,null,valObj);
           fail(method+"Cpo allowed me to reuse a busy connection");
         } catch (Exception busy){
           // THis should happen
@@ -233,7 +233,7 @@ public class RetrieveObjectTest extends TestCase {
       
       try{
           ValueObject valObj = new ValueObject();
-          crs = jdbcIdo_.retrieveObjects(null,valObj,valObj,null,null, 20);
+          crs = jdbcIdo_.retrieveObjects(null,valObj,null,null,null,valObj,11);
           logger.debug("Returned from retrieveObjects");
           for(ValueObject vo: crs){
             if (vo!=null)

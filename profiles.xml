@@ -4,7 +4,7 @@
     <profile>
       <id>mysql</id>
       <activation>
-        <activeByDefault>false</activeByDefault>
+        <activeByDefault>true</activeByDefault>
       </activation>
       <properties>
         <cpo.test.sqldir>src/test/sql/mysql</cpo.test.sqldir>
@@ -38,13 +38,13 @@
     <profile>
       <id>oracle</id>
       <activation>
-        <activeByDefault>true</activeByDefault>
+        <activeByDefault>false</activeByDefault>
       </activation>
       <properties>
         <cpo.test.sqldir>src/test/sql/oracle</cpo.test.sqldir>
 		<cpo.db.user>cpo</cpo.db.user>
 		<cpo.db.pswd>cpo</cpo.db.pswd>
-        <cpo.db.host>pamdfsr2cl1v1.synchronoss.net</cpo.db.host>
+        <cpo.db.host>pabetdd01v1.sncrcorp.net</cpo.db.host>
         <cpo.db.port>1521</cpo.db.port>
         <cpo.db.database>dcig2</cpo.db.database>
         <cpo.db.url>jdbc:oracle:thin:@${cpo.db.host}:${cpo.db.port}:${cpo.db.database}</cpo.db.url>
@@ -58,7 +58,7 @@
         <cpo.db.millisupport>true</cpo.db.millisupport>
 		<cpo.meta.user>cpometa</cpo.meta.user>
 		<cpo.meta.pswd>cpometa</cpo.meta.pswd>
-        <cpo.meta.host>pamdfsr2cl1v1.synchronoss.net</cpo.meta.host>
+        <cpo.meta.host>pabetdd01v1.sncrcorp.net</cpo.meta.host>
         <cpo.meta.port>1521</cpo.meta.port>
         <cpo.meta.database>dcig2</cpo.meta.database>
         <cpo.meta.url>jdbc:oracle:thin:@${cpo.meta.host}:${cpo.meta.port}:${cpo.meta.database}</cpo.meta.url>

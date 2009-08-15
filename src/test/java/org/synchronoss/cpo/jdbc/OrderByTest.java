@@ -104,10 +104,12 @@ public class OrderByTest extends TestCase {
         
         try{
             CpoOrderBy cob = jdbcIdo_.newOrderBy("id",true);
+            CpoOrderBy cob1 = jdbcIdo_.newOrderBy("attrVarChar",true);
             Collection<CpoOrderBy> colCob = new ArrayList<CpoOrderBy>();
             colCob.add(cob);
+            colCob.add(cob1);
             ValueObject valObj = new ValueObject();
-            col = jdbcIdo_.retrieveObjects("TestOrderByRetrieve",valObj,valObj,null,colCob);
+            col = jdbcIdo_.retrieveObjects("TestOrderByRetrieve",valObj,null,colCob,valObj);
             
             int id = 1;
             for(ValueObject vo:col) {
@@ -128,10 +130,12 @@ public class OrderByTest extends TestCase {
         
         try{
             CpoOrderBy cob = jdbcIdo_.newOrderBy("id",false,null);
+            CpoOrderBy cob2 = jdbcIdo_.newOrderBy("attrVarChar",false,null);
             Collection<CpoOrderBy> colCob = new ArrayList<CpoOrderBy>();
             colCob.add(cob);
+            colCob.add(cob2);
             ValueObject valObj = new ValueObject();
-            col = jdbcIdo_.retrieveObjects("TestOrderByRetrieve",valObj,valObj,null,colCob);
+            col = jdbcIdo_.retrieveObjects("TestOrderByRetrieve",valObj,null,colCob,valObj);
             int id = 5;
             for(ValueObject vo:col) {
                 assertEquals(id,vo.getId());
@@ -160,7 +164,7 @@ public class OrderByTest extends TestCase {
             Collection<CpoOrderBy> colCob = new ArrayList<CpoOrderBy>();
             colCob.add(cob);
             ValueObject valObj = new ValueObject();
-            col = jdbcIdo_.retrieveObjects("TestOrderByRetrieve",valObj,valObj,null,colCob);
+            col = jdbcIdo_.retrieveObjects("TestOrderByRetrieve",valObj,null,colCob,valObj);
             
             int id = 1;
             for(ValueObject vo:col) {

@@ -56,5 +56,5 @@ public class BindAttribute {
 	public String getName(){
 		return name_;
 	}
-
+	
 }

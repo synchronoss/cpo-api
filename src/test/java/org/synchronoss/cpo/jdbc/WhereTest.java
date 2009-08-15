@@ -109,8 +109,9 @@ public class WhereTest extends TestCase {
             ValueObject valObj = new ValueObject();
              cw = jdbcIdo_.newWhere(CpoWhere.LOGIC_NONE, "id", CpoWhere.COMP_GT, null);
              cw.setStaticValue("3");
-             
-            col = jdbcIdo_.retrieveObjects("TestWhereRetrieve",valObj,valObj,cw,null);
+            ArrayList<CpoWhere> wheres = new ArrayList<CpoWhere>();
+            wheres.add(cw);
+            col = jdbcIdo_.retrieveObjects("TestWhereRetrieve",valObj,wheres,null,valObj);
             
             assertTrue("Col size is "+col.size(), col.size()==2);
         } catch (Exception e) {
@@ -128,7 +129,9 @@ public class WhereTest extends TestCase {
             ValueObject valObj = new ValueObject(3);
             cw = jdbcIdo_.newWhere(CpoWhere.LOGIC_NONE, "id", CpoWhere.COMP_GT, valObj);
              
-            col = jdbcIdo_.retrieveObjects("TestWhereRetrieve",valObj,valObj,cw,null);
+            ArrayList<CpoWhere> wheres = new ArrayList<CpoWhere>();
+            wheres.add(cw);
+            col = jdbcIdo_.retrieveObjects("TestWhereRetrieve",valObj,wheres,null,valObj);
             
             assertTrue("Col size is "+col.size(), col.size()==2);
         } catch (Exception e) {
@@ -142,7 +145,7 @@ public class WhereTest extends TestCase {
       String method = "testValueWhere:";
       Collection<ValueObject> col = null;
       CpoWhere cw = null;
-      
+      ArrayList<CpoWhere> wheres = new ArrayList<CpoWhere>();
       
       try{
           ValueObject valObj = new ValueObject(-6);
@@ -156,8 +159,9 @@ public class WhereTest extends TestCase {
           valObj = new ValueObject(3);
           cwAnd.addWhere(jdbcIdo_.newWhere(CpoWhere.LOGIC_OR, "id", CpoWhere.COMP_EQ, valObj));
           
-          cw.addWhere(cwAnd); 
-          col = jdbcIdo_.retrieveObjects("TestWhereRetrieve",valObj,valObj,cw,null);
+          cw.addWhere(cwAnd);
+          wheres.add(cw);
+          col = jdbcIdo_.retrieveObjects("TestWhereRetrieve",valObj,wheres,null,valObj);
           
           assertTrue("Col size is "+col.size(), col.size()==3);
       } catch (Exception e) {
@@ -176,7 +180,9 @@ public class WhereTest extends TestCase {
             ValueObject valObj = new ValueObject(3);
             cw = jdbcIdo_.newWhere(CpoWhere.LOGIC_NONE, "attrChar", CpoWhere.COMP_ISNULL, null);
              
-            col = jdbcIdo_.retrieveObjects("TestWhereRetrieve",valObj,valObj,cw,null);
+            ArrayList<CpoWhere> wheres = new ArrayList<CpoWhere>();
+            wheres.add(cw);
+            col = jdbcIdo_.retrieveObjects("TestWhereRetrieve",valObj,wheres,null,valObj);
             
             assertTrue("Col size is "+col.size(), col.size()==6);
         } catch (Exception e) {
@@ -196,7 +202,9 @@ public class WhereTest extends TestCase {
             cw = jdbcIdo_.newWhere(CpoWhere.LOGIC_NONE, "id", CpoWhere.COMP_EQ, valObj);
             cw.setAttributeFunction("ABS(id)");
              
-            col = jdbcIdo_.retrieveObjects("TestWhereRetrieve",valObj,valObj,cw,null);
+            ArrayList<CpoWhere> wheres = new ArrayList<CpoWhere>();
+            wheres.add(cw);
+            col = jdbcIdo_.retrieveObjects("TestWhereRetrieve",valObj,wheres,null,valObj);
           
             assertTrue("Col size is "+col.size(), col.size()==1);
             ValueObject rvo = (ValueObject) col.iterator().next();
@@ -218,7 +226,9 @@ public class WhereTest extends TestCase {
             cw = jdbcIdo_.newWhere(CpoWhere.LOGIC_NONE, "id", CpoWhere.COMP_EQ, valObj, false);
             cw.setValueFunction("abs(id)");
              
-            col = jdbcIdo_.retrieveObjects("TestWhereRetrieve",valObj,valObj,cw,null);
+            ArrayList<CpoWhere> wheres = new ArrayList<CpoWhere>();
+            wheres.add(cw);
+            col = jdbcIdo_.retrieveObjects("TestWhereRetrieve",valObj,wheres,null,valObj);
           
             assertTrue("Col size is "+col.size(), col.size()==1);
             ValueObject rvo = (ValueObject) col.iterator().next();
@@ -247,7 +257,9 @@ public class WhereTest extends TestCase {
             cw.addWhere(cw1);
             cw.addWhere(cw2);
             
-            col = jdbcIdo_.retrieveObjects("TestWhereRetrieve",valObj,valObj,cw,null);
+            ArrayList<CpoWhere> wheres = new ArrayList<CpoWhere>();
+            wheres.add(cw);
+            col = jdbcIdo_.retrieveObjects("TestWhereRetrieve",valObj,wheres,null,valObj);
             
             assertTrue("Col size is "+col.size(), col.size()==0);
             
@@ -258,7 +270,9 @@ public class WhereTest extends TestCase {
             cw.addWhere(cw1);
             cw.addWhere(cw2);
              
-            col = jdbcIdo_.retrieveObjects("TestWhereRetrieve",valObj,valObj,cw,null);
+            wheres.clear();
+            wheres.add(cw);
+            col = jdbcIdo_.retrieveObjects("TestWhereRetrieve",valObj,wheres,null,valObj);
             
             assertTrue("Col size is "+col.size(), col.size()==1);
             
@@ -287,7 +301,9 @@ public class WhereTest extends TestCase {
             cw.addWhere(cw1);
             cw.addWhere(cw2);
              
-            col = jdbcIdo_.retrieveObjects("TestWhereRetrieve",valObj,valObj,cw,null);
+            ArrayList<CpoWhere> wheres = new ArrayList<CpoWhere>();
+            wheres.add(cw);
+            col = jdbcIdo_.retrieveObjects("TestWhereRetrieve",valObj,wheres,null,valObj);
             
             assertTrue("Col size is "+col.size(), col.size()==2);
             
@@ -299,7 +315,9 @@ public class WhereTest extends TestCase {
             cw.addWhere(cw1);
             cw.addWhere(cw2);
              
-            col = jdbcIdo_.retrieveObjects("TestWhereRetrieve",valObj,valObj,cw,null);
+            wheres.clear();
+            wheres.add(cw);
+            col = jdbcIdo_.retrieveObjects("TestWhereRetrieve",valObj,wheres,null,valObj);
             
             assertTrue("Col size is "+col.size(), col.size()==6);
             
@@ -327,7 +345,9 @@ public class WhereTest extends TestCase {
             cw.setRightAttributeFunction("ABS(attrSmallInt)");
             cw.setLogical(CpoWhere.LOGIC_NONE);
              
-            col = jdbcIdo_.retrieveObjects("TestWhereRetrieve",valObj,valObj,cw,null);
+            ArrayList<CpoWhere> wheres = new ArrayList<CpoWhere>();
+            wheres.add(cw);
+            col = jdbcIdo_.retrieveObjects("TestWhereRetrieve",valObj,wheres,null,valObj);
           
             assertTrue("Col size is "+col.size(), col.size()==1);
             ValueObject rvo = (ValueObject) col.iterator().next();
@@ -352,7 +372,9 @@ public class WhereTest extends TestCase {
             cw.setComparison(CpoWhere.COMP_EQ);
             cw.setLogical(CpoWhere.LOGIC_NONE);
              
-            col = jdbcIdo_.retrieveObjects("TestWhereRetrieve",valObj,valObj,cw,null);
+            ArrayList<CpoWhere> wheres = new ArrayList<CpoWhere>();
+            wheres.add(cw);
+            col = jdbcIdo_.retrieveObjects("TestWhereRetrieve",valObj,wheres,null,valObj);
           
             assertTrue("Col size is "+col.size(), col.size()==1);
             ValueObject rvo = (ValueObject) col.iterator().next();
@@ -383,7 +405,9 @@ public class WhereTest extends TestCase {
             cw.addWhere(cw1);
             cw.addWhere(cw2);
              
-            col = jdbcIdo_.retrieveObjects("TestWhereRetrieve",valObj,valObj,cw,null);
+            ArrayList<CpoWhere> wheres = new ArrayList<CpoWhere>();
+            wheres.add(cw);
+            col = jdbcIdo_.retrieveObjects("TestWhereRetrieve",valObj,wheres,null,valObj);
             
             assertTrue("Col size is "+col.size(), col.size()==1);
             
@@ -413,7 +437,9 @@ public class WhereTest extends TestCase {
             cw.addWhere(cw1);
             cw.addWhere(cw2);
              
-            col = jdbcIdo_.retrieveObjects("TestWhereRetrieve",valObj,valObj,cw,null);
+            ArrayList<CpoWhere> wheres = new ArrayList<CpoWhere>();
+            wheres.add(cw);
+            col = jdbcIdo_.retrieveObjects("TestWhereRetrieve",valObj,wheres,null,valObj);
             
             assertTrue("Col size is "+col.size(), col.size()==1);
             
@@ -442,7 +468,9 @@ public class WhereTest extends TestCase {
             cw.addWhere(cw1);
             cw.addWhere(cw2);
              
-            col = jdbcIdo_.retrieveObjects("TestWhereRetrieve",valObj,valObj,cw,null);
+            ArrayList<CpoWhere> wheres = new ArrayList<CpoWhere>();
+            wheres.add(cw);
+            col = jdbcIdo_.retrieveObjects("TestWhereRetrieve",valObj,wheres,null,valObj);
             
             assertTrue("Col size is "+col.size(), col.size()==1);
             
@@ -466,7 +494,9 @@ public class WhereTest extends TestCase {
                 
                 cw.addWhere(cw1);
                  
-                col = jdbcIdo_.retrieveObjects("TestWhereRetrieve",valObj,valObj,cw,null);
+                ArrayList<CpoWhere> wheres = new ArrayList<CpoWhere>();
+                wheres.add(cw);
+                col = jdbcIdo_.retrieveObjects("TestWhereRetrieve",valObj,wheres,null,valObj);
                 
                 assertTrue("Col size is "+col.size(), col.size()==1);
                 

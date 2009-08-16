@@ -4,7 +4,7 @@
     <profile>
       <id>mysql</id>
       <activation>
-        <activeByDefault>true</activeByDefault>
+        <activeByDefault>false</activeByDefault>
       </activation>
       <properties>
         <cpo.test.sqldir>src/test/sql/mysql</cpo.test.sqldir>
@@ -38,7 +38,7 @@
     <profile>
       <id>oracle</id>
       <activation>
-        <activeByDefault>false</activeByDefault>
+        <activeByDefault>true</activeByDefault>
       </activation>
       <properties>
         <cpo.test.sqldir>src/test/sql/oracle</cpo.test.sqldir>

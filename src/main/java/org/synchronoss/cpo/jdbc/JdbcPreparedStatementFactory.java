@@ -128,7 +128,7 @@ public class JdbcPreparedStatementFactory implements CpoReleasible {
 
     localLogger = obj == null ? logger : Logger.getLogger(obj.getClass().getName());
 
-    localLogger.info("JdbcQuery SQL = <" + sql + ">");
+    localLogger.debug("JdbcQuery SQL = <" + sql + ">");
 
     PreparedStatement pstmt = null;
 
@@ -375,9 +375,9 @@ public class JdbcPreparedStatementFactory implements CpoReleasible {
         if (jsm != null) {
           try {
             if (ja == null)
-              localLogger.info(bindAttr.getName() + "=" + bindObject);
+              localLogger.debug(bindAttr.getName() + "=" + bindObject);
             else
-              localLogger.info(ja.getDbName() + "=" + bindObject);
+              localLogger.debug(ja.getDbName() + "=" + bindObject);
             jsm.getPsSetter().invoke(this.getPreparedStatement(), new Object[] { index++, bindObject });
           } catch (IllegalAccessException iae) {
             localLogger.error("Error Accessing Prepared Statement Setter: " + iae.getLocalizedMessage());

@@ -24,6 +24,7 @@
 package org.synchronoss.cpo;
 
 import java.util.Collection;
+import java.util.List;
 
 /**
  * CpoAdapter is an interface for a set of routines that are responsible for 
@@ -1162,7 +1163,7 @@ public interface CpoAdapter extends java.io.Serializable {
      *
      * @throws CpoException Thrown if there are errors accessing the datasource
      */
-    public <T,C> Collection<T> retrieveObjects(String name, C criteria, Collection<CpoWhere> wheres,
+    public <T,C> List<T> retrieveObjects(String name, C criteria, Collection<CpoWhere> wheres,
         Collection<CpoOrderBy> orderBy, T result) throws CpoException;
 
     /**
@@ -1190,7 +1191,7 @@ public interface CpoAdapter extends java.io.Serializable {
      *
      * @throws CpoException Thrown if there are errors accessing the datasource
      */
-    public <T,C> Collection<T> retrieveObjects(String name, C criteria, Collection<CpoWhere> wheres,
+    public <T,C> List<T> retrieveObjects(String name, C criteria, Collection<CpoWhere> wheres,
         Collection<CpoOrderBy> orderBy, Collection<CpoNativeQuery> nativeQueries, T result) throws CpoException;
 
     /**

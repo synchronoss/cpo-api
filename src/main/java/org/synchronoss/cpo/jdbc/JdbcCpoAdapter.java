@@ -35,6 +35,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -1489,7 +1490,7 @@ public class JdbcCpoAdapter implements CpoAdapter {
    *         objects match the criteria, an empty collection will be returned
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
-  public <T, C> Collection<T> retrieveObjects(String name, C criteria, Collection<CpoWhere> wheres,
+  public <T, C> List<T> retrieveObjects(String name, C criteria, Collection<CpoWhere> wheres,
                                               Collection<CpoOrderBy> orderBy, T result) throws CpoException {
     return processSelectGroup(name, criteria, result, wheres, orderBy, null, false);
   }
@@ -1519,7 +1520,7 @@ public class JdbcCpoAdapter implements CpoAdapter {
    *         objects match the criteria, an empty collection will be returned
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
-  public <T, C> Collection<T> retrieveObjects(String name, C criteria, Collection<CpoWhere> wheres,
+  public <T, C> List<T> retrieveObjects(String name, C criteria, Collection<CpoWhere> wheres,
                                               Collection<CpoOrderBy> orderBy, Collection<CpoNativeQuery> nativeQueries, T result) throws CpoException {
     return processSelectGroup(name, criteria, result, wheres, orderBy, nativeQueries, false);
   }
@@ -2550,7 +2551,7 @@ public class JdbcCpoAdapter implements CpoAdapter {
    * @return DOCUMENT ME!
    * @throws CpoException DOCUMENT ME!
    */
-  protected <T, C> Collection<T> processSelectGroup(String name, C criteria, T result,
+  protected <T, C> List<T> processSelectGroup(String name, C criteria, T result,
       Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeQuery> nativeQueries, boolean useRetrieve) throws CpoException {
     Connection con = null;
     Connection meta = null;

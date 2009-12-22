@@ -23,7 +23,10 @@
  */
 package org.synchronoss.cpo.jdbc;
 
+import java.sql.Array;
+import java.sql.Blob;
 import java.sql.CallableStatement;
+import java.sql.Clob;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
@@ -33,6 +36,14 @@ import java.sql.SQLException;
 import java.sql.SQLWarning;
 import java.sql.Savepoint;
 import java.sql.Statement;
+import java.sql.Struct;
+import java.util.HashMap;
+import java.util.Properties;
+import org.synchronoss.cpo.JavaVersion;
+//import java.sql.ClientInfoStatus;
+//import java.sql.NClob;
+//import java.sql.SQLClientInfoException;
+//import java.sql.SQLXML;
 
 
 /**
@@ -1014,4 +1025,103 @@ public class JdbcConnection implements Connection {
         return new JdbcPreparedStatement(getDataSource().getCachedPreparedStatement(getConnection(), sql, 
         		columnNames));
     }
+//
+//  public Clob createClob() throws SQLException {
+//    if (JavaVersion.isJava6)
+//      return getConnection().createClob();
+//    else
+//      throw new UnsupportedOperationException("Not supported yet.");
+//  }
+//
+//  public Blob createBlob() throws SQLException {
+//    if (JavaVersion.isJava6)
+//      return getConnection().createBlob();
+//    else
+//      throw new UnsupportedOperationException("Not supported yet.");
+//  }
+//
+//  public NClob createNClob() throws SQLException {
+//    if (JavaVersion.isJava6)
+//      return getConnection().createNClob();
+//    else
+//      throw new UnsupportedOperationException("Not supported yet.");
+//  }
+//
+//  public SQLXML createSQLXML() throws SQLException {
+//    if (JavaVersion.isJava6)
+//      return getConnection().createSQLXML();
+//    else
+//      throw new UnsupportedOperationException("Not supported yet.");
+//  }
+//
+//  public boolean isValid(int timeout) throws SQLException {
+//    if (JavaVersion.isJava6)
+//      return getConnection().isValid(timeout);
+//    else
+//      throw new UnsupportedOperationException("Not supported yet.");
+//  }
+//
+//  public void setClientInfo(String name, String value) throws SQLClientInfoException {
+//    if (JavaVersion.isJava6)
+//      try {
+//        getConnection().setClientInfo(name, value);
+//      } catch (SQLException e) {
+//        throw new SQLClientInfoException(e.getLocalizedMessage(), new HashMap<String,ClientInfoStatus>());
+//      }
+//    else
+//      throw new UnsupportedOperationException("Not supported yet.");
+//  }
+//
+//  public void setClientInfo(Properties properties) throws SQLClientInfoException {
+//    if (JavaVersion.isJava6)
+//      try {
+//        getConnection().setClientInfo(properties);
+//      } catch (SQLException e) {
+//        throw new SQLClientInfoException(e.getLocalizedMessage(), new HashMap<String,ClientInfoStatus>());
+//      }
+//    else
+//      throw new UnsupportedOperationException("Not supported yet.");
+//  }
+//
+//  public String getClientInfo(String name) throws SQLException {
+//    if (JavaVersion.isJava6)
+//      return getConnection().getClientInfo(name);
+//    else
+//      throw new UnsupportedOperationException("Not supported yet.");
+//  }
+//
+//  public Properties getClientInfo() throws SQLException {
+//    if (JavaVersion.isJava6)
+//      return getConnection().getClientInfo();
+//    else
+//      throw new UnsupportedOperationException("Not supported yet.");
+//  }
+//
+//  public Array createArrayOf(String typeName, Object[] elements) throws SQLException {
+//    if (JavaVersion.isJava6)
+//      return getConnection().createArrayOf(typeName, elements);
+//    else
+//      throw new UnsupportedOperationException("Not supported yet.");
+//  }
+//
+//  public Struct createStruct(String typeName, Object[] attributes) throws SQLException {
+//    if (JavaVersion.isJava6)
+//      return getConnection().createStruct(typeName, attributes);
+//    else
+//      throw new UnsupportedOperationException("Not supported yet.");
+//  }
+//
+//  public <T> T unwrap(Class<T> iface) throws SQLException {
+//    if (JavaVersion.isJava6)
+//      return getConnection().unwrap(iface);
+//    else
+//      throw new UnsupportedOperationException("Not supported yet.");
+//  }
+//
+//  public boolean isWrapperFor(Class<?> iface) throws SQLException {
+//    if (JavaVersion.isJava6)
+//      return getConnection().isWrapperFor(iface);
+//    else
+//      throw new UnsupportedOperationException("Not supported yet.");
+//  }
 }

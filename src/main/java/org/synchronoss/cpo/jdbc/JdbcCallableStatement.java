@@ -24,14 +24,25 @@
 package org.synchronoss.cpo.jdbc;
 
 
+import java.io.InputStream;
+import java.io.Reader;
 import java.math.BigDecimal;
 import java.sql.Array;
 import java.sql.Blob;
 import java.sql.CallableStatement;
 import java.sql.Clob;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.Ref;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.sql.Types;
 import java.util.Calendar;
+import org.synchronoss.cpo.JavaVersion;
+//import java.sql.NClob;
+//import java.sql.RowId;
+//import java.sql.SQLXML;
 
 /**
  * The interface used to execute SQL stored procedures.  The JDBC API 
@@ -1598,6 +1609,229 @@ public class JdbcCallableStatement extends JdbcPreparedStatement implements Call
     	return (CallableStatement)super.getPreparedStatement();
     }
 
+//  public RowId getRowId(int parameterIndex) throws SQLException {
+//    if (JavaVersion.isJava6)
+//      return getCallableStatement().getRowId(parameterIndex);
+//    else
+//      throw new UnsupportedOperationException("Not supported yet.");
+//  }
+//
+//  public RowId getRowId(String parameterName) throws SQLException {
+//    if (JavaVersion.isJava6)
+//      return getCallableStatement().getRowId(parameterName);
+//    else
+//      throw new UnsupportedOperationException("Not supported yet.");
+//  }
+//
+//  public void setRowId(String parameterName, RowId x) throws SQLException {
+//    if (JavaVersion.isJava6)
+//      getCallableStatement().setRowId(parameterName, x);
+//    else
+//      throw new UnsupportedOperationException("Not supported yet.");
+//  }
+//
+//  public void setNString(String parameterName, String value) throws SQLException {
+//    if (JavaVersion.isJava6)
+//      getCallableStatement().setNString(parameterName, value);
+//    else
+//      throw new UnsupportedOperationException("Not supported yet.");
+//  }
+//
+//  public void setNCharacterStream(String parameterName, Reader value, long length) throws SQLException {
+//    if (JavaVersion.isJava6)
+//      getCallableStatement().setNCharacterStream(parameterName, value, length);
+//    else
+//      throw new UnsupportedOperationException("Not supported yet.");
+//  }
+//
+//  public void setNClob(String parameterName, NClob value) throws SQLException {
+//    if (JavaVersion.isJava6)
+//      getCallableStatement().setNClob(parameterName, value);
+//    else
+//      throw new UnsupportedOperationException("Not supported yet.");
+//  }
+//
+//  public void setClob(String parameterName, Reader reader, long length) throws SQLException {
+//    if (JavaVersion.isJava6)
+//      getCallableStatement().setClob(parameterName, reader, length);
+//    else
+//      throw new UnsupportedOperationException("Not supported yet.");
+//  }
+//
+//  public void setBlob(String parameterName, InputStream inputStream, long length) throws SQLException {
+//    if (JavaVersion.isJava6)
+//      getCallableStatement().setBlob(parameterName, inputStream, length);
+//    else
+//      throw new UnsupportedOperationException("Not supported yet.");
+//  }
+//
+//  public void setNClob(String parameterName, Reader reader, long length) throws SQLException {
+//    if (JavaVersion.isJava6)
+//      getCallableStatement().setNClob(parameterName, reader, length);
+//    else
+//      throw new UnsupportedOperationException("Not supported yet.");
+//  }
+//
+//  public NClob getNClob(int parameterIndex) throws SQLException {
+//    if (JavaVersion.isJava6)
+//      return getCallableStatement().getNClob(parameterIndex);
+//    else
+//      throw new UnsupportedOperationException("Not supported yet.");
+//  }
+//
+//  public NClob getNClob(String parameterName) throws SQLException {
+//    if (JavaVersion.isJava6)
+//      return getCallableStatement().getNClob(parameterName);
+//    else
+//      throw new UnsupportedOperationException("Not supported yet.");
+//  }
+//
+//  public void setSQLXML(String parameterName, SQLXML xmlObject) throws SQLException {
+//    if (JavaVersion.isJava6)
+//      getCallableStatement().setSQLXML(parameterName, xmlObject);
+//    else
+//      throw new UnsupportedOperationException("Not supported yet.");
+//  }
+//
+//  public SQLXML getSQLXML(int parameterIndex) throws SQLException {
+//    if (JavaVersion.isJava6)
+//      return getCallableStatement().getSQLXML(parameterIndex);
+//    else
+//      throw new UnsupportedOperationException("Not supported yet.");
+//  }
+//
+//  public SQLXML getSQLXML(String parameterName) throws SQLException {
+//    if (JavaVersion.isJava6)
+//      return getCallableStatement().getSQLXML(parameterName);
+//    else
+//      throw new UnsupportedOperationException("Not supported yet.");
+//  }
+//
+//  public String getNString(int parameterIndex) throws SQLException {
+//    if (JavaVersion.isJava6)
+//      return getCallableStatement().getNString(parameterIndex);
+//    else
+//      throw new UnsupportedOperationException("Not supported yet.");
+//  }
+//
+//  public String getNString(String parameterName) throws SQLException {
+//    if (JavaVersion.isJava6)
+//      return getCallableStatement().getNString(parameterName);
+//    else
+//      throw new UnsupportedOperationException("Not supported yet.");
+//  }
+//
+//  public Reader getNCharacterStream(int parameterIndex) throws SQLException {
+//    if (JavaVersion.isJava6)
+//      return getCallableStatement().getNCharacterStream(parameterIndex);
+//    else
+//      throw new UnsupportedOperationException("Not supported yet.");
+//  }
+//
+//  public Reader getNCharacterStream(String parameterName) throws SQLException {
+//    if (JavaVersion.isJava6)
+//      return getCallableStatement().getNCharacterStream(parameterName);
+//    else
+//      throw new UnsupportedOperationException("Not supported yet.");
+//  }
+//
+//  public Reader getCharacterStream(int parameterIndex) throws SQLException {
+//    if (JavaVersion.isJava6)
+//      return getCallableStatement().getCharacterStream(parameterIndex);
+//    else
+//      throw new UnsupportedOperationException("Not supported yet.");
+//  }
+//
+//  public Reader getCharacterStream(String parameterName) throws SQLException {
+//    if (JavaVersion.isJava6)
+//      return getCallableStatement().getCharacterStream(parameterName);
+//    else
+//      throw new UnsupportedOperationException("Not supported yet.");
+//  }
+//
+//  public void setBlob(String parameterName, Blob x) throws SQLException {
+//    if (JavaVersion.isJava6)
+//      getCallableStatement().setBlob(parameterName, x);
+//    else
+//      throw new UnsupportedOperationException("Not supported yet.");
+//  }
+//
+//  public void setClob(String parameterName, Clob x) throws SQLException {
+//    if (JavaVersion.isJava6)
+//      getCallableStatement().setClob(parameterName, x);
+//    else
+//      throw new UnsupportedOperationException("Not supported yet.");
+//  }
+//
+//  public void setAsciiStream(String parameterName, InputStream x, long length) throws SQLException {
+//    if (JavaVersion.isJava6)
+//      getCallableStatement().setAsciiStream(parameterName, x, length);
+//    else
+//      throw new UnsupportedOperationException("Not supported yet.");
+//  }
+//
+//  public void setBinaryStream(String parameterName, InputStream x, long length) throws SQLException {
+//    if (JavaVersion.isJava6)
+//      getCallableStatement().setBinaryStream(parameterName, x, length);
+//    else
+//      throw new UnsupportedOperationException("Not supported yet.");
+//  }
+//
+//  public void setCharacterStream(String parameterName, Reader reader, long length) throws SQLException {
+//    if (JavaVersion.isJava6)
+//      getCallableStatement().setCharacterStream(parameterName, reader, length);
+//    else
+//      throw new UnsupportedOperationException("Not supported yet.");
+//  }
+//
+//  public void setAsciiStream(String parameterName, InputStream x) throws SQLException {
+//    if (JavaVersion.isJava6)
+//      getCallableStatement().setAsciiStream(parameterName, x);
+//    else
+//      throw new UnsupportedOperationException("Not supported yet.");
+//  }
+//
+//  public void setBinaryStream(String parameterName, InputStream x) throws SQLException {
+//    if (JavaVersion.isJava6)
+//      getCallableStatement().setBinaryStream(parameterName, x);
+//    else
+//      throw new UnsupportedOperationException("Not supported yet.");
+//  }
+//
+//  public void setCharacterStream(String parameterName, Reader reader) throws SQLException {
+//    if (JavaVersion.isJava6)
+//      getCallableStatement().setCharacterStream(parameterName, reader);
+//    else
+//      throw new UnsupportedOperationException("Not supported yet.");
+//  }
+//
+//  public void setNCharacterStream(String parameterName, Reader value) throws SQLException {
+//    if (JavaVersion.isJava6)
+//      getCallableStatement().setNCharacterStream(parameterName, value);
+//    else
+//      throw new UnsupportedOperationException("Not supported yet.");
+//  }
+//
+//  public void setClob(String parameterName, Reader reader) throws SQLException {
+//    if (JavaVersion.isJava6)
+//      getCallableStatement().setClob(parameterName, reader);
+//    else
+//      throw new UnsupportedOperationException("Not supported yet.");
+//  }
+//
+//  public void setBlob(String parameterName, InputStream inputStream) throws SQLException {
+//    if (JavaVersion.isJava6)
+//      getCallableStatement().setBlob(parameterName, inputStream);
+//    else
+//      throw new UnsupportedOperationException("Not supported yet.");
+//  }
+//
+//  public void setNClob(String parameterName, Reader reader) throws SQLException {
+//    if (JavaVersion.isJava6)
+//      getCallableStatement().setNClob(parameterName, reader);
+//    else
+//      throw new UnsupportedOperationException("Not supported yet.");
+//  }
 
 }
 

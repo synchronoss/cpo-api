@@ -25,9 +25,8 @@
 package org.synchronoss.cpo;
 
 import java.lang.reflect.Method;
-import java.rmi.RemoteException;
-import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import javax.ejb.SessionBean;
 import javax.ejb.SessionContext;
@@ -252,7 +251,7 @@ public class CpoAdapterBean
      *
      * @throws CpoException Thrown if there are errors accessing the datasource
      */
-    public <C> Collection<C> retrieveObjects(String name, C criteria) throws CpoException{
+    public <C> List<C> retrieveObjects(String name, C criteria) throws CpoException{
         return JdbcCpoFactory.getCpoAdapter().retrieveObjects(name,criteria);
     }
 
@@ -275,7 +274,7 @@ public class CpoAdapterBean
      *
      * @throws CpoException Thrown if there are errors accessing the datasource
      */
-    public <C> Collection<C> retrieveObjects(String name, C criteria, CpoWhere where,
+    public <C> List<C> retrieveObjects(String name, C criteria, CpoWhere where,
         Collection<CpoOrderBy> orderBy) throws CpoException{
         return JdbcCpoFactory.getCpoAdapter().retrieveObjects(name,criteria,where, orderBy);
     }
@@ -297,7 +296,7 @@ public class CpoAdapterBean
      *
      * @throws CpoException Thrown if there are errors accessing the datasource
      */
-    public <C> Collection<C> retrieveObjects(String name, C criteria, Collection<CpoOrderBy> orderBy) throws CpoException{
+    public <C> List<C> retrieveObjects(String name, C criteria, Collection<CpoOrderBy> orderBy) throws CpoException{
         return JdbcCpoFactory.getCpoAdapter().retrieveObjects(name,criteria, orderBy);
     }
 
@@ -320,7 +319,7 @@ public class CpoAdapterBean
      *
      * @throws CpoException Thrown if there are errors accessing the datasource
      */
-    public <C> Collection<C> retrieveObjects(String name, C criteria, Collection<CpoWhere> wheres,
+    public <C> List<C> retrieveObjects(String name, C criteria, Collection<CpoWhere> wheres,
         Collection<CpoOrderBy> orderBy) throws CpoException{
         return JdbcCpoFactory.getCpoAdapter().retrieveObjects(name,criteria,wheres, orderBy);
     }
@@ -344,7 +343,7 @@ public class CpoAdapterBean
      *
      * @throws CpoException Thrown if there are errors accessing the datasource
      */
-    public <T,C> Collection<T> retrieveObjects(String name, C criteria, T result) throws CpoException{
+    public <T,C> List<T> retrieveObjects(String name, C criteria, T result) throws CpoException{
         return JdbcCpoFactory.getCpoAdapter().retrieveObjects(name,criteria,result);
     }
 
@@ -371,7 +370,7 @@ public class CpoAdapterBean
      *
      * @throws CpoException Thrown if there are errors accessing the datasource
      */
-    public <T,C> Collection<T> retrieveObjects(String name, C criteria, T result, CpoWhere where,
+    public <T,C> List<T> retrieveObjects(String name, C criteria, T result, CpoWhere where,
         Collection<CpoOrderBy> orderBy) throws CpoException{
         return JdbcCpoFactory.getCpoAdapter().retrieveObjects(name,criteria,result,where, orderBy);
     }
@@ -399,7 +398,7 @@ public class CpoAdapterBean
      *                 that was passed in. If no objects match the criteria, an empty
      *                 collection will be returned
      */
-    public <T,C> Collection<T> retrieveObjects(String name, C criteria, T result, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy)  throws CpoException {
+    public <T,C> List<T> retrieveObjects(String name, C criteria, T result, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy)  throws CpoException {
         return JdbcCpoFactory.getCpoAdapter().retrieveObjects(name,criteria,result, wheres, orderBy);
     }
 
@@ -425,7 +424,7 @@ public class CpoAdapterBean
      *                 that was passed in. If no objects match the criteria, an empty
      *                 collection will be returned
      */
-    public <T,C> Collection<T> retrieveObjects(String name, C criteria, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeQuery> nativeQuery, T result)  throws CpoException {
+    public <T,C> List<T> retrieveObjects(String name, C criteria, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeQuery> nativeQuery, T result)  throws CpoException {
         return JdbcCpoFactory.getCpoAdapter().retrieveObjects(name,criteria,wheres, orderBy, nativeQuery,result);
     }
 

@@ -24,6 +24,7 @@
 package org.synchronoss.cpo;
 
 import java.util.Collection;
+import java.util.List;
 
 /**
  * CpoAdapter is an interface for a set of routines that are responsible for 
@@ -1154,7 +1155,7 @@ public interface CpoAdapter extends java.io.Serializable {
      *
      * @throws CpoException Thrown if there are errors accessing the datasource
      */
-    public <C> Collection<C> retrieveObjects(String name, C criteria) throws CpoException;
+    public <C> List<C> retrieveObjects(String name, C criteria) throws CpoException;
 
     /**
      * Retrieves the Object from the datasource. The assumption is that the object exists in the
@@ -1175,7 +1176,7 @@ public interface CpoAdapter extends java.io.Serializable {
      *
      * @throws CpoException Thrown if there are errors accessing the datasource
      */
-    public <C> Collection<C> retrieveObjects(String name, C criteria, CpoWhere where,
+    public <C> List<C> retrieveObjects(String name, C criteria, CpoWhere where,
         Collection<CpoOrderBy> orderBy) throws CpoException;
 
     /**
@@ -1195,7 +1196,7 @@ public interface CpoAdapter extends java.io.Serializable {
      *
      * @throws CpoException Thrown if there are errors accessing the datasource
      */
-    public <C> Collection<C> retrieveObjects(String name, C criteria, Collection<CpoOrderBy> orderBy) throws CpoException;
+    public <C> List<C> retrieveObjects(String name, C criteria, Collection<CpoOrderBy> orderBy) throws CpoException;
 
     /**
      * Retrieves the Object from the datasource. The assumption is that the object exists in the
@@ -1216,7 +1217,7 @@ public interface CpoAdapter extends java.io.Serializable {
      *
      * @throws CpoException Thrown if there are errors accessing the datasource
      */
-    public <C> Collection<C> retrieveObjects(String name, C criteria, Collection<CpoWhere> wheres,
+    public <C> List<C> retrieveObjects(String name, C criteria, Collection<CpoWhere> wheres,
         Collection<CpoOrderBy> orderBy) throws CpoException;
 
     /**
@@ -1238,7 +1239,7 @@ public interface CpoAdapter extends java.io.Serializable {
      *
      * @throws CpoException Thrown if there are errors accessing the datasource
      */
-    public <T,C> Collection<T> retrieveObjects(String name, C criteria, T result) throws CpoException;
+    public <T,C> List<T> retrieveObjects(String name, C criteria, T result) throws CpoException;
 
     /**
      * Retrieves the Object from the datasource. The assumption is that the object exists in the
@@ -1263,7 +1264,7 @@ public interface CpoAdapter extends java.io.Serializable {
      *
      * @throws CpoException Thrown if there are errors accessing the datasource
      */
-    public <T,C> Collection<T> retrieveObjects(String name, C criteria, T result, CpoWhere where,
+    public <T,C> List<T> retrieveObjects(String name, C criteria, T result, CpoWhere where,
         Collection<CpoOrderBy> orderBy) throws CpoException;
 
     /**
@@ -1289,7 +1290,7 @@ public interface CpoAdapter extends java.io.Serializable {
      *
      * @throws CpoException Thrown if there are errors accessing the datasource
      */
-    public <T,C> Collection<T> retrieveObjects(String name, C criteria, T result, Collection<CpoWhere> wheres,
+    public <T,C> List<T> retrieveObjects(String name, C criteria, T result, Collection<CpoWhere> wheres,
         Collection<CpoOrderBy> orderBy) throws CpoException;
 
     /**
@@ -1317,7 +1318,7 @@ public interface CpoAdapter extends java.io.Serializable {
      *
      * @throws CpoException Thrown if there are errors accessing the datasource
      */
-    public <T,C> Collection<T> retrieveObjects(String name, C criteria, Collection<CpoWhere> wheres,
+    public <T,C> List<T> retrieveObjects(String name, C criteria, Collection<CpoWhere> wheres,
         Collection<CpoOrderBy> orderBy, Collection<CpoNativeQuery> nativeQueries, T result) throws CpoException;
 
     /**

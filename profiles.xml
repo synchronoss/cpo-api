@@ -5,11 +5,15 @@
       <id>mysql</id>
       <activation>
         <activeByDefault>false</activeByDefault>
+        <property>
+          <name>cpo.db</name>
+          <value>mysql</value>
+        </property>
       </activation>
       <properties>
         <cpo.test.sqldir>src/test/sql/mysql</cpo.test.sqldir>
-		<cpo.db.user>cpo</cpo.db.user>
-		<cpo.db.pswd>cpo</cpo.db.pswd>
+        <cpo.db.user>cpo</cpo.db.user>
+        <cpo.db.pswd>cpo</cpo.db.pswd>
         <cpo.db.host>localhost</cpo.db.host>
         <cpo.db.port>3306</cpo.db.port>
         <cpo.db.database>cpo</cpo.db.database>
@@ -22,8 +26,8 @@
         <cpo.db.callssupported>true</cpo.db.callssupported>
         <cpo.db.select4update>true</cpo.db.select4update>
         <cpo.db.millisupport>false</cpo.db.millisupport>
-		<cpo.meta.user>cpometa</cpo.meta.user>
-		<cpo.meta.pswd>cpometa</cpo.meta.pswd>
+        <cpo.meta.user>cpometa</cpo.meta.user>
+        <cpo.meta.pswd>cpometa</cpo.meta.pswd>
         <cpo.meta.host>localhost</cpo.meta.host>
         <cpo.meta.port>3306</cpo.meta.port>
         <cpo.meta.database>cpometa</cpo.meta.database>
@@ -38,12 +42,15 @@
     <profile>
       <id>oracle</id>
       <activation>
-        <activeByDefault>true</activeByDefault>
+        <activeByDefault>false</activeByDefault>
+        <property>
+          <name>!cpo.db</name>
+        </property>
       </activation>
-      <properties>
+       <properties>
         <cpo.test.sqldir>src/test/sql/oracle</cpo.test.sqldir>
-		<cpo.db.user>cpo</cpo.db.user>
-		<cpo.db.pswd>cpo</cpo.db.pswd>
+        <cpo.db.user>cpo</cpo.db.user>
+        <cpo.db.pswd>cpo</cpo.db.pswd>
         <cpo.db.host>pabetdd01v1.sncrcorp.net</cpo.db.host>
         <cpo.db.port>1521</cpo.db.port>
         <cpo.db.database>dcig1</cpo.db.database>
@@ -56,8 +63,8 @@
         <cpo.db.callssupported>true</cpo.db.callssupported>
         <cpo.db.select4update>true</cpo.db.select4update>
         <cpo.db.millisupport>true</cpo.db.millisupport>
-		<cpo.meta.user>cpometa</cpo.meta.user>
-		<cpo.meta.pswd>cpometa</cpo.meta.pswd>
+        <cpo.meta.user>cpometa</cpo.meta.user>
+        <cpo.meta.pswd>cpometa</cpo.meta.pswd>
         <cpo.meta.host>pabetdd01v1.sncrcorp.net</cpo.meta.host>
         <cpo.meta.port>1521</cpo.meta.port>
         <cpo.meta.database>dcig1</cpo.meta.database>
@@ -73,11 +80,15 @@
       <id>hsqldb</id>
       <activation>
         <activeByDefault>false</activeByDefault>
+        <property>
+          <name>cpo.db</name>
+          <value>hsqldb</value>
+        </property>
       </activation>
       <properties>
         <cpo.test.sqldir>src/test/sql/hsqldb</cpo.test.sqldir>
-		<cpo.db.user>cpo</cpo.db.user>
-		<cpo.db.pswd>cpo</cpo.db.pswd>
+        <cpo.db.user>cpo</cpo.db.user>
+        <cpo.db.pswd>cpo</cpo.db.pswd>
         <cpo.db.host>localhost</cpo.db.host>
         <cpo.db.port></cpo.db.port>
         <cpo.db.database>cpo</cpo.db.database>
@@ -90,8 +101,8 @@
         <cpo.db.callssupported>true</cpo.db.callssupported>
         <cpo.db.select4update>false</cpo.db.select4update>
         <cpo.db.millisupport>true</cpo.db.millisupport>
-		<cpo.meta.user>cpometa</cpo.meta.user>
-		<cpo.meta.pswd>cpometa</cpo.meta.pswd>
+        <cpo.meta.user>cpometa</cpo.meta.user>
+        <cpo.meta.pswd>cpometa</cpo.meta.pswd>
         <cpo.meta.host>localhost</cpo.meta.host>
         <cpo.meta.port></cpo.meta.port>
         <cpo.meta.database>cpometa</cpo.meta.database>
@@ -107,11 +118,15 @@
       <id>hsqldbfile</id>
       <activation>
         <activeByDefault>false</activeByDefault>
+        <property>
+          <name>cpo.db</name>
+          <value>hsqldbfile</value>
+        </property>
       </activation>
       <properties>
         <cpo.test.sqldir>src/test/sql/hsqldb</cpo.test.sqldir>
-		<cpo.db.user>sa</cpo.db.user>
-		<cpo.db.pswd></cpo.db.pswd>
+        <cpo.db.user>sa</cpo.db.user>
+        <cpo.db.pswd></cpo.db.pswd>
         <cpo.db.host>localhost</cpo.db.host>
         <cpo.db.port></cpo.db.port>
         <cpo.db.database>src/test/sql/hsqldb/db/cpo</cpo.db.database>
@@ -124,8 +139,8 @@
         <cpo.db.callssupported>false</cpo.db.callssupported>
         <cpo.db.select4update>false</cpo.db.select4update>
         <cpo.db.millisupport>true</cpo.db.millisupport>
-		<cpo.meta.user>sa</cpo.meta.user>
-		<cpo.meta.pswd></cpo.meta.pswd>
+        <cpo.meta.user>sa</cpo.meta.user>
+        <cpo.meta.pswd></cpo.meta.pswd>
         <cpo.meta.host>localhost</cpo.meta.host>
         <cpo.meta.port></cpo.meta.port>
         <cpo.meta.database>src/test/sql/hsqldb/db/cpometa</cpo.meta.database>
@@ -141,11 +156,15 @@
       <id>postgres</id>
       <activation>
         <activeByDefault>false</activeByDefault>
+        <property>
+          <name>cpo.db</name>
+          <value>postgres</value>
+        </property>
       </activation>
       <properties>
         <cpo.test.sqldir>src/test/sql/postgres</cpo.test.sqldir>
-		<cpo.db.user>cpo</cpo.db.user>
-		<cpo.db.pswd>cpo</cpo.db.pswd>
+        <cpo.db.user>cpo</cpo.db.user>
+        <cpo.db.pswd>cpo</cpo.db.pswd>
         <cpo.db.host>localhost</cpo.db.host>
         <cpo.db.port>5432</cpo.db.port>
         <cpo.db.database>cpo</cpo.db.database>
@@ -158,8 +177,8 @@
         <cpo.db.callssupported>true</cpo.db.callssupported>
         <cpo.db.select4update>true</cpo.db.select4update>
         <cpo.db.millisupport>true</cpo.db.millisupport>
-		<cpo.meta.user>cpometa</cpo.meta.user>
-		<cpo.meta.pswd>cpometa</cpo.meta.pswd>
+        <cpo.meta.user>cpometa</cpo.meta.user>
+        <cpo.meta.pswd>cpometa</cpo.meta.pswd>
         <cpo.meta.host>localhost</cpo.meta.host>
         <cpo.meta.port>5432</cpo.meta.port>
         <cpo.meta.database>cpometa</cpo.meta.database>
@@ -172,4 +191,5 @@
       </properties>
     </profile>
   </profiles>
+
 </profilesXml>

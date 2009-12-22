@@ -70,7 +70,7 @@
         <cpo.meta.database>dcig1</cpo.meta.database>
         <cpo.meta.url>jdbc:oracle:thin:@${cpo.meta.host}:${cpo.meta.port}:${cpo.meta.database}</cpo.meta.url>
         <cpo.meta.userurl>jdbc:oracle:thin:${cpo.meta.user}/${cpo.meta.pswd}@${cpo.meta.host}:${cpo.meta.port}:${cpo.meta.database}</cpo.meta.userurl>
-        <cpo.meta.driver>oracle.jdbc.driver.OracleDriver</cpo.meta.driver>
+        <cpo.meta.driver>oracle.jdbc.OracleDriver</cpo.meta.driver>
         <cpo.meta.initconn>1</cpo.meta.initconn>
         <cpo.meta.maxconn>1</cpo.meta.maxconn>
         <cpo.tableprefix>TEST_</cpo.tableprefix>

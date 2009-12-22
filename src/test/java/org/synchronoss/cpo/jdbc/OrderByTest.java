@@ -24,7 +24,6 @@ package org.synchronoss.cpo.jdbc;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 import junit.framework.TestCase;
 
@@ -127,7 +126,7 @@ public class OrderByTest extends TestCase {
      */
     public void testOrderByDescending() {
         String method = "testOrderByDescending:";
-        List<ValueObject> col = null;
+        Collection<ValueObject> col = null;
         
         try{
             CpoOrderBy cob = jdbcIdo_.newOrderBy("id",false,null);

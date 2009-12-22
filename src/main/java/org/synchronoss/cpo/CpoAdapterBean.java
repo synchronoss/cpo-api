@@ -25,8 +25,9 @@
 package org.synchronoss.cpo;
 
 import java.lang.reflect.Method;
+import java.rmi.RemoteException;
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 import javax.ejb.SessionBean;
 import javax.ejb.SessionContext;
@@ -258,7 +259,7 @@ public class CpoAdapterBean
      *                 that was passed in. If no objects match the criteria, an empty
      *                 collection will be returned
      */
-    public <T,C> List<T> retrieveObjects(String name, C criteria, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, T result)  throws CpoException {
+    public <T,C> Collection<T> retrieveObjects(String name, C criteria, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, T result)  throws CpoException {
         return JdbcCpoFactory.getCpoAdapter().retrieveObjects(name,criteria,wheres, orderBy,result);
     }
 
@@ -284,7 +285,7 @@ public class CpoAdapterBean
      *                 that was passed in. If no objects match the criteria, an empty
      *                 collection will be returned
      */
-    public <T,C> List<T> retrieveObjects(String name, C criteria, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeQuery> nativeQuery, T result)  throws CpoException {
+    public <T,C> Collection<T> retrieveObjects(String name, C criteria, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeQuery> nativeQuery, T result)  throws CpoException {
         return JdbcCpoFactory.getCpoAdapter().retrieveObjects(name,criteria,wheres, orderBy, nativeQuery,result);
     }
 

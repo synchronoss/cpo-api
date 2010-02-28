@@ -101,9 +101,9 @@ DROP  TABLE IF EXISTS cpo_query
 CREATE TABLE IF NOT EXISTS cpo_query (
        query_id             VARCHAR(36) NOT NULL PRIMARY KEY,
        group_id             VARCHAR(36) NOT NULL,
+       text_id              VARCHAR(36) NOT NULL,
        seq_no               NUMERIC(9) NOT NULL,
-       sql_text             VARCHAR(8000) NULL,
-       description          VARCHAR(1023) NULL,
+       stored_proc          VARCHAR(1) DEFAULT 'N' NULL,
        userid               varchar(50), 
        createdate           date
 )
@@ -118,9 +118,9 @@ DROP  TABLE IF EXISTS cpo_query_rev
 CREATE TABLE IF NOT EXISTS cpo_query_rev (
        query_id             VARCHAR(36) NOT NULL,
        group_id             VARCHAR(36) NOT NULL,
+       text_id              VARCHAR(36) NOT NULL,
        seq_no               NUMERIC(9) NOT NULL,
-       sql_text             VARCHAR(8000) NULL,
-       description          VARCHAR(1023) NULL,
+       stored_proc          VARCHAR(1) DEFAULT 'N' NULL,
        userid               varchar(50), 
        createdate           date,
        revision             NUMERIC
@@ -154,6 +154,39 @@ CREATE TABLE IF NOT EXISTS cpo_query_group_rev (
        class_id             VARCHAR(36) NOT NULL,
        group_type           VARCHAR(10) NOT NULL,
        name                 VARCHAR(50) NULL,
+       userid               varchar(50), 
+       createdate           date,
+       revision             numeric
+)
+ENGINE=InnoDB
+default character set = utf8;
+
+----------------------------------------------
+-- CPO_QUERY_TEXT
+----------------------------------------------
+DROP TABLE IF EXISTS cpo_query_text
+ ;
+
+CREATE TABLE IF NOT EXISTS cpo_query_text (
+       text_id              VARCHAR(36) NOT NULL PRIMARY KEY,
+       sql_text             VARCHAR(8000) NULL,
+       description          VARCHAR(1023) NULL,
+       userid               varchar(50), 
+       createdate           date
+)
+ENGINE=InnoDB
+default character set = utf8;
+
+----------------------------------------------
+-- CPO_QUERY_TEXT_REV
+----------------------------------------------
+DROP TABLE IF EXISTS cpo_query_text_rev
+ ;
+
+CREATE TABLE IF NOT EXISTS cpo_query_text_rev (
+       text_id              VARCHAR(36) NOT NULL PRIMARY KEY,
+       sql_text             VARCHAR(8000) NULL,
+       description          VARCHAR(1023) NULL,
        userid               varchar(50), 
        createdate           date,
        revision             numeric
@@ -215,6 +248,9 @@ ALTER TABLE cpo_query_parameter
 
 ALTER TABLE cpo_query
        ADD CONSTRAINT FK_GROUP_ID FOREIGN KEY (group_id) REFERENCES cpo_query_group(group_id);
+
+ALTER TABLE cpo_query
+       ADD CONSTRAINT FK_CQ_TEXT_ID FOREIGN KEY (text_id) REFERENCES cpo_query_text(text_id);
 
 ALTER TABLE cpo_attribute_map
        ADD CONSTRAINT UNIQUE_ATTR_CLASS UNIQUE(attribute_id,class_id);

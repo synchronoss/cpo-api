@@ -84,9 +84,9 @@ CREATE TABLE CPO_ATTRIBUTE_MAP_REV (
 CREATE TABLE CPO_QUERY (
        query_id             VARCHAR(36) NOT NULL PRIMARY KEY,
        group_id             VARCHAR(36) NOT NULL,
+       text_id              VARCHAR(36) NOT NULL,
        seq_no               NUMERIC(9) NOT NULL,
-       sql_text             VARCHAR(8000) NULL,
-       description          VARCHAR(1023) NULL,
+       stored_proc          VARCHAR(1) DEFAULT 'N' NULL,
        userid               varchar(50), 
        createdate           date
 );
@@ -97,9 +97,9 @@ CREATE TABLE CPO_QUERY (
 CREATE TABLE CPO_QUERY_REV (
        query_id             VARCHAR(36) NOT NULL,
        group_id             VARCHAR(36) NOT NULL,
+       text_id              VARCHAR(36) NOT NULL,
        seq_no               NUMERIC(9) NOT NULL,
-       sql_text             VARCHAR(8000) NULL,
-       description          VARCHAR(1023) NULL,
+       stored_proc          VARCHAR(1) DEFAULT 'N' NULL,
        userid               varchar(50), 
        createdate           date,
        revision             NUMERIC
@@ -125,6 +125,29 @@ CREATE TABLE CPO_QUERY_GROUP_REV (
        class_id             VARCHAR(36) NOT NULL,
        group_type           VARCHAR(10) NOT NULL,
        name                 VARCHAR(50) NULL,
+       userid               varchar(50), 
+       createdate           date,
+       revision             numeric
+);
+
+----------------------------------------------
+-- CPO_QUERY_TEXT
+----------------------------------------------
+CREATE TABLE CPO_QUERY_TEXT (
+       text_id              VARCHAR(36) NOT NULL PRIMARY KEY,
+       sql_text             VARCHAR(8000) NULL,
+       description          VARCHAR(1023) NULL,
+       userid               varchar(50), 
+       createdate           date
+);
+
+----------------------------------------------
+-- CPO_QUERY_TEXT_REV
+----------------------------------------------
+CREATE TABLE CPO_QUERY_TEXT_REV (
+       text_id              VARCHAR(36) NOT NULL PRIMARY KEY,
+       sql_text             VARCHAR(8000) NULL,
+       description          VARCHAR(1023) NULL,
        userid               varchar(50), 
        createdate           date,
        revision             numeric
@@ -168,6 +191,9 @@ ALTER TABLE CPO_ATTRIBUTE_MAP
 
 ALTER TABLE CPO_QUERY
        ADD CONSTRAINT FK_CQ_GROUP_ID FOREIGN KEY (group_id) REFERENCES CPO_QUERY_GROUP(group_id);
+
+ALTER TABLE CPO_QUERY
+       ADD CONSTRAINT FK_CQ_TEXT_ID FOREIGN KEY (text_id) REFERENCES CPO_QUERY_TEXT(text_id);
 
 ALTER TABLE CPO_QUERY_GROUP
        ADD CONSTRAINT FK_CQG_CLASS_ID FOREIGN KEY (class_id) REFERENCES CPO_CLASS(class_id);

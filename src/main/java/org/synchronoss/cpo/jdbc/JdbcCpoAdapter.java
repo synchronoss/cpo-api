@@ -3317,17 +3317,17 @@ public class JdbcCpoAdapter implements CpoAdapter {
     String id = null;
     StringBuffer sqlBuffer = new StringBuffer();
     //Uncomment when we remove the query_text_table
-    sqlBuffer.append("select cqg.group_type,cqg.name,cq.query_id,cq.seq_no as query_seq,cq.sql_text,cqp.seq_no as param_seq,");
+    //sqlBuffer.append("select cqg.group_type,cqg.name,cq.query_id,cq.seq_no as query_seq,cq.sql_text,cqp.seq_no as param_seq,");
     // Comment this out when we remove the query_text table
-    //sqlBuffer.append("select cqg.group_type,cqg.name,cq.query_id,cq.seq_no as query_seq,cqt.sql_text,cqp.seq_no as param_seq,");
+    sqlBuffer.append("select cqg.group_type,cqg.name,cq.query_id,cq.seq_no as query_seq,cqt.sql_text,cqp.seq_no as param_seq,");
     sqlBuffer.append("cam.attribute,cam.column_name,cam.column_type,cqp.param_type from ");
     sqlBuffer.append(getDbTablePrefix());
     sqlBuffer.append("cpo_query_group cqg left outer join ");
     sqlBuffer.append(getDbTablePrefix());
     sqlBuffer.append("cpo_query cq on cqg.group_id = cq.group_id left outer join ");
     // Comment this out when we remove the query_text table
-    //sqlBuffer.append(getDbTablePrefix());
-    //sqlBuffer.append("cpo_query_text cqt on cq.text_id = cqt.text_id left outer join ");
+    sqlBuffer.append(getDbTablePrefix());
+    sqlBuffer.append("cpo_query_text cqt on cq.text_id = cqt.text_id left outer join ");
     // End query_text table
     sqlBuffer.append(getDbTablePrefix());
     sqlBuffer.append("cpo_query_parameter cqp on cq.query_id = cqp.query_id left outer join ");

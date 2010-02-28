@@ -139,7 +139,7 @@ public class InsertObjectTest extends TestCase {
         }
 
         try{
-            Collection<ValueObject> col = jdbcIdo_.retrieveObjects(null,vo);
+            Collection<ValueObject> col = jdbcIdo_.retrieveBeans(null,vo);
 
             assertTrue(method+"Invalid number of objects returned", col.size()==al.size());
         } catch (Exception e) {

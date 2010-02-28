@@ -95,7 +95,7 @@ public class RetrieveObjectTest extends TestCase {
         
         try{
             ValueObject valObj = new ValueObject();
-            col = jdbcIdo_.retrieveObjects(null,valObj);
+            col = jdbcIdo_.retrieveBeans(null,valObj);
             assertTrue("Col size is "+col.size(), col.size()==al.size());
 
         } catch (Exception e) {
@@ -204,7 +204,7 @@ public class RetrieveObjectTest extends TestCase {
         
         // Let's see if it lets me do two trxs at once
         try{
-          trx.retrieveObjects(null,valObj);
+          trx.retrieveBeans(null,valObj);
           fail(method+"Cpo allowed me to reuse a busy connection");
         } catch (Exception busy){
           // THis should happen

@@ -7,6 +7,10 @@ DROP TABLE  IF EXISTS TEST_cpo_query_rev
 ;
 DROP TABLE  IF EXISTS TEST_cpo_query
 ;
+DROP TABLE  IF EXISTS TEST_cpo_query_text_rev
+;
+DROP TABLE  IF EXISTS TEST_cpo_query_text
+;
 DROP TABLE  IF EXISTS TEST_cpo_attribute_map_rev
 ;
 DROP TABLE  IF EXISTS TEST_cpo_attribute_map

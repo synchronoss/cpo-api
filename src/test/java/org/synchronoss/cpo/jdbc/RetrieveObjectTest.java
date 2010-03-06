@@ -193,7 +193,7 @@ public class RetrieveObjectTest extends TestCase {
         trx = jdbcIdo_.getCpoTrxAdapter();
 
         ValueObject valObj = new ValueObject();
-        crs = trx.retrieveObjects(null,valObj,null,null,null,valObj,11);
+        crs = trx.retrieveObjects(null,valObj,null,null,null,valObj,2);
         
         //start this trx
         for(ValueObject vo: crs){
@@ -233,7 +233,7 @@ public class RetrieveObjectTest extends TestCase {
       
       try{
           ValueObject valObj = new ValueObject();
-          crs = jdbcIdo_.retrieveObjects(null,valObj,null,null,null,valObj,11);
+          crs = jdbcIdo_.retrieveObjects(null,valObj,null,null,null,valObj,20);
           logger.debug("Returned from retrieveObjects");
           for(ValueObject vo: crs){
             if (vo!=null)

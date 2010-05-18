@@ -11,6 +11,7 @@
         </property>
       </activation>
       <properties>
+        <release.arguments>-Dcpo.db=${cpo.db}</release.arguments>
         <cpo.test.sqldir>src/test/sql/mysql</cpo.test.sqldir>
         <cpo.db.user>cpo</cpo.db.user>
         <cpo.db.pswd>cpo</cpo.db.pswd>
@@ -86,6 +87,7 @@
         </property>
       </activation>
       <properties>
+        <release.arguments>-Dcpo.db=${cpo.db}</release.arguments>
         <cpo.test.sqldir>src/test/sql/hsqldb</cpo.test.sqldir>
         <cpo.db.user>cpo</cpo.db.user>
         <cpo.db.pswd>cpo</cpo.db.pswd>
@@ -124,6 +126,7 @@
         </property>
       </activation>
       <properties>
+        <release.arguments>-Dcpo.db=${cpo.db}</release.arguments>
         <cpo.test.sqldir>src/test/sql/hsqldb</cpo.test.sqldir>
         <cpo.db.user>sa</cpo.db.user>
         <cpo.db.pswd></cpo.db.pswd>
@@ -162,6 +165,7 @@
         </property>
       </activation>
       <properties>
+        <release.arguments>-Dcpo.db=${cpo.db}</release.arguments>
         <cpo.test.sqldir>src/test/sql/postgres</cpo.test.sqldir>
         <cpo.db.user>cpo</cpo.db.user>
         <cpo.db.pswd>cpo</cpo.db.pswd>

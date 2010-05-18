@@ -21,8 +21,6 @@
   </licenses>
   <properties>
     <currentVersion>${project.version}</currentVersion>
-    <!-- default test db -->
-    <cpo.db>oracle</cpo.db>
   </properties>
   <ciManagement>
     <system>teamcity</system>
@@ -156,6 +154,13 @@
       </plugins>
     </pluginManagement>
     <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-release-plugin</artifactId>
+        <configuration>
+          <arguments>${release.arguments}</arguments>
+        </configuration>
+      </plugin>
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>sql-maven-plugin</artifactId>

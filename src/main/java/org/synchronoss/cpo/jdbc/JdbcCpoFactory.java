@@ -11,7 +11,6 @@ package org.synchronoss.cpo.jdbc;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Locale;
-import java.util.PropertyResourceBundle;
 import java.util.ResourceBundle;
 
 import org.apache.log4j.Logger;
@@ -20,7 +19,7 @@ import org.synchronoss.cpo.CpoException;
 
 /**
  * JdbcCpoFactory implements the JdbcCpoAdapter as a singleton. JdbcCpoAdapter is fully thread safe
- * so operating as a Singleton is the most efficent 
+ * so operating as a Singleton is the most efficient
  *
  * @author david berry
  */
@@ -94,7 +93,7 @@ public class JdbcCpoFactory {
   	  ResourceBundle b=null;
   	  
       try{
-        b = PropertyResourceBundle.getBundle(PROP_FILE,Locale.getDefault(), JdbcCpoFactory.class.getClassLoader());
+        b = ResourceBundle.getBundle(PROP_FILE,Locale.getDefault(), JdbcCpoFactory.class.getClassLoader());
       } catch (Exception e){
         throw new CpoException("Error processing properties file:"+PROP_FILE+".properties :"+e.getLocalizedMessage());
       }
@@ -126,7 +125,7 @@ public class JdbcCpoFactory {
     	  else if (metaUrl_!=null)
           metaInfo = new JdbcDataSourceInfo(metaDriver_,metaUrl_, metaUser_, metaPassword_, metaInitConn_, metaMaxConn_,false,tablePrefix_);
   	  } catch (SQLException se) {
-  	    logger.debug("Unable to get meta datasource info");
+  	    logger.debug("Unable to get meta datasource info: "+se.getLocalizedMessage());
   	    metaInfo=null;
   	  }
   	  
@@ -138,7 +137,7 @@ public class JdbcCpoFactory {
         else if (dbUrl_!=null)
           dbInfo = new JdbcDataSourceInfo(dbDriver_,dbUrl_, dbUser_, dbPassword_, dbInitConn_, dbMaxConn_,false,tablePrefix_);
       } catch (SQLException se) {
-        logger.debug("Unable to get db datasource info");
+        logger.debug("Unable to get db datasource info: "+se.getLocalizedMessage());
         dbInfo=null;
       }
   	  

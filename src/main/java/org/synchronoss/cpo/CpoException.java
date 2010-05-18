@@ -90,9 +90,13 @@ public class CpoException extends Exception  {
         StringBuffer msg=new StringBuffer("\n");
 
         msg.append(super.getMessage());
+
         if(detail != null) {
             msg.append("\n");
             msg.append(detail.getMessage());
+						if (detail.getCause()!=null){
+							msg.append(detail.getCause().getMessage());
+						}
         }
         return msg.toString();
     }

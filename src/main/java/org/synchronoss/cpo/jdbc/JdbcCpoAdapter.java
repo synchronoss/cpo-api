@@ -2309,7 +2309,7 @@ public class JdbcCpoAdapter implements CpoAdapter {
           } catch (CpoException ce) {
             jmc = null;
             classObj = classObj.getSuperclass();
-            className = classObj.getName();
+            className = classObj==null?null:classObj.getName();
           }
         }
         if (jmc==null){
@@ -3472,7 +3472,6 @@ public class JdbcCpoAdapter implements CpoAdapter {
         }
       } catch (CpoException ce) {
         String msg = "loadAttributeMap() failed:'" + sql + "' classname:" + name;
-        localLogger.error(msg, ce);
         throw ce;
       } catch (Exception e) {
         String msg = "loadAttributeMap() failed:'" + sql + "' classname:" + name;

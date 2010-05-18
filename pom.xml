@@ -79,20 +79,17 @@
       <id>sf-cpo-releases</id>
       <name>Sourceforge CPO Repository</name>
 <!--      <url>http://mavenrepo.synchronoss.net:8081/artifactory/libs-releases</url>-->
-<!--      <url>scp://shell.sourceforge.net/home/groups/c/cp/cpo/htdocs/sf-cpo-releases</url> -->
-      <url>scp://web.sourceforge.net/htdocs/sf-cpo-releases</url>
+      <url>scp://web.sourceforge.net/home/groups/c/cp/cpo/htdocs/sf-cpo-releases</url>
     </repository>
     <snapshotRepository>
       <id>sf-cpo-snapshots</id>
       <name>Sourceforge CPO Snapshot Repository</name>
-<!--      <url>scp://shell.sourceforge.net/home/groups/c/cp/cpo/htdocs/sf-cpo-snapshots</url> -->
-      <url>scp://web.sourceforge.net/htdocs/sf-cpo-snapshots</url>
+      <url>scp://web.sourceforge.net/home/groups/c/cp/cpo/htdocs/sf-cpo-snapshots</url>
     </snapshotRepository>
     <site>
       <!-- must create a shell for your account at sourceforge by execing: ssh -t <username>,<project name>@shell.sf.net create-->
       <id>sf-cpo-site</id>
-<!--      <url>scp://shell.sourceforge.net/home/groups/c/cp/cpo/htdocs</url> -->
-      <url>scp://web.sourceforge.net/htdocs</url>
+      <url>scp://web.sourceforge.net/home/groups/c/cp/cpo/htdocs</url>
     </site>
   </distributionManagement>
   <scm>

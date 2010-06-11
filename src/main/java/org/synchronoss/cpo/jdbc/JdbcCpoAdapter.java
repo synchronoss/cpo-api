@@ -2829,8 +2829,8 @@ public class JdbcCpoAdapter implements CpoAdapter {
           rsmd = rs.getMetaData();
 
           if ((rsmd.getColumnCount() == 2) &&
-              "CPO_ATTRIBUTE".equalsIgnoreCase(rsmd.getColumnName(1)) &&
-              "CPO_VALUE".equalsIgnoreCase(rsmd.getColumnName(2))) {
+              "CPO_ATTRIBUTE".equalsIgnoreCase(rsmd.getColumnLabel(1)) &&
+              "CPO_VALUE".equalsIgnoreCase(rsmd.getColumnLabel(2))) {
             while (rs.next()) {
               recordsExist = true;
               recordCount++;
@@ -2845,7 +2845,7 @@ public class JdbcCpoAdapter implements CpoAdapter {
             recordsExist = true;
             recordCount++;
             for (k = 1; k <= rsmd.getColumnCount(); k++) {
-              attribute = jmcAttrMap.get(rsmd.getColumnName(k));
+              attribute = jmcAttrMap.get(rsmd.getColumnLabel(k));
 
               if (attribute != null) {
                 attribute.invokeSetter(rObj, rs, k);
@@ -3054,7 +3054,7 @@ public class JdbcCpoAdapter implements CpoAdapter {
         attributes = new JdbcAttribute[columnCount + 1];
 
         for (k = 1; k <= columnCount; k++) {
-          attributes[k] = jmcAttrMap.get(rsmd.getColumnName(k));
+          attributes[k] = jmcAttrMap.get(rsmd.getColumnLabel(k));
         }
 
         while (rs.next()) {

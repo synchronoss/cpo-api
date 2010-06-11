@@ -78,7 +78,6 @@
     <repository>
       <id>sf-cpo-releases</id>
       <name>Sourceforge CPO Repository</name>
-<!--      <url>http://mavenrepo.synchronoss.net:8081/artifactory/libs-releases</url>-->
       <url>sftp://web.sourceforge.net/home/groups/c/cp/cpo/htdocs/sf-cpo-releases</url>
     </repository>
     <snapshotRepository>
@@ -87,7 +86,6 @@
       <url>sftp://web.sourceforge.net/home/groups/c/cp/cpo/htdocs/sf-cpo-snapshots</url>
     </snapshotRepository>
     <site>
-      <!-- must create a shell for your account at sourceforge by execing: ssh -t <username>,<project name>@shell.sf.net create-->
       <id>sf-cpo-site</id>
       <url>sftp://web.sourceforge.net/home/groups/c/cp/cpo/htdocs</url>
     </site>

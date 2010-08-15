@@ -78,15 +78,18 @@
     <repository>
       <id>sf-cpo-releases</id>
       <name>Sourceforge CPO Repository</name>
-      <url>sftp://web.sourceforge.net/home/groups/c/cp/cpo/htdocs/sf-cpo-releases</url>
+      <url>scp://shell.sourceforge.net/home/groups/c/cp/cpo/htdocs/sf-cpo-releases</url>
+      <!--<url>sftp://web.sourceforge.net/home/groups/c/cp/cpo/htdocs/sf-cpo-releases</url>-->
     </repository>
     <snapshotRepository>
       <id>sf-cpo-snapshots</id>
       <name>Sourceforge CPO Snapshot Repository</name>
-      <url>sftp://web.sourceforge.net/home/groups/c/cp/cpo/htdocs/sf-cpo-snapshots</url>
+      <url>scp://shell.sourceforge.net/home/groups/c/cp/cpo/htdocs/sf-cpo-snapshots</url>
+      <!--<url>sftp://web.sourceforge.net/home/groups/c/cp/cpo/htdocs/sf-cpo-snapshots</url>-->
     </snapshotRepository>
     <site>
       <id>sf-cpo-site</id>
+      <!--<url>scp://shell.sourceforge.net/home/groups/c/cp/cpo/htdocs</url>-->
       <url>sftp://web.sourceforge.net/home/groups/c/cp/cpo/htdocs</url>
     </site>
   </distributionManagement>

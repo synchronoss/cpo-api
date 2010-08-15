@@ -1,3 +1,4 @@
+<?xml version="1.0"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.synchronoss</groupId>
@@ -89,8 +90,8 @@
     </snapshotRepository>
     <site>
       <id>sf-cpo-site</id>
-      <!--<url>scp://shell.sourceforge.net/home/groups/c/cp/cpo/htdocs</url>-->
-      <url>sftp://web.sourceforge.net/home/groups/c/cp/cpo/htdocs</url>
+      <url>scp://shell.sourceforge.net/home/groups/c/cp/cpo/htdocs</url>
+      <!--<url>sftp://web.sourceforge.net/home/groups/c/cp/cpo/htdocs</url>-->
     </site>
   </distributionManagement>
   <scm>
@@ -113,8 +114,8 @@
       </extension>
       <extension>
         <groupId>net.sf.maven.plugins</groupId>
-         <artifactId>wagon-http-sourceforge</artifactId>
-         <version>0.4</version>
+        <artifactId>wagon-http-sourceforge</artifactId>
+        <version>0.4</version>
       </extension>
     </extensions>
     <pluginManagement>
@@ -323,7 +324,6 @@
           </reportSet>
         </reportSets>
       </plugin>
-
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-pmd-plugin</artifactId>
@@ -333,7 +333,6 @@
           <targetJdk>1.5</targetJdk>
         </configuration>
       </plugin>
-
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-plugin-plugin</artifactId>

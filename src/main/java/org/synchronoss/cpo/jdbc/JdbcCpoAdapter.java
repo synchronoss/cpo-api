@@ -1509,8 +1509,11 @@ public class JdbcCpoAdapter implements CpoAdapter {
      */
     public <C> List<C> retrieveBeans(String name, C criteria, CpoWhere where,
         Collection<CpoOrderBy> orderBy) throws CpoException{
-      ArrayList<CpoWhere> wheres = new ArrayList<CpoWhere>();
-      wheres.add(where);
+      ArrayList<CpoWhere> wheres = null;
+			if (where != null){
+				wheres = new ArrayList<CpoWhere>();
+				wheres.add(where);
+			}
         return processSelectGroup(name, criteria, criteria, wheres, orderBy, null, false);
     }
 
@@ -1607,8 +1610,11 @@ public class JdbcCpoAdapter implements CpoAdapter {
      */
     public <T,C> List<T> retrieveBeans(String name, C criteria, T result, CpoWhere where,
         Collection<CpoOrderBy> orderBy) throws CpoException{
-      ArrayList<CpoWhere> wheres = new ArrayList<CpoWhere>();
-      wheres.add(where);
+      ArrayList<CpoWhere> wheres = null;
+			if (where != null){
+				wheres = new ArrayList<CpoWhere>();
+        wheres.add(where);
+			}
     return processSelectGroup(name, criteria, result, wheres, orderBy, null, false);
     }
 

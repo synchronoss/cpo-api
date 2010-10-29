@@ -139,7 +139,27 @@ public class WhereTest extends TestCase {
             fail(method+e.getMessage());
         }
     }
-    
+
+		/*
+		 * This test is because retrieveBeans was not honoring the old functionality of passing null for cpo_where should
+		 * ignore the where clause.
+		 */
+    public void testNoWhere() {
+        String method = "testNoWhere:";
+        Collection<ValueObject> col = null;
+        CpoWhere cw = null;
+
+
+        try{
+            ValueObject valObj = new ValueObject(3);
+
+            col = jdbcIdo_.retrieveBeans("TestWhereRetrieve",valObj,cw,null);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            fail(method+e.getMessage());
+        }
+    }
     
     public void testNestedWhere() {
       String method = "testValueWhere:";

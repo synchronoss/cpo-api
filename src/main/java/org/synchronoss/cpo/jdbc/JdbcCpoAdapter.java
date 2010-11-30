@@ -277,9 +277,9 @@ public class JdbcCpoAdapter implements CpoAdapter {
 //      batchUpdatesSupported_ = false;
 
       this.closeConnection(c);
-    } catch (Exception e) {
-      logger.fatal(e, e);
-      throw new CpoException("Could Not Retrieve Database Meta Data", e);
+    } catch (Throwable t) {
+      logger.fatal(t, t);
+      throw new CpoException("Could Not Retrieve Database Meta Data", t);
     } finally {
       closeConnection(c);
     }
@@ -2695,11 +2695,11 @@ public class JdbcCpoAdapter implements CpoAdapter {
 
         cstmt.close();
       }
-    } catch (SQLException e) {
+    } catch (Throwable t) {
       String msg = "ProcessExecuteGroup(String name, Object criteria, Object result, Connection conn) failed. SQL=";
       if (jq != null) msg += jq.getText();
-      localLogger.error(msg, e);
-      throw new CpoException(msg, e);
+      localLogger.error(msg, t);
+      throw new CpoException(msg, t);
     } finally {
       if (cstmt != null) {
         try {
@@ -2882,11 +2882,11 @@ public class JdbcCpoAdapter implements CpoAdapter {
         localLogger.info("=================== " + recordCount + " Records - " + attributesSet + " Attributes - Class=<" + criteriaObj.getClass() + ">  Type=<" + JdbcCpoAdapter.RETRIEVE_GROUP + "> Name=<" + groupName + "> =========================");
       }
 
-    } catch (SQLException e) {
-      String msg = "ProcessSeclectGroup(Object) failed: " + e.getMessage();
-      localLogger.error(msg, e);
+    } catch (Throwable t) {
+      String msg = "ProcessSeclectGroup(Object) failed: " + t.getLocalizedMessage();
+      localLogger.error(msg, t);
       rObj = null;
-      throw new CpoException(msg, e);
+      throw new CpoException(msg, t);
     } finally {
       if (rs != null) {
         try {
@@ -3103,11 +3103,11 @@ public class JdbcCpoAdapter implements CpoAdapter {
 
         localLogger.info("=================== " + resultSet.size() + " Records - Class=<" + criteria.getClass() + "> Type=<" + JdbcCpoAdapter.LIST_GROUP + "> Name=<" + name + "> Result=<" + result.getClass() + "> ====================");
       }
-    } catch (SQLException e) {
+    } catch (Throwable t) {
       String msg =
           "ProcessSelectGroup(String name, Object criteria, Object result, CpoWhere where, Collection orderBy, Connection con) failed. Error:";
-      localLogger.error(msg, e);
-      throw new CpoException(msg, e);
+      localLogger.error(msg, t);
+      throw new CpoException(msg, t);
     } finally {
       if (rs != null) {
         try {
@@ -3214,12 +3214,12 @@ public class JdbcCpoAdapter implements CpoAdapter {
       if (numRows > 0) {
         updateCount++;
       }
-    } catch (SQLException e) {
+    } catch (Throwable t) {
       String msg = "ProcessUpdateGroup failed:" + groupType + "," + groupName + "," +
           obj.getClass().getName();
       localLogger.error("bound values:" + this.parameterToString(jq));
-      localLogger.error(msg, e);
-      throw new CpoException(msg, e);
+      localLogger.error(msg, t);
+      throw new CpoException(msg, t);
     } finally {
       if (ps != null) {
         try {
@@ -3308,12 +3308,12 @@ public class JdbcCpoAdapter implements CpoAdapter {
       if (numRows > 0) {
         updateCount = numRows;
       }
-    } catch (SQLException e) {
+    } catch (Throwable t) {
       String msg = "ProcessUpdateGroup failed:" + groupType + "," + groupName + "," +
           arr[0].getClass().getName();
       localLogger.error("bound values:" + this.parameterToString(jq));
-      localLogger.error(msg, e);
-      throw new CpoException(msg, e);
+      localLogger.error(msg, t);
+      throw new CpoException(msg, t);
     } finally {
       if (ps != null) {
         try {

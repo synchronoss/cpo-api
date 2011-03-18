@@ -194,6 +194,30 @@
         <cpo.tableprefix>TEST_</cpo.tableprefix>
       </properties>
     </profile>
+    
+    <!-- Profiles for JDK5 and JDK6 compilation -->
+    <profile>
+      <id>jdk5</id>
+      <activation>
+        <jdk>1.5</jdk>
+      </activation>
+      <properties>
+        <cpo.jdk.source>1.5</cpo.jdk.source>
+        <cpo.jdk.target>1.5</cpo.jdk.target>
+        <cpo.jdk.include>jdk5/**</cpo.jdk.include>
+      </properties>
+    </profile>
+    <profile>
+      <id>jdk6</id>
+      <activation>
+        <jdk>1.6</jdk>
+      </activation>
+      <properties>
+        <cpo.jdk.source>1.6</cpo.jdk.source>
+        <cpo.jdk.target>1.6</cpo.jdk.target>
+        <cpo.jdk.include>jdk6/**</cpo.jdk.include>
+      </properties>
+    </profile>
   </profiles>
 
 </profilesXml>

@@ -100,6 +100,7 @@
     <url>https://cpo.svn.sourceforge.net/svnroot/cpo/api/trunk</url>
   </scm>
   <build>
+<!--    <sourceDirectory>src/main/java</sourceDirectory> -->
     <testResources>
       <testResource>
         <directory>src/test/resources</directory>
@@ -151,8 +152,12 @@
           <artifactId>maven-compiler-plugin</artifactId>
           <!-- best lock down version of the plugin too -->
           <configuration>
-            <source>1.5</source>
-            <target>1.5</target>
+            <includes>
+              <include>org/**</include>
+              <include>${cpo.jdk.include}</include>
+            </includes>
+            <source>${cpo.jdk.source}</source>
+            <target>${cpo.jdk.target}</target>
           </configuration>
         </plugin>
       </plugins>

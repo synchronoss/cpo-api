@@ -216,6 +216,7 @@
         <cpo.jdk.source>1.6</cpo.jdk.source>
         <cpo.jdk.target>1.6</cpo.jdk.target>
         <cpo.jdk.include>jdk6/**</cpo.jdk.include>
+        <cpo.jdk.classifier>jdk6</cpo.jdk.classifier>
       </properties>
     </profile>
   </profiles>

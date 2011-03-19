@@ -8,6 +8,7 @@
   <description>CPO is a persistence layer that is thin wrapper around JDBC that consumes and
     produces POJOs
   </description>
+  
   <url>http://cpo.sourceforge.net/</url>
   <licenses>
     <license>
@@ -100,7 +101,6 @@
     <url>https://cpo.svn.sourceforge.net/svnroot/cpo/api/trunk</url>
   </scm>
   <build>
-<!--    <sourceDirectory>src/main/java</sourceDirectory> -->
     <testResources>
       <testResource>
         <directory>src/test/resources</directory>
@@ -121,6 +121,12 @@
     </extensions>
     <pluginManagement>
       <plugins>
+          <plugin>
+            <artifactId>maven-jar-plugin</artifactId>
+            <configuration>
+              <classifier>${cpo.jdk.classifier}</classifier>
+            </configuration>
+          </plugin>
         <plugin>
           <groupId>org.codehaus.mojo</groupId>
           <artifactId>sql-maven-plugin</artifactId>

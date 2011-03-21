@@ -24,9 +24,11 @@
  
 package org.synchronoss.cpo.transform.jdbc;
 
+import org.apache.log4j.Logger;
 import org.synchronoss.cpo.CpoException;
 import org.synchronoss.cpo.jdbc.JdbcCallableStatementFactory;
 import org.synchronoss.cpo.jdbc.JdbcPreparedStatementFactory;
+import org.synchronoss.cpo.transform.Transform;
 
 /**
  * This is an example of a transform that does nothing. It is used to test the mechanics 
@@ -35,7 +37,8 @@ import org.synchronoss.cpo.jdbc.JdbcPreparedStatementFactory;
  * @author david berry
  */
 
-public class TransformNoOp {
+public class TransformNoOp implements Transform<Integer, Integer> {
+    private static Logger logger = Logger.getLogger(TransformNoOp.class.getName());
 
     public TransformNoOp(){}
 
@@ -53,9 +56,9 @@ public class TransformNoOp {
      * @return The object to be stored in the attribute
      * @throws CpoException
      */
-    public int transformIn(int dbIn) 
+    public Integer transformIn(Integer dbIn) 
     throws CpoException {
-        
+        logger.debug("Inside TransformNoOp::transformIn("+dbIn+");");
         return dbIn;
     }
 
@@ -76,8 +79,9 @@ public class TransformNoOp {
      * @return The object to be stored in the datasource
      * @throws CpoException
      */
-    public int transformOut(JdbcCallableStatementFactory jcsf, int attrOut) 
+    public Integer transformOut(JdbcCallableStatementFactory jcsf, Integer attrOut) 
     throws CpoException {
+        logger.debug("Inside TransformNoOp::transformOut(JdbcCallableStatementFactory, "+attrOut+");");
         return attrOut;
     }
 
@@ -98,8 +102,9 @@ public class TransformNoOp {
      * @return The object to be stored in the datasource
      * @throws CpoException
      */
-    public int transformOut(JdbcPreparedStatementFactory jpsf, int attrOut) 
+    public Integer transformOut(JdbcPreparedStatementFactory jpsf, Integer attrOut) 
     throws CpoException {
+        logger.debug("Inside TransformNoOp::transformOut(JdbcPreparedStatementFactory, "+attrOut+");");
         return attrOut;
     }
 }

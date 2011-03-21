@@ -26,6 +26,7 @@ package org.synchronoss.cpo.jdbc;
 
 import java.io.InputStream;
 import java.io.Reader;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.sql.CallableStatement;
@@ -269,8 +270,7 @@ public class JdbcAttribute extends java.lang.Object implements java.io.Serializa
                     param = jdbcMethod.getRsGetter().invoke(rs,new Object[]{new Integer(idx)});
                     paramClass = jdbcMethod.getJavaSqlMethodClass();
                 }
-                
-                if (getSetters()[i].getParameterTypes()[0].isAssignableFrom(paramClass)){
+                if (getSetters()[i].getParameterTypes()[0].isAssignableFrom(paramClass) || isPrimitiveAssignableFrom(getSetters()[i].getParameterTypes()[0], param)){
                     getSetters()[i].invoke(obj, new Object[]{param});
                     return;
                 }
@@ -560,5 +560,35 @@ public class JdbcAttribute extends java.lang.Object implements java.io.Serializa
         return retObj;
     }
 
+    private boolean isPrimitiveAssignableFrom(Class clazz, Object obj){
+
+      // check to see if one is primitive and one is a possible wrapper
+      if (clazz.isPrimitive() ^ obj.getClass().isPrimitive()) {
+        // identify the prim and the wrapper
+        Class primClass, objClass;
+        if (clazz.isPrimitive()){
+          primClass=clazz;
+          objClass=obj.getClass();
+        } else {
+          primClass=obj.getClass();
+          objClass=clazz;
+        }
+        
+        // Lets do a quick name check
+        if (objClass.getSimpleName().toLowerCase().startsWith(primClass.getSimpleName())){
+          // go through the constructors of the wrapper to see if there one with a parameter type
+          // that is the same as the primitive
+          for (Constructor ctor:objClass.getConstructors()){
+            Class types[] = ctor.getParameterTypes();
+            if (types.length>0 && types[0].isAssignableFrom(primClass))
+              return true;
+          }
+        } else {
+            	Logger.getLogger(this.getClass().getName()).debug("Wrapper Class:"+objClass.getName().toLowerCase()+"does not start with "+primClass.getName());
+        }
+      }
+      
+      return false;
+    }
     
 }

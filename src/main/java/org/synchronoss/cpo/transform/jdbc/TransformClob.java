@@ -33,7 +33,9 @@ import oracle.sql.CLOB;
 
 import org.apache.log4j.Logger;
 import org.synchronoss.cpo.CpoException;
+import org.synchronoss.cpo.jdbc.JdbcCallableStatementFactory;
 import org.synchronoss.cpo.jdbc.JdbcPreparedStatementFactory;
+import org.synchronoss.cpo.transform.Transform;
 
 
 /**
@@ -43,7 +45,7 @@ import org.synchronoss.cpo.jdbc.JdbcPreparedStatementFactory;
  * @author david berry
  */
 
-public class TransformClob {
+public class TransformClob implements Transform<Clob, char[]> {
     private static Logger logger = Logger.getLogger(TransformClob.class.getName());
 
     public TransformClob(){}
@@ -111,5 +113,9 @@ public class TransformClob {
                 }
                return newClob;
     }
+
+  public Clob transformOut(JdbcCallableStatementFactory jpsf, char[] attributeObject) throws CpoException, UnsupportedOperationException {
+    throw new UnsupportedOperationException("Not supported yet.");
+  }
 
 }

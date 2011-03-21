@@ -25,7 +25,9 @@
 package org.synchronoss.cpo.transform.jdbc;
 
 import org.synchronoss.cpo.CpoException;
+import org.synchronoss.cpo.jdbc.JdbcCallableStatementFactory;
 import org.synchronoss.cpo.jdbc.JdbcPreparedStatementFactory;
+import org.synchronoss.cpo.transform.Transform;
 
 
 /**
@@ -35,7 +37,7 @@ import org.synchronoss.cpo.jdbc.JdbcPreparedStatementFactory;
  * @author david berry
  */
 
-public class TransformStringChar {
+public class TransformStringChar implements Transform<String, char[]> {
 
     public TransformStringChar(){}
 
@@ -67,5 +69,9 @@ public class TransformStringChar {
     throws CpoException {
                return attrObj==null?null:String.valueOf(attrObj);
     }
+
+  public String transformOut(JdbcCallableStatementFactory jpsf, char[] attributeObject) throws CpoException, UnsupportedOperationException {
+    throw new UnsupportedOperationException("Not supported yet.");
+  }
 
 }

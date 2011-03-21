@@ -32,7 +32,9 @@ import java.util.zip.GZIPOutputStream;
 
 import org.apache.log4j.Logger;
 import org.synchronoss.cpo.CpoException;
+import org.synchronoss.cpo.jdbc.JdbcCallableStatementFactory;
 import org.synchronoss.cpo.jdbc.JdbcPreparedStatementFactory;
+import org.synchronoss.cpo.transform.Transform;
 
 
 /**
@@ -42,7 +44,7 @@ import org.synchronoss.cpo.jdbc.JdbcPreparedStatementFactory;
  * @author david berry
  */
 
-public class TransformGZipBytes {
+public class TransformGZipBytes implements Transform<byte[], byte[]> {
     private static Logger logger = Logger.getLogger(TransformGZipBytes.class.getName());
 
     public TransformGZipBytes(){}
@@ -132,6 +134,10 @@ public class TransformGZipBytes {
         }
         return retBytes;
     }
+
+  public byte[] transformOut(JdbcCallableStatementFactory jpsf, byte[] attributeObject) throws CpoException, UnsupportedOperationException {
+    throw new UnsupportedOperationException("Not supported yet.");
+  }
 
 
 }

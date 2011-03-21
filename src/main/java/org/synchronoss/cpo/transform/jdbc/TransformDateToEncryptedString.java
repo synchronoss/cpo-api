@@ -26,9 +26,11 @@ import org.apache.log4j.Logger;
 import org.synchronoss.cpo.CpoException;
 import org.synchronoss.cpo.encrypt.Encryptor;
 import org.synchronoss.cpo.encrypt.EncryptorFactory;
+import org.synchronoss.cpo.jdbc.JdbcCallableStatementFactory;
 import org.synchronoss.cpo.jdbc.JdbcPreparedStatementFactory;
+import org.synchronoss.cpo.transform.Transform;
 
-public class TransformDateToEncryptedString {
+public class TransformDateToEncryptedString implements Transform<String, Timestamp> {
 
     
     private static Logger logger = Logger.getLogger(TransformDateToEncryptedString.class.getName());
@@ -78,5 +80,9 @@ public class TransformDateToEncryptedString {
         }
         return outString;
     }
+
+  public String transformOut(JdbcCallableStatementFactory jpsf, Timestamp attributeObject) throws CpoException, UnsupportedOperationException {
+    throw new UnsupportedOperationException("Not supported yet.");
+  }
     
 }

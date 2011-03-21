@@ -36,7 +36,9 @@ import oracle.sql.BLOB;
 import org.apache.log4j.Logger;
 import org.synchronoss.cpo.CpoByteArrayInputStream;
 import org.synchronoss.cpo.CpoException;
+import org.synchronoss.cpo.jdbc.JdbcCallableStatementFactory;
 import org.synchronoss.cpo.jdbc.JdbcPreparedStatementFactory;
+import org.synchronoss.cpo.transform.Transform;
 
 
 /**
@@ -46,7 +48,7 @@ import org.synchronoss.cpo.jdbc.JdbcPreparedStatementFactory;
  * @author david berry
  */
 
-public class TransformGZipBlob {
+public class TransformGZipBlob implements Transform<Blob, byte[]> {
     private static Logger logger = Logger.getLogger(TransformGZipBlob.class.getName());
 
     public TransformGZipBlob(){}
@@ -137,6 +139,10 @@ public class TransformGZipBlob {
         }
         return newBlob;
     }
+
+  public Blob transformOut(JdbcCallableStatementFactory jpsf, byte[] attributeObject) throws CpoException, UnsupportedOperationException {
+    throw new UnsupportedOperationException("Not supported yet.");
+  }
 
 
 }

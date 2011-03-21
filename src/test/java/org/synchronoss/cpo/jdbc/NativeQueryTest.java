@@ -125,6 +125,32 @@ public class NativeQueryTest extends TestCase {
         }
     }
 
+    public void testNullNative() {
+        String method = "testNativeOrWhere:";
+        Collection<ValueObject> col = null;
+        CpoWhere cw = null;
+        CpoWhere cw1 = null;
+        CpoWhere cw2 = null;
+        
+        
+        try{
+          ArrayList<CpoNativeQuery> cnqAl = new ArrayList<CpoNativeQuery>();
+          
+          
+          
+          cnqAl.add(new CpoNativeQuery("__CPO_WHERE__", null));
+
+          ValueObject valObj = new ValueObject(3);
+            col = jdbcIdo_.retrieveObjects("TestWhereRetrieve",valObj,null,null,cnqAl,valObj);
+            
+            assertTrue("Col size is "+col.size(), col.size()==6);
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+            fail(method+e.getMessage());
+        }
+    }
+
 
     
     

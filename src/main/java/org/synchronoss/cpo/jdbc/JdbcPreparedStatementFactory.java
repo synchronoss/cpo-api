@@ -214,8 +214,10 @@ public class JdbcPreparedStatementFactory implements CpoReleasible {
         if (nativeQueries != null){
           for (CpoNativeQuery cnq : nativeQueries){
             if (cnq.getMarker()==null || sqlText.indexOf(cnq.getMarker())==-1){
-              sqlText.append(" ");
-              sqlText.append(cnq.getNativeText());
+              if (cnq.getNativeText()!= null && cnq.getNativeText().length()>0){
+                sqlText.append(" ");
+                sqlText.append(cnq.getNativeText());
+              }
             } else {
               sqlText=replaceMarker(sqlText, cnq.getMarker(), cnq.getNativeText());
             }
@@ -233,12 +235,13 @@ public class JdbcPreparedStatementFactory implements CpoReleasible {
       int attrOffset = 0;
       int fromIndex = 0;
       int mLength=marker.length();
-      int rLength=replace.length();
+      String replaceText = replace==null?"":replace;
+      int rLength=replaceText.length();
       
       //OUT.debug("starting string <"+source.toString()+">");
       if(source!=null && source.length()>0) {
           while((attrOffset=source.indexOf(marker, fromIndex))!=-1){
-                   source.replace(attrOffset,attrOffset+mLength, replace);
+                   source.replace(attrOffset,attrOffset+mLength, replaceText);
                    fromIndex=attrOffset+rLength;
           }
       }

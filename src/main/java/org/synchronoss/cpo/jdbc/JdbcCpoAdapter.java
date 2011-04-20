@@ -2273,7 +2273,7 @@ public class JdbcCpoAdapter implements CpoAdapter {
       } else if (objCount == 1) {
         retType = JdbcCpoAdapter.UPDATE_GROUP;
       } else {
-        throw new CpoException("Cannot Persist Object To Multiple DataSource Objects");
+        throw new CpoException("Persist can only UPDATE one record. Your EXISTS query returned 2 or more.");
       }
     }
 

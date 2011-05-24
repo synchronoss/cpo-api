@@ -32,7 +32,8 @@ import java.util.ResourceBundle;
 
 import junit.framework.TestCase;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.CpoAdapter;
 import org.synchronoss.cpo.CpoTrxAdapter;
 
@@ -46,7 +47,7 @@ import org.synchronoss.cpo.CpoTrxAdapter;
  */
 
 public class BlobTestTrx extends TestCase {
-    private static Logger logger = Logger.getLogger(BlobTestTrx.class.getName());
+    private static Logger logger = LoggerFactory.getLogger(BlobTestTrx.class.getName());
     private static final String PROP_FILE="jdbcCpoFactory";
     private static final String PROP_DBDRIVER="dbDriver";
     private static final String PROP_DB_BLOBS_SUPPORTED="dbBlobsSupported";
@@ -427,7 +428,8 @@ public class BlobTestTrx extends TestCase {
     
 
     public void tearDown() {
-            jdbcIdo_=null;
+      try {jdbcIdo_.close();} catch (Exception e){}
+      jdbcIdo_=null;
     }
     
     private boolean isEqual(byte[] b1, byte[] b2){

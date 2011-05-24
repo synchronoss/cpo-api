@@ -36,7 +36,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.Map.Entry;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.CpoException;
 import org.synchronoss.cpo.CpoNativeQuery;
 import org.synchronoss.cpo.CpoOrderBy;
@@ -55,7 +56,7 @@ public class JdbcPreparedStatementFactory implements CpoReleasible {
     private static final long serialVersionUID=1L;
 
     /** DOCUMENT ME! */
-    private static Logger logger=Logger.getLogger(JdbcPreparedStatementFactory.class.getName());
+    private static Logger logger=LoggerFactory.getLogger(JdbcPreparedStatementFactory.class.getName());
     
     private Logger localLogger=null;
     
@@ -126,7 +127,7 @@ public class JdbcPreparedStatementFactory implements CpoReleasible {
 
     String sql = buildSql(jmcCriteria, jq.getText(), wheres, orderBy, nativeQueries, bindValues);
 
-    localLogger = obj == null ? logger : Logger.getLogger(obj.getClass().getName());
+    localLogger = obj == null ? logger : LoggerFactory.getLogger(obj.getClass().getName());
 
     localLogger.debug("JdbcQuery SQL = <" + sql + ">");
 

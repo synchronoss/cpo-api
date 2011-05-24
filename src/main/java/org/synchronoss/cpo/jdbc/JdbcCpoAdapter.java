@@ -42,7 +42,8 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.CpoAdapter;
 import org.synchronoss.cpo.CpoArrayResultSet;
 import org.synchronoss.cpo.CpoBlockingResultSet;
@@ -69,7 +70,7 @@ public class JdbcCpoAdapter implements CpoAdapter {
   /**
    * DOCUMENT ME!
    */
-  private static Logger logger = Logger.getLogger(JdbcCpoAdapter.class.getName());
+  private static Logger logger = LoggerFactory.getLogger(JdbcCpoAdapter.class.getName());
 
   /**
    * DOCUMENT ME!
@@ -278,7 +279,7 @@ public class JdbcCpoAdapter implements CpoAdapter {
 
       this.closeConnection(c);
     } catch (Throwable t) {
-      logger.fatal(t, t);
+      logger.error(t.getLocalizedMessage(), t);
       throw new CpoException("Could Not Retrieve Database Meta Data", t);
     } finally {
       closeConnection(c);
@@ -1032,7 +1033,7 @@ public class JdbcCpoAdapter implements CpoAdapter {
     try {
       jmc = getMetaClass(obj, metaCon);
       queryGroup = jmc.getQueryGroup(JdbcCpoAdapter.EXIST_GROUP, name);
-      localLogger = Logger.getLogger(jmc.getJmcClass().getName());
+      localLogger = LoggerFactory.getLogger(jmc.getJmcClass().getName());
 
       for (i = 0; i < queryGroup.size(); i++) {
         jq = queryGroup.get(i);
@@ -2311,7 +2312,7 @@ public class JdbcCpoAdapter implements CpoAdapter {
             // reset the class name to the original 
             jmc.setName(requestedName);
             metaClassMap.put(requestedName, jmc);
-            Logger.getLogger(requestedName).debug("Loading Class:" + requestedName);
+            LoggerFactory.getLogger(requestedName).debug("Loading Class:" + requestedName);
           } catch (CpoException ce) {
             jmc = null;
             classObj = classObj.getSuperclass();
@@ -2626,7 +2627,7 @@ public class JdbcCpoAdapter implements CpoAdapter {
     JdbcMetaClass<C> jmcCriteria;
     JdbcMetaClass<T> jmcResult;
     T returnObject = null;
-    Logger localLogger = criteria == null ? logger : Logger.getLogger(criteria.getClass().getName());
+    Logger localLogger = criteria == null ? logger : LoggerFactory.getLogger(criteria.getClass().getName());
 
     //Object[] setterArgs = {null};
     Class<T> jmcClass;
@@ -2787,7 +2788,7 @@ public class JdbcCpoAdapter implements CpoAdapter {
     JdbcAttribute attribute;
     T criteriaObj = obj;
     boolean recordsExist = false;
-    Logger localLogger = obj == null ? logger : Logger.getLogger(obj.getClass().getName());
+    Logger localLogger = obj == null ? logger : LoggerFactory.getLogger(obj.getClass().getName());
 
     int recordCount = 0;
     int attributesSet = 0;
@@ -3007,7 +3008,7 @@ public class JdbcCpoAdapter implements CpoAdapter {
   protected <T, C> void processSelectGroup(String name, C criteria, T result,
       Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeQuery> nativeQueries, Connection con, Connection metaCon, boolean useRetrieve, CpoResultSet<T> resultSet)
       throws CpoException {
-    Logger localLogger = criteria == null ? logger : Logger.getLogger(criteria.getClass().getName());
+    Logger localLogger = criteria == null ? logger : LoggerFactory.getLogger(criteria.getClass().getName());
     PreparedStatement ps = null;
     ArrayList<JdbcQuery> queryGroup;
     JdbcQuery jq;
@@ -3183,7 +3184,7 @@ public class JdbcCpoAdapter implements CpoAdapter {
    */
   protected <T> long processUpdateGroup(T obj, String groupType, String groupName, Connection con, Connection metaCon)
       throws CpoException {
-    Logger localLogger = obj == null ? logger : Logger.getLogger(obj.getClass().getName());
+    Logger localLogger = obj == null ? logger : LoggerFactory.getLogger(obj.getClass().getName());
     JdbcMetaClass<T> jmc;
     ArrayList<JdbcQuery> queryGroup;
     PreparedStatement ps = null;
@@ -3260,7 +3261,7 @@ public class JdbcCpoAdapter implements CpoAdapter {
     try {
       jmc = getMetaClass(arr[0], metaCon);
       queryGroup = jmc.getQueryGroup(getGroupType(arr[0], groupType, groupName, con, metaCon), groupName);
-      localLogger = Logger.getLogger(jmc.getJmcClass().getName());
+      localLogger = LoggerFactory.getLogger(jmc.getJmcClass().getName());
 
 
       int numRows = 0;
@@ -3442,7 +3443,7 @@ public class JdbcCpoAdapter implements CpoAdapter {
     StringBuffer failedMessage = new StringBuffer();
 
     if ((c != null) && (jmc != null)) {
-      Logger localLogger = Logger.getLogger(jmc.getJmcClass().getName());
+      Logger localLogger = LoggerFactory.getLogger(jmc.getJmcClass().getName());
       try {
         ps = c.prepareStatement(sql);
         ps.setString(1, name);
@@ -3562,7 +3563,7 @@ public class JdbcCpoAdapter implements CpoAdapter {
     String groupType = null;
 
     if ((c != null) && (jmc != null)) {
-      Logger localLogger = Logger.getLogger(jmc.getJmcClass().getName());
+      Logger localLogger = LoggerFactory.getLogger(jmc.getJmcClass().getName());
       try {
         id = jmc.getClassId();
         ps = c.prepareStatement(sql);

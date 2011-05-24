@@ -21,17 +21,25 @@
       </comments>
     </license>
   </licenses>
+  
   <properties>
     <currentVersion>${project.version}</currentVersion>
+    <oracleVersion>10.2.0.5</oracleVersion>
+    <mysqlVersion>5.1.16</mysqlVersion>
+    <hsqldbVersion>1.8.0.10</hsqldbVersion>
+    <postgresVersion>9.0-801.jdbc4</postgresVersion>
   </properties>
+  
   <ciManagement>
     <system>teamcity</system>
     <url>http://continuous.synchronoss.net:8111/viewType.html?buildTypeId=bt2</url>
   </ciManagement>
+  
   <issueManagement>
     <system>SourceForge</system>
     <url>http://sourceforge.net/projects/cpo</url>
   </issueManagement>
+  
   <mailingLists>
     <mailingList>
       <name>CPO Users List</name>
@@ -41,6 +49,7 @@
       <archive>http://lists.sourceforge.net/mailman/listinfo/cpo-users</archive>
     </mailingList>
   </mailingLists>
+  
   <developers>
     <developer>
       <name>David Berry</name>
@@ -130,29 +139,41 @@
         <plugin>
           <groupId>org.codehaus.mojo</groupId>
           <artifactId>sql-maven-plugin</artifactId>
-          <version>1.0</version>
-          <dependencies>
-            <dependency>
-              <groupId>com.oracle</groupId>
-              <artifactId>ojdbc14</artifactId>
-              <version>10.2.0.5</version>
-            </dependency>
-          </dependencies>
-          <configuration>
-            <username>${sncr.db.user}</username>
-            <password>${sncr.db.pswd}</password>
-            <driver>${sncr.db.driver}</driver>
-            <url>${sncr.db.url}</url>
-            <autocommit>true</autocommit>
-            <onError>continue</onError>
-            <skip>false</skip>
-          </configuration>
+          <version>1.4</version>
+        <dependencies>
+          <dependency>
+            <groupId>com.oracle</groupId>
+            <artifactId>ojdbc14</artifactId>
+            <version>${oracleVersion}</version>
+          </dependency>
+          <dependency>
+            <groupId>postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>${postgresVersion}</version>
+          </dependency>
+          <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>${mysqlVersion}</version>
+          </dependency>
+          <dependency>
+            <groupId>hsqldb</groupId>
+            <artifactId>hsqldb</artifactId>
+            <version>${hsqldbVersion}</version>
+          </dependency>
+        </dependencies>
+        <configuration>
+          <autocommit>true</autocommit>
+          <delimiter>;</delimiter>
+          <onError>continue</onError>
+          <skip>false</skip>
+        </configuration>
         </plugin>
-        <plugin>
+<!--        <plugin>
           <groupId>org.codehaus.mojo</groupId>
           <artifactId>xmlbeans-maven-plugin</artifactId>
           <version>2.3.1</version>
-        </plugin>
+        </plugin>-->
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-compiler-plugin</artifactId>
@@ -189,10 +210,8 @@
             <configuration>
               <username>${cpo.meta.user}</username>
               <password>${cpo.meta.pswd}</password>
-              <autocommit>true</autocommit>
               <driver>${cpo.meta.driver}</driver>
               <url>${cpo.meta.url}</url>
-              <onError>continue</onError>
               <srcFiles>
                 <srcFile>${cpo.test.sqldir}/dropCpoTables.sql</srcFile>
                 <srcFile>${cpo.test.sqldir}/CpoTableDDL.sql</srcFile>
@@ -210,11 +229,8 @@
             <configuration>
               <username>${cpo.db.user}</username>
               <password>${cpo.db.pswd}</password>
-              <autocommit>true</autocommit>
-              <delimiter>;</delimiter>
               <driver>${cpo.db.driver}</driver>
               <url>${cpo.db.url}</url>
-              <onError>continue</onError>
               <srcFiles>
                 <srcFile>${cpo.test.sqldir}/dropTestTables.sql</srcFile>
                 <srcFile>${cpo.test.sqldir}/LvoTableDDL.sql</srcFile>
@@ -224,31 +240,6 @@
             </configuration>
           </execution>
         </executions>
-        <dependencies>
-          <dependency>
-            <groupId>com.oracle</groupId>
-            <artifactId>ojdbc14</artifactId>
-            <version>10.2.0.5</version>
-          </dependency>
-          <dependency>
-            <groupId>postgresql</groupId>
-            <artifactId>postgresql</artifactId>
-            <version>8.3-603.jdbc3</version>
-          </dependency>
-          <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-            <version>5.1.6</version>
-          </dependency>
-          <dependency>
-            <groupId>hsqldb</groupId>
-            <artifactId>hsqldb</artifactId>
-            <version>1.8.0.7</version>
-          </dependency>
-        </dependencies>
-        <configuration>
-          <skip>false</skip>
-        </configuration>
       </plugin>
       <plugin>
         <artifactId>maven-assembly-plugin</artifactId>
@@ -286,16 +277,10 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>log4j</groupId>
-      <artifactId>log4j</artifactId>
-      <version>1.2.13</version>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+      <version>1.6.1</version>
       <scope>compile</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.oracle</groupId>
-      <artifactId>ojdbc14</artifactId>
-      <version>10.2.0.5</version>
-      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>javax.j2ee</groupId>
@@ -303,22 +288,46 @@
       <version>1.3.1</version>
       <scope>provided</scope>
     </dependency>
+    
+    <!-- Oracle is provided because of the oracle transforms -->
+    <dependency>
+      <groupId>com.oracle</groupId>
+      <artifactId>ojdbc14</artifactId>
+      <version>${oracleVersion}</version>
+      <scope>provided</scope>
+    </dependency>
+    
+    <!-- database drivers for testing -->
     <dependency>
       <groupId>postgresql</groupId>
       <artifactId>postgresql</artifactId>
-      <version>8.3-603.jdbc3</version>
+      <version>${postgresVersion}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>hsqldb</groupId>
       <artifactId>hsqldb</artifactId>
-      <version>1.8.0.7</version>
+      <version>${hsqldbVersion}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>mysql</groupId>
       <artifactId>mysql-connector-java</artifactId>
-      <version>5.1.6</version>
+      <version>${mysqlVersion}</version>
+      <scope>test</scope>
+    </dependency>
+    
+    <!-- log4j implementation for test logging -->
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-log4j12</artifactId>
+      <version>1.6.1</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>log4j</groupId>
+      <artifactId>log4j</artifactId>
+      <version>1.2.16</version>
       <scope>test</scope>
     </dependency>
   </dependencies>

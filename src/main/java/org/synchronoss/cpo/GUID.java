@@ -22,14 +22,14 @@ package org.synchronoss.cpo;
 import java.security.SecureRandom;
 import java.net.InetAddress;
 import java.math.BigInteger;
-import org.apache.log4j.*;
+import org.slf4j.*;
 
 public class GUID  {
   private static GUID guid;
   private SecureRandom seeder;
   SecureRandom sr;
   String guidMidValue;
-  private static Logger OUT = Logger.getLogger(GUID.class);
+  private static Logger OUT = LoggerFactory.getLogger(GUID.class);
 
   private GUID() {
     initGuid();

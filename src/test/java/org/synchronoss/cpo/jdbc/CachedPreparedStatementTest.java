@@ -34,7 +34,8 @@ import java.util.ResourceBundle;
 
 import junit.framework.TestCase;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.CpoAdapter;
 import org.synchronoss.cpo.CpoException;
 
@@ -44,7 +45,7 @@ import org.synchronoss.cpo.CpoException;
  * @author david berry
  */
 public class CachedPreparedStatementTest extends TestCase {
-  private static Logger logger = Logger.getLogger(CachedPreparedStatementTest.class.getName());
+  private static Logger logger = LoggerFactory.getLogger(CachedPreparedStatementTest.class.getName());
     private static final String PROP_FILE="jdbcCpoFactory";
     private static final String PROP_DBDRIVER="default.dbDriver";
     private static final String PROP_DB_CALLS_SUPPORTED="default.dbCallsSupported";

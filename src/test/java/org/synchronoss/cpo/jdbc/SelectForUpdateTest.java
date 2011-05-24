@@ -28,7 +28,8 @@ import java.util.ResourceBundle;
 
 import junit.framework.TestCase;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.CpoAdapter;
 import org.synchronoss.cpo.CpoException;
 import org.synchronoss.cpo.CpoTrxAdapter;
@@ -39,7 +40,7 @@ import org.synchronoss.cpo.CpoTrxAdapter;
  * @author david berry
  */
 public class SelectForUpdateTest extends TestCase {
-	private static final Logger logger = Logger.getLogger(SelectForUpdateTest.class.getName());
+	private static final Logger logger = LoggerFactory.getLogger(SelectForUpdateTest.class.getName());
     private static final String PROP_FILE="jdbcCpoFactory";
     private static final String PROP_DBDRIVER="default.dbDriver";
     private static final String PROP_DB_SELECT4UPDATE="default.dbSelect4Update";

@@ -13,7 +13,8 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.CpoAdapter;
 import org.synchronoss.cpo.CpoException;
 
@@ -25,7 +26,7 @@ import org.synchronoss.cpo.CpoException;
  */
 public class JdbcCpoFactory {
   private static HashMap<String, CpoAdapter> propMap = new HashMap<String, CpoAdapter>();
-  private static Logger logger=Logger.getLogger(JdbcCpoFactory.class.getName());
+  private static Logger logger=LoggerFactory.getLogger(JdbcCpoFactory.class.getName());
   
   private static final String PROP_FILE = "jdbcCpoFactory";
   private static final String DEFAULT_CONTEXT="default";

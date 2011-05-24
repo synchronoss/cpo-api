@@ -20,7 +20,8 @@
  */
 package org.synchronoss.cpo.transform.jdbc;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.CpoException;
 import org.synchronoss.cpo.encrypt.Encryptor;
 import org.synchronoss.cpo.encrypt.EncryptorFactory;
@@ -30,7 +31,7 @@ import org.synchronoss.cpo.transform.Transform;
 
 public class TransformStringToEncryptedString implements Transform<String, String> {
 
-  private static Logger logger = Logger.getLogger(TransformStringToEncryptedString.class.getName());
+  private static Logger logger = LoggerFactory.getLogger(TransformStringToEncryptedString.class.getName());
   private static Encryptor encryptor = null;
   private static String encLock = "lock";
 

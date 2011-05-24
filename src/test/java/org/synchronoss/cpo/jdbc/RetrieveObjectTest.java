@@ -29,7 +29,8 @@ import java.util.Collection;
 
 import junit.framework.TestCase;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.CpoAdapter;
 import org.synchronoss.cpo.CpoResultSet;
 import org.synchronoss.cpo.CpoTrxAdapter;
@@ -42,7 +43,7 @@ import org.synchronoss.cpo.CpoTrxAdapter;
  */
 
 public class RetrieveObjectTest extends TestCase {
-  private static Logger logger = Logger.getLogger(RetrieveObjectTest.class.getName());
+  private static Logger logger = LoggerFactory.getLogger(RetrieveObjectTest.class.getName());
     private CpoAdapter jdbcIdo_ = null;
     
     private ArrayList<ValueObject> al = new ArrayList<ValueObject>();

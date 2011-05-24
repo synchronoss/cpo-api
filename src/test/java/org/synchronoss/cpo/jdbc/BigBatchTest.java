@@ -30,7 +30,8 @@ import java.util.PropertyResourceBundle;
 import java.util.ResourceBundle;
 
 import junit.framework.TestCase;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.synchronoss.cpo.CpoAdapter;
 import org.synchronoss.cpo.CpoAdapterBean;
@@ -44,7 +45,7 @@ import org.synchronoss.cpo.CpoException;
  */
 
 public class BigBatchTest extends TestCase {
-    private static Logger logger = Logger.getLogger(BigBatchTest.class.getName());
+    private static Logger logger = LoggerFactory.getLogger(BigBatchTest.class.getName());
     private static final String PROP_FILE = "jdbcCpoFactory";
 
     private static final String PROP_DB_MILLI_SUPPORTED="default.dbMilliSupport";

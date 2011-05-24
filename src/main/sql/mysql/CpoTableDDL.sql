@@ -237,29 +237,31 @@ ALTER TABLE cpo_query_parameter
 ----------------------------------------------
 -- Foreign Keys
 ----------------------------------------------
-ALTER TABLE cpo_query_group
-       ADD CONSTRAINT FK_CQG_CLASS_ID FOREIGN KEY (class_id) REFERENCES cpo_class(class_id);
+ALTER TABLE TEST_cpo_query_group
+       ADD CONSTRAINT FK_CQG_CLASS_ID FOREIGN KEY (class_id) REFERENCES TEST_cpo_class(class_id)
+;
 
-ALTER TABLE cpo_query_parameter
-       ADD CONSTRAINT FK_ATTRIBUTE_ID FOREIGN KEY (attribute_id) REFERENCES cpo_attribute_map(attribute_id);
+ALTER TABLE TEST_cpo_query
+       ADD CONSTRAINT FK_GROUP_ID FOREIGN KEY (group_id) REFERENCES TEST_cpo_query_group(group_id)
+;
 
-ALTER TABLE cpo_query_parameter
-       ADD CONSTRAINT FK_QUERY_ID FOREIGN KEY (query_id) REFERENCES cpo_query(query_id);
+ALTER TABLE TEST_cpo_query
+       ADD CONSTRAINT FK_CQ_TEXT_ID FOREIGN KEY (text_id) REFERENCES TEST_cpo_query_text(text_id)
+;
 
-ALTER TABLE cpo_query
-       ADD CONSTRAINT FK_GROUP_ID FOREIGN KEY (group_id) REFERENCES cpo_query_group(group_id);
+ALTER TABLE TEST_cpo_query_parameter
+       ADD CONSTRAINT FK_QUERY_ID FOREIGN KEY (query_id) REFERENCES TEST_cpo_query(query_id)
+;
 
-ALTER TABLE cpo_query
-       ADD CONSTRAINT FK_CQ_TEXT_ID FOREIGN KEY (text_id) REFERENCES cpo_query_text(text_id);
+ALTER TABLE TEST_cpo_attribute_map
+      ADD CONSTRAINT UNIQUE_ATTR_CLASS UNIQUE INDEX (attribute_id,class_id)
+;
 
-ALTER TABLE cpo_attribute_map
-       ADD CONSTRAINT UNIQUE_ATTR_CLASS UNIQUE(attribute_id,class_id);
+ALTER TABLE TEST_cpo_attribute_map
+       ADD CONSTRAINT FK_CAM_CLASS_ID FOREIGN KEY (class_id) REFERENCES TEST_cpo_class(class_id)
+;
 
-ALTER TABLE cpo_attribute_map
-       ADD CONSTRAINT FK_CAM_CLASS_ID FOREIGN KEY (class_id) REFERENCES cpo_class(class_id);
-
-COMMIT;
-
-
-
+ALTER TABLE TEST_cpo_query_parameter
+       ADD CONSTRAINT FK_ATTRIBUTE_ID FOREIGN KEY (attribute_id) REFERENCES TEST_cpo_attribute_map(attribute_id)
+;
 

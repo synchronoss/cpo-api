@@ -29,7 +29,8 @@ import java.sql.CallableStatement;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.CpoException;
 
 /**
@@ -41,7 +42,7 @@ import org.synchronoss.cpo.CpoException;
 public class JavaSqlMethod<T> extends java.lang.Object implements java.io.Serializable, java.lang.Cloneable {
 
 
-	private static Logger logger = Logger.getLogger(JavaSqlMethod.class.getName());
+	private static Logger logger = LoggerFactory.getLogger(JavaSqlMethod.class.getName());
 
 	/**
      * Version Id for this class.

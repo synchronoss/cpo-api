@@ -89,7 +89,7 @@ package org.synchronoss.cpo;
 @Deprecated
 public class CpoObject<T> extends java.lang.Object implements java.io.Serializable, java.lang.Cloneable {
 
-//    private static Logger logger = Logger.getLogger(CpoObject.class.getName());
+//    private static Logger logger = LoggerFactory.getLogger(CpoObject.class.getName());
 
     /**
      * Version Id for this class.

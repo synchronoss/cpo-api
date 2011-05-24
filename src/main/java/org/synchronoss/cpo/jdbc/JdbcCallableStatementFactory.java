@@ -29,7 +29,8 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.CpoException;
 import org.synchronoss.cpo.CpoReleasible;
 
@@ -44,7 +45,7 @@ public class JdbcCallableStatementFactory implements CpoReleasible {
     private static final long serialVersionUID=1L;
 
     /** DOCUMENT ME! */
-    private static Logger logger=Logger.getLogger(JdbcCallableStatementFactory.class.getName());
+    private static Logger logger=LoggerFactory.getLogger(JdbcCallableStatementFactory.class.getName());
     
     private CallableStatement cs_ = null;
     
@@ -75,7 +76,7 @@ public class JdbcCallableStatementFactory implements CpoReleasible {
     public JdbcCallableStatementFactory(Connection conn, JdbcCpoAdapter jca, JdbcQuery jq, Object obj) throws CpoException {
         CallableStatement cstmt = null;
         JdbcAttribute attribute = null;
-        Logger localLogger = obj==null?logger:Logger.getLogger(obj.getClass().getName());
+        Logger localLogger = obj==null?logger:LoggerFactory.getLogger(obj.getClass().getName());
         
         try {
             outParameters=jq.getParameterList();

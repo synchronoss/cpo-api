@@ -30,7 +30,8 @@ import java.io.InputStream;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.CpoException;
 import org.synchronoss.cpo.jdbc.JdbcCallableStatementFactory;
 import org.synchronoss.cpo.jdbc.JdbcPreparedStatementFactory;
@@ -45,7 +46,7 @@ import org.synchronoss.cpo.transform.Transform;
  */
 
 public class TransformGZipBytes implements Transform<byte[], byte[]> {
-    private static Logger logger = Logger.getLogger(TransformGZipBytes.class.getName());
+    private static Logger logger = LoggerFactory.getLogger(TransformGZipBytes.class.getName());
 
     public TransformGZipBytes(){}
 

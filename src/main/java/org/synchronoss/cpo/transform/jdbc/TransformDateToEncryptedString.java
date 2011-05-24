@@ -22,7 +22,8 @@ package org.synchronoss.cpo.transform.jdbc;
 
 import java.sql.Timestamp;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.CpoException;
 import org.synchronoss.cpo.encrypt.Encryptor;
 import org.synchronoss.cpo.encrypt.EncryptorFactory;
@@ -33,7 +34,7 @@ import org.synchronoss.cpo.transform.Transform;
 public class TransformDateToEncryptedString implements Transform<String, Timestamp> {
 
     
-    private static Logger logger = Logger.getLogger(TransformDateToEncryptedString.class.getName());
+    private static Logger logger = LoggerFactory.getLogger(TransformDateToEncryptedString.class.getName());
     private static Encryptor encryptor = null;
     private static String encLock = "lock";
     

@@ -24,7 +24,8 @@
  
 package org.synchronoss.cpo.transform.jdbc;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.CpoException;
 import org.synchronoss.cpo.jdbc.JdbcCallableStatementFactory;
 import org.synchronoss.cpo.jdbc.JdbcPreparedStatementFactory;
@@ -38,7 +39,7 @@ import org.synchronoss.cpo.transform.Transform;
  */
 
 public class TransformNoOp implements Transform<Integer, Integer> {
-    private static Logger logger = Logger.getLogger(TransformNoOp.class.getName());
+    private static Logger logger = LoggerFactory.getLogger(TransformNoOp.class.getName());
 
     public TransformNoOp(){}
 

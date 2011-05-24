@@ -33,7 +33,8 @@ import java.util.zip.GZIPOutputStream;
 
 import oracle.sql.BLOB;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.CpoByteArrayInputStream;
 import org.synchronoss.cpo.CpoException;
 import org.synchronoss.cpo.jdbc.JdbcCallableStatementFactory;
@@ -49,7 +50,7 @@ import org.synchronoss.cpo.transform.Transform;
  */
 
 public class TransformGZipBlob implements Transform<Blob, byte[]> {
-    private static Logger logger = Logger.getLogger(TransformGZipBlob.class.getName());
+    private static Logger logger = LoggerFactory.getLogger(TransformGZipBlob.class.getName());
 
     public TransformGZipBlob(){}
 

@@ -31,7 +31,8 @@ import java.sql.Blob;
 
 import oracle.sql.BLOB;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.CpoException;
 import org.synchronoss.cpo.jdbc.JdbcCallableStatementFactory;
 import org.synchronoss.cpo.jdbc.JdbcPreparedStatementFactory;
@@ -47,7 +48,7 @@ import org.synchronoss.cpo.transform.Transform;
  */
 
 public class TransformBlob implements Transform<Blob, byte[]> {
-    private static Logger logger = Logger.getLogger(TransformBlob.class.getName());
+    private static Logger logger = LoggerFactory.getLogger(TransformBlob.class.getName());
     
     
     /**

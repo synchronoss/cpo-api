@@ -2,14 +2,15 @@ package org.synchronoss.cpo.jdbc;
 
 import java.util.Collection;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
 import org.synchronoss.cpo.CpoAdapter;
 import org.synchronoss.cpo.CpoException;
 
 import junit.framework.TestCase;
+import org.slf4j.LoggerFactory;
 
 public class InvalidParameterTest extends TestCase {
-  private static Logger logger = Logger.getLogger(InvalidParameterTest.class.getName());
+  private static Logger logger = LoggerFactory.getLogger(InvalidParameterTest.class.getName());
   private CpoAdapter jdbcIdo_ = null;
   
   public InvalidParameterTest(String name) {

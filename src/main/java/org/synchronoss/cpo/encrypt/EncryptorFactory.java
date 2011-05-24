@@ -22,11 +22,12 @@
  */
 package org.synchronoss.cpo.encrypt;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class EncryptorFactory {
     private static String defaultEncryptor = "org.synchronoss.gateway.cpo.jdbc.GatewayEncryptor";
-    private static Logger logger = Logger.getLogger(EncryptorFactory.class.getName());   
+    private static Logger logger = LoggerFactory.getLogger(EncryptorFactory.class.getName());   
 
     public static Encryptor getEncryptor(String className) throws ClassNotFoundException, InstantiationException, IllegalAccessException {
         logger.debug("Entering getEncryptor(" + className + ")");

@@ -27,6 +27,7 @@
         <cpo.db.callssupported>true</cpo.db.callssupported>
         <cpo.db.select4update>true</cpo.db.select4update>
         <cpo.db.millisupport>false</cpo.db.millisupport>
+        
         <cpo.meta.user>cpometa</cpo.meta.user>
         <cpo.meta.pswd>cpometa</cpo.meta.pswd>
         <cpo.meta.host>localhost</cpo.meta.host>

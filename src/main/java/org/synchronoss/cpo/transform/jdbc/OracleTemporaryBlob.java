@@ -24,7 +24,6 @@
 package org.synchronoss.cpo.transform.jdbc;
 
 import oracle.sql.BLOB;
-
 import org.synchronoss.cpo.CpoException;
 import org.synchronoss.cpo.CpoReleasible;
 

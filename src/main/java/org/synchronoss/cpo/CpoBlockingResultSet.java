@@ -6,10 +6,11 @@ import java.util.NoSuchElementException;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class CpoBlockingResultSet<E> implements CpoResultSet<E>, Iterator<E> {
-  private static Logger logger = Logger.getLogger(CpoBlockingResultSet.class.getName());
+  private static Logger logger = LoggerFactory.getLogger(CpoBlockingResultSet.class.getName());
   private static final long serialVersionUID = 1L;
   private int capacity=0;
   private AtomicInteger aInt = new AtomicInteger(0);

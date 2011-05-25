@@ -38,8 +38,8 @@ import org.synchronoss.cpo.CpoAdapterBean;
  *
  * @author david berry
  */
-public class ExecuteTestTrx extends TestCase {
-    private static Logger logger = LoggerFactory.getLogger(ExecuteTestTrx.class.getName());
+public class ExecuteTrxTest extends TestCase {
+    private static Logger logger = LoggerFactory.getLogger(ExecuteTrxTest.class.getName());
     private static final String PROP_FILE="jdbcCpoFactory";
     private static final String PROP_DBDRIVER="default.dbDriver";
     private static final String PROP_DB_CALLS_SUPPORTED="default.dbCallsSupported";
@@ -53,7 +53,7 @@ public class ExecuteTestTrx extends TestCase {
      *
      * @param name DOCUMENT ME!
      */
-    public ExecuteTestTrx() {
+    public ExecuteTrxTest() {
     }
 
     /**
@@ -95,7 +95,7 @@ public class ExecuteTestTrx extends TestCase {
             try{
                 rvo = (ValueObject) jdbcIdo_.executeObject("TestExecuteObject",vo);
                 assertNotNull(method+"Returned Value object is null");
-                assertTrue("power(3,3)="+rvo.getAttrInteger(),rvo.getAttrInteger()==27);
+                assertTrue("power(3,3)="+rvo.getAttrDouble(),rvo.getAttrDouble()==27);
             } catch (Exception e) {
                 e.printStackTrace();
                 fail(method+e.getMessage());
@@ -107,7 +107,7 @@ public class ExecuteTestTrx extends TestCase {
                 vo.setAttrSmallInt(3);
                 rvo = (ValueObject) jdbcIdo_.executeObject("TestExecuteObjectNoTransform",vo);
                 assertNotNull(method+"Returned Value object is null");
-                assertTrue("power(3,3)="+rvo.getAttrSmallInt(),rvo.getAttrSmallInt()==27);
+                assertTrue("power(3,3)="+rvo.getAttrDouble(),rvo.getAttrDouble()==27);
             } catch (Exception e) {
                 e.printStackTrace();
                 fail(method+e.getMessage());

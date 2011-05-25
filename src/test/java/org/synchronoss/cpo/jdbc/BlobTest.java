@@ -50,6 +50,7 @@ public class BlobTest extends TestCase {
     private static final String PROP_FILE="jdbcCpoFactory";
     private static final String PROP_DBDRIVER="default.dbDriver";
     private static final String PROP_DB_BLOBS_SUPPORTED="default.dbBlobsSupported";
+    private static int BLOB_SIZE=64999;
     
     private String dbDriver_=null;
     private boolean hasBlobSupport=true;
@@ -96,13 +97,13 @@ public class BlobTest extends TestCase {
         
         if (hasBlobSupport){
         
-            testBlob = new byte[64999];
-            for (int i = 0; i< 64999; i++){
+            testBlob = new byte[BLOB_SIZE];
+            for (int i = 0; i< BLOB_SIZE; i++){
                 testBlob[i]= (byte)(((int)'a') + (i%26));
             }
     
-            testBlob2 = new byte[64999];
-            for (int i = 0; i< 64999; i++){
+            testBlob2 = new byte[BLOB_SIZE];
+            for (int i = 0; i< BLOB_SIZE; i++){
                 testBlob2[i]=(byte)(((int)'z') - (i%26));
             }
             
@@ -172,13 +173,13 @@ public class BlobTest extends TestCase {
         
         if (hasBlobSupport){
         
-            testBlob = new byte[64999];
-            for (int i = 0; i< 64999; i++){
+            testBlob = new byte[BLOB_SIZE];
+            for (int i = 0; i< BLOB_SIZE; i++){
                 testBlob[i]= (byte)(((int)'a') + (i%26));
             }
     
-            testBlob2 = new byte[64999];
-            for (int i = 0; i< 64999; i++){
+            testBlob2 = new byte[BLOB_SIZE];
+            for (int i = 0; i< BLOB_SIZE; i++){
                 testBlob2[i]=(byte)(((int)'z') - (i%26));
             }
             

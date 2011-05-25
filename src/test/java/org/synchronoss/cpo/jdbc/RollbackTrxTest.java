@@ -36,7 +36,7 @@ import org.synchronoss.cpo.CpoTrxAdapter;
  *
  * @author david berry
  */
-public class RollbackTestTrx extends TestCase {
+public class RollbackTrxTest extends TestCase {
 
     private CpoAdapter jdbcCpo_=null;
     private CpoTrxAdapter jdbcIdo_=null;
@@ -46,7 +46,7 @@ public class RollbackTestTrx extends TestCase {
      *
      * @param name DOCUMENT ME!
      */
-    public RollbackTestTrx() {
+    public RollbackTrxTest() {
     }
 
     /**

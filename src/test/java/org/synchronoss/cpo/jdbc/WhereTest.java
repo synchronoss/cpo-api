@@ -140,6 +140,27 @@ public class WhereTest extends TestCase {
         }
     }
 
+    public void testNoMarkerWhere() {
+        String method = "testValueWhere:";
+        Collection<ValueObject> col = null;
+        CpoWhere cw = null;
+        
+        
+        try{
+            ValueObject valObj = new ValueObject(3);
+            cw = jdbcIdo_.newWhere(CpoWhere.LOGIC_NONE, "id", CpoWhere.COMP_GT, valObj);
+             
+            ArrayList<CpoWhere> wheres = new ArrayList<CpoWhere>();
+            wheres.add(cw);
+            col = jdbcIdo_.retrieveBeans(null,valObj,wheres,null);
+            
+            assertTrue("Col size is "+col.size(), col.size()==2);
+        } catch (Exception e) {
+            e.printStackTrace();
+            fail(method+e.getMessage());
+        }
+    }
+
 		/*
 		 * This test is because retrieveBeans was not honoring the old functionality of passing null for cpo_where should
 		 * ignore the where clause.

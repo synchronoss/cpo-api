@@ -175,6 +175,7 @@ public class JdbcPreparedStatementFactory implements CpoReleasible {
             }
             
             if (sqlText.indexOf(jcw.getName())==-1) {
+                sqlText.append(" ");
                 sqlText.append(jwb.getWhereClause());
                 bindValues.addAll(jwb.getBindValues());
             } else {

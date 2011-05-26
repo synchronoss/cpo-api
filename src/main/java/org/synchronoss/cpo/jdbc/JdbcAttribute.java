@@ -271,7 +271,7 @@ public class JdbcAttribute extends java.lang.Object implements java.io.Serializa
                     param = jdbcMethod.getRsGetter().invoke(rs,new Object[]{new Integer(idx)});
                     paramClass = jdbcMethod.getJavaSqlMethodClass();
                 }
-                if (getSetters()[i].getParameterTypes()[0].isAssignableFrom(paramClass) || isPrimitiveAssignableFrom(getSetters()[i].getParameterTypes()[0], param)){
+                if (getSetters()[i].getParameterTypes()[0].isAssignableFrom(paramClass) || isPrimitiveAssignableFrom(getSetters()[i].getParameterTypes()[0], paramClass)){
                     getSetters()[i].invoke(obj, new Object[]{param});
                     return;
                 }
@@ -561,17 +561,17 @@ public class JdbcAttribute extends java.lang.Object implements java.io.Serializa
         return retObj;
     }
 
-    private boolean isPrimitiveAssignableFrom(Class clazz, Object obj){
+    private boolean isPrimitiveAssignableFrom(Class clazz, Class paramClass){
 
       // check to see if one is primitive and one is a possible wrapper
-      if (clazz.isPrimitive() ^ obj.getClass().isPrimitive()) {
+      if (clazz.isPrimitive() ^ paramClass.isPrimitive()) {
         // identify the prim and the wrapper
         Class primClass, objClass;
         if (clazz.isPrimitive()){
           primClass=clazz;
-          objClass=obj.getClass();
+          objClass=paramClass;
         } else {
-          primClass=obj.getClass();
+          primClass=paramClass;
           objClass=clazz;
         }
         

@@ -455,7 +455,6 @@ public class JdbcAttribute extends java.lang.Object implements java.io.Serializa
     
     protected void setTransformClass(String className) throws CpoException {
         Class<?> transformClass=null;
-        Method[] m = null;
         Logger localLogger = className==null?logger:LoggerFactory.getLogger(className);
         
         try{
@@ -472,24 +471,31 @@ public class JdbcAttribute extends java.lang.Object implements java.io.Serializa
 	            }
 	            
 	            this.transformObject_ = transformClass.newInstance();
-	            m=transformClass.getMethods();
 	
-	            // go find the transformIn and transformOut classes.
-	            for (int i=0; i<m.length; i++){
-	                // The method name must match as well as the number of parameters and return types
-	                if (m[i].getName().equals("transformIn")){
-	                    this.transformIn_ = m[i];
-	                    hasTransformIn = true;
-	                } else if (m[i].getName().equals("transformOut")){
-	                	if (m[i].getParameterTypes()[0].getName().equals("org.synchronoss.cpo.jdbc.JdbcPreparedStatementFactory")){
-	                		this.transformPSOut_ = m[i];
-	                		hasTransformPS=true;
-	                	} else if (m[i].getParameterTypes()[0].getName().equals("org.synchronoss.cpo.jdbc.JdbcCallableStatementFactory")){
-	                		this.transformCSOut_ = m[i];
-	                		hasTransformCS=true;
-	                	}
-	                }
-	            }
+              // Lets walk the hierarchy to find the transform methods
+              while (transformClass != null){
+                // go find the transformIn and transformOut classes.
+                for (Method m : transformClass.getDeclaredMethods()){
+                  // Only look at methods that we created. Ignore compiler generated methods.
+                  if (!m.isSynthetic() && !m.isBridge()){
+                    // The method must be on an implementing class not an interface and the name must match as well as the number of parameters and return types
+                    //dumpMethod(m);
+                    if (!hasTransformIn && m.getName().equals("transformIn")){
+                        this.transformIn_ = m;
+                        hasTransformIn = true;
+                    } else if (m.getName().equals("transformOut")){
+                      if (!hasTransformPS && m.getParameterTypes()[0].getName().equals("org.synchronoss.cpo.jdbc.JdbcPreparedStatementFactory")){
+                        this.transformPSOut_ = m;
+                        hasTransformPS=true;
+                      } else if (!hasTransformCS && m.getParameterTypes()[0].getName().equals("org.synchronoss.cpo.jdbc.JdbcCallableStatementFactory")){
+                        this.transformCSOut_ = m;
+                        hasTransformCS=true;
+                      }
+                    }
+                  }
+                }
+                transformClass=transformClass.getEnclosingClass();
+              }
 	            
 	            if (transformIn_==null && transformPSOut_==null&&transformCSOut_==null){
 	            	localLogger.error("Invalid Transform Class specified:<"+className+">: Abstract Methods not Found");
@@ -508,6 +514,16 @@ public class JdbcAttribute extends java.lang.Object implements java.io.Serializa
             throw new CpoException (e);
         }
         
+    }
+    
+    private void dumpMethod(Method m){
+      logger.debug("========================");
+      logger.debug("===> Declaring Class: "+m.getDeclaringClass().getName());
+      logger.debug("===> Method Signature: "+m.toString());
+      logger.debug("===> Generic Signature: "+m.toGenericString());
+      logger.debug("===> Method isBridge: "+m.isBridge());
+      logger.debug("===> Method isSynthetic: "+m.isSynthetic());
+      logger.debug("========================");
     }
 
     protected Object transformIn(Object datasourceObject) throws CpoException{

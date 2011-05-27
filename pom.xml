@@ -191,6 +191,21 @@
       </plugins>
     </pluginManagement>
     <plugins>
+      <!-- need to always force a clean in case you are going between jdk versions -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-clean-plugin</artifactId>
+        <version>2.4.1</version>
+        <executions>
+          <execution>
+            <id>auto-clean</id>
+            <phase>initialize</phase>
+            <goals>
+              <goal>clean</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-release-plugin</artifactId>
@@ -256,6 +271,9 @@
             <goals>
               <goal>attached</goal>
             </goals>
+            <configuration>
+              <finalName>${cpo.assemblyFinalName}</finalName>
+            </configuration>
           </execution>
         </executions>
       </plugin>

@@ -206,6 +206,7 @@
         <cpo.jdk.source>1.5</cpo.jdk.source>
         <cpo.jdk.target>1.5</cpo.jdk.target>
         <cpo.jdk.include>jdk5/**</cpo.jdk.include>
+        <cpo.assemblyFinalName>${project.build.finalName}-jdk5</cpo.assemblyFinalName>
       </properties>
     </profile>
     <profile>
@@ -218,6 +219,7 @@
         <cpo.jdk.target>1.6</cpo.jdk.target>
         <cpo.jdk.include>jdk6/**</cpo.jdk.include>
         <cpo.jdk.classifier>jdk6</cpo.jdk.classifier>
+        <cpo.assemblyFinalName>${project.build.finalName}-jdk6</cpo.assemblyFinalName>
       </properties>
     </profile>
   </profiles>

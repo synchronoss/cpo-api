@@ -29,8 +29,6 @@ import java.io.Reader;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
 import java.sql.CallableStatement;
 import java.sql.ResultSet;
 import java.sql.Types;
@@ -242,49 +240,46 @@ public class JdbcAttribute extends java.lang.Object implements java.io.Serializa
         if (getSetters().length==0) 
             throw new CpoException("There are no setters");
         
-      if (hasTransformIn) {
-        localLogger.info("Calling Transform In:" + transformIn_.getDeclaringClass().getName());
+        if (hasTransformIn){
+    		localLogger.info("Calling Transform In:"+transformIn_.getDeclaringClass().getName());
+    		
+                // Get the JavaSqlMethod for the class that we are passing into the transform
+                jdbcMethod = JavaSqlMethods.getJavaSqlMethod(transformIn_.getParameterTypes()[0]);
+                
+                try {
+                    // Get the getter for the ResultSet
+                    param = jdbcMethod.getRsGetter().invoke(rs,new Object[]{new Integer(idx)});
+                    param = transformIn(param);
+                    paramClass = transformIn_.getReturnType();
+                } catch (IllegalAccessException iae){
+                	localLogger.debug("Error Invoking ResultSet Method: "+iae.getLocalizedMessage());
+                    throw new CpoException(iae);
+                } catch (InvocationTargetException ite){
+                	localLogger.debug("Error Invoking ResultSet Method: "+ite.getCause().getLocalizedMessage());
+                    throw new CpoException(ite.getCause());
+                }
 
-        // Get the JavaSqlMethod for the class that we are passing into the transform
-        jdbcMethod = JavaSqlMethods.getJavaSqlMethod(getMethodParamClass(transformIn_));
-
-        try {
-          // Get the getter for the ResultSet
-          param = jdbcMethod.getRsGetter().invoke(rs, new Object[]{new Integer(idx)});
-          param = transformIn(param);
-          paramClass = getMethodReturnClass(transformIn_);
-        } catch (IllegalAccessException iae) {
-          localLogger.debug("Error Invoking ResultSet Method: " + iae.getLocalizedMessage());
-          throw new CpoException(iae);
-        } catch (InvocationTargetException ite) {
-          localLogger.debug("Error Invoking ResultSet Method: " + ite.getCause().getLocalizedMessage());
-          throw new CpoException(ite.getCause());
         }
-
-      }
-    
-        for (Method setter : getSetters()) {
-          try{
-            Class paramTypeClass = getMethodParamClass(setter);
-            if (paramTypeClass != null){
-              if (!hasTransformIn){
-                  // Get the JavaSqlMethod for the class that we are passing in as the Setter parameter
-                  jdbcMethod = JavaSqlMethods.getJavaSqlMethod(paramTypeClass);
-
-                  // Get the getter for the ResultSet
-                  param = jdbcMethod.getRsGetter().invoke(rs,new Object[]{new Integer(idx)});
-                  paramClass = jdbcMethod.getJavaSqlMethodClass();
-              }
-              if (paramTypeClass.isAssignableFrom(paramClass) || isPrimitiveAssignableFrom(paramTypeClass, paramClass)){
-                  setter.invoke(obj, new Object[]{param});
-                  return;
-              }
+        
+        for (int i=0; i<getSetters().length; i++){
+            try{
+                if (!hasTransformIn){
+                    // Get the JavaSqlMethod for the class that we are passing in as the Setter parameter
+                    jdbcMethod = JavaSqlMethods.getJavaSqlMethod(getSetters()[i].getParameterTypes()[0]);
+                    
+                    // Get the getter for the ResultSet
+                    param = jdbcMethod.getRsGetter().invoke(rs,new Object[]{new Integer(idx)});
+                    paramClass = jdbcMethod.getJavaSqlMethodClass();
+                }
+                if (getSetters()[i].getParameterTypes()[0].isAssignableFrom(paramClass) || isPrimitiveAssignableFrom(getSetters()[i].getParameterTypes()[0], paramClass)){
+                    getSetters()[i].invoke(obj, new Object[]{param});
+                    return;
+                }
+            } catch (IllegalAccessException iae){
+            	localLogger.debug("Error Invoking Setter Method: "+iae.getLocalizedMessage());
+            } catch (InvocationTargetException ite){
+            	localLogger.debug("Error Invoking Setter Method: "+ite.getCause().getLocalizedMessage());
             }
-          } catch (IllegalAccessException iae){
-            localLogger.debug("Error Invoking Setter Method: "+iae.getLocalizedMessage());
-          } catch (InvocationTargetException ite){
-            localLogger.debug("Error Invoking Setter Method: "+ite.getCause().getLocalizedMessage());
-          }
         }
         
         throw new CpoException("invokeSetter: Could not find a Setter for "+obj.getClass()+": Column<"+this.getDbName()+"> Attribute<"+this.getName()+">");
@@ -299,51 +294,49 @@ public class JdbcAttribute extends java.lang.Object implements java.io.Serializa
         if (getSetters().length==0) 
             throw new CpoException("There are no setters");
 
-      if (hasTransformCS) {
-        localLogger.info("Calling Transform In:" + transformIn_.getDeclaringClass().getName());
-
-        // Get the jdbcType for the class that we are passing into the transform
-        jdbcMethod = JavaSqlMethods.getJavaSqlMethod(getMethodParamClass(transformIn_));
-
-        try {
-          // Get the getter for the Callable Statement
-          param = jdbcMethod.getCsGetter().invoke(cs, new Object[]{new Integer(idx)});
-          param = transformIn(param);
-          paramClass = getMethodReturnClass(transformIn_);
-        } catch (IllegalAccessException iae) {
-          localLogger.debug("Error Invoking CallableStatement Method: " + iae.getLocalizedMessage());
-          throw new CpoException(iae);
-        } catch (InvocationTargetException ite) {
-          localLogger.debug("Error Invoking CallableStatement Method: " + ite.getCause().getLocalizedMessage());
-          throw new CpoException(ite.getCause());
-        }
-      }
-
-        for (Method setter : getSetters()) {
-          try{
-            Class paramTypeClass = getMethodParamClass(setter);
-            if (paramTypeClass != null){
-              if (!hasTransformCS) {
-                // Get the jdbcType for the class that we are passing in as the Setter parameter
-                jdbcMethod = JavaSqlMethods.getJavaSqlMethod(paramTypeClass);
-
-                // Get the getter for the CallableStatement
-                // What we get from the cs will be set in the value object
-                param = jdbcMethod.getCsGetter().invoke(cs, new Object[]{new Integer(idx)});
-                paramClass = jdbcMethod.getJavaSqlMethodClass();
-              }
-
-              if (paramTypeClass.isAssignableFrom(paramClass)) {
-                setter.invoke(obj, new Object[]{param});
-                return;
-              }
+        if (hasTransformCS){
+    		localLogger.info("Calling Transform In:"+transformIn_.getDeclaringClass().getName());
+    		
+            // Get the jdbcType for the class that we are passing into the transform
+            jdbcMethod = JavaSqlMethods.getJavaSqlMethod(transformIn_.getParameterTypes()[0]);
+            
+            try {
+                // Get the getter for the Callable Statement
+                param = jdbcMethod.getCsGetter().invoke(cs,new Object[]{new Integer(idx)});
+                param = transformIn(param);
+                paramClass = transformIn_.getReturnType();
+            } catch (IllegalAccessException iae){
+            	localLogger.debug("Error Invoking CallableStatement Method: "+iae.getLocalizedMessage());
+                throw new CpoException(iae);
+            } catch (InvocationTargetException ite){
+            	localLogger.debug("Error Invoking CallableStatement Method: "+ite.getCause().getLocalizedMessage());
+                throw new CpoException(ite.getCause());
             }
-            } catch (IllegalAccessException iae) {
-          localLogger.debug("Error Invoking Setter Method: " + iae.getLocalizedMessage());
-        } catch (InvocationTargetException ite) {
-          localLogger.debug("Error Invoking Setter Method: " + ite.getCause().getLocalizedMessage());
         }
-      }
+
+        for (int i=0; i<getSetters().length; i++){
+            try{
+                
+                if (!hasTransformCS){
+                    // Get the jdbcType for the class that we are passing in as the Setter parameter
+                    jdbcMethod = JavaSqlMethods.getJavaSqlMethod(getSetters()[i].getParameterTypes()[0]);
+                    
+                    // Get the getter for the CallableStatement
+                    // What we get from the cs will be set in the value object
+                    param = jdbcMethod.getCsGetter().invoke(cs,new Object[]{new Integer(idx)});
+                    paramClass = jdbcMethod.getJavaSqlMethodClass();
+                }
+ 
+                if (getSetters()[i].getParameterTypes()[0].isAssignableFrom(paramClass)){
+                    getSetters()[i].invoke(obj, new Object[]{param});
+                    return;
+                }   
+            } catch (IllegalAccessException iae){
+            	localLogger.debug("Error Invoking Setter Method: "+iae.getLocalizedMessage());
+            } catch (InvocationTargetException ite){
+            	localLogger.debug("Error Invoking Setter Method: "+ite.getCause().getLocalizedMessage());
+            }
+        }
         
         throw new CpoException("invokeSetter: Could not find a Setter for "+obj.getClass());
     }
@@ -597,31 +590,6 @@ public class JdbcAttribute extends java.lang.Object implements java.io.Serializa
       }
       
       return false;
-    }
-    
-    private Class getMethodParamClass(Method method){
-      Class paramClass=null;
-      Type paramTypes[] = method.getGenericParameterTypes();
-      if (paramTypes.length>0){
-        Type paramType = paramTypes[0];
-        if (paramType instanceof Class){
-          paramClass = (Class<?>) paramType;
-        } else if (paramType instanceof ParameterizedType){
-          paramClass = (Class<?>) ((ParameterizedType)paramType).getRawType();
-        }
-      }
-      return paramClass;
-    }
- 
-    private Class getMethodReturnClass(Method method){
-      Class paramClass=null;
-      Type paramType = method.getGenericReturnType();
-      if (paramType instanceof Class){
-        paramClass = (Class<?>) paramType;
-      } else if (paramType instanceof ParameterizedType){
-        paramClass = (Class<?>) ((ParameterizedType)paramType).getRawType();
-      }
-      return paramClass;
     }
     
 }

@@ -182,7 +182,7 @@
           <configuration>
             <includes>
               <include>org/**</include>
-              <include>${cpo.jdk.include}</include>
+<!--              <include>${cpo.jdk.include}</include>-->
             </includes>
             <source>${cpo.jdk.source}</source>
             <target>${cpo.jdk.target}</target>

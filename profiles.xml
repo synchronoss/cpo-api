@@ -18,8 +18,8 @@
         <cpo.db.host>localhost</cpo.db.host>
         <cpo.db.port>3306</cpo.db.port>
         <cpo.db.database>cpo</cpo.db.database>
-        <cpo.db.url>jdbc:mysql://${cpo.db.host}:${cpo.db.port}/${cpo.db.database}?noAccessToProcedureBodies=true</cpo.db.url>
-        <cpo.db.userurl>jdbc:mysql://${cpo.db.host}:${cpo.db.port}/${cpo.db.database}?noAccessToProcedureBodies=true&amp;user=${cpo.db.user}&amp;password=${cpo.db.pswd}</cpo.db.userurl>
+        <cpo.db.url>jdbc:mysql://${cpo.db.host}:${cpo.db.port}/${cpo.db.database}?noAccessToProcedureBodies=true&amp;useCursorFetch=true&amp;defaultFetchSize=0</cpo.db.url>
+        <cpo.db.userurl>jdbc:mysql://${cpo.db.host}:${cpo.db.port}/${cpo.db.database}?user=${cpo.db.user}&amp;password=${cpo.db.pswd}&amp;noAccessToProcedureBodies=true&amp;useCursorFetch=true&amp;defaultFetchSize=0</cpo.db.userurl>
         <cpo.db.driver>com.mysql.jdbc.Driver</cpo.db.driver>
         <cpo.db.initconn>1</cpo.db.initconn>
         <cpo.db.maxconn>2</cpo.db.maxconn>

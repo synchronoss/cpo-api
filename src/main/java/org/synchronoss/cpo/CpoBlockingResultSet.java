@@ -1,10 +1,10 @@
 package org.synchronoss.cpo;
 
-import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
+import java.util.Set;
 import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,12 +13,14 @@ public class CpoBlockingResultSet<E> implements CpoResultSet<E>, Iterator<E> {
   private static Logger logger = LoggerFactory.getLogger(CpoBlockingResultSet.class.getName());
   private static final long serialVersionUID = 1L;
   private int capacity=0;
-  private AtomicInteger aInt = new AtomicInteger(0);
-  private ThreadLocal<E> tlObj = new ThreadLocal<E>();
-  LinkedBlockingQueue<E> lbq = null;
-  HashMap<Thread, Thread> producers = new HashMap<Thread, Thread>();
-  HashMap<Thread, Thread> consumers = new HashMap<Thread, Thread>();
-  boolean done = false;
+  private final ThreadLocal<E> tlObj = new ThreadLocal<E>();
+  private LinkedBlockingQueue<E> lbq = null;
+  private final Set<Thread> producers = new HashSet<Thread>();
+  private final Set<Thread> consumers = new HashSet<Thread>();
+  private boolean done = false;
+  
+  private CpoBlockingResultSet (){
+  }
   
   public CpoBlockingResultSet(int capacity) {
     this.capacity = capacity;
@@ -26,49 +28,32 @@ public class CpoBlockingResultSet<E> implements CpoResultSet<E>, Iterator<E> {
   }
   
   public void put(E e) throws InterruptedException{
-    producers.put(Thread.currentThread(), Thread.currentThread());
+    producers.add(Thread.currentThread());
     logger.debug("Put Called");
     lbq.put(e);
-    aInt.incrementAndGet();
   }
   
   public boolean hasNext(){
     logger.debug("hasNext Called");
-    E ret=tlObj.get();
     
-    if (isDone() && lbq.size()==0 && ret==null)
+    if (tlObj.get()!=null || lbq.size()>0)
+      return true;
+    
+    if (lbq.size()==0 && Thread.currentThread().interrupted())
       return false;
-
-    if (ret==null){
-      try{
-        tlObj.set(take());
-      } catch (InterruptedException ie){
-        if (!isDone()) {
-          // This is a real interrupt not just me signaling that the 
-          // the sender is done sending
-          //maintain the interrupt
-          Thread.currentThread().interrupt();
-          return false;
-        }
-        
-        if (isDone() && lbq.size()==0)
-          return false;
-        
-        try {
-          tlObj.set(take());
-        }catch (InterruptedException ie2){
-          // Once again must be a real interrupt not a signal
-          Thread.currentThread().interrupt();
-          return false;
-        }
-      }
+    
+    try{
+      tlObj.set(lbq.take());
+    } catch (InterruptedException ie){
+      logger.error("CpoBlockingResultSet.hasNext() - Interrupted and bailing out");
+      return false;
     }
     return true;
     
   }
   
   public int size(){
-    return aInt.get();
+    return lbq.size();
   }
   
   public void remove() {
@@ -80,32 +65,19 @@ public class CpoBlockingResultSet<E> implements CpoResultSet<E>, Iterator<E> {
     E ret=tlObj.get();
     
     if (ret==null){
+      if (lbq.size()==0 && Thread.currentThread().interrupted())
+        throw new NoSuchElementException();
+    
       try{
         ret=take();
       } catch (InterruptedException ie){
-        if (!isDone()) {
-          // This is a real interrupt not just me signaling that the 
-          // the sender is done sending
-          //maintain the interrupt
-          Thread.currentThread().interrupt();
-          throw new NoSuchElementException();
-        }
-
-        if (lbq.size()==0) {
-          throw new NoSuchElementException();
-        } else {
-          try {
-            ret = take();
-          }catch (InterruptedException ie2){
-            // Once again must be a real interrupt not a signal
-            Thread.currentThread().interrupt();
-            throw new NoSuchElementException();
-          }
-        }
+        logger.error("CpoBlockingResultSet.next() - Interrupted and bailing out");
+        throw new NoSuchElementException();
       }
     } else {
       tlObj.set(null);
     }
+    
     return ret;
   }
 
@@ -114,24 +86,16 @@ public class CpoBlockingResultSet<E> implements CpoResultSet<E>, Iterator<E> {
   }
 
   public E take() throws InterruptedException {
-    consumers.put(Thread.currentThread(), Thread.currentThread());
+    consumers.add(Thread.currentThread());
     logger.debug("Take Called");
     return lbq.take();
   }
-
-  public boolean isDone() {
-    return done;
-  }
-
-  public void setDone(boolean done) {
-    this.done = done;
-  }
   
   public void cancel(){
-    for(Thread t : consumers.values()){
+    for(Thread t : consumers){
         t.interrupt();
     }
-    for(Thread t : producers.values()){
+    for(Thread t : producers){
         t.interrupt();
     }
   }

@@ -3756,8 +3756,9 @@ public class JdbcCpoAdapter implements CpoAdapter {
         // TODO Auto-generated catch block
         e.printStackTrace();
       } finally {
-        resultSet.setDone(true);
-        // Interrupt the thread in case it is in a wait
+        //wait until the calling thread is finished processing the records
+        while(resultSet.size()>0);
+        //Tell the calling thread that it should not wait on the blocking queue any longer.
         callingThread.interrupt();
       }
     }

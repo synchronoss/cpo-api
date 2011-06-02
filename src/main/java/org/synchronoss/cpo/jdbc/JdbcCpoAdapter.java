@@ -3753,11 +3753,12 @@ public class JdbcCpoAdapter implements CpoAdapter {
       try {
         processSelectGroup(name, criteria, result, wheres, orderBy, nativeQueries, false, resultSet);
       } catch (CpoException e) {
-        // TODO Auto-generated catch block
         e.printStackTrace();
       } finally {
         //wait until the calling thread is finished processing the records
-        while(resultSet.size()>0);
+        while(resultSet.size()>0){
+          Thread.yield();
+        }
         //Tell the calling thread that it should not wait on the blocking queue any longer.
         callingThread.interrupt();
       }

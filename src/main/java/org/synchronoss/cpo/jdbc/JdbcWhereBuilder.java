@@ -39,7 +39,7 @@ import org.synchronoss.cpo.Node;
 
 public class JdbcWhereBuilder<T> implements INodeVisitor {
 
-    private StringBuffer whereClause = new StringBuffer();
+    private StringBuilder whereClause = new StringBuilder();
     private JdbcMetaClass<T> jmc = null;
     private Collection<BindAttribute> bindValues = new ArrayList<BindAttribute>();
 

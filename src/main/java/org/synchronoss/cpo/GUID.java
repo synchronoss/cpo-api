@@ -44,7 +44,7 @@ public class GUID  {
       seeder.nextBytes(newSeed);
       sr.setSeed(newSeed);
 
-      StringBuffer tmpBuffer = new StringBuffer();
+      StringBuilder tmpBuffer = new StringBuilder();
       // get the inet address
       InetAddress inet = InetAddress.getLocalHost();
       byte [] bytes = inet.getAddress();
@@ -100,7 +100,7 @@ public class GUID  {
         return s;
     }
     int fill = 8 - sz;
-    StringBuffer buf = new StringBuffer();
+    StringBuilder buf = new StringBuilder();
 
     for (int i=0;i<fill;++i){
        // add leading zeros

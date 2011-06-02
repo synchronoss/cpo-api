@@ -3440,7 +3440,7 @@ public class JdbcCpoAdapter implements CpoAdapter {
     //JdbcParameter jp=null;
     JdbcAttribute attribute;
     boolean failed = false;
-    StringBuffer failedMessage = new StringBuffer();
+    StringBuilder failedMessage = new StringBuilder();
 
     if ((c != null) && (jmc != null)) {
       Logger localLogger = LoggerFactory.getLogger(jmc.getJmcClass().getName());
@@ -3532,7 +3532,7 @@ public class JdbcCpoAdapter implements CpoAdapter {
   private <T> void loadQueryGroups(Connection c, JdbcMetaClass<T> jmc)
       throws CpoException {
     String id = null;
-    StringBuffer sqlBuffer = new StringBuffer();
+    StringBuilder sqlBuffer = new StringBuilder();
     //Uncomment when we remove the query_text_table
     //sqlBuffer.append("select cqg.group_type,cqg.name,cq.query_id,cq.seq_no as query_seq,cq.sql_text,cqp.seq_no as param_seq,");
     // Comment this out when we remove the query_text table
@@ -3640,7 +3640,7 @@ public class JdbcCpoAdapter implements CpoAdapter {
     JdbcAttribute attribute;
     int type;
     Class<?> c;
-    StringBuffer sb = new StringBuffer("Parameter list for ");
+    StringBuilder sb = new StringBuilder("Parameter list for ");
 
     if (jq == null) {
       return " null query.";

@@ -87,7 +87,7 @@ public class CpoException extends Exception  {
      * exception if there is one.
      */
     public String getMessage() {
-        StringBuffer msg=new StringBuffer("\n");
+        StringBuilder msg=new StringBuilder("\n");
 
         msg.append(super.getMessage());
 

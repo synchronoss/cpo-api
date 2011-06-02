@@ -151,7 +151,7 @@ public class JdbcCpoWhere extends Node implements CpoWhere{
     }
 
     public String toString(JdbcMetaClass<?> jmc)  throws CpoException {
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         JdbcAttribute attribute = null;
 
 
@@ -256,7 +256,7 @@ public class JdbcCpoWhere extends Node implements CpoWhere{
     }
 
     private String buildFunction(String function, String match, String value){
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         int attrOffset = 0;
         int fromIndex = 0;
 
@@ -273,7 +273,7 @@ public class JdbcCpoWhere extends Node implements CpoWhere{
     }
     
     private String buildColumnName(JdbcAttribute attribute){
-      StringBuffer columnName = new StringBuffer();
+      StringBuilder columnName = new StringBuilder();
       
       if (attribute.getDbTable()!=null){
         columnName.append(attribute.getDbTable());

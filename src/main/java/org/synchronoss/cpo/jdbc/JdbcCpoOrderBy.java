@@ -128,7 +128,7 @@ public class JdbcCpoOrderBy implements CpoOrderBy {
     }
 
     public String toString(JdbcMetaClass<?> jmc) throws CpoException {
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         String function = null;
         String attribute = null;
         String column = null;

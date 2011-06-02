@@ -469,7 +469,7 @@ public JdbcDataSourceInfo(String driver, String url, Properties properties,
      * @return DOCUMENT ME!
      */
     private String BuildDataSourceName(String url, Properties properties) {
-        StringBuffer dsName=new StringBuffer(url);
+        StringBuilder dsName=new StringBuilder(url);
         TreeMap<Object,Object> treeMap=new TreeMap<Object,Object>(properties);
         Iterator<Object> it=treeMap.values().iterator();
 

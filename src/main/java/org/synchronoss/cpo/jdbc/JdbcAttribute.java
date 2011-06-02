@@ -161,7 +161,7 @@ public class JdbcAttribute extends java.lang.Object implements java.io.Serializa
     }
 
     private <T> void initMethods(JdbcMetaClass<T> jmc) throws CpoException {
-        StringBuffer failedMessage = new StringBuffer();
+        StringBuilder failedMessage = new StringBuilder();
         setGetterName(buildMethodName("get",getName()));
         setSetterName(buildMethodName("set",getName()));
 
@@ -223,7 +223,7 @@ public class JdbcAttribute extends java.lang.Object implements java.io.Serializa
     
     static protected String buildMethodName(String prefix, String base){
 
-        StringBuffer methodName=new StringBuffer();
+        StringBuilder methodName=new StringBuilder();
         methodName.append(prefix);
         methodName.append(base);
         methodName.setCharAt(3, Character.toUpperCase(methodName.charAt(3)));

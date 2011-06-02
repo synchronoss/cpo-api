@@ -90,7 +90,7 @@ public class JdbcDataSource implements DataSource {
     }
 
     public synchronized String toString() {
-        StringBuffer info = new StringBuffer();
+        StringBuilder info = new StringBuilder();
         info.append("JdbcDataSource(");
         info.append(getDataSourceInfo().getUrl());
         info.append(",");

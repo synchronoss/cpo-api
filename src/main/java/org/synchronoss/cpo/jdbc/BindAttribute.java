@@ -32,6 +32,7 @@ public class BindAttribute {
 	private JdbcAttribute ja_ = null;
 	private Object bindObject_ = null;
 	private String name_ = null;
+  private boolean isIn_ = false;
 	
 	public BindAttribute(JdbcAttribute ja, Object bindObject){
 		ja_=ja;
@@ -43,6 +44,18 @@ public class BindAttribute {
 		bindObject_=bindObject;
 	}
 
+	public BindAttribute(JdbcAttribute ja, Object bindObject, boolean isIn){
+		ja_=ja;
+		bindObject_=bindObject;
+    isIn_=isIn;
+	}
+	
+	public BindAttribute(String name, Object bindObject, boolean isIn){
+		name_=name;
+		bindObject_=bindObject;
+    isIn_=isIn;
+	}
+  
 	public JdbcAttribute getJdbcAttribute(){
 		return ja_;
 	}
@@ -54,5 +67,9 @@ public class BindAttribute {
 	public String getName(){
 		return name_;
 	}
+
+  public boolean isIn() {
+    return isIn_;
+  }
 	
 }

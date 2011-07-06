@@ -549,5 +549,96 @@ public class WhereTest extends TestCase {
 
     }
     
-    
+  public void testInWhereStaticValue() {
+    String method = "testNonAttributeWhere:";
+    Collection<ValueObject> coll = null;
+    CpoWhere cw = null;
+    CpoWhere cw1 = null;
+
+    try {
+      ValueObject valObj = new ValueObject(1);
+
+      cw = jdbcIdo_.newWhere();
+      cw1 = jdbcIdo_.newWhere(CpoWhere.LOGIC_NONE, "id", CpoWhere.COMP_IN, null);
+      cw1.setStaticValue("(1,3,5)");
+
+      cw.addWhere(cw1);
+
+      ArrayList<CpoWhere> wheres = new ArrayList<CpoWhere>();
+      wheres.add(cw);
+      coll = jdbcIdo_.retrieveBeans("TestWhereRetrieve", valObj, wheres, null);
+
+      assertTrue("Collection size is " + coll.size(), coll.size() == 3);
+
+
+    } catch (Exception e) {
+      e.printStackTrace();
+      fail(method + e.getMessage());
+    }
+
+  }
+
+  public void testInWhereCollection() {
+    String method = "testNonAttributeWhere:";
+    Collection<ValueObject> coll = null;
+    CpoWhere cw = null;
+    CpoWhere cw1 = null;
+
+    try {
+      ValueObject valObj = new ValueObject(1);
+      Collection<Integer> inColl = new ArrayList<Integer>();
+      inColl.add(new Integer(1));
+      inColl.add(new Integer(3));
+      inColl.add(new Integer(5));
+      
+      cw = jdbcIdo_.newWhere();
+      cw1 = jdbcIdo_.newWhere(CpoWhere.LOGIC_NONE, "id", CpoWhere.COMP_IN, inColl);
+
+      cw.addWhere(cw1);
+
+      ArrayList<CpoWhere> wheres = new ArrayList<CpoWhere>();
+      wheres.add(cw);
+      coll = jdbcIdo_.retrieveBeans("TestWhereRetrieve", valObj, wheres, null);
+
+      assertTrue("Collection size is " + coll.size(), coll.size() == 3);
+
+
+    } catch (Exception e) {
+      e.printStackTrace();
+      fail(method + e.getMessage());
+    }
+
+  }
+  
+  public void testNonAttributeInWhereCollection() {
+    String method = "testNonAttributeWhere:";
+    Collection<ValueObject> coll = null;
+    CpoWhere cw = null;
+    CpoWhere cw1 = null;
+
+    try {
+      ValueObject valObj = new ValueObject(1);
+      Collection<Integer> inColl = new ArrayList<Integer>();
+      inColl.add(new Integer(1));
+      inColl.add(new Integer(3));
+      inColl.add(new Integer(5));
+      
+      cw = jdbcIdo_.newWhere();
+      cw1 = jdbcIdo_.newWhere(CpoWhere.LOGIC_NONE, "value_object.id", CpoWhere.COMP_IN, inColl);
+
+      cw.addWhere(cw1);
+
+      ArrayList<CpoWhere> wheres = new ArrayList<CpoWhere>();
+      wheres.add(cw);
+      coll = jdbcIdo_.retrieveBeans("TestWhereRetrieve", valObj, wheres, null);
+
+      assertTrue("Collection size is " + coll.size(), coll.size() == 3);
+
+
+    } catch (Exception e) {
+      e.printStackTrace();
+      fail(method + e.getMessage());
+    }
+
+  }
 }

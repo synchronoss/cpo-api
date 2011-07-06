@@ -356,14 +356,29 @@ public class JdbcPreparedStatementFactory implements CpoReleasible {
 
         // check to see if we are getting a cpo value object or an object that
         // can be put directly in the statement (String, BigDecimal, etc)
-        JavaSqlMethod<?> jsm = JavaSqlMethods.getJavaSqlMethod(bindObject.getClass());
+        JavaSqlMethod<?> jsm = null;
+        if (bindAttr.isIn() && bindObject instanceof Collection) {
+          for (Object obj : (Collection)bindObject){
+            jsm = JavaSqlMethods.getJavaSqlMethod(obj.getClass());
+            break;
+          }
+        } else {
+          jsm = JavaSqlMethods.getJavaSqlMethod(bindObject.getClass());
+        }
+        
         if (jsm != null) {
           try {
             if (ja == null)
               localLogger.debug(bindAttr.getName() + "=" + bindObject);
             else
               localLogger.debug(ja.getDbName() + "=" + bindObject);
-            jsm.getPsSetter().invoke(this.getPreparedStatement(), new Object[] { index++, bindObject });
+            if (bindAttr.isIn() && bindObject instanceof Collection) {
+              for (Object obj : (Collection)bindObject){
+                jsm.getPsSetter().invoke(this.getPreparedStatement(), new Object[] { index++, obj });
+              }
+            } else {
+              jsm.getPsSetter().invoke(this.getPreparedStatement(), new Object[] { index++, bindObject });
+            }
           } catch (IllegalAccessException iae) {
             localLogger.error("Error Accessing Prepared Statement Setter: " + ExceptionHelper.getLocalizedMessage(iae));
             throw new CpoException(iae);

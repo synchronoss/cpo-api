@@ -24,6 +24,7 @@
 
 package org.synchronoss.cpo.jdbc;
 
+import java.util.Collection;
 import org.synchronoss.cpo.ChildNodeException;
 import org.synchronoss.cpo.CpoException;
 import org.synchronoss.cpo.CpoWhere;
@@ -202,8 +203,18 @@ public class JdbcCpoWhere extends Node implements CpoWhere{
             if(getValue()!=null) {
                 if (getValueFunction()!=null){
                     sb.append(buildFunction(getValueFunction(), attribute==null?getAttribute():attribute.getName(),"?"));
+                } else if(getComparison()==CpoWhere.COMP_IN && getValue() instanceof Collection) {
+                  Collection coll = (Collection) getValue();
+                  sb.append("(");
+                  if (coll.size()>0){
+                    sb.append("?"); // add the parameter, we will bind it later.
+                    for (int i=1; i<coll.size(); i++){
+                      sb.append(", ?"); // add the parameter, we will bind it later.
+                    }
+                  }
+                  sb.append(")");
                 } else {
-                    sb.append("?");        // add the parameter, we will bind it later.
+                    sb.append("?"); // add the parameter, we will bind it later.
                 }
             } else if(getRightAttribute()!=null) {
                 attribute = (JdbcAttribute) jmc.getColumnMap().get(getRightAttribute());

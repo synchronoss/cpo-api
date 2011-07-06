@@ -26,6 +26,7 @@ package org.synchronoss.cpo.jdbc;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import org.synchronoss.cpo.CpoWhere;
 
 import org.synchronoss.cpo.INodeVisitor;
 import org.synchronoss.cpo.Node;
@@ -113,9 +114,9 @@ public class JdbcWhereBuilder<T> implements INodeVisitor {
         if(jcw.getValue() != null) {
             attribute = (JdbcAttribute) jmc.getColumnMap().get(jcw.getAttribute());
             if (attribute==null)
-                bindValues.add(new BindAttribute(jcw.getAttribute(),jcw.getValue()));
+                bindValues.add(new BindAttribute(jcw.getAttribute(),jcw.getValue(), jcw.getComparison()==CpoWhere.COMP_IN));
             else
-            	bindValues.add(new BindAttribute(attribute,jcw.getValue()));
+            	bindValues.add(new BindAttribute(attribute,jcw.getValue(), jcw.getComparison()==CpoWhere.COMP_IN));
         }
         return true;
     }

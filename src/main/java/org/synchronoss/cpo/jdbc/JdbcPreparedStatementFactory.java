@@ -72,28 +72,7 @@ public class JdbcPreparedStatementFactory implements CpoReleasible {
     private static final String ORDERBY_MARKER = "__CPO_ORDERBY__";
 
 
-    /**
-     * Used to build the PreparedStatement that is used by CPO to create the 
-     * actual JDBC PreparedStatement.
-     *
-     * The constructor is called by the internal CPO framework. This is not to be used by
-     * users of CPO. Programmers that build Transforms may need to use this object to get access
-     * to the actual connection. 
-     * 
-     * @param conn The actual jdbc connection that will be used to create the callable statement.
-     * @param jca The JdbcCpoAdapter that is controlling this transaction 
-     * @param jq The JdbcQuery that is being executed
-     * @param obj The pojo that is being acted upon
-    *
-     * @throws CpoException if a CPO error occurs
-     * @throws SQLException if a JDBC error occurs
-     */
-    public <T> JdbcPreparedStatementFactory(Connection conn, JdbcCpoAdapter jca, JdbcMetaClass<T> jmcCriteria, JdbcQuery jq, T obj) throws CpoException{
-        this(conn, jca, jmcCriteria, jq, obj, null, null, null);
-    }
-
-
-    /**
+  /**
    * Used to build the PreparedStatement that is used by CPO to create the
    * actual JDBC PreparedStatement.
    * 

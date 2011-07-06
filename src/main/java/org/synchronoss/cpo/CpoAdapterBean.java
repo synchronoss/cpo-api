@@ -115,6 +115,29 @@ public class CpoAdapterBean
         return JdbcCpoFactory.getCpoAdapter().insertObject(name,obj);
     }
 
+  /**
+   * Creates the Object in the datasource. The assumption is that the object does not exist in
+   * the datasource.  This method creates and stores the object in the datasource
+   *
+   * @param name The String name of the CREATE Query group that will be used to create the object
+   *             in the datasource. null signifies that the default rules will be used which is
+   *             equivalent to insertObject(Object obj);
+   * @param obj  This is an object that has been defined within the metadata of the datasource. If
+   *             the class is not defined an exception will be thrown.
+   * @param wheres   A collection of CpoWhere beans that define the constraints that should be
+   *                 used when retrieving beans
+   * @param orderBy  The CpoOrderBy bean that defines the order in which beans
+   *                 should be returned
+   * @param nativeQueries Native query text that will be used to augment the query text stored in 
+   *             the meta data. This text will be embedded at run-time
+   * @return The number of objects created in the datasource
+   * @throws CpoException Thrown if there are errors accessing the datasource
+   */
+  public <T> long insertObject(String name, T obj, Collection<CpoWhere> wheres,
+      Collection<CpoOrderBy> orderBy, Collection<CpoNativeQuery> nativeQueries) throws CpoException{
+        return JdbcCpoFactory.getCpoAdapter().insertObject(name,obj, wheres, orderBy, nativeQueries);
+    }
+  
     /**
      * Iterates through a collection of Objects, creates them and stores them in the datasource. 
      * The assumption is that the objects contained in the collection do not exist in the 
@@ -151,7 +174,35 @@ public class CpoAdapterBean
         return JdbcCpoFactory.getCpoAdapter().insertObjects(name,coll);
     }
 
-    /**
+  /**
+   * Iterates through a collection of Objects, creates and stores them in the datasource.  The
+   * assumption is that the objects contained in the collection do not exist in the  datasource.
+   * 
+   * This method creates and stores the objects in the datasource. The objects in the
+   * collection will be treated as one transaction, assuming the datasource supports transactions.
+   * 
+   * This means that if one of the objects fail being created in the datasource then the CpoAdapter should stop
+   * processing the remainder of the collection, and if supported, rollback all the objects created thus far.
+   * 
+   * @param name The String name of the CREATE Query group that will be used to create the object
+   *             in the datasource. null signifies that the default rules will be used.
+   * @param coll This is a collection of objects that have been defined within the metadata of
+   *             the datasource. If the class is not defined an exception will be thrown.
+   * @param wheres   A collection of CpoWhere beans that define the constraints that should be
+   *                 used when retrieving beans
+   * @param orderBy  The CpoOrderBy bean that defines the order in which beans
+   *                 should be returned
+   * @param nativeQueries Native query text that will be used to augment the query text stored in 
+   *             the meta data. This text will be embedded at run-time
+   * @return The number of objects created in the datasource
+   * @throws CpoException Thrown if there are errors accessing the datasource
+   */
+  public <T> long insertObjects(String name, Collection<T> coll, Collection<CpoWhere> wheres,
+      Collection<CpoOrderBy> orderBy, Collection<CpoNativeQuery> nativeQueries) throws CpoException{
+        return JdbcCpoFactory.getCpoAdapter().insertObject(name,coll, wheres, orderBy, nativeQueries);
+    }
+
+  /**
      * Retrieves the bean from the datasource. The assumption
      * is that the bean exists in the datasource.
      * 
@@ -187,6 +238,32 @@ public class CpoAdapterBean
         return(JdbcCpoFactory.getCpoAdapter().retrieveBean(name,bean));
     }
 
+  /**
+   * Retrieves the bean from the datasource. The assumption is that the bean exists in the
+   * datasource.  If the retrieve query defined for this beans returns more than one row, an
+   * exception will be thrown.
+   *
+   * @param name DOCUMENT ME!
+   * @param bean  This is an bean that has been defined within the metadata of the datasource. If
+   *             the class is not defined an exception will be thrown. If the bean does not exist
+   *             in the datasource, an exception will be thrown. The input  bean is used to specify
+   *             the search criteria, the output  bean is populated with the results of the query.
+   * @param wheres   A collection of CpoWhere beans that define the constraints that should be
+   *                 used when retrieving beans
+   * @param orderBy  The CpoOrderBy bean that defines the order in which beans
+   *                 should be returned
+   * @param nativeQueries Native query text that will be used to augment the query text stored in 
+   *             the meta data. This text will be embedded at run-time
+   * @return An bean of the same type as the result parameter that is filled in as specified
+   *         the metadata for the retireve.
+   * @throws CpoException Thrown if there are errors accessing the datasource
+   */
+  public <T> T retrieveBean(String name, T bean, Collection<CpoWhere> wheres,
+      Collection<CpoOrderBy> orderBy, Collection<CpoNativeQuery> nativeQueries)
+      throws CpoException{
+        return(JdbcCpoFactory.getCpoAdapter().retrieveBean(name,bean, wheres, orderBy, nativeQueries));
+    }
+  
     /**
      * Retrieves the bean from the datasource. The assumption
      * is that the bean exists in the datasource.
@@ -678,6 +755,26 @@ public class CpoAdapterBean
         return JdbcCpoFactory.getCpoAdapter().updateObject(name,obj);
     }
 
+/**
+   * Update the Object in the datasource. The CpoAdapter will check to see if the object
+   * exists in the datasource. If it exists then the object will be updated. If it does not exist,
+   * an exception will be thrown
+   * 
+   * @param name The String name of the UPDATE Query group that will be used to create the object
+   *             in the datasource. null signifies that the default rules will be used.
+   * @param obj  This is an object that has been defined within the metadata of the datasource. If
+   *             the class is not defined an exception will be thrown.
+   * @param wheres    A collection of CpoWhere objects to be used by the query
+   * @param orderBy   A collection of CpoOrderBy objects to be used by the query
+   * @param nativeQueries A collection of CpoNativeQuery objects to be used by the query
+   * @return The number of objects updated in the datasource
+   * @throws CpoException Thrown if there are errors accessing the datasource
+   */
+  public <T> long updateObject(String name, T obj, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, 
+      Collection<CpoNativeQuery> nativeQueries) throws CpoException{
+        return JdbcCpoFactory.getCpoAdapter().updateObject(name,obj,wheres, orderBy, nativeQueries);
+    }
+
     /**
      * Persists a collection of Objects into the datasource. The assumption
      * is that the objects contained in the collection exist in the datasource.
@@ -714,7 +811,29 @@ public class CpoAdapterBean
         return JdbcCpoFactory.getCpoAdapter().updateObjects(name,coll);
     }
 
-    /**
+  /**
+   * Updates a collection of Objects in the datasource. The assumption is that the objects
+   * contained in the collection exist in the datasource.  This method stores the object in the
+   * datasource. The objects in the collection will be treated as one transaction, meaning that
+   * if one of the objects fail being updated in the datasource then the entire collection will
+   * be rolled back, if supported by the datasource.
+   * 
+   * @param name The String name of the UPDATE Query group that will be used to create the object
+   *             in the datasource. null signifies that the default rules will be used.
+   * @param coll This is a collection of objects that have been defined within  the metadata of
+   *             the datasource. If the class is not defined an exception will be thrown.
+   * @param wheres    A collection of CpoWhere objects to be used by the query
+   * @param orderBy   A collection of CpoOrderBy objects to be used by the query
+   * @param nativeQueries A collection of CpoNativeQuery objects to be used by the query
+   * @return The number of objects updated in the datasource
+   * @throws CpoException Thrown if there are errors accessing the datasource
+   */
+  public <T> long updateObjects(String name, Collection<T> coll, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeQuery> nativeQueries)
+      throws CpoException{
+        return JdbcCpoFactory.getCpoAdapter().updateObject(name,coll,wheres, orderBy, nativeQueries);
+    }
+
+  /**
      * Removes the Object from the datasource. The assumption
      * is that the object exists in the datasource.
      * 
@@ -742,7 +861,30 @@ public class CpoAdapterBean
         return JdbcCpoFactory.getCpoAdapter().deleteObject(name,obj);
     }
 
-    /**
+  /**
+   * Removes the Object from the datasource. The assumption is that the object exists in the
+   * datasource.  This method stores the object in the datasource
+   * 
+   * @param name The String name of the DELETE Query group that will be used to create the object
+   *             in the datasource. null signifies that the default rules will be used.
+   * @param obj  This is an object that has been defined within the metadata of the datasource. If
+   *             the class is not defined an exception will be thrown. If the object does not exist
+   *             in the datasource an exception will be thrown.
+   * @param wheres   A collection of CpoWhere beans that define the constraints that should be
+   *                 used when retrieving beans
+   * @param orderBy  The CpoOrderBy bean that defines the order in which beans
+   *                 should be returned
+   * @param nativeQueries Native query text that will be used to augment the query text stored in 
+   *             the meta data. This text will be embedded at run-time
+   * @return The number of objects deleted from the datasource
+   * @throws CpoException Thrown if there are errors accessing the datasource
+   */
+  public <T> long deleteObject(String name, T obj, Collection<CpoWhere> wheres,
+      Collection<CpoOrderBy> orderBy, Collection<CpoNativeQuery> nativeQueries) throws CpoException{
+        return JdbcCpoFactory.getCpoAdapter().deleteObject(name,obj, wheres, orderBy, nativeQueries);
+    }
+
+  /**
      * Removes the Objects contained in the collection from the datasource. The 
      * assumption is that the object exists in the datasource.
      * 
@@ -774,7 +916,35 @@ public class CpoAdapterBean
         return JdbcCpoFactory.getCpoAdapter().deleteObjects(name,coll);
     }
 
-    /**
+  /**
+   * Removes the Objects contained in the collection from the datasource. The  assumption is that
+   * the object exists in the datasource.  This method stores the objects contained in the
+   * collection in the datasource. The objects in the collection will be treated as one transaction,
+   * assuming the datasource supports transactions.
+   * 
+   * This means that if one of the objects fail being deleted in the datasource then the CpoAdapter should stop
+   * processing the remainder of the collection, and if supported, rollback all the objects deleted thus far.
+   * 
+   * @param name The String name of the DELETE Query group that will be used to create the object
+   *             in the datasource. null signifies that the default rules will be used.
+   * @param coll This is a collection of objects that have been defined within  the metadata of
+   *             the datasource. If the class is not defined an exception will be thrown.
+   * @param wheres   A collection of CpoWhere beans that define the constraints that should be
+   *                 used when retrieving beans
+   * @param orderBy  The CpoOrderBy bean that defines the order in which beans
+   *                 should be returned
+   * @param nativeQueries Native query text that will be used to augment the query text stored in 
+   *             the meta data. This text will be embedded at run-time
+   * @return The number of objects deleted from the datasource
+   * @throws CpoException Thrown if there are errors accessing the datasource
+   */
+  public <T> long deleteObjects(String name, Collection<T> coll, Collection<CpoWhere> wheres,
+      Collection<CpoOrderBy> orderBy, Collection<CpoNativeQuery> nativeQueries)
+      throws CpoException{
+        return JdbcCpoFactory.getCpoAdapter().deleteObject(name, coll, wheres, orderBy, nativeQueries);
+    }
+
+  /**
      * Persists the Object into the datasource. The CpoAdapter will check to see if this
      * object exists in the datasource. If it exists, the object is updated in the datasource
      * If the object does not exist, then it is created in the datasource.

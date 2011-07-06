@@ -38,6 +38,7 @@ import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.CpoByteArrayInputStream;
 import org.synchronoss.cpo.CpoCharArrayReader;
 import org.synchronoss.cpo.CpoException;
+import org.synchronoss.cpo.helper.ExceptionHelper;
 
 
 
@@ -252,10 +253,10 @@ public class JdbcAttribute extends java.lang.Object implements java.io.Serializa
                     param = transformIn(param);
                     paramClass = transformIn_.getReturnType();
                 } catch (IllegalAccessException iae){
-                	localLogger.debug("Error Invoking ResultSet Method: "+iae.getLocalizedMessage());
+                	localLogger.debug("Error Invoking ResultSet Method: "+ExceptionHelper.getLocalizedMessage(iae));
                     throw new CpoException(iae);
                 } catch (InvocationTargetException ite){
-                	localLogger.debug("Error Invoking ResultSet Method: "+ite.getCause().getLocalizedMessage());
+                	localLogger.debug("Error Invoking ResultSet Method: "+ExceptionHelper.getLocalizedMessage(ite));
                     throw new CpoException(ite.getCause());
                 }
 
@@ -276,9 +277,9 @@ public class JdbcAttribute extends java.lang.Object implements java.io.Serializa
                     return;
                 }
             } catch (IllegalAccessException iae){
-            	localLogger.debug("Error Invoking Setter Method: "+iae.getLocalizedMessage());
+            	localLogger.debug("Error Invoking Setter Method: "+ExceptionHelper.getLocalizedMessage(iae));
             } catch (InvocationTargetException ite){
-            	localLogger.debug("Error Invoking Setter Method: "+ite.getCause().getLocalizedMessage());
+            	localLogger.debug("Error Invoking Setter Method: "+ExceptionHelper.getLocalizedMessage(ite));
             }
         }
         
@@ -306,10 +307,10 @@ public class JdbcAttribute extends java.lang.Object implements java.io.Serializa
                 param = transformIn(param);
                 paramClass = transformIn_.getReturnType();
             } catch (IllegalAccessException iae){
-            	localLogger.debug("Error Invoking CallableStatement Method: "+iae.getLocalizedMessage());
+            	localLogger.debug("Error Invoking CallableStatement Method: "+ExceptionHelper.getLocalizedMessage(iae));
                 throw new CpoException(iae);
             } catch (InvocationTargetException ite){
-            	localLogger.debug("Error Invoking CallableStatement Method: "+ite.getCause().getLocalizedMessage());
+            	localLogger.debug("Error Invoking CallableStatement Method: "+ExceptionHelper.getLocalizedMessage(ite));
                 throw new CpoException(ite.getCause());
             }
         }
@@ -332,9 +333,9 @@ public class JdbcAttribute extends java.lang.Object implements java.io.Serializa
                     return;
                 }   
             } catch (IllegalAccessException iae){
-            	localLogger.debug("Error Invoking Setter Method: "+iae.getLocalizedMessage());
+            	localLogger.debug("Error Invoking Setter Method: "+ExceptionHelper.getLocalizedMessage(iae));
             } catch (InvocationTargetException ite){
-            	localLogger.debug("Error Invoking Setter Method: "+ite.getCause().getLocalizedMessage());
+            	localLogger.debug("Error Invoking Setter Method: "+ExceptionHelper.getLocalizedMessage(ite));
             }
         }
         
@@ -376,9 +377,9 @@ public class JdbcAttribute extends java.lang.Object implements java.io.Serializa
         	}
             return;
         } catch (IllegalAccessException iae){
-        	localLogger.debug("Error Invoking Getter Method: "+iae.getLocalizedMessage());
+        	localLogger.debug("Error Invoking Getter Method: "+ExceptionHelper.getLocalizedMessage(iae));
         } catch (InvocationTargetException ite){
-        	localLogger.debug("Error Invoking Getter Method: "+ite.getCause().getLocalizedMessage());
+        	localLogger.debug("Error Invoking Getter Method: "+ExceptionHelper.getLocalizedMessage(ite));
         }
         
         throw new CpoException("invokeGetter: Could not find a Getter for "+obj.getClass());
@@ -405,10 +406,7 @@ public class JdbcAttribute extends java.lang.Object implements java.io.Serializa
                     }
            }
         } catch (Exception e){
-            msg = "Error Invoking Getter Method: "+getGetters()[0].getReturnType().getName()+" "+getGetters()[0].getName()+"():"+e.getLocalizedMessage();
-            if (e.getCause()!=null){
-            	msg += ":"+e.getCause().getLocalizedMessage();
-            }
+            msg = "Error Invoking Getter Method: "+getGetters()[0].getReturnType().getName()+" "+getGetters()[0].getName()+"():"+ExceptionHelper.getLocalizedMessage(e);
         } 
         
         if (msg==null){
@@ -431,10 +429,7 @@ public class JdbcAttribute extends java.lang.Object implements java.io.Serializa
             	}
                 return;
             } catch (Exception e){
-                msg="Error Invoking Jdbc Method: "+jdbcMethod.getPsSetter().getName()+":"+e.getLocalizedMessage();
-                if (e.getCause()!=null){
-                	msg += ":"+e.getCause().getLocalizedMessage();
-                }
+                msg="Error Invoking Jdbc Method: "+jdbcMethod.getPsSetter().getName()+":"+ExceptionHelper.getLocalizedMessage(e);
             }
         }
         
@@ -462,9 +457,7 @@ public class JdbcAttribute extends java.lang.Object implements java.io.Serializa
 	            try {
 	            	transformClass = Class.forName(className);
 	            } catch (Exception e){
-	            	String msg=e.getLocalizedMessage();
-	            	if (msg==null&&e.getCause()!=null)
-	            		msg=e.getCause().getLocalizedMessage();
+	            	String msg=ExceptionHelper.getLocalizedMessage(e);
 	            	
 	            	localLogger.error("Invalid Transform Class specified:<"+className+">");
 	                throw new CpoException("Invalid Transform Class specified:<"+className+">:");
@@ -506,7 +499,7 @@ public class JdbcAttribute extends java.lang.Object implements java.io.Serializa
         } catch (CpoException ce ){
         	throw ce;
         } catch (Exception e){
-        	localLogger.debug("Error Setting Transform Class: "+e.getLocalizedMessage());
+        	localLogger.debug("Error Setting Transform Class: "+ExceptionHelper.getLocalizedMessage(e));
             this.transformObject_ = null;
             this.transformIn_ = null;
             this.transformCSOut_=null;
@@ -533,10 +526,10 @@ public class JdbcAttribute extends java.lang.Object implements java.io.Serializa
             try{
                 retObj = transformIn_.invoke(transformObject_,new Object[] {datasourceObject});
             } catch (IllegalAccessException iae){
-                LoggerFactory.getLogger(transformIn_.getName()).error("Error Invoking transformIn: "+transformIn_.getName()+iae.getLocalizedMessage());
+                LoggerFactory.getLogger(transformIn_.getName()).error("Error Invoking transformIn: "+transformIn_.getName()+ExceptionHelper.getLocalizedMessage(iae));
                 throw new CpoException(iae);
             } catch (InvocationTargetException ite){
-            	LoggerFactory.getLogger(transformIn_.getName()).error("Error Invoking transformIn: "+transformIn_.getName()+ite.getCause().getLocalizedMessage());
+            	LoggerFactory.getLogger(transformIn_.getName()).error("Error Invoking transformIn: "+transformIn_.getName()+ExceptionHelper.getLocalizedMessage(ite));
                 throw new CpoException(ite.getCause());
             }
         }
@@ -550,10 +543,10 @@ public class JdbcAttribute extends java.lang.Object implements java.io.Serializa
             try{
                 retObj = transformPSOut_.invoke(transformObject_,new Object[] {jpsf, attributeObject});
             } catch (IllegalAccessException iae){
-            	LoggerFactory.getLogger(transformPSOut_.getName()).error("Error Invoking transformOut: "+transformPSOut_.getName()+iae.getLocalizedMessage());
+            	LoggerFactory.getLogger(transformPSOut_.getName()).error("Error Invoking transformOut: "+transformPSOut_.getName()+ExceptionHelper.getLocalizedMessage(iae));
                 throw new CpoException(iae);
             } catch (InvocationTargetException ite){
-            	LoggerFactory.getLogger(transformPSOut_.getName()).error("Error Invoking transformOut: "+transformPSOut_.getName()+ite.getCause().getLocalizedMessage());
+            	LoggerFactory.getLogger(transformPSOut_.getName()).error("Error Invoking transformOut: "+transformPSOut_.getName()+ExceptionHelper.getLocalizedMessage(ite));
                 throw new CpoException(ite.getCause());
             }
         }
@@ -567,10 +560,10 @@ public class JdbcAttribute extends java.lang.Object implements java.io.Serializa
             try{
                 retObj = transformCSOut_.invoke(transformObject_,new Object[] {jcsf, attributeObject});
             } catch (IllegalAccessException iae){
-            	LoggerFactory.getLogger(transformCSOut_.getName()).error("Error Invoking transformOut: "+transformCSOut_.getName()+iae.getLocalizedMessage());
+            	LoggerFactory.getLogger(transformCSOut_.getName()).error("Error Invoking transformOut: "+transformCSOut_.getName()+ExceptionHelper.getLocalizedMessage(iae));
                 throw new CpoException(iae);
             } catch (InvocationTargetException ite){
-            	LoggerFactory.getLogger(transformCSOut_.getName()).error("Error Invoking transformOut: "+transformCSOut_.getName()+ite.getCause().getLocalizedMessage());
+            	LoggerFactory.getLogger(transformCSOut_.getName()).error("Error Invoking transformOut: "+transformCSOut_.getName()+ExceptionHelper.getLocalizedMessage(ite));
                 throw new CpoException(ite.getCause());
             }
         }

@@ -36,6 +36,7 @@ import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.CpoAdapter;
 import org.synchronoss.cpo.CpoAdapterBean;
 import org.synchronoss.cpo.CpoException;
+import org.synchronoss.cpo.helper.ExceptionHelper;
 
 /**
  * RetrieveObjectTest is a JUnit test class for testing the
@@ -102,13 +103,13 @@ public class BigBatchTest extends TestCase {
             long inserts = jdbcIdo_.insertObjects(al);
             assertEquals("inserts performed do not equal inserts requested: ", inserts, numInserts);
         } catch (CpoException ce){
-          logger.debug("Received a CpoException:"+ce.getLocalizedMessage());
+          logger.debug("Received a CpoException:"+ExceptionHelper.getLocalizedMessage(ce));
         } catch (Exception e){
           e.printStackTrace();
-          fail(method+":Received an Exception instead of a CpoException: "+e.getLocalizedMessage());
+          fail(method+":Received an Exception instead of a CpoException: "+ExceptionHelper.getLocalizedMessage(e));
         } catch (Throwable t) {
             t.printStackTrace();
-          fail(method+":Received a Throwable instead of a CpoException: "+t.getLocalizedMessage());
+          fail(method+":Received a Throwable instead of a CpoException: "+ExceptionHelper.getLocalizedMessage(t));
         }
 
     }

@@ -51,7 +51,6 @@ public class JdbcCpoTrxAdapter extends JdbcCpoAdapter implements CpoTrxAdapter {
                     boolean batchSupported, String dbTablePrefix) throws CpoException {
             super(metaSource, metaSourceName, batchSupported, dbTablePrefix);
             setStaticConnection(c);
-            // TODO Auto-generated constructor stub
     }
 
     public void commit() throws CpoException {

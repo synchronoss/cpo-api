@@ -7,17 +7,14 @@ public class CpoArrayResultSet<E> extends ArrayList<E> implements CpoResultSet<E
   boolean canceled=false;
   public CpoArrayResultSet() {
     super();
-    // TODO Auto-generated constructor stub
   }
 
   public CpoArrayResultSet(Collection<? extends E> c) {
     super(c);
-    // TODO Auto-generated constructor stub
   }
 
   public CpoArrayResultSet(int initialCapacity) {
     super(initialCapacity);
-    // TODO Auto-generated constructor stub
   }
 
   private static final long serialVersionUID = 1L;

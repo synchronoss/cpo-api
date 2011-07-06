@@ -8,6 +8,7 @@ import org.synchronoss.cpo.CpoException;
 
 import junit.framework.TestCase;
 import org.slf4j.LoggerFactory;
+import org.synchronoss.cpo.helper.ExceptionHelper;
 
 public class InvalidParameterTest extends TestCase {
   private static Logger logger = LoggerFactory.getLogger(InvalidParameterTest.class.getName());
@@ -51,7 +52,7 @@ public class InvalidParameterTest extends TestCase {
       ce.printStackTrace();
     } catch (Exception e) {
       e.printStackTrace();
-      fail(method+"Unexpected Exception"+e.getLocalizedMessage());
+      fail(method+"Unexpected Exception"+ExceptionHelper.getLocalizedMessage(e));
     } 
   }
   
@@ -70,7 +71,7 @@ public class InvalidParameterTest extends TestCase {
       ce.printStackTrace();
     } catch (Exception e) {
       e.printStackTrace();
-      fail(method+"Unexpected Exception"+e.getLocalizedMessage());
+      fail(method+"Unexpected Exception"+ExceptionHelper.getLocalizedMessage(e));
     } 
   }
   
@@ -89,7 +90,7 @@ public class InvalidParameterTest extends TestCase {
       ce.printStackTrace();
     } catch (Exception e) {
       e.printStackTrace();
-      fail(method+"Unexpected Exception"+e.getLocalizedMessage());
+      fail(method+"Unexpected Exception"+ExceptionHelper.getLocalizedMessage(e));
     } 
   }
   
@@ -108,7 +109,7 @@ public class InvalidParameterTest extends TestCase {
       ce.printStackTrace();
     } catch (Exception e) {
       e.printStackTrace();
-      fail(method+"Unexpected Exception"+e.getLocalizedMessage());
+      fail(method+"Unexpected Exception"+ExceptionHelper.getLocalizedMessage(e));
     } 
   }
   
@@ -131,7 +132,7 @@ public class InvalidParameterTest extends TestCase {
       ce.printStackTrace();
     } catch (Exception e) {
       e.printStackTrace();
-      fail(method+"Unexpected Exception"+e.getLocalizedMessage());
+      fail(method+"Unexpected Exception"+ExceptionHelper.getLocalizedMessage(e));
     } 
   }
 

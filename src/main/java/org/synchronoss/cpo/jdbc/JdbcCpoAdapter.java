@@ -54,6 +54,7 @@ import org.synchronoss.cpo.CpoOrderBy;
 import org.synchronoss.cpo.CpoResultSet;
 import org.synchronoss.cpo.CpoTrxAdapter;
 import org.synchronoss.cpo.CpoWhere;
+import org.synchronoss.cpo.helper.ExceptionHelper;
 
 /**
  * JdbcCpoAdapter is an interface for a set of routines that are responsible for managing value
@@ -279,7 +280,7 @@ public class JdbcCpoAdapter implements CpoAdapter {
 
       this.closeConnection(c);
     } catch (Throwable t) {
-      logger.error(t.getLocalizedMessage(), t);
+      logger.error(ExceptionHelper.getLocalizedMessage(t), t);
       throw new CpoException("Could Not Retrieve Database Meta Data", t);
     } finally {
       closeConnection(c);
@@ -2884,7 +2885,7 @@ public class JdbcCpoAdapter implements CpoAdapter {
       }
 
     } catch (Throwable t) {
-      String msg = "ProcessSeclectGroup(Object) failed: " + t.getLocalizedMessage();
+      String msg = "ProcessSeclectGroup(Object) failed: " + ExceptionHelper.getLocalizedMessage(t);
       localLogger.error(msg, t);
       rObj = null;
       throw new CpoException(msg, t);
@@ -3464,9 +3465,7 @@ public class JdbcCpoAdapter implements CpoAdapter {
               cMap.put(attribute.getName(), attribute);
             } catch (CpoException ce) {
               failed = true;
-              String msg = ce.getLocalizedMessage();
-              if (msg == null && ce.getCause() != null)
-                msg = ce.getCause().getLocalizedMessage();
+              String msg = ExceptionHelper.getLocalizedMessage(ce);
               failedMessage.append(msg);
             }
           } while (rs.next());

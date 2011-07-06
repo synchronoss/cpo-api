@@ -30,8 +30,6 @@ import org.synchronoss.cpo.CpoReleasible;
 /**
  * @author david.berry
  *
- * TODO To change the template for this generated type comment go to
- * Window - Preferences - Java - Code Style - Code Templates
  */
 public class OracleTemporaryBlob implements CpoReleasible {
 	private BLOB blob_=null;
@@ -46,7 +44,6 @@ public class OracleTemporaryBlob implements CpoReleasible {
 	 * @see org.synchronoss.cpo.CpoReleasible#release()
 	 */
 	public void release() throws CpoException {
-		// TODO Auto-generated method stub
 		try{
 			if (blob_!=null){
 				blob_.freeTemporary();

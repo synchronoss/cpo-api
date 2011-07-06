@@ -30,6 +30,7 @@ import org.synchronoss.cpo.CpoAdapter;
 import org.synchronoss.cpo.CpoException;
 import org.synchronoss.cpo.CpoObject;
 import org.synchronoss.cpo.CpoTrxAdapter;
+import org.synchronoss.cpo.helper.ExceptionHelper;
 
 /**
  * BlobTest is a JUnit test class for testing the JdbcAdapter class Constructors
@@ -112,7 +113,7 @@ public class RollbackTrxTest extends TestCase {
             try {
             	jdbcIdo_.rollback();
             } catch (CpoException ce){
-                fail(method+"Rollback failed:"+ce.getLocalizedMessage());
+                fail(method+"Rollback failed:"+ExceptionHelper.getLocalizedMessage(ce));
 
             }
         	try{
@@ -139,7 +140,7 @@ public class RollbackTrxTest extends TestCase {
             try {
             	jdbcIdo_.rollback();
             } catch (CpoException ce){                
-            	fail(method+"Rollback failed:"+ce.getLocalizedMessage());
+            	fail(method+"Rollback failed:"+ExceptionHelper.getLocalizedMessage(ce));
             }
         	try{
             ValueObject rvo = jdbcIdo_.retrieveObject(vo);
@@ -172,7 +173,7 @@ public class RollbackTrxTest extends TestCase {
             try {
             	jdbcIdo_.rollback();
             } catch (CpoException ce){
-                fail(method+"Rollback failed:"+ce.getLocalizedMessage());
+                fail(method+"Rollback failed:"+ExceptionHelper.getLocalizedMessage(ce));
             }
         	
         	try{

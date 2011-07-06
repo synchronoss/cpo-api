@@ -33,6 +33,7 @@ import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.CpoAdapter;
 import org.synchronoss.cpo.CpoException;
 import org.synchronoss.cpo.CpoTrxAdapter;
+import org.synchronoss.cpo.helper.ExceptionHelper;
 
 /**
  * BlobTest is a JUnit test class for testing the JdbcAdapter class Constructors
@@ -77,7 +78,7 @@ public class SelectForUpdateTest extends TestCase {
             jdbcIdo_ = jdbcCpo_.getCpoTrxAdapter();
             assertNotNull(method+"CpoTrxAdapter is null", jdbcIdo_);
         } catch(Exception e) {
-            logger.debug(e.getLocalizedMessage());
+            logger.debug(ExceptionHelper.getLocalizedMessage(e));
         }
         ValueObject vo = new ValueObject(1);
         ValueObject vo2 = new ValueObject(2);
@@ -122,20 +123,20 @@ public class SelectForUpdateTest extends TestCase {
             try{
                 jdbcIdo_.retrieveObject("SelectForUpdate",vo2);
             } catch (Exception e) {
-                fail(method+"Select For Update should work:"+e.getLocalizedMessage());
+                fail(method+"Select For Update should work:"+ExceptionHelper.getLocalizedMessage(e));
             }
             
             try{
                 jdbcIdo_.retrieveObject("SelectForUpdate",vo2);
             } catch (Exception e) {
-                fail(method+"Select For Update should work:"+e.getLocalizedMessage());
+                fail(method+"Select For Update should work:"+ExceptionHelper.getLocalizedMessage(e));
             }
 
             try{
                 jdbcCpo_.retrieveObject("Select4UpdateNoWait",vo2);
                 fail(method+"SelectForUpdateNoWait should fail:");
             } catch (Exception e) {
-                logger.debug(e.getLocalizedMessage());
+                logger.debug(ExceptionHelper.getLocalizedMessage(e));
             }
 
             try{
@@ -144,7 +145,7 @@ public class SelectForUpdateTest extends TestCase {
                 try {
                     jdbcIdo_.rollback();
                 } catch (CpoException ce){
-                    fail(method+"Rollback failed:"+ce.getLocalizedMessage());
+                    fail(method+"Rollback failed:"+ExceptionHelper.getLocalizedMessage(e));
 
                 }
                 fail(method+"Commit should have worked.");
@@ -152,7 +153,7 @@ public class SelectForUpdateTest extends TestCase {
             try{
                 jdbcCpo_.retrieveObject("Select4UpdateNoWait",vo2);
             } catch (Exception e) {
-                fail(method+"SelectForUpdateNoWait should success:"+e.getLocalizedMessage());
+                fail(method+"SelectForUpdateNoWait should success:"+ExceptionHelper.getLocalizedMessage(e));
             }
         } else {
         	logger.error(dbDriver_+" does not support Select For Update");
@@ -168,21 +169,21 @@ public class SelectForUpdateTest extends TestCase {
             	long count = jdbcIdo_.existsObject("SelectForUpdateExistZero",vo2);
                 assertTrue("Zero objects should have been returned", count==0);
             } catch (Exception e) {
-                fail(method+"Select For Update should work:"+e.getLocalizedMessage());
+                fail(method+"Select For Update should work:"+ExceptionHelper.getLocalizedMessage(e));
             }
 
             try{
                 long count = jdbcIdo_.existsObject("SelectForUpdateExistSingle",vo2);
                 assertTrue("One object should have been returned, got "+count, count==1);
             } catch (Exception e) {
-                fail(method+"Select For Update should work:"+e.getLocalizedMessage());
+                fail(method+"Select For Update should work:"+ExceptionHelper.getLocalizedMessage(e));
             }
             
             try{
             	long count = jdbcIdo_.existsObject("SelectForUpdateExistAll",vo2);
                 assertTrue("Two objects should have been returned, got "+count, count==2);
             } catch (Exception e) {
-                fail(method+"Select For Update should work:"+e.getLocalizedMessage());
+                fail(method+"Select For Update should work:"+ExceptionHelper.getLocalizedMessage(e));
             }
 
             try{
@@ -191,7 +192,7 @@ public class SelectForUpdateTest extends TestCase {
                 try {
                     jdbcIdo_.rollback();
                 } catch (CpoException ce){
-                    fail(method+"Rollback failed:"+ce.getLocalizedMessage());
+                    fail(method+"Rollback failed:"+ExceptionHelper.getLocalizedMessage(ce));
 
                 }
                 fail(method+"Commit should have worked.");

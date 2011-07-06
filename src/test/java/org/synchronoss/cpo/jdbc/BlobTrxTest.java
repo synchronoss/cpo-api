@@ -266,7 +266,7 @@ public class BlobTrxTest extends TestCase {
             jca = new JdbcCpoAdapter(c1_);
             
         	} catch(Exception e){
-        		fail(e.getLocalizedMessage());
+        		fail(ExceptionHelper.getLocalizedMessage(e));
         	}
 	
             testBlob = new byte[64999];

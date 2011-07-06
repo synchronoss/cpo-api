@@ -33,6 +33,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.CpoException;
 import org.synchronoss.cpo.CpoReleasible;
+import org.synchronoss.cpo.helper.ExceptionHelper;
 
 /**
  * JdbcCallableStatementFactory is the object that encapsulates the creation of the actual
@@ -103,7 +104,7 @@ public class JdbcCallableStatementFactory implements CpoReleasible {
             }
     
         } catch (Exception e){
-        	localLogger.error("Error Instantiating JdbcCallableStatementFactory"+e.getLocalizedMessage());
+        	localLogger.error("Error Instantiating JdbcCallableStatementFactory"+ExceptionHelper.getLocalizedMessage(e));
             throw new CpoException(e);
         }
 

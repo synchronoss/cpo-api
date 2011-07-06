@@ -43,6 +43,7 @@ import org.synchronoss.cpo.CpoNativeQuery;
 import org.synchronoss.cpo.CpoOrderBy;
 import org.synchronoss.cpo.CpoReleasible;
 import org.synchronoss.cpo.CpoWhere;
+import org.synchronoss.cpo.helper.ExceptionHelper;
 
 
 /**
@@ -137,7 +138,7 @@ public class JdbcPreparedStatementFactory implements CpoReleasible {
       pstmt = conn.prepareStatement(sql);
     } catch (SQLException se) {
       localLogger
-          .error("Error Instantiating JdbcPreparedStatementFactory SQL=<" + sql + ">" + se.getLocalizedMessage());
+          .error("Error Instantiating JdbcPreparedStatementFactory SQL=<" + sql + ">" + ExceptionHelper.getLocalizedMessage(se));
       throw new CpoException(se);
     }
     setPreparedStatement(pstmt);
@@ -199,7 +200,7 @@ public class JdbcPreparedStatementFactory implements CpoReleasible {
                 sb.append(((JdbcCpoOrderBy)ob).toString(jmc));
               }
             } catch (CpoException ce) {
-            	throw new CpoException("Error Processing OrderBy Attribute<"+ce.getLocalizedMessage()+"> not Found. JDBC Query=<"+sqlText.toString()+">");
+            	throw new CpoException("Error Processing OrderBy Attribute<"+ExceptionHelper.getLocalizedMessage(ce)+"> not Found. JDBC Query=<"+sqlText.toString()+">");
             }
             
             Set<Entry<String, StringBuilder>> entries = mapOrderBy.entrySet();
@@ -385,10 +386,10 @@ public class JdbcPreparedStatementFactory implements CpoReleasible {
               localLogger.debug(ja.getDbName() + "=" + bindObject);
             jsm.getPsSetter().invoke(this.getPreparedStatement(), new Object[] { index++, bindObject });
           } catch (IllegalAccessException iae) {
-            localLogger.error("Error Accessing Prepared Statement Setter: " + iae.getLocalizedMessage());
+            localLogger.error("Error Accessing Prepared Statement Setter: " + ExceptionHelper.getLocalizedMessage(iae));
             throw new CpoException(iae);
           } catch (InvocationTargetException ite) {
-            localLogger.error("Error Invoking Prepared Statement Setter: " + ite.getCause().getLocalizedMessage());
+            localLogger.error("Error Invoking Prepared Statement Setter: " + ExceptionHelper.getLocalizedMessage(ite));
             throw new CpoException(ite.getCause());
           }
         } else {

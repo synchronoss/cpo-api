@@ -17,6 +17,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.CpoAdapter;
 import org.synchronoss.cpo.CpoException;
+import org.synchronoss.cpo.helper.ExceptionHelper;
 
 /**
  * JdbcCpoFactory implements the JdbcCpoAdapter as a singleton. JdbcCpoAdapter is fully thread safe
@@ -96,7 +97,7 @@ public class JdbcCpoFactory {
       try{
         b = ResourceBundle.getBundle(PROP_FILE,Locale.getDefault(), JdbcCpoFactory.class.getClassLoader());
       } catch (Exception e){
-        throw new CpoException("Error processing properties file:"+PROP_FILE+".properties :"+e.getLocalizedMessage());
+        throw new CpoException("Error processing properties file:"+PROP_FILE+".properties :"+ExceptionHelper.getLocalizedMessage(e));
       }
       
       dbDatasource_ = getResourceString(b,context+PROP_DB_DATASOURCE);
@@ -126,7 +127,7 @@ public class JdbcCpoFactory {
     	  else if (metaUrl_!=null)
           metaInfo = new JdbcDataSourceInfo(metaDriver_,metaUrl_, metaUser_, metaPassword_, metaInitConn_, metaMaxConn_,false,tablePrefix_);
   	  } catch (SQLException se) {
-  	    logger.debug("Unable to get meta datasource info: "+se.getLocalizedMessage());
+  	    logger.debug("Unable to get meta datasource info: "+ExceptionHelper.getLocalizedMessage(se));
   	    metaInfo=null;
   	  }
   	  
@@ -138,7 +139,7 @@ public class JdbcCpoFactory {
         else if (dbUrl_!=null)
           dbInfo = new JdbcDataSourceInfo(dbDriver_,dbUrl_, dbUser_, dbPassword_, dbInitConn_, dbMaxConn_,false,tablePrefix_);
       } catch (SQLException se) {
-        logger.debug("Unable to get db datasource info: "+se.getLocalizedMessage());
+        logger.debug("Unable to get db datasource info: "+ExceptionHelper.getLocalizedMessage(se));
         dbInfo=null;
       }
   	  

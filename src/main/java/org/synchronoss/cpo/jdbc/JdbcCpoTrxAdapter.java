@@ -43,6 +43,9 @@ public class JdbcCpoTrxAdapter extends JdbcCpoAdapter implements CpoTrxAdapter {
     // map to keep track of busy connections
     private static HashMap<Connection, Connection> busyMap_ = new HashMap<Connection,Connection>();
     
+    // map to keep track of dirty connections
+    private static HashMap<Connection, Connection> dirtyMap_ = new HashMap<Connection,Connection>();
+    
     
     @SuppressWarnings("unused")
     private JdbcCpoTrxAdapter(){}
@@ -58,10 +61,10 @@ public class JdbcCpoTrxAdapter extends JdbcCpoAdapter implements CpoTrxAdapter {
     	if (writeConnection!=null){
 	    	try {
 	    		writeConnection.commit();
+	    	  clearConnectionBusy(writeConnection);
+	    	  clearConnectionDirty(writeConnection);
 	    	} catch (SQLException se) {
 	    		throw new CpoException (se.getMessage());
-	    	} finally {
-	    	  clearConnectionBusy(writeConnection);
 	    	}
     	}else{
     		throw new CpoException ("Transaction Object has been Closed");
@@ -73,10 +76,10 @@ public class JdbcCpoTrxAdapter extends JdbcCpoAdapter implements CpoTrxAdapter {
     	if (writeConnection!=null){
 	    	try {
 	    		writeConnection.rollback();
+          clearConnectionBusy(writeConnection);
+	    	  clearConnectionDirty(writeConnection);
 	    	} catch (Exception e) {
 	    		throw new CpoException (e.getMessage());
-        } finally {
-          clearConnectionBusy(writeConnection);
         }
     	}else{
     		throw new CpoException ("Transaction Object has been Closed");
@@ -91,8 +94,6 @@ public class JdbcCpoTrxAdapter extends JdbcCpoAdapter implements CpoTrxAdapter {
     		closed = (writeConnection == null || writeConnection.isClosed());
     	} catch (Exception e) {
     		throw new CpoException (e.getMessage());
-    	} finally {
-        clearConnectionBusy(writeConnection);
     	}
     	return closed;
     }
@@ -102,14 +103,17 @@ public class JdbcCpoTrxAdapter extends JdbcCpoAdapter implements CpoTrxAdapter {
     	if (writeConnection != null) {
     	  try {
       		try {
-      			writeConnection.rollback();
+            // only rollback if the connection is dirty
+            if (isConnectionDirty(writeConnection))
+              writeConnection.rollback();
       		} catch (Exception e) {}
       		try {
       			writeConnection.close();
       		} catch (Exception e) {}
-    	  } finally{
+    	  } finally {
           setStaticConnection(null);
           clearConnectionBusy(writeConnection);
+          clearConnectionDirty(writeConnection);
     	  }
     	}
     }
@@ -142,6 +146,7 @@ public class JdbcCpoTrxAdapter extends JdbcCpoAdapter implements CpoTrxAdapter {
           throw new CpoException("Error Connection Busy");
         } else {
           setConnectionBusy(writeConnection_);
+          setConnectionDirty(writeConnection_);
         }
       }
       return writeConnection_;
@@ -176,6 +181,28 @@ public class JdbcCpoTrxAdapter extends JdbcCpoAdapter implements CpoTrxAdapter {
     protected void clearConnectionBusy(Connection c) {
       synchronized(busyMap_){
         busyMap_.remove(c);
+      }
+    }
+    
+    @Override
+    protected boolean isConnectionDirty(Connection c) {
+      synchronized(dirtyMap_){
+        Connection test = dirtyMap_.get(c);
+        return test!=null;
+      }
+    }
+
+    @Override
+    protected void setConnectionDirty(Connection c) {
+      synchronized(dirtyMap_){
+        dirtyMap_.put(c,c);
+      }
+    }
+    
+    @Override
+    protected void clearConnectionDirty(Connection c) {
+      synchronized(dirtyMap_){
+        dirtyMap_.remove(c);
       }
     }
     

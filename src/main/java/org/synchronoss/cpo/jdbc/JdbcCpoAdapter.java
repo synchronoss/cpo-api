@@ -2852,6 +2852,7 @@ public class JdbcCpoAdapter implements CpoAdapter {
     try {
       if (isStaticConnection(connection)){
         clearConnectionBusy(connection);
+        clearConnectionDirty(connection);
       } else if ((connection != null) && (connection.isClosed() == false)) {
         connection.close();
       }
@@ -4110,6 +4111,22 @@ public class JdbcCpoAdapter implements CpoAdapter {
   }
   
   protected void clearConnectionBusy(Connection c) {
+    // do nothing for JdbcCpoAdapter
+    // overridden by JdbcTrxAdapter
+  }
+    
+  protected boolean isConnectionDirty(Connection c) {
+    // do nothing for JdbcCpoAdapter
+    // overridden by JdbcTrxAdapter
+    return false;
+  }
+
+  protected void setConnectionDirty(Connection c) {
+    // do nothing for JdbcCpoAdapter
+    // overridden by JdbcTrxAdapter
+  }
+  
+  protected void clearConnectionDirty(Connection c) {
     // do nothing for JdbcCpoAdapter
     // overridden by JdbcTrxAdapter
   }

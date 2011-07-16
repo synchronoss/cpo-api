@@ -29,6 +29,7 @@ import junit.framework.TestCase;
 
 import org.synchronoss.cpo.CpoAdapter;
 import org.synchronoss.cpo.CpoAdapterBean;
+import org.synchronoss.cpo.CpoOrderBy;
 import org.synchronoss.cpo.CpoWhere;
 
 /**
@@ -640,6 +641,36 @@ public class WhereTest extends TestCase {
       fail(method + e.getMessage());
     }
 
+  }
+  
+  public void testWhereParens() {
+    String method = "testStaticWhere:";
+    Collection<ValueObject> col = null;
+    CpoWhere cw1 = null;
+
+
+    try {
+      ValueObject valObj = new ValueObject(1);
+      
+      // Without the correct parens, this will return multiple rows for a retrieveBean which is a 
+      // failure
+      cw1 = jdbcIdo_.newWhere();
+      cw1.setLogical(CpoWhere.LOGIC_AND);
+      cw1.addWhere(jdbcIdo_.newWhere(CpoWhere.LOGIC_NONE, "id", CpoWhere.COMP_EQ, new Integer(1)));
+      cw1.addWhere(jdbcIdo_.newWhere(CpoWhere.LOGIC_OR, "id", CpoWhere.COMP_EQ, new Integer(3)));
+
+      ArrayList<CpoWhere> wheres = new ArrayList<CpoWhere>();
+      ArrayList<CpoOrderBy> orderBys = new ArrayList<CpoOrderBy>();
+      wheres.add(cw1);
+
+      valObj = jdbcIdo_.retrieveBean(null, valObj, wheres, orderBys, null);
+
+      assertNotNull("Value Object should not be null", valObj);
+      assertTrue("Id should equal 1", valObj.getId() == 1);
+    } catch (Exception e) {
+      e.printStackTrace();
+      fail(method + e.getMessage());
+    }
   }
   
 }

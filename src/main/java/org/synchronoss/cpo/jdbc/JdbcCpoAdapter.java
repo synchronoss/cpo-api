@@ -54,6 +54,7 @@ import org.synchronoss.cpo.CpoOrderBy;
 import org.synchronoss.cpo.CpoResultSet;
 import org.synchronoss.cpo.CpoTrxAdapter;
 import org.synchronoss.cpo.CpoWhere;
+import org.synchronoss.cpo.DataSourceInfo;
 import org.synchronoss.cpo.helper.ExceptionHelper;
 
 /**
@@ -186,7 +187,7 @@ public class JdbcCpoAdapter implements CpoAdapter {
    * @throws org.synchronoss.cpo.CpoException
    *          exception
    */
-  public JdbcCpoAdapter(JdbcDataSourceInfo jdsi)
+  public JdbcCpoAdapter(DataSourceInfo jdsi)
       throws CpoException {
     this(null,jdsi);
   }
@@ -199,21 +200,21 @@ public class JdbcCpoAdapter implements CpoAdapter {
    * @throws org.synchronoss.cpo.CpoException
    *          exception
    */
-  public JdbcCpoAdapter(JdbcDataSourceInfo jdsiMeta, JdbcDataSourceInfo jdsiTrx)
+  public JdbcCpoAdapter(DataSourceInfo jdsiMeta, DataSourceInfo jdsiTrx)
       throws CpoException {
     
     if (jdsiMeta!=null) {
-      setDbTablePrefix(jdsiMeta.getDbTablePrefix());
-      setMetaDataSource(getDataSource(jdsiMeta));
+      setDbTablePrefix(jdsiMeta.getTablePrefix());
+      setMetaDataSource(jdsiMeta.getDataSource());
       setMetaDataSourceName(jdsiMeta.getDataSourceName());
     } else {
-      setDbTablePrefix(jdsiTrx.getDbTablePrefix());
-      setMetaDataSource(getDataSource(jdsiTrx));
+      setDbTablePrefix(jdsiTrx.getTablePrefix());
+      setMetaDataSource(jdsiTrx.getDataSource());
       setMetaDataSourceName(jdsiTrx.getDataSourceName());
       metaEqualsWrite_ = true;
     }
     
-    setWriteDataSource(getDataSource(jdsiTrx));
+    setWriteDataSource(jdsiTrx.getDataSource());
     setReadDataSource(getWriteDataSource());
     processDatabaseMetaData();
   }
@@ -229,12 +230,12 @@ public class JdbcCpoAdapter implements CpoAdapter {
    * @throws org.synchronoss.cpo.CpoException
    *          exception
    */
-  public JdbcCpoAdapter(JdbcDataSourceInfo jdsiMeta, JdbcDataSourceInfo jdsiWrite, JdbcDataSourceInfo jdsiRead)
+  public JdbcCpoAdapter(DataSourceInfo jdsiMeta, DataSourceInfo jdsiWrite, DataSourceInfo jdsiRead)
       throws CpoException {
-    setDbTablePrefix(jdsiMeta.getDbTablePrefix());
-    setMetaDataSource(getDataSource(jdsiMeta));
-    setWriteDataSource(getDataSource(jdsiWrite));
-    setReadDataSource(getDataSource(jdsiRead));
+    setDbTablePrefix(jdsiMeta.getTablePrefix());
+    setMetaDataSource((jdsiMeta.getDataSource()));
+    setWriteDataSource(jdsiWrite.getDataSource());
+    setReadDataSource(jdsiRead.getDataSource());
     setMetaDataSourceName(jdsiMeta.getDataSourceName());
     processDatabaseMetaData();
   }
@@ -245,27 +246,6 @@ public class JdbcCpoAdapter implements CpoAdapter {
     setMetaDataSource(metaSource);
     setMetaDataSourceName(metaSourceName);
     batchUpdatesSupported_ = batchSupported;
-  }
-
-  private DataSource getDataSource(JdbcDataSourceInfo jdsi) throws CpoException {
-    DataSource ds;
-
-    try {
-      if (jdsi.getConnectionType() == JdbcDataSourceInfo.JNDI_CONNECTION) {
-        Context ctx = jdsi.getJndiCtx();
-        if (ctx == null) {
-          ctx = new InitialContext();
-        }
-        ds = (DataSource) ctx.lookup(jdsi.getJndiName());
-
-      } else {
-        ds = new JdbcDataSource(jdsi);
-      }
-    } catch (Exception e) {
-      throw new CpoException("Error instantiating DataSource", e);
-    }
-
-    return ds;
   }
 
   private void processDatabaseMetaData() throws CpoException {

@@ -21,13 +21,12 @@
         <cpo.db.url>jdbc:mysql://${cpo.db.host}:${cpo.db.port}/${cpo.db.database}?noAccessToProcedureBodies=true&amp;useCursorFetch=true&amp;defaultFetchSize=0</cpo.db.url>
         <cpo.db.userurl>jdbc:mysql://${cpo.db.host}:${cpo.db.port}/${cpo.db.database}?user=${cpo.db.user}&amp;password=${cpo.db.pswd}&amp;noAccessToProcedureBodies=true&amp;useCursorFetch=true&amp;defaultFetchSize=0</cpo.db.userurl>
         <cpo.db.driver>com.mysql.jdbc.Driver</cpo.db.driver>
-        <cpo.db.initconn>1</cpo.db.initconn>
-        <cpo.db.maxconn>2</cpo.db.maxconn>
         <cpo.db.blobssupported>true</cpo.db.blobssupported>
         <cpo.db.callssupported>true</cpo.db.callssupported>
         <cpo.db.select4update>true</cpo.db.select4update>
         <cpo.db.millisupport>false</cpo.db.millisupport>
-        
+        <cpo.db.class>com.mysql.jdbc.jdbc2.optional.MysqlConnectionPoolDataSource</cpo.db.class>        
+        <cpo.meta.class>com.mysql.jdbc.jdbc2.optional.MysqlConnectionPoolDataSource</cpo.meta.class>        
         <cpo.meta.user>cpometa</cpo.meta.user>
         <cpo.meta.pswd>cpometa</cpo.meta.pswd>
         <cpo.meta.host>localhost</cpo.meta.host>
@@ -36,8 +35,6 @@
         <cpo.meta.url>jdbc:mysql://${cpo.meta.host}:${cpo.meta.port}/${cpo.meta.database}</cpo.meta.url>
         <cpo.meta.userurl>jdbc:mysql://${cpo.meta.host}:${cpo.meta.port}/${cpo.meta.database}?user=${cpo.meta.user}&amp;password=${cpo.meta.pswd}</cpo.meta.userurl>
         <cpo.meta.driver>com.mysql.jdbc.Driver</cpo.meta.driver>
-        <cpo.meta.initconn>1</cpo.meta.initconn>
-        <cpo.meta.maxconn>1</cpo.meta.maxconn>
         <cpo.tableprefix>TEST_</cpo.tableprefix>
       </properties>
     </profile>
@@ -59,12 +56,12 @@
         <cpo.db.url>jdbc:oracle:thin:@${cpo.db.host}:${cpo.db.port}:${cpo.db.database}</cpo.db.url>
         <cpo.db.userurl>jdbc:oracle:thin:${cpo.db.user}/${cpo.db.pswd}@${cpo.db.host}:${cpo.db.port}:${cpo.db.database}</cpo.db.userurl>
         <cpo.db.driver>oracle.jdbc.driver.OracleDriver</cpo.db.driver>
-        <cpo.db.initconn>1</cpo.db.initconn>
-        <cpo.db.maxconn>2</cpo.db.maxconn>
         <cpo.db.blobssupported>true</cpo.db.blobssupported>
         <cpo.db.callssupported>true</cpo.db.callssupported>
         <cpo.db.select4update>true</cpo.db.select4update>
         <cpo.db.millisupport>true</cpo.db.millisupport>
+        <cpo.db.class>oracle.jdbc.pool.OracleConnectionPoolDataSource</cpo.db.class>        
+        <cpo.meta.class>oracle.jdbc.pool.OracleConnectionPoolDataSource</cpo.meta.class>        
         <cpo.meta.user>cpometa</cpo.meta.user>
         <cpo.meta.pswd>cpometa</cpo.meta.pswd>
         <cpo.meta.host>pabetdd01v1.sncrcorp.net</cpo.meta.host>
@@ -73,8 +70,6 @@
         <cpo.meta.url>jdbc:oracle:thin:@${cpo.meta.host}:${cpo.meta.port}:${cpo.meta.database}</cpo.meta.url>
         <cpo.meta.userurl>jdbc:oracle:thin:${cpo.meta.user}/${cpo.meta.pswd}@${cpo.meta.host}:${cpo.meta.port}:${cpo.meta.database}</cpo.meta.userurl>
         <cpo.meta.driver>oracle.jdbc.OracleDriver</cpo.meta.driver>
-        <cpo.meta.initconn>1</cpo.meta.initconn>
-        <cpo.meta.maxconn>1</cpo.meta.maxconn>
         <cpo.tableprefix>TEST_</cpo.tableprefix>
       </properties>
     </profile>
@@ -98,8 +93,6 @@
         <cpo.db.url>jdbc:hsqldb:hsql://${cpo.db.host}/${cpo.db.database}</cpo.db.url>
         <cpo.db.userurl>jdbc:hsqldb:hsql://${cpo.db.host}/${cpo.db.database};user=${cpo.db.user};password=${cpo.db.pswd}</cpo.db.userurl>
         <cpo.db.driver>org.hsqldb.jdbcDriver</cpo.db.driver>
-        <cpo.db.initconn>1</cpo.db.initconn>
-        <cpo.db.maxconn>2</cpo.db.maxconn>
         <cpo.db.blobssupported>false</cpo.db.blobssupported>
         <cpo.db.callssupported>true</cpo.db.callssupported>
         <cpo.db.select4update>false</cpo.db.select4update>
@@ -112,8 +105,6 @@
         <cpo.meta.url>jdbc:hsqldb:hsql://${cpo.meta.host}/${cpo.meta.database}</cpo.meta.url>
         <cpo.meta.userurl>jdbc:hsqldb:hsql://${cpo.meta.host}/${cpo.meta.database};user=${cpo.meta.user};password=${cpo.meta.pswd}</cpo.meta.userurl>
         <cpo.meta.driver>org.hsqldb.jdbcDriver</cpo.meta.driver>
-        <cpo.meta.initconn>1</cpo.meta.initconn>
-        <cpo.meta.maxconn>1</cpo.meta.maxconn>
         <cpo.tableprefix>TEST_</cpo.tableprefix>
       </properties>
     </profile>
@@ -137,8 +128,6 @@
         <cpo.db.url>jdbc:hsqldb:file:${cpo.db.database}</cpo.db.url>
         <cpo.db.userurl>jdbc:hsqldb:file:${cpo.db.database};user=${cpo.db.user};password=${cpo.db.pswd}</cpo.db.userurl>
         <cpo.db.driver>org.hsqldb.jdbcDriver</cpo.db.driver>
-        <cpo.db.initconn>1</cpo.db.initconn>
-        <cpo.db.maxconn>2</cpo.db.maxconn>
         <cpo.db.blobssupported>false</cpo.db.blobssupported>
         <cpo.db.callssupported>false</cpo.db.callssupported>
         <cpo.db.select4update>false</cpo.db.select4update>
@@ -151,8 +140,6 @@
         <cpo.meta.url>jdbc:hsqldb:file:${cpo.meta.database}</cpo.meta.url>
         <cpo.meta.userurl>jdbc:hsqldb:file:${cpo.meta.database};user=${cpo.meta.user};password=${cpo.meta.pswd}</cpo.meta.userurl>
         <cpo.meta.driver>org.hsqldb.jdbcDriver</cpo.meta.driver>
-        <cpo.meta.initconn>1</cpo.meta.initconn>
-        <cpo.meta.maxconn>1</cpo.meta.maxconn>
         <cpo.tableprefix>TEST_</cpo.tableprefix>
       </properties>
     </profile>
@@ -176,8 +163,6 @@
         <cpo.db.url>jdbc:postgresql://${cpo.db.host}:${cpo.db.port}/${cpo.db.database}</cpo.db.url>
         <cpo.db.userurl>jdbc:postgresql://${cpo.db.host}:${cpo.db.port}/${cpo.db.database}?user=${cpo.db.user}&amp;password=${cpo.db.pswd}&amp;stringtype=unspecified</cpo.db.userurl>
         <cpo.db.driver>org.postgresql.Driver</cpo.db.driver>
-        <cpo.db.initconn>1</cpo.db.initconn>
-        <cpo.db.maxconn>2</cpo.db.maxconn>
         <cpo.db.blobssupported>false</cpo.db.blobssupported>
         <cpo.db.callssupported>true</cpo.db.callssupported>
         <cpo.db.select4update>true</cpo.db.select4update>
@@ -190,8 +175,6 @@
         <cpo.meta.url>jdbc:postgresql://${cpo.meta.host}:${cpo.meta.port}/${cpo.meta.database}</cpo.meta.url>
         <cpo.meta.userurl>jdbc:postgresql://${cpo.meta.host}:${cpo.meta.port}/${cpo.meta.database}?user=${cpo.meta.user}&amp;password=${cpo.meta.pswd}</cpo.meta.userurl>
         <cpo.meta.driver>org.postgresql.Driver</cpo.meta.driver>
-        <cpo.meta.initconn>1</cpo.meta.initconn>
-        <cpo.meta.maxconn>1</cpo.meta.maxconn>
         <cpo.tableprefix>TEST_</cpo.tableprefix>
       </properties>
     </profile>

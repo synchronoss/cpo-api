@@ -8,6 +8,7 @@
  */
 package org.synchronoss.cpo.jdbc;
 
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.ResourceBundle;
@@ -181,8 +182,9 @@ public class JdbcCpoFactory {
   
   private static HashMap<String, String> getProperties(ResourceBundle b, String propPrefix){
     HashMap<String, String> propMap = new HashMap<String, String>();
-    
-    for (String key : b.keySet()){
+    Enumeration enumKeys = b.getKeys();
+    while (enumKeys.hasMoreElements()){
+      String key = (String)enumKeys.nextElement();
       if (key.startsWith(propPrefix)){
         String value = getResourceString(b,key);
         if (value!=null) {

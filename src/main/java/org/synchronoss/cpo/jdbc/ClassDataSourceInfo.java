@@ -9,8 +9,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.ArrayDeque;
-import java.util.Deque;
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.Map;
 import java.util.TreeMap;
 import javax.sql.ConnectionEvent;
@@ -43,10 +43,10 @@ public class ClassDataSourceInfo implements DataSourceInfo, DataSource, Connecti
   private int timeout_ = 0;
    
   // Make sure DataSource creation is thread safe.
-  private Object LOCK = new Object();
+  final private Object LOCK = new Object();
 
-  private Deque<PooledConnection> freeConnections = new ArrayDeque<PooledConnection>();
-  private Deque<PooledConnection> usedConnections = new ArrayDeque<PooledConnection>();
+  private Queue<PooledConnection> freeConnections = new LinkedList<PooledConnection>();
+  private Queue<PooledConnection> usedConnections = new LinkedList<PooledConnection>();
   
   /**
    * Creates a ClassDataSourceInfo from a Jdbc Driver
@@ -130,7 +130,7 @@ public class ClassDataSourceInfo implements DataSourceInfo, DataSource, Connecti
     for (Object key : treeMap.keySet()) {
       dsName.append((String)key);
       dsName.append("=");
-      dsName.append(properties.get(key));
+      dsName.append(properties.get((String)key));
     }
 
     return dsName.toString();
@@ -161,6 +161,7 @@ public class ClassDataSourceInfo implements DataSourceInfo, DataSource, Connecti
       return pooledConn.getConnection();
     }
 
+    @Override
     public synchronized String toString() {
         StringBuilder info = new StringBuilder();
         info.append("JdbcDataSource(");
@@ -240,7 +241,8 @@ public class ClassDataSourceInfo implements DataSourceInfo, DataSource, Connecti
   }
 
   @Override
-  public void finalize(){
+  public void finalize() throws Throwable {
+    super.finalize();
     for (PooledConnection pc : freeConnections){
       pc.removeConnectionEventListener(this);
       try{

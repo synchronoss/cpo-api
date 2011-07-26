@@ -92,7 +92,7 @@ public class JndiDataSourceInfo implements DataSourceInfo {
   }
 
   public String getTablePrefix() {
-    return getTablePrefix();
+    return this.tablePrefix;
   }
 
   public DataSource getDataSource() throws CpoException {

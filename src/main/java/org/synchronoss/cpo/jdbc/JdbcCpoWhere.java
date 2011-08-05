@@ -202,6 +202,9 @@ public class JdbcCpoWhere extends Node implements CpoWhere{
 
             if(getValue()!=null) {
                 if (getValueFunction()!=null){
+                    if (jdbcAttribute==null) {
+                      jdbcAttribute = (JdbcAttribute) jmc.getColumnMap().get(getRightAttribute());
+                    }
                     sb.append(buildFunction(getValueFunction(), getAttributeName(jdbcAttribute, getAttribute(), getRightAttribute()),"?"));
                 } else if(getComparison()==CpoWhere.COMP_IN && getValue() instanceof Collection) {
                   Collection coll = (Collection) getValue();

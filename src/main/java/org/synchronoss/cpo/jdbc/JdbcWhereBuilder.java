@@ -114,7 +114,7 @@ public class JdbcWhereBuilder<T> implements INodeVisitor {
         if(jcw.getValue() != null) {
             attribute = (JdbcAttribute) jmc.getColumnMap().get(jcw.getAttribute());
             if (attribute==null)
-                bindValues.add(new BindAttribute(jcw.getAttribute(),jcw.getValue(), jcw.getComparison()==CpoWhere.COMP_IN));
+                bindValues.add(new BindAttribute(jcw.getAttribute()==null?jcw.getRightAttribute():jcw.getAttribute(),jcw.getValue(), jcw.getComparison()==CpoWhere.COMP_IN));
             else
             	bindValues.add(new BindAttribute(attribute,jcw.getValue(), jcw.getComparison()==CpoWhere.COMP_IN));
         }

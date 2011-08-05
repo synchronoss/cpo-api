@@ -153,7 +153,7 @@ public class JdbcCpoWhere extends Node implements CpoWhere{
 
     public String toString(JdbcMetaClass<?> jmc)  throws CpoException {
         StringBuilder sb = new StringBuilder();
-        JdbcAttribute attribute = null;
+        JdbcAttribute jdbcAttribute = null;
 
 
         if(getLogical()!=CpoWhere.LOGIC_NONE){
@@ -173,18 +173,18 @@ public class JdbcCpoWhere extends Node implements CpoWhere{
               sb.append(" ");
             String fullyQualifiedColumn=null;
 
-            attribute = (JdbcAttribute) jmc.getColumnMap().get(getAttribute());
-            if(attribute==null) {
+            jdbcAttribute = (JdbcAttribute) jmc.getColumnMap().get(getAttribute());
+            if(jdbcAttribute==null) {
                 // This is not an attribute on the cpo bean passed to the retrieveObjects method.
                 // treat it as the column name
                 fullyQualifiedColumn=getAttribute();
             } else {
-              fullyQualifiedColumn=buildColumnName(attribute);
+              fullyQualifiedColumn=buildColumnName(jdbcAttribute);
             }
             
             if (getAttributeFunction()!=null){
-            	if (attribute!=null)
-            		sb.append(buildFunction(getAttributeFunction(),attribute.getName(),fullyQualifiedColumn.toString()));
+            	if (jdbcAttribute!=null)
+            		sb.append(buildFunction(getAttributeFunction(),jdbcAttribute.getName(),fullyQualifiedColumn.toString()));
             	else
             		sb.append(getAttributeFunction());
             } else {
@@ -202,7 +202,7 @@ public class JdbcCpoWhere extends Node implements CpoWhere{
 
             if(getValue()!=null) {
                 if (getValueFunction()!=null){
-                    sb.append(buildFunction(getValueFunction(), attribute==null?getAttribute():attribute.getName(),"?"));
+                    sb.append(buildFunction(getValueFunction(), getAttributeName(jdbcAttribute, getAttribute(), getRightAttribute()),"?"));
                 } else if(getComparison()==CpoWhere.COMP_IN && getValue() instanceof Collection) {
                   Collection coll = (Collection) getValue();
                   sb.append("(");
@@ -217,16 +217,16 @@ public class JdbcCpoWhere extends Node implements CpoWhere{
                     sb.append("?"); // add the parameter, we will bind it later.
                 }
             } else if(getRightAttribute()!=null) {
-                attribute = (JdbcAttribute) jmc.getColumnMap().get(getRightAttribute());
+                jdbcAttribute = (JdbcAttribute) jmc.getColumnMap().get(getRightAttribute());
                 String fullyQualifiedColumn = null;
-                if (attribute==null){
+                if (jdbcAttribute==null){
                 	fullyQualifiedColumn=getRightAttribute();
                 } else {
-                  fullyQualifiedColumn=buildColumnName(attribute);
+                  fullyQualifiedColumn=buildColumnName(jdbcAttribute);
                 }
 
                 if (getRightAttributeFunction()!=null) {
-                    sb.append(buildFunction(getRightAttributeFunction(),attribute==null?getAttribute():attribute.getName(),fullyQualifiedColumn));
+                    sb.append(buildFunction(getRightAttributeFunction(),getAttributeName(jdbcAttribute, getAttribute(), getRightAttribute()), fullyQualifiedColumn));
                 } else {
                     sb.append(fullyQualifiedColumn);
                 }
@@ -237,6 +237,24 @@ public class JdbcCpoWhere extends Node implements CpoWhere{
         return sb.toString();
     }
 
+    private String getAttributeName(JdbcAttribute jdbcAttribute, String leftAttribute, String rightAttribute) {
+      String attrName = null;
+      
+      if (jdbcAttribute != null) {
+        attrName = jdbcAttribute.getName();
+      }
+      
+      if (attrName==null && leftAttribute!=null){
+        attrName = leftAttribute;
+      }
+      
+      if (attrName==null && rightAttribute!=null){
+        attrName = rightAttribute;
+      }
+      
+      return attrName;
+    }
+    
     public void addWhere(CpoWhere cw) throws CpoException{
         try{
             this.addChild((Node)cw);

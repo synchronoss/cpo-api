@@ -2830,10 +2830,8 @@ public class JdbcCpoAdapter implements CpoAdapter {
    */
   protected void closeConnection(Connection connection) {
     try {
-      if (isStaticConnection(connection)){
-        clearConnectionBusy(connection);
-        clearConnectionDirty(connection);
-      } else if ((connection != null) && (connection.isClosed() == false)) {
+      clearConnectionBusy(connection);
+      if (connection != null && !isStaticConnection(connection) && !connection.isClosed()) {
         connection.close();
       }
     } catch (SQLException e) {

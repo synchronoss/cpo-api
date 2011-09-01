@@ -57,12 +57,10 @@ public class JdbcCpoTrxAdapter extends JdbcCpoAdapter implements CpoTrxAdapter {
     }
 
     public void commit() throws CpoException {
-    	Connection writeConnection = getStaticConnection();
-    	if (writeConnection!=null){
+    	if (writeConnection_!=null){
 	    	try {
-	    		writeConnection.commit();
-	    	  clearConnectionBusy(writeConnection);
-	    	  clearConnectionDirty(writeConnection);
+	    		writeConnection_.commit();
+	    	  clearConnectionDirty(writeConnection_);
 	    	} catch (SQLException se) {
 	    		throw new CpoException (se.getMessage());
 	    	}
@@ -72,12 +70,10 @@ public class JdbcCpoTrxAdapter extends JdbcCpoAdapter implements CpoTrxAdapter {
     }
     
     public void rollback() throws CpoException {
-    	Connection writeConnection = getStaticConnection();
-    	if (writeConnection!=null){
+    	if (writeConnection_!=null){
 	    	try {
-	    		writeConnection.rollback();
-          clearConnectionBusy(writeConnection);
-	    	  clearConnectionDirty(writeConnection);
+	    		writeConnection_.rollback();
+	    	  clearConnectionDirty(writeConnection_);
 	    	} catch (Exception e) {
 	    		throw new CpoException (e.getMessage());
         }
@@ -87,11 +83,10 @@ public class JdbcCpoTrxAdapter extends JdbcCpoAdapter implements CpoTrxAdapter {
     }
     
     public boolean isClosed()  throws CpoException {
-    	Connection writeConnection = getStaticConnection();
     	boolean closed = false;
     	
     	try{
-    		closed = (writeConnection == null || writeConnection.isClosed());
+    		closed = (writeConnection_ == null || writeConnection_.isClosed());
     	} catch (Exception e) {
     		throw new CpoException (e.getMessage());
     	}
@@ -99,21 +94,19 @@ public class JdbcCpoTrxAdapter extends JdbcCpoAdapter implements CpoTrxAdapter {
     }
     
     public void close() throws CpoException {
-    	Connection writeConnection = getStaticConnection();
-    	if (writeConnection != null) {
+    	if (writeConnection_ != null) {
     	  try {
       		try {
             // only rollback if the connection is dirty
-            if (isConnectionDirty(writeConnection))
-              writeConnection.rollback();
+            if (isConnectionDirty(writeConnection_))
+              writeConnection_.rollback();
       		} catch (Exception e) {}
       		try {
-      			writeConnection.close();
+      			writeConnection_.close();
       		} catch (Exception e) {}
     	  } finally {
           setStaticConnection(null);
-          clearConnectionBusy(writeConnection);
-          clearConnectionDirty(writeConnection);
+          clearConnectionDirty(writeConnection_);
     	  }
     	}
     }
@@ -122,18 +115,11 @@ public class JdbcCpoTrxAdapter extends JdbcCpoAdapter implements CpoTrxAdapter {
      * DOCUMENT ME!
      */
     protected void finalize() {
-    	Connection writeConnection = null;
         try {
         	super.finalize();
-        	writeConnection = getStaticConnection();
         } catch (Throwable e) {}
         try {
-        	if (writeConnection!=null && !writeConnection.isClosed()) {
-        		this.rollback();
-        	}
-        } catch (Exception e) {}
-        try {
-        	if (writeConnection != null && !writeConnection.isClosed()) {
+        	if (writeConnection_ != null && !writeConnection_.isClosed()) {
         		this.close();
         	}
         } catch (Exception e) {}

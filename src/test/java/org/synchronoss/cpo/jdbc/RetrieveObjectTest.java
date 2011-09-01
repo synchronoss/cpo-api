@@ -105,6 +105,30 @@ public class RetrieveObjectTest extends TestCase {
         }
     }
     
+    public void testIsClosed() {
+        String method = "testIsClosed:";
+        Collection<ValueObject> col = null;
+        CpoTrxAdapter trx = null;
+        
+        try{
+          trx = jdbcIdo_.getCpoTrxAdapter();
+          trx.isClosed();
+            ValueObject valObj = new ValueObject();
+            col = trx.retrieveBeans(null,valObj);
+            assertTrue("Col size is "+col.size(), col.size()==al.size());
+            trx.commit();
+        } catch (Exception e) {
+            e.printStackTrace();
+            fail(method+e.getMessage());
+        } finally {
+          try{
+            trx.close();
+          }catch(Exception e){
+            
+          }
+        }
+    }
+    
     public void testRetrieveObjectsNoWaitSize2() {
       String method = "testRetrieveObjectsNoWaitSize2:";
       CpoResultSet<ValueObject> crs = null;

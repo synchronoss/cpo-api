@@ -4092,21 +4092,5 @@ public class JdbcCpoAdapter implements CpoAdapter {
     // do nothing for JdbcCpoAdapter
     // overridden by JdbcTrxAdapter
   }
-    
-  protected boolean isConnectionDirty(Connection c) {
-    // do nothing for JdbcCpoAdapter
-    // overridden by JdbcTrxAdapter
-    return false;
-  }
 
-  protected void setConnectionDirty(Connection c) {
-    // do nothing for JdbcCpoAdapter
-    // overridden by JdbcTrxAdapter
-  }
-  
-  protected void clearConnectionDirty(Connection c) {
-    // do nothing for JdbcCpoAdapter
-    // overridden by JdbcTrxAdapter
-  }
-    
 }

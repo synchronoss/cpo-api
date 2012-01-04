@@ -21,14 +21,11 @@
 
 package org.synchronoss.cpo.jdbc;
 
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.util.HashMap;
+import org.synchronoss.cpo.*;
 
 import javax.sql.DataSource;
-
-import org.synchronoss.cpo.CpoException;
-import org.synchronoss.cpo.CpoTrxAdapter;
+import java.sql.*;
+import java.util.HashMap;
 
 public class JdbcCpoTrxAdapter extends JdbcCpoAdapter implements CpoTrxAdapter {
     /** Version Id for this class. */
@@ -42,11 +39,7 @@ public class JdbcCpoTrxAdapter extends JdbcCpoAdapter implements CpoTrxAdapter {
 
     // map to keep track of busy connections
     private static HashMap<Connection, Connection> busyMap_ = new HashMap<Connection,Connection>();
-    
-    // map to keep track of dirty connections
-    private static HashMap<Connection, Connection> dirtyMap_ = new HashMap<Connection,Connection>();
-    
-    
+
     @SuppressWarnings("unused")
     private JdbcCpoTrxAdapter(){}
     
@@ -60,7 +53,6 @@ public class JdbcCpoTrxAdapter extends JdbcCpoAdapter implements CpoTrxAdapter {
     	if (writeConnection_!=null){
 	    	try {
 	    		writeConnection_.commit();
-	    	  clearConnectionDirty(writeConnection_);
 	    	} catch (SQLException se) {
 	    		throw new CpoException (se.getMessage());
 	    	}
@@ -73,7 +65,6 @@ public class JdbcCpoTrxAdapter extends JdbcCpoAdapter implements CpoTrxAdapter {
     	if (writeConnection_!=null){
 	    	try {
 	    		writeConnection_.rollback();
-	    	  clearConnectionDirty(writeConnection_);
 	    	} catch (Exception e) {
 	    		throw new CpoException (e.getMessage());
         }
@@ -97,16 +88,13 @@ public class JdbcCpoTrxAdapter extends JdbcCpoAdapter implements CpoTrxAdapter {
     	if (writeConnection_ != null) {
     	  try {
       		try {
-            // only rollback if the connection is dirty
-            if (isConnectionDirty(writeConnection_))
-              writeConnection_.rollback();
+            writeConnection_.rollback();
       		} catch (Exception e) {}
       		try {
       			writeConnection_.close();
       		} catch (Exception e) {}
     	  } finally {
           setStaticConnection(null);
-          clearConnectionDirty(writeConnection_);
     	  }
     	}
     }
@@ -132,7 +120,6 @@ public class JdbcCpoTrxAdapter extends JdbcCpoAdapter implements CpoTrxAdapter {
           throw new CpoException("Error Connection Busy");
         } else {
           setConnectionBusy(writeConnection_);
-          setConnectionDirty(writeConnection_);
         }
       }
       return writeConnection_;
@@ -169,27 +156,4 @@ public class JdbcCpoTrxAdapter extends JdbcCpoAdapter implements CpoTrxAdapter {
         busyMap_.remove(c);
       }
     }
-    
-    @Override
-    protected boolean isConnectionDirty(Connection c) {
-      synchronized(dirtyMap_){
-        Connection test = dirtyMap_.get(c);
-        return test!=null;
-      }
-    }
-
-    @Override
-    protected void setConnectionDirty(Connection c) {
-      synchronized(dirtyMap_){
-        dirtyMap_.put(c,c);
-      }
-    }
-    
-    @Override
-    protected void clearConnectionDirty(Connection c) {
-      synchronized(dirtyMap_){
-        dirtyMap_.remove(c);
-      }
-    }
-    
 }

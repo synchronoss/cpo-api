@@ -88,7 +88,7 @@
         <cpo.db.user>cpo</cpo.db.user>
         <cpo.db.pswd>cpo</cpo.db.pswd>
         <cpo.db.host>localhost</cpo.db.host>
-        <cpo.db.port></cpo.db.port>
+        <cpo.db.port/>
         <cpo.db.database>cpo</cpo.db.database>
         <cpo.db.url>jdbc:hsqldb:hsql://${cpo.db.host}/${cpo.db.database}</cpo.db.url>
         <cpo.db.userurl>jdbc:hsqldb:hsql://${cpo.db.host}/${cpo.db.database};user=${cpo.db.user};password=${cpo.db.pswd}</cpo.db.userurl>
@@ -97,6 +97,8 @@
         <cpo.db.callssupported>true</cpo.db.callssupported>
         <cpo.db.select4update>false</cpo.db.select4update>
         <cpo.db.millisupport>true</cpo.db.millisupport>
+        <cpo.db.class>org.hsqldb.jdbc.JDBCDataSource</cpo.db.class>
+        <cpo.meta.class>org.hsqldb.jdbc.JDBCDataSource</cpo.meta.class>
         <cpo.meta.user>cpometa</cpo.meta.user>
         <cpo.meta.pswd>cpometa</cpo.meta.pswd>
         <cpo.meta.host>localhost</cpo.meta.host>
@@ -121,9 +123,9 @@
         <release.arguments>-Dcpo.db=${cpo.db}</release.arguments>
         <cpo.test.sqldir>src/test/sql/hsqldb</cpo.test.sqldir>
         <cpo.db.user>sa</cpo.db.user>
-        <cpo.db.pswd></cpo.db.pswd>
+        <cpo.db.pswd/>
         <cpo.db.host>localhost</cpo.db.host>
-        <cpo.db.port></cpo.db.port>
+        <cpo.db.port/>
         <cpo.db.database>src/test/sql/hsqldb/db/cpo</cpo.db.database>
         <cpo.db.url>jdbc:hsqldb:file:${cpo.db.database}</cpo.db.url>
         <cpo.db.userurl>jdbc:hsqldb:file:${cpo.db.database};user=${cpo.db.user};password=${cpo.db.pswd}</cpo.db.userurl>
@@ -132,6 +134,8 @@
         <cpo.db.callssupported>false</cpo.db.callssupported>
         <cpo.db.select4update>false</cpo.db.select4update>
         <cpo.db.millisupport>true</cpo.db.millisupport>
+        <cpo.db.class>org.hsqldb.jdbc.JDBCDataSource</cpo.db.class>
+        <cpo.meta.class>org.hsqldb.jdbc.JDBCDataSource</cpo.meta.class>
         <cpo.meta.user>sa</cpo.meta.user>
         <cpo.meta.pswd></cpo.meta.pswd>
         <cpo.meta.host>localhost</cpo.meta.host>

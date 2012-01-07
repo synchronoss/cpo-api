@@ -159,6 +159,7 @@ delete from TEST_cpo_query_text where text_id = 'd2abbeee-0a0e-0045-00ba-6c13977
 delete from TEST_cpo_query_text where text_id = 'd329696e-0a0e-0045-00ba-6c13279e1c3e';
 delete from TEST_cpo_query_text where text_id = 'd329975c-0a0e-0045-00ba-6c1397d6e8c9';
 delete from TEST_cpo_query_text where text_id = '6ace397e-0a0e-0043-00e4-d0cd3e857349';
+insert into TEST_cpo_query_text (text_id, sql_text, description, userid) values ('020da868-c0a8-0107-6202-9d7533c40500','select * from value_object where attr_varchar=? __CPO_WHERE__ and attr_varchar=?','ValueObject - InterleavedWhere','dberry');
 insert into TEST_cpo_query_text (text_id, sql_text, description) values ('046ad592-0a0e-0090-0049-57c7c124b567','select count(0) from value_object where id = ?','ValueObject - Exists');
 update TEST_cpo_query_text set sql_text = 'select count(0) from value_object where id = ?', description = 'ValueObject - Exists' where text_id = '046ad592-0a0e-0090-0049-57c7c124b567';
 insert into TEST_cpo_query_text (text_id, sql_text, description) values ('048f12ab-0a0e-0090-0049-57c769b25986','select * from value_object where id = ?','ValueObject - Retrieve');
@@ -181,8 +182,8 @@ insert into TEST_cpo_query_text (text_id, sql_text, description) values ('624f55
 update TEST_cpo_query_text set sql_text = 'select * from value_object', description = 'TestOrderByRetrieve' where text_id = '624f55c4-0a0e-0045-0036-50ed07db4da2';
 insert into TEST_cpo_query_text (text_id, sql_text, description) values ('62515f1c-0a0e-0045-0036-50ed3b568fed','delete from value_object where id = ?','TestOrderByDelete');
 update TEST_cpo_query_text set sql_text = 'delete from value_object where id = ?', description = 'TestOrderByDelete' where text_id = '62515f1c-0a0e-0045-0036-50ed3b568fed';
-insert into TEST_cpo_query_text (text_id, sql_text, description) values ('6ace397e-0a0e-0043-00e4-d0cd3e857349','{?= call pow(?, ?)}','ValueObject - Function test');
-update TEST_cpo_query_text set sql_text = '{?= call pow(?, ?)}', description = 'ValueObject - Function test' where text_id = '6ace397e-0a0e-0043-00e4-d0cd3e857349';
+insert into TEST_cpo_query_text (text_id, sql_text, description) values ('6ace397e-0a0e-0043-00e4-d0cd3e857349','{?= call power(?, ?)}','ValueObject - Function test');
+update TEST_cpo_query_text set sql_text = '{?= call power(?, ?)}', description = 'ValueObject - Function test' where text_id = '6ace397e-0a0e-0043-00e4-d0cd3e857349';
 insert into TEST_cpo_query_text (text_id, sql_text, description) values ('8f670e40-0a0e-1e77-0050-152fc3c8c9f2','select * from value_object __CPO_WHERE__ order by id','Value Object - TestWhereRetrieve');
 update TEST_cpo_query_text set sql_text = 'select * from value_object __CPO_WHERE__ order by id', description = 'Value Object - TestWhereRetrieve' where text_id = '8f670e40-0a0e-1e77-0050-152fc3c8c9f2';
 insert into TEST_cpo_query_text (text_id, sql_text, description) values ('8f69023c-0a0e-1e77-0050-152f65428da8','select * from value_object for update','ValueObject - SelectForUpdateExistAll');
@@ -199,8 +200,8 @@ insert into TEST_cpo_query_text (text_id, sql_text, description) values ('d32969
 update TEST_cpo_query_text set sql_text = 'insert into value_object (id, attr_varchar) values (2,''Test'')', description = 'TestSingleRollback1' where text_id = 'd329696e-0a0e-0045-00ba-6c13279e1c3e';
 insert into TEST_cpo_query_text (text_id, sql_text, description) values ('d329975c-0a0e-0045-00ba-6c1397d6e8c9','insert into value_object (id, attr_varchar) values (1,''Test'')','TestSingleRollback2');
 update TEST_cpo_query_text set sql_text = 'insert into value_object (id, attr_varchar) values (1,''Test'')', description = 'TestSingleRollback2' where text_id = 'd329975c-0a0e-0045-00ba-6c1397d6e8c9';
-insert into TEST_cpo_query_text (text_id, sql_text, description) values ('6ace397e-0a0e-0043-00e4-d0cd3e857349','{?= call pow(?, ?)}','ValueObject - Function test');
-update TEST_cpo_query_text set sql_text = '{?= call pow(?, ?)}', description = 'ValueObject - Function test' where text_id = '6ace397e-0a0e-0043-00e4-d0cd3e857349';
+insert into TEST_cpo_query_text (text_id, sql_text, description) values ('6ace397e-0a0e-0043-00e4-d0cd3e857349','{?= call power(?, ?)}','ValueObject - Function test');
+update TEST_cpo_query_text set sql_text = '{?= call power(?, ?)}', description = 'ValueObject - Function test' where text_id = '6ace397e-0a0e-0043-00e4-d0cd3e857349';
 insert into TEST_cpo_class (class_id, name) values ('b079d2fa-0a07-2346-00fb-cb702782dbc4','org.synchronoss.cpo.jdbc.ValueObject');
 insert into TEST_cpo_attribute_map (attribute_id, class_id, column_name, attribute, column_type, db_column, db_table,transform_class) values ('04a0cb29-0a0e-0090-0049-57c743ffb250','b079d2fa-0a07-2346-00fb-cb702782dbc4','ATTR_BOOL','attrBit','BOOLEAN',null,null,null);
 insert into TEST_cpo_attribute_map (attribute_id, class_id, column_name, attribute, column_type, db_column, db_table,transform_class) values ('b079d354-0a07-2346-00fb-cb7051c25736','b079d2fa-0a07-2346-00fb-cb702782dbc4','ATTR_CHAR','attrChar','CHAR','attr_char','value_object',null);
@@ -287,3 +288,7 @@ insert into TEST_cpo_query (query_id, group_id, text_id, seq_no) values ('f39908
 insert into TEST_cpo_query_parameter (attribute_id, query_id, seq_no,param_type) values ('b079d386-0a07-2346-00fb-cb701e351cd9','f3990886-0a07-2346-010d-4f27f3a16567','1','OUT');
 insert into TEST_cpo_query_parameter (attribute_id, query_id, seq_no,param_type) values ('b079d386-0a07-2346-00fb-cb701e351cd9','f3990886-0a07-2346-010d-4f27f3a16567','2','IN');
 insert into TEST_cpo_query_parameter (attribute_id, query_id, seq_no,param_type) values ('b079d386-0a07-2346-00fb-cb701e351cd9','f3990886-0a07-2346-010d-4f27f3a16567','3','IN');
+insert into TEST_cpo_query_group (group_id, class_id, group_type, name, userid) values ('020df627-c0a8-0107-6202-9d7545ac4de2','b079d2fa-0a07-2346-00fb-cb702782dbc4','LIST','InterleavedWhere','dberry');
+insert into TEST_cpo_query (query_id, group_id, text_id, seq_no, userid) values ('020df629-c0a8-0107-6202-9d75a1cd87c0','020df627-c0a8-0107-6202-9d7545ac4de2','020da868-c0a8-0107-6202-9d7533c40500','0','dberry');
+insert into TEST_cpo_query_parameter (attribute_id, query_id, seq_no, param_type, userid) values ('b079d37c-0a07-2346-00fb-cb70993afd00','020df629-c0a8-0107-6202-9d75a1cd87c0','1','IN','dberry');
+insert into TEST_cpo_query_parameter (attribute_id, query_id, seq_no, param_type, userid) values ('b079d37c-0a07-2346-00fb-cb70993afd00','020df629-c0a8-0107-6202-9d75a1cd87c0','2','IN','dberry');

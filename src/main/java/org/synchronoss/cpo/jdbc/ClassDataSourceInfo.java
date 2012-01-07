@@ -277,7 +277,7 @@ public class ClassDataSourceInfo implements DataSourceInfo, DataSource, Connecti
       Method setter = obj.getClass().getMethod(methodName, String.class);
       setter.invoke(obj, value);
     } catch (NoSuchMethodException nsme) {
-      logger.error("Could not find setter Method:"+methodName+" for property:"+key, nsme);
+      logger.error("=========>>> Could not find setter Method:"+methodName+" for property:"+key+" please check the java docs for "+obj.getClass().getName());
     } catch (InvocationTargetException ite){
       logger.error("Error Invoking setter Method:"+methodName, ite);
     } catch (IllegalAccessException iae){

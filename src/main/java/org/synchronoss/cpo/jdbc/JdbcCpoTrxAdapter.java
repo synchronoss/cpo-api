@@ -87,9 +87,9 @@ public class JdbcCpoTrxAdapter extends JdbcCpoAdapter implements CpoTrxAdapter {
     public void close() throws CpoException {
     	if (writeConnection_ != null) {
     	  try {
-      		try {
-            writeConnection_.rollback();
-      		} catch (Exception e) {}
+//      		try {
+//            writeConnection_.rollback();
+//      		} catch (Exception e) {}
       		try {
       			writeConnection_.close();
       		} catch (Exception e) {}

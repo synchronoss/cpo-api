@@ -41,6 +41,3 @@ ID                      int primary key
 ,ATTR_LONGTEXT           longvarchar     NULL
 );
 
- GRANT ALL ON CLASS "java.lang.Math" TO PUBLIC;
- CREATE ALIAS pow FOR "java.lang.Math.pow";
-

@@ -27,7 +27,7 @@
     <currentVersion>${project.version}</currentVersion>
     <oracleVersion>10.2.0.5</oracleVersion>
     <mysqlVersion>5.1.16</mysqlVersion>
-    <hsqldbVersion>1.8.0.10</hsqldbVersion>
+    <hsqldbVersion>2.2.6</hsqldbVersion>
     <postgresVersion>9.0-801.jdbc4</postgresVersion>
   </properties>
   
@@ -159,7 +159,7 @@
             <version>${mysqlVersion}</version>
           </dependency>
           <dependency>
-            <groupId>hsqldb</groupId>
+            <groupId>org.hsqldb</groupId>
             <artifactId>hsqldb</artifactId>
             <version>${hsqldbVersion}</version>
           </dependency>
@@ -317,7 +317,7 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>hsqldb</groupId>
+      <groupId>org.hsqldb</groupId>
       <artifactId>hsqldb</artifactId>
       <version>${hsqldbVersion}</version>
       <scope>test</scope>

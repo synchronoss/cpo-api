@@ -107,8 +107,8 @@ public class InheritanceTest extends TestCase {
         
         try{
             ChildValueObject vo = jdbcIdo_.retrieveObject(null,valObj,valObj,null,null);
-            assertTrue("Ids do not match", vo.getId()==valObj.getId());
-            assertTrue("Integers do not match", vo.getAttrInteger()==valObj.getAttrInteger());
+            assertEquals("Ids do not match", vo.getId(),valObj.getId());
+            assertEquals("Integers do not match", vo.getAttrInteger(),valObj.getAttrInteger());
             assertEquals("Strings do not match", vo.getAttrVarChar(), valObj.getAttrVarChar());
             assertEquals("Timestamps do not match", vo.getAttrDatetime(), valObj.getAttrDatetime());
             assertTrue("boolean not stored correctly", vo.getAttrBit());

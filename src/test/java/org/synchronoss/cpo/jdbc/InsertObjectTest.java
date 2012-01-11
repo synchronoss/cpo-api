@@ -52,6 +52,8 @@ public class InsertObjectTest extends TestCase {
 
     private CpoAdapter jdbcIdo_ = null;
     
+    private CpoAdapter jdbcRead_ = null;
+    
     private boolean hasMilliSupport = true;
     
     public InsertObjectTest(String name) {
@@ -75,6 +77,12 @@ public class InsertObjectTest extends TestCase {
         try{
           jdbcIdo_ = new CpoAdapterBean(JdbcCpoFactory.getCpoAdapter());
             assertNotNull(method+"IdoAdapter is null",jdbcIdo_);
+        } catch (Exception e) {
+            fail(method+e.getMessage());
+        }
+        try{
+          jdbcRead_ = new CpoAdapterBean(JdbcCpoFactory.getCpoAdapter());
+            assertNotNull(method+"IdoAdapter is null",jdbcRead_);
         } catch (Exception e) {
             fail(method+e.getMessage());
         }
@@ -105,7 +113,7 @@ public class InsertObjectTest extends TestCase {
         }
         
         try{
-            ValueObject vo = jdbcIdo_.retrieveObject(null,valObj,valObj,null,null);
+            ValueObject vo = jdbcRead_.retrieveObject(null,valObj,valObj,null,null);
             assertTrue("Ids do not match", vo.getId()==valObj.getId());
             assertTrue("Integers do not match", vo.getAttrInteger()==valObj.getAttrInteger());
             assertEquals("Strings do not match", vo.getAttrVarChar(), valObj.getAttrVarChar());
@@ -116,7 +124,7 @@ public class InsertObjectTest extends TestCase {
            e.printStackTrace();
            fail(method+e.getMessage());
        }
-        
+       
         
     }
 
@@ -139,7 +147,7 @@ public class InsertObjectTest extends TestCase {
         }
 
         try{
-            Collection<ValueObject> col = jdbcIdo_.retrieveBeans(null,vo);
+            Collection<ValueObject> col = jdbcRead_.retrieveBeans(null,vo);
 
             assertTrue(method+"Invalid number of objects returned", col.size()==al.size());
         } catch (Exception e) {
@@ -160,6 +168,7 @@ public class InsertObjectTest extends TestCase {
             fail(method+e.getMessage());
         }
        jdbcIdo_=null;
+       jdbcRead_=null;
     }
 
 }

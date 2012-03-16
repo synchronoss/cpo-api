@@ -173,7 +173,7 @@ public class BlobTrxTest extends TestCase {
                 fail(ie.getMessage());
             }
         } else {
-            fail(dbDriver_+" does not support BLOBs");
+        	logger.error(dbDriver_+" does not support BLOBs");
         }
         
     }
@@ -245,7 +245,7 @@ public class BlobTrxTest extends TestCase {
                 fail(ie.getMessage());
             }
         } else {
-            fail(dbDriver_+" does not support BLOBs");
+        	logger.error(dbDriver_+" does not support BLOBs");
         }
         
     }
@@ -360,7 +360,7 @@ public class BlobTrxTest extends TestCase {
                 fail(ie.getMessage());
             }
         } else {
-            fail(dbDriver_+" does not support BLOBs");
+        	logger.error(dbDriver_+" does not support BLOBs");
         }
         
     }
@@ -421,7 +421,7 @@ public class BlobTrxTest extends TestCase {
                 fail(ie.getMessage());
             }
         } else {
-            fail(dbDriver_+" does not support BLOBs");
+        	logger.error(dbDriver_+" does not support BLOBs");
         }
         
     }

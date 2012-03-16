@@ -36,7 +36,7 @@ public class ClassDataSourceInfo implements DataSourceInfo, DataSource, Connecti
   private ConnectionPoolDataSource poolDataSource = null;
   
   private String dataSourceName = null;
-  private String    tablePrefix = null;
+  private String    tablePrefix = "";
   private Map<String, String> properties = null;
 
   private PrintWriter printWriter_ = null;
@@ -100,14 +100,17 @@ public class ClassDataSourceInfo implements DataSourceInfo, DataSource, Connecti
     }
   }
 
+  @Override
   public String getDataSourceName() {
     return dataSourceName;
   }
 
+  @Override
   public String getTablePrefix() {
     return tablePrefix;
   }
 
+  @Override
   public DataSource getDataSource() throws CpoException {
     return this.dataSource;
   }
@@ -136,18 +139,25 @@ public class ClassDataSourceInfo implements DataSourceInfo, DataSource, Connecti
     return dsName.toString();
   }
   
+  @Override
     public Connection getConnection(String userName, String password) 
     throws SQLException {
             throw new SQLException("Not Implemented");
     }
     
 
-    public Connection getConnection()
-    throws SQLException {
-        return makeNewConnection();
+  @Override
+    public Connection getConnection() throws SQLException {
+      Connection conn = null;
+      if (poolDataSource!=null)
+        conn = getPooledConnection();
+      else if (dataSource!=null)
+        conn = dataSource.getConnection();
+      
+      return conn;
     }
 
-    private Connection makeNewConnection() throws SQLException {
+    private Connection getPooledConnection() throws SQLException {
       PooledConnection pooledConn = null;
       synchronized(LOCK){
         if (!freeConnections.isEmpty()){
@@ -170,31 +180,37 @@ public class ClassDataSourceInfo implements DataSourceInfo, DataSource, Connecti
         return(info.toString());
     }
 
+  @Override
     public PrintWriter getLogWriter()
     throws SQLException{
         return printWriter_;
     }
 
+  @Override
     public void setLogWriter(PrintWriter out)
     throws SQLException{
         printWriter_ = out;
 
     }
 
+  @Override
     public void setLoginTimeout(int seconds)
     throws SQLException {
         timeout_ = seconds;
     }
 
+  @Override
     public int getLoginTimeout()
     throws SQLException {
         return timeout_;
     }
 
+  @Override
   public <T> T unwrap(Class<T> iface) throws SQLException {
       throw new UnsupportedOperationException("Not supported yet.");
   }
 
+  @Override
   public boolean isWrapperFor(Class<?> iface) throws SQLException {
     return false;
   }
@@ -221,6 +237,7 @@ public class ClassDataSourceInfo implements DataSourceInfo, DataSource, Connecti
     }
   }
 
+  @Override
   public void connectionClosed(ConnectionEvent ce) {
     synchronized (LOCK){
       PooledConnection pc = (PooledConnection)ce.getSource();
@@ -230,6 +247,7 @@ public class ClassDataSourceInfo implements DataSourceInfo, DataSource, Connecti
     }
   }
 
+  @Override
   public void connectionErrorOccurred(ConnectionEvent ce) {
     synchronized (LOCK){
       PooledConnection pc = (PooledConnection)ce.getSource();

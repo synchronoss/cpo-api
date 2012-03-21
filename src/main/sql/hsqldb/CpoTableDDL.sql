@@ -28,7 +28,7 @@ CREATE TABLE CPO_QUERY_PARAMETER (
        seq_no               NUMERIC(9) NOT NULL,
        param_type           VARCHAR(4) DEFAULT 'IN' NULL,
        userid               varchar(50), 
-       createdate           date
+       createdate           TIMESTAMP
    );
 
 ----------------------------------------------
@@ -40,7 +40,7 @@ CREATE TABLE CPO_QUERY_PARAMETER_REV (
        seq_no               NUMERIC(9) NOT NULL,
        param_type           VARCHAR(4) DEFAULT 'IN' NULL,
        userid               varchar(50), 
-       createdate           date,
+       createdate           TIMESTAMP,
        revision             NUMERIC
    );
 
@@ -57,7 +57,7 @@ CREATE TABLE CPO_ATTRIBUTE_MAP (
        db_table             VARCHAR(40) NULL,
        db_column            VARCHAR(40) NULL,
        userid               varchar(50), 
-       createdate           date
+       createdate           TIMESTAMP
 );
 
 
@@ -74,7 +74,7 @@ CREATE TABLE CPO_ATTRIBUTE_MAP_REV (
        db_table             VARCHAR(40) NULL,
        db_column            VARCHAR(40) NULL,
        userid               varchar(50), 
-       createdate           date,
+       createdate           TIMESTAMP,
        revision             NUMERIC
 );
 
@@ -88,7 +88,7 @@ CREATE TABLE CPO_QUERY (
        seq_no               NUMERIC(9) NOT NULL,
        stored_proc          VARCHAR(1) DEFAULT 'N' NULL,
        userid               varchar(50), 
-       createdate           date
+       createdate           TIMESTAMP
 );
 
 ----------------------------------------------
@@ -101,7 +101,7 @@ CREATE TABLE CPO_QUERY_REV (
        seq_no               NUMERIC(9) NOT NULL,
        stored_proc          VARCHAR(1) DEFAULT 'N' NULL,
        userid               varchar(50), 
-       createdate           date,
+       createdate           TIMESTAMP,
        revision             NUMERIC
 );
 
@@ -114,7 +114,7 @@ CREATE TABLE CPO_QUERY_GROUP (
        group_type           VARCHAR(10) NOT NULL,
        name                 VARCHAR(50) NULL,
        userid               varchar(50), 
-       createdate           date
+       createdate           TIMESTAMP
 );
 
 ----------------------------------------------
@@ -126,7 +126,7 @@ CREATE TABLE CPO_QUERY_GROUP_REV (
        group_type           VARCHAR(10) NOT NULL,
        name                 VARCHAR(50) NULL,
        userid               varchar(50), 
-       createdate           date,
+       createdate           TIMESTAMP,
        revision             numeric
 );
 
@@ -138,7 +138,7 @@ CREATE TABLE CPO_QUERY_TEXT (
        sql_text             VARCHAR(8000) NULL,
        description          VARCHAR(1023) NULL,
        userid               varchar(50), 
-       createdate           date
+       createdate           TIMESTAMP
 );
 
 ----------------------------------------------
@@ -149,7 +149,7 @@ CREATE TABLE CPO_QUERY_TEXT_REV (
        sql_text             VARCHAR(8000) NULL,
        description          VARCHAR(1023) NULL,
        userid               varchar(50), 
-       createdate           date,
+       createdate           TIMESTAMP,
        revision             numeric
 );
 
@@ -160,7 +160,7 @@ CREATE TABLE CPO_CLASS (
        class_id             VARCHAR(36) NOT NULL PRIMARY KEY,
        name                 VARCHAR(1023) NOT NULL,
        userid               varchar(50), 
-       createdate           date
+       createdate           TIMESTAMP
 );
 
 ----------------------------------------------
@@ -170,7 +170,7 @@ CREATE TABLE CPO_CLASS_REV (
        class_id             VARCHAR(36) NOT NULL PRIMARY KEY,
        name                 VARCHAR(1023) NOT NULL,
        userid               varchar(50), 
-       createdate           date,
+       createdate           TIMESTAMP,
        revision             numeric
 );
 

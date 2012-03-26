@@ -4,7 +4,7 @@
   <groupId>org.synchronoss</groupId>
   <artifactId>cpo</artifactId>
   <name>cpo</name>
-  <version>4.0.13-SNAPSHOT</version> 
+  <version>4.0.13</version> 
   <description>CPO is a persistence layer that is thin wrapper around JDBC that consumes and
     produces POJOs
   </description>
@@ -107,9 +107,9 @@
     </site>
   </distributionManagement>
   <scm>
-    <connection>scm:svn:https://cpo.svn.sourceforge.net/svnroot/cpo/api/trunk</connection>
-    <developerConnection>scm:svn:https://cpo.svn.sourceforge.net/svnroot/cpo/api/trunk</developerConnection>
-    <url>https://cpo.svn.sourceforge.net/svnroot/cpo/api/trunk</url>
+    <connection>scm:svn:https://cpo.svn.sourceforge.net/svnroot/cpo/api/tags/cpo-4.0.13</connection>
+    <developerConnection>scm:svn:https://cpo.svn.sourceforge.net/svnroot/cpo/api/tags/cpo-4.0.13</developerConnection>
+    <url>https://cpo.svn.sourceforge.net/svnroot/cpo/api/tags/cpo-4.0.13</url>
   </scm>
   <build>
     <testResources>
@@ -528,7 +528,7 @@
         <cpo.db.user>cpo</cpo.db.user>
         <cpo.db.pswd>cpo</cpo.db.pswd>
         <cpo.db.host>localhost</cpo.db.host>
-        <cpo.db.port/>
+        <cpo.db.port />
         <cpo.db.database>cpo</cpo.db.database>
         <cpo.db.url>jdbc:hsqldb:hsql://${cpo.db.host}/${cpo.db.database}</cpo.db.url>
         <cpo.db.userurl>jdbc:hsqldb:hsql://${cpo.db.host}/${cpo.db.database};user=${cpo.db.user};password=${cpo.db.pswd}</cpo.db.userurl>
@@ -542,7 +542,7 @@
         <cpo.meta.user>cpometa</cpo.meta.user>
         <cpo.meta.pswd>cpometa</cpo.meta.pswd>
         <cpo.meta.host>localhost</cpo.meta.host>
-        <cpo.meta.port></cpo.meta.port>
+        <cpo.meta.port />
         <cpo.meta.database>cpometa</cpo.meta.database>
         <cpo.meta.url>jdbc:hsqldb:hsql://${cpo.meta.host}/${cpo.meta.database}</cpo.meta.url>
         <cpo.meta.userurl>jdbc:hsqldb:hsql://${cpo.meta.host}/${cpo.meta.database};user=${cpo.meta.user};password=${cpo.meta.pswd}</cpo.meta.userurl>
@@ -563,9 +563,9 @@
         <release.arguments>-Dcpo.db=${cpo.db}</release.arguments>
         <cpo.test.sqldir>src/test/sql/hsqldb</cpo.test.sqldir>
         <cpo.db.user>sa</cpo.db.user>
-        <cpo.db.pswd/>
+        <cpo.db.pswd />
         <cpo.db.host>localhost</cpo.db.host>
-        <cpo.db.port/>
+        <cpo.db.port />
         <cpo.db.database>src/test/sql/hsqldb/db/cpo</cpo.db.database>
         <cpo.db.url>jdbc:hsqldb:file:${cpo.db.database}</cpo.db.url>
         <cpo.db.userurl>jdbc:hsqldb:file:${cpo.db.database};shutdown=true;user=${cpo.db.user};password=${cpo.db.pswd}</cpo.db.userurl>
@@ -577,9 +577,9 @@
         <cpo.db.class>org.hsqldb.jdbc.JDBCDataSource</cpo.db.class>
         <cpo.meta.class>org.hsqldb.jdbc.JDBCDataSource</cpo.meta.class>
         <cpo.meta.user>sa</cpo.meta.user>
-        <cpo.meta.pswd></cpo.meta.pswd>
+        <cpo.meta.pswd />
         <cpo.meta.host>localhost</cpo.meta.host>
-        <cpo.meta.port></cpo.meta.port>
+        <cpo.meta.port />
         <cpo.meta.database>src/test/sql/hsqldb/db/cpometa</cpo.meta.database>
         <cpo.meta.url>jdbc:hsqldb:file:${cpo.meta.database}</cpo.meta.url>
         <cpo.meta.userurl>jdbc:hsqldb:file:${cpo.meta.database};shutdown=true;user=${cpo.meta.user};password=${cpo.meta.pswd}</cpo.meta.userurl>

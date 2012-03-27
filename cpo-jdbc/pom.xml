@@ -132,12 +132,6 @@
     </extensions>
     <pluginManagement>
       <plugins>
-          <plugin>
-            <artifactId>maven-jar-plugin</artifactId>
-            <configuration>
-              <classifier>1.6</classifier>
-            </configuration>
-          </plugin>
         <plugin>
           <groupId>org.codehaus.mojo</groupId>
           <artifactId>sql-maven-plugin</artifactId>

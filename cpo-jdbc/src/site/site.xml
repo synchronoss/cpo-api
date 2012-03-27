@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project>
+  <publishDate position="left" format="MM-dd-yyyy hh:mm:ss a"/>
+  <bannerLeft>
+    <name>CPO</name>
+    <href>/</href>
+  </bannerLeft>
+  <bannerRight>
+    <src>images/syn_logo.gif</src>
+    <href>http://www.synchronoss.com</href>
+  </bannerRight>
+  <body>
+    <links>
+	  <item name="SourceForge Project" href="https://sourceforge.net/projects/cpo/"/>
+      <item name="SourceForge Files" href="https://sourceforge.net/project/showfiles.php?group_id=168495"/>
+      <item name="Continuous Builds" href="http://continuous.synchronoss.net:8111/viewType.html?buildTypeId=bt2"/>
+    </links>
+    <menu ref="parent" />
+    <menu ref="modules" />
+    <menu ref="reports" />
+    <menu name="Related Links">
+	  <item name="CPO Util" href="cpo-util-sourceforge/"/>
+	  <item name="CPO Meta" href="cpo-meta-sourceforge/"/>
+    </menu>
+  </body>
+</project>

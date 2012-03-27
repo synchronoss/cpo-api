@@ -1,15 +1,14 @@
 <?xml version="1.0"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <groupId>org.synchronoss</groupId>
+  <groupId>org.synchronoss.cpo</groupId>
   <artifactId>api</artifactId>
   <name>api</name>
   <packaging>pom</packaging>
   <version>5.0.0-SNAPSHOT</version> 
   <description>CPO is a persistence layer that is thin wrapper around JDBC that consumes and
     produces POJOs
-  </description>
-  
+  </description>  
   <url>http://cpo.sourceforge.net/</url>
   <licenses>
     <license>
@@ -22,22 +21,17 @@
       </comments>
     </license>
   </licenses>
-  
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <currentVersion>${project.version}</currentVersion>
   </properties>
-  
   <ciManagement>
     <system>teamcity</system>
     <url>http://continuous.synchronoss.net:8111/viewType.html?buildTypeId=bt2</url>
   </ciManagement>
-  
   <issueManagement>
     <system>SourceForge</system>
     <url>http://sourceforge.net/projects/cpo</url>
   </issueManagement>
-  
   <mailingLists>
     <mailingList>
       <name>CPO Users List</name>
@@ -47,7 +41,6 @@
       <archive>http://lists.sourceforge.net/mailman/listinfo/cpo-users</archive>
     </mailingList>
   </mailingLists>
-  
   <developers>
     <developer>
       <name>David Berry</name>
@@ -138,11 +131,8 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-compiler-plugin</artifactId>
-          <!-- best lock down version of the plugin too -->
+          <version>2.3.2</version>
           <configuration>
-            <includes>
-              <include>org/**</include>
-            </includes>
             <source>1.6</source>
             <target>1.6</target>
           </configuration>
@@ -162,6 +152,41 @@
       </plugin>
     </plugins>
   </build>
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>junit</groupId>
+        <artifactId>junit</artifactId>
+        <version>3.8.1</version>
+        <scope>test</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.slf4j</groupId>
+        <artifactId>slf4j-api</artifactId>
+        <version>1.6.1</version>
+        <scope>compile</scope>
+      </dependency>
+      <dependency>
+        <groupId>javax.j2ee</groupId>
+        <artifactId>j2ee</artifactId>
+        <version>1.3.1</version>
+        <scope>provided</scope>
+      </dependency>
+      <!-- log4j implementation for test logging -->
+      <dependency>
+        <groupId>org.slf4j</groupId>
+        <artifactId>slf4j-log4j12</artifactId>
+        <version>1.6.1</version>
+        <scope>test</scope>
+      </dependency>
+      <dependency>
+        <groupId>log4j</groupId>
+        <artifactId>log4j</artifactId>
+        <version>1.2.16</version>
+        <scope>test</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
   <reporting>
     <plugins>
       <plugin>

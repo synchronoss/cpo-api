@@ -1,0 +1,34 @@
+ -----
+ CPO - ${currentVersion}
+ -----
+ Architecture Team
+ -----
+ November 2008
+
+Home - CPO ${currentVersion}
+
+* What is CPO?
+
+  {{{about.html}About CPO}}
+
+* Where are the cpo maven repositories?
+
+  Right here on sourceforge!
+
+  Snapshots: http://cpo.sourceforge.net/sf-cpo-snapshots
+
+  Releases: http://cpo.sourceforge.net/sf-cpo-releases
+
+* Example Usage Information
+
+  Please review the test case source code from the navigation on the left in order to review how to use CPO.
+
+* News
+
+  * CPO Artifacts Uploaded to Sourceforge - 11/24/08
+
+    The current and passed CPO release artifacts have been placed in the download section on Sourceforge.
+
+  * CPO 2.0 is available on sourceforge.net - 26/05/06 14:08
+
+    Source Code for API and Utility available for download.

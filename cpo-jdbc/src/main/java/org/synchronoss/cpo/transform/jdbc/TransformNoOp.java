@@ -38,7 +38,7 @@ import org.synchronoss.cpo.transform.Transform;
  * @author david berry
  */
 
-public class TransformNoOp implements Transform<Integer, Integer> {
+public class TransformNoOp implements JdbcTransform<Integer, Integer> {
     private static Logger logger = LoggerFactory.getLogger(TransformNoOp.class.getName());
 
     public TransformNoOp(){}
@@ -108,4 +108,9 @@ public class TransformNoOp implements Transform<Integer, Integer> {
         logger.debug("Inside TransformNoOp::transformOut(JdbcPreparedStatementFactory, "+attrOut+");");
         return attrOut;
     }
+
+  @Override
+  public Integer transformOut(Integer j) throws CpoException, UnsupportedOperationException {
+    throw new UnsupportedOperationException("Not supported yet.");
+  }
 }

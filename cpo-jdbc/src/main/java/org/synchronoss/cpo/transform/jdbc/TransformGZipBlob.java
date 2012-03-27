@@ -49,7 +49,7 @@ import org.synchronoss.cpo.transform.Transform;
  * @author david berry
  */
 
-public class TransformGZipBlob implements Transform<Blob, byte[]> {
+public class TransformGZipBlob implements JdbcTransform<Blob, byte[]> {
     private static Logger logger = LoggerFactory.getLogger(TransformGZipBlob.class.getName());
 
     public TransformGZipBlob(){}
@@ -142,6 +142,11 @@ public class TransformGZipBlob implements Transform<Blob, byte[]> {
     }
 
   public Blob transformOut(JdbcCallableStatementFactory jpsf, byte[] attributeObject) throws CpoException, UnsupportedOperationException {
+    throw new UnsupportedOperationException("Not supported yet.");
+  }
+
+  @Override
+  public Blob transformOut(byte[] j) throws CpoException, UnsupportedOperationException {
     throw new UnsupportedOperationException("Not supported yet.");
   }
 

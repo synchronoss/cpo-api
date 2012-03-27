@@ -1,7 +1,6 @@
 package org.synchronoss.cpo.transform;
 
 import org.synchronoss.cpo.CpoException;
-import org.synchronoss.cpo.jdbc.*;
 
 /**
  * User: michael
@@ -12,8 +11,6 @@ public interface Transform<D, J> {
 
   public J transformIn(D inObject) throws CpoException, UnsupportedOperationException;
 
-  public D transformOut(JdbcPreparedStatementFactory jpsf, J attributeObject) throws CpoException, UnsupportedOperationException;
-
-  public D transformOut(JdbcCallableStatementFactory jpsf, J attributeObject) throws CpoException, UnsupportedOperationException;
+  public D transformOut(J attributeObject) throws CpoException, UnsupportedOperationException;
 
 }

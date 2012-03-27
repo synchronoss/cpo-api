@@ -38,7 +38,7 @@ import org.synchronoss.cpo.transform.Transform;
  * @author david berry
  */
 
-public class TransformTimestampToCalendar implements Transform<Timestamp, Calendar> {
+public class TransformTimestampToCalendar implements JdbcTransform<Timestamp, Calendar> {
 
     public TransformTimestampToCalendar(){}
 
@@ -99,4 +99,9 @@ public class TransformTimestampToCalendar implements Transform<Timestamp, Calend
 			}
       return ts;
     }
+
+  @Override
+  public Timestamp transformOut(Calendar j) throws CpoException, UnsupportedOperationException {
+    throw new UnsupportedOperationException("Not supported yet.");
+  }
 }

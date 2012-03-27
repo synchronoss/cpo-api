@@ -31,7 +31,7 @@ import org.synchronoss.cpo.jdbc.JdbcCallableStatementFactory;
 import org.synchronoss.cpo.jdbc.JdbcPreparedStatementFactory;
 import org.synchronoss.cpo.transform.Transform;
 
-public class TransformDateToEncryptedString implements Transform<String, Timestamp> {
+public class TransformDateToEncryptedString implements JdbcTransform<String, Timestamp> {
 
     
     private static Logger logger = LoggerFactory.getLogger(TransformDateToEncryptedString.class.getName());
@@ -83,6 +83,11 @@ public class TransformDateToEncryptedString implements Transform<String, Timesta
     }
 
   public String transformOut(JdbcCallableStatementFactory jpsf, Timestamp attributeObject) throws CpoException, UnsupportedOperationException {
+    throw new UnsupportedOperationException("Not supported yet.");
+  }
+
+  @Override
+  public String transformOut(Timestamp j) throws CpoException, UnsupportedOperationException {
     throw new UnsupportedOperationException("Not supported yet.");
   }
     

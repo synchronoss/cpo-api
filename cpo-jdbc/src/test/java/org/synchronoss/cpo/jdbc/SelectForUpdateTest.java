@@ -73,7 +73,7 @@ public class SelectForUpdateTest extends TestCase {
         hasSelect4UpdateSupport = new Boolean(b.getString(PROP_DB_SELECT4UPDATE).trim());
         
         try {
-          jdbcCpo_ = JdbcCpoFactory.getCpoAdapter();
+          jdbcCpo_ = new JdbcCpoFactory().getCpoAdapter();
             assertNotNull(method+"CpoAdapter is null", jdbcCpo_);
             jdbcIdo_ = jdbcCpo_.getCpoTrxAdapter();
             assertNotNull(method+"CpoTrxAdapter is null", jdbcIdo_);

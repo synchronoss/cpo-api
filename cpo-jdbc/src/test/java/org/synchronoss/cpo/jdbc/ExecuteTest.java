@@ -68,7 +68,7 @@ public class ExecuteTest extends TestCase {
         hasCallSupport = new Boolean(b.getString(PROP_DB_CALLS_SUPPORTED).trim());
         
         try {
-          jdbcIdo_ = new CpoAdapterBean(JdbcCpoFactory.getCpoAdapter());
+          jdbcIdo_ = new CpoAdapterBean(new JdbcCpoFactory());
             assertNotNull(method+"CpoAdapter is null", jdbcIdo_);
         } catch(Exception e) {
             fail(method+e.getMessage());

@@ -64,7 +64,7 @@ public class RetrieveObjectTest extends TestCase {
         String method = "setUp:";
         
         try{
-          jdbcIdo_ = JdbcCpoFactory.getCpoAdapter();
+          jdbcIdo_ = new JdbcCpoFactory().getCpoAdapter();
             assertNotNull(method+"IdoAdapter is null",jdbcIdo_);
         } catch (Exception e) {
             fail(method+e.getMessage());

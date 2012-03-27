@@ -17,6 +17,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.CpoAdapter;
 import org.synchronoss.cpo.CpoException;
+import org.synchronoss.cpo.CpoFactory;
 import org.synchronoss.cpo.DataSourceInfo;
 import org.synchronoss.cpo.helper.ExceptionHelper;
 
@@ -26,7 +27,7 @@ import org.synchronoss.cpo.helper.ExceptionHelper;
  *
  * @author david berry
  */
-public class JdbcCpoFactory {
+public class JdbcCpoFactory implements CpoFactory {
   private static HashMap<String, CpoAdapter> propMap = new HashMap<String, CpoAdapter>();
   private static Logger logger=LoggerFactory.getLogger(JdbcCpoFactory.class.getName());
   
@@ -50,14 +51,14 @@ public class JdbcCpoFactory {
   private static final String   PROP_META_PASSWORD = ".metaPassword";
   private static final String   PROP_META_DATASOURCE_CLASS = ".metaDatasourceClass";
 	
-	private JdbcCpoFactory(){
+	public JdbcCpoFactory(){
 	}
 	
-  public static CpoAdapter getCpoAdapter() throws CpoException {
+  public CpoAdapter getCpoAdapter() throws CpoException {
     return getCpoAdapter(DEFAULT_CONTEXT);
   }
 	
-	public static CpoAdapter getCpoAdapter(String context) throws CpoException {
+	public CpoAdapter getCpoAdapter(String context) throws CpoException {
 	  if (context==null)
 	    context = DEFAULT_CONTEXT;
 	  

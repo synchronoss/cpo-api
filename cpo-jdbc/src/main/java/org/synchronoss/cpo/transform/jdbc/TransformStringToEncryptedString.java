@@ -29,7 +29,7 @@ import org.synchronoss.cpo.jdbc.JdbcCallableStatementFactory;
 import org.synchronoss.cpo.jdbc.JdbcPreparedStatementFactory;
 import org.synchronoss.cpo.transform.Transform;
 
-public class TransformStringToEncryptedString implements Transform<String, String> {
+public class TransformStringToEncryptedString implements JdbcTransform<String, String> {
 
   private static Logger logger = LoggerFactory.getLogger(TransformStringToEncryptedString.class.getName());
   private static Encryptor encryptor = null;
@@ -77,6 +77,11 @@ public class TransformStringToEncryptedString implements Transform<String, Strin
   }
 
   public String transformOut(JdbcCallableStatementFactory jpsf, String attributeObject) throws CpoException, UnsupportedOperationException {
+    throw new UnsupportedOperationException("Not supported yet.");
+  }
+
+  @Override
+  public String transformOut(String j) throws CpoException, UnsupportedOperationException {
     throw new UnsupportedOperationException("Not supported yet.");
   }
 }

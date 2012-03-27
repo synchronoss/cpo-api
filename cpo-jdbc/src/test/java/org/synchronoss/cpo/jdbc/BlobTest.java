@@ -86,7 +86,7 @@ public class BlobTest extends TestCase {
         hasBlobSupport = new Boolean(b.getString(PROP_DB_BLOBS_SUPPORTED).trim());
           
         try{
-            jdbcIdo_ = new CpoAdapterBean(JdbcCpoFactory.getCpoAdapter());
+            jdbcIdo_ = new CpoAdapterBean(new JdbcCpoFactory());
             assertNotNull(method+"IdoAdapter is null",jdbcIdo_);
         } catch (Exception e) {
             fail(method+e.getMessage());

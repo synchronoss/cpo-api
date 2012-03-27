@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <groupId>org.synchronoss</groupId>
-  <artifactId>cpo</artifactId>
-  <name>cpo</name>
+  <groupId>org.synchronoss.cpo</groupId>
+  <artifactId>cpo-jdbc</artifactId>
+  <name>cpo-jdbc</name>
   <version>5.0.0-SNAPSHOT</version> 
   <description>CPO is a persistence layer that is thin wrapper around JDBC that consumes and
     produces POJOs
@@ -135,7 +135,7 @@
           <plugin>
             <artifactId>maven-jar-plugin</artifactId>
             <configuration>
-              <classifier>${cpo.jdk.classifier}</classifier>
+              <classifier>1.6</classifier>
             </configuration>
           </plugin>
         <plugin>
@@ -171,11 +171,6 @@
           <skip>false</skip>
         </configuration>
         </plugin>
-<!--        <plugin>
-          <groupId>org.codehaus.mojo</groupId>
-          <artifactId>xmlbeans-maven-plugin</artifactId>
-          <version>2.3.1</version>
-        </plugin>-->
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-compiler-plugin</artifactId>
@@ -183,10 +178,9 @@
           <configuration>
             <includes>
               <include>org/**</include>
-<!--              <include>${cpo.jdk.include}</include>-->
             </includes>
-            <source>${cpo.jdk.source}</source>
-            <target>${cpo.jdk.target}</target>
+            <source>1.6</source>
+            <target>1.6</target>
           </configuration>
         </plugin>
       </plugins>
@@ -244,14 +238,6 @@
         </executions>
       </plugin>
       <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-deploy-plugin</artifactId>
-        <version>2.7</version>
-        <configuration>
-          <classifier>${cpo.jdk.classifier}</classifier>
-        </configuration>
-      </plugin> 
-      <plugin>
         <artifactId>maven-assembly-plugin</artifactId>
         <configuration>
           <descriptors>
@@ -284,6 +270,12 @@
     </plugins>
   </build>
   <dependencies>
+    <dependency>
+      <groupId>org.synchronoss.cpo</groupId>
+      <artifactId>cpo-core</artifactId>
+      <version>5.0.0-SNAPSHOT</version>
+      <scope>compile</scope>
+    </dependency>
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
@@ -373,7 +365,7 @@
         <version>2.4</version>
         <configuration>
           <linkXref>true</linkXref>
-          <targetJdk>${cpo.jdk.source}</targetJdk>
+          <targetJdk>1.6</targetJdk>
         </configuration>
       </plugin>
       <plugin>
@@ -412,7 +404,7 @@
         <artifactId>maven-javadoc-plugin</artifactId>
         <version>2.4</version>
         <configuration>
-          <source>${cpo.jdk.source}</source>
+          <source>1.6</source>
           <aggregate>true</aggregate>
           <doclet>gr.spinellis.umlgraph.doclet.UmlGraphDoc</doclet>
           <docletArtifact>
@@ -620,33 +612,6 @@
         <cpo.meta.userurl>jdbc:postgresql://${cpo.meta.host}:${cpo.meta.port}/${cpo.meta.database}?user=${cpo.meta.user}&amp;password=${cpo.meta.pswd}</cpo.meta.userurl>
         <cpo.meta.driver>org.postgresql.Driver</cpo.meta.driver>
         <cpo.tableprefix>TEST_</cpo.tableprefix>
-      </properties>
-    </profile>
-    
-    <!-- Profiles for JDK5 and JDK6 compilation -->
-    <profile>
-      <id>jdk5</id>
-      <activation>
-        <jdk>1.5</jdk>
-      </activation>
-      <properties>
-        <cpo.jdk.source>1.5</cpo.jdk.source>
-        <cpo.jdk.target>1.5</cpo.jdk.target>
-        <cpo.jdk.include>jdk5/**</cpo.jdk.include>
-        <cpo.assemblyFinalName>${project.build.finalName}-jdk5</cpo.assemblyFinalName>
-      </properties>
-    </profile>
-    <profile>
-      <id>jdk6</id>
-      <activation>
-        <jdk>1.6</jdk>
-      </activation>
-      <properties>
-        <cpo.jdk.source>1.6</cpo.jdk.source>
-        <cpo.jdk.target>1.6</cpo.jdk.target>
-        <cpo.jdk.include>jdk6/**</cpo.jdk.include>
-        <cpo.jdk.classifier>jdk6</cpo.jdk.classifier>
-        <cpo.assemblyFinalName>${project.build.finalName}-jdk6</cpo.assemblyFinalName>
       </properties>
     </profile>
   </profiles>

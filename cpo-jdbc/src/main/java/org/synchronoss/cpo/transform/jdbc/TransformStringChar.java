@@ -37,7 +37,7 @@ import org.synchronoss.cpo.transform.Transform;
  * @author david berry
  */
 
-public class TransformStringChar implements Transform<String, char[]> {
+public class TransformStringChar implements JdbcTransform<String, char[]> {
 
     public TransformStringChar(){}
 
@@ -71,6 +71,11 @@ public class TransformStringChar implements Transform<String, char[]> {
     }
 
   public String transformOut(JdbcCallableStatementFactory jpsf, char[] attributeObject) throws CpoException, UnsupportedOperationException {
+    throw new UnsupportedOperationException("Not supported yet.");
+  }
+
+  @Override
+  public String transformOut(char[] j) throws CpoException, UnsupportedOperationException {
     throw new UnsupportedOperationException("Not supported yet.");
   }
 

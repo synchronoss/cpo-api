@@ -88,7 +88,7 @@ public class BlobTrxTest extends TestCase {
         hasBlobSupport = new Boolean(b.getString(PROP_DB_BLOBS_SUPPORTED).trim());
 
         try{
-            jdbcCpo_ = JdbcCpoFactory.getCpoAdapter();
+            jdbcCpo_ = new JdbcCpoFactory().getCpoAdapter();
             jdbcIdo_=jdbcCpo_.getCpoTrxAdapter();
             assertNotNull(method+"IdoAdapter is null",jdbcIdo_);
         } catch (Exception e) {

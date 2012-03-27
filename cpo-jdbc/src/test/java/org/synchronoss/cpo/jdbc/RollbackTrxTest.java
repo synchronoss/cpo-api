@@ -58,7 +58,7 @@ public class RollbackTrxTest extends TestCase {
         String method="setUp:";
         
         try {
-          jdbcCpo_ = JdbcCpoFactory.getCpoAdapter();
+          jdbcCpo_ = new JdbcCpoFactory().getCpoAdapter();
             jdbcIdo_ = jdbcCpo_.getCpoTrxAdapter();
             assertNotNull(method+"CpoAdapter is null", jdbcIdo_);
         } catch(Exception e) {

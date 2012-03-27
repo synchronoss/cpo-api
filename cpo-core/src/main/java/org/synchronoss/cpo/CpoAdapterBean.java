@@ -27,13 +27,8 @@ package org.synchronoss.cpo;
 import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.List;
-
 import javax.ejb.SessionBean;
 import javax.ejb.SessionContext;
-
-import org.synchronoss.cpo.jdbc.JdbcCpoFactory;
-
-//import org.synchronoss.cpo.jdbc.JdbcCpoAdapter;
 
 
 public class CpoAdapterBean 
@@ -44,12 +39,16 @@ public class CpoAdapterBean
      */
     private static final long serialVersionUID = 1L;
     
-    private CpoAdapter adapter_ = null;
+    private CpoAdapter cpoAdapter = null;
     
     private SessionContext ctx_=null;
     
-    public CpoAdapterBean(CpoAdapter cpo){
-    	adapter_=cpo;
+    public CpoAdapterBean(CpoFactory cpoFactory) throws CpoException {
+    	this.cpoAdapter = cpoFactory.getCpoAdapter();
+    }
+
+    public CpoAdapterBean(CpoAdapter cpoAdapter) throws CpoException {
+    	this.cpoAdapter = cpoAdapter;
     }
 
     public void ejbCreate() {
@@ -71,7 +70,7 @@ public class CpoAdapterBean
     public Class<?> getAdapterClass()
         throws CpoException{
 
-        return JdbcCpoFactory.getCpoAdapter().getClass();
+        return cpoAdapter.getClass();
     }
 
     public Object executeAdapterMethod(String name, Class<?>[] parameterTypes, Object[] args)
@@ -80,8 +79,8 @@ public class CpoAdapterBean
         Object obj = null;
 
         try{
-            meth =  JdbcCpoFactory.getCpoAdapter().getClass().getMethod(name, parameterTypes);
-            obj = meth.invoke(JdbcCpoFactory.getCpoAdapter(),args);
+            meth =  cpoAdapter.getClass().getMethod(name, parameterTypes);
+            obj = meth.invoke(cpoAdapter,args);
         } catch(Exception e) {
             throw new CpoException(e);
         }
@@ -99,7 +98,7 @@ public class CpoAdapterBean
      *               an exception will be thrown.
      */
     public <T> long insertObject(T obj) throws CpoException{
-        return JdbcCpoFactory.getCpoAdapter().insertObject(null,obj);
+        return cpoAdapter.insertObject(null,obj);
     }
 
     /**
@@ -112,7 +111,7 @@ public class CpoAdapterBean
      *               an exception will be thrown.
      */
     public <T> long insertObject(String name, T obj) throws CpoException{
-        return JdbcCpoFactory.getCpoAdapter().insertObject(name,obj);
+        return cpoAdapter.insertObject(name,obj);
     }
 
   /**
@@ -135,7 +134,7 @@ public class CpoAdapterBean
    */
   public <T> long insertObject(String name, T obj, Collection<CpoWhere> wheres,
       Collection<CpoOrderBy> orderBy, Collection<CpoNativeQuery> nativeQueries) throws CpoException{
-        return JdbcCpoFactory.getCpoAdapter().insertObject(name,obj, wheres, orderBy, nativeQueries);
+        return cpoAdapter.insertObject(name,obj, wheres, orderBy, nativeQueries);
     }
   
     /**
@@ -152,7 +151,7 @@ public class CpoAdapterBean
      *               an exception will be thrown.
      */
     public <T> long insertObjects(Collection<T> coll) throws CpoException{
-        return JdbcCpoFactory.getCpoAdapter().insertObjects(null,coll);
+        return cpoAdapter.insertObjects(null,coll);
     }
 
     /**
@@ -171,7 +170,7 @@ public class CpoAdapterBean
      *               an exception will be thrown.
      */
     public <T> long insertObjects(String name, Collection<T> coll) throws CpoException{
-        return JdbcCpoFactory.getCpoAdapter().insertObjects(name,coll);
+        return cpoAdapter.insertObjects(name,coll);
     }
 
   /**
@@ -199,7 +198,7 @@ public class CpoAdapterBean
    */
   public <T> long insertObjects(String name, Collection<T> coll, Collection<CpoWhere> wheres,
       Collection<CpoOrderBy> orderBy, Collection<CpoNativeQuery> nativeQueries) throws CpoException{
-        return JdbcCpoFactory.getCpoAdapter().insertObject(name,coll, wheres, orderBy, nativeQueries);
+        return cpoAdapter.insertObject(name,coll, wheres, orderBy, nativeQueries);
     }
 
   /**
@@ -216,7 +215,7 @@ public class CpoAdapterBean
      *               bean is populated with the results of the query.
      */
     public <T> T retrieveBean(T bean) throws CpoException{
-        return(JdbcCpoFactory.getCpoAdapter().retrieveBean(null,bean));
+        return(cpoAdapter.retrieveBean(null,bean));
     }
 
     /**
@@ -235,7 +234,7 @@ public class CpoAdapterBean
      *               bean is populated with the results of the query.
      */
     public <T> T retrieveBean(String name, T bean) throws CpoException{
-        return(JdbcCpoFactory.getCpoAdapter().retrieveBean(name,bean));
+        return(cpoAdapter.retrieveBean(name,bean));
     }
 
   /**
@@ -261,7 +260,7 @@ public class CpoAdapterBean
   public <T> T retrieveBean(String name, T bean, Collection<CpoWhere> wheres,
       Collection<CpoOrderBy> orderBy, Collection<CpoNativeQuery> nativeQueries)
       throws CpoException{
-        return(JdbcCpoFactory.getCpoAdapter().retrieveBean(name,bean, wheres, orderBy, nativeQueries));
+        return(cpoAdapter.retrieveBean(name,bean, wheres, orderBy, nativeQueries));
     }
   
     /**
@@ -286,7 +285,7 @@ public class CpoAdapterBean
      *                 collection.
      */
     public <T,C> T retrieveBean(String name, C criteria, T result, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy) throws CpoException{
-      return JdbcCpoFactory.getCpoAdapter().retrieveBean(name,criteria,result,wheres, orderBy);
+      return cpoAdapter.retrieveBean(name,criteria,result,wheres, orderBy);
     }
     /**
      * Retrieves the bean from the datasource. The assumption
@@ -310,7 +309,7 @@ public class CpoAdapterBean
      *                 collection.
      */
     public <T,C> T retrieveBean(String name, C criteria, T result, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeQuery> nativeQuery) throws CpoException{
-      return JdbcCpoFactory.getCpoAdapter().retrieveBean(name,criteria,result,wheres, orderBy,nativeQuery);
+      return cpoAdapter.retrieveBean(name,criteria,result,wheres, orderBy,nativeQuery);
     }
     
     /**
@@ -329,7 +328,7 @@ public class CpoAdapterBean
      * @throws CpoException Thrown if there are errors accessing the datasource
      */
     public <C> List<C> retrieveBeans(String name, C criteria) throws CpoException{
-        return JdbcCpoFactory.getCpoAdapter().retrieveBeans(name,criteria);
+        return cpoAdapter.retrieveBeans(name,criteria);
     }
 
     /**
@@ -353,7 +352,7 @@ public class CpoAdapterBean
      */
     public <C> List<C> retrieveBeans(String name, C criteria, CpoWhere where,
         Collection<CpoOrderBy> orderBy) throws CpoException{
-        return JdbcCpoFactory.getCpoAdapter().retrieveBeans(name,criteria,where, orderBy);
+        return cpoAdapter.retrieveBeans(name,criteria,where, orderBy);
     }
 
     /**
@@ -374,7 +373,7 @@ public class CpoAdapterBean
      * @throws CpoException Thrown if there are errors accessing the datasource
      */
     public <C> List<C> retrieveBeans(String name, C criteria, Collection<CpoOrderBy> orderBy) throws CpoException{
-        return JdbcCpoFactory.getCpoAdapter().retrieveBeans(name,criteria, orderBy);
+        return cpoAdapter.retrieveBeans(name,criteria, orderBy);
     }
 
     /**
@@ -398,7 +397,7 @@ public class CpoAdapterBean
      */
     public <C> List<C> retrieveBeans(String name, C criteria, Collection<CpoWhere> wheres,
         Collection<CpoOrderBy> orderBy) throws CpoException{
-        return JdbcCpoFactory.getCpoAdapter().retrieveBeans(name,criteria,wheres, orderBy);
+        return cpoAdapter.retrieveBeans(name,criteria,wheres, orderBy);
     }
 
     /**
@@ -421,7 +420,7 @@ public class CpoAdapterBean
      * @throws CpoException Thrown if there are errors accessing the datasource
      */
     public <T,C> List<T> retrieveBeans(String name, C criteria, T result) throws CpoException{
-        return JdbcCpoFactory.getCpoAdapter().retrieveBeans(name,criteria,result);
+        return cpoAdapter.retrieveBeans(name,criteria,result);
     }
 
     /**
@@ -449,7 +448,7 @@ public class CpoAdapterBean
      */
     public <T,C> List<T> retrieveBeans(String name, C criteria, T result, CpoWhere where,
         Collection<CpoOrderBy> orderBy) throws CpoException{
-        return JdbcCpoFactory.getCpoAdapter().retrieveBeans(name,criteria,result,where, orderBy);
+        return cpoAdapter.retrieveBeans(name,criteria,result,where, orderBy);
     }
 
 
@@ -476,7 +475,7 @@ public class CpoAdapterBean
      *                 collection will be returned
      */
     public <T,C> List<T> retrieveBeans(String name, C criteria, T result, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy)  throws CpoException {
-        return JdbcCpoFactory.getCpoAdapter().retrieveBeans(name,criteria,result, wheres, orderBy);
+        return cpoAdapter.retrieveBeans(name,criteria,result, wheres, orderBy);
     }
 
     /**
@@ -502,7 +501,7 @@ public class CpoAdapterBean
      *                 collection will be returned
      */
     public <T,C> List<T> retrieveBeans(String name, C criteria, T result, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeQuery> nativeQuery)  throws CpoException {
-        return JdbcCpoFactory.getCpoAdapter().retrieveBeans(name,criteria,result,wheres, orderBy, nativeQuery);
+        return cpoAdapter.retrieveBeans(name,criteria,result,wheres, orderBy, nativeQuery);
     }
 
     /**
@@ -532,7 +531,7 @@ public class CpoAdapterBean
      */
     public <T,C> CpoResultSet<T> retrieveBeans(String name, C criteria, T result, Collection<CpoWhere> wheres,
         Collection<CpoOrderBy> orderBy, Collection<CpoNativeQuery> nativeQueries, int queueSize) throws CpoException{
-			  return JdbcCpoFactory.getCpoAdapter().retrieveBeans(name,criteria,result,wheres, orderBy, nativeQueries, queueSize);
+			  return cpoAdapter.retrieveBeans(name,criteria,result,wheres, orderBy, nativeQueries, queueSize);
 		}
 
 		/**
@@ -552,7 +551,7 @@ public class CpoAdapterBean
      */
 		@Deprecated
     public <T> T retrieveObject(T obj) throws CpoException{
-        return(JdbcCpoFactory.getCpoAdapter().retrieveBean(null,obj));
+        return(cpoAdapter.retrieveBean(null,obj));
     }
 
     /**
@@ -574,7 +573,7 @@ public class CpoAdapterBean
      */
 		@Deprecated
     public <T> T retrieveObject(String name, T obj) throws CpoException{
-        return(JdbcCpoFactory.getCpoAdapter().retrieveBean(name,obj));
+        return(cpoAdapter.retrieveBean(name,obj));
     }
 
     /**
@@ -602,7 +601,7 @@ public class CpoAdapterBean
      */
 		@Deprecated
     public <T,C> T retrieveObject(String name, C criteria, T result, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy) throws CpoException{
-      return JdbcCpoFactory.getCpoAdapter().retrieveBean(name,criteria,result,wheres, orderBy);
+      return cpoAdapter.retrieveBean(name,criteria,result,wheres, orderBy);
     }
     /**
      * Retrieves the Object from the datasource. The assumption
@@ -629,7 +628,7 @@ public class CpoAdapterBean
      */
 		@Deprecated
     public <T,C> T retrieveObject(String name, C criteria, T result, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeQuery> nativeQuery) throws CpoException{
-      return JdbcCpoFactory.getCpoAdapter().retrieveBean(name,criteria,result,wheres, orderBy,nativeQuery);
+      return cpoAdapter.retrieveBean(name,criteria,result,wheres, orderBy,nativeQuery);
     }
 
     /**
@@ -658,7 +657,7 @@ public class CpoAdapterBean
      */
 		@Deprecated
     public <T,C> Collection<T> retrieveObjects(String name, C criteria, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, T result)  throws CpoException {
-        return JdbcCpoFactory.getCpoAdapter().retrieveBeans(name,criteria,result,wheres, orderBy);
+        return cpoAdapter.retrieveBeans(name,criteria,result,wheres, orderBy);
     }
 
     /**
@@ -687,7 +686,7 @@ public class CpoAdapterBean
      */
 		@Deprecated
     public <T,C> Collection<T> retrieveObjects(String name, C criteria, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeQuery> nativeQuery, T result)  throws CpoException {
-        return JdbcCpoFactory.getCpoAdapter().retrieveBeans(name,criteria,result,wheres, orderBy, nativeQuery);
+        return cpoAdapter.retrieveBeans(name,criteria,result,wheres, orderBy, nativeQuery);
     }
 
   /**
@@ -726,7 +725,7 @@ public class CpoAdapterBean
     @Deprecated
     public <T,C> CpoResultSet<T> retrieveObjects(String name, C criteria, Collection<CpoWhere> wheres,
         Collection<CpoOrderBy> orderBy, Collection<CpoNativeQuery> nativeQuery, T result, int queueSize) throws CpoException {
-      return JdbcCpoFactory.getCpoAdapter().retrieveBeans(name,criteria, result, wheres, orderBy, nativeQuery, queueSize);
+      return cpoAdapter.retrieveBeans(name,criteria, result, wheres, orderBy, nativeQuery, queueSize);
     }
 
     /**
@@ -739,7 +738,7 @@ public class CpoAdapterBean
      *               an exception will be thrown.
      */
     public <T> long updateObject(T obj) throws CpoException{
-        return JdbcCpoFactory.getCpoAdapter().updateObject(null,obj);
+        return cpoAdapter.updateObject(null,obj);
     }
 
     /**
@@ -752,7 +751,7 @@ public class CpoAdapterBean
      *               an exception will be thrown.
      */
     public <T> long updateObject(String name, T obj) throws CpoException{
-        return JdbcCpoFactory.getCpoAdapter().updateObject(name,obj);
+        return cpoAdapter.updateObject(name,obj);
     }
 
 /**
@@ -772,7 +771,7 @@ public class CpoAdapterBean
    */
   public <T> long updateObject(String name, T obj, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, 
       Collection<CpoNativeQuery> nativeQueries) throws CpoException{
-        return JdbcCpoFactory.getCpoAdapter().updateObject(name,obj,wheres, orderBy, nativeQueries);
+        return cpoAdapter.updateObject(name,obj,wheres, orderBy, nativeQueries);
     }
 
     /**
@@ -790,7 +789,7 @@ public class CpoAdapterBean
      *               an exception will be thrown.
      */
     public <T> long updateObjects(Collection<T> coll) throws CpoException{
-        return JdbcCpoFactory.getCpoAdapter().updateObjects(null,coll);
+        return cpoAdapter.updateObjects(null,coll);
     }
     
     /**
@@ -808,7 +807,7 @@ public class CpoAdapterBean
      *               an exception will be thrown.
      */
     public <T> long updateObjects(String name, Collection<T> coll) throws CpoException{
-        return JdbcCpoFactory.getCpoAdapter().updateObjects(name,coll);
+        return cpoAdapter.updateObjects(name,coll);
     }
 
   /**
@@ -830,7 +829,7 @@ public class CpoAdapterBean
    */
   public <T> long updateObjects(String name, Collection<T> coll, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeQuery> nativeQueries)
       throws CpoException{
-        return JdbcCpoFactory.getCpoAdapter().updateObject(name,coll,wheres, orderBy, nativeQueries);
+        return cpoAdapter.updateObject(name,coll,wheres, orderBy, nativeQueries);
     }
 
   /**
@@ -844,7 +843,7 @@ public class CpoAdapterBean
      *               the datasource an exception will be thrown.
      */
     public <T> long deleteObject(T obj) throws CpoException{
-        return JdbcCpoFactory.getCpoAdapter().deleteObject(null,obj);
+        return cpoAdapter.deleteObject(null,obj);
     }
 
     /**
@@ -858,7 +857,7 @@ public class CpoAdapterBean
      *               the datasource an exception will be thrown.
      */
     public <T> long deleteObject(String name, T obj) throws CpoException{
-        return JdbcCpoFactory.getCpoAdapter().deleteObject(name,obj);
+        return cpoAdapter.deleteObject(name,obj);
     }
 
   /**
@@ -881,7 +880,7 @@ public class CpoAdapterBean
    */
   public <T> long deleteObject(String name, T obj, Collection<CpoWhere> wheres,
       Collection<CpoOrderBy> orderBy, Collection<CpoNativeQuery> nativeQueries) throws CpoException{
-        return JdbcCpoFactory.getCpoAdapter().deleteObject(name,obj, wheres, orderBy, nativeQueries);
+        return cpoAdapter.deleteObject(name,obj, wheres, orderBy, nativeQueries);
     }
 
   /**
@@ -897,7 +896,7 @@ public class CpoAdapterBean
      *               an exception will be thrown.
      */
     public <T> long deleteObjects(Collection<T> coll) throws CpoException{
-        return JdbcCpoFactory.getCpoAdapter().deleteObjects(null,coll);
+        return cpoAdapter.deleteObjects(null,coll);
     }
 
     /**
@@ -913,7 +912,7 @@ public class CpoAdapterBean
      *               an exception will be thrown.
      */
     public <T> long deleteObjects(String name, Collection<T> coll) throws CpoException{
-        return JdbcCpoFactory.getCpoAdapter().deleteObjects(name,coll);
+        return cpoAdapter.deleteObjects(name,coll);
     }
 
   /**
@@ -941,7 +940,7 @@ public class CpoAdapterBean
   public <T> long deleteObjects(String name, Collection<T> coll, Collection<CpoWhere> wheres,
       Collection<CpoOrderBy> orderBy, Collection<CpoNativeQuery> nativeQueries)
       throws CpoException{
-        return JdbcCpoFactory.getCpoAdapter().deleteObject(name, coll, wheres, orderBy, nativeQueries);
+        return cpoAdapter.deleteObject(name, coll, wheres, orderBy, nativeQueries);
     }
 
   /**
@@ -963,7 +962,7 @@ public class CpoAdapterBean
      * @exception    An exception is thrown if existsObject() returns a value > 1
      */
     public <T> long persistObject(T obj) throws CpoException{
-        return JdbcCpoFactory.getCpoAdapter().persistObject(null,obj);
+        return cpoAdapter.persistObject(null,obj);
     }
     
     /**
@@ -984,7 +983,7 @@ public class CpoAdapterBean
      * @exception    An exception is thrown if existsObject() returns a value > 1
      */
     public <T> long persistObject(String name, T obj) throws CpoException{
-        return JdbcCpoFactory.getCpoAdapter().persistObject(name,obj);
+        return cpoAdapter.persistObject(name,obj);
     }
     
     /**
@@ -1011,7 +1010,7 @@ public class CpoAdapterBean
      * @see #updateObject
      */
     public <T> long persistObjects(Collection<T> coll) throws CpoException{
-        return JdbcCpoFactory.getCpoAdapter().persistObjects(null,coll);
+        return cpoAdapter.persistObjects(null,coll);
     }
 
     /**
@@ -1037,7 +1036,7 @@ public class CpoAdapterBean
      * @see #updateObject
      */
     public <T> long persistObjects(String name, Collection<T> coll) throws CpoException{
-        return JdbcCpoFactory.getCpoAdapter().persistObjects(name,coll);
+        return cpoAdapter.persistObjects(name,coll);
     }
 
     /**
@@ -1056,7 +1055,7 @@ public class CpoAdapterBean
      * @exception    An exception will be thrown if the column returned  cannot be converted to an int
      */
     public <T> long existsObject(T obj) throws CpoException{
-        return JdbcCpoFactory.getCpoAdapter().existsObject(null,obj);
+        return cpoAdapter.existsObject(null,obj);
     }
     
     /**
@@ -1074,7 +1073,7 @@ public class CpoAdapterBean
      * @exception    An exception will be thrown if the column returned  cannot be converted to an int
      */
     public <T> long existsObject(String name, T obj) throws CpoException{
-        return JdbcCpoFactory.getCpoAdapter().existsObject(name,obj);
+        return cpoAdapter.existsObject(name,obj);
     }
     
     /**
@@ -1124,7 +1123,7 @@ public class CpoAdapterBean
      * @throws CpoException Thrown if there are errors accessing the datasource
      */
     public <T> long existsObject(String name, T obj, Collection<CpoWhere> wheres) throws CpoException{
-        return JdbcCpoFactory.getCpoAdapter().existsObject(name,obj, wheres);
+        return cpoAdapter.existsObject(name,obj, wheres);
     }
     
     /**
@@ -1150,7 +1149,7 @@ public class CpoAdapterBean
      */
     public <T> T executeObject(T object)  throws CpoException
     {
-        return JdbcCpoFactory.getCpoAdapter().executeObject(null,object, object);    
+        return cpoAdapter.executeObject(null,object, object);    
     }
 
     /**
@@ -1171,7 +1170,7 @@ public class CpoAdapterBean
      */
     public <T> T executeObject(String name, T object)  throws CpoException
     {
-        return JdbcCpoFactory.getCpoAdapter().executeObject(name,object, object);    
+        return cpoAdapter.executeObject(name,object, object);    
     }
 
      /**
@@ -1196,38 +1195,38 @@ public class CpoAdapterBean
      */
     public <T,C> T executeObject(String name, C criteria, T result)  throws CpoException
     {
-        return JdbcCpoFactory.getCpoAdapter().executeObject(name,criteria, result);    
+        return cpoAdapter.executeObject(name,criteria, result);    
     }
     
     public CpoOrderBy newOrderBy(String attribute, boolean ascending) throws CpoException{
-        return JdbcCpoFactory.getCpoAdapter().newOrderBy(attribute,ascending);
+        return cpoAdapter.newOrderBy(attribute,ascending);
     }
     
     public CpoOrderBy newOrderBy(String attribute, boolean ascending, String function) throws CpoException{
-        return JdbcCpoFactory.getCpoAdapter().newOrderBy(attribute,ascending,function);
+        return cpoAdapter.newOrderBy(attribute,ascending,function);
     }
 
     public CpoWhere newWhere() throws CpoException{
-        return JdbcCpoFactory.getCpoAdapter().newWhere();
+        return cpoAdapter.newWhere();
     }
     public <T> CpoWhere newWhere(int logical, String attr, int comp, T value) throws CpoException{
-        return JdbcCpoFactory.getCpoAdapter().newWhere(logical, attr,comp,value);
+        return cpoAdapter.newWhere(logical, attr,comp,value);
     }
     public <T> CpoWhere newWhere(int logical, String attr, int comp, T value, boolean not) throws CpoException{
-        return JdbcCpoFactory.getCpoAdapter().newWhere(logical, attr,comp,value, not);
+        return cpoAdapter.newWhere(logical, attr,comp,value, not);
     }
 
     public void clearMetaClass(Object obj) throws CpoException{
-        JdbcCpoFactory.getCpoAdapter().clearMetaClass(obj);
+        cpoAdapter.clearMetaClass(obj);
     }
     public void clearMetaClass(String className) throws CpoException{
-        JdbcCpoFactory.getCpoAdapter().clearMetaClass(className);
+        cpoAdapter.clearMetaClass(className);
     }
     public void clearMetaClass() throws CpoException{
-        JdbcCpoFactory.getCpoAdapter().clearMetaClass();
+        cpoAdapter.clearMetaClass();
     }
     public void clearMetaClass(boolean all) throws CpoException{
-      JdbcCpoFactory.getCpoAdapter().clearMetaClass(all);
+      cpoAdapter.clearMetaClass(all);
     }
 
     /**
@@ -1235,7 +1234,7 @@ public class CpoAdapterBean
      */
     @Deprecated
     public <T> long transactObjects(Collection<CpoObject<T>> coll) throws CpoException{
-        return JdbcCpoFactory.getCpoAdapter().transactObjects(coll);
+        return cpoAdapter.transactObjects(coll);
     }
     public CpoTrxAdapter getCpoTrxAdapter() throws CpoException {
     	throw new CpoException("Not Supported in Session Bean");

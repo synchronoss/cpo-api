@@ -16,6 +16,12 @@
   </parent>
   <dependencies>
     <dependency>
+      <groupId>org.synchronoss.cpo</groupId>
+      <artifactId>cpo-core</artifactId>
+      <version>5.0.0-SNAPSHOT</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
     </dependency>

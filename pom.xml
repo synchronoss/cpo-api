@@ -269,5 +269,6 @@
   <modules>
     <module>cpo-core</module>
     <module>cpo-jdbc</module>
+    <module>cpo-cassandra</module>
   </modules>
 </project>

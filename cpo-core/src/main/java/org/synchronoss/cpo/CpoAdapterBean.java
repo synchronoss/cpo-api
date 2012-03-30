@@ -54,15 +54,19 @@ public class CpoAdapterBean
     public void ejbCreate() {
     }
 
+  @Override
     public void ejbActivate() {
     }
 
+  @Override
     public void ejbPassivate() {
     }
 
+  @Override
     public void ejbRemove() {
     }
 
+  @Override
     public void setSessionContext(SessionContext A) {
         this.ctx_=A;
     }
@@ -97,6 +101,7 @@ public class CpoAdapterBean
      *               metadata of the datasource. If the class is not defined
      *               an exception will be thrown.
      */
+  @Override
     public <T> long insertObject(T obj) throws CpoException{
         return cpoAdapter.insertObject(null,obj);
     }
@@ -110,6 +115,7 @@ public class CpoAdapterBean
      *               metadata of the datasource. If the class is not defined
      *               an exception will be thrown.
      */
+  @Override
     public <T> long insertObject(String name, T obj) throws CpoException{
         return cpoAdapter.insertObject(name,obj);
     }
@@ -132,6 +138,7 @@ public class CpoAdapterBean
    * @return The number of objects created in the datasource
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
+  @Override
   public <T> long insertObject(String name, T obj, Collection<CpoWhere> wheres,
       Collection<CpoOrderBy> orderBy, Collection<CpoNativeQuery> nativeQueries) throws CpoException{
         return cpoAdapter.insertObject(name,obj, wheres, orderBy, nativeQueries);
@@ -150,6 +157,7 @@ public class CpoAdapterBean
      *               the metadata of the datasource. If the class is not defined
      *               an exception will be thrown.
      */
+  @Override
     public <T> long insertObjects(Collection<T> coll) throws CpoException{
         return cpoAdapter.insertObjects(null,coll);
     }
@@ -169,6 +177,7 @@ public class CpoAdapterBean
      *               the metadata of the datasource. If the class is not defined
      *               an exception will be thrown.
      */
+  @Override
     public <T> long insertObjects(String name, Collection<T> coll) throws CpoException{
         return cpoAdapter.insertObjects(name,coll);
     }
@@ -196,6 +205,7 @@ public class CpoAdapterBean
    * @return The number of objects created in the datasource
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
+  @Override
   public <T> long insertObjects(String name, Collection<T> coll, Collection<CpoWhere> wheres,
       Collection<CpoOrderBy> orderBy, Collection<CpoNativeQuery> nativeQueries) throws CpoException{
         return cpoAdapter.insertObject(name,coll, wheres, orderBy, nativeQueries);
@@ -214,6 +224,7 @@ public class CpoAdapterBean
      *               bean is used to specify the search criteria, the output
      *               bean is populated with the results of the query.
      */
+  @Override
     public <T> T retrieveBean(T bean) throws CpoException{
         return(cpoAdapter.retrieveBean(null,bean));
     }
@@ -233,6 +244,7 @@ public class CpoAdapterBean
      *               bean is used to specify the search criteria, the output
      *               bean is populated with the results of the query.
      */
+  @Override
     public <T> T retrieveBean(String name, T bean) throws CpoException{
         return(cpoAdapter.retrieveBean(name,bean));
     }
@@ -257,6 +269,7 @@ public class CpoAdapterBean
    *         the metadata for the retireve.
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
+  @Override
   public <T> T retrieveBean(String name, T bean, Collection<CpoWhere> wheres,
       Collection<CpoOrderBy> orderBy, Collection<CpoNativeQuery> nativeQueries)
       throws CpoException{
@@ -284,6 +297,7 @@ public class CpoAdapterBean
      *                 is used to specify the bean type that will be returned in the
      *                 collection.
      */
+  @Override
     public <T,C> T retrieveBean(String name, C criteria, T result, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy) throws CpoException{
       return cpoAdapter.retrieveBean(name,criteria,result,wheres, orderBy);
     }
@@ -308,6 +322,7 @@ public class CpoAdapterBean
      *                 is used to specify the bean type that will be returned in the
      *                 collection.
      */
+  @Override
     public <T,C> T retrieveBean(String name, C criteria, T result, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeQuery> nativeQuery) throws CpoException{
       return cpoAdapter.retrieveBean(name,criteria,result,wheres, orderBy,nativeQuery);
     }
@@ -327,6 +342,7 @@ public class CpoAdapterBean
      *
      * @throws CpoException Thrown if there are errors accessing the datasource
      */
+  @Override
     public <C> List<C> retrieveBeans(String name, C criteria) throws CpoException{
         return cpoAdapter.retrieveBeans(name,criteria);
     }
@@ -350,6 +366,7 @@ public class CpoAdapterBean
      *
      * @throws CpoException Thrown if there are errors accessing the datasource
      */
+  @Override
     public <C> List<C> retrieveBeans(String name, C criteria, CpoWhere where,
         Collection<CpoOrderBy> orderBy) throws CpoException{
         return cpoAdapter.retrieveBeans(name,criteria,where, orderBy);
@@ -372,6 +389,7 @@ public class CpoAdapterBean
      *
      * @throws CpoException Thrown if there are errors accessing the datasource
      */
+  @Override
     public <C> List<C> retrieveBeans(String name, C criteria, Collection<CpoOrderBy> orderBy) throws CpoException{
         return cpoAdapter.retrieveBeans(name,criteria, orderBy);
     }
@@ -395,6 +413,7 @@ public class CpoAdapterBean
      *
      * @throws CpoException Thrown if there are errors accessing the datasource
      */
+  @Override
     public <C> List<C> retrieveBeans(String name, C criteria, Collection<CpoWhere> wheres,
         Collection<CpoOrderBy> orderBy) throws CpoException{
         return cpoAdapter.retrieveBeans(name,criteria,wheres, orderBy);
@@ -419,6 +438,7 @@ public class CpoAdapterBean
      *
      * @throws CpoException Thrown if there are errors accessing the datasource
      */
+  @Override
     public <T,C> List<T> retrieveBeans(String name, C criteria, T result) throws CpoException{
         return cpoAdapter.retrieveBeans(name,criteria,result);
     }
@@ -446,6 +466,7 @@ public class CpoAdapterBean
      *
      * @throws CpoException Thrown if there are errors accessing the datasource
      */
+  @Override
     public <T,C> List<T> retrieveBeans(String name, C criteria, T result, CpoWhere where,
         Collection<CpoOrderBy> orderBy) throws CpoException{
         return cpoAdapter.retrieveBeans(name,criteria,result,where, orderBy);
@@ -474,6 +495,7 @@ public class CpoAdapterBean
      *                 that was passed in. If no beans match the criteria, an empty
      *                 collection will be returned
      */
+  @Override
     public <T,C> List<T> retrieveBeans(String name, C criteria, T result, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy)  throws CpoException {
         return cpoAdapter.retrieveBeans(name,criteria,result, wheres, orderBy);
     }
@@ -500,6 +522,7 @@ public class CpoAdapterBean
      *                 that was passed in. If no beans match the criteria, an empty
      *                 collection will be returned
      */
+  @Override
     public <T,C> List<T> retrieveBeans(String name, C criteria, T result, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeQuery> nativeQuery)  throws CpoException {
         return cpoAdapter.retrieveBeans(name,criteria,result,wheres, orderBy, nativeQuery);
     }
@@ -529,6 +552,7 @@ public class CpoAdapterBean
      *
      * @throws CpoException Thrown if there are errors accessing the datasource
      */
+  @Override
     public <T,C> CpoResultSet<T> retrieveBeans(String name, C criteria, T result, Collection<CpoWhere> wheres,
         Collection<CpoOrderBy> orderBy, Collection<CpoNativeQuery> nativeQueries, int queueSize) throws CpoException{
 			  return cpoAdapter.retrieveBeans(name,criteria,result,wheres, orderBy, nativeQueries, queueSize);
@@ -550,6 +574,7 @@ public class CpoAdapterBean
 		 * @deprecated use retrieveBean
      */
 		@Deprecated
+  @Override
     public <T> T retrieveObject(T obj) throws CpoException{
         return(cpoAdapter.retrieveBean(null,obj));
     }
@@ -572,6 +597,7 @@ public class CpoAdapterBean
 		 * @deprecated use retrieveBean
      */
 		@Deprecated
+  @Override
     public <T> T retrieveObject(String name, T obj) throws CpoException{
         return(cpoAdapter.retrieveBean(name,obj));
     }
@@ -600,6 +626,7 @@ public class CpoAdapterBean
 		 * @deprecated use retrieveBean
      */
 		@Deprecated
+  @Override
     public <T,C> T retrieveObject(String name, C criteria, T result, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy) throws CpoException{
       return cpoAdapter.retrieveBean(name,criteria,result,wheres, orderBy);
     }
@@ -627,6 +654,7 @@ public class CpoAdapterBean
 		 * @deprecated use retrieveBean
      */
 		@Deprecated
+  @Override
     public <T,C> T retrieveObject(String name, C criteria, T result, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeQuery> nativeQuery) throws CpoException{
       return cpoAdapter.retrieveBean(name,criteria,result,wheres, orderBy,nativeQuery);
     }
@@ -656,6 +684,7 @@ public class CpoAdapterBean
 		 * @deprecated use retrieveBeans
      */
 		@Deprecated
+  @Override
     public <T,C> Collection<T> retrieveObjects(String name, C criteria, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, T result)  throws CpoException {
         return cpoAdapter.retrieveBeans(name,criteria,result,wheres, orderBy);
     }
@@ -685,6 +714,7 @@ public class CpoAdapterBean
 		 * @deprecated use retrieveBeans
      */
 		@Deprecated
+  @Override
     public <T,C> Collection<T> retrieveObjects(String name, C criteria, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeQuery> nativeQuery, T result)  throws CpoException {
         return cpoAdapter.retrieveBeans(name,criteria,result,wheres, orderBy, nativeQuery);
     }
@@ -723,6 +753,7 @@ public class CpoAdapterBean
 	 * @deprecated use retrieveBeans
    */
     @Deprecated
+  @Override
     public <T,C> CpoResultSet<T> retrieveObjects(String name, C criteria, Collection<CpoWhere> wheres,
         Collection<CpoOrderBy> orderBy, Collection<CpoNativeQuery> nativeQuery, T result, int queueSize) throws CpoException {
       return cpoAdapter.retrieveBeans(name,criteria, result, wheres, orderBy, nativeQuery, queueSize);
@@ -737,6 +768,7 @@ public class CpoAdapterBean
      *               metadata of the datasource. If the class is not defined
      *               an exception will be thrown.
      */
+  @Override
     public <T> long updateObject(T obj) throws CpoException{
         return cpoAdapter.updateObject(null,obj);
     }
@@ -750,6 +782,7 @@ public class CpoAdapterBean
      *               metadata of the datasource. If the class is not defined
      *               an exception will be thrown.
      */
+  @Override
     public <T> long updateObject(String name, T obj) throws CpoException{
         return cpoAdapter.updateObject(name,obj);
     }
@@ -769,6 +802,7 @@ public class CpoAdapterBean
    * @return The number of objects updated in the datasource
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
+  @Override
   public <T> long updateObject(String name, T obj, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, 
       Collection<CpoNativeQuery> nativeQueries) throws CpoException{
         return cpoAdapter.updateObject(name,obj,wheres, orderBy, nativeQueries);
@@ -788,6 +822,7 @@ public class CpoAdapterBean
      *               the metadata of the datasource. If the class is not defined
      *               an exception will be thrown.
      */
+  @Override
     public <T> long updateObjects(Collection<T> coll) throws CpoException{
         return cpoAdapter.updateObjects(null,coll);
     }
@@ -806,6 +841,7 @@ public class CpoAdapterBean
      *               the metadata of the datasource. If the class is not defined
      *               an exception will be thrown.
      */
+  @Override
     public <T> long updateObjects(String name, Collection<T> coll) throws CpoException{
         return cpoAdapter.updateObjects(name,coll);
     }
@@ -827,6 +863,7 @@ public class CpoAdapterBean
    * @return The number of objects updated in the datasource
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
+  @Override
   public <T> long updateObjects(String name, Collection<T> coll, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeQuery> nativeQueries)
       throws CpoException{
         return cpoAdapter.updateObject(name,coll,wheres, orderBy, nativeQueries);
@@ -842,6 +879,7 @@ public class CpoAdapterBean
      *               an exception will be thrown. If the object does not exist in
      *               the datasource an exception will be thrown.
      */
+  @Override
     public <T> long deleteObject(T obj) throws CpoException{
         return cpoAdapter.deleteObject(null,obj);
     }
@@ -856,6 +894,7 @@ public class CpoAdapterBean
      *               an exception will be thrown. If the object does not exist in
      *               the datasource an exception will be thrown.
      */
+  @Override
     public <T> long deleteObject(String name, T obj) throws CpoException{
         return cpoAdapter.deleteObject(name,obj);
     }
@@ -878,6 +917,7 @@ public class CpoAdapterBean
    * @return The number of objects deleted from the datasource
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
+  @Override
   public <T> long deleteObject(String name, T obj, Collection<CpoWhere> wheres,
       Collection<CpoOrderBy> orderBy, Collection<CpoNativeQuery> nativeQueries) throws CpoException{
         return cpoAdapter.deleteObject(name,obj, wheres, orderBy, nativeQueries);
@@ -895,6 +935,7 @@ public class CpoAdapterBean
      *               the metadata of the datasource. If the class is not defined
      *               an exception will be thrown.
      */
+  @Override
     public <T> long deleteObjects(Collection<T> coll) throws CpoException{
         return cpoAdapter.deleteObjects(null,coll);
     }
@@ -911,6 +952,7 @@ public class CpoAdapterBean
      *               the metadata of the datasource. If the class is not defined
      *               an exception will be thrown.
      */
+  @Override
     public <T> long deleteObjects(String name, Collection<T> coll) throws CpoException{
         return cpoAdapter.deleteObjects(name,coll);
     }
@@ -937,6 +979,7 @@ public class CpoAdapterBean
    * @return The number of objects deleted from the datasource
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
+  @Override
   public <T> long deleteObjects(String name, Collection<T> coll, Collection<CpoWhere> wheres,
       Collection<CpoOrderBy> orderBy, Collection<CpoNativeQuery> nativeQueries)
       throws CpoException{
@@ -961,6 +1004,7 @@ public class CpoAdapterBean
      * 
      * @exception    An exception is thrown if existsObject() returns a value > 1
      */
+  @Override
     public <T> long persistObject(T obj) throws CpoException{
         return cpoAdapter.persistObject(null,obj);
     }
@@ -982,6 +1026,7 @@ public class CpoAdapterBean
      * 
      * @exception    An exception is thrown if existsObject() returns a value > 1
      */
+  @Override
     public <T> long persistObject(String name, T obj) throws CpoException{
         return cpoAdapter.persistObject(name,obj);
     }
@@ -1009,6 +1054,7 @@ public class CpoAdapterBean
      * @see #insertObject
      * @see #updateObject
      */
+  @Override
     public <T> long persistObjects(Collection<T> coll) throws CpoException{
         return cpoAdapter.persistObjects(null,coll);
     }
@@ -1035,6 +1081,7 @@ public class CpoAdapterBean
      * @see #insertObject
      * @see #updateObject
      */
+  @Override
     public <T> long persistObjects(String name, Collection<T> coll) throws CpoException{
         return cpoAdapter.persistObjects(name,coll);
     }
@@ -1054,6 +1101,7 @@ public class CpoAdapterBean
      * @exception    An exception will be thrown if there is a column count != 1
      * @exception    An exception will be thrown if the column returned  cannot be converted to an int
      */
+  @Override
     public <T> long existsObject(T obj) throws CpoException{
         return cpoAdapter.existsObject(null,obj);
     }
@@ -1072,6 +1120,7 @@ public class CpoAdapterBean
      * @exception    An exception will be thrown if there is a column count != 1
      * @exception    An exception will be thrown if the column returned  cannot be converted to an int
      */
+  @Override
     public <T> long existsObject(String name, T obj) throws CpoException{
         return cpoAdapter.existsObject(name,obj);
     }
@@ -1122,6 +1171,7 @@ public class CpoAdapterBean
      *
      * @throws CpoException Thrown if there are errors accessing the datasource
      */
+  @Override
     public <T> long existsObject(String name, T obj, Collection<CpoWhere> wheres) throws CpoException{
         return cpoAdapter.existsObject(name,obj, wheres);
     }
@@ -1147,6 +1197,7 @@ public class CpoAdapterBean
      * 
      * @return         A result object populate with the OUT parameters
      */
+  @Override
     public <T> T executeObject(T object)  throws CpoException
     {
         return cpoAdapter.executeObject(null,object, object);    
@@ -1168,6 +1219,7 @@ public class CpoAdapterBean
      *
      * @throws CpoException DOCUMENT ME!
      */
+  @Override
     public <T> T executeObject(String name, T object)  throws CpoException
     {
         return cpoAdapter.executeObject(name,object, object);    
@@ -1193,49 +1245,45 @@ public class CpoAdapterBean
      *                 collection and contain the result set data or the OUT Parameters.
      * @return         A result object populate with the OUT parameters
      */
+  @Override
     public <T,C> T executeObject(String name, C criteria, T result)  throws CpoException
     {
         return cpoAdapter.executeObject(name,criteria, result);    
     }
     
+  @Override
     public CpoOrderBy newOrderBy(String attribute, boolean ascending) throws CpoException{
         return cpoAdapter.newOrderBy(attribute,ascending);
     }
     
+  @Override
     public CpoOrderBy newOrderBy(String attribute, boolean ascending, String function) throws CpoException{
         return cpoAdapter.newOrderBy(attribute,ascending,function);
     }
 
+  @Override
     public CpoWhere newWhere() throws CpoException{
         return cpoAdapter.newWhere();
     }
+  @Override
     public <T> CpoWhere newWhere(int logical, String attr, int comp, T value) throws CpoException{
         return cpoAdapter.newWhere(logical, attr,comp,value);
     }
+  @Override
     public <T> CpoWhere newWhere(int logical, String attr, int comp, T value, boolean not) throws CpoException{
         return cpoAdapter.newWhere(logical, attr,comp,value, not);
-    }
-
-    public void clearMetaClass(Object obj) throws CpoException{
-        cpoAdapter.clearMetaClass(obj);
-    }
-    public void clearMetaClass(String className) throws CpoException{
-        cpoAdapter.clearMetaClass(className);
-    }
-    public void clearMetaClass() throws CpoException{
-        cpoAdapter.clearMetaClass();
-    }
-    public void clearMetaClass(boolean all) throws CpoException{
-      cpoAdapter.clearMetaClass(all);
     }
 
     /**
      * @deprecated
      */
     @Deprecated
+  @Override
     public <T> long transactObjects(Collection<CpoObject<T>> coll) throws CpoException{
         return cpoAdapter.transactObjects(coll);
     }
+    
+  @Override
     public CpoTrxAdapter getCpoTrxAdapter() throws CpoException {
     	throw new CpoException("Not Supported in Session Bean");
     }

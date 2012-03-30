@@ -113,46 +113,6 @@ public interface CpoAdapter extends java.io.Serializable {
     static final int EXECUTE=7;
 
     /**
-     * Clears the metadata for the specified object. The metadata will be reloaded
-     * the next time that CPO is called to access this object
-     *
-     * @param obj The object whose metadata must be cleared
-     *
-     * @throws CpoException Thrown if there are errors accessing the datasource
-     */
-    public void clearMetaClass(Object obj) throws CpoException;
-
-    /**
-     * Clears the metadata for the specified fully qualifed class name. The metadata 
-     * will be reloaded the next time CPO is called to access this class.
-     *
-     * @param className The fully qualified class name for the class that needs its
-     *               metadata cleared.
-     *
-     * @throws CpoException Thrown if there are errors accessing the datasource
-     */
-    public void clearMetaClass(String className) throws CpoException;
-
-    /**
-     * Clears the metadata for all classes. The metadata will be lazy-loaded from 
-     * the metadata repository as classes are accessed.
-     *
-     * @param all true - clear all classes for all datasources.
-     *            false - clear all classes for the current datasource.
-     *
-     * @throws CpoException Thrown if there are errors accessing the datasource
-    */
-    public void clearMetaClass(boolean all) throws CpoException;
-
-    /**
-     * Clears the metadata for all classes for the current datasource. The metadata will be lazy-loaded from 
-     * the metadata repository as classes are accessed.
-     *
-     * @throws CpoException Thrown if there are errors accessing the datasource
-    */
-    public void clearMetaClass() throws CpoException;
-    
-    /**
      * Creates the Object in the datasource. The assumption is that the object does not exist in
      * the datasource.  This method creates and stores the object in the datasource.
      * 

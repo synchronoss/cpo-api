@@ -50,11 +50,13 @@ public class Container extends Object implements IContainer, Serializable, Clone
         this.myObject = obj;
     }
 
+  @Override
     public Object getObject()
     {
         return this.myObject;
     }
 
+  @Override
     public void setObject(Object obj)
     {
         if(!isReadOnly()) {
@@ -63,11 +65,13 @@ public class Container extends Object implements IContainer, Serializable, Clone
         }
     }
 
+  @Override
     public void setModified(boolean lclModified)
     {
         this.modified = lclModified;
     }
 
+  @Override
     public boolean getModified()
     {
         return this.modified;
@@ -83,6 +87,7 @@ public class Container extends Object implements IContainer, Serializable, Clone
         return this.readOnly;
     }
 
+  @Override
     public Object clone()
     throws CloneNotSupportedException {
         Container thisClone = (Container) super.clone();

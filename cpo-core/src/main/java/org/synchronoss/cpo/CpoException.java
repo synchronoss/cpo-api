@@ -86,6 +86,7 @@ public class CpoException extends Exception  {
      * Returns the detail message, including the message from the nested
      * exception if there is one.
      */
+  @Override
     public String getMessage() {
         StringBuilder msg=new StringBuilder("\n");
 
@@ -106,6 +107,7 @@ public class CpoException extends Exception  {
      * the specified stream <code>ps</code>.
      * @param ps the print stream
      */
+  @Override
     public void printStackTrace(java.io.PrintStream ps) {
         synchronized(ps) {
             if(detail != null) {
@@ -118,6 +120,7 @@ public class CpoException extends Exception  {
     /**
      * Prints the composite message to <code>System.err</code>.
      */
+  @Override
     public void printStackTrace() {
         printStackTrace(System.err);
     }
@@ -127,6 +130,7 @@ public class CpoException extends Exception  {
      * the specified print writer <code>pw</code>.
      * @param pw the print writer
      */
+  @Override
     public void printStackTrace(java.io.PrintWriter pw) {
         synchronized(pw) {
             if(detail != null) {

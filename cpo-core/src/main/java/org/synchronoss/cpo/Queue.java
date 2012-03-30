@@ -27,7 +27,6 @@
 package org.synchronoss.cpo;
 
 import java.io.Serializable;
-import java.lang.Cloneable;
 
 public class Queue extends Object implements Serializable, Cloneable {
     /** Version Id for this class. */

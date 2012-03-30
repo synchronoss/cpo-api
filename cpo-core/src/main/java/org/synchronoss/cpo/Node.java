@@ -31,13 +31,9 @@
 package org.synchronoss.cpo;
 
 import java.io.Serializable;
-import java.lang.Cloneable;
-import java.lang.Comparable;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.ArrayList;
-
-import org.synchronoss.cpo.INodeVisitor;
 
 /**
  * This is a general Node class to be used to build
@@ -599,6 +595,7 @@ public class Node implements Serializable, Cloneable, Comparable<Node> {
         return al;
     }
 
+  @Override
     public Object clone()
     throws CloneNotSupportedException {
         Node thisClone = (Node) super.clone();
@@ -623,6 +620,7 @@ public class Node implements Serializable, Cloneable, Comparable<Node> {
         return thisClone;
     }
 
+  @Override
     public int compareTo(Node o) {
 
         int rc;

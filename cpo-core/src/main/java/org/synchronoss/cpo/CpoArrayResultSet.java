@@ -19,12 +19,14 @@ public class CpoArrayResultSet<E> extends ArrayList<E> implements CpoResultSet<E
 
   private static final long serialVersionUID = 1L;
 
+  @Override
   public void put(E e) throws InterruptedException{
     if (canceled)
       throw new InterruptedException();
     add(e);
   }
   
+  @Override
   public E take() throws InterruptedException{
     if (canceled)
       throw new InterruptedException();
@@ -34,10 +36,12 @@ public class CpoArrayResultSet<E> extends ArrayList<E> implements CpoResultSet<E
       return null;
   }
   
+  @Override
   public void cancel(){
     canceled=true;
   }
   
+  @Override
   public int getFetchSize(){
     return 10;
   }

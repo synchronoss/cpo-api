@@ -23,8 +23,6 @@
  */
 package org.synchronoss.cpo;
 
-import org.synchronoss.cpo.CpoException;
-
 /**
  *
  * @author dberry

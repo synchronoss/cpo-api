@@ -19,13 +19,15 @@
  *  http://www.gnu.org/licenses/lgpl.txt
  */
 package org.synchronoss.cpo;
-import java.security.SecureRandom;
-import java.net.InetAddress;
+
 import java.math.BigInteger;
-import org.slf4j.*;
+import java.net.InetAddress;
+import java.security.SecureRandom;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class GUID  {
-  private static GUID guid;
+  private static GUID guid_;
   private SecureRandom seeder;
   SecureRandom sr;
   String guidMidValue;
@@ -72,9 +74,9 @@ public class GUID  {
   }
 
   static GUID getInstance() {
-    if (guid == null)
-      guid = new GUID();
-    return guid;
+    if (guid_ == null)
+      guid_ = new GUID();
+    return guid_;
   }
   
   public static String getGUID() {

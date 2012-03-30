@@ -5,7 +5,6 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.concurrent.LinkedBlockingQueue;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,12 +26,14 @@ public class CpoBlockingResultSet<E> implements CpoResultSet<E>, Iterator<E> {
     lbq = new LinkedBlockingQueue<E>(capacity);
   }
   
+  @Override
   public void put(E e) throws InterruptedException{
     producers.add(Thread.currentThread());
     logger.debug("Put Called");
     lbq.put(e);
   }
   
+  @Override
   public boolean hasNext(){
     logger.debug("hasNext Called");
     
@@ -52,14 +53,17 @@ public class CpoBlockingResultSet<E> implements CpoResultSet<E>, Iterator<E> {
     
   }
   
+  @Override
   public int size(){
     return lbq.size();
   }
   
+  @Override
   public void remove() {
     throw new UnsupportedOperationException();
   }
   
+  @Override
   public E next() throws NoSuchElementException{
     logger.debug("next Called");
     E ret=tlObj.get();
@@ -81,16 +85,19 @@ public class CpoBlockingResultSet<E> implements CpoResultSet<E>, Iterator<E> {
     return ret;
   }
 
+  @Override
   public Iterator<E> iterator() {
     return this;
   }
 
+  @Override
   public E take() throws InterruptedException {
     consumers.add(Thread.currentThread());
     logger.debug("Take Called");
     return lbq.take();
   }
   
+  @Override
   public void cancel(){
     for(Thread t : consumers){
         t.interrupt();
@@ -100,6 +107,7 @@ public class CpoBlockingResultSet<E> implements CpoResultSet<E>, Iterator<E> {
     }
   }
   
+  @Override
   public int getFetchSize(){
     return capacity;
   }

@@ -25,8 +25,6 @@
 
 package org.synchronoss.cpo;
 
-import org.synchronoss.cpo.Node;
-
 /**
   * This is the interface for the visitors to the Node Hierarchy
   *

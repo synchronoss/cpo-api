@@ -45,7 +45,7 @@ public class JdbcCpoMetaAdapter extends AbstractCpoMetaAdapter {
       throws CpoException {
     CpoClass<T> cpoClass=null;
 
-    cpoClass = new CpoClass<T>(objClass, name);
+    cpoClass = new CpoClass<T>(objClass);
 //    loadAttributeMap(name, cpoClass);
 //    loadQueryGroups(cpoClass);
 

@@ -11,10 +11,6 @@ public class CpoClassBean implements java.io.Serializable {
   public CpoClassBean() {
   }
   
-  public CpoClassBean(String name) {
-    this.name = name;
-  }
-
   /* Getters and Setters */
   public java.lang.String getName() {
     return this.name;

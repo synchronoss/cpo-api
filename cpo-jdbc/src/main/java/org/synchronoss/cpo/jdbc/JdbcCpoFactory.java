@@ -71,6 +71,105 @@ public class JdbcCpoFactory implements CpoFactory {
   public CpoAdapter getCpoAdapter() throws CpoException {
     return getCpoAdapter(DEFAULT_CONTEXT);
   }
+  
+  public JdbcCpoMetaAdapter getMetaCpoAdapter(String context) throws CpoException {
+	  if (context==null)
+	    context = DEFAULT_CONTEXT;
+	  
+	  JdbcCpoMetaAdapter cpo = null;
+    if (cpo!=null)
+      return cpo;
+	  
+	  synchronized(propMap){
+	    // check again
+//	    cpo= propMap.get(context);
+	    if (cpo!=null)
+	      return cpo;
+	    
+  	  String     tablePrefix_ = null;
+  	  String metaDatasource_ = null;
+  	  String     metaDriver_ = null;
+  	  String    metaUserUrl_ = null;
+  	  String        metaUrl_ = null;
+  	  String       metaUser_ = null;
+  	  String   metaPassword_ = null;
+  	  String metaDatasourceClass_ = null;
+  	  
+  	  String dbDatasource_ = null;
+  	  String     dbDriver_ = null;
+  	  String    dbUserUrl_ = null;
+  	  String        dbUrl_ = null;
+  	  String       dbUser_ = null;
+  	  String   dbPassword_ = null;
+  	  String dbDatasourceClass_ = null;
+
+      DataSourceInfo metaInfo=null;
+  	  DataSourceInfo dbInfo=null;
+  	  ResourceBundle b=null;
+  	  
+      try{
+        b = ResourceBundle.getBundle(PROP_FILE,Locale.getDefault(), JdbcCpoFactory.class.getClassLoader());
+      } catch (Exception e){
+        throw new CpoException("Error processing properties file:"+PROP_FILE+".properties :"+ExceptionHelper.getLocalizedMessage(e));
+      }
+      
+      dbDatasource_ = getResourceString(b,context+PROP_DB_DATASOURCE);
+      dbDriver_ = getResourceString(b,context+PROP_DB_DRIVER);
+      dbUserUrl_ = getResourceString(b,context+PROP_DB_USERURL);
+      dbUrl_ = getResourceString(b,context+PROP_DB_URL);
+      dbUser_ = getResourceString(b,context+PROP_DB_USER);
+      dbPassword_ = getResourceString(b,context+PROP_DB_PASSWORD);
+      dbDatasourceClass_ = getResourceString(b,context+PROP_DB_DATASOURCE_CLASS);
+      
+      tablePrefix_ = getResourceString(b,context+PROP_TABLE_PREFIX);
+      metaDatasource_ = getResourceString(b,context+PROP_META_DATASOURCE);
+      metaDriver_ = getResourceString(b,context+PROP_META_DRIVER);
+      metaUserUrl_ = getResourceString(b,context+PROP_META_USERURL);
+      metaUrl_ = getResourceString(b,context+PROP_META_URL);
+      metaUser_ = getResourceString(b,context+PROP_META_USER);
+      metaPassword_ = getResourceString(b,context+PROP_META_PASSWORD);
+      metaDatasourceClass_ = getResourceString(b,context+PROP_META_DATASOURCE_CLASS);
+  
+  	  try {
+    	  if (metaDatasource_!=null)
+    	    metaInfo = new JndiDataSourceInfo(metaDatasource_, tablePrefix_);
+    	  else if (metaDatasourceClass_!=null)
+    	    metaInfo = new ClassDataSourceInfo(metaDatasourceClass_,getProperties(b, context+PROP_META_DATASOURCE_CLASS+"."),tablePrefix_);
+    	  else if (metaUserUrl_!=null)
+    	    metaInfo = new DriverDataSourceInfo(metaDriver_,metaUserUrl_,tablePrefix_);
+    	  else if (metaUrl_!=null)
+          metaInfo = new DriverDataSourceInfo(metaDriver_,metaUrl_, metaUser_, metaPassword_, tablePrefix_);
+  	  } catch (CpoException se) {
+  	    logger.debug("Unable to get meta datasource info: "+ExceptionHelper.getLocalizedMessage(se));
+  	    metaInfo=null;
+  	  }
+  	  
+      try {
+        if (dbDatasource_!=null)
+          dbInfo = new JndiDataSourceInfo(dbDatasource_, tablePrefix_);
+        else if (dbDatasourceClass_!=null)
+    	    dbInfo = new ClassDataSourceInfo(metaDatasourceClass_,getProperties(b, context+PROP_DB_DATASOURCE_CLASS+"."),tablePrefix_);
+    	  else if (dbUserUrl_!=null)
+          dbInfo = new DriverDataSourceInfo(dbDriver_,dbUserUrl_, tablePrefix_);
+        else if (dbUrl_!=null)
+          dbInfo = new DriverDataSourceInfo(dbDriver_,dbUrl_, dbUser_, dbPassword_, tablePrefix_);
+      } catch (CpoException se) {
+        logger.debug("Unable to get db datasource info: "+ExceptionHelper.getLocalizedMessage(se));
+        dbInfo=null;
+      }
+  	  
+//      if (metaInfo==null && dbInfo==null){
+//        throw new CpoException("Unable to create CpoAdapter, Invalid Datasource Information Provided: "+context);
+//      } else if (metaInfo==null){
+//        cpo = new JdbcCpoAdapter(new JdbcCpoMetaAdapter(dbInfo),dbInfo);
+//        propMap.put(context, cpo);
+//        return cpo;
+//      }
+//      cpo = new JdbcCpoAdapter(metaInfo,dbInfo);
+//      propMap.put(context, cpo);
+      return cpo;
+	  }
+  }
 	
 	public CpoAdapter getCpoAdapter(String context) throws CpoException {
 	  if (context==null)
@@ -161,11 +260,11 @@ public class JdbcCpoFactory implements CpoFactory {
       if (metaInfo==null && dbInfo==null){
         throw new CpoException("Unable to create CpoAdapter, Invalid Datasource Information Provided: "+context);
       } else if (metaInfo==null){
-        cpo = new JdbcCpoAdapter(dbInfo);
+//        cpo = new JdbcCpoAdapter(new JdbcCpoMetaAdapter(dbInfo),dbInfo);
         propMap.put(context, cpo);
         return cpo;
       }
-      cpo = new JdbcCpoAdapter(metaInfo,dbInfo);
+//      cpo = new JdbcCpoAdapter(metaInfo,dbInfo);
       propMap.put(context, cpo);
       return cpo;
 	  }

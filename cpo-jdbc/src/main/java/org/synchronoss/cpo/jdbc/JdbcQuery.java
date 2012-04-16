@@ -58,7 +58,7 @@ public class JdbcQuery extends java.lang.Object implements java.io.Serializable,
      * parameterList is a list of attribute names to get the data from
      * to use as parameters for the query
      */
-    private ArrayList<JdbcParameter> parameterList = new ArrayList<JdbcParameter>();
+    private ArrayList<JdbcArgument> parameterList = new ArrayList<JdbcArgument>();
 
     public JdbcQuery(){
     }
@@ -95,7 +95,7 @@ public class JdbcQuery extends java.lang.Object implements java.io.Serializable,
         this.type = s;
     }
 
-    public ArrayList<JdbcParameter> getParameterList(){
+    public ArrayList<JdbcArgument> getParameterList(){
         return this.parameterList;
     }
 

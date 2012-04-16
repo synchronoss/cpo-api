@@ -7,7 +7,7 @@ import org.synchronoss.cpo.CpoException;
  * Date: Sep 19, 2010
  * Time: 12:37:17 AM
  */
-public interface Transform<D, J> {
+public interface CpoTransform<D, J> {
 
   public J transformIn(D inObject) throws CpoException, UnsupportedOperationException;
 

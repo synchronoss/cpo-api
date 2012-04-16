@@ -24,10 +24,12 @@
  
 package org.synchronoss.cpo.jdbc;
 
-import java.util.HashMap;
+import java.util.Map;
 
 import org.synchronoss.cpo.CpoException;
 import org.synchronoss.cpo.CpoOrderBy;
+import org.synchronoss.cpo.meta.domain.CpoAttribute;
+import org.synchronoss.cpo.meta.domain.CpoClass;
 
 
 /**
@@ -127,26 +129,26 @@ public class JdbcCpoOrderBy implements CpoOrderBy {
         this.function = s;
     }
 
-    public String toString(JdbcMetaClass<?> jmc) throws CpoException {
+    public String toString(CpoClass<?> jmc) throws CpoException {
         StringBuilder sb = new StringBuilder();
         String function = null;
         String attribute = null;
         String column = null;
         int attrOffset = 0;
         int fromIndex = 0;
-        HashMap<String,JdbcAttribute> columnMap = jmc.getColumnMap();
-        JdbcAttribute jdbcAttribute=null;
+        Map<String,CpoAttribute> columnMap = jmc.getColumnMap();
+        CpoAttribute jdbcAttribute=null;
 
         attribute = this.getAttribute();
         function = this.getFunction();
         if(attribute != null && attribute.length()>0) {
-            jdbcAttribute = (JdbcAttribute) columnMap.get(attribute);
+            jdbcAttribute = (CpoAttribute) columnMap.get(attribute);
             if (jdbcAttribute == null) {
             	throw new CpoException(attribute);
             }
             sb.append(" ");
 
-            column = jdbcAttribute.getDbName();
+            column = jdbcAttribute.getDataName();
             if(column != null && column.length()>0) {
                 if(function!=null && function.length()>0) {
                     while((attrOffset=function.indexOf(attribute, fromIndex))!=-1){

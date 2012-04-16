@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" 
+    xmlns="http://www.synchronoss.org/cpo/config/CpoConfig.xsd"
+    targetNamespace="http://www.synchronoss.org/cpo/config/CpoConfig.xsd"
+    elementFormDefault="qualified">
+    
+    <xs:element name="cpoConfig" type="ctCpoConfig"/>
+    
+    <xs:complexType name="ctCpoConfig">
+        <xs:sequence>
+            <xs:element name="metaConfig" type="ctMetaConfig"/>
+            <xs:element name="dataConfig" type="ctDataConfig"/>
+        </xs:sequence>
+    </xs:complexType>
+    
+    <xs:complexType name="ctMetaConfig">
+        <xs:choice>
+            <xs:element name="jdbcConfig" type="ctJdbcConfig"/>
+            <xs:element name="cassandraConfig" type="ctCassandraConfig"/>
+            <xs:element name="xmlConfig" type="ctXmlConfig"/>
+        </xs:choice>
+    </xs:complexType>
+    
+    <xs:complexType name="ctDataConfig">
+        <xs:choice>
+            <xs:element name="jdbcConfig" type="ctJdbcConfig"/>
+            <xs:element name="cassandraConfig" type="ctCassandraConfig"/>
+        </xs:choice>
+    </xs:complexType>
+
+    <xs:complexType name="ctJdbcConfig">
+        <xs:choice>
+            <xs:choice>
+                <xs:element name="dataSourceClass" type="ctClassInfo"/>
+                <xs:element name="jdbcDriver" type="ctClassInfo"/>
+            </xs:choice>
+        </xs:choice>
+    </xs:complexType>
+
+    <xs:complexType name="ctClassInfo">
+        <xs:sequence>
+            <xs:element name="className" type="xs:string"/>
+            <xs:element name="url" type="xs:string"/>
+            <xs:element name="user" type="xs:string"/>
+            <xs:element name="password" type="xs:string"/>
+        </xs:sequence>
+    </xs:complexType>
+    
+    <xs:complexType name="ctXmlConfig">
+        <xs:sequence>
+            <xs:element name="resourceName" type="xs:string"/>
+        </xs:sequence>
+    </xs:complexType>
+    
+    <xs:complexType name="ctCassandraConfig">
+        <xs:sequence>
+            <xs:element name="keyStore" type="xs:string"/>
+        </xs:sequence>
+    </xs:complexType>
+</xs:schema>

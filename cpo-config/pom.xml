@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>org.synchronoss.cpo</groupId>
+  <artifactId>cpo-config</artifactId>
+  <name>cpo-config</name>
+  <version>5.0.0-SNAPSHOT</version> 
+  <description>CPO is a persistence layer that allows you to persist POJOs. cpo-config is the module that processes the
+    config data for cpo. It includes the xsd for the config, the xml beans to process the config and helper functions
+    that return the config as POJOs
+  </description>
+  <parent>
+    <groupId>org.synchronoss.cpo</groupId>
+    <artifactId>cpo</artifactId>
+    <version>5.0.0-SNAPSHOT</version>
+    <relativePath>../pom.xml</relativePath>
+  </parent>
+  <dependencies>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+    </dependency>
+    <!-- log4j implementation for test logging -->
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-log4j12</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>log4j</groupId>
+      <artifactId>log4j</artifactId>
+    </dependency>
+  </dependencies>
+</project>

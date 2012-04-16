@@ -1,5 +1,5 @@
 /**
- * JdbcParameter.java
+ * JdbcArgument.java
  * 
  *  Copyright (C) 2006  David E. Berry
  *
@@ -24,17 +24,17 @@
 
 package org.synchronoss.cpo.jdbc;
 
-import org.synchronoss.cpo.CpoException;
+import org.synchronoss.cpo.meta.domain.CpoArgument;
 
 
 /**
- * JdbcParameter is a class that maps traditional java classes to tables in a 
+ * JdbcArgument is a class that maps traditional java classes to tables in a 
  * jdbc database. 
  * 
  * @author david berry
  */
 
-public class JdbcParameter extends java.lang.Object implements java.io.Serializable, java.lang.Cloneable {
+public class JdbcArgument extends CpoArgument implements java.io.Serializable, java.lang.Cloneable {
 
 	/**
      * Version Id for this class.
@@ -45,40 +45,36 @@ public class JdbcParameter extends java.lang.Object implements java.io.Serializa
     private static final String IN_PARAMETER = "IN";
     private static final String OUT_PARAMETER = "OUT";
     private static final String INOUT_PARAMETER = "BOTH";
+    private String executeType = null;
 
-    private JdbcAttribute attribute_ = null;
-    private String type_ = null;
-
-    public JdbcParameter(){
+    public JdbcArgument(JdbcAttribute attribute){
+      super(attribute);
     }
 
-    public JdbcParameter(JdbcAttribute attribute, String type)
-    throws CpoException {
-        setAttribute(attribute);
-        setType(type);
+    public JdbcArgument(JdbcAttribute attribute, String executeType){
+      super(attribute);
+      this.executeType=executeType;
     }
 
-    public void setAttribute(JdbcAttribute attribute){
-        attribute_ = attribute;
-    }
-
-    public void setType(String type){
-        type_ = type;
-    }
-
-    public JdbcAttribute getAttribute(){
-        return attribute_;
-    }
-
-    public String getType(){
-        return type_;
+  @Override
+    public JdbcAttribute getAttribute() {
+      return (JdbcAttribute) super.getAttribute();
     }
 
     public boolean isInParameter(){
-        return IN_PARAMETER.equals(getType()) || INOUT_PARAMETER.equals(getType());
+        return IN_PARAMETER.equals(getExecuteType()) || INOUT_PARAMETER.equals(getExecuteType());
     }
 
     public boolean isOutParameter(){
-        return OUT_PARAMETER.equals(getType()) || INOUT_PARAMETER.equals(getType());
+        return OUT_PARAMETER.equals(getExecuteType()) || INOUT_PARAMETER.equals(getExecuteType());
     }
+    
+  public String getExecuteType() {
+    return executeType;
+  }
+
+  public void setExecuteType(String executeType) {
+    this.executeType = executeType;
+  }
+
 }

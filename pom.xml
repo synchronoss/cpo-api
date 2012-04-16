@@ -142,6 +142,25 @@
           <artifactId>maven-surefire-plugin</artifactId>
           <version>2.12</version>
         </plugin>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>xmlbeans-maven-plugin</artifactId>
+        <version>2.3.3</version>
+        <executions>
+          <execution>
+            <id>Build-XMLBeans</id>
+            <phase>generate-sources</phase>
+            <!--<phase>compile</phase>-->
+            <goals>
+              <goal>xmlbeans</goal>
+            </goals>
+          </execution>
+        </executions>
+        <!--<inherited>true</inherited>-->
+        <configuration>
+          <schemaDirectory>src/main/xsd</schemaDirectory>
+        </configuration>
+      </plugin>
       </plugins>
     </pluginManagement>
   </build>
@@ -177,6 +196,11 @@
         <artifactId>log4j</artifactId>
         <version>1.2.16</version>
         <scope>test</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.xmlbeans</groupId>
+        <artifactId>xmlbeans</artifactId>
+        <version>2.4.0</version>
       </dependency>
     </dependencies>
   </dependencyManagement>
@@ -268,6 +292,7 @@
   </reporting>
   <modules>
     <module>cpo-core</module>
+    <module>cpo-config</module>
     <module>cpo-jdbc</module>
     <module>cpo-cassandra</module>
   </modules>

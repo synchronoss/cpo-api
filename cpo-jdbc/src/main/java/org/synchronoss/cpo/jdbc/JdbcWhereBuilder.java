@@ -30,6 +30,8 @@ import org.synchronoss.cpo.CpoWhere;
 
 import org.synchronoss.cpo.INodeVisitor;
 import org.synchronoss.cpo.Node;
+import org.synchronoss.cpo.meta.domain.CpoAttribute;
+import org.synchronoss.cpo.meta.domain.CpoClass;
 
 /**
  * JdbcWhereBuilder is an interface for specifying the sort order in which
@@ -41,7 +43,7 @@ import org.synchronoss.cpo.Node;
 public class JdbcWhereBuilder<T> implements INodeVisitor {
 
     private StringBuilder whereClause = new StringBuilder();
-    private JdbcMetaClass<T> jmc = null;
+    private CpoClass<T> cpoClass = null;
     private Collection<BindAttribute> bindValues = new ArrayList<BindAttribute>();
 
     public String getWhereClause(){
@@ -56,8 +58,8 @@ public class JdbcWhereBuilder<T> implements INodeVisitor {
     private JdbcWhereBuilder(){
     }
 
-    public JdbcWhereBuilder(JdbcMetaClass<T> jmc){
-        this.jmc = jmc;
+    public JdbcWhereBuilder(CpoClass<T> cpoClass){
+        this.cpoClass = cpoClass;
     }
 
     /**
@@ -68,7 +70,7 @@ public class JdbcWhereBuilder<T> implements INodeVisitor {
     */
     public boolean visitBegin(Node node) throws Exception{
         JdbcCpoWhere jcw = (JdbcCpoWhere) node;
-        whereClause.append(jcw.toString(jmc));
+        whereClause.append(jcw.toString(cpoClass));
         if (jcw.hasParent() || jcw.getLogical()!=CpoWhere.LOGIC_NONE)
           whereClause.append(" (");
         else 
@@ -110,11 +112,11 @@ public class JdbcWhereBuilder<T> implements INodeVisitor {
     public boolean visit(Node node) throws Exception{
         JdbcCpoWhere jcw = (JdbcCpoWhere) node;
         JdbcAttribute attribute = null;
-        whereClause.append(jcw.toString(jmc));
+        whereClause.append(jcw.toString(cpoClass));
         if(jcw.getValue() != null) {
-            attribute = (JdbcAttribute) jmc.getColumnMap().get(jcw.getAttribute());
+            attribute = (JdbcAttribute) cpoClass.getColumnMap().get(jcw.getAttribute());
             if (attribute==null){
-              attribute = (JdbcAttribute) jmc.getColumnMap().get(jcw.getRightAttribute());
+              attribute = (JdbcAttribute) cpoClass.getColumnMap().get(jcw.getRightAttribute());
             }
             if (attribute==null)
               bindValues.add(new BindAttribute(jcw.getAttribute()==null?jcw.getRightAttribute():jcw.getAttribute(),jcw.getValue(), jcw.getComparison()==CpoWhere.COMP_IN));

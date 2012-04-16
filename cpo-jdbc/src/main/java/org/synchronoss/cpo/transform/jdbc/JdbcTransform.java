@@ -9,7 +9,7 @@ import org.synchronoss.cpo.jdbc.*;
  * Date: Sep 19, 2010
  * Time: 12:37:17 AM
  */
-public interface JdbcTransform<D, J> extends Transform<D, J> {
+public interface JdbcTransform<D, J> extends CpoTransform<D, J> {
 
   public D transformOut(JdbcPreparedStatementFactory jpsf, J attributeObject) throws CpoException, UnsupportedOperationException;
 

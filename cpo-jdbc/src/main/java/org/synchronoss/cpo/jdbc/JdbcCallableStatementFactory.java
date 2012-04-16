@@ -28,12 +28,16 @@ import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.CpoException;
 import org.synchronoss.cpo.CpoReleasible;
 import org.synchronoss.cpo.helper.ExceptionHelper;
+import org.synchronoss.cpo.meta.domain.CpoArgument;
+import org.synchronoss.cpo.meta.domain.CpoAttribute;
+import org.synchronoss.cpo.meta.domain.CpoFunction;
 
 /**
  * JdbcCallableStatementFactory is the object that encapsulates the creation of the actual
@@ -53,9 +57,9 @@ public class JdbcCallableStatementFactory implements CpoReleasible {
     @SuppressWarnings("unused")
     private JdbcCallableStatementFactory(){}
     
-    private ArrayList<CpoReleasible> releasibles = new ArrayList<CpoReleasible>();
+    private List<CpoReleasible> releasibles = new ArrayList<CpoReleasible>();
     
-    private ArrayList<JdbcParameter> outParameters = new ArrayList<JdbcParameter>();
+    private List<CpoArgument> outArguments = new ArrayList<CpoArgument>();
  
 
     /**
@@ -68,35 +72,35 @@ public class JdbcCallableStatementFactory implements CpoReleasible {
      * 
      * @param conn The actual jdbc connection that will be used to create the callable statement.
      * @param jca The JdbcCpoAdapter that is controlling this transaction 
-     * @param jq The JdbcQuery that is being executed
+     * @param function The CpoFunction that is being executed
      * @param obj The pojo that is being acted upon
      *
      * @throws CpoException if a CPO error occurs
      * @throws SQLException if a JDBC error occurs
      */
-    public JdbcCallableStatementFactory(Connection conn, JdbcCpoAdapter jca, JdbcQuery jq, Object obj) throws CpoException {
+    public JdbcCallableStatementFactory(Connection conn, JdbcCpoAdapter jca, CpoFunction function, Object obj) throws CpoException {
         CallableStatement cstmt = null;
         JdbcAttribute attribute = null;
         Logger localLogger = obj==null?logger:LoggerFactory.getLogger(obj.getClass().getName());
         
         try {
-            outParameters=jq.getParameterList();
+            outArguments=function.getArguments();
 
-            localLogger.debug("SQL = <"+jq.getText()+">");
+            localLogger.debug("SQL = <"+function.getExpression()+">");
 
             // prepare the Callable Statement
-            cstmt=conn.prepareCall(jq.getText());
+            cstmt=conn.prepareCall(function.getExpression());
             setCallableStatement(cstmt);
             
             int j=1;
-            for(JdbcParameter parameter:outParameters) {
-                attribute=parameter.getAttribute();
+            for(CpoArgument argument:outArguments) {
+                attribute = (JdbcAttribute) argument.getAttribute();
 
-                if(parameter.isInParameter()) {
+                if(((JdbcArgument)argument).isInParameter()) {
                     attribute.invokeGetter(this, obj, j);
                 }
 
-                if(parameter.isOutParameter()) {
+                if(((JdbcArgument)argument).isOutParameter()) {
                 	localLogger.debug("Setting OUT parameter "+j+" as Type "+attribute.getJavaSqlType());
                     cstmt.registerOutParameter(j, attribute.getJavaSqlType());
                 }
@@ -126,8 +130,8 @@ public class JdbcCallableStatementFactory implements CpoReleasible {
      * returns the Out parameters from the callable statement
      * 
      */
-    public ArrayList<JdbcParameter> getOutParameters(){
-        return outParameters;
+    public List<CpoArgument> getOutArguments(){
+        return outArguments;
     }
 
     /**

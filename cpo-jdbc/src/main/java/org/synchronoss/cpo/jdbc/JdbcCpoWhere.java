@@ -29,6 +29,8 @@ import org.synchronoss.cpo.ChildNodeException;
 import org.synchronoss.cpo.CpoException;
 import org.synchronoss.cpo.CpoWhere;
 import org.synchronoss.cpo.Node;
+import org.synchronoss.cpo.meta.domain.CpoAttribute;
+import org.synchronoss.cpo.meta.domain.CpoClass;
 
 /**
  * JdbcCpoWhere is an interface for specifying the sort order in which
@@ -151,7 +153,7 @@ public class JdbcCpoWhere extends Node implements CpoWhere{
         this.not=b;
     }
 
-    public String toString(JdbcMetaClass<?> jmc)  throws CpoException {
+    public String toString(CpoClass<?> cpoClass)  throws CpoException {
         StringBuilder sb = new StringBuilder();
         JdbcAttribute jdbcAttribute = null;
 
@@ -173,7 +175,7 @@ public class JdbcCpoWhere extends Node implements CpoWhere{
               sb.append(" ");
             String fullyQualifiedColumn=null;
 
-            jdbcAttribute = (JdbcAttribute) jmc.getColumnMap().get(getAttribute());
+            jdbcAttribute = (JdbcAttribute) cpoClass.getColumnMap().get(getAttribute());
             if(jdbcAttribute==null) {
                 // This is not an attribute on the cpo bean passed to the retrieveObjects method.
                 // treat it as the column name
@@ -184,7 +186,7 @@ public class JdbcCpoWhere extends Node implements CpoWhere{
             
             if (getAttributeFunction()!=null){
             	if (jdbcAttribute!=null)
-            		sb.append(buildFunction(getAttributeFunction(),jdbcAttribute.getName(),fullyQualifiedColumn.toString()));
+            		sb.append(buildFunction(getAttributeFunction(),jdbcAttribute.getJavaName(),fullyQualifiedColumn.toString()));
             	else
             		sb.append(getAttributeFunction());
             } else {
@@ -203,7 +205,7 @@ public class JdbcCpoWhere extends Node implements CpoWhere{
             if(getValue()!=null) {
                 if (getValueFunction()!=null){
                     if (jdbcAttribute==null) {
-                      jdbcAttribute = (JdbcAttribute) jmc.getColumnMap().get(getRightAttribute());
+                      jdbcAttribute = (JdbcAttribute) cpoClass.getColumnMap().get(getRightAttribute());
                     }
                     sb.append(buildFunction(getValueFunction(), getAttributeName(jdbcAttribute, getAttribute(), getRightAttribute()),"?"));
                 } else if(getComparison()==CpoWhere.COMP_IN && getValue() instanceof Collection) {
@@ -220,7 +222,7 @@ public class JdbcCpoWhere extends Node implements CpoWhere{
                     sb.append("?"); // add the parameter, we will bind it later.
                 }
             } else if(getRightAttribute()!=null) {
-                jdbcAttribute = (JdbcAttribute) jmc.getColumnMap().get(getRightAttribute());
+                jdbcAttribute = (JdbcAttribute)  cpoClass.getColumnMap().get(getRightAttribute());
                 String fullyQualifiedColumn = null;
                 if (jdbcAttribute==null){
                 	fullyQualifiedColumn=getRightAttribute();
@@ -240,11 +242,11 @@ public class JdbcCpoWhere extends Node implements CpoWhere{
         return sb.toString();
     }
 
-    private String getAttributeName(JdbcAttribute jdbcAttribute, String leftAttribute, String rightAttribute) {
+    private String getAttributeName(CpoAttribute jdbcAttribute, String leftAttribute, String rightAttribute) {
       String attrName = null;
       
       if (jdbcAttribute != null) {
-        attrName = jdbcAttribute.getName();
+        attrName = jdbcAttribute.getJavaName();
       }
       
       if (attrName==null && leftAttribute!=null){
@@ -314,7 +316,7 @@ public class JdbcCpoWhere extends Node implements CpoWhere{
       if (attribute.getDbColumn()!=null) {
         columnName.append(attribute.getDbColumn());
       } else {
-        columnName.append(attribute.getDbName());
+        columnName.append(attribute.getDataName());
       }
       
       return columnName.toString();

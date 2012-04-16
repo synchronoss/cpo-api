@@ -21,7 +21,10 @@
  *  http://www.gnu.org/licenses/lgpl.txt
  *
  */
-package org.synchronoss.cpo;
+package org.synchronoss.cpo.meta;
+
+import org.synchronoss.cpo.CpoException;
+import org.synchronoss.cpo.meta.domain.CpoClass;
 
 /**
  *
@@ -68,11 +71,11 @@ public interface CpoMetaAdapter {
     */
     public void clearMetaClass() throws CpoException;
     
-    /**
+     /**
      * Returns the meta data for the class that is contained within the meta data source
      *
      * @throws CpoException Thrown if there are errors accessing the datasource
     */
-    public void getMetaClass(String className) throws CpoException;
+    public <T> CpoClass<T> getMetaClass(T obj) throws CpoException;
   
 }

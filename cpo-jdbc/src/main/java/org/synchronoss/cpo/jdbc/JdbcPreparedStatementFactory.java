@@ -44,6 +44,10 @@ import org.synchronoss.cpo.CpoOrderBy;
 import org.synchronoss.cpo.CpoReleasible;
 import org.synchronoss.cpo.CpoWhere;
 import org.synchronoss.cpo.helper.ExceptionHelper;
+import org.synchronoss.cpo.meta.domain.CpoArgument;
+import org.synchronoss.cpo.meta.domain.CpoAttribute;
+import org.synchronoss.cpo.meta.domain.CpoClass;
+import org.synchronoss.cpo.meta.domain.CpoFunction;
 
 
 /**
@@ -66,7 +70,7 @@ public class JdbcPreparedStatementFactory implements CpoReleasible {
     @SuppressWarnings("unused")
     private JdbcPreparedStatementFactory(){}
     
-    private ArrayList<CpoReleasible> releasibles = new ArrayList<CpoReleasible>();
+    private List<CpoReleasible> releasibles = new ArrayList<CpoReleasible>();
     
     private static final String WHERE_MARKER = "__CPO_WHERE__";
     private static final String ORDERBY_MARKER = "__CPO_ORDERBY__";
@@ -86,11 +90,11 @@ public class JdbcPreparedStatementFactory implements CpoReleasible {
    * @param jca
    *          The JdbcCpoAdapter that is controlling this transaction
    * @param jq
-   *          The JdbcQuery that is being executed
+   *          The CpoFunction that is being executed
    * @param obj
    *          The pojo that is being acted upon
    * @param additionalSql
-   *          Additional sql to be appended to the JdbcQuery sql that is used to
+   *          Additional sql to be appended to the CpoFunction sql that is used to
    *          create the actual JDBC PreparedStatement
    * 
    * @throws CpoException
@@ -98,18 +102,18 @@ public class JdbcPreparedStatementFactory implements CpoReleasible {
    * @throws SQLException
    *           if a JDBC error occurs
    */
-  public <T> JdbcPreparedStatementFactory(Connection conn, JdbcCpoAdapter jca, JdbcMetaClass<T> jmcCriteria,
-      JdbcQuery jq, T obj, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy,
+  public <T> JdbcPreparedStatementFactory(Connection conn, JdbcCpoAdapter jca, CpoClass<T> criteria,
+      CpoFunction function, T obj, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy,
       Collection<CpoNativeQuery> nativeQueries) throws CpoException {
 
     // get the list of bindValues from the query parameters
-    List<BindAttribute> bindValues = getBindValues(jq, obj);
+    List<BindAttribute> bindValues = getBindValues(function, obj);
 
-    String sql = buildSql(jmcCriteria, jq.getText(), wheres, orderBy, nativeQueries, bindValues);
+    String sql = buildSql(criteria, function.getExpression(), wheres, orderBy, nativeQueries, bindValues);
 
     localLogger = obj == null ? logger : LoggerFactory.getLogger(obj.getClass().getName());
 
-    localLogger.debug("JdbcQuery SQL = <" + sql + ">");
+    localLogger.debug("CpoFunction SQL = <" + sql + ">");
 
     PreparedStatement pstmt = null;
 
@@ -128,7 +132,7 @@ public class JdbcPreparedStatementFactory implements CpoReleasible {
     /**
      * DOCUMENT ME!
      *
-     * @param jmc DOCUMENT ME!
+     * @param cpoClass DOCUMENT ME!
      * @param sql DOCUMENT ME!
      * @param where DOCUMENT ME!
      * @param orderBy DOCUMENT ME!
@@ -137,14 +141,14 @@ public class JdbcPreparedStatementFactory implements CpoReleasible {
      *
      * @throws CpoException DOCUMENT ME!
      */
-    private <T> String buildSql(JdbcMetaClass<T> jmc, String sql, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeQuery> nativeQueries, List<BindAttribute> bindValues) throws CpoException {
+    private <T> String buildSql(CpoClass<T> cpoClass, String sql, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeQuery> nativeQueries, List<BindAttribute> bindValues) throws CpoException {
         StringBuilder sqlText=new StringBuilder();
 
         sqlText.append(sql);
 
         if (wheres != null){
           for (CpoWhere where: wheres){
-            JdbcWhereBuilder<T> jwb=new JdbcWhereBuilder<T>(jmc);
+            JdbcWhereBuilder<T> jwb=new JdbcWhereBuilder<T>(cpoClass);
             JdbcCpoWhere jcw=(JdbcCpoWhere) where;
   
           // do the where stuff here when ready
@@ -176,7 +180,7 @@ public class JdbcPreparedStatementFactory implements CpoReleasible {
                 } else {
                   sb.append(",");
                 }
-                sb.append(((JdbcCpoOrderBy)ob).toString(jmc));
+                sb.append(((JdbcCpoOrderBy)ob).toString(cpoClass));
               }
             } catch (CpoException ce) {
             	throw new CpoException("Error Processing OrderBy Attribute<"+ExceptionHelper.getLocalizedMessage(ce)+"> not Found. JDBC Query=<"+sqlText.toString()+">");
@@ -324,16 +328,14 @@ public class JdbcPreparedStatementFactory implements CpoReleasible {
    * CPO meta parameters and the parameters from the dynamic where.
    * 
    */
-    protected List<BindAttribute> getBindValues(JdbcQuery jq, Object obj) throws CpoException {
+    protected List<BindAttribute> getBindValues(CpoFunction jq, Object obj) throws CpoException {
       List<BindAttribute> bindValues = new ArrayList<BindAttribute>();
-      ArrayList<JdbcParameter> parameters = jq.getParameterList();
-      JdbcParameter parameter = null;
-      for (int j = 0; j < parameters.size(); j++) {
-        parameter = (JdbcParameter) parameters.get(j);
-        if (parameter == null) {
-          throw new CpoException("JdbcParameter is null!");
+      List<CpoArgument> arguments = jq.getArguments();
+      for (CpoArgument argument : arguments){
+        if (argument == null) {
+          throw new CpoException("CpoArgument is null!");
         }
-        bindValues.add(new BindAttribute(parameter.getAttribute(), obj));
+        bindValues.add(new BindAttribute(argument.getAttribute().getJavaName(), obj));
       }
       return bindValues;
     }
@@ -371,7 +373,7 @@ public class JdbcPreparedStatementFactory implements CpoReleasible {
             if (ja == null)
               localLogger.debug(bindAttr.getName() + "=" + bindObject);
             else
-              localLogger.debug(ja.getDbName() + "=" + bindObject);
+              localLogger.debug(ja.getDataName() + "=" + bindObject);
             if (bindAttr.isIn() && bindObject instanceof Collection) {
               for (Object obj : (Collection)bindObject){
                 jsm.getPsSetter().invoke(this.getPreparedStatement(), new Object[] { index++, obj });

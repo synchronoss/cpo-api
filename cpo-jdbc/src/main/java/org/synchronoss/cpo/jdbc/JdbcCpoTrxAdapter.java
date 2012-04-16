@@ -23,9 +23,9 @@ package org.synchronoss.cpo.jdbc;
 
 import org.synchronoss.cpo.*;
 
-import javax.sql.DataSource;
 import java.sql.*;
 import java.util.HashMap;
+import org.synchronoss.cpo.meta.CpoMetaAdapter;
 
 public class JdbcCpoTrxAdapter extends JdbcCpoAdapter implements CpoTrxAdapter {
     /** Version Id for this class. */
@@ -43,9 +43,9 @@ public class JdbcCpoTrxAdapter extends JdbcCpoAdapter implements CpoTrxAdapter {
     @SuppressWarnings("unused")
     private JdbcCpoTrxAdapter(){}
     
-    protected JdbcCpoTrxAdapter(DataSource metaSource, String metaSourceName, Connection c, 
+    protected JdbcCpoTrxAdapter(CpoMetaAdapter metaAdapter, Connection c, 
                     boolean batchSupported, String dbTablePrefix) throws CpoException {
-            super(metaSource, metaSourceName, batchSupported, dbTablePrefix);
+            super(metaAdapter, batchSupported, dbTablePrefix);
             setStaticConnection(c);
     }
 

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" 
+    xmlns:cpo="http://www.synchronoss.org/cpo/core/CpoCoreMeta.xsd"
+    xmlns="http://www.synchronoss.org/cpo/cassandra/CpoCassandraMeta.xsd"
+    targetNamespace="http://www.synchronoss.org/cpo/cassandra/CpoCassandraMeta.xsd"
+    elementFormDefault="qualified">
+
+    <xs:import namespace="http://www.synchronoss.org/cpo/core/CpoCoreMeta.xsd" schemaLocation="../../../../cpo-core/src/main/xsd/CpoCoreMeta.xsd"/>
+    
+    <xs:complexType name="ctCassandraAttribute" >
+        <xs:complexContent>
+            <xs:extension base="cpo:ctAttribute">
+                <xs:sequence>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="ctCassandraArgument">
+        <xs:complexContent>
+            <xs:extension base="cpo:ctArgument">
+                <xs:sequence>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    
+</xs:schema>

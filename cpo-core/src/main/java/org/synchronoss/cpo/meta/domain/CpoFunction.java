@@ -22,12 +22,13 @@
 
 package org.synchronoss.cpo.meta.domain;
 
-import java.util.List;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.slf4j.*;
+import org.synchronoss.cpo.*;
 import org.synchronoss.cpo.meta.bean.CpoFunctionBean;
 
-public class CpoFunction extends CpoFunctionBean {
+import java.util.List;
+
+public class CpoFunction extends CpoFunctionBean implements IMetaDFVisitable {
   private static Logger logger = LoggerFactory.getLogger(CpoFunction.class.getName());
   
   List<CpoArgument> arguments = null;
@@ -39,14 +40,14 @@ public class CpoFunction extends CpoFunctionBean {
     return arguments;
   }
 
-  public void setParameters(List<CpoArgument> arguments) {
+  public void setArguments(List<CpoArgument> arguments) {
     this.arguments = arguments;
   }
 
   /**
    * DOCUMENT ME!
    *
-   * @param function DOCUMENT ME!
+   * @param jq DOCUMENT ME!
    * @return DOCUMENT ME!
    */
   public String parameterToString(CpoFunction jq) {
@@ -64,14 +65,14 @@ public class CpoFunction extends CpoFunctionBean {
 
     // TODO: make uncomment the following line and make work
 //    sb.append(jq.getName() + " " + jq.getType());
-    arguments = (List<CpoArgument>) jq.getArguments();
+    arguments = jq.getArguments();
 
     for (j = 1; j <= arguments.size(); j++) {
       argument = arguments.get(j - 1);
 
       if (argument != null) {
         try {
-          attribute = (CpoAttribute) argument.getAttribute();
+          attribute = argument.getAttribute();
           c = attribute.getGetters()[0].getReturnType();
     // TODO: make uncomment the following line and make work
 //          type = attribute.getJavaSqlType();
@@ -89,5 +90,15 @@ public class CpoFunction extends CpoFunctionBean {
     }
 
     return sb.toString();
+  }
+
+  @Override
+  public void acceptMetaDFVisitor(IMetaVisitor visitor) {
+    visitor.visit(this);
+
+    // visit the arguments
+    for (CpoArgument cpoArgument : getArguments()) {
+      visitor.visit(cpoArgument);
+    }
   }
 }

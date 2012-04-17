@@ -21,11 +21,12 @@
  */
 package org.synchronoss.cpo.meta.domain;
 
+import org.synchronoss.cpo.*;
 import org.synchronoss.cpo.meta.bean.CpoClassBean;
 
 import java.util.*;
 
-public class CpoClass<T> extends CpoClassBean {
+public class CpoClass<T> extends CpoClassBean implements IMetaDFVisitable {
 
   private Class<T> metaClass = null;
 
@@ -82,5 +83,20 @@ public class CpoClass<T> extends CpoClassBean {
 
   public Class<T> getMetaClass() {
     return metaClass;
+  }
+
+  @Override
+  public void acceptMetaDFVisitor(IMetaVisitor visitor) {
+    visitor.visit(this);
+
+    // visit attributes
+    for (CpoAttribute cpoAttribute : getAttributeMap().values()) {
+      visitor.visit(cpoAttribute);
+    }
+
+    // visit function groups
+    for (CpoFunctionGroup cpoFunctionGroup : getFunctionGroups().values()) {
+      visitor.visit(cpoFunctionGroup);
+    }
   }
 }

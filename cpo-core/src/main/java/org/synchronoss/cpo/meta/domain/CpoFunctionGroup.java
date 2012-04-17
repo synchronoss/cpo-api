@@ -22,10 +22,12 @@
 
 package org.synchronoss.cpo.meta.domain;
 
-import java.util.List;
+import org.synchronoss.cpo.*;
 import org.synchronoss.cpo.meta.bean.CpoFunctionGroupBean;
 
-public class CpoFunctionGroup extends CpoFunctionGroupBean {
+import java.util.List;
+
+public class CpoFunctionGroup extends CpoFunctionGroupBean implements IMetaDFVisitable {
   
   List<CpoFunction> functions = null;
 
@@ -36,8 +38,17 @@ public class CpoFunctionGroup extends CpoFunctionGroupBean {
     return functions;
   }
 
-  public void setQueries(List<CpoFunction> functions) {
+  public void setFunctions(List<CpoFunction> functions) {
     this.functions = functions;
   }
 
+  @Override
+  public void acceptMetaDFVisitor(IMetaVisitor visitor) {
+    visitor.visit(this);
+
+    // visit the functions
+    for (CpoFunction cpoFunction : getFunctions()) {
+      visitor.visit(cpoFunction);
+    }
+  }
 }

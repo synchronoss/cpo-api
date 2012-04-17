@@ -292,7 +292,6 @@
   </reporting>
   <modules>
     <module>cpo-core</module>
-    <module>cpo-config</module>
     <module>cpo-jdbc</module>
     <module>cpo-cassandra</module>
   </modules>

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" 
+    xmlns="http://www.synchronoss.org/cpo/core/CpoCoreConfig.xsd"
+    targetNamespace="http://www.synchronoss.org/cpo/core/CpoCoreConfig.xsd"
+    elementFormDefault="qualified">
+    
+    <xs:element name="cpoConfig" type="ctCpoConfig"/>
+    
+    <xs:complexType name="ctCpoConfig">
+        <xs:sequence>
+            <xs:element name="dataConfig" type="ctDataConfig" minOccurs="1" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+    
+    <xs:complexType name="ctDataConfig" abstract="true">
+        <xs:sequence>
+            <xs:element name="metaXml" type="xs:string">
+                <xs:annotation>
+                    <xs:documentation>The location of the resource that contains the cml meta information for the classes for this adapter.</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
+        <xs:attribute name="name" type="xs:string" use="required">
+            <xs:annotation>
+                <xs:documentation>This is the context name to be used when requesting a CpoAdapter. The context name will be used to look up this config info and create the appropriate CpoAdapter</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="factory" type="xs:string" use="required">
+            <xs:annotation>
+                <xs:documentation>This is the factory that creates a ConfigProcessor that can process this config information. (ie, JdbcConfigProcessor, or CassandraConfigProcessor)</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+    </xs:complexType>
+</xs:schema>

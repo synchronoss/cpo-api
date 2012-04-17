@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" 
+    xmlns:cpo="http://www.synchronoss.org/cpo/core/CpoCoreConfig.xsd"
+    xmlns="http://www.synchronoss.org/cpo/jdbc/CpoJdbcConfig.xsd"
+    targetNamespace="http://www.synchronoss.org/cpo/jdbc/CpoJdbcConfig.xsd"
+    elementFormDefault="qualified">
+
+    <xs:import namespace="http://www.synchronoss.org/cpo/core/CpoCoreConfig.xsd" schemaLocation="../../../../cpo-core/src/main/xsd/CpoCoreConfig.xsd"/>
+    
+    <xs:complexType name="ctJdbcConfig">
+        <xs:complexContent>
+            <xs:extension base="cpo:ctDataConfig">
+                <xs:sequence>
+                    <xs:choice>
+                        <xs:element name="driver" type="xs:string">
+                            <xs:annotation>
+                                <xs:documentation>Deprecated. Use dataSourceClassName. The classname for the jdbc driver provided by the database vendor. 
+                                    ie: oracle.jdbc.driver.OracleDriver
+                                        com.mysql.jdbc.Driver
+                                        org.hsqldb.jdbcDriver
+                                </xs:documentation>
+                            </xs:annotation>
+                        </xs:element>
+                        <xs:element name="datasourceClassName" type="xs:string">
+                            <xs:annotation>
+                                <xs:documentation>The classname for the DataSource provided by the database vendor. 
+                                    Use a ConnectionPoolDataSource class if available or a DataSource class if not use a DataSource class.
+                                    ie: com.mysql.jdbc.jdbc2.optional.MysqlConnectionPoolDataSource
+                                        oracle.jdbc.pool.OracleConnectionPoolDataSource
+                                        org.hsqldb.jdbc.JDBCDataSource
+                                </xs:documentation>
+                            </xs:annotation>
+                        </xs:element>
+                    </xs:choice>
+                    <xs:element name="url" type="xs:string">
+                        <xs:annotation>
+                            <xs:documentation>This is the url to the jdbc database.</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="user" type="xs:string" minOccurs="0">
+                        <xs:annotation>
+                            <xs:documentation>This is the user to log into the data source. If the user is supplied in the url, this element should not be included.</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="password" type="xs:string" minOccurs="0">
+                        <xs:annotation>
+                            <xs:documentation>This is the password to log into the data source. If the password is supplied in the url, this element should not be included.</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+</xs:schema>

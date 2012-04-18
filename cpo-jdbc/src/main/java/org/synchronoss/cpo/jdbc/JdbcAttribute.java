@@ -24,22 +24,14 @@
 
 package org.synchronoss.cpo.jdbc;
 
-import java.io.InputStream;
-import java.io.Reader;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.sql.CallableStatement;
-import java.sql.ResultSet;
-import java.sql.Types;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import org.synchronoss.cpo.CpoByteArrayInputStream;
-import org.synchronoss.cpo.CpoCharArrayReader;
-import org.synchronoss.cpo.CpoException;
+import org.slf4j.*;
+import org.synchronoss.cpo.*;
 import org.synchronoss.cpo.helper.ExceptionHelper;
-import org.synchronoss.cpo.meta.domain.CpoAttribute;
-import org.synchronoss.cpo.meta.domain.CpoClass;
+import org.synchronoss.cpo.meta.domain.*;
+
+import java.io.*;
+import java.lang.reflect.*;
+import java.sql.*;
 
 
 
@@ -85,19 +77,19 @@ public class JdbcAttribute extends CpoAttribute implements java.io.Serializable,
         setJavaSqlType(JavaSqlTypes.getJavaSqlType(javaSqlTypeName));
     }
 
-    protected void setDbTable(String dbTable){
+    public void setDbTable(String dbTable){
         dbTable_ = dbTable;
     }
 
-    protected void setDbColumn(String dbColumn){
+    public void setDbColumn(String dbColumn){
         dbColumn_ = dbColumn;
     }
- 
-    protected String getDbTable(){
+
+    public String getDbTable(){
         return dbTable_;
     }
 
-    protected String getDbColumn(){
+    public String getDbColumn(){
         return dbColumn_;
     }
     

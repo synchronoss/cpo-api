@@ -501,7 +501,7 @@ public class Node implements Serializable, Cloneable, Comparable<Node> {
      *               when traversing the tree.
      * @see INodeVisitor
      */
-    public boolean acceptDFVisitor(INodeVisitor nv) throws Exception {
+    public boolean acceptDFVisitor(NodeVisitor nv) throws Exception {
         Node currNode;
         boolean continueVisit=true;
 
@@ -523,40 +523,6 @@ public class Node implements Serializable, Cloneable, Comparable<Node> {
                     } while(continueVisit);
                     if(continueVisit)
                         continueVisit = nv.visitEnd(this);
-                }
-            }
-        }
-        return continueVisit;
-    }
-
-    /**
-     * Implements the visitor pattern. This is a Breadth-based
-     * traversal that will call the INodeVisitor.visit() for 
-     * all nodes.
-     * 
-     * @param nv     INodeVisitor to call upon reaching a node
-     *               when traversing the tree.
-     * @see INodeVisitor
-     */
-    public boolean acceptBFVisitor(INodeVisitor nv) throws Exception {
-        Queue queue = new Queue();
-        Node parentNode;
-        Node childNode;
-        boolean continueVisit=true;
-
-        if(nv != null) {
-            queue.put(this);
-            while(!queue.isEmpty()) {
-                parentNode = (Node)queue.get();
-                continueVisit = nv.visit(this);
-                if(!continueVisit)
-                    break;
-                if(!parentNode.isLeaf()) {
-                    childNode = parentNode.getFirstChild();
-                    do {
-                        queue.put(childNode);
-                        childNode = childNode.getNextSibling();
-                    } while(childNode != parentNode.getFirstChild());
                 }
             }
         }

@@ -29,7 +29,7 @@ package org.synchronoss.cpo;
   * This is the interface for the visitors to the Node Hierarchy
   *
   */
-public interface INodeVisitor 
+public interface NodeVisitor 
 {
     /**
     * This is called by composite nodes prior to visiting children

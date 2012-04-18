@@ -28,7 +28,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import org.synchronoss.cpo.CpoWhere;
 
-import org.synchronoss.cpo.INodeVisitor;
+import org.synchronoss.cpo.NodeVisitor;
 import org.synchronoss.cpo.Node;
 import org.synchronoss.cpo.meta.domain.CpoAttribute;
 import org.synchronoss.cpo.meta.domain.CpoClass;
@@ -41,7 +41,7 @@ import org.synchronoss.cpo.meta.domain.CpoMetaClass;
  * @author david berry
  */
 
-public class JdbcWhereBuilder<T> implements INodeVisitor {
+public class JdbcWhereBuilder<T> implements NodeVisitor {
 
     private StringBuilder whereClause = new StringBuilder();
     private CpoMetaClass<T> cpoClass = null;

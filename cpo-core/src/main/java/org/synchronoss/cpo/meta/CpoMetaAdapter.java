@@ -24,7 +24,7 @@
 package org.synchronoss.cpo.meta;
 
 import org.synchronoss.cpo.CpoException;
-import org.synchronoss.cpo.meta.domain.CpoClass;
+import org.synchronoss.cpo.meta.domain.CpoMetaClass;
 
 /**
  *
@@ -76,6 +76,6 @@ public interface CpoMetaAdapter {
      *
      * @throws CpoException Thrown if there are errors accessing the datasource
     */
-    public <T> CpoClass<T> getMetaClass(T obj) throws CpoException;
+    public <T> CpoMetaClass<T> getMetaClass(T obj) throws CpoException;
   
 }

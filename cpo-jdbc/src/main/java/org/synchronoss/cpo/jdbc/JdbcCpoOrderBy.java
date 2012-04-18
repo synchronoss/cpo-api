@@ -30,6 +30,7 @@ import org.synchronoss.cpo.CpoException;
 import org.synchronoss.cpo.CpoOrderBy;
 import org.synchronoss.cpo.meta.domain.CpoAttribute;
 import org.synchronoss.cpo.meta.domain.CpoClass;
+import org.synchronoss.cpo.meta.domain.CpoMetaClass;
 
 
 /**
@@ -129,7 +130,7 @@ public class JdbcCpoOrderBy implements CpoOrderBy {
         this.function = s;
     }
 
-    public String toString(CpoClass<?> jmc) throws CpoException {
+    public String toString(CpoMetaClass<?> jmc) throws CpoException {
         StringBuilder sb = new StringBuilder();
         String function = null;
         String attribute = null;

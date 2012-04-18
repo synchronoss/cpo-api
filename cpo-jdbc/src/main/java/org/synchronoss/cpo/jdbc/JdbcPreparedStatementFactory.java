@@ -44,10 +44,7 @@ import org.synchronoss.cpo.CpoOrderBy;
 import org.synchronoss.cpo.CpoReleasible;
 import org.synchronoss.cpo.CpoWhere;
 import org.synchronoss.cpo.helper.ExceptionHelper;
-import org.synchronoss.cpo.meta.domain.CpoArgument;
-import org.synchronoss.cpo.meta.domain.CpoAttribute;
-import org.synchronoss.cpo.meta.domain.CpoClass;
-import org.synchronoss.cpo.meta.domain.CpoFunction;
+import org.synchronoss.cpo.meta.domain.*;
 
 
 /**
@@ -102,7 +99,7 @@ public class JdbcPreparedStatementFactory implements CpoReleasible {
    * @throws SQLException
    *           if a JDBC error occurs
    */
-  public <T> JdbcPreparedStatementFactory(Connection conn, JdbcCpoAdapter jca, CpoClass<T> criteria,
+  public <T> JdbcPreparedStatementFactory(Connection conn, JdbcCpoAdapter jca, CpoMetaClass<T> criteria,
       CpoFunction function, T obj, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy,
       Collection<CpoNativeQuery> nativeQueries) throws CpoException {
 
@@ -141,7 +138,7 @@ public class JdbcPreparedStatementFactory implements CpoReleasible {
      *
      * @throws CpoException DOCUMENT ME!
      */
-    private <T> String buildSql(CpoClass<T> cpoClass, String sql, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeQuery> nativeQueries, List<BindAttribute> bindValues) throws CpoException {
+    private <T> String buildSql(CpoMetaClass<T> cpoClass, String sql, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeQuery> nativeQueries, List<BindAttribute> bindValues) throws CpoException {
         StringBuilder sqlText=new StringBuilder();
 
         sqlText.append(sql);

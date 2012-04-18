@@ -26,9 +26,7 @@ import org.synchronoss.cpo.meta.bean.CpoClassBean;
 
 import java.util.*;
 
-public class CpoClass<T> extends CpoClassBean implements IMetaDFVisitable {
-
-  private Class<T> metaClass = null;
+public class CpoClass extends CpoClassBean implements IMetaDFVisitable {
 
   /**
    * attributeMap contains a Map of CpoAttribute Objects
@@ -50,12 +48,7 @@ public class CpoClass<T> extends CpoClassBean implements IMetaDFVisitable {
    */
   private SortedMap<String, CpoFunctionGroup> functionGroups = new TreeMap<String, CpoFunctionGroup>();
 
-  private CpoClass() {
-  }
-
-  public CpoClass(Class<T> metaClass) {
-    this.setName(metaClass.getClass().getName());
-    this.metaClass = metaClass;
+  public CpoClass() {
   }
 
   public SortedMap<String, CpoAttribute> getAttributeMap() {
@@ -79,10 +72,6 @@ public class CpoClass<T> extends CpoClassBean implements IMetaDFVisitable {
       return null;
 
     return this.functionGroups.put(group.getType() + "@" + group.getName(), group);
-  }
-
-  public Class<T> getMetaClass() {
-    return metaClass;
   }
 
   @Override

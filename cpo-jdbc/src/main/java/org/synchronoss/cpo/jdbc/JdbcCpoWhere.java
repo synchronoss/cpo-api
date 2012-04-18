@@ -31,6 +31,7 @@ import org.synchronoss.cpo.CpoWhere;
 import org.synchronoss.cpo.Node;
 import org.synchronoss.cpo.meta.domain.CpoAttribute;
 import org.synchronoss.cpo.meta.domain.CpoClass;
+import org.synchronoss.cpo.meta.domain.CpoMetaClass;
 
 /**
  * JdbcCpoWhere is an interface for specifying the sort order in which
@@ -153,7 +154,7 @@ public class JdbcCpoWhere extends Node implements CpoWhere{
         this.not=b;
     }
 
-    public String toString(CpoClass<?> cpoClass)  throws CpoException {
+    public String toString(CpoMetaClass<?> cpoClass)  throws CpoException {
         StringBuilder sb = new StringBuilder();
         JdbcAttribute jdbcAttribute = null;
 

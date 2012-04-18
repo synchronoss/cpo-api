@@ -24,8 +24,8 @@ public class MetaXmlObjectExporter implements IMetaXmlObjectExporter, IMetaVisit
   }
 
   @Override
-  public CtCpoMetaData export(Collection<CpoClass<?>> classes) {
-    for (CpoClass<?> cpoClass : classes) {
+  public CtCpoMetaData export(Collection<CpoClass> classes) {
+    for (CpoClass cpoClass : classes) {
       cpoClass.acceptMetaDFVisitor(this);
     }
 

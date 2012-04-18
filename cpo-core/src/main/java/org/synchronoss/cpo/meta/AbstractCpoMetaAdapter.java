@@ -22,7 +22,7 @@ public abstract class AbstractCpoMetaAdapter implements CpoMetaAdapter {
   /**
    * Each datasource has a cache for the meta data for each class inside that datasource
    */
-  private static HashMap<String, HashMap<String, CpoClass<?>>> dataSourceMap_ = new HashMap<String, HashMap<String, CpoClass<?>>>(); // Contains the
+  private static HashMap<String, HashMap<String, CpoMetaClass<?>>> dataSourceMap_ = new HashMap<String, HashMap<String, CpoMetaClass<?>>>(); // Contains the
   
   /**
    * This is the DataSource for the meta datasource. Not sure if this belongs here or if it needs to be in JdbcCpoMetaAdapter.
@@ -61,7 +61,7 @@ public abstract class AbstractCpoMetaAdapter implements CpoMetaAdapter {
    */
   @Override
   public void clearMetaClass(String className) {
-    HashMap<String, CpoClass<?>> metaClassMap;
+    HashMap<String, CpoMetaClass<?>> metaClassMap;
 
     synchronized (getDataSourceMap()) {
       metaClassMap = getMetaClassMap();
@@ -82,10 +82,10 @@ public abstract class AbstractCpoMetaAdapter implements CpoMetaAdapter {
   public void clearMetaClass(boolean all) {
     synchronized (getDataSourceMap()) {
       if (all==false) {
-        HashMap<String, CpoClass<?>> metaClassMap = getMetaClassMap();
+        HashMap<String, CpoMetaClass<?>> metaClassMap = getMetaClassMap();
         metaClassMap.clear();
       } else {
-        for (HashMap<String, CpoClass<?>> metamap : getDataSourceMap().values()){
+        for (HashMap<String, CpoMetaClass<?>> metamap : getDataSourceMap().values()){
           metamap.clear();
         }
       }
@@ -108,22 +108,22 @@ public abstract class AbstractCpoMetaAdapter implements CpoMetaAdapter {
    *
    * @return DOCUMENT ME!
    */
-  protected HashMap<String, HashMap<String, CpoClass<?>>> getDataSourceMap() {
+  protected HashMap<String, HashMap<String, CpoMetaClass<?>>> getDataSourceMap() {
     return dataSourceMap_;
   }
 
-  protected void setDataSourceMap(HashMap<String, HashMap<String, CpoClass<?>>> dsMap) {
+  protected void setDataSourceMap(HashMap<String, HashMap<String, CpoMetaClass<?>>> dsMap) {
     dataSourceMap_ = dsMap;
   }
 
   // All meta data will come from the meta datasource.
-  protected HashMap<String, CpoClass<?>> getMetaClassMap() {
-    HashMap<String, HashMap<String, CpoClass<?>>> dataSourceMap = getDataSourceMap();
+  protected HashMap<String, CpoMetaClass<?>> getMetaClassMap() {
+    HashMap<String, HashMap<String, CpoMetaClass<?>>> dataSourceMap = getDataSourceMap();
     String dataSourceName = getMetaDataSourceName();
-    HashMap<String, CpoClass<?>> metaClassMap = dataSourceMap.get(dataSourceName);
+    HashMap<String, CpoMetaClass<?>> metaClassMap = dataSourceMap.get(dataSourceName);
 
     if (metaClassMap == null) {
-      metaClassMap = new HashMap<String, CpoClass<?>>();
+      metaClassMap = new HashMap<String, CpoMetaClass<?>>();
       dataSourceMap.put(dataSourceName, metaClassMap);
     }
 
@@ -170,7 +170,7 @@ public abstract class AbstractCpoMetaAdapter implements CpoMetaAdapter {
    * Load the meta class from the CpoMetaAdapter Implementation
    * 
    */
-  protected abstract <T> CpoClass<T> loadMetaClass(Class<T> metaClass, String className) throws CpoException;
+  protected abstract <T> CpoMetaClass<T> loadMetaClass(Class<T> metaClass, String className) throws CpoException;
   
   /**
    * DOCUMENT ME!
@@ -180,13 +180,13 @@ public abstract class AbstractCpoMetaAdapter implements CpoMetaAdapter {
    * @throws CpoException DOCUMENT ME!
    */
   @Override
-  public <T> CpoClass<T> getMetaClass(T obj) throws CpoException {
-    CpoClass<T> cpoClass = null;
+  public <T> CpoMetaClass<T> getMetaClass(T obj) throws CpoException {
+    CpoMetaClass<T> cpoClass = null;
     String className;
     String requestedName;
     Class<?> classObj;
     Class<?> requestedClass;
-    HashMap<String, CpoClass<?>> metaClassMap;
+    HashMap<String, CpoMetaClass<?>> metaClassMap;
 
     if (obj != null) {
       requestedClass = obj.getClass();
@@ -196,10 +196,10 @@ public abstract class AbstractCpoMetaAdapter implements CpoMetaAdapter {
 
       synchronized (getDataSourceMap()) {
         metaClassMap = getMetaClassMap();
-        cpoClass = (CpoClass<T>) metaClassMap.get(className);
+        cpoClass = (CpoMetaClass<T>) metaClassMap.get(className);
         while(cpoClass==null && classObj!=null){
           try {
-            cpoClass = (CpoClass<T>) loadMetaClass(requestedClass, className);
+            cpoClass = (CpoMetaClass<T>) loadMetaClass(requestedClass, className);
             // reset the class name to the original 
             cpoClass.setName(requestedName);
             metaClassMap.put(requestedName, cpoClass);
@@ -293,8 +293,8 @@ public abstract class AbstractCpoMetaAdapter implements CpoMetaAdapter {
     cpoArgument.setAttribute(null);
   }
    
-  protected CpoClass createCpoClass(Class<?> clazz) {
-    return new CpoClass(clazz);
+  protected CpoMetaClass createCpoClass(Class<?> clazz) {
+    return new CpoMetaClass(clazz);
   }
   
   protected CpoAttribute createCpoAttribute() {

@@ -13,6 +13,6 @@ import java.util.Collection;
  */
 public interface IMetaXmlObjectExporter {
 
-  public CtCpoMetaData export(Collection<CpoClass<?>> classes);
+  public CtCpoMetaData export(Collection<CpoClass> classes);
 
 }

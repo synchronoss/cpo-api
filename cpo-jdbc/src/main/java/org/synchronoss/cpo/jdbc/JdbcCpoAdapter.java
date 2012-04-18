@@ -35,10 +35,7 @@ import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.*;
 import org.synchronoss.cpo.helper.ExceptionHelper;
 import org.synchronoss.cpo.meta.CpoMetaAdapter;
-import org.synchronoss.cpo.meta.domain.CpoArgument;
-import org.synchronoss.cpo.meta.domain.CpoAttribute;
-import org.synchronoss.cpo.meta.domain.CpoClass;
-import org.synchronoss.cpo.meta.domain.CpoFunction;
+import org.synchronoss.cpo.meta.domain.*;
 
 /**
  * JdbcCpoAdapter is an interface for a set of routines that are responsible for managing value
@@ -1084,7 +1081,7 @@ public class JdbcCpoAdapter implements CpoAdapter {
     ResultSet rs = null;
     ResultSetMetaData rsmd;
     CpoFunction jq = null;
-    CpoClass<T> jmc;
+    CpoMetaClass<T> jmc;
     List<CpoFunction> functions;
     long objCount = 0;
     int i;
@@ -2661,8 +2658,8 @@ public class JdbcCpoAdapter implements CpoAdapter {
     CallableStatement cstmt = null;
     List<CpoFunction> functions;
     CpoFunction jq = null;
-    CpoClass<C> jmcCriteria;
-    CpoClass<T> jmcResult;
+    CpoMetaClass<C> jmcCriteria;
+    CpoMetaClass<T> jmcResult;
     T returnObject = null;
     Logger localLogger = criteria == null ? logger : LoggerFactory.getLogger(criteria.getClass().getName());
 
@@ -2815,7 +2812,7 @@ public class JdbcCpoAdapter implements CpoAdapter {
     ResultSet rs = null;
     ResultSetMetaData rsmd;
     CpoFunction jq;
-    CpoClass<T> jmc;
+    CpoMetaClass<T> jmc;
     List<CpoFunction> functions;
     JdbcAttribute attribute;
     T criteriaObj = obj;
@@ -3029,8 +3026,8 @@ public class JdbcCpoAdapter implements CpoAdapter {
     PreparedStatement ps = null;
     List<CpoFunction> queryGroup;
     CpoFunction jq;
-    CpoClass<C> jmcCriteria;
-    CpoClass<T> jmcResult;
+    CpoMetaClass<C> jmcCriteria;
+    CpoMetaClass<T> jmcResult;
     ResultSet rs = null;
     ResultSetMetaData rsmd;
     int columnCount;
@@ -3193,7 +3190,7 @@ public class JdbcCpoAdapter implements CpoAdapter {
   protected <T> long processUpdateGroup(T obj, String groupType, String groupName, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeQuery> nativeQueries, Connection con)
       throws CpoException {
     Logger localLogger = obj == null ? logger : LoggerFactory.getLogger(obj.getClass().getName());
-    CpoClass<T> jmc;
+    CpoMetaClass<T> jmc;
     List<CpoFunction> queryGroup;
     PreparedStatement ps = null;
     CpoFunction jq = null;
@@ -3257,7 +3254,7 @@ public class JdbcCpoAdapter implements CpoAdapter {
    */
   protected <T> long processBatchUpdateGroup(T[] arr, String groupType, String groupName, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeQuery> nativeQueries, Connection con)
       throws CpoException {
-    CpoClass<T> jmc;
+    CpoMetaClass<T> jmc;
     List<CpoFunction> queryGroup;
     PreparedStatement ps = null;
     CpoFunction jq = null;

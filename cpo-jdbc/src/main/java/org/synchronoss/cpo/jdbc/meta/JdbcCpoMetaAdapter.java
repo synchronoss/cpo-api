@@ -37,10 +37,7 @@ import org.synchronoss.cpo.jdbc.JdbcAttribute;
 import org.synchronoss.cpo.jdbc.cpoJdbcMeta.CtJdbcArgument;
 import org.synchronoss.cpo.jdbc.cpoJdbcMeta.CtJdbcAttribute;
 import org.synchronoss.cpo.meta.AbstractCpoMetaAdapter;
-import org.synchronoss.cpo.meta.domain.CpoArgument;
-import org.synchronoss.cpo.meta.domain.CpoAttribute;
-import org.synchronoss.cpo.meta.domain.CpoClass;
-import org.synchronoss.cpo.meta.domain.CpoFunction;
+import org.synchronoss.cpo.meta.domain.*;
 
 /**
  *
@@ -100,11 +97,11 @@ public class JdbcCpoMetaAdapter extends AbstractCpoMetaAdapter {
    * @return DOCUMENT ME!
    * @throws CpoException DOCUMENT ME!
    */
-  protected <T> CpoClass<T> loadMetaClass(Class<T> objClass, String name)
+  protected <T> CpoMetaClass<T> loadMetaClass(Class<T> objClass, String name)
       throws CpoException {
-    CpoClass<T> cpoClass=null;
+    CpoMetaClass<T> cpoClass=null;
 
-    cpoClass = new CpoClass<T>(objClass);
+    cpoClass = new CpoMetaClass<T>(objClass);
 //    loadAttributeMap(name, cpoClass);
 //    loadQueryGroups(cpoClass);
 

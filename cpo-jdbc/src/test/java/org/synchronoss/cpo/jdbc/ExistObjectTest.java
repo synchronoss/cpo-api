@@ -30,6 +30,7 @@ import junit.framework.TestCase;
 
 import org.synchronoss.cpo.CpoAdapter;
 import org.synchronoss.cpo.CpoAdapterBean;
+import org.synchronoss.cpo.CpoAdapterFactory;
 import org.synchronoss.cpo.CpoWhere;
 
 /**
@@ -60,7 +61,7 @@ public class ExistObjectTest extends TestCase {
         String method = "setUp:";
         
         try{
-          jdbcIdo_ = new CpoAdapterBean(new JdbcCpoFactory());
+          jdbcIdo_ = new CpoAdapterBean(CpoAdapterFactory.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT));
             assertNotNull(method+"IdoAdapter is null",jdbcIdo_);
         } catch (Exception e) {
             fail(method+e.getMessage());

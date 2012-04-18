@@ -30,6 +30,7 @@ import junit.framework.TestCase;
 
 import org.synchronoss.cpo.CpoAdapter;
 import org.synchronoss.cpo.CpoAdapterBean;
+import org.synchronoss.cpo.CpoAdapterFactory;
 import org.synchronoss.cpo.CpoOrderBy;
 
 /**
@@ -58,7 +59,7 @@ public class OrderByTest extends TestCase {
         String method="setUp:";
         
         try {
-          jdbcIdo_ = new CpoAdapterBean(new JdbcCpoFactory());
+          jdbcIdo_ = new CpoAdapterBean(CpoAdapterFactory.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT));
             assertNotNull(method+"CpoAdapter is null", jdbcIdo_);
             // Add the test valueObjects
         } catch(Exception e) {

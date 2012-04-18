@@ -31,6 +31,7 @@ import junit.framework.TestCase;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.CpoAdapter;
+import org.synchronoss.cpo.CpoAdapterFactory;
 import org.synchronoss.cpo.CpoException;
 import org.synchronoss.cpo.CpoTrxAdapter;
 import org.synchronoss.cpo.helper.ExceptionHelper;
@@ -42,10 +43,6 @@ import org.synchronoss.cpo.helper.ExceptionHelper;
  */
 public class SelectForUpdateTest extends TestCase {
 	private static final Logger logger = LoggerFactory.getLogger(SelectForUpdateTest.class.getName());
-    private static final String PROP_FILE="jdbcCpoFactory";
-    private static final String PROP_DBDRIVER="default.dbDriver";
-    private static final String PROP_DB_SELECT4UPDATE="default.dbSelect4Update";
-
     private CpoAdapter jdbcCpo_=null;
     private CpoTrxAdapter jdbcIdo_=null;
     private String dbDriver_=null;
@@ -66,14 +63,14 @@ public class SelectForUpdateTest extends TestCase {
      */
     public void setUp() {
         String method="setUp:";
-        ResourceBundle b=PropertyResourceBundle.getBundle(PROP_FILE, Locale.getDefault(),
+        ResourceBundle b=PropertyResourceBundle.getBundle(JdbcStatics.PROP_FILE, Locale.getDefault(),
                 this.getClass().getClassLoader());
-        dbDriver_=b.getString(PROP_DBDRIVER).trim();
+        dbDriver_=b.getString(JdbcStatics.PROP_DBDRIVER).trim();
         
-        hasSelect4UpdateSupport = new Boolean(b.getString(PROP_DB_SELECT4UPDATE).trim());
+        hasSelect4UpdateSupport = new Boolean(b.getString(JdbcStatics.PROP_DB_SELECT4UPDATE).trim());
         
         try {
-          jdbcCpo_ = new JdbcCpoFactory().getCpoAdapter();
+          jdbcCpo_ = CpoAdapterFactory.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT);
             assertNotNull(method+"CpoAdapter is null", jdbcCpo_);
             jdbcIdo_ = jdbcCpo_.getCpoTrxAdapter();
             assertNotNull(method+"CpoTrxAdapter is null", jdbcIdo_);

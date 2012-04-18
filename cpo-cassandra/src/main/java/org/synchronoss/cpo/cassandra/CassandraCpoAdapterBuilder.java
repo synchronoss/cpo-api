@@ -31,7 +31,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.CpoAdapter;
 import org.synchronoss.cpo.CpoException;
-import org.synchronoss.cpo.CpoFactory;
+import org.synchronoss.cpo.CpoAdapterBuilder;
+import org.synchronoss.cpo.core.cpoCoreConfig.CtDataSourceConfig;
 import org.synchronoss.cpo.helper.ExceptionHelper;
 
 /**
@@ -39,9 +40,9 @@ import org.synchronoss.cpo.helper.ExceptionHelper;
  *
  * @author david berry
  */
-public class CassandraCpoFactory implements CpoFactory {
+public class CassandraCpoAdapterBuilder implements CpoAdapterBuilder {
   private static HashMap<String, CpoAdapter> propMap = new HashMap<String, CpoAdapter>();
-  private static Logger logger=LoggerFactory.getLogger(CassandraCpoFactory.class.getName());
+  private static Logger logger=LoggerFactory.getLogger(CassandraCpoAdapterBuilder.class.getName());
   
   private static final String PROP_FILE = "cassandraCpoFactory";
   private static final String DEFAULT_CONTEXT="default";
@@ -53,7 +54,7 @@ public class CassandraCpoFactory implements CpoFactory {
   private static final String       PROP_USER = ".user";
   private static final String   PROP_PASSWORD = ".password";
 	
-	public CassandraCpoFactory(){
+	public CassandraCpoAdapterBuilder(){
 	}
 	
   public CpoAdapter getCpoAdapter() throws CpoException {
@@ -85,7 +86,7 @@ public class CassandraCpoFactory implements CpoFactory {
   	  ResourceBundle b=null;
   	  
       try{
-        b = ResourceBundle.getBundle(PROP_FILE,Locale.getDefault(), CassandraCpoFactory.class.getClassLoader());
+        b = ResourceBundle.getBundle(PROP_FILE,Locale.getDefault(), CassandraCpoAdapterBuilder.class.getClassLoader());
       } catch (Exception e){
         throw new CpoException("Error processing properties file:"+PROP_FILE+".properties :"+ExceptionHelper.getLocalizedMessage(e));
       }
@@ -146,5 +147,10 @@ public class CassandraCpoFactory implements CpoFactory {
       }
     }
     return propMap;
+  }
+
+  @Override
+  public CpoAdapter buildCpoAdapter(CtDataSourceConfig dataSourceConfig) throws CpoException {
+    throw new UnsupportedOperationException("Not supported yet.");
   }
 }

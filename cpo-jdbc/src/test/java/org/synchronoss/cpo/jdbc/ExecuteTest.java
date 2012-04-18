@@ -32,6 +32,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.CpoAdapter;
 import org.synchronoss.cpo.CpoAdapterBean;
+import org.synchronoss.cpo.CpoAdapterFactory;
 
 /**
  * BlobTest is a JUnit test class for testing the JdbcAdapter class Constructors
@@ -40,9 +41,6 @@ import org.synchronoss.cpo.CpoAdapterBean;
  */
 public class ExecuteTest extends TestCase {
     private static Logger logger = LoggerFactory.getLogger(ExecuteTest.class.getName());
-    private static final String PROP_FILE="jdbcCpoFactory";
-    private static final String PROP_DBDRIVER="default.dbDriver";
-    private static final String PROP_DB_CALLS_SUPPORTED="default.dbCallsSupported";
 
     private CpoAdapter jdbcIdo_=null;
     private String dbDriver_=null;
@@ -62,13 +60,13 @@ public class ExecuteTest extends TestCase {
      */
     public void setUp() {
         String method="setUp:";
-        ResourceBundle b=PropertyResourceBundle.getBundle(PROP_FILE, Locale.getDefault(),
+        ResourceBundle b=PropertyResourceBundle.getBundle(JdbcStatics.PROP_FILE, Locale.getDefault(),
                 this.getClass().getClassLoader());
-        dbDriver_=b.getString(PROP_DBDRIVER).trim();
-        hasCallSupport = new Boolean(b.getString(PROP_DB_CALLS_SUPPORTED).trim());
+        dbDriver_=b.getString(JdbcStatics.PROP_DBDRIVER).trim();
+        hasCallSupport = new Boolean(b.getString(JdbcStatics.PROP_DB_CALLS_SUPPORTED).trim());
         
         try {
-          jdbcIdo_ = new CpoAdapterBean(new JdbcCpoFactory());
+          jdbcIdo_ = new CpoAdapterBean(CpoAdapterFactory.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT));
             assertNotNull(method+"CpoAdapter is null", jdbcIdo_);
         } catch(Exception e) {
             fail(method+e.getMessage());

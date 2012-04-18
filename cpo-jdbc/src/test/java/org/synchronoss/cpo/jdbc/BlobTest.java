@@ -35,6 +35,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.CpoAdapter;
 import org.synchronoss.cpo.CpoAdapterBean;
+import org.synchronoss.cpo.CpoAdapterFactory;
 
 
 
@@ -47,10 +48,6 @@ import org.synchronoss.cpo.CpoAdapterBean;
 
 public class BlobTest extends TestCase {
     private static Logger logger = LoggerFactory.getLogger(BlobTest.class.getName());
-    private static final String PROP_FILE="jdbcCpoFactory";
-    private static final String PROP_DBDRIVER="default.dbDriver";
-    private static final String PROP_DB_BLOBS_SUPPORTED="default.dbBlobsSupported";
-    private static int BLOB_SIZE=64999;
     
     private String dbDriver_=null;
     private boolean hasBlobSupport=true;
@@ -80,13 +77,13 @@ public class BlobTest extends TestCase {
     public void setUp() {
     
         String method = "setUp:";
-        ResourceBundle b=PropertyResourceBundle.getBundle(PROP_FILE, Locale.getDefault(),
+        ResourceBundle b=PropertyResourceBundle.getBundle(JdbcStatics.PROP_FILE, Locale.getDefault(),
             this.getClass().getClassLoader());
-        dbDriver_=b.getString(PROP_DBDRIVER).trim();
-        hasBlobSupport = new Boolean(b.getString(PROP_DB_BLOBS_SUPPORTED).trim());
+        dbDriver_=b.getString(JdbcStatics.PROP_DBDRIVER).trim();
+        hasBlobSupport = new Boolean(b.getString(JdbcStatics.PROP_DB_BLOBS_SUPPORTED).trim());
           
         try{
-            jdbcIdo_ = new CpoAdapterBean(new JdbcCpoFactory());
+            jdbcIdo_ = new CpoAdapterBean(CpoAdapterFactory.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT));
             assertNotNull(method+"IdoAdapter is null",jdbcIdo_);
         } catch (Exception e) {
             fail(method+e.getMessage());
@@ -97,13 +94,13 @@ public class BlobTest extends TestCase {
         
         if (hasBlobSupport){
         
-            testBlob = new byte[BLOB_SIZE];
-            for (int i = 0; i< BLOB_SIZE; i++){
+            testBlob = new byte[JdbcStatics.BLOB_SIZE];
+            for (int i = 0; i< JdbcStatics.BLOB_SIZE; i++){
                 testBlob[i]= (byte)(((int)'a') + (i%26));
             }
     
-            testBlob2 = new byte[BLOB_SIZE];
-            for (int i = 0; i< BLOB_SIZE; i++){
+            testBlob2 = new byte[JdbcStatics.BLOB_SIZE];
+            for (int i = 0; i< JdbcStatics.BLOB_SIZE; i++){
                 testBlob2[i]=(byte)(((int)'z') - (i%26));
             }
             
@@ -173,13 +170,13 @@ public class BlobTest extends TestCase {
         
         if (hasBlobSupport){
         
-            testBlob = new byte[BLOB_SIZE];
-            for (int i = 0; i< BLOB_SIZE; i++){
+            testBlob = new byte[JdbcStatics.BLOB_SIZE];
+            for (int i = 0; i< JdbcStatics.BLOB_SIZE; i++){
                 testBlob[i]= (byte)(((int)'a') + (i%26));
             }
     
-            testBlob2 = new byte[BLOB_SIZE];
-            for (int i = 0; i< BLOB_SIZE; i++){
+            testBlob2 = new byte[JdbcStatics.BLOB_SIZE];
+            for (int i = 0; i< JdbcStatics.BLOB_SIZE; i++){
                 testBlob2[i]=(byte)(((int)'z') - (i%26));
             }
             

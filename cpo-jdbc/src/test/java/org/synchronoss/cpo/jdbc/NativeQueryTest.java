@@ -27,10 +27,7 @@ import java.util.Collection;
 
 import junit.framework.TestCase;
 
-import org.synchronoss.cpo.CpoAdapter;
-import org.synchronoss.cpo.CpoAdapterBean;
-import org.synchronoss.cpo.CpoNativeQuery;
-import org.synchronoss.cpo.CpoWhere;
+import org.synchronoss.cpo.*;
 
 /**
  * BlobTest is a JUnit test class for testing the JdbcAdapter class Constructors
@@ -58,7 +55,7 @@ public class NativeQueryTest extends TestCase {
         String method="setUp:";
         
         try {
-          jdbcIdo_ = new CpoAdapterBean(new JdbcCpoFactory());
+          jdbcIdo_ = new CpoAdapterBean(CpoAdapterFactory.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT));
             assertNotNull(method+"CpoAdapter is null", jdbcIdo_);
         } catch(Exception e) {
             fail(method+e.getMessage());

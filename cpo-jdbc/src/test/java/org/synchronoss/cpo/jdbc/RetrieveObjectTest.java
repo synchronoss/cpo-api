@@ -32,6 +32,7 @@ import junit.framework.TestCase;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.CpoAdapter;
+import org.synchronoss.cpo.CpoAdapterFactory;
 import org.synchronoss.cpo.CpoResultSet;
 import org.synchronoss.cpo.CpoTrxAdapter;
 
@@ -64,7 +65,7 @@ public class RetrieveObjectTest extends TestCase {
         String method = "setUp:";
         
         try{
-          jdbcIdo_ = new JdbcCpoFactory().getCpoAdapter();
+          jdbcIdo_ = CpoAdapterFactory.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT);
             assertNotNull(method+"IdoAdapter is null",jdbcIdo_);
         } catch (Exception e) {
             fail(method+e.getMessage());

@@ -43,7 +43,7 @@ public class CpoAdapterBean
     
     private SessionContext ctx_=null;
     
-    public CpoAdapterBean(CpoFactory cpoFactory) throws CpoException {
+    public CpoAdapterBean(CpoAdapterFactory cpoFactory) throws CpoException {
     	this.cpoAdapter = cpoFactory.getCpoAdapter();
     }
 

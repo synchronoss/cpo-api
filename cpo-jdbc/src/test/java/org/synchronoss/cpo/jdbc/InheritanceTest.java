@@ -35,6 +35,7 @@ import junit.framework.TestCase;
 
 import org.synchronoss.cpo.CpoAdapter;
 import org.synchronoss.cpo.CpoAdapterBean;
+import org.synchronoss.cpo.CpoAdapterFactory;
 
 /**
  * RetrieveObjectTest is a JUnit test class for testing the
@@ -44,10 +45,6 @@ import org.synchronoss.cpo.CpoAdapterBean;
  */
 
 public class InheritanceTest extends TestCase {
-    private static final String PROP_FILE = "jdbcCpoFactory";
-
-    private static final String PROP_DB_MILLI_SUPPORTED="default.dbMilliSupport";
-        
     private ArrayList<ChildValueObject> al = new ArrayList<ChildValueObject>();
 
     private CpoAdapter jdbcIdo_ = null;
@@ -68,12 +65,12 @@ public class InheritanceTest extends TestCase {
 
     public void setUp() {
         String method = "setUp:";
-        ResourceBundle b = PropertyResourceBundle.getBundle(PROP_FILE,Locale.getDefault(), this.getClass().getClassLoader());
+        ResourceBundle b = PropertyResourceBundle.getBundle(JdbcStatics.PROP_FILE,Locale.getDefault(), this.getClass().getClassLoader());
 
-        hasMilliSupport = new Boolean(b.getString(PROP_DB_MILLI_SUPPORTED).trim());
+        hasMilliSupport = new Boolean(b.getString(JdbcStatics.PROP_DB_MILLI_SUPPORTED).trim());
         
         try{
-          jdbcIdo_ = new CpoAdapterBean(new JdbcCpoFactory());
+          jdbcIdo_ = new CpoAdapterBean(CpoAdapterFactory.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT));
             assertNotNull(method+"IdoAdapter is null",jdbcIdo_);
         } catch (Exception e) {
             fail(method+e.getMessage());

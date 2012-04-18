@@ -8,6 +8,7 @@ import org.synchronoss.cpo.CpoException;
 
 import junit.framework.TestCase;
 import org.slf4j.LoggerFactory;
+import org.synchronoss.cpo.CpoAdapterFactory;
 import org.synchronoss.cpo.helper.ExceptionHelper;
 
 public class InvalidParameterTest extends TestCase {
@@ -30,7 +31,7 @@ public class InvalidParameterTest extends TestCase {
       String method = "setUp:";
       
       try{
-        jdbcIdo_ = new JdbcCpoFactory().getCpoAdapter();
+        jdbcIdo_ = CpoAdapterFactory.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT);
           assertNotNull(method+"IdoAdapter is null",jdbcIdo_);
       } catch (Exception e) {
           fail(method+e.getMessage());

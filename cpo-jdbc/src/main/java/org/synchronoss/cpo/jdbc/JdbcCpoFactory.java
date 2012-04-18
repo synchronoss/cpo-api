@@ -23,6 +23,7 @@
  */
 package org.synchronoss.cpo.jdbc;
 
+import org.synchronoss.cpo.jdbc.meta.JdbcCpoMetaAdapter;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Locale;

@@ -29,12 +29,15 @@ public class CpoArgument extends CpoArgumentBean implements IMetaDFVisitable {
 
   CpoAttribute attribute = null;
   
-  public CpoArgument(CpoAttribute attribute) {
-    this.attribute = attribute;
+  public CpoArgument() {
   }
 
   public CpoAttribute getAttribute() {
     return attribute;
+  }
+
+  public void setAttribute(CpoAttribute attribute) {
+    this.attribute = attribute;
   }
 
   @Override

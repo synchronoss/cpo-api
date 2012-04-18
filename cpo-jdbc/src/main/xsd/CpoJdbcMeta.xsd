@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" 
     xmlns:cpo="http://www.synchronoss.org/cpo/core/CpoCoreMeta.xsd"
-    xmlns="http://www.synchronoss.org/cpo/jdbc/CpoJdbcTypes.xsd"
-    targetNamespace="http://www.synchronoss.org/cpo/jdbc/CpoJdbcTypes.xsd"
+    xmlns="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd"
+    targetNamespace="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd"
     elementFormDefault="qualified">
 
     <xs:import namespace="http://www.synchronoss.org/cpo/core/CpoCoreMeta.xsd" schemaLocation="../../../../cpo-core/src/main/xsd/CpoCoreMeta.xsd"/>

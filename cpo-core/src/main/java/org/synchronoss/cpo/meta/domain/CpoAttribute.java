@@ -42,7 +42,7 @@ public class CpoAttribute extends CpoAttributeBean implements IMetaDFVisitable {
   //Transform attributes
   private CpoTransform cpoTransform = null;
 
-  private CpoAttribute() {
+  public CpoAttribute() {
   }
 
   public <T> CpoAttribute(CpoClass<T> jmc, String name, String dataName, String transformClass) throws CpoException {

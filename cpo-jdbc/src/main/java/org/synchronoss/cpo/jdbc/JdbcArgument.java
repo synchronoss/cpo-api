@@ -47,13 +47,8 @@ public class JdbcArgument extends CpoArgument implements java.io.Serializable, j
     private static final String INOUT_PARAMETER = "BOTH";
     private String executeType = null;
 
-    public JdbcArgument(JdbcAttribute attribute){
-      super(attribute);
-    }
-
-    public JdbcArgument(JdbcAttribute attribute, String executeType){
-      super(attribute);
-      this.executeType=executeType;
+    public JdbcArgument(){
+      super();
     }
 
   @Override

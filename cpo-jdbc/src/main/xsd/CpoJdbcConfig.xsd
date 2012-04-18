@@ -9,7 +9,7 @@
     
     <xs:complexType name="ctJdbcConfig">
         <xs:complexContent>
-            <xs:extension base="cpo:ctDataConfig">
+            <xs:extension base="cpo:ctDataSourceConfig">
                 <xs:sequence>
                     <xs:choice>
                         <xs:element name="driver" type="xs:string">

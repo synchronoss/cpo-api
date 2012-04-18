@@ -64,6 +64,8 @@ public class JdbcAttribute extends CpoAttribute implements java.io.Serializable,
     private boolean hasTransformPS = false;
     private boolean hasTransformCS = false;
     
+    public JdbcAttribute() {
+    }
     /**
      * @param jmc
      * @param name

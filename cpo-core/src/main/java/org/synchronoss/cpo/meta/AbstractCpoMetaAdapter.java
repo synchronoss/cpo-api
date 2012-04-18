@@ -4,12 +4,15 @@
  */
 package org.synchronoss.cpo.meta;
 
-import java.sql.Connection;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import javax.sql.DataSource;
 import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.CpoException;
-import org.synchronoss.cpo.meta.domain.CpoClass;
+import org.synchronoss.cpo.core.cpoCoreMeta.*;
+import org.synchronoss.cpo.helper.ExceptionHelper;
+import org.synchronoss.cpo.meta.domain.*;
 
 /**
  *
@@ -218,4 +221,98 @@ public abstract class AbstractCpoMetaAdapter implements CpoMetaAdapter {
     return cpoClass;
   }
 
+  public void loadCpoMetaDataDocument(CpoMetaDataDocument metaDataDoc) throws CpoException {
+    
+    for(CtClass ctClass : metaDataDoc.getCpoMetaData().getClassMetaArray()) {
+      CpoClass cpoClass = loadCpoClass(ctClass);
+    }
+    
+  }
+  
+  protected CpoClass loadCpoClass(CtClass ctClass) throws CpoException {
+    CpoClass cpoClass = null;
+    
+    try {
+      cpoClass = createCpoClass(Class.forName(ctClass.getName()));
+      cpoClass.setDescription(ctClass.getDescription());
+    } catch (ClassNotFoundException cnfe) {
+      throw new CpoException("Unable to create class: "+ctClass.getName()+": "+ExceptionHelper.getLocalizedMessage(cnfe));
+    }
+    
+    for (CtAttribute ctAttribute : ctClass.getAttributeArray()){
+      loadCpoAttribute(createCpoAttribute(), ctAttribute);
+    }
+    
+    for (CtFunctionGroup ctFunctionGroup : ctClass.getFunctionsGroupArray()){
+      loadCpoFunctionGroup(createCpoFunctionGroup(), ctFunctionGroup);
+    }
+    
+    return cpoClass;    
+  }
+  
+  protected void loadCpoAttribute(CpoAttribute cpoAttribute, CtAttribute ctAttribute){
+    cpoAttribute.setDataName(ctAttribute.getDataName());
+    cpoAttribute.setDataType(ctAttribute.getDataType());
+    cpoAttribute.setDescription(ctAttribute.getDescription());
+    cpoAttribute.setJavaName(ctAttribute.getJavaName());
+    cpoAttribute.setJavaType(ctAttribute.getJavaType());
+    cpoAttribute.setTransformClass(ctAttribute.getTransformClass());
+  }
+  
+  protected void loadCpoFunctionGroup(CpoFunctionGroup cpoFunctionGroup, CtFunctionGroup ctFunctionGroup){
+    cpoFunctionGroup.setDescription(ctFunctionGroup.getDescription());
+    cpoFunctionGroup.setName(ctFunctionGroup.getName());
+    cpoFunctionGroup.setType(ctFunctionGroup.getType());
+    cpoFunctionGroup.setFunctions(new ArrayList<CpoFunction>());
+    List<CpoFunction> functions = cpoFunctionGroup.getFunctions();
+    
+    for (CtFunction ctFunction : ctFunctionGroup.getFunctionArray()){
+      CpoFunction cpoFunction = createCpoFunction();
+      functions.add(cpoFunction);
+      loadCpoFunction(cpoFunction, ctFunction);
+    }
+    
+  }
+  
+  protected void loadCpoFunction(CpoFunction cpoFunction, CtFunction ctFunction){
+    cpoFunction.setExpression(ctFunction.getExpression());
+    cpoFunction.setDescription(ctFunction.getDescription());
+    cpoFunction.setArguments(new ArrayList<CpoArgument>());
+    List<CpoArgument> arguments = cpoFunction.getArguments();
+    
+    for (CtArgument ctArgument : ctFunction.getArgumentsArray()){
+      CpoArgument cpoArgument = createCpoArgument();
+      arguments.add(cpoArgument);
+      loadCpoArgument(cpoArgument, ctArgument);
+    }    
+  }
+  
+  protected void loadCpoArgument(CpoArgument cpoArgument, CtArgument ctArgument){
+    cpoArgument.setAttributeName(ctArgument.getAttribute());
+    cpoArgument.setDescription(ctArgument.getDescription());
+    
+    //TODO: do the attribute look up here and set appropriately.
+    cpoArgument.setAttribute(null);
+  }
+   
+  protected CpoClass createCpoClass(Class<?> clazz) {
+    return new CpoClass(clazz);
+  }
+  
+  protected CpoAttribute createCpoAttribute() {
+    return new CpoAttribute();
+  }
+  
+  protected CpoFunctionGroup createCpoFunctionGroup() {
+    return new CpoFunctionGroup();
+  }
+  
+  protected CpoFunction createCpoFunction() {
+    return new CpoFunction();
+  }
+  
+  protected CpoArgument createCpoArgument() {
+    return new CpoArgument();
+  }
+  
 }

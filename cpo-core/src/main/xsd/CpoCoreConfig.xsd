@@ -8,11 +8,11 @@
     
     <xs:complexType name="ctCpoConfig">
         <xs:sequence>
-            <xs:element name="dataConfig" type="ctDataConfig" minOccurs="1" maxOccurs="unbounded"/>
+            <xs:element name="dataConfig" type="ctDataSourceConfig" minOccurs="1" maxOccurs="unbounded"/>
         </xs:sequence>
     </xs:complexType>
     
-    <xs:complexType name="ctDataConfig" abstract="true">
+    <xs:complexType name="ctDataSourceConfig" abstract="true">
         <xs:sequence>
             <xs:element name="metaXml" type="xs:string">
                 <xs:annotation>

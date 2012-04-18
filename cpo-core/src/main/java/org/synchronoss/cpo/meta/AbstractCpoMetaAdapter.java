@@ -221,7 +221,7 @@ public abstract class AbstractCpoMetaAdapter implements CpoMetaAdapter {
 
   public void loadCpoMetaDataDocument(CpoMetaDataDocument metaDataDoc) throws CpoException {
     
-    for(CtClass ctClass : metaDataDoc.getCpoMetaData().getClassMetaArray()) {
+    for(CtClass ctClass : metaDataDoc.getCpoMetaData().getCpoClassArray()) {
       CpoClass cpoClass = loadCpoClass(ctClass);
     }
     
@@ -237,11 +237,11 @@ public abstract class AbstractCpoMetaAdapter implements CpoMetaAdapter {
       throw new CpoException("Unable to create class: "+ctClass.getName()+": "+ExceptionHelper.getLocalizedMessage(cnfe));
     }
     
-    for (CtAttribute ctAttribute : ctClass.getAttributeArray()){
+    for (CtAttribute ctAttribute : ctClass.getCpoAttributeArray()){
       loadCpoAttribute(createCpoAttribute(), ctAttribute);
     }
     
-    for (CtFunctionGroup ctFunctionGroup : ctClass.getFunctionGroupArray()){
+    for (CtFunctionGroup ctFunctionGroup : ctClass.getCpoFunctionGroupArray()){
       loadCpoFunctionGroup(createCpoFunctionGroup(), ctFunctionGroup);
     }
     
@@ -264,7 +264,7 @@ public abstract class AbstractCpoMetaAdapter implements CpoMetaAdapter {
     cpoFunctionGroup.setFunctions(new ArrayList<CpoFunction>());
     List<CpoFunction> functions = cpoFunctionGroup.getFunctions();
     
-    for (CtFunction ctFunction : ctFunctionGroup.getFunctionArray()){
+    for (CtFunction ctFunction : ctFunctionGroup.getCpoFunctionArray()){
       CpoFunction cpoFunction = createCpoFunction();
       functions.add(cpoFunction);
       loadCpoFunction(cpoFunction, ctFunction);
@@ -278,7 +278,7 @@ public abstract class AbstractCpoMetaAdapter implements CpoMetaAdapter {
     cpoFunction.setArguments(new ArrayList<CpoArgument>());
     List<CpoArgument> arguments = cpoFunction.getArguments();
     
-    for (CtArgument ctArgument : ctFunction.getArgumentArray()){
+    for (CtArgument ctArgument : ctFunction.getCpoArgumentArray()){
       CpoArgument cpoArgument = createCpoArgument();
       arguments.add(cpoArgument);
       loadCpoArgument(cpoArgument, ctArgument);
@@ -286,7 +286,7 @@ public abstract class AbstractCpoMetaAdapter implements CpoMetaAdapter {
   }
   
   protected void loadCpoArgument(CpoArgument cpoArgument, CtArgument ctArgument){
-    cpoArgument.setAttributeName(ctArgument.getAttribute());
+    cpoArgument.setAttributeName(ctArgument.getAttributeName());
     cpoArgument.setDescription(ctArgument.getDescription());
     
     //TODO: do the attribute look up here and set appropriately.

@@ -22,11 +22,8 @@
 package org.synchronoss.cpo.meta.domain;
 
 import org.synchronoss.cpo.*;
-import org.synchronoss.cpo.meta.bean.CpoClassBean;
 
-import java.util.*;
-
-public class CpoMetaClass<T> extends CpoClass implements IMetaDFVisitable {
+public class CpoMetaClass<T> extends CpoClass implements MetaDFVisitable {
 
   private Class<T> metaClass = null;
 

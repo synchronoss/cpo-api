@@ -26,7 +26,7 @@ import org.synchronoss.cpo.meta.bean.CpoClassBean;
 
 import java.util.*;
 
-public class CpoClass extends CpoClassBean implements IMetaDFVisitable {
+public class CpoClass extends CpoClassBean implements MetaDFVisitable {
 
   /**
    * attributeMap contains a Map of CpoAttribute Objects
@@ -75,7 +75,7 @@ public class CpoClass extends CpoClassBean implements IMetaDFVisitable {
   }
 
   @Override
-  public void acceptMetaDFVisitor(IMetaVisitor visitor) {
+  public void acceptMetaDFVisitor(MetaVisitor visitor) {
     visitor.visit(this);
 
     // visit attributes
@@ -88,12 +88,18 @@ public class CpoClass extends CpoClassBean implements IMetaDFVisitable {
       visitor.visit(cpoFunctionGroup);
 
       // visit the functions
-      for (CpoFunction cpoFunction : cpoFunctionGroup.getFunctions()) {
-        visitor.visit(cpoFunction);
+      List<CpoFunction> functions = cpoFunctionGroup.getFunctions();
+      if (functions != null) {
+        for (CpoFunction cpoFunction : functions) {
+          visitor.visit(cpoFunction);
 
-        // visit the arguments
-        for (CpoArgument cpoArgument : cpoFunction.getArguments()) {
-          visitor.visit(cpoArgument);
+          // visit the arguments
+          List<CpoArgument> arguments = cpoFunction.getArguments();
+          if (arguments != null) {
+            for (CpoArgument cpoArgument : arguments) {
+              visitor.visit(cpoArgument);
+            }
+          }
         }
       }
     }

@@ -1,6 +1,6 @@
 package org.synchronoss.cpo.exporter;
 
-import org.synchronoss.cpo.IMetaVisitor;
+import org.synchronoss.cpo.MetaVisitor;
 import org.synchronoss.cpo.meta.domain.*;
 
 /**
@@ -9,7 +9,7 @@ import org.synchronoss.cpo.meta.domain.*;
  * @author Michael Bellomo
  * @since 4/17/12
  */
-public class CpoClassSourceGenerator implements IMetaVisitor {
+public class CpoClassSourceGenerator implements MetaVisitor {
 
   String className = null;
 

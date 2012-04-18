@@ -7,7 +7,7 @@ import org.synchronoss.cpo.meta.domain.*;
  *
  * @author Michael Bellomo
  */
-public interface IMetaVisitor {
+public interface MetaVisitor {
 
   /**
    *

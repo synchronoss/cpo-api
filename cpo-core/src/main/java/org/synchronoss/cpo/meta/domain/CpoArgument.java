@@ -25,7 +25,7 @@ package org.synchronoss.cpo.meta.domain;
 import org.synchronoss.cpo.*;
 import org.synchronoss.cpo.meta.bean.CpoArgumentBean;
 
-public class CpoArgument extends CpoArgumentBean implements IMetaDFVisitable {
+public class CpoArgument extends CpoArgumentBean implements MetaDFVisitable {
 
   CpoAttribute attribute = null;
   
@@ -41,7 +41,7 @@ public class CpoArgument extends CpoArgumentBean implements IMetaDFVisitable {
   }
 
   @Override
-  public void acceptMetaDFVisitor(IMetaVisitor visitor) {
+  public void acceptMetaDFVisitor(MetaVisitor visitor) {
     visitor.visit(this);
   }
 }

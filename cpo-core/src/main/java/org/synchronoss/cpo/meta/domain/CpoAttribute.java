@@ -19,7 +19,6 @@
  *  http://www.gnu.org/licenses/lgpl.txt
  *
  */
-
 package org.synchronoss.cpo.meta.domain;
 
 import org.slf4j.*;
@@ -30,7 +29,7 @@ import org.synchronoss.cpo.transform.CpoTransform;
 
 import java.lang.reflect.*;
 
-public class CpoAttribute extends CpoAttributeBean implements IMetaDFVisitable {
+public class CpoAttribute extends CpoAttributeBean {
 
   private static Logger logger = LoggerFactory.getLogger(CpoAttribute.class.getName());
 
@@ -269,10 +268,5 @@ public class CpoAttribute extends CpoAttributeBean implements IMetaDFVisitable {
     }
 
     return false;
-  }
-
-  @Override
-  public void acceptMetaDFVisitor(IMetaVisitor visitor) {
-    visitor.visit(this);
   }
 }

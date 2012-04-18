@@ -19,16 +19,14 @@
  *  http://www.gnu.org/licenses/lgpl.txt
  *
  */
-
 package org.synchronoss.cpo.meta.domain;
 
-import org.synchronoss.cpo.*;
 import org.synchronoss.cpo.meta.bean.CpoFunctionGroupBean;
 
 import java.util.List;
 
-public class CpoFunctionGroup extends CpoFunctionGroupBean implements IMetaDFVisitable {
-  
+public class CpoFunctionGroup extends CpoFunctionGroupBean {
+
   List<CpoFunction> functions = null;
 
   public CpoFunctionGroup() {
@@ -40,15 +38,5 @@ public class CpoFunctionGroup extends CpoFunctionGroupBean implements IMetaDFVis
 
   public void setFunctions(List<CpoFunction> functions) {
     this.functions = functions;
-  }
-
-  @Override
-  public void acceptMetaDFVisitor(IMetaVisitor visitor) {
-    visitor.visit(this);
-
-    // visit the functions
-    for (CpoFunction cpoFunction : getFunctions()) {
-      visitor.visit(cpoFunction);
-    }
   }
 }

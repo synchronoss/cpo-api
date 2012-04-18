@@ -4,15 +4,14 @@
  */
 package org.synchronoss.cpo.meta;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import javax.sql.DataSource;
 import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.CpoException;
 import org.synchronoss.cpo.core.cpoCoreMeta.*;
 import org.synchronoss.cpo.helper.ExceptionHelper;
 import org.synchronoss.cpo.meta.domain.*;
+
+import javax.sql.DataSource;
+import java.util.*;
 
 /**
  *
@@ -177,7 +176,6 @@ public abstract class AbstractCpoMetaAdapter implements CpoMetaAdapter {
    * DOCUMENT ME!
    *
    * @param obj DOCUMENT ME!
-   * @param c   connection
    * @return DOCUMENT ME!
    * @throws CpoException DOCUMENT ME!
    */
@@ -243,7 +241,7 @@ public abstract class AbstractCpoMetaAdapter implements CpoMetaAdapter {
       loadCpoAttribute(createCpoAttribute(), ctAttribute);
     }
     
-    for (CtFunctionGroup ctFunctionGroup : ctClass.getFunctionsGroupArray()){
+    for (CtFunctionGroup ctFunctionGroup : ctClass.getFunctionGroupArray()){
       loadCpoFunctionGroup(createCpoFunctionGroup(), ctFunctionGroup);
     }
     
@@ -280,7 +278,7 @@ public abstract class AbstractCpoMetaAdapter implements CpoMetaAdapter {
     cpoFunction.setArguments(new ArrayList<CpoArgument>());
     List<CpoArgument> arguments = cpoFunction.getArguments();
     
-    for (CtArgument ctArgument : ctFunction.getArgumentsArray()){
+    for (CtArgument ctArgument : ctFunction.getArgumentArray()){
       CpoArgument cpoArgument = createCpoArgument();
       arguments.add(cpoArgument);
       loadCpoArgument(cpoArgument, ctArgument);

@@ -19,18 +19,16 @@
  *  http://www.gnu.org/licenses/lgpl.txt
  *
  */
-
 package org.synchronoss.cpo.meta.domain;
 
 import org.slf4j.*;
-import org.synchronoss.cpo.*;
 import org.synchronoss.cpo.meta.bean.CpoFunctionBean;
 
 import java.util.List;
 
-public class CpoFunction extends CpoFunctionBean implements IMetaDFVisitable {
+public class CpoFunction extends CpoFunctionBean {
   private static Logger logger = LoggerFactory.getLogger(CpoFunction.class.getName());
-  
+
   List<CpoArgument> arguments = null;
 
   public CpoFunction() {
@@ -90,15 +88,5 @@ public class CpoFunction extends CpoFunctionBean implements IMetaDFVisitable {
     }
 
     return sb.toString();
-  }
-
-  @Override
-  public void acceptMetaDFVisitor(IMetaVisitor visitor) {
-    visitor.visit(this);
-
-    // visit the arguments
-    for (CpoArgument cpoArgument : getArguments()) {
-      visitor.visit(cpoArgument);
-    }
   }
 }

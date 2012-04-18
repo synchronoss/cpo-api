@@ -16,7 +16,7 @@
         <xs:sequence>
             <xs:element name="name" type="xs:string"/>
             <xs:element name="attribute" type="ctAttribute" minOccurs="0" maxOccurs="unbounded"/>
-            <xs:element name="functionsGroup" type="ctFunctionGroup" minOccurs="0" maxOccurs="unbounded"/> 
+            <xs:element name="functionGroup" type="ctFunctionGroup" minOccurs="0" maxOccurs="unbounded"/>
             <xs:element name="description" type="xs:string" minOccurs="0"/>
         </xs:sequence>
     </xs:complexType>
@@ -44,7 +44,7 @@
     <xs:complexType name="ctFunction">
         <xs:sequence>
             <xs:element name="expression" type="xs:string"/>
-            <xs:element name="arguments" type="ctArgument" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="argument" type="ctArgument" minOccurs="0" maxOccurs="unbounded"/>
             <xs:element name="description" type="xs:string" minOccurs="0"/>
         </xs:sequence>
     </xs:complexType>

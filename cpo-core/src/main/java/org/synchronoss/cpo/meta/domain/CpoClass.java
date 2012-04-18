@@ -97,6 +97,16 @@ public class CpoClass<T> extends CpoClassBean implements IMetaDFVisitable {
     // visit function groups
     for (CpoFunctionGroup cpoFunctionGroup : getFunctionGroups().values()) {
       visitor.visit(cpoFunctionGroup);
+
+      // visit the functions
+      for (CpoFunction cpoFunction : cpoFunctionGroup.getFunctions()) {
+        visitor.visit(cpoFunction);
+
+        // visit the arguments
+        for (CpoArgument cpoArgument : cpoFunction.getArguments()) {
+          visitor.visit(cpoArgument);
+        }
+      }
     }
   }
 }

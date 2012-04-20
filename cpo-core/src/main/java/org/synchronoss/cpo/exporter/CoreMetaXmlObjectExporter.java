@@ -2,9 +2,8 @@ package org.synchronoss.cpo.exporter;
 
 import org.synchronoss.cpo.MetaVisitor;
 import org.synchronoss.cpo.core.cpoCoreMeta.*;
+import org.synchronoss.cpo.meta.CpoMetaAdapter;
 import org.synchronoss.cpo.meta.domain.*;
-
-import java.util.Collection;
 
 /**
  * XmlObject exporter for meta objects
@@ -20,18 +19,14 @@ public class CoreMetaXmlObjectExporter implements MetaXmlObjectExporter, MetaVis
   protected CtFunctionGroup currentCtFunctionGroup;
   protected CtFunction currentCtFunction;
 
-  public CoreMetaXmlObjectExporter() {
+  public CoreMetaXmlObjectExporter(CpoMetaAdapter metaAdapter) {
     cpoMetaDataDocument = CpoMetaDataDocument.Factory.newInstance();
     CtCpoMetaData ctCpoMetaData = cpoMetaDataDocument.addNewCpoMetaData();
+    ctCpoMetaData.setMetaAdapter(metaAdapter.getClass().getName());
   }
 
   @Override
-  public CpoMetaDataDocument export(Collection<CpoClass> classes) {
-
-    for (CpoClass cpoClass : classes) {
-      cpoClass.acceptMetaDFVisitor(this);
-    }
-
+  public CpoMetaDataDocument getCpoMetaDataDocument() {
     return cpoMetaDataDocument;
   }
 

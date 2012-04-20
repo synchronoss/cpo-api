@@ -10,6 +10,7 @@
         <xs:sequence>
             <xs:element name="cpoClass" type="ctClass" minOccurs="0" maxOccurs="unbounded"/>
         </xs:sequence>
+        <xs:attribute name="metaAdapter" type="xs:string" use="required"/>
     </xs:complexType>
     
     <xs:complexType name="ctClass">

@@ -4,19 +4,15 @@
  */
 package org.synchronoss.cpo.meta;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import org.slf4j.LoggerFactory;
+import org.apache.xmlbeans.XmlException;
 import org.synchronoss.cpo.CpoException;
 import org.synchronoss.cpo.core.cpoCoreMeta.*;
+import org.synchronoss.cpo.exporter.*;
 import org.synchronoss.cpo.helper.ExceptionHelper;
 import org.synchronoss.cpo.meta.domain.*;
 
-import javax.sql.DataSource;
+import java.io.*;
 import java.util.*;
-import org.apache.xmlbeans.XmlException;
 
 /**
  *
@@ -204,9 +200,20 @@ public abstract class AbstractCpoMetaAdapter implements CpoMetaAdapter {
 
     return metaAdapter;
   }
-  
+
+  protected MetaXmlObjectExporter getMetaXmlObjectExporter() {
+    return new CoreMetaXmlObjectExporter(this);
+  }
+
+  public final CpoMetaDataDocument export() {
+    MetaXmlObjectExporter metaXmlObjectExporter = getMetaXmlObjectExporter();
+    for (CpoClass cpoClass : classMap.values()) {
+      cpoClass.acceptMetaDFVisitor(metaXmlObjectExporter);
+    }
+    return metaXmlObjectExporter.getCpoMetaDataDocument();
+  }
+
   protected void addCpoClass(CpoClass metaClass) {
     classMap.put(metaClass.getName(), metaClass);
   }
-  
 }

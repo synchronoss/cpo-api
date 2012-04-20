@@ -26,10 +26,12 @@ package org.synchronoss.cpo.jdbc.meta;
 import org.synchronoss.cpo.CpoException;
 import org.synchronoss.cpo.core.cpoCoreMeta.CtArgument;
 import org.synchronoss.cpo.core.cpoCoreMeta.CtAttribute;
+import org.synchronoss.cpo.exporter.MetaXmlObjectExporter;
 import org.synchronoss.cpo.jdbc.JdbcArgument;
 import org.synchronoss.cpo.jdbc.JdbcAttribute;
 import org.synchronoss.cpo.jdbc.cpoJdbcMeta.CtJdbcArgument;
 import org.synchronoss.cpo.jdbc.cpoJdbcMeta.CtJdbcAttribute;
+import org.synchronoss.cpo.jdbc.exporter.JdbcMetaXmlObjectExporter;
 import org.synchronoss.cpo.meta.AbstractCpoMetaAdapter;
 import org.synchronoss.cpo.meta.CpoMetaAdapter;
 import org.synchronoss.cpo.meta.domain.*;
@@ -116,5 +118,9 @@ public class JdbcCpoMetaAdapter extends AbstractCpoMetaAdapter {
     
     return null;
   }
-  
+
+  @Override
+  protected MetaXmlObjectExporter getMetaXmlObjectExporter() {
+    return new JdbcMetaXmlObjectExporter(this);
+  }
 }

@@ -21,43 +21,6 @@
     <postgresVersion>9.0-801.jdbc4</postgresVersion>
   </properties>
   <build>
-    <pluginManagement>
-      <plugins>
-        <plugin>
-          <groupId>org.codehaus.mojo</groupId>
-          <artifactId>sql-maven-plugin</artifactId>
-          <version>1.4</version>
-        <dependencies>
-          <dependency>
-            <groupId>com.oracle</groupId>
-            <artifactId>ojdbc14</artifactId>
-            <version>${oracleVersion}</version>
-          </dependency>
-          <dependency>
-            <groupId>postgresql</groupId>
-            <artifactId>postgresql</artifactId>
-            <version>${postgresVersion}</version>
-          </dependency>
-          <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-            <version>${mysqlVersion}</version>
-          </dependency>
-          <dependency>
-            <groupId>org.hsqldb</groupId>
-            <artifactId>hsqldb</artifactId>
-            <version>${hsqldbVersion}</version>
-          </dependency>
-        </dependencies>
-        <configuration>
-          <autocommit>true</autocommit>
-          <delimiter>;</delimiter>
-          <onError>continue</onError>
-          <skip>false</skip>
-        </configuration>
-        </plugin>
-      </plugins>
-    </pluginManagement>
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -65,50 +28,6 @@
         <configuration>
           <arguments>${release.arguments}</arguments>
         </configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>sql-maven-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>create-metadata-tables</id>
-            <phase>process-test-resources</phase>
-            <goals>
-              <goal>execute</goal>
-            </goals>
-            <configuration>
-              <username>${cpo.meta.user}</username>
-              <password>${cpo.meta.pswd}</password>
-              <driver>${cpo.meta.driver}</driver>
-              <url>${cpo.meta.url}</url>
-              <srcFiles>
-                <srcFile>${cpo.test.sqldir}/dropCpoTables.sql</srcFile>
-                <srcFile>${cpo.test.sqldir}/CpoTableDDL.sql</srcFile>
-                <srcFile>${cpo.test.sqldir}/cpoJunit.sql</srcFile>
-                <srcFile>${cpo.test.sqldir}/shutdown.sql</srcFile>
-              </srcFiles>
-            </configuration>
-          </execution>
-          <execution>
-            <id>create-data</id>
-            <phase>process-test-resources</phase>
-            <goals>
-              <goal>execute</goal>
-            </goals>
-            <configuration>
-              <username>${cpo.db.user}</username>
-              <password>${cpo.db.pswd}</password>
-              <driver>${cpo.db.driver}</driver>
-              <url>${cpo.db.url}</url>
-              <srcFiles>
-                <srcFile>${cpo.test.sqldir}/dropTestTables.sql</srcFile>
-                <srcFile>${cpo.test.sqldir}/LvoTableDDL.sql</srcFile>
-                <srcFile>${cpo.test.sqldir}/ValueObjectDDL.sql</srcFile>
-                <srcFile>${cpo.test.sqldir}/shutdown.sql</srcFile>
-              </srcFiles>
-            </configuration>
-          </execution>
-        </executions>
       </plugin>
       <plugin>
         <artifactId>maven-assembly-plugin</artifactId>
@@ -268,6 +187,7 @@
         <cpo.db.select4update>true</cpo.db.select4update>
         <cpo.db.millisupport>true</cpo.db.millisupport>
         <cpo.db.class>oracle.jdbc.pool.OracleConnectionPoolDataSource</cpo.db.class>        
+        <cpo.meta.xml>oracleMetaData.xml</cpo.meta.xml>
         <cpo.meta.class>oracle.jdbc.pool.OracleConnectionPoolDataSource</cpo.meta.class>        
         <cpo.meta.user>cpometa</cpo.meta.user>
         <cpo.meta.pswd>cpometa</cpo.meta.pswd>

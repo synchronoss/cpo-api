@@ -1,7 +1,7 @@
 /**
- *  DataSourceInfo.java
+ * CpoMetaAdapter.java  
  * 
- *  Copyright (C) 2006-2011  David E. Berry
+ *  Copyright (C) 2006  David E. Berry
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -19,34 +19,25 @@
  *  
  *  A copy of the GNU Lesser General Public License may also be found at 
  *  http://www.gnu.org/licenses/lgpl.txt
- */
-package org.synchronoss.cpo;
-
-import javax.sql.DataSource;
-
-/**
- * Interface that defines the methods needed by CPO for any class that collects DataSource info and 
- * instantiates the DataSource
- * 
- * @author david.berry
  *
  */
-public interface DataSourceInfo {
+package org.synchronoss.cpo.meta;
 
-	/**
-	 * @return Returns the dataSourceName.
-	 */
-	public String getDataSourceName();
+import org.synchronoss.cpo.CpoException;
 
-  /**
-   * @return Returns the DataSource
-   */
-  public DataSource getDataSource() throws CpoException ;
-  
-//  /**
-//   * Returns the tablePrefix or an empty string if no table prefix exists.
-//   * @return Returns the tablePrefix to be used on the CPO Tables
-//   */
-//  public String getTablePrefix();
+/**
+ *
+ * @author dberry
+ */
+public interface CpoMetaAdapterFactory {
+    /**
+     * Creates a new CpoMetaAdapter
+     *
+     * @param metaXml The resource name, file name, or actual xml that contains the metadata.
+     *
+     * @throws CpoException Thrown if there are errors creating the CpoMetaAdapter
+     */
+    public void getCpoMetaAdapter(String metaXml) throws CpoException;
+
   
 }

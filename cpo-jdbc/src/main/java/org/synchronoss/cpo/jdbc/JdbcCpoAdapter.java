@@ -123,10 +123,6 @@ public class JdbcCpoAdapter implements CpoAdapter {
    */
   private DataSource writeDataSource_ = null;
 
-  private String dbTablePrefix = "";
-
-  /** DOCUMENT ME! */
-
   /**
    * DOCUMENT ME!
    */
@@ -156,7 +152,6 @@ public class JdbcCpoAdapter implements CpoAdapter {
       throws CpoException {
 
     this.metaAdapter = metaAdapter;
-    setDbTablePrefix(jdsiTrx.getTablePrefix());
     setWriteDataSource(jdsiTrx.getDataSource());
     setReadDataSource(getWriteDataSource());
     processDatabaseMetaData();
@@ -176,16 +171,14 @@ public class JdbcCpoAdapter implements CpoAdapter {
   public JdbcCpoAdapter(CpoMetaAdapter metaAdapter, DataSourceInfo jdsiWrite, DataSourceInfo jdsiRead)
       throws CpoException {
     this.metaAdapter = metaAdapter;
-    setDbTablePrefix(jdsiWrite.getTablePrefix());
     setWriteDataSource(jdsiWrite.getDataSource());
     setReadDataSource(jdsiRead.getDataSource());
     processDatabaseMetaData();
   }
 
-  protected JdbcCpoAdapter(CpoMetaAdapter metaAdapter, boolean batchSupported, String dbTablePrefix)
+  protected JdbcCpoAdapter(CpoMetaAdapter metaAdapter, boolean batchSupported)
       throws CpoException {
     this.metaAdapter = metaAdapter;
-    setDbTablePrefix(dbTablePrefix);
     batchUpdatesSupported_ = batchSupported;
   }
 
@@ -3648,17 +3641,9 @@ public class JdbcCpoAdapter implements CpoAdapter {
    * @see CpoTrxAdapter
    */
   public CpoTrxAdapter getCpoTrxAdapter() throws CpoException {
-    return new JdbcCpoTrxAdapter(metaAdapter, getWriteConnection(), batchUpdatesSupported_, getDbTablePrefix());
+    return new JdbcCpoTrxAdapter(metaAdapter, getWriteConnection(), batchUpdatesSupported_);
   }
 
-  public String getDbTablePrefix() {
-    return dbTablePrefix;
-  }
-
-  public void setDbTablePrefix(String dbTablePrefix) {
-    this.dbTablePrefix = dbTablePrefix;
-  }
-  
   private class RetrieverThread<T,C> extends Thread {
     String name;
     C criteria;

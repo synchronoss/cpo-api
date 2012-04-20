@@ -36,7 +36,6 @@ public class ClassDataSourceInfo implements DataSourceInfo, DataSource, Connecti
   private ConnectionPoolDataSource poolDataSource = null;
   
   private String dataSourceName = null;
-  private String    tablePrefix = "";
   private Map<String, String> properties = null;
 
   private PrintWriter printWriter_ = null;
@@ -62,20 +61,6 @@ public class ClassDataSourceInfo implements DataSourceInfo, DataSource, Connecti
    * Creates a ClassDataSourceInfo from a Jdbc Driver
    *
    * @param classname The classname of a class that implements datasource
-   * @param tablePrefix The prefix added to the cpo tables in the metadata source
-   */
-  public ClassDataSourceInfo(String className, String tablePrefix) throws CpoException {
-    loadClass(className);
-    dataSourceName=className;
-    if (tablePrefix != null) {
-      this.tablePrefix=tablePrefix;
-    }
-  }
-
-  /**
-   * Creates a ClassDataSourceInfo from a Jdbc Driver
-   *
-   * @param classname The classname of a class that implements datasource
    * @param properties - The connection properties for connecting to the database
    */
   public ClassDataSourceInfo(String className, Map<String, String> properties) throws CpoException {
@@ -84,28 +69,8 @@ public class ClassDataSourceInfo implements DataSourceInfo, DataSource, Connecti
     setClassProperties(properties);
   }
 
-  /**
-   * Creates a ClassDataSourceInfo from a Jdbc Driver
-   *
-   * @param classname The classname of a class that implements datasource
-   * @param properties - The connection properties for connecting to the database
-   * @param tablePrefix The prefix added to the cpo tables in the metadata source
-   */
-  public ClassDataSourceInfo(String className, Map<String, String> properties, String tablePrefix) throws CpoException {
-    loadClass(className);
-    dataSourceName=BuildDataSourceName(className,properties);
-    setClassProperties(properties);
-    if (tablePrefix != null) {
-      this.tablePrefix=tablePrefix;
-    }
-  }
-
   public String getDataSourceName() {
     return dataSourceName;
-  }
-
-  public String getTablePrefix() {
-    return tablePrefix;
   }
 
   public DataSource getDataSource() throws CpoException {

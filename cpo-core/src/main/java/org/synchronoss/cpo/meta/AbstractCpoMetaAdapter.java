@@ -4,6 +4,10 @@
  */
 package org.synchronoss.cpo.meta;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.CpoException;
 import org.synchronoss.cpo.core.cpoCoreMeta.*;
@@ -12,6 +16,7 @@ import org.synchronoss.cpo.meta.domain.*;
 
 import javax.sql.DataSource;
 import java.util.*;
+import org.apache.xmlbeans.XmlException;
 
 /**
  *
@@ -20,151 +25,10 @@ import java.util.*;
 public abstract class AbstractCpoMetaAdapter implements CpoMetaAdapter {
   
   /**
-   * Each datasource has a cache for the meta data for each class inside that datasource
+   * The map of classes in this metaAdapter
    */
-  private static HashMap<String, HashMap<String, CpoMetaClass<?>>> dataSourceMap_ = new HashMap<String, HashMap<String, CpoMetaClass<?>>>(); // Contains the
+  private static SortedMap<String, CpoClass> classMap = new TreeMap<String, CpoClass>();
   
-  /**
-   * This is the DataSource for the meta datasource. Not sure if this belongs here or if it needs to be in JdbcCpoMetaAdapter.
-   */
-  private DataSource metaDataSource_ = null;
-
-  /**
-   * The unique statsource name for the meta store.
-   */
-  private String metaDataSourceName_ = null;
-
-  /**
-   * Clears the metadata for the specified object. The metadata will be reloaded
-   * the next time that CPO is called to access this object
-   *
-   * @param obj The object whose metadata must be cleared
-   */
-  @Override
-  public void clearMetaClass(Object obj) {
-    String className;
-    Class<?> objClass;
-
-    if (obj != null) {
-      objClass = obj.getClass();
-      className = objClass.getName();
-      clearMetaClass(className);
-    }
-  }
-
-  /**
-   * Clears the metadata for the specified fully qualifed class name. The metadata
-   * will be reloaded the next time CPO is called to access this class.
-   *
-   * @param className The fully qualified class name for the class that needs its
-   *                  metadata cleared.
-   */
-  @Override
-  public void clearMetaClass(String className) {
-    HashMap<String, CpoMetaClass<?>> metaClassMap;
-
-    synchronized (getDataSourceMap()) {
-      metaClassMap = getMetaClassMap();
-      metaClassMap.remove(className);
-    }
-  }
-
-  /**
-   * Clears the metadata for all classes. The metadata will be lazy-loaded from 
-   * the metadata repository as classes are accessed.
-   *
-   * @param all true - clear all classes for all datasources.
-   *            false - clear all classes for the current datasource.
-   *
-   * @throws CpoException Thrown if there are errors accessing the datasource
-  */
-  @Override
-  public void clearMetaClass(boolean all) {
-    synchronized (getDataSourceMap()) {
-      if (all==false) {
-        HashMap<String, CpoMetaClass<?>> metaClassMap = getMetaClassMap();
-        metaClassMap.clear();
-      } else {
-        for (HashMap<String, CpoMetaClass<?>> metamap : getDataSourceMap().values()){
-          metamap.clear();
-        }
-      }
-    }
-  }
-  
-  /**
-   * Clears the metadata for all classes for the current datasource. The metadata will be lazy-loaded from 
-   * the metadata repository as classes are accessed.
-   *
-   * @throws CpoException Thrown if there are errors accessing the datasource
-  */
-  @Override
-  public void clearMetaClass() {
-    clearMetaClass(false);
-  }
-
-  /**
-   * DOCUMENT ME!
-   *
-   * @return DOCUMENT ME!
-   */
-  protected HashMap<String, HashMap<String, CpoMetaClass<?>>> getDataSourceMap() {
-    return dataSourceMap_;
-  }
-
-  protected void setDataSourceMap(HashMap<String, HashMap<String, CpoMetaClass<?>>> dsMap) {
-    dataSourceMap_ = dsMap;
-  }
-
-  // All meta data will come from the meta datasource.
-  protected HashMap<String, CpoMetaClass<?>> getMetaClassMap() {
-    HashMap<String, HashMap<String, CpoMetaClass<?>>> dataSourceMap = getDataSourceMap();
-    String dataSourceName = getMetaDataSourceName();
-    HashMap<String, CpoMetaClass<?>> metaClassMap = dataSourceMap.get(dataSourceName);
-
-    if (metaClassMap == null) {
-      metaClassMap = new HashMap<String, CpoMetaClass<?>>();
-      dataSourceMap.put(dataSourceName, metaClassMap);
-    }
-
-    return metaClassMap;
-  }
-
-  /**
-   * DOCUMENT ME!
-   *
-   * @param metaDataSource DOCUMENT ME!
-   */
-  protected void setMetaDataSource(DataSource metaDataSource) {
-    metaDataSource_ = metaDataSource;
-  }
-
-  /**
-   * DOCUMENT ME!
-   *
-   * @return DOCUMENT ME!
-   */
-  protected DataSource getMetaDataSource() {
-    return metaDataSource_;
-  }
-
-  /**
-   * DOCUMENT ME!
-   *
-   * @param metaDataSourceName DOCUMENT ME!
-   */
-  protected void setMetaDataSourceName(String metaDataSourceName) {
-    metaDataSourceName_ = metaDataSourceName;
-  }
-
-  /**
-   * DOCUMENT ME!
-   *
-   * @return DOCUMENT ME!
-   */
-  protected String getMetaDataSourceName() {
-    return metaDataSourceName_;
-  }
 
   /**
    * Load the meta class from the CpoMetaAdapter Implementation
@@ -186,7 +50,6 @@ public abstract class AbstractCpoMetaAdapter implements CpoMetaAdapter {
     String requestedName;
     Class<?> classObj;
     Class<?> requestedClass;
-    HashMap<String, CpoMetaClass<?>> metaClassMap;
 
     if (obj != null) {
       requestedClass = obj.getClass();
@@ -194,40 +57,29 @@ public abstract class AbstractCpoMetaAdapter implements CpoMetaAdapter {
       requestedName = requestedClass.getName();
       className = requestedName;
 
-      synchronized (getDataSourceMap()) {
-        metaClassMap = getMetaClassMap();
-        cpoClass = (CpoMetaClass<T>) metaClassMap.get(className);
-        while(cpoClass==null && classObj!=null){
-          try {
-            cpoClass = (CpoMetaClass<T>) loadMetaClass(requestedClass, className);
-            // reset the class name to the original 
-            cpoClass.setName(requestedName);
-            metaClassMap.put(requestedName, cpoClass);
-            LoggerFactory.getLogger(requestedName).debug("Loading Class:" + requestedName);
-          } catch (CpoException ce) {
-            cpoClass = null;
-            classObj = classObj.getSuperclass();
-            className = classObj==null?null:classObj.getName();
-          }
-        }
-        if (cpoClass==null){
-          throw new CpoException("No Metadata found for class:" + requestedName);
-        }
+      while(cpoClass==null && classObj!=null){
+        classObj = classObj.getSuperclass();
+        className = classObj==null?null:classObj.getName();
+        cpoClass = (CpoMetaClass<T>) classMap.get(className);
+      }
+      if (cpoClass==null){
+        throw new CpoException("No Metadata found for class:" + requestedName);
       }
     }
 
     return cpoClass;
   }
 
-  public void loadCpoMetaDataDocument(CpoMetaDataDocument metaDataDoc) throws CpoException {
+  public static void loadCpoMetaDataDocument(CpoMetaDataDocument metaDataDoc, AbstractCpoMetaAdapter metaAdapter) throws CpoException {
     
     for(CtClass ctClass : metaDataDoc.getCpoMetaData().getCpoClassArray()) {
       CpoClass cpoClass = loadCpoClass(ctClass);
+      metaAdapter.addCpoClass(cpoClass);
     }
     
   }
   
-  protected CpoClass loadCpoClass(CtClass ctClass) throws CpoException {
+  protected static CpoClass loadCpoClass(CtClass ctClass) throws CpoException {
     CpoClass cpoClass = null;
     
     try {
@@ -248,7 +100,7 @@ public abstract class AbstractCpoMetaAdapter implements CpoMetaAdapter {
     return cpoClass;    
   }
   
-  protected void loadCpoAttribute(CpoAttribute cpoAttribute, CtAttribute ctAttribute){
+  protected static void loadCpoAttribute(CpoAttribute cpoAttribute, CtAttribute ctAttribute){
     cpoAttribute.setDataName(ctAttribute.getDataName());
     cpoAttribute.setDataType(ctAttribute.getDataType());
     cpoAttribute.setDescription(ctAttribute.getDescription());
@@ -257,7 +109,7 @@ public abstract class AbstractCpoMetaAdapter implements CpoMetaAdapter {
     cpoAttribute.setTransformClass(ctAttribute.getTransformClass());
   }
   
-  protected void loadCpoFunctionGroup(CpoFunctionGroup cpoFunctionGroup, CtFunctionGroup ctFunctionGroup){
+  protected static void loadCpoFunctionGroup(CpoFunctionGroup cpoFunctionGroup, CtFunctionGroup ctFunctionGroup){
     cpoFunctionGroup.setDescription(ctFunctionGroup.getDescription());
     cpoFunctionGroup.setName(ctFunctionGroup.getName());
     cpoFunctionGroup.setType(ctFunctionGroup.getType());
@@ -272,7 +124,7 @@ public abstract class AbstractCpoMetaAdapter implements CpoMetaAdapter {
     
   }
   
-  protected void loadCpoFunction(CpoFunction cpoFunction, CtFunction ctFunction){
+  protected static void loadCpoFunction(CpoFunction cpoFunction, CtFunction ctFunction){
     cpoFunction.setExpression(ctFunction.getExpression());
     cpoFunction.setDescription(ctFunction.getDescription());
     cpoFunction.setArguments(new ArrayList<CpoArgument>());
@@ -285,7 +137,7 @@ public abstract class AbstractCpoMetaAdapter implements CpoMetaAdapter {
     }    
   }
   
-  protected void loadCpoArgument(CpoArgument cpoArgument, CtArgument ctArgument){
+  protected static void loadCpoArgument(CpoArgument cpoArgument, CtArgument ctArgument){
     cpoArgument.setAttributeName(ctArgument.getAttributeName());
     cpoArgument.setDescription(ctArgument.getDescription());
     
@@ -293,24 +145,68 @@ public abstract class AbstractCpoMetaAdapter implements CpoMetaAdapter {
     cpoArgument.setAttribute(null);
   }
    
-  protected CpoMetaClass createCpoClass(Class<?> clazz) {
+  protected static CpoMetaClass createCpoClass(Class<?> clazz) {
     return new CpoMetaClass(clazz);
   }
   
-  protected CpoAttribute createCpoAttribute() {
+  protected static CpoAttribute createCpoAttribute() {
     return new CpoAttribute();
   }
   
-  protected CpoFunctionGroup createCpoFunctionGroup() {
+  protected static CpoFunctionGroup createCpoFunctionGroup() {
     return new CpoFunctionGroup();
   }
   
-  protected CpoFunction createCpoFunction() {
+  protected static CpoFunction createCpoFunction() {
     return new CpoFunction();
   }
   
-  protected CpoArgument createCpoArgument() {
+  protected static CpoArgument createCpoArgument() {
     return new CpoArgument();
+  }
+  
+  protected static CpoMetaAdapter getCpoMetaAdapter(String metaXml, AbstractCpoMetaAdapter metaAdapter) throws CpoException {
+    
+    // calculate the hash of metaXml
+    
+    // see if it exists in the cache
+    
+    // if it does, return it
+    
+    // if not, load the new one.
+    
+    InputStream is = null;
+    CpoMetaDataDocument metaDataDoc = null;
+    
+    is = AbstractCpoMetaAdapter.class.getResourceAsStream(metaXml);
+    if (is == null){
+      try {
+        is = new FileInputStream(metaXml);
+      } catch (FileNotFoundException fnfe){
+        is = null;
+      }
+    }
+    
+    try {
+      if (is == null){
+        metaDataDoc = CpoMetaDataDocument.Factory.parse(metaXml);
+      } else {
+        metaDataDoc = CpoMetaDataDocument.Factory.parse(is);
+      }
+    } catch (IOException ioe){
+      throw new CpoException("Error processing metaData from InputStream");
+    } catch (XmlException xe){
+      throw new CpoException("Error processing metaData from String");
+    }
+    
+    // We should have a valid metaData xml document now.
+    loadCpoMetaDataDocument(metaDataDoc, metaAdapter);
+
+    return metaAdapter;
+  }
+  
+  protected void addCpoClass(CpoClass metaClass) {
+    classMap.put(metaClass.getName(), metaClass);
   }
   
 }

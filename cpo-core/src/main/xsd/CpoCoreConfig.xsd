@@ -10,6 +10,11 @@
         <xs:sequence>
             <xs:element name="dataConfig" type="ctDataSourceConfig" minOccurs="1" maxOccurs="unbounded"/>
         </xs:sequence>
+        <xs:attribute name="default" type="xs:string">
+            <xs:annotation>
+                <xs:documentation>Specifies the name of the default configuration. If the default config does not exist, the first config in the file will be used.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
     </xs:complexType>
     
     <xs:complexType name="ctDataSourceConfig" abstract="true">
@@ -19,16 +24,17 @@
                     <xs:documentation>The location of the resource that contains the cml meta information for the classes for this adapter.</xs:documentation>
                 </xs:annotation>
             </xs:element>
+            <xs:element name="cpoConfigProcessor" type="xs:string">
+                <xs:annotation>
+                    <xs:documentation>This is the classname of a class that implements CpoConfigProcessor (ie, JdbcConfigProcessor, or CassandraConfigProcessor). The actual classname will be provided in the .xsd that defines the concrete config.</xs:documentation>
+                </xs:annotation>
+            </xs:element>
         </xs:sequence>
         <xs:attribute name="name" type="xs:string" use="required">
             <xs:annotation>
                 <xs:documentation>This is the context name to be used when requesting a CpoAdapter. The context name will be used to look up this config info and create the appropriate CpoAdapter</xs:documentation>
             </xs:annotation>
         </xs:attribute>
-        <xs:attribute name="factory" type="xs:string" use="required">
-            <xs:annotation>
-                <xs:documentation>This is the factory that creates a ConfigProcessor that can process this config information. (ie, JdbcConfigProcessor, or CassandraConfigProcessor)</xs:documentation>
-            </xs:annotation>
-        </xs:attribute>
     </xs:complexType>
+        
 </xs:schema>

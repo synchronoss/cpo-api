@@ -28,7 +28,6 @@ public class DriverDataSourceInfo implements DataSourceInfo, DataSource  {
   private int    connectionType = 0;
 
   private String dataSourceName = null;
-  private String    tablePrefix = null;
   private String            url = null;
   private String       username = null;
   private String       password = null;
@@ -58,23 +57,6 @@ public class DriverDataSourceInfo implements DataSourceInfo, DataSource  {
    *
    * @param driver The text name of the driver
    * @param url - The url that points to the database.
-   * @tablePrefix The prefix added to the cpo tables in the metadata source
-   */
-  public DriverDataSourceInfo(String driver, String url, String tablePrefix) throws CpoException {
-    loadDriver(driver);
-    connectionType=URL_CONNECTION;
-    this.url=url;
-    this.dataSourceName=url;
-    if (tablePrefix != null) {
-      this.tablePrefix=tablePrefix;
-    }
-  }
-
-  /**
-   * Creates a DriverDataSourceInfo from a Jdbc Driver
-   *
-   * @param driver The text name of the driver
-   * @param url - The url that points to the database.
    * @param properties - The connection properties for connecting to the database
    */
   public DriverDataSourceInfo(String driver, String url, Properties properties) throws CpoException {
@@ -83,25 +65,6 @@ public class DriverDataSourceInfo implements DataSourceInfo, DataSource  {
     this.url=url;
     this.properties=properties;
     this.dataSourceName=BuildDataSourceName(url, properties);
-  }
-
-  /**
-   * Creates a DriverDataSourceInfo from a Jdbc Driver
-   *
-   * @param driver The text name of the driver
-   * @param url - The url that points to the database.
-   * @param properties - The connection properties for connecting to the database
-   * @tablePrefix The prefix added to the cpo tables in the metadata source
-   */
-  public DriverDataSourceInfo(String driver, String url, Properties properties, String tablePrefix) throws CpoException {
-    loadDriver(driver);
-    connectionType=URL_PROPS_CONNECTION;
-    this.url=url;
-    this.properties=properties;
-    this.dataSourceName=BuildDataSourceName(url, properties);
-    if (tablePrefix != null) {
-      this.tablePrefix=tablePrefix;
-    }
   }
 
   /**
@@ -121,33 +84,8 @@ public class DriverDataSourceInfo implements DataSourceInfo, DataSource  {
     this.dataSourceName=url + username;
   }
 
-  /**
-   * Creates a DriverDataSourceInfo from a Jdbc Driver
-   *
-   * @param driver The text name of the driver
-   * @param url - The url that points to the database.
-   * @param username - The username for connecting to the database
-   * @param password - The password for connectinf to the database
-  * @tablePrefix The prefix added to the cpo tables in the metadata source
-   */
-  public DriverDataSourceInfo(String driver, String url, String username, String password, String tablePrefix) throws CpoException {
-    loadDriver(driver);
-    connectionType=URL_USER_PASSWORD_CONNECTION;
-    this.url=url;
-    this.username=username;
-    this.password=password;
-    this.dataSourceName=url + username;
-    if (tablePrefix != null) {
-      this.tablePrefix=tablePrefix;
-    }
-  }
-
   public String getDataSourceName() {
     return dataSourceName;
-  }
-
-  public String getTablePrefix() {
-    return tablePrefix;
   }
 
   public DataSource getDataSource() throws CpoException {

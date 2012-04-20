@@ -23,13 +23,7 @@
  */
 package org.synchronoss.cpo.jdbc.meta;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import org.apache.xmlbeans.XmlException;
 import org.synchronoss.cpo.CpoException;
-import org.synchronoss.cpo.core.cpoCoreMeta.CpoMetaDataDocument;
 import org.synchronoss.cpo.core.cpoCoreMeta.CtArgument;
 import org.synchronoss.cpo.core.cpoCoreMeta.CtAttribute;
 import org.synchronoss.cpo.jdbc.JdbcArgument;
@@ -37,6 +31,7 @@ import org.synchronoss.cpo.jdbc.JdbcAttribute;
 import org.synchronoss.cpo.jdbc.cpoJdbcMeta.CtJdbcArgument;
 import org.synchronoss.cpo.jdbc.cpoJdbcMeta.CtJdbcAttribute;
 import org.synchronoss.cpo.meta.AbstractCpoMetaAdapter;
+import org.synchronoss.cpo.meta.CpoMetaAdapter;
 import org.synchronoss.cpo.meta.domain.*;
 
 /**
@@ -47,7 +42,7 @@ public class JdbcCpoMetaAdapter extends AbstractCpoMetaAdapter {
   
   private String dataSourceIdentifier=null;
   
-  private JdbcCpoMetaAdapter(){
+  public JdbcCpoMetaAdapter(){
   }
 
   
@@ -58,34 +53,7 @@ public class JdbcCpoMetaAdapter extends AbstractCpoMetaAdapter {
    * @param metaXml The resource name, file name, or the actual xml
    * @throws CpoException Throws an exception if the xml is not valid.
    */
-  private JdbcCpoMetaAdapter(String dataSourceIdentifier, String metaXml) throws CpoException {
-    InputStream is = null;
-    CpoMetaDataDocument metaDataDoc = null;
-    this.dataSourceIdentifier=dataSourceIdentifier;
-    
-    is = this.getClass().getResourceAsStream(metaXml);
-    if (is == null){
-      try {
-        is = new FileInputStream(metaXml);
-      } catch (FileNotFoundException fnfe){
-        is = null;
-      }
-    }
-    
-    try {
-      if (is == null){
-        metaDataDoc = CpoMetaDataDocument.Factory.parse(metaXml);
-      } else {
-        metaDataDoc = CpoMetaDataDocument.Factory.parse(is);
-      }
-    } catch (IOException ioe){
-      throw new CpoException("Error processing metaData from InputStream");
-    } catch (XmlException xe){
-      throw new CpoException("Error processing metaData from String");
-    }
-    
-    // We should have a valid metaData xml document now.
-    loadCpoMetaDataDocument(metaDataDoc);
+  private JdbcCpoMetaAdapter(String metaXml) throws CpoException {
     
   }
   
@@ -109,8 +77,8 @@ public class JdbcCpoMetaAdapter extends AbstractCpoMetaAdapter {
   }
 
   
-  protected void loadCpoAttribute(CpoAttribute cpoAttribute, CtAttribute ctAttribute){
-    super.loadCpoAttribute(cpoAttribute, ctAttribute);
+  protected static void loadCpoAttribute(CpoAttribute cpoAttribute, CtAttribute ctAttribute){
+    AbstractCpoMetaAdapter.loadCpoAttribute(cpoAttribute, ctAttribute);
     
     // cast to the expected subclasses
     JdbcAttribute jdbcAttribute = (JdbcAttribute)cpoAttribute;
@@ -121,8 +89,8 @@ public class JdbcCpoMetaAdapter extends AbstractCpoMetaAdapter {
     
   }
   
-  protected void loadCpoArgument(CpoArgument cpoArgument, CtArgument ctArgument){
-    super.loadCpoArgument(cpoArgument, ctArgument);
+  protected static void loadCpoArgument(CpoArgument cpoArgument, CtArgument ctArgument){
+    AbstractCpoMetaAdapter.loadCpoArgument(cpoArgument, ctArgument);
     
     // cast to the expected subclasses
     JdbcArgument jdbcArgument = (JdbcArgument)cpoArgument;
@@ -132,12 +100,21 @@ public class JdbcCpoMetaAdapter extends AbstractCpoMetaAdapter {
     
   }
   
-  protected CpoAttribute createCpoAttribute() {
+  protected static CpoAttribute createCpoAttribute() {
     return new JdbcAttribute();
   }
   
-  protected CpoArgument createCpoArgument() {
+  protected static CpoArgument createCpoArgument() {
     return new JdbcArgument();
+  }
+
+  public static JdbcCpoMetaAdapter newInstance(String metaXml) throws CpoException {
+    CpoMetaAdapter metaAdapter = getCpoMetaAdapter(metaXml, new JdbcCpoMetaAdapter());
+    
+    if (metaAdapter != null && metaAdapter instanceof JdbcCpoMetaAdapter)
+      return (JdbcCpoMetaAdapter) metaAdapter;
+    
+    return null;
   }
   
 }

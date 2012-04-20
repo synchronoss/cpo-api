@@ -22,7 +22,6 @@ public class JndiDataSourceInfo implements DataSourceInfo {
   private String       jndiName = null;
   private Context       jndiCtx = null;
   private String dataSourceName = null;
-  private String    tablePrefix = null;
   
   // Make sure DataSource creation is thread safe.
   private Object LOCK = new Object();
@@ -44,22 +43,6 @@ public class JndiDataSourceInfo implements DataSourceInfo {
    * datasource in the application server.
    *
    * @param jndiName The JndiName of the app server datasource
-   * @tablePrefix The prefix added to the cpo tables in the metadata source
-   *
-   */
-  public JndiDataSourceInfo(String jndiName, String tablePrefix) {
-    this.jndiName=jndiName;
-    dataSourceName = jndiName;
-    if (tablePrefix != null) {
-      this.tablePrefix=tablePrefix;
-    }
-  }
-
-  /**
-   * Creates a JndiDataSourceInfo from a JNDIName that represents the 
-   * datasource in the application server.
-   *
-   * @param jndiName The JndiName of the app server datasource
    * @param ctx - The context for which the Jndi Lookup should use.
    *
    */
@@ -69,30 +52,8 @@ public class JndiDataSourceInfo implements DataSourceInfo {
     jndiCtx=ctx;
   }
 
-  /**
-   * Creates a JndiDataSourceInfo from a JNDIName that represents the 
-   * datasource in the application server.
-   *
-   * @param jndiName The JndiName of the app server datasource
-   * @param ctx - The context for which the Jndi Lookup should use.
-   * @tablePrefix The prefix added to the cpo tables in the metadata source
-   *
-   */
-  public JndiDataSourceInfo(String jndiName, Context ctx, String tablePrefix) {
-    this.jndiName=jndiName;
-    dataSourceName = jndiName;
-    jndiCtx=ctx;
-    if (tablePrefix != null) {
-      this.tablePrefix=tablePrefix;
-    }
-  }
-	
   public String getDataSourceName() {
     return dataSourceName;
-  }
-
-  public String getTablePrefix() {
-    return this.tablePrefix;
   }
 
   public DataSource getDataSource() throws CpoException {

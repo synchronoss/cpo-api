@@ -202,7 +202,7 @@ public abstract class AbstractCpoMetaAdapter implements CpoMetaAdapter {
   }
 
   protected MetaXmlObjectExporter getMetaXmlObjectExporter() {
-    return new CoreMetaXmlObjectExporter(this);
+    return new CoreMetaXmlObjectExporter(this.getClass().getName());
   }
 
   public final CpoMetaDataDocument export() {

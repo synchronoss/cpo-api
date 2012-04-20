@@ -121,6 +121,6 @@ public class JdbcCpoMetaAdapter extends AbstractCpoMetaAdapter {
 
   @Override
   protected MetaXmlObjectExporter getMetaXmlObjectExporter() {
-    return new JdbcMetaXmlObjectExporter(this);
+    return new JdbcMetaXmlObjectExporter(this.getClass().getName());
   }
 }

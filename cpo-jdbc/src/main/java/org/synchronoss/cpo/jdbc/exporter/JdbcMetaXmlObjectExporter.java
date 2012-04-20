@@ -4,7 +4,6 @@ import org.synchronoss.cpo.core.cpoCoreMeta.*;
 import org.synchronoss.cpo.exporter.*;
 import org.synchronoss.cpo.jdbc.*;
 import org.synchronoss.cpo.jdbc.cpoJdbcMeta.*;
-import org.synchronoss.cpo.meta.CpoMetaAdapter;
 import org.synchronoss.cpo.meta.domain.*;
 
 /**
@@ -15,7 +14,7 @@ import org.synchronoss.cpo.meta.domain.*;
  */
 public class JdbcMetaXmlObjectExporter extends CoreMetaXmlObjectExporter implements MetaXmlObjectExporter {
 
-  public JdbcMetaXmlObjectExporter(CpoMetaAdapter metaAdapter) {
+  public JdbcMetaXmlObjectExporter(String metaAdapter) {
     super(metaAdapter);
   }
 

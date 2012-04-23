@@ -28,7 +28,6 @@ import java.util.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.helper.ExceptionHelper;
-import org.synchronoss.cpo.meta.AbstractCpoMetaAdapter;
 
 public class CpoClass extends CpoClassBean implements MetaDFVisitable {
     private static Logger logger = LoggerFactory.getLogger(CpoClass.class.getName());
@@ -134,6 +133,10 @@ public class CpoClass extends CpoClassBean implements MetaDFVisitable {
     for (CpoAttribute attribute : javaMap.values()) {
       attribute.loadRunTimeInfo(this);
     }
+  }
+  
+  public CpoAttribute getAttributeJava(String javaName){
+    return javaMap.get(javaName);
   }
    
 }

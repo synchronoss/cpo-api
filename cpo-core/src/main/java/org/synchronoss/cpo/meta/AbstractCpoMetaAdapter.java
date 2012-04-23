@@ -26,6 +26,8 @@ public abstract class AbstractCpoMetaAdapter implements CpoMetaAdapter {
   private static SortedMap<String, CpoClass> classMap = new TreeMap<String, CpoClass>();
   
 
+  private CpoClass currentClass=null;
+  
   /**
    * DOCUMENT ME!
    *
@@ -85,6 +87,8 @@ public abstract class AbstractCpoMetaAdapter implements CpoMetaAdapter {
     cpoClass.setName(ctClass.getName());
     cpoClass.setDescription(ctClass.getDescription());
     
+    currentClass = cpoClass;
+    
     for (CtAttribute ctAttribute : ctClass.getCpoAttributeArray()){
       CpoAttribute cpoAttribute = createCpoAttribute();
       loadCpoAttribute(cpoAttribute, ctAttribute);
@@ -137,8 +141,7 @@ public abstract class AbstractCpoMetaAdapter implements CpoMetaAdapter {
     cpoArgument.setAttributeName(ctArgument.getAttributeName());
     cpoArgument.setDescription(ctArgument.getDescription());
     
-    //TODO: do the attribute look up here and set appropriately.
-    cpoArgument.setAttribute(null);
+    cpoArgument.setAttribute(currentClass.getAttributeJava(ctArgument.getAttributeName()));
   }
    
   protected CpoClass createCpoClass() {

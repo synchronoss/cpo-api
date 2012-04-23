@@ -32,7 +32,6 @@ import org.synchronoss.cpo.NodeVisitor;
 import org.synchronoss.cpo.Node;
 import org.synchronoss.cpo.meta.domain.CpoAttribute;
 import org.synchronoss.cpo.meta.domain.CpoClass;
-import org.synchronoss.cpo.meta.domain.CpoMetaClass;
 
 /**
  * JdbcWhereBuilder is an interface for specifying the sort order in which
@@ -44,7 +43,7 @@ import org.synchronoss.cpo.meta.domain.CpoMetaClass;
 public class JdbcWhereBuilder<T> implements NodeVisitor {
 
     private StringBuilder whereClause = new StringBuilder();
-    private CpoMetaClass<T> cpoClass = null;
+    private CpoClass cpoClass = null;
     private Collection<BindAttribute> bindValues = new ArrayList<BindAttribute>();
 
     public String getWhereClause(){
@@ -59,7 +58,7 @@ public class JdbcWhereBuilder<T> implements NodeVisitor {
     private JdbcWhereBuilder(){
     }
 
-    public JdbcWhereBuilder(CpoMetaClass<T> cpoClass){
+    public JdbcWhereBuilder(CpoClass cpoClass){
         this.cpoClass = cpoClass;
     }
 

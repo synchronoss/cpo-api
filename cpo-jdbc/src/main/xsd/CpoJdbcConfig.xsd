@@ -1,25 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" 
-    xmlns="http://www.synchronoss.org/cpo/core/CpoCoreConfig.xsd"
-    targetNamespace="http://www.synchronoss.org/cpo/core/CpoCoreConfig.xsd"
+    xmlns:cpo="http://www.synchronoss.org/cpo/core/CpoCoreConfig.xsd"
+    xmlns="http://www.synchronoss.org/cpo/jdbc/CpoJdbcConfig.xsd"
+    targetNamespace="http://www.synchronoss.org/cpo/jdbc/CpoJdbcConfig.xsd"
     elementFormDefault="qualified">
 
-    <xs:include schemaLocation="../../../../cpo-core/src/main/xsd/CpoCoreConfig.xsd"/>
-    
-    <xs:complexType name="ctJdbcRestrictedConfig" abstract="true">
-        <xs:complexContent>
-            <xs:restriction base="ctDataSourceConfig">
-                <xs:sequence>
-                    <xs:element name="metaXml" type="xs:string"/>
-                    <xs:element name="cpoConfigProcessor" type="xs:string" fixed="org.synchronoss.cpo.jdbc.config.JdbcCpoConfigProcessor"/>
-                </xs:sequence>
-            </xs:restriction>
-        </xs:complexContent>
-    </xs:complexType>
+    <xs:import namespace="http://www.synchronoss.org/cpo/core/CpoCoreConfig.xsd" schemaLocation="../../../../cpo-core/src/main/xsd/CpoCoreConfig.xsd"/>
     
     <xs:complexType name="ctJdbcConfig">
         <xs:complexContent>
-            <xs:extension base="ctJdbcRestrictedConfig">
+            <xs:extension base="cpo:ctDataSourceConfig">
                 <xs:choice>
                     <xs:element name="jndiName" type="xs:string">
                         <xs:annotation>

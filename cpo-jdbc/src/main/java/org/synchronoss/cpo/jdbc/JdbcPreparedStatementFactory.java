@@ -99,7 +99,7 @@ public class JdbcPreparedStatementFactory implements CpoReleasible {
    * @throws SQLException
    *           if a JDBC error occurs
    */
-  public <T> JdbcPreparedStatementFactory(Connection conn, JdbcCpoAdapter jca, CpoMetaClass<T> criteria,
+  public <T> JdbcPreparedStatementFactory(Connection conn, JdbcCpoAdapter jca, CpoClass criteria,
       CpoFunction function, T obj, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy,
       Collection<CpoNativeQuery> nativeQueries) throws CpoException {
 
@@ -138,7 +138,7 @@ public class JdbcPreparedStatementFactory implements CpoReleasible {
      *
      * @throws CpoException DOCUMENT ME!
      */
-    private <T> String buildSql(CpoMetaClass<T> cpoClass, String sql, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeQuery> nativeQueries, List<BindAttribute> bindValues) throws CpoException {
+    private <T> String buildSql(CpoClass cpoClass, String sql, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeQuery> nativeQueries, List<BindAttribute> bindValues) throws CpoException {
         StringBuilder sqlText=new StringBuilder();
 
         sqlText.append(sql);

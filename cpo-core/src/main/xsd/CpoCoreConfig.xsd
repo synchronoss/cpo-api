@@ -10,7 +10,7 @@
         <xs:sequence>
             <xs:element name="dataConfig" type="ctDataSourceConfig" minOccurs="1" maxOccurs="unbounded"/>
         </xs:sequence>
-        <xs:attribute name="default" type="xs:string">
+        <xs:attribute name="defaultConfig" type="xs:string">
             <xs:annotation>
                 <xs:documentation>Specifies the name of the default configuration. If the default config does not exist, the first config in the file will be used.</xs:documentation>
             </xs:annotation>

@@ -21,13 +21,14 @@
  */
 package org.synchronoss.cpo.meta.domain;
 
+import java.util.ArrayList;
 import org.synchronoss.cpo.meta.bean.CpoFunctionGroupBean;
 
 import java.util.List;
 
 public class CpoFunctionGroup extends CpoFunctionGroupBean {
 
-  List<CpoFunction> functions = null;
+  List<CpoFunction> functions = new ArrayList<CpoFunction>();
 
   public CpoFunctionGroup() {
   }
@@ -36,7 +37,10 @@ public class CpoFunctionGroup extends CpoFunctionGroupBean {
     return functions;
   }
 
-  public void setFunctions(List<CpoFunction> functions) {
-    this.functions = functions;
+  public void addFunction(CpoFunction function) {
+    if (function!=null) {
+      functions.add(function);
+    };
   }
+
 }

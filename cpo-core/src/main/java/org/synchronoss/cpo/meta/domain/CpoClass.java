@@ -28,19 +28,21 @@ import java.util.*;
 
 public class CpoClass extends CpoClassBean implements MetaDFVisitable {
 
+  private Class<?> metaClass = null;
+
   /**
    * attributeMap contains a Map of CpoAttribute Objects
    * the id is the dataName of the attribute in the database
    * the value is the attribute name for the class being described
    */
-  private SortedMap<String, CpoAttribute> attributeMap = new TreeMap<String, CpoAttribute>();
+  private SortedMap<String, CpoAttribute> javaMap = new TreeMap<String, CpoAttribute>();
 
   /**
    * columnMap contains a Map of CpoAttribute Objects
    * the id is the attributeName of the attribute in the database
    * the value is the dataname for the class being described
    */
-  private SortedMap<String, CpoAttribute> columnMap = new TreeMap<String, CpoAttribute>();
+  private SortedMap<String, CpoAttribute> dataMap = new TreeMap<String, CpoAttribute>();
 
   /**
    * queryGroup is a hashMap that contains a hashMap of jdbcQuery Lists that are used
@@ -51,12 +53,23 @@ public class CpoClass extends CpoClassBean implements MetaDFVisitable {
   public CpoClass() {
   }
 
+  public Class<?> getMetaClass() {
+    return metaClass;
+  }
+
   public SortedMap<String, CpoAttribute> getAttributeMap() {
-    return this.attributeMap;
+    return this.javaMap;
   }
 
   public SortedMap<String, CpoAttribute> getColumnMap() {
-    return this.columnMap;
+    return this.dataMap;
+  }
+
+  public void addAttribute(CpoAttribute cpoAttribute) {
+    if (cpoAttribute != null) {
+      javaMap.put(cpoAttribute.getJavaName(), cpoAttribute);
+      dataMap.put(cpoAttribute.getDataName(), cpoAttribute);
+    }
   }
 
   public SortedMap<String, CpoFunctionGroup> getFunctionGroups() {
@@ -104,4 +117,6 @@ public class CpoClass extends CpoClassBean implements MetaDFVisitable {
       }
     }
   }
+  
+  
 }

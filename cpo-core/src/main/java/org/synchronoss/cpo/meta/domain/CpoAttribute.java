@@ -44,7 +44,7 @@ public class CpoAttribute extends CpoAttributeBean {
   public CpoAttribute() {
   }
 
-  public <T> CpoAttribute(CpoMetaClass<T> jmc, String name, String dataName, String transformClass) throws CpoException {
+  public <T> CpoAttribute(CpoClass jmc, String name, String dataName, String transformClass) throws CpoException {
     LoggerFactory.getLogger(jmc.getMetaClass().getName()).debug("Adding Attribute for class " + jmc.getMetaClass().getName() + ": " + name + "(" + dataName + "," + transformClass + ")");
     setJavaName(name);
     setTransformClass(transformClass);
@@ -84,7 +84,7 @@ public class CpoAttribute extends CpoAttributeBean {
     setterName_ = setterName;
   }
 
-  private <T> void initMethods(CpoMetaClass<T> jmc) throws CpoException {
+  private <T> void initMethods(CpoClass jmc) throws CpoException {
     StringBuilder failedMessage = new StringBuilder();
     setGetterName(buildMethodName("get", getJavaName()));
     setSetterName(buildMethodName("set", getJavaName()));
@@ -105,7 +105,7 @@ public class CpoAttribute extends CpoAttributeBean {
     }
   }
 
-  static protected <T> Method[] findMethods(CpoMetaClass<T> jmc, String methodName, int args, boolean hasReturn) throws CpoException {
+  static protected <T> Method[] findMethods(CpoClass jmc, String methodName, int args, boolean hasReturn) throws CpoException {
     Method m[] = null;
     int count = 0;
     int idx[] = null;

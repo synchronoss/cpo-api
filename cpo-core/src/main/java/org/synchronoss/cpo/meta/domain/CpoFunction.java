@@ -21,6 +21,7 @@
  */
 package org.synchronoss.cpo.meta.domain;
 
+import java.util.ArrayList;
 import org.slf4j.*;
 import org.synchronoss.cpo.meta.bean.CpoFunctionBean;
 
@@ -29,7 +30,7 @@ import java.util.List;
 public class CpoFunction extends CpoFunctionBean {
   private static Logger logger = LoggerFactory.getLogger(CpoFunction.class.getName());
 
-  List<CpoArgument> arguments = null;
+  List<CpoArgument> arguments = new ArrayList<CpoArgument>();
 
   public CpoFunction() {
   }
@@ -38,10 +39,11 @@ public class CpoFunction extends CpoFunctionBean {
     return arguments;
   }
 
-  public void setArguments(List<CpoArgument> arguments) {
-    this.arguments = arguments;
+  public void addArgument(CpoArgument argument) {
+    if (argument != null) {
+      arguments.add(argument);
+    }
   }
-
   /**
    * DOCUMENT ME!
    *

@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <cpoConfig xmlns="http://www.synchronoss.org/cpo/core/CpoCoreConfig.xsd"
+ xmlns:jdbc="http://www.synchronoss.org/cpo/jdbc/CpoJdbcConfig.xsd"
  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
- xsi:schemaLocation="http://www.synchronoss.org/cpo/core/CpoCoreConfig.xsd file:/Users/dberry/project/cpo/api/cpo-jdbc/src/main/xsd/CpoJdbcConfig.xsd"
-    default="jdbc">
-    <dataConfig xsi:type="ctJdbcConfig" name="jdbc">
+ xsi:schemaLocation="http://www.synchronoss.org/cpo/jdbc/CpoJdbcConfig.xsd file:/Users/dberry/project/cpo/api/cpo-jdbc/src/main/xsd/CpoJdbcConfig.xsd"
+ defaultConfig="jdbc">
+    <dataConfig xsi:type="jdbc:ctJdbcConfig" name="jdbc">
         <metaXml>${cpo.meta.xml}</metaXml>
         <cpoConfigProcessor>org.synchronoss.cpo.jdbc.config.JdbcCpoConfigProcessor</cpoConfigProcessor>
-        <dataSourceClassName>${cpo.meta.class}</dataSourceClassName>
-        <url>${cpo.meta.url}</url>
-        <user>${cpo.meta.user}</user>
-        <password>${cpo.meta.password}</password>
+        <jdbc:dataSourceClassName>${cpo.meta.class}</jdbc:dataSourceClassName>
+        <jdbc:url>${cpo.meta.url}</jdbc:url>
+        <jdbc:user>${cpo.meta.user}</jdbc:user>
+        <jdbc:password>${cpo.meta.password}</jdbc:password>
     </dataConfig>
 </cpoConfig>

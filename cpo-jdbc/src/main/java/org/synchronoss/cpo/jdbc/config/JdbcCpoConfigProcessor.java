@@ -11,13 +11,14 @@ import org.synchronoss.cpo.CpoException;
 import org.synchronoss.cpo.DataSourceInfo;
 import org.synchronoss.cpo.config.CpoConfigProcessor;
 import org.synchronoss.cpo.core.cpoCoreConfig.CtDataSourceConfig;
-import org.synchronoss.cpo.core.cpoCoreConfig.CtJdbcConfig;
 
 import org.synchronoss.cpo.jdbc.ClassDataSourceInfo;
 import org.synchronoss.cpo.jdbc.DriverDataSourceInfo;
 import org.synchronoss.cpo.jdbc.JdbcCpoAdapter;
 import org.synchronoss.cpo.jdbc.JndiDataSourceInfo;
+import org.synchronoss.cpo.jdbc.cpoJdbcConfig.CtJdbcConfig;
 import org.synchronoss.cpo.jdbc.meta.JdbcCpoMetaAdapter;
+import org.synchronoss.cpo.meta.CpoCoreMetaAdapterFactory;
 
 /**
  *
@@ -43,7 +44,7 @@ public class JdbcCpoConfigProcessor implements CpoConfigProcessor {
     
     CtJdbcConfig jdbcConfig = (CtJdbcConfig) cpoConfig;
 
-    JdbcCpoMetaAdapter metaAdapter = JdbcCpoMetaAdapter.newInstance(jdbcConfig.getMetaXml());
+    JdbcCpoMetaAdapter metaAdapter = (JdbcCpoMetaAdapter) new CpoCoreMetaAdapterFactory().getCpoMetaAdapter(jdbcConfig.getMetaXml());
 
     DataSourceInfo dataSourceInfo = null;
     

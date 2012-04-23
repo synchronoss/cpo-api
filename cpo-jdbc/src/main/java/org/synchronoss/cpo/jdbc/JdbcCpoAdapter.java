@@ -1074,7 +1074,7 @@ public class JdbcCpoAdapter implements CpoAdapter {
     ResultSet rs = null;
     ResultSetMetaData rsmd;
     CpoFunction jq = null;
-    CpoMetaClass<T> jmc;
+    CpoClass jmc;
     List<CpoFunction> functions;
     long objCount = 0;
     int i;
@@ -2651,8 +2651,8 @@ public class JdbcCpoAdapter implements CpoAdapter {
     CallableStatement cstmt = null;
     List<CpoFunction> functions;
     CpoFunction jq = null;
-    CpoMetaClass<C> jmcCriteria;
-    CpoMetaClass<T> jmcResult;
+    CpoClass jmcCriteria;
+    CpoClass jmcResult;
     T returnObject = null;
     Logger localLogger = criteria == null ? logger : LoggerFactory.getLogger(criteria.getClass().getName());
 
@@ -2676,7 +2676,7 @@ public class JdbcCpoAdapter implements CpoAdapter {
       localLogger.info("===================processExecuteGroup (" + name + ") Count<" +
           functions.size() + ">=========================");
 
-      jmcClass = jmcResult.getMetaClass();
+      jmcClass = (Class<T>)jmcResult.getMetaClass();
       try {
         returnObject = jmcClass.newInstance();
       } catch (IllegalAccessException iae) {
@@ -2805,7 +2805,7 @@ public class JdbcCpoAdapter implements CpoAdapter {
     ResultSet rs = null;
     ResultSetMetaData rsmd;
     CpoFunction jq;
-    CpoMetaClass<T> jmc;
+    CpoClass jmc;
     List<CpoFunction> functions;
     JdbcAttribute attribute;
     T criteriaObj = obj;
@@ -2830,7 +2830,7 @@ public class JdbcCpoAdapter implements CpoAdapter {
       localLogger.info("=================== Class=<" + criteriaObj.getClass() + "> Type=<" + JdbcCpoAdapter.RETRIEVE_GROUP + "> Name=<" + groupName + "> =========================");
 
       try {
-        rObj = jmc.getMetaClass().newInstance();
+        rObj = (T) jmc.getMetaClass().newInstance();
       } catch (IllegalAccessException iae) {
         if (obj != null)
           localLogger.error("=================== Could not access default constructor for Class=<" + obj.getClass() + "> ==================");
@@ -3019,8 +3019,8 @@ public class JdbcCpoAdapter implements CpoAdapter {
     PreparedStatement ps = null;
     List<CpoFunction> queryGroup;
     CpoFunction jq;
-    CpoMetaClass<C> jmcCriteria;
-    CpoMetaClass<T> jmcResult;
+    CpoClass jmcCriteria;
+    CpoClass jmcResult;
     ResultSet rs = null;
     ResultSetMetaData rsmd;
     int columnCount;
@@ -3061,7 +3061,7 @@ public class JdbcCpoAdapter implements CpoAdapter {
 
         rsmd = rs.getMetaData();
 
-        jmcClass = jmcResult.getMetaClass();
+        jmcClass = (Class<T>) jmcResult.getMetaClass();
         jmcAttrMap = jmcResult.getAttributeMap();
         columnCount = rsmd.getColumnCount();
 
@@ -3183,7 +3183,7 @@ public class JdbcCpoAdapter implements CpoAdapter {
   protected <T> long processUpdateGroup(T obj, String groupType, String groupName, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeQuery> nativeQueries, Connection con)
       throws CpoException {
     Logger localLogger = obj == null ? logger : LoggerFactory.getLogger(obj.getClass().getName());
-    CpoMetaClass<T> jmc;
+    CpoClass jmc;
     List<CpoFunction> queryGroup;
     PreparedStatement ps = null;
     CpoFunction jq = null;
@@ -3247,7 +3247,7 @@ public class JdbcCpoAdapter implements CpoAdapter {
    */
   protected <T> long processBatchUpdateGroup(T[] arr, String groupType, String groupName, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeQuery> nativeQueries, Connection con)
       throws CpoException {
-    CpoMetaClass<T> jmc;
+    CpoClass jmc;
     List<CpoFunction> queryGroup;
     PreparedStatement ps = null;
     CpoFunction jq = null;

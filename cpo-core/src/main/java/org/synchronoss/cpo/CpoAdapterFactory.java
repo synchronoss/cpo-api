@@ -47,8 +47,8 @@ public final class CpoAdapterFactory {
       CtCpoConfig cpoConfig = CpoConfigDocument.Factory.parse(is).getCpoConfig();
 
       // Set the default context.
-      if (cpoConfig.isSetDefault()) {
-        defaultContext = cpoConfig.getDefault();
+      if (cpoConfig.isSetDefaultConfig()) {
+        defaultContext = cpoConfig.getDefaultConfig();
       } else {
         // make the first listed config the default.
         defaultContext = cpoConfig.getDataConfigArray(0).getName();

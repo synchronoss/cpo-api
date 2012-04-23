@@ -70,7 +70,7 @@ public class JdbcAttribute extends CpoAttribute implements java.io.Serializable,
      * @param jmc
      * @param name
      */
-    public <T> JdbcAttribute(CpoMetaClass<T> jmc, String name, String javaSqlTypeName, String dataName, String dbTable, String dbColumn, String transformClass)
+    public <T> JdbcAttribute(CpoClass jmc, String name, String javaSqlTypeName, String dataName, String dbTable, String dbColumn, String transformClass)
     throws CpoException {
       super(jmc,name,dataName,transformClass);
         LoggerFactory.getLogger(jmc.getMetaClass().getName()).debug("Adding Attribute for class "+jmc.getMetaClass().getName()+": "+name+"("+dataName+","+dbTable+","+dbColumn+","+transformClass+")");

@@ -37,7 +37,6 @@ public interface CpoMetaAdapterFactory {
      *
      * @throws CpoException Thrown if there are errors creating the CpoMetaAdapter
      */
-    public void getCpoMetaAdapter(String metaXml) throws CpoException;
-
+    public CpoMetaAdapter getCpoMetaAdapter(String metaXml) throws CpoException;
   
 }

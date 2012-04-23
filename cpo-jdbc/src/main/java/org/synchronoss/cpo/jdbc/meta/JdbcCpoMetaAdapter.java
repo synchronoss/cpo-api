@@ -44,43 +44,13 @@ public class JdbcCpoMetaAdapter extends AbstractCpoMetaAdapter {
   
   private String dataSourceIdentifier=null;
   
-  public JdbcCpoMetaAdapter(){
+  private JdbcCpoMetaAdapter(){
   }
 
   
-  /**
-   * Constructor for the JdbcCpoMetaAdapter. It checks to see if the string is valid xml, then checks to see if it points to a
-   * resource, then checks to see if it points to a file.
-   *
-   * @param metaXml The resource name, file name, or the actual xml
-   * @throws CpoException Throws an exception if the xml is not valid.
-   */
-  private JdbcCpoMetaAdapter(String metaXml) throws CpoException {
-    
-  }
-  
-  /**
-   * DOCUMENT ME!
-   *
-   * @param objClass DOCUMENT ME!
-   * @param name     DOCUMENT ME!
-   * @return DOCUMENT ME!
-   * @throws CpoException DOCUMENT ME!
-   */
-  protected <T> CpoMetaClass<T> loadMetaClass(Class<T> objClass, String name)
-      throws CpoException {
-    CpoMetaClass<T> cpoClass=null;
-
-    cpoClass = new CpoMetaClass<T>(objClass);
-//    loadAttributeMap(name, cpoClass);
-//    loadQueryGroups(cpoClass);
-
-    return cpoClass;
-  }
-
-  
-  protected static void loadCpoAttribute(CpoAttribute cpoAttribute, CtAttribute ctAttribute){
-    AbstractCpoMetaAdapter.loadCpoAttribute(cpoAttribute, ctAttribute);
+  @Override
+  protected void loadCpoAttribute(CpoAttribute cpoAttribute, CtAttribute ctAttribute){
+    loadCpoAttribute(cpoAttribute, ctAttribute);
     
     // cast to the expected subclasses
     JdbcAttribute jdbcAttribute = (JdbcAttribute)cpoAttribute;
@@ -91,8 +61,9 @@ public class JdbcCpoMetaAdapter extends AbstractCpoMetaAdapter {
     
   }
   
-  protected static void loadCpoArgument(CpoArgument cpoArgument, CtArgument ctArgument){
-    AbstractCpoMetaAdapter.loadCpoArgument(cpoArgument, ctArgument);
+  @Override
+  protected void loadCpoArgument(CpoArgument cpoArgument, CtArgument ctArgument){
+    loadCpoArgument(cpoArgument, ctArgument);
     
     // cast to the expected subclasses
     JdbcArgument jdbcArgument = (JdbcArgument)cpoArgument;
@@ -102,21 +73,14 @@ public class JdbcCpoMetaAdapter extends AbstractCpoMetaAdapter {
     
   }
   
-  protected static CpoAttribute createCpoAttribute() {
+  @Override
+  protected CpoAttribute createCpoAttribute() {
     return new JdbcAttribute();
   }
   
-  protected static CpoArgument createCpoArgument() {
+  @Override
+  protected CpoArgument createCpoArgument() {
     return new JdbcArgument();
-  }
-
-  public static JdbcCpoMetaAdapter newInstance(String metaXml) throws CpoException {
-    CpoMetaAdapter metaAdapter = getCpoMetaAdapter(metaXml, new JdbcCpoMetaAdapter());
-    
-    if (metaAdapter != null && metaAdapter instanceof JdbcCpoMetaAdapter)
-      return (JdbcCpoMetaAdapter) metaAdapter;
-    
-    return null;
   }
 
   @Override

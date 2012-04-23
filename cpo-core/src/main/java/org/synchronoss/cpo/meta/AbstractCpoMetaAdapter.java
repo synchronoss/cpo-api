@@ -4,29 +4,28 @@
  */
 package org.synchronoss.cpo.meta;
 
+import org.slf4j.*;
 import org.synchronoss.cpo.CpoException;
 import org.synchronoss.cpo.core.cpoCoreMeta.*;
 import org.synchronoss.cpo.exporter.*;
 import org.synchronoss.cpo.meta.domain.*;
 
 import java.util.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  *
  * @author dberry
  */
 public abstract class AbstractCpoMetaAdapter implements CpoMetaAdapter {
-    private static Logger logger = LoggerFactory.getLogger(AbstractCpoMetaAdapter.class.getName());
+
+  private static Logger logger = LoggerFactory.getLogger(AbstractCpoMetaAdapter.class.getName());
 
   /**
    * The map of classes in this metaAdapter
    */
   private static SortedMap<String, CpoClass> classMap = new TreeMap<String, CpoClass>();
-  
 
-  private CpoClass currentClass=null;
+  private CpoClass currentClass = null;
   
   /**
    * DOCUMENT ME!
@@ -68,6 +67,13 @@ public abstract class AbstractCpoMetaAdapter implements CpoMetaAdapter {
     }
 
     return cpoClass;
+  }
+
+  @Override
+  public List<CpoClass> getClasses() {
+    List<CpoClass> result = new ArrayList<CpoClass>();
+    result.addAll(classMap.values());
+    return result;
   }
 
   public void loadCpoMetaDataDocument(CpoMetaDataDocument metaDataDoc) throws CpoException {
@@ -163,12 +169,12 @@ public abstract class AbstractCpoMetaAdapter implements CpoMetaAdapter {
   protected CpoArgument createCpoArgument() {
     return new CpoArgument();
   }
-  
 
   protected MetaXmlObjectExporter getMetaXmlObjectExporter() {
     return new CoreMetaXmlObjectExporter(this.getClass().getName());
   }
 
+  @Override
   public final CpoMetaDataDocument export() {
     MetaXmlObjectExporter metaXmlObjectExporter = getMetaXmlObjectExporter();
     for (CpoClass cpoClass : classMap.values()) {

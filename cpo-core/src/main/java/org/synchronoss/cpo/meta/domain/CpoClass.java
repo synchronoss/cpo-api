@@ -72,7 +72,7 @@ public class CpoClass extends CpoClassBean implements MetaDFVisitable {
 
   public void addAttribute(CpoAttribute cpoAttribute) {
     if (cpoAttribute != null) {
-    logger.debug("Adding Attribute: "+cpoAttribute.getJavaName()+":"+cpoAttribute.getDataName());
+      logger.debug("Adding Attribute: "+cpoAttribute.getJavaName()+":"+cpoAttribute.getDataName());
       javaMap.put(cpoAttribute.getJavaName(), cpoAttribute);
       dataMap.put(cpoAttribute.getDataName(), cpoAttribute);
     }

@@ -82,18 +82,19 @@ public abstract class AbstractCpoMetaAdapter implements CpoMetaAdapter {
     
     logger.debug("Loading class: "+ctClass.getName());
     cpoClass = createCpoClass();
+    cpoClass.setName(ctClass.getName());
     cpoClass.setDescription(ctClass.getDescription());
     
     for (CtAttribute ctAttribute : ctClass.getCpoAttributeArray()){
       CpoAttribute cpoAttribute = createCpoAttribute();
-      cpoClass.addAttribute(cpoAttribute);
       loadCpoAttribute(cpoAttribute, ctAttribute);
+      cpoClass.addAttribute(cpoAttribute);
     }
     
     for (CtFunctionGroup ctFunctionGroup : ctClass.getCpoFunctionGroupArray()){
       CpoFunctionGroup functionGroup = createCpoFunctionGroup();
-      cpoClass.addFunctionGroup(functionGroup);
       loadCpoFunctionGroup(functionGroup, ctFunctionGroup);
+      cpoClass.addFunctionGroup(functionGroup);
     }
     
     return cpoClass;    

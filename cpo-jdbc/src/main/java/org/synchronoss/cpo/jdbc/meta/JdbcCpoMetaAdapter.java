@@ -44,13 +44,13 @@ public class JdbcCpoMetaAdapter extends AbstractCpoMetaAdapter {
   
   private String dataSourceIdentifier=null;
   
-  private JdbcCpoMetaAdapter(){
+  public JdbcCpoMetaAdapter(){
   }
 
   
   @Override
   protected void loadCpoAttribute(CpoAttribute cpoAttribute, CtAttribute ctAttribute){
-    loadCpoAttribute(cpoAttribute, ctAttribute);
+    super.loadCpoAttribute(cpoAttribute, ctAttribute);
     
     // cast to the expected subclasses
     JdbcAttribute jdbcAttribute = (JdbcAttribute)cpoAttribute;
@@ -63,7 +63,7 @@ public class JdbcCpoMetaAdapter extends AbstractCpoMetaAdapter {
   
   @Override
   protected void loadCpoArgument(CpoArgument cpoArgument, CtArgument ctArgument){
-    loadCpoArgument(cpoArgument, ctArgument);
+    super.loadCpoArgument(cpoArgument, ctArgument);
     
     // cast to the expected subclasses
     JdbcArgument jdbcArgument = (JdbcArgument)cpoArgument;

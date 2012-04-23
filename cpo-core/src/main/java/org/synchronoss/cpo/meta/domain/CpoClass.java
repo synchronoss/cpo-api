@@ -21,13 +21,16 @@
  */
 package org.synchronoss.cpo.meta.domain;
 
-import org.synchronoss.cpo.*;
-import org.synchronoss.cpo.meta.bean.CpoClassBean;
-
-import java.util.*;
+import java.util.List;
+import java.util.SortedMap;
+import java.util.TreeMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.synchronoss.cpo.CpoException;
+import org.synchronoss.cpo.MetaDFVisitable;
+import org.synchronoss.cpo.MetaVisitor;
 import org.synchronoss.cpo.helper.ExceptionHelper;
+import org.synchronoss.cpo.meta.bean.CpoClassBean;
 
 public class CpoClass extends CpoClassBean implements MetaDFVisitable {
     private static Logger logger = LoggerFactory.getLogger(CpoClass.class.getName());
@@ -35,16 +38,14 @@ public class CpoClass extends CpoClassBean implements MetaDFVisitable {
   private Class<?> metaClass = null;
 
   /**
-   * attributeMap contains a Map of CpoAttribute Objects
-   * the id is the dataName of the attribute in the database
-   * the value is the attribute name for the class being described
+   * javaMap contains a Map of CpoAttribute Objects
+   * the key is the javaName of the attribute
    */
   private SortedMap<String, CpoAttribute> javaMap = new TreeMap<String, CpoAttribute>();
 
   /**
-   * columnMap contains a Map of CpoAttribute Objects
-   * the id is the attributeName of the attribute in the database
-   * the value is the dataname for the class being described
+   * dataMap contains a Map of CpoAttribute Objects
+   * the key is the dataName of the attribute
    */
   private SortedMap<String, CpoAttribute> dataMap = new TreeMap<String, CpoAttribute>();
 
@@ -61,14 +62,6 @@ public class CpoClass extends CpoClassBean implements MetaDFVisitable {
     return metaClass;
   }
 
-  public SortedMap<String, CpoAttribute> getAttributeMap() {
-    return this.javaMap;
-  }
-
-  public SortedMap<String, CpoAttribute> getColumnMap() {
-    return this.dataMap;
-  }
-
   public void addAttribute(CpoAttribute cpoAttribute) {
     if (cpoAttribute != null) {
       logger.debug("Adding Attribute: "+cpoAttribute.getJavaName()+":"+cpoAttribute.getDataName());
@@ -82,22 +75,36 @@ public class CpoClass extends CpoClassBean implements MetaDFVisitable {
   }
 
   public CpoFunctionGroup getFunctionGroup(String groupType, String groupName) {
-    return this.functionGroups.get(groupType + "@" + groupName);
+    String key=buildFunctionGroupKey(groupType, groupName);
+    logger.debug("Getting function group: "+ key);
+    return this.functionGroups.get(key);
   }
 
   public CpoFunctionGroup addFunctionGroup(CpoFunctionGroup group) {
     if (group == null)
       return null;
 
-    return this.functionGroups.put(group.getType() + "@" + group.getName(), group);
+    String key=buildFunctionGroupKey(group.getType(), group.getName());
+    logger.debug("Adding function group: "+ key);
+    return this.functionGroups.put(key, group);
   }
 
+  private String buildFunctionGroupKey(String groupType, String groupName){
+    StringBuilder builder = new StringBuilder();
+    if (groupType!=null)
+      builder.append(groupType);
+    builder.append("@");
+    if (groupName!=null)
+      builder.append(groupName);
+    return builder.toString();
+  }
+    
   @Override
   public void acceptMetaDFVisitor(MetaVisitor visitor) {
     visitor.visit(this);
 
     // visit attributes
-    for (CpoAttribute cpoAttribute : getAttributeMap().values()) {
+    for (CpoAttribute cpoAttribute : javaMap.values()) {
       visitor.visit(cpoAttribute);
     }
 
@@ -136,7 +143,14 @@ public class CpoClass extends CpoClassBean implements MetaDFVisitable {
   }
   
   public CpoAttribute getAttributeJava(String javaName){
+    if (javaName==null)
+      return null;
     return javaMap.get(javaName);
   }
    
+  public CpoAttribute getAttributeData(String dataName){
+    if (dataName==null)
+      return null;
+    return dataMap.get(dataName);
+  }
 }

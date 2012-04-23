@@ -7,9 +7,9 @@
     <dataConfig xsi:type="jdbc:ctJdbcConfig" name="jdbc">
         <metaXml>${cpo.meta.xml}</metaXml>
         <cpoConfigProcessor>org.synchronoss.cpo.jdbc.config.JdbcCpoConfigProcessor</cpoConfigProcessor>
-        <jdbc:dataSourceClassName>${cpo.meta.class}</jdbc:dataSourceClassName>
-        <jdbc:url>${cpo.meta.url}</jdbc:url>
-        <jdbc:user>${cpo.meta.user}</jdbc:user>
-        <jdbc:password>${cpo.meta.password}</jdbc:password>
+        <jdbc:dataSourceClassName>${cpo.db.class}</jdbc:dataSourceClassName>
+        <jdbc:url>${cpo.db.url}</jdbc:url>
+        <jdbc:user>${cpo.db.user}</jdbc:user>
+        <jdbc:password>${cpo.db.password}</jdbc:password>
     </dataConfig>
 </cpoConfig>

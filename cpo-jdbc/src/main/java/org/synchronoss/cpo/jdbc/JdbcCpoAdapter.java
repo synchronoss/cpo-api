@@ -2817,7 +2817,6 @@ public class JdbcCpoAdapter implements CpoAdapter {
 
     int i;
     int k;
-    Map<String, CpoAttribute> jmcAttrMap;
     T rObj = null;
 
     if (obj==null) throw new CpoException("NULL Object passed into retrieveBean");
@@ -2825,7 +2824,6 @@ public class JdbcCpoAdapter implements CpoAdapter {
     try {
       jmc = metaAdapter.getMetaClass(criteriaObj);
       functions = jmc.getFunctionGroup(JdbcCpoAdapter.RETRIEVE_GROUP, groupName).getFunctions();
-      jmcAttrMap = jmc.getAttributeMap();
 
       localLogger.info("=================== Class=<" + criteriaObj.getClass() + "> Type=<" + JdbcCpoAdapter.RETRIEVE_GROUP + "> Name=<" + groupName + "> =========================");
 
@@ -2863,7 +2861,7 @@ public class JdbcCpoAdapter implements CpoAdapter {
             while (rs.next()) {
               recordsExist = true;
               recordCount++;
-              attribute = (JdbcAttribute)jmcAttrMap.get(rs.getString(1));
+              attribute = (JdbcAttribute)jmc.getAttributeData(rs.getString(1));
 
               if (attribute != null) {
                 attribute.invokeSetter(rObj, rs, 2);
@@ -2874,7 +2872,7 @@ public class JdbcCpoAdapter implements CpoAdapter {
             recordsExist = true;
             recordCount++;
             for (k = 1; k <= rsmd.getColumnCount(); k++) {
-              attribute = (JdbcAttribute)jmcAttrMap.get(rsmd.getColumnLabel(k));
+              attribute = (JdbcAttribute)jmc.getAttributeData(rsmd.getColumnLabel(k));
 
               if (attribute != null) {
                 attribute.invokeSetter(rObj, rs, k);
@@ -3027,7 +3025,6 @@ public class JdbcCpoAdapter implements CpoAdapter {
     int k;
     T obj;
     Class<T> jmcClass;
-    Map<String, CpoAttribute> jmcAttrMap;
     JdbcAttribute[] attributes;
     JdbcPreparedStatementFactory jpsf;
     int i;
@@ -3062,13 +3059,12 @@ public class JdbcCpoAdapter implements CpoAdapter {
         rsmd = rs.getMetaData();
 
         jmcClass = (Class<T>) jmcResult.getMetaClass();
-        jmcAttrMap = jmcResult.getAttributeMap();
         columnCount = rsmd.getColumnCount();
 
         attributes = new JdbcAttribute[columnCount + 1];
 
         for (k = 1; k <= columnCount; k++) {
-          attributes[k] = (JdbcAttribute)jmcAttrMap.get(rsmd.getColumnLabel(k));
+          attributes[k] = (JdbcAttribute)jmcResult.getAttributeData(rsmd.getColumnLabel(k));
         }
 
         while (rs.next()) {

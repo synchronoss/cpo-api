@@ -110,7 +110,7 @@ public abstract class AbstractCpoMetaAdapter implements CpoMetaAdapter {
     cpoAttribute.setDescription(ctAttribute.getDescription());
     cpoAttribute.setJavaName(ctAttribute.getJavaName());
     cpoAttribute.setJavaType(ctAttribute.getJavaType());
-    cpoAttribute.setTransformClass(ctAttribute.getTransformClass());
+    cpoAttribute.setTransformClassName(ctAttribute.getTransformClass());
   }
   
   protected void loadCpoFunctionGroup(CpoFunctionGroup cpoFunctionGroup, CtFunctionGroup ctFunctionGroup){

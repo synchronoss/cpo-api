@@ -103,7 +103,7 @@ public class JdbcPreparedStatementFactory implements CpoReleasible {
       CpoFunction function, T obj, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy,
       Collection<CpoNativeQuery> nativeQueries) throws CpoException {
 
-    // get the list of bindValues from the query parameters
+    // get the list of bindValues from the function parameters
     List<BindAttribute> bindValues = getBindValues(function, obj);
 
     String sql = buildSql(criteria, function.getExpression(), wheres, orderBy, nativeQueries, bindValues);
@@ -325,14 +325,14 @@ public class JdbcPreparedStatementFactory implements CpoReleasible {
    * CPO meta parameters and the parameters from the dynamic where.
    * 
    */
-    protected List<BindAttribute> getBindValues(CpoFunction jq, Object obj) throws CpoException {
+    protected List<BindAttribute> getBindValues(CpoFunction function, Object obj) throws CpoException {
       List<BindAttribute> bindValues = new ArrayList<BindAttribute>();
-      List<CpoArgument> arguments = jq.getArguments();
+      List<CpoArgument> arguments = function.getArguments();
       for (CpoArgument argument : arguments){
         if (argument == null) {
           throw new CpoException("CpoArgument is null!");
         }
-        bindValues.add(new BindAttribute(argument.getAttribute().getJavaName(), obj));
+        bindValues.add(new BindAttribute((JdbcAttribute)argument.getAttribute(), obj));
       }
       return bindValues;
     }
@@ -358,10 +358,12 @@ public class JdbcPreparedStatementFactory implements CpoReleasible {
         JavaSqlMethod<?> jsm = null;
         if (bindAttr.isIn() && bindObject instanceof Collection) {
           for (Object obj : (Collection)bindObject){
+            logger.debug("Looking up JavaSqlMethod for: "+obj.getClass().getName());
             jsm = JavaSqlMethods.getJavaSqlMethod(obj.getClass());
             break;
           }
         } else {
+          logger.debug("Looking up JavaSqlMethod for: "+bindObject.getClass().getName());
           jsm = JavaSqlMethods.getJavaSqlMethod(bindObject.getClass());
         }
         

@@ -45,7 +45,7 @@ public class JdbcArgument extends CpoArgument implements java.io.Serializable, j
     private static final String IN_PARAMETER = "IN";
     private static final String OUT_PARAMETER = "OUT";
     private static final String INOUT_PARAMETER = "BOTH";
-    private String executeType = null;
+    private String scope = null;
 
     public JdbcArgument(){
       super();
@@ -57,19 +57,19 @@ public class JdbcArgument extends CpoArgument implements java.io.Serializable, j
     }
 
     public boolean isInParameter(){
-        return IN_PARAMETER.equals(getExecuteType()) || INOUT_PARAMETER.equals(getExecuteType());
+        return IN_PARAMETER.equals(getScope()) || INOUT_PARAMETER.equals(getScope());
     }
 
     public boolean isOutParameter(){
-        return OUT_PARAMETER.equals(getExecuteType()) || INOUT_PARAMETER.equals(getExecuteType());
+        return OUT_PARAMETER.equals(getScope()) || INOUT_PARAMETER.equals(getScope());
     }
     
-  public String getExecuteType() {
-    return executeType;
+  public String getScope() {
+    return scope;
   }
 
-  public void setExecuteType(String executeType) {
-    this.executeType = executeType;
+  public void setScope(String scope) {
+    this.scope = scope;
   }
 
 }

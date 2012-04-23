@@ -51,8 +51,8 @@ public class CoreMetaXmlObjectExporter implements MetaXmlObjectExporter, MetaVis
       ctAttribute.setDataName(cpoAttribute.getDataName());
       ctAttribute.setDataType(cpoAttribute.getDataType());
 
-      if (cpoAttribute.getTransformClass() != null && cpoAttribute.getTransformClass().length() > 0)
-        ctAttribute.setTransformClass(cpoAttribute.getTransformClass());
+      if (cpoAttribute.getTransformClassName() != null && cpoAttribute.getTransformClassName().length() > 0)
+        ctAttribute.setTransformClass(cpoAttribute.getTransformClassName());
 
       if (cpoAttribute.getDescription() != null && cpoAttribute.getDescription().length() > 0)
         ctAttribute.setDescription(cpoAttribute.getDescription());

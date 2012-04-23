@@ -32,7 +32,10 @@ import java.lang.reflect.*;
 public class CpoAttribute extends CpoAttributeBean {
 
   private static Logger logger = LoggerFactory.getLogger(CpoAttribute.class.getName());
-
+  
+  protected static final String TRANSFORM_IN_NAME = "transformIn";
+  protected static final String TRANSFORM_OUT_NAME = "transformOut";
+          
   private String getterName_ = null;
   private String setterName_ = null;
   private Method[] getters_ = null;
@@ -40,17 +43,18 @@ public class CpoAttribute extends CpoAttributeBean {
 
   //Transform attributes
   private CpoTransform cpoTransform = null;
-
+  private Method transformInMethod = null;
+  
   public CpoAttribute() {
   }
 
-//  public <T> CpoAttribute(CpoClass jmc, String name, String dataName, String transformClass) throws CpoException {
-//    LoggerFactory.getLogger(jmc.getMetaClass().getName()).debug("Adding Attribute for class " + jmc.getMetaClass().getName() + ": " + name + "(" + dataName + "," + transformClass + ")");
-//    setJavaName(name);
-//    setTransformClass(transformClass);
-//    initMethods(jmc);
-//    setDataName(dataName);
-//  }
+  protected CpoTransform getCpoTransform() {
+    return cpoTransform;
+  }
+
+  public Method getTransformInMethod() {
+    return transformInMethod;
+  }
 
   protected Method[] getGetters() {
     return getters_;
@@ -84,20 +88,20 @@ public class CpoAttribute extends CpoAttributeBean {
     setterName_ = setterName;
   }
 
-  static protected Method[] findMethods(CpoClass jmc, String methodName, int args, boolean hasReturn) throws CpoException {
+  static protected Method[] findMethods(Class clazz, String methodName, int args, boolean hasReturn) throws CpoException {
     Method m[] = null;
     int count = 0;
     int idx[] = null;
     Method ret[] = null;
 
     try {
-      m = jmc.getMetaClass().getMethods();
+      m = clazz.getMethods();
       idx = new int[m.length];
 
       // go through once and find the accessor methods that match the method name
       for (int i = 0; i < m.length; i++) {
         // The method name must match as well as the number of parameters and return types
-        if (m[i].getName().equals(methodName) && m[i].getParameterTypes().length == args) {
+        if (!m[i].isSynthetic() && !m[i].isBridge() && m[i].getName().equals(methodName) && m[i].getParameterTypes().length == args) {
           if ((!hasReturn && m[i].getReturnType() == java.lang.Void.TYPE) || (hasReturn && m[i].getReturnType() != java.lang.Void.TYPE)) {
             idx[count++] = i;
           }
@@ -131,14 +135,21 @@ public class CpoAttribute extends CpoAttributeBean {
 
   public void invokeSetter(Object obj, Object param, Class<?> paramClass) throws CpoException {
     Logger localLogger = obj == null ? logger : LoggerFactory.getLogger(obj.getClass().getName());
-
+    Object actualParam = param;
+    Class<?> actualClass = paramClass;
+    
     if (getSetters().length == 0)
       throw new CpoException("There are no setters");
 
+    if (cpoTransform!=null){
+      actualParam = cpoTransform.transformIn(actualParam);
+      actualClass = transformInMethod.getReturnType();
+    }
+
     for (int i = 0; i < getSetters().length; i++) {
       try {
-        if (getSetters()[i].getParameterTypes()[0].isAssignableFrom(paramClass) || isPrimitiveAssignableFrom(getSetters()[i].getParameterTypes()[0], paramClass)) {
-          getSetters()[i].invoke(obj, new Object[]{param});
+        if (getSetters()[i].getParameterTypes()[0].isAssignableFrom(actualClass) || isPrimitiveAssignableFrom(getSetters()[i].getParameterTypes()[0], actualClass)) {
+          getSetters()[i].invoke(obj, new Object[]{actualParam});
           return;
         }
       } catch (IllegalAccessException iae) {
@@ -155,7 +166,7 @@ public class CpoAttribute extends CpoAttributeBean {
     Logger localLogger = obj == null ? logger : LoggerFactory.getLogger(obj.getClass().getName());
 
     try {
-      return getGetters()[0].invoke(obj, (Object[])null);
+      return transformOut(getGetters()[0].invoke(obj, (Object[])null));
     } catch (IllegalAccessException iae) {
       localLogger.debug("Error Invoking Getter Method: " + ExceptionHelper.getLocalizedMessage(iae));
     } catch (InvocationTargetException ite) {
@@ -163,31 +174,6 @@ public class CpoAttribute extends CpoAttributeBean {
     }
 
     throw new CpoException("invokeGetter: Could not find a Getter for " + obj.getClass());
-  }
-
-  protected void setTransformClassForName(String className) throws CpoException {
-    Class<CpoTransform> transformClass = null;
-    Logger localLogger = className == null ? logger : LoggerFactory.getLogger(className);
-
-    try {
-      if (className != null && className.length() > 0) {
-        try {
-          transformClass = (Class<CpoTransform>)Class.forName(className);
-        } catch (Exception e) {
-          String msg = ExceptionHelper.getLocalizedMessage(e);
-
-          localLogger.error("Invalid Transform Class specified:<" + className + ">");
-          throw new CpoException("Invalid Transform Class specified:<" + className + ">:");
-        }
-
-        this.cpoTransform = transformClass.newInstance();
-      }
-    } catch (CpoException ce) {
-      throw ce;
-    } catch (Exception e) {
-      localLogger.debug("Error Setting Transform Class: " + ExceptionHelper.getLocalizedMessage(e));
-      throw new CpoException(e);
-    }
   }
 
   private void dumpMethod(Method m) {
@@ -255,19 +241,56 @@ public class CpoAttribute extends CpoAttributeBean {
     setSetterName(buildMethodName("set", getJavaName()));
 
     try {
-      setGetters(findMethods(cpoClass, getGetterName(), 0, true));
+      setGetters(findMethods(cpoClass.getMetaClass(), getGetterName(), 0, true));
     } catch (CpoException ce1) {
       failedMessage.append(ce1.getMessage());
     }
     try {
-      setSetters(findMethods(cpoClass, getSetterName(), 1, false));
+      setSetters(findMethods(cpoClass.getMetaClass(), getSetterName(), 1, false));
     } catch (Exception ce2) {
       failedMessage.append(ce2.getMessage());
     }
 
+    initTransformClass();
+    
     if (failedMessage.length() > 0) {
       throw new CpoException(failedMessage.toString());
     }
   }
   
+  protected void initTransformClass() throws CpoException {
+    String className = getTransformClassName();
+    Class<?> transformClass = null;
+    Logger localLogger = className == null ? logger : LoggerFactory.getLogger(className);
+
+    try {
+      if (className != null && className.length() > 0) {
+        try {
+          transformClass = Class.forName(className);
+        } catch (Exception e) {
+          String msg = ExceptionHelper.getLocalizedMessage(e);
+
+          localLogger.error("Invalid Transform Class specified:<" + className + ">");
+          throw new CpoException("Invalid Transform Class specified:<" + className + ">:");
+        }
+
+        Object transformObject = transformClass.newInstance();
+
+        if (transformObject instanceof CpoTransform) {
+          cpoTransform = (CpoTransform) transformObject;
+          Method[] methods = findMethods(transformClass, TRANSFORM_IN_NAME, 1, true);
+          if (methods.length>0)
+            transformInMethod = methods[0];
+        } else {
+          localLogger.error("Invalid CpoTransform Class specified:<" + className + ">");
+          throw new CpoException("Invalid CpoTransform Class specified:<" + className + ">");
+        }
+
+      }
+    } catch (Exception e) {
+      localLogger.debug("Error Setting Transform Class: " + ExceptionHelper.getLocalizedMessage(e));
+      throw new CpoException(e);
+    }
+
+  }
 }

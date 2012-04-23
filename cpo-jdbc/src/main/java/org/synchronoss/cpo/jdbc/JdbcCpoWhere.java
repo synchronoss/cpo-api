@@ -175,7 +175,7 @@ public class JdbcCpoWhere extends Node implements CpoWhere{
               sb.append(" ");
             String fullyQualifiedColumn=null;
 
-            jdbcAttribute = (JdbcAttribute) cpoClass.getColumnMap().get(getAttribute());
+            jdbcAttribute = (JdbcAttribute) cpoClass.getAttributeJava(getAttribute());
             if(jdbcAttribute==null) {
                 // This is not an attribute on the cpo bean passed to the retrieveObjects method.
                 // treat it as the column name
@@ -205,7 +205,7 @@ public class JdbcCpoWhere extends Node implements CpoWhere{
             if(getValue()!=null) {
                 if (getValueFunction()!=null){
                     if (jdbcAttribute==null) {
-                      jdbcAttribute = (JdbcAttribute) cpoClass.getColumnMap().get(getRightAttribute());
+                      jdbcAttribute = (JdbcAttribute) cpoClass.getAttributeJava(getRightAttribute());
                     }
                     sb.append(buildFunction(getValueFunction(), getAttributeName(jdbcAttribute, getAttribute(), getRightAttribute()),"?"));
                 } else if(getComparison()==CpoWhere.COMP_IN && getValue() instanceof Collection) {
@@ -222,7 +222,7 @@ public class JdbcCpoWhere extends Node implements CpoWhere{
                     sb.append("?"); // add the parameter, we will bind it later.
                 }
             } else if(getRightAttribute()!=null) {
-                jdbcAttribute = (JdbcAttribute)  cpoClass.getColumnMap().get(getRightAttribute());
+                jdbcAttribute = (JdbcAttribute)  cpoClass.getAttributeJava(getRightAttribute());
                 String fullyQualifiedColumn = null;
                 if (jdbcAttribute==null){
                 	fullyQualifiedColumn=getRightAttribute();

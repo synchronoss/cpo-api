@@ -136,13 +136,12 @@ public class JdbcCpoOrderBy implements CpoOrderBy {
         String column = null;
         int attrOffset = 0;
         int fromIndex = 0;
-        Map<String,CpoAttribute> columnMap = jmc.getColumnMap();
         CpoAttribute jdbcAttribute=null;
 
         attribute = this.getAttribute();
         function = this.getFunction();
         if(attribute != null && attribute.length()>0) {
-            jdbcAttribute = (CpoAttribute) columnMap.get(attribute);
+            jdbcAttribute = (CpoAttribute) jmc.getAttributeJava(attribute);
             if (jdbcAttribute == null) {
             	throw new CpoException(attribute);
             }

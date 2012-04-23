@@ -37,8 +37,8 @@ public class JdbcMetaXmlObjectExporter extends CoreMetaXmlObjectExporter impleme
       ctJdbcAttribute.setDataName(jdbcAttribute.getDataName());
       ctJdbcAttribute.setDataType(jdbcAttribute.getDataType());
 
-      if (jdbcAttribute.getTransformClass() != null && jdbcAttribute.getTransformClass().length() > 0)
-        ctJdbcAttribute.setTransformClass(jdbcAttribute.getTransformClass());
+      if (jdbcAttribute.getTransformClassName() != null && jdbcAttribute.getTransformClassName().length() > 0)
+        ctJdbcAttribute.setTransformClass(jdbcAttribute.getTransformClassName());
 
       if (jdbcAttribute.getDescription() != null && jdbcAttribute.getDescription().length() > 0)
         ctJdbcAttribute.setDescription(jdbcAttribute.getDescription());

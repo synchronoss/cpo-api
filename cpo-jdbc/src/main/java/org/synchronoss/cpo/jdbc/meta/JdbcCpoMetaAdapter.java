@@ -72,7 +72,8 @@ public class JdbcCpoMetaAdapter extends AbstractCpoMetaAdapter {
     JdbcArgument jdbcArgument = (JdbcArgument)cpoArgument;
     CtJdbcArgument ctJdbcArgument = (CtJdbcArgument)ctArgument;
     
-    jdbcArgument.setExecuteType(ctJdbcArgument.getExecType().toString());
+//    logger.debug("Setting argument scope to: "+ctJdbcArgument.getExecType().toString());
+    jdbcArgument.setScope(ctJdbcArgument.getExecType().toString());
     
   }
   

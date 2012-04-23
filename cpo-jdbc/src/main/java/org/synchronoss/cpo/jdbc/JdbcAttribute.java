@@ -32,6 +32,8 @@ import org.synchronoss.cpo.meta.domain.*;
 import java.io.*;
 import java.lang.reflect.*;
 import java.sql.*;
+import org.synchronoss.cpo.transform.CpoTransform;
+import org.synchronoss.cpo.transform.jdbc.JdbcTransform;
 
 
 
@@ -43,8 +45,8 @@ import java.sql.*;
  */
 
 public class JdbcAttribute extends CpoAttribute implements java.io.Serializable, java.lang.Cloneable {
+  private static Logger logger = LoggerFactory.getLogger(JdbcAttribute.class.getName());
 
-    private static Logger logger = LoggerFactory.getLogger(JdbcAttribute.class.getName());
 
     /**
      * Version Id for this class.
@@ -56,28 +58,12 @@ public class JdbcAttribute extends CpoAttribute implements java.io.Serializable,
     private int javaSqlType_ = Types.NULL;
     
     //Transform attributes
-    private Object transformObject_=null;
-    private Method transformIn_ = null;
-    private Method transformPSOut_ = null;
-    private Method transformCSOut_ = null;
-    private boolean hasTransformIn = false;
-    private boolean hasTransformPS = false;
-    private boolean hasTransformCS = false;
+    private JdbcTransform jdbcTransform=null;
+    private Method transformPSOutMethod = null;
+    private Method transformCSOutMethod = null;
     
     public JdbcAttribute() {
     }
-    /**
-     * @param jmc
-     * @param name
-     */
-//    public <T> JdbcAttribute(CpoClass jmc, String name, String javaSqlTypeName, String dataName, String dbTable, String dbColumn, String transformClass)
-//    throws CpoException {
-//      super(jmc,name,dataName,transformClass);
-//        LoggerFactory.getLogger(jmc.getMetaClass().getName()).debug("Adding Attribute for class "+jmc.getMetaClass().getName()+": "+name+"("+dataName+","+dbTable+","+dbColumn+","+transformClass+")");
-//        setDbTable(dbTable);
-//        setDbColumn(dbColumn);
-//        setJavaSqlType(JavaSqlTypes.getJavaSqlType(javaSqlTypeName));
-//    }
 
     public void setDbTable(String dbTable){
         dbTable_ = dbTable;
@@ -104,17 +90,17 @@ public class JdbcAttribute extends CpoAttribute implements java.io.Serializable,
         if (getSetters().length==0) 
             throw new CpoException("There are no setters");
         
-        if (hasTransformIn){
-    		localLogger.info("Calling Transform In:"+transformIn_.getDeclaringClass().getName());
+        if (jdbcTransform!=null){
+    		localLogger.info("Calling Transform In:"+jdbcTransform.getClass().getName());
     		
                 // Get the JavaSqlMethod for the class that we are passing into the transform
-                jdbcMethod = JavaSqlMethods.getJavaSqlMethod(transformIn_.getParameterTypes()[0]);
+                jdbcMethod = JavaSqlMethods.getJavaSqlMethod(getTransformInMethod().getParameterTypes()[0]);
                 
                 try {
                     // Get the getter for the ResultSet
                     param = jdbcMethod.getRsGetter().invoke(rs,new Object[]{new Integer(idx)});
                     param = transformIn(param);
-                    paramClass = transformIn_.getReturnType();
+                    paramClass = getTransformInMethod().getReturnType();
                 } catch (IllegalAccessException iae){
                 	localLogger.debug("Error Invoking ResultSet Method: "+ExceptionHelper.getLocalizedMessage(iae));
                     throw new CpoException(iae);
@@ -127,7 +113,7 @@ public class JdbcAttribute extends CpoAttribute implements java.io.Serializable,
         
         for (int i=0; i<getSetters().length; i++){
             try{
-                if (!hasTransformIn){
+                if (jdbcTransform==null){
                     // Get the JavaSqlMethod for the class that we are passing in as the Setter parameter
                     jdbcMethod = JavaSqlMethods.getJavaSqlMethod(getSetters()[i].getParameterTypes()[0]);
                     
@@ -158,17 +144,17 @@ public class JdbcAttribute extends CpoAttribute implements java.io.Serializable,
         if (getSetters().length==0) 
             throw new CpoException("There are no setters");
 
-        if (hasTransformCS){
-    		localLogger.info("Calling Transform In:"+transformIn_.getDeclaringClass().getName());
+        if (jdbcTransform!=null){
+    		localLogger.info("Calling Transform In:"+jdbcTransform.getClass().getName());
     		
             // Get the jdbcType for the class that we are passing into the transform
-            jdbcMethod = JavaSqlMethods.getJavaSqlMethod(transformIn_.getParameterTypes()[0]);
+            jdbcMethod = JavaSqlMethods.getJavaSqlMethod(getTransformInMethod().getParameterTypes()[0]);
             
             try {
                 // Get the getter for the Callable Statement
                 param = jdbcMethod.getCsGetter().invoke(cs,new Object[]{new Integer(idx)});
                 param = transformIn(param);
-                paramClass = transformIn_.getReturnType();
+                paramClass = getTransformInMethod().getReturnType();
             } catch (IllegalAccessException iae){
             	localLogger.debug("Error Invoking CallableStatement Method: "+ExceptionHelper.getLocalizedMessage(iae));
                 throw new CpoException(iae);
@@ -181,7 +167,7 @@ public class JdbcAttribute extends CpoAttribute implements java.io.Serializable,
         for (int i=0; i<getSetters().length; i++){
             try{
                 
-                if (!hasTransformCS){
+                if (jdbcTransform==null){
                     // Get the jdbcType for the class that we are passing in as the Setter parameter
                     jdbcMethod = JavaSqlMethods.getJavaSqlMethod(getSetters()[i].getParameterTypes()[0]);
                     
@@ -211,10 +197,10 @@ public class JdbcAttribute extends CpoAttribute implements java.io.Serializable,
         Logger localLogger = obj==null?logger:LoggerFactory.getLogger(obj.getClass().getName());
          
         try{
-            if (hasTransformPS){
-            	localLogger.info("Calling Transform Out:"+transformCSOut_.getDeclaringClass().getName());
+            if (jdbcTransform!=null){
+            	localLogger.info("Calling Transform Out:"+jdbcTransform.getClass().getName());
                 param = transformOut(jcsf, getGetters()[0].invoke(obj, (Object[])null));
-                jdbcMethod = JavaSqlMethods.getJavaSqlMethod(transformCSOut_.getReturnType());
+                jdbcMethod = JavaSqlMethods.getJavaSqlMethod(transformCSOutMethod.getReturnType());
             } else {
                 jdbcMethod = JavaSqlMethods.getJavaSqlMethod(getGetters()[0].getReturnType());
                 param = getGetters()[0].invoke(obj, (Object[])null);
@@ -254,12 +240,12 @@ public class JdbcAttribute extends CpoAttribute implements java.io.Serializable,
         String msg = null;
         Logger localLogger = obj==null?logger:LoggerFactory.getLogger(obj.getClass().getName());
         try{
-            if (hasTransformPS){
-            	localLogger.info("Calling Transform Out:"+transformPSOut_.getDeclaringClass().getName());
-                    param = transformOut(jpsf, getGetters()[0].invoke(obj, (Object[])null));
-                    jdbcMethod = JavaSqlMethods.getJavaSqlMethod(transformPSOut_.getReturnType());
-                    if (jdbcMethod==null)
-                        throw new CpoException("Error Retrieveing Jdbc Method for type: "+transformPSOut_.getReturnType().getName());
+            if (jdbcTransform!=null){
+              localLogger.info("Calling Transform Out:"+jdbcTransform.getClass().getName());
+              param = transformOut(jpsf, getGetters()[0].invoke(obj, (Object[])null));
+              jdbcMethod = JavaSqlMethods.getJavaSqlMethod(transformPSOutMethod.getReturnType());
+              if (jdbcMethod==null)
+                  throw new CpoException("Error Retrieveing Jdbc Method for type: "+transformPSOutMethod.getReturnType().getName());
             } else {
                     jdbcMethod = JavaSqlMethods.getJavaSqlMethod(getGetters()[0].getReturnType());
                    param = getGetters()[0].invoke(obj, (Object[])null);
@@ -383,55 +369,37 @@ public class JdbcAttribute extends CpoAttribute implements java.io.Serializable,
       logger.debug("========================");
     }
 
-    protected Object transformIn(Object datasourceObject) throws CpoException{
-        Object retObj = datasourceObject;
-        
-        if (transformObject_!=null&&transformIn_!=null){
-            try{
-                retObj = transformIn_.invoke(transformObject_,new Object[] {datasourceObject});
-            } catch (IllegalAccessException iae){
-                LoggerFactory.getLogger(transformIn_.getName()).error("Error Invoking transformIn: "+transformIn_.getName()+ExceptionHelper.getLocalizedMessage(iae));
-                throw new CpoException(iae);
-            } catch (InvocationTargetException ite){
-            	LoggerFactory.getLogger(transformIn_.getName()).error("Error Invoking transformIn: "+transformIn_.getName()+ExceptionHelper.getLocalizedMessage(ite));
-                throw new CpoException(ite.getCause());
-            }
-        }
-        return retObj;
-    }
-    
     protected Object transformOut(JdbcPreparedStatementFactory jpsf, Object attributeObject) throws CpoException{
-        Object retObj = attributeObject;
+      Object retObj = attributeObject;
         
-       if (transformObject_!=null&&transformPSOut_!=null){
-            try{
-                retObj = transformPSOut_.invoke(transformObject_,new Object[] {jpsf, attributeObject});
-            } catch (IllegalAccessException iae){
-            	LoggerFactory.getLogger(transformPSOut_.getName()).error("Error Invoking transformOut: "+transformPSOut_.getName()+ExceptionHelper.getLocalizedMessage(iae));
-                throw new CpoException(iae);
-            } catch (InvocationTargetException ite){
-            	LoggerFactory.getLogger(transformPSOut_.getName()).error("Error Invoking transformOut: "+transformPSOut_.getName()+ExceptionHelper.getLocalizedMessage(ite));
-                throw new CpoException(ite.getCause());
-            }
-        }
-        return retObj;
+      if (jdbcTransform != null){
+        retObj = jdbcTransform.transformOut(jpsf, attributeObject);
+      }
+      return retObj;
     }
     
     protected Object transformOut(JdbcCallableStatementFactory jcsf, Object attributeObject) throws CpoException{
-        Object retObj = attributeObject;
+      Object retObj = attributeObject;
         
-        if (transformObject_!=null&&transformCSOut_!=null){
-            try{
-                retObj = transformCSOut_.invoke(transformObject_,new Object[] {jcsf, attributeObject});
-            } catch (IllegalAccessException iae){
-            	LoggerFactory.getLogger(transformCSOut_.getName()).error("Error Invoking transformOut: "+transformCSOut_.getName()+ExceptionHelper.getLocalizedMessage(iae));
-                throw new CpoException(iae);
-            } catch (InvocationTargetException ite){
-            	LoggerFactory.getLogger(transformCSOut_.getName()).error("Error Invoking transformOut: "+transformCSOut_.getName()+ExceptionHelper.getLocalizedMessage(ite));
-                throw new CpoException(ite.getCause());
-            }
-        }
-        return retObj;
+      if (jdbcTransform != null){
+        retObj = jdbcTransform.transformOut(jcsf, attributeObject);
+      }
+      return retObj;
     }
+    
+  protected void initTransformClass() throws CpoException {
+    if (getCpoTransform() != null && getCpoTransform() instanceof JdbcTransform ) {
+      jdbcTransform = (JdbcTransform)getCpoTransform();
+    
+      for(Method m : findMethods(jdbcTransform.getClass(), TRANSFORM_OUT_NAME, 1, true)){
+        if (m.getParameterTypes()[0].getName().equals("org.synchronoss.cpo.jdbc.JdbcPreparedStatementFactory")) {
+          transformPSOutMethod = m;
+        } else if (m.getParameterTypes()[0].getName().equals("org.synchronoss.cpo.jdbc.JdbcCallableStatementFactory")) {
+          transformCSOutMethod = m;
+        }
+      }
+    }
+
+  }
     
 }

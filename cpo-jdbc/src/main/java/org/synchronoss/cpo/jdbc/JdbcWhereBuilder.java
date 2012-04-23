@@ -114,9 +114,9 @@ public class JdbcWhereBuilder<T> implements NodeVisitor {
         JdbcAttribute attribute = null;
         whereClause.append(jcw.toString(cpoClass));
         if(jcw.getValue() != null) {
-            attribute = (JdbcAttribute) cpoClass.getColumnMap().get(jcw.getAttribute());
+            attribute = (JdbcAttribute) cpoClass.getAttributeJava(jcw.getAttribute());
             if (attribute==null){
-              attribute = (JdbcAttribute) cpoClass.getColumnMap().get(jcw.getRightAttribute());
+              attribute = (JdbcAttribute) cpoClass.getAttributeJava(jcw.getRightAttribute());
             }
             if (attribute==null)
               bindValues.add(new BindAttribute(jcw.getAttribute()==null?jcw.getRightAttribute():jcw.getAttribute(),jcw.getValue(), jcw.getComparison()==CpoWhere.COMP_IN));

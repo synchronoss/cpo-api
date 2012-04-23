@@ -9,7 +9,7 @@ public class CpoAttributeBean implements java.io.Serializable {
   private java.lang.String javaType;
   private java.lang.String dataName;
   private java.lang.String dataType;
-  private java.lang.String transformClass;
+  private java.lang.String transformClassName;
   private java.lang.String description;
 
   public CpoAttributeBean() {
@@ -55,12 +55,12 @@ public class CpoAttributeBean implements java.io.Serializable {
     this.javaType = javaType;
   }
 
-  public String getTransformClass() {
-    return transformClass;
+  public String getTransformClassName() {
+    return transformClassName;
   }
 
-  public void setTransformClass(String transformClass) {
-    this.transformClass = transformClass;
+  public void setTransformClassName(String transformClassName) {
+    this.transformClassName = transformClassName;
   }
 
   /* Getters and Setters */
@@ -81,7 +81,7 @@ public class CpoAttributeBean implements java.io.Serializable {
       return false;
     if (getDataType() != null ? !getDataType().equals(that.getDataType()) : that.getDataType() != null)
       return false;
-    if (getTransformClass() != null ? !getTransformClass().equals(that.getTransformClass()) : that.getTransformClass() != null)
+    if (getTransformClassName() != null ? !getTransformClassName().equals(that.getTransformClassName()) : that.getTransformClassName() != null)
       return false;
     if (getDescription() != null ? !getDescription().equals(that.getDescription()) : that.getDescription() != null)
       return false;
@@ -96,7 +96,7 @@ public class CpoAttributeBean implements java.io.Serializable {
     result = 31 * result + (getJavaType() != null ? getJavaType().hashCode() : 0);
     result = 31 * result + (getDataName() != null ? getDataName().hashCode() : 0);
     result = 31 * result + (getDataType() != null ? getDataType().hashCode() : 0);
-    result = 31 * result + (getTransformClass() != null ? getTransformClass().hashCode() : 0);
+    result = 31 * result + (getTransformClassName() != null ? getTransformClassName().hashCode() : 0);
     result = 31 * result + (getDescription() != null ? getDescription().hashCode() : 0);
     return result;
   }
@@ -107,7 +107,7 @@ public class CpoAttributeBean implements java.io.Serializable {
     str.append("javaType = " + getJavaType() + "\n");
     str.append("dataName = " + getDataName() + "\n");
     str.append("dataType = " + getDataType() + "\n");
-    str.append("transformClass = " + getTransformClass() + "\n");
+    str.append("transformClass = " + getTransformClassName() + "\n");
     str.append("description = " + getDescription() + "\n");
     return str.toString();
   }

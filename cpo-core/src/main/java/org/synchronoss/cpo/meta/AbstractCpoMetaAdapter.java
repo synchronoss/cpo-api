@@ -60,6 +60,10 @@ public abstract class AbstractCpoMetaAdapter implements CpoMetaAdapter {
         throw new CpoException("No Metadata found for class:" + requestedName);
       }
     }
+    
+    if (cpoClass.getMetaClass()==null){
+      cpoClass.loadRunTimeInfo();
+    }
 
     return cpoClass;
   }

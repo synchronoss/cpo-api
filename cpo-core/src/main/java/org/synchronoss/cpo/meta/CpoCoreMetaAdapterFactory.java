@@ -61,11 +61,11 @@ public class CpoCoreMetaAdapterFactory implements CpoMetaAdapterFactory {
     } catch (XmlException xe){
       throw new CpoException("Error processing metaData from String");
     } catch (ClassNotFoundException cnfe) {
-      throw new CpoException("CpoConfigProcessor not found: "+metaAdapterClassName+": "+ExceptionHelper.getLocalizedMessage(cnfe));
+      throw new CpoException("CpoMetaAdapter not found: "+metaAdapterClassName+": "+ExceptionHelper.getLocalizedMessage(cnfe));
     } catch (IllegalAccessException iae) {
-      throw new CpoException("Could not access CpoConfigProcessor: "+metaAdapterClassName+": "+ExceptionHelper.getLocalizedMessage(iae));
+      throw new CpoException("Could not access CpoMetaAdapter: "+metaAdapterClassName+": "+ExceptionHelper.getLocalizedMessage(iae));
     } catch (InstantiationException ie)  {
-      throw new CpoException("Could not instantiate CpoConfigProcessor: "+metaAdapterClassName+": "+ExceptionHelper.getLocalizedMessage(ie));
+      throw new CpoException("Could not instantiate CpoMetaAdapter: "+metaAdapterClassName+": "+ExceptionHelper.getLocalizedMessage(ie));
     }
     
     return metaAdapter;

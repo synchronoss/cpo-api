@@ -44,13 +44,13 @@ public class CpoAttribute extends CpoAttributeBean {
   public CpoAttribute() {
   }
 
-  public <T> CpoAttribute(CpoClass jmc, String name, String dataName, String transformClass) throws CpoException {
-    LoggerFactory.getLogger(jmc.getMetaClass().getName()).debug("Adding Attribute for class " + jmc.getMetaClass().getName() + ": " + name + "(" + dataName + "," + transformClass + ")");
-    setJavaName(name);
-    setTransformClass(transformClass);
-    initMethods(jmc);
-    setDataName(dataName);
-  }
+//  public <T> CpoAttribute(CpoClass jmc, String name, String dataName, String transformClass) throws CpoException {
+//    LoggerFactory.getLogger(jmc.getMetaClass().getName()).debug("Adding Attribute for class " + jmc.getMetaClass().getName() + ": " + name + "(" + dataName + "," + transformClass + ")");
+//    setJavaName(name);
+//    setTransformClass(transformClass);
+//    initMethods(jmc);
+//    setDataName(dataName);
+//  }
 
   protected Method[] getGetters() {
     return getters_;
@@ -84,28 +84,7 @@ public class CpoAttribute extends CpoAttributeBean {
     setterName_ = setterName;
   }
 
-  private <T> void initMethods(CpoClass jmc) throws CpoException {
-    StringBuilder failedMessage = new StringBuilder();
-    setGetterName(buildMethodName("get", getJavaName()));
-    setSetterName(buildMethodName("set", getJavaName()));
-
-    try {
-      setGetters(findMethods(jmc, getGetterName(), 0, true));
-    } catch (CpoException ce1) {
-      failedMessage.append(ce1.getMessage());
-    }
-    try {
-      setSetters(findMethods(jmc, getSetterName(), 1, false));
-    } catch (Exception ce2) {
-      failedMessage.append(ce2.getMessage());
-    }
-
-    if (failedMessage.length() > 0) {
-      throw new CpoException(failedMessage.toString());
-    }
-  }
-
-  static protected <T> Method[] findMethods(CpoClass jmc, String methodName, int args, boolean hasReturn) throws CpoException {
+  static protected Method[] findMethods(CpoClass jmc, String methodName, int args, boolean hasReturn) throws CpoException {
     Method m[] = null;
     int count = 0;
     int idx[] = null;
@@ -269,4 +248,26 @@ public class CpoAttribute extends CpoAttributeBean {
 
     return false;
   }
+  
+  public void loadRunTimeInfo(CpoClass cpoClass) throws CpoException {
+    StringBuilder failedMessage = new StringBuilder();
+    setGetterName(buildMethodName("get", getJavaName()));
+    setSetterName(buildMethodName("set", getJavaName()));
+
+    try {
+      setGetters(findMethods(cpoClass, getGetterName(), 0, true));
+    } catch (CpoException ce1) {
+      failedMessage.append(ce1.getMessage());
+    }
+    try {
+      setSetters(findMethods(cpoClass, getSetterName(), 1, false));
+    } catch (Exception ce2) {
+      failedMessage.append(ce2.getMessage());
+    }
+
+    if (failedMessage.length() > 0) {
+      throw new CpoException(failedMessage.toString());
+    }
+  }
+  
 }

@@ -26,7 +26,6 @@ package org.synchronoss.cpo.jdbc;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Locale;
 import java.util.PropertyResourceBundle;
 import java.util.ResourceBundle;

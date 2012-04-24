@@ -2678,7 +2678,7 @@ public class JdbcCpoAdapter implements CpoAdapter {
 
       jmcClass = (Class<T>)jmcResult.getMetaClass();
       try {
-        returnObject = jmcClass.newInstance();
+        returnObject = (T) result.getClass().newInstance();
       } catch (IllegalAccessException iae) {
         throw new CpoException("Unable to access the constructor of the Return Object", iae);
       } catch (InstantiationException iae) {
@@ -2828,7 +2828,7 @@ public class JdbcCpoAdapter implements CpoAdapter {
       localLogger.info("=================== Class=<" + criteriaObj.getClass() + "> Type=<" + JdbcCpoAdapter.RETRIEVE_GROUP + "> Name=<" + groupName + "> =========================");
 
       try {
-        rObj = (T) jmc.getMetaClass().newInstance();
+        rObj = (T) obj.getClass().newInstance();
       } catch (IllegalAccessException iae) {
         if (obj != null)
           localLogger.error("=================== Could not access default constructor for Class=<" + obj.getClass() + "> ==================");
@@ -3069,7 +3069,7 @@ public class JdbcCpoAdapter implements CpoAdapter {
 
         while (rs.next()) {
           try {
-            obj = jmcClass.newInstance();
+            obj = (T) result.getClass().newInstance();
           } catch (IllegalAccessException iae) {
             if (result != null)
               localLogger.error("=================== Could not access default constructor for Class=<" + result.getClass() + "> ==================");

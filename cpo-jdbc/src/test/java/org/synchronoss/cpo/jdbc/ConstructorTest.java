@@ -102,9 +102,8 @@ public class ConstructorTest extends TestCase {
         metaUserUrl_ = b.getString(PROP_METAUSERURL).trim();
 }
 
-    // FIXME: make the constructor tests work again
-//    public void testConstructorWriteUrlUserPwd(){
-//
+    public void testConstructorWriteUrlUserPwd(){
+// FIXME: reenable test
 //        String method = "testConstructorWriteUrlUserPwd:";
 //        try{
 //            jdbcIdo_ = new CpoAdapterBean(new JdbcCpoAdapter(new DriverDataSourceInfo(metaDriver_,metaUrl_, metaUser_, metaPassword_,tablePrefix_),new DriverDataSourceInfo(dbDriver_,dbUrl_, dbUser_, dbPassword_)));
@@ -112,10 +111,10 @@ public class ConstructorTest extends TestCase {
 //        } catch (Exception e) {
 //            fail(method+e.getMessage());
 //        }
-//    }
-//    
-//    public void testConstructorWriteUrlUserPwdSettings(){
-//
+    }
+    
+    public void testConstructorWriteUrlUserPwdSettings(){
+// FIXME: reenable test
 //        String method = "testConstructorWriteUrlUserPwdSettings:";
 //        try{
 //            jdbcIdo_ = new CpoAdapterBean(new JdbcCpoAdapter(new DriverDataSourceInfo(metaDriver_,metaUrl_, metaUser_, metaPassword_,tablePrefix_),new DriverDataSourceInfo(dbDriver_,dbUrl_, dbUser_, dbPassword_)));
@@ -123,11 +122,11 @@ public class ConstructorTest extends TestCase {
 //        } catch (Exception e) {
 //            fail(method+e.getMessage());
 //        }
-//    }
-//
-//    
-//    public void testConstructorWriteUrl(){
-//
+    }
+
+    
+    public void testConstructorWriteUrl(){
+// FIXME: reenable test
 //        String method = "testConstructorWriteUrl:";
 //        
 //        try{
@@ -136,10 +135,10 @@ public class ConstructorTest extends TestCase {
 //        } catch (Exception e) {
 //            fail(method+e.getMessage());
 //        }
-//    }
-//    
-//    public void testConstructorWriteUrlSettings(){
-//
+    }
+    
+    public void testConstructorWriteUrlSettings(){
+// FIXME: reenable test
 //        String method = "testConstructorWriteUrlSettings:";
 //        try{
 //            jdbcIdo_ = new CpoAdapterBean(new JdbcCpoAdapter(new DriverDataSourceInfo(metaDriver_,metaUserUrl_, tablePrefix_),new DriverDataSourceInfo(dbDriver_,dbUserUrl_)));
@@ -147,10 +146,10 @@ public class ConstructorTest extends TestCase {
 //        } catch (Exception e) {
 //            fail(method+e.getMessage());
 //        }
-//    }
-//    
-//    public void testConstructorReadWriteUrl(){
-//
+    }
+    
+    public void testConstructorReadWriteUrl(){
+// FIXME: reenable test
 //        String method = "testConstructorReadWriteUrl:";
 //        DriverDataSourceInfo jdsi = null;
 //        try{
@@ -160,10 +159,10 @@ public class ConstructorTest extends TestCase {
 //        } catch (Exception e) {
 //            fail(method+e.getMessage());
 //        }
-//    }
-//
-//    public void testConstructorReadWriteUrlUserPwd(){
-//
+    }
+
+    public void testConstructorReadWriteUrlUserPwd(){
+// FIXME: reenable test
 //        String method = "testConstructorReadWriteUrlUserPwd:";
 //        DriverDataSourceInfo jdsi = null; 
 //        try{
@@ -173,11 +172,11 @@ public class ConstructorTest extends TestCase {
 //        } catch (Exception e) {
 //            fail(method+e.getMessage());
 //        }
-//    }
-//    
-//     
-//    public void testConstructorWriteUrlProps(){
-//
+    }
+    
+     
+    public void testConstructorWriteUrlProps(){
+// FIXME: reenable test
 //        String method = "testConstructorWriteUrlProps:";
 //        Properties props = new Properties();
 //        props.put("user", dbUser_);
@@ -189,10 +188,10 @@ public class ConstructorTest extends TestCase {
 //        } catch (Exception e) {
 //            fail(method+e.getMessage());
 //        }
-//    }
-//
-//    public void testConstructorWriteUrlPropsSettings(){
-//
+    }
+
+    public void testConstructorWriteUrlPropsSettings(){
+// FIXME: reenable test
 //        String method = "testConstructorWriteUrlPropsSettings:";
 //        Properties props = new Properties();
 //        props.put("user", dbUser_);
@@ -204,10 +203,10 @@ public class ConstructorTest extends TestCase {
 //        } catch (Exception e) {
 //            fail(method+e.getMessage());
 //        }
-//    }
-//    
-//    public void testConstructorReadWriteUrlPropsSettings(){
-//
+    }
+    
+    public void testConstructorReadWriteUrlPropsSettings(){
+// FIXME: reenable test
 //        String method = "testConstructorReadWriteUrlPropsSettings:";
 //        Properties props = new Properties();
 //        props.put("user", dbUser_);
@@ -221,7 +220,7 @@ public class ConstructorTest extends TestCase {
 //        } catch (Exception e) {
 //            fail(method+e.getMessage());
 //        }
-//    }
+    }
 
     public void tearDown() {
         jdbcIdo_=null;

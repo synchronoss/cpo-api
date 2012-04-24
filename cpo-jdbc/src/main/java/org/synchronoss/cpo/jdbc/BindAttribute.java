@@ -27,46 +27,46 @@ package org.synchronoss.cpo.jdbc;
  */
 public class BindAttribute {
 
-  private JdbcAttribute ja_ = null;
-  private Object bindObject_ = null;
-  private String name_ = null;
-  private boolean isIn_ = false;
+  private JdbcAttribute jdbcAttribute = null;
+  private Object bindObject = null;
+  private String name = null;
+  private boolean isIn = false;
 
-  public BindAttribute(JdbcAttribute ja, Object bindObject) {
-    ja_ = ja;
-    bindObject_ = bindObject;
+  public BindAttribute(JdbcAttribute jdbcAttribute, Object bindObject) {
+    this.jdbcAttribute = jdbcAttribute;
+    this.bindObject = bindObject;
   }
 
   public BindAttribute(String name, Object bindObject) {
-    name_ = name;
-    bindObject_ = bindObject;
+    this.name = name;
+    this.bindObject = bindObject;
   }
 
-  public BindAttribute(JdbcAttribute ja, Object bindObject, boolean isIn) {
-    ja_ = ja;
-    bindObject_ = bindObject;
-    isIn_ = isIn;
+  public BindAttribute(JdbcAttribute jdbcAttribute, Object bindObject, boolean isIn) {
+    this.jdbcAttribute = jdbcAttribute;
+    this.bindObject = bindObject;
+    this.isIn = isIn;
   }
 
   public BindAttribute(String name, Object bindObject, boolean isIn) {
-    name_ = name;
-    bindObject_ = bindObject;
-    isIn_ = isIn;
+    this.name = name;
+    this.bindObject = bindObject;
+    this.isIn = isIn;
   }
 
   public JdbcAttribute getJdbcAttribute() {
-    return ja_;
+    return jdbcAttribute;
   }
 
   public Object getBindObject() {
-    return bindObject_;
+    return bindObject;
   }
 
   public String getName() {
-    return name_;
+    return name;
   }
 
   public boolean isIn() {
-    return isIn_;
+    return isIn;
   }
 }

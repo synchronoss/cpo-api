@@ -122,14 +122,14 @@ public class JdbcCpoOrderBy implements CpoOrderBy {
     this.function = s;
   }
 
-  public String toString(CpoClass jmc) throws CpoException {
+  public String toString(CpoClass cpoClass) throws CpoException {
     StringBuilder sb = new StringBuilder();
     String column;
     int attrOffset;
     int fromIndex = 0;
 
     if (attribute != null && attribute.length() > 0) {
-      CpoAttribute jdbcAttribute = (CpoAttribute) jmc.getAttributeJava(attribute);
+      CpoAttribute jdbcAttribute = (CpoAttribute) cpoClass.getAttributeJava(attribute);
       if (jdbcAttribute == null) {
         throw new CpoException(attribute);
       }

@@ -41,9 +41,4 @@ public interface DataSourceInfo {
    * @return Returns the DataSource
    */
   public DataSource getDataSource() throws CpoException;
-//  /**
-//   * Returns the tablePrefix or an empty string if no table prefix exists.
-//   * @return Returns the tablePrefix to be used on the CPO Tables
-//   */
-//  public String getTablePrefix();
 }

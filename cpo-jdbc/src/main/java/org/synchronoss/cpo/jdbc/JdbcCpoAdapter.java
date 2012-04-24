@@ -3081,22 +3081,21 @@ public class JdbcCpoAdapter implements CpoAdapter {
         updates = ps.executeBatch();
         jpsf.release();
         ps.close();
-        for (int j = 0; j < updates.length; j++) {
-          if (updates[j] > 0) {
-            numRows += updates[j];
-          } else if (updates[j] == PreparedStatement.SUCCESS_NO_INFO) {
+        for (int update : updates) {
+          if (update < 0 && update == PreparedStatement.SUCCESS_NO_INFO) {
             // something updated but we do not know what or how many so default to one.
             numRows++;
+          } else {
+            numRows += update;
           }
         }
         localLogger.info("=================== BATCH - " + numRows + " Updates - Class=<" + arr[0].getClass() + "> Type=<" + groupType + "> Name=<" + groupName + "> =========================");
 
       } else {
         localLogger.info("=================== Class=<" + arr[0].getClass() + "> Type=<" + groupType + "> Name=<" + groupName + "> =========================");
-        for (int j = 0; j < arr.length; j++) {
-          for (int i = 0; i < queryGroup.size(); i++) {
-            jq = queryGroup.get(i);
-            jpsf = new JdbcPreparedStatementFactory(con, this, jmc, jq, arr[j], wheres, orderBy, nativeQueries);
+        for (T obj : arr) {
+          for (CpoFunction function : queryGroup){
+            jpsf = new JdbcPreparedStatementFactory(con, this, jmc, function, obj, wheres, orderBy, nativeQueries);
             ps = jpsf.getPreparedStatement();
             numRows += ps.executeUpdate();
             jpsf.release();
@@ -3187,9 +3186,9 @@ public class JdbcCpoAdapter implements CpoAdapter {
     long updateCount = 0;
 
     if (!coll.isEmpty()) {
-      Object[] arr = coll.toArray();
+      T[] arr = (T[])coll.toArray();
 
-      Object obj1 = arr[0];
+      T obj1 = arr[0];
       boolean allEqual = true;
       for (int i = 1; i < arr.length; i++) {
         if (!obj1.getClass().getName().equals(arr[i].getClass().getName())) {
@@ -3201,8 +3200,8 @@ public class JdbcCpoAdapter implements CpoAdapter {
       if (allEqual && batchUpdatesSupported_ && !JdbcCpoAdapter.PERSIST_GROUP.equals(groupType)) {
         updateCount = processBatchUpdateGroup(arr, groupType, groupName, wheres, orderBy, nativeQueries, con);
       } else {
-        for (int i = 0; i < arr.length; i++) {
-          updateCount += processUpdateGroup(arr[i], groupType, groupName, wheres, orderBy, nativeQueries, con);
+        for (T obj :  arr) {
+          updateCount += processUpdateGroup(obj, groupType, groupName, wheres, orderBy, nativeQueries, con);
         }
       }
     }

@@ -78,7 +78,7 @@ public class JdbcAttribute extends CpoAttribute implements java.io.Serializable,
     Class<?> paramClass = null;
     Logger localLogger = obj == null ? logger : LoggerFactory.getLogger(obj.getClass().getName());
 
-    if (getSetters().length == 0) {
+    if (getSetters().size() == 0) {
       throw new CpoException("There are no setters");
     }
 
@@ -103,18 +103,18 @@ public class JdbcAttribute extends CpoAttribute implements java.io.Serializable,
 
     }
 
-    for (int i = 0; i < getSetters().length; i++) {
+    for (Method setter : getSetters()) {
       try {
         if (jdbcTransform == null) {
           // Get the JavaSqlMethod for the class that we are passing in as the Setter parameter
-          jdbcMethod = JavaSqlMethods.getJavaSqlMethod(getSetters()[i].getParameterTypes()[0]);
+          jdbcMethod = JavaSqlMethods.getJavaSqlMethod(setter.getParameterTypes()[0]);
 
           // Get the getter for the ResultSet
           param = jdbcMethod.getRsGetter().invoke(rs, new Object[]{new Integer(idx)});
           paramClass = jdbcMethod.getJavaSqlMethodClass();
         }
-        if (getSetters()[i].getParameterTypes()[0].isAssignableFrom(paramClass) || isPrimitiveAssignableFrom(getSetters()[i].getParameterTypes()[0], paramClass)) {
-          getSetters()[i].invoke(obj, new Object[]{param});
+        if (setter.getParameterTypes()[0].isAssignableFrom(paramClass) || isPrimitiveAssignableFrom(setter.getParameterTypes()[0], paramClass)) {
+          setter.invoke(obj, new Object[]{param});
           return;
         }
       } catch (IllegalAccessException iae) {
@@ -133,7 +133,7 @@ public class JdbcAttribute extends CpoAttribute implements java.io.Serializable,
     Class<?> paramClass = null;
     Logger localLogger = obj == null ? logger : LoggerFactory.getLogger(obj.getClass().getName());
 
-    if (getSetters().length == 0) {
+    if (getSetters().size() == 0) {
       throw new CpoException("There are no setters");
     }
 
@@ -157,12 +157,12 @@ public class JdbcAttribute extends CpoAttribute implements java.io.Serializable,
       }
     }
 
-    for (int i = 0; i < getSetters().length; i++) {
+    for (Method setter : getSetters()) {
       try {
 
         if (jdbcTransform == null) {
           // Get the jdbcType for the class that we are passing in as the Setter parameter
-          jdbcMethod = JavaSqlMethods.getJavaSqlMethod(getSetters()[i].getParameterTypes()[0]);
+          jdbcMethod = JavaSqlMethods.getJavaSqlMethod(setter.getParameterTypes()[0]);
 
           // Get the getter for the CallableStatement
           // What we get from the cs will be set in the value object
@@ -170,8 +170,8 @@ public class JdbcAttribute extends CpoAttribute implements java.io.Serializable,
           paramClass = jdbcMethod.getJavaSqlMethodClass();
         }
 
-        if (getSetters()[i].getParameterTypes()[0].isAssignableFrom(paramClass)) {
-          getSetters()[i].invoke(obj, new Object[]{param});
+        if (setter.getParameterTypes()[0].isAssignableFrom(paramClass)) {
+          setter.invoke(obj, new Object[]{param});
           return;
         }
       } catch (IllegalAccessException iae) {
@@ -192,11 +192,11 @@ public class JdbcAttribute extends CpoAttribute implements java.io.Serializable,
     try {
       if (jdbcTransform != null) {
         localLogger.info("Calling Transform Out:" + jdbcTransform.getClass().getName());
-        param = transformOut(jcsf, getGetters()[0].invoke(obj, (Object[]) null));
+        param = transformOut(jcsf, getGetters().get(0).invoke(obj, (Object[]) null));
         jdbcMethod = JavaSqlMethods.getJavaSqlMethod(transformCSOutMethod.getReturnType());
       } else {
-        jdbcMethod = JavaSqlMethods.getJavaSqlMethod(getGetters()[0].getReturnType());
-        param = getGetters()[0].invoke(obj, (Object[]) null);
+        jdbcMethod = JavaSqlMethods.getJavaSqlMethod(getGetters().get(0).getReturnType());
+        param = getGetters().get(0).invoke(obj, (Object[]) null);
       }
       int length = 0;
 
@@ -235,21 +235,21 @@ public class JdbcAttribute extends CpoAttribute implements java.io.Serializable,
     try {
       if (jdbcTransform != null) {
         localLogger.info("Calling Transform Out:" + jdbcTransform.getClass().getName());
-        param = transformOut(jpsf, getGetters()[0].invoke(obj, (Object[]) null));
+        param = transformOut(jpsf, getGetters().get(0).invoke(obj, (Object[]) null));
         jdbcMethod = JavaSqlMethods.getJavaSqlMethod(transformPSOutMethod.getReturnType());
         if (jdbcMethod == null) {
           throw new CpoException("Error Retrieveing Jdbc Method for type: " + transformPSOutMethod.getReturnType().getName());
         }
       } else {
-        jdbcMethod = JavaSqlMethods.getJavaSqlMethod(getGetters()[0].getReturnType());
-        param = getGetters()[0].invoke(obj, (Object[]) null);
+        jdbcMethod = JavaSqlMethods.getJavaSqlMethod(getGetters().get(0).getReturnType());
+        param = getGetters().get(0).invoke(obj, (Object[]) null);
         if (jdbcMethod == null) {
           localLogger.debug("jdbcMethod is null");
-          throw new CpoException("Error Retrieveing Jdbc Method for type: " + getGetters()[0].getReturnType().getName());
+          throw new CpoException("Error Retrieveing Jdbc Method for type: " + getGetters().get(0).getReturnType().getName());
         }
       }
     } catch (Exception e) {
-      msg = "Error Invoking Getter Method: " + getGetters()[0].getReturnType().getName() + " " + getGetters()[0].getName() + "():" + ExceptionHelper.getLocalizedMessage(e);
+      msg = "Error Invoking Getter Method: " + getGetters().get(0).getReturnType().getName() + " " + getGetters().get(0).getName() + "():" + ExceptionHelper.getLocalizedMessage(e);
     }
 
     if (msg == null) {

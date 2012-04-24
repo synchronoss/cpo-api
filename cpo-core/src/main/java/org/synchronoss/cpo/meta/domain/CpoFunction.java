@@ -74,7 +74,7 @@ public class CpoFunction extends CpoFunctionBean {
       if (argument != null) {
         try {
           attribute = argument.getAttribute();
-          c = attribute.getGetters()[0].getReturnType();
+          c = attribute.getGetters().get(0).getReturnType();
           // TODO: make uncomment the following line and make work
 //          type = attribute.getJavaSqlType();
           if (c != null) {

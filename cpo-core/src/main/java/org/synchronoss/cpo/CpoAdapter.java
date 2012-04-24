@@ -1725,58 +1725,6 @@ public interface CpoAdapter extends java.io.Serializable {
         Collection<CpoOrderBy> orderBy, Collection<CpoNativeQuery> nativeQueries, T result, int queueSize) throws CpoException;
 
     /**
-     * Allows you to perform a series of object interactions with the database. This method
-     * pre-dates CpoTrxAdapter and can be used without a programmer needing to remember to call
-     * commit() or rollback(). 
-     * 
-     * <pre>Example:<code>
-     * 
-     * class SomeObject so = null;
-     * class CpoAdapter cpo = null;
-     * 
-     *  try {
-     *    cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));
-     *  } catch (CpoException ce) {
-     *    // Handle the error
-     *    cpo = null;
-     *  }
-     *  
-     *  if (cpo!=null) {
-     *    ArrayList al = new ArrayList();
-     *    so = new SomeObject();
-     *    so.setId(1);
-     *    so.setName("SomeName");
-     *    CpoObject cobj = new CpoObject(CpoAdapter.CREATE,"MyCreate",so);
-     *    al.add(cobj);
-     *    so = new SomeObject();
-     *    so.setId(3);
-     *    so.setName("New Name");
-     *    CpoObject cobj = new CpoObject(CpoAdapter.PERSIST,"MyPersist",so);
-     *    al.add(cobj);
-     *    
-     *    try{
-     *      cpo.transactObjects(al);
-     *    } catch (CpoException ce) {
-     *      // Handle the error
-     *    }
-     *  }
-     *</code>
-     *</pre>
-     * 
-     * 
-     * @param coll This is a collection of CpoObject objects that have been defined within  the metadata of
-     *     the datasource. If the class is not defined an exception will be thrown.
-	 *
-     * @return The number of objects updated in the datasource
-     *
-     * @throws CpoException Thrown if there are errors accessing the datasource
-     * 
-     * @deprecated
-     */
-    @Deprecated
-   public <T> long transactObjects(Collection<CpoObject<T>> coll) throws CpoException;
-
-    /**
      * Update the Object in the datasource. The CpoAdapter will check to see if the object
      * exists in the datasource. If it exists then the object will be updated. If it does not exist,
      * an exception will be thrown

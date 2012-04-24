@@ -127,38 +127,4 @@ public class RollbackTest extends TestCase {
         }
     }
 
-    
-    /**
-     * DOCUMENT ME!
-     */
-    public void testRollbackTransactObjects() {
-        String method = "testRollbackProcessUpdateCollection:";
-        ValueObject vo = new ValueObject(2);
-        ValueObject vo2 = new ValueObject(1);
-        ArrayList<CpoObject<ValueObject>> al = new ArrayList<CpoObject<ValueObject>>();
-        
-        al.add(new CpoObject<ValueObject>(CpoAdapter.CREATE, "TestRollback", vo));
-        al.add(new CpoObject<ValueObject>(CpoAdapter.CREATE, "TestRollback", vo2));
-        
-        try{
-            jdbcIdo_.transactObjects(al);
-            fail(method+"Transact should have thrown an exception");
-        } catch (Exception e) {
-        	
-        	try{
-            	e.getMessage();
-            	e.printStackTrace();
-            	
-            	new CpoException("Creating this to test CpoException");
-
-	            ValueObject rvo = jdbcIdo_.retrieveObject(vo);
-	            assertNull(method+"Transact Object did not rollback", rvo);
-        	}catch (Exception e2) {
-                e2.printStackTrace();
-                fail(method+e.getMessage());
-        	}
-
-        }
-    }
-
 }

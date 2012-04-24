@@ -1274,15 +1274,6 @@ public class CpoAdapterBean
         return cpoAdapter.newWhere(logical, attr,comp,value, not);
     }
 
-    /**
-     * @deprecated
-     */
-    @Deprecated
-  @Override
-    public <T> long transactObjects(Collection<CpoObject<T>> coll) throws CpoException{
-        return cpoAdapter.transactObjects(coll);
-    }
-    
   @Override
     public CpoTrxAdapter getCpoTrxAdapter() throws CpoException {
     	throw new CpoException("Not Supported in Session Bean");

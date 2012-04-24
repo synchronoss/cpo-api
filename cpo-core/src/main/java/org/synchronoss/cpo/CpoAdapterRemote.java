@@ -580,21 +580,6 @@ public interface CpoAdapterRemote extends java.io.Serializable {
         Collection<? extends CpoOrderBy> orderBy) throws CpoException, RemoteException;
 
     /**
-     * DOCUMENT ME!
-     *
-     * @param coll DOCUMENT ME!
-     *
-     * @return DOCUMENT ME!
-     *
-     * @throws CpoException Thrown if there are errors accessing the datasource
-     * @throws RemoteException Thrown if using dataPersist as an EJB and an Error
-     *                         occurs.
-     * @deprecated
-     */
-    @Deprecated
-    public <T> long transactObjects(Collection<CpoObject<T>> coll) throws CpoException, RemoteException;
-
-    /**
      * Update the Object in the datasource. The CpoAdapter will check to see if the object
      * exists in the datasource. If it exists then the object will be updated. If it does not exist,
      * an exception will be thrown

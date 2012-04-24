@@ -282,7 +282,7 @@ public class WhereTest extends TestCase {
       wheres.add(cw);
       Collection<ValueObject> col = jdbcIdo_.retrieveBeans("TestWhereRetrieve", valObj, wheres, null);
 
-      assertTrue("Col size is " + col.size(), col.size() == 0);
+      assertTrue("Col size is " + col.size(), col.isEmpty());
 
       cw = jdbcIdo_.newWhere();
       cw1 = jdbcIdo_.newWhere(CpoWhere.LOGIC_NONE, "attrChar", CpoWhere.COMP_ISNULL, null);

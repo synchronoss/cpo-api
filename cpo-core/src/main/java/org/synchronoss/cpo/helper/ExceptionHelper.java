@@ -1,12 +1,23 @@
 /*
- *  Copyright 2008-2010. X-Factor Communications, 3 Empire Blvd
- *  South Hackensack, New Jersey, 07606, U.S.A.  All Rights Reserved.
- * 
- *  This source code is the confidential and proprietary information
- *  of X-Factor Communications ("Confidential Information"). You shall
- *  not disclose such Confidential Information and shall use it only in
- *  accordance with the terms of the license agreement you entered into
- *  with X-Factor Communications.
+ *  Copyright (C) 2003-2012 David E. Berry
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License as published by the Free Software Foundation; either
+ *  version 2.1 of the License, or (at your option) any later version.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ *
+ *  A copy of the GNU Lesser General Public License may also be found at 
+ *  http://www.gnu.org/licenses/lgpl.txt
+ *
  */
 
 package org.synchronoss.cpo.helper;

@@ -1,7 +1,5 @@
-/* 
- * 	CassandraCpoFactory.java
- *
- *  Copyright (C) 2006  David E. Berry
+/*
+ *  Copyright (C) 2003-2012 David E. Berry
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -21,6 +19,7 @@
  *  http://www.gnu.org/licenses/lgpl.txt
  *
  */
+
 package org.synchronoss.cpo.cassandra;
 
 import java.util.Enumeration;

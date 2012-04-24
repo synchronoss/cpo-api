@@ -96,7 +96,7 @@ public interface CpoAdapterRemote extends java.io.Serializable {
    * method creates and stores the object in the datasource
    *
    * @param name The
-   * <code>String</code> name of the CREATE Query group that will be used to create the object in the datasource.
+   * <code>String</code> name of the CREATE Function Group that will be used to create the object in the datasource.
    * <code>null</code> signifies that the default rules will be used.
    * @param obj This is an object that has been defined within the metadata of the datasource. If the class is not
    * defined an exception will be thrown.
@@ -140,7 +140,7 @@ public interface CpoAdapterRemote extends java.io.Serializable {
    * processing the remainder of the collection, and if supported, rollback all the objects created thus far.
    *
    * @param name The
-   * <code>String</code> name of the CREATE Query group that will be used to create the object in the datasource.
+   * <code>String</code> name of the CREATE Function Group that will be used to create the object in the datasource.
    * <code>null</code> signifies that the default rules will be used.
    * @param coll This is a collection of objects that have been defined within the metadata of the datasource. If the
    * class is not defined an exception will be thrown.
@@ -172,7 +172,7 @@ public interface CpoAdapterRemote extends java.io.Serializable {
    * stores the object in the datasource
    *
    * @param name The
-   * <code>String</code> name of the DELETE Query group that will be used to create the object in the datasource.
+   * <code>String</code> name of the DELETE Function Group that will be used to create the object in the datasource.
    * <code>null</code> signifies that the default rules will be used.
    * @param obj This is an object that has been defined within the metadata of the datasource. If the class is not
    * defined an exception will be thrown. If the object does not exist in the datasource an exception will be thrown.
@@ -211,7 +211,7 @@ public interface CpoAdapterRemote extends java.io.Serializable {
    * processing the remainder of the collection, and if supported, rollback all the objects deleted thus far.
    *
    * @param name The
-   * <code>String</code> name of the DELETE Query group that will be used to create the object in the datasource.
+   * <code>String</code> name of the DELETE Function Group that will be used to create the object in the datasource.
    * <code>null</code> signifies that the default rules will be used.
    * @param coll This is a collection of objects that have been defined within the metadata of the datasource. If the
    * class is not defined an exception will be thrown.
@@ -266,7 +266,7 @@ public interface CpoAdapterRemote extends java.io.Serializable {
    * in the datasource. If the object does not exist, an exception will be thrown
    *
    * @param name The
-   * <code>String</code> name of the EXECUTE Query group that will be used to create the object in the datasource.
+   * <code>String</code> name of the EXECUTE Function Group that will be used to create the object in the datasource.
    * <code>null</code> signifies that the default rules will be used.
    * @param criteria This is an object that has been defined within the metadata of the datasource. If the class is not
    * defined an exception will be thrown. If the object does not exist in the datasource, an exception will be thrown.
@@ -300,7 +300,7 @@ public interface CpoAdapterRemote extends java.io.Serializable {
    * The CpoAdapter will check to see if this object exists in the datasource.
    *
    * @param name The
-   * <code>String</code> name of the EXISTS Query group that will be used to create the object in the datasource.
+   * <code>String</code> name of the EXISTS Function Group that will be used to create the object in the datasource.
    * <code>null</code> signifies that the default rules will be used.
    * @param obj This is an object that has been defined within the metadata of the datasource. If the class is not
    * defined an exception will be thrown. This object will be searched for inside the datasource.
@@ -408,7 +408,7 @@ public interface CpoAdapterRemote extends java.io.Serializable {
    * If it exists, the object is updated in the datasource If the object does not exist, then it is created in the
    * datasource. This method stores the object in the datasource
    *
-   * @param name The name which identifies which EXISTS, INSERT, and UPDATE Query groups to execute to persist the
+   * @param name The name which identifies which EXISTS, INSERT, and UPDATE Function Groups to execute to persist the
    * object.
    * @param obj This is an object that has been defined within the metadata of the datasource. If the class is not
    * defined an exception will be thrown.
@@ -433,7 +433,7 @@ public interface CpoAdapterRemote extends java.io.Serializable {
    *
    * @param coll This is a collection of objects that have been defined within the metadata of the datasource. If the
    * class is not defined an exception will be thrown.
-   * @param name The name which identifies which EXISTS, INSERT, and UPDATE Query groups to execute to persist the
+   * @param name The name which identifies which EXISTS, INSERT, and UPDATE Function Groups to execute to persist the
    * object.
    *
    * @return DOCUMENT ME!
@@ -455,7 +455,7 @@ public interface CpoAdapterRemote extends java.io.Serializable {
    * as one transaction, meaning that if one of the objects fail being inserted or updated in the datasource then the
    * entire collection will be rolled back.
    *
-   * @param name The name which identifies which EXISTS, INSERT, and UPDATE Query groups to execute to persist the
+   * @param name The name which identifies which EXISTS, INSERT, and UPDATE Function Groups to execute to persist the
    * object.
    * @param coll This is a collection of objects that have been defined within the metadata of the datasource. If the
    * class is not defined an exception will be thrown.
@@ -473,12 +473,12 @@ public interface CpoAdapterRemote extends java.io.Serializable {
 
   /**
    * Retrieves the Object from the datasource. The assumption is that the object exists in the datasource. If the
-   * retrieve query defined for this objects returns more than one row, an exception will be thrown.
+   * retrieve function defined for this objects returns more than one row, an exception will be thrown.
    *
    * @param obj This is an object that has been defined within the metadata of the datasource. If the class is not
    * defined an exception will be thrown. If the object does not exist in the datasource, an exception will be thrown.
    * The input object is used to specify the search criteria, the output object is populated with the results of the
-   * query.
+   * function.
    *
    * @return DOCUMENT ME!
    *
@@ -490,13 +490,13 @@ public interface CpoAdapterRemote extends java.io.Serializable {
 
   /**
    * Retrieves the Object from the datasource. The assumption is that the object exists in the datasource. If the
-   * retrieve query defined for this objects returns more than one row, an exception will be thrown.
+   * retrieve function defined for this objects returns more than one row, an exception will be thrown.
    *
    * @param name DOCUMENT ME!
    * @param obj This is an object that has been defined within the metadata of the datasource. If the class is not
    * defined an exception will be thrown. If the object does not exist in the datasource, an exception will be thrown.
    * The input object is used to specify the search criteria, the output object is populated with the results of the
-   * query.
+   * function.
    * @return DOCUMENT ME!
    *
    * @throws CpoException Thrown if there are errors accessing the datasource
@@ -507,13 +507,13 @@ public interface CpoAdapterRemote extends java.io.Serializable {
 
   /**
    * Retrieves the Object from the datasource. The assumption is that the object exists in the datasource. If the
-   * retrieve query defined for this objects returns more than one row, an exception will be thrown.
+   * retrieve function defined for this objects returns more than one row, an exception will be thrown.
    *
    * @param name DOCUMENT ME!
    * @param obj This is an object that has been defined within the metadata of the datasource. If the class is not
    * defined an exception will be thrown. If the object does not exist in the datasource, an exception will be thrown.
    * The input object is used to specify the search criteria, the output object is populated with the results of the
-   * query.
+   * function.
    * @return DOCUMENT ME!
    *
    * @throws CpoException Thrown if there are errors accessing the datasource
@@ -564,7 +564,7 @@ public interface CpoAdapterRemote extends java.io.Serializable {
    * exists then the object will be updated. If it does not exist, an exception will be thrown
    *
    * @param name The
-   * <code>String</code> name of the UPDATE Query group that will be used to create the object in the datasource.
+   * <code>String</code> name of the UPDATE Function Group that will be used to create the object in the datasource.
    * <code>null</code> signifies that the default rules will be used.
    * @param obj This is an object that has been defined within the metadata of the datasource. If the class is not
    * defined an exception will be thrown.
@@ -600,7 +600,7 @@ public interface CpoAdapterRemote extends java.io.Serializable {
    * collection will be rolled back, if supported by the datasource.
    *
    * @param name The
-   * <code>String</code> name of the UPDATE Query group that will be used to create the object in the datasource.
+   * <code>String</code> name of the UPDATE Function Group that will be used to create the object in the datasource.
    * <code>null</code> signifies that the default rules will be used.
    * @param coll This is a collection of objects that have been defined within the metadata of the datasource. If the
    * class is not defined an exception will be thrown.

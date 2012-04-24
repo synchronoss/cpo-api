@@ -73,7 +73,7 @@ public class CpoClassSourceGenerator implements MetaVisitor {
     source.append("  /* Attribute name statics */\n");
     source.append(attributeStatics);
     source.append("\n");
-    source.append("  /* Query group statics */\n");
+    source.append("  /* Function group statics */\n");
     source.append(functionGroupStatics);
     source.append("\n");
     source.append("  /* Properties */\n");

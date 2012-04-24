@@ -117,21 +117,21 @@ public class CpoAdapterBean
    * Creates the Object in the datasource. The assumption is that the object does not exist in the datasource. This
    * method creates and stores the object in the datasource
    *
-   * @param name The String name of the CREATE Query group that will be used to create the object in the datasource.
+   * @param name The String name of the CREATE Function Group that will be used to create the object in the datasource.
    * null signifies that the default rules will be used which is equivalent to insertObject(Object obj);
    * @param obj This is an object that has been defined within the metadata of the datasource. If the class is not
    * defined an exception will be thrown.
    * @param wheres A collection of CpoWhere beans that define the constraints that should be used when retrieving beans
    * @param orderBy The CpoOrderBy bean that defines the order in which beans should be returned
-   * @param nativeQueries Native query text that will be used to augment the query text stored in the meta data. This
+   * @param nativeExpressions Native expression that will be used to augment the expression stored in the meta data. This
    * text will be embedded at run-time
    * @return The number of objects created in the datasource
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
   @Override
   public <T> long insertObject(String name, T obj, Collection<CpoWhere> wheres,
-          Collection<CpoOrderBy> orderBy, Collection<CpoNativeQuery> nativeQueries) throws CpoException {
-    return cpoAdapter.insertObject(name, obj, wheres, orderBy, nativeQueries);
+          Collection<CpoOrderBy> orderBy, Collection<CpoNativeFunction> nativeExpressions) throws CpoException {
+    return cpoAdapter.insertObject(name, obj, wheres, orderBy, nativeExpressions);
   }
 
   /**
@@ -177,31 +177,31 @@ public class CpoAdapterBean
    * This means that if one of the objects fail being created in the datasource then the CpoAdapter should stop
    * processing the remainder of the collection, and if supported, rollback all the objects created thus far.
    *
-   * @param name The String name of the CREATE Query group that will be used to create the object in the datasource.
+   * @param name The String name of the CREATE Function Group that will be used to create the object in the datasource.
    * null signifies that the default rules will be used.
    * @param coll This is a collection of objects that have been defined within the metadata of the datasource. If the
    * class is not defined an exception will be thrown.
    * @param wheres A collection of CpoWhere beans that define the constraints that should be used when retrieving beans
    * @param orderBy The CpoOrderBy bean that defines the order in which beans should be returned
-   * @param nativeQueries Native query text that will be used to augment the query text stored in the meta data. This
+   * @param nativeExpressions Native expression that will be used to augment the expression stored in the meta data. This
    * text will be embedded at run-time
    * @return The number of objects created in the datasource
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
   @Override
   public <T> long insertObjects(String name, Collection<T> coll, Collection<CpoWhere> wheres,
-          Collection<CpoOrderBy> orderBy, Collection<CpoNativeQuery> nativeQueries) throws CpoException {
-    return cpoAdapter.insertObject(name, coll, wheres, orderBy, nativeQueries);
+          Collection<CpoOrderBy> orderBy, Collection<CpoNativeFunction> nativeExpressions) throws CpoException {
+    return cpoAdapter.insertObject(name, coll, wheres, orderBy, nativeExpressions);
   }
 
   /**
    * Retrieves the bean from the datasource. The assumption is that the bean exists in the datasource.
    *
-   * If the retrieve query defined for this beans returns more than one row, an exception will be thrown.
+   * If the retrieve function defined for this beans returns more than one row, an exception will be thrown.
    *
    * @param bean This is an bean that has been defined within the metadata of the datasource. If the class is not
    * defined an exception will be thrown. If the bean does not exist in the datasource, an exception will be thrown. The
-   * input bean is used to specify the search criteria, the output bean is populated with the results of the query.
+   * input bean is used to specify the search criteria, the output bean is populated with the results of the function.
    */
   @Override
   public <T> T retrieveBean(T bean) throws CpoException {
@@ -211,12 +211,12 @@ public class CpoAdapterBean
   /**
    * Retrieves the bean from the datasource. The assumption is that the bean exists in the datasource.
    *
-   * If the retrieve query defined for this beans returns more than one row, an exception will be thrown.
+   * If the retrieve function defined for this beans returns more than one row, an exception will be thrown.
    *
    * @param name The the context name for which group of operations will be called to process this retrieve.
    * @param bean This is an bean that has been defined within the metadata of the datasource. If the class is not
    * defined an exception will be thrown. If the bean does not exist in the datasource, an exception will be thrown. The
-   * input bean is used to specify the search criteria, the output bean is populated with the results of the query.
+   * input bean is used to specify the search criteria, the output bean is populated with the results of the function.
    */
   @Override
   public <T> T retrieveBean(String name, T bean) throws CpoException {
@@ -225,15 +225,15 @@ public class CpoAdapterBean
 
   /**
    * Retrieves the bean from the datasource. The assumption is that the bean exists in the datasource. If the retrieve
-   * query defined for this beans returns more than one row, an exception will be thrown.
+   * function defined for this beans returns more than one row, an exception will be thrown.
    *
    * @param name DOCUMENT ME!
    * @param bean This is an bean that has been defined within the metadata of the datasource. If the class is not
    * defined an exception will be thrown. If the bean does not exist in the datasource, an exception will be thrown. The
-   * input bean is used to specify the search criteria, the output bean is populated with the results of the query.
+   * input bean is used to specify the search criteria, the output bean is populated with the results of the function.
    * @param wheres A collection of CpoWhere beans that define the constraints that should be used when retrieving beans
    * @param orderBy The CpoOrderBy bean that defines the order in which beans should be returned
-   * @param nativeQueries Native query text that will be used to augment the query text stored in the meta data. This
+   * @param nativeExpressions Native expression that will be used to augment the expression stored in the meta data. This
    * text will be embedded at run-time
    * @return An bean of the same type as the result parameter that is filled in as specified the metadata for the
    * retireve.
@@ -241,15 +241,15 @@ public class CpoAdapterBean
    */
   @Override
   public <T> T retrieveBean(String name, T bean, Collection<CpoWhere> wheres,
-          Collection<CpoOrderBy> orderBy, Collection<CpoNativeQuery> nativeQueries)
+          Collection<CpoOrderBy> orderBy, Collection<CpoNativeFunction> nativeExpressions)
           throws CpoException {
-    return (cpoAdapter.retrieveBean(name, bean, wheres, orderBy, nativeQueries));
+    return (cpoAdapter.retrieveBean(name, bean, wheres, orderBy, nativeExpressions));
   }
 
   /**
    * Retrieves the bean from the datasource. The assumption is that the bean exists in the datasource.
    *
-   * If the retrieve query defined for this beans returns more than one row, an exception will be thrown.
+   * If the retrieve function defined for this beans returns more than one row, an exception will be thrown.
    *
    * @param name The the context name for which group of operations will be called to process this retrieve.
    * @param criteria This is an bean that has been defined within the metadata of the datasource. If the class is not
@@ -267,7 +267,7 @@ public class CpoAdapterBean
   /**
    * Retrieves the bean from the datasource. The assumption is that the bean exists in the datasource.
    *
-   * If the retrieve query defined for this beans returns more than one row, an exception will be thrown.
+   * If the retrieve function defined for this beans returns more than one row, an exception will be thrown.
    *
    * @param name The the context name for which group of operations will be called to process this retrieve.
    * @param criteria This is an bean that has been defined within the metadata of the datasource. If the class is not
@@ -278,8 +278,8 @@ public class CpoAdapterBean
    * This bean is used to specify the bean type that will be returned in the collection.
    */
   @Override
-  public <T, C> T retrieveBean(String name, C criteria, T result, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeQuery> nativeQuery) throws CpoException {
-    return cpoAdapter.retrieveBean(name, criteria, result, wheres, orderBy, nativeQuery);
+  public <T, C> T retrieveBean(String name, C criteria, T result, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeFunction> nativeFunction) throws CpoException {
+    return cpoAdapter.retrieveBean(name, criteria, result, wheres, orderBy, nativeFunction);
   }
 
   /**
@@ -438,8 +438,8 @@ public class CpoAdapterBean
    * same type as the bean that was passed in. If no beans match the criteria, an empty collection will be returned
    */
   @Override
-  public <T, C> List<T> retrieveBeans(String name, C criteria, T result, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeQuery> nativeQuery) throws CpoException {
-    return cpoAdapter.retrieveBeans(name, criteria, result, wheres, orderBy, nativeQuery);
+  public <T, C> List<T> retrieveBeans(String name, C criteria, T result, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeFunction> nativeFunction) throws CpoException {
+    return cpoAdapter.retrieveBeans(name, criteria, result, wheres, orderBy, nativeFunction);
   }
 
   /**
@@ -455,7 +455,7 @@ public class CpoAdapterBean
    * This bean is used to specify the bean type that will be returned in the collection.
    * @param wheres A collection of CpoWhere beans that define the constraints that should be used when retrieving beans
    * @param orderBy The CpoOrderBy bean that defines the order in which beans should be returned
-   * @param nativeQueries Native query text that will be used to augment the query text stored in the meta data. This
+   * @param nativeExpressions Native expression that will be used to augment the expression stored in the meta data. This
    * text will be embedded at run-time
    * @param the queue size of the buffer that it uses to send the beans from the producer to the consumer.
    * @return A CpoResultSet that can be iterated through
@@ -464,19 +464,19 @@ public class CpoAdapterBean
    */
   @Override
   public <T, C> CpoResultSet<T> retrieveBeans(String name, C criteria, T result, Collection<CpoWhere> wheres,
-          Collection<CpoOrderBy> orderBy, Collection<CpoNativeQuery> nativeQueries, int queueSize) throws CpoException {
-    return cpoAdapter.retrieveBeans(name, criteria, result, wheres, orderBy, nativeQueries, queueSize);
+          Collection<CpoOrderBy> orderBy, Collection<CpoNativeFunction> nativeExpressions, int queueSize) throws CpoException {
+    return cpoAdapter.retrieveBeans(name, criteria, result, wheres, orderBy, nativeExpressions, queueSize);
   }
 
   /**
    * Retrieves the Object from the datasource. The assumption is that the object exists in the datasource.
    *
-   * If the retrieve query defined for this objects returns more than one row, an exception will be thrown.
+   * If the retrieve function defined for this objects returns more than one row, an exception will be thrown.
    *
    * @param obj This is an object that has been defined within the metadata of the datasource. If the class is not
    * defined an exception will be thrown. If the object does not exist in the datasource, an exception will be thrown.
    * The input object is used to specify the search criteria, the output object is populated with the results of the
-   * query.
+   * function.
    *
    * @deprecated use retrieveBean
    */
@@ -489,13 +489,13 @@ public class CpoAdapterBean
   /**
    * Retrieves the Object from the datasource. The assumption is that the object exists in the datasource.
    *
-   * If the retrieve query defined for this objects returns more than one row, an exception will be thrown.
+   * If the retrieve function defined for this objects returns more than one row, an exception will be thrown.
    *
    * @param name The the context name for which group of operations will be called to process this retrieve.
    * @param obj This is an object that has been defined within the metadata of the datasource. If the class is not
    * defined an exception will be thrown. If the object does not exist in the datasource, an exception will be thrown.
    * The input object is used to specify the search criteria, the output object is populated with the results of the
-   * query.
+   * function.
    *
    * @deprecated use retrieveBean
    */
@@ -508,7 +508,7 @@ public class CpoAdapterBean
   /**
    * Retrieves the Object from the datasource. The assumption is that the object exists in the datasource.
    *
-   * If the retrieve query defined for this objects returns more than one row, an exception will be thrown.
+   * If the retrieve function defined for this objects returns more than one row, an exception will be thrown.
    *
    * @param name The the context name for which group of operations will be called to process this retrieve.
    * @param criteria This is an object that has been defined within the metadata of the datasource. If the class is not
@@ -529,7 +529,7 @@ public class CpoAdapterBean
   /**
    * Retrieves the Object from the datasource. The assumption is that the object exists in the datasource.
    *
-   * If the retrieve query defined for this objects returns more than one row, an exception will be thrown.
+   * If the retrieve function defined for this objects returns more than one row, an exception will be thrown.
    *
    * @param name The the context name for which group of operations will be called to process this retrieve.
    * @param criteria This is an object that has been defined within the metadata of the datasource. If the class is not
@@ -543,8 +543,8 @@ public class CpoAdapterBean
    */
   @Deprecated
   @Override
-  public <T, C> T retrieveObject(String name, C criteria, T result, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeQuery> nativeQuery) throws CpoException {
-    return cpoAdapter.retrieveBean(name, criteria, result, wheres, orderBy, nativeQuery);
+  public <T, C> T retrieveObject(String name, C criteria, T result, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeFunction> nativeFunction) throws CpoException {
+    return cpoAdapter.retrieveBean(name, criteria, result, wheres, orderBy, nativeFunction);
   }
 
   /**
@@ -587,8 +587,8 @@ public class CpoAdapterBean
    */
   @Deprecated
   @Override
-  public <T, C> Collection<T> retrieveObjects(String name, C criteria, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeQuery> nativeQuery, T result) throws CpoException {
-    return cpoAdapter.retrieveBeans(name, criteria, result, wheres, orderBy, nativeQuery);
+  public <T, C> Collection<T> retrieveObjects(String name, C criteria, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeFunction> nativeFunction, T result) throws CpoException {
+    return cpoAdapter.retrieveBeans(name, criteria, result, wheres, orderBy, nativeFunction);
   }
 
   /**
@@ -610,7 +610,7 @@ public class CpoAdapterBean
    * @param wheres A collection of CpoWhere objects that define the constraints that should be used when retrieving
    * objects
    * @param orderBy The CpoOrderBy object that defines the order in which objects should be returned
-   * @param nativeQueries Native query text that will be used to augment the query text stored in the meta data. This
+   * @param nativeExpressions Native expression that will be used to augment the expression stored in the meta data. This
    * text will be embedded at run-time
    * @param objectBufferSize the maximum number of objects that the Iterator is allowed to cache. Once reached, the CPO
    * framework will halt processing records from the datasource.
@@ -624,8 +624,8 @@ public class CpoAdapterBean
   @Deprecated
   @Override
   public <T, C> CpoResultSet<T> retrieveObjects(String name, C criteria, Collection<CpoWhere> wheres,
-          Collection<CpoOrderBy> orderBy, Collection<CpoNativeQuery> nativeQuery, T result, int queueSize) throws CpoException {
-    return cpoAdapter.retrieveBeans(name, criteria, result, wheres, orderBy, nativeQuery, queueSize);
+          Collection<CpoOrderBy> orderBy, Collection<CpoNativeFunction> nativeFunction, T result, int queueSize) throws CpoException {
+    return cpoAdapter.retrieveBeans(name, criteria, result, wheres, orderBy, nativeFunction, queueSize);
   }
 
   /**
@@ -658,20 +658,20 @@ public class CpoAdapterBean
    * Update the Object in the datasource. The CpoAdapter will check to see if the object exists in the datasource. If it
    * exists then the object will be updated. If it does not exist, an exception will be thrown
    *
-   * @param name The String name of the UPDATE Query group that will be used to create the object in the datasource.
+   * @param name The String name of the UPDATE Function Group that will be used to create the object in the datasource.
    * null signifies that the default rules will be used.
    * @param obj This is an object that has been defined within the metadata of the datasource. If the class is not
    * defined an exception will be thrown.
-   * @param wheres A collection of CpoWhere objects to be used by the query
-   * @param orderBy A collection of CpoOrderBy objects to be used by the query
-   * @param nativeQueries A collection of CpoNativeQuery objects to be used by the query
+   * @param wheres A collection of CpoWhere objects to be used by the function
+   * @param orderBy A collection of CpoOrderBy objects to be used by the function
+   * @param nativeExpressions A collection of CpoNativeFunction objects to be used by the function
    * @return The number of objects updated in the datasource
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
   @Override
   public <T> long updateObject(String name, T obj, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy,
-          Collection<CpoNativeQuery> nativeQueries) throws CpoException {
-    return cpoAdapter.updateObject(name, obj, wheres, orderBy, nativeQueries);
+          Collection<CpoNativeFunction> nativeExpressions) throws CpoException {
+    return cpoAdapter.updateObject(name, obj, wheres, orderBy, nativeExpressions);
   }
 
   /**
@@ -716,20 +716,20 @@ public class CpoAdapterBean
    * treated as one transaction, meaning that if one of the objects fail being updated in the datasource then the entire
    * collection will be rolled back, if supported by the datasource.
    *
-   * @param name The String name of the UPDATE Query group that will be used to create the object in the datasource.
+   * @param name The String name of the UPDATE Function Group that will be used to create the object in the datasource.
    * null signifies that the default rules will be used.
    * @param coll This is a collection of objects that have been defined within the metadata of the datasource. If the
    * class is not defined an exception will be thrown.
-   * @param wheres A collection of CpoWhere objects to be used by the query
-   * @param orderBy A collection of CpoOrderBy objects to be used by the query
-   * @param nativeQueries A collection of CpoNativeQuery objects to be used by the query
+   * @param wheres A collection of CpoWhere objects to be used by the function
+   * @param orderBy A collection of CpoOrderBy objects to be used by the function
+   * @param nativeExpressions A collection of CpoNativeFunction objects to be used by the function
    * @return The number of objects updated in the datasource
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
   @Override
-  public <T> long updateObjects(String name, Collection<T> coll, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeQuery> nativeQueries)
+  public <T> long updateObjects(String name, Collection<T> coll, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeFunction> nativeExpressions)
           throws CpoException {
-    return cpoAdapter.updateObject(name, coll, wheres, orderBy, nativeQueries);
+    return cpoAdapter.updateObject(name, coll, wheres, orderBy, nativeExpressions);
   }
 
   /**
@@ -762,21 +762,21 @@ public class CpoAdapterBean
    * Removes the Object from the datasource. The assumption is that the object exists in the datasource. This method
    * stores the object in the datasource
    *
-   * @param name The String name of the DELETE Query group that will be used to create the object in the datasource.
+   * @param name The String name of the DELETE Function Group that will be used to create the object in the datasource.
    * null signifies that the default rules will be used.
    * @param obj This is an object that has been defined within the metadata of the datasource. If the class is not
    * defined an exception will be thrown. If the object does not exist in the datasource an exception will be thrown.
    * @param wheres A collection of CpoWhere beans that define the constraints that should be used when retrieving beans
    * @param orderBy The CpoOrderBy bean that defines the order in which beans should be returned
-   * @param nativeQueries Native query text that will be used to augment the query text stored in the meta data. This
+   * @param nativeExpressions Native expression that will be used to augment the expression stored in the meta data. This
    * text will be embedded at run-time
    * @return The number of objects deleted from the datasource
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
   @Override
   public <T> long deleteObject(String name, T obj, Collection<CpoWhere> wheres,
-          Collection<CpoOrderBy> orderBy, Collection<CpoNativeQuery> nativeQueries) throws CpoException {
-    return cpoAdapter.deleteObject(name, obj, wheres, orderBy, nativeQueries);
+          Collection<CpoOrderBy> orderBy, Collection<CpoNativeFunction> nativeExpressions) throws CpoException {
+    return cpoAdapter.deleteObject(name, obj, wheres, orderBy, nativeExpressions);
   }
 
   /**
@@ -819,22 +819,22 @@ public class CpoAdapterBean
    * This means that if one of the objects fail being deleted in the datasource then the CpoAdapter should stop
    * processing the remainder of the collection, and if supported, rollback all the objects deleted thus far.
    *
-   * @param name The String name of the DELETE Query group that will be used to create the object in the datasource.
+   * @param name The String name of the DELETE Function Group that will be used to create the object in the datasource.
    * null signifies that the default rules will be used.
    * @param coll This is a collection of objects that have been defined within the metadata of the datasource. If the
    * class is not defined an exception will be thrown.
    * @param wheres A collection of CpoWhere beans that define the constraints that should be used when retrieving beans
    * @param orderBy The CpoOrderBy bean that defines the order in which beans should be returned
-   * @param nativeQueries Native query text that will be used to augment the query text stored in the meta data. This
+   * @param nativeExpressions Native expression that will be used to augment the expression stored in the meta data. This
    * text will be embedded at run-time
    * @return The number of objects deleted from the datasource
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
   @Override
   public <T> long deleteObjects(String name, Collection<T> coll, Collection<CpoWhere> wheres,
-          Collection<CpoOrderBy> orderBy, Collection<CpoNativeQuery> nativeQueries)
+          Collection<CpoOrderBy> orderBy, Collection<CpoNativeFunction> nativeExpressions)
           throws CpoException {
-    return cpoAdapter.deleteObject(name, coll, wheres, orderBy, nativeQueries);
+    return cpoAdapter.deleteObject(name, coll, wheres, orderBy, nativeExpressions);
   }
 
   /**
@@ -846,7 +846,7 @@ public class CpoAdapterBean
    *
    * @param obj This is an object that has been defined within the metadata of the datasource. If the class is not
    * defined an exception will be thrown.
-   * @param name The name which identifies which EXISTS, INSERT, and UPDATE Query groups to execute to persist the
+   * @param name The name which identifies which EXISTS, INSERT, and UPDATE Function Groups to execute to persist the
    * object.
    *
    * @see #existsObject
@@ -867,7 +867,7 @@ public class CpoAdapterBean
    *
    * This method stores the object in the datasource
    *
-   * @param name The name which identifies which EXISTS, INSERT, and UPDATE Query groups to execute to persist the
+   * @param name The name which identifies which EXISTS, INSERT, and UPDATE Function Groups to execute to persist the
    * object.
    * @param obj This is an object that has been defined within the metadata of the datasource. If the class is not
    * defined an exception will be thrown.
@@ -893,7 +893,7 @@ public class CpoAdapterBean
    *
    * @param coll This is a collection of objects that have been defined within the metadata of the datasource. If the
    * class is not defined an exception will be thrown.
-   * @param name The name which identifies which EXISTS, INSERT, and UPDATE Query groups to execute to persist the
+   * @param name The name which identifies which EXISTS, INSERT, and UPDATE Function Groups to execute to persist the
    * object.
    *
    * @return A count of the number of objects persisted
@@ -918,7 +918,7 @@ public class CpoAdapterBean
    * meaning that if one of the objects fail being inserted or updated in the datasource then the entire collection will
    * be rolled back.
    *
-   * @param name The name which identifies which EXISTS, INSERT, and UPDATE Query groups to execute to persist the
+   * @param name The name which identifies which EXISTS, INSERT, and UPDATE Function Groups to execute to persist the
    * object.
    * @param coll This is a collection of objects that have been defined within the metadata of the datasource. If the
    * class is not defined an exception will be thrown.
@@ -940,12 +940,12 @@ public class CpoAdapterBean
    *
    * @param obj This is an object that has been defined within the metadata of the datasource. If the class is not
    * defined an exception will be thrown.
-   * @param name The name which identifies which EXISTS, INSERT, and UPDATE Query groups to execute to persist the
+   * @param name The name which identifies which EXISTS, INSERT, and UPDATE Function Groups to execute to persist the
    * object.
    *
    * @return The int value of the first column returned in the record set
    *
-   * @exception An exception will be thrown if the Query Group has a query count != 1
+   * @exception An exception will be thrown if the Function Group has a function count != 1
    * @exception An exception will be thrown if the resultset has a record count != 1
    * @exception An exception will be thrown if there is a column count != 1
    * @exception An exception will be thrown if the column returned cannot be converted to an int
@@ -958,13 +958,13 @@ public class CpoAdapterBean
   /**
    * The CpoAdapter will check to see if this object exists in the datasource.
    *
-   * @param name The name which identifies which EXISTS, INSERT, and UPDATE Query groups to execute to persist the
+   * @param name The name which identifies which EXISTS, INSERT, and UPDATE Function Groups to execute to persist the
    * object.
    * @param obj This is an object that has been defined within the metadata of the datasource. If the class is not
    * defined an exception will be thrown.
    * @return The int value of the first column returned in the record set
    *
-   * @exception An exception will be thrown if the Query Group has a query count != 1
+   * @exception An exception will be thrown if the Function Group has a function count != 1
    * @exception An exception will be thrown if the resultset has a record count != 1
    * @exception An exception will be thrown if there is a column count != 1
    * @exception An exception will be thrown if the column returned cannot be converted to an int
@@ -1010,11 +1010,11 @@ public class CpoAdapterBean
    * </code>
    * </pre>
    *
-   * @param name The String name of the EXISTS Query group that will be used to create the object in the datasource.
+   * @param name The String name of the EXISTS Function Group that will be used to create the object in the datasource.
    * null signifies that the default rules will be used.
    * @param obj This is an object that has been defined within the metadata of the datasource. If the class is not
    * defined an exception will be thrown. This object will be searched for inside the datasource.
-   * @param wheres A Collection of CpoWhere objects that pass in run-time constraints to the query that performs the the
+   * @param wheres A Collection of CpoWhere objects that pass in run-time constraints to the function that performs the the
    * exist
    * @return The number of objects that exist in the datasource that match the specified object
    *

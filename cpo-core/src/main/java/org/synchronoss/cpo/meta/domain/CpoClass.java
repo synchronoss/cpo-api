@@ -45,8 +45,8 @@ public class CpoClass extends CpoClassBean implements MetaDFVisitable {
    */
   private SortedMap<String, CpoAttribute> dataMap = new TreeMap<String, CpoAttribute>();
   /**
-   * queryGroup is a hashMap that contains a hashMap of jdbcQuery Lists that are used by this object to persist and
-   * retrieve it into a jdbc datasource.
+   * functionGroups is a hashMap that contains a hashMap of CpoFunctionGroup Lists that are used by this object to persist and
+   * retrieve it into a datasource.
    */
   private SortedMap<String, CpoFunctionGroup> functionGroups = new TreeMap<String, CpoFunctionGroup>();
 

@@ -69,7 +69,7 @@ public class JavaSqlTypes extends java.lang.Object implements java.io.Serializab
     new JavaSqlType<Boolean>(java.sql.Types.BIT, "BIT", boolean.class), // -7
     new JavaSqlType<Boolean>(java.sql.Types.BOOLEAN, "BOOLEAN", boolean.class), //16
 
-    // Now for the dbspecific types needed to generate the class from a query.
+    // Now for the dbspecific types needed to generate the class from a function.
     new JavaSqlType<String>(100, "VARCHAR_IGNORECASE", java.lang.String.class) // HSQLDB TYPE for VARCHAR_IGNORE_CASE
   };
   private static HashMap<Integer, JavaSqlType<?>> javaSqlTypeMap = null;

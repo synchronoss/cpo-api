@@ -21,17 +21,17 @@
  */
 package org.synchronoss.cpo;
 
-public class CpoNativeQuery {
+public class CpoNativeFunction {
 
   private String marker = null;
-  private String nativeText = null;
+  private String expession = null;
 
-  public CpoNativeQuery() {
+  public CpoNativeFunction() {
   }
 
-  public CpoNativeQuery(String marker, String text) {
+  public CpoNativeFunction(String marker, String text) {
     this.marker = marker;
-    this.nativeText = text;
+    this.expession = text;
   }
 
   public void setMarker(String marker) {
@@ -42,11 +42,11 @@ public class CpoNativeQuery {
     return this.marker;
   }
 
-  public void setNativeText(String text) {
-    this.nativeText = text;
+  public void setExpression(String expession) {
+    this.expession = expession;
   }
 
-  public String getNativeText() {
-    return this.nativeText;
+  public String getExpression() {
+    return this.expession;
   }
 }

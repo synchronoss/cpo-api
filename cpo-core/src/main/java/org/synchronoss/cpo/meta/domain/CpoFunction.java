@@ -51,7 +51,7 @@ public class CpoFunction extends CpoFunctionBean {
    * @param jq DOCUMENT ME!
    * @return DOCUMENT ME!
    */
-  public String parameterToString(CpoFunction jq) {
+  public String parameterToString(CpoFunction function) {
     List<CpoArgument> args;
     int j;
     CpoArgument argument;
@@ -60,13 +60,13 @@ public class CpoFunction extends CpoFunctionBean {
     Class<?> c;
     StringBuilder sb = new StringBuilder("Parameter list for ");
 
-    if (jq == null) {
-      return " null query.";
+    if (function == null) {
+      return " null function.";
     }
 
     // TODO: make uncomment the following line and make work
 //    sb.append(jq.getName() + " " + jq.getType());
-    args = jq.getArguments();
+    args = function.getArguments();
 
     for (j = 1; j <= args.size(); j++) {
       argument = args.get(j - 1);

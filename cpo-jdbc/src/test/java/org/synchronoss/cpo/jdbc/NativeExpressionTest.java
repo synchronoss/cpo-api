@@ -31,7 +31,7 @@ import org.synchronoss.cpo.*;
  *
  * @author david berry
  */
-public class NativeQueryTest extends TestCase {
+public class NativeExpressionTest extends TestCase {
 
   private CpoAdapter jdbcIdo_ = null;
   private ArrayList<ValueObject> al = new ArrayList<ValueObject>();
@@ -41,7 +41,7 @@ public class NativeQueryTest extends TestCase {
    *
    * @param name DOCUMENT ME!
    */
-  public NativeQueryTest() {
+  public NativeExpressionTest() {
   }
 
   /**
@@ -100,10 +100,10 @@ public class NativeQueryTest extends TestCase {
 
 
     try {
-      ArrayList<CpoNativeQuery> cnqAl = new ArrayList<CpoNativeQuery>();
+      ArrayList<CpoNativeFunction> cnqAl = new ArrayList<CpoNativeFunction>();
 
 
-      cnqAl.add(new CpoNativeQuery("__CPO_WHERE__", "WHERE ID = 2 OR ID = 3"));
+      cnqAl.add(new CpoNativeFunction("__CPO_WHERE__", "WHERE ID = 2 OR ID = 3"));
 
       ValueObject valObj = new ValueObject(3);
       col = jdbcIdo_.retrieveObjects("TestWhereRetrieve", valObj, null, null, cnqAl, valObj);
@@ -124,11 +124,11 @@ public class NativeQueryTest extends TestCase {
 
 
     try {
-      ArrayList<CpoNativeQuery> cnqAl = new ArrayList<CpoNativeQuery>();
+      ArrayList<CpoNativeFunction> cnqAl = new ArrayList<CpoNativeFunction>();
 
 
 
-      cnqAl.add(new CpoNativeQuery("__CPO_WHERE__", null));
+      cnqAl.add(new CpoNativeFunction("__CPO_WHERE__", null));
 
       ValueObject valObj = new ValueObject(3);
       col = jdbcIdo_.retrieveObjects("TestWhereRetrieve", valObj, null, null, cnqAl, valObj);

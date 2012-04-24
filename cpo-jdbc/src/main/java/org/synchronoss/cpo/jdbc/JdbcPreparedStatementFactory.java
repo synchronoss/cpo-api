@@ -80,7 +80,7 @@ public class JdbcPreparedStatementFactory implements CpoReleasible {
    */
   public <T> JdbcPreparedStatementFactory(Connection conn, JdbcCpoAdapter jca, CpoClass criteria,
           CpoFunction function, T obj, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy,
-          Collection<CpoNativeQuery> nativeQueries) throws CpoException {
+          Collection<CpoNativeFunction> nativeQueries) throws CpoException {
 
     // get the list of bindValues from the function parameters
     List<BindAttribute> bindValues = getBindValues(function, obj);
@@ -117,7 +117,7 @@ public class JdbcPreparedStatementFactory implements CpoReleasible {
    *
    * @throws CpoException DOCUMENT ME!
    */
-  private <T> String buildSql(CpoClass cpoClass, String sql, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeQuery> nativeQueries, List<BindAttribute> bindValues) throws CpoException {
+  private <T> String buildSql(CpoClass cpoClass, String sql, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeFunction> nativeQueries, List<BindAttribute> bindValues) throws CpoException {
     StringBuilder sqlText = new StringBuilder();
 
     sqlText.append(sql);
@@ -159,7 +159,7 @@ public class JdbcPreparedStatementFactory implements CpoReleasible {
           sb.append(((JdbcCpoOrderBy) ob).toString(cpoClass));
         }
       } catch (CpoException ce) {
-        throw new CpoException("Error Processing OrderBy Attribute<" + ExceptionHelper.getLocalizedMessage(ce) + "> not Found. JDBC Query=<" + sqlText.toString() + ">");
+        throw new CpoException("Error Processing OrderBy Attribute<" + ExceptionHelper.getLocalizedMessage(ce) + "> not Found. JDBC Expression=<" + sqlText.toString() + ">");
       }
 
       Set<Entry<String, StringBuilder>> entries = mapOrderBy.entrySet();
@@ -173,14 +173,14 @@ public class JdbcPreparedStatementFactory implements CpoReleasible {
     }
 
     if (nativeQueries != null) {
-      for (CpoNativeQuery cnq : nativeQueries) {
+      for (CpoNativeFunction cnq : nativeQueries) {
         if (cnq.getMarker() == null || sqlText.indexOf(cnq.getMarker()) == -1) {
-          if (cnq.getNativeText() != null && cnq.getNativeText().length() > 0) {
+          if (cnq.getExpression() != null && cnq.getExpression().length() > 0) {
             sqlText.append(" ");
-            sqlText.append(cnq.getNativeText());
+            sqlText.append(cnq.getExpression());
           }
         } else {
-          sqlText = replaceMarker(sqlText, cnq.getMarker(), cnq.getNativeText());
+          sqlText = replaceMarker(sqlText, cnq.getMarker(), cnq.getExpression());
         }
       }
     }

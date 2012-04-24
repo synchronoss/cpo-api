@@ -166,7 +166,7 @@ public interface CpoAdapter extends java.io.Serializable {
    * </code>
    * </pre>
    *
-   * @param name The String name of the CREATE Query group that will be used to create the object in the datasource.
+   * @param name The String name of the CREATE Function Group that will be used to create the object in the datasource.
    * null signifies that the default rules will be used which is equivalent to insertObject(Object obj);
    * @param obj This is an object that has been defined within the metadata of the datasource. If the class is not
    * defined an exception will be thrown.
@@ -207,19 +207,19 @@ public interface CpoAdapter extends java.io.Serializable {
    * </pre>
    *
    *
-   * @param name The String name of the CREATE Query group that will be used to create the object in the datasource.
+   * @param name The String name of the CREATE Function Group that will be used to create the object in the datasource.
    * null signifies that the default rules will be used which is equivalent to insertObject(Object obj);
    * @param obj This is an object that has been defined within the metadata of the datasource. If the class is not
    * defined an exception will be thrown.
    * @param wheres A collection of CpoWhere beans that define the constraints that should be used when retrieving beans
    * @param orderBy The CpoOrderBy bean that defines the order in which beans should be returned
-   * @param nativeQueries Native query text that will be used to augment the query text stored in the meta data. This
+   * @param nativeExpressions Native expression that will be used to augment the expression stored in the meta data. This
    * text will be embedded at run-time
    * @return The number of objects created in the datasource
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
   public <T> long insertObject(String name, T obj, Collection<CpoWhere> wheres,
-          Collection<CpoOrderBy> orderBy, Collection<CpoNativeQuery> nativeQueries) throws CpoException;
+          Collection<CpoOrderBy> orderBy, Collection<CpoNativeFunction> nativeExpressions) throws CpoException;
 
   /**
    * Iterates through a collection of Objects, creates and stores them in the datasource. The assumption is that the
@@ -314,7 +314,7 @@ public interface CpoAdapter extends java.io.Serializable {
    *</code>
    * </pre>
    *
-   * @param name The String name of the CREATE Query group that will be used to create the object in the datasource.
+   * @param name The String name of the CREATE Function Group that will be used to create the object in the datasource.
    * null signifies that the default rules will be used.
    * @param coll This is a collection of objects that have been defined within the metadata of the datasource. If the
    * class is not defined an exception will be thrown.
@@ -365,19 +365,19 @@ public interface CpoAdapter extends java.io.Serializable {
    *</code>
    * </pre>
    *
-   * @param name The String name of the CREATE Query group that will be used to create the object in the datasource.
+   * @param name The String name of the CREATE Function Group that will be used to create the object in the datasource.
    * null signifies that the default rules will be used.
    * @param coll This is a collection of objects that have been defined within the metadata of the datasource. If the
    * class is not defined an exception will be thrown.
    * @param wheres A collection of CpoWhere beans that define the constraints that should be used when retrieving beans
    * @param orderBy The CpoOrderBy bean that defines the order in which beans should be returned
-   * @param nativeQueries Native query text that will be used to augment the query text stored in the meta data. This
+   * @param nativeExpressions Native expression that will be used to augment the expression stored in the meta data. This
    * text will be embedded at run-time
    * @return The number of objects created in the datasource
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
   public <T> long insertObjects(String name, Collection<T> coll, Collection<CpoWhere> wheres,
-          Collection<CpoOrderBy> orderBy, Collection<CpoNativeQuery> nativeQueries) throws CpoException;
+          Collection<CpoOrderBy> orderBy, Collection<CpoNativeFunction> nativeExpressions) throws CpoException;
 
   /**
    * Removes the Object from the datasource. The assumption is that the object exists in the datasource. This method
@@ -446,7 +446,7 @@ public interface CpoAdapter extends java.io.Serializable {
    * </code>
    * </pre>
    *
-   * @param name The String name of the DELETE Query group that will be used to create the object in the datasource.
+   * @param name The String name of the DELETE Function Group that will be used to create the object in the datasource.
    * null signifies that the default rules will be used.
    * @param obj This is an object that has been defined within the metadata of the datasource. If the class is not
    * defined an exception will be thrown. If the object does not exist in the datasource an exception will be thrown.
@@ -485,19 +485,19 @@ public interface CpoAdapter extends java.io.Serializable {
    * </code>
    * </pre>
    *
-   * @param name The String name of the DELETE Query group that will be used to create the object in the datasource.
+   * @param name The String name of the DELETE Function Group that will be used to create the object in the datasource.
    * null signifies that the default rules will be used.
    * @param obj This is an object that has been defined within the metadata of the datasource. If the class is not
    * defined an exception will be thrown. If the object does not exist in the datasource an exception will be thrown.
    * @param wheres A collection of CpoWhere beans that define the constraints that should be used when retrieving beans
    * @param orderBy The CpoOrderBy bean that defines the order in which beans should be returned
-   * @param nativeQueries Native query text that will be used to augment the query text stored in the meta data. This
+   * @param nativeExpressions Native expression that will be used to augment the expression stored in the meta data. This
    * text will be embedded at run-time
    * @return The number of objects deleted from the datasource
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
   public <T> long deleteObject(String name, T obj, Collection<CpoWhere> wheres,
-          Collection<CpoOrderBy> orderBy, Collection<CpoNativeQuery> nativeQueries) throws CpoException;
+          Collection<CpoOrderBy> orderBy, Collection<CpoNativeFunction> nativeExpressions) throws CpoException;
 
   /**
    * Removes the Objects contained in the collection from the datasource. The assumption is that the object exists in
@@ -589,7 +589,7 @@ public interface CpoAdapter extends java.io.Serializable {
    *</code>
    * </pre>
    *
-   * @param name The String name of the DELETE Query group that will be used to create the object in the datasource.
+   * @param name The String name of the DELETE Function Group that will be used to create the object in the datasource.
    * null signifies that the default rules will be used.
    * @param coll This is a collection of objects that have been defined within the metadata of the datasource. If the
    * class is not defined an exception will be thrown.
@@ -639,19 +639,19 @@ public interface CpoAdapter extends java.io.Serializable {
    *</code>
    * </pre>
    *
-   * @param name The String name of the DELETE Query group that will be used to create the object in the datasource.
+   * @param name The String name of the DELETE Function Group that will be used to create the object in the datasource.
    * null signifies that the default rules will be used.
    * @param coll This is a collection of objects that have been defined within the metadata of the datasource. If the
    * class is not defined an exception will be thrown.
    * @param wheres A collection of CpoWhere beans that define the constraints that should be used when retrieving beans
    * @param orderBy The CpoOrderBy bean that defines the order in which beans should be returned
-   * @param nativeQueries Native query text that will be used to augment the query text stored in the meta data. This
+   * @param nativeExpressions Native expression that will be used to augment the expression stored in the meta data. This
    * text will be embedded at run-time
    * @return The number of objects deleted from the datasource
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
   public <T> long deleteObjects(String name, Collection<T> coll, Collection<CpoWhere> wheres,
-          Collection<CpoOrderBy> orderBy, Collection<CpoNativeQuery> nativeQueries)
+          Collection<CpoOrderBy> orderBy, Collection<CpoNativeFunction> nativeExpressions)
           throws CpoException;
 
   /**
@@ -770,7 +770,7 @@ public interface CpoAdapter extends java.io.Serializable {
    * </code>
    * </pre>
    *
-   * @param name The String name of the EXECUTE Query group that will be used to create the object in the datasource.
+   * @param name The String name of the EXECUTE Function Group that will be used to create the object in the datasource.
    * null signifies that the default rules will be used.
    * @param criteria This is an object that has been defined within the metadata of the datasource. If the class is not
    * defined an exception will be thrown. If the object does not exist in the datasource, an exception will be thrown.
@@ -864,7 +864,7 @@ public interface CpoAdapter extends java.io.Serializable {
    * </code>
    * </pre>
    *
-   * @param name The String name of the EXISTS Query group that will be used to create the object in the datasource.
+   * @param name The String name of the EXISTS Function Group that will be used to create the object in the datasource.
    * null signifies that the default rules will be used.
    * @param obj This is an object that has been defined within the metadata of the datasource. If the class is not
    * defined an exception will be thrown. This object will be searched for inside the datasource.
@@ -910,11 +910,11 @@ public interface CpoAdapter extends java.io.Serializable {
    * </code>
    * </pre>
    *
-   * @param name The String name of the EXISTS Query group that will be used to create the object in the datasource.
+   * @param name The String name of the EXISTS Function Group that will be used to create the object in the datasource.
    * null signifies that the default rules will be used.
    * @param obj This is an object that has been defined within the metadata of the datasource. If the class is not
    * defined an exception will be thrown. This object will be searched for inside the datasource.
-   * @param wheres A collection of CpoWhere objects that pass in run-time constraints to the query that performs the the
+   * @param wheres A collection of CpoWhere objects that pass in run-time constraints to the function that performs the the
    * exist
    * @return The number of objects that exist in the datasource that match the specified object
    *
@@ -996,7 +996,7 @@ public interface CpoAdapter extends java.io.Serializable {
    * Persists the Object into the datasource. The CpoAdapter will check to see if this object exists in the datasource.
    * If it exists, the object is updated in the datasource If the object does not exist, then it is created in the
    * datasource. This method stores the object in the datasource. This method uses the default EXISTS, CREATE, and
-   * UPDATE query groups specified for this object.
+   * UPDATE Function Groups specified for this object.
    *
    * <pre>Example:
    * <code>
@@ -1067,7 +1067,7 @@ public interface CpoAdapter extends java.io.Serializable {
    * </code>
    * </pre>
    *
-   * @param name The name which identifies which EXISTS, INSERT, and UPDATE Query groups to execute to persist the
+   * @param name The name which identifies which EXISTS, INSERT, and UPDATE Function Groups to execute to persist the
    * object.
    * @param obj This is an object that has been defined within the metadata of the datasource. If the class is not
    * defined an exception will be thrown.
@@ -1171,7 +1171,7 @@ public interface CpoAdapter extends java.io.Serializable {
    *</code>
    * </pre>
    *
-   * @param name The name which identifies which EXISTS, INSERT, and UPDATE Query groups to execute to persist the
+   * @param name The name which identifies which EXISTS, INSERT, and UPDATE Function Groups to execute to persist the
    * object.
    * @param coll This is a collection of objects that have been defined within the metadata of the datasource. If the
    * class is not defined an exception will be thrown.
@@ -1188,11 +1188,11 @@ public interface CpoAdapter extends java.io.Serializable {
 
   /**
    * Retrieves the Bean from the datasource. The assumption is that the bean exists in the datasource. If the retrieve
-   * query defined for these beans returns more than one row, an exception will be thrown.
+   * function defined for these beans returns more than one row, an exception will be thrown.
    *
    * @param bean This is a bean that has been defined within the metadata of the datasource. If the class is not defined
    * an exception will be thrown. If the bean does not exist in the datasource, an exception will be thrown. The input
-   * bean is used to specify the search criteria, the output bean is populated with the results of the query.
+   * bean is used to specify the search criteria, the output bean is populated with the results of the function.
    *
    * @return A bean of the same type as the result parameter that is filled in as specified the metadata for the
    * retireve.
@@ -1204,12 +1204,12 @@ public interface CpoAdapter extends java.io.Serializable {
 
   /**
    * Retrieves the bean from the datasource. The assumption is that the bean exists in the datasource. If the retrieve
-   * query defined for this beans returns more than one row, an exception will be thrown.
+   * function defined for this beans returns more than one row, an exception will be thrown.
    *
    * @param name DOCUMENT ME!
    * @param bean This is an bean that has been defined within the metadata of the datasource. If the class is not
    * defined an exception will be thrown. If the bean does not exist in the datasource, an exception will be thrown. The
-   * input bean is used to specify the search criteria, the output bean is populated with the results of the query.
+   * input bean is used to specify the search criteria, the output bean is populated with the results of the function.
    * @return An bean of the same type as the result parameter that is filled in as specified the metadata for the
    * retireve.
    *
@@ -1220,27 +1220,27 @@ public interface CpoAdapter extends java.io.Serializable {
 
   /**
    * Retrieves the bean from the datasource. The assumption is that the bean exists in the datasource. If the retrieve
-   * query defined for this beans returns more than one row, an exception will be thrown.
+   * function defined for this beans returns more than one row, an exception will be thrown.
    *
    * @param name DOCUMENT ME!
    * @param bean This is an bean that has been defined within the metadata of the datasource. If the class is not
    * defined an exception will be thrown. If the bean does not exist in the datasource, an exception will be thrown. The
-   * input bean is used to specify the search criteria, the output bean is populated with the results of the query.
+   * input bean is used to specify the search criteria, the output bean is populated with the results of the function.
    * @param wheres A collection of CpoWhere beans that define the constraints that should be used when retrieving beans
    * @param orderBy The CpoOrderBy bean that defines the order in which beans should be returned
-   * @param nativeQueries Native query text that will be used to augment the query text stored in the meta data. This
+   * @param nativeExpressions Native expression that will be used to augment the expression stored in the meta data. This
    * text will be embedded at run-time
    * @return An bean of the same type as the result parameter that is filled in as specified the metadata for the
    * retireve.
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
   public <T> T retrieveBean(String name, T bean, Collection<CpoWhere> wheres,
-          Collection<CpoOrderBy> orderBy, Collection<CpoNativeQuery> nativeQueries)
+          Collection<CpoOrderBy> orderBy, Collection<CpoNativeFunction> nativeExpressions)
           throws CpoException;
 
   /**
    * Retrieves the bean from the datasource. The assumption is that the bean exists in the datasource. If the retrieve
-   * query defined for this beans returns more than one row, an exception will be thrown.
+   * function defined for this beans returns more than one row, an exception will be thrown.
    *
    * @param name The filter name which tells the datasource which beans should be returned. The name also signifies what
    * data in the bean will be populated.
@@ -1262,7 +1262,7 @@ public interface CpoAdapter extends java.io.Serializable {
 
   /**
    * Retrieves the bean from the datasource. The assumption is that the bean exists in the datasource. If the retrieve
-   * query defined for this beans returns more than one row, an exception will be thrown.
+   * function defined for this beans returns more than one row, an exception will be thrown.
    *
    * @param name The filter name which tells the datasource which beans should be returned. The name also signifies what
    * data in the bean will be populated.
@@ -1274,7 +1274,7 @@ public interface CpoAdapter extends java.io.Serializable {
    * This bean is used to specify the bean type that will be returned in the collection.
    * @param wheres A collection of CpoWhere beans that define the constraints that should be used when retrieving beans
    * @param orderBy The CpoOrderBy bean that defines the order in which beans should be returned
-   * @param nativeQueries Native query text that will be used to augment the query text stored in the meta data. This
+   * @param nativeExpressions Native expression that will be used to augment the expression stored in the meta data. This
    * text will be embedded at run-time
    * @return An bean of the same type as the result parameter that is filled in as specified the metadata for the
    * retireve.
@@ -1282,7 +1282,7 @@ public interface CpoAdapter extends java.io.Serializable {
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
   public <T, C> T retrieveBean(String name, C criteria, T result, Collection<CpoWhere> wheres,
-          Collection<CpoOrderBy> orderBy, Collection<CpoNativeQuery> nativeQueries) throws CpoException;
+          Collection<CpoOrderBy> orderBy, Collection<CpoNativeFunction> nativeExpressions) throws CpoException;
 
   /**
    * Retrieves the bean from the datasource. The assumption is that the bean exists in the datasource.
@@ -1424,7 +1424,7 @@ public interface CpoAdapter extends java.io.Serializable {
    * This bean is used to specify the bean type that will be returned in the collection.
    * @param wheres A collection of CpoWhere beans that define the constraints that should be used when retrieving beans
    * @param orderBy The CpoOrderBy bean that defines the order in which beans should be returned
-   * @param nativeQueries Native query text that will be used to augment the query text stored in the meta data. This
+   * @param nativeExpressions Native expression that will be used to augment the expression stored in the meta data. This
    * text will be embedded at run-time
    * @return A collection of beans will be returned that meet the criteria specified by obj. The beans will be of the
    * same type as the bean that was passed in. If no beans match the criteria, an empty collection will be returned
@@ -1432,7 +1432,7 @@ public interface CpoAdapter extends java.io.Serializable {
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
   public <T, C> List<T> retrieveBeans(String name, C criteria, T result, Collection<CpoWhere> wheres,
-          Collection<CpoOrderBy> orderBy, Collection<CpoNativeQuery> nativeQueries) throws CpoException;
+          Collection<CpoOrderBy> orderBy, Collection<CpoNativeFunction> nativeExpressions) throws CpoException;
 
   /**
    * Retrieves the bean from the datasource. The assumption is that the bean exists in the datasource.
@@ -1447,7 +1447,7 @@ public interface CpoAdapter extends java.io.Serializable {
    * This bean is used to specify the bean type that will be returned in the collection.
    * @param wheres A collection of CpoWhere beans that define the constraints that should be used when retrieving beans
    * @param orderBy The CpoOrderBy bean that defines the order in which beans should be returned
-   * @param nativeQueries Native query text that will be used to augment the query text stored in the meta data. This
+   * @param nativeExpressions Native expression that will be used to augment the expression stored in the meta data. This
    * text will be embedded at run-time
    * @param the queue size of the buffer that it uses to send the beans from the producer to the consumer.
    * @return A CpoResultSet that can be iterated through
@@ -1455,16 +1455,16 @@ public interface CpoAdapter extends java.io.Serializable {
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
   public <T, C> CpoResultSet<T> retrieveBeans(String name, C criteria, T result, Collection<CpoWhere> wheres,
-          Collection<CpoOrderBy> orderBy, Collection<CpoNativeQuery> nativeQueries, int queueSize) throws CpoException;
+          Collection<CpoOrderBy> orderBy, Collection<CpoNativeFunction> nativeExpressions, int queueSize) throws CpoException;
 
   /**
    * Retrieves the Object from the datasource. The assumption is that the object exists in the datasource. If the
-   * retrieve query defined for this objects returns more than one row, an exception will be thrown.
+   * retrieve function defined for this objects returns more than one row, an exception will be thrown.
    *
    * @param obj This is an object that has been defined within the metadata of the datasource. If the class is not
    * defined an exception will be thrown. If the object does not exist in the datasource, an exception will be thrown.
    * The input object is used to specify the search criteria, the output object is populated with the results of the
-   * query.
+   * function.
    *
    * @return An object of the same type as the result parameter that is filled in as specified the metadata for the
    * retireve.
@@ -1479,13 +1479,13 @@ public interface CpoAdapter extends java.io.Serializable {
 
   /**
    * Retrieves the Object from the datasource. The assumption is that the object exists in the datasource. If the
-   * retrieve query defined for this objects returns more than one row, an exception will be thrown.
+   * retrieve function defined for this objects returns more than one row, an exception will be thrown.
    *
    * @param name DOCUMENT ME!
    * @param obj This is an object that has been defined within the metadata of the datasource. If the class is not
    * defined an exception will be thrown. If the object does not exist in the datasource, an exception will be thrown.
    * The input object is used to specify the search criteria, the output object is populated with the results of the
-   * query.
+   * function.
    * @return An object of the same type as the result parameter that is filled in as specified the metadata for the
    * retireve.
    *
@@ -1499,7 +1499,7 @@ public interface CpoAdapter extends java.io.Serializable {
 
   /**
    * Retrieves the Object from the datasource. The assumption is that the object exists in the datasource. If the
-   * retrieve query defined for this objects returns more than one row, an exception will be thrown.
+   * retrieve function defined for this objects returns more than one row, an exception will be thrown.
    *
    * @param name The filter name which tells the datasource which objects should be returned. The name also signifies
    * what data in the object will be populated.
@@ -1525,7 +1525,7 @@ public interface CpoAdapter extends java.io.Serializable {
 
   /**
    * Retrieves the Object from the datasource. The assumption is that the object exists in the datasource. If the
-   * retrieve query defined for this objects returns more than one row, an exception will be thrown.
+   * retrieve function defined for this objects returns more than one row, an exception will be thrown.
    *
    * @param name The filter name which tells the datasource which objects should be returned. The name also signifies
    * what data in the object will be populated.
@@ -1538,7 +1538,7 @@ public interface CpoAdapter extends java.io.Serializable {
    * @param wheres A collection of CpoWhere objects that define the constraints that should be used when retrieving
    * objects
    * @param orderBy The CpoOrderBy object that defines the order in which objects should be returned
-   * @param nativeQueries Native query text that will be used to augment the query text stored in the meta data. This
+   * @param nativeExpressions Native expression that will be used to augment the expression stored in the meta data. This
    * text will be embedded at run-time
    * @return An object of the same type as the result parameter that is filled in as specified the metadata for the
    * retireve.
@@ -1549,7 +1549,7 @@ public interface CpoAdapter extends java.io.Serializable {
    */
   @Deprecated
   public <T, C> T retrieveObject(String name, C criteria, T result, Collection<CpoWhere> wheres,
-          Collection<CpoOrderBy> orderBy, Collection<CpoNativeQuery> nativeQueries) throws CpoException;
+          Collection<CpoOrderBy> orderBy, Collection<CpoNativeFunction> nativeExpressions) throws CpoException;
 
   /**
    * Retrieves the Object from the datasource. The assumption is that the object exists in the datasource.
@@ -1591,7 +1591,7 @@ public interface CpoAdapter extends java.io.Serializable {
    * @param wheres A collection of CpoWhere objects that define the constraints that should be used when retrieving
    * objects
    * @param orderBy The CpoOrderBy object that defines the order in which objects should be returned
-   * @param nativeQueries Native query text that will be used to augment the query text stored in the meta data. This
+   * @param nativeExpressions Native expression that will be used to augment the expression stored in the meta data. This
    * text will be embedded at run-time
    * @return A collection of objects will be returned that meet the criteria specified by obj. The objects will be of
    * the same type as the Object that was passed in. If no objects match the criteria, an empty collection will be
@@ -1603,7 +1603,7 @@ public interface CpoAdapter extends java.io.Serializable {
    */
   @Deprecated
   public <T, C> Collection<T> retrieveObjects(String name, C criteria, Collection<CpoWhere> wheres,
-          Collection<CpoOrderBy> orderBy, Collection<CpoNativeQuery> nativeQueries, T result) throws CpoException;
+          Collection<CpoOrderBy> orderBy, Collection<CpoNativeFunction> nativeExpressions, T result) throws CpoException;
 
   /**
    * Retrieves the Object from the datasource. The assumption is that the object exists in the datasource.
@@ -1619,7 +1619,7 @@ public interface CpoAdapter extends java.io.Serializable {
    * @param wheres A collection of CpoWhere objects that define the constraints that should be used when retrieving
    * objects
    * @param orderBy The CpoOrderBy object that defines the order in which objects should be returned
-   * @param nativeQueries Native query text that will be used to augment the query text stored in the meta data. This
+   * @param nativeExpressions Native expression that will be used to augment the expression stored in the meta data. This
    * text will be embedded at run-time
    * @param the queue size of the buffer that it uses to send the objects from the producer to the consumer.
    * @return A CpoResultSet that can be iterated through
@@ -1630,7 +1630,7 @@ public interface CpoAdapter extends java.io.Serializable {
    */
   @Deprecated
   public <T, C> CpoResultSet<T> retrieveObjects(String name, C criteria, Collection<CpoWhere> wheres,
-          Collection<CpoOrderBy> orderBy, Collection<CpoNativeQuery> nativeQueries, T result, int queueSize) throws CpoException;
+          Collection<CpoOrderBy> orderBy, Collection<CpoNativeFunction> nativeExpressions, T result, int queueSize) throws CpoException;
 
   /**
    * Update the Object in the datasource. The CpoAdapter will check to see if the object exists in the datasource. If it
@@ -1699,7 +1699,7 @@ public interface CpoAdapter extends java.io.Serializable {
    * </code>
    * </pre>
    *
-   * @param name The String name of the UPDATE Query group that will be used to create the object in the datasource.
+   * @param name The String name of the UPDATE Function Group that will be used to create the object in the datasource.
    * null signifies that the default rules will be used.
    * @param obj This is an object that has been defined within the metadata of the datasource. If the class is not
    * defined an exception will be thrown.
@@ -1739,18 +1739,18 @@ public interface CpoAdapter extends java.io.Serializable {
    * </code>
    * </pre>
    *
-   * @param name The String name of the UPDATE Query group that will be used to create the object in the datasource.
+   * @param name The String name of the UPDATE Function Group that will be used to create the object in the datasource.
    * null signifies that the default rules will be used.
    * @param obj This is an object that has been defined within the metadata of the datasource. If the class is not
    * defined an exception will be thrown.
-   * @param wheres A collection of CpoWhere objects to be used by the query
-   * @param orderBy A collection of CpoOrderBy objects to be used by the query
-   * @param nativeQueries A collection of CpoNativeQuery objects to be used by the query
+   * @param wheres A collection of CpoWhere objects to be used by the function
+   * @param orderBy A collection of CpoOrderBy objects to be used by the function
+   * @param nativeExpressions A collection of CpoNativeFunction objects to be used by the function
    * @return The number of objects updated in the datasource
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
   public <T> long updateObject(String name, T obj, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy,
-          Collection<CpoNativeQuery> nativeQueries) throws CpoException;
+          Collection<CpoNativeFunction> nativeExpressions) throws CpoException;
 
   /**
    * Updates a collection of Objects in the datasource. The assumption is that the objects contained in the collection
@@ -1848,7 +1848,7 @@ public interface CpoAdapter extends java.io.Serializable {
    *</code>
    * </pre>
    *
-   * @param name The String name of the UPDATE Query group that will be used to create the object in the datasource.
+   * @param name The String name of the UPDATE Function Group that will be used to create the object in the datasource.
    * null signifies that the default rules will be used.
    * @param coll This is a collection of objects that have been defined within the metadata of the datasource. If the
    * class is not defined an exception will be thrown.
@@ -1896,17 +1896,17 @@ public interface CpoAdapter extends java.io.Serializable {
    *</code>
    * </pre>
    *
-   * @param name The String name of the UPDATE Query group that will be used to create the object in the datasource.
+   * @param name The String name of the UPDATE Function Group that will be used to create the object in the datasource.
    * null signifies that the default rules will be used.
    * @param coll This is a collection of objects that have been defined within the metadata of the datasource. If the
    * class is not defined an exception will be thrown.
-   * @param wheres A collection of CpoWhere objects to be used by the query
-   * @param orderBy A collection of CpoOrderBy objects to be used by the query
-   * @param nativeQueries A collection of CpoNativeQuery objects to be used by the query
+   * @param wheres A collection of CpoWhere objects to be used by the function
+   * @param orderBy A collection of CpoOrderBy objects to be used by the function
+   * @param nativeExpressions A collection of CpoNativeFunction objects to be used by the function
    * @return The number of objects updated in the datasource
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
-  public <T> long updateObjects(String name, Collection<T> coll, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeQuery> nativeQueries)
+  public <T> long updateObjects(String name, Collection<T> coll, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeFunction> nativeExpressions)
           throws CpoException;
 
   /**

@@ -19,14 +19,11 @@
  *  http://www.gnu.org/licenses/lgpl.txt
  *
  */
-
 package org.synchronoss.cpo.jdbc;
 
 import java.util.ArrayList;
 import java.util.Collection;
-
 import junit.framework.TestCase;
-
 import org.synchronoss.cpo.*;
 
 /**
@@ -36,119 +33,112 @@ import org.synchronoss.cpo.*;
  */
 public class NativeQueryTest extends TestCase {
 
-    private CpoAdapter jdbcIdo_=null;
-    private ArrayList<ValueObject> al = new ArrayList<ValueObject>();
+  private CpoAdapter jdbcIdo_ = null;
+  private ArrayList<ValueObject> al = new ArrayList<ValueObject>();
 
-    /**
-     * Creates a new RollbackTest object.
-     *
-     * @param name DOCUMENT ME!
-     */
-    public NativeQueryTest() {
+  /**
+   * Creates a new RollbackTest object.
+   *
+   * @param name DOCUMENT ME!
+   */
+  public NativeQueryTest() {
+  }
+
+  /**
+   * <code>setUp</code> Load the datasource from the properties in the property file jdbc_en_US.properties
+   */
+  public void setUp() {
+    String method = "setUp:";
+
+    try {
+      jdbcIdo_ = new CpoAdapterBean(CpoAdapterFactory.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT));
+      assertNotNull(method + "CpoAdapter is null", jdbcIdo_);
+    } catch (Exception e) {
+      fail(method + e.getMessage());
     }
-
-    /**
-     * <code>setUp</code> Load the datasource from the properties in the property file
-     * jdbc_en_US.properties
-     */
-    public void setUp() {
-        String method="setUp:";
-        
-        try {
-          jdbcIdo_ = new CpoAdapterBean(CpoAdapterFactory.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT));
-            assertNotNull(method+"CpoAdapter is null", jdbcIdo_);
-        } catch(Exception e) {
-            fail(method+e.getMessage());
-        }
-        ValueObject vo = new ValueObject(1);
-        vo.setAttrVarChar("Test");
-        vo.setAttrSmallInt(1);
-        al.add(vo);
-        al.add(new ValueObject(2));
-        al.add(new ValueObject(3));
-        al.add(new ValueObject(4));
-        al.add(new ValueObject(5));
-        al.add(new ValueObject(-6));
-        try{
-            jdbcIdo_.insertObjects("TestOrderByInsert",al);
-        } catch (Exception e) {
-            e.printStackTrace();
-            fail(method+e.getMessage());
-        }
+    ValueObject vo = new ValueObject(1);
+    vo.setAttrVarChar("Test");
+    vo.setAttrSmallInt(1);
+    al.add(vo);
+    al.add(new ValueObject(2));
+    al.add(new ValueObject(3));
+    al.add(new ValueObject(4));
+    al.add(new ValueObject(5));
+    al.add(new ValueObject(-6));
+    try {
+      jdbcIdo_.insertObjects("TestOrderByInsert", al);
+    } catch (Exception e) {
+      e.printStackTrace();
+      fail(method + e.getMessage());
     }
+  }
 
-    /**
-     * DOCUMENT ME!
-     */
-    public void tearDown() {
-        String method="tearDown:";
-        try{
-            jdbcIdo_.deleteObjects("TestOrderByDelete",al);
-            
-        } catch (Exception e) {
-            e.printStackTrace();
-            fail(method+e.getMessage());
-        }
-        jdbcIdo_=null;
+  /**
+   * DOCUMENT ME!
+   */
+  public void tearDown() {
+    String method = "tearDown:";
+    try {
+      jdbcIdo_.deleteObjects("TestOrderByDelete", al);
+
+    } catch (Exception e) {
+      e.printStackTrace();
+      fail(method + e.getMessage());
     }
+    jdbcIdo_ = null;
+  }
 
-    /**
-     * DOCUMENT ME!
-     */
-    
+  /**
+   * DOCUMENT ME!
+   */
+  public void testNativeOrWhere() {
+    String method = "testNativeOrWhere:";
+    Collection<ValueObject> col = null;
+    CpoWhere cw = null;
+    CpoWhere cw1 = null;
+    CpoWhere cw2 = null;
 
-    public void testNativeOrWhere() {
-        String method = "testNativeOrWhere:";
-        Collection<ValueObject> col = null;
-        CpoWhere cw = null;
-        CpoWhere cw1 = null;
-        CpoWhere cw2 = null;
-        
-        
-        try{
-          ArrayList<CpoNativeQuery> cnqAl = new ArrayList<CpoNativeQuery>();
-          
-          
-          cnqAl.add(new CpoNativeQuery("__CPO_WHERE__", "WHERE ID = 2 OR ID = 3"));
 
-          ValueObject valObj = new ValueObject(3);
-            col = jdbcIdo_.retrieveObjects("TestWhereRetrieve",valObj,null,null,cnqAl,valObj);
-            
-            assertTrue("Col size is "+col.size(), col.size()==2);
-            
-        } catch (Exception e) {
-            e.printStackTrace();
-            fail(method+e.getMessage());
-        }
+    try {
+      ArrayList<CpoNativeQuery> cnqAl = new ArrayList<CpoNativeQuery>();
+
+
+      cnqAl.add(new CpoNativeQuery("__CPO_WHERE__", "WHERE ID = 2 OR ID = 3"));
+
+      ValueObject valObj = new ValueObject(3);
+      col = jdbcIdo_.retrieveObjects("TestWhereRetrieve", valObj, null, null, cnqAl, valObj);
+
+      assertTrue("Col size is " + col.size(), col.size() == 2);
+
+    } catch (Exception e) {
+      e.printStackTrace();
+      fail(method + e.getMessage());
     }
+  }
 
-    public void testNullNative() {
-        String method = "testNativeOrWhere:";
-        Collection<ValueObject> col = null;
-        CpoWhere cw = null;
-        CpoWhere cw1 = null;
-        CpoWhere cw2 = null;
-        
-        
-        try{
-          ArrayList<CpoNativeQuery> cnqAl = new ArrayList<CpoNativeQuery>();
-          
-          
-          
-          cnqAl.add(new CpoNativeQuery("__CPO_WHERE__", null));
+  public void testNullNative() {
+    String method = "testNativeOrWhere:";
+    Collection<ValueObject> col = null;
+    CpoWhere cw = null;
+    CpoWhere cw1 = null;
+    CpoWhere cw2 = null;
 
-          ValueObject valObj = new ValueObject(3);
-            col = jdbcIdo_.retrieveObjects("TestWhereRetrieve",valObj,null,null,cnqAl,valObj);
-            
-            assertTrue("Col size is "+col.size(), col.size()==6);
-            
-        } catch (Exception e) {
-            e.printStackTrace();
-            fail(method+e.getMessage());
-        }
+
+    try {
+      ArrayList<CpoNativeQuery> cnqAl = new ArrayList<CpoNativeQuery>();
+
+
+
+      cnqAl.add(new CpoNativeQuery("__CPO_WHERE__", null));
+
+      ValueObject valObj = new ValueObject(3);
+      col = jdbcIdo_.retrieveObjects("TestWhereRetrieve", valObj, null, null, cnqAl, valObj);
+
+      assertTrue("Col size is " + col.size(), col.size() == 6);
+
+    } catch (Exception e) {
+      e.printStackTrace();
+      fail(method + e.getMessage());
     }
-
-
-    
-    
+  }
 }

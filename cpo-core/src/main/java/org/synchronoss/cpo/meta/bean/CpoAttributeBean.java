@@ -19,12 +19,13 @@
  *  http://www.gnu.org/licenses/lgpl.txt
  *
  */
-
 package org.synchronoss.cpo.meta.bean;
 
 public class CpoAttributeBean implements java.io.Serializable {
 
-  /* Properties */
+  /*
+   * Properties
+   */
   private java.lang.String javaName;
   private java.lang.String javaType;
   private java.lang.String dataName;
@@ -83,28 +84,37 @@ public class CpoAttributeBean implements java.io.Serializable {
     this.transformClassName = transformClassName;
   }
 
-  /* Getters and Setters */
-
+  /*
+   * Getters and Setters
+   */
   public boolean equals(Object o) {
-    if (this == o)
+    if (this == o) {
       return true;
-    if (o == null || getClass() != o.getClass())
+    }
+    if (o == null || getClass() != o.getClass()) {
       return false;
+    }
 
-    CpoAttributeBean that = (CpoAttributeBean)o;
+    CpoAttributeBean that = (CpoAttributeBean) o;
 
-    if (getJavaName() != null ? !getJavaName().equals(that.getJavaName()) : that.getJavaName() != null)
+    if (getJavaName() != null ? !getJavaName().equals(that.getJavaName()) : that.getJavaName() != null) {
       return false;
-    if (getJavaType() != null ? !getJavaType().equals(that.getJavaType()) : that.getJavaType() != null)
+    }
+    if (getJavaType() != null ? !getJavaType().equals(that.getJavaType()) : that.getJavaType() != null) {
       return false;
-    if (getDataName() != null ? !getDataName().equals(that.getDataName()) : that.getDataName() != null)
+    }
+    if (getDataName() != null ? !getDataName().equals(that.getDataName()) : that.getDataName() != null) {
       return false;
-    if (getDataType() != null ? !getDataType().equals(that.getDataType()) : that.getDataType() != null)
+    }
+    if (getDataType() != null ? !getDataType().equals(that.getDataType()) : that.getDataType() != null) {
       return false;
-    if (getTransformClassName() != null ? !getTransformClassName().equals(that.getTransformClassName()) : that.getTransformClassName() != null)
+    }
+    if (getTransformClassName() != null ? !getTransformClassName().equals(that.getTransformClassName()) : that.getTransformClassName() != null) {
       return false;
-    if (getDescription() != null ? !getDescription().equals(that.getDescription()) : that.getDescription() != null)
+    }
+    if (getDescription() != null ? !getDescription().equals(that.getDescription()) : that.getDescription() != null) {
       return false;
+    }
 
     return true;
   }

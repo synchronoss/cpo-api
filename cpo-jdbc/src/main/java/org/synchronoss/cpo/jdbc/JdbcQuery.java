@@ -19,82 +19,72 @@
  *  http://www.gnu.org/licenses/lgpl.txt
  *
  */
-
 package org.synchronoss.cpo.jdbc;
 
 import java.util.ArrayList;
 
 /**
- * JdbcQuery is a class that maps traditional java classes to tables in a 
- * jdbc database. 
- * 
+ * JdbcQuery is a class that maps traditional java classes to tables in a jdbc database.
+ *
  * @author david berry
  */
-
 public class JdbcQuery extends java.lang.Object implements java.io.Serializable, java.lang.Cloneable {
 
-	/**
-     * Version Id for this class.
-     */
-	private static final long serialVersionUID = 1L;
-	
+  /**
+   * Version Id for this class.
+   */
+  private static final long serialVersionUID = 1L;
+  /**
+   * The guid assigned to this query.
+   */
+  private String queryId = null;
+  /**
+   * The sql to be used for this query
+   */
+  private String text = null;
+  private String name = null;
+  private String type = null;
+  /**
+   * parameterList is a list of attribute names to get the data from to use as parameters for the query
+   */
+  private ArrayList<JdbcArgument> parameterList = new ArrayList<JdbcArgument>();
 
-    /**
-     * The guid assigned to this query.
-     */
-    private String queryId = null;
+  public JdbcQuery() {
+  }
 
-    /**
-     * The sql to be used for this query 
-     */
-    private String text = null;
+  public String getQueryId() {
+    return this.queryId;
+  }
 
-    private String name = null;
-    private String type = null;
+  public void setQueryId(String s) {
+    this.queryId = s;
+  }
 
-    /**
-     * parameterList is a list of attribute names to get the data from
-     * to use as parameters for the query
-     */
-    private ArrayList<JdbcArgument> parameterList = new ArrayList<JdbcArgument>();
+  public String getText() {
+    return this.text;
+  }
 
-    public JdbcQuery(){
-    }
+  public void setText(String s) {
+    this.text = s;
+  }
 
-    public String getQueryId(){
-        return this.queryId;
-    }
+  public String getName() {
+    return this.name;
+  }
 
-    public void setQueryId(String s){
-        this.queryId = s;
-    }
+  public void setName(String s) {
+    this.name = s;
+  }
 
-    public String getText(){
-        return this.text;
-    }
+  public String getType() {
+    return this.type;
+  }
 
-    public void setText(String s){
-        this.text = s;
-    }
+  public void setType(String s) {
+    this.type = s;
+  }
 
-    public String getName(){
-        return this.name;
-    }
-
-    public void setName(String s){
-        this.name = s;
-    }
-
-    public String getType(){
-        return this.type;
-    }
-
-    public void setType(String s){
-        this.type = s;
-    }
-
-    public ArrayList<JdbcArgument> getParameterList(){
-        return this.parameterList;
-    }
-
+  public ArrayList<JdbcArgument> getParameterList() {
+    return this.parameterList;
+  }
 }

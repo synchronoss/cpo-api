@@ -19,7 +19,6 @@
  *  http://www.gnu.org/licenses/lgpl.txt
  *
  */
-
 package org.synchronoss.cpo;
 
 import java.util.HashSet;
@@ -31,79 +30,83 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class CpoBlockingResultSet<E> implements CpoResultSet<E>, Iterator<E> {
+
   private static Logger logger = LoggerFactory.getLogger(CpoBlockingResultSet.class.getName());
   private static final long serialVersionUID = 1L;
-  private int capacity=0;
+  private int capacity = 0;
   private final ThreadLocal<E> tlObj = new ThreadLocal<E>();
   private LinkedBlockingQueue<E> lbq = null;
   private final Set<Thread> producers = new HashSet<Thread>();
   private final Set<Thread> consumers = new HashSet<Thread>();
   private boolean done = false;
-  
-  private CpoBlockingResultSet (){
+
+  private CpoBlockingResultSet() {
   }
-  
+
   public CpoBlockingResultSet(int capacity) {
     this.capacity = capacity;
     lbq = new LinkedBlockingQueue<E>(capacity);
   }
-  
+
   @Override
-  public void put(E e) throws InterruptedException{
+  public void put(E e) throws InterruptedException {
     producers.add(Thread.currentThread());
     logger.debug("Put Called");
     lbq.put(e);
   }
-  
+
   @Override
-  public boolean hasNext(){
+  public boolean hasNext() {
     logger.debug("hasNext Called");
-    
-    if (tlObj.get()!=null || lbq.size()>0)
+
+    if (tlObj.get() != null || lbq.size() > 0) {
       return true;
-    
-    if (lbq.size()==0 && Thread.currentThread().interrupted())
+    }
+
+    if (lbq.size() == 0 && Thread.currentThread().interrupted()) {
       return false;
-    
-    try{
+    }
+
+    try {
       tlObj.set(lbq.take());
-    } catch (InterruptedException ie){
+    } catch (InterruptedException ie) {
       logger.error("CpoBlockingResultSet.hasNext() - Interrupted and bailing out");
       return false;
     }
     return true;
-    
+
   }
-  
+
   @Override
-  public int size(){
+  public int size() {
     return lbq.size();
   }
-  
+
   @Override
   public void remove() {
     throw new UnsupportedOperationException();
   }
-  
+
   @Override
-  public E next() throws NoSuchElementException{
+  public E next() throws NoSuchElementException {
     logger.debug("next Called");
-    E ret=tlObj.get();
-    
-    if (ret==null){
-      if (lbq.size()==0 && Thread.currentThread().interrupted())
+    E ret = tlObj.get();
+
+    if (ret == null) {
+      if (lbq.size() == 0 && Thread.currentThread().interrupted()) {
         throw new NoSuchElementException();
-    
-      try{
-        ret=take();
-      } catch (InterruptedException ie){
+      }
+
+      try {
+        ret = take();
+      } catch (InterruptedException ie) {
         logger.error("CpoBlockingResultSet.next() - Interrupted and bailing out");
         throw new NoSuchElementException();
       }
     } else {
       tlObj.set(null);
     }
-    
+
     return ret;
   }
 
@@ -118,20 +121,19 @@ public class CpoBlockingResultSet<E> implements CpoResultSet<E>, Iterator<E> {
     logger.debug("Take Called");
     return lbq.take();
   }
-  
+
   @Override
-  public void cancel(){
-    for(Thread t : consumers){
-        t.interrupt();
+  public void cancel() {
+    for (Thread t : consumers) {
+      t.interrupt();
     }
-    for(Thread t : producers){
-        t.interrupt();
+    for (Thread t : producers) {
+      t.interrupt();
     }
-  }
-  
-  @Override
-  public int getFetchSize(){
-    return capacity;
   }
 
+  @Override
+  public int getFetchSize() {
+    return capacity;
+  }
 }

@@ -19,7 +19,6 @@
  *  http://www.gnu.org/licenses/lgpl.txt
  *
  */
-
 package org.synchronoss.cpo.exporter;
 
 import org.synchronoss.cpo.MetaVisitor;
@@ -35,7 +34,6 @@ import org.synchronoss.cpo.meta.domain.*;
 public class CoreMetaXmlObjectExporter implements MetaXmlObjectExporter, MetaVisitor {
 
   protected CpoMetaDataDocument cpoMetaDataDocument = null;
-
   protected CtClass currentCtClass;
   protected CtFunctionGroup currentCtFunctionGroup;
   protected CtFunction currentCtFunction;
@@ -56,8 +54,9 @@ public class CoreMetaXmlObjectExporter implements MetaXmlObjectExporter, MetaVis
     CtClass ctClass = cpoMetaDataDocument.getCpoMetaData().addNewCpoClass();
     ctClass.setName(cpoClass.getName());
 
-    if (cpoClass.getDescription() != null && cpoClass.getDescription().length() > 0)
+    if (cpoClass.getDescription() != null && cpoClass.getDescription().length() > 0) {
       ctClass.setDescription(cpoClass.getDescription());
+    }
 
     // save the reference
     currentCtClass = ctClass;
@@ -73,11 +72,13 @@ public class CoreMetaXmlObjectExporter implements MetaXmlObjectExporter, MetaVis
       ctAttribute.setDataName(cpoAttribute.getDataName());
       ctAttribute.setDataType(cpoAttribute.getDataType());
 
-      if (cpoAttribute.getTransformClassName() != null && cpoAttribute.getTransformClassName().length() > 0)
+      if (cpoAttribute.getTransformClassName() != null && cpoAttribute.getTransformClassName().length() > 0) {
         ctAttribute.setTransformClass(cpoAttribute.getTransformClassName());
+      }
 
-      if (cpoAttribute.getDescription() != null && cpoAttribute.getDescription().length() > 0)
+      if (cpoAttribute.getDescription() != null && cpoAttribute.getDescription().length() > 0) {
         ctAttribute.setDescription(cpoAttribute.getDescription());
+      }
     }
   }
 
@@ -89,8 +90,9 @@ public class CoreMetaXmlObjectExporter implements MetaXmlObjectExporter, MetaVis
       ctFunctionGroup.setName(cpoFunctionGroup.getName());
       ctFunctionGroup.setType(cpoFunctionGroup.getType());
 
-      if (cpoFunctionGroup.getDescription() != null && cpoFunctionGroup.getDescription().length() > 0)
+      if (cpoFunctionGroup.getDescription() != null && cpoFunctionGroup.getDescription().length() > 0) {
         ctFunctionGroup.setDescription(cpoFunctionGroup.getDescription());
+      }
 
       // save the reference
       currentCtFunctionGroup = ctFunctionGroup;
@@ -104,8 +106,9 @@ public class CoreMetaXmlObjectExporter implements MetaXmlObjectExporter, MetaVis
 
       ctFunction.setExpression(cpoFunction.getExpression());
 
-      if (cpoFunction.getDescription() != null && cpoFunction.getDescription().length() > 0)
+      if (cpoFunction.getDescription() != null && cpoFunction.getDescription().length() > 0) {
         ctFunction.setDescription(cpoFunction.getDescription());
+      }
 
       // save the reference
       currentCtFunction = ctFunction;
@@ -119,8 +122,9 @@ public class CoreMetaXmlObjectExporter implements MetaXmlObjectExporter, MetaVis
 
       ctArgument.setAttributeName(cpoArgument.getAttribute().getJavaName());
 
-      if (cpoArgument.getDescription() != null && cpoArgument.getDescription().length() > 0)
+      if (cpoArgument.getDescription() != null && cpoArgument.getDescription().length() > 0) {
         ctArgument.setDescription(cpoArgument.getDescription());
+      }
     }
   }
 }

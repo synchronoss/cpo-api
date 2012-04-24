@@ -19,33 +19,31 @@
  *  http://www.gnu.org/licenses/lgpl.txt
  *
  */
-
 package org.synchronoss.cpo.meta.domain;
 
-import org.slf4j.*;
-import org.synchronoss.cpo.*;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.synchronoss.cpo.CpoException;
 import org.synchronoss.cpo.helper.ExceptionHelper;
 import org.synchronoss.cpo.meta.bean.CpoAttributeBean;
 import org.synchronoss.cpo.transform.CpoTransform;
 
-import java.lang.reflect.*;
-
 public class CpoAttribute extends CpoAttributeBean {
 
   private static Logger logger = LoggerFactory.getLogger(CpoAttribute.class.getName());
-  
   protected static final String TRANSFORM_IN_NAME = "transformIn";
   protected static final String TRANSFORM_OUT_NAME = "transformOut";
-          
   private String getterName_ = null;
   private String setterName_ = null;
   private Method[] getters_ = null;
   private Method[] setters_ = null;
-
   //Transform attributes
   private CpoTransform cpoTransform = null;
   private Method transformInMethod = null;
-  
+
   public CpoAttribute() {
   }
 
@@ -138,11 +136,12 @@ public class CpoAttribute extends CpoAttributeBean {
     Logger localLogger = obj == null ? logger : LoggerFactory.getLogger(obj.getClass().getName());
     Object actualParam = param;
     Class<?> actualClass = paramClass;
-    
-    if (getSetters().length == 0)
-      throw new CpoException("There are no setters");
 
-    if (cpoTransform!=null){
+    if (getSetters().length == 0) {
+      throw new CpoException("There are no setters");
+    }
+
+    if (cpoTransform != null) {
       actualParam = cpoTransform.transformIn(actualParam);
       actualClass = transformInMethod.getReturnType();
     }
@@ -167,7 +166,7 @@ public class CpoAttribute extends CpoAttributeBean {
     Logger localLogger = obj == null ? logger : LoggerFactory.getLogger(obj.getClass().getName());
 
     try {
-      return transformOut(getGetters()[0].invoke(obj, (Object[])null));
+      return transformOut(getGetters()[0].invoke(obj, (Object[]) null));
     } catch (IllegalAccessException iae) {
       localLogger.debug("Error Invoking Getter Method: " + ExceptionHelper.getLocalizedMessage(iae));
     } catch (InvocationTargetException ite) {
@@ -225,8 +224,9 @@ public class CpoAttribute extends CpoAttributeBean {
         // that is the same as the primitive
         for (Constructor ctor : objClass.getConstructors()) {
           Class types[] = ctor.getParameterTypes();
-          if (types.length > 0 && types[0].isAssignableFrom(primClass))
+          if (types.length > 0 && types[0].isAssignableFrom(primClass)) {
             return true;
+          }
         }
       } else {
         logger.debug("Wrapper Class:" + objClass.getName().toLowerCase() + "does not start with " + primClass.getName());
@@ -235,7 +235,7 @@ public class CpoAttribute extends CpoAttributeBean {
 
     return false;
   }
-  
+
   public void loadRunTimeInfo(CpoClass cpoClass) throws CpoException {
     StringBuilder failedMessage = new StringBuilder();
     setGetterName(buildMethodName("get", getJavaName()));
@@ -253,12 +253,12 @@ public class CpoAttribute extends CpoAttributeBean {
     }
 
     initTransformClass();
-    
+
     if (failedMessage.length() > 0) {
       throw new CpoException(failedMessage.toString());
     }
   }
-  
+
   protected void initTransformClass() throws CpoException {
     String className = getTransformClassName();
     Class<?> transformClass = null;
@@ -280,8 +280,9 @@ public class CpoAttribute extends CpoAttributeBean {
         if (transformObject instanceof CpoTransform) {
           cpoTransform = (CpoTransform) transformObject;
           Method[] methods = findMethods(transformClass, TRANSFORM_IN_NAME, 1, true);
-          if (methods.length>0)
+          if (methods.length > 0) {
             transformInMethod = methods[0];
+          }
         } else {
           localLogger.error("Invalid CpoTransform Class specified:<" + className + ">");
           throw new CpoException("Invalid CpoTransform Class specified:<" + className + ">");

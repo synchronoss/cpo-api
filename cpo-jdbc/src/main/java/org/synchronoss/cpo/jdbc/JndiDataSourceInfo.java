@@ -19,7 +19,6 @@
  *  http://www.gnu.org/licenses/lgpl.txt
  *
  */
-
 package org.synchronoss.cpo.jdbc;
 
 import javax.naming.Context;
@@ -29,45 +28,43 @@ import org.synchronoss.cpo.CpoException;
 import org.synchronoss.cpo.DataSourceInfo;
 
 /**
- * Collects the info required to instantiate a DataSource stored as a JNDI Resource. 
- * 
+ * Collects the info required to instantiate a DataSource stored as a JNDI Resource.
+ *
  * Provides the DataSourceInfo factory method getDataSource which instantiates the DataSource
- * 
+ *
  * @author dberry
  */
 public class JndiDataSourceInfo implements DataSourceInfo {
+
   private DataSource dataSource = null;
-  private String       jndiName = null;
-  private Context       jndiCtx = null;
+  private String jndiName = null;
+  private Context jndiCtx = null;
   private String dataSourceName = null;
-  
   // Make sure DataSource creation is thread safe.
   private Object LOCK = new Object();
 
   /**
-   * Creates a JndiDataSourceInfo from a JNDIName that represents the 
-   * datasource in the application server.
+   * Creates a JndiDataSourceInfo from a JNDIName that represents the datasource in the application server.
    *
    * @param jndiName The JndiName of the app server datasource
    *
    */
   public JndiDataSourceInfo(String jndiName) {
-    this.jndiName=jndiName;
+    this.jndiName = jndiName;
     dataSourceName = jndiName;
   }
 
   /**
-   * Creates a JndiDataSourceInfo from a JNDIName that represents the 
-   * datasource in the application server.
+   * Creates a JndiDataSourceInfo from a JNDIName that represents the datasource in the application server.
    *
    * @param jndiName The JndiName of the app server datasource
    * @param ctx - The context for which the Jndi Lookup should use.
    *
    */
   public JndiDataSourceInfo(String jndiName, Context ctx) {
-    this.jndiName=jndiName;
+    this.jndiName = jndiName;
     dataSourceName = jndiName;
-    jndiCtx=ctx;
+    jndiCtx = ctx;
   }
 
   public String getDataSourceName() {
@@ -76,9 +73,10 @@ public class JndiDataSourceInfo implements DataSourceInfo {
 
   public DataSource getDataSource() throws CpoException {
 
-    if (dataSource!=null)
+    if (dataSource != null) {
       return dataSource;
-     
+    }
+
     synchronized (LOCK) {
       try {
         if (jndiCtx == null) {
@@ -92,5 +90,4 @@ public class JndiDataSourceInfo implements DataSourceInfo {
     }
     return dataSource;
   }
-  
 }

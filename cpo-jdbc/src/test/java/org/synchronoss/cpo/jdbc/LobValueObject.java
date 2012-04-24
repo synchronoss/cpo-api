@@ -19,52 +19,58 @@
  *  http://www.gnu.org/licenses/lgpl.txt
  *
  */
-
 package org.synchronoss.cpo.jdbc;
 
 import java.io.Serializable;
 
-
 public class LobValueObject implements Serializable {
-    /**
-     * Version Id for this class.
-     */
-    private static final long serialVersionUID = 1L;
-    
+
+  /**
+   * Version Id for this class.
+   */
+  private static final long serialVersionUID = 1L;
   private int lobId;
   private byte[] bLob = null;
   private byte[] bLob2 = null;
   private char[] cLob = null;
+
   public LobValueObject() {
   }
-  
-  public LobValueObject(int id, byte[] bLob, char[] cLob){
+
+  public LobValueObject(int id, byte[] bLob, char[] cLob) {
     this.lobId = id;
-    this.bLob=bLob;
-    this.cLob=cLob;
+    this.bLob = bLob;
+    this.cLob = cLob;
   }
-  
+
   public void setLobId(int lobId) {
     this.lobId = lobId;
   }
+
   public int getLobId() {
     return this.lobId;
   }
+
   public void setBLob(byte[] bLob) {
     this.bLob = bLob;
   }
+
   public byte[] getBLob() {
     return this.bLob;
   }
+
   public void setBLob2(byte[] bLob) {
     this.bLob2 = bLob;
   }
+
   public byte[] getBLob2() {
     return this.bLob2;
   }
+
   public void setCLob(char[] cLob) {
     this.cLob = cLob;
   }
+
   public char[] getCLob() {
     return this.cLob;
   }

@@ -19,7 +19,6 @@
  *  http://www.gnu.org/licenses/lgpl.txt
  *
  */
-
 package org.synchronoss.cpo.jdbc;
 
 import java.io.PrintWriter;
@@ -33,27 +32,25 @@ import org.synchronoss.cpo.CpoException;
 import org.synchronoss.cpo.DataSourceInfo;
 
 /**
- * Collects the info required to instantiate a DataSource from a JDBC Driver 
- * 
+ * Collects the info required to instantiate a DataSource from a JDBC Driver
+ *
  * Provides the DataSourceInfo factory method getDataSource which instantiates the DataSource
- * 
+ *
  * @author dberry
  */
-public class DriverDataSourceInfo implements DataSourceInfo, DataSource  {
-  private static final int               URL_CONNECTION = 1;
-  private static final int         URL_PROPS_CONNECTION = 2;
+public class DriverDataSourceInfo implements DataSourceInfo, DataSource {
+
+  private static final int URL_CONNECTION = 1;
+  private static final int URL_PROPS_CONNECTION = 2;
   private static final int URL_USER_PASSWORD_CONNECTION = 3;
-  private int    connectionType = 0;
-
+  private int connectionType = 0;
   private String dataSourceName = null;
-  private String            url = null;
-  private String       username = null;
-  private String       password = null;
+  private String url = null;
+  private String username = null;
+  private String password = null;
   private Properties properties = null;
-
   private PrintWriter printWriter_ = null;
   private int timeout_ = 0;
-   
   // Make sure DataSource creation is thread safe.
   private Object LOCK = new Object();
 
@@ -65,9 +62,9 @@ public class DriverDataSourceInfo implements DataSourceInfo, DataSource  {
    */
   public DriverDataSourceInfo(String driver, String url) throws CpoException {
     loadDriver(driver);
-    connectionType=URL_CONNECTION;
-    this.url=url;
-    this.dataSourceName=url;
+    connectionType = URL_CONNECTION;
+    this.url = url;
+    this.dataSourceName = url;
   }
 
   /**
@@ -79,10 +76,10 @@ public class DriverDataSourceInfo implements DataSourceInfo, DataSource  {
    */
   public DriverDataSourceInfo(String driver, String url, Properties properties) throws CpoException {
     loadDriver(driver);
-    connectionType=URL_PROPS_CONNECTION;
-    this.url=url;
-    this.properties=properties;
-    this.dataSourceName=BuildDataSourceName(url, properties);
+    connectionType = URL_PROPS_CONNECTION;
+    this.url = url;
+    this.properties = properties;
+    this.dataSourceName = BuildDataSourceName(url, properties);
   }
 
   /**
@@ -95,11 +92,11 @@ public class DriverDataSourceInfo implements DataSourceInfo, DataSource  {
    */
   public DriverDataSourceInfo(String driver, String url, String username, String password) throws CpoException {
     loadDriver(driver);
-    connectionType=URL_USER_PASSWORD_CONNECTION;
-    this.url=url;
-    this.username=username;
-    this.password=password;
-    this.dataSourceName=url + username;
+    connectionType = URL_USER_PASSWORD_CONNECTION;
+    this.url = url;
+    this.username = username;
+    this.password = password;
+    this.dataSourceName = url + username;
   }
 
   public String getDataSourceName() {
@@ -109,7 +106,7 @@ public class DriverDataSourceInfo implements DataSourceInfo, DataSource  {
   public DataSource getDataSource() throws CpoException {
     return this;
   }
-  
+
   /**
    * DOCUMENT ME!
    *
@@ -126,79 +123,79 @@ public class DriverDataSourceInfo implements DataSourceInfo, DataSource  {
     // the same datasource with the same properties but in different order,
     // we will generate the same key.
     for (Object key : treeMap.keySet()) {
-      dsName.append((String)key);
+      dsName.append((String) key);
       dsName.append("=");
-      dsName.append(properties.getProperty((String)key));
+      dsName.append(properties.getProperty((String) key));
     }
 
     return dsName.toString();
   }
-  
-    public Connection getConnection(String userName, String password) 
-    throws SQLException {
-            throw new SQLException("Not Implemented");
-    }
-    
 
-    public Connection getConnection()
-    throws SQLException {
-        return makeNewConnection();
-    }
+  public Connection getConnection(String userName, String password)
+          throws SQLException {
+    throw new SQLException("Not Implemented");
+  }
 
-    private Connection makeNewConnection() throws SQLException {
-        Connection connection = null;
-        switch(connectionType) {
-          case DriverDataSourceInfo.URL_CONNECTION: 
-              connection=DriverManager.getConnection(url);
-              break;
-          case DriverDataSourceInfo.URL_PROPS_CONNECTION:
-              connection=DriverManager.getConnection(url, properties);
-              break;
-          case DriverDataSourceInfo.URL_USER_PASSWORD_CONNECTION:
-              connection=DriverManager.getConnection(url, username, password);
-              break;
-          default: throw new SQLException("Invalid Connection Type");
-        }
-        return connection;
-    }
+  public Connection getConnection()
+          throws SQLException {
+    return makeNewConnection();
+  }
 
-    public synchronized String toString() {
-        StringBuilder info = new StringBuilder();
-        info.append("JdbcDataSource(");
-        info.append(dataSourceName);
-        info.append(")");
-        return(info.toString());
+  private Connection makeNewConnection() throws SQLException {
+    Connection connection = null;
+    switch (connectionType) {
+      case DriverDataSourceInfo.URL_CONNECTION:
+        connection = DriverManager.getConnection(url);
+        break;
+      case DriverDataSourceInfo.URL_PROPS_CONNECTION:
+        connection = DriverManager.getConnection(url, properties);
+        break;
+      case DriverDataSourceInfo.URL_USER_PASSWORD_CONNECTION:
+        connection = DriverManager.getConnection(url, username, password);
+        break;
+      default:
+        throw new SQLException("Invalid Connection Type");
     }
+    return connection;
+  }
 
-    public PrintWriter getLogWriter()
-    throws SQLException{
-        return printWriter_;
-    }
+  public synchronized String toString() {
+    StringBuilder info = new StringBuilder();
+    info.append("JdbcDataSource(");
+    info.append(dataSourceName);
+    info.append(")");
+    return (info.toString());
+  }
 
-    public void setLogWriter(PrintWriter out)
-    throws SQLException{
-        printWriter_ = out;
+  public PrintWriter getLogWriter()
+          throws SQLException {
+    return printWriter_;
+  }
 
-    }
+  public void setLogWriter(PrintWriter out)
+          throws SQLException {
+    printWriter_ = out;
 
-    public void setLoginTimeout(int seconds)
-    throws SQLException {
-        timeout_ = seconds;
-    }
+  }
 
-    public int getLoginTimeout()
-    throws SQLException {
-        return timeout_;
-    }
+  public void setLoginTimeout(int seconds)
+          throws SQLException {
+    timeout_ = seconds;
+  }
+
+  public int getLoginTimeout()
+          throws SQLException {
+    return timeout_;
+  }
 
   public <T> T unwrap(Class<T> iface) throws SQLException {
-      throw new UnsupportedOperationException("Not supported yet.");
+    throw new UnsupportedOperationException("Not supported yet.");
   }
 
   public boolean isWrapperFor(Class<?> iface) throws SQLException {
     return false;
   }
-  
+
   private void loadDriver(String driver) throws CpoException {
     try {
       Class.forName(driver);

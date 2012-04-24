@@ -19,86 +19,76 @@
  *  http://www.gnu.org/licenses/lgpl.txt
  *
  */
- 
 package org.synchronoss.cpo;
 
 /**
- * CpoOrderBy is an interface for specifying the sort order in which 
- * objects are returned from the Datasource.
- * 
+ * CpoOrderBy is an interface for specifying the sort order in which objects are returned from the Datasource.
+ *
  * @author david berry
  */
-
 public interface CpoOrderBy {
 
-    /**
-     * Gets the boolean that determines if the objects will be returned from
-     * from the CpoAdapter in Ascending order or Descending order
-     * 
-     * @return boolean true if it is to sort in Ascensing Order
-     *                 false if it is to be sorted in Descending Order
-     */
-    public boolean getAscending();
+  /**
+   * Gets the boolean that determines if the objects will be returned from from the CpoAdapter in Ascending order or
+   * Descending order
+   *
+   * @return boolean true if it is to sort in Ascensing Order false if it is to be sorted in Descending Order
+   */
+  public boolean getAscending();
 
-    /**
-     * Sets the boolean that determines if the objects will be returned from
-     * from the CpoAdapter in Ascending order or Descending order
-     * 
-     * @param b true if it is to sort in Ascensing Order
-     *          false if it is to be sorted in Descending Order
-     */
-    public void setAscending(boolean b);
+  /**
+   * Sets the boolean that determines if the objects will be returned from from the CpoAdapter in Ascending order or
+   * Descending order
+   *
+   * @param b true if it is to sort in Ascensing Order false if it is to be sorted in Descending Order
+   */
+  public void setAscending(boolean b);
 
-    /**
-     * Gets the name of the attribute that is to be used to sort the results 
-     * from the CpoAdapter.
-     * 
-     * @return String The name of the attribute
-     */
-    public String getAttribute();
+  /**
+   * Gets the name of the attribute that is to be used to sort the results from the CpoAdapter.
+   *
+   * @return String The name of the attribute
+   */
+  public String getAttribute();
 
-    /**
-     * Sets the name of the attribute that is to be used to sort the results 
-     * from the CpoAdapter.
-     * 
-     * @param s The name of the attribute
-     */
-    public void setAttribute(String s);
+  /**
+   * Sets the name of the attribute that is to be used to sort the results from the CpoAdapter.
+   *
+   * @param s The name of the attribute
+   */
+  public void setAttribute(String s);
 
-    /**
-     * Gets a string representing a datasource specific function call that 
-     * must be applied to the attribute that will be used for sorting.
-     * 
-     * i.e. - "upper(attribute_name)"
-     * 
-     * @return String The name of the function
-     */
-    public String getFunction();
+  /**
+   * Gets a string representing a datasource specific function call that must be applied to the attribute that will be
+   * used for sorting.
+   *
+   * i.e. - "upper(attribute_name)"
+   *
+   * @return String The name of the function
+   */
+  public String getFunction();
 
-    /**
-     * Sets a string representing a datasource specific function call that 
-     * must be applied to the attribute that will be used for sorting.
-     * 
-     * i.e. - "upper(attribute_name)"
-     * 
-     * @param s The name of the function
-     */
-    public void setFunction(String s);
-    
-    /**
-     * Gets a string representing the name of this instance of the 
-     * CpoOrderBy
-     * 
-     * @return String The name of the CpoOrderBy
-     */
-    public String getName();
+  /**
+   * Sets a string representing a datasource specific function call that must be applied to the attribute that will be
+   * used for sorting.
+   *
+   * i.e. - "upper(attribute_name)"
+   *
+   * @param s The name of the function
+   */
+  public void setFunction(String s);
 
-    /**
-     * Sets a string representing the name of this instance of the 
-     * CpoOrderBy
-     * 
-     * @param s The name of the CpoOrderBy
-     */
-    public void setName(String s);
+  /**
+   * Gets a string representing the name of this instance of the CpoOrderBy
+   *
+   * @return String The name of the CpoOrderBy
+   */
+  public String getName();
 
+  /**
+   * Sets a string representing the name of this instance of the CpoOrderBy
+   *
+   * @param s The name of the CpoOrderBy
+   */
+  public void setName(String s);
 }

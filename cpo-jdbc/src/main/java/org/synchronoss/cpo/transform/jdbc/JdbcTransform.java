@@ -19,22 +19,19 @@
  *  http://www.gnu.org/licenses/lgpl.txt
  *
  */
-
 package org.synchronoss.cpo.transform.jdbc;
 
-import org.synchronoss.cpo.transform.*;
 import org.synchronoss.cpo.CpoException;
-import org.synchronoss.cpo.jdbc.*;
+import org.synchronoss.cpo.jdbc.JdbcCallableStatementFactory;
+import org.synchronoss.cpo.jdbc.JdbcPreparedStatementFactory;
+import org.synchronoss.cpo.transform.CpoTransform;
 
 /**
- * User: michael
- * Date: Sep 19, 2010
- * Time: 12:37:17 AM
+ * User: michael Date: Sep 19, 2010 Time: 12:37:17 AM
  */
 public interface JdbcTransform<D, J> extends CpoTransform<D, J> {
 
   public D transformOut(JdbcPreparedStatementFactory jpsf, J attributeObject) throws CpoException, UnsupportedOperationException;
 
   public D transformOut(JdbcCallableStatementFactory jpsf, J attributeObject) throws CpoException, UnsupportedOperationException;
-
 }

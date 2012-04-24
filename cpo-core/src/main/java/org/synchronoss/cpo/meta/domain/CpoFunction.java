@@ -19,18 +19,17 @@
  *  http://www.gnu.org/licenses/lgpl.txt
  *
  */
-
 package org.synchronoss.cpo.meta.domain;
 
 import java.util.ArrayList;
-import org.slf4j.*;
+import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.meta.bean.CpoFunctionBean;
 
-import java.util.List;
-
 public class CpoFunction extends CpoFunctionBean {
-  private static Logger logger = LoggerFactory.getLogger(CpoFunction.class.getName());
 
+  private static Logger logger = LoggerFactory.getLogger(CpoFunction.class.getName());
   List<CpoArgument> arguments = new ArrayList<CpoArgument>();
 
   public CpoFunction() {
@@ -45,6 +44,7 @@ public class CpoFunction extends CpoFunctionBean {
       arguments.add(argument);
     }
   }
+
   /**
    * DOCUMENT ME!
    *
@@ -56,7 +56,7 @@ public class CpoFunction extends CpoFunctionBean {
     int j;
     CpoArgument argument;
     CpoAttribute attribute;
-    int type=0;
+    int type = 0;
     Class<?> c;
     StringBuilder sb = new StringBuilder("Parameter list for ");
 
@@ -75,11 +75,11 @@ public class CpoFunction extends CpoFunctionBean {
         try {
           attribute = argument.getAttribute();
           c = attribute.getGetters()[0].getReturnType();
-    // TODO: make uncomment the following line and make work
+          // TODO: make uncomment the following line and make work
 //          type = attribute.getJavaSqlType();
           if (c != null) {
             sb.append(" col" + j + ":" + c.getName() + " type:"
-                + type + " ");
+                    + type + " ");
           } else {
             sb.append(j + ":null type:" + type + " ");
           }

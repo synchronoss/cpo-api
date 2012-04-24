@@ -19,25 +19,26 @@
  *  http://www.gnu.org/licenses/lgpl.txt
  *
  */
-
 package org.synchronoss.cpo;
 
 /**
- * Exception class acts as a catch all for any condition occurring in
- * with regards to an Element
- * @author  Walter Jordan
+ * Exception class acts as a catch all for any condition occurring in with regards to an Element
+ *
+ * @author Walter Jordan
  */
 public class ChildNodeException
- extends Exception{
-    /** Version Id for this class. */
-    private static final long serialVersionUID=1L;
+        extends Exception {
 
-    public ChildNodeException(String message){
-         super(message);
-    }
+  /**
+   * Version Id for this class.
+   */
+  private static final long serialVersionUID = 1L;
 
-    public ChildNodeException(){
-         super();
-    }
+  public ChildNodeException(String message) {
+    super(message);
+  }
+
+  public ChildNodeException() {
+    super();
+  }
 }
-

@@ -19,7 +19,6 @@
  *  http://www.gnu.org/licenses/lgpl.txt
  *
  */
-
 package org.synchronoss.cpo.meta;
 
 import org.synchronoss.cpo.CpoException;
@@ -29,13 +28,13 @@ import org.synchronoss.cpo.CpoException;
  * @author dberry
  */
 public interface CpoMetaAdapterFactory {
-    /**
-     * Creates a new CpoMetaAdapter
-     *
-     * @param metaXml The resource name, file name, or actual xml that contains the metadata.
-     *
-     * @throws CpoException Thrown if there are errors creating the CpoMetaAdapter
-     */
-    public CpoMetaAdapter getCpoMetaAdapter(String metaXml) throws CpoException;
-  
+
+  /**
+   * Creates a new CpoMetaAdapter
+   *
+   * @param metaXml The resource name, file name, or actual xml that contains the metadata.
+   *
+   * @throws CpoException Thrown if there are errors creating the CpoMetaAdapter
+   */
+  public CpoMetaAdapter getCpoMetaAdapter(String metaXml) throws CpoException;
 }

@@ -19,13 +19,11 @@
  *  http://www.gnu.org/licenses/lgpl.txt
  *
  */
-
 package org.synchronoss.cpo.meta.domain;
 
 import java.util.ArrayList;
-import org.synchronoss.cpo.meta.bean.CpoFunctionGroupBean;
-
 import java.util.List;
+import org.synchronoss.cpo.meta.bean.CpoFunctionGroupBean;
 
 public class CpoFunctionGroup extends CpoFunctionGroupBean {
 
@@ -39,9 +37,8 @@ public class CpoFunctionGroup extends CpoFunctionGroupBean {
   }
 
   public void addFunction(CpoFunction function) {
-    if (function!=null) {
+    if (function != null) {
       functions.add(function);
     };
   }
-
 }

@@ -19,22 +19,26 @@
  *  http://www.gnu.org/licenses/lgpl.txt
  *
  */
-
 package org.synchronoss.cpo.meta.bean;
 
 public class CpoClassBean implements java.io.Serializable {
 
-  /* Properties */
+  /*
+   * Properties
+   */
   private java.lang.String name;
   private java.lang.String description;
 
   public CpoClassBean() {
   }
-  
-  /* Getters and Setters */
+
+  /*
+   * Getters and Setters
+   */
   public java.lang.String getName() {
     return this.name;
   }
+
   public void setName(java.lang.String name) {
     this.name = name;
   }
@@ -48,17 +52,21 @@ public class CpoClassBean implements java.io.Serializable {
   }
 
   public boolean equals(Object o) {
-    if (this == o)
+    if (this == o) {
       return true;
-    if (o == null || getClass() != o.getClass())
+    }
+    if (o == null || getClass() != o.getClass()) {
       return false;
+    }
 
-    CpoClassBean that = (CpoClassBean)o;
+    CpoClassBean that = (CpoClassBean) o;
 
-    if (getName() != null ? !getName().equals(that.getName()) : that.getName() != null)
+    if (getName() != null ? !getName().equals(that.getName()) : that.getName() != null) {
       return false;
-    if (getDescription() != null ? !getDescription().equals(that.getDescription()) : that.getDescription() != null)
+    }
+    if (getDescription() != null ? !getDescription().equals(that.getDescription()) : that.getDescription() != null) {
       return false;
+    }
 
     return true;
   }

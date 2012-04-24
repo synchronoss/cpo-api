@@ -19,61 +19,65 @@
  *  http://www.gnu.org/licenses/lgpl.txt
  *
  */
-
 package org.synchronoss.cpo.jdbc.meta;
 
-import org.slf4j.*;
-import org.synchronoss.cpo.core.cpoCoreMeta.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.synchronoss.cpo.core.cpoCoreMeta.CtArgument;
+import org.synchronoss.cpo.core.cpoCoreMeta.CtAttribute;
 import org.synchronoss.cpo.exporter.MetaXmlObjectExporter;
-import org.synchronoss.cpo.jdbc.*;
-import org.synchronoss.cpo.jdbc.cpoJdbcMeta.*;
+import org.synchronoss.cpo.jdbc.JdbcArgument;
+import org.synchronoss.cpo.jdbc.JdbcAttribute;
+import org.synchronoss.cpo.jdbc.cpoJdbcMeta.CtJdbcArgument;
+import org.synchronoss.cpo.jdbc.cpoJdbcMeta.CtJdbcAttribute;
 import org.synchronoss.cpo.jdbc.exporter.JdbcMetaXmlObjectExporter;
 import org.synchronoss.cpo.meta.AbstractCpoMetaAdapter;
-import org.synchronoss.cpo.meta.domain.*;
+import org.synchronoss.cpo.meta.domain.CpoArgument;
+import org.synchronoss.cpo.meta.domain.CpoAttribute;
 
 /**
  *
  * @author dberry
  */
 public class JdbcCpoMetaAdapter extends AbstractCpoMetaAdapter {
-    private static Logger logger = LoggerFactory.getLogger(JdbcCpoMetaAdapter.class.getName());
-  
-  private String dataSourceIdentifier=null;
-  
-  public JdbcCpoMetaAdapter(){
+
+  private static Logger logger = LoggerFactory.getLogger(JdbcCpoMetaAdapter.class.getName());
+  private String dataSourceIdentifier = null;
+
+  public JdbcCpoMetaAdapter() {
   }
 
   @Override
-  protected void loadCpoAttribute(CpoAttribute cpoAttribute, CtAttribute ctAttribute){
+  protected void loadCpoAttribute(CpoAttribute cpoAttribute, CtAttribute ctAttribute) {
     super.loadCpoAttribute(cpoAttribute, ctAttribute);
-    
+
     // cast to the expected subclasses
-    JdbcAttribute jdbcAttribute = (JdbcAttribute)cpoAttribute;
-    CtJdbcAttribute ctJdbcAttribute = (CtJdbcAttribute)ctAttribute;
-    
+    JdbcAttribute jdbcAttribute = (JdbcAttribute) cpoAttribute;
+    CtJdbcAttribute ctJdbcAttribute = (CtJdbcAttribute) ctAttribute;
+
     jdbcAttribute.setDbTable(ctJdbcAttribute.getDbTable());
     jdbcAttribute.setDbColumn(ctJdbcAttribute.getDbColumn());
-    
+
   }
-  
+
   @Override
-  protected void loadCpoArgument(CpoArgument cpoArgument, CtArgument ctArgument){
+  protected void loadCpoArgument(CpoArgument cpoArgument, CtArgument ctArgument) {
     super.loadCpoArgument(cpoArgument, ctArgument);
-    
+
     // cast to the expected subclasses
-    JdbcArgument jdbcArgument = (JdbcArgument)cpoArgument;
-    CtJdbcArgument ctJdbcArgument = (CtJdbcArgument)ctArgument;
-    
+    JdbcArgument jdbcArgument = (JdbcArgument) cpoArgument;
+    CtJdbcArgument ctJdbcArgument = (CtJdbcArgument) ctArgument;
+
 //    logger.debug("Setting argument scope to: "+ctJdbcArgument.getScope().toString());
     jdbcArgument.setScope(ctJdbcArgument.getScope().toString());
-    
+
   }
-  
+
   @Override
   protected CpoAttribute createCpoAttribute() {
     return new JdbcAttribute();
   }
-  
+
   @Override
   protected CpoArgument createCpoArgument() {
     return new JdbcArgument();

@@ -19,7 +19,6 @@
  *  http://www.gnu.org/licenses/lgpl.txt
  *
  */
-
 package org.synchronoss.cpo.jdbc;
 
 /**
@@ -28,46 +27,46 @@ package org.synchronoss.cpo.jdbc;
  */
 public class BindAttribute {
 
-	private JdbcAttribute ja_ = null;
-	private Object bindObject_ = null;
-	private String name_ = null;
-	private boolean isIn_ = false;
+  private JdbcAttribute ja_ = null;
+  private Object bindObject_ = null;
+  private String name_ = null;
+  private boolean isIn_ = false;
 
-	public BindAttribute(JdbcAttribute ja, Object bindObject) {
-		ja_ = ja;
-		bindObject_ = bindObject;
-	}
+  public BindAttribute(JdbcAttribute ja, Object bindObject) {
+    ja_ = ja;
+    bindObject_ = bindObject;
+  }
 
-	public BindAttribute(String name, Object bindObject) {
-		name_ = name;
-		bindObject_ = bindObject;
-	}
+  public BindAttribute(String name, Object bindObject) {
+    name_ = name;
+    bindObject_ = bindObject;
+  }
 
-	public BindAttribute(JdbcAttribute ja, Object bindObject, boolean isIn) {
-		ja_ = ja;
-		bindObject_ = bindObject;
-		isIn_ = isIn;
-	}
+  public BindAttribute(JdbcAttribute ja, Object bindObject, boolean isIn) {
+    ja_ = ja;
+    bindObject_ = bindObject;
+    isIn_ = isIn;
+  }
 
-	public BindAttribute(String name, Object bindObject, boolean isIn) {
-		name_ = name;
-		bindObject_ = bindObject;
-		isIn_ = isIn;
-	}
+  public BindAttribute(String name, Object bindObject, boolean isIn) {
+    name_ = name;
+    bindObject_ = bindObject;
+    isIn_ = isIn;
+  }
 
-	public JdbcAttribute getJdbcAttribute() {
-		return ja_;
-	}
+  public JdbcAttribute getJdbcAttribute() {
+    return ja_;
+  }
 
-	public Object getBindObject() {
-		return bindObject_;
-	}
+  public Object getBindObject() {
+    return bindObject_;
+  }
 
-	public String getName() {
-		return name_;
-	}
+  public String getName() {
+    return name_;
+  }
 
-	public boolean isIn() {
-		return isIn_;
-	}
+  public boolean isIn() {
+    return isIn_;
+  }
 }

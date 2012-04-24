@@ -19,12 +19,13 @@
  *  http://www.gnu.org/licenses/lgpl.txt
  *
  */
-
 package org.synchronoss.cpo.meta.bean;
 
 public class CpoFunctionGroupBean implements java.io.Serializable {
 
-  /* Properties */
+  /*
+   * Properties
+   */
   private java.lang.String name;
   private java.lang.String type;
   private java.lang.String description;
@@ -56,22 +57,28 @@ public class CpoFunctionGroupBean implements java.io.Serializable {
     this.type = type;
   }
 
-  /* Getters and Setters */
-
+  /*
+   * Getters and Setters
+   */
   public boolean equals(Object o) {
-    if (this == o)
+    if (this == o) {
       return true;
-    if (o == null || getClass() != o.getClass())
+    }
+    if (o == null || getClass() != o.getClass()) {
       return false;
+    }
 
-    CpoFunctionGroupBean that = (CpoFunctionGroupBean)o;
+    CpoFunctionGroupBean that = (CpoFunctionGroupBean) o;
 
-    if (getName() != null ? !getName().equals(that.getName()) : that.getName() != null)
+    if (getName() != null ? !getName().equals(that.getName()) : that.getName() != null) {
       return false;
-    if (getType() != null ? !getType().equals(that.getType()) : that.getType() != null)
+    }
+    if (getType() != null ? !getType().equals(that.getType()) : that.getType() != null) {
       return false;
-    if (getDescription() != null ? !getDescription().equals(that.getDescription()) : that.getDescription() != null)
+    }
+    if (getDescription() != null ? !getDescription().equals(that.getDescription()) : that.getDescription() != null) {
       return false;
+    }
 
     return true;
   }

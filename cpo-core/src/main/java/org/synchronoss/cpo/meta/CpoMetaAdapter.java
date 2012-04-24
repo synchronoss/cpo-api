@@ -19,14 +19,12 @@
  *  http://www.gnu.org/licenses/lgpl.txt
  *
  */
-
 package org.synchronoss.cpo.meta;
 
+import java.util.List;
 import org.synchronoss.cpo.CpoException;
 import org.synchronoss.cpo.core.cpoCoreMeta.CpoMetaDataDocument;
 import org.synchronoss.cpo.meta.domain.CpoClass;
-
-import java.util.List;
 
 /**
  * @author dberry

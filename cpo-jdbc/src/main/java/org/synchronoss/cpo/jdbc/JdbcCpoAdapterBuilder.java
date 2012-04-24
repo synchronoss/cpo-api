@@ -19,23 +19,17 @@
  *  http://www.gnu.org/licenses/lgpl.txt
  *
  */
-
 package org.synchronoss.cpo.jdbc;
 
-import org.synchronoss.cpo.jdbc.meta.JdbcCpoMetaAdapter;
 import java.util.Enumeration;
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.ResourceBundle;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.CpoAdapter;
-import org.synchronoss.cpo.CpoException;
 import org.synchronoss.cpo.CpoAdapterBuilder;
-import org.synchronoss.cpo.DataSourceInfo;
+import org.synchronoss.cpo.CpoException;
 import org.synchronoss.cpo.core.cpoCoreConfig.CtDataSourceConfig;
-import org.synchronoss.cpo.helper.ExceptionHelper;
 
 /**
  * JdbcCpoFactory implements the Factory pattern for creating a CpoAdatper for use with JDBC
@@ -43,32 +37,30 @@ import org.synchronoss.cpo.helper.ExceptionHelper;
  * @author david berry
  */
 public class JdbcCpoAdapterBuilder implements CpoAdapterBuilder {
+
   private static HashMap<String, CpoAdapter> propMap = new HashMap<String, CpoAdapter>();
-  private static Logger logger=LoggerFactory.getLogger(JdbcCpoAdapterBuilder.class.getName());
-  
+  private static Logger logger = LoggerFactory.getLogger(JdbcCpoAdapterBuilder.class.getName());
   private static final String PROP_FILE = "jdbcCpoFactory";
-  private static final String DEFAULT_CONTEXT="default";
-  
-  private static final String   PROP_DB_DATASOURCE = ".dbDatasource";
-  private static final String       PROP_DB_DRIVER = ".dbDriver";
-  private static final String      PROP_DB_USERURL = ".dbUserUrl";
-  private static final String          PROP_DB_URL = ".dbUrl";
-  private static final String         PROP_DB_USER = ".dbUser";
-  private static final String     PROP_DB_PASSWORD = ".dbPassword";
-  private static final String   PROP_DB_DATASOURCE_CLASS = ".dbDatasourceClass";
-  
-  private static final String     PROP_TABLE_PREFIX = ".tablePrefix";
+  private static final String DEFAULT_CONTEXT = "default";
+  private static final String PROP_DB_DATASOURCE = ".dbDatasource";
+  private static final String PROP_DB_DRIVER = ".dbDriver";
+  private static final String PROP_DB_USERURL = ".dbUserUrl";
+  private static final String PROP_DB_URL = ".dbUrl";
+  private static final String PROP_DB_USER = ".dbUser";
+  private static final String PROP_DB_PASSWORD = ".dbPassword";
+  private static final String PROP_DB_DATASOURCE_CLASS = ".dbDatasourceClass";
+  private static final String PROP_TABLE_PREFIX = ".tablePrefix";
   private static final String PROP_META_DATASOURCE = ".metaDatasource";
-  private static final String     PROP_META_DRIVER = ".metaDriver";
-  private static final String    PROP_META_USERURL = ".metaUserUrl";
-  private static final String        PROP_META_URL = ".metaUrl";
-  private static final String       PROP_META_USER = ".metaUser";
-  private static final String   PROP_META_PASSWORD = ".metaPassword";
-  private static final String   PROP_META_DATASOURCE_CLASS = ".metaDatasourceClass";
-	
-	public JdbcCpoAdapterBuilder(){
-	}
-	
+  private static final String PROP_META_DRIVER = ".metaDriver";
+  private static final String PROP_META_USERURL = ".metaUserUrl";
+  private static final String PROP_META_URL = ".metaUrl";
+  private static final String PROP_META_USER = ".metaUser";
+  private static final String PROP_META_PASSWORD = ".metaPassword";
+  private static final String PROP_META_DATASOURCE_CLASS = ".metaDatasourceClass";
+
+  public JdbcCpoAdapterBuilder() {
+  }
+
 //  public CpoAdapter getCpoAdapter() throws CpoException {
 //    return getCpoAdapter(DEFAULT_CONTEXT);
 //  }
@@ -270,41 +262,41 @@ public class JdbcCpoAdapterBuilder implements CpoAdapterBuilder {
 //      return cpo;
 //	  }
 //	}
-	
-	protected static String getResourceString(ResourceBundle b, String key){
-	  String s = null;
-	  try {
-	    s = b.getString(key).trim();
-	    if (s.length()<1)
-	      s=null;
-	  } catch (Exception e) {
-	    logger.debug("Could not load string resource:"+key);
-	    s=null;
-	  }
-	  return s;
-	}
-	
-  protected static int getResourceInt(ResourceBundle b, String key){
+  protected static String getResourceString(ResourceBundle b, String key) {
+    String s = null;
+    try {
+      s = b.getString(key).trim();
+      if (s.length() < 1) {
+        s = null;
+      }
+    } catch (Exception e) {
+      logger.debug("Could not load string resource:" + key);
+      s = null;
+    }
+    return s;
+  }
+
+  protected static int getResourceInt(ResourceBundle b, String key) {
     int i = 0;
     try {
       i = new Integer(b.getString(key));
     } catch (Exception e) {
-      logger.debug("Could not load int resource:"+key);
-      i=0;
+      logger.debug("Could not load int resource:" + key);
+      i = 0;
     }
     return i;
   }
-  
-  private static HashMap<String, String> getProperties(ResourceBundle b, String propPrefix){
+
+  private static HashMap<String, String> getProperties(ResourceBundle b, String propPrefix) {
     HashMap<String, String> propMap = new HashMap<String, String>();
     Enumeration enumKeys = b.getKeys();
-    while (enumKeys.hasMoreElements()){
-      String key = (String)enumKeys.nextElement();
-      if (key.startsWith(propPrefix)){
-        String value = getResourceString(b,key);
-        if (value!=null) {
+    while (enumKeys.hasMoreElements()) {
+      String key = (String) enumKeys.nextElement();
+      if (key.startsWith(propPrefix)) {
+        String value = getResourceString(b, key);
+        if (value != null) {
           propMap.put(key.substring(propPrefix.length()), value);
-          logger.debug("Adding prop:("+key.substring(propPrefix.length())+","+value+")");
+          logger.debug("Adding prop:(" + key.substring(propPrefix.length()) + "," + value + ")");
         }
       }
     }

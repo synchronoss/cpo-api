@@ -19,123 +19,125 @@
  *  http://www.gnu.org/licenses/lgpl.txt
  *
  */
-
 package org.synchronoss.cpo;
 
 /**
- * A <code>CpoException</code> is the common superclass for any number of
- * CPO related exceptions that may occur during the execution of a
- * business task.
+ * A
+ * <code>CpoException</code> is the common superclass for any number of CPO related exceptions that may occur during the
+ * execution of a business task.
+ *
  * @author David E. Berry
  */
-public class CpoException extends Exception  {
+public class CpoException extends Exception {
 
-    /**
-     * Version Id for this class.
-     */
-    private static final long serialVersionUID = 1L;
-    
-    /**
-     * Nested Exception to hold wrapped exception.
-     *
-     * @serial
-     */
-    public Throwable detail;
+  /**
+   * Version Id for this class.
+   */
+  private static final long serialVersionUID = 1L;
+  /**
+   * Nested Exception to hold wrapped exception.
+   *
+   * @serial
+   */
+  public Throwable detail;
 
-    /**
-     * Constructs a <code>CpoException</code> with no specified
-     * detail message.
-     */
-    public CpoException() {
-    }
+  /**
+   * Constructs a
+   * <code>CpoException</code> with no specified detail message.
+   */
+  public CpoException() {
+  }
 
-    /**
-     * Constructs a <code>CpoException</code> with the specified
-     * detail message.
-     *
-     * @param s the detail message
-     */
-    public CpoException(String s) {
-        super(s);
-    }
+  /**
+   * Constructs a
+   * <code>CpoException</code> with the specified detail message.
+   *
+   * @param s the detail message
+   */
+  public CpoException(String s) {
+    super(s);
+  }
 
-    /**
-     * Constructs a <code>CpoException</code> with the specified
-     * detail message and nested exception.
-     *
-     * @param s the detail message
-     * @param ex the nested exception
-     */
-    public CpoException(String s, Throwable ex) {
-        super(s);
-        detail = ex;
-    }
-    /**
-     * Constructs a <code>CpoException</code> with the specified
-     * detail message and nested exception.
-     *
-     * @param ex the nested exception
-     */
-    public CpoException(Throwable ex) {
-        super();
-        detail = ex;
-    }
-    /**
-     * Returns the detail message, including the message from the nested
-     * exception if there is one.
-     */
+  /**
+   * Constructs a
+   * <code>CpoException</code> with the specified detail message and nested exception.
+   *
+   * @param s the detail message
+   * @param ex the nested exception
+   */
+  public CpoException(String s, Throwable ex) {
+    super(s);
+    detail = ex;
+  }
+
+  /**
+   * Constructs a
+   * <code>CpoException</code> with the specified detail message and nested exception.
+   *
+   * @param ex the nested exception
+   */
+  public CpoException(Throwable ex) {
+    super();
+    detail = ex;
+  }
+
+  /**
+   * Returns the detail message, including the message from the nested exception if there is one.
+   */
   @Override
-    public String getMessage() {
-        StringBuilder msg=new StringBuilder("\n");
+  public String getMessage() {
+    StringBuilder msg = new StringBuilder("\n");
 
-        msg.append(super.getMessage());
+    msg.append(super.getMessage());
 
-        if(detail != null) {
-            msg.append("\n");
-            msg.append(detail.getMessage());
-						if (detail.getCause()!=null){
-							msg.append(detail.getCause().getMessage());
-						}
-        }
-        return msg.toString();
+    if (detail != null) {
+      msg.append("\n");
+      msg.append(detail.getMessage());
+      if (detail.getCause() != null) {
+        msg.append(detail.getCause().getMessage());
+      }
     }
+    return msg.toString();
+  }
 
-    /**
-     * Prints the composite message and the embedded stack trace to
-     * the specified stream <code>ps</code>.
-     * @param ps the print stream
-     */
+  /**
+   * Prints the composite message and the embedded stack trace to the specified stream
+   * <code>ps</code>.
+   *
+   * @param ps the print stream
+   */
   @Override
-    public void printStackTrace(java.io.PrintStream ps) {
-        synchronized(ps) {
-            if(detail != null) {
-                detail.printStackTrace(ps);
-            }
-            super.printStackTrace(ps);
-        }
+  public void printStackTrace(java.io.PrintStream ps) {
+    synchronized (ps) {
+      if (detail != null) {
+        detail.printStackTrace(ps);
+      }
+      super.printStackTrace(ps);
     }
+  }
 
-    /**
-     * Prints the composite message to <code>System.err</code>.
-     */
+  /**
+   * Prints the composite message to
+   * <code>System.err</code>.
+   */
   @Override
-    public void printStackTrace() {
-        printStackTrace(System.err);
-    }
+  public void printStackTrace() {
+    printStackTrace(System.err);
+  }
 
-    /**
-     * Prints the composite message and the embedded stack trace to
-     * the specified print writer <code>pw</code>.
-     * @param pw the print writer
-     */
+  /**
+   * Prints the composite message and the embedded stack trace to the specified print writer
+   * <code>pw</code>.
+   *
+   * @param pw the print writer
+   */
   @Override
-    public void printStackTrace(java.io.PrintWriter pw) {
-        synchronized(pw) {
-            if(detail != null) {
-                detail.printStackTrace(pw);
-            }
-            super.printStackTrace(pw);
-        }
+  public void printStackTrace(java.io.PrintWriter pw) {
+    synchronized (pw) {
+      if (detail != null) {
+        detail.printStackTrace(pw);
+      }
+      super.printStackTrace(pw);
     }
-
+  }
 }

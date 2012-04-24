@@ -19,7 +19,6 @@
  *  http://www.gnu.org/licenses/lgpl.txt
  *
  */
-
 package org.synchronoss.cpo;
 
 /**
@@ -31,5 +30,4 @@ package org.synchronoss.cpo;
 public interface MetaDFVisitable {
 
   public void acceptMetaDFVisitor(MetaVisitor visitor);
-
 }

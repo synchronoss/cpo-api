@@ -19,7 +19,6 @@
  *  http://www.gnu.org/licenses/lgpl.txt
  *
  */
-
 package org.synchronoss.cpo;
 
 import java.math.BigInteger;
@@ -28,7 +27,8 @@ import java.security.SecureRandom;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class GUID  {
+public class GUID {
+
   private static GUID guid_;
   private SecureRandom seeder;
   SecureRandom sr;
@@ -51,64 +51,66 @@ public class GUID  {
       StringBuilder tmpBuffer = new StringBuilder();
       // get the inet address
       InetAddress inet = InetAddress.getLocalHost();
-      byte [] bytes = inet.getAddress();
+      byte[] bytes = inet.getAddress();
       String hexInetAddress = hexFormat(new BigInteger(bytes).intValue());
 
       // get the hashcode
       String thisHashCode = hexFormat(this.hashCode());
 
-      /* set up a cached midValue as this is the same per method
-      / call as is object specific and is the
-      / ...-xxxx-xxxx-xxxx-xxxx.. mid part of the sequence
-      */
+      /*
+       * set up a cached midValue as this is the same per method / call as is object specific and is the /
+       * ...-xxxx-xxxx-xxxx-xxxx.. mid part of the sequence
+       */
       tmpBuffer.append("-");
-      tmpBuffer.append(hexInetAddress.substring(0,4));
+      tmpBuffer.append(hexInetAddress.substring(0, 4));
       tmpBuffer.append("-");
       tmpBuffer.append(hexInetAddress.substring(4));
       tmpBuffer.append("-");
-      tmpBuffer.append(thisHashCode.substring(0,4));
+      tmpBuffer.append(thisHashCode.substring(0, 4));
       tmpBuffer.append("-");
       tmpBuffer.append(thisHashCode.substring(4));
       guidMidValue = tmpBuffer.toString();
     } catch (Exception e) {
-      OUT.debug("initGuid: "+e.getMessage());
+      OUT.debug("initGuid: " + e.getMessage());
     }
   }
 
   static GUID getInstance() {
-    if (guid_ == null)
+    if (guid_ == null) {
       guid_ = new GUID();
+    }
     return guid_;
   }
-  
+
   public static String getGUID() {
     GUID guid = GUID.getInstance();
     long timeNow = System.currentTimeMillis();
     int timeLow = (int) timeNow & 0xFFFFFFFF;
     int node = guid.sr.nextInt();
     String retVal = (hexFormat(timeLow) + guid.guidMidValue + hexFormat(node));
-    OUT.debug("getGUID(): " +retVal);
+    OUT.debug("getGUID(): " + retVal);
     return retVal;
   }
 
   /**
-    * Returns an 8 character hexidecimal representation of trgt. If the
-    * result is not equal to eight characters leading zeros are prefixed.
-    * @return 8 character hex representation of trgt
-    */
-  private static String hexFormat(int trgt){
+   * Returns an 8 character hexidecimal representation of trgt. If the result is not equal to eight characters leading
+   * zeros are prefixed.
+   *
+   * @return 8 character hex representation of trgt
+   */
+  private static String hexFormat(int trgt) {
     String s = Integer.toHexString(trgt);
     int sz = s.length();
 
-    if (sz==8){
-        return s;
+    if (sz == 8) {
+      return s;
     }
     int fill = 8 - sz;
     StringBuilder buf = new StringBuilder();
 
-    for (int i=0;i<fill;++i){
-       // add leading zeros
-       buf.append('0');
+    for (int i = 0; i < fill; ++i) {
+      // add leading zeros
+      buf.append('0');
     }
     buf.append(s);
     return buf.toString();

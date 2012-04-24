@@ -28,7 +28,6 @@ import org.synchronoss.cpo.core.cpoCoreConfig.CtDataSourceConfig;
  * @author dberry
  */
 public interface CpoAdapterBuilder {
-  
-	public CpoAdapter buildCpoAdapter(CtDataSourceConfig dataSourceConfig) throws CpoException;
-  
+
+  public CpoAdapter buildCpoAdapter(CtDataSourceConfig dataSourceConfig) throws CpoException;
 }

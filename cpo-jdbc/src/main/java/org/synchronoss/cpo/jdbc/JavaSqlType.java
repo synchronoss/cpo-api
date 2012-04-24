@@ -19,62 +19,54 @@
  *  http://www.gnu.org/licenses/lgpl.txt
  *
  */
-
 package org.synchronoss.cpo.jdbc;
-
 
 /**
  * JdbcType is a class that maps datasource datatypes to java.sql.types and java classes
- * 
+ *
  * @author david berry
  */
-
 public class JavaSqlType<T> extends java.lang.Object implements java.io.Serializable, java.lang.Cloneable {
 
+  /**
+   * Version Id for this class.
+   */
+  private static final long serialVersionUID = 1L;
+  private int javaSqlType_ = java.sql.Types.NULL;
+  private String javaSqlTypeName_ = null;
+  private Class<T> javaClass_ = null;
 
-	/**
-     * Version Id for this class.
-     */
-	private static final long serialVersionUID = 1L;
-	
-    private int     javaSqlType_ = java.sql.Types.NULL;
-    private String    javaSqlTypeName_ = null;
-    private Class<T>     javaClass_ = null;
+  @SuppressWarnings("unused")
+  private JavaSqlType() {
+  }
 
-    
-    @SuppressWarnings("unused")
-    private JavaSqlType (){}
-    
+  public JavaSqlType(int javaSqlType, String javaSqlTypeName, Class<T> javaClass) {
+    setJavaSqlType(javaSqlType);
+    setJavaSqlTypeName(javaSqlTypeName);
+    setJavaClass(javaClass);
+  }
 
-    public JavaSqlType(int javaSqlType, String javaSqlTypeName, Class<T> javaClass){
-        setJavaSqlType(javaSqlType);
-        setJavaSqlTypeName(javaSqlTypeName);
-        setJavaClass(javaClass);
-    }
+  public void setJavaSqlType(int javaSqlType) {
+    javaSqlType_ = javaSqlType;
+  }
 
-    public void setJavaSqlType(int javaSqlType){
-        javaSqlType_ = javaSqlType;
-    }
+  public void setJavaSqlTypeName(String javaSqlTypeName) {
+    javaSqlTypeName_ = javaSqlTypeName;
+  }
 
-    public void setJavaSqlTypeName(String javaSqlTypeName){
-        javaSqlTypeName_ = javaSqlTypeName;
-    }
+  public void setJavaClass(Class<T> javaClass) {
+    javaClass_ = javaClass;
+  }
 
-    public void setJavaClass(Class<T> javaClass){
-        javaClass_ = javaClass;
-    }
+  public int getJavaSqlType() {
+    return javaSqlType_;
+  }
 
-    public int getJavaSqlType(){
-        return javaSqlType_;
-    }
-    
-    public String getJavaSqlTypeName(){
-        return javaSqlTypeName_;
-    }
- 
-    public Class<T> getJavaClass(){
-        return javaClass_;
-    }
-    
+  public String getJavaSqlTypeName() {
+    return javaSqlTypeName_;
+  }
 
+  public Class<T> getJavaClass() {
+    return javaClass_;
+  }
 }

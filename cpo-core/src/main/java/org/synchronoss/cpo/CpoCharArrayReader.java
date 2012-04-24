@@ -19,7 +19,6 @@
  *  http://www.gnu.org/licenses/lgpl.txt
  *
  */
-
 package org.synchronoss.cpo;
 
 import java.io.CharArrayReader;
@@ -29,91 +28,90 @@ import java.io.Reader;
 
 /**
  * CpoObject is a class that maps datasource datatypes to java.sql.types and java classes
- * 
+ *
  * @author david berry
  */
-
 public class CpoCharArrayReader extends CharArrayReader implements java.io.Serializable, java.lang.Cloneable {
 
-    /**
-     * Version Id for this class.
-     */
-    private static final long serialVersionUID = 1L;
-    
-    private char[] buffer_=null; //The buffer for the byte Array
-    
-    private int offset_=0;
-    private int size_=0;
-    
-    public CpoCharArrayReader(char[] buffer){
-        super(buffer);
-        setBuffer(buffer);
-    }
+  /**
+   * Version Id for this class.
+   */
+  private static final long serialVersionUID = 1L;
+  private char[] buffer_ = null; //The buffer for the byte Array
+  private int offset_ = 0;
+  private int size_ = 0;
 
-    public CpoCharArrayReader(char[] buffer, int offset, int length){
-        super(buffer, offset, length);
-        setBuffer(buffer);
-        setOffset(offset);
-        setSize(length);
-   }
+  public CpoCharArrayReader(char[] buffer) {
+    super(buffer);
+    setBuffer(buffer);
+  }
 
-    protected void setBuffer(char[] buffer){
-        buffer_ = buffer;
-    }
+  public CpoCharArrayReader(char[] buffer, int offset, int length) {
+    super(buffer, offset, length);
+    setBuffer(buffer);
+    setOffset(offset);
+    setSize(length);
+  }
 
-    protected char[] getBuffer(){
-        return buffer_;
-    }
-    
-    protected void setOffset(int offset){
-        offset_ = offset;
-    }
+  protected void setBuffer(char[] buffer) {
+    buffer_ = buffer;
+  }
 
-    protected int getOffset(){
-        return offset_;
-    }
-    
-    protected void setSize(int size){
-        size_ = size;
-    }
+  protected char[] getBuffer() {
+    return buffer_;
+  }
 
-    protected int getSize(){
-        return size_;
-    }
+  protected void setOffset(int offset) {
+    offset_ = offset;
+  }
 
-    public int getLength(){
-        int l=0;
-        
-        if (getOffset()==0){
-            l = getBuffer().length;
-        } else {
-            l = getSize()<getBuffer().length-getOffset()?getSize():getBuffer().length-getOffset();
+  protected int getOffset() {
+    return offset_;
+  }
+
+  protected void setSize(int size) {
+    size_ = size;
+  }
+
+  protected int getSize() {
+    return size_;
+  }
+
+  public int getLength() {
+    int l = 0;
+
+    if (getOffset() == 0) {
+      l = getBuffer().length;
+    } else {
+      l = getSize() < getBuffer().length - getOffset() ? getSize() : getBuffer().length - getOffset();
+    }
+    return l;
+  }
+
+  static public CpoCharArrayReader getCpoReader(Reader r) {
+    CpoCharArrayReader ccar = null;
+    if (r instanceof CpoCharArrayReader) {
+      ccar = ((CpoCharArrayReader) r);
+    } else {
+      // Need to determine the length of the Reader
+      // Need to determine the length of the InputStream
+      int b = -1;
+      try {
+        CharArrayWriter caw = new CharArrayWriter();
+        while ((b = r.read()) != -1) {
+          caw.write(b);
         }
-        return l; 
-    }
-
-    static public CpoCharArrayReader getCpoReader(Reader r){
-        CpoCharArrayReader ccar = null;
-        if (r instanceof CpoCharArrayReader)
-            ccar = ((CpoCharArrayReader)r);
-        else {  
-            // Need to determine the length of the Reader
-            // Need to determine the length of the InputStream
-            int b=-1;
-            try {
-                CharArrayWriter caw = new CharArrayWriter();
-                while ((b = r.read())!=-1) {
-                    caw.write(b);
-                }
-                ccar = new CpoCharArrayReader(caw.toCharArray());
-            } catch (IOException ioe) {
-                // do nothing for now. The null should get someone's attention. 
-            } finally {
-                try {r.close();} catch (IOException ioe){}
-            }
+        ccar = new CpoCharArrayReader(caw.toCharArray());
+      } catch (IOException ioe) {
+        // do nothing for now. The null should get someone's attention. 
+      } finally {
+        try {
+          r.close();
+        } catch (IOException ioe) {
         }
-        
-        return ccar;
+      }
     }
 
+    return ccar;
+  }
 }

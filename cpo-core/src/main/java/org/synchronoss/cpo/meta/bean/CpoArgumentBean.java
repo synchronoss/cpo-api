@@ -19,12 +19,13 @@
  *  http://www.gnu.org/licenses/lgpl.txt
  *
  */
-
 package org.synchronoss.cpo.meta.bean;
 
 public class CpoArgumentBean implements java.io.Serializable {
 
-  /* Properties */
+  /*
+   * Properties
+   */
   private java.lang.String attributeName;
   private java.lang.String description;
 
@@ -47,20 +48,25 @@ public class CpoArgumentBean implements java.io.Serializable {
     this.description = description;
   }
 
-  /* Getters and Setters */
-
+  /*
+   * Getters and Setters
+   */
   public boolean equals(Object o) {
-    if (this == o)
+    if (this == o) {
       return true;
-    if (o == null || getClass() != o.getClass())
+    }
+    if (o == null || getClass() != o.getClass()) {
       return false;
+    }
 
-    CpoArgumentBean that = (CpoArgumentBean)o;
+    CpoArgumentBean that = (CpoArgumentBean) o;
 
-    if (getAttributeName() != null ? !getAttributeName().equals(that.getAttributeName()) : that.getAttributeName() != null)
+    if (getAttributeName() != null ? !getAttributeName().equals(that.getAttributeName()) : that.getAttributeName() != null) {
       return false;
-    if (getDescription() != null ? !getDescription().equals(that.getDescription()) : that.getDescription() != null)
+    }
+    if (getDescription() != null ? !getDescription().equals(that.getDescription()) : that.getDescription() != null) {
       return false;
+    }
 
     return true;
   }

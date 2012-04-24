@@ -19,142 +19,148 @@
  *  http://www.gnu.org/licenses/lgpl.txt
  *
  */
-
 package org.synchronoss.cpo.jdbc;
 
-import org.synchronoss.cpo.*;
-
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.HashMap;
+import org.synchronoss.cpo.CpoException;
+import org.synchronoss.cpo.CpoTrxAdapter;
 import org.synchronoss.cpo.meta.CpoMetaAdapter;
 
 public class JdbcCpoTrxAdapter extends JdbcCpoAdapter implements CpoTrxAdapter {
-    /** Version Id for this class. */
-    private static final long serialVersionUID=1L;
-    
-    /**
-     * DOCUMENT ME!
-     */
-    // Default Connection. Only used JdbcCpoTrxAdapter
-    private Connection writeConnection_ = null;
 
-    // map to keep track of busy connections
-    private static HashMap<Connection, Connection> busyMap_ = new HashMap<Connection,Connection>();
+  /**
+   * Version Id for this class.
+   */
+  private static final long serialVersionUID = 1L;
+  /**
+   * DOCUMENT ME!
+   */
+  // Default Connection. Only used JdbcCpoTrxAdapter
+  private Connection writeConnection_ = null;
+  // map to keep track of busy connections
+  private static HashMap<Connection, Connection> busyMap_ = new HashMap<Connection, Connection>();
 
-    @SuppressWarnings("unused")
-    private JdbcCpoTrxAdapter(){}
-    
-    protected JdbcCpoTrxAdapter(CpoMetaAdapter metaAdapter, Connection c, 
-                    boolean batchSupported) throws CpoException {
-            super(metaAdapter, batchSupported);
-            setStaticConnection(c);
-    }
+  @SuppressWarnings("unused")
+  private JdbcCpoTrxAdapter() {
+  }
 
-    public void commit() throws CpoException {
-    	if (writeConnection_!=null){
-	    	try {
-	    		writeConnection_.commit();
-	    	} catch (SQLException se) {
-	    		throw new CpoException (se.getMessage());
-	    	}
-    	}else{
-    		throw new CpoException ("Transaction Object has been Closed");
-    	}
+  protected JdbcCpoTrxAdapter(CpoMetaAdapter metaAdapter, Connection c,
+          boolean batchSupported) throws CpoException {
+    super(metaAdapter, batchSupported);
+    setStaticConnection(c);
+  }
+
+  public void commit() throws CpoException {
+    if (writeConnection_ != null) {
+      try {
+        writeConnection_.commit();
+      } catch (SQLException se) {
+        throw new CpoException(se.getMessage());
+      }
+    } else {
+      throw new CpoException("Transaction Object has been Closed");
     }
-    
-    public void rollback() throws CpoException {
-    	if (writeConnection_!=null){
-	    	try {
-	    		writeConnection_.rollback();
-	    	} catch (Exception e) {
-	    		throw new CpoException (e.getMessage());
-        }
-    	}else{
-    		throw new CpoException ("Transaction Object has been Closed");
-    	}
+  }
+
+  public void rollback() throws CpoException {
+    if (writeConnection_ != null) {
+      try {
+        writeConnection_.rollback();
+      } catch (Exception e) {
+        throw new CpoException(e.getMessage());
+      }
+    } else {
+      throw new CpoException("Transaction Object has been Closed");
     }
-    
-    public boolean isClosed()  throws CpoException {
-    	boolean closed = false;
-    	
-    	try{
-    		closed = (writeConnection_ == null || writeConnection_.isClosed());
-    	} catch (Exception e) {
-    		throw new CpoException (e.getMessage());
-    	}
-    	return closed;
+  }
+
+  public boolean isClosed() throws CpoException {
+    boolean closed = false;
+
+    try {
+      closed = (writeConnection_ == null || writeConnection_.isClosed());
+    } catch (Exception e) {
+      throw new CpoException(e.getMessage());
     }
-    
-    public void close() throws CpoException {
-    	if (writeConnection_ != null) {
-    	  try {
-      		try {
-            writeConnection_.rollback();
-      		} catch (Exception e) {}
-      		try {
-      			writeConnection_.close();
-      		} catch (Exception e) {}
-    	  } finally {
-          setStaticConnection(null);
-    	  }
-    	}
-    }
-    
-    /**
-     * DOCUMENT ME!
-     */
-    protected void finalize() {
+    return closed;
+  }
+
+  public void close() throws CpoException {
+    if (writeConnection_ != null) {
+      try {
         try {
-        	super.finalize();
-        } catch (Throwable e) {}
-        try {
-        	if (writeConnection_ != null && !writeConnection_.isClosed()) {
-        		this.close();
-        	}
-        } catch (Exception e) {}
-    }
-    
-    @Override
-    protected Connection getStaticConnection() throws CpoException {
-      if (writeConnection_!=null){
-        if (isConnectionBusy(writeConnection_)){
-          throw new CpoException("Error Connection Busy");
-        } else {
-          setConnectionBusy(writeConnection_);
+          writeConnection_.rollback();
+        } catch (Exception e) {
         }
+        try {
+          writeConnection_.close();
+        } catch (Exception e) {
+        }
+      } finally {
+        setStaticConnection(null);
       }
-      return writeConnection_;
     }
+  }
 
-    @Override
-    protected boolean isStaticConnection(Connection c) {
-      return (writeConnection_==c);  
+  /**
+   * DOCUMENT ME!
+   */
+  protected void finalize() {
+    try {
+      super.finalize();
+    } catch (Throwable e) {
     }
-    
-    @Override
-    protected void setStaticConnection(Connection c) {
-      writeConnection_ = c;
+    try {
+      if (writeConnection_ != null && !writeConnection_.isClosed()) {
+        this.close();
+      }
+    } catch (Exception e) {
     }
+  }
 
-    @Override
-    protected boolean isConnectionBusy(Connection c) {
-      synchronized(busyMap_){
-        Connection test = busyMap_.get(c);
-        return test!=null;
+  @Override
+  protected Connection getStaticConnection() throws CpoException {
+    if (writeConnection_ != null) {
+      if (isConnectionBusy(writeConnection_)) {
+        throw new CpoException("Error Connection Busy");
+      } else {
+        setConnectionBusy(writeConnection_);
       }
     }
+    return writeConnection_;
+  }
 
-    @Override
-    protected void setConnectionBusy(Connection c) {
-      synchronized(busyMap_){
-        busyMap_.put(c,c);
-      }
+  @Override
+  protected boolean isStaticConnection(Connection c) {
+    return (writeConnection_ == c);
+  }
+
+  @Override
+  protected void setStaticConnection(Connection c) {
+    writeConnection_ = c;
+  }
+
+  @Override
+  protected boolean isConnectionBusy(Connection c) {
+    synchronized (busyMap_) {
+      Connection test = busyMap_.get(c);
+      return test != null;
     }
-    
-    @Override
-    protected void clearConnectionBusy(Connection c) {
-      synchronized(busyMap_){
-        busyMap_.remove(c);
-      }
+  }
+
+  @Override
+  protected void setConnectionBusy(Connection c) {
+    synchronized (busyMap_) {
+      busyMap_.put(c, c);
     }
+  }
+
+  @Override
+  protected void clearConnectionBusy(Connection c) {
+    synchronized (busyMap_) {
+      busyMap_.remove(c);
+    }
+  }
 }

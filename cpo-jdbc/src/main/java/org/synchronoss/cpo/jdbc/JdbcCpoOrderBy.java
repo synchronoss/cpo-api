@@ -19,162 +19,150 @@
  *  http://www.gnu.org/licenses/lgpl.txt
  *
  */
- 
 package org.synchronoss.cpo.jdbc;
-
-import java.util.Map;
 
 import org.synchronoss.cpo.CpoException;
 import org.synchronoss.cpo.CpoOrderBy;
 import org.synchronoss.cpo.meta.domain.CpoAttribute;
 import org.synchronoss.cpo.meta.domain.CpoClass;
 
-
 /**
- * JdbcCpoOrderBy is an interface for specifying the sort order in which 
- * objects are returned from the Datasource.
- * 
+ * JdbcCpoOrderBy is an interface for specifying the sort order in which objects are returned from the Datasource.
+ *
  * @author david berry
  */
-
 public class JdbcCpoOrderBy implements CpoOrderBy {
 
+  private boolean ascending;
+  private String attribute;
+  private String function;
+  private String name = "__CPO_ORDERBY__";
 
-    private boolean ascending;
-    private String attribute;
-    private String function;
-    private String name = "__CPO_ORDERBY__";
+  @SuppressWarnings("unused")
+  private JdbcCpoOrderBy() {
+  }
 
-    @SuppressWarnings("unused")
-    private JdbcCpoOrderBy(){
-    }
+  public JdbcCpoOrderBy(String attr, boolean asc) {
+    setAscending(asc);
+    setAttribute(attr);
+    setFunction(null);
+  }
 
-    public JdbcCpoOrderBy(String attr, boolean asc){
-        setAscending(asc);
-        setAttribute(attr);
-        setFunction(null);
-    }
+  public JdbcCpoOrderBy(String attr, boolean asc, String func) {
+    setAscending(asc);
+    setAttribute(attr);
+    setFunction(func);
+  }
 
-    public JdbcCpoOrderBy(String attr, boolean asc, String func){
-        setAscending(asc);
-        setAttribute(attr);
-        setFunction(func);
-    }
+  /**
+   * Gets the boolean that determines if the objects will be returned from from the CpoAdapter in Ascending order or
+   * Descending order
+   *
+   * @return boolean true if it is to sort in Ascensing Order false if it is to be sorted in Descending Order
+   */
+  public boolean getAscending() {
+    return this.ascending;
+  }
 
-    /**
-     * Gets the boolean that determines if the objects will be returned from
-     * from the CpoAdapter in Ascending order or Descending order
-     * 
-     * @return boolean true if it is to sort in Ascensing Order
-     *                 false if it is to be sorted in Descending Order
-     */
-    public boolean getAscending(){
-        return this.ascending;
-    }
+  /**
+   * Sets the boolean that determines if the objects will be returned from from the CpoAdapter in Ascending order or
+   * Descending order
+   *
+   * @param b true if it is to sort in Ascensing Order false if it is to be sorted in Descending Order
+   */
+  public void setAscending(boolean b) {
+    this.ascending = b;
+  }
 
-    /**
-     * Sets the boolean that determines if the objects will be returned from
-     * from the CpoAdapter in Ascending order or Descending order
-     * 
-     * @param b true if it is to sort in Ascensing Order
-     *          false if it is to be sorted in Descending Order
-     */
-    public void setAscending(boolean b){
-        this.ascending = b;
-    }
+  /**
+   * Gets the name of the attribute that is to be used to sort the results from the CpoAdapter.
+   *
+   * @return String The name of the attribute
+   */
+  public String getAttribute() {
+    return this.attribute;
+  }
 
-    /**
-     * Gets the name of the attribute that is to be used to sort the results 
-     * from the CpoAdapter.
-     * 
-     * @return String The name of the attribute
-     */
-    public String getAttribute(){
-        return this.attribute;
-    }
+  /**
+   * Sets the name of the attribute that is to be used to sort the results from the CpoAdapter.
+   *
+   * @param s The name of the attribute
+   */
+  public void setAttribute(String s) {
+    this.attribute = s;
+  }
 
-    /**
-     * Sets the name of the attribute that is to be used to sort the results 
-     * from the CpoAdapter.
-     * 
-     * @param s The name of the attribute
-     */
-    public void setAttribute(String s){
-        this.attribute = s;
-    }
+  /**
+   * Gets a string representing a datasource specific function call that must be applied to the attribute that will be
+   * used for sorting.
+   *
+   * i.e. - "upper(attribute_name)"
+   *
+   * @return String The name of the function
+   */
+  public String getFunction() {
+    return this.function;
+  }
 
-    /**
-     * Gets a string representing a datasource specific function call that 
-     * must be applied to the attribute that will be used for sorting.
-     * 
-     * i.e. - "upper(attribute_name)"
-     * 
-     * @return String The name of the function
-     */
-    public String getFunction(){
-        return this.function;
-    }
+  /**
+   * Sets a string representing a datasource specific function call that must be applied to the attribute that will be
+   * used for sorting.
+   *
+   * i.e. - "upper(attribute_name)"
+   *
+   * @param s The name of the function
+   */
+  public void setFunction(String s) {
+    this.function = s;
+  }
 
-    /**
-     * Sets a string representing a datasource specific function call that 
-     * must be applied to the attribute that will be used for sorting.
-     * 
-     * i.e. - "upper(attribute_name)"
-     * 
-     * @param s The name of the function
-     */
-    public void setFunction(String s){
-        this.function = s;
-    }
+  public String toString(CpoClass jmc) throws CpoException {
+    StringBuilder sb = new StringBuilder();
+    String function = null;
+    String attribute = null;
+    String column = null;
+    int attrOffset = 0;
+    int fromIndex = 0;
+    CpoAttribute jdbcAttribute = null;
 
-    public String toString(CpoClass jmc) throws CpoException {
-        StringBuilder sb = new StringBuilder();
-        String function = null;
-        String attribute = null;
-        String column = null;
-        int attrOffset = 0;
-        int fromIndex = 0;
-        CpoAttribute jdbcAttribute=null;
+    attribute = this.getAttribute();
+    function = this.getFunction();
+    if (attribute != null && attribute.length() > 0) {
+      jdbcAttribute = (CpoAttribute) jmc.getAttributeJava(attribute);
+      if (jdbcAttribute == null) {
+        throw new CpoException(attribute);
+      }
+      sb.append(" ");
 
-        attribute = this.getAttribute();
-        function = this.getFunction();
-        if(attribute != null && attribute.length()>0) {
-            jdbcAttribute = (CpoAttribute) jmc.getAttributeJava(attribute);
-            if (jdbcAttribute == null) {
-            	throw new CpoException(attribute);
-            }
-            sb.append(" ");
-
-            column = jdbcAttribute.getDataName();
-            if(column != null && column.length()>0) {
-                if(function!=null && function.length()>0) {
-                    while((attrOffset=function.indexOf(attribute, fromIndex))!=-1){
-                             sb.append(function.substring(0,attrOffset));
-                             sb.append(column);
-                             fromIndex+=attrOffset+attribute.length();
-                    }
-                    sb.append(function.substring(fromIndex));
-                } else {
-                    sb.append(column);
-                }
-            }
-
-            if(this.getAscending()==true) {
-                sb.append(" ASC");
-            } else {
-                sb.append(" DESC");
-            }
+      column = jdbcAttribute.getDataName();
+      if (column != null && column.length() > 0) {
+        if (function != null && function.length() > 0) {
+          while ((attrOffset = function.indexOf(attribute, fromIndex)) != -1) {
+            sb.append(function.substring(0, attrOffset));
+            sb.append(column);
+            fromIndex += attrOffset + attribute.length();
+          }
+          sb.append(function.substring(fromIndex));
+        } else {
+          sb.append(column);
         }
+      }
 
-        return sb.toString();
+      if (this.getAscending() == true) {
+        sb.append(" ASC");
+      } else {
+        sb.append(" DESC");
+      }
     }
 
-    public String getName() {
-      return name;
-    }
+    return sb.toString();
+  }
 
-    public void setName(String name) {
-      this.name = name;
-    }
+  public String getName() {
+    return name;
+  }
 
+  public void setName(String name) {
+    this.name = name;
+  }
 }

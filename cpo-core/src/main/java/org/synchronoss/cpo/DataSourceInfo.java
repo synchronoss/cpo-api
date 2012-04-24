@@ -19,34 +19,31 @@
  *  http://www.gnu.org/licenses/lgpl.txt
  *
  */
-
 package org.synchronoss.cpo;
 
 import javax.sql.DataSource;
 
 /**
- * Interface that defines the methods needed by CPO for any class that collects DataSource info and 
- * instantiates the DataSource
- * 
+ * Interface that defines the methods needed by CPO for any class that collects DataSource info and instantiates the
+ * DataSource
+ *
  * @author david.berry
  *
  */
 public interface DataSourceInfo {
 
-	/**
-	 * @return Returns the dataSourceName.
-	 */
-	public String getDataSourceName();
+  /**
+   * @return Returns the dataSourceName.
+   */
+  public String getDataSourceName();
 
   /**
    * @return Returns the DataSource
    */
-  public DataSource getDataSource() throws CpoException ;
-  
+  public DataSource getDataSource() throws CpoException;
 //  /**
 //   * Returns the tablePrefix or an empty string if no table prefix exists.
 //   * @return Returns the tablePrefix to be used on the CPO Tables
 //   */
 //  public String getTablePrefix();
-  
 }

@@ -19,7 +19,6 @@
  *  http://www.gnu.org/licenses/lgpl.txt
  *
  */
-
 package org.synchronoss.cpo;
 
 import java.io.ByteArrayInputStream;
@@ -29,91 +28,91 @@ import java.io.InputStream;
 
 /**
  * CpoObject is a class that maps datasource datatypes to java.sql.types and java classes
- * 
+ *
  * @author david berry
  */
-
 public class CpoByteArrayInputStream extends ByteArrayInputStream implements java.io.Serializable, java.lang.Cloneable {
 
-    /**
-     * Version Id for this class.
-     */
-    private static final long serialVersionUID = 1L;
-    
-    private byte[] buffer_=null; //The buffer for the byte Array
-    
-    private int offset_=0;
-    private int size_=0;
-    
-    public CpoByteArrayInputStream(byte[] buffer){
-        super(buffer);
-        setBuffer(buffer);
-    }
+  /**
+   * Version Id for this class.
+   */
+  private static final long serialVersionUID = 1L;
+  private byte[] buffer_ = null; //The buffer for the byte Array
+  private int offset_ = 0;
+  private int size_ = 0;
 
-    public CpoByteArrayInputStream(byte[] buffer, int offset, int length){
-        super(buffer, offset, length);
-        setBuffer(buffer);
-        setOffset(offset);
-        setSize(length);
-   }
+  public CpoByteArrayInputStream(byte[] buffer) {
+    super(buffer);
+    setBuffer(buffer);
+  }
 
-    protected void setBuffer(byte[] buffer){
-        buffer_ = buffer;
-    }
+  public CpoByteArrayInputStream(byte[] buffer, int offset, int length) {
+    super(buffer, offset, length);
+    setBuffer(buffer);
+    setOffset(offset);
+    setSize(length);
+  }
 
-    protected byte[] getBuffer(){
-        return buffer_;
-    }
-    
-    protected void setOffset(int offset){
-        offset_ = offset;
-    }
+  protected void setBuffer(byte[] buffer) {
+    buffer_ = buffer;
+  }
 
-    protected int getOffset(){
-        return offset_;
-    }
-    
-    protected void setSize(int size){
-        size_ = size;
-    }
+  protected byte[] getBuffer() {
+    return buffer_;
+  }
 
-    protected int getSize(){
-        return size_;
-    }
+  protected void setOffset(int offset) {
+    offset_ = offset;
+  }
 
-    public int getLength(){
-        int l=0;
-        
-        if (getOffset()==0){
-            l = getBuffer().length;
-        } else {
-            l = getSize()<getBuffer().length-getOffset()?getSize():getBuffer().length-getOffset();
+  protected int getOffset() {
+    return offset_;
+  }
+
+  protected void setSize(int size) {
+    size_ = size;
+  }
+
+  protected int getSize() {
+    return size_;
+  }
+
+  public int getLength() {
+    int l = 0;
+
+    if (getOffset() == 0) {
+      l = getBuffer().length;
+    } else {
+      l = getSize() < getBuffer().length - getOffset() ? getSize() : getBuffer().length - getOffset();
+    }
+    return l;
+  }
+
+  static public CpoByteArrayInputStream getCpoStream(InputStream is) {
+    CpoByteArrayInputStream cbais = null;
+
+    if (is instanceof CpoByteArrayInputStream) {
+      cbais = ((CpoByteArrayInputStream) is);
+    } else {
+      // Need to determine the length of the InputStream
+      int b = -1;
+      try {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        while ((b = is.read()) != -1) {
+          baos.write(b);
         }
-        return l; 
-    }
-    static public CpoByteArrayInputStream getCpoStream(InputStream is){
-        CpoByteArrayInputStream cbais = null;
-        
-        if (is instanceof CpoByteArrayInputStream)
-            cbais = ((CpoByteArrayInputStream)is);
-        else {
-            // Need to determine the length of the InputStream
-            int b=-1;
-            try {
-                ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                while ((b = is.read())!=-1) {
-                    baos.write(b);
-                }
-                cbais = new CpoByteArrayInputStream(baos.toByteArray());
-            } catch (IOException ioe) {
-                // do nothing for now. The null should get someone's attention. 
-            } finally {
-                try {is.close();} catch (IOException ioe){}
-            }
-            
+        cbais = new CpoByteArrayInputStream(baos.toByteArray());
+      } catch (IOException ioe) {
+        // do nothing for now. The null should get someone's attention. 
+      } finally {
+        try {
+          is.close();
+        } catch (IOException ioe) {
         }
-            
-        return cbais;
+      }
+
     }
 
+    return cbais;
+  }
 }

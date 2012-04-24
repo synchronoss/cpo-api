@@ -19,7 +19,6 @@
  *  http://www.gnu.org/licenses/lgpl.txt
  *
  */
-
 package org.synchronoss.cpo;
 
 import org.synchronoss.cpo.meta.domain.*;
@@ -60,6 +59,4 @@ public interface MetaVisitor {
    * @param cpoArgument The argument to be visited
    */
   public void visit(CpoArgument cpoArgument);
-
 }
-

@@ -19,12 +19,13 @@
  *  http://www.gnu.org/licenses/lgpl.txt
  *
  */
-
 package org.synchronoss.cpo.meta.bean;
 
 public class CpoFunctionBean implements java.io.Serializable {
 
-  /* Properties */
+  /*
+   * Properties
+   */
   private java.lang.String expression;
   private java.lang.String description;
 
@@ -47,20 +48,25 @@ public class CpoFunctionBean implements java.io.Serializable {
     this.expression = expression;
   }
 
-  /* Getters and Setters */
-
+  /*
+   * Getters and Setters
+   */
   public boolean equals(Object o) {
-    if (this == o)
+    if (this == o) {
       return true;
-    if (o == null || getClass() != o.getClass())
+    }
+    if (o == null || getClass() != o.getClass()) {
       return false;
+    }
 
-    CpoFunctionBean that = (CpoFunctionBean)o;
+    CpoFunctionBean that = (CpoFunctionBean) o;
 
-    if (getExpression() != null ? !getExpression().equals(that.getExpression()) : that.getExpression() != null)
+    if (getExpression() != null ? !getExpression().equals(that.getExpression()) : that.getExpression() != null) {
       return false;
-    if (getDescription() != null ? !getDescription().equals(that.getDescription()) : that.getDescription() != null)
+    }
+    if (getDescription() != null ? !getDescription().equals(that.getDescription()) : that.getDescription() != null) {
       return false;
+    }
 
     return true;
   }

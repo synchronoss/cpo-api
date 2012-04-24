@@ -19,49 +19,43 @@
  *  http://www.gnu.org/licenses/lgpl.txt
  *
  */
-
 package org.synchronoss.cpo.jdbc;
 
 import org.synchronoss.cpo.meta.domain.CpoArgument;
 
-
 /**
- * JdbcArgument is a class that maps traditional java classes to tables in a 
- * jdbc database. 
- * 
+ * JdbcArgument is a class that maps traditional java classes to tables in a jdbc database.
+ *
  * @author david berry
  */
-
 public class JdbcArgument extends CpoArgument implements java.io.Serializable, java.lang.Cloneable {
 
-	/**
-     * Version Id for this class.
-     */
-	private static final long serialVersionUID = 1L;
-	
+  /**
+   * Version Id for this class.
+   */
+  private static final long serialVersionUID = 1L;
+  private static final String IN_PARAMETER = "IN";
+  private static final String OUT_PARAMETER = "OUT";
+  private static final String INOUT_PARAMETER = "BOTH";
+  private String scope = null;
 
-    private static final String IN_PARAMETER = "IN";
-    private static final String OUT_PARAMETER = "OUT";
-    private static final String INOUT_PARAMETER = "BOTH";
-    private String scope = null;
-
-    public JdbcArgument(){
-      super();
-    }
+  public JdbcArgument() {
+    super();
+  }
 
   @Override
-    public JdbcAttribute getAttribute() {
-      return (JdbcAttribute) super.getAttribute();
-    }
+  public JdbcAttribute getAttribute() {
+    return (JdbcAttribute) super.getAttribute();
+  }
 
-    public boolean isInParameter(){
-        return IN_PARAMETER.equals(getScope()) || INOUT_PARAMETER.equals(getScope());
-    }
+  public boolean isInParameter() {
+    return IN_PARAMETER.equals(getScope()) || INOUT_PARAMETER.equals(getScope());
+  }
 
-    public boolean isOutParameter(){
-        return OUT_PARAMETER.equals(getScope()) || INOUT_PARAMETER.equals(getScope());
-    }
-    
+  public boolean isOutParameter() {
+    return OUT_PARAMETER.equals(getScope()) || INOUT_PARAMETER.equals(getScope());
+  }
+
   public String getScope() {
     return scope;
   }
@@ -69,5 +63,4 @@ public class JdbcArgument extends CpoArgument implements java.io.Serializable, j
   public void setScope(String scope) {
     this.scope = scope;
   }
-
 }

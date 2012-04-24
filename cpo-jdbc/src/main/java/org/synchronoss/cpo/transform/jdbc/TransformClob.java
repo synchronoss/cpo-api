@@ -19,99 +19,94 @@
  *  http://www.gnu.org/licenses/lgpl.txt
  *
  */
- 
 package org.synchronoss.cpo.transform.jdbc;
 
 import java.io.CharArrayWriter;
 import java.io.Reader;
 import java.io.Writer;
 import java.sql.Clob;
-
 import oracle.sql.CLOB;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.CpoException;
 import org.synchronoss.cpo.jdbc.JdbcCallableStatementFactory;
 import org.synchronoss.cpo.jdbc.JdbcPreparedStatementFactory;
-import org.synchronoss.cpo.transform.CpoTransform;
-
 
 /**
- * Converts a java.sql.Blob from a jdbc datasource to a byte[] and
- * from a byte[] to a java.sql.Blob
- * 
+ * Converts a java.sql.Blob from a jdbc datasource to a byte[] and from a byte[] to a java.sql.Blob
+ *
  * @author david berry
  */
-
 public class TransformClob implements JdbcTransform<Clob, char[]> {
-    private static Logger logger = LoggerFactory.getLogger(TransformClob.class.getName());
 
-    public TransformClob(){}
+  private static Logger logger = LoggerFactory.getLogger(TransformClob.class.getName());
 
-    /**
-     * Transforms the datasource object into an object required by the class
-     * 
-     * @param cpoAdapter The CpoAdapter for the datasource where the attribute is being retrieved
-     * @param parentObject The object that contains the attribute being retrieved.
-     * @param The object that represents the datasource object being retrieved
-     * @return The object to be stored in the attribute
-     * @throws CpoException
-     */
-    public char[] transformIn(Clob clob) 
-    throws CpoException {
-        
-        char[] buffChars = new char[1024];
-        char[] retChars = null;
-        int length = 0;
-        CharArrayWriter caw = new CharArrayWriter();
-        
-        if (clob!=null){
-            try{
-                Reader is = clob.getCharacterStream();
-                
-                while ((length= is.read(buffChars)) != -1) {
-                    caw.write(buffChars,0,length);
-                }
-                is.close();
-                retChars = caw.toCharArray();
-            } catch (Exception e) {
-                logger.debug("Error in transform blob",e);
-                throw new CpoException(e);
-            }
+  public TransformClob() {
+  }
+
+  /**
+   * Transforms the datasource object into an object required by the class
+   *
+   * @param cpoAdapter The CpoAdapter for the datasource where the attribute is being retrieved
+   * @param parentObject The object that contains the attribute being retrieved.
+   * @param The object that represents the datasource object being retrieved
+   * @return The object to be stored in the attribute
+   * @throws CpoException
+   */
+  public char[] transformIn(Clob clob)
+          throws CpoException {
+
+    char[] buffChars = new char[1024];
+    char[] retChars = null;
+    int length = 0;
+    CharArrayWriter caw = new CharArrayWriter();
+
+    if (clob != null) {
+      try {
+        Reader is = clob.getCharacterStream();
+
+        while ((length = is.read(buffChars)) != -1) {
+          caw.write(buffChars, 0, length);
         }
-        return retChars;
+        is.close();
+        retChars = caw.toCharArray();
+      } catch (Exception e) {
+        logger.debug("Error in transform blob", e);
+        throw new CpoException(e);
+      }
     }
+    return retChars;
+  }
 
-    /**
-     * Transforms the data from the class attribute to the object required by the datasource
-     *
-     * @param cpoAdapter The CpoAdapter for the datasource where the attribute is being persisted
-     * @param parentObject The object that contains the attribute being persisted.
-     * @param attributeObject The object that represents the attribute being persisted.
-     * @return The object to be stored in the datasource
-     * @throws CpoException
-     */
-    public Clob transformOut(JdbcPreparedStatementFactory jpsf, char[] attributeObject) 
-    throws CpoException {
-        CLOB newClob = null;
-         
-                try{
-                    if (attributeObject != null){
-                        newClob = CLOB.createTemporary(jpsf.getPreparedStatement().getConnection(), false, CLOB.DURATION_SESSION);
-                        jpsf.AddReleasible(new OracleTemporaryClob(newClob));
-                        
-                        Writer cos = newClob.setCharacterStream(0); 
-                        cos.write(attributeObject);
-                        cos.close();
-                    }
-                } catch (Exception e){
-                    String msg = "Error CLOBing Char Array";
-                    logger.error(msg,e);
-                    throw new CpoException(msg, e);
-                }
-               return newClob;
+  /**
+   * Transforms the data from the class attribute to the object required by the datasource
+   *
+   * @param cpoAdapter The CpoAdapter for the datasource where the attribute is being persisted
+   * @param parentObject The object that contains the attribute being persisted.
+   * @param attributeObject The object that represents the attribute being persisted.
+   * @return The object to be stored in the datasource
+   * @throws CpoException
+   */
+  public Clob transformOut(JdbcPreparedStatementFactory jpsf, char[] attributeObject)
+          throws CpoException {
+    CLOB newClob = null;
+
+    try {
+      if (attributeObject != null) {
+        newClob = CLOB.createTemporary(jpsf.getPreparedStatement().getConnection(), false, CLOB.DURATION_SESSION);
+        jpsf.AddReleasible(new OracleTemporaryClob(newClob));
+
+        Writer cos = newClob.setCharacterStream(0);
+        cos.write(attributeObject);
+        cos.close();
+      }
+    } catch (Exception e) {
+      String msg = "Error CLOBing Char Array";
+      logger.error(msg, e);
+      throw new CpoException(msg, e);
     }
+    return newClob;
+  }
 
   public Clob transformOut(JdbcCallableStatementFactory jpsf, char[] attributeObject) throws CpoException, UnsupportedOperationException {
     throw new UnsupportedOperationException("Not supported yet.");
@@ -121,5 +116,4 @@ public class TransformClob implements JdbcTransform<Clob, char[]> {
   public Clob transformOut(char[] j) throws CpoException, UnsupportedOperationException {
     throw new UnsupportedOperationException("Not supported yet.");
   }
-
 }

@@ -19,7 +19,6 @@
  *  http://www.gnu.org/licenses/lgpl.txt
  *
  */
-
 package org.synchronoss.cpo.helper;
 
 /**
@@ -27,28 +26,32 @@ package org.synchronoss.cpo.helper;
  * @author dberry
  */
 public class ExceptionHelper {
-	public static String getMessage(Throwable e){
-		String msg="";
 
-		if (e!=null)
-			msg=e.getMessage();
+  public static String getMessage(Throwable e) {
+    String msg = "";
 
-    if (msg==null && e.getCause()!=null)
+    if (e != null) {
+      msg = e.getMessage();
+    }
+
+    if (msg == null && e.getCause() != null) {
       msg = e.getCause().getMessage();
-    
-		return msg;
-	}
+    }
 
-	public static String getLocalizedMessage(Throwable e){
-		String msg="";
+    return msg;
+  }
 
-		if (e!=null)
-			msg=e.getLocalizedMessage();
+  public static String getLocalizedMessage(Throwable e) {
+    String msg = "";
 
-    if (msg==null && e.getCause()!=null)
+    if (e != null) {
+      msg = e.getLocalizedMessage();
+    }
+
+    if (msg == null && e.getCause() != null) {
       msg = e.getCause().getLocalizedMessage();
-		
-		return msg;
-	}
+    }
 
+    return msg;
+  }
 }

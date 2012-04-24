@@ -19,22 +19,17 @@
  *  http://www.gnu.org/licenses/lgpl.txt
  *
  */
-
 package org.synchronoss.cpo.jdbc;
-
-import org.synchronoss.cpo.jdbc.ValueObject;
 
 /**
  * TestCallable is a class that maps datasource datatypes to java.sql.types and java classes
- * 
+ *
  * @author david berry
  */
-
 public class ChildValueObject extends ValueObject implements java.io.Serializable, java.lang.Cloneable {
 
   /**
-   * 
+   *
    */
   private static final long serialVersionUID = 1L;
-
 }

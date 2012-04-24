@@ -19,82 +19,85 @@
  *  http://www.gnu.org/licenses/lgpl.txt
  *
  */
-
 package org.synchronoss.cpo;
 
 /**
- * CpoWhere is an interface for specifying the where clause to filter
- * objects that are returned from the Datasource.
+ * CpoWhere is an interface for specifying the where clause to filter objects that are returned from the Datasource.
  *
  * @author david berry
  */
-
 public interface CpoWhere {
 
-    static final int COMP_NONE   = -1;
-    static final int COMP_EQ     = 0;
-    static final int COMP_LT     = 1;
-    static final int COMP_GT     = 2;
-    static final int COMP_NEQ    = 3;
-    static final int COMP_IN     = 4;
-    static final int COMP_LIKE   = 5;
-    static final int COMP_LTEQ   = 6;
-    static final int COMP_GTEQ   = 7;
-    static final int COMP_EXISTS = 8;
-    static final int COMP_ISNULL = 9;
+  static final int COMP_NONE = -1;
+  static final int COMP_EQ = 0;
+  static final int COMP_LT = 1;
+  static final int COMP_GT = 2;
+  static final int COMP_NEQ = 3;
+  static final int COMP_IN = 4;
+  static final int COMP_LIKE = 5;
+  static final int COMP_LTEQ = 6;
+  static final int COMP_GTEQ = 7;
+  static final int COMP_EXISTS = 8;
+  static final int COMP_ISNULL = 9;
+  static final int LOGIC_NONE = -1;
+  static final int LOGIC_AND = 0;
+  static final int LOGIC_OR = 1;
 
-    static final int LOGIC_NONE = -1;
-    static final int LOGIC_AND  = 0;
-    static final int LOGIC_OR   = 1;
+  public void setComparison(int comp);
 
-    public void setComparison(int comp);
-    public int getComparison();
+  public int getComparison();
 
-    public void setLogical(int log);
-    public int getLogical();
+  public void setLogical(int log);
 
-    public void setAttribute(String attr);
-    public String getAttribute();
+  public int getLogical();
 
-    public void setRightAttribute(String attr);
-    public String getRightAttribute();
+  public void setAttribute(String attr);
 
-    public void setValue(Object val);
-    public Object getValue();
+  public String getAttribute();
 
-    public boolean getNot();
-    public void setNot(boolean b);
+  public void setRightAttribute(String attr);
 
-    public void addWhere(CpoWhere cw) throws CpoException;
+  public String getRightAttribute();
 
-    public void setAttributeFunction(String s);
-    public String getAttributeFunction();
+  public void setValue(Object val);
 
-    public void setValueFunction(String s);
-    public String getValueFunction();
+  public Object getValue();
 
-    public void setRightAttributeFunction(String s);
-    public String getRightAttributeFunction();
+  public boolean getNot();
 
-    public void setStaticValue(String staticValue);
-    public String getStaticValue();
+  public void setNot(boolean b);
 
-    public boolean isLeaf();
+  public void addWhere(CpoWhere cw) throws CpoException;
 
-    /**
-     * Gets a string representing the name of this instance of the 
-     * CpoOrderBy
-     * 
-     * @return String The name of the CpoOrderBy
-     */
-    public String getName();
+  public void setAttributeFunction(String s);
 
-    /**
-     * Sets a string representing the name of this instance of the 
-     * CpoOrderBy
-     * 
-     * @param s The name of the CpoOrderBy
-     */
-    public void setName(String s);
+  public String getAttributeFunction();
 
+  public void setValueFunction(String s);
+
+  public String getValueFunction();
+
+  public void setRightAttributeFunction(String s);
+
+  public String getRightAttributeFunction();
+
+  public void setStaticValue(String staticValue);
+
+  public String getStaticValue();
+
+  public boolean isLeaf();
+
+  /**
+   * Gets a string representing the name of this instance of the CpoOrderBy
+   *
+   * @return String The name of the CpoOrderBy
+   */
+  public String getName();
+
+  /**
+   * Sets a string representing the name of this instance of the CpoOrderBy
+   *
+   * @param s The name of the CpoOrderBy
+   */
+  public void setName(String s);
 }

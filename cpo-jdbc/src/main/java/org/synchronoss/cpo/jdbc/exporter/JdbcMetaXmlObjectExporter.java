@@ -19,14 +19,18 @@
  *  http://www.gnu.org/licenses/lgpl.txt
  *
  */
-
 package org.synchronoss.cpo.jdbc.exporter;
 
-import org.synchronoss.cpo.core.cpoCoreMeta.*;
-import org.synchronoss.cpo.exporter.*;
-import org.synchronoss.cpo.jdbc.*;
-import org.synchronoss.cpo.jdbc.cpoJdbcMeta.*;
-import org.synchronoss.cpo.meta.domain.*;
+import org.synchronoss.cpo.core.cpoCoreMeta.CtArgument;
+import org.synchronoss.cpo.core.cpoCoreMeta.CtAttribute;
+import org.synchronoss.cpo.exporter.CoreMetaXmlObjectExporter;
+import org.synchronoss.cpo.exporter.MetaXmlObjectExporter;
+import org.synchronoss.cpo.jdbc.JdbcArgument;
+import org.synchronoss.cpo.jdbc.JdbcAttribute;
+import org.synchronoss.cpo.jdbc.cpoJdbcMeta.CtJdbcArgument;
+import org.synchronoss.cpo.jdbc.cpoJdbcMeta.CtJdbcAttribute;
+import org.synchronoss.cpo.meta.domain.CpoArgument;
+import org.synchronoss.cpo.meta.domain.CpoAttribute;
 
 /**
  * XmlObject exporter for jdbc meta objects
@@ -49,7 +53,7 @@ public class JdbcMetaXmlObjectExporter extends CoreMetaXmlObjectExporter impleme
       return;
     }
 
-    JdbcAttribute jdbcAttribute = (JdbcAttribute)cpoAttribute;
+    JdbcAttribute jdbcAttribute = (JdbcAttribute) cpoAttribute;
 
     if (currentCtClass != null) {
 
@@ -61,17 +65,21 @@ public class JdbcMetaXmlObjectExporter extends CoreMetaXmlObjectExporter impleme
       ctJdbcAttribute.setDataName(jdbcAttribute.getDataName());
       ctJdbcAttribute.setDataType(jdbcAttribute.getDataType());
 
-      if (jdbcAttribute.getTransformClassName() != null && jdbcAttribute.getTransformClassName().length() > 0)
+      if (jdbcAttribute.getTransformClassName() != null && jdbcAttribute.getTransformClassName().length() > 0) {
         ctJdbcAttribute.setTransformClass(jdbcAttribute.getTransformClassName());
+      }
 
-      if (jdbcAttribute.getDescription() != null && jdbcAttribute.getDescription().length() > 0)
+      if (jdbcAttribute.getDescription() != null && jdbcAttribute.getDescription().length() > 0) {
         ctJdbcAttribute.setDescription(jdbcAttribute.getDescription());
+      }
 
-      if (jdbcAttribute.getDbTable() != null && jdbcAttribute.getDbTable().length() > 0)
+      if (jdbcAttribute.getDbTable() != null && jdbcAttribute.getDbTable().length() > 0) {
         ctJdbcAttribute.setDbTable(jdbcAttribute.getDbTable());
+      }
 
-      if (jdbcAttribute.getDbColumn() != null && jdbcAttribute.getDbColumn().length() > 0)
+      if (jdbcAttribute.getDbColumn() != null && jdbcAttribute.getDbColumn().length() > 0) {
         ctJdbcAttribute.setDbColumn(jdbcAttribute.getDbColumn());
+      }
 
       // add it to the class
       CtAttribute ctAttribute = currentCtClass.addNewCpoAttribute();
@@ -88,7 +96,7 @@ public class JdbcMetaXmlObjectExporter extends CoreMetaXmlObjectExporter impleme
       return;
     }
 
-    JdbcArgument jdbcArgument = (JdbcArgument)cpoArgument;
+    JdbcArgument jdbcArgument = (JdbcArgument) cpoArgument;
 
     if (currentCtFunction != null) {
 
@@ -97,8 +105,9 @@ public class JdbcMetaXmlObjectExporter extends CoreMetaXmlObjectExporter impleme
 
       ctJdbcArgument.setAttributeName(jdbcArgument.getAttributeName());
 
-      if (jdbcArgument.getDescription() != null && jdbcArgument.getDescription().length() > 0)
+      if (jdbcArgument.getDescription() != null && jdbcArgument.getDescription().length() > 0) {
         ctJdbcArgument.setDescription(jdbcArgument.getDescription());
+      }
 
       if (jdbcArgument.isInParameter() && jdbcArgument.isOutParameter()) {
         ctJdbcArgument.setScope(CtJdbcArgument.Scope.BOTH);

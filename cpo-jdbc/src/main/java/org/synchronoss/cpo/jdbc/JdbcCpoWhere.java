@@ -19,7 +19,6 @@
  *  http://www.gnu.org/licenses/lgpl.txt
  *
  */
-
 package org.synchronoss.cpo.jdbc;
 
 import java.util.Collection;
@@ -31,300 +30,305 @@ import org.synchronoss.cpo.meta.domain.CpoAttribute;
 import org.synchronoss.cpo.meta.domain.CpoClass;
 
 /**
- * JdbcCpoWhere is an interface for specifying the sort order in which
- * objects are returned from the Datasource.
+ * JdbcCpoWhere is an interface for specifying the sort order in which objects are returned from the Datasource.
  *
  * @author david berry
  */
+public class JdbcCpoWhere extends Node implements CpoWhere {
 
-public class JdbcCpoWhere extends Node implements CpoWhere{
+  /**
+   * Version Id for this class.
+   */
+  private static final long serialVersionUID = 1L;
+  static final String comparisons[] = {
+    "=", //COMP_EQ
+    "<", //COMP_LT
+    ">", //COMP_GT
+    "<>", //COMP_NEQ
+    "IN", //COMP_IN
+    "LIKE", //COMP_LIKE
+    "<=", //COMP_LTEQ
+    ">=", //COMP_GTEQ
+    "EXISTS", //COMP_EXISTS
+    "IS NULL" //COMP_ISNULL
+  };
+  static final String logicals[] = {
+    "AND", //LOGIC_AND
+    "OR" //LOGIC_OR
+  };
+  private int comparison = CpoWhere.COMP_NONE;
+  private int logical = CpoWhere.LOGIC_NONE;
+  private String attribute = null;
+  private String rightAttribute = null;
+  private Object value = null;
+  private String attributeFunction = null;
+  private String rightAttributeFunction = null;
+  private String valueFunction = null;
+  private boolean not = false;
+  private String staticValue_ = null;
+  private String name = "__CPO_WHERE__";
 
-    /**
-     * Version Id for this class.
-     */
-    private static final long serialVersionUID = 1L;
-    
+  public <T> JdbcCpoWhere(int logical, String attr, int comp, T value) {
+    setLogical(logical);
+    setAttribute(attr);
+    setComparison(comp);
+    setValue(value);
+  }
 
-    static final String comparisons[] = {
-        "=",        //COMP_EQ
-        "<",        //COMP_LT
-        ">",        //COMP_GT
-        "<>",       //COMP_NEQ
-        "IN",       //COMP_IN
-        "LIKE",     //COMP_LIKE
-        "<=",        //COMP_LTEQ
-        ">=",        //COMP_GTEQ
-        "EXISTS",    //COMP_EXISTS
-        "IS NULL"    //COMP_ISNULL
-    };
+  public <T> JdbcCpoWhere(int logical, String attr, int comp, T value, boolean not) {
+    setLogical(logical);
+    setAttribute(attr);
+    setComparison(comp);
+    setValue(value);
+    setNot(not);
+  }
 
-    static final String logicals[] = {
-        "AND",        //LOGIC_AND
-        "OR"          //LOGIC_OR
-    };
+  public JdbcCpoWhere() {
+  }
 
-    private int comparison = CpoWhere.COMP_NONE;
-    private int logical = CpoWhere.LOGIC_NONE;
-    private String attribute = null;
-    private String rightAttribute = null;
-    private Object value = null;
-    private String attributeFunction = null;
-    private String rightAttributeFunction = null;
-    private String valueFunction = null;
-    private boolean not = false;
-    private String staticValue_ = null;
-    private String name = "__CPO_WHERE__";
+  public void setComparison(int i) {
+    if (i < 0 || i >= comparisons.length) {
+      this.comparison = CpoWhere.COMP_NONE;
+    } else {
+      this.comparison = i;
+    }
+  }
+
+  public int getComparison() {
+    return this.comparison;
+  }
+
+  public void setLogical(int i) {
+    if (i < 0 || i >= logicals.length) {
+      this.logical = CpoWhere.LOGIC_NONE;
+    } else {
+      this.logical = i;
+    }
+  }
+
+  public int getLogical() {
+    return this.logical;
+  }
+
+  public void setAttribute(String s) {
+    this.attribute = s;
+  }
+
+  public String getAttribute() {
+    return this.attribute;
+  }
+
+  public void setRightAttribute(String s) {
+    this.rightAttribute = s;
+  }
+
+  public String getRightAttribute() {
+    return this.rightAttribute;
+  }
+
+  public void setValue(Object s) {
+    this.value = s;
+  }
+
+  public Object getValue() {
+    return this.value;
+  }
+
+  public void setStaticValue(String staticValue) {
+    this.staticValue_ = staticValue;
+  }
+
+  public String getStaticValue() {
+    return this.staticValue_;
+  }
+
+  public boolean getNot() {
+    return this.not;
+  }
+
+  public void setNot(boolean b) {
+    this.not = b;
+  }
+
+  public String toString(CpoClass cpoClass) throws CpoException {
+    StringBuilder sb = new StringBuilder();
+    JdbcAttribute jdbcAttribute = null;
 
 
-    public <T> JdbcCpoWhere(int logical, String attr, int comp, T value){
-        setLogical(logical);
-        setAttribute(attr);
-        setComparison(comp);
-        setValue(value);
+    if (getLogical() != CpoWhere.LOGIC_NONE) {
+      sb.append(" ");
+      sb.append(logicals[getLogical()]);
+    } else if (!hasParent()) {
+      // This is the root where clause
+      sb.append("WHERE");
     }
 
-    public <T> JdbcCpoWhere(int logical, String attr, int comp, T value, boolean not){
-        setLogical(logical);
-        setAttribute(attr);
-        setComparison(comp);
-        setValue(value);
-        setNot(not);
+    if (getNot() == true) {
+      sb.append(" NOT");
     }
 
-    public JdbcCpoWhere(){
-    }
-
-    public void setComparison(int i){
-        if(i<0 || i>=comparisons.length) {
-            this.comparison=CpoWhere.COMP_NONE;
-        } else {
-            this.comparison = i;
-        }
-    }
-    public int getComparison(){
-        return this.comparison;
-    }
-
-    public void setLogical(int i){
-        if(i<0 || i>=logicals.length) {
-            this.logical=CpoWhere.LOGIC_NONE;
-        } else {
-            this.logical = i;
-        }
-    }
-    public int getLogical(){
-        return this.logical;
-    }
-
-    public void setAttribute(String s){
-        this.attribute = s;
-    }
-    public String getAttribute(){
-        return this.attribute;
-    }
-
-    public void setRightAttribute(String s){
-        this.rightAttribute = s;
-    }
-    public String getRightAttribute(){
-        return this.rightAttribute;
-    }
-
-    public void setValue(Object s){
-        this.value = s;
-    }
-    public Object getValue(){
-        return this.value;
-    }
-
-    public void setStaticValue(String staticValue){
-        this.staticValue_ = staticValue;
-    }
-    public String getStaticValue(){
-        return this.staticValue_;
-    }
-
-    public boolean getNot(){
-        return this.not;
-    }
-    public void setNot(boolean b){
-        this.not=b;
-    }
-
-    public String toString(CpoClass cpoClass)  throws CpoException {
-        StringBuilder sb = new StringBuilder();
-        JdbcAttribute jdbcAttribute = null;
-
-
-        if(getLogical()!=CpoWhere.LOGIC_NONE){
-            sb.append(" ");
-            sb.append(logicals[getLogical()]);
-        } else if (!hasParent()){
-          // This is the root where clause
-            sb.append("WHERE");
-        }
-
-        if(getNot()==true) {
-            sb.append(" NOT");
-        }
-
-        if(getAttribute()!=null){
-            if (sb.length()>0)
-              sb.append(" ");
-            String fullyQualifiedColumn=null;
-
-            jdbcAttribute = (JdbcAttribute) cpoClass.getAttributeJava(getAttribute());
-            if(jdbcAttribute==null) {
-                // This is not an attribute on the cpo bean passed to the retrieveObjects method.
-                // treat it as the column name
-                fullyQualifiedColumn=getAttribute();
-            } else {
-              fullyQualifiedColumn=buildColumnName(jdbcAttribute);
-            }
-            
-            if (getAttributeFunction()!=null){
-            	if (jdbcAttribute!=null)
-            		sb.append(buildFunction(getAttributeFunction(),jdbcAttribute.getJavaName(),fullyQualifiedColumn.toString()));
-            	else
-            		sb.append(getAttributeFunction());
-            } else {
-                sb.append(fullyQualifiedColumn);
-            }
-        }
-
-        if(getComparison()!=CpoWhere.COMP_NONE){
-            sb.append(" ");
-            sb.append(comparisons[getComparison()]);
-        }
-
-        if(getComparison()!=CpoWhere.COMP_ISNULL && (getValue()!=null || getRightAttribute()!=null || getStaticValue()!=null)) {
-            sb.append(" ");
-
-            if(getValue()!=null) {
-                if (getValueFunction()!=null){
-                    if (jdbcAttribute==null) {
-                      jdbcAttribute = (JdbcAttribute) cpoClass.getAttributeJava(getRightAttribute());
-                    }
-                    sb.append(buildFunction(getValueFunction(), getAttributeName(jdbcAttribute, getAttribute(), getRightAttribute()),"?"));
-                } else if(getComparison()==CpoWhere.COMP_IN && getValue() instanceof Collection) {
-                  Collection coll = (Collection) getValue();
-                  sb.append("(");
-                  if (coll.size()>0){
-                    sb.append("?"); // add the parameter, we will bind it later.
-                    for (int i=1; i<coll.size(); i++){
-                      sb.append(", ?"); // add the parameter, we will bind it later.
-                    }
-                  }
-                  sb.append(")");
-                } else {
-                    sb.append("?"); // add the parameter, we will bind it later.
-                }
-            } else if(getRightAttribute()!=null) {
-                jdbcAttribute = (JdbcAttribute)  cpoClass.getAttributeJava(getRightAttribute());
-                String fullyQualifiedColumn = null;
-                if (jdbcAttribute==null){
-                	fullyQualifiedColumn=getRightAttribute();
-                } else {
-                  fullyQualifiedColumn=buildColumnName(jdbcAttribute);
-                }
-
-                if (getRightAttributeFunction()!=null) {
-                    sb.append(buildFunction(getRightAttributeFunction(),getAttributeName(jdbcAttribute, getAttribute(), getRightAttribute()), fullyQualifiedColumn));
-                } else {
-                    sb.append(fullyQualifiedColumn);
-                }
-             } else if(getStaticValue()!=null) {
-                sb.append(getStaticValue());
-             }
-        }
-        return sb.toString();
-    }
-
-    private String getAttributeName(CpoAttribute jdbcAttribute, String leftAttribute, String rightAttribute) {
-      String attrName = null;
-      
-      if (jdbcAttribute != null) {
-        attrName = jdbcAttribute.getJavaName();
+    if (getAttribute() != null) {
+      if (sb.length() > 0) {
+        sb.append(" ");
       }
-      
-      if (attrName==null && leftAttribute!=null){
-        attrName = leftAttribute;
-      }
-      
-      if (attrName==null && rightAttribute!=null){
-        attrName = rightAttribute;
-      }
-      
-      return attrName;
-    }
-    
-    public void addWhere(CpoWhere cw) throws CpoException{
-        try{
-            this.addChild((Node)cw);
-        }catch(ChildNodeException cne){
-            throw new CpoException("Error Adding Where Statement");
-        }
-    }
+      String fullyQualifiedColumn = null;
 
-    public void setAttributeFunction(String s){
-        this.attributeFunction=s;
-    }
-    public String getAttributeFunction(){
-        return this.attributeFunction;
-    }
-
-    public void setValueFunction(String s){
-        this.valueFunction=s;
-    }
-    public String getValueFunction(){
-        return this.valueFunction;
-    }
-
-    public void setRightAttributeFunction(String s){
-        this.rightAttributeFunction=s;
-    }
-    public String getRightAttributeFunction(){
-        return this.rightAttributeFunction;
-    }
-
-    private String buildFunction(String function, String match, String value){
-        StringBuilder sb = new StringBuilder();
-        int attrOffset = 0;
-        int fromIndex = 0;
-
-        if(function!=null && function.length()>0) {
-            while((attrOffset=function.indexOf(match, fromIndex))!=-1){
-                     sb.append(function.substring(0,attrOffset));
-                     sb.append(value);
-                     fromIndex+=attrOffset+match.length();
-            }
-            sb.append(function.substring(fromIndex));
-        }
-
-        return sb.toString();
-    }
-    
-    private String buildColumnName(JdbcAttribute attribute){
-      StringBuilder columnName = new StringBuilder();
-      
-      if (attribute.getDbTable()!=null){
-        columnName.append(attribute.getDbTable());
-        columnName.append(".");
-      }
-      if (attribute.getDbColumn()!=null) {
-        columnName.append(attribute.getDbColumn());
+      jdbcAttribute = (JdbcAttribute) cpoClass.getAttributeJava(getAttribute());
+      if (jdbcAttribute == null) {
+        // This is not an attribute on the cpo bean passed to the retrieveObjects method.
+        // treat it as the column name
+        fullyQualifiedColumn = getAttribute();
       } else {
-        columnName.append(attribute.getDataName());
+        fullyQualifiedColumn = buildColumnName(jdbcAttribute);
       }
-      
-      return columnName.toString();
+
+      if (getAttributeFunction() != null) {
+        if (jdbcAttribute != null) {
+          sb.append(buildFunction(getAttributeFunction(), jdbcAttribute.getJavaName(), fullyQualifiedColumn.toString()));
+        } else {
+          sb.append(getAttributeFunction());
+        }
+      } else {
+        sb.append(fullyQualifiedColumn);
+      }
     }
 
-    public String getName() {
-      return name;
+    if (getComparison() != CpoWhere.COMP_NONE) {
+      sb.append(" ");
+      sb.append(comparisons[getComparison()]);
     }
 
-    public void setName(String name) {
-      this.name = name;
+    if (getComparison() != CpoWhere.COMP_ISNULL && (getValue() != null || getRightAttribute() != null || getStaticValue() != null)) {
+      sb.append(" ");
+
+      if (getValue() != null) {
+        if (getValueFunction() != null) {
+          if (jdbcAttribute == null) {
+            jdbcAttribute = (JdbcAttribute) cpoClass.getAttributeJava(getRightAttribute());
+          }
+          sb.append(buildFunction(getValueFunction(), getAttributeName(jdbcAttribute, getAttribute(), getRightAttribute()), "?"));
+        } else if (getComparison() == CpoWhere.COMP_IN && getValue() instanceof Collection) {
+          Collection coll = (Collection) getValue();
+          sb.append("(");
+          if (coll.size() > 0) {
+            sb.append("?"); // add the parameter, we will bind it later.
+            for (int i = 1; i < coll.size(); i++) {
+              sb.append(", ?"); // add the parameter, we will bind it later.
+            }
+          }
+          sb.append(")");
+        } else {
+          sb.append("?"); // add the parameter, we will bind it later.
+        }
+      } else if (getRightAttribute() != null) {
+        jdbcAttribute = (JdbcAttribute) cpoClass.getAttributeJava(getRightAttribute());
+        String fullyQualifiedColumn = null;
+        if (jdbcAttribute == null) {
+          fullyQualifiedColumn = getRightAttribute();
+        } else {
+          fullyQualifiedColumn = buildColumnName(jdbcAttribute);
+        }
+
+        if (getRightAttributeFunction() != null) {
+          sb.append(buildFunction(getRightAttributeFunction(), getAttributeName(jdbcAttribute, getAttribute(), getRightAttribute()), fullyQualifiedColumn));
+        } else {
+          sb.append(fullyQualifiedColumn);
+        }
+      } else if (getStaticValue() != null) {
+        sb.append(getStaticValue());
+      }
     }
+    return sb.toString();
+  }
+
+  private String getAttributeName(CpoAttribute jdbcAttribute, String leftAttribute, String rightAttribute) {
+    String attrName = null;
+
+    if (jdbcAttribute != null) {
+      attrName = jdbcAttribute.getJavaName();
+    }
+
+    if (attrName == null && leftAttribute != null) {
+      attrName = leftAttribute;
+    }
+
+    if (attrName == null && rightAttribute != null) {
+      attrName = rightAttribute;
+    }
+
+    return attrName;
+  }
+
+  public void addWhere(CpoWhere cw) throws CpoException {
+    try {
+      this.addChild((Node) cw);
+    } catch (ChildNodeException cne) {
+      throw new CpoException("Error Adding Where Statement");
+    }
+  }
+
+  public void setAttributeFunction(String s) {
+    this.attributeFunction = s;
+  }
+
+  public String getAttributeFunction() {
+    return this.attributeFunction;
+  }
+
+  public void setValueFunction(String s) {
+    this.valueFunction = s;
+  }
+
+  public String getValueFunction() {
+    return this.valueFunction;
+  }
+
+  public void setRightAttributeFunction(String s) {
+    this.rightAttributeFunction = s;
+  }
+
+  public String getRightAttributeFunction() {
+    return this.rightAttributeFunction;
+  }
+
+  private String buildFunction(String function, String match, String value) {
+    StringBuilder sb = new StringBuilder();
+    int attrOffset = 0;
+    int fromIndex = 0;
+
+    if (function != null && function.length() > 0) {
+      while ((attrOffset = function.indexOf(match, fromIndex)) != -1) {
+        sb.append(function.substring(0, attrOffset));
+        sb.append(value);
+        fromIndex += attrOffset + match.length();
+      }
+      sb.append(function.substring(fromIndex));
+    }
+
+    return sb.toString();
+  }
+
+  private String buildColumnName(JdbcAttribute attribute) {
+    StringBuilder columnName = new StringBuilder();
+
+    if (attribute.getDbTable() != null) {
+      columnName.append(attribute.getDbTable());
+      columnName.append(".");
+    }
+    if (attribute.getDbColumn() != null) {
+      columnName.append(attribute.getDbColumn());
+    } else {
+      columnName.append(attribute.getDataName());
+    }
+
+    return columnName.toString();
+  }
+
+  public String getName() {
+    return name;
+  }
+
+  public void setName(String name) {
+    this.name = name;
+  }
 }

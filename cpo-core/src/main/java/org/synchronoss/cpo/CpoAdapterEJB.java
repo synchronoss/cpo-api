@@ -19,15 +19,15 @@
  *  http://www.gnu.org/licenses/lgpl.txt
  *
  */
- 
 package org.synchronoss.cpo;
 
 import javax.ejb.EJBObject;
+
 /**
-  *
-  *
-  * @author David E. Berry
-  */
+ *
+ *
+ * @author David E. Berry
+ */
 public interface CpoAdapterEJB
-    extends CpoAdapterRemote, EJBObject {
+        extends CpoAdapterRemote, EJBObject {
 }

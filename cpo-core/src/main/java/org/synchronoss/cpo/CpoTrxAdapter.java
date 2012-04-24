@@ -19,35 +19,34 @@
  *  http://www.gnu.org/licenses/lgpl.txt
  *
  */
-
 package org.synchronoss.cpo;
 
 /**
- * CpoTrxAdapter adds commit, rollback, and close functionality to the methods already
- * in CpoAdapter. This allows the user to control the transaction boundries of CPO.
+ * CpoTrxAdapter adds commit, rollback, and close functionality to the methods already in CpoAdapter. This allows the
+ * user to control the transaction boundries of CPO.
  *
  * @author david berry
  */
 public interface CpoTrxAdapter extends CpoAdapter {
-    
-    /**
-     * Commits the current transaction behind the CpoTrxAdapter
-     */
-    public void commit() throws CpoException;
-    
-    /**
-     * Rollback the current transaction behind the CpoTrxAdapter
-     */
-    public void rollback() throws CpoException;
 
-    /**
-     * Closes the current transaction behind the CpoTrxAdapter. All
-     * subsequent calls to the CpoTrxAdapter will throw an exception.
-     */
-    public void close() throws CpoException;
-    
-    /**
-     * Returns true if the TrxAdapter has been closed, false if it is still active
-     */
-    public boolean isClosed() throws CpoException;
+  /**
+   * Commits the current transaction behind the CpoTrxAdapter
+   */
+  public void commit() throws CpoException;
+
+  /**
+   * Rollback the current transaction behind the CpoTrxAdapter
+   */
+  public void rollback() throws CpoException;
+
+  /**
+   * Closes the current transaction behind the CpoTrxAdapter. All subsequent calls to the CpoTrxAdapter will throw an
+   * exception.
+   */
+  public void close() throws CpoException;
+
+  /**
+   * Returns true if the TrxAdapter has been closed, false if it is still active
+   */
+  public boolean isClosed() throws CpoException;
 }

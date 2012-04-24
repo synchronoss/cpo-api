@@ -19,7 +19,6 @@
  *  http://www.gnu.org/licenses/lgpl.txt
  *
  */
-
 package org.synchronoss.cpo.meta;
 
 import java.io.FileInputStream;
@@ -39,31 +38,31 @@ public class CpoCoreMetaAdapterFactory implements CpoMetaAdapterFactory {
 
   @Override
   public CpoMetaAdapter getCpoMetaAdapter(String metaXml) throws CpoException {
-    
+
     // calculate the hash of metaXml
-    
+
     // see if it exists in the cache
-    
+
     // if it does, return it
-    
+
     // if not, load the new one.
-    
+
     InputStream is = null;
     CpoMetaDataDocument metaDataDoc = null;
-    
+
     is = AbstractCpoMetaAdapter.class.getResourceAsStream(metaXml);
-    if (is == null){
+    if (is == null) {
       try {
         is = new FileInputStream(metaXml);
-      } catch (FileNotFoundException fnfe){
+      } catch (FileNotFoundException fnfe) {
         is = null;
       }
     }
-    
-    String metaAdapterClassName=null;
+
+    String metaAdapterClassName = null;
     AbstractCpoMetaAdapter metaAdapter = null;
     try {
-      if (is == null){
+      if (is == null) {
         metaDataDoc = CpoMetaDataDocument.Factory.parse(metaXml);
       } else {
         metaDataDoc = CpoMetaDataDocument.Factory.parse(is);
@@ -74,18 +73,18 @@ public class CpoCoreMetaAdapterFactory implements CpoMetaAdapterFactory {
       metaAdapter.loadCpoMetaDataDocument(metaDataDoc);
 
 
-    } catch (IOException ioe){
+    } catch (IOException ioe) {
       throw new CpoException("Error processing metaData from InputStream");
-    } catch (XmlException xe){
+    } catch (XmlException xe) {
       throw new CpoException("Error processing metaData from String");
     } catch (ClassNotFoundException cnfe) {
-      throw new CpoException("CpoMetaAdapter not found: "+metaAdapterClassName+": "+ExceptionHelper.getLocalizedMessage(cnfe));
+      throw new CpoException("CpoMetaAdapter not found: " + metaAdapterClassName + ": " + ExceptionHelper.getLocalizedMessage(cnfe));
     } catch (IllegalAccessException iae) {
-      throw new CpoException("Could not access CpoMetaAdapter: "+metaAdapterClassName+": "+ExceptionHelper.getLocalizedMessage(iae));
-    } catch (InstantiationException ie)  {
-      throw new CpoException("Could not instantiate CpoMetaAdapter: "+metaAdapterClassName+": "+ExceptionHelper.getLocalizedMessage(ie));
+      throw new CpoException("Could not access CpoMetaAdapter: " + metaAdapterClassName + ": " + ExceptionHelper.getLocalizedMessage(iae));
+    } catch (InstantiationException ie) {
+      throw new CpoException("Could not instantiate CpoMetaAdapter: " + metaAdapterClassName + ": " + ExceptionHelper.getLocalizedMessage(ie));
     }
-    
+
     return metaAdapter;
   }
 }

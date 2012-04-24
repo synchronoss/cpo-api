@@ -19,7 +19,6 @@
  *  http://www.gnu.org/licenses/lgpl.txt
  *
  */
-
 package org.synchronoss.cpo.transform.jdbc;
 
 import oracle.sql.BLOB;
@@ -31,26 +30,28 @@ import org.synchronoss.cpo.CpoReleasible;
  *
  */
 public class OracleTemporaryBlob implements CpoReleasible {
-	private BLOB blob_=null;
+
+  private BLOB blob_ = null;
 
   @SuppressWarnings("unused")
-	private OracleTemporaryBlob(){}
-	
-	public OracleTemporaryBlob(BLOB blob){
-		blob_=blob;
-	}
-	/* (non-Javadoc)
-	 * @see org.synchronoss.cpo.CpoReleasible#release()
-	 */
-	public void release() throws CpoException {
-		try{
-			if (blob_!=null){
-				blob_.freeTemporary();
-				blob_=null;
-			}
-		} catch (Exception e){
-			throw new CpoException("Error releasing Oracle Temporary Blob",e);
-		}
-	}
+  private OracleTemporaryBlob() {
+  }
 
+  public OracleTemporaryBlob(BLOB blob) {
+    blob_ = blob;
+  }
+  /*
+   * (non-Javadoc) @see org.synchronoss.cpo.CpoReleasible#release()
+   */
+
+  public void release() throws CpoException {
+    try {
+      if (blob_ != null) {
+        blob_.freeTemporary();
+        blob_ = null;
+      }
+    } catch (Exception e) {
+      throw new CpoException("Error releasing Oracle Temporary Blob", e);
+    }
+  }
 }

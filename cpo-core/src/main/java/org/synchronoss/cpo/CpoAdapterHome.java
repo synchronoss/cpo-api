@@ -19,7 +19,6 @@
  *  http://www.gnu.org/licenses/lgpl.txt
  *
  */
- 
 package org.synchronoss.cpo;
 
 import java.rmi.RemoteException;
@@ -27,7 +26,6 @@ import javax.ejb.CreateException;
 import javax.ejb.EJBHome;
 
 public interface CpoAdapterHome extends EJBHome {
-    
-    public CpoAdapterEJB create() throws CreateException, RemoteException;
 
+  public CpoAdapterEJB create() throws CreateException, RemoteException;
 }

@@ -19,15 +19,12 @@
  *  http://www.gnu.org/licenses/lgpl.txt
  *
  */
-
 package org.synchronoss.cpo.jdbc;
 
 import java.util.Locale;
 import java.util.PropertyResourceBundle;
 import java.util.ResourceBundle;
-
 import junit.framework.TestCase;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.CpoAdapter;
@@ -40,79 +37,77 @@ import org.synchronoss.cpo.CpoAdapterFactory;
  * @author david berry
  */
 public class ExecuteTest extends TestCase {
-    private static Logger logger = LoggerFactory.getLogger(ExecuteTest.class.getName());
 
-    private CpoAdapter jdbcIdo_=null;
-    private String dbDriver_=null;
-    private boolean hasCallSupport = true;
+  private static Logger logger = LoggerFactory.getLogger(ExecuteTest.class.getName());
+  private CpoAdapter jdbcIdo_ = null;
+  private String dbDriver_ = null;
+  private boolean hasCallSupport = true;
 
-    /**
-     * Creates a new RollbackTest object.
-     *
-     * @param name DOCUMENT ME!
-     */
-    public ExecuteTest() {
+  /**
+   * Creates a new RollbackTest object.
+   *
+   * @param name DOCUMENT ME!
+   */
+  public ExecuteTest() {
+  }
+
+  /**
+   * <code>setUp</code> Load the datasource from the properties in the property file jdbc_en_US.properties
+   */
+  public void setUp() {
+    String method = "setUp:";
+    ResourceBundle b = PropertyResourceBundle.getBundle(JdbcStatics.PROP_FILE, Locale.getDefault(),
+            this.getClass().getClassLoader());
+    dbDriver_ = b.getString(JdbcStatics.PROP_DBDRIVER).trim();
+    hasCallSupport = new Boolean(b.getString(JdbcStatics.PROP_DB_CALLS_SUPPORTED).trim());
+
+    try {
+      jdbcIdo_ = new CpoAdapterBean(CpoAdapterFactory.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT));
+      assertNotNull(method + "CpoAdapter is null", jdbcIdo_);
+    } catch (Exception e) {
+      fail(method + e.getMessage());
     }
+  }
 
-    /**
-     * <code>setUp</code> Load the datasource from the properties in the property file
-     * jdbc_en_US.properties
-     */
-    public void setUp() {
-        String method="setUp:";
-        ResourceBundle b=PropertyResourceBundle.getBundle(JdbcStatics.PROP_FILE, Locale.getDefault(),
-                this.getClass().getClassLoader());
-        dbDriver_=b.getString(JdbcStatics.PROP_DBDRIVER).trim();
-        hasCallSupport = new Boolean(b.getString(JdbcStatics.PROP_DB_CALLS_SUPPORTED).trim());
-        
-        try {
-          jdbcIdo_ = new CpoAdapterBean(CpoAdapterFactory.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT));
-            assertNotNull(method+"CpoAdapter is null", jdbcIdo_);
-        } catch(Exception e) {
-            fail(method+e.getMessage());
-        }
+  /**
+   * DOCUMENT ME!
+   */
+  public void tearDown() {
+    jdbcIdo_ = null;
+  }
+
+  /**
+   * DOCUMENT ME!
+   */
+  public void testExecute() {
+    if (hasCallSupport == true) {
+      String method = "testExecuteObject:";
+      ValueObject vo = new ValueObject(1);
+      vo.setAttrInteger(3);
+      ValueObject rvo = null;
+
+      try {
+        rvo = (ValueObject) jdbcIdo_.executeObject("TestExecuteObject", vo);
+        assertNotNull(method + "Returned Value object is null");
+        assertTrue("power(3,3)=" + rvo.getAttrDouble(), rvo.getAttrDouble() == 27);
+      } catch (Exception e) {
+        e.printStackTrace();
+        fail(method + e.getMessage());
+      }
+
+
+      try {
+        vo = new ValueObject(1);
+        vo.setAttrSmallInt(3);
+        rvo = (ValueObject) jdbcIdo_.executeObject("TestExecuteObjectNoTransform", vo);
+        assertNotNull(method + "Returned Value object is null");
+        assertTrue("power(3,3)=" + rvo.getAttrDouble(), rvo.getAttrDouble() == 27);
+      } catch (Exception e) {
+        e.printStackTrace();
+        fail(method + e.getMessage());
+      }
+    } else {
+      logger.error(dbDriver_ + " does not support CallableStatements");
     }
-
-    /**
-     * DOCUMENT ME!
-     */
-    public void tearDown() {
-        jdbcIdo_=null;
-    }
-
-    /**
-     * DOCUMENT ME!
-     */
-    public void testExecute() {
-        if (hasCallSupport==true){
-            String method = "testExecuteObject:";
-            ValueObject vo = new ValueObject(1);
-            vo.setAttrInteger(3);
-            ValueObject rvo = null;
-            
-            try{
-                rvo = (ValueObject) jdbcIdo_.executeObject("TestExecuteObject",vo);
-                assertNotNull(method+"Returned Value object is null");
-                assertTrue("power(3,3)="+rvo.getAttrDouble(),rvo.getAttrDouble()==27);
-            } catch (Exception e) {
-                e.printStackTrace();
-                fail(method+e.getMessage());
-            }
-
-
-            try{
-                vo = new ValueObject(1);
-                vo.setAttrSmallInt(3);
-                rvo = (ValueObject) jdbcIdo_.executeObject("TestExecuteObjectNoTransform",vo);
-                assertNotNull(method+"Returned Value object is null");
-                assertTrue("power(3,3)="+rvo.getAttrDouble(),rvo.getAttrDouble()==27);
-            } catch (Exception e) {
-                e.printStackTrace();
-                fail(method+e.getMessage());
-            }
-        } else {
-        	logger.error(dbDriver_+" does not support CallableStatements");
-        }
-    }
-    
+  }
 }

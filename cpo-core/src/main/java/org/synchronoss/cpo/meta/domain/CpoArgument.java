@@ -19,7 +19,6 @@
  *  http://www.gnu.org/licenses/lgpl.txt
  *
  */
-
 package org.synchronoss.cpo.meta.domain;
 
 import org.synchronoss.cpo.meta.bean.CpoArgumentBean;
@@ -27,7 +26,7 @@ import org.synchronoss.cpo.meta.bean.CpoArgumentBean;
 public class CpoArgument extends CpoArgumentBean {
 
   CpoAttribute attribute = null;
-  
+
   public CpoArgument() {
   }
 

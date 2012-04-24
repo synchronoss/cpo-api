@@ -19,41 +19,34 @@
  *  http://www.gnu.org/licenses/lgpl.txt
  *
  */
-
 package org.synchronoss.cpo.jdbc;
-
 
 /**
  * TestCallable is a class that maps datasource datatypes to java.sql.types and java classes
- * 
+ *
  * @author david berry
  */
-
 public class IdObject extends java.lang.Object implements java.io.Serializable, java.lang.Cloneable {
 
-    /**
-     * Version Id for this class.
-     */
-    private static final long serialVersionUID = 1L;
-    
+  /**
+   * Version Id for this class.
+   */
+  private static final long serialVersionUID = 1L;
+  private int id_ = 0; // The id for the value object in the database
 
-    private int id_ = 0; // The id for the value object in the database
+  public IdObject() {
+    // public default constructor as required by cpo
+  }
 
-    
-    public IdObject() {
-        // public default constructor as required by cpo
-    }
-    
-    public IdObject(int id){
-        id_ = id;
-    }
-    
-    public void setId(int id){
-        id_ = id;
-    }
-    
-    public int getId(){
-        return id_;
-    }
+  public IdObject(int id) {
+    id_ = id;
+  }
 
- }
+  public void setId(int id) {
+    id_ = id;
+  }
+
+  public int getId() {
+    return id_;
+  }
+}

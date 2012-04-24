@@ -19,20 +19,20 @@
  *  http://www.gnu.org/licenses/lgpl.txt
  *
  */
- 
 package org.synchronoss.cpo;
 
 import java.rmi.RemoteException;
 import java.util.Collection;
 
 /**
-  *
-  *
-  * @author David E. Berry
-  */
+ *
+ *
+ * @author David E. Berry
+ */
 public interface CpoSqlAdapter
-    extends java.io.Serializable {
+        extends java.io.Serializable {
 
-    public Collection<String> getSqlTypes() throws CpoException, RemoteException;
-    public Class<?> getSqlTypeClass(String typeName) throws CpoException, RemoteException;
+  public Collection<String> getSqlTypes() throws CpoException, RemoteException;
+
+  public Class<?> getSqlTypeClass(String typeName) throws CpoException, RemoteException;
 }

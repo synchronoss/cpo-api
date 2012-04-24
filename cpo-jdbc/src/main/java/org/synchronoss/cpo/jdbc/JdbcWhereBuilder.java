@@ -61,6 +61,7 @@ public class JdbcWhereBuilder<T> implements NodeVisitor {
    * @param val The node to be visited
    * @return a boolean (false) to end visit or (true) to continue visiting
    */
+  @Override
   public boolean visitBegin(Node node) throws Exception {
     JdbcCpoWhere jcw = (JdbcCpoWhere) node;
     whereClause.append(jcw.toString(cpoClass));
@@ -79,6 +80,7 @@ public class JdbcWhereBuilder<T> implements NodeVisitor {
    * @param val The node to be visited
    * @return a boolean (false) to end visit or (true) to continue visiting
    */
+  @Override
   public boolean visitMiddle(Node node) throws Exception {
     return true;
   }
@@ -89,6 +91,7 @@ public class JdbcWhereBuilder<T> implements NodeVisitor {
    * @param val The node to be visited
    * @return a boolean (false) to end visit or (true) to continue visiting
    */
+  @Override
   public boolean visitEnd(Node node) throws Exception {
     JdbcCpoWhere jcw = (JdbcCpoWhere) node;
     if (jcw.hasParent() || jcw.getLogical() != CpoWhere.LOGIC_NONE) {
@@ -103,9 +106,10 @@ public class JdbcWhereBuilder<T> implements NodeVisitor {
    * @param val The element to be visited
    * @return a boolean (false) to end visit or (true) to continue visiting
    */
+  @Override
   public boolean visit(Node node) throws Exception {
     JdbcCpoWhere jcw = (JdbcCpoWhere) node;
-    JdbcAttribute attribute = null;
+    JdbcAttribute attribute;
     whereClause.append(jcw.toString(cpoClass));
     if (jcw.getValue() != null) {
       attribute = (JdbcAttribute) cpoClass.getAttributeJava(jcw.getAttribute());

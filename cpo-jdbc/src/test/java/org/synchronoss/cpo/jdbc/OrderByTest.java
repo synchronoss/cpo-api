@@ -51,6 +51,7 @@ public class OrderByTest extends TestCase {
   /**
    * <code>setUp</code> Load the datasource from the properties in the property file jdbc_en_US.properties
    */
+  @Override
   public void setUp() {
     String method = "setUp:";
 
@@ -70,7 +71,6 @@ public class OrderByTest extends TestCase {
     try {
       jdbcIdo_.insertObjects("TestOrderByInsert", al);
     } catch (Exception e) {
-      e.printStackTrace();
       fail(method + e.getMessage());
     }
 
@@ -80,13 +80,13 @@ public class OrderByTest extends TestCase {
   /**
    * DOCUMENT ME!
    */
+  @Override
   public void tearDown() {
     String method = "tearDown:";
     try {
       jdbcIdo_.deleteObjects("TestOrderByDelete", al);
 
     } catch (Exception e) {
-      e.printStackTrace();
       fail(method + e.getMessage());
     }
     jdbcIdo_ = null;
@@ -97,7 +97,7 @@ public class OrderByTest extends TestCase {
    */
   public void testOrderByAscending() {
     String method = "testOrderByAscending:";
-    Collection<ValueObject> col = null;
+    Collection<ValueObject> col;
 
 
     try {
@@ -115,7 +115,6 @@ public class OrderByTest extends TestCase {
         id++;
       }
     } catch (Exception e) {
-      e.printStackTrace();
       fail(method + e.getMessage());
     }
   }
@@ -125,7 +124,7 @@ public class OrderByTest extends TestCase {
    */
   public void testOrderByDescending() {
     String method = "testOrderByDescending:";
-    List<ValueObject> col = null;
+    List<ValueObject> col;
 
     try {
       CpoOrderBy cob = jdbcIdo_.newOrderBy("id", false, null);
@@ -141,20 +140,18 @@ public class OrderByTest extends TestCase {
         id--;
       }
     } catch (Exception e) {
-      e.printStackTrace();
       fail(method + e.getMessage());
     }
   }
 
   public void testOrderByFunction() {
     String method = "testOrderByAscending:";
-    Collection<ValueObject> col = null;
+    Collection<ValueObject> col;
 
     ValueObject vobj = new ValueObject(-6);
     try {
       jdbcIdo_.insertObject("TestOrderByInsert", vobj);
     } catch (Exception e) {
-      e.printStackTrace();
       fail(method + e.getMessage());
     }
     try {
@@ -174,7 +171,6 @@ public class OrderByTest extends TestCase {
         id++;
       }
     } catch (Exception e) {
-      e.printStackTrace();
       fail(method + e.getMessage());
     }
 
@@ -182,7 +178,6 @@ public class OrderByTest extends TestCase {
       jdbcIdo_.deleteObject("TestOrderByDelete", vobj);
 
     } catch (Exception e) {
-      e.printStackTrace();
       fail(method + e.getMessage());
     }
   }

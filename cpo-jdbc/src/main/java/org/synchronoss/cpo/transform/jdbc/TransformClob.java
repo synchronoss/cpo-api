@@ -53,12 +53,13 @@ public class TransformClob implements JdbcTransform<Clob, char[]> {
    * @return The object to be stored in the attribute
    * @throws CpoException
    */
+  @Override
   public char[] transformIn(Clob clob)
           throws CpoException {
 
     char[] buffChars = new char[1024];
     char[] retChars = null;
-    int length = 0;
+    int length;
     CharArrayWriter caw = new CharArrayWriter();
 
     if (clob != null) {
@@ -87,6 +88,7 @@ public class TransformClob implements JdbcTransform<Clob, char[]> {
    * @return The object to be stored in the datasource
    * @throws CpoException
    */
+  @Override
   public Clob transformOut(JdbcPreparedStatementFactory jpsf, char[] attributeObject)
           throws CpoException {
     CLOB newClob = null;
@@ -108,6 +110,7 @@ public class TransformClob implements JdbcTransform<Clob, char[]> {
     return newClob;
   }
 
+  @Override
   public Clob transformOut(JdbcCallableStatementFactory jpsf, char[] attributeObject) throws CpoException, UnsupportedOperationException {
     throw new UnsupportedOperationException("Not supported yet.");
   }

@@ -50,6 +50,7 @@ public class RollbackTrxTest extends TestCase {
   /**
    * <code>setUp</code> Load the datasource from the properties in the property file jdbc_en_US.properties
    */
+  @Override
   public void setUp() {
     String method = "setUp:";
 
@@ -70,7 +71,6 @@ public class RollbackTrxTest extends TestCase {
         jdbcIdo_.rollback();
       } catch (Exception e1) {
       }
-      e.printStackTrace();
       fail(method + e.getMessage());
     }
   }
@@ -78,6 +78,7 @@ public class RollbackTrxTest extends TestCase {
   /**
    * DOCUMENT ME!
    */
+  @Override
   public void tearDown() {
     ValueObject vo = new ValueObject(1);
     try {
@@ -88,7 +89,6 @@ public class RollbackTrxTest extends TestCase {
         jdbcIdo_.rollback();
       } catch (Exception e1) {
       }
-      e.printStackTrace();
     } finally {
       try {
         jdbcIdo_.close();
@@ -125,7 +125,6 @@ public class RollbackTrxTest extends TestCase {
         ValueObject rvo = jdbcIdo_.retrieveObject(vo);
         assertNull(method + "Value Object did not rollback", rvo);
       } catch (Exception e2) {
-        e.printStackTrace();
         fail(method + e.getMessage());
       }
     }
@@ -151,7 +150,6 @@ public class RollbackTrxTest extends TestCase {
         ValueObject rvo = jdbcIdo_.retrieveObject(vo);
         assertNull(method + "Value Object did not rollback", rvo);
       } catch (Exception e2) {
-        e.printStackTrace();
         fail(method + e.getMessage());
       }
     }

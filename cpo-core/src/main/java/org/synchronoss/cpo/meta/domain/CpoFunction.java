@@ -52,7 +52,7 @@ public class CpoFunction extends CpoFunctionBean {
    * @return DOCUMENT ME!
    */
   public String parameterToString(CpoFunction jq) {
-    List<CpoArgument> arguments;
+    List<CpoArgument> args;
     int j;
     CpoArgument argument;
     CpoAttribute attribute;
@@ -66,10 +66,10 @@ public class CpoFunction extends CpoFunctionBean {
 
     // TODO: make uncomment the following line and make work
 //    sb.append(jq.getName() + " " + jq.getType());
-    arguments = jq.getArguments();
+    args = jq.getArguments();
 
-    for (j = 1; j <= arguments.size(); j++) {
-      argument = arguments.get(j - 1);
+    for (j = 1; j <= args.size(); j++) {
+      argument = args.get(j - 1);
 
       if (argument != null) {
         try {

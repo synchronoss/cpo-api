@@ -99,10 +99,12 @@ public class DriverDataSourceInfo implements DataSourceInfo, DataSource {
     this.dataSourceName = url + username;
   }
 
+  @Override
   public String getDataSourceName() {
     return dataSourceName;
   }
 
+  @Override
   public DataSource getDataSource() throws CpoException {
     return this;
   }
@@ -131,11 +133,13 @@ public class DriverDataSourceInfo implements DataSourceInfo, DataSource {
     return dsName.toString();
   }
 
+  @Override
   public Connection getConnection(String userName, String password)
           throws SQLException {
     throw new SQLException("Not Implemented");
   }
 
+  @Override
   public Connection getConnection()
           throws SQLException {
     return makeNewConnection();
@@ -159,6 +163,7 @@ public class DriverDataSourceInfo implements DataSourceInfo, DataSource {
     return connection;
   }
 
+  @Override
   public synchronized String toString() {
     StringBuilder info = new StringBuilder();
     info.append("JdbcDataSource(");
@@ -167,31 +172,37 @@ public class DriverDataSourceInfo implements DataSourceInfo, DataSource {
     return (info.toString());
   }
 
+  @Override
   public PrintWriter getLogWriter()
           throws SQLException {
     return printWriter_;
   }
 
+  @Override
   public void setLogWriter(PrintWriter out)
           throws SQLException {
     printWriter_ = out;
 
   }
 
+  @Override
   public void setLoginTimeout(int seconds)
           throws SQLException {
     timeout_ = seconds;
   }
 
+  @Override
   public int getLoginTimeout()
           throws SQLException {
     return timeout_;
   }
 
+  @Override
   public <T> T unwrap(Class<T> iface) throws SQLException {
     throw new UnsupportedOperationException("Not supported yet.");
   }
 
+  @Override
   public boolean isWrapperFor(Class<?> iface) throws SQLException {
     return false;
   }

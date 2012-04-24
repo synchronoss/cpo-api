@@ -39,6 +39,6 @@ public class CpoFunctionGroup extends CpoFunctionGroupBean {
   public void addFunction(CpoFunction function) {
     if (function != null) {
       functions.add(function);
-    };
+    }
   }
 }

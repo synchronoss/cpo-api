@@ -30,6 +30,7 @@ import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.CpoAdapter;
 import org.synchronoss.cpo.CpoAdapterBean;
 import org.synchronoss.cpo.CpoAdapterFactory;
+import org.synchronoss.cpo.helper.ExceptionHelper;
 
 /**
  * BlobTest is a JUnit test class for testing the JdbcAdapter class Constructors
@@ -54,6 +55,7 @@ public class ExecuteTrxTest extends TestCase {
   /**
    * <code>setUp</code> Load the datasource from the properties in the property file jdbc_en_US.properties
    */
+  @Override
   public void setUp() {
     String method = "setUp:";
     ResourceBundle b = PropertyResourceBundle.getBundle(JdbcStatics.PROP_FILE, Locale.getDefault(),
@@ -72,6 +74,7 @@ public class ExecuteTrxTest extends TestCase {
   /**
    * DOCUMENT ME!
    */
+  @Override
   public void tearDown() {
     jdbcIdo_ = null;
   }
@@ -84,14 +87,14 @@ public class ExecuteTrxTest extends TestCase {
       String method = "testExecuteObject:";
       ValueObject vo = new ValueObject(1);
       vo.setAttrInteger(3);
-      ValueObject rvo = null;
+      ValueObject rvo;
 
       try {
         rvo = (ValueObject) jdbcIdo_.executeObject("TestExecuteObject", vo);
         assertNotNull(method + "Returned Value object is null");
         assertTrue("power(3,3)=" + rvo.getAttrDouble(), rvo.getAttrDouble() == 27);
       } catch (Exception e) {
-        e.printStackTrace();
+        logger.error(ExceptionHelper.getLocalizedMessage(e));
         fail(method + e.getMessage());
       }
 
@@ -103,7 +106,7 @@ public class ExecuteTrxTest extends TestCase {
         assertNotNull(method + "Returned Value object is null");
         assertTrue("power(3,3)=" + rvo.getAttrDouble(), rvo.getAttrDouble() == 27);
       } catch (Exception e) {
-        e.printStackTrace();
+        logger.error(ExceptionHelper.getLocalizedMessage(e));
         fail(method + e.getMessage());
       }
     } else {

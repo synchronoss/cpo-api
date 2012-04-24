@@ -61,6 +61,7 @@ public class BlobTrxTest extends TestCase {
    * @author david berry
    * @version '$Id: BlobTestTrx.java,v 1.2 2006/01/31 22:31:06 dberry Exp $'
    */
+  @Override
   public void setUp() {
 
     String method = "setUp:";
@@ -423,6 +424,7 @@ public class BlobTrxTest extends TestCase {
 
   }
 
+  @Override
   public void tearDown() {
     try {
       jdbcIdo_.close();

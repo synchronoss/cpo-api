@@ -37,8 +37,8 @@ public class CpoAdapterBean
   private CpoAdapter cpoAdapter = null;
   private SessionContext ctx_ = null;
 
-  public CpoAdapterBean(CpoAdapterFactory cpoFactory) throws CpoException {
-    this.cpoAdapter = cpoFactory.getCpoAdapter();
+  public CpoAdapterBean() throws CpoException {
+    this.cpoAdapter = CpoAdapterFactory.getCpoAdapter();
   }
 
   public CpoAdapterBean(CpoAdapter cpoAdapter) throws CpoException {
@@ -73,11 +73,10 @@ public class CpoAdapterBean
 
   public Object executeAdapterMethod(String name, Class<?>[] parameterTypes, Object[] args)
           throws CpoException {
-    Method meth = null;
     Object obj = null;
 
     try {
-      meth = cpoAdapter.getClass().getMethod(name, parameterTypes);
+      Method meth = cpoAdapter.getClass().getMethod(name, parameterTypes);
       obj = meth.invoke(cpoAdapter, args);
     } catch (Exception e) {
       throw new CpoException(e);

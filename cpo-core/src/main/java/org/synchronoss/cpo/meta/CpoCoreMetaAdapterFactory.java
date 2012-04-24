@@ -47,10 +47,7 @@ public class CpoCoreMetaAdapterFactory implements CpoMetaAdapterFactory {
 
     // if not, load the new one.
 
-    InputStream is = null;
-    CpoMetaDataDocument metaDataDoc = null;
-
-    is = AbstractCpoMetaAdapter.class.getResourceAsStream(metaXml);
+    InputStream is = AbstractCpoMetaAdapter.class.getResourceAsStream(metaXml);
     if (is == null) {
       try {
         is = new FileInputStream(metaXml);
@@ -62,6 +59,7 @@ public class CpoCoreMetaAdapterFactory implements CpoMetaAdapterFactory {
     String metaAdapterClassName = null;
     AbstractCpoMetaAdapter metaAdapter = null;
     try {
+      CpoMetaDataDocument metaDataDoc;
       if (is == null) {
         metaDataDoc = CpoMetaDataDocument.Factory.parse(metaXml);
       } else {

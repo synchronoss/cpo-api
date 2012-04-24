@@ -40,6 +40,7 @@ public class TransformStringChar implements JdbcTransform<String, char[]> {
    * @return The object to be stored in the attribute
    * @throws CpoException
    */
+  @Override
   public char[] transformIn(String lvc)
           throws CpoException {
 
@@ -55,11 +56,13 @@ public class TransformStringChar implements JdbcTransform<String, char[]> {
    * @return The object to be stored in the datasource
    * @throws CpoException
    */
+  @Override
   public String transformOut(JdbcPreparedStatementFactory jpsf, char[] attrObj)
           throws CpoException {
     return attrObj == null ? null : String.valueOf(attrObj);
   }
 
+  @Override
   public String transformOut(JdbcCallableStatementFactory jpsf, char[] attributeObject) throws CpoException, UnsupportedOperationException {
     throw new UnsupportedOperationException("Not supported yet.");
   }

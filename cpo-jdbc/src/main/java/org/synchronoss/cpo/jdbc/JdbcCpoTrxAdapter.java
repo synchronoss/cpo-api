@@ -40,7 +40,7 @@ public class JdbcCpoTrxAdapter extends JdbcCpoAdapter implements CpoTrxAdapter {
   // Default Connection. Only used JdbcCpoTrxAdapter
   private Connection writeConnection_ = null;
   // map to keep track of busy connections
-  private static HashMap<Connection, Connection> busyMap_ = new HashMap<Connection, Connection>();
+  private static final HashMap<Connection, Connection> busyMap_ = new HashMap<Connection, Connection>();
 
   @SuppressWarnings("unused")
   private JdbcCpoTrxAdapter() {
@@ -52,6 +52,7 @@ public class JdbcCpoTrxAdapter extends JdbcCpoAdapter implements CpoTrxAdapter {
     setStaticConnection(c);
   }
 
+  @Override
   public void commit() throws CpoException {
     if (writeConnection_ != null) {
       try {
@@ -64,6 +65,7 @@ public class JdbcCpoTrxAdapter extends JdbcCpoAdapter implements CpoTrxAdapter {
     }
   }
 
+  @Override
   public void rollback() throws CpoException {
     if (writeConnection_ != null) {
       try {
@@ -76,6 +78,7 @@ public class JdbcCpoTrxAdapter extends JdbcCpoAdapter implements CpoTrxAdapter {
     }
   }
 
+  @Override
   public boolean isClosed() throws CpoException {
     boolean closed = false;
 
@@ -87,6 +90,7 @@ public class JdbcCpoTrxAdapter extends JdbcCpoAdapter implements CpoTrxAdapter {
     return closed;
   }
 
+  @Override
   public void close() throws CpoException {
     if (writeConnection_ != null) {
       try {
@@ -107,6 +111,7 @@ public class JdbcCpoTrxAdapter extends JdbcCpoAdapter implements CpoTrxAdapter {
   /**
    * DOCUMENT ME!
    */
+  @Override
   protected void finalize() {
     try {
       super.finalize();

@@ -57,6 +57,7 @@ public class SelectForUpdateTest extends TestCase {
   /**
    * <code>setUp</code> Load the datasource from the properties in the property file jdbc_en_US.properties
    */
+  @Override
   public void setUp() {
     String method = "setUp:";
     ResourceBundle b = PropertyResourceBundle.getBundle(JdbcStatics.PROP_FILE, Locale.getDefault(),
@@ -83,8 +84,7 @@ public class SelectForUpdateTest extends TestCase {
       try {
         jdbcIdo_.rollback();
       } catch (Exception e1) {
-      };
-      e.printStackTrace();
+      }
       fail(method + e.getMessage());
     }
   }
@@ -92,8 +92,10 @@ public class SelectForUpdateTest extends TestCase {
   /**
    * DOCUMENT ME!
    */
+  @Override
   public void tearDown() {
-    ValueObject vo = new ValueObject(1);
+   String method = "tearDown:";
+   ValueObject vo = new ValueObject(1);
     ValueObject vo2 = new ValueObject(2);
     try {
       jdbcIdo_.deleteObject(vo);
@@ -103,8 +105,8 @@ public class SelectForUpdateTest extends TestCase {
       try {
         jdbcIdo_.rollback();
       } catch (Exception e1) {
-      };
-      e.printStackTrace();
+      }
+      fail(method + e.getMessage());
     } finally {
       try {
         jdbcIdo_.close();

@@ -73,12 +73,12 @@ public class JdbcAttribute extends CpoAttribute implements java.io.Serializable,
   }
 
   public void invokeSetter(Object obj, ResultSet rs, int idx) throws CpoException {
-    JavaSqlMethod<?> jdbcMethod = null;
+    JavaSqlMethod<?> jdbcMethod;
     Object param = null;
     Class<?> paramClass = null;
     Logger localLogger = obj == null ? logger : LoggerFactory.getLogger(obj.getClass().getName());
 
-    if (getSetters().size() == 0) {
+    if (getSetters().isEmpty()) {
       throw new CpoException("There are no setters");
     }
 
@@ -128,12 +128,12 @@ public class JdbcAttribute extends CpoAttribute implements java.io.Serializable,
   }
 
   public void invokeSetter(Object obj, CallableStatement cs, int idx) throws CpoException {
-    JavaSqlMethod<?> jdbcMethod = null;
+    JavaSqlMethod<?> jdbcMethod;
     Object param = null;
     Class<?> paramClass = null;
     Logger localLogger = obj == null ? logger : LoggerFactory.getLogger(obj.getClass().getName());
 
-    if (getSetters().size() == 0) {
+    if (getSetters().isEmpty()) {
       throw new CpoException("There are no setters");
     }
 
@@ -185,8 +185,8 @@ public class JdbcAttribute extends CpoAttribute implements java.io.Serializable,
   }
 
   public void invokeGetter(JdbcCallableStatementFactory jcsf, Object obj, int idx) throws CpoException {
-    Object param = null;
-    JavaSqlMethod<?> jdbcMethod = null;
+    Object param;
+    JavaSqlMethod<?> jdbcMethod;
     Logger localLogger = obj == null ? logger : LoggerFactory.getLogger(obj.getClass().getName());
 
     try {
@@ -291,67 +291,6 @@ public class JdbcAttribute extends CpoAttribute implements java.io.Serializable,
     return this.javaSqlType_;
   }
 
-// TODO: Get this working
-//    protected void setTransformClass(String className) throws CpoException {
-//        Class<?> transformClass=null;
-//        Logger localLogger = className==null?logger:LoggerFactory.getLogger(className);
-//        
-//        try{
-//        	if (className!=null && className.length()>0){
-//	            try {
-//	            	transformClass = Class.forName(className);
-//	            } catch (Exception e){
-//	            	String msg=ExceptionHelper.getLocalizedMessage(e);
-//	            	
-//	            	localLogger.error("Invalid Transform Class specified:<"+className+">");
-//	                throw new CpoException("Invalid Transform Class specified:<"+className+">:");
-//	            }
-//	            
-//	            this.transformObject_ = transformClass.newInstance();
-//	
-//              // Lets walk the hierarchy to find the transform methods
-//              while (transformClass != null){
-//                // go find the transformIn and transformOut classes.
-//                for (Method m : transformClass.getDeclaredMethods()){
-//                  // Only look at methods that we created. Ignore compiler generated methods.
-//                  if (!m.isSynthetic() && !m.isBridge()){
-//                    // The method must be on an implementing class not an interface and the name must match as well as the number of parameters and return types
-//                    //dumpMethod(m);
-//                    if (!hasTransformIn && m.getName().equals("transformIn")){
-//                        this.transformIn_ = m;
-//                        hasTransformIn = true;
-//                    } else if (m.getName().equals("transformOut")){
-//                      if (!hasTransformPS && m.getParameterTypes()[0].getName().equals("org.synchronoss.cpo.jdbc.JdbcPreparedStatementFactory")){
-//                        this.transformPSOut_ = m;
-//                        hasTransformPS=true;
-//                      } else if (!hasTransformCS && m.getParameterTypes()[0].getName().equals("org.synchronoss.cpo.jdbc.JdbcCallableStatementFactory")){
-//                        this.transformCSOut_ = m;
-//                        hasTransformCS=true;
-//                      }
-//                    }
-//                  }
-//                }
-//                transformClass=transformClass.getEnclosingClass();
-//              }
-//	            
-//	            if (transformIn_==null && transformPSOut_==null&&transformCSOut_==null){
-//	            	localLogger.error("Invalid Transform Class specified:<"+className+">: Abstract Methods not Found");
-//	                throw new CpoException("Invalid Transform Class specified:<"+className+">: Abstract Methods not Found");
-//	            }
-//	            
-//        	}
-//        } catch (CpoException ce ){
-//        	throw ce;
-//        } catch (Exception e){
-//        	localLogger.debug("Error Setting Transform Class: "+ExceptionHelper.getLocalizedMessage(e));
-//            this.transformObject_ = null;
-//            this.transformIn_ = null;
-//            this.transformCSOut_=null;
-//            this.transformPSOut_=null;
-//            throw new CpoException (e);
-//        }
-//        
-//    }
   private void dumpMethod(Method m) {
     logger.debug("========================");
     logger.debug("===> Declaring Class: " + m.getDeclaringClass().getName());

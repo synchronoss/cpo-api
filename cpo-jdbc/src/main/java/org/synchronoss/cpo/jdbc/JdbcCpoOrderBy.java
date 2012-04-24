@@ -43,15 +43,15 @@ public class JdbcCpoOrderBy implements CpoOrderBy {
   }
 
   public JdbcCpoOrderBy(String attr, boolean asc) {
-    setAscending(asc);
-    setAttribute(attr);
-    setFunction(null);
+    ascending = asc;
+    attribute = attr;
+    function = null;
   }
 
   public JdbcCpoOrderBy(String attr, boolean asc, String func) {
-    setAscending(asc);
-    setAttribute(attr);
-    setFunction(func);
+    ascending = asc;
+    attribute = attr;
+    function = func;
   }
 
   /**
@@ -60,6 +60,7 @@ public class JdbcCpoOrderBy implements CpoOrderBy {
    *
    * @return boolean true if it is to sort in Ascensing Order false if it is to be sorted in Descending Order
    */
+  @Override
   public boolean getAscending() {
     return this.ascending;
   }
@@ -70,6 +71,7 @@ public class JdbcCpoOrderBy implements CpoOrderBy {
    *
    * @param b true if it is to sort in Ascensing Order false if it is to be sorted in Descending Order
    */
+  @Override
   public void setAscending(boolean b) {
     this.ascending = b;
   }
@@ -79,6 +81,7 @@ public class JdbcCpoOrderBy implements CpoOrderBy {
    *
    * @return String The name of the attribute
    */
+  @Override
   public String getAttribute() {
     return this.attribute;
   }
@@ -88,6 +91,7 @@ public class JdbcCpoOrderBy implements CpoOrderBy {
    *
    * @param s The name of the attribute
    */
+  @Override
   public void setAttribute(String s) {
     this.attribute = s;
   }
@@ -100,6 +104,7 @@ public class JdbcCpoOrderBy implements CpoOrderBy {
    *
    * @return String The name of the function
    */
+  @Override
   public String getFunction() {
     return this.function;
   }
@@ -112,23 +117,19 @@ public class JdbcCpoOrderBy implements CpoOrderBy {
    *
    * @param s The name of the function
    */
+  @Override
   public void setFunction(String s) {
     this.function = s;
   }
 
   public String toString(CpoClass jmc) throws CpoException {
     StringBuilder sb = new StringBuilder();
-    String function = null;
-    String attribute = null;
-    String column = null;
-    int attrOffset = 0;
+    String column;
+    int attrOffset;
     int fromIndex = 0;
-    CpoAttribute jdbcAttribute = null;
 
-    attribute = this.getAttribute();
-    function = this.getFunction();
     if (attribute != null && attribute.length() > 0) {
-      jdbcAttribute = (CpoAttribute) jmc.getAttributeJava(attribute);
+      CpoAttribute jdbcAttribute = (CpoAttribute) jmc.getAttributeJava(attribute);
       if (jdbcAttribute == null) {
         throw new CpoException(attribute);
       }
@@ -158,10 +159,12 @@ public class JdbcCpoOrderBy implements CpoOrderBy {
     return sb.toString();
   }
 
+  @Override
   public String getName() {
     return name;
   }
 
+  @Override
   public void setName(String name) {
     this.name = name;
   }

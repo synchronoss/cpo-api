@@ -44,6 +44,7 @@ public class TransformCharArray implements JdbcTransform<String, char[]> {
    * @return The object to be stored in the attribute
    * @throws CpoException
    */
+  @Override
   public char[] transformIn(String inStr)
           throws CpoException {
     char retChars[] = null;
@@ -64,6 +65,7 @@ public class TransformCharArray implements JdbcTransform<String, char[]> {
    * @return The object to be stored in the datasource
    * @throws CpoException
    */
+  @Override
   public String transformOut(JdbcPreparedStatementFactory jpsf, char[] attributeObject)
           throws CpoException {
 
@@ -75,6 +77,7 @@ public class TransformCharArray implements JdbcTransform<String, char[]> {
     return retStr;
   }
 
+  @Override
   public String transformOut(JdbcCallableStatementFactory jpsf, char[] attributeObject) throws CpoException, UnsupportedOperationException {
     throw new UnsupportedOperationException("Not supported yet.");
   }

@@ -52,6 +52,7 @@ public class RetrieveObjectTest extends TestCase {
    * @author david berry
    * @version '$Id: RetrieveObjectTest.java,v 1.6 2006/01/30 19:09:23 dberry Exp $'
    */
+  @Override
   public void setUp() {
     String method = "setUp:";
 
@@ -76,14 +77,13 @@ public class RetrieveObjectTest extends TestCase {
     try {
       jdbcIdo_.insertObjects("TestOrderByInsert", al);
     } catch (Exception e) {
-      e.printStackTrace();
       fail(method + e.getMessage());
     }
   }
 
   public void testRetrieveObjects() {
     String method = "testRetrieveObjects:";
-    Collection<ValueObject> col = null;
+    Collection<ValueObject> col;
 
 
     try {
@@ -92,14 +92,13 @@ public class RetrieveObjectTest extends TestCase {
       assertTrue("Col size is " + col.size(), col.size() == al.size());
 
     } catch (Exception e) {
-      e.printStackTrace();
       fail(method + e.getMessage());
     }
   }
 
   public void testIsClosed() {
     String method = "testIsClosed:";
-    Collection<ValueObject> col = null;
+    Collection<ValueObject> col;
     CpoTrxAdapter trx = null;
 
     try {
@@ -110,7 +109,6 @@ public class RetrieveObjectTest extends TestCase {
       assertTrue("Col size is " + col.size(), col.size() == al.size());
       trx.commit();
     } catch (Exception e) {
-      e.printStackTrace();
       fail(method + e.getMessage());
     } finally {
       try {
@@ -122,7 +120,7 @@ public class RetrieveObjectTest extends TestCase {
 
   public void testRetrieveObjectsNoWaitSize2() {
     String method = "testRetrieveObjectsNoWaitSize2:";
-    CpoResultSet<ValueObject> crs = null;
+    CpoResultSet<ValueObject> crs;
     int count = 0;
 
     try {
@@ -138,14 +136,13 @@ public class RetrieveObjectTest extends TestCase {
       assertTrue("Result size is " + count, count == al.size());
 
     } catch (Exception e) {
-      e.printStackTrace();
       fail(method + e.getMessage());
     }
   }
 
   public void testRetrieveObjectsNoWaitSize9() {
     String method = "testRetrieveObjectsNoWaitSize9:";
-    CpoResultSet<ValueObject> crs = null;
+    CpoResultSet<ValueObject> crs;
     int count = 0;
 
     try {
@@ -159,14 +156,13 @@ public class RetrieveObjectTest extends TestCase {
       assertTrue("Result size is " + count, count == al.size());
 
     } catch (Exception e) {
-      e.printStackTrace();
       fail(method + e.getMessage());
     }
   }
 
   public void testRetrieveObjectsNoWaitSize10() {
     String method = "testRetrieveObjectsNoWaitSize10:";
-    CpoResultSet<ValueObject> crs = null;
+    CpoResultSet<ValueObject> crs;
     int count = 0;
 
     try {
@@ -180,14 +176,13 @@ public class RetrieveObjectTest extends TestCase {
       assertTrue("Result size is " + count, count == al.size());
 
     } catch (Exception e) {
-      e.printStackTrace();
       fail(method + e.getMessage());
     }
   }
 
   public void testRetrieveObjectsNoWaitSize11() {
     String method = "testRetrieveObjectsNoWaitSize11:";
-    CpoResultSet<ValueObject> crs = null;
+    CpoResultSet<ValueObject> crs;
     int count = 0;
 
     try {
@@ -201,14 +196,13 @@ public class RetrieveObjectTest extends TestCase {
       assertTrue("Result size is " + count, count == al.size());
 
     } catch (Exception e) {
-      e.printStackTrace();
       fail(method + e.getMessage());
     }
   }
 
   public void testConnectionBusy() {
     String method = "testConnectionBusy:";
-    CpoResultSet<ValueObject> crs = null;
+    CpoResultSet<ValueObject> crs;
     int count = 0;
     CpoTrxAdapter trx = null;
 
@@ -244,7 +238,6 @@ public class RetrieveObjectTest extends TestCase {
       assertTrue("Result size is " + count, count == al.size());
 
     } catch (Exception e) {
-      e.printStackTrace();
       fail(method + e.getMessage());
     } finally {
       try {
@@ -256,7 +249,7 @@ public class RetrieveObjectTest extends TestCase {
 
   public void testRetrieveObjectsNoWaitSize20() {
     String method = "testRetrieveObjectsNoWaitSize20:";
-    CpoResultSet<ValueObject> crs = null;
+    CpoResultSet<ValueObject> crs;
     int count = 0;
 
     try {
@@ -272,7 +265,6 @@ public class RetrieveObjectTest extends TestCase {
       assertTrue("Result size is " + count, count == al.size());
 
     } catch (Exception e) {
-      e.printStackTrace();
       fail(method + e.getMessage());
     }
   }
@@ -281,7 +273,7 @@ public class RetrieveObjectTest extends TestCase {
 
     String method = "testRetrieveObject:";
     ValueObject vo = new ValueObject(1);
-    ValueObject rvo = null;
+    ValueObject rvo;
 
     try {
       rvo = jdbcIdo_.retrieveObject(vo);
@@ -292,7 +284,6 @@ public class RetrieveObjectTest extends TestCase {
         fail(method + "ValueObjects are the same");
       }
     } catch (Exception e) {
-      e.printStackTrace();
       fail(method + e.getMessage());
     }
   }
@@ -301,24 +292,23 @@ public class RetrieveObjectTest extends TestCase {
 
     String method = "testNullRetrieveObject:";
     ValueObject vo = new ValueObject(100);
-    ValueObject rvo = null;
+    ValueObject rvo;
 
     try {
       rvo = jdbcIdo_.retrieveObject(vo);
       assertNull(method + "Returned Value object is Not Null", rvo);
     } catch (Exception e) {
-      e.printStackTrace();
       fail(method + e.getMessage());
     }
   }
 
+  @Override
   public void tearDown() {
     String method = "tearDown:";
     try {
       jdbcIdo_.deleteObjects("TestOrderByDelete", al);
 
     } catch (Exception e) {
-      e.printStackTrace();
       fail(method + e.getMessage());
     }
     jdbcIdo_ = null;

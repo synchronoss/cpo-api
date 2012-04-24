@@ -43,14 +43,14 @@ public class CpoCharArrayReader extends CharArrayReader implements java.io.Seria
 
   public CpoCharArrayReader(char[] buffer) {
     super(buffer);
-    setBuffer(buffer);
+    buffer_ = buffer;
   }
 
   public CpoCharArrayReader(char[] buffer, int offset, int length) {
     super(buffer, offset, length);
-    setBuffer(buffer);
-    setOffset(offset);
-    setSize(length);
+    buffer_ = buffer;
+    offset_ = offset;
+    size_ = length;
   }
 
   protected void setBuffer(char[] buffer) {
@@ -78,7 +78,7 @@ public class CpoCharArrayReader extends CharArrayReader implements java.io.Seria
   }
 
   public int getLength() {
-    int l = 0;
+    int l;
 
     if (getOffset() == 0) {
       l = getBuffer().length;
@@ -95,7 +95,7 @@ public class CpoCharArrayReader extends CharArrayReader implements java.io.Seria
     } else {
       // Need to determine the length of the Reader
       // Need to determine the length of the InputStream
-      int b = -1;
+      int b;
       try {
         CharArrayWriter caw = new CharArrayWriter();
         while ((b = r.read()) != -1) {

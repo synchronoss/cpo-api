@@ -50,6 +50,7 @@ public class InterleavedWhereTest extends TestCase {
   /**
    * <code>setUp</code> Load the datasource from the properties in the property file jdbc_en_US.properties
    */
+  @Override
   public void setUp() {
     String method = "setUp:";
 
@@ -76,7 +77,6 @@ public class InterleavedWhereTest extends TestCase {
     try {
       jdbcIdo_.insertObjects("TestOrderByInsert", al);
     } catch (Exception e) {
-      e.printStackTrace();
       fail(method + e.getMessage());
     }
   }
@@ -84,13 +84,13 @@ public class InterleavedWhereTest extends TestCase {
   /**
    * DOCUMENT ME!
    */
+  @Override
   public void tearDown() {
     String method = "tearDown:";
     try {
       jdbcIdo_.deleteObjects("TestOrderByDelete", al);
 
     } catch (Exception e) {
-      e.printStackTrace();
       fail(method + e.getMessage());
     }
     jdbcIdo_ = null;
@@ -101,8 +101,8 @@ public class InterleavedWhereTest extends TestCase {
    */
   public void testInterleavedInWhereCollection() {
     String method = "testInterleavedInWhereCollection:";
-    Collection<ValueObject> coll = null;
-    CpoWhere cw = null;
+    Collection<ValueObject> coll;
+    CpoWhere cw;
     CpoWhere cw1 = null;
 
     try {
@@ -124,7 +124,6 @@ public class InterleavedWhereTest extends TestCase {
 
 
     } catch (Exception e) {
-      e.printStackTrace();
       fail(method + e.getMessage());
     }
 

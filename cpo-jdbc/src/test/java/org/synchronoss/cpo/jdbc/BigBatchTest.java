@@ -56,6 +56,7 @@ public class BigBatchTest extends TestCase {
    * @author david berry
    * @version '$Id: InsertObjectTest.java,v 1.3 2006/01/30 19:09:23 dberry Exp $'
    */
+  @Override
   public void setUp() {
     String method = "setUp:";
     ResourceBundle b = PropertyResourceBundle.getBundle(JdbcStatics.PROP_FILE, Locale.getDefault(), this.getClass().getClassLoader());
@@ -91,22 +92,23 @@ public class BigBatchTest extends TestCase {
     } catch (CpoException ce) {
       logger.debug("Received a CpoException:" + ExceptionHelper.getLocalizedMessage(ce));
     } catch (Exception e) {
-      e.printStackTrace();
+      logger.error(ExceptionHelper.getLocalizedMessage(e));
       fail(method + ":Received an Exception instead of a CpoException: " + ExceptionHelper.getLocalizedMessage(e));
     } catch (Throwable t) {
-      t.printStackTrace();
+      logger.error(ExceptionHelper.getLocalizedMessage(t));
       fail(method + ":Received a Throwable instead of a CpoException: " + ExceptionHelper.getLocalizedMessage(t));
     }
 
   }
 
+  @Override
   public void tearDown() {
     String method = "tearDown:";
     try {
       jdbcIdo_.deleteObjects(al);
 
     } catch (Exception e) {
-      e.printStackTrace();
+            logger.error(ExceptionHelper.getLocalizedMessage(e));
       fail(method + e.getMessage());
     }
     jdbcIdo_ = null;

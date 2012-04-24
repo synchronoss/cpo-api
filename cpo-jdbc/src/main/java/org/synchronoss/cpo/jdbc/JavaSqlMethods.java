@@ -39,7 +39,7 @@ public class JavaSqlMethods extends java.lang.Object implements java.io.Serializ
    */
   private static final long serialVersionUID = 1L;
   // JDK 1.4.2 Values
-  private static JavaSqlMethod<?>[] javaSqlMethods = {
+  private static final JavaSqlMethod<?>[] javaSqlMethods = {
     new JavaSqlMethod<String>(JavaSqlMethod.METHOD_TYPE_BASIC, String.class, String.class, "getString", "setString"), // 12
     new JavaSqlMethod<BigDecimal>(JavaSqlMethod.METHOD_TYPE_BASIC, BigDecimal.class, BigDecimal.class, "getBigDecimal", "setBigDecimal"), // 3
     new JavaSqlMethod<Byte>(JavaSqlMethod.METHOD_TYPE_BASIC, byte.class, byte.class, "getByte", "setByte"), // -6

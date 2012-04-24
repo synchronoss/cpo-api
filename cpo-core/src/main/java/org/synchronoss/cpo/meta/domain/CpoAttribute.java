@@ -126,7 +126,7 @@ public class CpoAttribute extends CpoAttributeBean {
     Object actualParam = param;
     Class<?> actualClass = paramClass;
 
-    if (getSetters().size() == 0) {
+    if (getSetters().isEmpty()) {
       throw new CpoException("There are no setters");
     }
 

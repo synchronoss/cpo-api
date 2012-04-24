@@ -23,10 +23,13 @@ package org.synchronoss.cpo.jdbc;
 
 import java.util.ArrayList;
 import junit.framework.TestCase;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.CpoAdapter;
 import org.synchronoss.cpo.CpoAdapterBean;
 import org.synchronoss.cpo.CpoAdapterFactory;
 import org.synchronoss.cpo.CpoWhere;
+import org.synchronoss.cpo.helper.ExceptionHelper;
 
 /**
  * RetrieveObjectTest is a JUnit test class for testing the JdbcAdapter class Constructors
@@ -35,6 +38,7 @@ import org.synchronoss.cpo.CpoWhere;
  */
 public class ExistObjectTest extends TestCase {
 
+  private static Logger logger = LoggerFactory.getLogger(ExistObjectTest.class.getName());
   private CpoAdapter jdbcIdo_ = null;
 
   public ExistObjectTest(String name) {
@@ -47,6 +51,7 @@ public class ExistObjectTest extends TestCase {
    * @author david berry
    * @version '$Id: ExistObjectTest.java,v 1.2 2006/01/30 19:09:23 dberry Exp $'
    */
+  @Override
   public void setUp() {
     String method = "setUp:";
 
@@ -62,7 +67,7 @@ public class ExistObjectTest extends TestCase {
     try {
       jdbcIdo_.insertObject(vo);
     } catch (Exception e) {
-      e.printStackTrace();
+      logger.error(ExceptionHelper.getLocalizedMessage(e));
       fail(method + e.getMessage());
     }
   }
@@ -76,7 +81,6 @@ public class ExistObjectTest extends TestCase {
       long count = jdbcIdo_.existsObject(valObj);
       assertTrue("Object not Found", count == 1);
     } catch (Exception e) {
-      e.printStackTrace();
       fail(method + e.getMessage());
     }
 
@@ -85,7 +89,6 @@ public class ExistObjectTest extends TestCase {
       long count = jdbcIdo_.existsObject(valObj);
       assertTrue("Object Found", count == 0);
     } catch (Exception e) {
-      e.printStackTrace();
       fail(method + e.getMessage());
     }
 
@@ -103,7 +106,6 @@ public class ExistObjectTest extends TestCase {
       long count = jdbcIdo_.existsObject(null, valObj, wheres);
       assertTrue("Object not Found", count == 1);
     } catch (Exception e) {
-      e.printStackTrace();
       fail(method + e.getMessage());
     }
 
@@ -115,19 +117,19 @@ public class ExistObjectTest extends TestCase {
       long count = jdbcIdo_.existsObject(null, valObj, wheres);
       assertTrue("Object Found", count == 0);
     } catch (Exception e) {
-      e.printStackTrace();
       fail(method + e.getMessage());
     }
 
   }
 
+  @Override
   public void tearDown() {
     //String method="tearDown:";
     ValueObject vo = new ValueObject(1);
     try {
       jdbcIdo_.deleteObject(vo);
     } catch (Exception e) {
-      e.printStackTrace();
+      logger.error(ExceptionHelper.getLocalizedMessage(e));
     }
     jdbcIdo_ = null;
   }

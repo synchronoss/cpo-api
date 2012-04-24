@@ -56,12 +56,13 @@ public class TransformGZipBlob implements JdbcTransform<Blob, byte[]> {
    * @return The object to be stored in the attribute
    * @throws CpoException
    */
+  @Override
   public byte[] transformIn(Blob blob)
           throws CpoException {
 
     byte[] buffBytes = new byte[1024];
     byte[] retBytes = null;
-    int length = 0;
+    int length;
     ByteArrayOutputStream bos = new ByteArrayOutputStream();
 
     if (blob != null) {
@@ -102,6 +103,7 @@ public class TransformGZipBlob implements JdbcTransform<Blob, byte[]> {
    * @return The object to be stored in the datasource
    * @throws CpoException
    */
+  @Override
   public Blob transformOut(JdbcPreparedStatementFactory jpsf, byte[] attributeObject)
           throws CpoException {
 
@@ -133,6 +135,7 @@ public class TransformGZipBlob implements JdbcTransform<Blob, byte[]> {
     return newBlob;
   }
 
+  @Override
   public Blob transformOut(JdbcCallableStatementFactory jpsf, byte[] attributeObject) throws CpoException, UnsupportedOperationException {
     throw new UnsupportedOperationException("Not supported yet.");
   }

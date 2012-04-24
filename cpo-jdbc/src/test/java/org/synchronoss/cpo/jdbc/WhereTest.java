@@ -47,6 +47,7 @@ public class WhereTest extends TestCase {
   /**
    * <code>setUp</code> Load the datasource from the properties in the property file jdbc_en_US.properties
    */
+  @Override
   public void setUp() {
     String method = "setUp:";
 
@@ -69,7 +70,6 @@ public class WhereTest extends TestCase {
     try {
       jdbcIdo_.insertObjects("TestOrderByInsert", al);
     } catch (Exception e) {
-      e.printStackTrace();
       fail(method + e.getMessage());
     }
   }
@@ -77,13 +77,13 @@ public class WhereTest extends TestCase {
   /**
    * DOCUMENT ME!
    */
+  @Override
   public void tearDown() {
     String method = "tearDown:";
     try {
       jdbcIdo_.deleteObjects("TestOrderByDelete", al);
 
     } catch (Exception e) {
-      e.printStackTrace();
       fail(method + e.getMessage());
     }
     jdbcIdo_ = null;
@@ -94,8 +94,8 @@ public class WhereTest extends TestCase {
    */
   public void testStaticWhere() {
     String method = "testStaticWhere:";
-    Collection<ValueObject> col = null;
-    CpoWhere cw = null;
+    Collection<ValueObject> col;
+    CpoWhere cw;
 
 
     try {
@@ -108,15 +108,14 @@ public class WhereTest extends TestCase {
 
       assertTrue("Col size is " + col.size(), col.size() == 2);
     } catch (Exception e) {
-      e.printStackTrace();
       fail(method + e.getMessage());
     }
   }
 
   public void testValueWhere() {
     String method = "testValueWhere:";
-    Collection<ValueObject> col = null;
-    CpoWhere cw = null;
+    Collection<ValueObject> col;
+    CpoWhere cw;
 
 
     try {
@@ -129,15 +128,14 @@ public class WhereTest extends TestCase {
 
       assertTrue("Col size is " + col.size(), col.size() == 2);
     } catch (Exception e) {
-      e.printStackTrace();
       fail(method + e.getMessage());
     }
   }
 
   public void testNoMarkerWhere() {
     String method = "testValueWhere:";
-    Collection<ValueObject> col = null;
-    CpoWhere cw = null;
+    Collection<ValueObject> col;
+    CpoWhere cw;
 
 
     try {
@@ -150,7 +148,6 @@ public class WhereTest extends TestCase {
 
       assertTrue("Col size is " + col.size(), col.size() == 2);
     } catch (Exception e) {
-      e.printStackTrace();
       fail(method + e.getMessage());
     }
   }
@@ -171,15 +168,14 @@ public class WhereTest extends TestCase {
       col = jdbcIdo_.retrieveBeans("TestWhereRetrieve", valObj, cw, null);
 
     } catch (Exception e) {
-      e.printStackTrace();
       fail(method + e.getMessage());
     }
   }
 
   public void testNestedWhere() {
     String method = "testValueWhere:";
-    Collection<ValueObject> col = null;
-    CpoWhere cw = null;
+    Collection<ValueObject> col;
+    CpoWhere cw;
     ArrayList<CpoWhere> wheres = new ArrayList<CpoWhere>();
 
     try {
@@ -200,15 +196,14 @@ public class WhereTest extends TestCase {
 
       assertTrue("Col size is " + col.size(), col.size() == 3);
     } catch (Exception e) {
-      e.printStackTrace();
       fail(method + e.getMessage());
     }
   }
 
   public void testIsNullWhere() {
     String method = "testIsNullWhere:";
-    Collection<ValueObject> col = null;
-    CpoWhere cw = null;
+    Collection<ValueObject> col;
+    CpoWhere cw;
 
 
     try {
@@ -221,15 +216,14 @@ public class WhereTest extends TestCase {
 
       assertTrue("Col size is " + col.size(), col.size() == 6);
     } catch (Exception e) {
-      e.printStackTrace();
       fail(method + e.getMessage());
     }
   }
 
   public void testAttributeFunction() {
     String method = "testAttributeFunction:";
-    Collection<ValueObject> col = null;
-    CpoWhere cw = null;
+    Collection<ValueObject> col;
+    CpoWhere cw;
 
 
     try {
@@ -245,15 +239,14 @@ public class WhereTest extends TestCase {
       ValueObject rvo = (ValueObject) col.iterator().next();
       assertTrue("-6 != " + rvo.getId(), rvo.getId() == -6);
     } catch (Exception e) {
-      e.printStackTrace();
       fail(method + e.getMessage());
     }
   }
 
   public void testValueFunction() {
     String method = "testValueFunction:";
-    Collection<ValueObject> col = null;
-    CpoWhere cw = null;
+    Collection<ValueObject> col;
+    CpoWhere cw;
 
 
     try {
@@ -269,31 +262,25 @@ public class WhereTest extends TestCase {
       ValueObject rvo = (ValueObject) col.iterator().next();
       assertTrue("1 != " + rvo.getId(), rvo.getId() == 1);
     } catch (Exception e) {
-      e.printStackTrace();
       fail(method + e.getMessage());
     }
   }
 
   public void testAndWhere() {
     String method = "testAndWhere:";
-    Collection<ValueObject> col = null;
-    CpoWhere cw = null;
-    CpoWhere cw1 = null;
-    CpoWhere cw2 = null;
-
 
     try {
       ValueObject valObj = new ValueObject(3);
-      cw = jdbcIdo_.newWhere();
-      cw1 = jdbcIdo_.newWhere(CpoWhere.LOGIC_NONE, "attrChar", CpoWhere.COMP_ISNULL, null);
-      cw2 = jdbcIdo_.newWhere(CpoWhere.LOGIC_AND, "attrChar", CpoWhere.COMP_ISNULL, null, true);
+      CpoWhere cw = jdbcIdo_.newWhere();
+      CpoWhere cw1 = jdbcIdo_.newWhere(CpoWhere.LOGIC_NONE, "attrChar", CpoWhere.COMP_ISNULL, null);
+      CpoWhere cw2 = jdbcIdo_.newWhere(CpoWhere.LOGIC_AND, "attrChar", CpoWhere.COMP_ISNULL, null, true);
 
       cw.addWhere(cw1);
       cw.addWhere(cw2);
 
       ArrayList<CpoWhere> wheres = new ArrayList<CpoWhere>();
       wheres.add(cw);
-      col = jdbcIdo_.retrieveBeans("TestWhereRetrieve", valObj, wheres, null);
+      Collection<ValueObject> col = jdbcIdo_.retrieveBeans("TestWhereRetrieve", valObj, wheres, null);
 
       assertTrue("Col size is " + col.size(), col.size() == 0);
 
@@ -312,24 +299,18 @@ public class WhereTest extends TestCase {
 
 
     } catch (Exception e) {
-      e.printStackTrace();
       fail(method + e.getMessage());
     }
   }
 
   public void testOrWhere() {
     String method = "testOrWhere:";
-    Collection<ValueObject> col = null;
-    CpoWhere cw = null;
-    CpoWhere cw1 = null;
-    CpoWhere cw2 = null;
-
 
     try {
       ValueObject valObj = new ValueObject(3);
-      cw = jdbcIdo_.newWhere();
-      cw1 = jdbcIdo_.newWhere(CpoWhere.LOGIC_NONE, "id", CpoWhere.COMP_EQ, null);
-      cw2 = jdbcIdo_.newWhere(CpoWhere.LOGIC_OR, "id", CpoWhere.COMP_EQ, valObj);
+      CpoWhere cw = jdbcIdo_.newWhere();
+      CpoWhere cw1 = jdbcIdo_.newWhere(CpoWhere.LOGIC_NONE, "id", CpoWhere.COMP_EQ, null);
+      CpoWhere cw2 = jdbcIdo_.newWhere(CpoWhere.LOGIC_OR, "id", CpoWhere.COMP_EQ, valObj);
 
       cw1.setStaticValue("2");
       cw.addWhere(cw1);
@@ -337,7 +318,7 @@ public class WhereTest extends TestCase {
 
       ArrayList<CpoWhere> wheres = new ArrayList<CpoWhere>();
       wheres.add(cw);
-      col = jdbcIdo_.retrieveBeans("TestWhereRetrieve", valObj, wheres, null);
+      Collection<ValueObject> col = jdbcIdo_.retrieveBeans("TestWhereRetrieve", valObj, wheres, null);
 
       assertTrue("Col size is " + col.size(), col.size() == 2);
 
@@ -357,20 +338,16 @@ public class WhereTest extends TestCase {
 
 
     } catch (Exception e) {
-      e.printStackTrace();
       fail(method + e.getMessage());
     }
   }
 
   public void testRightAttributeFunction() {
     String method = "testRightAttributeFunction:";
-    Collection<ValueObject> col = null;
-    CpoWhere cw = null;
-
 
     try {
       ValueObject valObj = new ValueObject(-1);
-      cw = jdbcIdo_.newWhere();
+      CpoWhere cw = jdbcIdo_.newWhere();
       cw.setAttribute("id");
       cw.setRightAttribute("attrSmallInt");
       cw.setAttributeFunction("ABS(id)");
@@ -380,26 +357,22 @@ public class WhereTest extends TestCase {
 
       ArrayList<CpoWhere> wheres = new ArrayList<CpoWhere>();
       wheres.add(cw);
-      col = jdbcIdo_.retrieveBeans("TestWhereRetrieve", valObj, wheres, null);
+      Collection<ValueObject> col = jdbcIdo_.retrieveBeans("TestWhereRetrieve", valObj, wheres, null);
 
       assertTrue("Col size is " + col.size(), col.size() == 1);
       ValueObject rvo = (ValueObject) col.iterator().next();
       assertTrue("1 != " + rvo.getId(), rvo.getId() == 1);
     } catch (Exception e) {
-      e.printStackTrace();
       fail(method + e.getMessage());
     }
   }
 
   public void testRightAttribute() {
     String method = "testRightAttribute:";
-    Collection<ValueObject> col = null;
-    CpoWhere cw = null;
-
 
     try {
       ValueObject valObj = new ValueObject(-1);
-      cw = jdbcIdo_.newWhere();
+      CpoWhere cw = jdbcIdo_.newWhere();
       cw.setAttribute("id");
       cw.setRightAttribute("attrSmallInt");
       cw.setComparison(CpoWhere.COMP_EQ);
@@ -407,136 +380,113 @@ public class WhereTest extends TestCase {
 
       //ArrayList<CpoWhere> wheres = new ArrayList<CpoWhere>();
       //wheres.add(cw);
-      col = jdbcIdo_.retrieveBeans("TestWhereRetrieve", valObj, valObj, cw, null);
+      Collection<ValueObject> col = jdbcIdo_.retrieveBeans("TestWhereRetrieve", valObj, valObj, cw, null);
 
       assertTrue("Col size is " + col.size(), col.size() == 1);
       ValueObject rvo = (ValueObject) col.iterator().next();
       assertTrue("1 != " + rvo.getId(), rvo.getId() == 1);
     } catch (Exception e) {
-      e.printStackTrace();
       fail(method + e.getMessage());
     }
   }
 
   public void testMultipleBindWhere() {
     String method = "testMultipleBindWhere:";
-    Collection<ValueObject> col = null;
-    CpoWhere cw = null;
-    CpoWhere cw1 = null;
-    CpoWhere cw2 = null;
-
 
     try {
       ValueObject valObj = new ValueObject(1);
       valObj.setAttrVarChar("Test");
 
-      cw = jdbcIdo_.newWhere();
-      cw1 = jdbcIdo_.newWhere(CpoWhere.LOGIC_NONE, "attrVarChar", CpoWhere.COMP_EQ, valObj);
-      cw2 = jdbcIdo_.newWhere(CpoWhere.LOGIC_AND, "id", CpoWhere.COMP_EQ, valObj);
+      CpoWhere cw = jdbcIdo_.newWhere();
+      CpoWhere cw1 = jdbcIdo_.newWhere(CpoWhere.LOGIC_NONE, "attrVarChar", CpoWhere.COMP_EQ, valObj);
+      CpoWhere cw2 = jdbcIdo_.newWhere(CpoWhere.LOGIC_AND, "id", CpoWhere.COMP_EQ, valObj);
 
       cw.addWhere(cw1);
       cw.addWhere(cw2);
 
       ArrayList<CpoWhere> wheres = new ArrayList<CpoWhere>();
       wheres.add(cw);
-      col = jdbcIdo_.retrieveBeans("TestWhereRetrieve", valObj, wheres, null);
+      Collection<ValueObject> col = jdbcIdo_.retrieveBeans("TestWhereRetrieve", valObj, wheres, null);
 
       assertTrue("Col size is " + col.size(), col.size() == 1);
 
 
     } catch (Exception e) {
-      e.printStackTrace();
       fail(method + e.getMessage());
     }
   }
 
   public void testLikeWhere() {
     String method = "testLikeWhere:";
-    Collection<ValueObject> col = null;
-    CpoWhere cw = null;
-    CpoWhere cw1 = null;
-    CpoWhere cw2 = null;
-
 
     try {
       ValueObject valObj = new ValueObject(1);
       valObj.setAttrVarChar("T%");
 
-      cw = jdbcIdo_.newWhere();
-      cw1 = jdbcIdo_.newWhere(CpoWhere.LOGIC_NONE, "attrVarChar", CpoWhere.COMP_LIKE, valObj);
-      cw2 = jdbcIdo_.newWhere(CpoWhere.LOGIC_AND, "id", CpoWhere.COMP_EQ, valObj);
+      CpoWhere cw = jdbcIdo_.newWhere();
+      CpoWhere cw1 = jdbcIdo_.newWhere(CpoWhere.LOGIC_NONE, "attrVarChar", CpoWhere.COMP_LIKE, valObj);
+      CpoWhere cw2 = jdbcIdo_.newWhere(CpoWhere.LOGIC_AND, "id", CpoWhere.COMP_EQ, valObj);
 
       cw.addWhere(cw1);
       cw.addWhere(cw2);
 
       ArrayList<CpoWhere> wheres = new ArrayList<CpoWhere>();
       wheres.add(cw);
-      col = jdbcIdo_.retrieveBeans("TestWhereRetrieve", valObj, wheres, null);
+      Collection<ValueObject> col = jdbcIdo_.retrieveBeans("TestWhereRetrieve", valObj, wheres, null);
 
       assertTrue("Col size is " + col.size(), col.size() == 1);
 
 
     } catch (Exception e) {
-      e.printStackTrace();
       fail(method + e.getMessage());
     }
   }
 
   public void testLikeWhereStrings() {
     String method = "testLikeWhereStrings:";
-    Collection<ValueObject> col = null;
-    CpoWhere cw = null;
-    CpoWhere cw1 = null;
-    CpoWhere cw2 = null;
-
 
     try {
       ValueObject valObj = new ValueObject(1);
       valObj.setAttrVarChar("T%");
 
-      cw = jdbcIdo_.newWhere();
-      cw1 = jdbcIdo_.newWhere(CpoWhere.LOGIC_NONE, "attrVarChar", CpoWhere.COMP_LIKE, "T%");
-      cw2 = jdbcIdo_.newWhere(CpoWhere.LOGIC_AND, "id", CpoWhere.COMP_EQ, "1");
+      CpoWhere cw = jdbcIdo_.newWhere();
+      CpoWhere cw1 = jdbcIdo_.newWhere(CpoWhere.LOGIC_NONE, "attrVarChar", CpoWhere.COMP_LIKE, "T%");
+      CpoWhere cw2 = jdbcIdo_.newWhere(CpoWhere.LOGIC_AND, "id", CpoWhere.COMP_EQ, "1");
 
       cw.addWhere(cw1);
       cw.addWhere(cw2);
 
       ArrayList<CpoWhere> wheres = new ArrayList<CpoWhere>();
       wheres.add(cw);
-      col = jdbcIdo_.retrieveBeans("TestWhereRetrieve", valObj, wheres, null);
+      Collection<ValueObject> col = jdbcIdo_.retrieveBeans("TestWhereRetrieve", valObj, wheres, null);
 
       assertTrue("Col size is " + col.size(), col.size() == 1);
 
 
     } catch (Exception e) {
-      e.printStackTrace();
       fail(method + e.getMessage());
     }
   }
 
   public void testNonAttributeWhere() {
     String method = "testNonAttributeWhere:";
-    Collection<ValueObject> col = null;
-    CpoWhere cw = null;
-    CpoWhere cw1 = null;
 
     try {
       ValueObject valObj = new ValueObject(1);
 
-      cw = jdbcIdo_.newWhere();
-      cw1 = jdbcIdo_.newWhere(CpoWhere.LOGIC_NONE, "value_object.id", CpoWhere.COMP_LT, new Integer(1));
+      CpoWhere cw = jdbcIdo_.newWhere();
+      CpoWhere cw1 = jdbcIdo_.newWhere(CpoWhere.LOGIC_NONE, "value_object.id", CpoWhere.COMP_LT, new Integer(1));
 
       cw.addWhere(cw1);
 
       ArrayList<CpoWhere> wheres = new ArrayList<CpoWhere>();
       wheres.add(cw);
-      col = jdbcIdo_.retrieveBeans("TestWhereRetrieve", valObj, wheres, null);
+      Collection<ValueObject> col = jdbcIdo_.retrieveBeans("TestWhereRetrieve", valObj, wheres, null);
 
       assertTrue("Col size is " + col.size(), col.size() == 1);
 
 
     } catch (Exception e) {
-      e.printStackTrace();
       fail(method + e.getMessage());
     }
 
@@ -544,28 +494,24 @@ public class WhereTest extends TestCase {
 
   public void testInWhereStaticValue() {
     String method = "testNonAttributeWhere:";
-    Collection<ValueObject> coll = null;
-    CpoWhere cw = null;
-    CpoWhere cw1 = null;
 
     try {
       ValueObject valObj = new ValueObject(1);
 
-      cw = jdbcIdo_.newWhere();
-      cw1 = jdbcIdo_.newWhere(CpoWhere.LOGIC_NONE, "id", CpoWhere.COMP_IN, null);
+      CpoWhere cw = jdbcIdo_.newWhere();
+      CpoWhere cw1 = jdbcIdo_.newWhere(CpoWhere.LOGIC_NONE, "id", CpoWhere.COMP_IN, null);
       cw1.setStaticValue("(1,3,5)");
 
       cw.addWhere(cw1);
 
       ArrayList<CpoWhere> wheres = new ArrayList<CpoWhere>();
       wheres.add(cw);
-      coll = jdbcIdo_.retrieveBeans("TestWhereRetrieve", valObj, wheres, null);
+      Collection<ValueObject> coll = jdbcIdo_.retrieveBeans("TestWhereRetrieve", valObj, wheres, null);
 
       assertTrue("Collection size is " + coll.size(), coll.size() == 3);
 
 
     } catch (Exception e) {
-      e.printStackTrace();
       fail(method + e.getMessage());
     }
 
@@ -573,9 +519,6 @@ public class WhereTest extends TestCase {
 
   public void testInWhereCollection() {
     String method = "testNonAttributeWhere:";
-    Collection<ValueObject> coll = null;
-    CpoWhere cw = null;
-    CpoWhere cw1 = null;
 
     try {
       ValueObject valObj = new ValueObject(1);
@@ -584,20 +527,19 @@ public class WhereTest extends TestCase {
       inColl.add(new Integer(3));
       inColl.add(new Integer(5));
 
-      cw = jdbcIdo_.newWhere();
-      cw1 = jdbcIdo_.newWhere(CpoWhere.LOGIC_NONE, "id", CpoWhere.COMP_IN, inColl);
+      CpoWhere cw = jdbcIdo_.newWhere();
+      CpoWhere cw1 = jdbcIdo_.newWhere(CpoWhere.LOGIC_NONE, "id", CpoWhere.COMP_IN, inColl);
 
       cw.addWhere(cw1);
 
       ArrayList<CpoWhere> wheres = new ArrayList<CpoWhere>();
       wheres.add(cw);
-      coll = jdbcIdo_.retrieveBeans("TestWhereRetrieve", valObj, wheres, null);
+      Collection<ValueObject> coll = jdbcIdo_.retrieveBeans("TestWhereRetrieve", valObj, wheres, null);
 
       assertTrue("Collection size is " + coll.size(), coll.size() == 3);
 
 
     } catch (Exception e) {
-      e.printStackTrace();
       fail(method + e.getMessage());
     }
 
@@ -605,9 +547,6 @@ public class WhereTest extends TestCase {
 
   public void testNonAttributeInWhereCollection() {
     String method = "testNonAttributeWhere:";
-    Collection<ValueObject> coll = null;
-    CpoWhere cw = null;
-    CpoWhere cw1 = null;
 
     try {
       ValueObject valObj = new ValueObject(1);
@@ -616,20 +555,19 @@ public class WhereTest extends TestCase {
       inColl.add(new Integer(3));
       inColl.add(new Integer(5));
 
-      cw = jdbcIdo_.newWhere();
-      cw1 = jdbcIdo_.newWhere(CpoWhere.LOGIC_NONE, "value_object.id", CpoWhere.COMP_IN, inColl);
+      CpoWhere cw = jdbcIdo_.newWhere();
+      CpoWhere cw1 = jdbcIdo_.newWhere(CpoWhere.LOGIC_NONE, "value_object.id", CpoWhere.COMP_IN, inColl);
 
       cw.addWhere(cw1);
 
       ArrayList<CpoWhere> wheres = new ArrayList<CpoWhere>();
       wheres.add(cw);
-      coll = jdbcIdo_.retrieveBeans("TestWhereRetrieve", valObj, wheres, null);
+      Collection<ValueObject> coll = jdbcIdo_.retrieveBeans("TestWhereRetrieve", valObj, wheres, null);
 
       assertTrue("Collection size is " + coll.size(), coll.size() == 3);
 
 
     } catch (Exception e) {
-      e.printStackTrace();
       fail(method + e.getMessage());
     }
 
@@ -638,15 +576,13 @@ public class WhereTest extends TestCase {
   public void testWhereParens() {
     String method = "testStaticWhere:";
     Collection<ValueObject> col = null;
-    CpoWhere cw1 = null;
-
 
     try {
       ValueObject valObj = new ValueObject(1);
 
       // Without the correct parens, this will return multiple rows for a retrieveBean which is a 
       // failure
-      cw1 = jdbcIdo_.newWhere();
+      CpoWhere cw1 = jdbcIdo_.newWhere();
       cw1.setLogical(CpoWhere.LOGIC_AND);
       cw1.addWhere(jdbcIdo_.newWhere(CpoWhere.LOGIC_NONE, "id", CpoWhere.COMP_EQ, new Integer(1)));
       cw1.addWhere(jdbcIdo_.newWhere(CpoWhere.LOGIC_OR, "id", CpoWhere.COMP_EQ, new Integer(3)));
@@ -660,7 +596,6 @@ public class WhereTest extends TestCase {
       assertNotNull("Value Object should not be null", valObj);
       assertTrue("Id should equal 1", valObj.getId() == 1);
     } catch (Exception e) {
-      e.printStackTrace();
       fail(method + e.getMessage());
     }
   }

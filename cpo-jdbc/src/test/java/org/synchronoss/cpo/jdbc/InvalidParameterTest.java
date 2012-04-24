@@ -45,6 +45,7 @@ public class InvalidParameterTest extends TestCase {
    * @author david berry
    * @version '$Id: RetrieveObjectTest.java,v 1.6 2006/01/30 19:09:23 dberry Exp $'
    */
+  @Override
   public void setUp() {
     String method = "setUp:";
 
@@ -68,9 +69,7 @@ public class InvalidParameterTest extends TestCase {
     } catch (CpoException ce) {
       //This is what I am expecting so let it go
       logger.debug("Got a cpo exception");
-      ce.printStackTrace();
     } catch (Exception e) {
-      e.printStackTrace();
       fail(method + "Unexpected Exception" + ExceptionHelper.getLocalizedMessage(e));
     }
   }
@@ -87,9 +86,7 @@ public class InvalidParameterTest extends TestCase {
     } catch (CpoException ce) {
       //This is what I am expecting so let it go
       logger.debug("Got a cpo exception");
-      ce.printStackTrace();
     } catch (Exception e) {
-      e.printStackTrace();
       fail(method + "Unexpected Exception" + ExceptionHelper.getLocalizedMessage(e));
     }
   }
@@ -100,15 +97,12 @@ public class InvalidParameterTest extends TestCase {
 
 
     try {
-      ValueObject valObj = null;
-      valObj = jdbcIdo_.retrieveObject(null, valObj);
+      ValueObject valObj = jdbcIdo_.retrieveObject(null, null);
       fail(method + "Test got to unreachable code");
     } catch (CpoException ce) {
       //This is what I am expecting so let it go
       logger.debug("Got a cpo exception");
-      ce.printStackTrace();
     } catch (Exception e) {
-      e.printStackTrace();
       fail(method + "Unexpected Exception" + ExceptionHelper.getLocalizedMessage(e));
     }
   }
@@ -125,9 +119,7 @@ public class InvalidParameterTest extends TestCase {
     } catch (CpoException ce) {
       //This is what I am expecting so let it go
       logger.debug("Got a cpo exception");
-      ce.printStackTrace();
     } catch (Exception e) {
-      e.printStackTrace();
       fail(method + "Unexpected Exception" + ExceptionHelper.getLocalizedMessage(e));
     }
   }
@@ -147,9 +139,7 @@ public class InvalidParameterTest extends TestCase {
       //This is what I am expecting so let it go
       //This is what I am expecting so let it go
       logger.debug("Got a cpo exception");
-      ce.printStackTrace();
     } catch (Exception e) {
-      e.printStackTrace();
       fail(method + "Unexpected Exception" + ExceptionHelper.getLocalizedMessage(e));
     }
   }

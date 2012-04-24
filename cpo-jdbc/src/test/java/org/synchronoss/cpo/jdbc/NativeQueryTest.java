@@ -47,6 +47,7 @@ public class NativeQueryTest extends TestCase {
   /**
    * <code>setUp</code> Load the datasource from the properties in the property file jdbc_en_US.properties
    */
+  @Override
   public void setUp() {
     String method = "setUp:";
 
@@ -68,7 +69,6 @@ public class NativeQueryTest extends TestCase {
     try {
       jdbcIdo_.insertObjects("TestOrderByInsert", al);
     } catch (Exception e) {
-      e.printStackTrace();
       fail(method + e.getMessage());
     }
   }
@@ -76,13 +76,13 @@ public class NativeQueryTest extends TestCase {
   /**
    * DOCUMENT ME!
    */
+  @Override
   public void tearDown() {
     String method = "tearDown:";
     try {
       jdbcIdo_.deleteObjects("TestOrderByDelete", al);
 
     } catch (Exception e) {
-      e.printStackTrace();
       fail(method + e.getMessage());
     }
     jdbcIdo_ = null;
@@ -93,7 +93,7 @@ public class NativeQueryTest extends TestCase {
    */
   public void testNativeOrWhere() {
     String method = "testNativeOrWhere:";
-    Collection<ValueObject> col = null;
+    Collection<ValueObject> col;
     CpoWhere cw = null;
     CpoWhere cw1 = null;
     CpoWhere cw2 = null;
@@ -111,14 +111,13 @@ public class NativeQueryTest extends TestCase {
       assertTrue("Col size is " + col.size(), col.size() == 2);
 
     } catch (Exception e) {
-      e.printStackTrace();
       fail(method + e.getMessage());
     }
   }
 
   public void testNullNative() {
     String method = "testNativeOrWhere:";
-    Collection<ValueObject> col = null;
+    Collection<ValueObject> col;
     CpoWhere cw = null;
     CpoWhere cw1 = null;
     CpoWhere cw2 = null;
@@ -137,7 +136,6 @@ public class NativeQueryTest extends TestCase {
       assertTrue("Col size is " + col.size(), col.size() == 6);
 
     } catch (Exception e) {
-      e.printStackTrace();
       fail(method + e.getMessage());
     }
   }

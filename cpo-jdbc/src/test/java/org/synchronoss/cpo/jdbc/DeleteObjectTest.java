@@ -24,10 +24,13 @@ package org.synchronoss.cpo.jdbc;
 import java.sql.Timestamp;
 import java.util.*;
 import junit.framework.TestCase;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.CpoAdapter;
 import org.synchronoss.cpo.CpoAdapterBean;
 import org.synchronoss.cpo.CpoAdapterFactory;
 import org.synchronoss.cpo.CpoWhere;
+import org.synchronoss.cpo.helper.ExceptionHelper;
 
 /**
  * DeleteObjectTest is a JUnit test class for testing the JdbcAdapter deleteObject method
@@ -36,6 +39,7 @@ import org.synchronoss.cpo.CpoWhere;
  */
 public class DeleteObjectTest extends TestCase {
 
+  private static Logger logger = LoggerFactory.getLogger(DeleteObjectTest.class.getName());
   private ArrayList<ValueObject> al = new ArrayList<ValueObject>();
   private CpoAdapter jdbcIdo_ = null;
   private boolean hasMilliSupport = true;
@@ -50,6 +54,7 @@ public class DeleteObjectTest extends TestCase {
    * @author david berry
    * @version '$Id: InsertObjectTest.java,v 1.3 2006/01/30 19:09:23 dberry Exp $'
    */
+  @Override
   public void setUp() {
     String method = "setUp:";
     ResourceBundle b = PropertyResourceBundle.getBundle(JdbcStatics.PROP_FILE, Locale.getDefault(), this.getClass().getClassLoader());
@@ -85,7 +90,7 @@ public class DeleteObjectTest extends TestCase {
     try {
       jdbcIdo_.insertObject(valObj);
     } catch (Exception e) {
-      e.printStackTrace();
+      logger.error(ExceptionHelper.getLocalizedMessage(e));
       fail(method + e.getMessage());
     }
 
@@ -96,7 +101,7 @@ public class DeleteObjectTest extends TestCase {
       long deleted = jdbcIdo_.deleteObject(null, valObj, cws, null, null);
       assertEquals("Should not have deleted anything", 0, deleted);
     } catch (Exception e) {
-      e.printStackTrace();
+      logger.error(ExceptionHelper.getLocalizedMessage(e));
       fail(method + e.getMessage());
     }
 
@@ -107,7 +112,7 @@ public class DeleteObjectTest extends TestCase {
       long deleted = jdbcIdo_.deleteObject(null, valObj, cws, null, null);
       assertEquals("Should have deleted 1", 1, deleted);
     } catch (Exception e) {
-      e.printStackTrace();
+      logger.error(ExceptionHelper.getLocalizedMessage(e));
       fail(method + e.getMessage());
     }
 
@@ -115,13 +120,14 @@ public class DeleteObjectTest extends TestCase {
 
   }
 
+  @Override
   public void tearDown() {
     String method = "tearDown:";
     try {
       jdbcIdo_.deleteObjects(al);
 
     } catch (Exception e) {
-      e.printStackTrace();
+      logger.error(ExceptionHelper.getLocalizedMessage(e));
       fail(method + e.getMessage());
     }
     jdbcIdo_ = null;

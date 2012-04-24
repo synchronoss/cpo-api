@@ -38,7 +38,7 @@ public class JavaSqlTypes extends java.lang.Object implements java.io.Serializab
    */
   private static final long serialVersionUID = 1L;
   // JDK 1.4.2 Values
-  private static JavaSqlType<?>[] jdbcTypes = {
+  private static final JavaSqlType<?>[] jdbcTypes = {
     new JavaSqlType<String>(java.sql.Types.CHAR, "CHAR", String.class), // 1
     new JavaSqlType<String>(java.sql.Types.LONGVARCHAR, "LONGVARCHAR", String.class), // -1
     new JavaSqlType<String>(java.sql.Types.VARCHAR, "VARCHAR", String.class), // 12

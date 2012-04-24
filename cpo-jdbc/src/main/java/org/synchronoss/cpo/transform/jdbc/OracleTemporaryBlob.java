@@ -44,6 +44,7 @@ public class OracleTemporaryBlob implements CpoReleasible {
    * (non-Javadoc) @see org.synchronoss.cpo.CpoReleasible#release()
    */
 
+  @Override
   public void release() throws CpoException {
     try {
       if (blob_ != null) {

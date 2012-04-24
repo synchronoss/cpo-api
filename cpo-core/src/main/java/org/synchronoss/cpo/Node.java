@@ -49,31 +49,29 @@ public class Node implements Serializable, Cloneable, Comparable<Node> {
   /**
    * The parent node for this Node
    */
-  private Node parent;
+  private Node parent = null;
   /**
    * The first child in the linked list of children
    */
-  private Node firstChild;
+  private Node firstChild = null;
   /**
    * The previous sibling for this node
    */
-  private Node prevSibling;
+  private Node prevSibling = null;
   /**
    * The next sibling for this node
    */
-  private Node nextSibling;
+  private Node nextSibling = null;
   /**
    * Whether this node is allowed to have chidren.
    */
-  private boolean allowChildren;
+  private boolean allowChildren = true;
 
   /**
    * This is the default constructor for the Node class. By default, it creates a Composite Node, that is, a Node that
    * can have children nodes.
    */
   protected Node() {
-    // init all the attributes.
-    release();
   }
 
   /**
@@ -84,8 +82,6 @@ public class Node implements Serializable, Cloneable, Comparable<Node> {
    * Node.ParentNode Node.ChildNode
    */
   protected Node(int nodeType) {
-    // init all the attributes.
-    release();
     if (nodeType == CHILD_NODE) {
       allowChildren = false;
     }
@@ -211,8 +207,6 @@ public class Node implements Serializable, Cloneable, Comparable<Node> {
    * @exception NodeException
    */
   public void addChild(Node node) throws ChildNodeException {
-    Node lastChild = null;
-
     if (node != null) {
       if (!allowChildren) {
         throw new ChildNodeException();
@@ -223,7 +217,7 @@ public class Node implements Serializable, Cloneable, Comparable<Node> {
         getFirstChild().setPrevSibling(firstChild);
         getFirstChild().setNextSibling(firstChild);
       } else {    // Add it to the end of the list
-        lastChild = getFirstChild().getPrevSibling();
+        Node lastChild = getFirstChild().getPrevSibling();
         if (lastChild != null) {
           lastChild.setNextSibling(node);
         }
@@ -244,9 +238,6 @@ public class Node implements Serializable, Cloneable, Comparable<Node> {
   }
 
   public void addChildSort(Node node, Comparator<Node> c) throws ChildNodeException {
-    Node lastChild = null;
-    Node currNode = null;
-
     if (node != null) {
       if (!allowChildren) {
         throw new ChildNodeException();
@@ -258,7 +249,7 @@ public class Node implements Serializable, Cloneable, Comparable<Node> {
         getFirstChild().setNextSibling(node);
       } else {    // Add it in sorted order
         boolean added = false;
-        currNode = getFirstChild();
+        Node currNode = getFirstChild();
         do {
           if (doCompare(node, currNode, c) < 0) {
             node.setPrevSibling(currNode.getPrevSibling());
@@ -274,7 +265,7 @@ public class Node implements Serializable, Cloneable, Comparable<Node> {
         } while (currNode != getFirstChild());
 
         if (!added) { // add to the end of the list.
-          lastChild = getFirstChild().getPrevSibling();
+          Node lastChild = getFirstChild().getPrevSibling();
           if (lastChild != null) {
             lastChild.setNextSibling(node);
           }

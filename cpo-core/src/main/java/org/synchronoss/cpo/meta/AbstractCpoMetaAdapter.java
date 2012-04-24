@@ -104,10 +104,8 @@ public abstract class AbstractCpoMetaAdapter implements CpoMetaAdapter {
   }
 
   protected CpoClass loadCpoClass(CtClass ctClass) throws CpoException {
-    CpoClass cpoClass = null;
-
     logger.debug("Loading class: " + ctClass.getName());
-    cpoClass = createCpoClass();
+    CpoClass cpoClass = createCpoClass();
     cpoClass.setName(ctClass.getName());
     cpoClass.setDescription(ctClass.getDescription());
 

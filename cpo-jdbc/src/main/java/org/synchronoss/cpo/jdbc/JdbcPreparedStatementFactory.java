@@ -193,7 +193,7 @@ public class JdbcPreparedStatementFactory implements CpoReleasible {
   }
 
   private StringBuilder replaceMarker(StringBuilder source, String marker, String replace) {
-    int attrOffset = 0;
+    int attrOffset;
     int fromIndex = 0;
     int mLength = marker.length();
     String replaceText = replace == null ? "" : replace;
@@ -212,7 +212,7 @@ public class JdbcPreparedStatementFactory implements CpoReleasible {
   }
 
   private <T> StringBuilder replaceMarker(StringBuilder source, String marker, JdbcWhereBuilder<T> jwb, List<BindAttribute> bindValues) {
-    int attrOffset = 0;
+    int attrOffset;
     int fromIndex = 0;
     int mLength = marker.length();
     String replace = jwb.getWhereClause();
@@ -233,8 +233,8 @@ public class JdbcPreparedStatementFactory implements CpoReleasible {
   }
 
   private int countBindMarkers(String source) {
-    StringReader reader = null;
-    int rc = -1;
+    StringReader reader;
+    int rc;
     int qMarks = 0;
     boolean inDoubleQuotes = false;
     boolean inSingleQuotes = false;
@@ -287,6 +287,7 @@ public class JdbcPreparedStatementFactory implements CpoReleasible {
    * Called by the CPO framework. This method calls the
    * <code>release</code> on all the CpoReleasible associated with this object
    */
+  @Override
   public void release() throws CpoException {
     for (CpoReleasible releasible : releasibles) {
       try {

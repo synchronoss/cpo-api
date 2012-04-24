@@ -86,6 +86,7 @@ public class JdbcCpoWhere extends Node implements CpoWhere {
   public JdbcCpoWhere() {
   }
 
+  @Override
   public void setComparison(int i) {
     if (i < 0 || i >= comparisons.length) {
       this.comparison = CpoWhere.COMP_NONE;
@@ -94,10 +95,12 @@ public class JdbcCpoWhere extends Node implements CpoWhere {
     }
   }
 
+  @Override
   public int getComparison() {
     return this.comparison;
   }
 
+  @Override
   public void setLogical(int i) {
     if (i < 0 || i >= logicals.length) {
       this.logical = CpoWhere.LOGIC_NONE;
@@ -106,46 +109,57 @@ public class JdbcCpoWhere extends Node implements CpoWhere {
     }
   }
 
+  @Override
   public int getLogical() {
     return this.logical;
   }
 
+  @Override
   public void setAttribute(String s) {
     this.attribute = s;
   }
 
+  @Override
   public String getAttribute() {
     return this.attribute;
   }
 
+  @Override
   public void setRightAttribute(String s) {
     this.rightAttribute = s;
   }
 
+  @Override
   public String getRightAttribute() {
     return this.rightAttribute;
   }
 
+  @Override
   public void setValue(Object s) {
     this.value = s;
   }
 
+  @Override
   public Object getValue() {
     return this.value;
   }
 
+  @Override
   public void setStaticValue(String staticValue) {
     this.staticValue_ = staticValue;
   }
 
+  @Override
   public String getStaticValue() {
     return this.staticValue_;
   }
 
+  @Override
   public boolean getNot() {
     return this.not;
   }
 
+  @Override
   public void setNot(boolean b) {
     this.not = b;
   }
@@ -171,7 +185,7 @@ public class JdbcCpoWhere extends Node implements CpoWhere {
       if (sb.length() > 0) {
         sb.append(" ");
       }
-      String fullyQualifiedColumn = null;
+      String fullyQualifiedColumn;
 
       jdbcAttribute = (JdbcAttribute) cpoClass.getAttributeJava(getAttribute());
       if (jdbcAttribute == null) {
@@ -222,7 +236,7 @@ public class JdbcCpoWhere extends Node implements CpoWhere {
         }
       } else if (getRightAttribute() != null) {
         jdbcAttribute = (JdbcAttribute) cpoClass.getAttributeJava(getRightAttribute());
-        String fullyQualifiedColumn = null;
+        String fullyQualifiedColumn;
         if (jdbcAttribute == null) {
           fullyQualifiedColumn = getRightAttribute();
         } else {
@@ -259,6 +273,7 @@ public class JdbcCpoWhere extends Node implements CpoWhere {
     return attrName;
   }
 
+  @Override
   public void addWhere(CpoWhere cw) throws CpoException {
     try {
       this.addChild((Node) cw);
@@ -267,33 +282,39 @@ public class JdbcCpoWhere extends Node implements CpoWhere {
     }
   }
 
+  @Override
   public void setAttributeFunction(String s) {
     this.attributeFunction = s;
   }
 
+  @Override
   public String getAttributeFunction() {
     return this.attributeFunction;
   }
 
+  @Override
   public void setValueFunction(String s) {
     this.valueFunction = s;
   }
 
+  @Override
   public String getValueFunction() {
     return this.valueFunction;
   }
 
+  @Override
   public void setRightAttributeFunction(String s) {
     this.rightAttributeFunction = s;
   }
 
+  @Override
   public String getRightAttributeFunction() {
     return this.rightAttributeFunction;
   }
 
   private String buildFunction(String function, String match, String value) {
     StringBuilder sb = new StringBuilder();
-    int attrOffset = 0;
+    int attrOffset;
     int fromIndex = 0;
 
     if (function != null && function.length() > 0) {
@@ -324,10 +345,12 @@ public class JdbcCpoWhere extends Node implements CpoWhere {
     return columnName.toString();
   }
 
+  @Override
   public String getName() {
     return name;
   }
 
+  @Override
   public void setName(String name) {
     this.name = name;
   }

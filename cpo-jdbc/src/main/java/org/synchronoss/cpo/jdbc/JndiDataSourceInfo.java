@@ -41,7 +41,7 @@ public class JndiDataSourceInfo implements DataSourceInfo {
   private Context jndiCtx = null;
   private String dataSourceName = null;
   // Make sure DataSource creation is thread safe.
-  private Object LOCK = new Object();
+  private final Object LOCK = new Object();
 
   /**
    * Creates a JndiDataSourceInfo from a JNDIName that represents the datasource in the application server.
@@ -67,10 +67,12 @@ public class JndiDataSourceInfo implements DataSourceInfo {
     jndiCtx = ctx;
   }
 
+  @Override
   public String getDataSourceName() {
     return dataSourceName;
   }
 
+  @Override
   public DataSource getDataSource() throws CpoException {
 
     if (dataSource != null) {

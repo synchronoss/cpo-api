@@ -69,6 +69,7 @@ public class ConstructorTest extends TestCase {
    * @author david berry
    * @version '$Id: ConstructorTest.java,v 1.7 2006/01/31 22:55:03 dberry Exp $'
    */
+  @Override
   public void setUp() {
     ResourceBundle b = PropertyResourceBundle.getBundle(PROP_FILE, Locale.getDefault(), this.getClass().getClassLoader());
     dbUrl_ = b.getString(PROP_DBURL).trim();
@@ -203,6 +204,7 @@ public class ConstructorTest extends TestCase {
 //        }
   }
 
+  @Override
   public void tearDown() {
     jdbcIdo_ = null;
   }

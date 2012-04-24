@@ -87,6 +87,7 @@ public class CpoAttributeBean implements java.io.Serializable {
   /*
    * Getters and Setters
    */
+  @Override
   public boolean equals(Object o) {
     if (this == o) {
       return true;
@@ -119,6 +120,7 @@ public class CpoAttributeBean implements java.io.Serializable {
     return true;
   }
 
+  @Override
   public int hashCode() {
     int result = 0;
     result = 31 * result + getClass().getName().hashCode();
@@ -131,6 +133,7 @@ public class CpoAttributeBean implements java.io.Serializable {
     return result;
   }
 
+  @Override
   public String toString() {
     StringBuilder str = new StringBuilder();
     str.append("javaName = " + getJavaName() + "\n");

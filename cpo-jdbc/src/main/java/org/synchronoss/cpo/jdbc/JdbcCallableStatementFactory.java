@@ -73,8 +73,8 @@ public class JdbcCallableStatementFactory implements CpoReleasible {
    * @throws SQLException if a JDBC error occurs
    */
   public JdbcCallableStatementFactory(Connection conn, JdbcCpoAdapter jca, CpoFunction function, Object obj) throws CpoException {
-    CallableStatement cstmt = null;
-    JdbcAttribute attribute = null;
+    CallableStatement cstmt;
+    JdbcAttribute attribute;
     Logger localLogger = obj == null ? logger : LoggerFactory.getLogger(obj.getClass().getName());
 
     try {
@@ -143,6 +143,7 @@ public class JdbcCallableStatementFactory implements CpoReleasible {
    * Called by the CPO framework. This method calls the
    * <code>release</code> on all the CpoReleasible associated with this object
    */
+  @Override
   public void release() throws CpoException {
     for (CpoReleasible releasible : releasibles) {
       try {

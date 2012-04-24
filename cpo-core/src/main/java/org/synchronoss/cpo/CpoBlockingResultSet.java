@@ -63,7 +63,7 @@ public class CpoBlockingResultSet<E> implements CpoResultSet<E>, Iterator<E> {
       return true;
     }
 
-    if (lbq.size() == 0 && Thread.currentThread().interrupted()) {
+    if (lbq.size() == 0 && Thread.interrupted()) {
       return false;
     }
 
@@ -93,7 +93,7 @@ public class CpoBlockingResultSet<E> implements CpoResultSet<E>, Iterator<E> {
     E ret = tlObj.get();
 
     if (ret == null) {
-      if (lbq.size() == 0 && Thread.currentThread().interrupted()) {
+      if (lbq.size() == 0 && Thread.interrupted()) {
         throw new NoSuchElementException();
       }
 

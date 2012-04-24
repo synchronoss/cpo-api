@@ -52,6 +52,7 @@ public class InheritanceTest extends TestCase {
    * @author david berry
    * @version '$Id: InsertObjectTest.java,v 1.3 2006/01/30 19:09:23 dberry Exp $'
    */
+  @Override
   public void setUp() {
     String method = "setUp:";
     ResourceBundle b = PropertyResourceBundle.getBundle(JdbcStatics.PROP_FILE, Locale.getDefault(), this.getClass().getClassLoader());
@@ -88,7 +89,6 @@ public class InheritanceTest extends TestCase {
     try {
       jdbcIdo_.insertObject(valObj);
     } catch (Exception e) {
-      e.printStackTrace();
       fail(method + e.getMessage());
     }
 
@@ -101,20 +101,19 @@ public class InheritanceTest extends TestCase {
       assertTrue("boolean not stored correctly", vo.getAttrBit());
 
     } catch (Exception e) {
-      e.printStackTrace();
       fail(method + e.getMessage());
     }
 
 
   }
 
+  @Override
   public void tearDown() {
     String method = "tearDown:";
     try {
       jdbcIdo_.deleteObjects(al);
 
     } catch (Exception e) {
-      e.printStackTrace();
       fail(method + e.getMessage());
     }
     jdbcIdo_ = null;

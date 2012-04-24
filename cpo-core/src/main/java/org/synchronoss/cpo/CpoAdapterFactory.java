@@ -58,8 +58,7 @@ public final class CpoAdapterFactory {
   private static Map<String, CpoAdapter> loadAdapters() {
     HashMap<String, CpoAdapter> map = new HashMap<String, CpoAdapter>();
 
-    InputStream is = null;
-    is = CpoAdapterFactory.class.getResourceAsStream(CPO_CONFIG_XML);
+    InputStream is = CpoAdapterFactory.class.getResourceAsStream(CPO_CONFIG_XML);
 
     try {
       CtCpoConfig cpoConfig = CpoConfigDocument.Factory.parse(is).getCpoConfig();

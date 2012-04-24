@@ -387,11 +387,13 @@ public class JdbcAttribute extends CpoAttribute implements java.io.Serializable,
       return retObj;
     }
     
+  @Override
   protected void initTransformClass() throws CpoException {
+    super.initTransformClass();
     if (getCpoTransform() != null && getCpoTransform() instanceof JdbcTransform ) {
       jdbcTransform = (JdbcTransform)getCpoTransform();
     
-      for(Method m : findMethods(jdbcTransform.getClass(), TRANSFORM_OUT_NAME, 1, true)){
+      for(Method m : findMethods(jdbcTransform.getClass(), TRANSFORM_OUT_NAME, 2, true)){
         if (m.getParameterTypes()[0].getName().equals("org.synchronoss.cpo.jdbc.JdbcPreparedStatementFactory")) {
           transformPSOutMethod = m;
         } else if (m.getParameterTypes()[0].getName().equals("org.synchronoss.cpo.jdbc.JdbcCallableStatementFactory")) {
@@ -399,7 +401,7 @@ public class JdbcAttribute extends CpoAttribute implements java.io.Serializable,
         }
       }
     }
-
+    setJavaSqlType(JavaSqlTypes.getJavaSqlType(getDataName()));
   }
     
 }

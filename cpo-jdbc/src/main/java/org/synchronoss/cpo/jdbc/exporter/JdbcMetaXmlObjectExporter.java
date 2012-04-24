@@ -30,6 +30,8 @@ public class JdbcMetaXmlObjectExporter extends CoreMetaXmlObjectExporter impleme
     JdbcAttribute jdbcAttribute = (JdbcAttribute)cpoAttribute;
 
     if (currentCtClass != null) {
+
+      // CtClass.addNewCpoAttribute() can't be used here because it returns a CtAttribute, not a CtJdbcAttribute
       CtJdbcAttribute ctJdbcAttribute = CtJdbcAttribute.Factory.newInstance();
 
       ctJdbcAttribute.setJavaName(jdbcAttribute.getJavaName());
@@ -68,6 +70,7 @@ public class JdbcMetaXmlObjectExporter extends CoreMetaXmlObjectExporter impleme
 
     if (currentCtFunction != null) {
 
+      // CtFunction.addNewCpoArgument() can't be used here because it returns a CtArgument, not a CtJdbcArgument
       CtJdbcArgument ctJdbcArgument = CtJdbcArgument.Factory.newInstance();
 
       ctJdbcArgument.setAttributeName(jdbcArgument.getAttributeName());
@@ -76,11 +79,11 @@ public class JdbcMetaXmlObjectExporter extends CoreMetaXmlObjectExporter impleme
         ctJdbcArgument.setDescription(jdbcArgument.getDescription());
 
       if (jdbcArgument.isInParameter() && jdbcArgument.isOutParameter()) {
-        ctJdbcArgument.setExecType(CtJdbcArgument.ExecType.BOTH);
+        ctJdbcArgument.setScope(CtJdbcArgument.Scope.BOTH);
       } else if (jdbcArgument.isInParameter()) {
-        ctJdbcArgument.setExecType(CtJdbcArgument.ExecType.IN);
+        ctJdbcArgument.setScope(CtJdbcArgument.Scope.IN);
       } else if (jdbcArgument.isOutParameter()) {
-        ctJdbcArgument.setExecType(CtJdbcArgument.ExecType.OUT);
+        ctJdbcArgument.setScope(CtJdbcArgument.Scope.OUT);
       }
 
       CtArgument ctArgument = currentCtFunction.addNewCpoArgument();

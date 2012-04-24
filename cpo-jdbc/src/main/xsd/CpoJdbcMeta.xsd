@@ -22,7 +22,7 @@
         <xs:complexContent>
             <xs:extension base="cpo:ctArgument">
                 <xs:sequence>
-                    <xs:element name="execType" minOccurs="0" default="IN">
+                    <xs:element name="scope" minOccurs="0" default="IN">
                         <xs:simpleType>
                             <xs:restriction base="xs:string">
                                 <xs:enumeration value="IN"/>   

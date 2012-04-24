@@ -21,7 +21,6 @@
  */
 package org.synchronoss.cpo.jdbc;
 
-import java.io.PrintWriter;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.sql.Connection;
@@ -29,12 +28,10 @@ import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.Queue;
-import java.util.TreeMap;
 import javax.sql.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.CpoException;
-import org.synchronoss.cpo.DataSourceInfo;
 
 /**
  * Collects the info required to instantiate a DataSource from a JDBC Driver
@@ -43,15 +40,12 @@ import org.synchronoss.cpo.DataSourceInfo;
  *
  * @author dberry
  */
-public class ClassDataSourceInfo implements DataSourceInfo, DataSource, ConnectionEventListener {
+public class ClassDataSourceInfo extends AbstractDataSource implements ConnectionEventListener {
 
   private Logger logger = LoggerFactory.getLogger(this.getClass());
-  private DataSource dataSource = null;
   private ConnectionPoolDataSource poolDataSource = null;
-  private String dataSourceName = null;
+  private String className = null;
   private Map<String, String> properties = null;
-  private PrintWriter printWriter_ = null;
-  private int timeout_ = 0;
   // Make sure DataSource creation is thread safe.
   final private Object LOCK = new Object();
   private Queue<PooledConnection> freeConnections = new LinkedList<PooledConnection>();
@@ -63,8 +57,8 @@ public class ClassDataSourceInfo implements DataSourceInfo, DataSource, Connecti
    * @param classname The classname of a class that implements datasource
    */
   public ClassDataSourceInfo(String className) throws CpoException {
-    loadClass(className);
-    dataSourceName = className;
+    super(className);
+    this.className=className;
   }
 
   /**
@@ -74,61 +68,15 @@ public class ClassDataSourceInfo implements DataSourceInfo, DataSource, Connecti
    * @param properties - The connection properties for connecting to the database
    */
   public ClassDataSourceInfo(String className, Map<String, String> properties) throws CpoException {
-    loadClass(className);
-    dataSourceName = BuildDataSourceName(className, properties);
-    setClassProperties(properties);
-  }
-
-  @Override
-  public String getDataSourceName() {
-    return dataSourceName;
-  }
-
-  @Override
-  public DataSource getDataSource() throws CpoException {
-    return this.dataSource;
-  }
-
-  /**
-   * DOCUMENT ME!
-   *
-   * @param url DOCUMENT ME!
-   * @param properties DOCUMENT ME!
-   *
-   * @return DOCUMENT ME!
-   */
-  private String BuildDataSourceName(String s, Map<String, String> properties) {
-    StringBuilder dsName = new StringBuilder(s);
-    TreeMap<Object, Object> treeMap = new TreeMap<Object, Object>(properties);
-
-    // Use a tree map so that the properties are sorted. This way if we have
-    // the same datasource with the same properties but in different order,
-    // we will generate the same key.
-    for (Object key : treeMap.keySet()) {
-      dsName.append((String) key);
-      dsName.append("=");
-      dsName.append(properties.get((String) key));
-    }
-
-    return dsName.toString();
-  }
-
-  @Override
-  public Connection getConnection(String userName, String password)
-          throws SQLException {
-    throw new SQLException("Not Implemented");
+    super(className, properties);
+    this.className=className;
+    this.properties=properties;
   }
 
   @Override
   public Connection getConnection() throws SQLException {
     Connection conn = null;
-    if (poolDataSource != null) {
-      conn = getPooledConnection();
-    } else if (dataSource != null) {
-      conn = dataSource.getConnection();
-    }
-
-    return conn;
+    return getPooledConnection();
   }
 
   private Connection getPooledConnection() throws SQLException {
@@ -149,59 +97,28 @@ public class ClassDataSourceInfo implements DataSourceInfo, DataSource, Connecti
   public synchronized String toString() {
     StringBuilder info = new StringBuilder();
     info.append("JdbcDataSource(");
-    info.append(dataSourceName);
+    info.append(getDataSourceName());
     info.append(")");
     return (info.toString());
   }
 
   @Override
-  public PrintWriter getLogWriter()
-          throws SQLException {
-    return printWriter_;
-  }
-
-  @Override
-  public void setLogWriter(PrintWriter out)
-          throws SQLException {
-    printWriter_ = out;
-
-  }
-
-  @Override
-  public void setLoginTimeout(int seconds)
-          throws SQLException {
-    timeout_ = seconds;
-  }
-
-  @Override
-  public int getLoginTimeout()
-          throws SQLException {
-    return timeout_;
-  }
-
-  @Override
-  public <T> T unwrap(Class<T> iface) throws SQLException {
-    throw new UnsupportedOperationException("Not supported yet.");
-  }
-
-  @Override
-  public boolean isWrapperFor(Class<?> iface) throws SQLException {
-    return false;
-  }
-
-  private void loadClass(String className) throws CpoException {
+  protected DataSource createDataSource() throws CpoException {
+    DataSource dataSource = null;
     try {
       Class dsClass = Class.forName(className);
-      Object ds = dsClass.newInstance();
+      CommonDataSource ds = (CommonDataSource) dsClass.newInstance();
 
       if (ds instanceof ConnectionPoolDataSource) {
         this.poolDataSource = (ConnectionPoolDataSource) ds;
-        this.dataSource = this;
+        dataSource = this;
       } else if (ds instanceof DataSource) {
-        this.dataSource = (DataSource) ds;
+        dataSource = (DataSource) ds;
       } else {
         throw new CpoException(className + "is not a DataSource");
       }
+      if (properties !=null)
+        setClassProperties(ds,properties);
     } catch (ClassNotFoundException cnfe) {
       throw new CpoException("Could Not Find Class" + className, cnfe);
     } catch (InstantiationException ie) {
@@ -209,6 +126,8 @@ public class ClassDataSourceInfo implements DataSourceInfo, DataSource, Connecti
     } catch (IllegalAccessException iae) {
       throw new CpoException("Could Not Access Class" + className, iae);
     }
+    
+    return dataSource;
   }
 
   @Override
@@ -251,12 +170,7 @@ public class ClassDataSourceInfo implements DataSourceInfo, DataSource, Connecti
     }
   }
 
-  private void setClassProperties(Map<String, String> properties) {
-    Object ds = dataSource;
-    if (poolDataSource != null) {
-      ds = poolDataSource;
-    }
-
+  private void setClassProperties(CommonDataSource ds, Map<String, String> properties) {
     for (String key : properties.keySet()) {
       setObjectProperty(ds, key, properties.get(key));
     }

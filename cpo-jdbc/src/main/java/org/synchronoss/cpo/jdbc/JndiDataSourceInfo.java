@@ -25,7 +25,6 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.sql.DataSource;
 import org.synchronoss.cpo.CpoException;
-import org.synchronoss.cpo.DataSourceInfo;
 
 /**
  * Collects the info required to instantiate a DataSource stored as a JNDI Resource.
@@ -34,14 +33,10 @@ import org.synchronoss.cpo.DataSourceInfo;
  *
  * @author dberry
  */
-public class JndiDataSourceInfo implements DataSourceInfo {
+public class JndiDataSourceInfo extends AbstractDataSourceInfo {
 
-  private DataSource dataSource = null;
   private String jndiName = null;
   private Context jndiCtx = null;
-  private String dataSourceName = null;
-  // Make sure DataSource creation is thread safe.
-  private final Object LOCK = new Object();
 
   /**
    * Creates a JndiDataSourceInfo from a JNDIName that represents the datasource in the application server.
@@ -50,8 +45,8 @@ public class JndiDataSourceInfo implements DataSourceInfo {
    *
    */
   public JndiDataSourceInfo(String jndiName) {
+    super(jndiName);
     this.jndiName = jndiName;
-    dataSourceName = jndiName;
   }
 
   /**
@@ -62,34 +57,22 @@ public class JndiDataSourceInfo implements DataSourceInfo {
    *
    */
   public JndiDataSourceInfo(String jndiName, Context ctx) {
+    super(jndiName);
     this.jndiName = jndiName;
-    dataSourceName = jndiName;
     jndiCtx = ctx;
   }
 
   @Override
-  public String getDataSourceName() {
-    return dataSourceName;
-  }
-
-  @Override
-  public DataSource getDataSource() throws CpoException {
-
-    if (dataSource != null) {
-      return dataSource;
-    }
-
-    synchronized (LOCK) {
-      try {
-        if (jndiCtx == null) {
-          jndiCtx = new InitialContext();
-        }
-        dataSource = (DataSource) jndiCtx.lookup(jndiName);
-        //        ds = new JdbcDataSource(jdsi);
-      } catch (Exception e) {
-        throw new CpoException("Error instantiating DataSource", e);
+  protected DataSource createDataSource() throws CpoException {
+    DataSource datasource = null;
+    try {
+      if (jndiCtx == null) {
+        jndiCtx = new InitialContext();
       }
+      datasource = (DataSource) jndiCtx.lookup(jndiName);
+    } catch (Exception e) {
+        throw new CpoException("Error instantiating DataSource", e); 
     }
-    return dataSource;
+    return datasource;
   }
 }

@@ -74,10 +74,13 @@ public class CpoClass extends CpoClassBean implements MetaDFVisitable {
     return this.functionGroups;
   }
 
-  public CpoFunctionGroup getFunctionGroup(String groupType, String groupName) {
+  public CpoFunctionGroup getFunctionGroup(String groupType, String groupName) throws CpoException {
     String key=buildFunctionGroupKey(groupType, groupName);
-    logger.debug("Getting function group: "+ key);
-    return this.functionGroups.get(key);
+    CpoFunctionGroup group = functionGroups.get(key);
+    if (group==null){
+      throw new CpoException("Function Group Not Found: "+groupType+":"+groupName);
+    }
+    return group;
   }
 
   public CpoFunctionGroup addFunctionGroup(CpoFunctionGroup group) {

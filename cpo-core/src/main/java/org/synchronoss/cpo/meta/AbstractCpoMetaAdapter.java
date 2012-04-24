@@ -47,13 +47,11 @@ public abstract class AbstractCpoMetaAdapter implements CpoMetaAdapter {
       classObj = requestedClass;
       requestedName = requestedClass.getName();
       className = requestedName;
-      logger.debug("Looking up class: "+className);
       cpoClass = classMap.get(className);
 
       while(cpoClass==null && classObj!=null){
         classObj = classObj.getSuperclass();
         className = classObj==null?null:classObj.getName();
-        logger.debug("Looking up class: "+className);
         if (className!=null)
           cpoClass = classMap.get(className);
       }

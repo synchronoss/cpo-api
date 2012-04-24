@@ -358,12 +358,10 @@ public class JdbcPreparedStatementFactory implements CpoReleasible {
         JavaSqlMethod<?> jsm = null;
         if (bindAttr.isIn() && bindObject instanceof Collection) {
           for (Object obj : (Collection)bindObject){
-            logger.debug("Looking up JavaSqlMethod for: "+obj.getClass().getName());
             jsm = JavaSqlMethods.getJavaSqlMethod(obj.getClass());
             break;
           }
         } else {
-          logger.debug("Looking up JavaSqlMethod for: "+bindObject.getClass().getName());
           jsm = JavaSqlMethods.getJavaSqlMethod(bindObject.getClass());
         }
         

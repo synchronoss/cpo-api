@@ -24,7 +24,7 @@ package org.synchronoss.cpo.plugin;
 import org.apache.maven.plugin.*;
 import org.apache.xmlbeans.XmlOptions;
 import org.synchronoss.cpo.core.cpoCoreMeta.CpoMetaDataDocument;
-import org.synchronoss.cpo.exporter.*;
+import org.synchronoss.cpo.exporter.MetaXmlObjectExporter;
 import org.synchronoss.cpo.jdbc.*;
 import org.synchronoss.cpo.jdbc.exporter.JdbcMetaXmlObjectExporter;
 import org.synchronoss.cpo.jdbc.meta.JdbcCpoMetaAdapter;
@@ -32,7 +32,6 @@ import org.synchronoss.cpo.meta.CpoMetaAdapter;
 import org.synchronoss.cpo.meta.domain.*;
 
 import java.io.*;
-import java.lang.reflect.Method;
 import java.sql.*;
 import java.util.*;
 
@@ -223,20 +222,6 @@ public class ConvertSQLToXML extends AbstractMojo {
         cpoAttribute.setTransformClassName(rs.getString(6));
 
         // figure out the java type
-        Class<?> attClass = metaAdapter.getJavaTypeClass(cpoAttribute);
-        if (cpoAttribute.getTransformClassName() != null) {
-          // if the attribute uses a transform, figure out what class it really is
-          try {
-            Class<?> transformClass = Class.forName(cpoAttribute.getTransformClassName());
-            for (Method method : transformClass.getMethods()) {
-              if (method.getName().equals("transformIn") && !method.isSynthetic() && !method.isBridge()) {
-                attClass = method.getReturnType();
-              }
-            }
-          } catch (Exception e) {
-            getLog().debug("Invalid Transform Class specified:<" + cpoAttribute.getTransformClassName() + "> using default");
-          }
-        }
         cpoAttribute.setJavaType(metaAdapter.getJavaTypeName(cpoAttribute));
 
         attributes.add(cpoAttribute);

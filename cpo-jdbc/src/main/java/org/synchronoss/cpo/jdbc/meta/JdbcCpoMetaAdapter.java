@@ -27,8 +27,10 @@ import org.synchronoss.cpo.exporter.MetaXmlObjectExporter;
 import org.synchronoss.cpo.jdbc.*;
 import org.synchronoss.cpo.jdbc.cpoJdbcMeta.*;
 import org.synchronoss.cpo.jdbc.exporter.JdbcMetaXmlObjectExporter;
+import org.synchronoss.cpo.jdbc.parser.SQLExpressionParser;
 import org.synchronoss.cpo.meta.AbstractCpoMetaAdapter;
 import org.synchronoss.cpo.meta.domain.*;
+import org.synchronoss.cpo.parser.ExpressionParser;
 
 import java.math.BigDecimal;
 import java.util.*;
@@ -122,6 +124,11 @@ public class JdbcCpoMetaAdapter extends AbstractCpoMetaAdapter {
   @Override
   protected MetaXmlObjectExporter getMetaXmlObjectExporter() {
     return new JdbcMetaXmlObjectExporter(this);
+  }
+
+  @Override
+  public ExpressionParser getExpressionParser() {
+    return new SQLExpressionParser();
   }
 
   @Override

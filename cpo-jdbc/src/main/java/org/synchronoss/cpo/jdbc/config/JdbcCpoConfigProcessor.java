@@ -33,6 +33,7 @@ import org.synchronoss.cpo.jdbc.DriverDataSourceInfo;
 import org.synchronoss.cpo.jdbc.JdbcCpoAdapter;
 import org.synchronoss.cpo.jdbc.JndiDataSourceInfo;
 import org.synchronoss.cpo.jdbc.cpoJdbcConfig.CtJdbcConfig;
+import org.synchronoss.cpo.jdbc.cpoJdbcConfig.CtJdbcReadWriteConfig;
 import org.synchronoss.cpo.jdbc.meta.JdbcCpoMetaAdapter;
 import org.synchronoss.cpo.meta.CpoCoreMetaAdapterFactory;
 
@@ -62,8 +63,6 @@ public class JdbcCpoConfigProcessor implements CpoConfigProcessor {
     CtJdbcConfig jdbcConfig = (CtJdbcConfig) cpoConfig;
 
     JdbcCpoMetaAdapter metaAdapter = (JdbcCpoMetaAdapter) new CpoCoreMetaAdapterFactory().getCpoMetaAdapter(jdbcConfig.getMetaXml());
-
-    DataSourceInfo dataSourceInfo = null;
     
     if (jdbcConfig.isSetSupportsBlobs())
       metaAdapter.setSupportsBlobs(jdbcConfig.getSupportsBlobs());
@@ -78,36 +77,48 @@ public class JdbcCpoConfigProcessor implements CpoConfigProcessor {
       metaAdapter.setSupportsSelect4Update(jdbcConfig.getSupportsSelect4Update());
     
     // build a datasource info
-    if (jdbcConfig.isSetJndiName()) {
-      dataSourceInfo = new JndiDataSourceInfo(jdbcConfig.getJndiName());
-    } else if (jdbcConfig.isSetDataSourceClassName()) {
+    if (jdbcConfig.isSetReadWriteConfig()) {
+      DataSourceInfo dataSourceInfo = buildDataSourceInfo(jdbcConfig.getReadWriteConfig());
+      cpoAdapter = new JdbcCpoAdapter(metaAdapter, dataSourceInfo);
+    } else {
+      DataSourceInfo readDataSourceInfo = buildDataSourceInfo(jdbcConfig.getReadConfig());
+      DataSourceInfo writeDataSourceInfo = buildDataSourceInfo(jdbcConfig.getWriteConfig());
+      cpoAdapter = new JdbcCpoAdapter(metaAdapter, writeDataSourceInfo, readDataSourceInfo);
+    }
+    
+    return cpoAdapter;
+  }
+  
+  private DataSourceInfo buildDataSourceInfo(CtJdbcReadWriteConfig readWriteConfig) throws CpoException {
+    DataSourceInfo dataSourceInfo = null;
+    
+    if (readWriteConfig.isSetJndiName()) {
+      dataSourceInfo = new JndiDataSourceInfo(readWriteConfig.getJndiName());
+    } else if (readWriteConfig.isSetDataSourceClassName()) {
       Map<String, String> props = new HashMap<String, String>();
 
-      if (jdbcConfig.isSetUrl()) {
-        props.put(PROP_URL1, jdbcConfig.getUrl());
-        props.put(PROP_URL2, jdbcConfig.getUrl());
+      if (readWriteConfig.isSetUrl()) {
+        props.put(PROP_URL1, readWriteConfig.getUrl());
+        props.put(PROP_URL2, readWriteConfig.getUrl());
       }
 
-      if (jdbcConfig.isSetUser()) {
-        props.put(PROP_USER, jdbcConfig.getUser());
+      if (readWriteConfig.isSetUser()) {
+        props.put(PROP_USER, readWriteConfig.getUser());
       }
 
-      if (jdbcConfig.isSetPassword()) {
-        props.put(PROP_PASSWORD, jdbcConfig.getUser());
+      if (readWriteConfig.isSetPassword()) {
+        props.put(PROP_PASSWORD, readWriteConfig.getUser());
       }
 
-      dataSourceInfo = new ClassDataSourceInfo(jdbcConfig.getDataSourceClassName(), props);
-    } else if (jdbcConfig.isSetDriverClassName()) {
-      if (jdbcConfig.isSetUser()) {
-        dataSourceInfo = new DriverDataSourceInfo(jdbcConfig.getDriverClassName(), jdbcConfig.getUrl(), jdbcConfig.getUser(), jdbcConfig.getPassword());
+      dataSourceInfo = new ClassDataSourceInfo(readWriteConfig.getDataSourceClassName(), props);
+    } else if (readWriteConfig.isSetDriverClassName()) {
+      if (readWriteConfig.isSetUser()) {
+        dataSourceInfo = new DriverDataSourceInfo(readWriteConfig.getDriverClassName(), readWriteConfig.getUrl(), readWriteConfig.getUser(), readWriteConfig.getPassword());
       } else {
-        dataSourceInfo = new DriverDataSourceInfo(jdbcConfig.getDriverClassName(), jdbcConfig.getUrl());
+        dataSourceInfo = new DriverDataSourceInfo(readWriteConfig.getDriverClassName(), readWriteConfig.getUrl());
       }
     }
 
-    if (dataSourceInfo != null) {
-      cpoAdapter = new JdbcCpoAdapter(metaAdapter, dataSourceInfo);
-    }
-    return cpoAdapter;
+    return dataSourceInfo;
   }
 }

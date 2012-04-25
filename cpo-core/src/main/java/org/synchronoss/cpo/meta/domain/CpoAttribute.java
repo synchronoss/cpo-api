@@ -241,9 +241,11 @@ public class CpoAttribute extends CpoAttributeBean {
     } catch (Exception ce2) {
       failedMessage.append(ce2.getMessage());
     }
-
-    initTransformClass(metaAdapter);
-
+    try {
+      initTransformClass(metaAdapter);
+    } catch (Exception ce2) {
+      failedMessage.append(ce2.getMessage());
+    }
     if (failedMessage.length() > 0) {
       throw new CpoException(failedMessage.toString());
     }
@@ -254,7 +256,6 @@ public class CpoAttribute extends CpoAttributeBean {
     Class<?> transformClass = null;
     Logger localLogger = className == null ? logger : LoggerFactory.getLogger(className);
 
-    try {
       if (className != null && className.length() > 0) {
         try {
           transformClass = Class.forName(className);
@@ -265,7 +266,13 @@ public class CpoAttribute extends CpoAttributeBean {
           throw new CpoException("Invalid Transform Class specified:<" + className + ">:");
         }
 
-        Object transformObject = transformClass.newInstance();
+        Object transformObject;
+        try {
+            transformObject = transformClass.newInstance();
+        } catch (Exception e) {
+          localLogger.debug("Error Setting Transform Class: " + ExceptionHelper.getLocalizedMessage(e));
+          throw new CpoException(e);
+        }
 
         if (transformObject instanceof CpoTransform) {
           cpoTransform = (CpoTransform) transformObject;
@@ -279,10 +286,5 @@ public class CpoAttribute extends CpoAttributeBean {
         }
 
       }
-    } catch (Exception e) {
-      localLogger.debug("Error Setting Transform Class: " + ExceptionHelper.getLocalizedMessage(e));
-      throw new CpoException(e);
-    }
-
   }
 }

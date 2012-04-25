@@ -166,7 +166,7 @@ public class JdbcCpoWhere extends Node implements CpoWhere {
 
   public String toString(CpoClass cpoClass) throws CpoException {
     StringBuilder sb = new StringBuilder();
-    JdbcAttribute jdbcAttribute = null;
+    JdbcCpoAttribute jdbcAttribute = null;
 
 
     if (getLogical() != CpoWhere.LOGIC_NONE) {
@@ -187,7 +187,7 @@ public class JdbcCpoWhere extends Node implements CpoWhere {
       }
       String fullyQualifiedColumn;
 
-      jdbcAttribute = (JdbcAttribute) cpoClass.getAttributeJava(getAttribute());
+      jdbcAttribute = (JdbcCpoAttribute) cpoClass.getAttributeJava(getAttribute());
       if (jdbcAttribute == null) {
         // This is not an attribute on the cpo bean passed to the retrieveObjects method.
         // treat it as the column name
@@ -218,7 +218,7 @@ public class JdbcCpoWhere extends Node implements CpoWhere {
       if (getValue() != null) {
         if (getValueFunction() != null) {
           if (jdbcAttribute == null) {
-            jdbcAttribute = (JdbcAttribute) cpoClass.getAttributeJava(getRightAttribute());
+            jdbcAttribute = (JdbcCpoAttribute) cpoClass.getAttributeJava(getRightAttribute());
           }
           sb.append(buildFunction(getValueFunction(), getAttributeName(jdbcAttribute, getAttribute(), getRightAttribute()), "?"));
         } else if (getComparison() == CpoWhere.COMP_IN && getValue() instanceof Collection) {
@@ -235,7 +235,7 @@ public class JdbcCpoWhere extends Node implements CpoWhere {
           sb.append("?"); // add the parameter, we will bind it later.
         }
       } else if (getRightAttribute() != null) {
-        jdbcAttribute = (JdbcAttribute) cpoClass.getAttributeJava(getRightAttribute());
+        jdbcAttribute = (JdbcCpoAttribute) cpoClass.getAttributeJava(getRightAttribute());
         String fullyQualifiedColumn;
         if (jdbcAttribute == null) {
           fullyQualifiedColumn = getRightAttribute();
@@ -329,7 +329,7 @@ public class JdbcCpoWhere extends Node implements CpoWhere {
     return sb.toString();
   }
 
-  private String buildColumnName(JdbcAttribute attribute) {
+  private String buildColumnName(JdbcCpoAttribute attribute) {
     StringBuilder columnName = new StringBuilder();
 
     if (attribute.getDbTable() != null) {

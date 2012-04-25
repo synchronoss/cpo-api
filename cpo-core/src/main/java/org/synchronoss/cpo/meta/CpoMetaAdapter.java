@@ -43,7 +43,7 @@ public interface CpoMetaAdapter {
    *
    * @return java.util.List of CpoClass
    */
-  public List<CpoClass> getClasses();
+  public List<CpoClass> getCpoClasses();
 
   /**
    * Performs an export to a CpoMetaDataDocument (XmlObject) format.

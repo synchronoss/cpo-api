@@ -26,8 +26,8 @@ import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.core.cpoCoreMeta.CtArgument;
 import org.synchronoss.cpo.core.cpoCoreMeta.CtAttribute;
 import org.synchronoss.cpo.exporter.MetaXmlObjectExporter;
-import org.synchronoss.cpo.jdbc.JdbcArgument;
-import org.synchronoss.cpo.jdbc.JdbcAttribute;
+import org.synchronoss.cpo.jdbc.JdbcCpoArgument;
+import org.synchronoss.cpo.jdbc.JdbcCpoAttribute;
 import org.synchronoss.cpo.jdbc.cpoJdbcMeta.CtJdbcArgument;
 import org.synchronoss.cpo.jdbc.cpoJdbcMeta.CtJdbcAttribute;
 import org.synchronoss.cpo.jdbc.exporter.JdbcMetaXmlObjectExporter;
@@ -52,7 +52,7 @@ public class JdbcCpoMetaAdapter extends AbstractCpoMetaAdapter {
     super.loadCpoAttribute(cpoAttribute, ctAttribute);
 
     // cast to the expected subclasses
-    JdbcAttribute jdbcAttribute = (JdbcAttribute) cpoAttribute;
+    JdbcCpoAttribute jdbcAttribute = (JdbcCpoAttribute) cpoAttribute;
     CtJdbcAttribute ctJdbcAttribute = (CtJdbcAttribute) ctAttribute;
 
     jdbcAttribute.setDbTable(ctJdbcAttribute.getDbTable());
@@ -65,7 +65,7 @@ public class JdbcCpoMetaAdapter extends AbstractCpoMetaAdapter {
     super.loadCpoArgument(cpoArgument, ctArgument);
 
     // cast to the expected subclasses
-    JdbcArgument jdbcArgument = (JdbcArgument) cpoArgument;
+    JdbcCpoArgument jdbcArgument = (JdbcCpoArgument) cpoArgument;
     CtJdbcArgument ctJdbcArgument = (CtJdbcArgument) ctArgument;
 
 //    logger.debug("Setting argument scope to: "+ctJdbcArgument.getScope().toString());
@@ -75,12 +75,12 @@ public class JdbcCpoMetaAdapter extends AbstractCpoMetaAdapter {
 
   @Override
   protected CpoAttribute createCpoAttribute() {
-    return new JdbcAttribute();
+    return new JdbcCpoAttribute();
   }
 
   @Override
   protected CpoArgument createCpoArgument() {
-    return new JdbcArgument();
+    return new JdbcCpoArgument();
   }
 
   @Override

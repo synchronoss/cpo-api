@@ -88,7 +88,7 @@ public abstract class AbstractCpoMetaAdapter implements CpoMetaAdapter {
   }
 
   @Override
-  public List<CpoClass> getClasses() {
+  public List<CpoClass> getCpoClasses() {
     List<CpoClass> result = new ArrayList<CpoClass>();
     result.addAll(classMap.values());
     return result;

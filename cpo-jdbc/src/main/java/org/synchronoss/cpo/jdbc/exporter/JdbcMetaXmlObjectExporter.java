@@ -25,8 +25,8 @@ import org.synchronoss.cpo.core.cpoCoreMeta.CtArgument;
 import org.synchronoss.cpo.core.cpoCoreMeta.CtAttribute;
 import org.synchronoss.cpo.exporter.CoreMetaXmlObjectExporter;
 import org.synchronoss.cpo.exporter.MetaXmlObjectExporter;
-import org.synchronoss.cpo.jdbc.JdbcArgument;
-import org.synchronoss.cpo.jdbc.JdbcAttribute;
+import org.synchronoss.cpo.jdbc.JdbcCpoArgument;
+import org.synchronoss.cpo.jdbc.JdbcCpoAttribute;
 import org.synchronoss.cpo.jdbc.cpoJdbcMeta.CtJdbcArgument;
 import org.synchronoss.cpo.jdbc.cpoJdbcMeta.CtJdbcAttribute;
 import org.synchronoss.cpo.meta.domain.CpoArgument;
@@ -48,12 +48,12 @@ public class JdbcMetaXmlObjectExporter extends CoreMetaXmlObjectExporter impleme
   public void visit(CpoAttribute cpoAttribute) {
 
     // shouldn't happen, but if what we got wasn't a JdbcAttribute...
-    if (!(cpoAttribute instanceof JdbcAttribute)) {
+    if (!(cpoAttribute instanceof JdbcCpoAttribute)) {
       super.visit(cpoAttribute);
       return;
     }
 
-    JdbcAttribute jdbcAttribute = (JdbcAttribute) cpoAttribute;
+    JdbcCpoAttribute jdbcAttribute = (JdbcCpoAttribute) cpoAttribute;
 
     if (currentCtClass != null) {
 
@@ -91,12 +91,12 @@ public class JdbcMetaXmlObjectExporter extends CoreMetaXmlObjectExporter impleme
   public void visit(CpoArgument cpoArgument) {
 
     // shouldn't happen, but if what we got wasn't a JdbcArgument...
-    if (!(cpoArgument instanceof JdbcArgument)) {
+    if (!(cpoArgument instanceof JdbcCpoArgument)) {
       super.visit(cpoArgument);
       return;
     }
 
-    JdbcArgument jdbcArgument = (JdbcArgument) cpoArgument;
+    JdbcCpoArgument jdbcArgument = (JdbcCpoArgument) cpoArgument;
 
     if (currentCtFunction != null) {
 

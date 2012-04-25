@@ -74,7 +74,7 @@ public class JdbcCallableStatementFactory implements CpoReleasible {
    */
   public JdbcCallableStatementFactory(Connection conn, JdbcCpoAdapter jca, CpoFunction function, Object obj) throws CpoException {
     CallableStatement cstmt;
-    JdbcAttribute attribute;
+    JdbcCpoAttribute attribute;
     Logger localLogger = obj == null ? logger : LoggerFactory.getLogger(obj.getClass().getName());
 
     try {
@@ -88,13 +88,13 @@ public class JdbcCallableStatementFactory implements CpoReleasible {
 
       int j = 1;
       for (CpoArgument argument : outArguments) {
-        attribute = (JdbcAttribute) argument.getAttribute();
+        attribute = (JdbcCpoAttribute) argument.getAttribute();
 
-        if (((JdbcArgument) argument).isInParameter()) {
+        if (((JdbcCpoArgument) argument).isInParameter()) {
           attribute.invokeGetter(this, obj, j);
         }
 
-        if (((JdbcArgument) argument).isOutParameter()) {
+        if (((JdbcCpoArgument) argument).isOutParameter()) {
           localLogger.debug("Setting OUT parameter " + j + " as Type " + attribute.getJavaSqlType());
           cstmt.registerOutParameter(j, attribute.getJavaSqlType());
         }

@@ -38,9 +38,9 @@ import org.synchronoss.cpo.transform.jdbc.JdbcTransform;
  *
  * @author david berry
  */
-public class JdbcAttribute extends CpoAttribute implements java.io.Serializable, java.lang.Cloneable {
+public class JdbcCpoAttribute extends CpoAttribute implements java.io.Serializable, java.lang.Cloneable {
 
-  private static Logger logger = LoggerFactory.getLogger(JdbcAttribute.class.getName());
+  private static Logger logger = LoggerFactory.getLogger(JdbcCpoAttribute.class.getName());
   /**
    * Version Id for this class.
    */
@@ -53,7 +53,7 @@ public class JdbcAttribute extends CpoAttribute implements java.io.Serializable,
   private Method transformPSOutMethod = null;
   private Method transformCSOutMethod = null;
 
-  public JdbcAttribute() {
+  public JdbcCpoAttribute() {
   }
 
   public void setDbTable(String dbTable) {

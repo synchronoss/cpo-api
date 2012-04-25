@@ -28,7 +28,7 @@ import org.synchronoss.cpo.meta.domain.CpoArgument;
  *
  * @author david berry
  */
-public class JdbcArgument extends CpoArgument implements java.io.Serializable, java.lang.Cloneable {
+public class JdbcCpoArgument extends CpoArgument implements java.io.Serializable, java.lang.Cloneable {
 
   /**
    * Version Id for this class.
@@ -39,13 +39,13 @@ public class JdbcArgument extends CpoArgument implements java.io.Serializable, j
   private static final String INOUT_PARAMETER = "BOTH";
   private String scope = null;
 
-  public JdbcArgument() {
+  public JdbcCpoArgument() {
     super();
   }
 
   @Override
-  public JdbcAttribute getAttribute() {
-    return (JdbcAttribute) super.getAttribute();
+  public JdbcCpoAttribute getAttribute() {
+    return (JdbcCpoAttribute) super.getAttribute();
   }
 
   public boolean isInParameter() {

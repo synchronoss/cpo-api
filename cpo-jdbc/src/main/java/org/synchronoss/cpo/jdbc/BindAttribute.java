@@ -27,12 +27,12 @@ package org.synchronoss.cpo.jdbc;
  */
 public class BindAttribute {
 
-  private JdbcAttribute jdbcAttribute = null;
+  private JdbcCpoAttribute jdbcAttribute = null;
   private Object bindObject = null;
   private String name = null;
   private boolean isIn = false;
 
-  public BindAttribute(JdbcAttribute jdbcAttribute, Object bindObject) {
+  public BindAttribute(JdbcCpoAttribute jdbcAttribute, Object bindObject) {
     this.jdbcAttribute = jdbcAttribute;
     this.bindObject = bindObject;
   }
@@ -42,7 +42,7 @@ public class BindAttribute {
     this.bindObject = bindObject;
   }
 
-  public BindAttribute(JdbcAttribute jdbcAttribute, Object bindObject, boolean isIn) {
+  public BindAttribute(JdbcCpoAttribute jdbcAttribute, Object bindObject, boolean isIn) {
     this.jdbcAttribute = jdbcAttribute;
     this.bindObject = bindObject;
     this.isIn = isIn;
@@ -54,7 +54,7 @@ public class BindAttribute {
     this.isIn = isIn;
   }
 
-  public JdbcAttribute getJdbcAttribute() {
+  public JdbcCpoAttribute getJdbcAttribute() {
     return jdbcAttribute;
   }
 

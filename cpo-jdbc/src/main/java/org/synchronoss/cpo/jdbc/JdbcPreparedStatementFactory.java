@@ -311,7 +311,7 @@ public class JdbcPreparedStatementFactory implements CpoReleasible {
       if (argument == null) {
         throw new CpoException("CpoArgument is null!");
       }
-      bindValues.add(new BindAttribute((JdbcAttribute) argument.getAttribute(), obj));
+      bindValues.add(new BindAttribute((JdbcCpoAttribute) argument.getAttribute(), obj));
     }
     return bindValues;
   }
@@ -330,7 +330,7 @@ public class JdbcPreparedStatementFactory implements CpoReleasible {
       // They must be in correct order.
       for (BindAttribute bindAttr : bindValues) {
         Object bindObject = bindAttr.getBindObject();
-        JdbcAttribute ja = bindAttr.getJdbcAttribute();
+        JdbcCpoAttribute ja = bindAttr.getJdbcAttribute();
 
         // check to see if we are getting a cpo value object or an object that
         // can be put directly in the statement (String, BigDecimal, etc)

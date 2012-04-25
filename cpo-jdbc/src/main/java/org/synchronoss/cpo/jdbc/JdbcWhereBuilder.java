@@ -109,12 +109,12 @@ public class JdbcWhereBuilder<T> implements NodeVisitor {
   @Override
   public boolean visit(Node node) throws Exception {
     JdbcCpoWhere jcw = (JdbcCpoWhere) node;
-    JdbcAttribute attribute;
+    JdbcCpoAttribute attribute;
     whereClause.append(jcw.toString(cpoClass));
     if (jcw.getValue() != null) {
-      attribute = (JdbcAttribute) cpoClass.getAttributeJava(jcw.getAttribute());
+      attribute = (JdbcCpoAttribute) cpoClass.getAttributeJava(jcw.getAttribute());
       if (attribute == null) {
-        attribute = (JdbcAttribute) cpoClass.getAttributeJava(jcw.getRightAttribute());
+        attribute = (JdbcCpoAttribute) cpoClass.getAttributeJava(jcw.getRightAttribute());
       }
       if (attribute == null) {
         bindValues.add(new BindAttribute(jcw.getAttribute() == null ? jcw.getRightAttribute() : jcw.getAttribute(), jcw.getValue(), jcw.getComparison() == CpoWhere.COMP_IN));

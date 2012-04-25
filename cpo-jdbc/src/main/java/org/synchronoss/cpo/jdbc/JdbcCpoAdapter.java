@@ -2530,7 +2530,7 @@ public class JdbcCpoAdapter implements CpoAdapter {
         // object
         int j=1;
         for (CpoArgument cpoArgument : jcsf.getOutArguments()) {
-          JdbcArgument jdbcArgument = (JdbcArgument) cpoArgument;
+          JdbcCpoArgument jdbcArgument = (JdbcCpoArgument) cpoArgument;
           if (jdbcArgument.isOutParameter()) {
             jdbcArgument.getAttribute().invokeSetter(returnObject, cstmt, j++);
           }
@@ -2619,7 +2619,7 @@ public class JdbcCpoAdapter implements CpoAdapter {
     ResultSet rs = null;
     ResultSetMetaData rsmd;
     CpoClass cpoClass;
-    JdbcAttribute attribute;
+    JdbcCpoAttribute attribute;
     T criteriaObj = obj;
     boolean recordsExist = false;
     Logger localLogger = obj == null ? logger : LoggerFactory.getLogger(obj.getClass().getName());
@@ -2674,7 +2674,7 @@ public class JdbcCpoAdapter implements CpoAdapter {
             while (rs.next()) {
               recordsExist = true;
               recordCount++;
-              attribute = (JdbcAttribute) cpoClass.getAttributeData(rs.getString(1));
+              attribute = (JdbcCpoAttribute) cpoClass.getAttributeData(rs.getString(1));
 
               if (attribute != null) {
                 attribute.invokeSetter(rObj, rs, 2);
@@ -2685,7 +2685,7 @@ public class JdbcCpoAdapter implements CpoAdapter {
             recordsExist = true;
             recordCount++;
             for (k = 1; k <= rsmd.getColumnCount(); k++) {
-              attribute = (JdbcAttribute) cpoClass.getAttributeData(rsmd.getColumnLabel(k));
+              attribute = (JdbcCpoAttribute) cpoClass.getAttributeData(rsmd.getColumnLabel(k));
 
               if (attribute != null) {
                 attribute.invokeSetter(rObj, rs, k);
@@ -2838,7 +2838,7 @@ public class JdbcCpoAdapter implements CpoAdapter {
     int columnCount;
     int k;
     T obj;
-    JdbcAttribute[] attributes;
+    JdbcCpoAttribute[] attributes;
     JdbcPreparedStatementFactory jpsf;
     int i;
 
@@ -2873,10 +2873,10 @@ public class JdbcCpoAdapter implements CpoAdapter {
 
         columnCount = rsmd.getColumnCount();
 
-        attributes = new JdbcAttribute[columnCount + 1];
+        attributes = new JdbcCpoAttribute[columnCount + 1];
 
         for (k = 1; k <= columnCount; k++) {
-          attributes[k] = (JdbcAttribute) resultClass.getAttributeData(rsmd.getColumnLabel(k));
+          attributes[k] = (JdbcCpoAttribute) resultClass.getAttributeData(rsmd.getColumnLabel(k));
         }
 
         while (rs.next()) {

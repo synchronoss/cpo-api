@@ -30,6 +30,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.CpoException;
 import org.synchronoss.cpo.helper.ExceptionHelper;
+import org.synchronoss.cpo.meta.CpoMetaAdapter;
 import org.synchronoss.cpo.meta.bean.CpoAttributeBean;
 import org.synchronoss.cpo.transform.CpoTransform;
 
@@ -225,7 +226,7 @@ public class CpoAttribute extends CpoAttributeBean {
     return false;
   }
 
-  public void loadRunTimeInfo(CpoClass cpoClass) throws CpoException {
+  public void loadRunTimeInfo(CpoMetaAdapter metaAdapter, CpoClass cpoClass) throws CpoException {
     StringBuilder failedMessage = new StringBuilder();
     setGetterName(buildMethodName("get", getJavaName()));
     setSetterName(buildMethodName("set", getJavaName()));
@@ -241,14 +242,14 @@ public class CpoAttribute extends CpoAttributeBean {
       failedMessage.append(ce2.getMessage());
     }
 
-    initTransformClass();
+    initTransformClass(metaAdapter);
 
     if (failedMessage.length() > 0) {
       throw new CpoException(failedMessage.toString());
     }
   }
 
-  protected void initTransformClass() throws CpoException {
+  protected void initTransformClass(CpoMetaAdapter metaAdapter) throws CpoException {
     String className = getTransformClassName();
     Class<?> transformClass = null;
     Logger localLogger = className == null ? logger : LoggerFactory.getLogger(className);

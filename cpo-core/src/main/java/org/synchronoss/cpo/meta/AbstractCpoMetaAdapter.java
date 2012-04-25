@@ -81,7 +81,7 @@ public abstract class AbstractCpoMetaAdapter implements CpoMetaAdapter {
     }
 
     if (cpoClass.getMetaClass() == null) {
-      cpoClass.loadRunTimeInfo();
+      cpoClass.loadRunTimeInfo(this);
     }
 
     return cpoClass;

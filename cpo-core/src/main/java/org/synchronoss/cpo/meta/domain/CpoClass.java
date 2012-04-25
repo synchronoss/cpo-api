@@ -30,6 +30,7 @@ import org.synchronoss.cpo.CpoException;
 import org.synchronoss.cpo.MetaDFVisitable;
 import org.synchronoss.cpo.MetaVisitor;
 import org.synchronoss.cpo.helper.ExceptionHelper;
+import org.synchronoss.cpo.meta.CpoMetaAdapter;
 import org.synchronoss.cpo.meta.bean.CpoClassBean;
 
 public class CpoClass extends CpoClassBean implements MetaDFVisitable {
@@ -131,7 +132,7 @@ public class CpoClass extends CpoClassBean implements MetaDFVisitable {
     }
   }
 
-  public void loadRunTimeInfo() throws CpoException {
+  public void loadRunTimeInfo(CpoMetaAdapter metaAdapter) throws CpoException {
     try {
       metaClass = Class.forName(getName());
     } catch (ClassNotFoundException cnfe) {
@@ -139,7 +140,7 @@ public class CpoClass extends CpoClassBean implements MetaDFVisitable {
     }
 
     for (CpoAttribute attribute : javaMap.values()) {
-      attribute.loadRunTimeInfo(this);
+      attribute.loadRunTimeInfo(metaAdapter, this);
     }
   }
 

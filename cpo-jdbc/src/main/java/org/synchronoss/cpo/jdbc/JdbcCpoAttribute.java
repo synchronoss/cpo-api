@@ -31,6 +31,7 @@ import org.synchronoss.cpo.CpoCharArrayReader;
 import org.synchronoss.cpo.CpoException;
 import org.synchronoss.cpo.helper.ExceptionHelper;
 import org.synchronoss.cpo.jdbc.meta.JdbcCpoMetaAdapter;
+import org.synchronoss.cpo.meta.CpoMetaAdapter;
 import org.synchronoss.cpo.meta.domain.CpoAttribute;
 import org.synchronoss.cpo.transform.jdbc.JdbcTransform;
 
@@ -321,8 +322,8 @@ public class JdbcCpoAttribute extends CpoAttribute implements java.io.Serializab
   }
 
   @Override
-  protected void initTransformClass() throws CpoException {
-    super.initTransformClass();
+  protected void initTransformClass(CpoMetaAdapter metaAdapter) throws CpoException {
+    super.initTransformClass(metaAdapter);
     if (getCpoTransform() != null && getCpoTransform() instanceof JdbcTransform) {
       jdbcTransform = (JdbcTransform) getCpoTransform();
 
@@ -334,6 +335,6 @@ public class JdbcCpoAttribute extends CpoAttribute implements java.io.Serializab
         }
       }
     }
-    setJavaSqlType(JdbcCpoMetaAdapter.getJavaSqlType(getDataName()));
+    setJavaSqlType(((JdbcCpoMetaAdapter)metaAdapter).getJavaSqlType(getDataName()));
   }
 }

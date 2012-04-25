@@ -182,7 +182,7 @@ public class JdbcCpoMetaAdapter extends AbstractCpoMetaAdapter {
 //    }
 //  }
 
-  public static int getJavaSqlType(String javaSqlTypeName) {
+  public int getJavaSqlType(String javaSqlTypeName) {
     JavaSqlType<?> jdbcType = getJdbcTypeNameMap().get(javaSqlTypeName);
     if (jdbcType == null) // oracle likes to send back crazy SQL Types sometimes
     // Sending back null just breaks the requesting code. 

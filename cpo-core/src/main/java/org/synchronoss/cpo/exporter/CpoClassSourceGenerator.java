@@ -22,6 +22,7 @@
 package org.synchronoss.cpo.exporter;
 
 import org.synchronoss.cpo.MetaVisitor;
+import org.synchronoss.cpo.meta.CpoMetaAdapter;
 import org.synchronoss.cpo.meta.domain.*;
 
 /**
@@ -32,6 +33,10 @@ import org.synchronoss.cpo.meta.domain.*;
  */
 public class CpoClassSourceGenerator implements MetaVisitor {
 
+  private static final String ATTR_PREFIX = "ATTR_";
+  private static final String FG_PREFIX = "FG";
+
+  protected CpoMetaAdapter metaAdapter;
   protected String className = null;
   protected StringBuilder header = new StringBuilder();
   protected StringBuilder attributeStatics = new StringBuilder();
@@ -44,7 +49,8 @@ public class CpoClassSourceGenerator implements MetaVisitor {
   protected StringBuilder toString = new StringBuilder();
   protected StringBuilder footer = new StringBuilder();
 
-  public CpoClassSourceGenerator() {
+  public CpoClassSourceGenerator(CpoMetaAdapter metaAdapter) {
+    this.metaAdapter = metaAdapter;
   }
 
   /**
@@ -159,13 +165,11 @@ public class CpoClassSourceGenerator implements MetaVisitor {
       getterName = ("get" + attName.toUpperCase() + "()");
     }
 
-    String attClassName = cpoAttribute.getJavaType();
-
-    // FIXME - bad
-    Class<?> attClass = String.class;
+    Class<?> attClass = metaAdapter.getJavaTypeClass(cpoAttribute);
+    String attClassName = metaAdapter.getJavaTypeName(cpoAttribute);
 
     // generate attribute statics
-    String staticName = "ATTR_" + attName.toUpperCase();
+    String staticName = ATTR_PREFIX + attName.toUpperCase();
     attributeStatics.append("  public final static String " + staticName + " = \"" + attName + "\";\n");
 
     // generate property declarations
@@ -217,17 +221,17 @@ public class CpoClassSourceGenerator implements MetaVisitor {
   public void visit(CpoFunctionGroup cpoFunctionGroup) {
 
     // generate statics for function group
-    String qgName = cpoFunctionGroup.getName();
-    if (qgName == null) {
-      qgName = "NULL";
+    String fgName = cpoFunctionGroup.getName();
+    if (fgName == null) {
+      fgName = "NULL";
     }
 
-    String staticName = "QG_" + cpoFunctionGroup.getType() + "_" + qgName.toUpperCase();
+    String staticName = FG_PREFIX + cpoFunctionGroup.getType() + "_" + fgName.toUpperCase();
 
     if (cpoFunctionGroup.getName() == null) {
       functionGroupStatics.append("  public final static String " + staticName + " = null;\n");
     } else {
-      functionGroupStatics.append("  public final static String " + staticName + " = \"" + qgName + "\";\n");
+      functionGroupStatics.append("  public final static String " + staticName + " = \"" + fgName + "\";\n");
     }
   }
 

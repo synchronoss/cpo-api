@@ -21,25 +21,17 @@
  */
 package org.synchronoss.cpo.jdbc.meta;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.synchronoss.cpo.core.cpoCoreMeta.CtArgument;
-import org.synchronoss.cpo.core.cpoCoreMeta.CtAttribute;
+import org.slf4j.*;
+import org.synchronoss.cpo.core.cpoCoreMeta.*;
 import org.synchronoss.cpo.exporter.MetaXmlObjectExporter;
-import org.synchronoss.cpo.jdbc.JavaSqlType;
-import org.synchronoss.cpo.jdbc.JdbcCpoArgument;
-import org.synchronoss.cpo.jdbc.JdbcCpoAttribute;
-import org.synchronoss.cpo.jdbc.cpoJdbcMeta.CtJdbcArgument;
-import org.synchronoss.cpo.jdbc.cpoJdbcMeta.CtJdbcAttribute;
+import org.synchronoss.cpo.jdbc.*;
+import org.synchronoss.cpo.jdbc.cpoJdbcMeta.*;
 import org.synchronoss.cpo.jdbc.exporter.JdbcMetaXmlObjectExporter;
 import org.synchronoss.cpo.meta.AbstractCpoMetaAdapter;
-import org.synchronoss.cpo.meta.domain.CpoArgument;
-import org.synchronoss.cpo.meta.domain.CpoAttribute;
+import org.synchronoss.cpo.meta.domain.*;
+
+import java.math.BigDecimal;
+import java.util.*;
 
 /**
  *
@@ -129,7 +121,7 @@ public class JdbcCpoMetaAdapter extends AbstractCpoMetaAdapter {
 
   @Override
   protected MetaXmlObjectExporter getMetaXmlObjectExporter() {
-    return new JdbcMetaXmlObjectExporter(this.getClass().getName());
+    return new JdbcMetaXmlObjectExporter(this);
   }
 
   @Override

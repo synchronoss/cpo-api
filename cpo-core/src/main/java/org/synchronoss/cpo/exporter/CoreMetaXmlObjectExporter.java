@@ -23,6 +23,7 @@ package org.synchronoss.cpo.exporter;
 
 import org.synchronoss.cpo.MetaVisitor;
 import org.synchronoss.cpo.core.cpoCoreMeta.*;
+import org.synchronoss.cpo.meta.CpoMetaAdapter;
 import org.synchronoss.cpo.meta.domain.*;
 
 /**
@@ -38,10 +39,10 @@ public class CoreMetaXmlObjectExporter implements MetaXmlObjectExporter, MetaVis
   protected CtFunctionGroup currentCtFunctionGroup;
   protected CtFunction currentCtFunction;
 
-  public CoreMetaXmlObjectExporter(String metaAdapter) {
+  public CoreMetaXmlObjectExporter(CpoMetaAdapter metaAdapter) {
     cpoMetaDataDocument = CpoMetaDataDocument.Factory.newInstance();
     CtCpoMetaData ctCpoMetaData = cpoMetaDataDocument.addNewCpoMetaData();
-    ctCpoMetaData.setMetaAdapter(metaAdapter);
+    ctCpoMetaData.setMetaAdapter(metaAdapter.getClass().getName());
   }
 
   @Override
@@ -87,7 +88,10 @@ public class CoreMetaXmlObjectExporter implements MetaXmlObjectExporter, MetaVis
     if (currentCtClass != null) {
       CtFunctionGroup ctFunctionGroup = currentCtClass.addNewCpoFunctionGroup();
 
-      ctFunctionGroup.setName(cpoFunctionGroup.getName());
+      if (cpoFunctionGroup.getName() != null && cpoFunctionGroup.getName().length() > 0) {
+        ctFunctionGroup.setName(cpoFunctionGroup.getName());
+      }
+
       ctFunctionGroup.setType(cpoFunctionGroup.getType());
 
       if (cpoFunctionGroup.getDescription() != null && cpoFunctionGroup.getDescription().length() > 0) {

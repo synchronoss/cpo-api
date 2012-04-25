@@ -21,17 +21,13 @@
  */
 package org.synchronoss.cpo.meta;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.SortedMap;
-import java.util.TreeMap;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.slf4j.*;
 import org.synchronoss.cpo.CpoException;
 import org.synchronoss.cpo.core.cpoCoreMeta.*;
-import org.synchronoss.cpo.exporter.CoreMetaXmlObjectExporter;
-import org.synchronoss.cpo.exporter.MetaXmlObjectExporter;
+import org.synchronoss.cpo.exporter.*;
 import org.synchronoss.cpo.meta.domain.*;
+
+import java.util.*;
 
 /**
  *
@@ -137,7 +133,9 @@ public abstract class AbstractCpoMetaAdapter implements CpoMetaAdapter {
 
   protected void loadCpoFunctionGroup(CpoFunctionGroup cpoFunctionGroup, CtFunctionGroup ctFunctionGroup) {
     cpoFunctionGroup.setDescription(ctFunctionGroup.getDescription());
-    cpoFunctionGroup.setName(ctFunctionGroup.getName());
+    if (ctFunctionGroup.isSetName()) {
+      cpoFunctionGroup.setName(ctFunctionGroup.getName());
+    }
     cpoFunctionGroup.setType(ctFunctionGroup.getType());
 
     for (CtFunction ctFunction : ctFunctionGroup.getCpoFunctionArray()) {
@@ -187,7 +185,7 @@ public abstract class AbstractCpoMetaAdapter implements CpoMetaAdapter {
   }
 
   protected MetaXmlObjectExporter getMetaXmlObjectExporter() {
-    return new CoreMetaXmlObjectExporter(this.getClass().getName());
+    return new CoreMetaXmlObjectExporter(this);
   }
 
   @Override

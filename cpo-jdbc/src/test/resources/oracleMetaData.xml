@@ -16,7 +16,7 @@
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  *
- *  A copy of the GNU Lesser General Public License may also be found at 
+ *  A copy of the GNU Lesser General Public License may also be found at
  *  http://www.gnu.org/licenses/lgpl.txt
  *
  */
@@ -25,21 +25,21 @@
   <cpoClass name="org.synchronoss.cpo.jdbc.LobValueObject">
     <cpoAttribute xsi:type="cpoj:ctJdbcAttribute" xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
       <javaName>bLob</javaName>
-      <javaType>byte[]</javaType>
+      <javaType>java.sql.Blob</javaType>
       <dataName>B_LOB</dataName>
       <dataType>BLOB</dataType>
       <transformClass>org.synchronoss.cpo.transform.jdbc.TransformGZipBlob</transformClass>
     </cpoAttribute>
     <cpoAttribute xsi:type="cpoj:ctJdbcAttribute" xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
       <javaName>bLob2</javaName>
-      <javaType>byte[]</javaType>
+      <javaType>java.sql.Blob</javaType>
       <dataName>B_LOB2</dataName>
       <dataType>BLOB</dataType>
       <transformClass>org.synchronoss.cpo.transform.jdbc.TransformBlob</transformClass>
     </cpoAttribute>
     <cpoAttribute xsi:type="cpoj:ctJdbcAttribute" xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
       <javaName>cLob</javaName>
-      <javaType>char[]</javaType>
+      <javaType>java.sql.Clob</javaType>
       <dataName>C_LOB</dataName>
       <dataType>CLOB</dataType>
       <transformClass>org.synchronoss.cpo.transform.jdbc.TransformClob</transformClass>
@@ -158,7 +158,7 @@
     </cpoAttribute>
     <cpoAttribute xsi:type="cpoj:ctJdbcAttribute" xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
       <javaName>attrInteger</javaName>
-      <javaType>java.lang.Integer</javaType>
+      <javaType>int</javaType>
       <dataName>ATTR_INTEGER</dataName>
       <dataType>INTEGER</dataType>
       <transformClass>org.synchronoss.cpo.transform.jdbc.TransformNoOp</transformClass>
@@ -199,7 +199,7 @@
       <cpoj:dbTable>value_object</cpoj:dbTable>
       <cpoj:dbColumn>id</cpoj:dbColumn>
     </cpoAttribute>
-    <cpoFunctionGroup name="" type="CREATE">
+    <cpoFunctionGroup type="CREATE">
       <cpoFunction>
         <expression>insert into value_object(id, attr_char, attr_character, attr_date, ATTR_DECIMAL, ATTR_INTEGER, ATTR_NUMERIC, ATTR_SMALLINT, ATTR_TIMESTAMP, ATTR_VARCHAR, ATTR_BOOL, ATTR_DATETIME) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)</expression>
         <cpoArgument xsi:type="cpoj:ctJdbcArgument" xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
@@ -290,7 +290,7 @@
         <expression>insert into value_object (id, attr_varchar) values (1,'Test')</expression>
       </cpoFunction>
     </cpoFunctionGroup>
-    <cpoFunctionGroup name="" type="DELETE">
+    <cpoFunctionGroup type="DELETE">
       <cpoFunction>
         <expression>delete from value_object where id = ?</expression>
         <cpoArgument xsi:type="cpoj:ctJdbcArgument" xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
@@ -342,7 +342,7 @@
         </cpoArgument>
       </cpoFunction>
     </cpoFunctionGroup>
-    <cpoFunctionGroup name="" type="EXIST">
+    <cpoFunctionGroup type="EXIST">
       <cpoFunction>
         <expression>select count(0) from value_object where id = ?</expression>
         <cpoArgument xsi:type="cpoj:ctJdbcArgument" xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
@@ -370,7 +370,7 @@
         <expression>select * from value_object where id is null for update</expression>
       </cpoFunction>
     </cpoFunctionGroup>
-    <cpoFunctionGroup name="" type="LIST">
+    <cpoFunctionGroup type="LIST">
       <cpoFunction>
         <expression>select * from value_object</expression>
       </cpoFunction>
@@ -398,7 +398,7 @@
         <expression>select * from value_object __CPO_WHERE__ order by id</expression>
       </cpoFunction>
     </cpoFunctionGroup>
-    <cpoFunctionGroup name="" type="RETRIEVE">
+    <cpoFunctionGroup type="RETRIEVE">
       <cpoFunction>
         <expression>select * from value_object where id = ?</expression>
         <cpoArgument xsi:type="cpoj:ctJdbcArgument" xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
@@ -434,7 +434,7 @@
         </cpoArgument>
       </cpoFunction>
     </cpoFunctionGroup>
-    <cpoFunctionGroup name="" type="UPDATE">
+    <cpoFunctionGroup type="UPDATE">
       <cpoFunction>
         <expression>update value_object set ATTR_VARCHAR=?</expression>
         <cpoArgument xsi:type="cpoj:ctJdbcArgument" xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">

@@ -46,6 +46,12 @@
   </licenses>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <currentVersion>${project.version}</currentVersion>
+
+    <oracleVersion>11.2.0.2.0</oracleVersion>
+    <mysqlVersion>5.1.16</mysqlVersion>
+    <hsqldbVersion>2.2.8</hsqldbVersion>
+    <postgresVersion>9.0-801.jdbc4</postgresVersion>
   </properties>
   <ciManagement>
     <system>teamcity</system>
@@ -316,5 +322,6 @@
     <module>cpo-core</module>
     <module>cpo-jdbc</module>
     <module>cpo-cassandra</module>
+    <module>cpo-plugin</module>
   </modules>
 </project>

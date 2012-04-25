@@ -22,7 +22,8 @@
 package org.synchronoss.cpo.jdbc;
 
 import java.sql.Timestamp;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
 import junit.framework.TestCase;
 import org.synchronoss.cpo.CpoAdapter;
 import org.synchronoss.cpo.CpoAdapterBean;

@@ -31,6 +31,7 @@ import org.synchronoss.cpo.CpoAdapter;
 import org.synchronoss.cpo.CpoAdapterBean;
 import org.synchronoss.cpo.CpoAdapterFactory;
 import org.synchronoss.cpo.helper.ExceptionHelper;
+import org.synchronoss.cpo.jdbc.meta.JdbcCpoMetaAdapter;
 
 /**
  * BlobTest is a JUnit test class for testing the JdbcAdapter class Constructors
@@ -40,9 +41,8 @@ import org.synchronoss.cpo.helper.ExceptionHelper;
 public class ExecuteTrxTest extends TestCase {
 
   private static Logger logger = LoggerFactory.getLogger(ExecuteTrxTest.class.getName());
-  private CpoAdapter jdbcIdo_ = null;
-  private String dbDriver_ = null;
-  private boolean hasCallSupport = true;
+  private CpoAdapter cpoAdapter = null;
+  private JdbcCpoMetaAdapter metaAdapter = null;
 
   /**
    * Creates a new RollbackTest object.
@@ -58,14 +58,11 @@ public class ExecuteTrxTest extends TestCase {
   @Override
   public void setUp() {
     String method = "setUp:";
-    ResourceBundle b = PropertyResourceBundle.getBundle(JdbcStatics.PROP_FILE, Locale.getDefault(),
-            this.getClass().getClassLoader());
-    dbDriver_ = b.getString(JdbcStatics.PROP_DBDRIVER).trim();
-    hasCallSupport = new Boolean(b.getString(JdbcStatics.PROP_DB_CALLS_SUPPORTED).trim());
 
     try {
-      jdbcIdo_ = new CpoAdapterBean(CpoAdapterFactory.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT));
-      assertNotNull(method + "CpoAdapter is null", jdbcIdo_);
+      cpoAdapter = new CpoAdapterBean(CpoAdapterFactory.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT));
+      assertNotNull(method + "CpoAdapter is null", cpoAdapter);
+      metaAdapter = (JdbcCpoMetaAdapter) cpoAdapter.getCpoMetaAdapter();
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -76,21 +73,21 @@ public class ExecuteTrxTest extends TestCase {
    */
   @Override
   public void tearDown() {
-    jdbcIdo_ = null;
+    cpoAdapter = null;
   }
 
   /**
    * DOCUMENT ME!
    */
   public void testExecuteTrx() {
-    if (hasCallSupport == true) {
+    if (metaAdapter.isSupportsCalls()) {
       String method = "testExecuteObject:";
       ValueObject vo = new ValueObject(1);
       vo.setAttrInteger(3);
       ValueObject rvo;
 
       try {
-        rvo = (ValueObject) jdbcIdo_.executeObject("TestExecuteObject", vo);
+        rvo = (ValueObject) cpoAdapter.executeObject("TestExecuteObject", vo);
         assertNotNull(method + "Returned Value object is null");
         assertTrue("power(3,3)=" + rvo.getAttrDouble(), rvo.getAttrDouble() == 27);
       } catch (Exception e) {
@@ -102,7 +99,7 @@ public class ExecuteTrxTest extends TestCase {
       try {
         vo = new ValueObject(1);
         vo.setAttrSmallInt(3);
-        rvo = (ValueObject) jdbcIdo_.executeObject("TestExecuteObjectNoTransform", vo);
+        rvo = (ValueObject) cpoAdapter.executeObject("TestExecuteObjectNoTransform", vo);
         assertNotNull(method + "Returned Value object is null");
         assertTrue("power(3,3)=" + rvo.getAttrDouble(), rvo.getAttrDouble() == 27);
       } catch (Exception e) {
@@ -110,7 +107,7 @@ public class ExecuteTrxTest extends TestCase {
         fail(method + e.getMessage());
       }
     } else {
-      logger.error(dbDriver_ + " does not support CallableStatements");
+      logger.error(cpoAdapter.getDataSourceName() + " does not support CallableStatements");
     }
   }
 }

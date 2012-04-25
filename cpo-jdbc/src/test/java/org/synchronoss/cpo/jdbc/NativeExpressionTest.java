@@ -33,7 +33,7 @@ import org.synchronoss.cpo.*;
  */
 public class NativeExpressionTest extends TestCase {
 
-  private CpoAdapter jdbcIdo_ = null;
+  private CpoAdapter cpoAdapter = null;
   private ArrayList<ValueObject> al = new ArrayList<ValueObject>();
 
   /**
@@ -52,8 +52,8 @@ public class NativeExpressionTest extends TestCase {
     String method = "setUp:";
 
     try {
-      jdbcIdo_ = new CpoAdapterBean(CpoAdapterFactory.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT));
-      assertNotNull(method + "CpoAdapter is null", jdbcIdo_);
+      cpoAdapter = new CpoAdapterBean(CpoAdapterFactory.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT));
+      assertNotNull(method + "CpoAdapter is null", cpoAdapter);
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -67,7 +67,7 @@ public class NativeExpressionTest extends TestCase {
     al.add(new ValueObject(5));
     al.add(new ValueObject(-6));
     try {
-      jdbcIdo_.insertObjects("TestOrderByInsert", al);
+      cpoAdapter.insertObjects("TestOrderByInsert", al);
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -80,12 +80,12 @@ public class NativeExpressionTest extends TestCase {
   public void tearDown() {
     String method = "tearDown:";
     try {
-      jdbcIdo_.deleteObjects("TestOrderByDelete", al);
+      cpoAdapter.deleteObjects("TestOrderByDelete", al);
 
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
-    jdbcIdo_ = null;
+    cpoAdapter = null;
   }
 
   /**
@@ -106,7 +106,7 @@ public class NativeExpressionTest extends TestCase {
       cnqAl.add(new CpoNativeFunction("__CPO_WHERE__", "WHERE ID = 2 OR ID = 3"));
 
       ValueObject valObj = new ValueObject(3);
-      col = jdbcIdo_.retrieveObjects("TestWhereRetrieve", valObj, null, null, cnqAl, valObj);
+      col = cpoAdapter.retrieveObjects("TestWhereRetrieve", valObj, null, null, cnqAl, valObj);
 
       assertTrue("Col size is " + col.size(), col.size() == 2);
 
@@ -131,7 +131,7 @@ public class NativeExpressionTest extends TestCase {
       cnqAl.add(new CpoNativeFunction("__CPO_WHERE__", null));
 
       ValueObject valObj = new ValueObject(3);
-      col = jdbcIdo_.retrieveObjects("TestWhereRetrieve", valObj, null, null, cnqAl, valObj);
+      col = cpoAdapter.retrieveObjects("TestWhereRetrieve", valObj, null, null, cnqAl, valObj);
 
       assertTrue("Col size is " + col.size(), col.size() == 6);
 

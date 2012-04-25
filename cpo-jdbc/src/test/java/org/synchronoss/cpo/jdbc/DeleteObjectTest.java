@@ -31,6 +31,7 @@ import org.synchronoss.cpo.CpoAdapterBean;
 import org.synchronoss.cpo.CpoAdapterFactory;
 import org.synchronoss.cpo.CpoWhere;
 import org.synchronoss.cpo.helper.ExceptionHelper;
+import org.synchronoss.cpo.jdbc.meta.JdbcCpoMetaAdapter;
 
 /**
  * DeleteObjectTest is a JUnit test class for testing the JdbcAdapter deleteObject method
@@ -41,8 +42,8 @@ public class DeleteObjectTest extends TestCase {
 
   private static Logger logger = LoggerFactory.getLogger(DeleteObjectTest.class.getName());
   private ArrayList<ValueObject> al = new ArrayList<ValueObject>();
-  private CpoAdapter jdbcIdo_ = null;
-  private boolean hasMilliSupport = true;
+  private CpoAdapter cpoAdapter = null;
+  private JdbcCpoMetaAdapter metaAdapter = null;
 
   public DeleteObjectTest(String name) {
     super(name);
@@ -57,13 +58,11 @@ public class DeleteObjectTest extends TestCase {
   @Override
   public void setUp() {
     String method = "setUp:";
-    ResourceBundle b = PropertyResourceBundle.getBundle(JdbcStatics.PROP_FILE, Locale.getDefault(), this.getClass().getClassLoader());
-
-    hasMilliSupport = new Boolean(b.getString(JdbcStatics.PROP_DB_MILLI_SUPPORTED).trim());
 
     try {
-      jdbcIdo_ = new CpoAdapterBean(CpoAdapterFactory.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT));
-      assertNotNull(method + "IdoAdapter is null", jdbcIdo_);
+      cpoAdapter = new CpoAdapterBean(CpoAdapterFactory.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT));
+      assertNotNull(method + "IdoAdapter is null", cpoAdapter);
+      metaAdapter = (JdbcCpoMetaAdapter) cpoAdapter.getCpoMetaAdapter();
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -77,7 +76,7 @@ public class DeleteObjectTest extends TestCase {
     valObj.setAttrInteger(3);
     Timestamp ts = new Timestamp(System.currentTimeMillis());
 
-    if (!hasMilliSupport) {
+    if (!metaAdapter.isSupportsMillis()) {
       ts.setNanos(0);
     }
 
@@ -88,7 +87,7 @@ public class DeleteObjectTest extends TestCase {
     al.add(valObj);
 
     try {
-      jdbcIdo_.insertObject(valObj);
+      cpoAdapter.insertObject(valObj);
     } catch (Exception e) {
       logger.error(ExceptionHelper.getLocalizedMessage(e));
       fail(method + e.getMessage());
@@ -97,8 +96,8 @@ public class DeleteObjectTest extends TestCase {
     // try the where on the delete, should delete 0
     try {
       List<CpoWhere> cws = new ArrayList<CpoWhere>();
-      cws.add(jdbcIdo_.newWhere(CpoWhere.LOGIC_AND, "id", CpoWhere.COMP_EQ, new Integer(2)));
-      long deleted = jdbcIdo_.deleteObject(null, valObj, cws, null, null);
+      cws.add(cpoAdapter.newWhere(CpoWhere.LOGIC_AND, "id", CpoWhere.COMP_EQ, new Integer(2)));
+      long deleted = cpoAdapter.deleteObject(null, valObj, cws, null, null);
       assertEquals("Should not have deleted anything", 0, deleted);
     } catch (Exception e) {
       logger.error(ExceptionHelper.getLocalizedMessage(e));
@@ -108,8 +107,8 @@ public class DeleteObjectTest extends TestCase {
     // try the where on the delete, should delete 1
     try {
       List<CpoWhere> cws = new ArrayList<CpoWhere>();
-      cws.add(jdbcIdo_.newWhere(CpoWhere.LOGIC_OR, "id", CpoWhere.COMP_EQ, new Integer(2)));
-      long deleted = jdbcIdo_.deleteObject(null, valObj, cws, null, null);
+      cws.add(cpoAdapter.newWhere(CpoWhere.LOGIC_OR, "id", CpoWhere.COMP_EQ, new Integer(2)));
+      long deleted = cpoAdapter.deleteObject(null, valObj, cws, null, null);
       assertEquals("Should have deleted 1", 1, deleted);
     } catch (Exception e) {
       logger.error(ExceptionHelper.getLocalizedMessage(e));
@@ -124,12 +123,12 @@ public class DeleteObjectTest extends TestCase {
   public void tearDown() {
     String method = "tearDown:";
     try {
-      jdbcIdo_.deleteObjects(al);
+      cpoAdapter.deleteObjects(al);
 
     } catch (Exception e) {
       logger.error(ExceptionHelper.getLocalizedMessage(e));
       fail(method + e.getMessage());
     }
-    jdbcIdo_ = null;
+    cpoAdapter = null;
   }
 }

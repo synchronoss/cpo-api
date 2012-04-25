@@ -39,7 +39,7 @@ import org.synchronoss.cpo.helper.ExceptionHelper;
 public class ExistObjectTest extends TestCase {
 
   private static Logger logger = LoggerFactory.getLogger(ExistObjectTest.class.getName());
-  private CpoAdapter jdbcIdo_ = null;
+  private CpoAdapter cpoAdapter = null;
 
   public ExistObjectTest(String name) {
     super(name);
@@ -56,8 +56,8 @@ public class ExistObjectTest extends TestCase {
     String method = "setUp:";
 
     try {
-      jdbcIdo_ = new CpoAdapterBean(CpoAdapterFactory.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT));
-      assertNotNull(method + "IdoAdapter is null", jdbcIdo_);
+      cpoAdapter = new CpoAdapterBean(CpoAdapterFactory.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT));
+      assertNotNull(method + "IdoAdapter is null", cpoAdapter);
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -65,7 +65,7 @@ public class ExistObjectTest extends TestCase {
     vo.setAttrVarChar("WHERE");
 
     try {
-      jdbcIdo_.insertObject(vo);
+      cpoAdapter.insertObject(vo);
     } catch (Exception e) {
       logger.error(ExceptionHelper.getLocalizedMessage(e));
       fail(method + e.getMessage());
@@ -78,7 +78,7 @@ public class ExistObjectTest extends TestCase {
 
     try {
       ValueObject valObj = new ValueObject(1);
-      long count = jdbcIdo_.existsObject(valObj);
+      long count = cpoAdapter.existsObject(valObj);
       assertTrue("Object not Found", count == 1);
     } catch (Exception e) {
       fail(method + e.getMessage());
@@ -86,7 +86,7 @@ public class ExistObjectTest extends TestCase {
 
     try {
       ValueObject valObj = new ValueObject(5);
-      long count = jdbcIdo_.existsObject(valObj);
+      long count = cpoAdapter.existsObject(valObj);
       assertTrue("Object Found", count == 0);
     } catch (Exception e) {
       fail(method + e.getMessage());
@@ -100,10 +100,10 @@ public class ExistObjectTest extends TestCase {
 
     try {
       ValueObject valObj = new ValueObject(1);
-      CpoWhere where = jdbcIdo_.newWhere(CpoWhere.LOGIC_AND, "attrVarChar", CpoWhere.COMP_EQ, "WHERE");
+      CpoWhere where = cpoAdapter.newWhere(CpoWhere.LOGIC_AND, "attrVarChar", CpoWhere.COMP_EQ, "WHERE");
       ArrayList<CpoWhere> wheres = new ArrayList<CpoWhere>();
       wheres.add(where);
-      long count = jdbcIdo_.existsObject(null, valObj, wheres);
+      long count = cpoAdapter.existsObject(null, valObj, wheres);
       assertTrue("Object not Found", count == 1);
     } catch (Exception e) {
       fail(method + e.getMessage());
@@ -111,10 +111,10 @@ public class ExistObjectTest extends TestCase {
 
     try {
       ValueObject valObj = new ValueObject(1);
-      CpoWhere where = jdbcIdo_.newWhere(CpoWhere.LOGIC_AND, "attrVarChar", CpoWhere.COMP_EQ, "NOWHERE");
+      CpoWhere where = cpoAdapter.newWhere(CpoWhere.LOGIC_AND, "attrVarChar", CpoWhere.COMP_EQ, "NOWHERE");
       ArrayList<CpoWhere> wheres = new ArrayList<CpoWhere>();
       wheres.add(where);
-      long count = jdbcIdo_.existsObject(null, valObj, wheres);
+      long count = cpoAdapter.existsObject(null, valObj, wheres);
       assertTrue("Object Found", count == 0);
     } catch (Exception e) {
       fail(method + e.getMessage());
@@ -127,10 +127,10 @@ public class ExistObjectTest extends TestCase {
     //String method="tearDown:";
     ValueObject vo = new ValueObject(1);
     try {
-      jdbcIdo_.deleteObject(vo);
+      cpoAdapter.deleteObject(vo);
     } catch (Exception e) {
       logger.error(ExceptionHelper.getLocalizedMessage(e));
     }
-    jdbcIdo_ = null;
+    cpoAdapter = null;
   }
 }

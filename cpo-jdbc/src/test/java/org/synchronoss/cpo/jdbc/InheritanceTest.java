@@ -30,6 +30,7 @@ import junit.framework.TestCase;
 import org.synchronoss.cpo.CpoAdapter;
 import org.synchronoss.cpo.CpoAdapterBean;
 import org.synchronoss.cpo.CpoAdapterFactory;
+import org.synchronoss.cpo.jdbc.meta.JdbcCpoMetaAdapter;
 
 /**
  * RetrieveObjectTest is a JUnit test class for testing the JdbcAdapter class Constructors
@@ -39,8 +40,8 @@ import org.synchronoss.cpo.CpoAdapterFactory;
 public class InheritanceTest extends TestCase {
 
   private ArrayList<ChildValueObject> al = new ArrayList<ChildValueObject>();
-  private CpoAdapter jdbcIdo_ = null;
-  private boolean hasMilliSupport = true;
+  private CpoAdapter cpoAdapter = null;
+  private JdbcCpoMetaAdapter metaAdapter = null;
 
   public InheritanceTest(String name) {
     super(name);
@@ -55,13 +56,11 @@ public class InheritanceTest extends TestCase {
   @Override
   public void setUp() {
     String method = "setUp:";
-    ResourceBundle b = PropertyResourceBundle.getBundle(JdbcStatics.PROP_FILE, Locale.getDefault(), this.getClass().getClassLoader());
-
-    hasMilliSupport = new Boolean(b.getString(JdbcStatics.PROP_DB_MILLI_SUPPORTED).trim());
 
     try {
-      jdbcIdo_ = new CpoAdapterBean(CpoAdapterFactory.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT));
-      assertNotNull(method + "IdoAdapter is null", jdbcIdo_);
+      cpoAdapter = new CpoAdapterBean(CpoAdapterFactory.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT));
+      assertNotNull(method + "IdoAdapter is null", cpoAdapter);
+      metaAdapter = (JdbcCpoMetaAdapter) cpoAdapter.getCpoMetaAdapter();
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -76,7 +75,7 @@ public class InheritanceTest extends TestCase {
     valObj.setAttrInteger(3);
     Timestamp ts = new Timestamp(System.currentTimeMillis());
 
-    if (!hasMilliSupport) {
+    if (!metaAdapter.isSupportsMillis()) {
       ts.setNanos(0);
     }
 
@@ -87,13 +86,13 @@ public class InheritanceTest extends TestCase {
     al.add(valObj);
 
     try {
-      jdbcIdo_.insertObject(valObj);
+      cpoAdapter.insertObject(valObj);
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
 
     try {
-      ChildValueObject vo = jdbcIdo_.retrieveObject(null, valObj, valObj, null, null);
+      ChildValueObject vo = cpoAdapter.retrieveObject(null, valObj, valObj, null, null);
       assertEquals("Ids do not match", vo.getId(), valObj.getId());
       assertEquals("Integers do not match", vo.getAttrInteger(), valObj.getAttrInteger());
       assertEquals("Strings do not match", vo.getAttrVarChar(), valObj.getAttrVarChar());
@@ -111,11 +110,11 @@ public class InheritanceTest extends TestCase {
   public void tearDown() {
     String method = "tearDown:";
     try {
-      jdbcIdo_.deleteObjects(al);
+      cpoAdapter.deleteObjects(al);
 
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
-    jdbcIdo_ = null;
+    cpoAdapter = null;
   }
 }

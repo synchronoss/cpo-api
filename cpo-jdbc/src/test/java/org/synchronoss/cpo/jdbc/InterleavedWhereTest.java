@@ -36,7 +36,7 @@ import org.synchronoss.cpo.CpoWhere;
  */
 public class InterleavedWhereTest extends TestCase {
 
-  private CpoAdapter jdbcIdo_ = null;
+  private CpoAdapter cpoAdapter = null;
   private ArrayList<ValueObject> al = new ArrayList<ValueObject>();
 
   /**
@@ -55,8 +55,8 @@ public class InterleavedWhereTest extends TestCase {
     String method = "setUp:";
 
     try {
-      jdbcIdo_ = new CpoAdapterBean(CpoAdapterFactory.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT));
-      assertNotNull(method + "CpoAdapter is null", jdbcIdo_);
+      cpoAdapter = new CpoAdapterBean(CpoAdapterFactory.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT));
+      assertNotNull(method + "CpoAdapter is null", cpoAdapter);
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -75,7 +75,7 @@ public class InterleavedWhereTest extends TestCase {
     vo5.setAttrBit(true);
     al.add(vo5);
     try {
-      jdbcIdo_.insertObjects("TestOrderByInsert", al);
+      cpoAdapter.insertObjects("TestOrderByInsert", al);
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -88,12 +88,12 @@ public class InterleavedWhereTest extends TestCase {
   public void tearDown() {
     String method = "tearDown:";
     try {
-      jdbcIdo_.deleteObjects("TestOrderByDelete", al);
+      cpoAdapter.deleteObjects("TestOrderByDelete", al);
 
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
-    jdbcIdo_ = null;
+    cpoAdapter = null;
   }
 
   /**
@@ -114,11 +114,11 @@ public class InterleavedWhereTest extends TestCase {
       inColl.add(new Integer(3));
       inColl.add(new Integer(5));
 
-      cw = jdbcIdo_.newWhere(CpoWhere.LOGIC_AND, "id", CpoWhere.COMP_IN, inColl);
+      cw = cpoAdapter.newWhere(CpoWhere.LOGIC_AND, "id", CpoWhere.COMP_IN, inColl);
 
       ArrayList<CpoWhere> wheres = new ArrayList<CpoWhere>();
       wheres.add(cw);
-      coll = jdbcIdo_.retrieveBeans("InterleavedWhere", valObj, wheres, null);
+      coll = cpoAdapter.retrieveBeans("InterleavedWhere", valObj, wheres, null);
 
       assertTrue("Collection size is " + coll.size(), coll.size() == 3);
 

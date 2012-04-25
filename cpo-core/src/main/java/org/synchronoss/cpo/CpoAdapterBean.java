@@ -26,6 +26,7 @@ import java.util.Collection;
 import java.util.List;
 import javax.ejb.SessionBean;
 import javax.ejb.SessionContext;
+import org.synchronoss.cpo.meta.CpoMetaAdapter;
 
 public class CpoAdapterBean
         implements CpoAdapter, SessionBean {
@@ -1115,4 +1116,16 @@ public class CpoAdapterBean
   public CpoTrxAdapter getCpoTrxAdapter() throws CpoException {
     throw new CpoException("Not Supported in Session Bean");
   }
+  
+  @Override
+  public CpoMetaAdapter getCpoMetaAdapter() {
+    return cpoAdapter.getCpoMetaAdapter();
+  }
+  
+  @Override
+  public String getDataSourceName() {
+    return cpoAdapter.getDataSourceName();
+  }
+  
+
 }

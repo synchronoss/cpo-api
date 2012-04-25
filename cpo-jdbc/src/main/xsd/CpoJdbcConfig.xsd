@@ -78,6 +78,10 @@
                         </xs:element>
                     </xs:sequence>
                 </xs:choice>
+                <xs:attribute name="supportsBlobs" type="xs:boolean" use="optional"/>
+                <xs:attribute name="supportsCalls" type="xs:boolean" use="optional"/>
+                <xs:attribute name="supportsMillis" type="xs:boolean" use="optional"/>
+                <xs:attribute name="supportsSelect4Update" type="xs:boolean" use="optional"/>
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>

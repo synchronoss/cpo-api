@@ -34,7 +34,7 @@ import org.synchronoss.cpo.CpoAdapterFactory;
  */
 public class RollbackTest extends TestCase {
 
-  private CpoAdapter jdbcIdo_ = null;
+  private CpoAdapter cpoAdapter = null;
 
   /**
    * Creates a new RollbackTest object.
@@ -52,14 +52,14 @@ public class RollbackTest extends TestCase {
     String method = "setUp:";
 
     try {
-      jdbcIdo_ = new CpoAdapterBean(CpoAdapterFactory.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT));
-      assertNotNull(method + "CpoAdapter is null", jdbcIdo_);
+      cpoAdapter = new CpoAdapterBean(CpoAdapterFactory.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT));
+      assertNotNull(method + "CpoAdapter is null", cpoAdapter);
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
     ValueObject vo = new ValueObject(1);
     try {
-      jdbcIdo_.insertObject(vo);
+      cpoAdapter.insertObject(vo);
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -73,10 +73,10 @@ public class RollbackTest extends TestCase {
   public void tearDown() {
     ValueObject vo = new ValueObject(1);
     try {
-      jdbcIdo_.deleteObject(vo);
+      cpoAdapter.deleteObject(vo);
     } catch (Exception e) {
     }
-    jdbcIdo_ = null;
+    cpoAdapter = null;
   }
 
   /**
@@ -92,11 +92,11 @@ public class RollbackTest extends TestCase {
     al.add(vo2);
 
     try {
-      jdbcIdo_.insertObjects("TestRollback", al);
+      cpoAdapter.insertObjects("TestRollback", al);
       fail(method + "Insert should have thrown an exception");
     } catch (Exception e) {
       try {
-        ValueObject rvo = jdbcIdo_.retrieveObject(vo);
+        ValueObject rvo = cpoAdapter.retrieveObject(vo);
         assertNull(method + "Value Object did not rollback", rvo);
       } catch (Exception e2) {
         fail(method + e.getMessage());
@@ -111,11 +111,11 @@ public class RollbackTest extends TestCase {
     String method = "testSingleRollback:";
     ValueObject vo = new ValueObject(2);
     try {
-      jdbcIdo_.insertObject("TestSingleRollback", vo);
+      cpoAdapter.insertObject("TestSingleRollback", vo);
       fail(method + "Insert should have thrown an exception");
     } catch (Exception e) {
       try {
-        ValueObject rvo = jdbcIdo_.retrieveObject(vo);
+        ValueObject rvo = cpoAdapter.retrieveObject(vo);
         assertNull(method + "Value Object did not rollback", rvo);
       } catch (Exception e2) {
         fail(method + e.getMessage());

@@ -21,15 +21,13 @@
  */
 package org.synchronoss.cpo.jdbc;
 
-import java.util.Locale;
-import java.util.PropertyResourceBundle;
-import java.util.ResourceBundle;
 import junit.framework.TestCase;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.CpoAdapter;
 import org.synchronoss.cpo.CpoAdapterBean;
 import org.synchronoss.cpo.CpoAdapterFactory;
+import org.synchronoss.cpo.jdbc.meta.JdbcCpoMetaAdapter;
 
 /**
  * BlobTest is a JUnit test class for testing the JdbcAdapter class Constructors
@@ -39,9 +37,8 @@ import org.synchronoss.cpo.CpoAdapterFactory;
 public class BlobTest extends TestCase {
 
   private static Logger logger = LoggerFactory.getLogger(BlobTest.class.getName());
-  private String dbDriver_ = null;
-  private boolean hasBlobSupport = true;
-  private CpoAdapter jdbcIdo_ = null;
+  private JdbcCpoMetaAdapter metaAdapter = null;
+  private CpoAdapter cpoAdapter = null;
   //private byte[] anotherBlob = "This is a test of a small Blob".getBytes();
   //    private byte[] anotherBlob2 = "This is a another test of a small Blob".getBytes();
   private byte[] testBlob = null;
@@ -63,14 +60,11 @@ public class BlobTest extends TestCase {
   public void setUp() {
 
     String method = "setUp:";
-    ResourceBundle b = PropertyResourceBundle.getBundle(JdbcStatics.PROP_FILE, Locale.getDefault(),
-            this.getClass().getClassLoader());
-    dbDriver_ = b.getString(JdbcStatics.PROP_DBDRIVER).trim();
-    hasBlobSupport = new Boolean(b.getString(JdbcStatics.PROP_DB_BLOBS_SUPPORTED).trim());
 
     try {
-      jdbcIdo_ = new CpoAdapterBean(CpoAdapterFactory.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT));
-      assertNotNull(method + "IdoAdapter is null", jdbcIdo_);
+      cpoAdapter = new CpoAdapterBean(CpoAdapterFactory.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT));
+      assertNotNull(method + "IdoAdapter is null", cpoAdapter);
+      metaAdapter = (JdbcCpoMetaAdapter) cpoAdapter.getCpoMetaAdapter();
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -78,7 +72,7 @@ public class BlobTest extends TestCase {
 
   public void testTrxGZipBlobInsertandDelete() {
 
-    if (hasBlobSupport) {
+    if (metaAdapter.isSupportsBlobs()) {
 
       testBlob = new byte[JdbcStatics.BLOB_SIZE];
       for (int i = 0; i < JdbcStatics.BLOB_SIZE; i++) {
@@ -96,21 +90,21 @@ public class BlobTest extends TestCase {
       lvo.setBLob2(testBlob2);
 
       try {
-        jdbcIdo_.deleteObject("deleteLVO", lvo);
+        cpoAdapter.deleteObject("deleteLVO", lvo);
       } catch (Exception ie) {
         logger.error("error deleting lob");
         fail(ie.getMessage());
       }
 
       try {
-        jdbcIdo_.insertObject("createLVO", lvo);
+        cpoAdapter.insertObject("createLVO", lvo);
       } catch (Exception ie) {
         logger.error("error inserting lob", ie);
         fail(ie.getMessage());
       }
 
       try {
-        lvo2 = jdbcIdo_.retrieveObject("retrieveLVO", lvo);
+        lvo2 = cpoAdapter.retrieveObject("retrieveLVO", lvo);
         String blob1 = new String(lvo.getBLob());
         String blob2 = new String(lvo2.getBLob());
 
@@ -129,8 +123,8 @@ public class BlobTest extends TestCase {
       try {
         lvo2.setBLob(testBlob2);
         lvo2.setCLob(testClob2);
-        jdbcIdo_.updateObject("updateLVO", lvo2);
-        lvo2 = jdbcIdo_.retrieveObject("retrieveLVO", lvo);
+        cpoAdapter.updateObject("updateLVO", lvo2);
+        lvo2 = cpoAdapter.retrieveObject("retrieveLVO", lvo);
         String blob1 = new String(testBlob2);
         String blob2 = new String(lvo2.getBLob());
 
@@ -146,14 +140,14 @@ public class BlobTest extends TestCase {
         fail(ie.getMessage());
       }
     } else {
-      logger.error(dbDriver_ + " does not support BLOBs");
+      logger.error(cpoAdapter.getDataSourceName() + " does not support BLOBs");
     }
 
   }
 
   public void testTrxBlobInsertandDelete() {
 
-    if (hasBlobSupport) {
+    if (metaAdapter.isSupportsBlobs()) {
 
       testBlob = new byte[JdbcStatics.BLOB_SIZE];
       for (int i = 0; i < JdbcStatics.BLOB_SIZE; i++) {
@@ -172,21 +166,21 @@ public class BlobTest extends TestCase {
       lvo.setBLob2(testBlob2);
 
       try {
-        jdbcIdo_.deleteObject("deleteLVO", lvo);
+        cpoAdapter.deleteObject("deleteLVO", lvo);
       } catch (Exception ie) {
         logger.error("error deleting lob");
         fail(ie.getMessage());
       }
 
       try {
-        jdbcIdo_.insertObject("createLVO", lvo);
+        cpoAdapter.insertObject("createLVO", lvo);
       } catch (Exception ie) {
         logger.error("error inserting lob", ie);
         fail(ie.getMessage());
       }
 
       try {
-        lvo2 = jdbcIdo_.retrieveObject("retrieveLVO", lvo);
+        lvo2 = cpoAdapter.retrieveObject("retrieveLVO", lvo);
         String blob1 = new String(lvo.getBLob2());
         String blob2 = new String(lvo2.getBLob2());
 
@@ -199,8 +193,8 @@ public class BlobTest extends TestCase {
 
       try {
         lvo2.setBLob2(testBlob);
-        jdbcIdo_.updateObject("updateLVO", lvo2);
-        lvo2 = jdbcIdo_.retrieveObject("retrieveLVO", lvo);
+        cpoAdapter.updateObject("updateLVO", lvo2);
+        lvo2 = cpoAdapter.retrieveObject("retrieveLVO", lvo);
         String blob1 = new String(testBlob);
         String blob2 = new String(lvo2.getBLob2());
 
@@ -211,7 +205,7 @@ public class BlobTest extends TestCase {
         fail(ie.getMessage());
       }
     } else {
-      logger.error(dbDriver_ + " does not support BLOBs");
+      logger.error(cpoAdapter.getDataSourceName() + " does not support BLOBs");
     }
 
   }
@@ -241,7 +235,7 @@ public class BlobTest extends TestCase {
    */
   public void testTrxEmptyGZipBlobInsertandDelete() {
 
-    if (hasBlobSupport) {
+    if (metaAdapter.isSupportsBlobs()) {
 
       testBlob = new byte[0];
       testBlob2 = new byte[0];
@@ -252,21 +246,21 @@ public class BlobTest extends TestCase {
       lvo.setBLob2(testBlob2);
 
       try {
-        jdbcIdo_.deleteObject("deleteLVO", lvo);
+        cpoAdapter.deleteObject("deleteLVO", lvo);
       } catch (Exception ie) {
         logger.error("error deleting lob");
         fail(ie.getMessage());
       }
 
       try {
-        jdbcIdo_.insertObject("createLVO", lvo);
+        cpoAdapter.insertObject("createLVO", lvo);
       } catch (Exception ie) {
         logger.error("error inserting lob", ie);
         fail(ie.getMessage());
       }
 
       try {
-        lvo2 = jdbcIdo_.retrieveObject("retrieveLVO", lvo);
+        lvo2 = cpoAdapter.retrieveObject("retrieveLVO", lvo);
         byte blob1[] = lvo.getBLob();
         byte blob2[] = lvo2.getBLob();
 
@@ -284,8 +278,8 @@ public class BlobTest extends TestCase {
       try {
         lvo2.setBLob(testBlob2);
         lvo2.setCLob(testClob2);
-        jdbcIdo_.updateObject("updateLVO", lvo2);
-        lvo2 = jdbcIdo_.retrieveObject("retrieveLVO", lvo);
+        cpoAdapter.updateObject("updateLVO", lvo2);
+        lvo2 = cpoAdapter.retrieveObject("retrieveLVO", lvo);
         byte blob1[] = testBlob2;
         byte blob2[] = lvo2.getBLob();
 
@@ -300,14 +294,14 @@ public class BlobTest extends TestCase {
         fail(ie.getMessage());
       }
     } else {
-      logger.error(dbDriver_ + " does not support BLOBs");
+      logger.error(cpoAdapter.getDataSourceName() + " does not support BLOBs");
     }
 
   }
 
   public void testTrxNullGZipBlobInsertandDelete() {
 
-    if (hasBlobSupport) {
+    if (metaAdapter.isSupportsBlobs()) {
 
       LobValueObject lvo = new LobValueObject(1, null, null);
       LobValueObject lvo2 = null;
@@ -315,21 +309,21 @@ public class BlobTest extends TestCase {
       lvo.setBLob2(null);
 
       try {
-        jdbcIdo_.deleteObject("deleteLVO", lvo);
+        cpoAdapter.deleteObject("deleteLVO", lvo);
       } catch (Exception ie) {
         logger.error("error deleting lob");
         fail(ie.getMessage());
       }
 
       try {
-        jdbcIdo_.insertObject("createLVO", lvo);
+        cpoAdapter.insertObject("createLVO", lvo);
       } catch (Exception ie) {
         logger.error("error inserting lob", ie);
         fail(ie.getMessage());
       }
 
       try {
-        lvo2 = jdbcIdo_.retrieveObject("retrieveLVO", lvo);
+        lvo2 = cpoAdapter.retrieveObject("retrieveLVO", lvo);
 
         assertNull(lvo2.getBLob());
         assertNull(lvo2.getBLob2());
@@ -343,8 +337,8 @@ public class BlobTest extends TestCase {
       try {
         lvo2.setBLob(null);
         lvo2.setCLob(null);
-        jdbcIdo_.updateObject("updateLVO", lvo2);
-        lvo2 = jdbcIdo_.retrieveObject("retrieveLVO", lvo);
+        cpoAdapter.updateObject("updateLVO", lvo2);
+        lvo2 = cpoAdapter.retrieveObject("retrieveLVO", lvo);
 
         assertNull(lvo2.getBLob());
         assertNull(lvo2.getBLob2());
@@ -355,7 +349,7 @@ public class BlobTest extends TestCase {
         fail(ie.getMessage());
       }
     } else {
-      logger.error(dbDriver_ + " does not support BLOBs");
+      logger.error(cpoAdapter.getDataSourceName() + " does not support BLOBs");
     }
 
   }
@@ -363,7 +357,7 @@ public class BlobTest extends TestCase {
   @Override
   public void tearDown() {
 
-    jdbcIdo_ = null;
+    cpoAdapter = null;
 
 
 

@@ -46,7 +46,7 @@ public class JdbcCpoConfigProcessor implements CpoConfigProcessor {
   private static final String PROP_URL2 = "URL";
   private static final String PROP_USER = "user";
   private static final String PROP_PASSWORD = "password";
-
+  
   public JdbcCpoConfigProcessor() {
   }
 
@@ -64,7 +64,19 @@ public class JdbcCpoConfigProcessor implements CpoConfigProcessor {
     JdbcCpoMetaAdapter metaAdapter = (JdbcCpoMetaAdapter) new CpoCoreMetaAdapterFactory().getCpoMetaAdapter(jdbcConfig.getMetaXml());
 
     DataSourceInfo dataSourceInfo = null;
-
+    
+    if (jdbcConfig.isSetSupportsBlobs())
+      metaAdapter.setSupportsBlobs(jdbcConfig.getSupportsBlobs());
+    
+    if (jdbcConfig.isSetSupportsCalls())
+      metaAdapter.setSupportsCalls(jdbcConfig.getSupportsCalls());
+    
+    if (jdbcConfig.isSetSupportsMillis())
+      metaAdapter.setSupportsMillis(jdbcConfig.getSupportsMillis());
+    
+    if (jdbcConfig.isSetSupportsSelect4Update())
+      metaAdapter.setSupportsSelect4Update(jdbcConfig.getSupportsSelect4Update());
+    
     // build a datasource info
     if (jdbcConfig.isSetJndiName()) {
       dataSourceInfo = new JndiDataSourceInfo(jdbcConfig.getJndiName());

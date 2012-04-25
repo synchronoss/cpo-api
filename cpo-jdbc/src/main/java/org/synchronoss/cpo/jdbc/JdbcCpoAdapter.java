@@ -113,6 +113,10 @@ public class JdbcCpoAdapter implements CpoAdapter {
   /**
    * DOCUMENT ME!
    */
+  private String dataSourceName_ = null;
+  /**
+   * DOCUMENT ME!
+   */
   private boolean invalidReadConnection_ = false;
   private boolean metaEqualsWrite_ = false;
   private boolean batchUpdatesSupported_ = false;
@@ -137,6 +141,7 @@ public class JdbcCpoAdapter implements CpoAdapter {
     this.metaAdapter = metaAdapter;
     writeDataSource_=jdsiTrx.getDataSource();
     readDataSource_ = writeDataSource_;
+    dataSourceName_ = jdsiTrx.getDataSourceName();
     processDatabaseMetaData();
   }
 
@@ -153,13 +158,15 @@ public class JdbcCpoAdapter implements CpoAdapter {
     this.metaAdapter = metaAdapter;
     writeDataSource_=jdsiWrite.getDataSource();
     readDataSource_ = jdsiRead.getDataSource();
+    dataSourceName_ = jdsiWrite.getDataSourceName();
     processDatabaseMetaData();
   }
 
-  protected JdbcCpoAdapter(CpoMetaAdapter metaAdapter, boolean batchSupported)
+  protected JdbcCpoAdapter(CpoMetaAdapter metaAdapter, boolean batchSupported, String dataSourceName)
           throws CpoException {
     this.metaAdapter = metaAdapter;
     batchUpdatesSupported_ = batchSupported;
+    dataSourceName_ = dataSourceName;
   }
 
   private void processDatabaseMetaData() throws CpoException {
@@ -3151,7 +3158,7 @@ public class JdbcCpoAdapter implements CpoAdapter {
    */
   @Override
   public CpoTrxAdapter getCpoTrxAdapter() throws CpoException {
-    return new JdbcCpoTrxAdapter(metaAdapter, getWriteConnection(), batchUpdatesSupported_);
+    return new JdbcCpoTrxAdapter(metaAdapter, getWriteConnection(), batchUpdatesSupported_, getDataSourceName());
   }
 
   private class RetrieverThread<T, C> extends Thread {
@@ -3229,4 +3236,16 @@ public class JdbcCpoAdapter implements CpoAdapter {
       }
     }
   }
+  
+  @Override
+  public CpoMetaAdapter getCpoMetaAdapter() {
+    return metaAdapter;
+  }
+  
+  @Override
+  public String getDataSourceName() {
+    return dataSourceName_;
+  }
+  
+  
 }

@@ -43,8 +43,7 @@ public class BigBatchTest extends TestCase {
 
   private static Logger logger = LoggerFactory.getLogger(BigBatchTest.class.getName());
   private ArrayList<ValueObject> al = new ArrayList<ValueObject>();
-  private CpoAdapter jdbcIdo_ = null;
-  private boolean hasMilliSupport = true;
+  private CpoAdapter cpoAdapter = null;
 
   public BigBatchTest(String name) {
     super(name);
@@ -59,13 +58,10 @@ public class BigBatchTest extends TestCase {
   @Override
   public void setUp() {
     String method = "setUp:";
-    ResourceBundle b = PropertyResourceBundle.getBundle(JdbcStatics.PROP_FILE, Locale.getDefault(), this.getClass().getClassLoader());
-
-    hasMilliSupport = new Boolean(b.getString(JdbcStatics.PROP_DB_MILLI_SUPPORTED).trim());
 
     try {
-      jdbcIdo_ = new CpoAdapterBean(CpoAdapterFactory.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT));
-      assertNotNull(method + "IdoAdapter is null", jdbcIdo_);
+      cpoAdapter = new CpoAdapterBean(CpoAdapterFactory.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT));
+      assertNotNull(method + "IdoAdapter is null", cpoAdapter);
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -87,7 +83,7 @@ public class BigBatchTest extends TestCase {
     }
 
     try {
-      long inserts = jdbcIdo_.insertObjects(al);
+      long inserts = cpoAdapter.insertObjects(al);
       assertEquals("inserts performed do not equal inserts requested: ", inserts, numInserts);
     } catch (CpoException ce) {
       logger.debug("Received a CpoException:" + ExceptionHelper.getLocalizedMessage(ce));
@@ -105,12 +101,12 @@ public class BigBatchTest extends TestCase {
   public void tearDown() {
     String method = "tearDown:";
     try {
-      jdbcIdo_.deleteObjects(al);
+      cpoAdapter.deleteObjects(al);
 
     } catch (Exception e) {
             logger.error(ExceptionHelper.getLocalizedMessage(e));
       fail(method + e.getMessage());
     }
-    jdbcIdo_ = null;
+    cpoAdapter = null;
   }
 }

@@ -32,6 +32,7 @@ import org.synchronoss.cpo.CpoAdapterFactory;
 import org.synchronoss.cpo.CpoException;
 import org.synchronoss.cpo.CpoTrxAdapter;
 import org.synchronoss.cpo.helper.ExceptionHelper;
+import org.synchronoss.cpo.jdbc.meta.JdbcCpoMetaAdapter;
 
 /**
  * BlobTest is a JUnit test class for testing the JdbcAdapter class Constructors
@@ -41,10 +42,9 @@ import org.synchronoss.cpo.helper.ExceptionHelper;
 public class SelectForUpdateTest extends TestCase {
 
   private static final Logger logger = LoggerFactory.getLogger(SelectForUpdateTest.class.getName());
-  private CpoAdapter jdbcCpo_ = null;
-  private CpoTrxAdapter jdbcIdo_ = null;
-  private String dbDriver_ = null;
-  private boolean hasSelect4UpdateSupport = true;
+  private CpoAdapter cpoAdapter = null;
+  private CpoTrxAdapter trxAdapter = null;
+  private JdbcCpoMetaAdapter metaAdapter = null;
 
   /**
    * Creates a new RollbackTest object.
@@ -60,29 +60,25 @@ public class SelectForUpdateTest extends TestCase {
   @Override
   public void setUp() {
     String method = "setUp:";
-    ResourceBundle b = PropertyResourceBundle.getBundle(JdbcStatics.PROP_FILE, Locale.getDefault(),
-            this.getClass().getClassLoader());
-    dbDriver_ = b.getString(JdbcStatics.PROP_DBDRIVER).trim();
-
-    hasSelect4UpdateSupport = new Boolean(b.getString(JdbcStatics.PROP_DB_SELECT4UPDATE).trim());
 
     try {
-      jdbcCpo_ = CpoAdapterFactory.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT);
-      assertNotNull(method + "CpoAdapter is null", jdbcCpo_);
-      jdbcIdo_ = jdbcCpo_.getCpoTrxAdapter();
-      assertNotNull(method + "CpoTrxAdapter is null", jdbcIdo_);
+      cpoAdapter = CpoAdapterFactory.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT);
+      assertNotNull(method + "CpoAdapter is null", cpoAdapter);
+      trxAdapter = cpoAdapter.getCpoTrxAdapter();
+      assertNotNull(method + "CpoTrxAdapter is null", trxAdapter);
+      metaAdapter = (JdbcCpoMetaAdapter) cpoAdapter.getCpoMetaAdapter();
     } catch (Exception e) {
       logger.debug(ExceptionHelper.getLocalizedMessage(e));
     }
     ValueObject vo = new ValueObject(1);
     ValueObject vo2 = new ValueObject(2);
     try {
-      jdbcIdo_.insertObject(vo);
-      jdbcIdo_.insertObject(vo2);
-      jdbcIdo_.commit();
+      trxAdapter.insertObject(vo);
+      trxAdapter.insertObject(vo2);
+      trxAdapter.commit();
     } catch (Exception e) {
       try {
-        jdbcIdo_.rollback();
+        trxAdapter.rollback();
       } catch (Exception e1) {
       }
       fail(method + e.getMessage());
@@ -98,21 +94,21 @@ public class SelectForUpdateTest extends TestCase {
    ValueObject vo = new ValueObject(1);
     ValueObject vo2 = new ValueObject(2);
     try {
-      jdbcIdo_.deleteObject(vo);
-      jdbcIdo_.deleteObject(vo2);
-      jdbcIdo_.commit();
+      trxAdapter.deleteObject(vo);
+      trxAdapter.deleteObject(vo2);
+      trxAdapter.commit();
     } catch (Exception e) {
       try {
-        jdbcIdo_.rollback();
+        trxAdapter.rollback();
       } catch (Exception e1) {
       }
       fail(method + e.getMessage());
     } finally {
       try {
-        jdbcIdo_.close();
+        trxAdapter.close();
       } catch (Exception e1) {
       }
-      jdbcIdo_ = null;
+      trxAdapter = null;
     }
   }
 
@@ -120,34 +116,34 @@ public class SelectForUpdateTest extends TestCase {
    * DOCUMENT ME!
    */
   public void testSelect4UpdateSingleObject() {
-    if (hasSelect4UpdateSupport) {
+    if (metaAdapter.isSupportsSelect4Update()) {
       String method = "testSelect4UpdateSingleObject:";
       ValueObject vo2 = new ValueObject(1);
 
       try {
-        jdbcIdo_.retrieveObject("SelectForUpdate", vo2);
+        trxAdapter.retrieveObject("SelectForUpdate", vo2);
       } catch (Exception e) {
         fail(method + "Select For Update should work:" + ExceptionHelper.getLocalizedMessage(e));
       }
 
       try {
-        jdbcIdo_.retrieveObject("SelectForUpdate", vo2);
+        trxAdapter.retrieveObject("SelectForUpdate", vo2);
       } catch (Exception e) {
         fail(method + "Select For Update should work:" + ExceptionHelper.getLocalizedMessage(e));
       }
 
       try {
-        jdbcCpo_.retrieveObject("Select4UpdateNoWait", vo2);
+        cpoAdapter.retrieveObject("Select4UpdateNoWait", vo2);
         fail(method + "SelectForUpdateNoWait should fail:");
       } catch (Exception e) {
         logger.debug(ExceptionHelper.getLocalizedMessage(e));
       }
 
       try {
-        jdbcIdo_.commit();
+        trxAdapter.commit();
       } catch (Exception e) {
         try {
-          jdbcIdo_.rollback();
+          trxAdapter.rollback();
         } catch (CpoException ce) {
           fail(method + "Rollback failed:" + ExceptionHelper.getLocalizedMessage(e));
 
@@ -155,46 +151,46 @@ public class SelectForUpdateTest extends TestCase {
         fail(method + "Commit should have worked.");
       }
       try {
-        jdbcCpo_.retrieveObject("Select4UpdateNoWait", vo2);
+        cpoAdapter.retrieveObject("Select4UpdateNoWait", vo2);
       } catch (Exception e) {
         fail(method + "SelectForUpdateNoWait should success:" + ExceptionHelper.getLocalizedMessage(e));
       }
     } else {
-      logger.error(dbDriver_ + " does not support Select For Update");
+      logger.error(cpoAdapter.getDataSourceName() + " does not support Select For Update");
     }
   }
 
   public void testSelect4UpdateExists() {
-    if (hasSelect4UpdateSupport) {
+    if (metaAdapter.isSupportsSelect4Update()) {
       String method = "testSelect4UpdateExists:";
       ValueObject vo2 = new ValueObject(1);
 
       try {
-        long count = jdbcIdo_.existsObject("SelectForUpdateExistZero", vo2);
+        long count = trxAdapter.existsObject("SelectForUpdateExistZero", vo2);
         assertTrue("Zero objects should have been returned", count == 0);
       } catch (Exception e) {
         fail(method + "Select For Update should work:" + ExceptionHelper.getLocalizedMessage(e));
       }
 
       try {
-        long count = jdbcIdo_.existsObject("SelectForUpdateExistSingle", vo2);
+        long count = trxAdapter.existsObject("SelectForUpdateExistSingle", vo2);
         assertTrue("One object should have been returned, got " + count, count == 1);
       } catch (Exception e) {
         fail(method + "Select For Update should work:" + ExceptionHelper.getLocalizedMessage(e));
       }
 
       try {
-        long count = jdbcIdo_.existsObject("SelectForUpdateExistAll", vo2);
+        long count = trxAdapter.existsObject("SelectForUpdateExistAll", vo2);
         assertTrue("Two objects should have been returned, got " + count, count == 2);
       } catch (Exception e) {
         fail(method + "Select For Update should work:" + ExceptionHelper.getLocalizedMessage(e));
       }
 
       try {
-        jdbcIdo_.commit();
+        trxAdapter.commit();
       } catch (Exception e) {
         try {
-          jdbcIdo_.rollback();
+          trxAdapter.rollback();
         } catch (CpoException ce) {
           fail(method + "Rollback failed:" + ExceptionHelper.getLocalizedMessage(ce));
 
@@ -202,7 +198,7 @@ public class SelectForUpdateTest extends TestCase {
         fail(method + "Commit should have worked.");
       }
     } else {
-      logger.error(dbDriver_ + " does not support Select For Update");
+      logger.error(cpoAdapter.getDataSourceName() + " does not support Select For Update");
     }
   }
 }

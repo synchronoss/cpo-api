@@ -39,7 +39,7 @@ import org.synchronoss.cpo.CpoTrxAdapter;
 public class RetrieveObjectTest extends TestCase {
 
   private static Logger logger = LoggerFactory.getLogger(RetrieveObjectTest.class.getName());
-  private CpoAdapter jdbcIdo_ = null;
+  private CpoAdapter cpoAdapter = null;
   private ArrayList<ValueObject> al = new ArrayList<ValueObject>();
 
   public RetrieveObjectTest(String name) {
@@ -57,8 +57,8 @@ public class RetrieveObjectTest extends TestCase {
     String method = "setUp:";
 
     try {
-      jdbcIdo_ = CpoAdapterFactory.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT);
-      assertNotNull(method + "IdoAdapter is null", jdbcIdo_);
+      cpoAdapter = CpoAdapterFactory.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT);
+      assertNotNull(method + "IdoAdapter is null", cpoAdapter);
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -75,7 +75,7 @@ public class RetrieveObjectTest extends TestCase {
     al.add(new ValueObject(9));
     al.add(new ValueObject(10));
     try {
-      jdbcIdo_.insertObjects("TestOrderByInsert", al);
+      cpoAdapter.insertObjects("TestOrderByInsert", al);
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -88,7 +88,7 @@ public class RetrieveObjectTest extends TestCase {
 
     try {
       ValueObject valObj = new ValueObject();
-      col = jdbcIdo_.retrieveBeans(null, valObj);
+      col = cpoAdapter.retrieveBeans(null, valObj);
       assertTrue("Col size is " + col.size(), col.size() == al.size());
 
     } catch (Exception e) {
@@ -102,7 +102,7 @@ public class RetrieveObjectTest extends TestCase {
     CpoTrxAdapter trx = null;
 
     try {
-      trx = jdbcIdo_.getCpoTrxAdapter();
+      trx = cpoAdapter.getCpoTrxAdapter();
       trx.isClosed();
       ValueObject valObj = new ValueObject();
       col = trx.retrieveBeans(null, valObj);
@@ -125,7 +125,7 @@ public class RetrieveObjectTest extends TestCase {
 
     try {
       ValueObject valObj = new ValueObject();
-      crs = jdbcIdo_.retrieveObjects(null, valObj, null, null, null, valObj, 2);
+      crs = cpoAdapter.retrieveObjects(null, valObj, null, null, null, valObj, 2);
       logger.debug("Returned from retrieveObjects");
       for (ValueObject vo : crs) {
         if (vo != null) {
@@ -147,7 +147,7 @@ public class RetrieveObjectTest extends TestCase {
 
     try {
       ValueObject valObj = new ValueObject();
-      crs = jdbcIdo_.retrieveObjects(null, valObj, null, null, null, valObj, 9);
+      crs = cpoAdapter.retrieveObjects(null, valObj, null, null, null, valObj, 9);
       for (ValueObject vo : crs) {
         if (vo != null) {
           count++;
@@ -167,7 +167,7 @@ public class RetrieveObjectTest extends TestCase {
 
     try {
       ValueObject valObj = new ValueObject();
-      crs = jdbcIdo_.retrieveObjects(null, valObj, null, null, null, valObj, 10);
+      crs = cpoAdapter.retrieveObjects(null, valObj, null, null, null, valObj, 10);
       for (ValueObject vo : crs) {
         if (vo != null) {
           count++;
@@ -187,7 +187,7 @@ public class RetrieveObjectTest extends TestCase {
 
     try {
       ValueObject valObj = new ValueObject();
-      crs = jdbcIdo_.retrieveObjects(null, valObj, null, null, null, valObj, 11);
+      crs = cpoAdapter.retrieveObjects(null, valObj, null, null, null, valObj, 11);
       for (ValueObject vo : crs) {
         if (vo != null) {
           count++;
@@ -207,7 +207,7 @@ public class RetrieveObjectTest extends TestCase {
     CpoTrxAdapter trx = null;
 
     try {
-      trx = jdbcIdo_.getCpoTrxAdapter();
+      trx = cpoAdapter.getCpoTrxAdapter();
 
       ValueObject valObj = new ValueObject();
       crs = trx.retrieveObjects(null, valObj, null, null, null, valObj, 2);
@@ -254,7 +254,7 @@ public class RetrieveObjectTest extends TestCase {
 
     try {
       ValueObject valObj = new ValueObject();
-      crs = jdbcIdo_.retrieveObjects(null, valObj, null, null, null, valObj, 20);
+      crs = cpoAdapter.retrieveObjects(null, valObj, null, null, null, valObj, 20);
       logger.debug("Returned from retrieveObjects");
       for (ValueObject vo : crs) {
         if (vo != null) {
@@ -276,7 +276,7 @@ public class RetrieveObjectTest extends TestCase {
     ValueObject rvo;
 
     try {
-      rvo = jdbcIdo_.retrieveObject(vo);
+      rvo = cpoAdapter.retrieveObject(vo);
       assertNotNull(method + "Returned Value object is null");
       assertNotSame(method + "ValueObjects are the same", vo, rvo);
       assertEquals(method + "Strings are not the same", rvo.getAttrVarChar(), "Test");
@@ -295,7 +295,7 @@ public class RetrieveObjectTest extends TestCase {
     ValueObject rvo;
 
     try {
-      rvo = jdbcIdo_.retrieveObject(vo);
+      rvo = cpoAdapter.retrieveObject(vo);
       assertNull(method + "Returned Value object is Not Null", rvo);
     } catch (Exception e) {
       fail(method + e.getMessage());
@@ -306,11 +306,11 @@ public class RetrieveObjectTest extends TestCase {
   public void tearDown() {
     String method = "tearDown:";
     try {
-      jdbcIdo_.deleteObjects("TestOrderByDelete", al);
+      cpoAdapter.deleteObjects("TestOrderByDelete", al);
 
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
-    jdbcIdo_ = null;
+    cpoAdapter = null;
   }
 }

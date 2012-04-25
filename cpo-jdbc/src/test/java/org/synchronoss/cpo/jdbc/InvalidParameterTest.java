@@ -33,7 +33,7 @@ import org.synchronoss.cpo.helper.ExceptionHelper;
 public class InvalidParameterTest extends TestCase {
 
   private static Logger logger = LoggerFactory.getLogger(InvalidParameterTest.class.getName());
-  private CpoAdapter jdbcIdo_ = null;
+  private CpoAdapter cpoAdapter = null;
 
   public InvalidParameterTest(String name) {
     super(name);
@@ -50,8 +50,8 @@ public class InvalidParameterTest extends TestCase {
     String method = "setUp:";
 
     try {
-      jdbcIdo_ = CpoAdapterFactory.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT);
-      assertNotNull(method + "IdoAdapter is null", jdbcIdo_);
+      cpoAdapter = CpoAdapterFactory.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT);
+      assertNotNull(method + "IdoAdapter is null", cpoAdapter);
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -64,7 +64,7 @@ public class InvalidParameterTest extends TestCase {
 
     try {
       ValueObject valObj = new ValueObject();
-      col = jdbcIdo_.retrieveBeans("BadContext", valObj);
+      col = cpoAdapter.retrieveBeans("BadContext", valObj);
       fail(method + "Test got to unreachable code");
     } catch (CpoException ce) {
       //This is what I am expecting so let it go
@@ -81,7 +81,7 @@ public class InvalidParameterTest extends TestCase {
 
     try {
       ValueObject valObj = null;
-      col = jdbcIdo_.retrieveBeans(null, valObj);
+      col = cpoAdapter.retrieveBeans(null, valObj);
       fail(method + "Test got to unreachable code");
     } catch (CpoException ce) {
       //This is what I am expecting so let it go
@@ -97,7 +97,7 @@ public class InvalidParameterTest extends TestCase {
 
 
     try {
-      ValueObject valObj = jdbcIdo_.retrieveObject(null, null);
+      ValueObject valObj = cpoAdapter.retrieveObject(null, null);
       fail(method + "Test got to unreachable code");
     } catch (CpoException ce) {
       //This is what I am expecting so let it go
@@ -114,7 +114,7 @@ public class InvalidParameterTest extends TestCase {
 
     try {
       ValueObject valObj = null;
-      jdbcIdo_.insertObject(null, valObj);
+      cpoAdapter.insertObject(null, valObj);
       fail(method + "Test got to unreachable code");
     } catch (CpoException ce) {
       //This is what I am expecting so let it go
@@ -132,7 +132,7 @@ public class InvalidParameterTest extends TestCase {
     try {
       LobValueObject lvo = new LobValueObject();
       logger.debug("Calling the NULL List");
-      lvos = jdbcIdo_.retrieveBeans(null, lvo);
+      lvos = cpoAdapter.retrieveBeans(null, lvo);
       logger.debug("Called the NULL List");
       fail(method + "Test got to unreachable code");
     } catch (CpoException ce) {

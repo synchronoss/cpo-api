@@ -37,7 +37,7 @@ import org.synchronoss.cpo.CpoOrderBy;
  */
 public class OrderByTest extends TestCase {
 
-  private CpoAdapter jdbcIdo_ = null;
+  private CpoAdapter cpoAdapter = null;
   private ArrayList<ValueObject> al = new ArrayList<ValueObject>();
 
   /**
@@ -56,8 +56,8 @@ public class OrderByTest extends TestCase {
     String method = "setUp:";
 
     try {
-      jdbcIdo_ = new CpoAdapterBean(CpoAdapterFactory.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT));
-      assertNotNull(method + "CpoAdapter is null", jdbcIdo_);
+      cpoAdapter = new CpoAdapterBean(CpoAdapterFactory.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT));
+      assertNotNull(method + "CpoAdapter is null", cpoAdapter);
       // Add the test valueObjects
     } catch (Exception e) {
       fail(method + e.getMessage());
@@ -69,7 +69,7 @@ public class OrderByTest extends TestCase {
     al.add(new ValueObject(4));
     al.add(new ValueObject(5));
     try {
-      jdbcIdo_.insertObjects("TestOrderByInsert", al);
+      cpoAdapter.insertObjects("TestOrderByInsert", al);
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -84,12 +84,12 @@ public class OrderByTest extends TestCase {
   public void tearDown() {
     String method = "tearDown:";
     try {
-      jdbcIdo_.deleteObjects("TestOrderByDelete", al);
+      cpoAdapter.deleteObjects("TestOrderByDelete", al);
 
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
-    jdbcIdo_ = null;
+    cpoAdapter = null;
   }
 
   /**
@@ -101,13 +101,13 @@ public class OrderByTest extends TestCase {
 
 
     try {
-      CpoOrderBy cob = jdbcIdo_.newOrderBy("id", true);
-      CpoOrderBy cob1 = jdbcIdo_.newOrderBy("attrVarChar", true);
+      CpoOrderBy cob = cpoAdapter.newOrderBy("id", true);
+      CpoOrderBy cob1 = cpoAdapter.newOrderBy("attrVarChar", true);
       Collection<CpoOrderBy> colCob = new ArrayList<CpoOrderBy>();
       colCob.add(cob);
       colCob.add(cob1);
       ValueObject valObj = new ValueObject();
-      col = jdbcIdo_.retrieveBeans("TestOrderByRetrieve", valObj, colCob);
+      col = cpoAdapter.retrieveBeans("TestOrderByRetrieve", valObj, colCob);
 
       int id = 1;
       for (ValueObject vo : col) {
@@ -127,13 +127,13 @@ public class OrderByTest extends TestCase {
     List<ValueObject> col;
 
     try {
-      CpoOrderBy cob = jdbcIdo_.newOrderBy("id", false, null);
-      CpoOrderBy cob2 = jdbcIdo_.newOrderBy("attrVarChar", false, null);
+      CpoOrderBy cob = cpoAdapter.newOrderBy("id", false, null);
+      CpoOrderBy cob2 = cpoAdapter.newOrderBy("attrVarChar", false, null);
       Collection<CpoOrderBy> colCob = new ArrayList<CpoOrderBy>();
       colCob.add(cob);
       colCob.add(cob2);
       ValueObject valObj = new ValueObject();
-      col = jdbcIdo_.retrieveBeans("TestOrderByRetrieve", valObj, colCob);
+      col = cpoAdapter.retrieveBeans("TestOrderByRetrieve", valObj, colCob);
       int id = 5;
       for (ValueObject vo : col) {
         assertEquals(id, vo.getId());
@@ -150,16 +150,16 @@ public class OrderByTest extends TestCase {
 
     ValueObject vobj = new ValueObject(-6);
     try {
-      jdbcIdo_.insertObject("TestOrderByInsert", vobj);
+      cpoAdapter.insertObject("TestOrderByInsert", vobj);
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
     try {
-      CpoOrderBy cob = jdbcIdo_.newOrderBy("id", true, "ABS(id)");
+      CpoOrderBy cob = cpoAdapter.newOrderBy("id", true, "ABS(id)");
       Collection<CpoOrderBy> colCob = new ArrayList<CpoOrderBy>();
       colCob.add(cob);
       ValueObject valObj = new ValueObject();
-      col = jdbcIdo_.retrieveBeans("TestOrderByRetrieve", valObj, colCob);
+      col = cpoAdapter.retrieveBeans("TestOrderByRetrieve", valObj, colCob);
 
       int id = 1;
       for (ValueObject vo : col) {
@@ -175,7 +175,7 @@ public class OrderByTest extends TestCase {
     }
 
     try {
-      jdbcIdo_.deleteObject("TestOrderByDelete", vobj);
+      cpoAdapter.deleteObject("TestOrderByDelete", vobj);
 
     } catch (Exception e) {
       fail(method + e.getMessage());

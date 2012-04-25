@@ -36,8 +36,8 @@ import org.synchronoss.cpo.helper.ExceptionHelper;
  */
 public class RollbackTrxTest extends TestCase {
 
-  private CpoAdapter jdbcCpo_ = null;
-  private CpoTrxAdapter jdbcIdo_ = null;
+  private CpoAdapter cpoAdapter = null;
+  private CpoTrxAdapter trxAdapter = null;
 
   /**
    * Creates a new RollbackTest object.
@@ -55,20 +55,20 @@ public class RollbackTrxTest extends TestCase {
     String method = "setUp:";
 
     try {
-      jdbcCpo_ = CpoAdapterFactory.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT);
-      jdbcIdo_ = jdbcCpo_.getCpoTrxAdapter();
-      assertNotNull(method + "CpoAdapter is null", jdbcIdo_);
+      cpoAdapter = CpoAdapterFactory.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT);
+      trxAdapter = cpoAdapter.getCpoTrxAdapter();
+      assertNotNull(method + "CpoAdapter is null", trxAdapter);
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
     ValueObject vo = new ValueObject(1);
     vo.setAttrVarChar("Test");
     try {
-      jdbcIdo_.insertObject(vo);
-      jdbcIdo_.commit();
+      trxAdapter.insertObject(vo);
+      trxAdapter.commit();
     } catch (Exception e) {
       try {
-        jdbcIdo_.rollback();
+        trxAdapter.rollback();
       } catch (Exception e1) {
       }
       fail(method + e.getMessage());
@@ -82,19 +82,19 @@ public class RollbackTrxTest extends TestCase {
   public void tearDown() {
     ValueObject vo = new ValueObject(1);
     try {
-      jdbcIdo_.deleteObject(vo);
-      jdbcIdo_.commit();
+      trxAdapter.deleteObject(vo);
+      trxAdapter.commit();
     } catch (Exception e) {
       try {
-        jdbcIdo_.rollback();
+        trxAdapter.rollback();
       } catch (Exception e1) {
       }
     } finally {
       try {
-        jdbcIdo_.close();
+        trxAdapter.close();
       } catch (Exception e1) {
       }
-      jdbcIdo_ = null;
+      trxAdapter = null;
     }
   }
 
@@ -111,18 +111,18 @@ public class RollbackTrxTest extends TestCase {
     al.add(vo2);
 
     try {
-      jdbcIdo_.insertObjects("TestRollback", al);
-      jdbcIdo_.commit();
+      trxAdapter.insertObjects("TestRollback", al);
+      trxAdapter.commit();
       fail(method + "Insert should have thrown an exception");
     } catch (Exception e) {
       try {
-        jdbcIdo_.rollback();
+        trxAdapter.rollback();
       } catch (CpoException ce) {
         fail(method + "Rollback failed:" + ExceptionHelper.getLocalizedMessage(ce));
 
       }
       try {
-        ValueObject rvo = jdbcIdo_.retrieveObject(vo);
+        ValueObject rvo = trxAdapter.retrieveObject(vo);
         assertNull(method + "Value Object did not rollback", rvo);
       } catch (Exception e2) {
         fail(method + e.getMessage());
@@ -137,17 +137,17 @@ public class RollbackTrxTest extends TestCase {
     String method = "testSingleRollback:";
     ValueObject vo = new ValueObject(2);
     try {
-      jdbcIdo_.insertObject("TestSingleRollback", vo);
-      jdbcIdo_.commit();
+      trxAdapter.insertObject("TestSingleRollback", vo);
+      trxAdapter.commit();
       fail(method + "Insert should have thrown an exception");
     } catch (Exception e) {
       try {
-        jdbcIdo_.rollback();
+        trxAdapter.rollback();
       } catch (CpoException ce) {
         fail(method + "Rollback failed:" + ExceptionHelper.getLocalizedMessage(ce));
       }
       try {
-        ValueObject rvo = jdbcIdo_.retrieveObject(vo);
+        ValueObject rvo = trxAdapter.retrieveObject(vo);
         assertNull(method + "Value Object did not rollback", rvo);
       } catch (Exception e2) {
         fail(method + e.getMessage());

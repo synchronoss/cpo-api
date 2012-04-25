@@ -27,6 +27,7 @@ import junit.framework.TestCase;
 import org.synchronoss.cpo.CpoAdapter;
 import org.synchronoss.cpo.CpoAdapterBean;
 import org.synchronoss.cpo.CpoAdapterFactory;
+import org.synchronoss.cpo.jdbc.meta.JdbcCpoMetaAdapter;
 
 /**
  * RetrieveObjectTest is a JUnit test class for testing the JdbcAdapter class Constructors
@@ -36,9 +37,9 @@ import org.synchronoss.cpo.CpoAdapterFactory;
 public class InsertObjectTest extends TestCase {
 
   private ArrayList<ValueObject> al = new ArrayList<ValueObject>();
-  private CpoAdapter jdbcIdo_ = null;
-  private CpoAdapter jdbcRead_ = null;
-  private boolean hasMilliSupport = true;
+  private CpoAdapter cpoAdapter = null;
+  private CpoAdapter readAdapter = null;
+  private JdbcCpoMetaAdapter metaAdapter = null;
 
   public InsertObjectTest(String name) {
     super(name);
@@ -53,19 +54,17 @@ public class InsertObjectTest extends TestCase {
   @Override
   public void setUp() {
     String method = "setUp:";
-    ResourceBundle b = PropertyResourceBundle.getBundle(JdbcStatics.PROP_FILE, Locale.getDefault(), this.getClass().getClassLoader());
-
-    hasMilliSupport = new Boolean(b.getString(JdbcStatics.PROP_DB_MILLI_SUPPORTED).trim());
 
     try {
-      jdbcIdo_ = new CpoAdapterBean(CpoAdapterFactory.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT));
-      assertNotNull(method + "IdoAdapter is null", jdbcIdo_);
+      cpoAdapter = new CpoAdapterBean(CpoAdapterFactory.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT));
+      assertNotNull(method + "IdoAdapter is null", cpoAdapter);
+      metaAdapter = (JdbcCpoMetaAdapter) cpoAdapter.getCpoMetaAdapter();
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
     try {
-      jdbcRead_ = new CpoAdapterBean(CpoAdapterFactory.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT));
-      assertNotNull(method + "IdoAdapter is null", jdbcRead_);
+      readAdapter = new CpoAdapterBean(CpoAdapterFactory.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT));
+      assertNotNull(method + "IdoAdapter is null", readAdapter);
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -79,7 +78,7 @@ public class InsertObjectTest extends TestCase {
     valObj.setAttrInteger(3);
     Timestamp ts = new Timestamp(System.currentTimeMillis());
 
-    if (!hasMilliSupport) {
+    if (!metaAdapter.isSupportsMillis()) {
       ts.setNanos(0);
     }
 
@@ -90,13 +89,13 @@ public class InsertObjectTest extends TestCase {
     al.add(valObj);
 
     try {
-      jdbcIdo_.insertObject(valObj);
+      cpoAdapter.insertObject(valObj);
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
 
     try {
-      ValueObject vo = jdbcRead_.retrieveObject(null, valObj, valObj, null, null);
+      ValueObject vo = readAdapter.retrieveObject(null, valObj, valObj, null, null);
       assertTrue("Ids do not match", vo.getId() == valObj.getId());
       assertTrue("Integers do not match", vo.getAttrInteger() == valObj.getAttrInteger());
       assertEquals("Strings do not match", vo.getAttrVarChar(), valObj.getAttrVarChar());
@@ -121,14 +120,14 @@ public class InsertObjectTest extends TestCase {
     al.add(new ValueObject(3));
     al.add(new ValueObject(4));
     try {
-      long inserts = jdbcIdo_.insertObjects(al);
+      long inserts = cpoAdapter.insertObjects(al);
       assertEquals("inserts performed do not equal inserts requested", inserts, 4);
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
 
     try {
-      Collection<ValueObject> col = jdbcRead_.retrieveBeans(null, vo);
+      Collection<ValueObject> col = readAdapter.retrieveBeans(null, vo);
 
       assertTrue(method + "Invalid number of objects returned", col.size() == al.size());
     } catch (Exception e) {
@@ -142,12 +141,12 @@ public class InsertObjectTest extends TestCase {
   public void tearDown() {
     String method = "tearDown:";
     try {
-      jdbcIdo_.deleteObjects(al);
+      cpoAdapter.deleteObjects(al);
 
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
-    jdbcIdo_ = null;
-    jdbcRead_ = null;
+    cpoAdapter = null;
+    readAdapter = null;
   }
 }

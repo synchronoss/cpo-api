@@ -21,6 +21,8 @@
  */
 package org.synchronoss.cpo.helper;
 
+import org.synchronoss.cpo.CpoException;
+
 /**
  *
  * @author dberry
@@ -53,5 +55,13 @@ public class ExceptionHelper {
     }
 
     return msg;
+  }
+  
+  public static void reThrowCpoException(Throwable e, String message) throws CpoException {
+      if (e instanceof CpoException) {
+        throw (CpoException) e;
+      } else {
+        throw new CpoException(message,e);
+      }
   }
 }

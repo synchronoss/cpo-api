@@ -1120,19 +1120,8 @@ public class JdbcCpoAdapter implements CpoAdapter {
       localLogger.error(msg, e);
       throw new CpoException(msg, e);
     } finally {
-      if (rs != null) {
-        try {
-          rs.close();
-        } catch (Exception e) {
-        }
-      }
-
-      if (ps != null) {
-        try {
-          ps.close();
-        } catch (Exception e) {
-        }
-      }
+      resultSetClose(rs);
+      statementClose(ps);
     }
 
     return objCount;
@@ -2424,7 +2413,8 @@ public class JdbcCpoAdapter implements CpoAdapter {
       if (connection != null && !isStaticConnection(connection)) {
         connection.rollback();
       }
-    } catch (SQLException e) {
+    } catch (SQLException se) {
+    } catch (Exception e) {
     }
   }
 
@@ -2454,17 +2444,8 @@ public class JdbcCpoAdapter implements CpoAdapter {
       commitConnection(c);
     } catch (Exception e) {
       // Any exception has to try to rollback the work;
-      try {
-        rollbackConnection(c);
-      } catch (Exception re) {
-      }
-
-      if (e instanceof CpoException) {
-        throw (CpoException) e;
-      } else {
-        throw new CpoException("processExecuteGroup(String name, Object criteria, Object result) failed",
-                e);
-      }
+      rollbackConnection(c);
+      ExceptionHelper.reThrowCpoException(e, "processExecuteGroup(String name, Object criteria, Object result) failed");
     } finally {
       closeConnection(c);
     }
@@ -2543,12 +2524,7 @@ public class JdbcCpoAdapter implements CpoAdapter {
       localLogger.error(msg, t);
       throw new CpoException(msg, t);
     } finally {
-      if (cstmt != null) {
-        try {
-          cstmt.close();
-        } catch (Exception e) {
-        }
-      }
+      statementClose(cstmt);
       if (jcsf != null) {
         jcsf.release();
       }
@@ -2585,17 +2561,8 @@ public class JdbcCpoAdapter implements CpoAdapter {
       commitConnection(c);
     } catch (Exception e) {
       // Any exception has to try to rollback the work;
-      try {
-        rollbackConnection(c);
-      } catch (Exception re) {
-      }
-
-      if (e instanceof CpoException) {
-        throw (CpoException) e;
-      } else {
-        throw new CpoException("processSelectGroup(Object obj, String groupName) failed",
-                e);
-      }
+      rollbackConnection(c);
+      ExceptionHelper.reThrowCpoException(e, "processSelectGroup(Object obj, String groupName) failed");
     } finally {
       closeConnection(c);
     }
@@ -2722,20 +2689,8 @@ public class JdbcCpoAdapter implements CpoAdapter {
       rObj = null;
       throw new CpoException(msg, t);
     } finally {
-      if (rs != null) {
-        try {
-          rs.close();
-        } catch (Exception e) {
-        }
-      }
-
-      if (ps != null) {
-        try {
-          ps.close();
-        } catch (Exception e) {
-        }
-      }
-
+      resultSetClose(rs);
+      statementClose(ps);
     }
 
     return rObj;
@@ -2766,17 +2721,8 @@ public class JdbcCpoAdapter implements CpoAdapter {
       commitConnection(con);
     } catch (Exception e) {
       // Any exception has to try to rollback the work;
-      try {
-        rollbackConnection(con);
-      } catch (Exception re) {
-      }
-
-      if (e instanceof CpoException) {
-        throw (CpoException) e;
-      } else {
-        throw new CpoException("processSelectGroup(String name, Object criteria, Object result,CpoWhere where, Collection orderBy, boolean useRetrieve) failed",
-                e);
-      }
+      rollbackConnection(con);
+      ExceptionHelper.reThrowCpoException(e, "processSelectGroup(String name, Object criteria, Object result,CpoWhere where, Collection orderBy, boolean useRetrieve) failed");
     } finally {
       closeConnection(con);
     }
@@ -2796,17 +2742,8 @@ public class JdbcCpoAdapter implements CpoAdapter {
       commitConnection(con);
     } catch (Exception e) {
       // Any exception has to try to rollback the work;
-      try {
-        rollbackConnection(con);
-      } catch (Exception re) {
-      }
-
-      if (e instanceof CpoException) {
-        throw (CpoException) e;
-      } else {
-        throw new CpoException("processSelectGroup(String name, Object criteria, Object result,CpoWhere where, Collection orderBy, boolean useRetrieve) failed",
-                e);
-      }
+      rollbackConnection(con);
+      ExceptionHelper.reThrowCpoException(e, "processSelectGroup(String name, Object criteria, Object result,CpoWhere where, Collection orderBy, boolean useRetrieve) failed");
     } finally {
       closeConnection(con);
     }
@@ -2908,15 +2845,8 @@ public class JdbcCpoAdapter implements CpoAdapter {
           }
         }
 
-        try {
-          rs.close();
-        } catch (Exception e) {
-        }
-
-        try {
-          ps.close();
-        } catch (Exception e) {
-        }
+        resultSetClose(rs);
+        statementClose(ps);
 
         localLogger.info("=================== " + resultSet.size() + " Records - Class=<" + criteria.getClass() + "> Type=<" + JdbcCpoAdapter.LIST_GROUP + "> Name=<" + name + "> Result=<" + result.getClass() + "> ====================");
       }
@@ -2926,19 +2856,8 @@ public class JdbcCpoAdapter implements CpoAdapter {
       localLogger.error(msg, t);
       throw new CpoException(msg, t);
     } finally {
-      if (rs != null) {
-        try {
-          rs.close();
-        } catch (Exception e) {
-        }
-      }
-
-      if (ps != null) {
-        try {
-          ps.close();
-        } catch (Exception e) {
-        }
-      }
+      resultSetClose(rs);
+      statementClose(ps);
     }
   }
 
@@ -2962,17 +2881,8 @@ public class JdbcCpoAdapter implements CpoAdapter {
       commitConnection(c);
     } catch (Exception e) {
       // Any exception has to try to rollback the work;
-      try {
-        rollbackConnection(c);
-      } catch (Exception re) {
-      }
-
-      if (e instanceof CpoException) {
-        throw (CpoException) e;
-      } else {
-        throw new CpoException("processUdateGroup(Object obj, String groupType, String groupName) failed",
-                e);
-      }
+      rollbackConnection(c);
+      ExceptionHelper.reThrowCpoException(e, "processUdateGroup(Object obj, String groupType, String groupName) failed");
     } finally {
       closeConnection(c);
     }
@@ -3030,12 +2940,7 @@ public class JdbcCpoAdapter implements CpoAdapter {
       localLogger.error(msg, t);
       throw new CpoException(msg, t);
     } finally {
-      if (ps != null) {
-        try {
-          ps.close();
-        } catch (Exception e) {
-        }
-      }
+      statementClose(ps);
       if (jpsf != null) {
         jpsf.release();
       }
@@ -3124,12 +3029,7 @@ public class JdbcCpoAdapter implements CpoAdapter {
       localLogger.error(msg, t);
       throw new CpoException(msg, t);
     } finally {
-      if (ps != null) {
-        try {
-          ps.close();
-        } catch (Exception e) {
-        }
-      }
+      statementClose(ps);
       if (jpsf != null) {
         jpsf.release();
       }
@@ -3160,17 +3060,8 @@ public class JdbcCpoAdapter implements CpoAdapter {
       commitConnection(c);
     } catch (Exception e) {
       // Any exception has to try to rollback the work;
-      try {
-        rollbackConnection(c);
-      } catch (Exception re) {
-      }
-
-      if (e instanceof CpoException) {
-        throw (CpoException) e;
-      } else {
-        throw new CpoException("processUpdateGroup(Collection coll, String groupType, String groupName) failed",
-                e);
-      }
+      rollbackConnection(c);
+      ExceptionHelper.reThrowCpoException(e, "processUpdateGroup(Collection coll, String groupType, String groupName) failed");
     } finally {
       closeConnection(c);
     }
@@ -3319,5 +3210,23 @@ public class JdbcCpoAdapter implements CpoAdapter {
   protected void clearConnectionBusy(Connection c) {
     // do nothing for JdbcCpoAdapter
     // overridden by JdbcTrxAdapter
+  }
+  
+  private void statementClose(Statement s) {
+    if (s != null) {
+      try {
+        s.close();
+      } catch (Exception e) {
+      }
+    }
+  }
+  
+  private void resultSetClose(ResultSet rs) {
+    if (rs != null) {
+      try {
+        rs.close();
+      } catch (Exception e) {
+      }
+    }
   }
 }

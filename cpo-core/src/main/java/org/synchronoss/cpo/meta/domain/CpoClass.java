@@ -21,19 +21,15 @@
  */
 package org.synchronoss.cpo.meta.domain;
 
-import java.util.List;
-import java.util.SortedMap;
-import java.util.TreeMap;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.synchronoss.cpo.CpoException;
-import org.synchronoss.cpo.MetaDFVisitable;
-import org.synchronoss.cpo.MetaVisitor;
+import org.slf4j.*;
+import org.synchronoss.cpo.*;
 import org.synchronoss.cpo.helper.ExceptionHelper;
 import org.synchronoss.cpo.meta.CpoMetaAdapter;
 import org.synchronoss.cpo.meta.bean.CpoClassBean;
 
-public class CpoClass extends CpoClassBean implements MetaDFVisitable {
+import java.util.*;
+
+public class CpoClass extends CpoClassBean implements Comparable<CpoClass>, MetaDFVisitable {
 
   private static Logger logger = LoggerFactory.getLogger(CpoClass.class.getName());
   private Class<?> metaClass = null;
@@ -99,6 +95,11 @@ public class CpoClass extends CpoClassBean implements MetaDFVisitable {
       builder.append(groupName);
     }
     return builder.toString();
+  }
+
+  @Override
+  public int compareTo(CpoClass anotherCpoClass) {
+    return getName().compareTo(anotherCpoClass.getName());
   }
 
   @Override

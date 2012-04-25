@@ -24,6 +24,7 @@ package org.synchronoss.cpo.meta;
 import java.util.List;
 import org.synchronoss.cpo.CpoException;
 import org.synchronoss.cpo.core.cpoCoreMeta.CpoMetaDataDocument;
+import org.synchronoss.cpo.meta.domain.CpoAttribute;
 import org.synchronoss.cpo.meta.domain.CpoClass;
 
 /**
@@ -51,4 +52,11 @@ public interface CpoMetaAdapter {
    * @return CpoMetaDataDocument that represents this adapter
    */
   public CpoMetaDataDocument export();
+  
+  public String getJavaTypeName(CpoAttribute attribute);
+  
+  public Class getJavaTypeClass(CpoAttribute attribute);
+  
+  public List<String> getAllowableDataTypes();
+  
 }

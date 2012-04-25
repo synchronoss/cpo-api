@@ -27,6 +27,14 @@ package org.synchronoss.cpo.jdbc;
  */
 public interface JdbcStatics {
 
-  public static final String ADAPTER_CONTEXT = "jdbc";
+  public static final String ADAPTER_CONTEXT_JDBC = "jdbc";
+  public static final String ADAPTER_CONTEXT_CLASS = "class";
+  public static final String ADAPTER_CONTEXT_DRIVER = "driver";
+  public static final String ADAPTER_CONTEXT_CLASSPROP = "classProp";
+  public static final String ADAPTER_CONTEXT_DRIVERPROP = "driverProp";
+  public static final String ADAPTER_CONTEXT_CLASSCLASS = "classclass";
+  public static final String ADAPTER_CONTEXT_DRIVERDRIVER = "driverdriver";
+  public static final String ADAPTER_CONTEXT_CLASSDRIVER = "classdriver";
+  public static final String ADAPTER_CONTEXT_DRIVERCLASS = "driverclass";
   public static int BLOB_SIZE = 64999;
 }

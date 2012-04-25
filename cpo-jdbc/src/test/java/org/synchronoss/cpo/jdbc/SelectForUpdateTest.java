@@ -59,7 +59,7 @@ public class SelectForUpdateTest extends TestCase {
     String method = "setUp:";
 
     try {
-      cpoAdapter = CpoAdapterFactory.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT);
+      cpoAdapter = CpoAdapterFactory.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_JDBC);
       assertNotNull(method + "CpoAdapter is null", cpoAdapter);
       trxAdapter = cpoAdapter.getCpoTrxAdapter();
       assertNotNull(method + "CpoTrxAdapter is null", trxAdapter);

@@ -64,7 +64,7 @@ public class BlobTrxTest extends TestCase {
     String method = "setUp:";
 
     try {
-      cpoAdapter = CpoAdapterFactory.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT);
+      cpoAdapter = CpoAdapterFactory.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_JDBC);
       trxAdapter = cpoAdapter.getCpoTrxAdapter();
       assertNotNull(method + "IdoAdapter is null", trxAdapter);
       metaAdapter = (JdbcCpoMetaAdapter) cpoAdapter.getCpoMetaAdapter();

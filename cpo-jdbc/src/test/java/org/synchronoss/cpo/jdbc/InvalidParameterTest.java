@@ -50,7 +50,7 @@ public class InvalidParameterTest extends TestCase {
     String method = "setUp:";
 
     try {
-      cpoAdapter = CpoAdapterFactory.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT);
+      cpoAdapter = CpoAdapterFactory.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_JDBC);
       assertNotNull(method + "IdoAdapter is null", cpoAdapter);
     } catch (Exception e) {
       fail(method + e.getMessage());

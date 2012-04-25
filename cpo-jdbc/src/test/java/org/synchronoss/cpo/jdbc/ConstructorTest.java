@@ -21,11 +21,11 @@
  */
 package org.synchronoss.cpo.jdbc;
 
-import java.util.Locale;
-import java.util.PropertyResourceBundle;
-import java.util.ResourceBundle;
+import java.util.List;
 import junit.framework.TestCase;
 import org.synchronoss.cpo.CpoAdapter;
+import org.synchronoss.cpo.CpoAdapterBean;
+import org.synchronoss.cpo.CpoAdapterFactory;
 
 /**
  * ConstructorTest is a JUnit test class for testing the JdbcAdapter class Constructors
@@ -33,31 +33,6 @@ import org.synchronoss.cpo.CpoAdapter;
  * @author david berry
  */
 public class ConstructorTest extends TestCase {
-
-  private static final String PROP_FILE = "jdbcCpoFactory";
-  private static final String PROP_DBDRIVER = "default.dbDriver";
-  private static final String PROP_DBURL = "default.dbUrl";
-  private static final String PROP_DBUSERURL = "default.dbUserUrl";
-  private static final String PROP_DBUSER = "default.dbUser";
-  private static final String PROP_DBPASSWORD = "default.dbPassword";
-  private static final String PROP_METADRIVER = "default.metaDriver";
-  private static final String PROP_METACONNECTION = "default.metaUrl";
-  private static final String PROP_METAUSER = "default.metaUser";
-  private static final String PROP_METAUSERURL = "default.metaUserUrl";
-  private static final String PROP_METAPASSWORD = "default.metaPassword";
-  private static final String PROP_TABLEPREFIX = "default.tablePrefix";
-  private String tablePrefix_ = null;
-  private String metaUrl_ = null;
-  private String metaDriver_ = null;
-  private String metaUser_ = null;
-  private String metaPassword_ = null;
-  private String metaUserUrl_ = null;
-  private String dbUrl_ = null;
-  private String dbDriver_ = null;
-  private String dbUser_ = null;
-  private String dbUserUrl_ = null;
-  private String dbPassword_ = null;
-  private CpoAdapter jdbcIdo_ = null;
 
   public ConstructorTest(String name) {
     super(name);
@@ -71,141 +46,113 @@ public class ConstructorTest extends TestCase {
    */
   @Override
   public void setUp() {
-    ResourceBundle b = PropertyResourceBundle.getBundle(PROP_FILE, Locale.getDefault(), this.getClass().getClassLoader());
-    dbUrl_ = b.getString(PROP_DBURL).trim();
-    dbDriver_ = b.getString(PROP_DBDRIVER).trim();
-    dbUser_ = b.getString(PROP_DBUSER).trim();
-    dbPassword_ = b.getString(PROP_DBPASSWORD).trim();
-    dbUserUrl_ = b.getString(PROP_DBUSERURL).trim();
-
-    metaUrl_ = b.getString(PROP_METACONNECTION).trim();
-    metaDriver_ = b.getString(PROP_METADRIVER).trim();
-    metaUser_ = b.getString(PROP_METAUSER).trim();
-    metaPassword_ = b.getString(PROP_METAPASSWORD).trim();
-    tablePrefix_ = b.getString(PROP_TABLEPREFIX).trim();
-    metaUserUrl_ = b.getString(PROP_METAUSERURL).trim();
   }
 
-  public void testConstructorWriteUrlUserPwd() {
-// FIXME: reenable test
-//        String method = "testConstructorWriteUrlUserPwd:";
-//        try{
-//            jdbcIdo_ = new CpoAdapterBean(new JdbcCpoAdapter(new DriverDataSourceInfo(metaDriver_,metaUrl_, metaUser_, metaPassword_,tablePrefix_),new DriverDataSourceInfo(dbDriver_,dbUrl_, dbUser_, dbPassword_)));
-//            if (jdbcIdo_==null) fail(method+"Unable to create CpoAdapter Bean");
-//        } catch (Exception e) {
-//            fail(method+e.getMessage());
-//        }
+  public void testConstructorClass() {
+    String method = "testConstructorClass:";
+    try {
+      CpoAdapter cpoAdapter = new CpoAdapterBean(CpoAdapterFactory.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_CLASS));
+      assertNotNull(method + "cpoAdapter is null", cpoAdapter);
+      ValueObject valObj = new ValueObject();
+      List<ValueObject> objs = cpoAdapter.retrieveBeans(null, valObj);
+      assertTrue("List size is " + objs.size(), objs.size() == 0);
+    } catch (Exception e) {
+      fail(method + e.getMessage());
+    }
   }
 
-  public void testConstructorWriteUrlUserPwdSettings() {
-// FIXME: reenable test
-//        String method = "testConstructorWriteUrlUserPwdSettings:";
-//        try{
-//            jdbcIdo_ = new CpoAdapterBean(new JdbcCpoAdapter(new DriverDataSourceInfo(metaDriver_,metaUrl_, metaUser_, metaPassword_,tablePrefix_),new DriverDataSourceInfo(dbDriver_,dbUrl_, dbUser_, dbPassword_)));
-//            if (jdbcIdo_==null) fail(method+"Unable to create CpoAdapter Bean");
-//        } catch (Exception e) {
-//            fail(method+e.getMessage());
-//        }
+  public void testConstructorClassProp() {
+    String method = "testConstructorClassProp:";
+    try {
+      CpoAdapter cpoAdapter = new CpoAdapterBean(CpoAdapterFactory.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_CLASSPROP));
+      assertNotNull(method + "cpoAdapter is null", cpoAdapter);
+      ValueObject valObj = new ValueObject();
+      List<ValueObject> objs = cpoAdapter.retrieveBeans(null, valObj);
+      assertTrue("List size is " + objs.size(), objs.size() == 0);
+    } catch (Exception e) {
+      fail(method + e.getMessage());
+    }
   }
 
-  public void testConstructorWriteUrl() {
-// FIXME: reenable test
-//        String method = "testConstructorWriteUrl:";
-//        
-//        try{
-//            jdbcIdo_ = new CpoAdapterBean(new JdbcCpoAdapter(new DriverDataSourceInfo(metaDriver_,metaUserUrl_, tablePrefix_),new DriverDataSourceInfo(dbDriver_,dbUserUrl_)));
-//            if (jdbcIdo_==null) fail(method+"Unable to create CpoAdapter Bean");
-//        } catch (Exception e) {
-//            fail(method+e.getMessage());
-//        }
+  public void testConstructorDriver() {
+    String method = "testConstructorDriver:";
+    try {
+      CpoAdapter cpoAdapter = new CpoAdapterBean(CpoAdapterFactory.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_DRIVER));
+      assertNotNull(method + "cpoAdapter is null", cpoAdapter);
+      ValueObject valObj = new ValueObject();
+      List<ValueObject> objs = cpoAdapter.retrieveBeans(null, valObj);
+      assertTrue("List size is " + objs.size(), objs.size() == 0);
+    } catch (Exception e) {
+      fail(method + e.getMessage());
+    }
   }
 
-  public void testConstructorWriteUrlSettings() {
-// FIXME: reenable test
-//        String method = "testConstructorWriteUrlSettings:";
-//        try{
-//            jdbcIdo_ = new CpoAdapterBean(new JdbcCpoAdapter(new DriverDataSourceInfo(metaDriver_,metaUserUrl_, tablePrefix_),new DriverDataSourceInfo(dbDriver_,dbUserUrl_)));
-//            if (jdbcIdo_==null) fail(method+"Unable to create CpoAdapter Bean");
-//        } catch (Exception e) {
-//            fail(method+e.getMessage());
-//        }
+  public void testConstructorDriverProp() {
+    String method = "testConstructorDriverProp:";
+    try {
+      CpoAdapter cpoAdapter = new CpoAdapterBean(CpoAdapterFactory.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_DRIVERPROP));
+      assertNotNull(method + "cpoAdapter is null", cpoAdapter);
+      ValueObject valObj = new ValueObject();
+      List<ValueObject> objs = cpoAdapter.retrieveBeans(null, valObj);
+      assertTrue("List size is " + objs.size(), objs.size() == 0);
+    } catch (Exception e) {
+      fail(method + e.getMessage());
+    }
   }
 
-  public void testConstructorReadWriteUrl() {
-// FIXME: reenable test
-//        String method = "testConstructorReadWriteUrl:";
-//        DriverDataSourceInfo jdsi = null;
-//        try{
-//        	jdsi = new DriverDataSourceInfo(dbDriver_,dbUserUrl_);
-//            jdbcIdo_ = new CpoAdapterBean(new JdbcCpoAdapter(new DriverDataSourceInfo(metaDriver_,metaUserUrl_,tablePrefix_),jdsi,jdsi));
-//            if (jdbcIdo_==null) fail(method+"Unable to create CpoAdapter Bean");
-//        } catch (Exception e) {
-//            fail(method+e.getMessage());
-//        }
+  public void testConstructorClassClass() {
+    String method = "testConstructorClassClass:";
+    try {
+      CpoAdapter cpoAdapter = new CpoAdapterBean(CpoAdapterFactory.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_CLASSCLASS));
+      assertNotNull(method + "cpoAdapter is null", cpoAdapter);
+      ValueObject valObj = new ValueObject();
+      List<ValueObject> objs = cpoAdapter.retrieveBeans(null, valObj);
+      assertTrue("List size is " + objs.size(), objs.size() == 0);
+    } catch (Exception e) {
+      fail(method + e.getMessage());
+    }
   }
 
-  public void testConstructorReadWriteUrlUserPwd() {
-// FIXME: reenable test
-//        String method = "testConstructorReadWriteUrlUserPwd:";
-//        DriverDataSourceInfo jdsi = null; 
-//        try{
-//        	jdsi = new DriverDataSourceInfo(dbDriver_,dbUrl_, dbUser_, dbPassword_);
-//            jdbcIdo_ = new CpoAdapterBean(new JdbcCpoAdapter(new DriverDataSourceInfo(metaDriver_,metaUserUrl_,tablePrefix_),jdsi,jdsi));
-//            if (jdbcIdo_==null) fail(method+"Unable to create CpoAdapter Bean");
-//        } catch (Exception e) {
-//            fail(method+e.getMessage());
-//        }
+  public void testConstructorDriverDriver() {
+    String method = "testConstructorDriverDriver:";
+    try {
+      CpoAdapter cpoAdapter = new CpoAdapterBean(CpoAdapterFactory.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_DRIVERDRIVER));
+      assertNotNull(method + "cpoAdapter is null", cpoAdapter);
+      ValueObject valObj = new ValueObject();
+      List<ValueObject> objs = cpoAdapter.retrieveBeans(null, valObj);
+      assertTrue("List size is " + objs.size(), objs.size() == 0);
+    } catch (Exception e) {
+      fail(method + e.getMessage());
+    }
   }
 
-  public void testConstructorWriteUrlProps() {
-// FIXME: reenable test
-//        String method = "testConstructorWriteUrlProps:";
-//        Properties props = new Properties();
-//        props.put("user", dbUser_);
-//        props.put("password", dbPassword_);
-//        
-//        try{
-//            jdbcIdo_ = new CpoAdapterBean(new JdbcCpoAdapter(new DriverDataSourceInfo(metaDriver_,metaUrl_, metaUser_, metaPassword_,tablePrefix_),new DriverDataSourceInfo(dbDriver_,dbUrl_, props)));
-//            if (jdbcIdo_==null) fail(method+"Unable to create CpoAdapter Bean");
-//        } catch (Exception e) {
-//            fail(method+e.getMessage());
-//        }
+  public void testConstructorClassDriver() {
+    String method = "testConstructorClassDriver:";
+    try {
+      CpoAdapter cpoAdapter = new CpoAdapterBean(CpoAdapterFactory.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_CLASSDRIVER));
+      assertNotNull(method + "cpoAdapter is null", cpoAdapter);
+      ValueObject valObj = new ValueObject();
+      List<ValueObject> objs = cpoAdapter.retrieveBeans(null, valObj);
+      assertTrue("List size is " + objs.size(), objs.size() == 0);
+    } catch (Exception e) {
+      fail(method + e.getMessage());
+    }
   }
 
-  public void testConstructorWriteUrlPropsSettings() {
-// FIXME: reenable test
-//        String method = "testConstructorWriteUrlPropsSettings:";
-//        Properties props = new Properties();
-//        props.put("user", dbUser_);
-//        props.put("password", dbPassword_);
-//
-//        try{
-//            jdbcIdo_ = new CpoAdapterBean(new JdbcCpoAdapter(new DriverDataSourceInfo(metaDriver_,metaUrl_, metaUser_, metaPassword_,tablePrefix_),new DriverDataSourceInfo(dbDriver_,dbUrl_, props)));
-//            if (jdbcIdo_==null) fail(method+"Unable to create CpoAdapter Bean");
-//        } catch (Exception e) {
-//            fail(method+e.getMessage());
-//        }
-  }
-
-  public void testConstructorReadWriteUrlPropsSettings() {
-// FIXME: reenable test
-//        String method = "testConstructorReadWriteUrlPropsSettings:";
-//        Properties props = new Properties();
-//        props.put("user", dbUser_);
-//        props.put("password", dbPassword_);
-//        DriverDataSourceInfo jdsi = null;
-//        
-//        try{
-//        	jdsi = new DriverDataSourceInfo(dbDriver_,dbUrl_, props);
-//            jdbcIdo_ = new CpoAdapterBean(new JdbcCpoAdapter(jdsi,jdsi,jdsi));
-//            if (jdbcIdo_==null) fail(method+"Unable to create CpoAdapter Bean");
-//        } catch (Exception e) {
-//            fail(method+e.getMessage());
-//        }
+  public void testConstructorDriverClass() {
+    String method = "testConstructorDriverClass:";
+    try {
+      CpoAdapter cpoAdapter = new CpoAdapterBean(CpoAdapterFactory.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_DRIVERCLASS));
+      assertNotNull(method + "cpoAdapter is null", cpoAdapter);
+      ValueObject valObj = new ValueObject();
+      List<ValueObject> objs = cpoAdapter.retrieveBeans(null, valObj);
+      assertTrue("List size is " + objs.size(), objs.size() == 0);
+    } catch (Exception e) {
+      fail(method + e.getMessage());
+    }
   }
 
   @Override
   public void tearDown() {
-    jdbcIdo_ = null;
   }
 }

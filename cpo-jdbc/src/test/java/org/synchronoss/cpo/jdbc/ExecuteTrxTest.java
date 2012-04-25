@@ -57,7 +57,7 @@ public class ExecuteTrxTest extends TestCase {
     String method = "setUp:";
 
     try {
-      cpoAdapter = new CpoAdapterBean(CpoAdapterFactory.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT));
+      cpoAdapter = new CpoAdapterBean(CpoAdapterFactory.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_JDBC));
       assertNotNull(method + "CpoAdapter is null", cpoAdapter);
       metaAdapter = (JdbcCpoMetaAdapter) cpoAdapter.getCpoMetaAdapter();
     } catch (Exception e) {

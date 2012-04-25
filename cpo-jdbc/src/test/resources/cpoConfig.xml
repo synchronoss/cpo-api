@@ -34,7 +34,111 @@
          <jdbc:dataSourceClassName>${cpo.db.class}</jdbc:dataSourceClassName>
          <jdbc:url>${cpo.db.url}</jdbc:url>
          <jdbc:user>${cpo.db.user}</jdbc:user>
-         <jdbc:password>${cpo.db.password}</jdbc:password>
+     <jdbc:password>${cpo.db.pswd}</jdbc:password>
     </jdbc:readWriteConfig>
   </dataConfig>
+  <dataConfig xsi:type="jdbc:ctJdbcConfig" name="driver">
+   <metaXml>${cpo.meta.xml}</metaXml>
+   <cpoConfigProcessor>org.synchronoss.cpo.jdbc.config.JdbcCpoConfigProcessor</cpoConfigProcessor>
+   <jdbc:readWriteConfig>
+    <jdbc:driverClassName>${cpo.db.driver}</jdbc:driverClassName>
+    <jdbc:url>${cpo.db.url}</jdbc:url>
+    <jdbc:user>${cpo.db.user}</jdbc:user>
+    <jdbc:password>${cpo.db.pswd}</jdbc:password>
+   </jdbc:readWriteConfig>
+  </dataConfig>
+ <dataConfig xsi:type="jdbc:ctJdbcConfig" name="driverProp">
+  <metaXml>${cpo.meta.xml}</metaXml>
+  <cpoConfigProcessor>org.synchronoss.cpo.jdbc.config.JdbcCpoConfigProcessor</cpoConfigProcessor>
+  <jdbc:readWriteConfig>
+   <jdbc:driverClassName>${cpo.db.driver}</jdbc:driverClassName>
+   <jdbc:url>${cpo.db.url}</jdbc:url>
+   <jdbc:property name="user" value="${cpo.db.user}"/>
+   <jdbc:property name="password" value="${cpo.db.pswd}"/>
+  </jdbc:readWriteConfig>
+ </dataConfig>
+ <dataConfig xsi:type="jdbc:ctJdbcConfig" name="class">
+  <metaXml>${cpo.meta.xml}</metaXml>
+  <cpoConfigProcessor>org.synchronoss.cpo.jdbc.config.JdbcCpoConfigProcessor</cpoConfigProcessor>
+  <jdbc:readWriteConfig>
+   <jdbc:dataSourceClassName>${cpo.db.class}</jdbc:dataSourceClassName>
+   <jdbc:url>${cpo.db.url}</jdbc:url>
+   <jdbc:user>${cpo.db.user}</jdbc:user>
+   <jdbc:password>${cpo.db.pswd}</jdbc:password>
+  </jdbc:readWriteConfig>
+ </dataConfig>
+ <dataConfig xsi:type="jdbc:ctJdbcConfig" name="classProp">
+  <metaXml>${cpo.meta.xml}</metaXml>
+  <cpoConfigProcessor>org.synchronoss.cpo.jdbc.config.JdbcCpoConfigProcessor</cpoConfigProcessor>
+  <jdbc:readWriteConfig>
+   <jdbc:dataSourceClassName>${cpo.db.class}</jdbc:dataSourceClassName>
+   <jdbc:url>${cpo.db.url}</jdbc:url>
+   <jdbc:property name="user" value="${cpo.db.user}"/>
+   <jdbc:property name="password" value="${cpo.db.pswd}"/>
+  </jdbc:readWriteConfig>
+ </dataConfig>
+ <dataConfig xsi:type="jdbc:ctJdbcConfig" name="driverdriver">
+  <metaXml>${cpo.meta.xml}</metaXml>
+  <cpoConfigProcessor>org.synchronoss.cpo.jdbc.config.JdbcCpoConfigProcessor</cpoConfigProcessor>
+  <jdbc:readConfig>
+   <jdbc:driverClassName>${cpo.db.driver}</jdbc:driverClassName>
+   <jdbc:url>${cpo.db.url}</jdbc:url>
+   <jdbc:user>${cpo.db.user}</jdbc:user>
+   <jdbc:password>${cpo.db.pswd}</jdbc:password>
+  </jdbc:readConfig>
+  <jdbc:writeConfig>
+   <jdbc:driverClassName>${cpo.db.driver}</jdbc:driverClassName>
+   <jdbc:url>${cpo.db.url}</jdbc:url>
+   <jdbc:user>${cpo.db.user}</jdbc:user>
+   <jdbc:password>${cpo.db.pswd}</jdbc:password>
+  </jdbc:writeConfig>
+ </dataConfig>
+ <dataConfig xsi:type="jdbc:ctJdbcConfig" name="classclass">
+  <metaXml>${cpo.meta.xml}</metaXml>
+  <cpoConfigProcessor>org.synchronoss.cpo.jdbc.config.JdbcCpoConfigProcessor</cpoConfigProcessor>
+  <jdbc:readConfig>
+   <jdbc:dataSourceClassName>${cpo.db.class}</jdbc:dataSourceClassName>
+   <jdbc:url>${cpo.db.url}</jdbc:url>
+   <jdbc:user>${cpo.db.user}</jdbc:user>
+   <jdbc:password>${cpo.db.pswd}</jdbc:password>
+  </jdbc:readConfig>
+  <jdbc:writeConfig>
+   <jdbc:dataSourceClassName>${cpo.db.class}</jdbc:dataSourceClassName>
+   <jdbc:url>${cpo.db.url}</jdbc:url>
+   <jdbc:user>${cpo.db.user}</jdbc:user>
+   <jdbc:password>${cpo.db.pswd}</jdbc:password>
+  </jdbc:writeConfig>
+ </dataConfig>
+ <dataConfig xsi:type="jdbc:ctJdbcConfig" name="driverclass">
+  <metaXml>${cpo.meta.xml}</metaXml>
+  <cpoConfigProcessor>org.synchronoss.cpo.jdbc.config.JdbcCpoConfigProcessor</cpoConfigProcessor>
+  <jdbc:readConfig>
+   <jdbc:driverClassName>${cpo.db.driver}</jdbc:driverClassName>
+   <jdbc:url>${cpo.db.url}</jdbc:url>
+   <jdbc:user>${cpo.db.user}</jdbc:user>
+   <jdbc:password>${cpo.db.pswd}</jdbc:password>
+  </jdbc:readConfig>
+  <jdbc:writeConfig>
+   <jdbc:dataSourceClassName>${cpo.db.class}</jdbc:dataSourceClassName>
+   <jdbc:url>${cpo.db.url}</jdbc:url>
+   <jdbc:user>${cpo.db.user}</jdbc:user>
+   <jdbc:password>${cpo.db.pswd}</jdbc:password>
+  </jdbc:writeConfig>
+ </dataConfig>
+ <dataConfig xsi:type="jdbc:ctJdbcConfig" name="classdriver">
+  <metaXml>${cpo.meta.xml}</metaXml>
+  <cpoConfigProcessor>org.synchronoss.cpo.jdbc.config.JdbcCpoConfigProcessor</cpoConfigProcessor>
+  <jdbc:readConfig>
+   <jdbc:dataSourceClassName>${cpo.db.class}</jdbc:dataSourceClassName>
+   <jdbc:url>${cpo.db.url}</jdbc:url>
+   <jdbc:user>${cpo.db.user}</jdbc:user>
+   <jdbc:password>${cpo.db.pswd}</jdbc:password>
+  </jdbc:readConfig>
+  <jdbc:writeConfig>
+   <jdbc:driverClassName>${cpo.db.driver}</jdbc:driverClassName>
+   <jdbc:url>${cpo.db.url}</jdbc:url>
+   <jdbc:user>${cpo.db.user}</jdbc:user>
+   <jdbc:password>${cpo.db.pswd}</jdbc:password>
+  </jdbc:writeConfig>
+ </dataConfig>
 </cpoConfig>

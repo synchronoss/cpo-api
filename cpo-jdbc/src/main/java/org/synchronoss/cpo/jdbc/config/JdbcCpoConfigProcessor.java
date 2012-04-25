@@ -23,6 +23,7 @@ package org.synchronoss.cpo.jdbc.config;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Properties;
 import org.synchronoss.cpo.CpoAdapter;
 import org.synchronoss.cpo.CpoException;
 import org.synchronoss.cpo.DataSourceInfo;
@@ -34,6 +35,7 @@ import org.synchronoss.cpo.jdbc.JdbcCpoAdapter;
 import org.synchronoss.cpo.jdbc.JndiDataSourceInfo;
 import org.synchronoss.cpo.jdbc.cpoJdbcConfig.CtJdbcConfig;
 import org.synchronoss.cpo.jdbc.cpoJdbcConfig.CtJdbcReadWriteConfig;
+import org.synchronoss.cpo.jdbc.cpoJdbcConfig.CtProperty;
 import org.synchronoss.cpo.jdbc.meta.JdbcCpoMetaAdapter;
 import org.synchronoss.cpo.meta.CpoCoreMetaAdapterFactory;
 
@@ -107,13 +109,23 @@ public class JdbcCpoConfigProcessor implements CpoConfigProcessor {
       }
 
       if (readWriteConfig.isSetPassword()) {
-        props.put(PROP_PASSWORD, readWriteConfig.getUser());
+        props.put(PROP_PASSWORD, readWriteConfig.getPassword());
+      }
+      
+      for (CtProperty property : readWriteConfig.getPropertyArray()){
+        props.put(property.getName(), property.getValue());
       }
 
       dataSourceInfo = new ClassDataSourceInfo(readWriteConfig.getDataSourceClassName(), props);
     } else if (readWriteConfig.isSetDriverClassName()) {
       if (readWriteConfig.isSetUser()) {
         dataSourceInfo = new DriverDataSourceInfo(readWriteConfig.getDriverClassName(), readWriteConfig.getUrl(), readWriteConfig.getUser(), readWriteConfig.getPassword());
+      } else if (readWriteConfig.getPropertyArray().length>0) {
+        Properties props = new Properties();
+        for (CtProperty property : readWriteConfig.getPropertyArray()){
+          props.put(property.getName(), property.getValue());
+        }
+        dataSourceInfo = new DriverDataSourceInfo(readWriteConfig.getDriverClassName(), readWriteConfig.getUrl(), props);
       } else {
         dataSourceInfo = new DriverDataSourceInfo(readWriteConfig.getDriverClassName(), readWriteConfig.getUrl());
       }

@@ -56,7 +56,7 @@ public class OrderByTest extends TestCase {
     String method = "setUp:";
 
     try {
-      cpoAdapter = new CpoAdapterBean(CpoAdapterFactory.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT));
+      cpoAdapter = new CpoAdapterBean(CpoAdapterFactory.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_JDBC));
       assertNotNull(method + "CpoAdapter is null", cpoAdapter);
       // Add the test valueObjects
     } catch (Exception e) {

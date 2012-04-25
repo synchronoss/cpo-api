@@ -82,19 +82,28 @@
                         <xs:documentation>This is the url to the jdbc database.</xs:documentation>
                     </xs:annotation>
                 </xs:element>
-                <xs:element name="user" type="xs:string" minOccurs="0">
-                    <xs:annotation>
-                        <xs:documentation>This is the user to log into the data source. If the user is supplied in the url, this element should not be included.</xs:documentation>
-                    </xs:annotation>
-                </xs:element>
-                <xs:element name="password" type="xs:string" minOccurs="0">
-                    <xs:annotation>
-                        <xs:documentation>This is the password to log into the data source. If the password is supplied in the url, this element should not be included.</xs:documentation>
-                    </xs:annotation>
-                </xs:element>
+                <xs:choice minOccurs="0">
+                    <xs:sequence>
+                        <xs:element name="user" type="xs:string">
+                            <xs:annotation>
+                                <xs:documentation>This is the user to log into the data source. If the user is supplied in the url, this element should not be included.</xs:documentation>
+                            </xs:annotation>
+                        </xs:element>
+                        <xs:element name="password" type="xs:string">
+                            <xs:annotation>
+                                <xs:documentation>This is the password to log into the data source. If the password is supplied in the url, this element should not be included.</xs:documentation>
+                            </xs:annotation>
+                        </xs:element>
+                    </xs:sequence>
+                    <xs:element name="property" type="ctProperty" maxOccurs="unbounded"/>
+                </xs:choice>
             </xs:sequence>
         </xs:choice>
     </xs:complexType>
     
+    <xs:complexType name="ctProperty">
+        <xs:attribute name="name" type="xs:string" use="required"/>
+        <xs:attribute name="value" type="xs:string" use="required"/>
+    </xs:complexType>
     
 </xs:schema>

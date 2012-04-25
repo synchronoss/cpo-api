@@ -57,14 +57,14 @@ public class InsertObjectTest extends TestCase {
     String method = "setUp:";
 
     try {
-      cpoAdapter = new CpoAdapterBean(CpoAdapterFactory.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT));
+      cpoAdapter = new CpoAdapterBean(CpoAdapterFactory.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_JDBC));
       assertNotNull(method + "IdoAdapter is null", cpoAdapter);
       metaAdapter = (JdbcCpoMetaAdapter) cpoAdapter.getCpoMetaAdapter();
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
     try {
-      readAdapter = new CpoAdapterBean(CpoAdapterFactory.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT));
+      readAdapter = new CpoAdapterBean(CpoAdapterFactory.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_JDBC));
       assertNotNull(method + "IdoAdapter is null", readAdapter);
     } catch (Exception e) {
       fail(method + e.getMessage());

@@ -28,7 +28,7 @@ import org.synchronoss.cpo.CpoAdapter;
 import org.synchronoss.cpo.CpoAdapterBean;
 import org.synchronoss.cpo.CpoAdapterFactory;
 import org.synchronoss.cpo.helper.ExceptionHelper;
-import org.synchronoss.cpo.jdbc.meta.JdbcCpoMetaAdapter;
+import org.synchronoss.cpo.jdbc.meta.JdbcCpoMetaDescriptor;
 
 /**
  * BlobTest is a JUnit test class for testing the JdbcAdapter class Constructors
@@ -39,7 +39,7 @@ public class ExecuteTest extends TestCase {
 
   private static Logger logger = LoggerFactory.getLogger(ExecuteTest.class.getName());
   private CpoAdapter cpoAdapter = null;
-  private JdbcCpoMetaAdapter metaAdapter = null;
+  private JdbcCpoMetaDescriptor metaDescriptor = null;
 
   /**
    * Creates a new RollbackTest object.
@@ -59,7 +59,7 @@ public class ExecuteTest extends TestCase {
     try {
       cpoAdapter = new CpoAdapterBean(CpoAdapterFactory.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_JDBC));
       assertNotNull(method + "CpoAdapter is null", cpoAdapter);
-      metaAdapter = (JdbcCpoMetaAdapter) cpoAdapter.getCpoMetaAdapter();
+      metaDescriptor = (JdbcCpoMetaDescriptor) cpoAdapter.getCpoMetaDescriptor();
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -77,7 +77,7 @@ public class ExecuteTest extends TestCase {
    * DOCUMENT ME!
    */
   public void testExecute() {
-    if (metaAdapter.isSupportsCalls()) {
+    if (metaDescriptor.isSupportsCalls()) {
       String method = "testExecuteObject:";
       ValueObject vo = new ValueObject(1);
       vo.setAttrInteger(3);

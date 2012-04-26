@@ -29,7 +29,7 @@ import org.synchronoss.cpo.CpoAdapterFactory;
 import org.synchronoss.cpo.CpoException;
 import org.synchronoss.cpo.CpoTrxAdapter;
 import org.synchronoss.cpo.helper.ExceptionHelper;
-import org.synchronoss.cpo.jdbc.meta.JdbcCpoMetaAdapter;
+import org.synchronoss.cpo.jdbc.meta.JdbcCpoMetaDescriptor;
 
 /**
  * BlobTest is a JUnit test class for testing the JdbcAdapter class Constructors
@@ -41,7 +41,7 @@ public class SelectForUpdateTest extends TestCase {
   private static final Logger logger = LoggerFactory.getLogger(SelectForUpdateTest.class.getName());
   private CpoAdapter cpoAdapter = null;
   private CpoTrxAdapter trxAdapter = null;
-  private JdbcCpoMetaAdapter metaAdapter = null;
+  private JdbcCpoMetaDescriptor metaDescriptor = null;
 
   /**
    * Creates a new RollbackTest object.
@@ -63,7 +63,7 @@ public class SelectForUpdateTest extends TestCase {
       assertNotNull(method + "CpoAdapter is null", cpoAdapter);
       trxAdapter = cpoAdapter.getCpoTrxAdapter();
       assertNotNull(method + "CpoTrxAdapter is null", trxAdapter);
-      metaAdapter = (JdbcCpoMetaAdapter) cpoAdapter.getCpoMetaAdapter();
+      metaDescriptor = (JdbcCpoMetaDescriptor) cpoAdapter.getCpoMetaDescriptor();
     } catch (Exception e) {
       logger.debug(ExceptionHelper.getLocalizedMessage(e));
     }
@@ -113,7 +113,7 @@ public class SelectForUpdateTest extends TestCase {
    * DOCUMENT ME!
    */
   public void testSelect4UpdateSingleObject() {
-    if (metaAdapter.isSupportsSelect4Update()) {
+    if (metaDescriptor.isSupportsSelect4Update()) {
       String method = "testSelect4UpdateSingleObject:";
       ValueObject vo2 = new ValueObject(1);
 
@@ -158,7 +158,7 @@ public class SelectForUpdateTest extends TestCase {
   }
 
   public void testSelect4UpdateExists() {
-    if (metaAdapter.isSupportsSelect4Update()) {
+    if (metaDescriptor.isSupportsSelect4Update()) {
       String method = "testSelect4UpdateExists:";
       ValueObject vo2 = new ValueObject(1);
 

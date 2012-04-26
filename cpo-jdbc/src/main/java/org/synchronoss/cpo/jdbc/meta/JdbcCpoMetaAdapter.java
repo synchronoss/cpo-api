@@ -42,11 +42,6 @@ import java.util.*;
 public class JdbcCpoMetaAdapter extends AbstractCpoMetaAdapter {
 
   private static Logger logger = LoggerFactory.getLogger(JdbcCpoMetaAdapter.class.getName());
-  private boolean supportsBlobs = false;
-  private boolean supportsCalls = false;
-  private boolean supportsMillis = false;
-  private boolean supportsSelect4Update = false;
-  
 
   // JDK 1.4.2 Values
   private static final JavaSqlType<?>[] jdbcTypes = {
@@ -259,37 +254,4 @@ public class JdbcCpoMetaAdapter extends AbstractCpoMetaAdapter {
     return javaSqlTypeNameMap;
   }
 
-  public boolean isSupportsBlobs() {
-    return supportsBlobs;
-  }
-
-  public void setSupportsBlobs(boolean supportsBlobs) {
-    this.supportsBlobs = supportsBlobs;
-  }
-
-  public boolean isSupportsCalls() {
-    return supportsCalls;
-  }
-
-  public void setSupportsCalls(boolean supportsCalls) {
-    this.supportsCalls = supportsCalls;
-  }
-
-  public boolean isSupportsMillis() {
-    return supportsMillis;
-  }
-
-  public void setSupportsMillis(boolean supportsMillis) {
-    this.supportsMillis = supportsMillis;
-  }
-
-  public boolean isSupportsSelect4Update() {
-    return supportsSelect4Update;
-  }
-
-  public void setSupportsSelect4Update(boolean supportsSelect4Update) {
-    this.supportsSelect4Update = supportsSelect4Update;
-  }
-  
-  
 }

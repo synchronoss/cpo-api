@@ -29,7 +29,7 @@ import org.synchronoss.cpo.CpoAdapter;
 import org.synchronoss.cpo.CpoAdapterBean;
 import org.synchronoss.cpo.CpoAdapterFactory;
 import org.synchronoss.cpo.CpoWhere;
-import org.synchronoss.cpo.jdbc.meta.JdbcCpoMetaAdapter;
+import org.synchronoss.cpo.jdbc.meta.JdbcCpoMetaDescriptor;
 
 /**
  * DeleteObjectTest is a JUnit test class for testing the JdbcAdapter deleteObject method
@@ -40,7 +40,7 @@ public class UpdateObjectTest extends TestCase {
 
   private ArrayList<ValueObject> al = new ArrayList<ValueObject>();
   private CpoAdapter cpoAdapter = null;
-  private JdbcCpoMetaAdapter metaAdapter = null;
+  private JdbcCpoMetaDescriptor metaDescriptor = null;
 
   public UpdateObjectTest(String name) {
     super(name);
@@ -59,7 +59,7 @@ public class UpdateObjectTest extends TestCase {
     try {
       cpoAdapter = new CpoAdapterBean(CpoAdapterFactory.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_JDBC));
       assertNotNull(method + "IdoAdapter is null", cpoAdapter);
-      metaAdapter = (JdbcCpoMetaAdapter) cpoAdapter.getCpoMetaAdapter();
+      metaDescriptor = (JdbcCpoMetaDescriptor) cpoAdapter.getCpoMetaDescriptor();
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -73,7 +73,7 @@ public class UpdateObjectTest extends TestCase {
     valObj.setAttrInteger(3);
     Timestamp ts = new Timestamp(System.currentTimeMillis());
 
-    if (!metaAdapter.isSupportsMillis()) {
+    if (!metaDescriptor.isSupportsMillis()) {
       ts.setNanos(0);
     }
 

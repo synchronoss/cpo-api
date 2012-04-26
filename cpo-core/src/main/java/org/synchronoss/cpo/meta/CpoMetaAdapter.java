@@ -45,20 +45,20 @@ public interface CpoMetaAdapter {
    *
    * @return java.util.List of CpoClass
    */
-  public List<CpoClass> getCpoClasses();
+  public List<CpoClass> getCpoClasses() throws CpoException ;
 
   /**
    * Performs an export to a CpoMetaDataDocument (XmlObject) format.
    *
    * @return CpoMetaDataDocument that represents this adapter
    */
-  public CpoMetaDataDocument export();
+  public CpoMetaDataDocument export() throws CpoException ;
 
-  public ExpressionParser getExpressionParser();
+  public ExpressionParser getExpressionParser() throws CpoException ;
 
-  public String getJavaTypeName(CpoAttribute attribute);
+  public String getJavaTypeName(CpoAttribute attribute) throws CpoException ;
   
-  public Class getJavaTypeClass(CpoAttribute attribute);
+  public Class getJavaTypeClass(CpoAttribute attribute) throws CpoException ;
   
-  public List<String> getAllowableDataTypes();
+  public List<String> getAllowableDataTypes() throws CpoException ;
 }

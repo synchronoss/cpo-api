@@ -26,7 +26,7 @@ import java.util.Collection;
 import java.util.List;
 import javax.ejb.SessionBean;
 import javax.ejb.SessionContext;
-import org.synchronoss.cpo.meta.CpoMetaAdapter;
+import org.synchronoss.cpo.meta.CpoMetaDescriptor;
 
 public class CpoAdapterBean
         implements CpoAdapter, SessionBean {
@@ -1118,8 +1118,8 @@ public class CpoAdapterBean
   }
   
   @Override
-  public CpoMetaAdapter getCpoMetaAdapter() {
-    return cpoAdapter.getCpoMetaAdapter();
+  public CpoMetaDescriptor getCpoMetaDescriptor() {
+    return cpoAdapter.getCpoMetaDescriptor();
   }
   
   @Override

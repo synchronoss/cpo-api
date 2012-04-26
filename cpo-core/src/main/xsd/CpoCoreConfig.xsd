@@ -42,9 +42,9 @@
     
     <xs:complexType name="ctDataSourceConfig" abstract="true">
         <xs:sequence>
-            <xs:element name="metaXml" type="xs:string">
+            <xs:element name="metaDescriptor" type="ctMetaDescriptor">
                 <xs:annotation>
-                    <xs:documentation>The location of the resource that contains the cml meta information for the classes for this adapter.</xs:documentation>
+                    <xs:documentation>The Descriptor for the meta data to load up for the class</xs:documentation>
                 </xs:annotation>
             </xs:element>
             <xs:element name="cpoConfigProcessor" type="xs:string">
@@ -56,6 +56,21 @@
         <xs:attribute name="name" type="xs:string" use="required">
             <xs:annotation>
                 <xs:documentation>This is the context name to be used when requesting a CpoAdapter. The context name will be used to look up this config info and create the appropriate CpoAdapter</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+    </xs:complexType>
+    
+    <xs:complexType name="ctMetaDescriptor">
+        <xs:sequence>
+            <xs:element name="metaXml" type="xs:string" minOccurs="0" maxOccurs="unbounded">
+                <xs:annotation>
+                    <xs:documentation>A list containing resource or filenames that contain meta information. If this descriptor was already defined in a previous config, then only the name needs to be supplied so that is can find the previously loaded files.</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
+        <xs:attribute name="name" type="xs:string" use="required">
+            <xs:annotation>
+                <xs:documentation>This is the descriptor name that will be used to identify this meta data from within CPO. Only one meta descriptor can have this name. Last in wins.</xs:documentation>
             </xs:annotation>
         </xs:attribute>
     </xs:complexType>

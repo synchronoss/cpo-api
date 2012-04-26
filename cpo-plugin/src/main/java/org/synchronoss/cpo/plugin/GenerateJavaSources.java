@@ -28,6 +28,7 @@ import org.synchronoss.cpo.meta.*;
 import org.synchronoss.cpo.meta.domain.CpoClass;
 
 import java.io.*;
+import org.synchronoss.cpo.jdbc.meta.JdbcCpoMetaDescriptor;
 
 /**
  * Plugin goal that will generate the cpo classes based on the xml configuration file
@@ -75,10 +76,9 @@ public class GenerateJavaSources extends AbstractMojo {
     }
 
     try {
-      CpoMetaAdapterFactory factory = new CpoCoreMetaAdapterFactory();
-      CpoMetaAdapter metaAdapter = factory.getCpoMetaAdapter(cpoConfig);
+      CpoMetaDescriptor metaDescriptor = CpoMetaDescriptor.newInstance("Generator", cpoConfig);
 
-      for (CpoClass cpoClass : metaAdapter.getCpoClasses()) {
+      for (CpoClass cpoClass : metaDescriptor.getCpoClasses()) {
         String className = cpoClass.getName();
         File classDir = srcDir;
         if (className.lastIndexOf(".") != -1) {
@@ -94,7 +94,7 @@ public class GenerateJavaSources extends AbstractMojo {
         }
         File javaFile = new File(classDir, className + ".java");
 
-        CpoClassSourceGenerator classSourceGenerator = new CpoClassSourceGenerator(metaAdapter);
+        CpoClassSourceGenerator classSourceGenerator = new CpoClassSourceGenerator(metaDescriptor);
         cpoClass.acceptMetaDFVisitor(classSourceGenerator);
 
         FileWriter cw = new FileWriter(javaFile);

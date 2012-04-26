@@ -199,7 +199,11 @@ public abstract class AbstractCpoMetaAdapter implements CpoMetaAdapter {
   }
 
   protected void addCpoClass(CpoClass metaClass) {
-    logger.debug("Adding class: " + metaClass.getName());
-    classMap.put(metaClass.getName(), metaClass);
+    CpoClass oldMetaClass = classMap.put(metaClass.getName(), metaClass);
+    if (oldMetaClass != null)
+      logger.debug("Overwrote class: " + metaClass.getName());
+    else 
+      logger.debug("Added class: " + metaClass.getName());
+
   }
 }

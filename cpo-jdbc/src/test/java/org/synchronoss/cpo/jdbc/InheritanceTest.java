@@ -27,7 +27,7 @@ import junit.framework.TestCase;
 import org.synchronoss.cpo.CpoAdapter;
 import org.synchronoss.cpo.CpoAdapterBean;
 import org.synchronoss.cpo.CpoAdapterFactory;
-import org.synchronoss.cpo.jdbc.meta.JdbcCpoMetaAdapter;
+import org.synchronoss.cpo.jdbc.meta.JdbcCpoMetaDescriptor;
 
 /**
  * RetrieveObjectTest is a JUnit test class for testing the JdbcAdapter class Constructors
@@ -38,7 +38,7 @@ public class InheritanceTest extends TestCase {
 
   private ArrayList<ChildValueObject> al = new ArrayList<ChildValueObject>();
   private CpoAdapter cpoAdapter = null;
-  private JdbcCpoMetaAdapter metaAdapter = null;
+  private JdbcCpoMetaDescriptor metaDescriptor = null;
 
   public InheritanceTest(String name) {
     super(name);
@@ -57,7 +57,7 @@ public class InheritanceTest extends TestCase {
     try {
       cpoAdapter = new CpoAdapterBean(CpoAdapterFactory.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_JDBC));
       assertNotNull(method + "IdoAdapter is null", cpoAdapter);
-      metaAdapter = (JdbcCpoMetaAdapter) cpoAdapter.getCpoMetaAdapter();
+      metaDescriptor = (JdbcCpoMetaDescriptor) cpoAdapter.getCpoMetaDescriptor();
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -72,7 +72,7 @@ public class InheritanceTest extends TestCase {
     valObj.setAttrInteger(3);
     Timestamp ts = new Timestamp(System.currentTimeMillis());
 
-    if (!metaAdapter.isSupportsMillis()) {
+    if (!metaDescriptor.isSupportsMillis()) {
       ts.setNanos(0);
     }
 

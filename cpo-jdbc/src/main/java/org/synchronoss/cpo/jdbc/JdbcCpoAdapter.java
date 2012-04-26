@@ -35,6 +35,7 @@ import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.*;
 import org.synchronoss.cpo.helper.ExceptionHelper;
 import org.synchronoss.cpo.meta.CpoMetaAdapter;
+import org.synchronoss.cpo.meta.CpoMetaDescriptor;
 import org.synchronoss.cpo.meta.domain.CpoArgument;
 import org.synchronoss.cpo.meta.domain.CpoClass;
 import org.synchronoss.cpo.meta.domain.CpoFunction;
@@ -123,7 +124,7 @@ public class JdbcCpoAdapter implements CpoAdapter {
   /**
    * CpoMetaAdapter allows you to get the meta data for a class.
    */
-  private CpoMetaAdapter metaAdapter = null;
+  private CpoMetaDescriptor metaDescriptor = null;
 
   protected JdbcCpoAdapter() {
   }
@@ -135,10 +136,10 @@ public class JdbcCpoAdapter implements CpoAdapter {
    * @param jdsiTrx The datasoruce that identifies the transaction database.
    * @throws org.synchronoss.cpo.CpoException exception
    */
-  public JdbcCpoAdapter(CpoMetaAdapter metaAdapter, DataSourceInfo jdsiTrx)
+  public JdbcCpoAdapter(CpoMetaDescriptor metaDescriptor, DataSourceInfo jdsiTrx)
           throws CpoException {
 
-    this.metaAdapter = metaAdapter;
+    this.metaDescriptor = metaDescriptor;
     writeDataSource_=jdsiTrx.getDataSource();
     readDataSource_ = writeDataSource_;
     dataSourceName_ = jdsiTrx.getDataSourceName();
@@ -153,18 +154,18 @@ public class JdbcCpoAdapter implements CpoAdapter {
    * @param jdsiRead The datasource that identifies the transaction database for read-only transactions.
    * @throws org.synchronoss.cpo.CpoException exception
    */
-  public JdbcCpoAdapter(CpoMetaAdapter metaAdapter, DataSourceInfo jdsiWrite, DataSourceInfo jdsiRead)
+  public JdbcCpoAdapter(CpoMetaDescriptor metaDescriptor, DataSourceInfo jdsiWrite, DataSourceInfo jdsiRead)
           throws CpoException {
-    this.metaAdapter = metaAdapter;
+    this.metaDescriptor = metaDescriptor;
     writeDataSource_=jdsiWrite.getDataSource();
     readDataSource_ = jdsiRead.getDataSource();
     dataSourceName_ = jdsiWrite.getDataSourceName();
     processDatabaseMetaData();
   }
 
-  protected JdbcCpoAdapter(CpoMetaAdapter metaAdapter, boolean batchSupported, String dataSourceName)
+  protected JdbcCpoAdapter(CpoMetaDescriptor metaDescriptor, boolean batchSupported, String dataSourceName)
           throws CpoException {
-    this.metaAdapter = metaAdapter;
+    this.metaDescriptor = metaDescriptor;
     batchUpdatesSupported_ = batchSupported;
     dataSourceName_ = dataSourceName;
   }
@@ -1077,7 +1078,7 @@ public class JdbcCpoAdapter implements CpoAdapter {
     }
 
     try {
-      cpoClass = metaAdapter.getMetaClass(obj);
+      cpoClass = metaDescriptor.getMetaClass(obj);
       List<CpoFunction> cpoFunctions = cpoClass.getFunctionGroup(JdbcCpoAdapter.EXIST_GROUP, name).getFunctions();
       localLogger = LoggerFactory.getLogger(cpoClass.getMetaClass().getName());
 
@@ -2484,7 +2485,7 @@ public class JdbcCpoAdapter implements CpoAdapter {
     }
 
     try {
-      criteriaClass = metaAdapter.getMetaClass(criteria);
+      criteriaClass = metaDescriptor.getMetaClass(criteria);
       List<CpoFunction> functions = criteriaClass.getFunctionGroup(JdbcCpoAdapter.EXECUTE_GROUP, name).getFunctions();
       localLogger.info("===================processExecuteGroup (" + name + ") Count<"
               + functions.size() + ">=========================");
@@ -2609,7 +2610,7 @@ public class JdbcCpoAdapter implements CpoAdapter {
     }
 
     try {
-      cpoClass = metaAdapter.getMetaClass(criteriaObj);
+      cpoClass = metaDescriptor.getMetaClass(criteriaObj);
       List<CpoFunction> functions = cpoClass.getFunctionGroup(JdbcCpoAdapter.RETRIEVE_GROUP, groupName).getFunctions();
 
       localLogger.info("=================== Class=<" + criteriaObj.getClass() + "> Type=<" + JdbcCpoAdapter.RETRIEVE_GROUP + "> Name=<" + groupName + "> =========================");
@@ -2791,8 +2792,8 @@ public class JdbcCpoAdapter implements CpoAdapter {
     }
 
     try {
-      criteriaClass = metaAdapter.getMetaClass(criteria);
-      resultClass = metaAdapter.getMetaClass(result);
+      criteriaClass = metaDescriptor.getMetaClass(criteria);
+      resultClass = metaDescriptor.getMetaClass(result);
       if (useRetrieve) {
         localLogger.info("=================== Class=<" + criteria.getClass() + "> Type=<" + JdbcCpoAdapter.RETRIEVE_GROUP + "> Name=<" + name + "> =========================");
         cpoFunctions = criteriaClass.getFunctionGroup(JdbcCpoAdapter.RETRIEVE_GROUP, name).getFunctions();
@@ -2921,7 +2922,7 @@ public class JdbcCpoAdapter implements CpoAdapter {
     }
 
     try {
-      cpoClass = metaAdapter.getMetaClass(obj);
+      cpoClass = metaDescriptor.getMetaClass(obj);
       List<CpoFunction> cpoFunctions = cpoClass.getFunctionGroup(getGroupType(obj, groupType, groupName, con), groupName).getFunctions();
       localLogger.info("=================== Class=<" + obj.getClass() + "> Type=<" + groupType + "> Name=<" + groupName + "> =========================");
 
@@ -2979,7 +2980,7 @@ public class JdbcCpoAdapter implements CpoAdapter {
     Logger localLogger = logger;
 
     try {
-      jmc = metaAdapter.getMetaClass(arr[0]);
+      jmc = metaDescriptor.getMetaClass(arr[0]);
       cpoFunctions = jmc.getFunctionGroup(getGroupType(arr[0], groupType, groupName, con), groupName).getFunctions();
       localLogger = LoggerFactory.getLogger(jmc.getMetaClass().getName());
 
@@ -3158,7 +3159,7 @@ public class JdbcCpoAdapter implements CpoAdapter {
    */
   @Override
   public CpoTrxAdapter getCpoTrxAdapter() throws CpoException {
-    return new JdbcCpoTrxAdapter(metaAdapter, getWriteConnection(), batchUpdatesSupported_, getDataSourceName());
+    return new JdbcCpoTrxAdapter(metaDescriptor, getWriteConnection(), batchUpdatesSupported_, getDataSourceName());
   }
 
   private class RetrieverThread<T, C> extends Thread {
@@ -3238,8 +3239,8 @@ public class JdbcCpoAdapter implements CpoAdapter {
   }
   
   @Override
-  public CpoMetaAdapter getCpoMetaAdapter() {
-    return metaAdapter;
+  public CpoMetaDescriptor getCpoMetaDescriptor() {
+    return metaDescriptor;
   }
   
   @Override

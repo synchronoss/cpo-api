@@ -23,7 +23,7 @@ package org.synchronoss.cpo;
 
 import java.util.Collection;
 import java.util.List;
-import org.synchronoss.cpo.meta.CpoMetaAdapter;
+import org.synchronoss.cpo.meta.CpoMetaDescriptor;
 
 /**
  * CpoAdapter is an interface for a set of routines that are responsible for Creating, Retrieving, Updating, and
@@ -1955,7 +1955,7 @@ public interface CpoAdapter extends java.io.Serializable {
    */
   public CpoTrxAdapter getCpoTrxAdapter() throws CpoException;
   
-  public CpoMetaAdapter getCpoMetaAdapter();
+  public CpoMetaDescriptor getCpoMetaDescriptor();
   
   public String getDataSourceName();
   

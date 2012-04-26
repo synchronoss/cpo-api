@@ -21,6 +21,7 @@
  */
 package org.synchronoss.cpo.jdbc.config;
 
+import org.synchronoss.cpo.jdbc.meta.JdbcCpoMetaDescriptor;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
@@ -29,6 +30,7 @@ import org.synchronoss.cpo.CpoException;
 import org.synchronoss.cpo.DataSourceInfo;
 import org.synchronoss.cpo.config.CpoConfigProcessor;
 import org.synchronoss.cpo.core.cpoCoreConfig.CtDataSourceConfig;
+import org.synchronoss.cpo.core.cpoCoreConfig.CtMetaDescriptor;
 import org.synchronoss.cpo.jdbc.ClassDataSourceInfo;
 import org.synchronoss.cpo.jdbc.DriverDataSourceInfo;
 import org.synchronoss.cpo.jdbc.JdbcCpoAdapter;
@@ -36,8 +38,6 @@ import org.synchronoss.cpo.jdbc.JndiDataSourceInfo;
 import org.synchronoss.cpo.jdbc.cpoJdbcConfig.CtJdbcConfig;
 import org.synchronoss.cpo.jdbc.cpoJdbcConfig.CtJdbcReadWriteConfig;
 import org.synchronoss.cpo.jdbc.cpoJdbcConfig.CtProperty;
-import org.synchronoss.cpo.jdbc.meta.JdbcCpoMetaAdapter;
-import org.synchronoss.cpo.meta.CpoCoreMetaAdapterFactory;
 
 /**
  *
@@ -63,29 +63,33 @@ public class JdbcCpoConfigProcessor implements CpoConfigProcessor {
     }
 
     CtJdbcConfig jdbcConfig = (CtJdbcConfig) cpoConfig;
-
-    JdbcCpoMetaAdapter metaAdapter = (JdbcCpoMetaAdapter) new CpoCoreMetaAdapterFactory().getCpoMetaAdapter(jdbcConfig.getMetaXml());
+    CtMetaDescriptor ctMetaDescriptor = jdbcConfig.getMetaDescriptor();
+    JdbcCpoMetaDescriptor metaDescriptor;
+    if (ctMetaDescriptor.getMetaXmlArray().length==0)
+      metaDescriptor = JdbcCpoMetaDescriptor.newInstance(jdbcConfig.getMetaDescriptor().getName());
+    else
+      metaDescriptor = JdbcCpoMetaDescriptor.newInstance(jdbcConfig.getMetaDescriptor().getName(), jdbcConfig.getMetaDescriptor().getMetaXmlArray());
     
     if (jdbcConfig.isSetSupportsBlobs())
-      metaAdapter.setSupportsBlobs(jdbcConfig.getSupportsBlobs());
+      metaDescriptor.setSupportsBlobs(jdbcConfig.getSupportsBlobs());
     
     if (jdbcConfig.isSetSupportsCalls())
-      metaAdapter.setSupportsCalls(jdbcConfig.getSupportsCalls());
+      metaDescriptor.setSupportsCalls(jdbcConfig.getSupportsCalls());
     
     if (jdbcConfig.isSetSupportsMillis())
-      metaAdapter.setSupportsMillis(jdbcConfig.getSupportsMillis());
+      metaDescriptor.setSupportsMillis(jdbcConfig.getSupportsMillis());
     
     if (jdbcConfig.isSetSupportsSelect4Update())
-      metaAdapter.setSupportsSelect4Update(jdbcConfig.getSupportsSelect4Update());
+      metaDescriptor.setSupportsSelect4Update(jdbcConfig.getSupportsSelect4Update());
     
     // build a datasource info
     if (jdbcConfig.isSetReadWriteConfig()) {
       DataSourceInfo dataSourceInfo = buildDataSourceInfo(jdbcConfig.getReadWriteConfig());
-      cpoAdapter = new JdbcCpoAdapter(metaAdapter, dataSourceInfo);
+      cpoAdapter = new JdbcCpoAdapter(metaDescriptor, dataSourceInfo);
     } else {
       DataSourceInfo readDataSourceInfo = buildDataSourceInfo(jdbcConfig.getReadConfig());
       DataSourceInfo writeDataSourceInfo = buildDataSourceInfo(jdbcConfig.getWriteConfig());
-      cpoAdapter = new JdbcCpoAdapter(metaAdapter, writeDataSourceInfo, readDataSourceInfo);
+      cpoAdapter = new JdbcCpoAdapter(metaDescriptor, writeDataSourceInfo, readDataSourceInfo);
     }
     
     return cpoAdapter;

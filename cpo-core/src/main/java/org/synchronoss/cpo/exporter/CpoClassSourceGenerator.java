@@ -21,6 +21,7 @@
  */
 package org.synchronoss.cpo.exporter;
 
+import org.synchronoss.cpo.CpoException;
 import org.synchronoss.cpo.MetaVisitor;
 import org.synchronoss.cpo.meta.CpoMetaAdapter;
 import org.synchronoss.cpo.meta.domain.*;
@@ -165,56 +166,60 @@ public class CpoClassSourceGenerator implements MetaVisitor {
       getterName = ("get" + attName.toUpperCase() + "()");
     }
 
-    Class<?> attClass = metaAdapter.getJavaTypeClass(cpoAttribute);
-    String attClassName = metaAdapter.getJavaTypeName(cpoAttribute);
+    try {
+      Class<?> attClass = metaAdapter.getJavaTypeClass(cpoAttribute);
+      String attClassName = metaAdapter.getJavaTypeName(cpoAttribute);
 
-    // generate attribute statics
-    String staticName = ATTR_PREFIX + attName.toUpperCase();
-    attributeStatics.append("  public final static String " + staticName + " = \"" + attName + "\";\n");
+      // generate attribute statics
+      String staticName = ATTR_PREFIX + attName.toUpperCase();
+      attributeStatics.append("  public final static String " + staticName + " = \"" + attName + "\";\n");
 
-    // generate property declarations
-    properties.append("  private " + attClassName + " " + attName + ";\n");
+      // generate property declarations
+      properties.append("  private " + attClassName + " " + attName + ";\n");
 
-    // generate getter
-    gettersSetters.append("  public " + attClassName + " " + getterName + " {\n");
-    gettersSetters.append("    return this." + attName + ";\n");
-    gettersSetters.append("  }\n");
+      // generate getter
+      gettersSetters.append("  public " + attClassName + " " + getterName + " {\n");
+      gettersSetters.append("    return this." + attName + ";\n");
+      gettersSetters.append("  }\n");
 
-    // generate setter
-    if (attName.length() > 1) {
-      gettersSetters.append("  public void set" + attName.substring(0, 1).toUpperCase() + attName.substring(1) + "(" + attClassName + " " + attName + ") {\n");
-    } else {
-      gettersSetters.append("  public void set" + attName.toUpperCase() + "(" + attClassName + " " + attName + ") {\n");
+      // generate setter
+      if (attName.length() > 1) {
+        gettersSetters.append("  public void set" + attName.substring(0, 1).toUpperCase() + attName.substring(1) + "(" + attClassName + " " + attName + ") {\n");
+      } else {
+        gettersSetters.append("  public void set" + attName.toUpperCase() + "(" + attClassName + " " + attName + ") {\n");
+      }
+      gettersSetters.append("    this." + attName + " = " + attName + ";\n");
+      gettersSetters.append("  }\n");
+
+      // equals()
+      if (attClass.isPrimitive()) {
+        // primitive type, use ==
+        equals.append("    if (" + getterName + " != that." + getterName + ")\n");
+      } else if (attClass.isArray()) {
+        // array type, use Array.equals()
+        equals.append("    if (!java.util.Arrays.equals(" + getterName + ", that." + getterName + "))\n");
+      } else {
+        // object, use .equals
+        equals.append("    if (" + getterName + " != null ? !" + getterName + ".equals(that." + getterName + ") : that." + getterName + " != null)\n");
+      }
+      equals.append("      return false;\n");
+
+      // hashCode()
+      if (attClass.isPrimitive()) {
+        // primitive type, need some magic
+        hashCode.append("    result = 31 * result + (String.valueOf(" + getterName + ").hashCode());\n");
+      } else if (attClass.isArray()) {
+        // array type, use Array.hashCode()
+        hashCode.append("    result = 31 * result + (" + getterName + "!= null ? java.util.Arrays.hashCode(" + getterName + ") : 0);\n");
+      } else {
+        hashCode.append("    result = 31 * result + (" + getterName + " != null ? " + getterName + ".hashCode() : 0);\n");
+      }
+
+      // toString()
+      toString.append("    str.append(\"" + attName + " = \" + " + getterName + " + \"\\n\");\n");
+    } catch(CpoException ce) {
+      
     }
-    gettersSetters.append("    this." + attName + " = " + attName + ";\n");
-    gettersSetters.append("  }\n");
-
-    // equals()
-    if (attClass.isPrimitive()) {
-      // primitive type, use ==
-      equals.append("    if (" + getterName + " != that." + getterName + ")\n");
-    } else if (attClass.isArray()) {
-      // array type, use Array.equals()
-      equals.append("    if (!java.util.Arrays.equals(" + getterName + ", that." + getterName + "))\n");
-    } else {
-      // object, use .equals
-      equals.append("    if (" + getterName + " != null ? !" + getterName + ".equals(that." + getterName + ") : that." + getterName + " != null)\n");
-    }
-    equals.append("      return false;\n");
-
-    // hashCode()
-    if (attClass.isPrimitive()) {
-      // primitive type, need some magic
-      hashCode.append("    result = 31 * result + (String.valueOf(" + getterName + ").hashCode());\n");
-    } else if (attClass.isArray()) {
-      // array type, use Array.hashCode()
-      hashCode.append("    result = 31 * result + (" + getterName + "!= null ? java.util.Arrays.hashCode(" + getterName + ") : 0);\n");
-    } else {
-      hashCode.append("    result = 31 * result + (" + getterName + " != null ? " + getterName + ".hashCode() : 0);\n");
-    }
-
-    // toString()
-    toString.append("    str.append(\"" + attName + " = \" + " + getterName + " + \"\\n\");\n");
   }
 
   @Override

@@ -94,7 +94,7 @@ public class CpoFunction extends CpoFunctionBean {
 
   @Override
   public String toString() {
-    return this.getDescription();
+    return this.getName();
   }
 
   public String toStringFull() {

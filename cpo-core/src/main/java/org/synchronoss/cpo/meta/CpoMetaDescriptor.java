@@ -4,15 +4,12 @@
  */
 package org.synchronoss.cpo.meta;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.SortedMap;
-import java.util.TreeMap;
 import org.synchronoss.cpo.CpoException;
 import org.synchronoss.cpo.core.cpoCoreMeta.CpoMetaDataDocument;
-import org.synchronoss.cpo.meta.domain.CpoAttribute;
-import org.synchronoss.cpo.meta.domain.CpoClass;
+import org.synchronoss.cpo.meta.domain.*;
 import org.synchronoss.cpo.parser.ExpressionParser;
+
+import java.util.*;
 
 /**
  *
@@ -138,5 +135,24 @@ public class CpoMetaDescriptor implements CpoMetaAdapter {
   public List<String> getAllowableDataTypes() throws CpoException {
     return getCpoMetaAdapter().getAllowableDataTypes();
   }
-  
+
+  public CpoClass createCpoClass() throws CpoException {
+    return ((AbstractCpoMetaAdapter)getCpoMetaAdapter()).createCpoClass();
+  }
+
+  public CpoAttribute createCpoAttribute() throws CpoException {
+    return ((AbstractCpoMetaAdapter)getCpoMetaAdapter()).createCpoAttribute();
+  }
+
+  public CpoFunctionGroup createCpoFunctionGroup() throws CpoException {
+    return ((AbstractCpoMetaAdapter)getCpoMetaAdapter()).createCpoFunctionGroup();
+  }
+
+  public CpoFunction createCpoFunction() throws CpoException {
+    return ((AbstractCpoMetaAdapter)getCpoMetaAdapter()).createCpoFunction();
+  }
+
+  public CpoArgument createCpoArgument() throws CpoException {
+    return ((AbstractCpoMetaAdapter)getCpoMetaAdapter()).createCpoArgument();
+  }
 }

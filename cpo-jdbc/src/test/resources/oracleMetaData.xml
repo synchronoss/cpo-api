@@ -1,26 +1,3 @@
-<!--
-/*
- *  Copyright (C) 2003-2012 David E. Berry
- *
- *  This library is free software; you can redistribute it and/or
- *  modify it under the terms of the GNU Lesser General Public
- *  License as published by the Free Software Foundation; either
- *  version 2.1 of the License, or (at your option) any later version.
- *
- *  This library is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *  Lesser General Public License for more details.
- *
- *  You should have received a copy of the GNU Lesser General Public
- *  License along with this library; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
- *
- *  A copy of the GNU Lesser General Public License may also be found at
- *  http://www.gnu.org/licenses/lgpl.txt
- *
- */
--->
 <cpoMetaData metaAdapter="org.synchronoss.cpo.jdbc.meta.JdbcCpoMetaAdapter" xmlns="http://www.synchronoss.org/cpo/core/CpoCoreMeta.xsd">
   <cpoClass name="org.synchronoss.cpo.jdbc.LobValueObject">
     <cpoAttribute xsi:type="cpoj:ctJdbcAttribute" xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
@@ -51,7 +28,7 @@
       <dataType>NUMERIC</dataType>
     </cpoAttribute>
     <cpoFunctionGroup name="createLVO" type="CREATE">
-      <cpoFunction>
+      <cpoFunction name="createLVO">
         <expression>insert into lob_test (lob_id, b_lob, c_lob, b_lob2) values (?,?,?,?)</expression>
         <cpoArgument xsi:type="cpoj:ctJdbcArgument" xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
           <attributeName>lobId</attributeName>
@@ -72,7 +49,7 @@
       </cpoFunction>
     </cpoFunctionGroup>
     <cpoFunctionGroup name="deleteLVO" type="DELETE">
-      <cpoFunction>
+      <cpoFunction name="deleteLVO">
         <expression>delete from lob_test where lob_id = ?</expression>
         <cpoArgument xsi:type="cpoj:ctJdbcArgument" xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
           <attributeName>lobId</attributeName>
@@ -81,7 +58,7 @@
       </cpoFunction>
     </cpoFunctionGroup>
     <cpoFunctionGroup name="retrieveLVO" type="RETRIEVE">
-      <cpoFunction>
+      <cpoFunction name="retrieveLVO">
         <expression>select * from lob_test where lob_id = ?</expression>
         <cpoArgument xsi:type="cpoj:ctJdbcArgument" xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
           <attributeName>lobId</attributeName>
@@ -90,7 +67,7 @@
       </cpoFunction>
     </cpoFunctionGroup>
     <cpoFunctionGroup name="updateLVO" type="UPDATE">
-      <cpoFunction>
+      <cpoFunction name="updateLVO">
         <expression>update lob_test set b_lob=?, c_lob=?, b_lob2=? where lob_id = ?</expression>
         <cpoArgument xsi:type="cpoj:ctJdbcArgument" xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
           <attributeName>bLob</attributeName>
@@ -200,7 +177,7 @@
       <cpoj:dbColumn>id</cpoj:dbColumn>
     </cpoAttribute>
     <cpoFunctionGroup type="CREATE">
-      <cpoFunction>
+      <cpoFunction name="ValueObject - Create">
         <expression>insert into value_object(id, attr_char, attr_character, attr_date, ATTR_DECIMAL, ATTR_INTEGER, ATTR_NUMERIC, ATTR_SMALLINT, ATTR_TIMESTAMP, ATTR_VARCHAR, ATTR_BOOL, ATTR_DATETIME) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)</expression>
         <cpoArgument xsi:type="cpoj:ctJdbcArgument" xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
           <attributeName>id</attributeName>
@@ -253,7 +230,7 @@
       </cpoFunction>
     </cpoFunctionGroup>
     <cpoFunctionGroup name="TestOrderByInsert" type="CREATE">
-      <cpoFunction>
+      <cpoFunction name="TestOrderByInsert">
         <expression>insert into value_object (id,attr_varchar,attr_smallint) values (?,?,?)</expression>
         <cpoArgument xsi:type="cpoj:ctJdbcArgument" xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
           <attributeName>id</attributeName>
@@ -270,7 +247,7 @@
       </cpoFunction>
     </cpoFunctionGroup>
     <cpoFunctionGroup name="TestRollback" type="CREATE">
-      <cpoFunction>
+      <cpoFunction name="ValueObject - TestRollback">
         <expression>insert into value_object (id, attr_varchar) values (?,?)</expression>
         <cpoArgument xsi:type="cpoj:ctJdbcArgument" xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
           <attributeName>id</attributeName>
@@ -283,15 +260,15 @@
       </cpoFunction>
     </cpoFunctionGroup>
     <cpoFunctionGroup name="TestSingleRollback" type="CREATE">
-      <cpoFunction>
+      <cpoFunction name="TestSingleRollback1">
         <expression>insert into value_object (id, attr_varchar) values (2,'Test')</expression>
       </cpoFunction>
-      <cpoFunction>
+      <cpoFunction name="TestSingleRollback2">
         <expression>insert into value_object (id, attr_varchar) values (1,'Test')</expression>
       </cpoFunction>
     </cpoFunctionGroup>
     <cpoFunctionGroup type="DELETE">
-      <cpoFunction>
+      <cpoFunction name="ValueObject - Delete">
         <expression>delete from value_object where id = ?</expression>
         <cpoArgument xsi:type="cpoj:ctJdbcArgument" xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
           <attributeName>id</attributeName>
@@ -300,7 +277,7 @@
       </cpoFunction>
     </cpoFunctionGroup>
     <cpoFunctionGroup name="TestOrderByDelete" type="DELETE">
-      <cpoFunction>
+      <cpoFunction name="TestOrderByDelete">
         <expression>delete from value_object where id = ?</expression>
         <cpoArgument xsi:type="cpoj:ctJdbcArgument" xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
           <attributeName>id</attributeName>
@@ -309,7 +286,7 @@
       </cpoFunction>
     </cpoFunctionGroup>
     <cpoFunctionGroup name="TestExecuteObject" type="EXECUTE">
-      <cpoFunction>
+      <cpoFunction name="ValueObject - Function test">
         <expression>{? = call power(?,?)}</expression>
         <cpoArgument xsi:type="cpoj:ctJdbcArgument" xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
           <attributeName>attrDouble</attributeName>
@@ -326,7 +303,7 @@
       </cpoFunction>
     </cpoFunctionGroup>
     <cpoFunctionGroup name="TestExecuteObjectNoTransform" type="EXECUTE">
-      <cpoFunction>
+      <cpoFunction name="ValueObject - Function test">
         <expression>{? = call power(?,?)}</expression>
         <cpoArgument xsi:type="cpoj:ctJdbcArgument" xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
           <attributeName>attrDouble</attributeName>
@@ -343,7 +320,7 @@
       </cpoFunction>
     </cpoFunctionGroup>
     <cpoFunctionGroup type="EXIST">
-      <cpoFunction>
+      <cpoFunction name="ValueObject - Exists">
         <expression>select count(0) from value_object where id = ?</expression>
         <cpoArgument xsi:type="cpoj:ctJdbcArgument" xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
           <attributeName>id</attributeName>
@@ -352,12 +329,12 @@
       </cpoFunction>
     </cpoFunctionGroup>
     <cpoFunctionGroup name="SelectForUpdateExistAll" type="EXIST">
-      <cpoFunction>
+      <cpoFunction name="ValueObject - SelectForUpdateExistAll">
         <expression>select * from value_object for update</expression>
       </cpoFunction>
     </cpoFunctionGroup>
     <cpoFunctionGroup name="SelectForUpdateExistSingle" type="EXIST">
-      <cpoFunction>
+      <cpoFunction name="ValueObject - SelectForUpdateExistSingle">
         <expression>select * from value_object where id = ? for update</expression>
         <cpoArgument xsi:type="cpoj:ctJdbcArgument" xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
           <attributeName>id</attributeName>
@@ -366,17 +343,17 @@
       </cpoFunction>
     </cpoFunctionGroup>
     <cpoFunctionGroup name="SelectForUpdateExistZero" type="EXIST">
-      <cpoFunction>
+      <cpoFunction name="ValueObject - SelectForUpdateExistZero">
         <expression>select * from value_object where id is null for update</expression>
       </cpoFunction>
     </cpoFunctionGroup>
     <cpoFunctionGroup type="LIST">
-      <cpoFunction>
+      <cpoFunction name="ValueObject - list">
         <expression>select * from value_object</expression>
       </cpoFunction>
     </cpoFunctionGroup>
     <cpoFunctionGroup name="InterleavedWhere" type="LIST">
-      <cpoFunction>
+      <cpoFunction name="ValueObject - InterleavedWhere">
         <expression>select * from value_object where attr_varchar=? __CPO_WHERE__ and attr_varchar=?</expression>
         <cpoArgument xsi:type="cpoj:ctJdbcArgument" xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
           <attributeName>attrVarChar</attributeName>
@@ -389,17 +366,17 @@
       </cpoFunction>
     </cpoFunctionGroup>
     <cpoFunctionGroup name="TestOrderByRetrieve" type="LIST">
-      <cpoFunction>
+      <cpoFunction name="TestOrderByRetrieve">
         <expression>select * from value_object</expression>
       </cpoFunction>
     </cpoFunctionGroup>
     <cpoFunctionGroup name="TestWhereRetrieve" type="LIST">
-      <cpoFunction>
+      <cpoFunction name="Value Object - TestWhereRetrieve">
         <expression>select * from value_object __CPO_WHERE__ order by id</expression>
       </cpoFunction>
     </cpoFunctionGroup>
     <cpoFunctionGroup type="RETRIEVE">
-      <cpoFunction>
+      <cpoFunction name="ValueObject - Retrieve">
         <expression>select * from value_object where id = ?</expression>
         <cpoArgument xsi:type="cpoj:ctJdbcArgument" xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
           <attributeName>id</attributeName>
@@ -408,7 +385,7 @@
       </cpoFunction>
     </cpoFunctionGroup>
     <cpoFunctionGroup name="Select4UpdateNoWait" type="RETRIEVE">
-      <cpoFunction>
+      <cpoFunction name="ValueObject - SelectForUpdateNoWait">
         <expression>select * from value_object where id = ? for update of id NOWAIT</expression>
         <cpoArgument xsi:type="cpoj:ctJdbcArgument" xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
           <attributeName>id</attributeName>
@@ -417,7 +394,7 @@
       </cpoFunction>
     </cpoFunctionGroup>
     <cpoFunctionGroup name="SelectForUpdate" type="RETRIEVE">
-      <cpoFunction>
+      <cpoFunction name="ValueObject - SelectForUpdate">
         <expression>select * from value_object where id = ? for update of id</expression>
         <cpoArgument xsi:type="cpoj:ctJdbcArgument" xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
           <attributeName>id</attributeName>
@@ -426,7 +403,7 @@
       </cpoFunction>
     </cpoFunctionGroup>
     <cpoFunctionGroup name="TestRetrieveObject" type="RETRIEVE">
-      <cpoFunction>
+      <cpoFunction name="ValueObject - TestRetrieveObject">
         <expression>Select * from value_object where id = ?</expression>
         <cpoArgument xsi:type="cpoj:ctJdbcArgument" xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
           <attributeName>id</attributeName>
@@ -435,7 +412,7 @@
       </cpoFunction>
     </cpoFunctionGroup>
     <cpoFunctionGroup type="UPDATE">
-      <cpoFunction>
+      <cpoFunction name="ValueObject - Default Update">
         <expression>update value_object set ATTR_VARCHAR=?</expression>
         <cpoArgument xsi:type="cpoj:ctJdbcArgument" xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
           <attributeName>attrVarChar</attributeName>

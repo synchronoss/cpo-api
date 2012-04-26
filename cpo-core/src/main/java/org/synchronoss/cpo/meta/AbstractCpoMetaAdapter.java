@@ -136,7 +136,7 @@ public abstract class AbstractCpoMetaAdapter implements CpoMetaAdapter {
     if (ctFunctionGroup.isSetName()) {
       cpoFunctionGroup.setName(ctFunctionGroup.getName());
     }
-    cpoFunctionGroup.setType(ctFunctionGroup.getType());
+    cpoFunctionGroup.setType(ctFunctionGroup.getType().toString());
 
     for (CtFunction ctFunction : ctFunctionGroup.getCpoFunctionArray()) {
       CpoFunction cpoFunction = createCpoFunction();
@@ -147,6 +147,7 @@ public abstract class AbstractCpoMetaAdapter implements CpoMetaAdapter {
   }
 
   protected void loadCpoFunction(CpoFunction cpoFunction, CtFunction ctFunction) {
+    cpoFunction.setName(ctFunction.getName());
     cpoFunction.setExpression(ctFunction.getExpression());
     cpoFunction.setDescription(ctFunction.getDescription());
 

@@ -254,7 +254,7 @@ public class ConvertSQLToXML extends AbstractMojo {
     List<CpoFunctionGroup> functionGroups = new ArrayList<CpoFunctionGroup>();
 
     StringBuilder sql = new StringBuilder();
-    sql.append("select cqg.group_type, cqg.name, cqt.sql_text, cam.attribute, cqp.param_type ");
+    sql.append("select cqg.group_type, cqg.name, cqt.sql_text, cqt.description, cam.attribute, cqp.param_type ");
     sql.append("from " + dbTablePrefix + "cpo_query_group cqg ");
     sql.append("join " + dbTablePrefix + "cpo_class cc on cqg.class_id = cc.class_id and cc.name = ? ");
     sql.append("left outer join " + dbTablePrefix + "cpo_query cq on cqg.group_id = cq.group_id ");
@@ -282,8 +282,9 @@ public class ConvertSQLToXML extends AbstractMojo {
         String groupType = rs.getString(1);
         String groupName = rs.getString(2);
         String expression = rs.getString(3);
-        String attribute = rs.getString(4);
-        String paramType = rs.getString(5);
+        String functionName = rs.getString(4);
+        String attribute = rs.getString(5);
+        String paramType = rs.getString(6);
 
         StringBuilder fgNamebuf = new StringBuilder();
         fgNamebuf.append(groupType);
@@ -309,6 +310,7 @@ public class ConvertSQLToXML extends AbstractMojo {
         // if the function changed, make a new one
         if (function == null || !function.getExpression().equals(expression)) {
           function = new CpoFunction();
+          function.setName(functionName);
           function.setExpression(expression);
 
           functionGroup.addFunction(function);

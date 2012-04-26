@@ -26,10 +26,19 @@ public class CpoFunctionBean implements java.io.Serializable {
   /*
    * Properties
    */
+  private java.lang.String name;
   private java.lang.String expression;
   private java.lang.String description;
 
   public CpoFunctionBean() {
+  }
+
+  public String getName() {
+    return name;
+  }
+
+  public void setName(String name) {
+    this.name = name;
   }
 
   public String getDescription() {

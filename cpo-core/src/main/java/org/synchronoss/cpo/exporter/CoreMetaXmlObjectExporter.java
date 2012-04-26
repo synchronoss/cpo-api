@@ -92,7 +92,7 @@ public class CoreMetaXmlObjectExporter implements MetaXmlObjectExporter, MetaVis
         ctFunctionGroup.setName(cpoFunctionGroup.getName());
       }
 
-      ctFunctionGroup.setType(cpoFunctionGroup.getType());
+      ctFunctionGroup.setType(StFunctionGroupType.Enum.forString(cpoFunctionGroup.getType()));
 
       if (cpoFunctionGroup.getDescription() != null && cpoFunctionGroup.getDescription().length() > 0) {
         ctFunctionGroup.setDescription(cpoFunctionGroup.getDescription());
@@ -108,6 +108,7 @@ public class CoreMetaXmlObjectExporter implements MetaXmlObjectExporter, MetaVis
     if (currentCtFunctionGroup != null) {
       CtFunction ctFunction = currentCtFunctionGroup.addNewCpoFunction();
 
+      ctFunction.setName(cpoFunction.getName());
       ctFunction.setExpression(cpoFunction.getExpression());
 
       if (cpoFunction.getDescription() != null && cpoFunction.getDescription().length() > 0) {

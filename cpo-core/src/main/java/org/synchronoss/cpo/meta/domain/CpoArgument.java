@@ -37,4 +37,13 @@ public class CpoArgument extends CpoArgumentBean {
   public void setAttribute(CpoAttribute attribute) {
     this.attribute = attribute;
   }
+
+  @Override
+  public String toString() {
+    return this.getDescription();
+  }
+
+  public String toStringFull() {
+    return super.toString();
+  }
 }

@@ -21,18 +21,15 @@
  */
 package org.synchronoss.cpo.meta.domain;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.List;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.slf4j.*;
 import org.synchronoss.cpo.CpoException;
 import org.synchronoss.cpo.helper.ExceptionHelper;
 import org.synchronoss.cpo.meta.CpoMetaAdapter;
 import org.synchronoss.cpo.meta.bean.CpoAttributeBean;
 import org.synchronoss.cpo.transform.CpoTransform;
+
+import java.lang.reflect.*;
+import java.util.*;
 
 public class CpoAttribute extends CpoAttributeBean {
 
@@ -156,7 +153,7 @@ public class CpoAttribute extends CpoAttributeBean {
     Logger localLogger = obj == null ? logger : LoggerFactory.getLogger(obj.getClass().getName());
 
     try {
-      return transformOut(getGetters().get(0).invoke(obj, (Object[]) null));
+      return transformOut(getGetters().get(0).invoke(obj, (Object[])null));
     } catch (IllegalAccessException iae) {
       localLogger.debug("Error Invoking Getter Method: " + ExceptionHelper.getLocalizedMessage(iae));
     } catch (InvocationTargetException ite) {
@@ -256,35 +253,43 @@ public class CpoAttribute extends CpoAttributeBean {
     Class<?> transformClass = null;
     Logger localLogger = className == null ? logger : LoggerFactory.getLogger(className);
 
-      if (className != null && className.length() > 0) {
-        try {
-          transformClass = Class.forName(className);
-        } catch (Exception e) {
-          String msg = ExceptionHelper.getLocalizedMessage(e);
+    if (className != null && className.length() > 0) {
+      try {
+        transformClass = Class.forName(className);
+      } catch (Exception e) {
+        String msg = ExceptionHelper.getLocalizedMessage(e);
 
-          localLogger.error("Invalid Transform Class specified:<" + className + ">");
-          throw new CpoException("Invalid Transform Class specified:<" + className + ">:");
-        }
-
-        Object transformObject;
-        try {
-            transformObject = transformClass.newInstance();
-        } catch (Exception e) {
-          localLogger.debug("Error Setting Transform Class: " + ExceptionHelper.getLocalizedMessage(e));
-          throw new CpoException(e);
-        }
-
-        if (transformObject instanceof CpoTransform) {
-          cpoTransform = (CpoTransform) transformObject;
-          List<Method> methods = findMethods(transformClass, TRANSFORM_IN_NAME, 1, true);
-          if (methods.size() > 0) {
-            transformInMethod = methods.get(0);
-          }
-        } else {
-          localLogger.error("Invalid CpoTransform Class specified:<" + className + ">");
-          throw new CpoException("Invalid CpoTransform Class specified:<" + className + ">");
-        }
-
+        localLogger.error("Invalid Transform Class specified:<" + className + ">");
+        throw new CpoException("Invalid Transform Class specified:<" + className + ">:");
       }
+
+      Object transformObject;
+      try {
+        transformObject = transformClass.newInstance();
+      } catch (Exception e) {
+        localLogger.debug("Error Setting Transform Class: " + ExceptionHelper.getLocalizedMessage(e));
+        throw new CpoException(e);
+      }
+
+      if (transformObject instanceof CpoTransform) {
+        cpoTransform = (CpoTransform)transformObject;
+        List<Method> methods = findMethods(transformClass, TRANSFORM_IN_NAME, 1, true);
+        if (methods.size() > 0) {
+          transformInMethod = methods.get(0);
+        }
+      } else {
+        localLogger.error("Invalid CpoTransform Class specified:<" + className + ">");
+        throw new CpoException("Invalid CpoTransform Class specified:<" + className + ">");
+      }
+    }
+  }
+
+  @Override
+  public String toString() {
+    return this.getJavaName();
+  }
+
+  public String toStringFull() {
+    return super.toString();
   }
 }

@@ -21,9 +21,9 @@
  */
 package org.synchronoss.cpo.meta.domain;
 
-import java.util.ArrayList;
-import java.util.List;
 import org.synchronoss.cpo.meta.bean.CpoFunctionGroupBean;
+
+import java.util.*;
 
 public class CpoFunctionGroup extends CpoFunctionGroupBean {
 
@@ -40,5 +40,14 @@ public class CpoFunctionGroup extends CpoFunctionGroupBean {
     if (function != null) {
       functions.add(function);
     }
+  }
+
+  @Override
+  public String toString() {
+    return this.getType() + " - " + this.getName();
+  }
+
+  public String toStringFull() {
+    return super.toString();
   }
 }

@@ -158,4 +158,13 @@ public class CpoClass extends CpoClassBean implements Comparable<CpoClass>, Meta
     }
     return dataMap.get(dataName);
   }
+
+  @Override
+  public String toString() {
+    return this.getName();
+  }
+
+  public String toStringFull() {
+    return super.toString();
+  }
 }

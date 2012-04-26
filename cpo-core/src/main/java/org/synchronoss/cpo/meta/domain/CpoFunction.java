@@ -21,11 +21,10 @@
  */
 package org.synchronoss.cpo.meta.domain;
 
-import java.util.ArrayList;
-import java.util.List;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.slf4j.*;
 import org.synchronoss.cpo.meta.bean.CpoFunctionBean;
+
+import java.util.*;
 
 public class CpoFunction extends CpoFunctionBean {
 
@@ -48,7 +47,7 @@ public class CpoFunction extends CpoFunctionBean {
   /**
    * DOCUMENT ME!
    *
-   * @param jq DOCUMENT ME!
+   * @param function DOCUMENT ME!
    * @return DOCUMENT ME!
    */
   public String parameterToString(CpoFunction function) {
@@ -91,5 +90,14 @@ public class CpoFunction extends CpoFunctionBean {
     }
 
     return sb.toString();
+  }
+
+  @Override
+  public String toString() {
+    return this.getDescription();
+  }
+
+  public String toStringFull() {
+    return super.toString();
   }
 }

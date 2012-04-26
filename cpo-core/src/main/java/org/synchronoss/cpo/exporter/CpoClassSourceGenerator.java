@@ -23,7 +23,7 @@ package org.synchronoss.cpo.exporter;
 
 import org.synchronoss.cpo.CpoException;
 import org.synchronoss.cpo.MetaVisitor;
-import org.synchronoss.cpo.meta.CpoMetaAdapter;
+import org.synchronoss.cpo.meta.CpoMetaDescriptor;
 import org.synchronoss.cpo.meta.domain.*;
 
 /**
@@ -37,7 +37,7 @@ public class CpoClassSourceGenerator implements MetaVisitor {
   private static final String ATTR_PREFIX = "ATTR_";
   private static final String FG_PREFIX = "FG";
 
-  protected CpoMetaAdapter metaAdapter;
+  protected CpoMetaDescriptor metaDescriptor;
   protected String className = null;
   protected StringBuilder header = new StringBuilder();
   protected StringBuilder attributeStatics = new StringBuilder();
@@ -50,8 +50,8 @@ public class CpoClassSourceGenerator implements MetaVisitor {
   protected StringBuilder toString = new StringBuilder();
   protected StringBuilder footer = new StringBuilder();
 
-  public CpoClassSourceGenerator(CpoMetaAdapter metaAdapter) {
-    this.metaAdapter = metaAdapter;
+  public CpoClassSourceGenerator(CpoMetaDescriptor metaAdapter) {
+    this.metaDescriptor = metaAdapter;
   }
 
   /**
@@ -167,8 +167,8 @@ public class CpoClassSourceGenerator implements MetaVisitor {
     }
 
     try {
-      Class<?> attClass = metaAdapter.getJavaTypeClass(cpoAttribute);
-      String attClassName = metaAdapter.getJavaTypeName(cpoAttribute);
+      Class<?> attClass = metaDescriptor.getJavaTypeClass(cpoAttribute);
+      String attClassName = metaDescriptor.getJavaTypeName(cpoAttribute);
 
       // generate attribute statics
       String staticName = ATTR_PREFIX + attName.toUpperCase();

@@ -23,7 +23,7 @@ package org.synchronoss.cpo.exporter;
 
 import org.synchronoss.cpo.MetaVisitor;
 import org.synchronoss.cpo.core.cpoCoreMeta.*;
-import org.synchronoss.cpo.meta.CpoMetaAdapter;
+import org.synchronoss.cpo.meta.CpoMetaDescriptor;
 import org.synchronoss.cpo.meta.domain.*;
 
 /**
@@ -39,10 +39,10 @@ public class CoreMetaXmlObjectExporter implements MetaXmlObjectExporter, MetaVis
   protected CtFunctionGroup currentCtFunctionGroup;
   protected CtFunction currentCtFunction;
 
-  public CoreMetaXmlObjectExporter(CpoMetaAdapter metaAdapter) {
+  public CoreMetaXmlObjectExporter(CpoMetaDescriptor metaDescriptor) {
     cpoMetaDataDocument = CpoMetaDataDocument.Factory.newInstance();
     CtCpoMetaData ctCpoMetaData = cpoMetaDataDocument.addNewCpoMetaData();
-    ctCpoMetaData.setMetaAdapter(metaAdapter.getClass().getName());
+    ctCpoMetaData.setMetaAdapter(metaDescriptor.getClass().getName());
   }
 
   @Override

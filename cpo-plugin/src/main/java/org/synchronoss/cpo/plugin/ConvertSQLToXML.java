@@ -27,13 +27,13 @@ import org.synchronoss.cpo.core.cpoCoreMeta.CpoMetaDataDocument;
 import org.synchronoss.cpo.exporter.MetaXmlObjectExporter;
 import org.synchronoss.cpo.jdbc.*;
 import org.synchronoss.cpo.jdbc.exporter.JdbcMetaXmlObjectExporter;
-import org.synchronoss.cpo.jdbc.meta.JdbcCpoMetaAdapter;
-import org.synchronoss.cpo.meta.CpoMetaAdapter;
 import org.synchronoss.cpo.meta.domain.*;
 
 import java.io.*;
 import java.sql.*;
 import java.util.*;
+import org.synchronoss.cpo.jdbc.meta.JdbcCpoMetaDescriptor;
+import org.synchronoss.cpo.meta.CpoMetaDescriptor;
 
 /**
  * @goal convertsqltoxml
@@ -67,7 +67,7 @@ public class ConvertSQLToXML extends AbstractMojo {
    */
   private String filter;
 
-  private CpoMetaAdapter metaAdapter = new JdbcCpoMetaAdapter();
+  private CpoMetaDescriptor metaDescriptor;
 
 	public void execute() throws MojoExecutionException {
 		getLog().info("Converting SQL to XML...");
@@ -75,6 +75,13 @@ public class ConvertSQLToXML extends AbstractMojo {
     getLog().info("dbUrl: " + dbUrl);
     getLog().info("dbTablePrefix: " + dbTablePrefix);
     getLog().info("Class: " + dbDriver);
+    
+    try {
+      metaDescriptor = JdbcCpoMetaDescriptor.newInstance("Converter");
+    } catch (Exception e) {
+      throw new MojoExecutionException("Couldn't load the MetaDescriptor");
+    }
+    
     try {
       Class<?> driverClass = Class.forName(dbDriver);
     } catch (Exception e) {
@@ -113,8 +120,8 @@ public class ConvertSQLToXML extends AbstractMojo {
         }
       }
 
-      // Force the JdbcCpoMetaAdapter class here, because we know it's from a database
-      MetaXmlObjectExporter exporter = new JdbcMetaXmlObjectExporter(metaAdapter);
+      // Force the metaDescriptor class here, because we know it's from a database
+      MetaXmlObjectExporter exporter = new JdbcMetaXmlObjectExporter(metaDescriptor);
       for (CpoClass cpoClass : classes) {
         cpoClass.acceptMetaDFVisitor(exporter);
       }
@@ -222,7 +229,7 @@ public class ConvertSQLToXML extends AbstractMojo {
         cpoAttribute.setTransformClassName(rs.getString(6));
 
         // figure out the java type
-        cpoAttribute.setJavaType(metaAdapter.getJavaTypeName(cpoAttribute));
+        cpoAttribute.setJavaType(metaDescriptor.getJavaTypeName(cpoAttribute));
 
         attributes.add(cpoAttribute);
       }

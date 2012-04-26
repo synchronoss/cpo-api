@@ -25,6 +25,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Constructor;
 import java.util.List;
 import org.apache.xmlbeans.XmlException;
 import org.synchronoss.cpo.CpoException;
@@ -37,11 +38,11 @@ import org.synchronoss.cpo.helper.ExceptionHelper;
  */
 public class CpoCoreMetaAdapter {
 
-  static protected CpoMetaAdapter newInstance(List<String> metaXmls) throws CpoException {
-    return newInstance(metaXmls.toArray(new String[metaXmls.size()]));
+  static protected CpoMetaAdapter newInstance(CpoMetaDescriptor descriptor, List<String> metaXmls) throws CpoException {
+    return newInstance(descriptor, metaXmls.toArray(new String[metaXmls.size()]));
   }
   
-  static protected CpoMetaAdapter newInstance(String[] metaXmls) throws CpoException {
+  static protected CpoMetaAdapter newInstance(CpoMetaDescriptor descriptor, String[] metaXmls) throws CpoException {
     String metaAdapterClassName = null;
     AbstractCpoMetaAdapter metaAdapter = null;
 
@@ -65,7 +66,9 @@ public class CpoCoreMetaAdapter {
         
         if (metaAdapterClassName == null) {
           metaAdapterClassName = metaDataDoc.getCpoMetaData().getMetaAdapter();
-          metaAdapter = (AbstractCpoMetaAdapter) Class.forName(metaAdapterClassName).newInstance();
+          Class<?> clazz = Class.forName(metaAdapterClassName);
+          Constructor<?> cons = clazz.getConstructor(CpoMetaDescriptor.class);
+          metaAdapter = (AbstractCpoMetaAdapter) cons.newInstance(descriptor);
         } else if (!metaAdapterClassName.equals(metaDataDoc.getCpoMetaData().getMetaAdapter())){
           throw new CpoException("Error processing multiple metaXml files. All files must have the same metaAdapter class name.");
         }
@@ -82,6 +85,8 @@ public class CpoCoreMetaAdapter {
         throw new CpoException("Could not access CpoMetaAdapter: " + metaAdapterClassName + ": " + ExceptionHelper.getLocalizedMessage(iae));
       } catch (InstantiationException ie) {
         throw new CpoException("Could not instantiate CpoMetaAdapter: " + metaAdapterClassName + ": " + ExceptionHelper.getLocalizedMessage(ie));
+      } catch (Exception e) {
+        throw new CpoException("Error Constructing metaAdapter: " + metaAdapterClassName + ": " + ExceptionHelper.getLocalizedMessage(e));
       } finally {
         if (is != null) {
           try {

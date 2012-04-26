@@ -34,6 +34,7 @@ import org.synchronoss.cpo.parser.ExpressionParser;
 
 import java.math.BigDecimal;
 import java.util.*;
+import org.synchronoss.cpo.meta.CpoMetaDescriptor;
 
 /**
  *
@@ -82,7 +83,8 @@ public class JdbcCpoMetaAdapter extends AbstractCpoMetaAdapter {
   private static HashMap<String, JavaSqlType<?>> javaSqlTypeNameMap = null;
 
   
-  public JdbcCpoMetaAdapter() {
+  public JdbcCpoMetaAdapter(CpoMetaDescriptor metaDescriptor) {
+    super(metaDescriptor);
   }
 
   @Override
@@ -123,7 +125,7 @@ public class JdbcCpoMetaAdapter extends AbstractCpoMetaAdapter {
 
   @Override
   protected MetaXmlObjectExporter getMetaXmlObjectExporter() {
-    return new JdbcMetaXmlObjectExporter(this);
+    return new JdbcMetaXmlObjectExporter(getMetaDescriptor());
   }
 
   @Override

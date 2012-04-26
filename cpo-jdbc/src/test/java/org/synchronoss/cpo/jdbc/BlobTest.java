@@ -28,7 +28,6 @@ import org.synchronoss.cpo.CpoAdapter;
 import org.synchronoss.cpo.CpoAdapterBean;
 import org.synchronoss.cpo.CpoAdapterFactory;
 import org.synchronoss.cpo.jdbc.meta.JdbcCpoMetaDescriptor;
-import org.synchronoss.cpo.jdbc.meta.JdbcCpoMetaAdapter;
 
 /**
  * BlobTest is a JUnit test class for testing the JdbcAdapter class Constructors

@@ -34,7 +34,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.*;
 import org.synchronoss.cpo.helper.ExceptionHelper;
-import org.synchronoss.cpo.meta.CpoMetaAdapter;
 import org.synchronoss.cpo.meta.CpoMetaDescriptor;
 import org.synchronoss.cpo.meta.domain.CpoArgument;
 import org.synchronoss.cpo.meta.domain.CpoClass;
@@ -122,7 +121,7 @@ public class JdbcCpoAdapter implements CpoAdapter {
   private boolean metaEqualsWrite_ = false;
   private boolean batchUpdatesSupported_ = false;
   /**
-   * CpoMetaAdapter allows you to get the meta data for a class.
+   * CpoMetaDescriptor allows you to get the meta data for a class.
    */
   private CpoMetaDescriptor metaDescriptor = null;
 

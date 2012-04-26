@@ -33,6 +33,7 @@ import org.synchronoss.cpo.core.cpoCoreConfig.CpoConfigDocument;
 import org.synchronoss.cpo.core.cpoCoreConfig.CtCpoConfig;
 import org.synchronoss.cpo.core.cpoCoreConfig.CtDataSourceConfig;
 import org.synchronoss.cpo.helper.ExceptionHelper;
+import org.synchronoss.cpo.meta.CpoMetaDescriptor;
 
 /**
  *

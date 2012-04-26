@@ -33,7 +33,6 @@ import org.synchronoss.cpo.CpoAdapterFactory;
 import org.synchronoss.cpo.CpoWhere;
 import org.synchronoss.cpo.helper.ExceptionHelper;
 import org.synchronoss.cpo.jdbc.meta.JdbcCpoMetaDescriptor;
-import org.synchronoss.cpo.jdbc.meta.JdbcCpoMetaAdapter;
 
 /**
  * DeleteObjectTest is a JUnit test class for testing the JdbcAdapter deleteObject method

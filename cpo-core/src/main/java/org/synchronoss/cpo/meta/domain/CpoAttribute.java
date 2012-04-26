@@ -21,15 +21,18 @@
  */
 package org.synchronoss.cpo.meta.domain;
 
-import org.slf4j.*;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.CpoException;
 import org.synchronoss.cpo.helper.ExceptionHelper;
 import org.synchronoss.cpo.meta.CpoMetaAdapter;
 import org.synchronoss.cpo.meta.bean.CpoAttributeBean;
 import org.synchronoss.cpo.transform.CpoTransform;
-
-import java.lang.reflect.*;
-import java.util.*;
 
 public class CpoAttribute extends CpoAttributeBean {
 

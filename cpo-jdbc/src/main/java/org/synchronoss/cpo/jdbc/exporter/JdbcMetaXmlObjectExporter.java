@@ -29,7 +29,7 @@ import org.synchronoss.cpo.jdbc.JdbcCpoArgument;
 import org.synchronoss.cpo.jdbc.JdbcCpoAttribute;
 import org.synchronoss.cpo.jdbc.cpoJdbcMeta.CtJdbcArgument;
 import org.synchronoss.cpo.jdbc.cpoJdbcMeta.CtJdbcAttribute;
-import org.synchronoss.cpo.meta.CpoMetaAdapter;
+import org.synchronoss.cpo.meta.CpoMetaDescriptor;
 import org.synchronoss.cpo.meta.domain.CpoArgument;
 import org.synchronoss.cpo.meta.domain.CpoAttribute;
 
@@ -41,8 +41,8 @@ import org.synchronoss.cpo.meta.domain.CpoAttribute;
  */
 public class JdbcMetaXmlObjectExporter extends CoreMetaXmlObjectExporter implements MetaXmlObjectExporter {
 
-  public JdbcMetaXmlObjectExporter(CpoMetaAdapter metaAdapter) {
-    super(metaAdapter);
+  public JdbcMetaXmlObjectExporter(CpoMetaDescriptor metaDescriptor) {
+    super(metaDescriptor);
   }
 
   @Override

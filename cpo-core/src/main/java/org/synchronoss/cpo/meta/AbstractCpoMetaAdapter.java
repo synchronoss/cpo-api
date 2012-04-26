@@ -41,6 +41,18 @@ public abstract class AbstractCpoMetaAdapter implements CpoMetaAdapter {
    */
   private static SortedMap<String, CpoClass> classMap = new TreeMap<String, CpoClass>();
   private CpoClass currentClass = null;
+  private CpoMetaDescriptor metaDescriptor = null;
+  
+  private AbstractCpoMetaAdapter(){
+  }
+
+  protected AbstractCpoMetaAdapter(CpoMetaDescriptor metaDescriptor){
+    this.metaDescriptor = metaDescriptor;
+  }
+
+  protected CpoMetaDescriptor getMetaDescriptor() {
+    return metaDescriptor;
+  }
 
   /**
    * DOCUMENT ME!
@@ -186,7 +198,7 @@ public abstract class AbstractCpoMetaAdapter implements CpoMetaAdapter {
   }
 
   protected MetaXmlObjectExporter getMetaXmlObjectExporter() {
-    return new CoreMetaXmlObjectExporter(this);
+    return new CoreMetaXmlObjectExporter(metaDescriptor);
   }
 
   @Override

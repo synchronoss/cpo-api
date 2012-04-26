@@ -21,7 +21,6 @@
  */
 package org.synchronoss.cpo.jdbc.config;
 
-import org.synchronoss.cpo.jdbc.meta.JdbcCpoMetaDescriptor;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
@@ -38,6 +37,7 @@ import org.synchronoss.cpo.jdbc.JndiDataSourceInfo;
 import org.synchronoss.cpo.jdbc.cpoJdbcConfig.CtJdbcConfig;
 import org.synchronoss.cpo.jdbc.cpoJdbcConfig.CtJdbcReadWriteConfig;
 import org.synchronoss.cpo.jdbc.cpoJdbcConfig.CtProperty;
+import org.synchronoss.cpo.jdbc.meta.JdbcCpoMetaDescriptor;
 
 /**
  *

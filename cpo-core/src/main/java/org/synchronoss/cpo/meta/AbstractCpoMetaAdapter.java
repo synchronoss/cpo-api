@@ -106,7 +106,7 @@ public abstract class AbstractCpoMetaAdapter implements CpoMetaAdapter {
     return result;
   }
 
-  public void loadCpoMetaDataDocument(CpoMetaDataDocument metaDataDoc) throws CpoException {
+  protected void loadCpoMetaDataDocument(CpoMetaDataDocument metaDataDoc) throws CpoException {
 
     for (CtClass ctClass : metaDataDoc.getCpoMetaData().getCpoClassArray()) {
       CpoClass cpoClass = loadCpoClass(ctClass);

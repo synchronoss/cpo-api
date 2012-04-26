@@ -155,16 +155,8 @@
         <cpo.db.select4update>true</cpo.db.select4update>
         <cpo.db.millisupport>false</cpo.db.millisupport>
         <cpo.db.class>com.mysql.jdbc.jdbc2.optional.MysqlConnectionPoolDataSource</cpo.db.class>        
-        <cpo.meta.class>com.mysql.jdbc.jdbc2.optional.MysqlConnectionPoolDataSource</cpo.meta.class>        
-        <cpo.meta.user>cpometa</cpo.meta.user>
-        <cpo.meta.pswd>cpometa</cpo.meta.pswd>
-        <cpo.meta.host>localhost</cpo.meta.host>
-        <cpo.meta.port>3306</cpo.meta.port>
-        <cpo.meta.database>cpometa</cpo.meta.database>
-        <cpo.meta.url>jdbc:mysql://${cpo.meta.host}:${cpo.meta.port}/${cpo.meta.database}</cpo.meta.url>
-        <cpo.meta.userurl>jdbc:mysql://${cpo.meta.host}:${cpo.meta.port}/${cpo.meta.database}?user=${cpo.meta.user}&amp;password=${cpo.meta.pswd}</cpo.meta.userurl>
-        <cpo.meta.driver>com.mysql.jdbc.Driver</cpo.meta.driver>
-        <cpo.tableprefix>TEST_</cpo.tableprefix>
+        <cpo.valueMeta.xml>/mysqlValueMetaData.xml</cpo.valueMeta.xml>
+        <cpo.lobMeta.xml>/mysqlLobMetaData.xml</cpo.lobMeta.xml>
       </properties>
     </profile>
     <profile>
@@ -190,17 +182,8 @@
         <cpo.db.select4update>true</cpo.db.select4update>
         <cpo.db.millisupport>true</cpo.db.millisupport>
         <cpo.db.class>oracle.jdbc.pool.OracleConnectionPoolDataSource</cpo.db.class>        
-        <cpo.meta.xml>/oracleMetaData.xml</cpo.meta.xml>
-        <cpo.meta.class>oracle.jdbc.pool.OracleConnectionPoolDataSource</cpo.meta.class>        
-        <cpo.meta.user>cpometa</cpo.meta.user>
-        <cpo.meta.pswd>cpometa</cpo.meta.pswd>
-        <cpo.meta.host>pabetdd01v1.sncrcorp.net</cpo.meta.host>
-        <cpo.meta.port>1521</cpo.meta.port>
-        <cpo.meta.database>dcig1</cpo.meta.database>
-        <cpo.meta.url>jdbc:oracle:thin:@${cpo.meta.host}:${cpo.meta.port}:${cpo.meta.database}</cpo.meta.url>
-        <cpo.meta.userurl>jdbc:oracle:thin:${cpo.meta.user}/${cpo.meta.pswd}@${cpo.meta.host}:${cpo.meta.port}:${cpo.meta.database}</cpo.meta.userurl>
-        <cpo.meta.driver>oracle.jdbc.OracleDriver</cpo.meta.driver>
-        <cpo.tableprefix>TEST_</cpo.tableprefix>
+        <cpo.valueMeta.xml>/oracleValueMetaData.xml</cpo.valueMeta.xml>
+        <cpo.lobMeta.xml>/oracleLobMetaData.xml</cpo.lobMeta.xml>
       </properties>
     </profile>
     <profile>
@@ -228,16 +211,8 @@
         <cpo.db.select4update>false</cpo.db.select4update>
         <cpo.db.millisupport>true</cpo.db.millisupport>
         <cpo.db.class>org.hsqldb.jdbc.JDBCDataSource</cpo.db.class>
-        <cpo.meta.class>org.hsqldb.jdbc.JDBCDataSource</cpo.meta.class>
-        <cpo.meta.user>cpometa</cpo.meta.user>
-        <cpo.meta.pswd>cpometa</cpo.meta.pswd>
-        <cpo.meta.host>localhost</cpo.meta.host>
-        <cpo.meta.port />
-        <cpo.meta.database>cpometa</cpo.meta.database>
-        <cpo.meta.url>jdbc:hsqldb:hsql://${cpo.meta.host}/${cpo.meta.database}</cpo.meta.url>
-        <cpo.meta.userurl>jdbc:hsqldb:hsql://${cpo.meta.host}/${cpo.meta.database};user=${cpo.meta.user};password=${cpo.meta.pswd}</cpo.meta.userurl>
-        <cpo.meta.driver>org.hsqldb.jdbcDriver</cpo.meta.driver>
-        <cpo.tableprefix>TEST_</cpo.tableprefix>
+        <cpo.valueMeta.xml>/hsqldbValueMetaData.xml</cpo.valueMeta.xml>
+        <cpo.lobMeta.xml>/hsqldbLobMetaData.xml</cpo.lobMeta.xml>
       </properties>
     </profile>
     <profile>
@@ -265,16 +240,8 @@
         <cpo.db.select4update>false</cpo.db.select4update>
         <cpo.db.millisupport>true</cpo.db.millisupport>
         <cpo.db.class>org.hsqldb.jdbc.JDBCDataSource</cpo.db.class>
-        <cpo.meta.class>org.hsqldb.jdbc.JDBCDataSource</cpo.meta.class>
-        <cpo.meta.user>sa</cpo.meta.user>
-        <cpo.meta.pswd />
-        <cpo.meta.host>localhost</cpo.meta.host>
-        <cpo.meta.port />
-        <cpo.meta.database>src/test/sql/hsqldb/db/cpometa</cpo.meta.database>
-        <cpo.meta.url>jdbc:hsqldb:file:${cpo.meta.database}</cpo.meta.url>
-        <cpo.meta.userurl>jdbc:hsqldb:file:${cpo.meta.database};shutdown=true;user=${cpo.meta.user};password=${cpo.meta.pswd}</cpo.meta.userurl>
-        <cpo.meta.driver>org.hsqldb.jdbcDriver</cpo.meta.driver>
-        <cpo.tableprefix>TEST_</cpo.tableprefix>
+        <cpo.valueMeta.xml>/hsqldbValueMetaData.xml</cpo.valueMeta.xml>
+        <cpo.lobMeta.xml>/hsqldbLobMetaData.xml</cpo.lobMeta.xml>
       </properties>
     </profile>
     <profile>
@@ -301,15 +268,8 @@
         <cpo.db.callssupported>true</cpo.db.callssupported>
         <cpo.db.select4update>true</cpo.db.select4update>
         <cpo.db.millisupport>true</cpo.db.millisupport>
-        <cpo.meta.user>cpometa</cpo.meta.user>
-        <cpo.meta.pswd>cpometa</cpo.meta.pswd>
-        <cpo.meta.host>localhost</cpo.meta.host>
-        <cpo.meta.port>5432</cpo.meta.port>
-        <cpo.meta.database>cpometa</cpo.meta.database>
-        <cpo.meta.url>jdbc:postgresql://${cpo.meta.host}:${cpo.meta.port}/${cpo.meta.database}</cpo.meta.url>
-        <cpo.meta.userurl>jdbc:postgresql://${cpo.meta.host}:${cpo.meta.port}/${cpo.meta.database}?user=${cpo.meta.user}&amp;password=${cpo.meta.pswd}</cpo.meta.userurl>
-        <cpo.meta.driver>org.postgresql.Driver</cpo.meta.driver>
-        <cpo.tableprefix>TEST_</cpo.tableprefix>
+        <cpo.valueMeta.xml>/postgresValueMetaData.xml</cpo.valueMeta.xml>
+        <cpo.lobMeta.xml>/postgresLobMetaData.xml</cpo.lobMeta.xml>
       </properties>
     </profile>
   </profiles>

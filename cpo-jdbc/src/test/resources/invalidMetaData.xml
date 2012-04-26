@@ -1,0 +1,6 @@
+<cpoMetaData metaAdapter="org.synchronoss.cpo.jdbc.meta.JdbcCpoMetaAdapter" xmlns="http://www.synchronoss.org/cpo/core/CpoCoreMeta.xsd">
+  <cpoClass name="org.synchronoss.cpo.jdbc.LobValueObject">
+  </cpoClass>
+  <cpoClass name="org.synchronoss.cpo.jdbc.ValueObject">
+  </cpoClass>
+</cpoMetaData>

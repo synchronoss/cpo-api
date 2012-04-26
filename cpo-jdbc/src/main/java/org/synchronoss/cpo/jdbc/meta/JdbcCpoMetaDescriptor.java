@@ -28,19 +28,19 @@ public class JdbcCpoMetaDescriptor extends CpoMetaDescriptor {
     JdbcCpoMetaDescriptor descriptor = new JdbcCpoMetaDescriptor(name);
     JdbcCpoMetaDescriptor metaDescriptor = (JdbcCpoMetaDescriptor) CpoMetaDescriptor.findInstance(descriptor);
     if (metaDescriptor==null) {
-      metaDescriptor = (JdbcCpoMetaDescriptor) createInstance(descriptor, new JdbcCpoMetaAdapter(descriptor));
+      metaDescriptor = (JdbcCpoMetaDescriptor) createUpdateInstance(descriptor, new JdbcCpoMetaAdapter(descriptor));
     }
     return metaDescriptor;
   }
   
   public static JdbcCpoMetaDescriptor newInstance(String name, List<String> metaXmls) throws CpoException {
     JdbcCpoMetaDescriptor descriptor = new JdbcCpoMetaDescriptor(name);
-    return (JdbcCpoMetaDescriptor) CpoMetaDescriptor.createInstance(descriptor, metaXmls);
+    return (JdbcCpoMetaDescriptor) CpoMetaDescriptor.createUpdateInstance(descriptor, metaXmls);
   }
 
   public static JdbcCpoMetaDescriptor newInstance(String name, String[] metaXmls) throws CpoException {
     JdbcCpoMetaDescriptor descriptor = new JdbcCpoMetaDescriptor(name);
-    return (JdbcCpoMetaDescriptor) CpoMetaDescriptor.createInstance(descriptor, metaXmls);
+    return (JdbcCpoMetaDescriptor) CpoMetaDescriptor.createUpdateInstance(descriptor, metaXmls);
   }
 
   public boolean isSupportsBlobs() {

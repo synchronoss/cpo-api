@@ -101,6 +101,25 @@ public class CpoException extends Exception {
   }
 
   /**
+   * Returns the detail message, including the message from the nested exception if there is one.
+   */
+  @Override
+  public String getLocalizedMessage() {
+    StringBuilder msg = new StringBuilder("\n");
+
+    msg.append(super.getLocalizedMessage());
+
+    if (detail != null) {
+      msg.append("\n");
+      msg.append(detail.getLocalizedMessage());
+      if (detail.getCause() != null) {
+        msg.append(detail.getCause().getLocalizedMessage());
+      }
+    }
+    return msg.toString();
+  }
+
+  /**
    * Prints the composite message and the embedded stack trace to the specified stream
    * <code>ps</code>.
    *

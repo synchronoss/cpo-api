@@ -28,6 +28,8 @@ import java.io.InputStream;
 import java.lang.reflect.Constructor;
 import java.util.List;
 import org.apache.xmlbeans.XmlException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.CpoException;
 import org.synchronoss.cpo.core.cpoCoreMeta.CpoMetaDataDocument;
 import org.synchronoss.cpo.helper.ExceptionHelper;
@@ -38,6 +40,8 @@ import org.synchronoss.cpo.helper.ExceptionHelper;
  */
 public class CpoCoreMetaAdapter {
 
+  private static Logger logger = LoggerFactory.getLogger(CpoCoreMetaAdapter.class.getName());
+  
   static protected CpoMetaAdapter newInstance(CpoMetaDescriptor descriptor, List<String> metaXmls) throws CpoException {
     return newInstance(descriptor, metaXmls.toArray(new String[metaXmls.size()]));
   }
@@ -49,9 +53,11 @@ public class CpoCoreMetaAdapter {
     for (String metaXml : metaXmls) {
       InputStream is = AbstractCpoMetaAdapter.class.getResourceAsStream(metaXml);
       if (is == null) {
+        logger.info("Resource Not Found: "+metaXml);
         try {
           is = new FileInputStream(metaXml);
         } catch (FileNotFoundException fnfe) {
+          logger.info("File Not Found: "+metaXml);
           is = null;
         }
       }
@@ -76,15 +82,17 @@ public class CpoCoreMetaAdapter {
         metaAdapter.loadCpoMetaDataDocument(metaDataDoc);
 
       } catch (IOException ioe) {
-        throw new CpoException("Error processing metaData from InputStream");
+        throw new CpoException("Error processing metaData from InputStream: "+metaXml, ioe);
       } catch (XmlException xe) {
-        throw new CpoException("Error processing metaData from String");
+        throw new CpoException("Error processing metaData from String: "+metaXml, xe);
       } catch (ClassNotFoundException cnfe) {
         throw new CpoException("CpoMetaAdapter not found: " + metaAdapterClassName + ": " + ExceptionHelper.getLocalizedMessage(cnfe));
       } catch (IllegalAccessException iae) {
         throw new CpoException("Could not access CpoMetaAdapter: " + metaAdapterClassName + ": " + ExceptionHelper.getLocalizedMessage(iae));
       } catch (InstantiationException ie) {
         throw new CpoException("Could not instantiate CpoMetaAdapter: " + metaAdapterClassName + ": " + ExceptionHelper.getLocalizedMessage(ie));
+      } catch (CpoException ce) {
+        throw ce;
       } catch (Exception e) {
         throw new CpoException("Error Constructing metaAdapter: " + metaAdapterClassName + ": " + ExceptionHelper.getLocalizedMessage(e));
       } finally {
@@ -96,8 +104,54 @@ public class CpoCoreMetaAdapter {
           }
         }
       }
-    }
-
+    }    
     return metaAdapter;
   }
+  
+  static protected CpoMetaAdapter updateInstance(CpoMetaAdapter metaAdapter, List<String> metaXmls) throws CpoException {
+    return updateInstance(metaAdapter, metaXmls.toArray(new String[metaXmls.size()]));
+  }
+  
+  static protected CpoMetaAdapter updateInstance(CpoMetaAdapter metaAdapter, String[] metaXmls) throws CpoException {
+    String metaAdapterClassName = null;
+
+    for (String metaXml : metaXmls) {
+      InputStream is = AbstractCpoMetaAdapter.class.getResourceAsStream(metaXml);
+      if (is == null) {
+        try {
+          is = new FileInputStream(metaXml);
+        } catch (FileNotFoundException fnfe) {
+          is = null;
+        }
+      }
+
+      try {
+        CpoMetaDataDocument metaDataDoc;
+        if (is == null) {
+          metaDataDoc = CpoMetaDataDocument.Factory.parse(metaXml);
+        } else {
+          metaDataDoc = CpoMetaDataDocument.Factory.parse(is);
+        }
+        
+        ((AbstractCpoMetaAdapter)metaAdapter).loadCpoMetaDataDocument(metaDataDoc);
+
+      } catch (IOException ioe) {
+        throw new CpoException("Error processing metaData from InputStream", ioe);
+      } catch (XmlException xe) {
+        throw new CpoException("Error processing metaData from String", xe);
+      } catch (Exception e) {
+        throw new CpoException("Error Loading metaAdapter: " + metaAdapterClassName, e); // + ": " + ExceptionHelper.getLocalizedMessage(e));
+      } finally {
+        if (is != null) {
+          try {
+            is.close();
+          } catch (Exception e) {
+
+          }
+        }
+      }
+    }
+    return metaAdapter;
+  }
+  
 }

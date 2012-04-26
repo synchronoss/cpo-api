@@ -79,9 +79,9 @@ public final class CpoAdapterFactory {
         }
       }
     } catch (IOException ioe) {
-      logger.error("Error reading cpoConfig.xml: " + ExceptionHelper.getLocalizedMessage(ioe));
+      logger.error("Error reading cpoConfig.xml: ", ioe);
     } catch (XmlException xe) {
-      logger.error("Error processing cpoConfig.xml: " + ExceptionHelper.getLocalizedMessage(xe));
+      logger.error("Error processing cpoConfig.xml: ", xe);
     }
 
 
@@ -96,13 +96,13 @@ public final class CpoAdapterFactory {
       CpoConfigProcessor configProcessor = (CpoConfigProcessor) Class.forName(dataSourceConfig.getCpoConfigProcessor()).newInstance();
       cpoAdapter = configProcessor.processCpoConfig(dataSourceConfig);
     } catch (ClassNotFoundException cnfe) {
-      logger.error("CpoConfigProcessor not found: " + dataSourceConfig.getCpoConfigProcessor() + ": " + ExceptionHelper.getLocalizedMessage(cnfe));
+      logger.error("CpoConfigProcessor not found: " + dataSourceConfig.getCpoConfigProcessor(), cnfe);
     } catch (IllegalAccessException iae) {
-      logger.error("Could not access CpoConfigProcessor: " + dataSourceConfig.getCpoConfigProcessor() + ": " + ExceptionHelper.getLocalizedMessage(iae));
+      logger.error("Could not access CpoConfigProcessor: " + dataSourceConfig.getCpoConfigProcessor(), iae);
     } catch (InstantiationException ie) {
-      logger.error("Could not instantiate CpoConfigProcessor: " + dataSourceConfig.getCpoConfigProcessor() + ": " + ExceptionHelper.getLocalizedMessage(ie));
+      logger.error("Could not instantiate CpoConfigProcessor: " + dataSourceConfig.getCpoConfigProcessor(), ie);
     } catch (CpoException ce) {
-      logger.error("Error Creating CpoAdapter: " + dataSourceConfig.getCpoConfigProcessor() + ": " + ExceptionHelper.getLocalizedMessage(ce));
+      logger.error("Error Creating CpoConfigProcessor: " + dataSourceConfig.getCpoConfigProcessor(), ce);
     }
 
     return cpoAdapter;

@@ -29,7 +29,10 @@
  defaultConfig="jdbc">
    <dataConfig xsi:type="jdbc:ctJdbcConfig" name="jdbc" supportsBlobs="${cpo.db.blobssupported}" supportsCalls="${cpo.db.callssupported}" supportsMillis="${cpo.db.millisupport}" supportsSelect4Update="${cpo.db.select4update}">
       <metaDescriptor name="jdbcMeta">
-        <metaXml>${cpo.meta.xml}</metaXml>
+        <metaXml>/invalidMetaData.xml</metaXml>
+        <metaXml>${cpo.valueMeta.xml}</metaXml>
+        <metaXml>${cpo.lobMeta.xml}</metaXml>
+        <metaXml>/emptyMetaData.xml</metaXml>
       </metaDescriptor>
       <cpoConfigProcessor>org.synchronoss.cpo.jdbc.config.JdbcCpoConfigProcessor</cpoConfigProcessor>
     <jdbc:readWriteConfig>

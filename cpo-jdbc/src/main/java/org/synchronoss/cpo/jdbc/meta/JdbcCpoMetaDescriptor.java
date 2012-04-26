@@ -6,6 +6,7 @@ package org.synchronoss.cpo.jdbc.meta;
 
 import java.util.List;
 import org.synchronoss.cpo.CpoException;
+import org.synchronoss.cpo.jdbc.JavaSqlType;
 import org.synchronoss.cpo.meta.CpoMetaAdapter;
 import org.synchronoss.cpo.meta.CpoMetaDescriptor;
 
@@ -76,7 +77,10 @@ public class JdbcCpoMetaDescriptor extends CpoMetaDescriptor {
   }
   
   public int getJavaSqlType(String javaSqlTypeName) throws CpoException {
-        return ((JdbcCpoMetaAdapter)getCpoMetaAdapter()).getJavaSqlType(javaSqlTypeName);
-
+    return ((JdbcCpoMetaAdapter)getCpoMetaAdapter()).getJavaSqlType(javaSqlTypeName);
+  }
+  
+  public JavaSqlType<?> getJavaSqlType(int sqlType) throws CpoException {
+    return ((JdbcCpoMetaAdapter)getCpoMetaAdapter()).getJavaSqlType(sqlType);
   }
 }

@@ -27,6 +27,7 @@ import java.util.List;
 import javax.ejb.SessionBean;
 import javax.ejb.SessionContext;
 import org.synchronoss.cpo.meta.CpoMetaDescriptor;
+import org.synchronoss.cpo.meta.domain.CpoAttribute;
 
 public class CpoAdapterBean
         implements CpoAdapter, SessionBean {
@@ -1127,5 +1128,9 @@ public class CpoAdapterBean
     return cpoAdapter.getDataSourceName();
   }
   
+  @Override
+  public List<CpoAttribute> getCpoAttributes(String expression) throws CpoException {
+    return cpoAdapter.getCpoAttributes(expression);
+  }
 
 }

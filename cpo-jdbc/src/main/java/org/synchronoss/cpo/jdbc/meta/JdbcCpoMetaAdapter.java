@@ -79,7 +79,7 @@ public class JdbcCpoMetaAdapter extends AbstractCpoMetaAdapter {
     // Now for the dbspecific types needed to generate the class from a function.
     new JavaSqlType<String>(100, "VARCHAR_IGNORECASE", java.lang.String.class) // HSQLDB TYPE for VARCHAR_IGNORE_CASE
   };
-//  private static HashMap<Integer, JavaSqlType<?>> javaSqlTypeMap = null;
+  private static HashMap<Integer, JavaSqlType<?>> javaSqlTypeMap = null;
   private static HashMap<String, JavaSqlType<?>> javaSqlTypeNameMap = null;
 
   
@@ -171,17 +171,17 @@ public class JdbcCpoMetaAdapter extends AbstractCpoMetaAdapter {
    * getJdbcTypeMap().get(javaSqlType); return jdbcType; }
    */
 
-//  public JavaSqlType<?> getJavaSqlType(int javaSqlType) {
-//    JavaSqlType<?> jdbcType = getJdbcTypeMap().get(javaSqlType);
-//    if (jdbcType == null) // oracle likes to send back crazy SQL Types sometimes
-//    // Sending back null just breaks the requesting code. 
-//    // Will send back VarChar to use get string. This should work
-//    {
-//      return getJdbcTypeMap().get(java.sql.Types.VARCHAR);
-//    } else {
-//      return jdbcType;
-//    }
-//  }
+  public JavaSqlType<?> getJavaSqlType(int javaSqlType) {
+    JavaSqlType<?> jdbcType = getJdbcTypeMap().get(javaSqlType);
+    if (jdbcType == null) // oracle likes to send back crazy SQL Types sometimes
+    // Sending back null just breaks the requesting code. 
+    // Will send back VarChar to use get string. This should work
+    {
+      return getJdbcTypeMap().get(java.sql.Types.VARCHAR);
+    } else {
+      return jdbcType;
+    }
+  }
 
   public int getJavaSqlType(String javaSqlTypeName) {
     JavaSqlType<?> jdbcType = getJdbcTypeNameMap().get(javaSqlTypeName);
@@ -195,33 +195,33 @@ public class JdbcCpoMetaAdapter extends AbstractCpoMetaAdapter {
     }
   }
 
-//  public Class<?> getSqlTypeClass(int javaSqlType) {
-//    return getSqlTypeClass(new Integer(javaSqlType));
-//  }
-//
-//  public Class<?> getSqlTypeClass(Integer javaSqlType) {
-//    JavaSqlType<?> jdbcType = getJdbcTypeMap().get(javaSqlType);
-//    if (jdbcType == null) {
-//      // oracle likes to send back crazy SQL Types sometimes
-//      // Sending back null just breaks the requesting code. 
-//      // Will send back VarChar to use get string. This should work
-//      jdbcType = getJdbcTypeMap().get(java.sql.Types.VARCHAR); //
-//    }
-//
-//    return jdbcType.getJavaClass();
-//  }
+  public Class<?> getSqlTypeClass(int javaSqlType) {
+    return getSqlTypeClass(new Integer(javaSqlType));
+  }
 
-//  public Class<?> getSqlTypeClass(String javaSqlTypeName) {
-//    JavaSqlType<?> jdbcType = getJdbcTypeNameMap().get(javaSqlTypeName);
-//    if (jdbcType == null) {
-//      // oracle likes to send back crazy SQL Types sometimes
-//      // Sending back null just breaks the requesting code. 
-//      // Will send back VarChar to use get string. This should work
-//      jdbcType = getJdbcTypeMap().get(java.sql.Types.VARCHAR); //
-//    }
-//    return jdbcType.getJavaClass();
-//  }
-//
+  public Class<?> getSqlTypeClass(Integer javaSqlType) {
+    JavaSqlType<?> jdbcType = getJdbcTypeMap().get(javaSqlType);
+    if (jdbcType == null) {
+      // oracle likes to send back crazy SQL Types sometimes
+      // Sending back null just breaks the requesting code. 
+      // Will send back VarChar to use get string. This should work
+      jdbcType = getJdbcTypeMap().get(java.sql.Types.VARCHAR); //
+    }
+
+    return jdbcType.getJavaClass();
+  }
+
+  public Class<?> getSqlTypeClass(String javaSqlTypeName) {
+    JavaSqlType<?> jdbcType = getJdbcTypeNameMap().get(javaSqlTypeName);
+    if (jdbcType == null) {
+      // oracle likes to send back crazy SQL Types sometimes
+      // Sending back null just breaks the requesting code. 
+      // Will send back VarChar to use get string. This should work
+      jdbcType = getJdbcTypeMap().get(java.sql.Types.VARCHAR); //
+    }
+    return jdbcType.getJavaClass();
+  }
+
   private List<String> getSqlTypes() {
     ArrayList<String> al = new ArrayList<String>();
     // need to put the keySet into an arraylist. The inner class is not serializable 
@@ -232,22 +232,22 @@ public class JdbcCpoMetaAdapter extends AbstractCpoMetaAdapter {
   private static void initMaps() {
     synchronized (jdbcTypes) {
       if (javaSqlTypeNameMap == null) {
-//        javaSqlTypeMap = new HashMap<Integer, JavaSqlType<?>>();
+        javaSqlTypeMap = new HashMap<Integer, JavaSqlType<?>>();
         javaSqlTypeNameMap = new HashMap<String, JavaSqlType<?>>();
         for (JavaSqlType<?> jst : jdbcTypes) {
-//          javaSqlTypeMap.put(new Integer(jst.getJavaSqlType()), jst);
+          javaSqlTypeMap.put(new Integer(jst.getJavaSqlType()), jst);
           javaSqlTypeNameMap.put(jst.getJavaSqlTypeName(), jst);
         }
       }
     }
   }
 
-//  private static HashMap<Integer, JavaSqlType<?>> getJdbcTypeMap() {
-//    if (javaSqlTypeMap == null) {
-//      initMaps();
-//    }
-//    return javaSqlTypeMap;
-//  }
+  private static HashMap<Integer, JavaSqlType<?>> getJdbcTypeMap() {
+    if (javaSqlTypeMap == null) {
+      initMaps();
+    }
+    return javaSqlTypeMap;
+  }
 
   private static HashMap<String, JavaSqlType<?>> getJdbcTypeNameMap() {
     if (javaSqlTypeNameMap == null) {

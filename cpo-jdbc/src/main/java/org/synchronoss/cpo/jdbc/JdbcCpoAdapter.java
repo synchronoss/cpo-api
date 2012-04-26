@@ -34,8 +34,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.*;
 import org.synchronoss.cpo.helper.ExceptionHelper;
+import org.synchronoss.cpo.jdbc.meta.JdbcCpoMetaDescriptor;
 import org.synchronoss.cpo.meta.CpoMetaDescriptor;
 import org.synchronoss.cpo.meta.domain.CpoArgument;
+import org.synchronoss.cpo.meta.domain.CpoAttribute;
 import org.synchronoss.cpo.meta.domain.CpoClass;
 import org.synchronoss.cpo.meta.domain.CpoFunction;
 
@@ -123,7 +125,7 @@ public class JdbcCpoAdapter implements CpoAdapter {
   /**
    * CpoMetaDescriptor allows you to get the meta data for a class.
    */
-  private CpoMetaDescriptor metaDescriptor = null;
+  private JdbcCpoMetaDescriptor metaDescriptor = null;
 
   protected JdbcCpoAdapter() {
   }
@@ -138,7 +140,7 @@ public class JdbcCpoAdapter implements CpoAdapter {
   public JdbcCpoAdapter(CpoMetaDescriptor metaDescriptor, DataSourceInfo jdsiTrx)
           throws CpoException {
 
-    this.metaDescriptor = metaDescriptor;
+    this.metaDescriptor = (JdbcCpoMetaDescriptor)metaDescriptor;
     writeDataSource_=jdsiTrx.getDataSource();
     readDataSource_ = writeDataSource_;
     dataSourceName_ = jdsiTrx.getDataSourceName();
@@ -155,7 +157,7 @@ public class JdbcCpoAdapter implements CpoAdapter {
    */
   public JdbcCpoAdapter(CpoMetaDescriptor metaDescriptor, DataSourceInfo jdsiWrite, DataSourceInfo jdsiRead)
           throws CpoException {
-    this.metaDescriptor = metaDescriptor;
+    this.metaDescriptor = (JdbcCpoMetaDescriptor)metaDescriptor;
     writeDataSource_=jdsiWrite.getDataSource();
     readDataSource_ = jdsiRead.getDataSource();
     dataSourceName_ = jdsiWrite.getDataSourceName();
@@ -164,7 +166,7 @@ public class JdbcCpoAdapter implements CpoAdapter {
 
   protected JdbcCpoAdapter(CpoMetaDescriptor metaDescriptor, boolean batchSupported, String dataSourceName)
           throws CpoException {
-    this.metaDescriptor = metaDescriptor;
+    this.metaDescriptor = (JdbcCpoMetaDescriptor)metaDescriptor;
     batchUpdatesSupported_ = batchSupported;
     dataSourceName_ = dataSourceName;
   }
@@ -3248,4 +3250,40 @@ public class JdbcCpoAdapter implements CpoAdapter {
   }
   
   
+  @Override
+  public List<CpoAttribute> getCpoAttributes(String expression) throws CpoException {
+    List<CpoAttribute> attributes = new ArrayList<CpoAttribute>();
+    Connection c = null;
+    PreparedStatement ps = null;
+    ResultSet rs = null;
+    try {
+      c = getWriteConnection();
+      ps = c.prepareStatement(expression);
+      rs = ps.executeQuery();
+      ResultSetMetaData rsmd = rs.getMetaData();
+      for(int i=1; i<=rsmd.getColumnCount(); i++) {
+        JdbcCpoAttribute attribute = new JdbcCpoAttribute();
+        attribute.setDataName(rsmd.getColumnLabel(i));
+        attribute.setDbTable(rsmd.getTableName(i));
+        attribute.setDbColumn(rsmd.getColumnName(i));
+        
+        JavaSqlType<?> javaSqlType = metaDescriptor.getJavaSqlType(rsmd.getColumnType(i));
+        attribute.setDataType(javaSqlType.getJavaSqlTypeName());
+        attribute.setJavaSqlType(javaSqlType.getJavaSqlType());
+        attribute.setJavaType(javaSqlType.getJavaClass().getName());
+        attribute.setJavaName(javaSqlType.makeJavaName(rsmd.getColumnLabel(i)));
+        
+        attributes.add(attribute);
+      }
+    } catch (Throwable t) {
+      logger.error(ExceptionHelper.getLocalizedMessage(t), t);
+      throw new CpoException("Error Generating Attributes", t);
+    } finally {
+      resultSetClose(rs);
+      statementClose(ps);
+      closeConnection(c);
+    }
+    return attributes;
+  }
+
 }

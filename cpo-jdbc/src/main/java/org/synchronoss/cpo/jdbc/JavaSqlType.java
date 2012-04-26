@@ -69,4 +69,15 @@ public class JavaSqlType<T> extends java.lang.Object implements java.io.Serializ
   public Class<T> getJavaClass() {
     return javaClass_;
   }
+  
+  public String makeJavaName(String dataName){
+    dataName = dataName.toLowerCase();
+
+    int idx;
+    while ((idx = dataName.indexOf("_")) > 0) {
+      // remove the underscore, upper case the following character
+      dataName = dataName.substring(0, idx) + dataName.substring(idx + 1, idx + 2).toUpperCase() + dataName.substring(idx + 2);
+    }
+    return dataName;
+  }
 }

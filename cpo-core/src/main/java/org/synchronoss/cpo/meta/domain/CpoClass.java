@@ -21,13 +21,17 @@
  */
 package org.synchronoss.cpo.meta.domain;
 
-import org.slf4j.*;
-import org.synchronoss.cpo.*;
+import java.util.List;
+import java.util.SortedMap;
+import java.util.TreeMap;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.synchronoss.cpo.CpoException;
+import org.synchronoss.cpo.MetaDFVisitable;
+import org.synchronoss.cpo.MetaVisitor;
 import org.synchronoss.cpo.helper.ExceptionHelper;
-import org.synchronoss.cpo.meta.CpoMetaAdapter;
+import org.synchronoss.cpo.meta.CpoMetaDescriptor;
 import org.synchronoss.cpo.meta.bean.CpoClassBean;
-
-import java.util.*;
 
 public class CpoClass extends CpoClassBean implements Comparable<CpoClass>, MetaDFVisitable {
 
@@ -133,7 +137,7 @@ public class CpoClass extends CpoClassBean implements Comparable<CpoClass>, Meta
     }
   }
 
-  public void loadRunTimeInfo(CpoMetaAdapter metaAdapter) throws CpoException {
+  public void loadRunTimeInfo(CpoMetaDescriptor metaDescriptor) throws CpoException {
     try {
       metaClass = Class.forName(getName());
     } catch (ClassNotFoundException cnfe) {
@@ -141,7 +145,7 @@ public class CpoClass extends CpoClassBean implements Comparable<CpoClass>, Meta
     }
 
     for (CpoAttribute attribute : javaMap.values()) {
-      attribute.loadRunTimeInfo(metaAdapter, this);
+      attribute.loadRunTimeInfo(metaDescriptor, this);
     }
   }
 

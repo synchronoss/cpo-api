@@ -33,7 +33,6 @@ import org.synchronoss.cpo.core.cpoCoreConfig.CpoConfigDocument;
 import org.synchronoss.cpo.core.cpoCoreConfig.CtCpoConfig;
 import org.synchronoss.cpo.core.cpoCoreConfig.CtDataSourceConfig;
 import org.synchronoss.cpo.helper.ExceptionHelper;
-import org.synchronoss.cpo.meta.CpoMetaDescriptor;
 
 /**
  *
@@ -92,7 +91,7 @@ public final class CpoAdapterFactory {
   private static CpoAdapter makeCpoAdapter(CtDataSourceConfig dataSourceConfig) {
     CpoAdapter cpoAdapter = null;
 
-    // make the cpoMetaAdapter
+    // make the CpoAdapter
     try {
       CpoConfigProcessor configProcessor = (CpoConfigProcessor) Class.forName(dataSourceConfig.getCpoConfigProcessor()).newInstance();
       cpoAdapter = configProcessor.processCpoConfig(dataSourceConfig);

@@ -75,4 +75,8 @@ public class JdbcCpoMetaDescriptor extends CpoMetaDescriptor {
     this.supportsSelect4Update = supportsSelect4Update;
   }
   
+  public int getJavaSqlType(String javaSqlTypeName) throws CpoException {
+        return ((JdbcCpoMetaAdapter)getCpoMetaAdapter()).getJavaSqlType(javaSqlTypeName);
+
+  }
 }

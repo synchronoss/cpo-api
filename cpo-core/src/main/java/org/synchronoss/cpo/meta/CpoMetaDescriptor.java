@@ -87,7 +87,7 @@ public class CpoMetaDescriptor implements CpoMetaAdapter {
     return null;
   }
 
-  private CpoMetaAdapter getCpoMetaAdapter() throws CpoException {
+  protected CpoMetaAdapter getCpoMetaAdapter() throws CpoException {
     CpoMetaAdapter metaAdapter = metaMap.get(name);
     if (metaAdapter == null) {
       throw new CpoException("Invalid MetaDescriptor: "+name);

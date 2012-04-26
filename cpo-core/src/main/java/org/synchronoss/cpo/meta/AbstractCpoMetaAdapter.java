@@ -21,13 +21,17 @@
  */
 package org.synchronoss.cpo.meta;
 
-import org.slf4j.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.SortedMap;
+import java.util.TreeMap;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.CpoException;
 import org.synchronoss.cpo.core.cpoCoreMeta.*;
-import org.synchronoss.cpo.exporter.*;
+import org.synchronoss.cpo.exporter.CoreMetaXmlObjectExporter;
+import org.synchronoss.cpo.exporter.MetaXmlObjectExporter;
 import org.synchronoss.cpo.meta.domain.*;
-
-import java.util.*;
 
 /**
  *
@@ -89,7 +93,7 @@ public abstract class AbstractCpoMetaAdapter implements CpoMetaAdapter {
     }
 
     if (cpoClass.getMetaClass() == null) {
-      cpoClass.loadRunTimeInfo(this);
+      cpoClass.loadRunTimeInfo(getMetaDescriptor());
     }
 
     return cpoClass;

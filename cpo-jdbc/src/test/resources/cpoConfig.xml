@@ -29,7 +29,7 @@
  defaultConfig="jdbc">
    <dataConfig xsi:type="jdbc:ctJdbcConfig" name="jdbc" supportsBlobs="${cpo.db.blobssupported}" supportsCalls="${cpo.db.callssupported}" supportsMillis="${cpo.db.millisupport}" supportsSelect4Update="${cpo.db.select4update}">
       <metaDescriptor name="jdbcMeta">
-        <metaXml>/invalidMetaData.xml</metaXml>
+        <metaXml>/emptyClassMetaData.xml</metaXml>
         <metaXml>${cpo.valueMeta.xml}</metaXml>
         <metaXml>${cpo.lobMeta.xml}</metaXml>
         <metaXml>/emptyMetaData.xml</metaXml>

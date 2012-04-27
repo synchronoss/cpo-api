@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/*
+ *  Copyright (C) 2003-2012 David E. Berry
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License as published by the Free Software Foundation; either
+ *  version 2.1 of the License, or (at your option) any later version.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ *
+ *  A copy of the GNU Lesser General Public License may also be found at 
+ *  http://www.gnu.org/licenses/lgpl.txt
+ *
+ */
+-->
+<cpoConfig xmlns="http://www.synchronoss.org/cpo/core/CpoCoreConfig.xsd"
+ xmlns:jdbc="http://www.synchronoss.org/cpo/jdbc/CpoJdbcConfig.xsd"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xsi:schemaLocation="http://www.synchronoss.org/cpo/jdbc/CpoJdbcConfig.xsd file:../../main/xsd/CpoJdbcConfig.xsd"
+ defaultConfig="jdbc">
+   <dataConfig xsi:type="jdbc:ctJdbcConfig" name="jdbc" supportsBlobs="${cpo.db.blobssupported}" supportsCalls="${cpo.db.callssupported}" supportsMillis="${cpo.db.millisupport}" supportsSelect4Update="${cpo.db.select4update}">
+      <metaDescriptor name="jdbcMeta">
+        <metaXml>/emptyClassMetaData.xml</metaXml>
+        <metaXml>${cpo.valueMeta.xml}</metaXml>
+        <metaXml>${cpo.lobMeta.xml}</metaXml>
+        <metaXml>/emptyMetaData.xml</metaXml>
+      </metaDescriptor>
+      <cpoConfigProcessor>org.synchronoss.cpo.jdbc.config.JdbcCpoConfigProcessor</cpoConfigProcessor>
+    <jdbc:readWriteConfig>
+         <!-- <jdbc:dataSourceClassName>${cpo.db.class}</jdbc:dataSourceClassName> -->
+         <jdbc:url>${cpo.db.url}</jdbc:url>
+         <jdbc:user>${cpo.db.user}</jdbc:user>
+     <jdbc:password>${cpo.db.pswd}</jdbc:password>
+    </jdbc:readWriteConfig>
+  </dataConfig>
+</cpoConfig>

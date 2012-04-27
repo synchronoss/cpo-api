@@ -888,6 +888,7 @@ public interface CpoAdapter extends java.io.Serializable {
    *
    *
    *  try {
+   * 
    *    cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));
    *  } catch (CpoException ce) {
    *    // Handle the error

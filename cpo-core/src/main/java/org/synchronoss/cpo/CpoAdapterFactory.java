@@ -35,6 +35,7 @@ import org.synchronoss.cpo.config.CpoConfigProcessor;
 import org.synchronoss.cpo.core.cpoCoreConfig.CpoConfigDocument;
 import org.synchronoss.cpo.core.cpoCoreConfig.CtCpoConfig;
 import org.synchronoss.cpo.core.cpoCoreConfig.CtDataSourceConfig;
+import org.synchronoss.cpo.helper.XmlBeansHelper;
 
 /**
  *
@@ -64,17 +65,12 @@ public final class CpoAdapterFactory {
 
     try {
       CpoConfigDocument configDoc = CpoConfigDocument.Factory.parse(is);
+      String errMsg = XmlBeansHelper.validateXml(configDoc);
+      if (errMsg!=null) {
+        logger.error("Invalid cpoConfig.xml: "+errMsg);
+      }
       
       CtCpoConfig cpoConfig = configDoc.getCpoConfig();
-      ArrayList<XmlValidationError> validationErrors = new ArrayList<XmlValidationError>(); 
-      XmlOptions validationOptions = new XmlOptions(); 
-      validationOptions.setErrorListener(validationErrors); 
-      boolean isValid = configDoc.validate(validationOptions); // to display error we should pass options.
-      if (!isValid) {
-          for (XmlValidationError es : validationErrors) {
-              logger.error(es.getMessage());
-          }
-      }
 
       // Set the default context.
       if (cpoConfig.isSetDefaultConfig()) {

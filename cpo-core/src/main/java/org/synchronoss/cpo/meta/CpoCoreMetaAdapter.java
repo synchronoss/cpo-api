@@ -33,6 +33,7 @@ import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.CpoException;
 import org.synchronoss.cpo.core.cpoCoreMeta.CpoMetaDataDocument;
 import org.synchronoss.cpo.helper.ExceptionHelper;
+import org.synchronoss.cpo.helper.XmlBeansHelper;
 
 /**
  *
@@ -70,6 +71,11 @@ public class CpoCoreMetaAdapter {
           metaDataDoc = CpoMetaDataDocument.Factory.parse(is);
         }
         
+        String errMsg = XmlBeansHelper.validateXml(metaDataDoc);
+        if (errMsg!=null) {
+          throw new CpoException("Invalid metaXml: "+metaXml+":"+errMsg);
+        }
+        
         if (metaAdapterClassName == null) {
           metaAdapterClassName = metaDataDoc.getCpoMetaData().getMetaAdapter();
           Class<?> clazz = Class.forName(metaAdapterClassName);
@@ -82,9 +88,9 @@ public class CpoCoreMetaAdapter {
         metaAdapter.loadCpoMetaDataDocument(metaDataDoc);
 
       } catch (IOException ioe) {
-        throw new CpoException("Error processing metaData from InputStream: "+metaXml, ioe);
+        throw new CpoException("Error processing metaData from InputStream: "+metaXml + ": " + ExceptionHelper.getLocalizedMessage(ioe));
       } catch (XmlException xe) {
-        throw new CpoException("Error processing metaData from String: "+metaXml, xe);
+        throw new CpoException("Error processing metaData from String: "+metaXml + ": " + ExceptionHelper.getLocalizedMessage(xe));
       } catch (ClassNotFoundException cnfe) {
         throw new CpoException("CpoMetaAdapter not found: " + metaAdapterClassName + ": " + ExceptionHelper.getLocalizedMessage(cnfe));
       } catch (IllegalAccessException iae) {

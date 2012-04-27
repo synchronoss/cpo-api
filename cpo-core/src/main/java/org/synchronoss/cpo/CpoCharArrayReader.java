@@ -27,7 +27,7 @@ import java.io.IOException;
 import java.io.Reader;
 
 /**
- * CpoObject is a class that maps datasource datatypes to java.sql.types and java classes
+ * CpoCharArrayReader is a utility class to help process CharArrayReader
  *
  * @author david berry
  */

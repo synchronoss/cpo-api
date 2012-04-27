@@ -22,7 +22,7 @@
 package org.synchronoss.cpo.jdbc;
 
 /**
- * JdbcType is a class that maps datasource datatypes to java.sql.types and java classes
+ * JavaSqlType is a class that defines the mapping of  datasource datatypes to java types
  *
  * @author david berry
  */

@@ -22,7 +22,7 @@
 package org.synchronoss.cpo.jdbc;
 
 /**
- * TestCallable is a class that maps datasource datatypes to java.sql.types and java classes
+ * ChildValueObject is a class used to test the inheritance support of cpo
  *
  * @author david berry
  */

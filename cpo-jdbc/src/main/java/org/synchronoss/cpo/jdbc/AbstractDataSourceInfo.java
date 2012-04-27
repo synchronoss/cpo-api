@@ -4,7 +4,6 @@
  */
 package org.synchronoss.cpo.jdbc;
 
-import java.util.Map;
 import java.util.Properties;
 import java.util.SortedMap;
 import java.util.TreeMap;
@@ -26,7 +25,7 @@ public abstract class AbstractDataSourceInfo implements DataSourceInfo {
     this.dataSourceName=dataSourceName;
   }
   
-  public AbstractDataSourceInfo(String className, Map<String, String> properties) {
+  public AbstractDataSourceInfo(String className, SortedMap<String, String> properties) {
     this.dataSourceName=BuildDataSourceName(className, properties);
   }
 
@@ -56,26 +55,24 @@ public abstract class AbstractDataSourceInfo implements DataSourceInfo {
     return dataSource;
   }
   
-  private String BuildDataSourceName(String s, Map<String, String> properties) {
-    SortedMap<Object, Object> map = new TreeMap<Object, Object>(properties);
-    return BuildDataSourceName(s, map);
-  }
-  
   private String BuildDataSourceName(String s, Properties properties) {
-    SortedMap<Object, Object> map = new TreeMap<Object, Object>(properties);
+    SortedMap<String, String> map = new TreeMap<String, String>();
+    for (Object key : properties.keySet()){
+      map.put((String)key, properties.getProperty((String)key));
+    }
     return BuildDataSourceName(s, map);
   }
   
-  private String BuildDataSourceName(String s, SortedMap<Object, Object> map) {
+  private String BuildDataSourceName(String s, SortedMap<String, String> map) {
     StringBuilder dsName = new StringBuilder(s);
 
     // Use a tree map so that the properties are sorted. This way if we have
     // the same datasource with the same properties but in different order,
     // we will generate the same key.
     for (Object key : map.keySet()) {
-      dsName.append((String) key);
+      dsName.append(key);
       dsName.append("=");
-      dsName.append(map.get((String) key));
+      dsName.append(map.get(key));
     }
 
     return dsName.toString();

@@ -27,7 +27,7 @@ import java.sql.Time;
 import java.sql.Timestamp;
 
 /**
- * TestCallable is a class that maps datasource datatypes to java.sql.types and java classes
+ * ValueObject - a cpo bean used to test the cpo apis
  *
  * @author david berry
  */

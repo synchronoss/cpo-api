@@ -36,7 +36,7 @@ import org.synchronoss.cpo.meta.domain.CpoAttribute;
 import org.synchronoss.cpo.transform.jdbc.JdbcTransform;
 
 /**
- * JdbcAttribute is a class that maps traditional java classes to tables in a jdbc database.
+ * JdbcCpoAttribute. A class that includes the Jdbc specifc attributes that are additional to the CpoAttribute attributes
  *
  * @author david berry
  */

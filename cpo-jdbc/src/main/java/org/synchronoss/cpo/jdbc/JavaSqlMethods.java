@@ -28,7 +28,7 @@ import java.net.URL;
 import java.util.HashMap;
 
 /**
- * JdbcTypeClasses is a class that maps datasource datatypes to java.sql.types and java classes
+ * JavaSqlMethods is a class defines the getters and setters for all the JDBC specific data classes
  *
  * @author david berry
  */

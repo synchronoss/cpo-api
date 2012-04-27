@@ -21,9 +21,9 @@
  */
 package org.synchronoss.cpo.jdbc.config;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Properties;
+import java.util.SortedMap;
+import java.util.TreeMap;
 import org.synchronoss.cpo.CpoAdapter;
 import org.synchronoss.cpo.CpoException;
 import org.synchronoss.cpo.DataSourceInfo;
@@ -101,7 +101,7 @@ public class JdbcCpoConfigProcessor implements CpoConfigProcessor {
     if (readWriteConfig.isSetJndiName()) {
       dataSourceInfo = new JndiDataSourceInfo(readWriteConfig.getJndiName());
     } else if (readWriteConfig.isSetDataSourceClassName()) {
-      Map<String, String> props = new HashMap<String, String>();
+      SortedMap<String, String> props = new TreeMap<String, String>();
 
       if (readWriteConfig.isSetUrl()) {
         props.put(PROP_URL1, readWriteConfig.getUrl());

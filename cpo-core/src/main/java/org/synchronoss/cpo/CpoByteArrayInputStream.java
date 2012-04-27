@@ -27,7 +27,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 /**
- * CpoObject is a class that maps datasource datatypes to java.sql.types and java classes
+ * CpoByteArrayInputStream is a utility class to help process ByteArrayInputStreams
  *
  * @author david berry
  */

@@ -24,7 +24,7 @@ package org.synchronoss.cpo.jdbc;
 import org.synchronoss.cpo.meta.domain.CpoArgument;
 
 /**
- * JdbcArgument is a class that maps traditional java classes to tables in a jdbc database.
+ * JdbcCpoArgument is a class that defines the arguments to a JDBC expression
  *
  * @author david berry
  */

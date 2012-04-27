@@ -26,8 +26,8 @@ import java.lang.reflect.Method;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.LinkedList;
-import java.util.Map;
 import java.util.Queue;
+import java.util.SortedMap;
 import javax.sql.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,7 +45,7 @@ public class ClassDataSourceInfo extends AbstractDataSource implements Connectio
   private Logger logger = LoggerFactory.getLogger(this.getClass());
   private ConnectionPoolDataSource poolDataSource = null;
   private String className = null;
-  private Map<String, String> properties = null;
+  private SortedMap<String, String> properties = null;
   // Make sure DataSource creation is thread safe.
   final private Object LOCK = new Object();
   private Queue<PooledConnection> freeConnections = new LinkedList<PooledConnection>();
@@ -67,7 +67,7 @@ public class ClassDataSourceInfo extends AbstractDataSource implements Connectio
    * @param classname The classname of a class that implements datasource
    * @param properties - The connection properties for connecting to the database
    */
-  public ClassDataSourceInfo(String className, Map<String, String> properties) throws CpoException {
+  public ClassDataSourceInfo(String className, SortedMap<String, String> properties) throws CpoException {
     super(className, properties);
     this.className=className;
     this.properties=properties;
@@ -170,7 +170,7 @@ public class ClassDataSourceInfo extends AbstractDataSource implements Connectio
     }
   }
 
-  private void setClassProperties(CommonDataSource ds, Map<String, String> properties) {
+  private void setClassProperties(CommonDataSource ds, SortedMap<String, String> properties) {
     for (String key : properties.keySet()) {
       setObjectProperty(ds, key, properties.get(key));
     }

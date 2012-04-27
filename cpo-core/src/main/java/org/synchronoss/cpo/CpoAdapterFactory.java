@@ -24,8 +24,8 @@ package org.synchronoss.cpo;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.SortedMap;
+import java.util.TreeMap;
 import org.apache.xmlbeans.XmlException;
 import org.apache.xmlbeans.XmlOptions;
 import org.apache.xmlbeans.XmlValidationError;
@@ -44,7 +44,7 @@ public final class CpoAdapterFactory {
 
   private static final Logger logger = LoggerFactory.getLogger(CpoAdapterFactory.class.getName());
   private static final String CPO_CONFIG_XML = "/cpoConfig.xml";
-  private static final Map<String, CpoAdapter> adapterMap = loadAdapters();
+  private static final SortedMap<String, CpoAdapter> adapterMap = loadAdapters();
   private static String defaultContext = null;
 
   public static CpoAdapter getCpoAdapter() throws CpoException {
@@ -57,8 +57,8 @@ public final class CpoAdapterFactory {
 
   }
 
-  private static Map<String, CpoAdapter> loadAdapters() {
-    HashMap<String, CpoAdapter> map = new HashMap<String, CpoAdapter>();
+  private static SortedMap<String, CpoAdapter> loadAdapters() {
+    SortedMap<String, CpoAdapter> map = new TreeMap<String, CpoAdapter>();
 
     InputStream is = CpoAdapterFactory.class.getResourceAsStream(CPO_CONFIG_XML);
 

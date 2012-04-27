@@ -30,7 +30,7 @@ import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.CpoException;
 
 /**
- * JdbcType is a class that maps datasource datatypes to java.sql.types and java classes
+ * JavaSqlMethod is a class defines the getters and setters for JDBC specific data classes
  *
  * @author david berry
  */

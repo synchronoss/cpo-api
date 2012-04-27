@@ -7,8 +7,8 @@ package org.synchronoss.cpo.jdbc;
 import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.Map;
 import java.util.Properties;
+import java.util.SortedMap;
 import javax.sql.DataSource;
 
 /**
@@ -23,7 +23,7 @@ public abstract class AbstractDataSource extends AbstractDataSourceInfo implemen
     super(dataSourceName);
   }
   
-  public AbstractDataSource(String className, Map<String, String> properties) {
+  public AbstractDataSource(String className, SortedMap<String, String> properties) {
     super(className, properties);
   }
 

@@ -22,10 +22,10 @@
 package org.synchronoss.cpo.meta;
 
 import org.synchronoss.cpo.CpoException;
-import org.synchronoss.cpo.core.cpoCoreMeta.CpoMetaDataDocument;
 import org.synchronoss.cpo.meta.domain.*;
 import org.synchronoss.cpo.parser.ExpressionParser;
 
+import java.io.*;
 import java.util.List;
 
 /**
@@ -48,11 +48,19 @@ public interface CpoMetaAdapter {
   public List<CpoClass> getCpoClasses() throws CpoException ;
 
   /**
-   * Performs an export to a CpoMetaDataDocument (XmlObject) format.
-   *
-   * @return CpoMetaDataDocument that represents this adapter
+   * Performs an export of the meta data to the specified File
    */
-  public CpoMetaDataDocument export() throws CpoException ;
+  public void export(File file) throws CpoException ;
+
+  /**
+   * Performs an export of the meta data to the specified Writer
+   */
+  public void export(Writer writer) throws CpoException ;
+
+  /**
+   * Performs an export of the meta data to the specified OutputStream
+   */
+  public void export(OutputStream outputStream) throws CpoException ;
 
   public ExpressionParser getExpressionParser() throws CpoException ;
 

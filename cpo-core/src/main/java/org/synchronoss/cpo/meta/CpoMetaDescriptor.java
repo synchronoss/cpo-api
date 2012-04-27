@@ -5,10 +5,10 @@
 package org.synchronoss.cpo.meta;
 
 import org.synchronoss.cpo.CpoException;
-import org.synchronoss.cpo.core.cpoCoreMeta.CpoMetaDataDocument;
 import org.synchronoss.cpo.meta.domain.*;
 import org.synchronoss.cpo.parser.ExpressionParser;
 
+import java.io.*;
 import java.util.*;
 
 /**
@@ -110,8 +110,18 @@ public class CpoMetaDescriptor implements CpoMetaAdapter {
   }
 
   @Override
-  public CpoMetaDataDocument export() throws CpoException {
-    return getCpoMetaAdapter().export();
+  public void export(File file) throws CpoException {
+    getCpoMetaAdapter().export(file);
+  }
+
+  @Override
+  public void export(Writer writer) throws CpoException {
+    getCpoMetaAdapter().export(writer);
+  }
+
+  @Override
+  public void export(OutputStream outputStream) throws CpoException {
+    getCpoMetaAdapter().export(outputStream);
   }
 
   @Override

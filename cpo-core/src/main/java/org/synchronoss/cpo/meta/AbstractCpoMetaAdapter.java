@@ -21,17 +21,15 @@
  */
 package org.synchronoss.cpo.meta;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.SortedMap;
-import java.util.TreeMap;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.xmlbeans.XmlOptions;
+import org.slf4j.*;
 import org.synchronoss.cpo.CpoException;
 import org.synchronoss.cpo.core.cpoCoreMeta.*;
-import org.synchronoss.cpo.exporter.CoreMetaXmlObjectExporter;
-import org.synchronoss.cpo.exporter.MetaXmlObjectExporter;
+import org.synchronoss.cpo.exporter.*;
 import org.synchronoss.cpo.meta.domain.*;
+
+import java.io.*;
+import java.util.*;
 
 /**
  *
@@ -205,13 +203,52 @@ public abstract class AbstractCpoMetaAdapter implements CpoMetaAdapter {
     return new CoreMetaXmlObjectExporter(metaDescriptor);
   }
 
-  @Override
-  public final CpoMetaDataDocument export() {
+  protected final CpoMetaDataDocument export() {
     MetaXmlObjectExporter metaXmlObjectExporter = getMetaXmlObjectExporter();
     for (CpoClass cpoClass : classMap.values()) {
       cpoClass.acceptMetaDFVisitor(metaXmlObjectExporter);
     }
     return metaXmlObjectExporter.getCpoMetaDataDocument();
+  }
+
+  @Override
+  public final void export(File file) throws CpoException {
+    try {
+      CpoMetaDataDocument doc = export();
+      doc.save(file, getXmlOptions());
+    } catch (IOException ex) {
+      throw new CpoException(ex.getMessage(), ex);
+    }
+  }
+
+  @Override
+  public final void export(Writer writer) throws CpoException {
+    try {
+      CpoMetaDataDocument doc = export();
+      doc.save(writer, getXmlOptions());
+    } catch (IOException ex) {
+      throw new CpoException(ex.getMessage(), ex);
+    }
+  }
+
+  @Override
+  public final void export(OutputStream outputStream) throws CpoException {
+    try {
+      CpoMetaDataDocument doc = export();
+      doc.save(outputStream, getXmlOptions());
+    } catch (IOException ex) {
+      throw new CpoException(ex.getMessage(), ex);
+    }
+  }
+
+  protected final XmlOptions getXmlOptions() {
+    XmlOptions xo = new XmlOptions();
+    xo.setCharacterEncoding("utf-8");
+    xo.setSaveAggressiveNamespaces();
+    xo.setSaveNamespacesFirst();
+    xo.setSavePrettyPrint();
+    xo.setUseDefaultNamespace();
+    return xo;
   }
 
   protected void addCpoClass(CpoClass metaClass) {

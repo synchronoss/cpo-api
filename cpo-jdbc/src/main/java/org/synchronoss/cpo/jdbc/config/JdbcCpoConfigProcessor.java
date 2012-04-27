@@ -66,9 +66,9 @@ public class JdbcCpoConfigProcessor implements CpoConfigProcessor {
     CtMetaDescriptor ctMetaDescriptor = jdbcConfig.getMetaDescriptor();
     JdbcCpoMetaDescriptor metaDescriptor;
     if (ctMetaDescriptor.getMetaXmlArray().length==0)
-      metaDescriptor = JdbcCpoMetaDescriptor.newInstance(jdbcConfig.getMetaDescriptor().getName());
+      metaDescriptor = JdbcCpoMetaDescriptor.getInstance(jdbcConfig.getMetaDescriptor().getName());
     else
-      metaDescriptor = JdbcCpoMetaDescriptor.newInstance(jdbcConfig.getMetaDescriptor().getName(), jdbcConfig.getMetaDescriptor().getMetaXmlArray());
+      metaDescriptor = JdbcCpoMetaDescriptor.getInstance(jdbcConfig.getMetaDescriptor().getName(), jdbcConfig.getMetaDescriptor().getMetaXmlArray());
     
     if (jdbcConfig.isSetSupportsBlobs())
       metaDescriptor.setSupportsBlobs(jdbcConfig.getSupportsBlobs());
@@ -137,4 +137,5 @@ public class JdbcCpoConfigProcessor implements CpoConfigProcessor {
 
     return dataSourceInfo;
   }
+  
 }

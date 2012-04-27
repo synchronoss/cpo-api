@@ -23,16 +23,18 @@ package org.synchronoss.cpo;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import org.apache.xmlbeans.XmlException;
+import org.apache.xmlbeans.XmlOptions;
+import org.apache.xmlbeans.XmlValidationError;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.config.CpoConfigProcessor;
 import org.synchronoss.cpo.core.cpoCoreConfig.CpoConfigDocument;
 import org.synchronoss.cpo.core.cpoCoreConfig.CtCpoConfig;
 import org.synchronoss.cpo.core.cpoCoreConfig.CtDataSourceConfig;
-import org.synchronoss.cpo.helper.ExceptionHelper;
 
 /**
  *
@@ -61,7 +63,18 @@ public final class CpoAdapterFactory {
     InputStream is = CpoAdapterFactory.class.getResourceAsStream(CPO_CONFIG_XML);
 
     try {
-      CtCpoConfig cpoConfig = CpoConfigDocument.Factory.parse(is).getCpoConfig();
+      CpoConfigDocument configDoc = CpoConfigDocument.Factory.parse(is);
+      
+      CtCpoConfig cpoConfig = configDoc.getCpoConfig();
+      ArrayList<XmlValidationError> validationErrors = new ArrayList<XmlValidationError>(); 
+      XmlOptions validationOptions = new XmlOptions(); 
+      validationOptions.setErrorListener(validationErrors); 
+      boolean isValid = configDoc.validate(validationOptions); // to display error we should pass options.
+      if (!isValid) {
+          for (XmlValidationError es : validationErrors) {
+              logger.error(es.getMessage());
+          }
+      }
 
       // Set the default context.
       if (cpoConfig.isSetDefaultConfig()) {
@@ -88,7 +101,7 @@ public final class CpoAdapterFactory {
     return map;
   }
 
-  private static CpoAdapter makeCpoAdapter(CtDataSourceConfig dataSourceConfig) {
+   private static CpoAdapter makeCpoAdapter(CtDataSourceConfig dataSourceConfig) {
     CpoAdapter cpoAdapter = null;
 
     // make the CpoAdapter

@@ -7,7 +7,6 @@ package org.synchronoss.cpo.jdbc.meta;
 import java.util.List;
 import org.synchronoss.cpo.CpoException;
 import org.synchronoss.cpo.jdbc.JavaSqlType;
-import org.synchronoss.cpo.meta.CpoMetaAdapter;
 import org.synchronoss.cpo.meta.CpoMetaDescriptor;
 
 /**
@@ -25,7 +24,7 @@ public class JdbcCpoMetaDescriptor extends CpoMetaDescriptor {
     super(name);
   }
   
-  public static JdbcCpoMetaDescriptor newInstance(String name) throws CpoException {
+  public static JdbcCpoMetaDescriptor getInstance(String name) throws CpoException {
     JdbcCpoMetaDescriptor descriptor = new JdbcCpoMetaDescriptor(name);
     JdbcCpoMetaDescriptor metaDescriptor = (JdbcCpoMetaDescriptor) CpoMetaDescriptor.findInstance(descriptor);
     if (metaDescriptor==null) {
@@ -34,12 +33,12 @@ public class JdbcCpoMetaDescriptor extends CpoMetaDescriptor {
     return metaDescriptor;
   }
   
-  public static JdbcCpoMetaDescriptor newInstance(String name, List<String> metaXmls) throws CpoException {
+  public static JdbcCpoMetaDescriptor getInstance(String name, List<String> metaXmls) throws CpoException {
     JdbcCpoMetaDescriptor descriptor = new JdbcCpoMetaDescriptor(name);
     return (JdbcCpoMetaDescriptor) CpoMetaDescriptor.createUpdateInstance(descriptor, metaXmls);
   }
 
-  public static JdbcCpoMetaDescriptor newInstance(String name, String[] metaXmls) throws CpoException {
+  public static JdbcCpoMetaDescriptor getInstance(String name, String[] metaXmls) throws CpoException {
     JdbcCpoMetaDescriptor descriptor = new JdbcCpoMetaDescriptor(name);
     return (JdbcCpoMetaDescriptor) CpoMetaDescriptor.createUpdateInstance(descriptor, metaXmls);
   }

@@ -25,31 +25,30 @@ public class CpoMetaDescriptor implements CpoMetaAdapter {
     this.name = name;
   }
   
-  public static CpoMetaDescriptor newInstance(String name) throws CpoException {
-    CpoMetaDescriptor metaDescriptor = new CpoMetaDescriptor(name);
-    
+  public static CpoMetaDescriptor getInstance(String name) throws CpoException {
+    CpoMetaDescriptor metaDescriptor = new CpoMetaDescriptor(name);    
     return findInstance(metaDescriptor);
   }
   
-  public static CpoMetaDescriptor newInstance(String name, String metaXml) throws CpoException {
+  public static CpoMetaDescriptor getInstance(String name, String metaXml) throws CpoException {
     List<String> metaXmls = new ArrayList<String>();
     metaXmls.add(metaXml);
     CpoMetaDescriptor metaDescriptor = new CpoMetaDescriptor(name);
     return createUpdateInstance(metaDescriptor,metaXmls);
   }
     
-  public static CpoMetaDescriptor newInstance(String name, List<String> metaXmls) throws CpoException {
+  public static CpoMetaDescriptor getInstance(String name, List<String> metaXmls) throws CpoException {
     CpoMetaDescriptor metaDescriptor = new CpoMetaDescriptor(name);
     return createUpdateInstance(metaDescriptor,metaXmls);
   }
     
-  public static CpoMetaDescriptor newInstance(String name, String[] metaXmls) throws CpoException {
+  public static CpoMetaDescriptor getInstance(String name, String[] metaXmls) throws CpoException {
     CpoMetaDescriptor metaDescriptor = new CpoMetaDescriptor(name);
     return createUpdateInstance(metaDescriptor,metaXmls);
   }
     
-  public static CpoMetaDescriptor createUpdateInstance(CpoMetaDescriptor metaDescriptor, List<String> metaXmls) throws CpoException {
-    CpoMetaAdapter metaAdapter = metaMap.get(metaDescriptor.name);
+  protected static CpoMetaDescriptor createUpdateInstance(CpoMetaDescriptor metaDescriptor, List<String> metaXmls) throws CpoException {
+    CpoMetaAdapter metaAdapter = findInstance(metaDescriptor);
     if (metaAdapter == null)
       metaAdapter = CpoCoreMetaAdapter.newInstance(metaDescriptor, metaXmls);
     else 
@@ -63,8 +62,8 @@ public class CpoMetaDescriptor implements CpoMetaAdapter {
     return null;
   }
     
-  public static CpoMetaDescriptor createUpdateInstance(CpoMetaDescriptor metaDescriptor, String[] metaXmls) throws CpoException {
-    CpoMetaAdapter metaAdapter = CpoCoreMetaAdapter.newInstance(metaDescriptor, metaXmls);
+  protected static CpoMetaDescriptor createUpdateInstance(CpoMetaDescriptor metaDescriptor, String[] metaXmls) throws CpoException {
+    CpoMetaAdapter metaAdapter = findInstance(metaDescriptor);
     if (metaAdapter == null)
       metaAdapter = CpoCoreMetaAdapter.newInstance(metaDescriptor, metaXmls);
     else 
@@ -79,12 +78,11 @@ public class CpoMetaDescriptor implements CpoMetaAdapter {
     return null;
   }
     
-  public static CpoMetaDescriptor createUpdateInstance(CpoMetaDescriptor metaDescriptor, CpoMetaAdapter metaAdapter) throws CpoException {
+  protected static CpoMetaDescriptor createUpdateInstance(CpoMetaDescriptor metaDescriptor, CpoMetaAdapter metaAdapter) throws CpoException {
     if (metaAdapter != null) {
       metaMap.put(metaDescriptor.name, metaAdapter);
-      return metaDescriptor;
     }
-    return null;
+    return findInstance(metaDescriptor);
   }
     
   protected static CpoMetaDescriptor findInstance(CpoMetaDescriptor metaDescriptor) {

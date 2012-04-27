@@ -100,10 +100,10 @@ public class JdbcCpoAdapter implements CpoAdapter {
    * DOCUMENT ME!
    */
   private Context context_ = null;
+
+
   // DataSource Information
-  // These used to be static, but that prevented Cpo from supporting Multiple
-  // DataSources.
-  // The classMap will be accessed via the dataSourceMap now.
+
   /**
    * DOCUMENT ME!
    */
@@ -120,7 +120,6 @@ public class JdbcCpoAdapter implements CpoAdapter {
    * DOCUMENT ME!
    */
   private boolean invalidReadConnection_ = false;
-  private boolean metaEqualsWrite_ = false;
   private boolean batchUpdatesSupported_ = false;
   /**
    * CpoMetaDescriptor allows you to get the meta data for a class.

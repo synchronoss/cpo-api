@@ -21,14 +21,14 @@
  */
 package org.synchronoss.cpo.plugin;
 
-import org.apache.maven.plugin.*;
+import java.io.File;
+import java.io.FileWriter;
+import org.apache.maven.plugin.AbstractMojo;
+import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.project.MavenProject;
 import org.synchronoss.cpo.exporter.CpoClassSourceGenerator;
-import org.synchronoss.cpo.meta.*;
+import org.synchronoss.cpo.meta.CpoMetaDescriptor;
 import org.synchronoss.cpo.meta.domain.CpoClass;
-
-import java.io.*;
-import org.synchronoss.cpo.jdbc.meta.JdbcCpoMetaDescriptor;
 
 /**
  * Plugin goal that will generate the cpo classes based on the xml configuration file
@@ -76,7 +76,7 @@ public class GenerateJavaSources extends AbstractMojo {
     }
 
     try {
-      CpoMetaDescriptor metaDescriptor = CpoMetaDescriptor.newInstance("Generator", cpoConfig);
+      CpoMetaDescriptor metaDescriptor = CpoMetaDescriptor.getInstance("Generator", cpoConfig);
 
       for (CpoClass cpoClass : metaDescriptor.getCpoClasses()) {
         String className = cpoClass.getName();

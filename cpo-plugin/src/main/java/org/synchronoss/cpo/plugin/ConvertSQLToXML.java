@@ -77,7 +77,7 @@ public class ConvertSQLToXML extends AbstractMojo {
     getLog().info("Class: " + dbDriver);
     
     try {
-      metaDescriptor = JdbcCpoMetaDescriptor.newInstance("Converter");
+      metaDescriptor = JdbcCpoMetaDescriptor.getInstance("Converter");
     } catch (Exception e) {
       throw new MojoExecutionException("Couldn't load the MetaDescriptor");
     }

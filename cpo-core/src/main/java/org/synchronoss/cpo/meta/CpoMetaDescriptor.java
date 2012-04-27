@@ -10,13 +10,13 @@ import org.synchronoss.cpo.parser.ExpressionParser;
 
 import java.io.*;
 import java.util.*;
+import org.synchronoss.cpo.cache.CpoMetaAdapterCache;
 
 /**
  *
  * @author dberry
  */
-public class CpoMetaDescriptor implements CpoMetaAdapter {
-  private static final SortedMap<String, CpoMetaAdapter> metaMap = new TreeMap<String, CpoMetaAdapter>();
+public class CpoMetaDescriptor extends CpoMetaAdapterCache implements CpoMetaAdapter {
   private String name=null;
   
   private CpoMetaDescriptor(){}
@@ -25,9 +25,17 @@ public class CpoMetaDescriptor implements CpoMetaAdapter {
     this.name = name;
   }
   
+  public static boolean isValidMetaDescriptor(CpoMetaDescriptor metaDescriptor) {
+    return (findCpoMetaAdapter(metaDescriptor.getName()) != null);
+  }
+  
   public static CpoMetaDescriptor getInstance(String name) throws CpoException {
-    CpoMetaDescriptor metaDescriptor = new CpoMetaDescriptor(name);    
-    return findInstance(metaDescriptor);
+    CpoMetaDescriptor metaDescriptor = null;
+    
+    if (findCpoMetaAdapter(name) != null)
+      metaDescriptor = new CpoMetaDescriptor(name);
+    
+    return metaDescriptor;
   }
   
   public static CpoMetaDescriptor getInstance(String name, String metaXml) throws CpoException {
@@ -48,51 +56,36 @@ public class CpoMetaDescriptor implements CpoMetaAdapter {
   }
     
   protected static CpoMetaDescriptor createUpdateInstance(CpoMetaDescriptor metaDescriptor, List<String> metaXmls) throws CpoException {
-    CpoMetaAdapter metaAdapter = findInstance(metaDescriptor);
-    if (metaAdapter == null)
-      metaAdapter = CpoCoreMetaAdapter.newInstance(metaDescriptor, metaXmls);
-    else 
-      metaAdapter = CpoCoreMetaAdapter.updateInstance(metaAdapter, metaXmls);
-    
-    if (metaAdapter != null) {
-      metaMap.put(metaDescriptor.name, metaAdapter);
-      return metaDescriptor;
-    }
-    
-    return null;
+    return createUpdateInstance(metaDescriptor, metaXmls.toArray(new String[metaXmls.size()]));
   }
     
   protected static CpoMetaDescriptor createUpdateInstance(CpoMetaDescriptor metaDescriptor, String[] metaXmls) throws CpoException {
-    CpoMetaAdapter metaAdapter = findInstance(metaDescriptor);
-    if (metaAdapter == null)
+    CpoMetaAdapter metaAdapter = findCpoMetaAdapter(metaDescriptor.getName());
+    CpoMetaDescriptor retDescriptor = null;
+
+    if (metaAdapter == null) {
       metaAdapter = CpoCoreMetaAdapter.newInstance(metaDescriptor, metaXmls);
-    else 
-      metaAdapter = CpoCoreMetaAdapter.updateInstance(metaAdapter, metaXmls);
-    
-    
-    if (metaAdapter != null) {
-      metaMap.put(metaDescriptor.name, metaAdapter);
-      return metaDescriptor;
+      if (metaAdapter != null) {
+        addCpoMetaAdapter(metaDescriptor.getName(), metaAdapter);
+        retDescriptor = metaDescriptor;
+      }
+    } else {
+      CpoCoreMetaAdapter.updateInstance(metaAdapter, metaXmls);
+      retDescriptor = metaDescriptor;
     }
-    
-    return null;
+         
+    return retDescriptor;
   }
     
   protected static CpoMetaDescriptor createUpdateInstance(CpoMetaDescriptor metaDescriptor, CpoMetaAdapter metaAdapter) throws CpoException {
-    if (metaAdapter != null) {
-      metaMap.put(metaDescriptor.name, metaAdapter);
+    if (metaDescriptor != null && metaAdapter != null) {
+      addCpoMetaAdapter(metaDescriptor.getName(), metaAdapter);
     }
-    return findInstance(metaDescriptor);
+    return metaDescriptor;
   }
     
-  protected static CpoMetaDescriptor findInstance(CpoMetaDescriptor metaDescriptor) {
-    if (metaMap.get(metaDescriptor.name)!=null)
-      return metaDescriptor;
-    return null;
-  }
-
   protected CpoMetaAdapter getCpoMetaAdapter() throws CpoException {
-    CpoMetaAdapter metaAdapter = metaMap.get(name);
+    CpoMetaAdapter metaAdapter = findCpoMetaAdapter(name);
     if (metaAdapter == null) {
       throw new CpoException("Invalid MetaDescriptor: "+name);
     }
@@ -163,4 +156,9 @@ public class CpoMetaDescriptor implements CpoMetaAdapter {
   public CpoArgument createCpoArgument() throws CpoException {
     return ((AbstractCpoMetaAdapter)getCpoMetaAdapter()).createCpoArgument();
   }
+
+  public String getName() {
+    return name;
+  }
+  
 }

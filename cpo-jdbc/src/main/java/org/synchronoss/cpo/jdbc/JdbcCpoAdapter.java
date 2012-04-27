@@ -21,6 +21,7 @@
  */
 package org.synchronoss.cpo.jdbc;
 
+import org.synchronoss.cpo.cache.CpoAdapterCache;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -47,7 +48,7 @@ import org.synchronoss.cpo.meta.domain.CpoFunction;
  *
  * @author david berry
  */
-public class JdbcCpoAdapter implements CpoAdapter {
+public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
 
   /**
    * Version Id for this class.
@@ -136,7 +137,7 @@ public class JdbcCpoAdapter implements CpoAdapter {
    * @param jdsiTrx The datasoruce that identifies the transaction database.
    * @throws org.synchronoss.cpo.CpoException exception
    */
-  public JdbcCpoAdapter(CpoMetaDescriptor metaDescriptor, DataSourceInfo jdsiTrx)
+  protected JdbcCpoAdapter(CpoMetaDescriptor metaDescriptor, DataSourceInfo jdsiTrx)
           throws CpoException {
 
     this.metaDescriptor = (JdbcCpoMetaDescriptor)metaDescriptor;
@@ -154,7 +155,7 @@ public class JdbcCpoAdapter implements CpoAdapter {
    * @param jdsiRead The datasource that identifies the transaction database for read-only transactions.
    * @throws org.synchronoss.cpo.CpoException exception
    */
-  public JdbcCpoAdapter(CpoMetaDescriptor metaDescriptor, DataSourceInfo jdsiWrite, DataSourceInfo jdsiRead)
+  protected JdbcCpoAdapter(CpoMetaDescriptor metaDescriptor, DataSourceInfo jdsiWrite, DataSourceInfo jdsiRead)
           throws CpoException {
     this.metaDescriptor = (JdbcCpoMetaDescriptor)metaDescriptor;
     writeDataSource_=jdsiWrite.getDataSource();
@@ -163,6 +164,14 @@ public class JdbcCpoAdapter implements CpoAdapter {
     processDatabaseMetaData();
   }
 
+  /**
+   * This constructor is used specifically to create a JdbcCpoTrxAdapter.
+   * 
+   * @param metaDescriptor
+   * @param batchSupported
+   * @param dataSourceName
+   * @throws CpoException 
+   */
   protected JdbcCpoAdapter(CpoMetaDescriptor metaDescriptor, boolean batchSupported, String dataSourceName)
           throws CpoException {
     this.metaDescriptor = (JdbcCpoMetaDescriptor)metaDescriptor;
@@ -187,6 +196,34 @@ public class JdbcCpoAdapter implements CpoAdapter {
     } finally {
       closeConnection(c);
     }
+  }
+
+  public static JdbcCpoAdapter getInstance(CpoMetaDescriptor metaDescriptor, DataSourceInfo jdsiTrx) throws CpoException {
+    String adapterKey = metaDescriptor+":"+jdsiTrx.getDataSourceName();
+    JdbcCpoAdapter adapter = (JdbcCpoAdapter)findCpoAdapter(adapterKey);
+    if (adapter==null) {
+      adapter = new JdbcCpoAdapter(metaDescriptor, jdsiTrx);
+      addCpoAdapter(adapterKey, adapter);
+    }
+    return adapter;
+  }
+
+  /**
+   * Creates a JdbcCpoAdapter.
+   *
+   * @param jdsiMeta This datasource that identifies the cpo metadata datasource
+   * @param jdsiWrite The datasource that identifies the transaction database for write transactions.
+   * @param jdsiRead The datasource that identifies the transaction database for read-only transactions.
+   * @throws org.synchronoss.cpo.CpoException exception
+   */
+  public static JdbcCpoAdapter getInstance(CpoMetaDescriptor metaDescriptor, DataSourceInfo jdsiWrite, DataSourceInfo jdsiRead) throws CpoException {
+    String adapterKey = metaDescriptor+":"+jdsiWrite.getDataSourceName()+":"+jdsiRead.getDataSourceName();
+    JdbcCpoAdapter adapter = (JdbcCpoAdapter)findCpoAdapter(adapterKey);
+    if (adapter==null) {
+      adapter = new JdbcCpoAdapter(metaDescriptor, jdsiWrite);
+      addCpoAdapter(adapterKey, adapter);
+    }
+    return adapter;
   }
 
   /**

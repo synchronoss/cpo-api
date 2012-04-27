@@ -25,10 +25,9 @@ public class JdbcCpoMetaDescriptor extends CpoMetaDescriptor {
   }
   
   public static JdbcCpoMetaDescriptor getInstance(String name) throws CpoException {
-    JdbcCpoMetaDescriptor descriptor = new JdbcCpoMetaDescriptor(name);
-    JdbcCpoMetaDescriptor metaDescriptor = (JdbcCpoMetaDescriptor) CpoMetaDescriptor.findInstance(descriptor);
-    if (metaDescriptor==null) {
-      metaDescriptor = (JdbcCpoMetaDescriptor) createUpdateInstance(descriptor, new JdbcCpoMetaAdapter(descriptor));
+    JdbcCpoMetaDescriptor metaDescriptor = new JdbcCpoMetaDescriptor(name);
+    if (!isValidMetaDescriptor(metaDescriptor)) {
+      metaDescriptor = (JdbcCpoMetaDescriptor) createUpdateInstance(metaDescriptor, new JdbcCpoMetaAdapter(metaDescriptor));
     }
     return metaDescriptor;
   }

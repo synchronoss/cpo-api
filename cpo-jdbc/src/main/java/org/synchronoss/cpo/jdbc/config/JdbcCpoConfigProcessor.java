@@ -85,11 +85,11 @@ public class JdbcCpoConfigProcessor implements CpoConfigProcessor {
     // build a datasource info
     if (jdbcConfig.isSetReadWriteConfig()) {
       DataSourceInfo dataSourceInfo = buildDataSourceInfo(jdbcConfig.getReadWriteConfig());
-      cpoAdapter = new JdbcCpoAdapter(metaDescriptor, dataSourceInfo);
+      cpoAdapter = JdbcCpoAdapter.getInstance(metaDescriptor, dataSourceInfo);
     } else {
       DataSourceInfo readDataSourceInfo = buildDataSourceInfo(jdbcConfig.getReadConfig());
       DataSourceInfo writeDataSourceInfo = buildDataSourceInfo(jdbcConfig.getWriteConfig());
-      cpoAdapter = new JdbcCpoAdapter(metaDescriptor, writeDataSourceInfo, readDataSourceInfo);
+      cpoAdapter = JdbcCpoAdapter.getInstance(metaDescriptor, writeDataSourceInfo, readDataSourceInfo);
     }
     
     return cpoAdapter;

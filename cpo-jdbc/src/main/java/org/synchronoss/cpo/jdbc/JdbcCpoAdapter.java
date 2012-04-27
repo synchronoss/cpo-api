@@ -3289,35 +3289,38 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
   @Override
   public List<CpoAttribute> getCpoAttributes(String expression) throws CpoException {
     List<CpoAttribute> attributes = new ArrayList<CpoAttribute>();
-    Connection c = null;
-    PreparedStatement ps = null;
-    ResultSet rs = null;
-    try {
-      c = getWriteConnection();
-      ps = c.prepareStatement(expression);
-      rs = ps.executeQuery();
-      ResultSetMetaData rsmd = rs.getMetaData();
-      for(int i=1; i<=rsmd.getColumnCount(); i++) {
-        JdbcCpoAttribute attribute = new JdbcCpoAttribute();
-        attribute.setDataName(rsmd.getColumnLabel(i));
-        attribute.setDbTable(rsmd.getTableName(i));
-        attribute.setDbColumn(rsmd.getColumnName(i));
-        
-        JavaSqlType<?> javaSqlType = metaDescriptor.getJavaSqlType(rsmd.getColumnType(i));
-        attribute.setDataType(javaSqlType.getJavaSqlTypeName());
-        attribute.setJavaSqlType(javaSqlType.getJavaSqlType());
-        attribute.setJavaType(javaSqlType.getJavaClass().getName());
-        attribute.setJavaName(javaSqlType.makeJavaName(rsmd.getColumnLabel(i)));
-        
-        attributes.add(attribute);
+    
+    if (expression != null && !expression.isEmpty()) {
+      Connection c = null;
+      PreparedStatement ps = null;
+      ResultSet rs = null;
+      try {
+        c = getWriteConnection();
+        ps = c.prepareStatement(expression);
+        rs = ps.executeQuery();
+        ResultSetMetaData rsmd = rs.getMetaData();
+        for(int i=1; i<=rsmd.getColumnCount(); i++) {
+          JdbcCpoAttribute attribute = new JdbcCpoAttribute();
+          attribute.setDataName(rsmd.getColumnLabel(i));
+          attribute.setDbTable(rsmd.getTableName(i));
+          attribute.setDbColumn(rsmd.getColumnName(i));
+
+          JavaSqlType<?> javaSqlType = metaDescriptor.getJavaSqlType(rsmd.getColumnType(i));
+          attribute.setDataType(javaSqlType.getJavaSqlTypeName());
+          attribute.setJavaSqlType(javaSqlType.getJavaSqlType());
+          attribute.setJavaType(javaSqlType.getJavaClass().getName());
+          attribute.setJavaName(javaSqlType.makeJavaName(rsmd.getColumnLabel(i)));
+
+          attributes.add(attribute);
+        }
+      } catch (Throwable t) {
+        logger.error(ExceptionHelper.getLocalizedMessage(t), t);
+        throw new CpoException("Error Generating Attributes", t);
+      } finally {
+        resultSetClose(rs);
+        statementClose(ps);
+        closeConnection(c);
       }
-    } catch (Throwable t) {
-      logger.error(ExceptionHelper.getLocalizedMessage(t), t);
-      throw new CpoException("Error Generating Attributes", t);
-    } finally {
-      resultSetClose(rs);
-      statementClose(ps);
-      closeConnection(c);
     }
     return attributes;
   }

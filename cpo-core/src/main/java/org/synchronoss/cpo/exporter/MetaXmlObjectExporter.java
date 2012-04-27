@@ -21,6 +21,7 @@
  */
 package org.synchronoss.cpo.exporter;
 
+import org.apache.xmlbeans.XmlOptions;
 import org.synchronoss.cpo.MetaVisitor;
 import org.synchronoss.cpo.core.cpoCoreMeta.CpoMetaDataDocument;
 
@@ -33,4 +34,6 @@ import org.synchronoss.cpo.core.cpoCoreMeta.CpoMetaDataDocument;
 public interface MetaXmlObjectExporter extends MetaVisitor {
 
   public CpoMetaDataDocument getCpoMetaDataDocument();
+
+  public XmlOptions getXmlOptions();
 }

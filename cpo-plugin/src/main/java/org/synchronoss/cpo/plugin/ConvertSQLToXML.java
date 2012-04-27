@@ -22,18 +22,17 @@
 package org.synchronoss.cpo.plugin;
 
 import org.apache.maven.plugin.*;
-import org.apache.xmlbeans.XmlOptions;
 import org.synchronoss.cpo.core.cpoCoreMeta.CpoMetaDataDocument;
 import org.synchronoss.cpo.exporter.MetaXmlObjectExporter;
 import org.synchronoss.cpo.jdbc.*;
 import org.synchronoss.cpo.jdbc.exporter.JdbcMetaXmlObjectExporter;
+import org.synchronoss.cpo.jdbc.meta.JdbcCpoMetaDescriptor;
+import org.synchronoss.cpo.meta.CpoMetaDescriptor;
 import org.synchronoss.cpo.meta.domain.*;
 
 import java.io.*;
 import java.sql.*;
 import java.util.*;
-import org.synchronoss.cpo.jdbc.meta.JdbcCpoMetaDescriptor;
-import org.synchronoss.cpo.meta.CpoMetaDescriptor;
 
 /**
  * @goal convertsqltoxml
@@ -127,15 +126,8 @@ public class ConvertSQLToXML extends AbstractMojo {
       }
       CpoMetaDataDocument cpoMetaDataDocument = exporter.getCpoMetaDataDocument();
 
-      XmlOptions xo = new XmlOptions();
-      xo.setCharacterEncoding("utf-8");
-      xo.setSavePrettyPrint();
-      xo.setUseDefaultNamespace();
-
-      FileWriter fw = new FileWriter(new File("target", "CpoConfig.xml"));
-      fw.write(cpoMetaDataDocument.xmlText(xo));
-      fw.flush();
-      fw.close();
+      // save to file
+      cpoMetaDataDocument.save(new File("target", "CpoConfig.xml"), exporter.getXmlOptions());
 
     } catch (IOException ex) {
       getLog().error("IOException caught", ex);

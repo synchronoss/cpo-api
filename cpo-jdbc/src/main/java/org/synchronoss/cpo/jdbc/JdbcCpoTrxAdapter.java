@@ -26,6 +26,7 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import org.synchronoss.cpo.CpoException;
 import org.synchronoss.cpo.CpoTrxAdapter;
+import org.synchronoss.cpo.jdbc.meta.JdbcCpoMetaDescriptor;
 import org.synchronoss.cpo.meta.CpoMetaDescriptor;
 
 public class JdbcCpoTrxAdapter extends JdbcCpoAdapter implements CpoTrxAdapter {
@@ -46,7 +47,7 @@ public class JdbcCpoTrxAdapter extends JdbcCpoAdapter implements CpoTrxAdapter {
   private JdbcCpoTrxAdapter() {
   }
 
-  protected JdbcCpoTrxAdapter(CpoMetaDescriptor metaDescriptor, Connection c,
+  protected JdbcCpoTrxAdapter(JdbcCpoMetaDescriptor metaDescriptor, Connection c,
           boolean batchSupported, String dataSourceName) throws CpoException {
     super(metaDescriptor, batchSupported, dataSourceName);
     setStaticConnection(c);

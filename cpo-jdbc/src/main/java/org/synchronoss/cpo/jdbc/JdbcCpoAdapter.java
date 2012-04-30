@@ -137,10 +137,10 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
    * @param jdsiTrx The datasoruce that identifies the transaction database.
    * @throws org.synchronoss.cpo.CpoException exception
    */
-  protected JdbcCpoAdapter(CpoMetaDescriptor metaDescriptor, DataSourceInfo jdsiTrx)
+  protected JdbcCpoAdapter(JdbcCpoMetaDescriptor metaDescriptor, DataSourceInfo jdsiTrx)
           throws CpoException {
 
-    this.metaDescriptor = (JdbcCpoMetaDescriptor)metaDescriptor;
+    this.metaDescriptor = metaDescriptor;
     writeDataSource_=jdsiTrx.getDataSource();
     readDataSource_ = writeDataSource_;
     dataSourceName_ = jdsiTrx.getDataSourceName();
@@ -155,9 +155,9 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
    * @param jdsiRead The datasource that identifies the transaction database for read-only transactions.
    * @throws org.synchronoss.cpo.CpoException exception
    */
-  protected JdbcCpoAdapter(CpoMetaDescriptor metaDescriptor, DataSourceInfo jdsiWrite, DataSourceInfo jdsiRead)
+  protected JdbcCpoAdapter(JdbcCpoMetaDescriptor metaDescriptor, DataSourceInfo jdsiWrite, DataSourceInfo jdsiRead)
           throws CpoException {
-    this.metaDescriptor = (JdbcCpoMetaDescriptor)metaDescriptor;
+    this.metaDescriptor = metaDescriptor;
     writeDataSource_=jdsiWrite.getDataSource();
     readDataSource_ = jdsiRead.getDataSource();
     dataSourceName_ = jdsiWrite.getDataSourceName();
@@ -172,9 +172,9 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
    * @param dataSourceName
    * @throws CpoException 
    */
-  protected JdbcCpoAdapter(CpoMetaDescriptor metaDescriptor, boolean batchSupported, String dataSourceName)
+  protected JdbcCpoAdapter(JdbcCpoMetaDescriptor metaDescriptor, boolean batchSupported, String dataSourceName)
           throws CpoException {
-    this.metaDescriptor = (JdbcCpoMetaDescriptor)metaDescriptor;
+    this.metaDescriptor = metaDescriptor;
     batchUpdatesSupported_ = batchSupported;
     dataSourceName_ = dataSourceName;
   }
@@ -198,7 +198,7 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
     }
   }
 
-  public static JdbcCpoAdapter getInstance(CpoMetaDescriptor metaDescriptor, DataSourceInfo jdsiTrx) throws CpoException {
+  public static JdbcCpoAdapter getInstance(JdbcCpoMetaDescriptor metaDescriptor, DataSourceInfo jdsiTrx) throws CpoException {
     String adapterKey = metaDescriptor+":"+jdsiTrx.getDataSourceName();
     JdbcCpoAdapter adapter = (JdbcCpoAdapter)findCpoAdapter(adapterKey);
     if (adapter==null) {
@@ -216,7 +216,7 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
    * @param jdsiRead The datasource that identifies the transaction database for read-only transactions.
    * @throws org.synchronoss.cpo.CpoException exception
    */
-  public static JdbcCpoAdapter getInstance(CpoMetaDescriptor metaDescriptor, DataSourceInfo jdsiWrite, DataSourceInfo jdsiRead) throws CpoException {
+  public static JdbcCpoAdapter getInstance(JdbcCpoMetaDescriptor metaDescriptor, DataSourceInfo jdsiWrite, DataSourceInfo jdsiRead) throws CpoException {
     String adapterKey = metaDescriptor+":"+jdsiWrite.getDataSourceName()+":"+jdsiRead.getDataSourceName();
     JdbcCpoAdapter adapter = (JdbcCpoAdapter)findCpoAdapter(adapterKey);
     if (adapter==null) {

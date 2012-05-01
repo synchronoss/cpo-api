@@ -6,7 +6,9 @@ package org.synchronoss.cpo.jdbc.meta;
 
 import java.util.List;
 import org.synchronoss.cpo.CpoException;
+import org.synchronoss.cpo.exporter.MetaXmlObjectExporter;
 import org.synchronoss.cpo.jdbc.JavaSqlType;
+import org.synchronoss.cpo.jdbc.exporter.JdbcMetaXmlObjectExporter;
 import org.synchronoss.cpo.meta.CpoMetaDescriptor;
 
 /**
@@ -20,26 +22,23 @@ public class JdbcCpoMetaDescriptor extends CpoMetaDescriptor {
   private boolean supportsSelect4Update = false;
   
 
-  protected JdbcCpoMetaDescriptor(String name) {
+  public JdbcCpoMetaDescriptor(String name) throws CpoException {
     super(name);
   }
   
-  public static JdbcCpoMetaDescriptor getInstance(String name) throws CpoException {
-    JdbcCpoMetaDescriptor metaDescriptor = new JdbcCpoMetaDescriptor(name);
-    if (!isValidMetaDescriptor(metaDescriptor)) {
-      metaDescriptor = (JdbcCpoMetaDescriptor) createUpdateInstance(metaDescriptor, new JdbcCpoMetaAdapter(metaDescriptor));
-    }
-    return metaDescriptor;
+  @Override
+  protected Class getMetaAdapterClass() throws CpoException {
+    return JdbcCpoMetaAdapter.class;
   }
   
-  public static JdbcCpoMetaDescriptor getInstance(String name, List<String> metaXmls) throws CpoException {
-    JdbcCpoMetaDescriptor descriptor = new JdbcCpoMetaDescriptor(name);
-    return (JdbcCpoMetaDescriptor) CpoMetaDescriptor.createUpdateInstance(descriptor, metaXmls);
-  }
-
-  public static JdbcCpoMetaDescriptor getInstance(String name, String[] metaXmls) throws CpoException {
-    JdbcCpoMetaDescriptor descriptor = new JdbcCpoMetaDescriptor(name);
-    return (JdbcCpoMetaDescriptor) CpoMetaDescriptor.createUpdateInstance(descriptor, metaXmls);
+//  public static JdbcCpoMetaDescriptor getInstance(String name) throws CpoException {
+//    return new JdbcCpoMetaDescriptor(name);
+//  }
+//  
+  
+  @Override
+  protected MetaXmlObjectExporter getMetaXmlObjectExporter() {
+    return new JdbcMetaXmlObjectExporter(this);
   }
 
   public boolean isSupportsBlobs() {

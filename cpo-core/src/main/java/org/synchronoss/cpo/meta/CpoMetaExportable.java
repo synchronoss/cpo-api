@@ -21,37 +21,29 @@
  */
 package org.synchronoss.cpo.meta;
 
+import java.io.File;
+import java.io.OutputStream;
+import java.io.Writer;
 import org.synchronoss.cpo.CpoException;
-import org.synchronoss.cpo.meta.domain.*;
-import org.synchronoss.cpo.parser.ExpressionParser;
-
-import java.io.*;
-import java.util.List;
 
 /**
  * @author dberry
  */
-public interface CpoMetaAdapter {
+public interface CpoMetaExportable {
 
   /**
-   * Returns the meta data for the class that is contained within the meta data source
-   *
-   * @throws CpoException Thrown if there are errors accessing the datasource
+   * Performs an export of the meta data to the specified File
    */
-  public <T> CpoClass getMetaClass(T obj) throws CpoException;
+  public void export(File file) throws CpoException ;
 
   /**
-   * Returns a list of the cpo class objects that the meta adapter is aware of.
-   *
-   * @return java.util.List of CpoClass
+   * Performs an export of the meta data to the specified Writer
    */
-  public List<CpoClass> getCpoClasses() throws CpoException ;
+  public void export(Writer writer) throws CpoException ;
 
-  public ExpressionParser getExpressionParser() throws CpoException ;
+  /**
+   * Performs an export of the meta data to the specified OutputStream
+   */
+  public void export(OutputStream outputStream) throws CpoException ;
 
-  public String getJavaTypeName(CpoAttribute attribute) throws CpoException ;
-  
-  public Class getJavaTypeClass(CpoAttribute attribute) throws CpoException ;
-  
-  public List<String> getAllowableDataTypes() throws CpoException ;
 }

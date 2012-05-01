@@ -1,2 +1,2 @@
-<cpoMetaData metaAdapter="org.synchronoss.cpo.jdbc.meta.JdbcCpoMetaAdapter" xmlns="http://www.synchronoss.org/cpo/core/CpoCoreMeta.xsd">
+<cpoMetaData metaDescriptor="org.synchronoss.cpo.jdbc.meta.JdbcCpoMetaDescriptor" xmlns="http://www.synchronoss.org/cpo/core/CpoCoreMeta.xsd">
 </cpoMetaData>

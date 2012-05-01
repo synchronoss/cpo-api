@@ -38,6 +38,7 @@ import org.synchronoss.cpo.jdbc.cpoJdbcConfig.CtJdbcConfig;
 import org.synchronoss.cpo.jdbc.cpoJdbcConfig.CtJdbcReadWriteConfig;
 import org.synchronoss.cpo.jdbc.cpoJdbcConfig.CtProperty;
 import org.synchronoss.cpo.jdbc.meta.JdbcCpoMetaDescriptor;
+import org.synchronoss.cpo.meta.CpoMetaDescriptor;
 
 /**
  *
@@ -64,11 +65,8 @@ public class JdbcCpoConfigProcessor implements CpoConfigProcessor {
 
     CtJdbcConfig jdbcConfig = (CtJdbcConfig) cpoConfig;
     CtMetaDescriptor ctMetaDescriptor = jdbcConfig.getMetaDescriptor();
-    JdbcCpoMetaDescriptor metaDescriptor;
-    if (ctMetaDescriptor.getMetaXmlArray().length==0)
-      metaDescriptor = JdbcCpoMetaDescriptor.getInstance(jdbcConfig.getMetaDescriptor().getName());
-    else
-      metaDescriptor = JdbcCpoMetaDescriptor.getInstance(jdbcConfig.getMetaDescriptor().getName(), jdbcConfig.getMetaDescriptor().getMetaXmlArray());
+    
+    JdbcCpoMetaDescriptor metaDescriptor = (JdbcCpoMetaDescriptor) CpoMetaDescriptor.getInstance(jdbcConfig.getMetaDescriptor().getName(), jdbcConfig.getMetaDescriptor().getMetaXmlArray());
     
     if (jdbcConfig.isSetSupportsBlobs())
       metaDescriptor.setSupportsBlobs(jdbcConfig.getSupportsBlobs());

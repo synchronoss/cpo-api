@@ -30,6 +30,7 @@ import org.synchronoss.cpo.meta.domain.*;
 
 import java.io.*;
 import java.util.*;
+import org.apache.xmlbeans.XmlException;
 
 /**
  *
@@ -43,17 +44,9 @@ public abstract class AbstractCpoMetaAdapter implements CpoMetaAdapter {
    */
   private SortedMap<String, CpoClass> classMap = new TreeMap<String, CpoClass>();
   private CpoClass currentClass = null;
-  private CpoMetaDescriptor metaDescriptor = null;
+//  private CpoMetaDescriptor metaDescriptor = null;
   
-  private AbstractCpoMetaAdapter(){
-  }
-
-  protected AbstractCpoMetaAdapter(CpoMetaDescriptor metaDescriptor){
-    this.metaDescriptor = metaDescriptor;
-  }
-
-  protected CpoMetaDescriptor getMetaDescriptor() {
-    return metaDescriptor;
+  protected AbstractCpoMetaAdapter(){
   }
 
   /**
@@ -88,10 +81,6 @@ public abstract class AbstractCpoMetaAdapter implements CpoMetaAdapter {
       if (cpoClass == null) {
         throw new CpoException("No Metadata found for class:" + requestedName);
       }
-    }
-
-    if (cpoClass.getMetaClass() == null) {
-      cpoClass.loadRunTimeInfo(getMetaDescriptor());
     }
 
     return cpoClass;
@@ -131,6 +120,7 @@ public abstract class AbstractCpoMetaAdapter implements CpoMetaAdapter {
       CpoFunctionGroup functionGroup = createCpoFunctionGroup();
       loadCpoFunctionGroup(functionGroup, ctFunctionGroup);
       cpoClass.addFunctionGroup(functionGroup);
+      logger.debug("Added Function Group: " + functionGroup.getName());
     }
 
     return cpoClass;
@@ -199,58 +189,6 @@ public abstract class AbstractCpoMetaAdapter implements CpoMetaAdapter {
     return new CpoArgument();
   }
 
-  protected MetaXmlObjectExporter getMetaXmlObjectExporter() {
-    return new CoreMetaXmlObjectExporter(metaDescriptor);
-  }
-
-  protected final CpoMetaDataDocument export() {
-    MetaXmlObjectExporter metaXmlObjectExporter = getMetaXmlObjectExporter();
-    for (CpoClass cpoClass : classMap.values()) {
-      cpoClass.acceptMetaDFVisitor(metaXmlObjectExporter);
-    }
-    return metaXmlObjectExporter.getCpoMetaDataDocument();
-  }
-
-  @Override
-  public final void export(File file) throws CpoException {
-    try {
-      CpoMetaDataDocument doc = export();
-      doc.save(file, getXmlOptions());
-    } catch (IOException ex) {
-      throw new CpoException(ex.getMessage(), ex);
-    }
-  }
-
-  @Override
-  public final void export(Writer writer) throws CpoException {
-    try {
-      CpoMetaDataDocument doc = export();
-      doc.save(writer, getXmlOptions());
-    } catch (IOException ex) {
-      throw new CpoException(ex.getMessage(), ex);
-    }
-  }
-
-  @Override
-  public final void export(OutputStream outputStream) throws CpoException {
-    try {
-      CpoMetaDataDocument doc = export();
-      doc.save(outputStream, getXmlOptions());
-    } catch (IOException ex) {
-      throw new CpoException(ex.getMessage(), ex);
-    }
-  }
-
-  protected final XmlOptions getXmlOptions() {
-    XmlOptions xo = new XmlOptions();
-    xo.setCharacterEncoding("utf-8");
-    xo.setSaveAggressiveNamespaces();
-    xo.setSaveNamespacesFirst();
-    xo.setSavePrettyPrint();
-    xo.setUseDefaultNamespace();
-    return xo;
-  }
-
   protected void addCpoClass(CpoClass metaClass) {
     CpoClass oldMetaClass = classMap.put(metaClass.getName(), metaClass);
     if (oldMetaClass != null)
@@ -259,4 +197,5 @@ public abstract class AbstractCpoMetaAdapter implements CpoMetaAdapter {
       logger.debug("Added class: " + metaClass.getName());
 
   }
+  
 }

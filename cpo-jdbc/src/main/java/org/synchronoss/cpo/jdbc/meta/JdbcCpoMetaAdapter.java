@@ -82,11 +82,6 @@ public class JdbcCpoMetaAdapter extends AbstractCpoMetaAdapter {
   private static HashMap<Integer, JavaSqlType<?>> javaSqlTypeMap = null;
   private static HashMap<String, JavaSqlType<?>> javaSqlTypeNameMap = null;
 
-  
-  public JdbcCpoMetaAdapter(CpoMetaDescriptor metaDescriptor) {
-    super(metaDescriptor);
-  }
-
   @Override
   protected void loadCpoAttribute(CpoAttribute cpoAttribute, CtAttribute ctAttribute) {
     super.loadCpoAttribute(cpoAttribute, ctAttribute);
@@ -121,11 +116,6 @@ public class JdbcCpoMetaAdapter extends AbstractCpoMetaAdapter {
   @Override
   protected CpoArgument createCpoArgument() {
     return new JdbcCpoArgument();
-  }
-
-  @Override
-  protected MetaXmlObjectExporter getMetaXmlObjectExporter() {
-    return new JdbcMetaXmlObjectExporter(getMetaDescriptor());
   }
 
   @Override

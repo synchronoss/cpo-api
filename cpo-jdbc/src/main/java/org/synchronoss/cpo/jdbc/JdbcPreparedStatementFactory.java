@@ -51,7 +51,7 @@ public class JdbcPreparedStatementFactory implements CpoReleasible {
   /**
    * DOCUMENT ME!
    */
-  private static Logger logger = LoggerFactory.getLogger(JdbcPreparedStatementFactory.class.getName());
+  private static Logger logger = LoggerFactory.getLogger(JdbcPreparedStatementFactory.class.getSimpleName());
   private Logger localLogger = null;
   private PreparedStatement ps_ = null;
 
@@ -87,7 +87,7 @@ public class JdbcPreparedStatementFactory implements CpoReleasible {
 
     String sql = buildSql(criteria, function.getExpression(), wheres, orderBy, nativeQueries, bindValues);
 
-    localLogger = obj == null ? logger : LoggerFactory.getLogger(obj.getClass().getName());
+    localLogger = obj == null ? logger : LoggerFactory.getLogger(obj.getClass().getSimpleName()+":"+logger.getName());
 
     localLogger.debug("CpoFunction SQL = <" + sql + ">");
 

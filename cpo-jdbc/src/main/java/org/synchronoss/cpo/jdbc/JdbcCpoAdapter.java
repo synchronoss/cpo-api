@@ -57,7 +57,7 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
   /**
    * DOCUMENT ME!
    */
-  private static Logger logger = LoggerFactory.getLogger(JdbcCpoAdapter.class.getName());
+  private static Logger logger = LoggerFactory.getLogger(JdbcCpoAdapter.class.getSimpleName());
   /**
    * DOCUMENT ME!
    */
@@ -1117,7 +1117,7 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
     try {
       cpoClass = metaDescriptor.getMetaClass(obj);
       List<CpoFunction> cpoFunctions = cpoClass.getFunctionGroup(JdbcCpoAdapter.EXIST_GROUP, name).getFunctions();
-      localLogger = LoggerFactory.getLogger(cpoClass.getMetaClass().getName());
+      localLogger = LoggerFactory.getLogger(cpoClass.getMetaClass().getSimpleName()+":"+logger.getName());
 
       for (CpoFunction cpoFunction : cpoFunctions) {
         localLogger.info(cpoFunction.getExpression());
@@ -2513,7 +2513,7 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
     CallableStatement cstmt = null;
     CpoClass criteriaClass;
     T returnObject = null;
-    Logger localLogger = criteria == null ? logger : LoggerFactory.getLogger(criteria.getClass().getName());
+    Logger localLogger = criteria == null ? logger : LoggerFactory.getLogger(criteria.getClass().getSimpleName()+":"+logger.getName());
 
     JdbcCallableStatementFactory jcsf = null;
 
@@ -2634,7 +2634,7 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
     JdbcCpoAttribute attribute;
     T criteriaObj = obj;
     boolean recordsExist = false;
-    Logger localLogger = obj == null ? logger : LoggerFactory.getLogger(obj.getClass().getName());
+    Logger localLogger = obj == null ? logger : LoggerFactory.getLogger(obj.getClass().getSimpleName()+":"+logger.getName());
 
     int recordCount = 0;
     int attributesSet = 0;
@@ -2810,7 +2810,7 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
   protected <T, C> void processSelectGroup(String name, C criteria, T result,
           Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeFunction> nativeExpressions, Connection con, boolean useRetrieve, CpoResultSet<T> resultSet)
           throws CpoException {
-    Logger localLogger = criteria == null ? logger : LoggerFactory.getLogger(criteria.getClass().getName());
+    Logger localLogger = criteria == null ? logger : LoggerFactory.getLogger(criteria.getClass().getSimpleName()+":"+logger.getName());
     PreparedStatement ps = null;
     List<CpoFunction> cpoFunctions;
     CpoClass criteriaClass;
@@ -2947,7 +2947,7 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
    */
   protected <T> long processUpdateGroup(T obj, String groupType, String groupName, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeFunction> nativeExpressions, Connection con)
           throws CpoException {
-    Logger localLogger = obj == null ? logger : LoggerFactory.getLogger(obj.getClass().getName());
+    Logger localLogger = obj == null ? logger : LoggerFactory.getLogger(obj.getClass().getSimpleName()+":"+logger.getName());
     CpoClass cpoClass;
     PreparedStatement ps = null;
     
@@ -3019,7 +3019,7 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
     try {
       jmc = metaDescriptor.getMetaClass(arr[0]);
       cpoFunctions = jmc.getFunctionGroup(getGroupType(arr[0], groupType, groupName, con), groupName).getFunctions();
-      localLogger = LoggerFactory.getLogger(jmc.getMetaClass().getName());
+      localLogger = LoggerFactory.getLogger(jmc.getMetaClass().getSimpleName()+":"+logger.getName());
 
 
       int numRows = 0;

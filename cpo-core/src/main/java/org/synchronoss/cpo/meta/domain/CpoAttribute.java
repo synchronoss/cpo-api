@@ -36,7 +36,7 @@ import org.synchronoss.cpo.transform.CpoTransform;
 
 public class CpoAttribute extends CpoAttributeBean {
 
-  private static Logger logger = LoggerFactory.getLogger(CpoAttribute.class.getName());
+  private static Logger logger = LoggerFactory.getLogger(CpoAttribute.class.getSimpleName());
   protected static final String TRANSFORM_IN_NAME = "transformIn";
   protected static final String TRANSFORM_OUT_NAME = "transformOut";
   private String getterName_ = null;
@@ -123,7 +123,7 @@ public class CpoAttribute extends CpoAttributeBean {
   }
 
   public void invokeSetter(Object obj, Object param, Class<?> paramClass) throws CpoException {
-    Logger localLogger = obj == null ? logger : LoggerFactory.getLogger(obj.getClass().getName());
+    Logger localLogger = obj == null ? logger : LoggerFactory.getLogger(obj.getClass().getSimpleName()+":"+logger.getName());
     Object actualParam = param;
     Class<?> actualClass = paramClass;
 
@@ -153,7 +153,7 @@ public class CpoAttribute extends CpoAttributeBean {
   }
 
   public Object invokeGetter(Object obj) throws CpoException {
-    Logger localLogger = obj == null ? logger : LoggerFactory.getLogger(obj.getClass().getName());
+    Logger localLogger = obj == null ? logger : LoggerFactory.getLogger(obj.getClass().getSimpleName()+":"+logger.getName());
 
     try {
       return transformOut(getGetters().get(0).invoke(obj, (Object[])null));
@@ -254,7 +254,7 @@ public class CpoAttribute extends CpoAttributeBean {
   protected void initTransformClass(CpoMetaDescriptor metaDescriptor) throws CpoException {
     String className = getTransformClassName();
     Class<?> transformClass = null;
-    Logger localLogger = className == null ? logger : LoggerFactory.getLogger(className);
+    Logger localLogger = className == null ? logger : LoggerFactory.getLogger(className+":"+logger.getName());
 
     if (className != null && className.length() > 0) {
       try {

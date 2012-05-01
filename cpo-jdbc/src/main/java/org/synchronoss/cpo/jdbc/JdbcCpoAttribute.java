@@ -42,7 +42,7 @@ import org.synchronoss.cpo.transform.jdbc.JdbcTransform;
  */
 public class JdbcCpoAttribute extends CpoAttribute implements java.io.Serializable, java.lang.Cloneable {
 
-  private static Logger logger = LoggerFactory.getLogger(JdbcCpoAttribute.class.getName());
+  private static Logger logger = LoggerFactory.getLogger(JdbcCpoAttribute.class.getSimpleName());
   /**
    * Version Id for this class.
    */
@@ -78,7 +78,7 @@ public class JdbcCpoAttribute extends CpoAttribute implements java.io.Serializab
     JavaSqlMethod<?> jdbcMethod;
     Object param = null;
     Class<?> paramClass = null;
-    Logger localLogger = obj == null ? logger : LoggerFactory.getLogger(obj.getClass().getName());
+    Logger localLogger = obj == null ? logger : LoggerFactory.getLogger(obj.getClass().getSimpleName()+":"+logger.getName());
 
     if (getSetters().isEmpty()) {
       throw new CpoException("There are no setters");
@@ -133,7 +133,7 @@ public class JdbcCpoAttribute extends CpoAttribute implements java.io.Serializab
     JavaSqlMethod<?> jdbcMethod;
     Object param = null;
     Class<?> paramClass = null;
-    Logger localLogger = obj == null ? logger : LoggerFactory.getLogger(obj.getClass().getName());
+    Logger localLogger = obj == null ? logger : LoggerFactory.getLogger(obj.getClass().getSimpleName()+":"+logger.getName());
 
     if (getSetters().isEmpty()) {
       throw new CpoException("There are no setters");
@@ -189,7 +189,7 @@ public class JdbcCpoAttribute extends CpoAttribute implements java.io.Serializab
   public void invokeGetter(JdbcCallableStatementFactory jcsf, Object obj, int idx) throws CpoException {
     Object param;
     JavaSqlMethod<?> jdbcMethod;
-    Logger localLogger = obj == null ? logger : LoggerFactory.getLogger(obj.getClass().getName());
+    Logger localLogger = obj == null ? logger : LoggerFactory.getLogger(obj.getClass().getSimpleName()+":"+logger.getName());
 
     try {
       if (jdbcTransform != null) {
@@ -233,7 +233,7 @@ public class JdbcCpoAttribute extends CpoAttribute implements java.io.Serializab
     Object param = null;
     JavaSqlMethod<?> jdbcMethod = null;
     String msg = null;
-    Logger localLogger = obj == null ? logger : LoggerFactory.getLogger(obj.getClass().getName());
+    Logger localLogger = obj == null ? logger : LoggerFactory.getLogger(obj.getClass().getSimpleName()+":"+logger.getName());
     try {
       if (jdbcTransform != null) {
         localLogger.info("Calling Transform Out:" + jdbcTransform.getClass().getName());

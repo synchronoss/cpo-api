@@ -37,7 +37,7 @@ import org.synchronoss.cpo.meta.domain.CpoAttribute;
  */
 public class EntityTest extends TestCase {
 
-  private static Logger logger = LoggerFactory.getLogger(BlobTest.class.getName());
+  private static Logger logger = LoggerFactory.getLogger(EntityTest.class.getName());
   
   public EntityTest(String name) {
     super(name);

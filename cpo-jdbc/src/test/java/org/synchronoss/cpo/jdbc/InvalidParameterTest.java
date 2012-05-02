@@ -43,7 +43,6 @@ public class InvalidParameterTest extends TestCase {
    * <code>setUp</code> Load the datasource from the properties in the property file jdbc_en_US.properties
    *
    * @author david berry
-   * @version '$Id: RetrieveObjectTest.java,v 1.6 2006/01/30 19:09:23 dberry Exp $'
    */
   @Override
   public void setUp() {
@@ -57,8 +56,8 @@ public class InvalidParameterTest extends TestCase {
     }
   }
 
-  public void testRetrieveObjectBadContext() {
-    String method = "testRetrieveObjectBadContext:";
+  public void testRetrieveBeanBadContext() {
+    String method = "testRetrieveBeanBadContext:";
     Collection<ValueObject> col = null;
 
 
@@ -74,8 +73,8 @@ public class InvalidParameterTest extends TestCase {
     }
   }
 
-  public void testRetrieveObjectsNullBean() {
-    String method = "testRetrieveObjectsNullBean:";
+  public void testRetrieveBeansNullBean() {
+    String method = "testRetrieveBeansNullBean:";
     Collection<ValueObject> col = null;
 
 
@@ -91,13 +90,13 @@ public class InvalidParameterTest extends TestCase {
     }
   }
 
-  public void testRetrieveObjectNullBean() {
-    String method = "testRetrieveObjectNullBean:";
+  public void testRetrieveBeanNullBean() {
+    String method = "testRetrieveBeanNullBean:";
     Collection<ValueObject> col = null;
 
 
     try {
-      ValueObject valObj = cpoAdapter.retrieveObject(null, null);
+      ValueObject valObj = cpoAdapter.retrieveBean(null, null);
       fail(method + "Test got to unreachable code");
     } catch (CpoException ce) {
       //This is what I am expecting so let it go
@@ -124,8 +123,8 @@ public class InvalidParameterTest extends TestCase {
     }
   }
 
-  public void testRetrieveObjectNullContext() {
-    String method = "testRetrieveObjectNullContext:";
+  public void testRetrieveBeanNullContext() {
+    String method = "testRetrieveBeanNullContext:";
     Collection<LobValueObject> lvos = null;
 
 

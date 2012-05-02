@@ -189,7 +189,7 @@ public class JdbcCpoWhere extends Node implements CpoWhere {
 
       jdbcAttribute = (JdbcCpoAttribute) cpoClass.getAttributeJava(getAttribute());
       if (jdbcAttribute == null) {
-        // This is not an attribute on the cpo bean passed to the retrieveObjects method.
+        // This is not an attribute on the cpo bean passed to the retrieveBeans method.
         // treat it as the column name
         fullyQualifiedColumn = getAttribute();
       } else {

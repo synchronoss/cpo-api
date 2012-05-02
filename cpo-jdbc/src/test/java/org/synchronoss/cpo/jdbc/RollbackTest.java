@@ -95,7 +95,7 @@ public class RollbackTest extends TestCase {
       fail(method + "Insert should have thrown an exception");
     } catch (Exception e) {
       try {
-        ValueObject rvo = cpoAdapter.retrieveObject(vo);
+        ValueObject rvo = cpoAdapter.retrieveBean(vo);
         assertNull(method + "Value Object did not rollback", rvo);
       } catch (Exception e2) {
         fail(method + e.getMessage());
@@ -114,7 +114,7 @@ public class RollbackTest extends TestCase {
       fail(method + "Insert should have thrown an exception");
     } catch (Exception e) {
       try {
-        ValueObject rvo = cpoAdapter.retrieveObject(vo);
+        ValueObject rvo = cpoAdapter.retrieveBean(vo);
         assertNull(method + "Value Object did not rollback", rvo);
       } catch (Exception e2) {
         fail(method + e.getMessage());

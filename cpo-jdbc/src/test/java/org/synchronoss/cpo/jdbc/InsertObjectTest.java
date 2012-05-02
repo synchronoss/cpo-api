@@ -30,7 +30,7 @@ import org.synchronoss.cpo.CpoAdapterFactory;
 import org.synchronoss.cpo.jdbc.meta.JdbcCpoMetaDescriptor;
 
 /**
- * RetrieveObjectTest is a JUnit test class for testing the JdbcAdapter class Constructors
+ * InsertObjectTest is a JUnit test class for testing the insert api calls of cpo
  *
  * @author david berry
  */
@@ -95,7 +95,7 @@ public class InsertObjectTest extends TestCase {
     }
 
     try {
-      ValueObject vo = readAdapter.retrieveObject(null, valObj, valObj, null, null);
+      ValueObject vo = readAdapter.retrieveBean(null, valObj, valObj, null, null);
       assertTrue("Ids do not match", vo.getId() == valObj.getId());
       assertTrue("Integers do not match", vo.getAttrInteger() == valObj.getAttrInteger());
       assertEquals("Strings do not match", vo.getAttrVarChar(), valObj.getAttrVarChar());

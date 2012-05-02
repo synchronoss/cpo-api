@@ -109,7 +109,7 @@ public class NativeExpressionTest extends TestCase {
       cnqAl.add(new CpoNativeFunction("__CPO_WHERE__", "WHERE ID = 2 OR ID = 3"));
 
       ValueObject valObj = new ValueObject(3);
-      col = cpoAdapter.retrieveObjects("TestWhereRetrieve", valObj, null, null, cnqAl, valObj);
+      col = cpoAdapter.retrieveBeans("TestWhereRetrieve", valObj, valObj, null, null, cnqAl);
 
       assertTrue("Col size is " + col.size(), col.size() == 2);
 
@@ -134,7 +134,7 @@ public class NativeExpressionTest extends TestCase {
       cnqAl.add(new CpoNativeFunction("__CPO_WHERE__", null));
 
       ValueObject valObj = new ValueObject(3);
-      col = cpoAdapter.retrieveObjects("TestWhereRetrieve", valObj, null, null, cnqAl, valObj);
+      col = cpoAdapter.retrieveBeans("TestWhereRetrieve", valObj, valObj, null, null, cnqAl);
 
       assertTrue("Col size is " + col.size(), col.size() == 6);
 

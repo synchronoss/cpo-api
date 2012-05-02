@@ -117,7 +117,7 @@ public class BlobTrxTest extends TestCase {
       }
 
       try {
-        lvo2 = trxAdapter.retrieveObject("retrieveLVO", lvo);
+        lvo2 = trxAdapter.retrieveBean("retrieveLVO", lvo);
         String blob1 = new String(lvo.getBLob());
         String blob2 = new String(lvo2.getBLob());
 
@@ -139,7 +139,7 @@ public class BlobTrxTest extends TestCase {
         trxAdapter.updateObject("updateLVO", lvo2);
         trxAdapter.commit();
 
-        lvo2 = trxAdapter.retrieveObject("retrieveLVO", lvo);
+        lvo2 = trxAdapter.retrieveBean("retrieveLVO", lvo);
         String blob1 = new String(testBlob2);
         String blob2 = new String(lvo2.getBLob());
 
@@ -209,7 +209,7 @@ public class BlobTrxTest extends TestCase {
       }
 
       try {
-        lvo2 = trxAdapter.retrieveObject("retrieveLVO", lvo);
+        lvo2 = trxAdapter.retrieveBean("retrieveLVO", lvo);
         String blob1 = new String(lvo.getBLob2());
         String blob2 = new String(lvo2.getBLob2());
 
@@ -224,7 +224,7 @@ public class BlobTrxTest extends TestCase {
         lvo2.setBLob2(testBlob);
         trxAdapter.updateObject("updateLVO", lvo2);
         trxAdapter.commit();
-        lvo2 = trxAdapter.retrieveObject("retrieveLVO", lvo);
+        lvo2 = trxAdapter.retrieveBean("retrieveLVO", lvo);
         String blob1 = new String(testBlob);
         String blob2 = new String(lvo2.getBLob2());
 
@@ -259,7 +259,7 @@ public class BlobTrxTest extends TestCase {
    *
    *
    * for (int i=2; i<1000; i++){ LobValueObject lvo = new LobValueObject(i,testBlob, testClob); al.add(lvo); try{
-   * jca.insertObject("createLVO",lvo,c1_); c1_.commit(); jca.retrieveObject("retrieveLVO",lvo,c1_); } catch (Exception
+   * jca.insertObject("createLVO",lvo,c1_); c1_.commit(); jca.retrieveBean("retrieveLVO",lvo,c1_); } catch (Exception
    * ie){ logger.error("error inserting lob", ie); fail(ie.getMessage()); }
    *
    * }
@@ -304,7 +304,7 @@ public class BlobTrxTest extends TestCase {
       }
 
       try {
-        lvo2 = trxAdapter.retrieveObject("retrieveLVO", lvo);
+        lvo2 = trxAdapter.retrieveBean("retrieveLVO", lvo);
         byte blob1[] = lvo.getBLob();
         byte blob2[] = lvo2.getBLob();
 
@@ -324,7 +324,7 @@ public class BlobTrxTest extends TestCase {
         lvo2.setCLob(testClob2);
         trxAdapter.updateObject("updateLVO", lvo2);
         trxAdapter.commit();
-        lvo2 = trxAdapter.retrieveObject("retrieveLVO", lvo);
+        lvo2 = trxAdapter.retrieveBean("retrieveLVO", lvo);
         byte blob1[] = testBlob2;
         byte blob2[] = lvo2.getBLob();
 
@@ -382,7 +382,7 @@ public class BlobTrxTest extends TestCase {
       }
 
       try {
-        lvo2 = trxAdapter.retrieveObject("retrieveLVO", lvo);
+        lvo2 = trxAdapter.retrieveBean("retrieveLVO", lvo);
 
         assertNull(lvo2.getBLob());
         assertNull(lvo2.getBLob2());
@@ -398,7 +398,7 @@ public class BlobTrxTest extends TestCase {
         lvo2.setCLob(null);
         trxAdapter.updateObject("updateLVO", lvo2);
         trxAdapter.commit();
-        lvo2 = trxAdapter.retrieveObject("retrieveLVO", lvo);
+        lvo2 = trxAdapter.retrieveBean("retrieveLVO", lvo);
 
         assertNull(lvo2.getBLob());
         assertNull(lvo2.getBLob2());

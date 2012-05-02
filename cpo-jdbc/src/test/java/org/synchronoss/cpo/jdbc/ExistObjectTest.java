@@ -31,7 +31,7 @@ import org.synchronoss.cpo.CpoWhere;
 import org.synchronoss.cpo.helper.ExceptionHelper;
 
 /**
- * RetrieveObjectTest is a JUnit test class for testing the JdbcAdapter class Constructors
+ * ExistObjectTest is a JUnit test class for the exists api calls
  *
  * @author david berry
  */

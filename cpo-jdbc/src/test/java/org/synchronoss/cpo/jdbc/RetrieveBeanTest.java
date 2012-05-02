@@ -32,17 +32,17 @@ import org.synchronoss.cpo.CpoResultSet;
 import org.synchronoss.cpo.CpoTrxAdapter;
 
 /**
- * RetrieveObjectTest is a JUnit test class for testing the JdbcAdapter class Constructors
+ * RetrieveBeanTest is a JUnit test class for testing the JdbcAdapter class Constructors
  *
  * @author david berry
  */
-public class RetrieveObjectTest extends TestCase {
+public class RetrieveBeanTest extends TestCase {
 
-  private static Logger logger = LoggerFactory.getLogger(RetrieveObjectTest.class.getName());
+  private static Logger logger = LoggerFactory.getLogger(RetrieveBeanTest.class.getName());
   private CpoAdapter cpoAdapter = null;
   private ArrayList<ValueObject> al = new ArrayList<ValueObject>();
 
-  public RetrieveObjectTest(String name) {
+  public RetrieveBeanTest(String name) {
     super(name);
   }
 
@@ -50,7 +50,7 @@ public class RetrieveObjectTest extends TestCase {
    * <code>setUp</code> Load the datasource from the properties in the property file jdbc_en_US.properties
    *
    * @author david berry
-   * @version '$Id: RetrieveObjectTest.java,v 1.6 2006/01/30 19:09:23 dberry Exp $'
+   * @version '$Id: RetrieveBeanTest.java,v 1.6 2006/01/30 19:09:23 dberry Exp $'
    */
   @Override
   public void setUp() {
@@ -81,8 +81,8 @@ public class RetrieveObjectTest extends TestCase {
     }
   }
 
-  public void testRetrieveObjects() {
-    String method = "testRetrieveObjects:";
+  public void testRetrieveBeans() {
+    String method = "testRetrieveBeans:";
     Collection<ValueObject> col;
 
 
@@ -118,15 +118,15 @@ public class RetrieveObjectTest extends TestCase {
     }
   }
 
-  public void testRetrieveObjectsNoWaitSize2() {
-    String method = "testRetrieveObjectsNoWaitSize2:";
+  public void testRetrieveBeansNoWaitSize2() {
+    String method = "testRetrieveBeansNoWaitSize2:";
     CpoResultSet<ValueObject> crs;
     int count = 0;
 
     try {
       ValueObject valObj = new ValueObject();
-      crs = cpoAdapter.retrieveObjects(null, valObj, null, null, null, valObj, 2);
-      logger.debug("Returned from retrieveObjects");
+      crs = cpoAdapter.retrieveBeans(null, valObj, valObj, null, null, null, 2);
+      logger.debug("Returned from retrieveBeans");
       for (ValueObject vo : crs) {
         if (vo != null) {
           count++;
@@ -140,14 +140,14 @@ public class RetrieveObjectTest extends TestCase {
     }
   }
 
-  public void testRetrieveObjectsNoWaitSize9() {
-    String method = "testRetrieveObjectsNoWaitSize9:";
+  public void testRetrieveBeansNoWaitSize9() {
+    String method = "testRetrieveBeansNoWaitSize9:";
     CpoResultSet<ValueObject> crs;
     int count = 0;
 
     try {
       ValueObject valObj = new ValueObject();
-      crs = cpoAdapter.retrieveObjects(null, valObj, null, null, null, valObj, 9);
+      crs = cpoAdapter.retrieveBeans(null, valObj, valObj, null, null, null, 9);
       for (ValueObject vo : crs) {
         if (vo != null) {
           count++;
@@ -160,14 +160,14 @@ public class RetrieveObjectTest extends TestCase {
     }
   }
 
-  public void testRetrieveObjectsNoWaitSize10() {
-    String method = "testRetrieveObjectsNoWaitSize10:";
+  public void testRetrieveBeansNoWaitSize10() {
+    String method = "testRetrieveBeansNoWaitSize10:";
     CpoResultSet<ValueObject> crs;
     int count = 0;
 
     try {
       ValueObject valObj = new ValueObject();
-      crs = cpoAdapter.retrieveObjects(null, valObj, null, null, null, valObj, 10);
+      crs = cpoAdapter.retrieveBeans(null, valObj, valObj, null, null, null, 10);
       for (ValueObject vo : crs) {
         if (vo != null) {
           count++;
@@ -180,14 +180,14 @@ public class RetrieveObjectTest extends TestCase {
     }
   }
 
-  public void testRetrieveObjectsNoWaitSize11() {
-    String method = "testRetrieveObjectsNoWaitSize11:";
+  public void testRetrieveBeansNoWaitSize11() {
+    String method = "testRetrieveBeansNoWaitSize11:";
     CpoResultSet<ValueObject> crs;
     int count = 0;
 
     try {
       ValueObject valObj = new ValueObject();
-      crs = cpoAdapter.retrieveObjects(null, valObj, null, null, null, valObj, 11);
+      crs = cpoAdapter.retrieveBeans(null, valObj, valObj, null, null, null, 11);
       for (ValueObject vo : crs) {
         if (vo != null) {
           count++;
@@ -210,7 +210,7 @@ public class RetrieveObjectTest extends TestCase {
       trx = cpoAdapter.getCpoTrxAdapter();
 
       ValueObject valObj = new ValueObject();
-      crs = trx.retrieveObjects(null, valObj, null, null, null, valObj, 2);
+      crs = trx.retrieveBeans(null, valObj, valObj, null, null, null, 2);
 
       //start this trx
       for (ValueObject vo : crs) {
@@ -247,15 +247,15 @@ public class RetrieveObjectTest extends TestCase {
     }
   }
 
-  public void testRetrieveObjectsNoWaitSize20() {
-    String method = "testRetrieveObjectsNoWaitSize20:";
+  public void testRetrieveBeansNoWaitSize20() {
+    String method = "testRetrieveBeansNoWaitSize20:";
     CpoResultSet<ValueObject> crs;
     int count = 0;
 
     try {
       ValueObject valObj = new ValueObject();
-      crs = cpoAdapter.retrieveObjects(null, valObj, null, null, null, valObj, 20);
-      logger.debug("Returned from retrieveObjects");
+      crs = cpoAdapter.retrieveBeans(null, valObj, valObj, null, null, null, 20);
+      logger.debug("Returned from retrieveBeans");
       for (ValueObject vo : crs) {
         if (vo != null) {
           count++;
@@ -269,14 +269,14 @@ public class RetrieveObjectTest extends TestCase {
     }
   }
 
-  public void testRetrieveObject() {
+  public void testRetrieveBean() {
 
-    String method = "testRetrieveObject:";
+    String method = "testRetrieveBean:";
     ValueObject vo = new ValueObject(1);
     ValueObject rvo;
 
     try {
-      rvo = cpoAdapter.retrieveObject(vo);
+      rvo = cpoAdapter.retrieveBean(vo);
       assertNotNull(method + "Returned Value object is null");
       assertNotSame(method + "ValueObjects are the same", vo, rvo);
       assertEquals(method + "Strings are not the same", rvo.getAttrVarChar(), "Test");
@@ -288,14 +288,14 @@ public class RetrieveObjectTest extends TestCase {
     }
   }
 
-  public void testNullRetrieveObject() {
+  public void testNullRetrieveBean() {
 
-    String method = "testNullRetrieveObject:";
+    String method = "testNullRetrieveBean:";
     ValueObject vo = new ValueObject(100);
     ValueObject rvo;
 
     try {
-      rvo = cpoAdapter.retrieveObject(vo);
+      rvo = cpoAdapter.retrieveBean(vo);
       assertNull(method + "Returned Value object is Not Null", rvo);
     } catch (Exception e) {
       fail(method + e.getMessage());

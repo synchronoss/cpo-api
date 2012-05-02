@@ -122,7 +122,7 @@ public class RollbackTrxTest extends TestCase {
 
       }
       try {
-        ValueObject rvo = trxAdapter.retrieveObject(vo);
+        ValueObject rvo = trxAdapter.retrieveBean(vo);
         assertNull(method + "Value Object did not rollback", rvo);
       } catch (Exception e2) {
         fail(method + e.getMessage());
@@ -147,7 +147,7 @@ public class RollbackTrxTest extends TestCase {
         fail(method + "Rollback failed:" + ExceptionHelper.getLocalizedMessage(ce));
       }
       try {
-        ValueObject rvo = trxAdapter.retrieveObject(vo);
+        ValueObject rvo = trxAdapter.retrieveBean(vo);
         assertNull(method + "Value Object did not rollback", rvo);
       } catch (Exception e2) {
         fail(method + e.getMessage());

@@ -31,7 +31,7 @@ import org.synchronoss.cpo.CpoException;
 import org.synchronoss.cpo.helper.ExceptionHelper;
 
 /**
- * RetrieveObjectTest is a JUnit test class for testing the JdbcAdapter class Constructors
+ * BigBatchTest is a JUnit test class for testing big batches
  *
  * @author david berry
  */

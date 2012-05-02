@@ -29,7 +29,7 @@ import org.synchronoss.cpo.CpoAdapterFactory;
 import org.synchronoss.cpo.jdbc.meta.JdbcCpoMetaDescriptor;
 
 /**
- * RetrieveObjectTest is a JUnit test class for testing the JdbcAdapter class Constructors
+ * InheritanceTest is a JUnit test class for testing the polymorphic capabilites of CPO
  *
  * @author david berry
  */
@@ -88,7 +88,7 @@ public class InheritanceTest extends TestCase {
     }
 
     try {
-      ChildValueObject vo = cpoAdapter.retrieveObject(null, valObj, valObj, null, null);
+      ChildValueObject vo = cpoAdapter.retrieveBean(null, valObj, valObj, null, null);
       assertEquals("Ids do not match", vo.getId(), valObj.getId());
       assertEquals("Integers do not match", vo.getAttrInteger(), valObj.getAttrInteger());
       assertEquals("Strings do not match", vo.getAttrVarChar(), valObj.getAttrVarChar());

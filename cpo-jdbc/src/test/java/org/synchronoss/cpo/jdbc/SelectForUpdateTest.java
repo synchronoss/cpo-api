@@ -118,19 +118,19 @@ public class SelectForUpdateTest extends TestCase {
       ValueObject vo2 = new ValueObject(1);
 
       try {
-        trxAdapter.retrieveObject("SelectForUpdate", vo2);
+        trxAdapter.retrieveBean("SelectForUpdate", vo2);
       } catch (Exception e) {
         fail(method + "Select For Update should work:" + ExceptionHelper.getLocalizedMessage(e));
       }
 
       try {
-        trxAdapter.retrieveObject("SelectForUpdate", vo2);
+        trxAdapter.retrieveBean("SelectForUpdate", vo2);
       } catch (Exception e) {
         fail(method + "Select For Update should work:" + ExceptionHelper.getLocalizedMessage(e));
       }
 
       try {
-        cpoAdapter.retrieveObject("Select4UpdateNoWait", vo2);
+        cpoAdapter.retrieveBean("Select4UpdateNoWait", vo2);
         fail(method + "SelectForUpdateNoWait should fail:");
       } catch (Exception e) {
         logger.debug(ExceptionHelper.getLocalizedMessage(e));
@@ -148,7 +148,7 @@ public class SelectForUpdateTest extends TestCase {
         fail(method + "Commit should have worked.");
       }
       try {
-        cpoAdapter.retrieveObject("Select4UpdateNoWait", vo2);
+        cpoAdapter.retrieveBean("Select4UpdateNoWait", vo2);
       } catch (Exception e) {
         fail(method + "SelectForUpdateNoWait should success:" + ExceptionHelper.getLocalizedMessage(e));
       }

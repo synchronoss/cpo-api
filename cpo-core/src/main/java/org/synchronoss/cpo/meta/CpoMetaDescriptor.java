@@ -48,7 +48,9 @@ public class CpoMetaDescriptor extends CpoMetaDescriptorCache implements CpoMeta
       throw new CpoException("Could not instantiate CpoMetaAdapter: " + ExceptionHelper.getLocalizedMessage(ie));
     } catch (IllegalAccessException iae) {
       throw new CpoException("Could not access CpoMetaAdapter: " + ExceptionHelper.getLocalizedMessage(iae));
-    }catch (CpoException ce) {
+    } catch (ClassCastException cce) {
+      throw new CpoException("CpoMetaAdapter must extend AbstractCpoMetaAdapter: " + ExceptionHelper.getLocalizedMessage(cce));
+    } catch (CpoException ce) {
       throw ce;
     }
   }
@@ -171,7 +173,7 @@ public class CpoMetaDescriptor extends CpoMetaDescriptorCache implements CpoMeta
     return metaDescriptor;
   }
       
-  protected CpoMetaAdapter getCpoMetaAdapter() throws CpoException {
+  protected AbstractCpoMetaAdapter getCpoMetaAdapter() throws CpoException {
     return metaAdapter;
   }
 
@@ -211,23 +213,23 @@ public class CpoMetaDescriptor extends CpoMetaDescriptorCache implements CpoMeta
   }
 
   public CpoClass createCpoClass() throws CpoException {
-    return ((AbstractCpoMetaAdapter)getCpoMetaAdapter()).createCpoClass();
+    return getCpoMetaAdapter().createCpoClass();
   }
 
   public CpoAttribute createCpoAttribute() throws CpoException {
-    return ((AbstractCpoMetaAdapter)getCpoMetaAdapter()).createCpoAttribute();
+    return getCpoMetaAdapter().createCpoAttribute();
   }
 
   public CpoFunctionGroup createCpoFunctionGroup() throws CpoException {
-    return ((AbstractCpoMetaAdapter)getCpoMetaAdapter()).createCpoFunctionGroup();
+    return getCpoMetaAdapter().createCpoFunctionGroup();
   }
 
   public CpoFunction createCpoFunction() throws CpoException {
-    return ((AbstractCpoMetaAdapter)getCpoMetaAdapter()).createCpoFunction();
+    return getCpoMetaAdapter().createCpoFunction();
   }
 
   public CpoArgument createCpoArgument() throws CpoException {
-    return ((AbstractCpoMetaAdapter)getCpoMetaAdapter()).createCpoArgument();
+    return getCpoMetaAdapter().createCpoArgument();
   }
 
   public String getName() {

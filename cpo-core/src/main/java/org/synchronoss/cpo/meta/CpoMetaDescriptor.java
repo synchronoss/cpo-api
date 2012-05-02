@@ -4,25 +4,19 @@
  */
 package org.synchronoss.cpo.meta;
 
-import java.io.*;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
-import java.util.List;
-import org.apache.xmlbeans.XmlException;
-import org.apache.xmlbeans.XmlOptions;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.xmlbeans.*;
+import org.slf4j.*;
 import org.synchronoss.cpo.CpoException;
 import org.synchronoss.cpo.cache.CpoMetaDescriptorCache;
 import org.synchronoss.cpo.core.cpoCoreMeta.CpoMetaDataDocument;
-import org.synchronoss.cpo.core.cpoCoreMeta.CtCpoMetaData;
-import org.synchronoss.cpo.exporter.CoreMetaXmlObjectExporter;
-import org.synchronoss.cpo.exporter.MetaXmlObjectExporter;
-import org.synchronoss.cpo.helper.ExceptionHelper;
-import org.synchronoss.cpo.helper.XmlBeansHelper;
+import org.synchronoss.cpo.exporter.*;
+import org.synchronoss.cpo.helper.*;
 import org.synchronoss.cpo.meta.domain.*;
 import org.synchronoss.cpo.parser.ExpressionParser;
+
+import java.io.*;
+import java.lang.reflect.*;
+import java.util.*;
 
 /**
  *
@@ -31,8 +25,11 @@ import org.synchronoss.cpo.parser.ExpressionParser;
 public class CpoMetaDescriptor extends CpoMetaDescriptorCache implements CpoMetaAdapter, CpoMetaExportable {
 
   private static Logger logger = LoggerFactory.getLogger(CpoMetaDescriptor.class.getName());
-  private String name=null;
+  private String name = null;
   private AbstractCpoMetaAdapter metaAdapter = null;
+
+  // used by cpo util
+  private String defaultPackageName;
   
   private CpoMetaDescriptor(){}
   
@@ -130,6 +127,7 @@ public class CpoMetaDescriptor extends CpoMetaDescriptorCache implements CpoMeta
           throw new CpoException("Error processing multiple metaXml files. All files must have the same CpoMetaDescriptor class name.");
         }
 
+        metaDescriptor.setDefaultPackageName(metaDataDoc.getCpoMetaData().getDefaultPackageName());
         metaDescriptor.metaAdapter.loadCpoMetaDataDocument(metaDataDoc);
 
       } catch (IOException ioe) {
@@ -230,6 +228,16 @@ public class CpoMetaDescriptor extends CpoMetaDescriptorCache implements CpoMeta
 
   public CpoArgument createCpoArgument() throws CpoException {
     return getCpoMetaAdapter().createCpoArgument();
+  }
+
+  public String getDefaultPackageName() {
+    return defaultPackageName;
+  }
+
+  public void setDefaultPackageName(String packageName) {
+    if (packageName != null) {
+      defaultPackageName = packageName;
+    }
   }
 
   public String getName() {

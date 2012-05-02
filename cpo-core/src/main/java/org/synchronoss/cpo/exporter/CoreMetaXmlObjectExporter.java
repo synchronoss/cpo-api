@@ -43,6 +43,7 @@ public class CoreMetaXmlObjectExporter implements MetaXmlObjectExporter, MetaVis
     cpoMetaDataDocument = CpoMetaDataDocument.Factory.newInstance();
     CtCpoMetaData ctCpoMetaData = cpoMetaDataDocument.addNewCpoMetaData();
     ctCpoMetaData.setMetaDescriptor(metaDescriptor.getClass().getName());
+    ctCpoMetaData.setDefaultPackageName(metaDescriptor.getDefaultPackageName());
   }
 
   @Override

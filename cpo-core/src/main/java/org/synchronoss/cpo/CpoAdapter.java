@@ -39,68 +39,50 @@ import org.synchronoss.cpo.meta.domain.CpoAttribute;
 public interface CpoAdapter extends java.io.Serializable {
 
   /**
-   * Static integer to be used with the CpoObject. It identifies the operation to be processed by the CpoObject. CREATE
-   * signifies that the CpoObject will try to add the object to the datasource.
-   *
-   * @see CpoObject
+   * Identifies the operation to be processed by the CPO. CREATE signifies that the CPO will try to add the object to the datasource.
    */
   static final int CREATE = 0;
+  
   /**
-   * Static integer to be used with the CpoObject. It identifies the operation to be processed by the CpoObject. INSERT
-   * signifies that the CpoObject will try to add the object to the datasource.
-   *
-   * @see CpoObject
+   * Identifies the operation to be processed by CPO. INSERT signifies that the CPO will try to add the object to the datasource.
    */
   static final int INSERT = 0;
+  
   /**
-   * Static integer to be used with the CpoObject. It identifies the operation to be processed by the CpoObject. UPDATE
-   * signifies that the CpoObject will try to update the object in the datasource.
-   *
-   * @see CpoObject
+   * Identifies the operation to be processed by CPO. UPDATE signifies that the CPO will try to update the object in the datasource.
    */
   static final int UPDATE = 1;
+  
   /**
-   * Static integer to be used with the CpoObject. It identifies the operation to be processed by the CpoObject. DELETE
-   * signifies that the CpoObject will try to delete the object in the datasource.
-   *
-   * @see CpoObject
+   * Identifies the operation to be processed by CPO. DELETE signifies that the CPO will try to delete the object in the datasource.
    */
   static final int DELETE = 2;
+  
   /**
-   * Static integer to be used with the CpoObject. It identifies the operation to be processed by the CpoObject.
-   * RETRIEVE signifies that the CpoObject will try to retrieve a single object from the datasource.
-   *
-   * @see CpoObject
+   * Identifies the operation to be processed by CPO. RETRIEVE signifies that the CPO will try to retrieve a single object from the datasource.
    */
   static final int RETRIEVE = 3;
+  
   /**
-   * Static integer to be used with the CpoObject. It identifies the operation to be processed by the CpoObject. LIST
-   * signifies that the CpoObject will try to retrieve one or more objects from the datasource.
-   *
-   * @see CpoObject
+   * Identifies the operation to be processed by CPO. LIST signifies that the CPO will try to retrieve one or more objects from the datasource.
    */
   static final int LIST = 4;
+  
   /**
-   * Static integer to be used with the CpoObject. It identifies the operation to be processed by the CpoObject. PERSIST
-   * signifies that the CpoObject will try to add or update the object in the datasource.
-   *
-   * @see CpoObject
+   * Identifies the operation to be processed by CPO. PERSIST signifies that the CPO will try to add or update the object in the datasource.
    */
   static final int PERSIST = 5;
+  
   /**
-   * Static integer to be used with the CpoObject. It identifies the operation to be processed by the CpoObject. EXIST
-   * signifies that the CpoObject will check to see if the object exists in the datasource.
-   *
-   * @see CpoObject
+   * Identifies the operation to be processed by CPO. EXIST signifies that the CPO will check to see if the object exists in the datasource.
    */
   static final int EXIST = 6;
+  
   /**
-   * Static integer to be used with the CpoObject. It identifies the operation to be processed by the CpoObject. EXECUTE
-   * signifies that the CpoObject will try to execute a function or procedure in the datasource.
-   *
-   * @see CpoObject
+   * Identifies the operation to be processed by the CPO. EXECUTE signifies that the CPO will try to execute a function or procedure in the datasource.
    */
   static final int EXECUTE = 7;
+  
 
   /**
    * Creates the Object in the datasource. The assumption is that the object does not exist in the datasource. This

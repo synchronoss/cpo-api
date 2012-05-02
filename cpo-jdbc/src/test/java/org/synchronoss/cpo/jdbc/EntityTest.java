@@ -26,7 +26,6 @@ import junit.framework.TestCase;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.CpoAdapter;
-import org.synchronoss.cpo.CpoAdapterBean;
 import org.synchronoss.cpo.CpoAdapterFactory;
 import org.synchronoss.cpo.meta.domain.CpoAttribute;
 
@@ -56,7 +55,7 @@ public class EntityTest extends TestCase {
   public void testGetDataSourceEntities() {
     String method = "testGetDataSourceEntities:";
     try {
-      CpoAdapter cpoAdapter = new CpoAdapterBean(CpoAdapterFactory.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_CLASS));
+      CpoAdapter cpoAdapter = CpoAdapterFactory.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_CLASS);
       assertNotNull(method + "cpoAdapter is null", cpoAdapter);
       
       List<CpoAttribute> attributes = cpoAdapter.getCpoAttributes("select * from lob_test");

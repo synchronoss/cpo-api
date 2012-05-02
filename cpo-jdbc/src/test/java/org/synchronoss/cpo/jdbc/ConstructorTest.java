@@ -24,7 +24,6 @@ package org.synchronoss.cpo.jdbc;
 import java.util.List;
 import junit.framework.TestCase;
 import org.synchronoss.cpo.CpoAdapter;
-import org.synchronoss.cpo.CpoAdapterBean;
 import org.synchronoss.cpo.CpoAdapterFactory;
 
 /**
@@ -51,7 +50,7 @@ public class ConstructorTest extends TestCase {
   public void testConstructorClass() {
     String method = "testConstructorClass:";
     try {
-      CpoAdapter cpoAdapter = new CpoAdapterBean(CpoAdapterFactory.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_CLASS));
+      CpoAdapter cpoAdapter = CpoAdapterFactory.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_CLASS);
       assertNotNull(method + "cpoAdapter is null", cpoAdapter);
       ValueObject valObj = new ValueObject();
       List<ValueObject> objs = cpoAdapter.retrieveBeans(null, valObj);
@@ -64,7 +63,7 @@ public class ConstructorTest extends TestCase {
   public void testConstructorClassProp() {
     String method = "testConstructorClassProp:";
     try {
-      CpoAdapter cpoAdapter = new CpoAdapterBean(CpoAdapterFactory.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_CLASSPROP));
+      CpoAdapter cpoAdapter = CpoAdapterFactory.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_CLASSPROP);
       assertNotNull(method + "cpoAdapter is null", cpoAdapter);
       ValueObject valObj = new ValueObject();
       List<ValueObject> objs = cpoAdapter.retrieveBeans(null, valObj);
@@ -77,7 +76,7 @@ public class ConstructorTest extends TestCase {
   public void testConstructorDriver() {
     String method = "testConstructorDriver:";
     try {
-      CpoAdapter cpoAdapter = new CpoAdapterBean(CpoAdapterFactory.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_DRIVER));
+      CpoAdapter cpoAdapter = CpoAdapterFactory.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_DRIVER);
       assertNotNull(method + "cpoAdapter is null", cpoAdapter);
       ValueObject valObj = new ValueObject();
       List<ValueObject> objs = cpoAdapter.retrieveBeans(null, valObj);
@@ -90,7 +89,7 @@ public class ConstructorTest extends TestCase {
   public void testConstructorDriverProp() {
     String method = "testConstructorDriverProp:";
     try {
-      CpoAdapter cpoAdapter = new CpoAdapterBean(CpoAdapterFactory.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_DRIVERPROP));
+      CpoAdapter cpoAdapter = CpoAdapterFactory.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_DRIVERPROP);
       assertNotNull(method + "cpoAdapter is null", cpoAdapter);
       ValueObject valObj = new ValueObject();
       List<ValueObject> objs = cpoAdapter.retrieveBeans(null, valObj);
@@ -103,7 +102,7 @@ public class ConstructorTest extends TestCase {
   public void testConstructorClassClass() {
     String method = "testConstructorClassClass:";
     try {
-      CpoAdapter cpoAdapter = new CpoAdapterBean(CpoAdapterFactory.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_CLASSCLASS));
+      CpoAdapter cpoAdapter = CpoAdapterFactory.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_CLASSCLASS);
       assertNotNull(method + "cpoAdapter is null", cpoAdapter);
       ValueObject valObj = new ValueObject();
       List<ValueObject> objs = cpoAdapter.retrieveBeans(null, valObj);
@@ -116,7 +115,7 @@ public class ConstructorTest extends TestCase {
   public void testConstructorDriverDriver() {
     String method = "testConstructorDriverDriver:";
     try {
-      CpoAdapter cpoAdapter = new CpoAdapterBean(CpoAdapterFactory.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_DRIVERDRIVER));
+      CpoAdapter cpoAdapter = CpoAdapterFactory.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_DRIVERDRIVER);
       assertNotNull(method + "cpoAdapter is null", cpoAdapter);
       ValueObject valObj = new ValueObject();
       List<ValueObject> objs = cpoAdapter.retrieveBeans(null, valObj);
@@ -129,7 +128,7 @@ public class ConstructorTest extends TestCase {
   public void testConstructorClassDriver() {
     String method = "testConstructorClassDriver:";
     try {
-      CpoAdapter cpoAdapter = new CpoAdapterBean(CpoAdapterFactory.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_CLASSDRIVER));
+      CpoAdapter cpoAdapter = CpoAdapterFactory.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_CLASSDRIVER);
       assertNotNull(method + "cpoAdapter is null", cpoAdapter);
       ValueObject valObj = new ValueObject();
       List<ValueObject> objs = cpoAdapter.retrieveBeans(null, valObj);
@@ -142,7 +141,7 @@ public class ConstructorTest extends TestCase {
   public void testConstructorDriverClass() {
     String method = "testConstructorDriverClass:";
     try {
-      CpoAdapter cpoAdapter = new CpoAdapterBean(CpoAdapterFactory.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_DRIVERCLASS));
+      CpoAdapter cpoAdapter = CpoAdapterFactory.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_DRIVERCLASS);
       assertNotNull(method + "cpoAdapter is null", cpoAdapter);
       ValueObject valObj = new ValueObject();
       List<ValueObject> objs = cpoAdapter.retrieveBeans(null, valObj);

@@ -25,7 +25,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import junit.framework.TestCase;
 import org.synchronoss.cpo.CpoAdapter;
-import org.synchronoss.cpo.CpoAdapterBean;
 import org.synchronoss.cpo.CpoAdapterFactory;
 import org.synchronoss.cpo.CpoWhere;
 
@@ -55,7 +54,7 @@ public class InterleavedWhereTest extends TestCase {
     String method = "setUp:";
 
     try {
-      cpoAdapter = new CpoAdapterBean(CpoAdapterFactory.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_JDBC));
+      cpoAdapter = CpoAdapterFactory.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_JDBC);
       assertNotNull(method + "CpoAdapter is null", cpoAdapter);
     } catch (Exception e) {
       fail(method + e.getMessage());

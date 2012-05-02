@@ -110,6 +110,8 @@ public final class CpoAdapterFactory {
       logger.error("Could not access CpoConfigProcessor: " + dataSourceConfig.getCpoConfigProcessor(), iae);
     } catch (InstantiationException ie) {
       logger.error("Could not instantiate CpoConfigProcessor: " + dataSourceConfig.getCpoConfigProcessor(), ie);
+    } catch (ClassCastException cce) {
+      logger.error("Class is not instance of CpoConfigProcessor: " + dataSourceConfig.getCpoConfigProcessor(), cce);
     } catch (CpoException ce) {
       logger.error("Error Creating CpoConfigProcessor: " + dataSourceConfig.getCpoConfigProcessor(), ce);
     }

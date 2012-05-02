@@ -46,7 +46,7 @@ public class CpoMetaDescriptor extends CpoMetaDescriptorCache implements CpoMeta
     } catch (IllegalAccessException iae) {
       throw new CpoException("Could not access CpoMetaAdapter: " + ExceptionHelper.getLocalizedMessage(iae));
     } catch (ClassCastException cce) {
-      throw new CpoException("CpoMetaAdapter must extend AbstractCpoMetaAdapter: " + ExceptionHelper.getLocalizedMessage(cce));
+      throw new CpoException("CpoMetaAdapter must extend AbstractCpoMetaAdapter: " + getMetaAdapterClass().getName() + ":" +ExceptionHelper.getLocalizedMessage(cce));
     } catch (CpoException ce) {
       throw ce;
     }
@@ -150,6 +150,8 @@ public class CpoMetaDescriptor extends CpoMetaDescriptorCache implements CpoMeta
         throw new CpoException("Could not find constructor: " + metaDescriptorClassName + ": " + ExceptionHelper.getLocalizedMessage(nsme));
       } catch (SecurityException se) {
         throw new CpoException("Not allowed to access constructor: " + metaDescriptorClassName + ": " + ExceptionHelper.getLocalizedMessage(se));
+      } catch (ClassCastException cce) {
+        throw new CpoException("Class is not instance of CpoMetaDescriptor: " + metaDescriptorClassName + ":" +ExceptionHelper.getLocalizedMessage(cce));
       } finally {
         if (is != null) {
           try {

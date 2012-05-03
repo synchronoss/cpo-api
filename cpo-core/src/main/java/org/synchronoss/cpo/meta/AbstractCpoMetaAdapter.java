@@ -21,16 +21,12 @@
  */
 package org.synchronoss.cpo.meta;
 
-import org.apache.xmlbeans.XmlOptions;
 import org.slf4j.*;
 import org.synchronoss.cpo.CpoException;
 import org.synchronoss.cpo.core.cpoCoreMeta.*;
-import org.synchronoss.cpo.exporter.*;
 import org.synchronoss.cpo.meta.domain.*;
 
-import java.io.*;
 import java.util.*;
-import org.apache.xmlbeans.XmlException;
 
 /**
  *
@@ -44,9 +40,9 @@ public abstract class AbstractCpoMetaAdapter implements CpoMetaAdapter {
    */
   private SortedMap<String, CpoClass> classMap = new TreeMap<String, CpoClass>();
   private CpoClass currentClass = null;
-//  private CpoMetaDescriptor metaDescriptor = null;
-  
-  protected AbstractCpoMetaAdapter(){
+
+  protected AbstractCpoMetaAdapter() {
+    super();
   }
 
   /**
@@ -94,12 +90,10 @@ public abstract class AbstractCpoMetaAdapter implements CpoMetaAdapter {
   }
 
   protected void loadCpoMetaDataDocument(CpoMetaDataDocument metaDataDoc) throws CpoException {
-
     for (CtClass ctClass : metaDataDoc.getCpoMetaData().getCpoClassArray()) {
       CpoClass cpoClass = loadCpoClass(ctClass);
       addCpoClass(cpoClass);
     }
-
   }
 
   protected CpoClass loadCpoClass(CtClass ctClass) throws CpoException {
@@ -197,5 +191,11 @@ public abstract class AbstractCpoMetaAdapter implements CpoMetaAdapter {
       logger.debug("Added class: " + metaClass.getName());
 
   }
-  
+
+  protected void removeCpoClass(CpoClass metaClass) {
+    if (metaClass != null) {
+      logger.debug("Removing class: " + metaClass.getName());
+      classMap.remove(metaClass.getName());
+    }
+  }
 }

@@ -192,6 +192,14 @@ public class CpoMetaDescriptor extends CpoMetaDescriptorCache implements CpoMeta
     return getCpoMetaAdapter().getCpoClasses();
   }
 
+  public void addCpoClass(CpoClass cpoClass) throws CpoException {
+    getCpoMetaAdapter().addCpoClass(cpoClass);
+  }
+
+  public void removeCpoClass(CpoClass cpoClass) throws CpoException {
+    getCpoMetaAdapter().removeCpoClass(cpoClass);
+  }
+
   @Override
   public ExpressionParser getExpressionParser() throws CpoException {
     return getCpoMetaAdapter().getExpressionParser();

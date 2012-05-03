@@ -42,6 +42,13 @@ public class CpoFunctionGroup extends CpoFunctionGroupBean {
     }
   }
 
+  public boolean removeFunction(CpoFunction function) {
+    if (function != null) {
+      return functions.remove(function);
+    }
+    return false;
+  }
+
   @Override
   public String toString() {
     return this.getType() + " - " + this.getName();

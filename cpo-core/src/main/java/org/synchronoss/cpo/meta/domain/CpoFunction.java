@@ -44,6 +44,13 @@ public class CpoFunction extends CpoFunctionBean {
     }
   }
 
+  public boolean removeArgument(CpoArgument argument) {
+    if (argument != null) {
+      return arguments.remove(argument);
+    }
+    return false;
+  }
+
   /**
    * DOCUMENT ME!
    *

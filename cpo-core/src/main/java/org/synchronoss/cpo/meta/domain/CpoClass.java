@@ -21,17 +21,13 @@
  */
 package org.synchronoss.cpo.meta.domain;
 
-import java.util.List;
-import java.util.SortedMap;
-import java.util.TreeMap;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.synchronoss.cpo.CpoException;
-import org.synchronoss.cpo.MetaDFVisitable;
-import org.synchronoss.cpo.MetaVisitor;
+import org.slf4j.*;
+import org.synchronoss.cpo.*;
 import org.synchronoss.cpo.helper.ExceptionHelper;
 import org.synchronoss.cpo.meta.CpoMetaDescriptor;
 import org.synchronoss.cpo.meta.bean.CpoClassBean;
+
+import java.util.*;
 
 public class CpoClass extends CpoClassBean implements Comparable<CpoClass>, MetaDFVisitable {
 
@@ -66,6 +62,14 @@ public class CpoClass extends CpoClassBean implements Comparable<CpoClass>, Meta
     }
   }
 
+  public void removeAttribute(CpoAttribute cpoAttribute) {
+    if (cpoAttribute != null) {
+      logger.debug("Removing Attribute: " + cpoAttribute.getJavaName() + ":" + cpoAttribute.getDataName());
+      javaMap.remove(cpoAttribute.getJavaName());
+      dataMap.remove(cpoAttribute.getDataName());
+    }
+  }
+
   public SortedMap<String, CpoFunctionGroup> getFunctionGroups() {
     return this.functionGroups;
   }
@@ -87,6 +91,13 @@ public class CpoClass extends CpoClassBean implements Comparable<CpoClass>, Meta
     String key = buildFunctionGroupKey(group.getType(), group.getName());
     logger.debug("Adding function group: " + key);
     return this.functionGroups.put(key, group);
+  }
+
+  public void removeFunctionGroup(CpoFunctionGroup group) {
+    if (group != null) {
+      String key = buildFunctionGroupKey(group.getType(), group.getName());
+      functionGroups.remove(key);
+    }
   }
 
   private String buildFunctionGroupKey(String groupType, String groupName) {

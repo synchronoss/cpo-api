@@ -123,7 +123,6 @@ public class ExistObjectTest extends TestCase {
 
   @Override
   public void tearDown() {
-    //String method="tearDown:";
     ValueObject vo = new ValueObject(1);
     try {
       cpoAdapter.deleteObject(vo);

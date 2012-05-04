@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.synchronoss.cpo.CpoData;
 import org.synchronoss.cpo.CpoException;
 import org.synchronoss.cpo.CpoReleasible;
 import org.synchronoss.cpo.helper.ExceptionHelper;
@@ -91,7 +92,8 @@ public class JdbcCallableStatementFactory implements CpoReleasible {
         attribute = (JdbcCpoAttribute) argument.getAttribute();
 
         if (((JdbcCpoArgument) argument).isInParameter()) {
-          attribute.invokeGetter(this, obj, j);
+          CpoData cpoData = new CallableStatementCpoData(this, attribute, j);
+          cpoData.invokeSetter(obj);
         }
 
         if (((JdbcCpoArgument) argument).isOutParameter()) {

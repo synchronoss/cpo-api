@@ -21,10 +21,11 @@
  */
 package org.synchronoss.cpo.meta.domain;
 
-import org.slf4j.*;
+import java.util.ArrayList;
+import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.meta.bean.CpoFunctionBean;
-
-import java.util.*;
 
 public class CpoFunction extends CpoFunctionBean {
 
@@ -80,7 +81,7 @@ public class CpoFunction extends CpoFunctionBean {
       if (argument != null) {
         try {
           attribute = argument.getAttribute();
-          c = attribute.getGetters().get(0).getReturnType();
+          c = attribute.getGetter().getReturnType();
           // TODO: make uncomment the following line and make work
 //          type = attribute.getJavaSqlType();
           if (c != null) {

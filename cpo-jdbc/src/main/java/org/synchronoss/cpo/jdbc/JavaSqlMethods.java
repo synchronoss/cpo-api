@@ -26,6 +26,7 @@ import java.io.Reader;
 import java.math.BigDecimal;
 import java.net.URL;
 import java.util.HashMap;
+import org.synchronoss.cpo.CpoException;
 
 /**
  * JavaSqlMethods is a class defines the getters and setters for all the JDBC specific data classes
@@ -74,7 +75,7 @@ public class JavaSqlMethods extends java.lang.Object implements java.io.Serializ
   private JavaSqlMethods() {
   }
 
-  static public JavaSqlMethod<?> getJavaSqlMethod(Class<?> c) {
+  static public JavaSqlMethod<?> getJavaSqlMethod(Class<?> c) throws CpoException {
     JavaSqlMethod<?> javaSqlMethod = getJavaSqlMethodMap().get(c);
     return javaSqlMethod;
 

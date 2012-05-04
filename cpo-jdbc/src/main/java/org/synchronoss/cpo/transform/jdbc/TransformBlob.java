@@ -39,7 +39,7 @@ import org.synchronoss.cpo.jdbc.JdbcPreparedStatementFactory;
  *
  * @author david berry
  */
-public class TransformBlob implements JdbcTransform<Blob, byte[]> {
+public class TransformBlob implements JdbcCpoTransform<Blob, byte[]> {
 
   private static Logger logger = LoggerFactory.getLogger(TransformBlob.class.getName());
 

@@ -45,7 +45,6 @@ public class Node implements Serializable, Cloneable, Comparable<Node> {
    */
   private static final long serialVersionUID = 1L;
   private static final int CHILD_NODE = 0;
-//    private static final int PARENT_NODE = 1;
   /**
    * The parent node for this Node
    */

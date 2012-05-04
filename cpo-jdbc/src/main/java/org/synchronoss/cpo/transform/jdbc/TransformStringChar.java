@@ -26,7 +26,7 @@ import org.synchronoss.cpo.jdbc.JdbcPreparedStatementFactory;
  *
  * @author david berry
  */
-public class TransformStringChar implements JdbcTransform<String, char[]> {
+public class TransformStringChar implements JdbcCpoTransform<String, char[]> {
 
   public TransformStringChar() {
   }

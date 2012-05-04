@@ -187,7 +187,6 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
 
       // do all the tests here
       batchUpdatesSupported_ = dmd.supportsBatchUpdates();
-//      batchUpdatesSupported_ = false;
 
       this.closeConnection(c);
     } catch (Throwable t) {
@@ -2362,7 +2361,8 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
         for (CpoArgument cpoArgument : jcsf.getOutArguments()) {
           JdbcCpoArgument jdbcArgument = (JdbcCpoArgument) cpoArgument;
           if (jdbcArgument.isOutParameter()) {
-            jdbcArgument.getAttribute().invokeSetter(returnObject, cstmt, j++);
+            JdbcCpoAttribute jdbcAttribute = jdbcArgument.getAttribute();
+            jdbcAttribute.invokeSetter(returnObject, new CallableStatementCpoData(cstmt, jdbcAttribute, j++));
           }
         }
 
@@ -2493,7 +2493,7 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
               attribute = (JdbcCpoAttribute) cpoClass.getAttributeData(rs.getString(1));
 
               if (attribute != null) {
-                attribute.invokeSetter(rObj, rs, 2);
+                attribute.invokeSetter(rObj, new ResultSetCpoData(rs, attribute, 2));
                 attributesSet++;
               }
             }
@@ -2504,7 +2504,7 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
               attribute = (JdbcCpoAttribute) cpoClass.getAttributeData(rsmd.getColumnLabel(k));
 
               if (attribute != null) {
-                attribute.invokeSetter(rObj, rs, k);
+                attribute.invokeSetter(rObj, new ResultSetCpoData(rs, attribute, k));
                 attributesSet++;
               }
             }
@@ -2682,7 +2682,7 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
 
           for (k = 1; k <= columnCount; k++) {
             if (attributes[k] != null) {
-              attributes[k].invokeSetter(obj, rs, k);
+                attributes[k].invokeSetter(obj, new ResultSetCpoData(rs, attributes[k], k));
             }
           }
 

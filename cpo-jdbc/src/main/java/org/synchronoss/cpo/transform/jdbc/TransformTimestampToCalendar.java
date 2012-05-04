@@ -33,7 +33,7 @@ import org.synchronoss.cpo.jdbc.JdbcPreparedStatementFactory;
  *
  * @author david berry
  */
-public class TransformTimestampToCalendar implements JdbcTransform<Timestamp, Calendar> {
+public class TransformTimestampToCalendar implements JdbcCpoTransform<Timestamp, Calendar> {
 
   public TransformTimestampToCalendar() {
   }

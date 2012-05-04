@@ -30,7 +30,7 @@ import org.synchronoss.cpo.jdbc.JdbcPreparedStatementFactory;
  *
  * @author david berry
  */
-public class TransformCharArray implements JdbcTransform<String, char[]> {
+public class TransformCharArray implements JdbcCpoTransform<String, char[]> {
 
   public TransformCharArray() {
   }

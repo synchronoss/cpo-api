@@ -33,7 +33,7 @@ import org.synchronoss.cpo.helper.ExceptionHelper;
 import org.synchronoss.cpo.jdbc.meta.JdbcCpoMetaDescriptor;
 import org.synchronoss.cpo.meta.CpoMetaDescriptor;
 import org.synchronoss.cpo.meta.domain.CpoAttribute;
-import org.synchronoss.cpo.transform.jdbc.JdbcTransform;
+import org.synchronoss.cpo.transform.jdbc.JdbcCpoTransform;
 
 /**
  * JdbcCpoAttribute. A class that includes the Jdbc specifc attributes that are additional to the CpoAttribute attributes
@@ -51,7 +51,7 @@ public class JdbcCpoAttribute extends CpoAttribute implements java.io.Serializab
   private String dbColumn_ = null;
   private int javaSqlType_ = Types.NULL;
   //Transform attributes
-  private JdbcTransform jdbcTransform = null;
+  private JdbcCpoTransform jdbcTransform = null;
   private Method transformPSOutMethod = null;
   private Method transformCSOutMethod = null;
 
@@ -74,216 +74,6 @@ public class JdbcCpoAttribute extends CpoAttribute implements java.io.Serializab
     return dbColumn_;
   }
 
-  public void invokeSetter(Object obj, ResultSet rs, int idx) throws CpoException {
-    JavaSqlMethod<?> jdbcMethod;
-    Object param = null;
-    Class<?> paramClass = null;
-    Logger localLogger = obj == null ? logger : LoggerFactory.getLogger(obj.getClass().getSimpleName()+":"+logger.getName());
-
-    if (getSetters().isEmpty()) {
-      throw new CpoException("There are no setters");
-    }
-
-    if (jdbcTransform != null) {
-      localLogger.info("Calling Transform In:" + jdbcTransform.getClass().getName());
-
-      // Get the JavaSqlMethod for the class that we are passing into the transform
-      jdbcMethod = JavaSqlMethods.getJavaSqlMethod(getTransformInMethod().getParameterTypes()[0]);
-
-      try {
-        // Get the getter for the ResultSet
-        param = jdbcMethod.getRsGetter().invoke(rs, new Object[]{new Integer(idx)});
-        param = transformIn(param);
-        paramClass = getTransformInMethod().getReturnType();
-      } catch (IllegalAccessException iae) {
-        localLogger.debug("Error Invoking ResultSet Method: " + ExceptionHelper.getLocalizedMessage(iae));
-        throw new CpoException(iae);
-      } catch (InvocationTargetException ite) {
-        localLogger.debug("Error Invoking ResultSet Method: " + ExceptionHelper.getLocalizedMessage(ite));
-        throw new CpoException(ite.getCause());
-      }
-
-    }
-
-    for (Method setter : getSetters()) {
-      try {
-        if (jdbcTransform == null) {
-          // Get the JavaSqlMethod for the class that we are passing in as the Setter parameter
-          jdbcMethod = JavaSqlMethods.getJavaSqlMethod(setter.getParameterTypes()[0]);
-
-          // Get the getter for the ResultSet
-          param = jdbcMethod.getRsGetter().invoke(rs, new Object[]{new Integer(idx)});
-          paramClass = jdbcMethod.getJavaSqlMethodClass();
-        }
-        if (setter.getParameterTypes()[0].isAssignableFrom(paramClass) || isPrimitiveAssignableFrom(setter.getParameterTypes()[0], paramClass)) {
-          setter.invoke(obj, new Object[]{param});
-          return;
-        }
-      } catch (IllegalAccessException iae) {
-        localLogger.debug("Error Invoking Setter Method: " + ExceptionHelper.getLocalizedMessage(iae));
-      } catch (InvocationTargetException ite) {
-        localLogger.debug("Error Invoking Setter Method: " + ExceptionHelper.getLocalizedMessage(ite));
-      }
-    }
-
-    throw new CpoException("invokeSetter: Could not find a Setter for " + obj.getClass() + ": Column<" + this.getDataName() + "> Attribute<" + this.getJavaName() + ">");
-  }
-
-  public void invokeSetter(Object obj, CallableStatement cs, int idx) throws CpoException {
-    JavaSqlMethod<?> jdbcMethod;
-    Object param = null;
-    Class<?> paramClass = null;
-    Logger localLogger = obj == null ? logger : LoggerFactory.getLogger(obj.getClass().getSimpleName()+":"+logger.getName());
-
-    if (getSetters().isEmpty()) {
-      throw new CpoException("There are no setters");
-    }
-
-    if (jdbcTransform != null) {
-      localLogger.info("Calling Transform In:" + jdbcTransform.getClass().getName());
-
-      // Get the jdbcType for the class that we are passing into the transform
-      jdbcMethod = JavaSqlMethods.getJavaSqlMethod(getTransformInMethod().getParameterTypes()[0]);
-
-      try {
-        // Get the getter for the Callable Statement
-        param = jdbcMethod.getCsGetter().invoke(cs, new Object[]{new Integer(idx)});
-        param = transformIn(param);
-        paramClass = getTransformInMethod().getReturnType();
-      } catch (IllegalAccessException iae) {
-        localLogger.debug("Error Invoking CallableStatement Method: " + ExceptionHelper.getLocalizedMessage(iae));
-        throw new CpoException(iae);
-      } catch (InvocationTargetException ite) {
-        localLogger.debug("Error Invoking CallableStatement Method: " + ExceptionHelper.getLocalizedMessage(ite));
-        throw new CpoException(ite.getCause());
-      }
-    }
-
-    for (Method setter : getSetters()) {
-      try {
-
-        if (jdbcTransform == null) {
-          // Get the jdbcType for the class that we are passing in as the Setter parameter
-          jdbcMethod = JavaSqlMethods.getJavaSqlMethod(setter.getParameterTypes()[0]);
-
-          // Get the getter for the CallableStatement
-          // What we get from the cs will be set in the value object
-          param = jdbcMethod.getCsGetter().invoke(cs, new Object[]{new Integer(idx)});
-          paramClass = jdbcMethod.getJavaSqlMethodClass();
-        }
-
-        if (setter.getParameterTypes()[0].isAssignableFrom(paramClass)) {
-          setter.invoke(obj, new Object[]{param});
-          return;
-        }
-      } catch (IllegalAccessException iae) {
-        localLogger.debug("Error Invoking Setter Method: " + ExceptionHelper.getLocalizedMessage(iae));
-      } catch (InvocationTargetException ite) {
-        localLogger.debug("Error Invoking Setter Method: " + ExceptionHelper.getLocalizedMessage(ite));
-      }
-    }
-
-    throw new CpoException("invokeSetter: Could not find a Setter for " + obj.getClass());
-  }
-
-  public void invokeGetter(JdbcCallableStatementFactory jcsf, Object obj, int idx) throws CpoException {
-    Object param;
-    JavaSqlMethod<?> jdbcMethod;
-    Logger localLogger = obj == null ? logger : LoggerFactory.getLogger(obj.getClass().getSimpleName()+":"+logger.getName());
-
-    try {
-      if (jdbcTransform != null) {
-        localLogger.info("Calling Transform Out:" + jdbcTransform.getClass().getName());
-        param = transformOut(jcsf, getGetters().get(0).invoke(obj, (Object[]) null));
-        jdbcMethod = JavaSqlMethods.getJavaSqlMethod(transformCSOutMethod.getReturnType());
-      } else {
-        jdbcMethod = JavaSqlMethods.getJavaSqlMethod(getGetters().get(0).getReturnType());
-        param = getGetters().get(0).invoke(obj, (Object[]) null);
-      }
-      int length = 0;
-
-      localLogger.info(this.getDataName() + "=" + param);
-
-      switch (jdbcMethod.getMethodType()) {
-        case JavaSqlMethod.METHOD_TYPE_BASIC:
-          jdbcMethod.getCsSetter().invoke(jcsf.getCallableStatement(), new Object[]{new Integer(idx), param});
-          break;
-        case JavaSqlMethod.METHOD_TYPE_STREAM:
-          CpoByteArrayInputStream cbis = CpoByteArrayInputStream.getCpoStream((InputStream) param);
-          // Get the length of the InputStream in param
-          jdbcMethod.getCsSetter().invoke(jcsf.getCallableStatement(), new Object[]{new Integer(idx), (InputStream) cbis, new Integer(length)});
-          break;
-        case JavaSqlMethod.METHOD_TYPE_READER:
-          CpoCharArrayReader ccar = CpoCharArrayReader.getCpoReader((Reader) param);
-          // Get the length of the Reader in param
-          jdbcMethod.getCsSetter().invoke(jcsf.getCallableStatement(), new Object[]{new Integer(idx), (Reader) ccar, new Integer(length)});
-          break;
-      }
-      return;
-    } catch (IllegalAccessException iae) {
-      localLogger.debug("Error Invoking Getter Method: " + ExceptionHelper.getLocalizedMessage(iae));
-    } catch (InvocationTargetException ite) {
-      localLogger.debug("Error Invoking Getter Method: " + ExceptionHelper.getLocalizedMessage(ite));
-    }
-
-    throw new CpoException("invokeGetter: Could not find a Getter for " + obj.getClass());
-  }
-
-  public void invokeGetter(JdbcPreparedStatementFactory jpsf, Object obj, int idx) throws CpoException {
-    Object param = null;
-    JavaSqlMethod<?> jdbcMethod = null;
-    String msg = null;
-    Logger localLogger = obj == null ? logger : LoggerFactory.getLogger(obj.getClass().getSimpleName()+":"+logger.getName());
-    try {
-      if (jdbcTransform != null) {
-        localLogger.info("Calling Transform Out:" + jdbcTransform.getClass().getName());
-        param = transformOut(jpsf, getGetters().get(0).invoke(obj, (Object[]) null));
-        jdbcMethod = JavaSqlMethods.getJavaSqlMethod(transformPSOutMethod.getReturnType());
-        if (jdbcMethod == null) {
-          throw new CpoException("Error Retrieveing Jdbc Method for type: " + transformPSOutMethod.getReturnType().getName());
-        }
-      } else {
-        jdbcMethod = JavaSqlMethods.getJavaSqlMethod(getGetters().get(0).getReturnType());
-        param = getGetters().get(0).invoke(obj, (Object[]) null);
-        if (jdbcMethod == null) {
-          localLogger.debug("jdbcMethod is null");
-          throw new CpoException("Error Retrieveing Jdbc Method for type: " + getGetters().get(0).getReturnType().getName());
-        }
-      }
-    } catch (Exception e) {
-      msg = "Error Invoking Getter Method: " + getGetters().get(0).getReturnType().getName() + " " + getGetters().get(0).getName() + "():" + ExceptionHelper.getLocalizedMessage(e);
-    }
-
-    if (msg == null) {
-      localLogger.info(this.getDataName() + "=" + param);
-      try {
-        switch (jdbcMethod.getMethodType()) {
-          case JavaSqlMethod.METHOD_TYPE_BASIC:
-            jdbcMethod.getPsSetter().invoke(jpsf.getPreparedStatement(), new Object[]{new Integer(idx), param});
-            break;
-          case JavaSqlMethod.METHOD_TYPE_STREAM:
-            CpoByteArrayInputStream cbais = CpoByteArrayInputStream.getCpoStream((InputStream) param);
-            // Get the length of the InputStream in param
-            jdbcMethod.getPsSetter().invoke(jpsf.getPreparedStatement(), new Object[]{new Integer(idx), (InputStream) cbais, new Integer(cbais.getLength())});
-            break;
-          case JavaSqlMethod.METHOD_TYPE_READER:
-            CpoCharArrayReader ccar = CpoCharArrayReader.getCpoReader((Reader) param);
-            // Get the length of the Reader in param
-            jdbcMethod.getPsSetter().invoke(jpsf.getPreparedStatement(), new Object[]{new Integer(idx), (Reader) ccar, new Integer(ccar.getLength())});
-            break;
-        }
-        return;
-      } catch (Exception e) {
-        msg = "Error Invoking Jdbc Method: " + jdbcMethod.getPsSetter().getName() + ":" + ExceptionHelper.getLocalizedMessage(e);
-      }
-    }
-
-    if (msg != null) {
-      localLogger.error(msg);
-      throw new CpoException(msg);
-    }
-  }
-
   protected void setJavaSqlType(int type) {
     javaSqlType_ = type;
 
@@ -303,29 +93,11 @@ public class JdbcCpoAttribute extends CpoAttribute implements java.io.Serializab
     logger.debug("========================");
   }
 
-  protected Object transformOut(JdbcPreparedStatementFactory jpsf, Object attributeObject) throws CpoException {
-    Object retObj = attributeObject;
-
-    if (jdbcTransform != null) {
-      retObj = jdbcTransform.transformOut(jpsf, attributeObject);
-    }
-    return retObj;
-  }
-
-  protected Object transformOut(JdbcCallableStatementFactory jcsf, Object attributeObject) throws CpoException {
-    Object retObj = attributeObject;
-
-    if (jdbcTransform != null) {
-      retObj = jdbcTransform.transformOut(jcsf, attributeObject);
-    }
-    return retObj;
-  }
-
   @Override
   protected void initTransformClass(CpoMetaDescriptor metaDescriptor) throws CpoException {
     super.initTransformClass(metaDescriptor);
-    if (getCpoTransform() != null && getCpoTransform() instanceof JdbcTransform) {
-      jdbcTransform = (JdbcTransform) getCpoTransform();
+    if (getCpoTransform() != null && getCpoTransform() instanceof JdbcCpoTransform) {
+      jdbcTransform = (JdbcCpoTransform) getCpoTransform();
 
       for (Method m : findMethods(jdbcTransform.getClass(), TRANSFORM_OUT_NAME, 2, true)) {
         if (m.getParameterTypes()[0].getName().equals("org.synchronoss.cpo.jdbc.JdbcPreparedStatementFactory")) {

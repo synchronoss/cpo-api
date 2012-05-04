@@ -366,7 +366,8 @@ public class JdbcPreparedStatementFactory implements CpoReleasible {
             throw new CpoException(ite.getCause());
           }
         } else {
-          ja.invokeGetter(this, bindObject, index++);
+          CpoData cpoData = new PreparedStatementCpoData(this, ja, index++);
+          cpoData.invokeSetter(bindObject);
         }
       }
     }

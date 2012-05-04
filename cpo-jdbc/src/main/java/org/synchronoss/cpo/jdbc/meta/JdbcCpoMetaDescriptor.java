@@ -31,11 +31,6 @@ public class JdbcCpoMetaDescriptor extends CpoMetaDescriptor {
     return JdbcCpoMetaAdapter.class;
   }
   
-//  public static JdbcCpoMetaDescriptor getInstance(String name) throws CpoException {
-//    return new JdbcCpoMetaDescriptor(name);
-//  }
-//  
-  
   @Override
   protected MetaXmlObjectExporter getMetaXmlObjectExporter() {
     return new JdbcMetaXmlObjectExporter(this);

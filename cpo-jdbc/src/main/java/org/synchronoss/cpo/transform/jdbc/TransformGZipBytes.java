@@ -38,7 +38,7 @@ import org.synchronoss.cpo.jdbc.JdbcPreparedStatementFactory;
  *
  * @author david berry
  */
-public class TransformGZipBytes implements JdbcTransform<byte[], byte[]> {
+public class TransformGZipBytes implements JdbcCpoTransform<byte[], byte[]> {
 
   private static Logger logger = LoggerFactory.getLogger(TransformGZipBytes.class.getName());
 

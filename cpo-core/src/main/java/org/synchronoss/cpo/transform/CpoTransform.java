@@ -28,7 +28,7 @@ import org.synchronoss.cpo.CpoException;
  */
 public interface CpoTransform<D, J> {
 
-  public J transformIn(D inObject) throws CpoException, UnsupportedOperationException;
+  public J transformIn(D inObject) throws CpoException;
 
-  public D transformOut(J attributeObject) throws CpoException, UnsupportedOperationException;
+  public D transformOut(J attributeObject) throws CpoException;
 }

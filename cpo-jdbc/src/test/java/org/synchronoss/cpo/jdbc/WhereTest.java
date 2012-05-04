@@ -378,8 +378,6 @@ public class WhereTest extends TestCase {
       cw.setComparison(CpoWhere.COMP_EQ);
       cw.setLogical(CpoWhere.LOGIC_NONE);
 
-      //ArrayList<CpoWhere> wheres = new ArrayList<CpoWhere>();
-      //wheres.add(cw);
       Collection<ValueObject> col = cpoAdapter.retrieveBeans("TestWhereRetrieve", valObj, valObj, cw, null);
 
       assertTrue("Col size is " + col.size(), col.size() == 1);

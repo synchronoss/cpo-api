@@ -41,8 +41,6 @@ public class BlobTrxTest extends TestCase {
   private CpoAdapter cpoAdapter = null;
   private CpoTrxAdapter trxAdapter = null;
   private JdbcCpoMetaDescriptor metaDescriptor = null;
-  //private byte[] anotherBlob = "This is a test of a small Blob".getBytes();
-  //    private byte[] anotherBlob2 = "This is a another test of a small Blob".getBytes();
   private byte[] testBlob = null;
   private char[] testClob = "This is a test Clob used for testing clobs".toCharArray();
   private byte[] testBlob2 = null;
@@ -123,11 +121,6 @@ public class BlobTrxTest extends TestCase {
 
         assertEquals(blob1, blob2);
 
-        //          String clob1 = new String(lvo.getCLob());
-        //          String clob2 = new String(lvo2.getCLob());
-
-        //          assertEquals(clob1,clob2);
-
       } catch (Exception ie) {
         logger.error("error retrieving lob", ie);
         fail(ie.getMessage());
@@ -144,11 +137,6 @@ public class BlobTrxTest extends TestCase {
         String blob2 = new String(lvo2.getBLob());
 
         assertEquals(blob1, blob2);
-
-        //          String clob1 = new String(testClob2);
-        //          String clob2 = new String(lvo2.getCLob());
-        //          
-        //          assertEquals(clob1,clob2);
 
       } catch (Exception ie) {
         logger.error("error updating lob", ie);
@@ -181,7 +169,6 @@ public class BlobTrxTest extends TestCase {
       LobValueObject lvo = new LobValueObject(1, testBlob, testClob);
       LobValueObject lvo2 = null;
 
-      //lvo.setBLob2(anotherBlob);
       lvo.setBLob2(testBlob2);
 
       try {

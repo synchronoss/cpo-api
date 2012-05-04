@@ -38,8 +38,6 @@ public class BlobTest extends TestCase {
   private static Logger logger = LoggerFactory.getLogger(BlobTest.class.getName());
   private JdbcCpoMetaDescriptor metaDescriptor = null;
   private CpoAdapter cpoAdapter = null;
-  //private byte[] anotherBlob = "This is a test of a small Blob".getBytes();
-  //    private byte[] anotherBlob2 = "This is a another test of a small Blob".getBytes();
   private byte[] testBlob = null;
   private char[] testClob = "This is a test Clob used for testing clobs".toCharArray();
   private byte[] testBlob2 = null;
@@ -161,7 +159,6 @@ public class BlobTest extends TestCase {
       LobValueObject lvo = new LobValueObject(1, testBlob, testClob);
       LobValueObject lvo2 = null;
 
-      //lvo.setBLob2(anotherBlob);
       lvo.setBLob2(testBlob2);
 
       try {

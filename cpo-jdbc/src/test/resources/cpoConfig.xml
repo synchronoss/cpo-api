@@ -52,6 +52,14 @@
     <jdbc:password>${cpo.db.pswd}</jdbc:password>
    </jdbc:readWriteConfig>
   </dataConfig>
+  <dataConfig xsi:type="jdbc:ctJdbcConfig" name="driverUrlOnly">
+   <metaDescriptor name="jdbcMeta"/>
+   <cpoConfigProcessor>org.synchronoss.cpo.jdbc.config.JdbcCpoConfigProcessor</cpoConfigProcessor>
+   <jdbc:readWriteConfig>
+    <jdbc:driverClassName>${cpo.db.driver}</jdbc:driverClassName>
+    <jdbc:url>${cpo.db.userurl}</jdbc:url>
+   </jdbc:readWriteConfig>
+  </dataConfig>
  <dataConfig xsi:type="jdbc:ctJdbcConfig" name="driverProp">
   <metaDescriptor name="jdbcMeta"/>
   <cpoConfigProcessor>org.synchronoss.cpo.jdbc.config.JdbcCpoConfigProcessor</cpoConfigProcessor>

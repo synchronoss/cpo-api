@@ -86,6 +86,19 @@ public class ConstructorTest extends TestCase {
     }
   }
 
+  public void testConstructorDriverUrlOnly() {
+    String method = "testConstructorDriverUrlOnly:";
+    try {
+      CpoAdapter cpoAdapter = CpoAdapterFactory.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_DRIVER_URLONLY);
+      assertNotNull(method + "cpoAdapter is null", cpoAdapter);
+      ValueObject valObj = new ValueObject();
+      List<ValueObject> objs = cpoAdapter.retrieveBeans(null, valObj);
+      assertTrue("List size is " + objs.size(), objs.size() == 0);
+    } catch (Exception e) {
+      fail(method + e.getMessage());
+    }
+  }
+
   public void testConstructorDriverProp() {
     String method = "testConstructorDriverProp:";
     try {

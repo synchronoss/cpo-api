@@ -91,13 +91,15 @@ public final class CpoAdapterFactory {
       logger.error("Error reading cpoConfig.xml: ", ioe);
     } catch (XmlException xe) {
       logger.error("Error processing cpoConfig.xml: ", xe);
+    } catch (CpoException ce) {
+      logger.error("Error processing cpoConfig.xml: ", ce);
     }
 
 
     return map;
   }
 
-   private static CpoAdapter makeCpoAdapter(CtDataSourceConfig dataSourceConfig) {
+   public static CpoAdapter makeCpoAdapter(CtDataSourceConfig dataSourceConfig) throws CpoException {
     CpoAdapter cpoAdapter = null;
 
     // make the CpoAdapter
@@ -105,15 +107,23 @@ public final class CpoAdapterFactory {
       CpoConfigProcessor configProcessor = (CpoConfigProcessor) Class.forName(dataSourceConfig.getCpoConfigProcessor()).newInstance();
       cpoAdapter = configProcessor.processCpoConfig(dataSourceConfig);
     } catch (ClassNotFoundException cnfe) {
-      logger.error("CpoConfigProcessor not found: " + dataSourceConfig.getCpoConfigProcessor(), cnfe);
+      String msg = "CpoConfigProcessor not found: " + dataSourceConfig.getCpoConfigProcessor();
+      logger.error(msg);
+      throw new CpoException(msg);
     } catch (IllegalAccessException iae) {
-      logger.error("Could not access CpoConfigProcessor: " + dataSourceConfig.getCpoConfigProcessor(), iae);
+      String msg = "Could not access CpoConfigProcessor: " + dataSourceConfig.getCpoConfigProcessor();
+      logger.error(msg);
+      throw new CpoException(msg);
     } catch (InstantiationException ie) {
-      logger.error("Could not instantiate CpoConfigProcessor: " + dataSourceConfig.getCpoConfigProcessor(), ie);
+      String msg = "Could not instantiate CpoConfigProcessor: " + dataSourceConfig.getCpoConfigProcessor();
+      logger.error(msg);
+      throw new CpoException(msg);
     } catch (ClassCastException cce) {
-      logger.error("Class is not instance of CpoConfigProcessor: " + dataSourceConfig.getCpoConfigProcessor(), cce);
+      String msg = "Class is not instance of CpoConfigProcessor: " + dataSourceConfig.getCpoConfigProcessor();
+      logger.error(msg);
+      throw new CpoException(msg);
     } catch (CpoException ce) {
-      logger.error("Error Creating CpoConfigProcessor: " + dataSourceConfig.getCpoConfigProcessor(), ce);
+      throw ce;
     }
 
     return cpoAdapter;

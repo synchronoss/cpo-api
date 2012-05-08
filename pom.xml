@@ -1,27 +1,4 @@
 <?xml version="1.0"?>
-<!--
-/*
- *  Copyright (C) 2003-2012 David E. Berry
- *
- *  This library is free software; you can redistribute it and/or
- *  modify it under the terms of the GNU Lesser General Public
- *  License as published by the Free Software Foundation; either
- *  version 2.1 of the License, or (at your option) any later version.
- *
- *  This library is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *  Lesser General Public License for more details.
- *
- *  You should have received a copy of the GNU Lesser General Public
- *  License along with this library; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
- *
- *  A copy of the GNU Lesser General Public License may also be found at 
- *  http://www.gnu.org/licenses/lgpl.txt
- *
- */
--->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.synchronoss.cpo</groupId>
@@ -29,9 +6,7 @@
   <name>cpo</name>
   <packaging>pom</packaging>
   <version>5.0.0-SNAPSHOT</version> 
-  <description>CPO is a persistence layer that is thin wrapper around JDBC that consumes and
-    produces POJOs
-  </description>  
+  <description>CPO is a persistence layer that is thin wrapper around JDBC that consumes and produces POJOs</description>
   <url>http://cpo.sourceforge.net/</url>
   <licenses>
     <license>
@@ -47,11 +22,6 @@
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <currentVersion>${project.version}</currentVersion>
-
-    <oracleVersion>11.2.0.2.0</oracleVersion>
-    <mysqlVersion>5.1.16</mysqlVersion>
-    <hsqldbVersion>2.2.8</hsqldbVersion>
-    <postgresVersion>9.0-801.jdbc4</postgresVersion>
   </properties>
   <ciManagement>
     <system>teamcity</system>
@@ -171,27 +141,57 @@
           <artifactId>maven-surefire-plugin</artifactId>
           <version>2.12</version>
         </plugin>
+        <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>xmlbeans-maven-plugin</artifactId>
+          <version>2.3.3</version>
+          <executions>
+            <execution>
+              <id>Build-XMLBeans</id>
+              <phase>generate-sources</phase>
+              <!--<phase>compile</phase>-->
+              <goals>
+                <goal>xmlbeans</goal>
+              </goals>
+            </execution>
+          </executions>
+          <!--<inherited>true</inherited>-->
+          <configuration>
+            <schemaDirectory>src/main/xsd</schemaDirectory>
+          </configuration>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+    <plugins>
       <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>xmlbeans-maven-plugin</artifactId>
-        <version>2.3.3</version>
+        <groupId>com.mycila.maven-license-plugin</groupId>
+        <artifactId>maven-license-plugin</artifactId>
+        <version>1.10.b1</version>
+        <configuration>
+          <header>src/main/resources/license.txt</header>
+          <aggregate>true</aggregate>
+          <failIfMissing>false</failIfMissing>
+          <strictCheck>true</strictCheck>
+          <mapping>
+            <!-- use /* instead of /** for java files -->
+            <java>SLASHSTAR_STYLE</java>
+          </mapping>
+          <excludes>
+            <!-- intellij folder -->
+            <exclude>.idea/**</exclude>
+          </excludes>
+        </configuration>
         <executions>
           <execution>
-            <id>Build-XMLBeans</id>
-            <phase>generate-sources</phase>
-            <!--<phase>compile</phase>-->
+            <id>check-headers</id>
+            <phase>validate</phase>
             <goals>
-              <goal>xmlbeans</goal>
+              <goal>format</goal>
             </goals>
           </execution>
         </executions>
-        <!--<inherited>true</inherited>-->
-        <configuration>
-          <schemaDirectory>src/main/xsd</schemaDirectory>
-        </configuration>
       </plugin>
-      </plugins>
-    </pluginManagement>
+    </plugins>
   </build>
   <dependencyManagement>
     <dependencies>

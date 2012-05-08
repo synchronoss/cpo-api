@@ -1,39 +1,33 @@
 /*
- *  Copyright (C) 2003-2012 David E. Berry
+ * Copyright (C) 2003-2012 David E. Berry
  *
- *  This library is free software; you can redistribute it and/or
- *  modify it under the terms of the GNU Lesser General Public
- *  License as published by the Free Software Foundation; either
- *  version 2.1 of the License, or (at your option) any later version.
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
  *
- *  This library is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *  Lesser General Public License for more details.
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
  *
- *  You should have received a copy of the GNU Lesser General Public
- *  License along with this library; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  *
- *  A copy of the GNU Lesser General Public License may also be found at 
- *  http://www.gnu.org/licenses/lgpl.txt
- *
+ * A copy of the GNU Lesser General Public License may also be found at
+ * http://www.gnu.org/licenses/lgpl.txt
  */
 package org.synchronoss.cpo.transform.jdbc;
 
-import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.sql.Blob;
-import java.util.zip.GZIPInputStream;
-import java.util.zip.GZIPOutputStream;
 import oracle.sql.BLOB;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.synchronoss.cpo.CpoByteArrayInputStream;
-import org.synchronoss.cpo.CpoException;
-import org.synchronoss.cpo.jdbc.JdbcCallableStatementFactory;
-import org.synchronoss.cpo.jdbc.JdbcPreparedStatementFactory;
+import org.slf4j.*;
+import org.synchronoss.cpo.*;
+import org.synchronoss.cpo.jdbc.*;
+
+import java.io.*;
+import java.sql.Blob;
+import java.util.zip.*;
 
 /**
  * Converts a java.sql.Blob from a jdbc datasource to a byte[] and from a byte[] to a java.sql.Blob

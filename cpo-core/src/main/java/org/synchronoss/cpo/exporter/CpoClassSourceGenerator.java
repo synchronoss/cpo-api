@@ -50,8 +50,8 @@ public class CpoClassSourceGenerator implements MetaVisitor {
   protected StringBuilder toString = new StringBuilder();
   protected StringBuilder footer = new StringBuilder();
 
-  public CpoClassSourceGenerator(CpoMetaDescriptor metaAdapter) {
-    this.metaDescriptor = metaAdapter;
+  public CpoClassSourceGenerator(CpoMetaDescriptor metaDescriptor) {
+    this.metaDescriptor = metaDescriptor;
   }
 
   /**

@@ -38,12 +38,49 @@
     produces POJOs
   </description>
   <properties>
-    <oracleVersion>10.2.0.5</oracleVersion>
+    <oracleVersion>11.2.0.2.0</oracleVersion>
     <mysqlVersion>5.1.16</mysqlVersion>
     <hsqldbVersion>2.2.8</hsqldbVersion>
     <postgresVersion>9.0-801.jdbc4</postgresVersion>
   </properties>
   <build>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>sql-maven-plugin</artifactId>
+          <version>1.4</version>
+          <dependencies>
+            <dependency>
+              <groupId>com.oracle</groupId>
+              <artifactId>ojdbc6</artifactId>
+              <version>${oracleVersion}</version>
+            </dependency>
+            <dependency>
+              <groupId>postgresql</groupId>
+              <artifactId>postgresql</artifactId>
+              <version>${postgresVersion}</version>
+            </dependency>
+            <dependency>
+              <groupId>mysql</groupId>
+              <artifactId>mysql-connector-java</artifactId>
+              <version>${mysqlVersion}</version>
+            </dependency>
+            <dependency>
+              <groupId>org.hsqldb</groupId>
+              <artifactId>hsqldb</artifactId>
+              <version>${hsqldbVersion}</version>
+            </dependency>
+          </dependencies>
+          <configuration>
+            <autocommit>true</autocommit>
+            <delimiter>;</delimiter>
+            <onError>continue</onError>
+            <skip>false</skip>
+          </configuration>
+        </plugin>
+      </plugins>
+    </pluginManagement>
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -64,6 +101,31 @@
        <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>xmlbeans-maven-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>sql-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>create-data</id>
+            <phase>process-test-resources</phase>
+            <goals>
+              <goal>execute</goal>
+            </goals>
+            <configuration>
+              <username>${cpo.db.user}</username>
+              <password>${cpo.db.pswd}</password>
+              <driver>${cpo.db.driver}</driver>
+              <url>${cpo.db.url}</url>
+              <srcFiles>
+                <srcFile>${cpo.test.sqldir}/dropTestTables.sql</srcFile>
+                <srcFile>${cpo.test.sqldir}/LvoTableDDL.sql</srcFile>
+                <srcFile>${cpo.test.sqldir}/ValueObjectDDL.sql</srcFile>
+                <srcFile>${cpo.test.sqldir}/shutdown.sql</srcFile>
+              </srcFiles>
+            </configuration>
+          </execution>
+        </executions>
       </plugin>
     </plugins>
   </build>
@@ -90,7 +152,7 @@
     <!-- Oracle is provided because of the oracle transforms -->
     <dependency>
       <groupId>com.oracle</groupId>
-      <artifactId>ojdbc14</artifactId>
+      <artifactId>ojdbc6</artifactId>
       <version>${oracleVersion}</version>
       <scope>provided</scope>
     </dependency>
@@ -155,8 +217,8 @@
         <cpo.db.select4update>true</cpo.db.select4update>
         <cpo.db.millisupport>false</cpo.db.millisupport>
         <cpo.db.class>com.mysql.jdbc.jdbc2.optional.MysqlConnectionPoolDataSource</cpo.db.class>        
-        <cpo.valueMeta.xml>/mysqlValueMetaData.xml</cpo.valueMeta.xml>
-        <cpo.lobMeta.xml>/mysqlLobMetaData.xml</cpo.lobMeta.xml>
+        <cpo.valueMeta.xml>/mysql/mysqlValueMetaData.xml</cpo.valueMeta.xml>
+        <cpo.lobMeta.xml>/mysql/mysqlLobMetaData.xml</cpo.lobMeta.xml>
       </properties>
     </profile>
     <profile>
@@ -182,8 +244,8 @@
         <cpo.db.select4update>true</cpo.db.select4update>
         <cpo.db.millisupport>true</cpo.db.millisupport>
         <cpo.db.class>oracle.jdbc.pool.OracleConnectionPoolDataSource</cpo.db.class>        
-        <cpo.valueMeta.xml>/oracleValueMetaData.xml</cpo.valueMeta.xml>
-        <cpo.lobMeta.xml>/oracleLobMetaData.xml</cpo.lobMeta.xml>
+        <cpo.valueMeta.xml>/oracle/oracleValueMetaData.xml</cpo.valueMeta.xml>
+        <cpo.lobMeta.xml>/oracle/oracleLobMetaData.xml</cpo.lobMeta.xml>
       </properties>
     </profile>
     <profile>
@@ -211,8 +273,8 @@
         <cpo.db.select4update>false</cpo.db.select4update>
         <cpo.db.millisupport>true</cpo.db.millisupport>
         <cpo.db.class>org.hsqldb.jdbc.JDBCDataSource</cpo.db.class>
-        <cpo.valueMeta.xml>/hsqldbValueMetaData.xml</cpo.valueMeta.xml>
-        <cpo.lobMeta.xml>/hsqldbLobMetaData.xml</cpo.lobMeta.xml>
+        <cpo.valueMeta.xml>/hsqldb/hsqldbValueMetaData.xml</cpo.valueMeta.xml>
+        <cpo.lobMeta.xml>/hsqldb/hsqldbLobMetaData.xml</cpo.lobMeta.xml>
       </properties>
     </profile>
     <profile>
@@ -240,8 +302,8 @@
         <cpo.db.select4update>false</cpo.db.select4update>
         <cpo.db.millisupport>true</cpo.db.millisupport>
         <cpo.db.class>org.hsqldb.jdbc.JDBCDataSource</cpo.db.class>
-        <cpo.valueMeta.xml>/hsqldbValueMetaData.xml</cpo.valueMeta.xml>
-        <cpo.lobMeta.xml>/hsqldbLobMetaData.xml</cpo.lobMeta.xml>
+        <cpo.valueMeta.xml>/hsqldb/hsqldbValueMetaData.xml</cpo.valueMeta.xml>
+        <cpo.lobMeta.xml>/hsqldb/hsqldbLobMetaData.xml</cpo.lobMeta.xml>
       </properties>
     </profile>
     <profile>
@@ -268,8 +330,8 @@
         <cpo.db.callssupported>true</cpo.db.callssupported>
         <cpo.db.select4update>true</cpo.db.select4update>
         <cpo.db.millisupport>true</cpo.db.millisupport>
-        <cpo.valueMeta.xml>/postgresValueMetaData.xml</cpo.valueMeta.xml>
-        <cpo.lobMeta.xml>/postgresLobMetaData.xml</cpo.lobMeta.xml>
+        <cpo.valueMeta.xml>/postgres/postgresValueMetaData.xml</cpo.valueMeta.xml>
+        <cpo.lobMeta.xml>/postgres/postgresLobMetaData.xml</cpo.lobMeta.xml>
       </properties>
     </profile>
   </profiles>

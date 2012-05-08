@@ -32,6 +32,7 @@ import org.synchronoss.cpo.meta.domain.CpoClass;
 
 import javax.tools.*;
 import java.io.*;
+import java.util.Arrays;
 
 /**
  * JUnit test class for testing the ExporterTest
@@ -123,10 +124,12 @@ public class ExporterTest extends TestCase {
       // let's try to compile the file
       logger.debug("Compiling class source");
       JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
-      int compilationResult =	compiler.run(null, null, null, javaFile.getAbsolutePath());
+      StandardJavaFileManager fileManager = compiler.getStandardFileManager(null, null, null);
+      Iterable<? extends JavaFileObject> compilationUnits = fileManager.getJavaFileObjectsFromFiles(Arrays.asList(javaFile));
+      boolean result = compiler.getTask(null, fileManager, null, null, null, compilationUnits).call();
 
-      // validate that the result is 0
-      assertEquals(0, compilationResult);
+      // validate the result
+      assertTrue(result);
 
     } catch (Exception e) {
       fail(e.getMessage());

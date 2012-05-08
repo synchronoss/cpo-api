@@ -49,7 +49,7 @@
         <plugin>
           <groupId>org.codehaus.mojo</groupId>
           <artifactId>sql-maven-plugin</artifactId>
-          <version>1.4</version>
+          <version>1.5</version>
           <dependencies>
             <dependency>
               <groupId>com.oracle</groupId>
@@ -148,6 +148,11 @@
       <groupId>javax.j2ee</groupId>
       <artifactId>j2ee</artifactId>
     </dependency>
+    <dependency>
+      <groupId>org.apache.xmlbeans</groupId>
+      <artifactId>xmlbeans</artifactId>
+    </dependency>
+
     
     <!-- Oracle is provided because of the oracle transforms -->
     <dependency>
@@ -176,21 +181,23 @@
       <version>${mysqlVersion}</version>
       <scope>test</scope>
     </dependency>
-    
+    <dependency>
+      <groupId>org.apache-extras.cassandra-jdbc</groupId>
+      <artifactId>cassandra-jdbc</artifactId>
+      <version>1.0.5-SNAPSHOT</version>    
+    </dependency>
     <!-- log4j implementation for test logging -->
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-log4j12</artifactId>
+      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>log4j</groupId>
       <artifactId>log4j</artifactId>
+      <scope>test</scope>
     </dependency>
-    <dependency>
-      <groupId>org.apache.xmlbeans</groupId>
-      <artifactId>xmlbeans</artifactId>
-    </dependency>
-  </dependencies>
+    </dependencies>
   <profiles>
     <profile>
       <id>mysql</id>
@@ -216,6 +223,7 @@
         <cpo.db.callssupported>true</cpo.db.callssupported>
         <cpo.db.select4update>true</cpo.db.select4update>
         <cpo.db.millisupport>false</cpo.db.millisupport>
+        <cpo.db.jndi>java:/comp/env/jdbc/cpodatasource</cpo.db.jndi>        
         <cpo.db.class>com.mysql.jdbc.jdbc2.optional.MysqlConnectionPoolDataSource</cpo.db.class>        
         <cpo.valueMeta.xml>/mysql/mysqlValueMetaData.xml</cpo.valueMeta.xml>
         <cpo.lobMeta.xml>/mysql/mysqlLobMetaData.xml</cpo.lobMeta.xml>
@@ -243,6 +251,7 @@
         <cpo.db.callssupported>true</cpo.db.callssupported>
         <cpo.db.select4update>true</cpo.db.select4update>
         <cpo.db.millisupport>true</cpo.db.millisupport>
+        <cpo.db.jndi>cpodatasource</cpo.db.jndi>        
         <cpo.db.class>oracle.jdbc.pool.OracleConnectionPoolDataSource</cpo.db.class>        
         <cpo.valueMeta.xml>/oracle/oracleValueMetaData.xml</cpo.valueMeta.xml>
         <cpo.lobMeta.xml>/oracle/oracleLobMetaData.xml</cpo.lobMeta.xml>
@@ -272,6 +281,7 @@
         <cpo.db.callssupported>true</cpo.db.callssupported>
         <cpo.db.select4update>false</cpo.db.select4update>
         <cpo.db.millisupport>true</cpo.db.millisupport>
+        <cpo.db.jndi>java:/comp/env/jdbc/cpodatasource</cpo.db.jndi>        
         <cpo.db.class>org.hsqldb.jdbc.JDBCDataSource</cpo.db.class>
         <cpo.valueMeta.xml>/hsqldb/hsqldbValueMetaData.xml</cpo.valueMeta.xml>
         <cpo.lobMeta.xml>/hsqldb/hsqldbLobMetaData.xml</cpo.lobMeta.xml>
@@ -293,7 +303,7 @@
         <cpo.db.pswd />
         <cpo.db.host>localhost</cpo.db.host>
         <cpo.db.port />
-        <cpo.db.database>src/test/sql/hsqldb/db/cpo</cpo.db.database>
+        <cpo.db.database>${project.basedir}/src/test/sql/hsqldb/db/cpo</cpo.db.database>
         <cpo.db.url>jdbc:hsqldb:file:${cpo.db.database}</cpo.db.url>
         <cpo.db.userurl>jdbc:hsqldb:file:${cpo.db.database};shutdown=true;user=${cpo.db.user};password=${cpo.db.pswd}</cpo.db.userurl>
         <cpo.db.driver>org.hsqldb.jdbcDriver</cpo.db.driver>
@@ -301,6 +311,7 @@
         <cpo.db.callssupported>false</cpo.db.callssupported>
         <cpo.db.select4update>false</cpo.db.select4update>
         <cpo.db.millisupport>true</cpo.db.millisupport>
+        <cpo.db.jndi>java:/comp/env/jdbc/cpodatasource</cpo.db.jndi>        
         <cpo.db.class>org.hsqldb.jdbc.JDBCDataSource</cpo.db.class>
         <cpo.valueMeta.xml>/hsqldb/hsqldbValueMetaData.xml</cpo.valueMeta.xml>
         <cpo.lobMeta.xml>/hsqldb/hsqldbLobMetaData.xml</cpo.lobMeta.xml>
@@ -330,6 +341,7 @@
         <cpo.db.callssupported>true</cpo.db.callssupported>
         <cpo.db.select4update>true</cpo.db.select4update>
         <cpo.db.millisupport>true</cpo.db.millisupport>
+        <cpo.db.jndi>java:/comp/env/jdbc/cpodatasource</cpo.db.jndi>        
         <cpo.valueMeta.xml>/postgres/postgresValueMetaData.xml</cpo.valueMeta.xml>
         <cpo.lobMeta.xml>/postgres/postgresLobMetaData.xml</cpo.lobMeta.xml>
       </properties>

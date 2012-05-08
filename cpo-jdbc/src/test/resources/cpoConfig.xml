@@ -90,6 +90,13 @@
    <jdbc:property name="password" value="${cpo.db.pswd}"/>
   </jdbc:readWriteConfig>
  </dataConfig>
+<!-- <dataConfig xsi:type="jdbc:ctJdbcConfig" name="jndi">
+  <metaDescriptor name="jdbcMeta"/>
+  <cpoConfigProcessor>org.synchronoss.cpo.jdbc.config.JdbcCpoConfigProcessor</cpoConfigProcessor>
+  <jdbc:readWriteConfig>
+   <jdbc:jndiName>${cpo.db.jndi}</jdbc:jndiName>
+  </jdbc:readWriteConfig>
+ </dataConfig>-->
  <dataConfig xsi:type="jdbc:ctJdbcConfig" name="driverdriver">
   <metaDescriptor name="jdbcMeta"/>
   <cpoConfigProcessor>org.synchronoss.cpo.jdbc.config.JdbcCpoConfigProcessor</cpoConfigProcessor>

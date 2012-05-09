@@ -42,7 +42,6 @@
     <menu ref="reports" />
     <menu name="Related Links">
 	  <item name="CPO Util" href="cpo-util-sourceforge/"/>
-	  <item name="CPO Meta" href="cpo-meta-sourceforge/"/>
     </menu>
   </body>
 </project>

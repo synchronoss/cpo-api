@@ -38,7 +38,7 @@ import java.util.*;
  */
 public class JdbcCpoMetaAdapter extends AbstractCpoMetaAdapter {
 
-  private static Logger logger = LoggerFactory.getLogger(JdbcCpoMetaAdapter.class.getName());
+//  private static final Logger logger = LoggerFactory.getLogger(JdbcCpoMetaAdapter.class);
 
   // JDK 1.4.2 Values
   private static final JavaSqlType<?>[] jdbcTypes = {

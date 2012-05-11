@@ -33,7 +33,7 @@ import java.util.*;
  */
 public class SQLExpressionParser implements ExpressionParser {
 
-  private static Logger OUT = LoggerFactory.getLogger(SQLExpressionParser.class.getName());
+  private static final Logger logger = LoggerFactory.getLogger(SQLExpressionParser.class);
 
   private final static String COMPARE_CHARS = " =<>!()";
   private final static String SEPARATOR_CHARS = " .,()\n";
@@ -87,7 +87,7 @@ public class SQLExpressionParser implements ExpressionParser {
           idx++;
         } while (rc != -1);
       } catch (Exception e) {
-        OUT.error("error counting bind markers");
+        logger.error("error counting bind markers");
       }
     }
     return indexes;
@@ -105,8 +105,8 @@ public class SQLExpressionParser implements ExpressionParser {
     if (expression == null)
       throw new ParseException("The expression is null", -1);
 
-    if (OUT.isDebugEnabled())
-      OUT.debug("Expression: " + expression);
+    if (logger.isDebugEnabled())
+      logger.debug("Expression: " + expression);
 
     // expression is empty, nothing we can do
     if (expression.length() < 1)
@@ -151,9 +151,9 @@ public class SQLExpressionParser implements ExpressionParser {
       if (cols == null || vals == null)
         return null;
 
-      if (OUT.isDebugEnabled()) {
-        OUT.debug("Found cols: " + cols.length);
-        OUT.debug("Found vals: " + vals.length);
+      if (logger.isDebugEnabled()) {
+        logger.debug("Found cols: " + cols.length);
+        logger.debug("Found vals: " + vals.length);
       }
 
       if (cols.length != vals.length)
@@ -181,8 +181,8 @@ public class SQLExpressionParser implements ExpressionParser {
       for (int qIdx : indexes) {
         String chunk = expression.substring(startIdx, qIdx);
 
-        if (OUT.isDebugEnabled())
-          OUT.debug("Chunk [" + chunk + "]");
+        if (logger.isDebugEnabled())
+          logger.debug("Chunk [" + chunk + "]");
 
         int idx = chunk.length() - 1;
         int fieldStartIdx = -1;

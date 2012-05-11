@@ -36,7 +36,7 @@ import java.util.zip.*;
  */
 public class TransformGZipBlob implements JdbcCpoTransform<Blob, byte[]> {
 
-  private static Logger logger = LoggerFactory.getLogger(TransformGZipBlob.class.getName());
+  private static final Logger logger = LoggerFactory.getLogger(TransformGZipBlob.class);
 
   public TransformGZipBlob() {
   }

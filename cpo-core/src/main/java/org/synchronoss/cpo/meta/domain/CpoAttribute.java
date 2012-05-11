@@ -32,7 +32,7 @@ import java.util.*;
 
 public class CpoAttribute extends CpoAttributeBean {
 
-  private static Logger logger = LoggerFactory.getLogger(CpoAttribute.class);
+  private static final Logger logger = LoggerFactory.getLogger(CpoAttribute.class);
   protected static final String TRANSFORM_IN_NAME = "transformIn";
   protected static final String TRANSFORM_OUT_NAME = "transformOut";
   private String getterName_ = null;
@@ -238,7 +238,7 @@ public class CpoAttribute extends CpoAttributeBean {
   protected void initTransformClass(CpoMetaDescriptor metaDescriptor) throws CpoException {
     String className = getTransformClassName();
     Class<?> transformClass = null;
-    Logger localLogger = className == null ? logger : LoggerFactory.getLogger(className+":"+logger.getName());
+    Logger localLogger = className == null ? logger : LoggerFactory.getLogger(className);
 
     if (className != null && className.length() > 0) {
       try {

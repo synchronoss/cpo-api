@@ -30,7 +30,7 @@ import java.util.*;
 
 public class CpoClass extends CpoClassBean implements Comparable<CpoClass>, MetaDFVisitable {
 
-  private static Logger logger = LoggerFactory.getLogger(CpoClass.class.getName());
+  private static final Logger logger = LoggerFactory.getLogger(CpoClass.class);
   private Class<?> metaClass = null;
   /**
    * javaMap contains a Map of CpoAttribute Objects the key is the javaName of the attribute

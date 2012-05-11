@@ -34,7 +34,7 @@ import java.util.List;
  */
 public class EntityTest extends TestCase {
 
-  private static Logger logger = LoggerFactory.getLogger(EntityTest.class.getName());
+  private static final Logger logger = LoggerFactory.getLogger(EntityTest.class);
   
   public EntityTest(String name) {
     super(name);

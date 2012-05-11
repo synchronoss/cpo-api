@@ -33,7 +33,7 @@ import java.sql.*;
  */
 public class JavaSqlMethod<T> extends java.lang.Object implements java.io.Serializable, java.lang.Cloneable {
 
-  private static Logger logger = LoggerFactory.getLogger(JavaSqlMethod.class.getName());
+  private static final Logger logger = LoggerFactory.getLogger(JavaSqlMethod.class);
   /**
    * Version Id for this class.
    */

@@ -35,7 +35,7 @@ import org.synchronoss.cpo.jdbc.meta.JdbcCpoMetaDescriptor;
  */
 public class BlobTrxTest extends TestCase {
 
-  private static Logger logger = LoggerFactory.getLogger(BlobTrxTest.class.getName());
+  private static final Logger logger = LoggerFactory.getLogger(BlobTrxTest.class);
   private static int BLOB_SIZE = 64999;
   private CpoAdapter cpoAdapter = null;
   private CpoTrxAdapter trxAdapter = null;

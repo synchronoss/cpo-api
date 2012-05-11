@@ -34,7 +34,7 @@ import java.util.ArrayList;
  */
 public class ExistObjectTest extends TestCase {
 
-  private static Logger logger = LoggerFactory.getLogger(ExistObjectTest.class.getName());
+  private static final Logger logger = LoggerFactory.getLogger(ExistObjectTest.class);
   private CpoAdapter cpoAdapter = null;
 
   public ExistObjectTest(String name) {

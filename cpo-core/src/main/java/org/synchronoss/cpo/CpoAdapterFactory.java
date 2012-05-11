@@ -35,7 +35,7 @@ import java.util.*;
  */
 public final class CpoAdapterFactory {
 
-  private static final Logger logger = LoggerFactory.getLogger(CpoAdapterFactory.class.getName());
+  private static final Logger logger = LoggerFactory.getLogger(CpoAdapterFactory.class);
   private static final String CPO_CONFIG_XML = "/cpoConfig.xml";
   private static final Map<String, CpoAdapter> adapterMap = loadAdapters();
   private static String defaultContext = null;

@@ -50,7 +50,7 @@ public class JdbcPreparedStatementFactory implements CpoReleasible {
   /**
    * DOCUMENT ME!
    */
-  private static Logger logger = LoggerFactory.getLogger(JdbcPreparedStatementFactory.class);
+  private static final Logger logger = LoggerFactory.getLogger(JdbcPreparedStatementFactory.class);
   private Logger localLogger = null;
   private PreparedStatement ps_ = null;
 

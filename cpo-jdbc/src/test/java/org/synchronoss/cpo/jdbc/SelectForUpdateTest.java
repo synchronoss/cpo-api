@@ -37,7 +37,7 @@ import org.synchronoss.cpo.jdbc.meta.JdbcCpoMetaDescriptor;
  */
 public class SelectForUpdateTest extends TestCase {
 
-  private static final Logger logger = LoggerFactory.getLogger(SelectForUpdateTest.class.getName());
+  private static final Logger logger = LoggerFactory.getLogger(SelectForUpdateTest.class);
   private CpoAdapter cpoAdapter = null;
   private CpoTrxAdapter trxAdapter = null;
   private JdbcCpoMetaDescriptor metaDescriptor = null;

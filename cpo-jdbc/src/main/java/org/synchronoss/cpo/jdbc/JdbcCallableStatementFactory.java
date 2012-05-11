@@ -43,7 +43,7 @@ public class JdbcCallableStatementFactory implements CpoReleasible {
   /**
    * DOCUMENT ME!
    */
-  private static Logger logger = LoggerFactory.getLogger(JdbcCallableStatementFactory.class);
+  private static final Logger logger = LoggerFactory.getLogger(JdbcCallableStatementFactory.class);
   private CallableStatement cs_ = null;
 
   @SuppressWarnings("unused")

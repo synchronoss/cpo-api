@@ -37,7 +37,7 @@ import java.sql.Blob;
  */
 public class TransformBlob implements JdbcCpoTransform<Blob, byte[]> {
 
-  private static Logger logger = LoggerFactory.getLogger(TransformBlob.class.getName());
+  private static final Logger logger = LoggerFactory.getLogger(TransformBlob.class);
 
   /**
    * Transforms the datasource object into an object required by the class

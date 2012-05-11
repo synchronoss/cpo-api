@@ -32,7 +32,7 @@ public class GUID {
   private SecureRandom seeder;
   SecureRandom sr;
   String guidMidValue;
-  private static Logger OUT = LoggerFactory.getLogger(GUID.class);
+  private static final Logger logger = LoggerFactory.getLogger(GUID.class);
 
   private GUID() {
     initGuid();
@@ -70,7 +70,7 @@ public class GUID {
       tmpBuffer.append(thisHashCode.substring(4));
       guidMidValue = tmpBuffer.toString();
     } catch (Exception e) {
-      OUT.debug("initGuid: " + e.getMessage());
+      logger.debug("initGuid: " + e.getMessage());
     }
   }
 
@@ -87,7 +87,7 @@ public class GUID {
     int timeLow = (int) timeNow & 0xFFFFFFFF;
     int node = guid.sr.nextInt();
     String retVal = (hexFormat(timeLow) + guid.guidMidValue + hexFormat(node));
-    OUT.debug("getGUID(): " + retVal);
+    logger.debug("getGUID(): " + retVal);
     return retVal;
   }
 

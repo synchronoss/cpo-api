@@ -36,7 +36,7 @@ import java.util.*;
  */
 public class DeleteObjectTest extends TestCase {
 
-  private static Logger logger = LoggerFactory.getLogger(DeleteObjectTest.class.getName());
+  private static final Logger logger = LoggerFactory.getLogger(DeleteObjectTest.class);
   private ArrayList<ValueObject> al = new ArrayList<ValueObject>();
   private CpoAdapter cpoAdapter = null;
   private JdbcCpoMetaDescriptor metaDescriptor = null;

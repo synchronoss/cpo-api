@@ -29,7 +29,7 @@ import java.util.Collection;
 
 public class InvalidParameterTest extends TestCase {
 
-  private static Logger logger = LoggerFactory.getLogger(InvalidParameterTest.class.getName());
+  private static final Logger logger = LoggerFactory.getLogger(InvalidParameterTest.class);
   private CpoAdapter cpoAdapter = null;
 
   public InvalidParameterTest(String name) {

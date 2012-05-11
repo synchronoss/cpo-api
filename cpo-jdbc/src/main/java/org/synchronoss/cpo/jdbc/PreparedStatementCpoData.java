@@ -35,7 +35,7 @@ import java.io.*;
  */
 public class PreparedStatementCpoData extends AbstractJdbcCpoData {
 
-  private static Logger logger = LoggerFactory.getLogger(PreparedStatementCpoData.class);
+  private static final Logger logger = LoggerFactory.getLogger(PreparedStatementCpoData.class);
   private JdbcPreparedStatementFactory jpsf = null;
   private int index = -1;
   

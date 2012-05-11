@@ -56,7 +56,7 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
   /**
    * DOCUMENT ME!
    */
-  private static Logger logger = LoggerFactory.getLogger(JdbcCpoAdapter.class);
+  private static final Logger logger = LoggerFactory.getLogger(JdbcCpoAdapter.class);
   /**
    * DOCUMENT ME!
    */

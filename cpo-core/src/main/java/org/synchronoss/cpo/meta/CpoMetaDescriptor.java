@@ -40,7 +40,7 @@ import java.util.*;
  */
 public class CpoMetaDescriptor extends CpoMetaDescriptorCache implements CpoMetaAdapter, CpoMetaExportable {
 
-  private static Logger logger = LoggerFactory.getLogger(CpoMetaDescriptor.class.getName());
+  private static final Logger logger = LoggerFactory.getLogger(CpoMetaDescriptor.class);
   private String name = null;
   private AbstractCpoMetaAdapter metaAdapter = null;
 

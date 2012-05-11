@@ -37,7 +37,7 @@ import java.sql.CallableStatement;
  */
 public class CallableStatementCpoData extends AbstractJdbcCpoData {
   
-  private static Logger logger = LoggerFactory.getLogger(CallableStatementCpoData.class);
+  private static final Logger logger = LoggerFactory.getLogger(CallableStatementCpoData.class);
   private CallableStatement cs = null;
   JdbcCallableStatementFactory jcsf = null;
   

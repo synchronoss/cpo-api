@@ -27,7 +27,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 public class CpoBlockingResultSet<E> implements CpoResultSet<E>, Iterator<E> {
 
-  private static Logger logger = LoggerFactory.getLogger(CpoBlockingResultSet.class.getName());
+  private static final Logger logger = LoggerFactory.getLogger(CpoBlockingResultSet.class);
   private static final long serialVersionUID = 1L;
   private int capacity = 0;
   private final ThreadLocal<E> tlObj = new ThreadLocal<E>();

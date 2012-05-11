@@ -40,7 +40,7 @@ import java.util.Arrays;
  */
 public class ExporterTest extends TestCase {
 
-  private static Logger logger = LoggerFactory.getLogger(ExporterTest.class.getName());
+  private static final Logger logger = LoggerFactory.getLogger(ExporterTest.class);
 
   private CpoAdapter cpoAdapter = null;
   private JdbcCpoMetaDescriptor metaDescriptor = null;

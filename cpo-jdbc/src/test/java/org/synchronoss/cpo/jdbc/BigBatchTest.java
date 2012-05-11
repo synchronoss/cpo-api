@@ -34,7 +34,7 @@ import java.util.ArrayList;
  */
 public class BigBatchTest extends TestCase {
 
-  private static Logger logger = LoggerFactory.getLogger(BigBatchTest.class.getName());
+  private static final Logger logger = LoggerFactory.getLogger(BigBatchTest.class);
   private ArrayList<ValueObject> al = new ArrayList<ValueObject>();
   private CpoAdapter cpoAdapter = null;
 

@@ -27,7 +27,7 @@ import java.util.*;
 
 public class CpoFunction extends CpoFunctionBean {
 
-  private static Logger logger = LoggerFactory.getLogger(CpoFunction.class.getName());
+  private static final Logger logger = LoggerFactory.getLogger(CpoFunction.class);
   List<CpoArgument> arguments = new ArrayList<CpoArgument>();
 
   public CpoFunction() {

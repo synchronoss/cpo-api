@@ -34,7 +34,7 @@ import org.synchronoss.cpo.jdbc.JdbcPreparedStatementFactory;
  */
 public class TransformNoOp implements JdbcCpoTransform<Integer, Integer> {
 
-  private static Logger logger = LoggerFactory.getLogger(TransformNoOp.class.getName());
+  private static final Logger logger = LoggerFactory.getLogger(TransformNoOp.class);
 
   public TransformNoOp() {
   }

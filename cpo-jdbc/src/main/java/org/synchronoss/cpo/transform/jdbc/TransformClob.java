@@ -35,7 +35,7 @@ import java.sql.Clob;
  */
 public class TransformClob implements JdbcCpoTransform<Clob, char[]> {
 
-  private static Logger logger = LoggerFactory.getLogger(TransformClob.class.getName());
+  private static final Logger logger = LoggerFactory.getLogger(TransformClob.class);
 
   public TransformClob() {
   }

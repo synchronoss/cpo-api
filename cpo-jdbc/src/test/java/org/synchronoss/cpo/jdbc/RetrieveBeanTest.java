@@ -33,7 +33,7 @@ import java.util.*;
  */
 public class RetrieveBeanTest extends TestCase {
 
-  private static Logger logger = LoggerFactory.getLogger(RetrieveBeanTest.class.getName());
+  private static final Logger logger = LoggerFactory.getLogger(RetrieveBeanTest.class);
   private CpoAdapter cpoAdapter = null;
   private ArrayList<ValueObject> al = new ArrayList<ValueObject>();
 

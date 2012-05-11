@@ -33,7 +33,7 @@ import java.util.*;
  */
 public abstract class AbstractCpoMetaAdapter implements CpoMetaAdapter {
 
-  private static Logger logger = LoggerFactory.getLogger(AbstractCpoMetaAdapter.class.getName());
+  private static final Logger logger = LoggerFactory.getLogger(AbstractCpoMetaAdapter.class);
   /**
    * The map of classes in this metaAdapter
    */

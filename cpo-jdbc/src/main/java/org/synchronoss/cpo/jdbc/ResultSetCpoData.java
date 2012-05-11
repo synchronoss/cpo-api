@@ -34,7 +34,7 @@ import java.sql.ResultSet;
  */
 public class ResultSetCpoData extends AbstractJdbcCpoData {
 
-  private static Logger logger = LoggerFactory.getLogger(CallableStatementCpoData.class);
+  private static final Logger logger = LoggerFactory.getLogger(CallableStatementCpoData.class);
   private ResultSet rs = null;
   private int index = -1;
   

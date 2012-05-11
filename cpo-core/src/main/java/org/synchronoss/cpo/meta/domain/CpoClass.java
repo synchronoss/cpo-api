@@ -35,16 +35,16 @@ public class CpoClass extends CpoClassBean implements Comparable<CpoClass>, Meta
   /**
    * javaMap contains a Map of CpoAttribute Objects the key is the javaName of the attribute
    */
-  private SortedMap<String, CpoAttribute> javaMap = new TreeMap<String, CpoAttribute>();
+  private Map<String, CpoAttribute> javaMap = new HashMap<String, CpoAttribute>();
   /**
    * dataMap contains a Map of CpoAttribute Objects the key is the dataName of the attribute
    */
-  private SortedMap<String, CpoAttribute> dataMap = new TreeMap<String, CpoAttribute>();
+  private Map<String, CpoAttribute> dataMap = new HashMap<String, CpoAttribute>();
   /**
    * functionGroups is a hashMap that contains a hashMap of CpoFunctionGroup Lists that are used by this object to persist and
    * retrieve it into a datasource.
    */
-  private SortedMap<String, CpoFunctionGroup> functionGroups = new TreeMap<String, CpoFunctionGroup>();
+  private Map<String, CpoFunctionGroup> functionGroups = new HashMap<String, CpoFunctionGroup>();
 
   public CpoClass() {
   }
@@ -69,7 +69,7 @@ public class CpoClass extends CpoClassBean implements Comparable<CpoClass>, Meta
     }
   }
 
-  public SortedMap<String, CpoFunctionGroup> getFunctionGroups() {
+  public Map<String, CpoFunctionGroup> getFunctionGroups() {
     return this.functionGroups;
   }
 

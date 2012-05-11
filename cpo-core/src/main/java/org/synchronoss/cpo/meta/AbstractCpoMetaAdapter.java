@@ -37,7 +37,7 @@ public abstract class AbstractCpoMetaAdapter implements CpoMetaAdapter {
   /**
    * The map of classes in this metaAdapter
    */
-  private SortedMap<String, CpoClass> classMap = new TreeMap<String, CpoClass>();
+  private Map<String, CpoClass> classMap = new HashMap<String, CpoClass>();
   private CpoClass currentClass = null;
 
   protected AbstractCpoMetaAdapter() {

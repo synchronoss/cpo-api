@@ -70,14 +70,14 @@ public abstract class AbstractDataSourceInfo implements DataSourceInfo {
   }
   
   private String BuildDataSourceName(String s, Properties properties) {
-    SortedMap<String, String> map = new TreeMap<String, String>();
+    Map<String, String> map = new HashMap<String, String>();
     for (Object key : properties.keySet()){
       map.put((String)key, properties.getProperty((String)key));
     }
     return BuildDataSourceName(s, map);
   }
   
-  private String BuildDataSourceName(String s, SortedMap<String, String> map) {
+  private String BuildDataSourceName(String s, Map<String, String> map) {
     StringBuilder dsName = new StringBuilder(s);
 
     // Use a tree map so that the properties are sorted. This way if we have

@@ -30,7 +30,7 @@ import java.util.*;
  */
 public class CpoAdapterCache {
   
-  private static final SortedMap<String, CpoAdapter> adapterMap = new TreeMap<String, CpoAdapter>();
+  private static final Map<String, CpoAdapter> adapterMap = new HashMap<String, CpoAdapter>();
   
   protected static CpoAdapter findCpoAdapter(String adapterKey){
     CpoAdapter adapter=null;

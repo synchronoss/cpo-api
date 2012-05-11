@@ -257,27 +257,27 @@
       </properties>
     </profile>
     <profile>
-      <id>hsqldb</id>
+      <id>hsqldbmem</id>
       <activation>
         <activeByDefault>false</activeByDefault>
         <property>
           <name>cpo.db</name>
-          <value>hsqldb</value>
+          <value>hsqldbmem</value>
         </property>
       </activation>
       <properties>
         <release.arguments>-Dcpo.db=${cpo.db}</release.arguments>
-        <cpo.test.sqldir>src/test/sql/hsqldb</cpo.test.sqldir>
+        <cpo.test.sqldir>src/test/sql/hsqldbmem</cpo.test.sqldir>
         <cpo.db.user>cpo</cpo.db.user>
         <cpo.db.pswd>cpo</cpo.db.pswd>
         <cpo.db.host>localhost</cpo.db.host>
         <cpo.db.port />
         <cpo.db.database>cpo</cpo.db.database>
-        <cpo.db.url>jdbc:hsqldb:hsql://${cpo.db.host}/${cpo.db.database}</cpo.db.url>
-        <cpo.db.userurl>jdbc:hsqldb:hsql://${cpo.db.host}/${cpo.db.database};user=${cpo.db.user};password=${cpo.db.pswd}</cpo.db.userurl>
+        <cpo.db.url>jdbc:hsqldb:mem:${cpo.db.database}</cpo.db.url>
+        <cpo.db.userurl>jdbc:hsqldb:mem:${cpo.db.database};user=${cpo.db.user};password=${cpo.db.pswd}</cpo.db.userurl>
         <cpo.db.driver>org.hsqldb.jdbcDriver</cpo.db.driver>
-        <cpo.db.blobssupported>true</cpo.db.blobssupported>
-        <cpo.db.callssupported>true</cpo.db.callssupported>
+        <cpo.db.blobssupported>false</cpo.db.blobssupported>
+        <cpo.db.callssupported>false</cpo.db.callssupported>
         <cpo.db.select4update>false</cpo.db.select4update>
         <cpo.db.millisupport>true</cpo.db.millisupport>
         <cpo.db.jndi>java:/comp/env/jdbc/cpodatasource</cpo.db.jndi>        

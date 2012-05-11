@@ -37,7 +37,7 @@ public final class CpoAdapterFactory {
 
   private static final Logger logger = LoggerFactory.getLogger(CpoAdapterFactory.class.getName());
   private static final String CPO_CONFIG_XML = "/cpoConfig.xml";
-  private static final SortedMap<String, CpoAdapter> adapterMap = loadAdapters();
+  private static final Map<String, CpoAdapter> adapterMap = loadAdapters();
   private static String defaultContext = null;
 
   public static CpoAdapter getCpoAdapter() throws CpoException {
@@ -50,8 +50,8 @@ public final class CpoAdapterFactory {
 
   }
 
-  private static SortedMap<String, CpoAdapter> loadAdapters() {
-    SortedMap<String, CpoAdapter> map = new TreeMap<String, CpoAdapter>();
+  private static Map<String, CpoAdapter> loadAdapters() {
+    Map<String, CpoAdapter> map = new HashMap<String, CpoAdapter>();
 
     InputStream is = CpoAdapterFactory.class.getResourceAsStream(CPO_CONFIG_XML);
 

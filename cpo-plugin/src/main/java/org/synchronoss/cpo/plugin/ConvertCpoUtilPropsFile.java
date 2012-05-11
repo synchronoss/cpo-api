@@ -43,6 +43,7 @@ public class ConvertCpoUtilPropsFile extends AbstractMojo {
   private static final String DEFAULT_META_DESCRIPTOR = "cpoutil";
   private static final String PARAM_DELIM = ";";
   private static final String PARAM_ASSIGNMENT = "=";
+  private static final String CUSTOM_CLASSPATH="cpoutil.classpath";
 
   private static final String PROP_WLSURL="cpoutil.wls.url.";
   /*
@@ -96,73 +97,83 @@ public class ConvertCpoUtilPropsFile extends AbstractMojo {
       }
     }
 
-    if (servers.isEmpty()) {
-      // if there's no servers, nothing to migrate, so just bail quietly
-      return;
-    }
-
     // create the document
     CpoUtilConfigDocument doc = CpoUtilConfigDocument.Factory.newInstance();
     CtCpoUtilConfig cpoUtilConfig = doc.addNewCpoUtilConfig();
-    CtDataConfig dataConfig = cpoUtilConfig.addNewDataConfigs();
 
-    for (String server : servers) {
-      getLog().info("Converting " + server);
-      if (oldProps.getProperty(PROP_JDBC_URL + server) == null && oldProps.getProperty(PROP_JDBC_URL + server) == null) {
-        // weblogic
-        // TODO - do we need this?
-      } else {
-        // jdbc
-        String userName = null;
-        String password = null;
-        String url = oldProps.getProperty(PROP_JDBC_URL + server);
-        String driver = oldProps.getProperty(PROP_JDBC_DRIVER + server);
-        String params = oldProps.getProperty(PROP_JDBC_PARAMS + server);
+    // custom classpath entries
+    String customClasspath = oldProps.getProperty(CUSTOM_CLASSPATH);
+    if (customClasspath != null && !customClasspath.isEmpty()) {
+      CtCustomClasspath ctCustomClasspath = cpoUtilConfig.addNewCustomClasspath();
+      StringTokenizer st = new StringTokenizer(customClasspath, File.pathSeparator);
+      while (st.hasMoreTokens()) {
+        String entry = st.nextToken();
+        ctCustomClasspath.addClasspathEntry(entry);
+      }
+    }
 
-        // try to parse the user/pass out of the url
-        String oraclePrefix = "jdbc:oracle:thin:";
-        String hsqlPrefix = "jdbc:hsqldb:file:";
-        if (url.startsWith(oraclePrefix)) {
-          String userPass = url.substring(oraclePrefix.length(), url.indexOf("@"));
-          userName = userPass.substring(0, userPass.indexOf("/"));
-          password = userPass.substring(userPass.indexOf("/") + 1);
-        } else if (url.startsWith(hsqlPrefix)) {
-          String userPass = url.substring(url.indexOf("user="));
-          userName = userPass.substring("user=".length(), userPass.indexOf(";"));
-          password = userPass.substring(userPass.indexOf(";")).substring("password=".length() + 1);
-        }
+    // if any servers exist
+    if (!servers.isEmpty()) {
+      CtDataConfig dataConfig = cpoUtilConfig.addNewDataConfigs();
 
-        CtJdbcConfig jdbcConfig = CtJdbcConfig.Factory.newInstance();
-        jdbcConfig.setName(server);
-        jdbcConfig.setCpoConfigProcessor(JDBC_CONFIG_PROCESSOR);
-        CtMetaDescriptor metaDescriptor = jdbcConfig.addNewMetaDescriptor();
-        metaDescriptor.setName(DEFAULT_META_DESCRIPTOR);
+      for (String server : servers) {
+        getLog().info("Converting " + server);
+        if (oldProps.getProperty(PROP_JDBC_URL + server) == null && oldProps.getProperty(PROP_JDBC_URL + server) == null) {
+          // weblogic
+          // TODO - do we need this?
+        } else {
+          // jdbc
+          String userName = null;
+          String password = null;
+          String url = oldProps.getProperty(PROP_JDBC_URL + server);
+          String driver = oldProps.getProperty(PROP_JDBC_DRIVER + server);
+          String params = oldProps.getProperty(PROP_JDBC_PARAMS + server);
 
-        CtJdbcReadWriteConfig rwc = jdbcConfig.addNewReadWriteConfig();
-        rwc.setUser(userName);
-        rwc.setPassword(password);
-        rwc.setUrl(url);
-        rwc.setDriverClassName(driver);
-
-        if (params != null && !params.isEmpty()) {
-          StringTokenizer st = new StringTokenizer(params, PARAM_DELIM);
-          while (st.hasMoreTokens()) {
-            String token = st.nextToken();
-            StringTokenizer stNameValue = new StringTokenizer(token, PARAM_ASSIGNMENT);
-            String name = null, value = null;
-            if (stNameValue.hasMoreTokens())
-              name = stNameValue.nextToken();
-            if (stNameValue.hasMoreTokens())
-              value = stNameValue.nextToken();
-
-            CtProperty prop = rwc.addNewProperty();
-            prop.setName(name);
-            prop.setValue(value);
+          // try to parse the user/pass out of the url
+          String oraclePrefix = "jdbc:oracle:thin:";
+          String hsqlPrefix = "jdbc:hsqldb:file:";
+          if (url.startsWith(oraclePrefix)) {
+            String userPass = url.substring(oraclePrefix.length(), url.indexOf("@"));
+            userName = userPass.substring(0, userPass.indexOf("/"));
+            password = userPass.substring(userPass.indexOf("/") + 1);
+          } else if (url.startsWith(hsqlPrefix)) {
+            String userPass = url.substring(url.indexOf("user="));
+            userName = userPass.substring("user=".length(), userPass.indexOf(";"));
+            password = userPass.substring(userPass.indexOf(";")).substring("password=".length() + 1);
           }
-        }
 
-        CtDataSourceConfig dataSourceConfig = dataConfig.addNewDataConfig();
-        dataSourceConfig.set(jdbcConfig);
+          CtJdbcConfig jdbcConfig = CtJdbcConfig.Factory.newInstance();
+          jdbcConfig.setName(server);
+          jdbcConfig.setCpoConfigProcessor(JDBC_CONFIG_PROCESSOR);
+          CtMetaDescriptor metaDescriptor = jdbcConfig.addNewMetaDescriptor();
+          metaDescriptor.setName(DEFAULT_META_DESCRIPTOR);
+
+          CtJdbcReadWriteConfig rwc = jdbcConfig.addNewReadWriteConfig();
+          rwc.setUser(userName);
+          rwc.setPassword(password);
+          rwc.setUrl(url);
+          rwc.setDriverClassName(driver);
+
+          if (params != null && !params.isEmpty()) {
+            StringTokenizer st = new StringTokenizer(params, PARAM_DELIM);
+            while (st.hasMoreTokens()) {
+              String token = st.nextToken();
+              StringTokenizer stNameValue = new StringTokenizer(token, PARAM_ASSIGNMENT);
+              String name = null, value = null;
+              if (stNameValue.hasMoreTokens())
+                name = stNameValue.nextToken();
+              if (stNameValue.hasMoreTokens())
+                value = stNameValue.nextToken();
+
+              CtProperty prop = rwc.addNewProperty();
+              prop.setName(name);
+              prop.setValue(value);
+            }
+          }
+
+          CtDataSourceConfig dataSourceConfig = dataConfig.addNewDataConfig();
+          dataSourceConfig.set(jdbcConfig);
+        }
       }
     }
 

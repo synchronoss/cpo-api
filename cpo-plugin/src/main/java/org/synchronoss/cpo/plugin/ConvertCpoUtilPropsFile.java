@@ -21,8 +21,8 @@
 package org.synchronoss.cpo.plugin;
 
 import org.apache.maven.plugin.*;
-import org.apache.xmlbeans.XmlOptions;
 import org.synchronoss.cpo.core.cpoCoreConfig.*;
+import org.synchronoss.cpo.helper.XmlBeansHelper;
 import org.synchronoss.cpo.jdbc.cpoJdbcConfig.*;
 import org.synchronoss.cpo.util.cpoUtilConfig.*;
 
@@ -178,15 +178,8 @@ public class ConvertCpoUtilPropsFile extends AbstractMojo {
     }
 
     // save the file
-    XmlOptions xo = new XmlOptions();
-    xo.setCharacterEncoding("utf-8");
-    xo.setSaveAggressiveNamespaces();
-    xo.setSaveNamespacesFirst();
-    xo.setSavePrettyPrint();
-    xo.setUseDefaultNamespace();
-
     try {
-      doc.save(cpoUtilConfigFile, xo);
+      doc.save(cpoUtilConfigFile, XmlBeansHelper.getXmlOptions());
     } catch (Exception ex) {
       throw new MojoExecutionException(ex.getMessage(), ex);
     }

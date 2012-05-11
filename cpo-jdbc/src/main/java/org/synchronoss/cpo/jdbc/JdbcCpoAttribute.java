@@ -37,7 +37,7 @@ import java.sql.Types;
  */
 public class JdbcCpoAttribute extends CpoAttribute implements java.io.Serializable, java.lang.Cloneable {
 
-  private static Logger logger = LoggerFactory.getLogger(JdbcCpoAttribute.class.getSimpleName());
+  private static Logger logger = LoggerFactory.getLogger(JdbcCpoAttribute.class);
   /**
    * Version Id for this class.
    */

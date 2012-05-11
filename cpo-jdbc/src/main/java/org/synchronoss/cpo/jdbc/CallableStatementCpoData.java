@@ -37,7 +37,7 @@ import java.sql.CallableStatement;
  */
 public class CallableStatementCpoData extends AbstractJdbcCpoData {
   
-  private static Logger logger = LoggerFactory.getLogger(CallableStatementCpoData.class.getSimpleName());
+  private static Logger logger = LoggerFactory.getLogger(CallableStatementCpoData.class);
   private CallableStatement cs = null;
   JdbcCallableStatementFactory jcsf = null;
   
@@ -75,7 +75,7 @@ public class CallableStatementCpoData extends AbstractJdbcCpoData {
 
   @Override
   public void invokeSetter(Object instanceObject) throws CpoException {
-    Logger localLogger = instanceObject == null ? logger : LoggerFactory.getLogger(instanceObject.getClass().getSimpleName()+":"+logger.getName());
+    Logger localLogger = instanceObject == null ? logger : LoggerFactory.getLogger(instanceObject.getClass());
     CpoAttribute cpoAttribute = getCpoAttribute();
     Object param = transformOut(cpoAttribute.invokeGetter(instanceObject));
     JavaSqlMethod<?> javaSqlMethod = JavaSqlMethods.getJavaSqlMethod(getDataSetterParamType());

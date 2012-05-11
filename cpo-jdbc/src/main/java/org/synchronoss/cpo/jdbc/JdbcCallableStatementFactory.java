@@ -43,7 +43,7 @@ public class JdbcCallableStatementFactory implements CpoReleasible {
   /**
    * DOCUMENT ME!
    */
-  private static Logger logger = LoggerFactory.getLogger(JdbcCallableStatementFactory.class.getSimpleName());
+  private static Logger logger = LoggerFactory.getLogger(JdbcCallableStatementFactory.class);
   private CallableStatement cs_ = null;
 
   @SuppressWarnings("unused")
@@ -69,7 +69,7 @@ public class JdbcCallableStatementFactory implements CpoReleasible {
   public JdbcCallableStatementFactory(Connection conn, JdbcCpoAdapter jca, CpoFunction function, Object obj) throws CpoException {
     CallableStatement cstmt;
     JdbcCpoAttribute attribute;
-    Logger localLogger = obj == null ? logger : LoggerFactory.getLogger(obj.getClass().getSimpleName()+":"+logger.getName());
+    Logger localLogger = obj == null ? logger : LoggerFactory.getLogger(obj.getClass());
 
     try {
       outArguments = function.getArguments();

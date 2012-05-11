@@ -32,7 +32,7 @@ import java.util.*;
 
 public class CpoAttribute extends CpoAttributeBean {
 
-  private static Logger logger = LoggerFactory.getLogger(CpoAttribute.class.getSimpleName());
+  private static Logger logger = LoggerFactory.getLogger(CpoAttribute.class);
   protected static final String TRANSFORM_IN_NAME = "transformIn";
   protected static final String TRANSFORM_OUT_NAME = "transformOut";
   private String getterName_ = null;
@@ -133,7 +133,7 @@ public class CpoAttribute extends CpoAttributeBean {
   }
 
   public void invokeSetter(Object instanceObject, CpoData cpoData) throws CpoException {
-    Logger localLogger = instanceObject == null ? logger : LoggerFactory.getLogger(instanceObject.getClass().getSimpleName()+":"+logger.getName());
+    Logger localLogger = instanceObject == null ? logger : LoggerFactory.getLogger(instanceObject.getClass());
 
     try {
       setter_.invoke(instanceObject, new Object[]{cpoData.invokeGetter()});
@@ -146,7 +146,7 @@ public class CpoAttribute extends CpoAttributeBean {
   }
 
   public Object invokeGetter(Object obj) throws CpoException {
-    Logger localLogger = obj == null ? logger : LoggerFactory.getLogger(obj.getClass().getSimpleName()+":"+logger.getName());
+    Logger localLogger = obj == null ? logger : LoggerFactory.getLogger(obj.getClass());
 
     try {
       return getGetter().invoke(obj, (Object[])null);
@@ -225,7 +225,7 @@ public class CpoAttribute extends CpoAttributeBean {
         }
       }
       if (getSetter()==null){
-        failedMessage.append("invokeSetter: Could not find a Setter:" + getSetterName() + "(" + actualClass.getSimpleName() + ")");
+        failedMessage.append("invokeSetter: Could not find a Setter:" + getSetterName() + "(" + actualClass.getName() + ")");
       }
     } catch (Exception ce2) {
       failedMessage.append(ce2.getMessage());

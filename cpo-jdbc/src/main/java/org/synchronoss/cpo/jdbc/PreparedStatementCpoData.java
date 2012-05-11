@@ -35,7 +35,7 @@ import java.io.*;
  */
 public class PreparedStatementCpoData extends AbstractJdbcCpoData {
 
-  private static Logger logger = LoggerFactory.getLogger(PreparedStatementCpoData.class.getSimpleName());
+  private static Logger logger = LoggerFactory.getLogger(PreparedStatementCpoData.class);
   private JdbcPreparedStatementFactory jpsf = null;
   private int index = -1;
   
@@ -51,7 +51,7 @@ public class PreparedStatementCpoData extends AbstractJdbcCpoData {
 
   @Override
   public void invokeSetter(Object instanceObject) throws CpoException {
-    Logger localLogger = instanceObject == null ? logger : LoggerFactory.getLogger(instanceObject.getClass().getSimpleName()+":"+logger.getName());
+    Logger localLogger = instanceObject == null ? logger : LoggerFactory.getLogger(instanceObject.getClass());
     CpoAttribute cpoAttribute = getCpoAttribute();
     Object param = transformOut(cpoAttribute.invokeGetter(instanceObject));
     JavaSqlMethod<?> javaSqlMethod = JavaSqlMethods.getJavaSqlMethod(getDataSetterParamType());

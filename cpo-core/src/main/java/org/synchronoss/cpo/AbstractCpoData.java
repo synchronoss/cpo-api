@@ -30,7 +30,7 @@ import org.synchronoss.cpo.meta.domain.CpoAttribute;
  */
 public abstract class AbstractCpoData implements CpoData{
   
-  private static Logger logger = LoggerFactory.getLogger(AbstractCpoData.class.getSimpleName());
+  private static Logger logger = LoggerFactory.getLogger(AbstractCpoData.class);
   private CpoAttribute cpoAttribute = null;
   
   public AbstractCpoData(CpoAttribute cpoAttribute) {

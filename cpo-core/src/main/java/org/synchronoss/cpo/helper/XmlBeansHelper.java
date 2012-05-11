@@ -44,5 +44,15 @@ public class XmlBeansHelper {
         errMsg=sb.toString();
     }
     return errMsg;
-  } 
+  }
+
+  public static XmlOptions getXmlOptions() {
+    XmlOptions xo = new XmlOptions();
+    xo.setCharacterEncoding("utf-8");
+    xo.setSaveAggressiveNamespaces();
+    xo.setSaveNamespacesFirst();
+    xo.setSavePrettyPrint();
+    xo.setUseDefaultNamespace();
+    return xo;
+  }
 }

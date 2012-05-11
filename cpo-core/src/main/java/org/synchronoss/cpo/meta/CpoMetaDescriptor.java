@@ -285,7 +285,7 @@ public class CpoMetaDescriptor extends CpoMetaDescriptorCache implements CpoMeta
   public final void export(File file) throws CpoException {
     try {
       CpoMetaDataDocument doc = export();
-      doc.save(file, getXmlOptions());
+      doc.save(file, XmlBeansHelper.getXmlOptions());
     } catch (IOException ex) {
       throw new CpoException(ex.getMessage(), ex);
     }
@@ -294,7 +294,7 @@ public class CpoMetaDescriptor extends CpoMetaDescriptorCache implements CpoMeta
   public final void export(Writer writer) throws CpoException {
     try {
       CpoMetaDataDocument doc = export();
-      doc.save(writer, getXmlOptions());
+      doc.save(writer, XmlBeansHelper.getXmlOptions());
     } catch (IOException ex) {
       throw new CpoException(ex.getMessage(), ex);
     }
@@ -303,20 +303,9 @@ public class CpoMetaDescriptor extends CpoMetaDescriptorCache implements CpoMeta
   public final void export(OutputStream outputStream) throws CpoException {
     try {
       CpoMetaDataDocument doc = export();
-      doc.save(outputStream, getXmlOptions());
+      doc.save(outputStream, XmlBeansHelper.getXmlOptions());
     } catch (IOException ex) {
       throw new CpoException(ex.getMessage(), ex);
     }
   }
-
-  protected final XmlOptions getXmlOptions() {
-    XmlOptions xo = new XmlOptions();
-    xo.setCharacterEncoding("utf-8");
-    xo.setSaveAggressiveNamespaces();
-    xo.setSaveNamespacesFirst();
-    xo.setSavePrettyPrint();
-    xo.setUseDefaultNamespace();
-    return xo;
-  }
-
 }

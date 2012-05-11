@@ -160,31 +160,33 @@
             <schemaDirectory>src/main/xsd</schemaDirectory>
           </configuration>
         </plugin>
+        <plugin>
+          <groupId>com.mycila.maven-license-plugin</groupId>
+          <artifactId>maven-license-plugin</artifactId>
+          <version>1.10.b1</version>
+          <configuration>
+            <header>src/main/resources/license.txt</header>
+            <failIfMissing>false</failIfMissing>
+            <strictCheck>true</strictCheck>
+            <mapping>
+              <!-- use /* instead of /** for java files -->
+              <java>SLASHSTAR_STYLE</java>
+            </mapping>
+            <excludes>
+              <!-- intellij folder -->
+              <exclude>.idea/**</exclude>
+            </excludes>
+          </configuration>
+        </plugin>
       </plugins>
     </pluginManagement>
     <plugins>
-			<!--
       <plugin>
         <groupId>com.mycila.maven-license-plugin</groupId>
         <artifactId>maven-license-plugin</artifactId>
-        <version>1.10.b1</version>
         <configuration>
           <header>src/main/resources/license.txt</header>
           <aggregate>true</aggregate>
-          <failIfMissing>false</failIfMissing>
-          <strictCheck>true</strictCheck>
-          <mapping>
-					-->
-            <!-- use /* instead of /** for java files -->
-					<!--
-            <java>SLASHSTAR_STYLE</java>
-          </mapping>
-          <excludes>
-					-->
-            <!-- intellij folder -->
-					<!--
-            <exclude>.idea/**</exclude>
-          </excludes>
         </configuration>
         <executions>
           <execution>
@@ -196,7 +198,6 @@
           </execution>
         </executions>
       </plugin>
-			-->
     </plugins>
   </build>
   <dependencyManagement>

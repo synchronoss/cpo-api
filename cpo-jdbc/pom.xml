@@ -126,6 +126,23 @@
           </execution>
         </executions>
       </plugin>
+      <plugin>
+        <groupId>com.mycila.maven-license-plugin</groupId>
+        <artifactId>maven-license-plugin</artifactId>
+        <configuration>
+          <header>../src/main/resources/license.txt</header>
+          <aggregate>true</aggregate>
+        </configuration>
+        <executions>
+          <execution>
+            <id>check-headers</id>
+            <phase>validate</phase>
+            <goals>
+              <goal>format</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
     </plugins>
   </build>
   <dependencies>
@@ -184,6 +201,12 @@
       <groupId>org.apache-extras.cassandra-jdbc</groupId>
       <artifactId>cassandra-jdbc</artifactId>
       <version>1.0.5-SNAPSHOT</version>    
+    </dependency>
+    <dependency>
+      <groupId>org.apache.jmeter</groupId>
+      <artifactId>ApacheJMeter_java</artifactId>
+      <version>2.6</version>
+      <scope>test</scope>
     </dependency>
     <!-- log4j implementation for test logging -->
     <dependency>

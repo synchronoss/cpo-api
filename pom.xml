@@ -5,7 +5,7 @@
   <artifactId>cpo</artifactId>
   <name>cpo</name>
   <packaging>pom</packaging>
-  <version>5.0.0-SNAPSHOT</version> 
+  <version>5.0.0-SNAPSHOT</version>
   <description>CPO is a persistence layer that is thin wrapper around JDBC that consumes and produces POJOs</description>
   <url>http://cpo.sourceforge.net/</url>
   <licenses>
@@ -163,6 +163,7 @@
       </plugins>
     </pluginManagement>
     <plugins>
+			<!--
       <plugin>
         <groupId>com.mycila.maven-license-plugin</groupId>
         <artifactId>maven-license-plugin</artifactId>
@@ -173,11 +174,15 @@
           <failIfMissing>false</failIfMissing>
           <strictCheck>true</strictCheck>
           <mapping>
+					-->
             <!-- use /* instead of /** for java files -->
+					<!--
             <java>SLASHSTAR_STYLE</java>
           </mapping>
           <excludes>
+					-->
             <!-- intellij folder -->
+					<!--
             <exclude>.idea/**</exclude>
           </excludes>
         </configuration>
@@ -191,6 +196,7 @@
           </execution>
         </executions>
       </plugin>
+			-->
     </plugins>
   </build>
   <dependencyManagement>

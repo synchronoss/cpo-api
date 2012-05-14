@@ -37,7 +37,7 @@ public final class CpoAdapterFactory {
 
   private static final Logger logger = LoggerFactory.getLogger(CpoAdapterFactory.class);
   private static final String CPO_CONFIG_XML = "/cpoConfig.xml";
-  private static final Map<String, CpoAdapter> adapterMap = loadAdapters();
+  private static Map<String, CpoAdapter> adapterMap = null;
   private static String defaultContext = null;
 
   public static CpoAdapter getCpoAdapter() throws CpoException {
@@ -45,21 +45,39 @@ public final class CpoAdapterFactory {
   }
 
   public static CpoAdapter getCpoAdapter(String context) throws CpoException {
+    
+    if (adapterMap == null)
+      adapterMap = loadAdapters(CPO_CONFIG_XML);
 
     return adapterMap.get(context);
 
   }
 
-  private static Map<String, CpoAdapter> loadAdapters() {
+  public static Map<String, CpoAdapter> loadAdapters(String configFile) {
     Map<String, CpoAdapter> map = new HashMap<String, CpoAdapter>();
 
-    InputStream is = CpoAdapterFactory.class.getResourceAsStream(CPO_CONFIG_XML);
+    InputStream is = CpoAdapterFactory.class.getResourceAsStream(configFile);
+    if (is == null) {
+      logger.info("Resource Not Found: "+configFile);
+      try {
+        is = new FileInputStream(configFile);
+      } catch (FileNotFoundException fnfe) {
+        logger.info("File Not Found: "+configFile);
+        is = null;
+      }
+    }
 
     try {
-      CpoConfigDocument configDoc = CpoConfigDocument.Factory.parse(is);
+      CpoConfigDocument configDoc;
+      if (is == null) {
+        configDoc = CpoConfigDocument.Factory.parse(configFile);
+      } else {
+        configDoc = CpoConfigDocument.Factory.parse(is);
+      }
+      
       String errMsg = XmlBeansHelper.validateXml(configDoc);
       if (errMsg!=null) {
-        logger.error("Invalid cpoConfig.xml: "+errMsg);
+        logger.error("Invalid CPO Config file: "+configFile+":"+errMsg);
       }
       
       CtCpoConfig cpoConfig = configDoc.getCpoConfig();

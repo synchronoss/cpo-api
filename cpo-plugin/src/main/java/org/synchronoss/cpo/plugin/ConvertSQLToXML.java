@@ -126,7 +126,7 @@ public class ConvertSQLToXML extends AbstractMojo {
       CpoMetaDataDocument cpoMetaDataDocument = exporter.getCpoMetaDataDocument();
 
       // save to file
-      cpoMetaDataDocument.save(new File("target", "CpoConfig.xml"), XmlBeansHelper.getXmlOptions());
+      cpoMetaDataDocument.save(new File("target", "CpoMetaData.xml"), XmlBeansHelper.getXmlOptions());
 
     } catch (IOException ex) {
       getLog().error("IOException caught", ex);

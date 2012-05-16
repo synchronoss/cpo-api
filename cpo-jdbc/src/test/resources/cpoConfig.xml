@@ -21,74 +21,75 @@
     http://www.gnu.org/licenses/lgpl.txt
 
 -->
-<cpoConfig xmlns="http://www.synchronoss.org/cpo/core/CpoCoreConfig.xsd"
+<core:cpoConfig xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xsi:schemaLocation="http://www.synchronoss.org/cpo/CpoConfig.xsd ../../../../src/main/xsd/CpoConfig.xsd"
+ xmlns:core="http://www.synchronoss.org/cpo/core/CpoCoreConfig.xsd"
  xmlns:jdbc="http://www.synchronoss.org/cpo/jdbc/CpoJdbcConfig.xsd"
- xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
- xsi:schemaLocation="http://www.synchronoss.org/cpo/jdbc/CpoJdbcConfig.xsd file:../../main/xsd/CpoJdbcConfig.xsd"
+ xmlns="http://www.synchronoss.org/cpo/CpoConfig.xsd"
  defaultConfig="jdbc">
-   <dataConfig xsi:type="jdbc:ctJdbcConfig" name="jdbc" supportsBlobs="${cpo.db.blobssupported}" supportsCalls="${cpo.db.callssupported}" supportsMillis="${cpo.db.millisupport}" supportsSelect4Update="${cpo.db.select4update}">
-      <metaDescriptor name="jdbcMeta">
-        <metaXml>/emptyClassMetaData.xml</metaXml>
-        <metaXml>${cpo.valueMeta.xml}</metaXml>
-        <metaXml>${cpo.lobMeta.xml}</metaXml>
-        <metaXml>/emptyMetaData.xml</metaXml>
-      </metaDescriptor>
-      <cpoConfigProcessor>org.synchronoss.cpo.jdbc.config.JdbcCpoConfigProcessor</cpoConfigProcessor>
+   <core:dataConfig xsi:type="jdbc:ctJdbcConfig" name="jdbc" supportsBlobs="${cpo.db.blobssupported}" supportsCalls="${cpo.db.callssupported}" supportsMillis="${cpo.db.millisupport}" supportsSelect4Update="${cpo.db.select4update}">
+      <core:metaDescriptor name="jdbcMeta">
+       <core:metaXml>/emptyClassMetaData.xml</core:metaXml>
+       <core:metaXml>${cpo.valueMeta.xml}</core:metaXml>
+       <core:metaXml>${cpo.lobMeta.xml}</core:metaXml>
+       <core:metaXml>/emptyMetaData.xml</core:metaXml>
+      </core:metaDescriptor>
+    <core:cpoConfigProcessor>org.synchronoss.cpo.jdbc.config.JdbcCpoConfigProcessor</core:cpoConfigProcessor>
     <jdbc:readWriteConfig>
          <jdbc:dataSourceClassName>${cpo.db.class}</jdbc:dataSourceClassName>
          <jdbc:url>${cpo.db.url}</jdbc:url>
          <jdbc:user>${cpo.db.user}</jdbc:user>
      <jdbc:password>${cpo.db.pswd}</jdbc:password>
     </jdbc:readWriteConfig>
-  </dataConfig>
-  <dataConfig xsi:type="jdbc:ctJdbcConfig" name="driver">
-   <metaDescriptor name="jdbcMeta"/>
-   <cpoConfigProcessor>org.synchronoss.cpo.jdbc.config.JdbcCpoConfigProcessor</cpoConfigProcessor>
+  </core:dataConfig>
+ <core:dataConfig xsi:type="jdbc:ctJdbcConfig" name="driver">
+  <core:metaDescriptor name="jdbcMeta"/>
+  <core:cpoConfigProcessor>org.synchronoss.cpo.jdbc.config.JdbcCpoConfigProcessor</core:cpoConfigProcessor>
    <jdbc:readWriteConfig>
     <jdbc:driverClassName>${cpo.db.driver}</jdbc:driverClassName>
     <jdbc:url>${cpo.db.url}</jdbc:url>
     <jdbc:user>${cpo.db.user}</jdbc:user>
     <jdbc:password>${cpo.db.pswd}</jdbc:password>
    </jdbc:readWriteConfig>
-  </dataConfig>
-  <dataConfig xsi:type="jdbc:ctJdbcConfig" name="driverUrlOnly">
-   <metaDescriptor name="jdbcMeta"/>
-   <cpoConfigProcessor>org.synchronoss.cpo.jdbc.config.JdbcCpoConfigProcessor</cpoConfigProcessor>
+ </core:dataConfig>
+ <core:dataConfig xsi:type="jdbc:ctJdbcConfig" name="driverUrlOnly">
+  <core:metaDescriptor name="jdbcMeta"/>
+  <core:cpoConfigProcessor>org.synchronoss.cpo.jdbc.config.JdbcCpoConfigProcessor</core:cpoConfigProcessor>
    <jdbc:readWriteConfig>
     <jdbc:driverClassName>${cpo.db.driver}</jdbc:driverClassName>
     <jdbc:url>${cpo.db.userurl}</jdbc:url>
    </jdbc:readWriteConfig>
-  </dataConfig>
- <dataConfig xsi:type="jdbc:ctJdbcConfig" name="driverProp">
-  <metaDescriptor name="jdbcMeta"/>
-  <cpoConfigProcessor>org.synchronoss.cpo.jdbc.config.JdbcCpoConfigProcessor</cpoConfigProcessor>
+ </core:dataConfig>
+ <core:dataConfig xsi:type="jdbc:ctJdbcConfig" name="driverProp">
+  <core:metaDescriptor name="jdbcMeta"/>
+  <core:cpoConfigProcessor>org.synchronoss.cpo.jdbc.config.JdbcCpoConfigProcessor</core:cpoConfigProcessor>
   <jdbc:readWriteConfig>
    <jdbc:driverClassName>${cpo.db.driver}</jdbc:driverClassName>
    <jdbc:url>${cpo.db.url}</jdbc:url>
    <jdbc:property name="user" value="${cpo.db.user}"/>
    <jdbc:property name="password" value="${cpo.db.pswd}"/>
   </jdbc:readWriteConfig>
- </dataConfig>
- <dataConfig xsi:type="jdbc:ctJdbcConfig" name="class">
-  <metaDescriptor name="jdbcMeta"/>
-  <cpoConfigProcessor>org.synchronoss.cpo.jdbc.config.JdbcCpoConfigProcessor</cpoConfigProcessor>
+ </core:dataConfig>
+ <core:dataConfig xsi:type="jdbc:ctJdbcConfig" name="class">
+  <core:metaDescriptor name="jdbcMeta"/>
+  <core:cpoConfigProcessor>org.synchronoss.cpo.jdbc.config.JdbcCpoConfigProcessor</core:cpoConfigProcessor>
   <jdbc:readWriteConfig>
    <jdbc:dataSourceClassName>${cpo.db.class}</jdbc:dataSourceClassName>
    <jdbc:url>${cpo.db.url}</jdbc:url>
    <jdbc:user>${cpo.db.user}</jdbc:user>
    <jdbc:password>${cpo.db.pswd}</jdbc:password>
   </jdbc:readWriteConfig>
- </dataConfig>
- <dataConfig xsi:type="jdbc:ctJdbcConfig" name="classProp">
-  <metaDescriptor name="jdbcMeta"/>
-  <cpoConfigProcessor>org.synchronoss.cpo.jdbc.config.JdbcCpoConfigProcessor</cpoConfigProcessor>
+ </core:dataConfig>
+ <core:dataConfig xsi:type="jdbc:ctJdbcConfig" name="classProp">
+  <core:metaDescriptor name="jdbcMeta"/>
+  <core:cpoConfigProcessor>org.synchronoss.cpo.jdbc.config.JdbcCpoConfigProcessor</core:cpoConfigProcessor>
   <jdbc:readWriteConfig>
    <jdbc:dataSourceClassName>${cpo.db.class}</jdbc:dataSourceClassName>
    <jdbc:url>${cpo.db.url}</jdbc:url>
    <jdbc:property name="user" value="${cpo.db.user}"/>
    <jdbc:property name="password" value="${cpo.db.pswd}"/>
   </jdbc:readWriteConfig>
- </dataConfig>
+ </core:dataConfig>
 <!-- <dataConfig xsi:type="jdbc:ctJdbcConfig" name="jndi">
   <metaDescriptor name="jdbcMeta"/>
   <cpoConfigProcessor>org.synchronoss.cpo.jdbc.config.JdbcCpoConfigProcessor</cpoConfigProcessor>
@@ -96,9 +97,9 @@
    <jdbc:jndiName>${cpo.db.jndi}</jdbc:jndiName>
   </jdbc:readWriteConfig>
  </dataConfig>-->
- <dataConfig xsi:type="jdbc:ctJdbcConfig" name="driverdriver">
-  <metaDescriptor name="jdbcMeta"/>
-  <cpoConfigProcessor>org.synchronoss.cpo.jdbc.config.JdbcCpoConfigProcessor</cpoConfigProcessor>
+ <core:dataConfig xsi:type="jdbc:ctJdbcConfig" name="driverdriver">
+  <core:metaDescriptor name="jdbcMeta"/>
+  <core:cpoConfigProcessor>org.synchronoss.cpo.jdbc.config.JdbcCpoConfigProcessor</core:cpoConfigProcessor>
   <jdbc:readConfig>
    <jdbc:driverClassName>${cpo.db.driver}</jdbc:driverClassName>
    <jdbc:url>${cpo.db.url}</jdbc:url>
@@ -111,10 +112,10 @@
    <jdbc:user>${cpo.db.user}</jdbc:user>
    <jdbc:password>${cpo.db.pswd}</jdbc:password>
   </jdbc:writeConfig>
- </dataConfig>
- <dataConfig xsi:type="jdbc:ctJdbcConfig" name="classclass">
-  <metaDescriptor name="jdbcMeta"/>
-  <cpoConfigProcessor>org.synchronoss.cpo.jdbc.config.JdbcCpoConfigProcessor</cpoConfigProcessor>
+ </core:dataConfig>
+ <core:dataConfig xsi:type="jdbc:ctJdbcConfig" name="classclass">
+  <core:metaDescriptor name="jdbcMeta"/>
+  <core:cpoConfigProcessor>org.synchronoss.cpo.jdbc.config.JdbcCpoConfigProcessor</core:cpoConfigProcessor>
   <jdbc:readConfig>
    <jdbc:dataSourceClassName>${cpo.db.class}</jdbc:dataSourceClassName>
    <jdbc:url>${cpo.db.url}</jdbc:url>
@@ -127,10 +128,10 @@
    <jdbc:user>${cpo.db.user}</jdbc:user>
    <jdbc:password>${cpo.db.pswd}</jdbc:password>
   </jdbc:writeConfig>
- </dataConfig>
- <dataConfig xsi:type="jdbc:ctJdbcConfig" name="driverclass">
-  <metaDescriptor name="jdbcMeta"/>
-  <cpoConfigProcessor>org.synchronoss.cpo.jdbc.config.JdbcCpoConfigProcessor</cpoConfigProcessor>
+ </core:dataConfig>
+ <core:dataConfig xsi:type="jdbc:ctJdbcConfig" name="driverclass">
+  <core:metaDescriptor name="jdbcMeta"/>
+  <core:cpoConfigProcessor>org.synchronoss.cpo.jdbc.config.JdbcCpoConfigProcessor</core:cpoConfigProcessor>
   <jdbc:readConfig>
    <jdbc:driverClassName>${cpo.db.driver}</jdbc:driverClassName>
    <jdbc:url>${cpo.db.url}</jdbc:url>
@@ -143,10 +144,10 @@
    <jdbc:user>${cpo.db.user}</jdbc:user>
    <jdbc:password>${cpo.db.pswd}</jdbc:password>
   </jdbc:writeConfig>
- </dataConfig>
- <dataConfig xsi:type="jdbc:ctJdbcConfig" name="classdriver">
-  <metaDescriptor name="jdbcMeta"/>
-  <cpoConfigProcessor>org.synchronoss.cpo.jdbc.config.JdbcCpoConfigProcessor</cpoConfigProcessor>
+ </core:dataConfig>
+ <core:dataConfig xsi:type="jdbc:ctJdbcConfig" name="classdriver">
+  <core:metaDescriptor name="jdbcMeta"/>
+  <core:cpoConfigProcessor>org.synchronoss.cpo.jdbc.config.JdbcCpoConfigProcessor</core:cpoConfigProcessor>
   <jdbc:readConfig>
    <jdbc:dataSourceClassName>${cpo.db.class}</jdbc:dataSourceClassName>
    <jdbc:url>${cpo.db.url}</jdbc:url>
@@ -159,5 +160,5 @@
    <jdbc:user>${cpo.db.user}</jdbc:user>
    <jdbc:password>${cpo.db.pswd}</jdbc:password>
   </jdbc:writeConfig>
- </dataConfig>
-</cpoConfig>
+ </core:dataConfig>
+ </core:cpoConfig>

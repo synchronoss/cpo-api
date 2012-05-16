@@ -20,14 +20,20 @@
  */
 package org.synchronoss.cpo;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
 import org.apache.xmlbeans.XmlException;
-import org.slf4j.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.config.CpoConfigProcessor;
-import org.synchronoss.cpo.core.cpoCoreConfig.*;
+import org.synchronoss.cpo.core.cpoCoreConfig.CpoConfigDocument;
+import org.synchronoss.cpo.core.cpoCoreConfig.CtCpoConfig;
+import org.synchronoss.cpo.core.cpoCoreConfig.CtDataSourceConfig;
 import org.synchronoss.cpo.helper.XmlBeansHelper;
-
-import java.io.*;
-import java.util.*;
 
 /**
  *
@@ -47,14 +53,15 @@ public final class CpoAdapterFactory {
   public static CpoAdapter getCpoAdapter(String context) throws CpoException {
     
     if (adapterMap == null)
-      adapterMap = loadAdapters(CPO_CONFIG_XML);
+      loadAdapters(CPO_CONFIG_XML);
 
     return adapterMap.get(context);
 
   }
 
-  public static Map<String, CpoAdapter> loadAdapters(String configFile) {
-    Map<String, CpoAdapter> map = new HashMap<String, CpoAdapter>();
+  public static void loadAdapters(String configFile) {
+    if (adapterMap == null)
+      adapterMap = new HashMap<String, CpoAdapter>();
 
     InputStream is = CpoAdapterFactory.class.getResourceAsStream(configFile);
     if (is == null) {
@@ -94,7 +101,7 @@ public final class CpoAdapterFactory {
       for (CtDataSourceConfig dataSourceConfig : cpoConfig.getDataConfigArray()) {
         CpoAdapter cpoAdapter = makeCpoAdapter(dataSourceConfig);
         if (cpoAdapter != null) {
-          map.put(dataSourceConfig.getName(), cpoAdapter);
+          adapterMap.put(dataSourceConfig.getName(), cpoAdapter);
         }
       }
     } catch (IOException ioe) {
@@ -105,8 +112,6 @@ public final class CpoAdapterFactory {
       logger.error("Error processing cpoConfig.xml: ", ce);
     }
 
-
-    return map;
   }
 
    public static CpoAdapter makeCpoAdapter(CtDataSourceConfig dataSourceConfig) throws CpoException {

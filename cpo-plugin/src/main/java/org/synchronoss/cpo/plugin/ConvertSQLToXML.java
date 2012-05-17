@@ -65,6 +65,8 @@ public class ConvertSQLToXML extends AbstractMojo {
    */
   private String filter;
 
+  private static final File TARGET = new File("target");
+
   private JdbcCpoMetaDescriptor metaDescriptor;
 
 	public void execute() throws MojoExecutionException {
@@ -125,8 +127,13 @@ public class ConvertSQLToXML extends AbstractMojo {
       }
       CpoMetaDataDocument cpoMetaDataDocument = exporter.getCpoMetaDataDocument();
 
+      // if target folder doesn't exist, make it
+      if (!TARGET.exists()) {
+        TARGET.mkdir();
+      }
+
       // save to file
-      cpoMetaDataDocument.save(new File("target", "CpoMetaData.xml"), XmlBeansHelper.getXmlOptions());
+      cpoMetaDataDocument.save(new File(TARGET, "CpoMetaData.xml"), XmlBeansHelper.getXmlOptions());
 
     } catch (IOException ex) {
       getLog().error("IOException caught", ex);

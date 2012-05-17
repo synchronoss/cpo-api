@@ -45,11 +45,6 @@ public class PreparedStatementCpoData extends AbstractJdbcCpoData {
   }
 
   @Override
-  public Object invokeGetter() throws CpoException {
-    throw new UnsupportedOperationException("Not supported yet.");
-  }
-
-  @Override
   public void invokeSetter(Object instanceObject) throws CpoException {
     Logger localLogger = instanceObject == null ? logger : LoggerFactory.getLogger(instanceObject.getClass());
     CpoAttribute cpoAttribute = getCpoAttribute();

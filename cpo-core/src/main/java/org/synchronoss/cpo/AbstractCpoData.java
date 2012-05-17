@@ -65,6 +65,16 @@ public abstract class AbstractCpoData implements CpoData{
     return retObj;
   }
 
+  @Override
+  public Object invokeGetter() throws CpoException {
+    throw new UnsupportedOperationException("Not supported yet.");
+  }
+
+  @Override
+  public void invokeSetter(Object instanceObject) throws CpoException {
+    throw new UnsupportedOperationException("Not supported yet.");
+  }
+  
   public Class getDataGetterReturnType() {
     Class returnClass = cpoAttribute.getSetterParamType();
     if (cpoAttribute.getCpoTransform()!=null){

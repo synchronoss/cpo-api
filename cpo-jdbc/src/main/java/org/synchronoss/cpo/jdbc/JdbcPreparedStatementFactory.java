@@ -148,10 +148,10 @@ public class JdbcPreparedStatementFactory implements CpoReleasible {
       HashMap<String, StringBuilder> mapOrderBy = new HashMap<String, StringBuilder>();
       try {
         for (CpoOrderBy ob : orderBy) {
-          StringBuilder sb = mapOrderBy.get(ob.getName());
+          StringBuilder sb = mapOrderBy.get(ob.getMarker());
           if (sb == null) {
             sb = new StringBuilder(" ORDER BY ");
-            mapOrderBy.put(ob.getName(), sb);
+            mapOrderBy.put(ob.getMarker(), sb);
           } else {
             sb.append(",");
           }

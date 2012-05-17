@@ -29,6 +29,8 @@ import org.synchronoss.cpo.jdbc.meta.JdbcCpoMetaDescriptor;
 import org.synchronoss.cpo.meta.CpoMetaDescriptor;
 
 import java.util.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -36,6 +38,7 @@ import java.util.*;
  */
 public class JdbcCpoConfigProcessor implements CpoConfigProcessor {
 
+  private static final Logger logger = LoggerFactory.getLogger(JdbcCpoConfigProcessor.class);
   private static final String PROP_URL1 = "url";
   private static final String PROP_URL2 = "URL";
   private static final String PROP_USER = "user";
@@ -123,6 +126,7 @@ public class JdbcCpoConfigProcessor implements CpoConfigProcessor {
       }
     }
 
+    logger.debug("Created DataSourceInfo: "+dataSourceInfo);
     return dataSourceInfo;
   }
   

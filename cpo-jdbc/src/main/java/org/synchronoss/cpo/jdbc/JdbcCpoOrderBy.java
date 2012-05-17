@@ -35,7 +35,7 @@ public class JdbcCpoOrderBy implements CpoOrderBy {
   private boolean ascending;
   private String attribute;
   private String function;
-  private String name = "__CPO_ORDERBY__";
+  private String marker = DEFAULT_MARKER;
 
   @SuppressWarnings("unused")
   private JdbcCpoOrderBy() {
@@ -47,7 +47,21 @@ public class JdbcCpoOrderBy implements CpoOrderBy {
     function = null;
   }
 
+  public JdbcCpoOrderBy(String marker, String attr, boolean asc) {
+    this.marker = marker;
+    ascending = asc;
+    attribute = attr;
+    function = null;
+  }
+
   public JdbcCpoOrderBy(String attr, boolean asc, String func) {
+    ascending = asc;
+    attribute = attr;
+    function = func;
+  }
+
+  public JdbcCpoOrderBy(String marker, String attr, boolean asc, String func) {
+    this.marker = marker;
     ascending = asc;
     attribute = attr;
     function = func;
@@ -65,17 +79,6 @@ public class JdbcCpoOrderBy implements CpoOrderBy {
   }
 
   /**
-   * Sets the boolean that determines if the objects will be returned from from the CpoAdapter in Ascending order or
-   * Descending order
-   *
-   * @param b true if it is to sort in Ascensing Order false if it is to be sorted in Descending Order
-   */
-  @Override
-  public void setAscending(boolean b) {
-    this.ascending = b;
-  }
-
-  /**
    * Gets the name of the attribute that is to be used to sort the results from the CpoAdapter.
    *
    * @return String The name of the attribute
@@ -83,16 +86,6 @@ public class JdbcCpoOrderBy implements CpoOrderBy {
   @Override
   public String getAttribute() {
     return this.attribute;
-  }
-
-  /**
-   * Sets the name of the attribute that is to be used to sort the results from the CpoAdapter.
-   *
-   * @param s The name of the attribute
-   */
-  @Override
-  public void setAttribute(String s) {
-    this.attribute = s;
   }
 
   /**
@@ -108,19 +101,7 @@ public class JdbcCpoOrderBy implements CpoOrderBy {
     return this.function;
   }
 
-  /**
-   * Sets a string representing a datasource specific function call that must be applied to the attribute that will be
-   * used for sorting.
-   *
-   * i.e. - "upper(attribute_name)"
-   *
-   * @param s The name of the function
-   */
   @Override
-  public void setFunction(String s) {
-    this.function = s;
-  }
-
   public String toString(CpoClass cpoClass) throws CpoException {
     StringBuilder sb = new StringBuilder();
     String column;
@@ -159,12 +140,8 @@ public class JdbcCpoOrderBy implements CpoOrderBy {
   }
 
   @Override
-  public String getName() {
-    return name;
+  public String getMarker() {
+    return marker;
   }
 
-  @Override
-  public void setName(String name) {
-    this.name = name;
-  }
 }

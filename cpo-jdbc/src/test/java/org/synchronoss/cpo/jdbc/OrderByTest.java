@@ -93,6 +93,29 @@ public class OrderByTest extends TestCase {
   /**
    * DOCUMENT ME!
    */
+  public void testNewOrderBy() {
+    String method = "testOrderByAscending:";
+    Collection<ValueObject> col;
+    String marker = "MY_MARKER";
+    String attribute = "MY_ATTRIBUTE";
+    String function = "MY_FUNCTION";
+    boolean ascending = false; 
+
+
+    try {
+      CpoOrderBy cob = cpoAdapter.newOrderBy(marker, attribute, ascending, function);
+      assertEquals(marker, cob.getMarker());
+      assertEquals(attribute, cob.getAttribute());
+      assertEquals(ascending, cob.getAscending());
+      assertEquals(function, cob.getFunction());
+    } catch (Exception e) {
+      fail(method + e.getMessage());
+    }
+  }
+
+  /**
+   * DOCUMENT ME!
+   */
   public void testOrderByAscending() {
     String method = "testOrderByAscending:";
     Collection<ValueObject> col;
@@ -100,7 +123,7 @@ public class OrderByTest extends TestCase {
 
     try {
       CpoOrderBy cob = cpoAdapter.newOrderBy("id", true);
-      CpoOrderBy cob1 = cpoAdapter.newOrderBy("attrVarChar", true);
+      CpoOrderBy cob1 = cpoAdapter.newOrderBy(CpoOrderBy.DEFAULT_MARKER, "attrVarChar", true);
       Collection<CpoOrderBy> colCob = new ArrayList<CpoOrderBy>();
       colCob.add(cob);
       colCob.add(cob1);
@@ -126,7 +149,7 @@ public class OrderByTest extends TestCase {
 
     try {
       CpoOrderBy cob = cpoAdapter.newOrderBy("id", false, null);
-      CpoOrderBy cob2 = cpoAdapter.newOrderBy("attrVarChar", false, null);
+      CpoOrderBy cob2 = cpoAdapter.newOrderBy(CpoOrderBy.DEFAULT_MARKER, "attrVarChar", false, null);
       Collection<CpoOrderBy> colCob = new ArrayList<CpoOrderBy>();
       colCob.add(cob);
       colCob.add(cob2);

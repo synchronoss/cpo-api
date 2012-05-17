@@ -45,18 +45,6 @@ public class JavaSqlType<T> extends java.lang.Object implements java.io.Serializ
     javaClass_ = javaClass;
   }
 
-  public void setJavaSqlType(int javaSqlType) {
-    javaSqlType_ = javaSqlType;
-  }
-
-  public void setJavaSqlTypeName(String javaSqlTypeName) {
-    javaSqlTypeName_ = javaSqlTypeName;
-  }
-
-  public void setJavaClass(Class<T> javaClass) {
-    javaClass_ = javaClass;
-  }
-
   public int getJavaSqlType() {
     return javaSqlType_;
   }

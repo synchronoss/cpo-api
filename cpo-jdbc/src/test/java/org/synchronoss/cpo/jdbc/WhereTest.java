@@ -596,4 +596,31 @@ public class WhereTest extends TestCase {
       fail(method + e.getMessage());
     }
   }
+  
+  public void testWhereOrderBy() {
+    String method = "testStaticWhere:";
+    Collection<ValueObject> col = null;
+
+    try {
+      ValueObject valObj = new ValueObject(1);
+
+      // Without the correct parens, this will return multiple rows for a retrieveBean which is a 
+      // failure
+      CpoWhere cw1 = cpoAdapter.newWhere();
+      cw1.setLogical(CpoWhere.LOGIC_AND);
+      cw1.addWhere(cpoAdapter.newWhere(CpoWhere.LOGIC_NONE, "id", CpoWhere.COMP_EQ, new Integer(1)));
+      cw1.addWhere(cpoAdapter.newWhere(CpoWhere.LOGIC_OR, "id", CpoWhere.COMP_EQ, new Integer(3)));
+
+      ArrayList<CpoWhere> wheres = new ArrayList<CpoWhere>();
+      ArrayList<CpoOrderBy> orderBys = new ArrayList<CpoOrderBy>();
+      wheres.add(cw1);
+
+      valObj = cpoAdapter.retrieveBean(null, valObj, valObj, wheres, orderBys);
+
+      assertNotNull("Value Object should not be null", valObj);
+      assertTrue("Id should equal 1", valObj.getId() == 1);
+    } catch (Exception e) {
+      fail(method + e.getMessage());
+    }
+  }
 }

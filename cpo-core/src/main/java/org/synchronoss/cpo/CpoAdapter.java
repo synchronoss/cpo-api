@@ -924,6 +924,21 @@ public interface CpoAdapter extends java.io.Serializable {
    * newOrderBy allows you to dynamically change the order of the objects in the resulting collection. This allows you
    * to apply user input in determining the order of the collection
    *
+   * @param marker the marker that will be replaced in the expression with the string representation of this orderBy
+   * @param attribute The name of the attribute from the pojo that will be sorted.
+   * @param ascending If true, sort ascending. If false sort descending.
+   *
+   * @return A CpoOrderBy object to be passed into retrieveBeans.
+   *
+   * @throws CpoException Thrown if there are errors accessing the datasource
+   */
+  public CpoOrderBy newOrderBy(String marker, String attribute, boolean ascending)
+          throws CpoException;
+  
+  /**
+   * newOrderBy allows you to dynamically change the order of the objects in the resulting collection. This allows you
+   * to apply user input in determining the order of the collection
+   *
    * @param attribute The name of the attribute from the pojo that will be sorted.
    * @param ascending If true, sort ascending. If false sort descending.
    * @param function A string which represents a datasource function that will be called on the attribute. must be
@@ -934,6 +949,23 @@ public interface CpoAdapter extends java.io.Serializable {
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
   public CpoOrderBy newOrderBy(String attribute, boolean ascending, String function)
+          throws CpoException;
+
+  /**
+   * newOrderBy allows you to dynamically change the order of the objects in the resulting collection. This allows you
+   * to apply user input in determining the order of the collection
+   *
+   * @param marker the marker that will be replaced in the expression with the string representation of this orderBy
+   * @param attribute The name of the attribute from the pojo that will be sorted.
+   * @param ascending If true, sort ascending. If false sort descending.
+   * @param function A string which represents a datasource function that will be called on the attribute. must be
+   * contained in the function string. The attribute name will be replaced at run-time with its datasource counterpart
+   *
+   * @return A CpoOrderBy object to be passed into retrieveBeans.
+   *
+   * @throws CpoException Thrown if there are errors accessing the datasource
+   */
+  public CpoOrderBy newOrderBy(String marker, String attribute, boolean ascending, String function)
           throws CpoException;
 
   /**

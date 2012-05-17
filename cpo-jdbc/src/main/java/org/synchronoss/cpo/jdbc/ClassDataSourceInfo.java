@@ -54,16 +54,6 @@ public class ClassDataSourceInfo extends AbstractDataSource implements Connectio
    * Creates a ClassDataSourceInfo from a Jdbc Driver
    *
    * @param classname The classname of a class that implements datasource
-   */
-  public ClassDataSourceInfo(String className) throws CpoException {
-    super(className);
-    this.className=className;
-  }
-
-  /**
-   * Creates a ClassDataSourceInfo from a Jdbc Driver
-   *
-   * @param classname The classname of a class that implements datasource
    * @param properties - The connection properties for connecting to the database
    */
   public ClassDataSourceInfo(String className, SortedMap<String, String> properties) throws CpoException {

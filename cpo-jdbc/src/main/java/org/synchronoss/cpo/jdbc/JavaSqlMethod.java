@@ -47,7 +47,6 @@ public class JavaSqlMethod<T> extends java.lang.Object implements java.io.Serial
   private Method psSetter_ = null;
   private Method csGetter_ = null;
   private Method csSetter_ = null;
-  private String dbType_ = null;
   private int methodType_ = METHOD_TYPE_BASIC;
   private static final Class<PreparedStatement> psc = PreparedStatement.class;
   private static final Class<ResultSet> rsc = ResultSet.class;
@@ -60,9 +59,9 @@ public class JavaSqlMethod<T> extends java.lang.Object implements java.io.Serial
   public JavaSqlMethod(int methodType, Class<T> javaClass, Class<T> javaSqlMethodClass, String getterName, String setterName) {
 
     try {
-      setMethodType(methodType);
-      setJavaClass(javaClass);
-      setJavaSqlMethodClass(javaSqlMethodClass);
+      methodType_ = methodType;
+      this.javaClass_ = javaClass;
+      this.javaSqlMethodClass_ = javaSqlMethodClass;
       setRsGetter(getterName);
       setPsSetter(setterName);
       setCsGetter(getterName);
@@ -70,14 +69,6 @@ public class JavaSqlMethod<T> extends java.lang.Object implements java.io.Serial
     } catch (CpoException ce) {
       logger.error("Error In JavaSqlMethod", ce);
     }
-  }
-
-  public void setJavaClass(Class<T> javaClass) {
-    this.javaClass_ = javaClass;
-  }
-
-  public void setJavaSqlMethodClass(Class<T> javaSqlMethodClass) {
-    this.javaSqlMethodClass_ = javaSqlMethodClass;
   }
 
   public void setPsSetter(String setterName) throws CpoException {
@@ -149,19 +140,7 @@ public class JavaSqlMethod<T> extends java.lang.Object implements java.io.Serial
     return csSetter_;
   }
 
-  public String getDatabaseType() {
-    return dbType_;
-  }
-
-  public void setDatabaseType(String dbType) {
-    dbType_ = dbType;
-  }
-
   public int getMethodType() {
     return methodType_;
-  }
-
-  public void setMethodType(int methodType) {
-    methodType_ = methodType;
   }
 }

@@ -20,12 +20,16 @@
  */
 package org.synchronoss.cpo;
 
+import org.synchronoss.cpo.meta.domain.CpoClass;
+
 /**
  * CpoOrderBy is an interface for specifying the sort order in which objects are returned from the Datasource.
  *
  * @author david berry
  */
 public interface CpoOrderBy {
+  
+  public static final String DEFAULT_MARKER = "__CPO_ORDERBY__";
 
   /**
    * Gets the boolean that determines if the objects will be returned from from the CpoAdapter in Ascending order or
@@ -36,26 +40,11 @@ public interface CpoOrderBy {
   public boolean getAscending();
 
   /**
-   * Sets the boolean that determines if the objects will be returned from from the CpoAdapter in Ascending order or
-   * Descending order
-   *
-   * @param b true if it is to sort in Ascensing Order false if it is to be sorted in Descending Order
-   */
-  public void setAscending(boolean b);
-
-  /**
    * Gets the name of the attribute that is to be used to sort the results from the CpoAdapter.
    *
    * @return String The name of the attribute
    */
   public String getAttribute();
-
-  /**
-   * Sets the name of the attribute that is to be used to sort the results from the CpoAdapter.
-   *
-   * @param s The name of the attribute
-   */
-  public void setAttribute(String s);
 
   /**
    * Gets a string representing a datasource specific function call that must be applied to the attribute that will be
@@ -68,26 +57,14 @@ public interface CpoOrderBy {
   public String getFunction();
 
   /**
-   * Sets a string representing a datasource specific function call that must be applied to the attribute that will be
-   * used for sorting.
+   * Gets the string marker that this cpoOrderBy will search for in the expression to replace
    *
-   * i.e. - "upper(attribute_name)"
-   *
-   * @param s The name of the function
+   * @return String The marker of the CpoOrderBy
    */
-  public void setFunction(String s);
-
+  public String getMarker();  
+  
   /**
-   * Gets a string representing the name of this instance of the CpoOrderBy
-   *
-   * @return String The name of the CpoOrderBy
+   * @param s returns the string that will be added into the expression 
    */
-  public String getName();
-
-  /**
-   * Sets a string representing the name of this instance of the CpoOrderBy
-   *
-   * @param s The name of the CpoOrderBy
-   */
-  public void setName(String s);
+  public String toString(CpoClass cpoClass) throws CpoException;
 }

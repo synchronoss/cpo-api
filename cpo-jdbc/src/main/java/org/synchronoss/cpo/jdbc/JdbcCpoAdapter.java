@@ -1189,6 +1189,22 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
    * newOrderBy allows you to dynamically change the order of the objects in the resulting collection. This allows you
    * to apply user input in determining the order of the collection
    *
+   * @param marker the marker that will be replaced in the expression with the string representation of this orderBy
+   * @param attribute The name of the attribute from the pojo that will be sorted.
+   * @param ascending If true, sort ascending. If false sort descending.
+   * @return A CpoOrderBy object to be passed into retrieveBeans.
+   * @throws CpoException Thrown if there are errors accessing the datasource
+   */
+  @Override
+  public CpoOrderBy newOrderBy(String marker, String attribute, boolean ascending)
+          throws CpoException {
+    return new JdbcCpoOrderBy(marker, attribute, ascending);
+  }
+
+  /**
+   * newOrderBy allows you to dynamically change the order of the objects in the resulting collection. This allows you
+   * to apply user input in determining the order of the collection
+   *
    * @param attribute The name of the attribute from the pojo that will be sorted.
    * @param ascending If true, sort ascending. If false sort descending.
    * @param function A string which represents a datasource function that will be called on the attribute. must be
@@ -1200,6 +1216,24 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
   public CpoOrderBy newOrderBy(String attribute, boolean ascending, String function)
           throws CpoException {
     return new JdbcCpoOrderBy(attribute, ascending, function);
+  }
+
+  /**
+   * newOrderBy allows you to dynamically change the order of the objects in the resulting collection. This allows you
+   * to apply user input in determining the order of the collection
+   *
+   * @param marker the marker that will be replaced in the expression with the string representation of this orderBy
+   * @param attribute The name of the attribute from the pojo that will be sorted.
+   * @param ascending If true, sort ascending. If false sort descending.
+   * @param function A string which represents a datasource function that will be called on the attribute. must be
+   * contained in the function string. The attribute name will be replaced at run-time with its datasource counterpart
+   * @return A CpoOrderBy object to be passed into retrieveBeans.
+   * @throws CpoException Thrown if there are errors accessing the datasource
+   */
+  @Override
+  public CpoOrderBy newOrderBy(String marker, String attribute, boolean ascending, String function)
+          throws CpoException {
+    return new JdbcCpoOrderBy(marker, attribute, ascending, function);
   }
 
   /**
@@ -2148,15 +2182,6 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
   /**
    * DOCUMENT ME!
    *
-   * @param readDataSource DOCUMENT ME!
-   */
-  protected void setReadDataSource(DataSource readDataSource) {
-    readDataSource_ = readDataSource;
-  }
-
-  /**
-   * DOCUMENT ME!
-   *
    * @return DOCUMENT ME!
    */
   protected DataSource getReadDataSource() {
@@ -2203,14 +2228,6 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
     // overridden by JdbcTrxAdapter
   }
 
-  /**
-   * DOCUMENT ME!
-   *
-   * @param writeDataSource DOCUMENT ME!
-   */
-  protected void setWriteDataSource(DataSource writeDataSource) {
-    writeDataSource_ = writeDataSource;
-  }
 
   /**
    * DOCUMENT ME!

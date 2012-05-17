@@ -65,9 +65,4 @@ public class ResultSetCpoData extends AbstractJdbcCpoData {
     return javaObject;
   }
 
-  @Override
-  public void invokeSetter(Object instanceObject) throws CpoException {
-    throw new UnsupportedOperationException("Not supported yet.");
-  }
-  
 }

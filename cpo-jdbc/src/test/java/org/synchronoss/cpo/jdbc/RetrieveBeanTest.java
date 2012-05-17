@@ -91,6 +91,21 @@ public class RetrieveBeanTest extends TestCase {
     }
   }
 
+  public void testRetrieveBeans2() {
+    String method = "testRetrieveBeans:";
+    Collection<ValueObject> col;
+
+
+    try {
+      ValueObject valObj = new ValueObject();
+      col = cpoAdapter.retrieveBeans(null, valObj, valObj);
+      assertTrue("Col size is " + col.size(), col.size() == al.size());
+
+    } catch (Exception e) {
+      fail(method + e.getMessage());
+    }
+  }
+
   public void testIsClosed() {
     String method = "testIsClosed:";
     Collection<ValueObject> col;

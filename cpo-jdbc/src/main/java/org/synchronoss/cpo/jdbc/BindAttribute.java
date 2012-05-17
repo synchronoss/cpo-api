@@ -36,11 +36,6 @@ public class BindAttribute {
     this.bindObject = bindObject;
   }
 
-  public BindAttribute(String name, Object bindObject) {
-    this.name = name;
-    this.bindObject = bindObject;
-  }
-
   public BindAttribute(JdbcCpoAttribute jdbcAttribute, Object bindObject, boolean isIn) {
     this.jdbcAttribute = jdbcAttribute;
     this.bindObject = bindObject;

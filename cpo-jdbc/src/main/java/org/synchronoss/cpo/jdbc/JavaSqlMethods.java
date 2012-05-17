@@ -82,11 +82,9 @@ public class JavaSqlMethods extends java.lang.Object implements java.io.Serializ
 
   static private void initMaps() {
     synchronized (javaSqlMethods) {
-      if (javaSqlMethodMap == null) {
-        javaSqlMethodMap = new HashMap<Class<?>, JavaSqlMethod<?>>();
-        for (JavaSqlMethod<?> jsm : javaSqlMethods) {
-          javaSqlMethodMap.put(jsm.getJavaClass(), jsm);
-        }
+      javaSqlMethodMap = new HashMap<Class<?>, JavaSqlMethod<?>>();
+      for (JavaSqlMethod<?> jsm : javaSqlMethods) {
+        javaSqlMethodMap.put(jsm.getJavaClass(), jsm);
       }
     }
   }

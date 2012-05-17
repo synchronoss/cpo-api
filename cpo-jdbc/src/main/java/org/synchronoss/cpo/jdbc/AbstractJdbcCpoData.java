@@ -40,7 +40,4 @@ public abstract class AbstractJdbcCpoData extends AbstractCpoData {
     return index;
   }
 
-  public void setIndex(int index) {
-    this.index = index;
-  }
 }

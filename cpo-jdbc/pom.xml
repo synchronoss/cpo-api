@@ -257,8 +257,8 @@
         <cpo.db.host>localhost</cpo.db.host>
         <cpo.db.port>3306</cpo.db.port>
         <cpo.db.database>cpo</cpo.db.database>
-        <cpo.db.url>jdbc:mysql://${cpo.db.host}:${cpo.db.port}/${cpo.db.database}?noAccessToProcedureBodies=true&amp;useCursorFetch=true&amp;defaultFetchSize=0</cpo.db.url>
-        <cpo.db.userurl>jdbc:mysql://${cpo.db.host}:${cpo.db.port}/${cpo.db.database}?user=${cpo.db.user}&amp;password=${cpo.db.pswd}&amp;noAccessToProcedureBodies=true&amp;useCursorFetch=true&amp;defaultFetchSize=0</cpo.db.userurl>
+        <cpo.db.url>jdbc:mysql://${cpo.db.host}:${cpo.db.port}/${cpo.db.database}?noAccessToProcedureBodies=true&amp;amp;useCursorFetch=true&amp;amp;defaultFetchSize=0</cpo.db.url>
+        <cpo.db.userurl>jdbc:mysql://${cpo.db.host}:${cpo.db.port}/${cpo.db.database}?user=${cpo.db.user}&amp;amp;password=${cpo.db.pswd}&amp;amp;noAccessToProcedureBodies=true&amp;amp;useCursorFetch=true&amp;amp;defaultFetchSize=0</cpo.db.userurl>
         <cpo.db.driver>com.mysql.jdbc.Driver</cpo.db.driver>
         <cpo.db.blobssupported>true</cpo.db.blobssupported>
         <cpo.db.callssupported>true</cpo.db.callssupported>

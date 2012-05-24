@@ -207,28 +207,30 @@ public class CpoAttribute extends CpoAttributeBean {
     setSetterName(buildMethodName("set", getJavaName()));
 
     try {
-      setGetter(findMethods(cpoClass.getMetaClass(), getGetterName(), 0, true).get(0));
-    } catch (CpoException ce1) {
-      failedMessage.append(ce1.getMessage());
-    }
-    try {
       initTransformClass(metaDescriptor);
     } catch (Exception ce2) {
       failedMessage.append(ce2.getMessage());
     }
-    try {
-      Class actualClass = getGetterReturnType();
-      
-      for (Method setter : findMethods(cpoClass.getMetaClass(), getSetterName(), 1, false)) {
-        if (setter.getParameterTypes()[0].isAssignableFrom(actualClass) || isPrimitiveAssignableFrom(setter.getParameterTypes()[0], actualClass)) {
-          setSetter(setter);
+    if (cpoClass != null) {
+      try {
+        setGetter(findMethods(cpoClass.getMetaClass(), getGetterName(), 0, true).get(0));
+      } catch (CpoException ce1) {
+        failedMessage.append(ce1.getMessage());
+      }
+      try {
+        Class actualClass = getGetterReturnType();
+
+        for (Method setter : findMethods(cpoClass.getMetaClass(), getSetterName(), 1, false)) {
+          if (setter.getParameterTypes()[0].isAssignableFrom(actualClass) || isPrimitiveAssignableFrom(setter.getParameterTypes()[0], actualClass)) {
+            setSetter(setter);
+          }
         }
+        if (getSetter()==null){
+          failedMessage.append("invokeSetter: Could not find a Setter:" + getSetterName() + "(" + actualClass.getName() + ")");
+        }
+      } catch (Exception ce2) {
+        failedMessage.append(ce2.getMessage());
       }
-      if (getSetter()==null){
-        failedMessage.append("invokeSetter: Could not find a Setter:" + getSetterName() + "(" + actualClass.getName() + ")");
-      }
-    } catch (Exception ce2) {
-      failedMessage.append(ce2.getMessage());
     }
     if (failedMessage.length() > 0) {
       throw new CpoException(failedMessage.toString());

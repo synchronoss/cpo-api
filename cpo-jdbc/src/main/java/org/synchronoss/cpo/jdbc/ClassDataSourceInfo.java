@@ -31,6 +31,7 @@ import javax.sql.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.CpoException;
+import org.synchronoss.cpo.helper.ExceptionHelper;
 
 /**
  * Collects the info required to instantiate a DataSource from a JDBC Driver
@@ -109,11 +110,11 @@ public class ClassDataSourceInfo extends AbstractDataSource implements Connectio
       if (properties !=null)
         setClassProperties(ds,properties);
     } catch (ClassNotFoundException cnfe) {
-      throw new CpoException("Could Not Find Class" + className, cnfe);
+      throw new CpoException("Could Not Find Class: " + className, cnfe);
     } catch (InstantiationException ie) {
-      throw new CpoException("Could Not Instantiate Class" + className, ie);
+      throw new CpoException("Could Not Instantiate Class: " + className + ":" + ExceptionHelper.getLocalizedMessage(ie));
     } catch (IllegalAccessException iae) {
-      throw new CpoException("Could Not Access Class" + className, iae);
+      throw new CpoException("Could Not Access Class: " + className, iae);
     }
     
     return dataSource;
@@ -167,6 +168,7 @@ public class ClassDataSourceInfo extends AbstractDataSource implements Connectio
 
   private void setObjectProperty(Object obj, String key, String value) {
     String methodName = "set" + key.substring(0, 1).toUpperCase() + key.substring(1);
+    logger.debug("Calling "+methodName+"("+value+")");
     try {
       Method setter = obj.getClass().getMethod(methodName, String.class);
       setter.invoke(obj, value);

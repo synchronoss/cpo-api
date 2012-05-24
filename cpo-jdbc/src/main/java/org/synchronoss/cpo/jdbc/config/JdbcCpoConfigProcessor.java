@@ -109,6 +109,7 @@ public class JdbcCpoConfigProcessor implements CpoConfigProcessor {
       
       for (CtProperty property : readWriteConfig.getPropertyArray()){
         props.put(property.getName(), property.getValue());
+        logger.debug("Adding property "+property.getName()+"="+property.getValue());
       }
 
       dataSourceInfo = new ClassDataSourceInfo(readWriteConfig.getDataSourceClassName(), props);

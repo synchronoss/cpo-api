@@ -33,6 +33,7 @@ import org.synchronoss.cpo.config.CpoConfigProcessor;
 import org.synchronoss.cpo.core.cpoCoreConfig.CpoConfigDocument;
 import org.synchronoss.cpo.core.cpoCoreConfig.CtCpoConfig;
 import org.synchronoss.cpo.core.cpoCoreConfig.CtDataSourceConfig;
+import org.synchronoss.cpo.helper.ExceptionHelper;
 import org.synchronoss.cpo.helper.XmlBeansHelper;
 
 /**
@@ -85,23 +86,23 @@ public final class CpoAdapterFactory {
       String errMsg = XmlBeansHelper.validateXml(configDoc);
       if (errMsg!=null) {
         logger.error("Invalid CPO Config file: "+configFile+":"+errMsg);
-      }
-      
-      CtCpoConfig cpoConfig = configDoc.getCpoConfig();
-
-      // Set the default context.
-      if (cpoConfig.isSetDefaultConfig()) {
-        defaultContext = cpoConfig.getDefaultConfig();
       } else {
-        // make the first listed config the default.
-        defaultContext = cpoConfig.getDataConfigArray(0).getName();
-      }
+        CtCpoConfig cpoConfig = configDoc.getCpoConfig();
 
-      // now lets loop through all the adapters and get them cached.
-      for (CtDataSourceConfig dataSourceConfig : cpoConfig.getDataConfigArray()) {
-        CpoAdapter cpoAdapter = makeCpoAdapter(dataSourceConfig);
-        if (cpoAdapter != null) {
-          adapterMap.put(dataSourceConfig.getName(), cpoAdapter);
+        // Set the default context.
+        if (cpoConfig.isSetDefaultConfig()) {
+          defaultContext = cpoConfig.getDefaultConfig();
+        } else {
+          // make the first listed config the default.
+          defaultContext = cpoConfig.getDataConfigArray(0).getName();
+        }
+
+        // now lets loop through all the adapters and get them cached.
+        for (CtDataSourceConfig dataSourceConfig : cpoConfig.getDataConfigArray()) {
+          CpoAdapter cpoAdapter = makeCpoAdapter(dataSourceConfig);
+          if (cpoAdapter != null) {
+            adapterMap.put(dataSourceConfig.getName(), cpoAdapter);
+          }
         }
       }
     } catch (IOException ioe) {
@@ -130,7 +131,7 @@ public final class CpoAdapterFactory {
       logger.error(msg);
       throw new CpoException(msg);
     } catch (InstantiationException ie) {
-      String msg = "Could not instantiate CpoConfigProcessor: " + dataSourceConfig.getCpoConfigProcessor();
+      String msg = "Could not instantiate CpoConfigProcessor: " + dataSourceConfig.getCpoConfigProcessor() + ": " + ExceptionHelper.getLocalizedMessage(ie);
       logger.error(msg);
       throw new CpoException(msg);
     } catch (ClassCastException cce) {

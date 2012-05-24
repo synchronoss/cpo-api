@@ -36,10 +36,15 @@
       </core:metaDescriptor>
     <core:cpoConfigProcessor>org.synchronoss.cpo.jdbc.config.JdbcCpoConfigProcessor</core:cpoConfigProcessor>
     <jdbc:readWriteConfig>
-         <jdbc:dataSourceClassName>${cpo.db.class}</jdbc:dataSourceClassName>
-         <jdbc:url>${cpo.db.url}</jdbc:url>
-         <jdbc:user>${cpo.db.user}</jdbc:user>
-     <jdbc:password>${cpo.db.pswd}</jdbc:password>
+      <jdbc:dataSourceClassName>${cpo.db.class}</jdbc:dataSourceClassName>
+      <jdbc:url>${cpo.db.url}</jdbc:url>
+      <jdbc:property name="user" value="${cpo.db.user}"/>
+      <jdbc:property name="password" value="${cpo.db.pswd}"/>
+      <!-- CQL properties -->
+      <jdbc:property name="serverName" value="${cpo.db.host}"/>
+      <jdbc:property name="portNumber" value="${cpo.db.port}"/>
+      <jdbc:property name="databaseName" value="${cpo.db.database}"/>
+      <!-- CQL properties -->
     </jdbc:readWriteConfig>
   </core:dataConfig>
  <core:dataConfig xsi:type="jdbc:ctJdbcConfig" name="driver">
@@ -76,8 +81,13 @@
   <jdbc:readWriteConfig>
    <jdbc:dataSourceClassName>${cpo.db.class}</jdbc:dataSourceClassName>
    <jdbc:url>${cpo.db.url}</jdbc:url>
-   <jdbc:user>${cpo.db.user}</jdbc:user>
-   <jdbc:password>${cpo.db.pswd}</jdbc:password>
+      <jdbc:property name="user" value="${cpo.db.user}"/>
+      <jdbc:property name="password" value="${cpo.db.pswd}"/>
+      <!-- CQL properties -->
+      <jdbc:property name="serverName" value="${cpo.db.host}"/>
+      <jdbc:property name="portNumber" value="${cpo.db.port}"/>
+      <jdbc:property name="databaseName" value="${cpo.db.database}"/>
+      <!-- CQL properties -->
   </jdbc:readWriteConfig>
  </core:dataConfig>
  <core:dataConfig xsi:type="jdbc:ctJdbcConfig" name="classProp">
@@ -86,8 +96,13 @@
   <jdbc:readWriteConfig>
    <jdbc:dataSourceClassName>${cpo.db.class}</jdbc:dataSourceClassName>
    <jdbc:url>${cpo.db.url}</jdbc:url>
-   <jdbc:property name="user" value="${cpo.db.user}"/>
-   <jdbc:property name="password" value="${cpo.db.pswd}"/>
+      <jdbc:property name="user" value="${cpo.db.user}"/>
+      <jdbc:property name="password" value="${cpo.db.pswd}"/>
+      <!-- CQL properties -->
+      <jdbc:property name="serverName" value="${cpo.db.host}"/>
+      <jdbc:property name="portNumber" value="${cpo.db.port}"/>
+      <jdbc:property name="databaseName" value="${cpo.db.database}"/>
+      <!-- CQL properties -->
   </jdbc:readWriteConfig>
  </core:dataConfig>
 <!-- <dataConfig xsi:type="jdbc:ctJdbcConfig" name="jndi">
@@ -119,14 +134,24 @@
   <jdbc:readConfig>
    <jdbc:dataSourceClassName>${cpo.db.class}</jdbc:dataSourceClassName>
    <jdbc:url>${cpo.db.url}</jdbc:url>
-   <jdbc:user>${cpo.db.user}</jdbc:user>
-   <jdbc:password>${cpo.db.pswd}</jdbc:password>
+      <jdbc:property name="user" value="${cpo.db.user}"/>
+      <jdbc:property name="password" value="${cpo.db.pswd}"/>
+      <!-- CQL properties -->
+      <jdbc:property name="serverName" value="${cpo.db.host}"/>
+      <jdbc:property name="portNumber" value="${cpo.db.port}"/>
+      <jdbc:property name="databaseName" value="${cpo.db.database}"/>
+      <!-- CQL properties -->
   </jdbc:readConfig>
   <jdbc:writeConfig>
    <jdbc:dataSourceClassName>${cpo.db.class}</jdbc:dataSourceClassName>
    <jdbc:url>${cpo.db.url}</jdbc:url>
-   <jdbc:user>${cpo.db.user}</jdbc:user>
-   <jdbc:password>${cpo.db.pswd}</jdbc:password>
+      <jdbc:property name="user" value="${cpo.db.user}"/>
+      <jdbc:property name="password" value="${cpo.db.pswd}"/>
+      <!-- CQL properties -->
+      <jdbc:property name="serverName" value="${cpo.db.host}"/>
+      <jdbc:property name="portNumber" value="${cpo.db.port}"/>
+      <jdbc:property name="databaseName" value="${cpo.db.database}"/>
+      <!-- CQL properties -->
   </jdbc:writeConfig>
  </core:dataConfig>
  <core:dataConfig xsi:type="jdbc:ctJdbcConfig" name="driverclass">
@@ -141,8 +166,13 @@
   <jdbc:writeConfig>
    <jdbc:dataSourceClassName>${cpo.db.class}</jdbc:dataSourceClassName>
    <jdbc:url>${cpo.db.url}</jdbc:url>
-   <jdbc:user>${cpo.db.user}</jdbc:user>
-   <jdbc:password>${cpo.db.pswd}</jdbc:password>
+      <jdbc:property name="user" value="${cpo.db.user}"/>
+      <jdbc:property name="password" value="${cpo.db.pswd}"/>
+      <!-- CQL properties -->
+      <jdbc:property name="serverName" value="${cpo.db.host}"/>
+      <jdbc:property name="portNumber" value="${cpo.db.port}"/>
+      <jdbc:property name="databaseName" value="${cpo.db.database}"/>
+      <!-- CQL properties -->
   </jdbc:writeConfig>
  </core:dataConfig>
  <core:dataConfig xsi:type="jdbc:ctJdbcConfig" name="classdriver">
@@ -151,8 +181,13 @@
   <jdbc:readConfig>
    <jdbc:dataSourceClassName>${cpo.db.class}</jdbc:dataSourceClassName>
    <jdbc:url>${cpo.db.url}</jdbc:url>
-   <jdbc:user>${cpo.db.user}</jdbc:user>
-   <jdbc:password>${cpo.db.pswd}</jdbc:password>
+      <jdbc:property name="user" value="${cpo.db.user}"/>
+      <jdbc:property name="password" value="${cpo.db.pswd}"/>
+      <!-- CQL properties -->
+      <jdbc:property name="serverName" value="${cpo.db.host}"/>
+      <jdbc:property name="portNumber" value="${cpo.db.port}"/>
+      <jdbc:property name="databaseName" value="${cpo.db.database}"/>
+      <!-- CQL properties -->
   </jdbc:readConfig>
   <jdbc:writeConfig>
    <jdbc:driverClassName>${cpo.db.driver}</jdbc:driverClassName>

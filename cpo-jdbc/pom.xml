@@ -40,6 +40,7 @@
     <oracleVersion>11.2.0.2.0</oracleVersion>
     <mysqlVersion>5.1.16</mysqlVersion>
     <hsqldbVersion>2.2.8</hsqldbVersion>
+    <cassandraVersion>1.0.5-SNAPSHOT</cassandraVersion>
     <postgresVersion>9.0-801.jdbc4</postgresVersion>
   </properties>
   <build>
@@ -66,6 +67,11 @@
               <version>${mysqlVersion}</version>
             </dependency>
             <dependency>
+              <groupId>org.apache-extras.cassandra-jdbc</groupId>
+              <artifactId>cassandra-jdbc</artifactId>
+              <version>${cassandraVersion}</version>
+            </dependency>
+            <dependency>
               <groupId>org.hsqldb</groupId>
               <artifactId>hsqldb</artifactId>
               <version>${hsqldbVersion}</version>
@@ -81,25 +87,6 @@
       </plugins>
     </pluginManagement>
     <plugins>
-			<plugin>
-				<groupId>org.jacoco</groupId>
-				<artifactId>jacoco-maven-plugin</artifactId>
-				<version>0.5.7.201204190339</version>
-				<executions>
-					<execution>
-						<goals>
-							<goal>prepare-agent</goal>
-						</goals>
-					</execution>
-					<execution>
-						<id>report</id>
-						<phase>prepare-package</phase>
-						<goals>
-							<goal>report</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-release-plugin</artifactId>
@@ -135,6 +122,7 @@
               <password>${cpo.db.pswd}</password>
               <driver>${cpo.db.driver}</driver>
               <url>${cpo.db.url}</url>
+              <skip>${cpo.skip.sql.plugin}</skip>
               <srcFiles>
                 <srcFile>${cpo.test.sqldir}/dropTestTables.sql</srcFile>
                 <srcFile>${cpo.test.sqldir}/LvoTableDDL.sql</srcFile>
@@ -219,7 +207,8 @@
     <dependency>
       <groupId>org.apache-extras.cassandra-jdbc</groupId>
       <artifactId>cassandra-jdbc</artifactId>
-      <version>1.0.5-SNAPSHOT</version>    
+      <version>${cassandraVersion}</version>
+      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.apache.jmeter</groupId>
@@ -241,6 +230,37 @@
     </dependencies>
   <profiles>
     <profile>
+      <id>cassandra</id>
+      <activation>
+        <activeByDefault>false</activeByDefault>
+        <property>
+          <name>cpo.db</name>
+          <value>cassandra</value>
+        </property>
+      </activation>
+      <properties>
+        <release.arguments>-Dcpo.db=${cpo.db}</release.arguments>
+        <cpo.test.sqldir>src/test/sql/cassandra</cpo.test.sqldir>
+        <cpo.skip.sql.plugin>true</cpo.skip.sql.plugin>
+        <cpo.db.user>root</cpo.db.user>
+        <cpo.db.pswd>root</cpo.db.pswd>
+        <cpo.db.host>localhost</cpo.db.host>
+        <cpo.db.port>9160</cpo.db.port>
+        <cpo.db.database>cpo</cpo.db.database>
+        <cpo.db.url>jdbc:cassandra://${cpo.db.host}:${cpo.db.port}/${cpo.db.database}</cpo.db.url>
+        <cpo.db.userurl>jdbc:cassandra://${cpo.db.user}:${cpo.db.pswd}@${cpo.db.host}:${cpo.db.port}/${cpo.db.database}</cpo.db.userurl>
+        <cpo.db.driver>org.apache.cassandra.cql.jdbc.CassandraDriver</cpo.db.driver>
+        <cpo.db.blobssupported>true</cpo.db.blobssupported>
+        <cpo.db.callssupported>false</cpo.db.callssupported>
+        <cpo.db.select4update>false</cpo.db.select4update>
+        <cpo.db.millisupport>true</cpo.db.millisupport>
+        <cpo.db.jndi>java:/comp/env/jdbc/cpodatasource</cpo.db.jndi>
+        <cpo.db.class>org.apache.cassandra.cql.jdbc.CassandraDataSource</cpo.db.class>
+        <cpo.valueMeta.xml>/cassandra/cassandraValueMetaData.xml</cpo.valueMeta.xml>
+        <cpo.lobMeta.xml>/cassandra/cassandraLobMetaData.xml</cpo.lobMeta.xml>
+      </properties>
+    </profile>
+    <profile>
       <id>mysql</id>
       <activation>
         <activeByDefault>false</activeByDefault>
@@ -251,6 +271,7 @@
       </activation>
       <properties>
         <release.arguments>-Dcpo.db=${cpo.db}</release.arguments>
+        <cpo.skip.sql.plugin>false</cpo.skip.sql.plugin>
         <cpo.test.sqldir>src/test/sql/mysql</cpo.test.sqldir>
         <cpo.db.user>cpo</cpo.db.user>
         <cpo.db.pswd>cpo</cpo.db.pswd>
@@ -279,6 +300,7 @@
         </property>
       </activation>
        <properties>
+        <cpo.skip.sql.plugin>false</cpo.skip.sql.plugin>
         <cpo.test.sqldir>src/test/sql/oracle</cpo.test.sqldir>
         <cpo.db.user>cpo</cpo.db.user>
         <cpo.db.pswd>cpo</cpo.db.pswd>
@@ -309,6 +331,7 @@
       </activation>
       <properties>
         <release.arguments>-Dcpo.db=${cpo.db}</release.arguments>
+        <cpo.skip.sql.plugin>false</cpo.skip.sql.plugin>
         <cpo.test.sqldir>src/test/sql/hsqldbmem</cpo.test.sqldir>
         <cpo.db.user>cpo</cpo.db.user>
         <cpo.db.pswd>cpo</cpo.db.pswd>
@@ -339,6 +362,7 @@
       </activation>
       <properties>
         <release.arguments>-Dcpo.db=${cpo.db}</release.arguments>
+        <cpo.skip.sql.plugin>false</cpo.skip.sql.plugin>
         <cpo.test.sqldir>src/test/sql/hsqldb</cpo.test.sqldir>
         <cpo.db.user>sa</cpo.db.user>
         <cpo.db.pswd />
@@ -369,6 +393,7 @@
       </activation>
       <properties>
         <release.arguments>-Dcpo.db=${cpo.db}</release.arguments>
+        <cpo.skip.sql.plugin>false</cpo.skip.sql.plugin>
         <cpo.test.sqldir>src/test/sql/postgres</cpo.test.sqldir>
         <cpo.db.user>cpo</cpo.db.user>
         <cpo.db.pswd>cpo</cpo.db.pswd>

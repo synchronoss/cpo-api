@@ -1,0 +1,89 @@
+#*
+ * Copyright (C) 2003-2012 David E. Berry
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ *
+ * A copy of the GNU Lesser General Public License may also be found at
+ * http://www.gnu.org/licenses/lgpl.txt
+ *#
+ -----
+ Cpo Plugin - ${currentVersion}
+ -----
+ Architecture Team
+ -----
+ April 2012
+
+About - Cpo Plugin ${currentVersion}
+
+Contents
+
+    * {{{#convertsqltoxml}Convert SQL to XML goal}}
+
+    * {{{#generatejavasource}Generate Java Source goal}}
+
+{convertsqltoxml} goal
+
+  This goal will connect to an existing database, read your cpo config, and generate the cpo meta data xml file.
+
+  To use the cpo-plugin to create a XML meta data file from an existing CPO database configuration, run the following:
+
+  mvn org.synchronoss.cpo:cpo-plugin:${currentVersion}:convertsqltoxml -DdbTablePrefix=<prefix> -DdbUrl=<url>
+
+  Replace <prefix> value with proper cpo table prefix for the database
+
+  Replace <url> value with the jdbc url for your database. The url should be in the format of: jdbc:oracle:thin:user/pass@host:port:instance (oracle example)
+
+  Optionally, you can also specify the following arguments:
+
+    * dbDriver - The default is "oracle.jdbc.OracleDriver", so for non oracle instances, this should be specified
+
+    * dbParams - for any database params that you might need, the format is exactly what you would have previously used w/ cpo util
+
+    * filter - this allows you to only export a subset of classes, as opposed to all classes.  The default expression for this is ".*" to match everything.  Use regular expression syntax.  An example might be "com\.mycompany\.mypackage.*" to match only classes that are in the com.mycompany.mypackage package and below.
+
+  The generated XML file will be placed in target/CpoMetaData.xml
+
+{generatejavasource} goal
+
+  This goal can be used to generate the cpo bean classes at build time.  It will generate the java source files, add them to the classpath, compile them and allow them to get packaged into your jar artifact.
+
+  To use the generatejavasource goal from the command line, run the following:
+
+  mvn org.synchronoss.cpo:cpo-plugin:${currentVersion}:generatejavasource -DcpoConfig=<config>
+
+  Replace <config> with the location of your cpo meta data xml file
+
+  It's more likely that this goal will be included in the build/plugins section of your project's pom.  To enable that configuration, here's an example:
+
+---
+      <plugin>
+        <groupId>org.synchronoss.cpo</groupId>
+        <artifactId>cpo-plugin</artifactId>
+        <version>${currentVersion}</version>
+        <executions>
+          <execution>
+            <id>Build-CpoBeans</id>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>generatejavasource</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <cpoConfig>${basedir}/src/main/resources/com/mycompany/mypackage/CpoMetaData.xml</cpoConfig>
+        </configuration>
+      </plugin>
+---
+

@@ -35,7 +35,6 @@
     <relativePath>../pom.xml</relativePath>
   </parent>
   <description>CPO Maven Plugin</description>
-  <url>http://cpo.sourceforge.net/</url>
   <licenses>
     <license>
       <name>GNU Lesser General Public License</name>

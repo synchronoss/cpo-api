@@ -156,6 +156,14 @@ public class CpoClassSourceGenerator implements MetaVisitor {
   public void visit(CpoAttribute cpoAttribute) {
 
     String attName = cpoAttribute.getJavaName();
+    
+    if (cpoAttribute.getTransformClassName()!=null && cpoAttribute.getTransformInMethod()==null) {
+      try {
+        cpoAttribute.loadRunTimeInfo(metaDescriptor, null);
+      } catch (Exception e) {
+        
+      }
+    }
 
     // the getter name is get concatenated with the camel case of the attribute name
     String getterName;

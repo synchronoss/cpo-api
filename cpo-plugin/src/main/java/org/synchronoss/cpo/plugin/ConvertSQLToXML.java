@@ -226,6 +226,13 @@ public class ConvertSQLToXML extends AbstractMojo {
         cpoAttribute.setDbColumn(rs.getString(5));
         cpoAttribute.setTransformClassName(rs.getString(6));
 
+        if (cpoAttribute.getTransformClassName()!=null) {
+          try {
+            cpoAttribute.loadRunTimeInfo(metaDescriptor, null);
+          } catch (Exception e) {
+
+          }
+        }
         // figure out the java type
         cpoAttribute.setJavaType(metaDescriptor.getJavaTypeName(cpoAttribute));
 

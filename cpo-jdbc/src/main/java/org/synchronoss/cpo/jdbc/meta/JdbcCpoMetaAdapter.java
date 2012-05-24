@@ -138,11 +138,12 @@ public class JdbcCpoMetaAdapter extends AbstractCpoMetaAdapter {
     Class<?> clazz = String.class;
     JavaSqlType<?> jdbcType = getJdbcTypeNameMap().get(attribute.getDataType());
     
-    if (jdbcType == null) {
-      return String.class;
-    } else {
-      return jdbcType.getJavaClass();
-    }
+    if (attribute.getTransformInMethod() != null)
+      clazz = attribute.getTransformInMethod().getReturnType();
+    else if (jdbcType != null)
+      clazz = jdbcType.getJavaClass();
+    
+    return clazz;
   }
 
   @Override

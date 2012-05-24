@@ -276,7 +276,12 @@ public class CpoMetaDescriptor extends CpoMetaDescriptorCache implements CpoMeta
 
   protected final CpoMetaDataDocument export() {
     MetaXmlObjectExporter metaXmlObjectExporter = getMetaXmlObjectExporter();
-    for (CpoClass cpoClass : metaAdapter.getCpoClasses()) {
+
+    // need these sorted
+    List<CpoClass> classList = new ArrayList<CpoClass>();
+    classList.addAll(metaAdapter.getCpoClasses());
+    Collections.sort(classList);
+    for (CpoClass cpoClass : classList) {
       cpoClass.acceptMetaDFVisitor(metaXmlObjectExporter);
     }
     return metaXmlObjectExporter.getCpoMetaDataDocument();

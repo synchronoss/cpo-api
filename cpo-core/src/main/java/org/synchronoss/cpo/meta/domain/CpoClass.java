@@ -120,13 +120,15 @@ public class CpoClass extends CpoClassBean implements Comparable<CpoClass>, Meta
   public void acceptMetaDFVisitor(MetaVisitor visitor) {
     visitor.visit(this);
 
-    // visit attributes
-    for (CpoAttribute cpoAttribute : javaMap.values()) {
+    // visit attributes -- need these sorted
+    TreeMap<String, CpoAttribute> attributeMap = new TreeMap<String, CpoAttribute>(javaMap);
+    for (CpoAttribute cpoAttribute : attributeMap.values()) {
       visitor.visit(cpoAttribute);
     }
 
-    // visit function groups
-    for (CpoFunctionGroup cpoFunctionGroup : getFunctionGroups().values()) {
+    // visit function groups -- need these sorted
+    TreeMap<String, CpoFunctionGroup> functionGroupMap = new TreeMap<String, CpoFunctionGroup>(functionGroups);
+    for (CpoFunctionGroup cpoFunctionGroup : functionGroupMap.values()) {
       visitor.visit(cpoFunctionGroup);
 
       // visit the functions

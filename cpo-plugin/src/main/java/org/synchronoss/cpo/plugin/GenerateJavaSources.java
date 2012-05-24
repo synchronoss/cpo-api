@@ -92,6 +92,8 @@ public class GenerateJavaSources extends AbstractMojo {
         }
         File javaFile = new File(classDir, className + ".java");
 
+        getLog().info("cpo-plugin generated " + javaFile.getAbsolutePath());
+
         CpoClassSourceGenerator classSourceGenerator = new CpoClassSourceGenerator(metaDescriptor);
         cpoClass.acceptMetaDFVisitor(classSourceGenerator);
 

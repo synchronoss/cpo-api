@@ -117,6 +117,10 @@ public class JdbcMetaXmlObjectExporter extends CoreMetaXmlObjectExporter impleme
         ctJdbcArgument.setScope(CtJdbcArgument.Scope.OUT);
       }
 
+      if (jdbcArgument.getTypeInfo() != null && !jdbcArgument.getTypeInfo().isEmpty()) {
+        ctJdbcArgument.setTypeInfo(jdbcArgument.getTypeInfo());
+      }
+
       CtArgument ctArgument = currentCtFunction.addNewCpoArgument();
       ctArgument.set(ctJdbcArgument);
     }

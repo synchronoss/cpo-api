@@ -35,8 +35,9 @@ public class JdbcCpoArgument extends CpoArgument implements java.io.Serializable
   private static final long serialVersionUID = 1L;
   private static final String IN_PARAMETER = "IN";
   private static final String OUT_PARAMETER = "OUT";
-  private static final String INOUT_PARAMETER = "BOTH";
+  private static final String INOUT_PARAMETER = "BOTH";  
   private String scope = null;
+  private String typeInfo = null;
 
   public JdbcCpoArgument() {
     super();
@@ -62,4 +63,13 @@ public class JdbcCpoArgument extends CpoArgument implements java.io.Serializable
   public void setScope(String scope) {
     this.scope = scope;
   }
+
+  public String getTypeInfo() {
+    return typeInfo;
+  }
+
+  public void setTypeInfo(String typeInfo) {
+    this.typeInfo = typeInfo;
+  }
+    
 }

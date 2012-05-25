@@ -82,16 +82,20 @@ public class JdbcCallableStatementFactory implements CpoReleasible {
 
       int j = 1;
       for (CpoArgument argument : outArguments) {
+        JdbcCpoArgument jdbcArgument = (JdbcCpoArgument) argument;
         attribute = (JdbcCpoAttribute) argument.getAttribute();
 
-        if (((JdbcCpoArgument) argument).isInParameter()) {
+        if (jdbcArgument.isInParameter()) {
           CpoData cpoData = new CallableStatementCpoData(this, attribute, j);
           cpoData.invokeSetter(obj);
         }
 
-        if (((JdbcCpoArgument) argument).isOutParameter()) {
+        if (jdbcArgument.isOutParameter()) {
           localLogger.debug("Setting OUT parameter " + j + " as Type " + attribute.getJavaSqlType());
-          cstmt.registerOutParameter(j, attribute.getJavaSqlType());
+          if (jdbcArgument.getTypeInfo()!=null)
+            cstmt.registerOutParameter(j, attribute.getJavaSqlType(), jdbcArgument.getTypeInfo());
+          else 
+            cstmt.registerOutParameter(j, attribute.getJavaSqlType());
         }
         j++;
       }

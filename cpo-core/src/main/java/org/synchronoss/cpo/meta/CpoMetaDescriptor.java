@@ -147,7 +147,7 @@ public class CpoMetaDescriptor extends CpoMetaDescriptorCache implements CpoMeta
           logger.debug("Creating the instance");
           metaDescriptor = (CpoMetaDescriptor) cons.newInstance(name);
           addCpoMetaDescriptor(metaDescriptor);
-        } else if (!metaDescriptorClassName.equals(metaDataDoc.getCpoMetaData().getMetaDescriptor())){
+        } else if (!metaDescriptor.getClass().getName().equals(metaDataDoc.getCpoMetaData().getMetaDescriptor())){
           throw new CpoException("Error processing multiple metaXml files. All files must have the same CpoMetaDescriptor class name.");
         }
 

@@ -34,6 +34,11 @@ public abstract class AbstractDataSourceInfo implements DataSourceInfo {
   private String dataSourceName = null;
   // Make sure DataSource creation is thread safe.
   private final Object LOCK = new Object();
+  
+  // common password strings
+  private final String PASSWORD = "password";
+  private final String PASSWD = "passwd";
+  private final String PWD = "pwd";
 
   public AbstractDataSourceInfo(String dataSourceName) {
     this.dataSourceName=dataSourceName;
@@ -70,23 +75,27 @@ public abstract class AbstractDataSourceInfo implements DataSourceInfo {
   }
   
   private String BuildDataSourceName(String s, Properties properties) {
-    Map<String, String> map = new HashMap<String, String>();
+    // Use a tree map so that the properties are sorted. This way if we have
+    // the same datasource with the same properties but in different order,
+    // we will generate the same key.
+    SortedMap<String, String> map = new TreeMap<String, String>();
     for (Object key : properties.keySet()){
       map.put((String)key, properties.getProperty((String)key));
     }
     return BuildDataSourceName(s, map);
   }
   
-  private String BuildDataSourceName(String s, Map<String, String> map) {
+  private String BuildDataSourceName(String s, SortedMap<String, String> map) {
     StringBuilder dsName = new StringBuilder(s);
 
-    // Use a tree map so that the properties are sorted. This way if we have
-    // the same datasource with the same properties but in different order,
-    // we will generate the same key.
-    for (Object key : map.keySet()) {
-      dsName.append(key);
-      dsName.append("=");
-      dsName.append(map.get(key));
+    for (Object obj : map.keySet()) {
+      String key = (String)obj;
+      // Don't store the password in the datasource generated name.
+      if (!PASSWORD.equalsIgnoreCase(key) && !PASSWD.equalsIgnoreCase(key) && !PWD.equalsIgnoreCase(key) ) {
+        dsName.append(key);
+        dsName.append("=");
+        dsName.append(map.get(key));
+      }
     }
 
     return dsName.toString();

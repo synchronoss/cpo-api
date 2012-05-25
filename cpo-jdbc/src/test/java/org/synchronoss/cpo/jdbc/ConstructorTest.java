@@ -24,6 +24,8 @@ import junit.framework.TestCase;
 import org.synchronoss.cpo.*;
 
 import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * ConstructorTest is a JUnit test class for testing the JdbcAdapter class Constructors
@@ -31,6 +33,8 @@ import java.util.List;
  * @author david berry
  */
 public class ConstructorTest extends TestCase {
+  private static final Logger logger = LoggerFactory.getLogger(ConstructorTest.class);
+  private static final String PASSWORDSTRING = "password=";
 
   public ConstructorTest(String name) {
     super(name);
@@ -51,6 +55,11 @@ public class ConstructorTest extends TestCase {
     try {
       CpoAdapter cpoAdapter = CpoAdapterFactory.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_CLASS);
       assertNotNull(method + "cpoAdapter is null", cpoAdapter);
+      
+      logger.debug("=====> DatasourceName: "+cpoAdapter.getDataSourceName());
+      // make sure the password is not in the name
+      assertTrue("password is in datasource name",cpoAdapter.getDataSourceName().indexOf(PASSWORDSTRING)==-1);
+      
       ValueObject valObj = new ValueObject();
       List<ValueObject> objs = cpoAdapter.retrieveBeans(null, valObj);
       assertTrue("List size is " + objs.size(), objs.size() == 0);
@@ -64,6 +73,10 @@ public class ConstructorTest extends TestCase {
     try {
       CpoAdapter cpoAdapter = CpoAdapterFactory.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_CLASSPROP);
       assertNotNull(method + "cpoAdapter is null", cpoAdapter);
+      
+      // make sure the password is not in the name
+      assertTrue("password is in datasource name",cpoAdapter.getDataSourceName().indexOf(PASSWORDSTRING)==-1);
+      
       ValueObject valObj = new ValueObject();
       List<ValueObject> objs = cpoAdapter.retrieveBeans(null, valObj);
       assertTrue("List size is " + objs.size(), objs.size() == 0);
@@ -77,6 +90,10 @@ public class ConstructorTest extends TestCase {
     try {
       CpoAdapter cpoAdapter = CpoAdapterFactory.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_DRIVER);
       assertNotNull(method + "cpoAdapter is null", cpoAdapter);
+      
+      // make sure the password is not in the name
+      assertTrue("password is in datasource name",cpoAdapter.getDataSourceName().indexOf(PASSWORDSTRING)==-1);
+      
       ValueObject valObj = new ValueObject();
       List<ValueObject> objs = cpoAdapter.retrieveBeans(null, valObj);
       assertTrue("List size is " + objs.size(), objs.size() == 0);
@@ -90,7 +107,11 @@ public class ConstructorTest extends TestCase {
     try {
       CpoAdapter cpoAdapter = CpoAdapterFactory.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_DRIVER_URLONLY);
       assertNotNull(method + "cpoAdapter is null", cpoAdapter);
-      ValueObject valObj = new ValueObject();
+       
+      // make sure the password is not in the name
+      assertTrue("password is in datasource name",cpoAdapter.getDataSourceName().indexOf(PASSWORDSTRING)==-1);
+      
+     ValueObject valObj = new ValueObject();
       List<ValueObject> objs = cpoAdapter.retrieveBeans(null, valObj);
       assertTrue("List size is " + objs.size(), objs.size() == 0);
     } catch (Exception e) {
@@ -103,6 +124,10 @@ public class ConstructorTest extends TestCase {
     try {
       CpoAdapter cpoAdapter = CpoAdapterFactory.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_DRIVERPROP);
       assertNotNull(method + "cpoAdapter is null", cpoAdapter);
+      
+      // make sure the password is not in the name
+      assertTrue("password is in datasource name",cpoAdapter.getDataSourceName().indexOf(PASSWORDSTRING)==-1);
+      
       ValueObject valObj = new ValueObject();
       List<ValueObject> objs = cpoAdapter.retrieveBeans(null, valObj);
       assertTrue("List size is " + objs.size(), objs.size() == 0);
@@ -116,6 +141,10 @@ public class ConstructorTest extends TestCase {
     try {
       CpoAdapter cpoAdapter = CpoAdapterFactory.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_CLASSCLASS);
       assertNotNull(method + "cpoAdapter is null", cpoAdapter);
+      
+      // make sure the password is not in the name
+      assertTrue("password is in datasource name",cpoAdapter.getDataSourceName().indexOf(PASSWORDSTRING)==-1);
+      
       ValueObject valObj = new ValueObject();
       List<ValueObject> objs = cpoAdapter.retrieveBeans(null, valObj);
       assertTrue("List size is " + objs.size(), objs.size() == 0);
@@ -129,6 +158,10 @@ public class ConstructorTest extends TestCase {
     try {
       CpoAdapter cpoAdapter = CpoAdapterFactory.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_DRIVERDRIVER);
       assertNotNull(method + "cpoAdapter is null", cpoAdapter);
+      
+      // make sure the password is not in the name
+      assertTrue("password is in datasource name",cpoAdapter.getDataSourceName().indexOf(PASSWORDSTRING)==-1);
+      
       ValueObject valObj = new ValueObject();
       List<ValueObject> objs = cpoAdapter.retrieveBeans(null, valObj);
       assertTrue("List size is " + objs.size(), objs.size() == 0);
@@ -142,6 +175,10 @@ public class ConstructorTest extends TestCase {
     try {
       CpoAdapter cpoAdapter = CpoAdapterFactory.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_CLASSDRIVER);
       assertNotNull(method + "cpoAdapter is null", cpoAdapter);
+      
+      // make sure the password is not in the name
+      assertTrue("password is in datasource name",cpoAdapter.getDataSourceName().indexOf(PASSWORDSTRING)==-1);
+      
       ValueObject valObj = new ValueObject();
       List<ValueObject> objs = cpoAdapter.retrieveBeans(null, valObj);
       assertTrue("List size is " + objs.size(), objs.size() == 0);
@@ -155,6 +192,10 @@ public class ConstructorTest extends TestCase {
     try {
       CpoAdapter cpoAdapter = CpoAdapterFactory.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_DRIVERCLASS);
       assertNotNull(method + "cpoAdapter is null", cpoAdapter);
+      
+      // make sure the password is not in the name
+      assertTrue("password is in datasource name",cpoAdapter.getDataSourceName().indexOf(PASSWORDSTRING)==-1);
+      
       ValueObject valObj = new ValueObject();
       List<ValueObject> objs = cpoAdapter.retrieveBeans(null, valObj);
       assertTrue("List size is " + objs.size(), objs.size() == 0);

@@ -95,6 +95,14 @@ public class CpoMetaDescriptor extends CpoMetaDescriptorCache implements CpoMeta
     return createUpdateInstance(name,metaXmls);
   }
     
+  public static void refreshDescriptorMeta(String name, List<String> metaXmls) throws CpoException {
+    createUpdateInstance(name,metaXmls);
+  }
+    
+  public void refreshDescriptorMeta(List<String> metaXmls) throws CpoException {
+    createUpdateInstance(this.getName(), metaXmls);
+  }
+    
   protected static CpoMetaDescriptor createUpdateInstance(String name, List<String> metaXmls) throws CpoException {
     return createUpdateInstance(name, metaXmls.toArray(new String[metaXmls.size()]));
   }
@@ -144,7 +152,7 @@ public class CpoMetaDescriptor extends CpoMetaDescriptorCache implements CpoMeta
         }
 
         metaDescriptor.setDefaultPackageName(metaDataDoc.getCpoMetaData().getDefaultPackageName());
-        metaDescriptor.metaAdapter.loadCpoMetaDataDocument(metaDataDoc);
+        metaDescriptor.getCpoMetaAdapter().loadCpoMetaDataDocument(metaDataDoc);
 
       } catch (IOException ioe) {
         throw new CpoException("Error processing metaData from InputStream: "+metaXml + ": " + ExceptionHelper.getLocalizedMessage(ioe));
@@ -189,7 +197,7 @@ public class CpoMetaDescriptor extends CpoMetaDescriptorCache implements CpoMeta
     return metaDescriptor;
   }
       
-  protected AbstractCpoMetaAdapter getCpoMetaAdapter() throws CpoException {
+  protected AbstractCpoMetaAdapter getCpoMetaAdapter() {
     return metaAdapter;
   }
 
@@ -279,7 +287,7 @@ public class CpoMetaDescriptor extends CpoMetaDescriptorCache implements CpoMeta
 
     // need these sorted
     List<CpoClass> classList = new ArrayList<CpoClass>();
-    classList.addAll(metaAdapter.getCpoClasses());
+    classList.addAll(getCpoMetaAdapter().getCpoClasses());
     Collections.sort(classList);
     for (CpoClass cpoClass : classList) {
       cpoClass.acceptMetaDFVisitor(metaXmlObjectExporter);

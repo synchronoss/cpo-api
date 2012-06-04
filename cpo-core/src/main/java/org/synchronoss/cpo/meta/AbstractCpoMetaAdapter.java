@@ -90,33 +90,55 @@ public abstract class AbstractCpoMetaAdapter implements CpoMetaAdapter {
 
   protected void loadCpoMetaDataDocument(CpoMetaDataDocument metaDataDoc) throws CpoException {
     for (CtClass ctClass : metaDataDoc.getCpoMetaData().getCpoClassArray()) {
-      CpoClass cpoClass = loadCpoClass(ctClass);
-      addCpoClass(cpoClass);
+      
+      CpoClass cpoClass = getCpoClass(ctClass.getName()); 
+      if (cpoClass == null){
+        cpoClass = createCpoClass();
+        cpoClass.setName(ctClass.getName());
+        cpoClass.setDescription(ctClass.getDescription());
+        addCpoClass(cpoClass);
+      } else {
+        loadCpoClass(cpoClass, ctClass);
+      }
     }
   }
 
-  protected CpoClass loadCpoClass(CtClass ctClass) throws CpoException {
+  protected void loadCpoClass(CpoClass cpoClass, CtClass ctClass) throws CpoException {
     logger.debug("Loading class: " + ctClass.getName());
-    CpoClass cpoClass = createCpoClass();
-    cpoClass.setName(ctClass.getName());
-    cpoClass.setDescription(ctClass.getDescription());
 
     currentClass = cpoClass;
 
     for (CtAttribute ctAttribute : ctClass.getCpoAttributeArray()) {
-      CpoAttribute cpoAttribute = createCpoAttribute();
-      loadCpoAttribute(cpoAttribute, ctAttribute);
-      cpoClass.addAttribute(cpoAttribute);
+      CpoAttribute cpoAttribute = cpoClass.getAttributeJava(ctAttribute.getJavaName());
+      
+      if (cpoAttribute == null) {
+        cpoAttribute = createCpoAttribute();
+        loadCpoAttribute(cpoAttribute, ctAttribute);
+        cpoClass.addAttribute(cpoAttribute);
+      } else {
+        loadCpoAttribute(cpoAttribute, ctAttribute);
+      }
     }
 
     for (CtFunctionGroup ctFunctionGroup : ctClass.getCpoFunctionGroupArray()) {
-      CpoFunctionGroup functionGroup = createCpoFunctionGroup();
-      loadCpoFunctionGroup(functionGroup, ctFunctionGroup);
-      cpoClass.addFunctionGroup(functionGroup);
+      CpoFunctionGroup functionGroup = null;
+      
+      try {
+        functionGroup = cpoClass.getFunctionGroup(ctFunctionGroup.getType().toString(), ctFunctionGroup.getName());
+      } catch (Exception e){
+        // this a runtime exception that we can ignore during load time.
+      }
+      
+      if (functionGroup == null) {
+        functionGroup = createCpoFunctionGroup();
+        loadCpoFunctionGroup(functionGroup, ctFunctionGroup);
+        cpoClass.addFunctionGroup(functionGroup);
+      } else {
+        functionGroup.clearFunctions();
+        loadCpoFunctionGroup(functionGroup, ctFunctionGroup);
+      }
       logger.debug("Added Function Group: " + functionGroup.getName());
     }
-
-    return cpoClass;
   }
 
   protected void loadCpoAttribute(CpoAttribute cpoAttribute, CtAttribute ctAttribute) {
@@ -180,6 +202,10 @@ public abstract class AbstractCpoMetaAdapter implements CpoMetaAdapter {
 
   protected CpoArgument createCpoArgument() {
     return new CpoArgument();
+  }
+
+  protected CpoClass getCpoClass(String name) {
+    return classMap.get(name);
   }
 
   protected void addCpoClass(CpoClass metaClass) {

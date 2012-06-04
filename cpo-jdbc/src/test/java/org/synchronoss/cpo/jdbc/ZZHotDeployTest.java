@@ -67,28 +67,35 @@ public class ZZHotDeployTest extends TestCase {
 
     try {
       ValueObject valObj = new ValueObject();
+      
+      // make sure the default retrieve works
       col = cpoAdapter.retrieveBeans(null, valObj);
       assertTrue("Col size is " + col.size(), col!=null);
+      
+      col = cpoAdapter.retrieveBeans("HotDeploySelect", valObj);
+      fail("Should not have gotten here:");
     } catch (Exception e) {
-      fail(method + e.getMessage());
+      logger.debug("Received an expected Exception: "+e.getLocalizedMessage());
     }
     
     try {
       List<String> metaFiles = new ArrayList<String>();
-      metaFiles.add("/EmptyClassMetaData.xml");
+      metaFiles.add("/hotDeployMetaData.xml");
       cpoAdapter.getCpoMetaDescriptor().refreshDescriptorMeta(metaFiles);
 
       ValueObject valObj = new ValueObject();
+      
+      // make sure the default retrieve still works
       col = cpoAdapter.retrieveBeans(null, valObj);
-      fail(method + "Should have failed as the class meta data should be empty");
+      assertTrue("Col size is " + col.size(), col!=null);
+      
+      col = cpoAdapter.retrieveBeans("HotDeploySelect", valObj);
+      assertTrue("Col size is " + col.size(), col!=null);
       
     } catch (Exception e) {
       String msg = ExceptionHelper.getLocalizedMessage(e);
       
-      if (msg.indexOf("Function Group Not Found: LIST:null") == -1)
-        fail("Received an unexpected exception");
-      else
-        logger.debug("Received an expected Exception: "+msg);
+      fail("Received an unexpected exception: "+msg);
     }
   }
 

@@ -47,6 +47,10 @@ public class CpoFunctionGroup extends CpoFunctionGroupBean {
     }
     return false;
   }
+  
+  public void clearFunctions() {
+    functions.clear();
+  }
 
   @Override
   public String toString() {

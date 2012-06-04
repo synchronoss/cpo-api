@@ -175,6 +175,8 @@
             <excludes>
               <!-- intellij folder -->
               <exclude>.idea/**</exclude>
+              <!-- netbeans action file -->
+              <exclude>nbactions.xml</exclude>
             </excludes>
           </configuration>
         </plugin>

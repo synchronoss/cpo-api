@@ -96,6 +96,7 @@ public abstract class AbstractCpoMetaAdapter implements CpoMetaAdapter {
         cpoClass = createCpoClass();
         cpoClass.setName(ctClass.getName());
         cpoClass.setDescription(ctClass.getDescription());
+        loadCpoClass(cpoClass, ctClass);
         addCpoClass(cpoClass);
       } else {
         loadCpoClass(cpoClass, ctClass);

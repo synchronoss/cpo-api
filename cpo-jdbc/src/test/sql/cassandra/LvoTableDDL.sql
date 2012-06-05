@@ -19,22 +19,11 @@
 -- http://www.gnu.org/licenses/lgpl.txt
 --
 
-----------------------------------------------
--- LOB_TEST
-----------------------------------------------
--- DROP TABLE IF EXISTS lob_test
--- ;
--- CREATE TABLE IF NOT EXISTS lob_test (
---        lob_id               INT NOT NULL,
---        b_lob                MEDIUMBLOB NULL,
---        b_lob2                MEDIUMBLOB NULL,
---        c_lob                MEDIUMTEXT NULL
--- )
--- ENGINE = 'InnoDB';
--- 
--- 
--- COMMIT;
+USE cpo;
 
-
-
-
+CREATE COLUMNFAMILY lob_test (
+  lob_id  int PRIMARY KEY,
+  b_lob   blob,
+  b_lob2  blob,
+  c_lob   text
+)

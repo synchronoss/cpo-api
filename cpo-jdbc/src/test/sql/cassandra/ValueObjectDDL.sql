@@ -19,4 +19,38 @@
 -- http://www.gnu.org/licenses/lgpl.txt
 --
 
--- 
+USE cpo;
+
+CREATE COLUMNFAMILY value_object (
+id                      varint primary key, 
+attr_integer            int,
+attr_int                int,
+attr_double             double,
+attr_float              float,
+attr_varchar            varchar,
+attr_varchar_ignorecase varchar,
+attr_char               text,
+attr_character          text,
+attr_date               timestamp,
+attr_time               timestamp,
+attr_timestamp          timestamp,
+attr_datetime           timestamp,
+attr_decimal            decimal,
+attr_numeric            decimal,
+attr_bit                boolean,
+attr_bool               boolean,
+attr_boolean            boolean,
+attr_tinyint            int,
+attr_smallint           int,
+attr_mediumint          int,
+attr_bigint             bigint,
+attr_real               double,
+attr_blob               blob,
+attr_tinyblob           blob,
+attr_mediumblob         blob,
+attr_longblob           blob,
+attr_text               text,
+attr_tinytext           text,
+attr_mediumtext         text,
+attr_longtext           text)
+

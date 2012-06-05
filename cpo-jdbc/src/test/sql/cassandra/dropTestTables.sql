@@ -19,4 +19,9 @@
 -- http://www.gnu.org/licenses/lgpl.txt
 --
 
--- DROP TABLE  IF EXISTS LOB_TEST;
+USE cpo;
+
+DROP COLUMNFAMILY value_object;
+
+DROP COLUMNFAMILY lob_test;
+

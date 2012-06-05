@@ -3122,8 +3122,12 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
         for(int i=1; i<=rsmd.getColumnCount(); i++) {
           JdbcCpoAttribute attribute = new JdbcCpoAttribute();
           attribute.setDataName(rsmd.getColumnLabel(i));
-          attribute.setDbTable(rsmd.getTableName(i));
           attribute.setDbColumn(rsmd.getColumnName(i));
+          try {
+            attribute.setDbTable(rsmd.getTableName(i));
+          } catch (Exception e) {
+            // do nothing if this call is not supported
+          }
 
           JavaSqlType<?> javaSqlType = metaDescriptor.getJavaSqlType(rsmd.getColumnType(i));
           attribute.setDataType(javaSqlType.getJavaSqlTypeName());

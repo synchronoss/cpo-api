@@ -24,7 +24,7 @@ import org.synchronoss.cpo.meta.bean.CpoFunctionGroupBean;
 
 import java.util.*;
 
-public class CpoFunctionGroup extends CpoFunctionGroupBean {
+public class CpoFunctionGroup extends CpoFunctionGroupBean implements Comparable<CpoFunctionGroup> {
 
   List<CpoFunction> functions = new ArrayList<CpoFunction>();
 
@@ -59,5 +59,10 @@ public class CpoFunctionGroup extends CpoFunctionGroupBean {
 
   public String toStringFull() {
     return super.toString();
+  }
+
+  @Override
+  public int compareTo(CpoFunctionGroup fg) {
+    return this.toString().compareTo(fg.toString());
   }
 }

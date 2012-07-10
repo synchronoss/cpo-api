@@ -26,7 +26,7 @@
   <groupId>org.synchronoss.cpo</groupId>
   <artifactId>cpo-plugin</artifactId>
   <name>cpo-plugin</name>
-  <version>1.0-SNAPSHOT</version>
+	<version>5.0.0-SNAPSHOT</version>
   <packaging>maven-plugin</packaging>
   <parent>
     <groupId>org.synchronoss.cpo</groupId>
@@ -85,7 +85,6 @@
       <artifactId>maven-project</artifactId>
       <version>2.2.1</version>
     </dependency>
-
     <!-- log4j implementation for test logging -->
     <dependency>
       <groupId>org.slf4j</groupId>
@@ -97,7 +96,6 @@
       <artifactId>log4j</artifactId>
       <scope>test</scope>
     </dependency>
-
     <!-- JDBC Drivers -->
     <dependency>
       <groupId>com.oracle</groupId>

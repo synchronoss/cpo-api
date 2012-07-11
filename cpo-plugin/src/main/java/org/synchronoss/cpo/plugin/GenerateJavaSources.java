@@ -27,6 +27,7 @@ import org.synchronoss.cpo.meta.CpoMetaDescriptor;
 import org.synchronoss.cpo.meta.domain.CpoClass;
 
 import java.io.*;
+import java.util.StringTokenizer;
 
 /**
  * Plugin goal that will generate the cpo classes based on the xml configuration file
@@ -81,7 +82,11 @@ public class GenerateJavaSources extends AbstractMojo {
         File classDir = srcDir;
         if (className.lastIndexOf(".") != -1) {
           String packageName = className.substring(0, className.lastIndexOf("."));
-          classDir = new File(srcDir, packageName.replaceAll("\\.", File.separator));
+          StringTokenizer tok = new StringTokenizer(packageName, ".");
+          while (tok.hasMoreTokens()) {
+            String dirName = tok.nextToken();
+            classDir = new File(classDir, dirName);
+          }
           className = className.substring(className.lastIndexOf(".") + 1);
         }
 

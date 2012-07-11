@@ -30,22 +30,29 @@ import java.util.*;
  */
 public class CpoMetaDescriptorCache {
   private static final Map<String, CpoMetaDescriptor> metaDescriptorMap = new HashMap<String, CpoMetaDescriptor>();
-  
-  protected static CpoMetaDescriptor findCpoMetaDescriptor(String adapterKey){
+
+  protected static CpoMetaDescriptor findCpoMetaDescriptor(String adapterKey) {
     CpoMetaDescriptor metaDescriptor = null;
-    if (adapterKey!=null) {
+    if (adapterKey != null) {
       metaDescriptor = metaDescriptorMap.get(adapterKey);
     }
-    
+
     return metaDescriptor;
   }
-  
-  protected static CpoMetaDescriptor addCpoMetaDescriptor(CpoMetaDescriptor metaDescriptor){
+
+  protected static CpoMetaDescriptor addCpoMetaDescriptor(CpoMetaDescriptor metaDescriptor) {
     CpoMetaDescriptor oldMetaDescriptor = null;
     if (metaDescriptor != null && metaDescriptor.getName() != null) {
       oldMetaDescriptor = metaDescriptorMap.put(metaDescriptor.getName(), metaDescriptor);
     }
     return oldMetaDescriptor;
   }
-  
+
+  /**
+   * @return A collection of names of all meta descriptors currently loaded
+   */
+  protected static Collection<String> getCpoMetaDescriptorNames() {
+    return metaDescriptorMap.keySet();
+  }
+
 }

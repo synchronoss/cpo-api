@@ -20,21 +20,15 @@
  */
 package org.synchronoss.cpo;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.HashMap;
-import java.util.Map;
 import org.apache.xmlbeans.XmlException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.slf4j.*;
 import org.synchronoss.cpo.config.CpoConfigProcessor;
-import org.synchronoss.cpo.core.cpoCoreConfig.CpoConfigDocument;
-import org.synchronoss.cpo.core.cpoCoreConfig.CtCpoConfig;
-import org.synchronoss.cpo.core.cpoCoreConfig.CtDataSourceConfig;
-import org.synchronoss.cpo.helper.ExceptionHelper;
-import org.synchronoss.cpo.helper.XmlBeansHelper;
+import org.synchronoss.cpo.core.cpoCoreConfig.*;
+import org.synchronoss.cpo.helper.*;
+import org.synchronoss.cpo.meta.CpoMetaDescriptor;
+
+import java.io.*;
+import java.util.*;
 
 /**
  *
@@ -95,6 +89,11 @@ public final class CpoAdapterFactory {
         } else {
           // make the first listed config the default.
           defaultContext = cpoConfig.getDataConfigArray(0).getName();
+        }
+
+        for (CtMetaDescriptor metaDescriptor : cpoConfig.getMetaConfigArray()) {
+          // this will create and cache, so we don't need the return
+          CpoMetaDescriptor.getInstance(metaDescriptor.getName(), metaDescriptor.getMetaXmlArray());
         }
 
         // now lets loop through all the adapters and get them cached.

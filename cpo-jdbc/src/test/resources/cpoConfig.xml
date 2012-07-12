@@ -27,13 +27,16 @@
  xmlns:jdbc="http://www.synchronoss.org/cpo/jdbc/CpoJdbcConfig.xsd"
  xmlns="http://www.synchronoss.org/cpo/CpoConfig.xsd"
  defaultConfig="jdbc">
+
+  <core:metaConfig name="jdbcMeta">
+    <core:metaXml>/emptyClassMetaData.xml</core:metaXml>
+    <core:metaXml>${cpo.valueMeta.xml}</core:metaXml>
+    <core:metaXml>${cpo.lobMeta.xml}</core:metaXml>
+    <core:metaXml>/emptyMetaData.xml</core:metaXml>
+  </core:metaConfig>
+
    <core:dataConfig xsi:type="jdbc:ctJdbcConfig" name="jdbc" supportsBlobs="${cpo.db.blobssupported}" supportsCalls="${cpo.db.callssupported}" supportsMillis="${cpo.db.millisupport}" supportsSelect4Update="${cpo.db.select4update}">
-      <core:metaDescriptor name="jdbcMeta">
-       <core:metaXml>/emptyClassMetaData.xml</core:metaXml>
-       <core:metaXml>${cpo.valueMeta.xml}</core:metaXml>
-       <core:metaXml>${cpo.lobMeta.xml}</core:metaXml>
-       <core:metaXml>/emptyMetaData.xml</core:metaXml>
-      </core:metaDescriptor>
+    <core:metaDescriptorName>jdbcMeta</core:metaDescriptorName>
     <core:cpoConfigProcessor>org.synchronoss.cpo.jdbc.config.JdbcCpoConfigProcessor</core:cpoConfigProcessor>
     <jdbc:readWriteConfig>
       <jdbc:dataSourceClassName>${cpo.db.class}</jdbc:dataSourceClassName>
@@ -48,7 +51,7 @@
     </jdbc:readWriteConfig>
   </core:dataConfig>
  <core:dataConfig xsi:type="jdbc:ctJdbcConfig" name="driver">
-  <core:metaDescriptor name="jdbcMeta"/>
+  <core:metaDescriptorName>jdbcMeta</core:metaDescriptorName>
   <core:cpoConfigProcessor>org.synchronoss.cpo.jdbc.config.JdbcCpoConfigProcessor</core:cpoConfigProcessor>
    <jdbc:readWriteConfig>
     <jdbc:driverClassName>${cpo.db.driver}</jdbc:driverClassName>
@@ -58,7 +61,7 @@
    </jdbc:readWriteConfig>
  </core:dataConfig>
  <core:dataConfig xsi:type="jdbc:ctJdbcConfig" name="driverUrlOnly">
-  <core:metaDescriptor name="jdbcMeta"/>
+  <core:metaDescriptorName>jdbcMeta</core:metaDescriptorName>
   <core:cpoConfigProcessor>org.synchronoss.cpo.jdbc.config.JdbcCpoConfigProcessor</core:cpoConfigProcessor>
    <jdbc:readWriteConfig>
     <jdbc:driverClassName>${cpo.db.driver}</jdbc:driverClassName>
@@ -66,7 +69,7 @@
    </jdbc:readWriteConfig>
  </core:dataConfig>
  <core:dataConfig xsi:type="jdbc:ctJdbcConfig" name="driverProp">
-  <core:metaDescriptor name="jdbcMeta"/>
+  <core:metaDescriptorName>jdbcMeta</core:metaDescriptorName>
   <core:cpoConfigProcessor>org.synchronoss.cpo.jdbc.config.JdbcCpoConfigProcessor</core:cpoConfigProcessor>
   <jdbc:readWriteConfig>
    <jdbc:driverClassName>${cpo.db.driver}</jdbc:driverClassName>
@@ -76,7 +79,7 @@
   </jdbc:readWriteConfig>
  </core:dataConfig>
  <core:dataConfig xsi:type="jdbc:ctJdbcConfig" name="class">
-  <core:metaDescriptor name="jdbcMeta"/>
+  <core:metaDescriptorName>jdbcMeta</core:metaDescriptorName>
   <core:cpoConfigProcessor>org.synchronoss.cpo.jdbc.config.JdbcCpoConfigProcessor</core:cpoConfigProcessor>
   <jdbc:readWriteConfig>
    <jdbc:dataSourceClassName>${cpo.db.class}</jdbc:dataSourceClassName>
@@ -91,7 +94,7 @@
   </jdbc:readWriteConfig>
  </core:dataConfig>
  <core:dataConfig xsi:type="jdbc:ctJdbcConfig" name="classProp">
-  <core:metaDescriptor name="jdbcMeta"/>
+  <core:metaDescriptorName>jdbcMeta</core:metaDescriptorName>
   <core:cpoConfigProcessor>org.synchronoss.cpo.jdbc.config.JdbcCpoConfigProcessor</core:cpoConfigProcessor>
   <jdbc:readWriteConfig>
    <jdbc:dataSourceClassName>${cpo.db.class}</jdbc:dataSourceClassName>
@@ -106,14 +109,14 @@
   </jdbc:readWriteConfig>
  </core:dataConfig>
 <!-- <dataConfig xsi:type="jdbc:ctJdbcConfig" name="jndi">
-  <metaDescriptor name="jdbcMeta"/>
+  <metaDescriptorName>jdbcMeta</metaDescriptorName>
   <cpoConfigProcessor>org.synchronoss.cpo.jdbc.config.JdbcCpoConfigProcessor</cpoConfigProcessor>
   <jdbc:readWriteConfig>
    <jdbc:jndiName>${cpo.db.jndi}</jdbc:jndiName>
   </jdbc:readWriteConfig>
  </dataConfig>-->
  <core:dataConfig xsi:type="jdbc:ctJdbcConfig" name="driverdriver">
-  <core:metaDescriptor name="jdbcMeta"/>
+  <core:metaDescriptorName>jdbcMeta</core:metaDescriptorName>
   <core:cpoConfigProcessor>org.synchronoss.cpo.jdbc.config.JdbcCpoConfigProcessor</core:cpoConfigProcessor>
   <jdbc:readConfig>
    <jdbc:driverClassName>${cpo.db.driver}</jdbc:driverClassName>
@@ -129,7 +132,7 @@
   </jdbc:writeConfig>
  </core:dataConfig>
  <core:dataConfig xsi:type="jdbc:ctJdbcConfig" name="classclass">
-  <core:metaDescriptor name="jdbcMeta"/>
+  <core:metaDescriptorName>jdbcMeta</core:metaDescriptorName>
   <core:cpoConfigProcessor>org.synchronoss.cpo.jdbc.config.JdbcCpoConfigProcessor</core:cpoConfigProcessor>
   <jdbc:readConfig>
    <jdbc:dataSourceClassName>${cpo.db.class}</jdbc:dataSourceClassName>
@@ -155,7 +158,7 @@
   </jdbc:writeConfig>
  </core:dataConfig>
  <core:dataConfig xsi:type="jdbc:ctJdbcConfig" name="driverclass">
-  <core:metaDescriptor name="jdbcMeta"/>
+  <core:metaDescriptorName>jdbcMeta</core:metaDescriptorName>
   <core:cpoConfigProcessor>org.synchronoss.cpo.jdbc.config.JdbcCpoConfigProcessor</core:cpoConfigProcessor>
   <jdbc:readConfig>
    <jdbc:driverClassName>${cpo.db.driver}</jdbc:driverClassName>
@@ -176,7 +179,7 @@
   </jdbc:writeConfig>
  </core:dataConfig>
  <core:dataConfig xsi:type="jdbc:ctJdbcConfig" name="classdriver">
-  <core:metaDescriptor name="jdbcMeta"/>
+  <core:metaDescriptorName>jdbcMeta</core:metaDescriptorName>
   <core:cpoConfigProcessor>org.synchronoss.cpo.jdbc.config.JdbcCpoConfigProcessor</core:cpoConfigProcessor>
   <jdbc:readConfig>
    <jdbc:dataSourceClassName>${cpo.db.class}</jdbc:dataSourceClassName>

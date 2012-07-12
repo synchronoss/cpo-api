@@ -25,7 +25,6 @@ import org.apache.jmeter.protocol.java.sampler.*;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.log.Logger;
 import org.synchronoss.cpo.*;
-import org.synchronoss.cpo.core.cpoCoreConfig.CtMetaDescriptor;
 import org.synchronoss.cpo.jdbc.ValueObject;
 import org.synchronoss.cpo.jdbc.cpoJdbcConfig.*;
 import org.synchronoss.cpo.jdbc.meta.JdbcCpoMetaDescriptor;
@@ -62,10 +61,7 @@ public class CpoJavaSamplerClient extends AbstractJavaSamplerClient {
 
       CtJdbcConfig jdbcConfig = CtJdbcConfig.Factory.newInstance();
       jdbcConfig.setName(this.getClass().getName());
-
-      CtMetaDescriptor ctMetaDescriptor = jdbcConfig.addNewMetaDescriptor();
-      ctMetaDescriptor.setName(metaDescriptor.getName());
-
+      jdbcConfig.setMetaDescriptorName(metaDescriptor.getName());
       jdbcConfig.setCpoConfigProcessor(CONFIG_PROCESSOR);
 
       CtJdbcReadWriteConfig rwc = jdbcConfig.addNewReadWriteConfig();

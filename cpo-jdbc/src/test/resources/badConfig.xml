@@ -26,13 +26,16 @@
  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
  xsi:schemaLocation="http://www.synchronoss.org/cpo/jdbc/CpoJdbcConfig.xsd file:../../main/xsd/CpoJdbcConfig.xsd"
  defaultConfig="jdbc">
+
+  <metaConfig name="jdbcMeta">
+    <metaXml>/emptyClassMetaData.xml</metaXml>
+    <metaXml>${cpo.valueMeta.xml}</metaXml>
+    <metaXml>${cpo.lobMeta.xml}</metaXml>
+    <metaXml>/emptyMetaData.xml</metaXml>
+  </metaConfig>
+
    <dataConfig xsi:type="jdbc:ctJdbcConfig" name="jdbc" supportsBlobs="${cpo.db.blobssupported}" supportsCalls="${cpo.db.callssupported}" supportsMillis="${cpo.db.millisupport}" supportsSelect4Update="${cpo.db.select4update}">
-      <metaDescriptor name="jdbcMeta">
-        <metaXml>/emptyClassMetaData.xml</metaXml>
-        <metaXml>${cpo.valueMeta.xml}</metaXml>
-        <metaXml>${cpo.lobMeta.xml}</metaXml>
-        <metaXml>/emptyMetaData.xml</metaXml>
-      </metaDescriptor>
+      <metaDescriptorName>jdbcMeta</metaDescriptorName>
       <cpoConfigProcessor>org.synchronoss.cpo.jdbc.config.JdbcCpoConfigProcessor</cpoConfigProcessor>
     <jdbc:readWriteConfig>
          <!-- <jdbc:dataSourceClassName>${cpo.db.class}</jdbc:dataSourceClassName> -->

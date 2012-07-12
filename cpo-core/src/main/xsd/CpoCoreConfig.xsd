@@ -30,6 +30,7 @@
     
     <xs:complexType name="ctCpoConfig">
         <xs:sequence>
+            <xs:element name="metaConfig" type="ctMetaDescriptor" minOccurs="1" maxOccurs="unbounded"/>
             <xs:element name="dataConfig" type="ctDataSourceConfig" minOccurs="1" maxOccurs="unbounded"/>
         </xs:sequence>
         <xs:attribute name="defaultConfig" type="xs:string">
@@ -41,7 +42,7 @@
     
     <xs:complexType name="ctDataSourceConfig" abstract="true">
         <xs:sequence>
-            <xs:element name="metaDescriptor" type="ctMetaDescriptor">
+            <xs:element name="metaDescriptorName" type="xs:string">
                 <xs:annotation>
                     <xs:documentation>The Descriptor for the meta data to load up for the class</xs:documentation>
                 </xs:annotation>
@@ -61,7 +62,7 @@
     
     <xs:complexType name="ctMetaDescriptor">
         <xs:sequence>
-            <xs:element name="metaXml" type="xs:string" minOccurs="0" maxOccurs="unbounded">
+            <xs:element name="metaXml" type="xs:string" minOccurs="1" maxOccurs="unbounded">
                 <xs:annotation>
                     <xs:documentation>A list containing resource or filenames that contain meta information. If this descriptor was already defined in a previous config, then only the name needs to be supplied so that is can find the previously loaded files.</xs:documentation>
                 </xs:annotation>

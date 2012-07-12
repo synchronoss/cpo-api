@@ -20,17 +20,16 @@
  */
 package org.synchronoss.cpo.jdbc.config;
 
+import org.slf4j.*;
 import org.synchronoss.cpo.*;
 import org.synchronoss.cpo.config.CpoConfigProcessor;
-import org.synchronoss.cpo.core.cpoCoreConfig.*;
+import org.synchronoss.cpo.core.cpoCoreConfig.CtDataSourceConfig;
 import org.synchronoss.cpo.jdbc.*;
 import org.synchronoss.cpo.jdbc.cpoJdbcConfig.*;
 import org.synchronoss.cpo.jdbc.meta.JdbcCpoMetaDescriptor;
 import org.synchronoss.cpo.meta.CpoMetaDescriptor;
 
 import java.util.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -57,9 +56,8 @@ public class JdbcCpoConfigProcessor implements CpoConfigProcessor {
     }
 
     CtJdbcConfig jdbcConfig = (CtJdbcConfig) cpoConfig;
-    CtMetaDescriptor ctMetaDescriptor = jdbcConfig.getMetaDescriptor();
-    
-    JdbcCpoMetaDescriptor metaDescriptor = (JdbcCpoMetaDescriptor) CpoMetaDescriptor.getInstance(jdbcConfig.getMetaDescriptor().getName(), jdbcConfig.getMetaDescriptor().getMetaXmlArray());
+
+    JdbcCpoMetaDescriptor metaDescriptor = (JdbcCpoMetaDescriptor)CpoMetaDescriptor.getInstance(jdbcConfig.getMetaDescriptorName());
     
     if (jdbcConfig.isSetSupportsBlobs())
       metaDescriptor.setSupportsBlobs(jdbcConfig.getSupportsBlobs());

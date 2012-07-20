@@ -65,10 +65,21 @@ public class ConvertSQLToXML extends AbstractMojo {
    */
   private String filter;
 
-  private static final File TARGET = new File("target");
+  public static final File TARGET = new File("target");
+  public static final String CPO_META_DATA_XML = "CpoMetaData.xml";
 
   private JdbcCpoMetaDescriptor metaDescriptor;
 
+  public void execute(String dbUrl, String dbTablePrefix, String dbDriver, String dbParams, String filter) throws MojoExecutionException {
+    this.dbUrl = dbUrl;
+    this.dbTablePrefix = dbTablePrefix;
+    this.dbDriver = dbDriver;
+    this.dbParams = dbParams;
+    this.filter = filter;
+    execute();
+  }
+
+  @Override
 	public void execute() throws MojoExecutionException {
 		getLog().info("Converting SQL to XML...");
 
@@ -133,7 +144,7 @@ public class ConvertSQLToXML extends AbstractMojo {
       }
 
       // save to file
-      cpoMetaDataDocument.save(new File(TARGET, "CpoMetaData.xml"), XmlBeansHelper.getXmlOptions());
+      cpoMetaDataDocument.save(new File(TARGET, CPO_META_DATA_XML), XmlBeansHelper.getXmlOptions());
 
     } catch (IOException ex) {
       getLog().error("IOException caught", ex);
@@ -321,11 +332,17 @@ public class ConvertSQLToXML extends AbstractMojo {
 
         // if the function changed, make a new one
         if (function == null || !function.getExpression().equals(expression)) {
-          function = new CpoFunction();
-          function.setName(functionName);
-          function.setExpression(expression);
 
-          functionGroup.addFunction(function);
+          // ignore if the sql or name is null/empty
+          if (functionName == null || functionName.isEmpty() || expression == null || expression.isEmpty()) {
+            getLog().warn("Query Group[" + groupName + "] contained no sql, so ignoring it");
+          } else {
+            function = new CpoFunction();
+            function.setName(functionName);
+            function.setExpression(expression);
+
+            functionGroup.addFunction(function);
+          }
         }
 
         if (attribute != null) {

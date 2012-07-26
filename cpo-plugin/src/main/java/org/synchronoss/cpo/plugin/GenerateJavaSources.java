@@ -37,6 +37,10 @@ import java.util.StringTokenizer;
  */
 public class GenerateJavaSources extends AbstractMojo {
 
+  private enum Scopes {
+    test
+  }
+
   /**
    * @parameter expression="${cpoConfig}"
    * @required
@@ -44,10 +48,26 @@ public class GenerateJavaSources extends AbstractMojo {
   private String cpoConfig;
 
   /**
+   * Default output directory
+   *
    * @parameter expression="${project.build.directory}/generated-sources/cpo"
    * @required
    */
   private String outputDir;
+
+  /**
+   * Output directory for test scope executions
+   *
+   * @parameter expression="${project.build.directory}/generated-test-sources/cpo"
+   * @required
+   */
+  private String testOutputDir;
+
+  /**
+   * @parameter expression="${scope}" default-value="compile"
+   * @required
+   */
+  private String scope;
 
   /**
    * A reference to the Maven Project metadata.
@@ -58,14 +78,27 @@ public class GenerateJavaSources extends AbstractMojo {
    */
   protected MavenProject project;
 
+  private final String JAVA_EXT = ".java";
+  private final String META_DESCRIPTOR_NAME = "Generator-" + System.currentTimeMillis();
+
 	public void execute() throws MojoExecutionException {
     getLog().info("Cpo config: " + cpoConfig);
-		getLog().info("Generating cpo java sources to " + outputDir);
 
-    File srcDir = new File(outputDir);
+    File srcDir;
 
-    getLog().debug("Adding " + srcDir.getAbsolutePath() + " to the project's compile sources.");
-    project.addCompileSourceRoot(srcDir.getAbsolutePath());
+    if (Scopes.test.toString().equals(scope)) {
+      // test scope, so use test output directory and add to test compile path
+      srcDir = new File(testOutputDir);
+      project.addTestCompileSourceRoot(srcDir.getAbsolutePath());
+      getLog().debug("Adding " + srcDir.getAbsolutePath() + " to the project's test compile sources.");
+    } else {
+      // default scope, so use output directory and add to compile path
+      srcDir = new File(outputDir);
+      project.addCompileSourceRoot(srcDir.getAbsolutePath());
+      getLog().debug("Adding " + srcDir.getAbsolutePath() + " to the project's compile sources.");
+    }
+
+    getLog().info("Generating cpo java sources to " + srcDir);
 
     File outputDirectory = new File(project.getBuild().getOutputDirectory());
     if (!outputDirectory.exists()) {
@@ -75,7 +108,7 @@ public class GenerateJavaSources extends AbstractMojo {
     }
 
     try {
-      CpoMetaDescriptor metaDescriptor = CpoMetaDescriptor.getInstance("Generator", cpoConfig);
+      CpoMetaDescriptor metaDescriptor = CpoMetaDescriptor.getInstance(META_DESCRIPTOR_NAME, cpoConfig);
 
       for (CpoClass cpoClass : metaDescriptor.getCpoClasses()) {
         String className = cpoClass.getName();
@@ -95,7 +128,7 @@ public class GenerateJavaSources extends AbstractMojo {
             throw new MojoExecutionException("Unable to create class directories: " + classDir.getAbsolutePath());
           }
         }
-        File javaFile = new File(classDir, className + ".java");
+        File javaFile = new File(classDir, className + JAVA_EXT);
 
         getLog().info("cpo-plugin generated " + javaFile.getAbsolutePath());
 

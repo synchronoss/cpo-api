@@ -79,8 +79,16 @@ public class CpoMetaDescriptor extends CpoMetaDescriptorCache implements CpoMeta
   public static CpoMetaDescriptor getInstance(String name) throws CpoException {
     return findCpoMetaDescriptor(name);
   }
-  
-  public static CpoMetaDescriptor getInstance(String name, String metaXml) throws CpoException {
+
+  public static void removeInstance(String name) throws CpoException {
+    removeCpoMetaDescriptor(name);
+  }
+
+   public static void clearAllInstances() throws CpoException {
+    clearCpoMetaDescriptorCache();
+  }
+
+ public static CpoMetaDescriptor getInstance(String name, String metaXml) throws CpoException {
     List<String> metaXmls = new ArrayList<String>();
     metaXmls.add(metaXml);
     return createUpdateInstance(name,metaXmls);

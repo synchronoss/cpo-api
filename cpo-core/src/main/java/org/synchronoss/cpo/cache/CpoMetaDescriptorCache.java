@@ -54,5 +54,13 @@ public class CpoMetaDescriptorCache {
   protected static Collection<String> getCpoMetaDescriptorNames() {
     return metaDescriptorMap.keySet();
   }
+  
+  protected static void removeCpoMetaDescriptor(String adapterKey) {
+      metaDescriptorMap.remove(adapterKey);
+  }
 
+  protected static void clearCpoMetaDescriptorCache() {
+      metaDescriptorMap.clear();
+  }
+  
 }

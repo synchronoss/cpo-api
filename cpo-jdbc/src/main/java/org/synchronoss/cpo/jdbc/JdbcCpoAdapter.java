@@ -2378,8 +2378,9 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
           JdbcCpoArgument jdbcArgument = (JdbcCpoArgument) cpoArgument;
           if (jdbcArgument.isOutParameter()) {
             JdbcCpoAttribute jdbcAttribute = jdbcArgument.getAttribute();
-            jdbcAttribute.invokeSetter(returnObject, new CallableStatementCpoData(cstmt, jdbcAttribute, j++));
+            jdbcAttribute.invokeSetter(returnObject, new CallableStatementCpoData(cstmt, jdbcAttribute, j));
           }
+          j++;
         }
 
         cstmt.close();

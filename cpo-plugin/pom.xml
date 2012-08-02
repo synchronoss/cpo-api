@@ -26,12 +26,12 @@
   <groupId>org.synchronoss.cpo</groupId>
   <artifactId>cpo-plugin</artifactId>
   <name>cpo-plugin</name>
-	<version>5.0.1</version>
+	<version>5.0.2-SNAPSHOT</version>
   <packaging>maven-plugin</packaging>
   <parent>
     <groupId>org.synchronoss.cpo</groupId>
     <artifactId>cpo</artifactId>
-    <version>5.0.1</version>
+    <version>5.0.2-SNAPSHOT</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
   <description>CPO Maven Plugin</description>
@@ -66,13 +66,13 @@
     <dependency>
       <groupId>org.synchronoss.cpo</groupId>
       <artifactId>cpo-core</artifactId>
-      <version>5.0.1</version>
+      <version>5.0.2-SNAPSHOT</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>org.synchronoss.cpo</groupId>
       <artifactId>cpo-jdbc</artifactId>
-      <version>5.0.1</version>
+      <version>5.0.2-SNAPSHOT</version>
       <scope>compile</scope>
     </dependency>
     <dependency>

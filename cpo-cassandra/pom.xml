@@ -26,21 +26,21 @@
   <groupId>org.synchronoss.cpo</groupId>
   <artifactId>cpo-cassandra</artifactId>
   <name>cpo-cassandra</name>
-  <version>5.0.1-SNAPSHOT</version> 
+  <version>5.0.1</version> 
   <description>CPO is a persistence layer that is thin wrapper around JDBC that consumes and
     produces POJOs. cpo-cassandra allows you to persist pojos to cassandra
   </description>
   <parent>
     <groupId>org.synchronoss.cpo</groupId>
     <artifactId>cpo</artifactId>
-    <version>5.0.1-SNAPSHOT</version>
+    <version>5.0.1</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
   <dependencies>
     <dependency>
       <groupId>org.synchronoss.cpo</groupId>
       <artifactId>cpo-core</artifactId>
-      <version>5.0.1-SNAPSHOT</version>
+      <version>5.0.1</version>
       <scope>compile</scope>
     </dependency>
     <dependency>

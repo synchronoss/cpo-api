@@ -146,10 +146,9 @@ public class ConvertSQLToXML extends AbstractMojo {
       // save to file
       cpoMetaDataDocument.save(new File(TARGET, CPO_META_DATA_XML), XmlBeansHelper.getXmlOptions());
 
-    } catch (IOException ex) {
-      getLog().error("IOException caught", ex);
-    } catch (SQLException ex) {
-      getLog().error("SQLException caught", ex);
+    } catch (Exception ex) {
+      getLog().error("Exception caught", ex);
+      throw new MojoExecutionException(ex.getMessage(), ex);
     } finally {
       if (conn != null) {
         try {
@@ -161,7 +160,7 @@ public class ConvertSQLToXML extends AbstractMojo {
     }
 	}
 
-  private List<CpoClass> getClasses(Connection conn) {
+  private List<CpoClass> getClasses(Connection conn) throws SQLException {
     List<CpoClass> classes = new ArrayList<CpoClass>();
 
     StringBuilder sql = new StringBuilder();
@@ -175,7 +174,6 @@ public class ConvertSQLToXML extends AbstractMojo {
     try {
       ps = conn.prepareStatement(sql.toString());
       rs = ps.executeQuery();
-
       while (rs.next()) {
         String className = rs.getString(1);
 
@@ -186,8 +184,6 @@ public class ConvertSQLToXML extends AbstractMojo {
           classes.add(cpoClass);
         }
       }
-    } catch (SQLException ex) {
-      getLog().error("SQLException caught", ex);
     } finally {
       if (rs != null) {
         try {
@@ -196,7 +192,6 @@ public class ConvertSQLToXML extends AbstractMojo {
           // ignore
         }
       }
-
       if (ps != null) {
         try {
           ps.close();
@@ -208,7 +203,7 @@ public class ConvertSQLToXML extends AbstractMojo {
     return classes;
   }
 
-  private List<CpoAttribute> getAttributes(CpoClass cpoClass, Connection conn) {
+  private List<CpoAttribute> getAttributes(CpoClass cpoClass, Connection conn) throws Exception {
     List<CpoAttribute> attributes = new ArrayList<CpoAttribute>();
 
     StringBuilder sql = new StringBuilder();
@@ -252,6 +247,7 @@ public class ConvertSQLToXML extends AbstractMojo {
     } catch (Exception ex) {
       String msg = "loadAttributeMap() failed:'" + sql + "' classname:" + cpoClass.getName();
       getLog().error(msg, ex);
+      throw ex;
     } finally {
       if (rs != null) {
         try {

@@ -32,8 +32,10 @@ import java.util.StringTokenizer;
 /**
  * Plugin goal that will generate the cpo classes based on the xml configuration file
  *
+ * @requiresDependencyResolution
  * @goal generatejavasource
  * @phase generate-sources
+ * @configurator include-project-dependencies
  */
 public class GenerateJavaSources extends AbstractMojo {
 

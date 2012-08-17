@@ -72,6 +72,11 @@ public class GenerateJavaSources extends AbstractMojo {
   private String scope;
 
   /**
+   * @parameter expression="${filter}" default-value=".*"
+   */
+  private String filter;
+
+  /**
    * A reference to the Maven Project metadata.
    *
    * @parameter expression="${project}"
@@ -113,34 +118,39 @@ public class GenerateJavaSources extends AbstractMojo {
       CpoMetaDescriptor metaDescriptor = CpoMetaDescriptor.getInstance(META_DESCRIPTOR_NAME, cpoConfig);
 
       for (CpoClass cpoClass : metaDescriptor.getCpoClasses()) {
+
         String className = cpoClass.getName();
-        File classDir = srcDir;
-        if (className.lastIndexOf(".") != -1) {
-          String packageName = className.substring(0, className.lastIndexOf("."));
-          StringTokenizer tok = new StringTokenizer(packageName, ".");
-          while (tok.hasMoreTokens()) {
-            String dirName = tok.nextToken();
-            classDir = new File(classDir, dirName);
+
+        // check the filter
+        if (filter != null && className.matches(filter)) {
+          File classDir = srcDir;
+          if (className.lastIndexOf(".") != -1) {
+            String packageName = className.substring(0, className.lastIndexOf("."));
+            StringTokenizer tok = new StringTokenizer(packageName, ".");
+            while (tok.hasMoreTokens()) {
+              String dirName = tok.nextToken();
+              classDir = new File(classDir, dirName);
+            }
+            className = className.substring(className.lastIndexOf(".") + 1);
           }
-          className = className.substring(className.lastIndexOf(".") + 1);
-        }
 
-        if (!classDir.exists()) {
-          if (!classDir.mkdirs()) {
-            throw new MojoExecutionException("Unable to create class directories: " + classDir.getAbsolutePath());
+          if (!classDir.exists()) {
+            if (!classDir.mkdirs()) {
+              throw new MojoExecutionException("Unable to create class directories: " + classDir.getAbsolutePath());
+            }
           }
+          File javaFile = new File(classDir, className + JAVA_EXT);
+
+          getLog().info("cpo-plugin generated " + javaFile.getAbsolutePath());
+
+          CpoClassSourceGenerator classSourceGenerator = new CpoClassSourceGenerator(metaDescriptor);
+          cpoClass.acceptMetaDFVisitor(classSourceGenerator);
+
+          FileWriter cw = new FileWriter(javaFile);
+          cw.write(classSourceGenerator.getSourceCode());
+          cw.flush();
+          cw.close();
         }
-        File javaFile = new File(classDir, className + JAVA_EXT);
-
-        getLog().info("cpo-plugin generated " + javaFile.getAbsolutePath());
-
-        CpoClassSourceGenerator classSourceGenerator = new CpoClassSourceGenerator(metaDescriptor);
-        cpoClass.acceptMetaDFVisitor(classSourceGenerator);
-
-        FileWriter cw = new FileWriter(javaFile);
-        cw.write(classSourceGenerator.getSourceCode());
-        cw.flush();
-        cw.close();
       }
     } catch (Exception ex) {
       throw new MojoExecutionException("Exception caught", ex);

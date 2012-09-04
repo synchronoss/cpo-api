@@ -45,8 +45,7 @@ public class ConvertSQLToXML extends AbstractMojo {
   private String dbUrl;
 
   /**
-   * @parameter expression="${dbTablePrefix}"
-   * @required
+   * @parameter expression="${dbTablePrefix}" default-value=" "
    */
   private String dbTablePrefix;
 

@@ -328,10 +328,15 @@ public class ConvertSQLToXML extends AbstractMojo {
         // if the function changed, make a new one
         if (function == null || !function.getExpression().equals(expression)) {
 
-          // ignore if the sql or name is null/empty
-          if (functionName == null || functionName.isEmpty() || expression == null || expression.isEmpty()) {
+          if (expression == null || expression.isEmpty()) {
+            // ignore if the sql is null/empty
             getLog().warn("Query Group[" + groupName + "] contained no sql, so ignoring it");
           } else {
+            if (functionName == null || functionName.isEmpty()) {
+              // the name is null/empty
+              getLog().warn("Function Name [" + functionName + "] was null, so using group name [" + groupName + "]");
+              functionName = groupName;
+            }
             function = new CpoFunction();
             function.setName(functionName);
             function.setExpression(expression);
@@ -340,7 +345,7 @@ public class ConvertSQLToXML extends AbstractMojo {
           }
         }
 
-        if (attribute != null) {
+        if (attribute != null && function != null) {
           JdbcCpoArgument argument = new JdbcCpoArgument();
           argument.setAttributeName(attribute);
           argument.setScope(paramType);

@@ -32,6 +32,7 @@ import org.synchronoss.cpo.meta.domain.*;
 import java.io.*;
 import java.sql.*;
 import java.util.*;
+import org.synchronoss.cpo.helper.CpoClassLoader;
 
 /**
  * @goal convertsqltoxml
@@ -93,7 +94,7 @@ public class ConvertSQLToXML extends AbstractMojo {
     }
     
     try {
-      Class<?> driverClass = Class.forName(dbDriver);
+      Class<?> driverClass = CpoClassLoader.forName(dbDriver);
     } catch (Exception e) {
       throw new MojoExecutionException("Couldn't location driver class");
     }

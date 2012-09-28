@@ -58,7 +58,7 @@ public final class CpoAdapterFactory {
     if (adapterMap == null)
       adapterMap = new HashMap<String, CpoAdapter>();
 
-    InputStream is = CpoAdapterFactory.class.getResourceAsStream(configFile);
+    InputStream is = CpoClassLoader.getResourceAsStream(configFile);
     if (is == null) {
       logger.info("Resource Not Found: "+configFile);
       try {
@@ -107,7 +107,7 @@ public final class CpoAdapterFactory {
     } catch (IOException ioe) {
       logger.error("Error reading cpoConfig.xml: ", ioe);
     } catch (XmlException xe) {
-      logger.error("Error processing cpoConfig.xml: ", xe);
+      logger.error("Error processing cpoConfig.xml: Invalid XML");
     } catch (CpoException ce) {
       logger.error("Error processing cpoConfig.xml: ", ce);
     }
@@ -119,7 +119,7 @@ public final class CpoAdapterFactory {
 
     // make the CpoAdapter
     try {
-      CpoConfigProcessor configProcessor = (CpoConfigProcessor) Class.forName(dataSourceConfig.getCpoConfigProcessor()).newInstance();
+      CpoConfigProcessor configProcessor = (CpoConfigProcessor) CpoClassLoader.forName(dataSourceConfig.getCpoConfigProcessor()).newInstance();
       cpoAdapter = configProcessor.processCpoConfig(dataSourceConfig);
     } catch (ClassNotFoundException cnfe) {
       String msg = "CpoConfigProcessor not found: " + dataSourceConfig.getCpoConfigProcessor();

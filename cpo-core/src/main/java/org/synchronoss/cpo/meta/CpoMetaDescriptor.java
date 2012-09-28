@@ -126,7 +126,7 @@ public class CpoMetaDescriptor extends CpoMetaDescriptorCache implements CpoMeta
     String metaDescriptorClassName = null;
 
     for (String metaXml : metaXmls) {
-      InputStream is = AbstractCpoMetaAdapter.class.getResourceAsStream(metaXml);
+      InputStream is = CpoClassLoader.getResourceAsStream(metaXml);
       if (is == null) {
         logger.info("Resource Not Found: "+metaXml);
         try {
@@ -153,7 +153,7 @@ public class CpoMetaDescriptor extends CpoMetaDescriptorCache implements CpoMeta
           logger.debug("Getting descriptor name");
           metaDescriptorClassName = metaDataDoc.getCpoMetaData().getMetaDescriptor();
           logger.debug("Getting the Class");
-          Class<?> clazz = Class.forName(metaDescriptorClassName);
+          Class<?> clazz = CpoClassLoader.forName(metaDescriptorClassName);
           logger.debug("Getting the Constructor");
           if (clazz==null)
             logger.debug("clazz==null");

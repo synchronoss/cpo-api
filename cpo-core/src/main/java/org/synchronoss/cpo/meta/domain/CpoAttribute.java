@@ -29,6 +29,7 @@ import org.synchronoss.cpo.transform.CpoTransform;
 
 import java.lang.reflect.*;
 import java.util.*;
+import org.synchronoss.cpo.helper.CpoClassLoader;
 
 public class CpoAttribute extends CpoAttributeBean {
 
@@ -244,7 +245,7 @@ public class CpoAttribute extends CpoAttributeBean {
 
     if (className != null && className.length() > 0) {
       try {
-        transformClass = Class.forName(className);
+        transformClass = CpoClassLoader.forName(className);
       } catch (Exception e) {
         String msg = ExceptionHelper.getLocalizedMessage(e);
 

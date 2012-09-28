@@ -23,11 +23,11 @@ package org.synchronoss.cpo.jdbc;
 import junit.framework.TestCase;
 import org.apache.xmlbeans.XmlException;
 import org.slf4j.*;
-import org.synchronoss.cpo.CpoAdapterFactory;
 import org.synchronoss.cpo.core.cpoCoreConfig.CpoConfigDocument;
 import org.synchronoss.cpo.helper.XmlBeansHelper;
 
 import java.io.*;
+import org.synchronoss.cpo.helper.CpoClassLoader;
 
 /**
  *
@@ -44,7 +44,7 @@ public class XmlValidationTest extends TestCase {
   }
   
   public void testBadXml(){
-    InputStream is = CpoAdapterFactory.class.getResourceAsStream(BAD_CPO_CONFIG_XML);
+    InputStream is = CpoClassLoader.getResourceAsStream(BAD_CPO_CONFIG_XML);
 
     try {
       CpoConfigDocument configDoc = CpoConfigDocument.Factory.parse(is);
@@ -62,7 +62,7 @@ public class XmlValidationTest extends TestCase {
   }
   
   public void testGoodXml(){
-    InputStream is = CpoAdapterFactory.class.getResourceAsStream(CPO_CONFIG_XML);
+    InputStream is = CpoClassLoader.getResourceAsStream(CPO_CONFIG_XML);
 
     try {
       CpoConfigDocument configDoc = CpoConfigDocument.Factory.parse(is);

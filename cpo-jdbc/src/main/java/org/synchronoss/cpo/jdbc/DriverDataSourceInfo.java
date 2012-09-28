@@ -25,6 +25,7 @@ import org.synchronoss.cpo.CpoException;
 import javax.sql.DataSource;
 import java.sql.*;
 import java.util.Properties;
+import org.synchronoss.cpo.helper.CpoClassLoader;
 
 /**
  * Collects the info required to instantiate a DataSource from a JDBC Driver
@@ -129,7 +130,7 @@ public class DriverDataSourceInfo extends AbstractDataSource {
 
   private void loadDriver(String driver) throws CpoException {
     try {
-      Class.forName(driver);
+      CpoClassLoader.forName(driver);
     } catch (ClassNotFoundException cnfe) {
       throw new CpoException("Could Not Load Driver" + driver);
     }

@@ -233,7 +233,7 @@ public class BlobTrxTest extends TestCase {
   /*
    * public void testBlobLeakage(){ Connection c1_=null; JdbcCpoAdapter jca = null;
    *
-   * if (hasBlobSupport){ // Load database driver if not already loaded try{ Class.forName(dbDriver_);
+   * if (hasBlobSupport){ // Load database driver if not already loaded try{ CpoClassLoader.forName(dbDriver_);
    *
    * c1_ = DriverManager.getConnection(dbUrl_, dbUser_, dbPassword_); c1_.setAutoCommit(false);
    *

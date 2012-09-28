@@ -31,6 +31,7 @@ import javax.sql.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.CpoException;
+import org.synchronoss.cpo.helper.CpoClassLoader;
 import org.synchronoss.cpo.helper.ExceptionHelper;
 
 /**
@@ -96,7 +97,7 @@ public class ClassDataSourceInfo extends AbstractDataSource implements Connectio
   protected DataSource createDataSource() throws CpoException {
     DataSource dataSource = null;
     try {
-      Class dsClass = Class.forName(className);
+      Class dsClass = CpoClassLoader.forName(className);
       CommonDataSource ds = (CommonDataSource) dsClass.newInstance();
 
       if (ds instanceof ConnectionPoolDataSource) {

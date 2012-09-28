@@ -27,6 +27,7 @@ import org.synchronoss.cpo.meta.CpoMetaDescriptor;
 import org.synchronoss.cpo.meta.bean.CpoClassBean;
 
 import java.util.*;
+import org.synchronoss.cpo.helper.CpoClassLoader;
 
 public class CpoClass extends CpoClassBean implements Comparable<CpoClass>, MetaDFVisitable {
 
@@ -151,7 +152,7 @@ public class CpoClass extends CpoClassBean implements Comparable<CpoClass>, Meta
 
   public void loadRunTimeInfo(CpoMetaDescriptor metaDescriptor) throws CpoException {
     try {
-      metaClass = Class.forName(getName());
+      metaClass = CpoClassLoader.forName(getName());
     } catch (ClassNotFoundException cnfe) {
       throw new CpoException("Class not found: " + getName() + ": " + ExceptionHelper.getLocalizedMessage(cnfe));
     }

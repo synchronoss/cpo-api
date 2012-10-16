@@ -2663,7 +2663,8 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
       for (CpoFunction cpoFunction : cpoFunctions) {
         jpsf = new JdbcPreparedStatementFactory(con, this, criteriaClass, cpoFunction, criteria, wheres, orderBy, nativeExpressions);
         ps = jpsf.getPreparedStatement();
-        ps.setFetchSize(resultSet.getFetchSize());
+        if (resultSet.getFetchSize()!=-1)
+          ps.setFetchSize(resultSet.getFetchSize());
 
         localLogger.debug("Retrieving Records");
 

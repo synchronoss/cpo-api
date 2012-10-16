@@ -67,6 +67,6 @@ public class CpoArrayResultSet<E> extends ArrayList<E> implements CpoResultSet<E
 
   @Override
   public int getFetchSize() {
-    return 10;
+    return -1;
   }
 }

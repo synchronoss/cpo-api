@@ -3357,7 +3357,9 @@ public class JdbcCpoAdapter implements CpoAdapter {
 
         jpsf = new JdbcPreparedStatementFactory(con, this, jmcCriteria, jq, criteria, wheres, orderBy, nativeQueries);
         ps = jpsf.getPreparedStatement();
-        ps.setFetchSize(resultSet.getFetchSize());
+        if (resultSet.getFetchSize()!=-1) {
+          ps.setFetchSize(resultSet.getFetchSize());
+        }
 
         localLogger.debug("Retrieving Records");
 

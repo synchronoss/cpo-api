@@ -4,7 +4,7 @@
   <groupId>org.synchronoss</groupId>
   <artifactId>cpo</artifactId>
   <name>cpo</name>
-  <version>4.0.13</version> 
+  <version>4.0.14-SNAPSHOT</version> 
   <description>CPO is a persistence layer that is thin wrapper around JDBC that consumes and
     produces POJOs
   </description>
@@ -107,9 +107,9 @@
     </site>
   </distributionManagement>
   <scm>
-    <connection>scm:svn:https://cpo.svn.sourceforge.net/svnroot/cpo/api/tags/cpo-4.0.13</connection>
-    <developerConnection>scm:svn:https://cpo.svn.sourceforge.net/svnroot/cpo/api/tags/cpo-4.0.13</developerConnection>
-    <url>https://cpo.svn.sourceforge.net/svnroot/cpo/api/tags/cpo-4.0.13</url>
+    <connection>scm:svn:https://cpo.svn.sourceforge.net/svnroot/cpo/api/branches/api-4.x-branch</connection>
+    <developerConnection>scm:svn:https://cpo.svn.sourceforge.net/svnroot/cpo/api/branches/api-4.x-branch</developerConnection>
+    <url>https://cpo.svn.sourceforge.net/svnroot/cpo/api/branches/api-4.x-branch</url>
   </scm>
   <build>
     <testResources>
@@ -330,7 +330,13 @@
       <version>${mysqlVersion}</version>
       <scope>test</scope>
     </dependency>
-    
+    <dependency>
+      <groupId>org.apache.jmeter</groupId>
+      <artifactId>ApacheJMeter_java</artifactId>
+      <version>2.6</version>
+      <scope>test</scope>
+    </dependency>
+
     <!-- log4j implementation for test logging -->
     <dependency>
       <groupId>org.slf4j</groupId>

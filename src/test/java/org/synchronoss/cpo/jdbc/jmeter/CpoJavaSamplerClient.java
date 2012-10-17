@@ -54,7 +54,6 @@ public class CpoJavaSamplerClient extends AbstractJavaSamplerClient {
   private static final String TABLE_PREFIX = "table_prefix";
   private static final String CONFIG_PROCESSOR = "org.synchronoss.cpo.jdbc.config.JdbcCpoConfigProcessor";
 
-  @Override
   public void setupTest(JavaSamplerContext javaSamplerContext) {
     super.setupTest(javaSamplerContext);
 
@@ -78,13 +77,11 @@ public class CpoJavaSamplerClient extends AbstractJavaSamplerClient {
     }
   }
 
-  @Override
   public void teardownTest(JavaSamplerContext javaSamplerContext) {
     super.teardownTest(javaSamplerContext);
     cpoAdapter = null;
   }
 
-  @Override
   public SampleResult runTest(JavaSamplerContext javaSamplerContext) {
     SampleResult result = new SampleResult();
     result.sampleStart();
@@ -122,7 +119,6 @@ public class CpoJavaSamplerClient extends AbstractJavaSamplerClient {
     return result;
   }
 
-  @Override
   public Arguments getDefaultParameters() {
     Arguments args = new Arguments();
 

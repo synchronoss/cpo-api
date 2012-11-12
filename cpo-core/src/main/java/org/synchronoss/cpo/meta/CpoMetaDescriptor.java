@@ -111,8 +111,11 @@ public class CpoMetaDescriptor extends CpoMetaDescriptorCache implements CpoMeta
     return CpoMetaDescriptorCache.getCpoMetaDescriptorNames();
   }
 
-  public void refreshDescriptorMeta(String name, List<String> metaXmls) throws CpoException {
-    createUpdateInstance(name,metaXmls, caseSensitive);
+  public static void refreshDescriptorMeta(String name, List<String> metaXmls) throws CpoException {
+    CpoMetaDescriptor metaDescriptor = findCpoMetaDescriptor(name);
+    if (metaDescriptor!=null) {
+      metaDescriptor.refreshDescriptorMeta(metaXmls);
+    }
   }
     
   public void refreshDescriptorMeta(List<String> metaXmls) throws CpoException {

@@ -260,6 +260,7 @@
         <cpo.db.jndi>java:/comp/env/jdbc/cpodatasource</cpo.db.jndi>
         <cpo.db.class>org.apache.cassandra.cql.jdbc.CassandraDataSource</cpo.db.class>
         <cpo.valueMeta.xml>/cassandra/cassandraValueMetaData.xml</cpo.valueMeta.xml>
+        <cpo.valueCaseMeta.xml>/cassandra/cassandraValueCaseMetaData.xml</cpo.valueCaseMeta.xml>
         <cpo.lobMeta.xml>/cassandra/cassandraLobMetaData.xml</cpo.lobMeta.xml>
       </properties>
     </profile>
@@ -291,6 +292,7 @@
         <cpo.db.jndi>java:/comp/env/jdbc/cpodatasource</cpo.db.jndi>        
         <cpo.db.class>com.mysql.jdbc.jdbc2.optional.MysqlConnectionPoolDataSource</cpo.db.class>        
         <cpo.valueMeta.xml>/mysql/mysqlValueMetaData.xml</cpo.valueMeta.xml>
+        <cpo.valueCaseMeta.xml>/mysql/mysqlValueCaseMetaData.xml</cpo.valueCaseMeta.xml>
         <cpo.lobMeta.xml>/mysql/mysqlLobMetaData.xml</cpo.lobMeta.xml>
       </properties>
     </profile>
@@ -321,6 +323,7 @@
         <cpo.db.jndi>cpodatasource</cpo.db.jndi>        
         <cpo.db.class>oracle.jdbc.pool.OracleConnectionPoolDataSource</cpo.db.class>        
         <cpo.valueMeta.xml>/oracle/oracleValueMetaData.xml</cpo.valueMeta.xml>
+        <cpo.valueCaseMeta.xml>/oracle/oracleValueCaseMetaData.xml</cpo.valueCaseMeta.xml>
         <cpo.lobMeta.xml>/oracle/oracleLobMetaData.xml</cpo.lobMeta.xml>
       </properties>
     </profile>
@@ -351,6 +354,7 @@
         <cpo.db.jndi>cpodatasource</cpo.db.jndi>        
         <cpo.db.class>oracle.jdbc.pool.OracleConnectionPoolDataSource</cpo.db.class>        
         <cpo.valueMeta.xml>/oracle/oracleValueMetaData.xml</cpo.valueMeta.xml>
+        <cpo.valueCaseMeta.xml>/oracle/oracleValueCaseMetaData.xml</cpo.valueCaseMeta.xml>
         <cpo.lobMeta.xml>/oracle/oracleLobMetaData.xml</cpo.lobMeta.xml>
       </properties>
     </profile>
@@ -382,6 +386,7 @@
         <cpo.db.jndi>java:/comp/env/jdbc/cpodatasource</cpo.db.jndi>        
         <cpo.db.class>org.hsqldb.jdbc.pool.JDBCPooledDataSource</cpo.db.class>
         <cpo.valueMeta.xml>/hsqldb/hsqldbValueMetaData.xml</cpo.valueMeta.xml>
+        <cpo.valueCaseMeta.xml>/hsqldb/hsqldbValueCaseMetaData.xml</cpo.valueCaseMeta.xml>
         <cpo.lobMeta.xml>/hsqldb/hsqldbLobMetaData.xml</cpo.lobMeta.xml>
       </properties>
     </profile>
@@ -419,6 +424,7 @@
         <cpo.db.jndi>java:/comp/env/jdbc/cpodatasource</cpo.db.jndi>        
         <cpo.db.class>org.hsqldb.jdbc.pool.JDBCPooledDataSource</cpo.db.class>
         <cpo.valueMeta.xml>/hsqldb/hsqldbValueMetaData.xml</cpo.valueMeta.xml>
+        <cpo.valueCaseMeta.xml>/hsqldb/hsqldbValueCaseMetaData.xml</cpo.valueCaseMeta.xml>
         <cpo.lobMeta.xml>/hsqldb/hsqldbLobMetaData.xml</cpo.lobMeta.xml>
       </properties>
     </profile>
@@ -448,7 +454,7 @@
         <cpo.db.select4update>true</cpo.db.select4update>
         <cpo.db.millisupport>true</cpo.db.millisupport>
         <cpo.db.jndi>java:/comp/env/jdbc/cpodatasource</cpo.db.jndi>        
-        <cpo.valueMeta.xml>/postgres/postgresValueMetaData.xml</cpo.valueMeta.xml>
+        <cpo.valueCaseMeta.xml>/postgres/postgresValueCaseMetaData.xml</cpo.valueCaseMeta.xml>
         <cpo.lobMeta.xml>/postgres/postgresLobMetaData.xml</cpo.lobMeta.xml>
       </properties>
     </profile>

@@ -88,7 +88,7 @@ public class ConvertSQLToXML extends AbstractMojo {
     getLog().info("Class: " + dbDriver);
     
     try {
-      metaDescriptor = new JdbcCpoMetaDescriptor("Converter");
+      metaDescriptor = new JdbcCpoMetaDescriptor("Converter", true);
     } catch (Exception e) {
       throw new MojoExecutionException("Couldn't load the MetaDescriptor");
     }
@@ -179,7 +179,7 @@ public class ConvertSQLToXML extends AbstractMojo {
 
         // check the filter, if there is one
         if (filter != null && className.matches(filter)) {
-          CpoClass cpoClass = new CpoClass();
+          CpoClass cpoClass = new CpoClassCaseSensitive();
           cpoClass.setName(className);
           classes.add(cpoClass);
         }

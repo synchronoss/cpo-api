@@ -37,8 +37,8 @@ public class JdbcCpoMetaDescriptor extends CpoMetaDescriptor {
   private boolean supportsSelect4Update = false;
   
 
-  public JdbcCpoMetaDescriptor(String name) throws CpoException {
-    super(name);
+  public JdbcCpoMetaDescriptor(String name, boolean caseSensitive) throws CpoException {
+    super(name, caseSensitive);
   }
   
   @Override

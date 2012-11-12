@@ -42,6 +42,7 @@ public class CpoMetaDescriptor extends CpoMetaDescriptorCache implements CpoMeta
 
   private static final Logger logger = LoggerFactory.getLogger(CpoMetaDescriptor.class);
   private String name = null;
+  private boolean caseSensitive = true;
   private AbstractCpoMetaAdapter metaAdapter = null;
 
   // used by cpo util
@@ -49,8 +50,9 @@ public class CpoMetaDescriptor extends CpoMetaDescriptorCache implements CpoMeta
   
   private CpoMetaDescriptor(){}
   
-  protected CpoMetaDescriptor(String name) throws CpoException {
+  protected CpoMetaDescriptor(String name, boolean caseSensitive) throws CpoException {
     this.name = name;
+    this.caseSensitive = caseSensitive;
     
     // Lets create the metaAdapter
     try {
@@ -88,18 +90,18 @@ public class CpoMetaDescriptor extends CpoMetaDescriptorCache implements CpoMeta
     clearCpoMetaDescriptorCache();
   }
 
- public static CpoMetaDescriptor getInstance(String name, String metaXml) throws CpoException {
+ public static CpoMetaDescriptor getInstance(String name, String metaXml, boolean caseSensitive) throws CpoException {
     List<String> metaXmls = new ArrayList<String>();
     metaXmls.add(metaXml);
-    return createUpdateInstance(name,metaXmls);
+    return createUpdateInstance(name,metaXmls, caseSensitive);
   }
     
-  public static CpoMetaDescriptor getInstance(String name, List<String> metaXmls) throws CpoException {
-    return createUpdateInstance(name,metaXmls);
+  public static CpoMetaDescriptor getInstance(String name, List<String> metaXmls, boolean caseSensitive) throws CpoException {
+    return createUpdateInstance(name,metaXmls, caseSensitive);
   }
     
-  public static CpoMetaDescriptor getInstance(String name, String[] metaXmls) throws CpoException {
-    return createUpdateInstance(name,metaXmls);
+  public static CpoMetaDescriptor getInstance(String name, String[] metaXmls, boolean caseSensitive) throws CpoException {
+    return createUpdateInstance(name,metaXmls, caseSensitive);
   }
 
   /**
@@ -109,19 +111,19 @@ public class CpoMetaDescriptor extends CpoMetaDescriptorCache implements CpoMeta
     return CpoMetaDescriptorCache.getCpoMetaDescriptorNames();
   }
 
-  public static void refreshDescriptorMeta(String name, List<String> metaXmls) throws CpoException {
-    createUpdateInstance(name,metaXmls);
+  public static void refreshDescriptorMeta(String name, List<String> metaXmls, boolean caseSensitive) throws CpoException {
+    createUpdateInstance(name,metaXmls, caseSensitive);
   }
     
-  public void refreshDescriptorMeta(List<String> metaXmls) throws CpoException {
-    createUpdateInstance(this.getName(), metaXmls);
+  public void refreshDescriptorMeta(List<String> metaXmls, boolean caseSensitive) throws CpoException {
+    createUpdateInstance(this.getName(), metaXmls, caseSensitive);
   }
     
-  protected static CpoMetaDescriptor createUpdateInstance(String name, List<String> metaXmls) throws CpoException {
-    return createUpdateInstance(name, metaXmls.toArray(new String[metaXmls.size()]));
+  protected static CpoMetaDescriptor createUpdateInstance(String name, List<String> metaXmls, boolean caseSensitive) throws CpoException {
+    return createUpdateInstance(name, metaXmls.toArray(new String[metaXmls.size()]), caseSensitive);
   }
     
-  protected static CpoMetaDescriptor createUpdateInstance(String name, String[] metaXmls) throws CpoException {
+  protected static CpoMetaDescriptor createUpdateInstance(String name, String[] metaXmls, boolean caseSensitive) throws CpoException {
     CpoMetaDescriptor metaDescriptor = findCpoMetaDescriptor(name);
     String metaDescriptorClassName = null;
 
@@ -157,16 +159,16 @@ public class CpoMetaDescriptor extends CpoMetaDescriptorCache implements CpoMeta
           logger.debug("Getting the Constructor");
           if (clazz==null)
             logger.debug("clazz==null");
-          Constructor<?> cons = clazz.getConstructor(String.class);
+          Constructor<?> cons = clazz.getConstructor(String.class, boolean.class);
           logger.debug("Creating the instance");
-          metaDescriptor = (CpoMetaDescriptor) cons.newInstance(name);
+          metaDescriptor = (CpoMetaDescriptor) cons.newInstance(name, caseSensitive);
           addCpoMetaDescriptor(metaDescriptor);
         } else if (!metaDescriptor.getClass().getName().equals(metaDataDoc.getCpoMetaData().getMetaDescriptor())){
           throw new CpoException("Error processing multiple metaXml files. All files must have the same CpoMetaDescriptor class name.");
         }
 
         metaDescriptor.setDefaultPackageName(metaDataDoc.getCpoMetaData().getDefaultPackageName());
-        metaDescriptor.getCpoMetaAdapter().loadCpoMetaDataDocument(metaDataDoc);
+        metaDescriptor.getCpoMetaAdapter().loadCpoMetaDataDocument(metaDataDoc, caseSensitive);
 
       } catch (IOException ioe) {
         throw new CpoException("Error processing metaData from InputStream: "+metaXml + ": " + ExceptionHelper.getLocalizedMessage(ioe));
@@ -259,7 +261,7 @@ public class CpoMetaDescriptor extends CpoMetaDescriptorCache implements CpoMeta
   }
 
   public CpoClass createCpoClass() throws CpoException {
-    return getCpoMetaAdapter().createCpoClass();
+    return getCpoMetaAdapter().createCpoClass(caseSensitive);
   }
 
   public CpoAttribute createCpoAttribute() throws CpoException {
@@ -334,5 +336,9 @@ public class CpoMetaDescriptor extends CpoMetaDescriptorCache implements CpoMeta
     } catch (IOException ex) {
       throw new CpoException(ex.getMessage(), ex);
     }
+  }
+
+  public boolean isCaseSensitive() {
+    return caseSensitive;
   }
 }

@@ -29,7 +29,7 @@ import org.synchronoss.cpo.meta.bean.CpoClassBean;
 import java.util.*;
 import org.synchronoss.cpo.helper.CpoClassLoader;
 
-public class CpoClass extends CpoClassBean implements Comparable<CpoClass>, MetaDFVisitable {
+public abstract class CpoClass extends CpoClassBean implements Comparable<CpoClass>, MetaDFVisitable {
 
   private static final Logger logger = LoggerFactory.getLogger(CpoClass.class);
   private Class<?> metaClass = null;
@@ -54,11 +54,21 @@ public class CpoClass extends CpoClassBean implements Comparable<CpoClass>, Meta
     return metaClass;
   }
 
+  public abstract void addDataNameToMap(String dataName, CpoAttribute cpoAttribute);
+  
+  public abstract void removeDataNameFromMap(String dataName);
+  
+  public abstract CpoAttribute getAttributeData(String dataName);
+
+  protected Map<String, CpoAttribute> getDataMap() {
+    return dataMap;
+  }
+
   public void addAttribute(CpoAttribute cpoAttribute) {
     if (cpoAttribute != null) {
       logger.debug("Adding Attribute: " + cpoAttribute.getJavaName() + ":" + cpoAttribute.getDataName());
       javaMap.put(cpoAttribute.getJavaName(), cpoAttribute);
-      dataMap.put(cpoAttribute.getDataName(), cpoAttribute);
+      addDataNameToMap(cpoAttribute.getDataName(), cpoAttribute);
     }
   }
 
@@ -66,7 +76,7 @@ public class CpoClass extends CpoClassBean implements Comparable<CpoClass>, Meta
     if (cpoAttribute != null) {
       logger.debug("Removing Attribute: " + cpoAttribute.getJavaName() + ":" + cpoAttribute.getDataName());
       javaMap.remove(cpoAttribute.getJavaName());
-      dataMap.remove(cpoAttribute.getDataName());
+      removeDataNameFromMap(cpoAttribute.getDataName());
     }
   }
 
@@ -169,13 +179,6 @@ public class CpoClass extends CpoClassBean implements Comparable<CpoClass>, Meta
     return javaMap.get(javaName);
   }
 
-  public CpoAttribute getAttributeData(String dataName) {
-    if (dataName == null) {
-      return null;
-    }
-    return dataMap.get(dataName);
-  }
-
   @Override
   public String toString() {
     return this.getName();
@@ -183,5 +186,11 @@ public class CpoClass extends CpoClassBean implements Comparable<CpoClass>, Meta
 
   public String toStringFull() {
     return super.toString();
+  }
+  
+  public void emptyMaps() {
+    javaMap.clear();
+    dataMap.clear();
+    functionGroups.clear();
   }
 }

@@ -38,5 +38,7 @@ public interface JdbcStatics {
   public static final String ADAPTER_CONTEXT_JDBC_URLONLY = "jdbcUrlOnly";
   public static final String ADAPTER_CONTEXT_CLASS_URLONLY = "classUrlOnly";
   public static final String ADAPTER_CONTEXT_DRIVER_URLONLY = "driverUrlOnly";
+  public static final String ADAPTER_CONTEXT_CASESENSITIVE = "caseSensitive";
+  public static final String ADAPTER_CONTEXT_CASEINSENSITIVE = "caseInsensitive";
   public static int BLOB_SIZE = 64999;
 }

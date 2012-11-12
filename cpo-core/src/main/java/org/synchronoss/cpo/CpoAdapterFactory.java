@@ -22,13 +22,13 @@ package org.synchronoss.cpo;
 
 import org.apache.xmlbeans.XmlException;
 import org.slf4j.*;
-import org.synchronoss.cpo.config.CpoConfigProcessor;
 import org.synchronoss.cpo.core.cpoCoreConfig.*;
 import org.synchronoss.cpo.helper.*;
 import org.synchronoss.cpo.meta.CpoMetaDescriptor;
 
 import java.io.*;
 import java.util.*;
+import org.synchronoss.cpo.config.CpoConfigProcessor;
 
 /**
  *
@@ -40,6 +40,7 @@ public final class CpoAdapterFactory {
   private static final String CPO_CONFIG_XML = "/cpoConfig.xml";
   private static Map<String, CpoAdapter> adapterMap = null;
   private static String defaultContext = null;
+  private static String loadedFile = null;
 
   public static CpoAdapter getCpoAdapter() throws CpoException {
     return getCpoAdapter(defaultContext);
@@ -90,10 +91,15 @@ public final class CpoAdapterFactory {
           // make the first listed config the default.
           defaultContext = cpoConfig.getDataConfigArray(0).getName();
         }
-
+        
         for (CtMetaDescriptor metaDescriptor : cpoConfig.getMetaConfigArray()) {
+          boolean caseSensitive = true;
+          if (metaDescriptor.isSetCaseSensitive()) {
+            caseSensitive = metaDescriptor.getCaseSensitive();
+          }
+                 
           // this will create and cache, so we don't need the return
-          CpoMetaDescriptor.getInstance(metaDescriptor.getName(), metaDescriptor.getMetaXmlArray());
+          CpoMetaDescriptor.getInstance(metaDescriptor.getName(), metaDescriptor.getMetaXmlArray(), caseSensitive);
         }
 
         // now lets loop through all the adapters and get them cached.
@@ -105,11 +111,11 @@ public final class CpoAdapterFactory {
         }
       }
     } catch (IOException ioe) {
-      logger.error("Error reading cpoConfig.xml: ", ioe);
+      logger.error("Error reading "+configFile+": ", ioe);
     } catch (XmlException xe) {
-      logger.error("Error processing cpoConfig.xml: Invalid XML");
+      logger.error("Error processing "+configFile+": Invalid XML");
     } catch (CpoException ce) {
-      logger.error("Error processing cpoConfig.xml: ", ce);
+      logger.error("Error processing "+configFile+": ", ce);
     }
 
   }

@@ -115,7 +115,7 @@ public class GenerateJavaSources extends AbstractMojo {
     }
 
     try {
-      CpoMetaDescriptor metaDescriptor = CpoMetaDescriptor.getInstance(META_DESCRIPTOR_NAME, cpoConfig);
+      CpoMetaDescriptor metaDescriptor = CpoMetaDescriptor.getInstance(META_DESCRIPTOR_NAME, cpoConfig, true);
 
       for (CpoClass cpoClass : metaDescriptor.getCpoClasses()) {
 

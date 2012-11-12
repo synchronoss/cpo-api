@@ -88,12 +88,12 @@ public abstract class AbstractCpoMetaAdapter implements CpoMetaAdapter {
     return result;
   }
 
-  protected void loadCpoMetaDataDocument(CpoMetaDataDocument metaDataDoc) throws CpoException {
+  protected void loadCpoMetaDataDocument(CpoMetaDataDocument metaDataDoc, boolean caseSensitive) throws CpoException {
     for (CtClass ctClass : metaDataDoc.getCpoMetaData().getCpoClassArray()) {
-      
-      CpoClass cpoClass = getCpoClass(ctClass.getName()); 
-      if (cpoClass == null){
-        cpoClass = createCpoClass();
+
+      CpoClass cpoClass = getCpoClass(ctClass.getName());
+      if (cpoClass == null) {
+        cpoClass = createCpoClass(caseSensitive);
         cpoClass.setName(ctClass.getName());
         cpoClass.setDescription(ctClass.getDescription());
         loadCpoClass(cpoClass, ctClass);
@@ -185,8 +185,11 @@ public abstract class AbstractCpoMetaAdapter implements CpoMetaAdapter {
     cpoArgument.setAttribute(currentClass.getAttributeJava(ctArgument.getAttributeName()));
   }
 
-  protected CpoClass createCpoClass() {
-    return new CpoClass();
+  protected CpoClass createCpoClass(boolean caseSensitive) {
+    if (caseSensitive)
+      return new CpoClassCaseSensitive();
+    else 
+      return new CpoClassCaseInsensitive();
   }
 
   protected CpoAttribute createCpoAttribute() {
@@ -221,6 +224,7 @@ public abstract class AbstractCpoMetaAdapter implements CpoMetaAdapter {
   protected void removeCpoClass(CpoClass metaClass) {
     if (metaClass != null) {
       logger.debug("Removing class: " + metaClass.getName());
+      metaClass.emptyMaps();
       classMap.remove(metaClass.getName());
     }
   }

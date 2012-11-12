@@ -57,7 +57,7 @@ public class CpoJavaSamplerClient extends AbstractJavaSamplerClient {
     super.setupTest(javaSamplerContext);
 
     try {
-      metaDescriptor = (JdbcCpoMetaDescriptor)CpoMetaDescriptor.getInstance("jmeter-" + System.currentTimeMillis(), "/oracle/oracleValueMetaData.xml");
+      metaDescriptor = (JdbcCpoMetaDescriptor)CpoMetaDescriptor.getInstance("jmeter-" + System.currentTimeMillis(), "/oracle/oracleValueMetaData.xml", true);
 
       CtJdbcConfig jdbcConfig = CtJdbcConfig.Factory.newInstance();
       jdbcConfig.setName(this.getClass().getName());

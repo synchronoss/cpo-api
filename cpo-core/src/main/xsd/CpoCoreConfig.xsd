@@ -73,6 +73,11 @@
                 <xs:documentation>This is the descriptor name that will be used to identify this meta data from within CPO. Only one meta descriptor can have this name. Last in wins.</xs:documentation>
             </xs:annotation>
         </xs:attribute>
+        <xs:attribute name="caseSensitive" type="xs:boolean" use="optional" default="true">
+            <xs:annotation>
+                <xs:documentation>This tells CPO whether to treat dataNames as caseSensitive or to ignore case. Default is caseSensitive=true</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
     </xs:complexType>
         
 </xs:schema>

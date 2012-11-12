@@ -81,7 +81,7 @@ public class ZZHotDeployTest extends TestCase {
     try {
       List<String> metaFiles = new ArrayList<String>();
       metaFiles.add("/hotDeployMetaData.xml");
-      cpoAdapter.getCpoMetaDescriptor().refreshDescriptorMeta(metaFiles, cpoAdapter.getCpoMetaDescriptor().isCaseSensitive());
+      cpoAdapter.getCpoMetaDescriptor().refreshDescriptorMeta(metaFiles);
 
       ValueObject valObj = new ValueObject();
       

@@ -5,7 +5,7 @@
   <artifactId>cpo</artifactId>
   <name>cpo</name>
   <packaging>pom</packaging>
-  <version>5.0.3.2-SNAPSHOT</version>
+  <version>5.0.3.1-SNAPSHOT</version>
   <description>CPO is a persistence layer that is thin wrapper around JDBC that consumes and produces POJOs</description>
   <url>http://cpo.sourceforge.net/</url>
   <licenses>

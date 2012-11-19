@@ -160,15 +160,19 @@ public abstract class CpoClass extends CpoClassBean implements Comparable<CpoCla
     }
   }
 
-  public void loadRunTimeInfo(CpoMetaDescriptor metaDescriptor) throws CpoException {
-    try {
-      metaClass = CpoClassLoader.forName(getName());
-    } catch (ClassNotFoundException cnfe) {
-      throw new CpoException("Class not found: " + getName() + ": " + ExceptionHelper.getLocalizedMessage(cnfe));
-    }
+  synchronized public void loadRunTimeInfo(CpoMetaDescriptor metaDescriptor) throws CpoException {
+    if (metaClass==null) {
+      try {
+        logger.debug("Loading runtimeinfo for "+getName());
+        metaClass = CpoClassLoader.forName(getName());
+      } catch (ClassNotFoundException cnfe) {
+        throw new CpoException("Class not found: " + getName() + ": " + ExceptionHelper.getLocalizedMessage(cnfe));
+      }
 
-    for (CpoAttribute attribute : javaMap.values()) {
-      attribute.loadRunTimeInfo(metaDescriptor, this);
+      for (CpoAttribute attribute : javaMap.values()) {
+        attribute.loadRunTimeInfo(metaDescriptor, this);
+      }
+      logger.debug("Loaded runtimeinfo for "+getName());
     }
   }
 

@@ -401,7 +401,7 @@
         <cpo.db.pswd />
         <cpo.db.host />
         <cpo.db.port />
-        <cpo.db.database>${project.basedir}/src/test/sql/hsqldb/db/cpo</cpo.db.database>
+        <cpo.db.database>${project.basedir}/target/hsqldb/db/cpo</cpo.db.database>
         <cpo.db.url>jdbc:hsqldb:file:${cpo.db.database}</cpo.db.url>
         <cpo.db.userurl>jdbc:hsqldb:file:${cpo.db.database};shutdown=true;user=${cpo.db.user};password=${cpo.db.pswd}</cpo.db.userurl>
         <cpo.db.driver>org.hsqldb.jdbc.JDBCDriver</cpo.db.driver>

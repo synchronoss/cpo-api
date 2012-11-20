@@ -152,9 +152,9 @@ public class CpoAttribute extends CpoAttributeBean {
     try {
       return getGetter().invoke(obj, (Object[])null);
     } catch (IllegalAccessException iae) {
-      localLogger.debug("Error Invoking Getter Method: " + ExceptionHelper.getLocalizedMessage(iae));
+      localLogger.debug("Error Invoking Getter Method: " + getGetterName() + ":" + ExceptionHelper.getLocalizedMessage(iae));
     } catch (InvocationTargetException ite) {
-      localLogger.debug("Error Invoking Getter Method: " + ExceptionHelper.getLocalizedMessage(ite));
+      localLogger.debug("Error Invoking Getter Method: " + getGetterName() + ":" + ExceptionHelper.getLocalizedMessage(ite));
     }
 
     throw new CpoException("invokeGetter: Could not find a Getter for " + obj.getClass());
@@ -215,6 +215,9 @@ public class CpoAttribute extends CpoAttributeBean {
     if (cpoClass != null) {
       try {
         setGetter(findMethods(cpoClass.getMetaClass(), getGetterName(), 0, true).get(0));
+        if (getGetter()==null){
+          failedMessage.append("loadRunTimeInfo: Could not find getter:" + getGetterName() + "(" + cpoClass.getMetaClass().getName() + ")");
+        }
       } catch (CpoException ce1) {
         failedMessage.append(ce1.getMessage());
       }
@@ -227,7 +230,7 @@ public class CpoAttribute extends CpoAttributeBean {
           }
         }
         if (getSetter()==null){
-          failedMessage.append("invokeSetter: Could not find a Setter:" + getSetterName() + "(" + actualClass.getName() + ")");
+          failedMessage.append("loadRunTimeInfo: Could not find a Setter:" + getSetterName() + "(" + actualClass.getName() + ")");
         }
       } catch (Exception ce2) {
         failedMessage.append(ce2.getMessage());

@@ -32,6 +32,7 @@ import org.synchronoss.cpo.helper.CpoClassLoader;
 public class CpoClass extends CpoClassBean implements Comparable<CpoClass>, MetaDFVisitable {
 
   private static final Logger logger = LoggerFactory.getLogger(CpoClass.class);
+  private boolean runTimeLoaded = false;
   private Class<?> metaClass = null;
   /**
    * javaMap contains a Map of CpoAttribute Objects the key is the javaName of the attribute
@@ -151,15 +152,18 @@ public class CpoClass extends CpoClassBean implements Comparable<CpoClass>, Meta
   }
 
   public void loadRunTimeInfo(CpoMetaDescriptor metaDescriptor) throws CpoException {
-    try {
-      metaClass = CpoClassLoader.forName(getName());
-    } catch (ClassNotFoundException cnfe) {
-      throw new CpoException("Class not found: " + getName() + ": " + ExceptionHelper.getLocalizedMessage(cnfe));
-    }
+      logger.debug("Loading run-time info for:"+getName());
+      try {
+        metaClass = CpoClassLoader.forName(getName());
+      } catch (ClassNotFoundException cnfe) {
+        throw new CpoException("Class not found: " + getName() + ": " + ExceptionHelper.getLocalizedMessage(cnfe));
+      }
 
-    for (CpoAttribute attribute : javaMap.values()) {
-      attribute.loadRunTimeInfo(metaDescriptor, this);
-    }
+      for (CpoAttribute attribute : javaMap.values()) {
+        attribute.loadRunTimeInfo(metaDescriptor, this);
+      }
+      logger.debug("Loaded run-time info for:"+getName());
+      runTimeLoaded=true;
   }
 
   public CpoAttribute getAttributeJava(String javaName) {
@@ -183,5 +187,9 @@ public class CpoClass extends CpoClassBean implements Comparable<CpoClass>, Meta
 
   public String toStringFull() {
     return super.toString();
+  }
+
+  public boolean isRunTimeLoaded() {
+    return runTimeLoaded;
   }
 }

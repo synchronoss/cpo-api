@@ -218,12 +218,12 @@ public class CpoMetaDescriptor extends CpoMetaDescriptorCache implements CpoMeta
   @Override
   public <T> CpoClass getMetaClass(T obj) throws CpoException {
     CpoClass cpoClass = getCpoMetaAdapter().getMetaClass(obj);
-    if (cpoClass != null && cpoClass.getMetaClass() == null) {
-      synchronized(cpoClass){
-			  if (cpoClass.getMetaClass() == null) {
-			    cpoClass.loadRunTimeInfo(this);
-			  }
-		  }
+    if (cpoClass != null && !cpoClass.isRunTimeLoaded()) {
+      synchronized(cpoClass) {
+        if (!cpoClass.isRunTimeLoaded()) {
+          cpoClass.loadRunTimeInfo(this);
+        }
+      }
 	  }
 
     return cpoClass;

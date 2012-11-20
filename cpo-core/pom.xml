@@ -26,14 +26,14 @@
   <groupId>org.synchronoss.cpo</groupId>
   <artifactId>cpo-core</artifactId>
   <name>cpo-core</name>
-  <version>5.0.3.2-SNAPSHOT</version> 
+  <version>5.0.3.2</version> 
   <description>CPO is a persistence layer that allows you to persist POJOs. cpo-core is the persistence agnostic classes 
   that are used for  all persistence types.
   </description>
   <parent>
     <groupId>org.synchronoss.cpo</groupId>
     <artifactId>cpo</artifactId>
-    <version>5.0.3.2-SNAPSHOT</version>
+    <version>5.0.3.2</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
   <dependencies>

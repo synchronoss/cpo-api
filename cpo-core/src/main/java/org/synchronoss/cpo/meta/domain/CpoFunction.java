@@ -50,6 +50,13 @@ public class CpoFunction extends CpoFunctionBean {
     return false;
   }
 
+  public boolean removeArgument(int index) {
+    if (index > 0 && index < arguments.size()) {
+      return (arguments.remove(index) != null);
+    }
+    return false;
+  }
+
   /**
    * DOCUMENT ME!
    *

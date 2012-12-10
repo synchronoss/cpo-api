@@ -28,7 +28,7 @@ import java.security.SecureRandom;
 
 public class GUID {
 
-  private static GUID guid_;
+  private static GUID guid_ = new GUID();
   private SecureRandom seeder;
   SecureRandom sr;
   String guidMidValue;
@@ -75,9 +75,6 @@ public class GUID {
   }
 
   static GUID getInstance() {
-    if (guid_ == null) {
-      guid_ = new GUID();
-    }
     return guid_;
   }
 

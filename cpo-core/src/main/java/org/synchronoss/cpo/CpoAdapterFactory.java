@@ -38,7 +38,7 @@ public final class CpoAdapterFactory {
 
   private static final Logger logger = LoggerFactory.getLogger(CpoAdapterFactory.class);
   private static final String CPO_CONFIG_XML = "/cpoConfig.xml";
-  private static Map<String, CpoAdapter> adapterMap = null;
+  private static volatile Map<String, CpoAdapter> adapterMap = null;
   private static String defaultContext = null;
   private static String loadedFile = null;
 
@@ -47,10 +47,13 @@ public final class CpoAdapterFactory {
   }
 
   public static CpoAdapter getCpoAdapter(String context) throws CpoException {
-    
-    if (adapterMap == null)
-      loadAdapters(CPO_CONFIG_XML);
-
+    if (adapterMap == null) {
+      synchronized(CpoAdapterFactory.class) {
+        if (adapterMap == null) {
+          loadAdapters(CPO_CONFIG_XML);
+        }
+      }
+    }
     return adapterMap.get(context);
 
   }

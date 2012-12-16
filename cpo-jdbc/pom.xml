@@ -26,11 +26,11 @@
   <groupId>org.synchronoss.cpo</groupId>
   <artifactId>cpo-jdbc</artifactId>
   <name>cpo-jdbc</name>
-  <version>5.0.3.3-SNAPSHOT</version>
+  <version>5.0.3.3</version>
   <parent>
     <groupId>org.synchronoss.cpo</groupId>
     <artifactId>cpo</artifactId>
-    <version>5.0.3.3-SNAPSHOT</version>
+    <version>5.0.3.3</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
   <description>CPO is a persistence layer that is thin wrapper around JDBC that consumes and
@@ -156,7 +156,7 @@
     <dependency>
       <groupId>org.synchronoss.cpo</groupId>
       <artifactId>cpo-core</artifactId>
-      <version>5.0.3.3-SNAPSHOT</version>
+      <version>5.0.3.3</version>
       <scope>compile</scope>
     </dependency>
     <dependency>

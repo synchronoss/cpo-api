@@ -20,13 +20,12 @@
  */
 package org.synchronoss.cpo.jdbc;
 
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.util.HashMap;
-import org.synchronoss.cpo.CpoException;
-import org.synchronoss.cpo.CpoTrxAdapter;
+import org.slf4j.*;
+import org.synchronoss.cpo.*;
 import org.synchronoss.cpo.jdbc.meta.JdbcCpoMetaDescriptor;
-import org.synchronoss.cpo.meta.CpoMetaDescriptor;
+
+import java.sql.*;
+import java.util.HashMap;
 
 public class JdbcCpoTrxAdapter extends JdbcCpoAdapter implements CpoTrxAdapter {
 
@@ -34,6 +33,9 @@ public class JdbcCpoTrxAdapter extends JdbcCpoAdapter implements CpoTrxAdapter {
    * Version Id for this class.
    */
   private static final long serialVersionUID = 1L;
+
+  private static final Logger logger = LoggerFactory.getLogger(JdbcCpoAdapter.class);
+
   /**
    * DOCUMENT ME!
    */
@@ -97,10 +99,16 @@ public class JdbcCpoTrxAdapter extends JdbcCpoAdapter implements CpoTrxAdapter {
         try {
           writeConnection_.rollback();
         } catch (Exception e) {
+          if (logger.isTraceEnabled()) {
+            logger.trace(e.getLocalizedMessage());
+          }
         }
         try {
           writeConnection_.close();
         } catch (Exception e) {
+          if (logger.isTraceEnabled()) {
+            logger.trace(e.getLocalizedMessage());
+          }
         }
       } finally {
         setStaticConnection(null);
@@ -116,12 +124,18 @@ public class JdbcCpoTrxAdapter extends JdbcCpoAdapter implements CpoTrxAdapter {
     try {
       super.finalize();
     } catch (Throwable e) {
+      if (logger.isTraceEnabled()) {
+        logger.trace(e.getLocalizedMessage());
+      }
     }
     try {
       if (writeConnection_ != null && !writeConnection_.isClosed()) {
         this.close();
       }
     } catch (Exception e) {
+      if (logger.isTraceEnabled()) {
+        logger.trace(e.getLocalizedMessage());
+      }
     }
   }
 

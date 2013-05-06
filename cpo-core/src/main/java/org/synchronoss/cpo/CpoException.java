@@ -38,7 +38,7 @@ public class CpoException extends Exception {
    *
    * @serial
    */
-  public Throwable detail;
+  private Throwable detail;
 
   /**
    * Constructs a

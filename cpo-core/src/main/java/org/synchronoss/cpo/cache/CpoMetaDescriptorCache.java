@@ -25,10 +25,10 @@ import org.synchronoss.cpo.meta.CpoMetaDescriptor;
 import java.util.*;
 
 /**
- *
  * @author dberry
  */
 public class CpoMetaDescriptorCache {
+
   private static final Map<String, CpoMetaDescriptor> metaDescriptorMap = new HashMap<String, CpoMetaDescriptor>();
 
   protected static CpoMetaDescriptor findCpoMetaDescriptor(String adapterKey) {
@@ -54,13 +54,12 @@ public class CpoMetaDescriptorCache {
   protected static Collection<String> getCpoMetaDescriptorNames() {
     return metaDescriptorMap.keySet();
   }
-  
+
   protected static void removeCpoMetaDescriptor(String adapterKey) {
-      metaDescriptorMap.remove(adapterKey);
+    metaDescriptorMap.remove(adapterKey);
   }
 
   protected static void clearCpoMetaDescriptorCache() {
-      metaDescriptorMap.clear();
+    metaDescriptorMap.clear();
   }
-  
 }

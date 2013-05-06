@@ -20,11 +20,11 @@
  */
 package org.synchronoss.cpo.transform.jdbc;
 
+import org.synchronoss.cpo.CpoException;
+import org.synchronoss.cpo.jdbc.*;
+
 import java.sql.Timestamp;
 import java.util.Calendar;
-import org.synchronoss.cpo.CpoException;
-import org.synchronoss.cpo.jdbc.JdbcCallableStatementFactory;
-import org.synchronoss.cpo.jdbc.JdbcPreparedStatementFactory;
 
 /**
  * This is an example of a transform that does nothing. It is used to test the mechanics of the transform logic within
@@ -47,8 +47,7 @@ public class TransformTimestampToCalendar implements JdbcCpoTransform<Timestamp,
    * @throws CpoException
    */
   @Override
-  public Calendar transformIn(Timestamp ts)
-          throws CpoException {
+  public Calendar transformIn(Timestamp ts) throws CpoException {
     Calendar cal = null;
     if (ts != null) {
       cal = Calendar.getInstance();
@@ -69,8 +68,7 @@ public class TransformTimestampToCalendar implements JdbcCpoTransform<Timestamp,
    * @throws CpoException
    */
   @Override
-  public Timestamp transformOut(JdbcCallableStatementFactory jcsf, Calendar cal)
-          throws CpoException {
+  public Timestamp transformOut(JdbcCallableStatementFactory jcsf, Calendar cal) throws CpoException {
     Timestamp ts = null;
     if (cal != null) {
       ts = new Timestamp(cal.getTimeInMillis());
@@ -90,8 +88,7 @@ public class TransformTimestampToCalendar implements JdbcCpoTransform<Timestamp,
    * @throws CpoException
    */
   @Override
-  public Timestamp transformOut(JdbcPreparedStatementFactory jpsf, Calendar cal)
-          throws CpoException {
+  public Timestamp transformOut(JdbcPreparedStatementFactory jpsf, Calendar cal) throws CpoException {
     Timestamp ts = null;
     if (cal != null) {
       ts = new Timestamp(cal.getTimeInMillis());

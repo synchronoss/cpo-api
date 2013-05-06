@@ -50,8 +50,7 @@ public class TransformClob implements JdbcCpoTransform<Clob, char[]> {
    * @throws CpoException
    */
   @Override
-  public char[] transformIn(Clob clob)
-          throws CpoException {
+  public char[] transformIn(Clob clob) throws CpoException {
 
     char[] buffChars = new char[1024];
     char[] retChars = null;
@@ -85,8 +84,7 @@ public class TransformClob implements JdbcCpoTransform<Clob, char[]> {
    * @throws CpoException
    */
   @Override
-  public Clob transformOut(JdbcPreparedStatementFactory jpsf, char[] attributeObject)
-          throws CpoException {
+  public Clob transformOut(JdbcPreparedStatementFactory jpsf, char[] attributeObject) throws CpoException {
     CLOB newClob = null;
 
     try {

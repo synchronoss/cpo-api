@@ -41,7 +41,6 @@ public class JndiDataSourceInfo extends AbstractDataSourceInfo {
    * Creates a JndiDataSourceInfo from a JNDIName that represents the datasource in the application server.
    *
    * @param jndiName The JndiName of the app server datasource
-   *
    */
   public JndiDataSourceInfo(String jndiName) {
     super(jndiName);
@@ -53,7 +52,6 @@ public class JndiDataSourceInfo extends AbstractDataSourceInfo {
    *
    * @param jndiName The JndiName of the app server datasource
    * @param ctx - The context for which the Jndi Lookup should use.
-   *
    */
   public JndiDataSourceInfo(String jndiName, Context ctx) {
     super(jndiName);
@@ -68,9 +66,9 @@ public class JndiDataSourceInfo extends AbstractDataSourceInfo {
       if (jndiCtx == null) {
         jndiCtx = new InitialContext();
       }
-      datasource = (DataSource) jndiCtx.lookup(jndiName);
+      datasource = (DataSource)jndiCtx.lookup(jndiName);
     } catch (Exception e) {
-        throw new CpoException("Error instantiating DataSource", e); 
+      throw new CpoException("Error instantiating DataSource", e);
     }
     return datasource;
   }

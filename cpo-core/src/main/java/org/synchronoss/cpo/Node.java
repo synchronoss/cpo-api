@@ -91,7 +91,6 @@ public class Node implements Serializable, Cloneable, Comparable<Node> {
    * @param nodeType nodeType can be one of two values:
    *
    * Node.ParentNode Node.ChildNode
-   *
    * @return an Instance of an Node
    */
   static public Node createNode(int nodeType) {
@@ -100,7 +99,6 @@ public class Node implements Serializable, Cloneable, Comparable<Node> {
 
   /**
    * Resets all the attributes to their default state.
-   *
    */
   public void release() {
 
@@ -159,7 +157,7 @@ public class Node implements Serializable, Cloneable, Comparable<Node> {
    * @return an Node representing the parent of this node or null if no parent exists.
    */
   public Node getParentNode() {
-    return (Node) this.parent;
+    return (Node)this.parent;
   }
 
   /**
@@ -202,7 +200,7 @@ public class Node implements Serializable, Cloneable, Comparable<Node> {
    * This function adds a child to the linked-list of children for this node. It adds the child to the end of the list.
    *
    * @param node Node that is the node to be added as a child of this Node.
-   * @exception NodeException
+   * @throws NodeException
    */
   public void addChild(Node node) throws ChildNodeException {
     if (node != null) {
@@ -221,7 +219,7 @@ public class Node implements Serializable, Cloneable, Comparable<Node> {
         }
         node.setNextSibling(getFirstChild());
       }
-      node.setParent((Node) this);
+      node.setParent((Node)this);
     }
   }
 
@@ -229,7 +227,7 @@ public class Node implements Serializable, Cloneable, Comparable<Node> {
    * This function adds a child to the linked-list of children for this node. It adds the child to the end of the list.
    *
    * @param node Node that is the node to be added as a child of this Node.
-   * @exception NodeException
+   * @throws NodeException
    */
   public void addChildSort(Node node) throws ChildNodeException {
     addChildSort(node, null);
@@ -270,7 +268,7 @@ public class Node implements Serializable, Cloneable, Comparable<Node> {
           node.setNextSibling(getFirstChild());
         }
       }
-      node.setParent((Node) this);
+      node.setParent((Node)this);
     }
   }
 
@@ -511,9 +509,8 @@ public class Node implements Serializable, Cloneable, Comparable<Node> {
   }
 
   @Override
-  public Object clone()
-          throws CloneNotSupportedException {
-    Node thisClone = (Node) super.clone();
+  public Object clone() throws CloneNotSupportedException {
+    Node thisClone = (Node)super.clone();
     Node currNode;
 
     thisClone.release(); //Clear all the attributes
@@ -524,7 +521,7 @@ public class Node implements Serializable, Cloneable, Comparable<Node> {
       currNode = getFirstChild();
       do {
         try {
-          thisClone.addChild((Node) currNode.clone());
+          thisClone.addChild((Node)currNode.clone());
         } catch (ChildNodeException e) {
           // This should not happen since we are cloning a parent if we got here.
         }

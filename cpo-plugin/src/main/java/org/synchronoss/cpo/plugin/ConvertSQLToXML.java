@@ -23,16 +23,15 @@ package org.synchronoss.cpo.plugin;
 import org.apache.maven.plugin.*;
 import org.synchronoss.cpo.core.cpoCoreMeta.CpoMetaDataDocument;
 import org.synchronoss.cpo.exporter.MetaXmlObjectExporter;
-import org.synchronoss.cpo.helper.XmlBeansHelper;
+import org.synchronoss.cpo.helper.*;
 import org.synchronoss.cpo.jdbc.*;
 import org.synchronoss.cpo.jdbc.exporter.JdbcMetaXmlObjectExporter;
 import org.synchronoss.cpo.jdbc.meta.JdbcCpoMetaDescriptor;
 import org.synchronoss.cpo.meta.domain.*;
 
-import java.io.*;
+import java.io.File;
 import java.sql.*;
 import java.util.*;
-import org.synchronoss.cpo.helper.CpoClassLoader;
 
 /**
  * @goal convertsqltoxml
@@ -155,6 +154,9 @@ public class ConvertSQLToXML extends AbstractMojo {
           conn.close();
         } catch (SQLException ex) {
           // ignore
+          if (getLog().isDebugEnabled()) {
+            getLog().debug(ex.getMessage());
+          }
         }
       }
     }
@@ -190,6 +192,9 @@ public class ConvertSQLToXML extends AbstractMojo {
           rs.close();
         } catch (Exception e) {
           // ignore
+          if (getLog().isDebugEnabled()) {
+            getLog().debug(e.getMessage());
+          }
         }
       }
       if (ps != null) {
@@ -197,6 +202,9 @@ public class ConvertSQLToXML extends AbstractMojo {
           ps.close();
         } catch (Exception e) {
           // ignore
+          if (getLog().isDebugEnabled()) {
+            getLog().debug(e.getMessage());
+          }
         }
       }
     }
@@ -254,6 +262,9 @@ public class ConvertSQLToXML extends AbstractMojo {
           rs.close();
         } catch (Exception e) {
           // ignore
+          if (getLog().isDebugEnabled()) {
+            getLog().debug(e.getMessage());
+          }
         }
       }
 
@@ -262,6 +273,9 @@ public class ConvertSQLToXML extends AbstractMojo {
           ps.close();
         } catch (Exception e) {
           // ignore
+          if (getLog().isDebugEnabled()) {
+            getLog().debug(e.getMessage());
+          }
         }
       }
     }
@@ -363,6 +377,9 @@ public class ConvertSQLToXML extends AbstractMojo {
           rs.close();
         } catch (Exception e) {
           // ignore
+          if (getLog().isDebugEnabled()) {
+            getLog().debug(e.getMessage());
+          }
         }
       }
 
@@ -371,6 +388,9 @@ public class ConvertSQLToXML extends AbstractMojo {
           ps.close();
         } catch (Exception e) {
           // ignore
+          if (getLog().isDebugEnabled()) {
+            getLog().debug(e.getMessage());
+          }
         }
       }
     }

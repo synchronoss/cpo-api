@@ -61,7 +61,7 @@ public class CallableStatementCpoData extends AbstractJdbcCpoData {
     
     try {
       // Get the getter for the Callable Statement
-      javaObject = transformIn(javaSqlMethod.getCsGetter().invoke(cs, new Object[]{new Integer(getIndex())}));
+      javaObject = transformIn(javaSqlMethod.getCsGetter().invoke(cs, getIndex()));
     } catch (IllegalAccessException iae) {
       logger.debug("Error Invoking CallableStatement Method: " + ExceptionHelper.getLocalizedMessage(iae));
       throw new CpoException(iae);
@@ -86,17 +86,17 @@ public class CallableStatementCpoData extends AbstractJdbcCpoData {
     try {
       switch (javaSqlMethod.getMethodType()) {
         case JavaSqlMethod.METHOD_TYPE_BASIC:
-          javaSqlMethod.getCsSetter().invoke(jcsf.getCallableStatement(), new Object[]{new Integer(getIndex()), param});
+          javaSqlMethod.getCsSetter().invoke(jcsf.getCallableStatement(), getIndex(), param);
           break;
         case JavaSqlMethod.METHOD_TYPE_STREAM:
           CpoByteArrayInputStream cbais = CpoByteArrayInputStream.getCpoStream((InputStream) param);
           // Get the length of the InputStream in param
-          javaSqlMethod.getCsSetter().invoke(jcsf.getCallableStatement(), new Object[]{new Integer(getIndex()), (InputStream) cbais, new Integer(cbais.getLength())});
+          javaSqlMethod.getCsSetter().invoke(jcsf.getCallableStatement(), getIndex(), cbais, cbais.getLength());
           break;
         case JavaSqlMethod.METHOD_TYPE_READER:
           CpoCharArrayReader ccar = CpoCharArrayReader.getCpoReader((Reader) param);
           // Get the length of the Reader in param
-          javaSqlMethod.getCsSetter().invoke(jcsf.getCallableStatement(), new Object[]{new Integer(getIndex()), (Reader) ccar, new Integer(ccar.getLength())});
+          javaSqlMethod.getCsSetter().invoke(jcsf.getCallableStatement(), getIndex(), ccar, ccar.getLength());
           break;
       }
     } catch (Exception e) {

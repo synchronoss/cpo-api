@@ -36,7 +36,7 @@ public class JdbcCpoWhere extends Node implements CpoWhere {
    * Version Id for this class.
    */
   private static final long serialVersionUID = 1L;
-  static final String comparisons[] = {
+  static final String[] comparisons = {
     "=", //COMP_EQ
     "<", //COMP_LT
     ">", //COMP_GT
@@ -48,7 +48,7 @@ public class JdbcCpoWhere extends Node implements CpoWhere {
     "EXISTS", //COMP_EXISTS
     "IS NULL" //COMP_ISNULL
   };
-  static final String logicals[] = {
+  static final String[] logicals = {
     "AND", //LOGIC_AND
     "OR" //LOGIC_OR
   };
@@ -173,7 +173,7 @@ public class JdbcCpoWhere extends Node implements CpoWhere {
       sb.append("WHERE");
     }
 
-    if (getNot() == true) {
+    if (getNot()) {
       sb.append(" NOT");
     }
 
@@ -194,7 +194,7 @@ public class JdbcCpoWhere extends Node implements CpoWhere {
 
       if (getAttributeFunction() != null) {
         if (jdbcAttribute != null) {
-          sb.append(buildFunction(getAttributeFunction(), jdbcAttribute.getJavaName(), fullyQualifiedColumn.toString()));
+          sb.append(buildFunction(getAttributeFunction(), jdbcAttribute.getJavaName(), fullyQualifiedColumn));
         } else {
           sb.append(getAttributeFunction());
         }

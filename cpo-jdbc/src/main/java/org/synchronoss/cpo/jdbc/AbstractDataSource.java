@@ -26,17 +26,17 @@ import java.sql.*;
 import java.util.*;
 
 /**
- *
  * @author dberry
  */
 public abstract class AbstractDataSource extends AbstractDataSourceInfo implements DataSource {
+
   private PrintWriter printWriter_ = null;
   private int timeout_ = 0;
 
   public AbstractDataSource(String dataSourceName) {
     super(dataSourceName);
   }
-  
+
   public AbstractDataSource(String className, SortedMap<String, String> properties) {
     super(className, properties);
   }
@@ -51,27 +51,22 @@ public abstract class AbstractDataSource extends AbstractDataSourceInfo implemen
   }
 
   @Override
-  public PrintWriter getLogWriter()
-          throws SQLException {
+  public PrintWriter getLogWriter() throws SQLException {
     return printWriter_;
   }
 
   @Override
-  public void setLogWriter(PrintWriter out)
-          throws SQLException {
+  public void setLogWriter(PrintWriter out) throws SQLException {
     printWriter_ = out;
-
   }
 
   @Override
-  public void setLoginTimeout(int seconds)
-          throws SQLException {
+  public void setLoginTimeout(int seconds) throws SQLException {
     timeout_ = seconds;
   }
 
   @Override
-  public int getLoginTimeout()
-          throws SQLException {
+  public int getLoginTimeout() throws SQLException {
     return timeout_;
   }
 
@@ -84,6 +79,4 @@ public abstract class AbstractDataSource extends AbstractDataSourceInfo implemen
   public boolean isWrapperFor(Class<?> iface) throws SQLException {
     return false;
   }
-
-  
 }

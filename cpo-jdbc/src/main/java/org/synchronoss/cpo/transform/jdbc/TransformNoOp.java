@@ -52,8 +52,7 @@ public class TransformNoOp implements JdbcCpoTransform<Integer, Integer> {
    * @throws CpoException
    */
   @Override
-  public Integer transformIn(Integer dbIn)
-          throws CpoException {
+  public Integer transformIn(Integer dbIn) throws CpoException {
     logger.debug("Inside TransformNoOp::transformIn(" + dbIn + ");");
     return dbIn;
   }
@@ -66,7 +65,6 @@ public class TransformNoOp implements JdbcCpoTransform<Integer, Integer> {
    * e.g public Blob transformOut(JdbcCallableStatementFactory jcsf, byte[] attrOut) would be the signature for
    * converting a byte[] stored in the pojo into a Blob object for the datasource.
    *
-   *
    * @param jcsf a reference to the JdbcCallableStatementFactory. This is necessary as some DBMSs (ORACLE !#$%^&!) that
    * require access to the connection to deal with certain datatypes.
    * @param attrOut The attribute object that needs to get transformed into the db representation
@@ -74,8 +72,7 @@ public class TransformNoOp implements JdbcCpoTransform<Integer, Integer> {
    * @throws CpoException
    */
   @Override
-  public Integer transformOut(JdbcCallableStatementFactory jcsf, Integer attrOut)
-          throws CpoException {
+  public Integer transformOut(JdbcCallableStatementFactory jcsf, Integer attrOut) throws CpoException {
     logger.debug("Inside TransformNoOp::transformOut(JdbcCallableStatementFactory, " + attrOut + ");");
     return attrOut;
   }
@@ -88,7 +85,6 @@ public class TransformNoOp implements JdbcCpoTransform<Integer, Integer> {
    * e.g public Blob transformOut(JdbcPreparedStatementFactory jpsf, byte[] attrOut) would be the signature for
    * converting a byte[] stored in the pojo into a Blob object for the datasource.
    *
-   *
    * @param jpsf a reference to the JdbcPreparedStatementFactory. This is necessary as some DBMSs (ORACLE !#$%^&!) that
    * require access to the connection to deal with certain datatypes.
    * @param attrOut The attribute object that needs to get transformed into the db representation
@@ -96,8 +92,7 @@ public class TransformNoOp implements JdbcCpoTransform<Integer, Integer> {
    * @throws CpoException
    */
   @Override
-  public Integer transformOut(JdbcPreparedStatementFactory jpsf, Integer attrOut)
-          throws CpoException {
+  public Integer transformOut(JdbcPreparedStatementFactory jpsf, Integer attrOut) throws CpoException {
     logger.debug("Inside TransformNoOp::transformOut(JdbcPreparedStatementFactory, " + attrOut + ");");
     return attrOut;
   }

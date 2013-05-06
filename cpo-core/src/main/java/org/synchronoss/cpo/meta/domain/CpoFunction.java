@@ -76,7 +76,7 @@ public class CpoFunction extends CpoFunctionBean {
       return " null function.";
     }
 
-    // TODO: make uncomment the following line and make work
+    // TODO make uncomment the following line and make work
 //    sb.append(jq.getName() + " " + jq.getType());
     args = function.getArguments();
 
@@ -87,7 +87,7 @@ public class CpoFunction extends CpoFunctionBean {
         try {
           attribute = argument.getAttribute();
           c = attribute.getGetter().getReturnType();
-          // TODO: make uncomment the following line and make work
+          // TODO make uncomment the following line and make work
 //          type = attribute.getJavaSqlType();
           if (c != null) {
             sb.append(" col" + j + ":" + c.getName() + " type:"

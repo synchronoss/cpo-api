@@ -21,11 +21,11 @@
 package org.synchronoss.cpo.jdbc;
 
 import org.synchronoss.cpo.CpoException;
+import org.synchronoss.cpo.helper.CpoClassLoader;
 
 import javax.sql.DataSource;
 import java.sql.*;
 import java.util.Properties;
-import org.synchronoss.cpo.helper.CpoClassLoader;
 
 /**
  * Collects the info required to instantiate a DataSource from a JDBC Driver
@@ -96,8 +96,7 @@ public class DriverDataSourceInfo extends AbstractDataSource {
   }
 
   @Override
-  public Connection getConnection()
-          throws SQLException {
+  public Connection getConnection() throws SQLException {
     return makeNewConnection();
   }
 

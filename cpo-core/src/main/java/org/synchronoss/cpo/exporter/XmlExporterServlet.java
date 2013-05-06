@@ -20,7 +20,6 @@
  */
 package org.synchronoss.cpo.exporter;
 
-import org.slf4j.*;
 import org.synchronoss.cpo.CpoException;
 import org.synchronoss.cpo.meta.CpoMetaDescriptor;
 
@@ -37,20 +36,9 @@ import java.io.*;
  */
 public class XmlExporterServlet extends HttpServlet {
 
-  private Logger OUT = LoggerFactory.getLogger(this.getClass());
-
   private static final String HTML_CONTENT_TYPE = "text/html";
   private static final String XML_CONTENT_TYPE = "text/xml";
   public static final String PARAM_META_DESCRIPTOR_NAME = "metaDescriptorName";
-
-  @Override
-  public void init(ServletConfig cfg) throws javax.servlet.ServletException {
-    super.init(cfg);
-  }
-
-  @Override
-  public void destroy() {
-  }
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

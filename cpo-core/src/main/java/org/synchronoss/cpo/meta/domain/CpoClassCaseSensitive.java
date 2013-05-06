@@ -34,12 +34,11 @@ public class CpoClassCaseSensitive extends CpoClass {
 
   @Override
   public void addDataNameToMap(String dataName, CpoAttribute cpoAttribute) {
-      getDataMap().put(dataName, cpoAttribute);
+    getDataMap().put(dataName, cpoAttribute);
   }
 
   @Override
   public void removeDataNameFromMap(String dataName) {
-      getDataMap().remove(dataName);
+    getDataMap().remove(dataName);
   }
-
 }

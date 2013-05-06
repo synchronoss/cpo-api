@@ -51,8 +51,7 @@ public class TransformGZipBlob implements JdbcCpoTransform<Blob, byte[]> {
    * @throws CpoException
    */
   @Override
-  public byte[] transformIn(Blob blob)
-          throws CpoException {
+  public byte[] transformIn(Blob blob) throws CpoException {
 
     byte[] buffBytes = new byte[1024];
     byte[] retBytes = null;
@@ -98,8 +97,7 @@ public class TransformGZipBlob implements JdbcCpoTransform<Blob, byte[]> {
    * @throws CpoException
    */
   @Override
-  public Blob transformOut(JdbcPreparedStatementFactory jpsf, byte[] attributeObject)
-          throws CpoException {
+  public Blob transformOut(JdbcPreparedStatementFactory jpsf, byte[] attributeObject) throws CpoException {
 
     BLOB newBlob = null;
 
@@ -120,7 +118,6 @@ public class TransformGZipBlob implements JdbcCpoTransform<Blob, byte[]> {
         bos.write(baos.toByteArray());
         bos.close();
       }
-
     } catch (Exception e) {
       String msg = "Error GZipping Byte Array";
       logger.error(msg, e);

@@ -109,7 +109,7 @@ public class JdbcCpoOrderBy implements CpoOrderBy {
     int fromIndex = 0;
 
     if (attribute != null && attribute.length() > 0) {
-      CpoAttribute jdbcAttribute = (CpoAttribute) cpoClass.getAttributeJava(attribute);
+      CpoAttribute jdbcAttribute = cpoClass.getAttributeJava(attribute);
       if (jdbcAttribute == null) {
         throw new CpoException(attribute);
       }
@@ -129,7 +129,7 @@ public class JdbcCpoOrderBy implements CpoOrderBy {
         }
       }
 
-      if (this.getAscending() == true) {
+      if (this.getAscending()) {
         sb.append(" ASC");
       } else {
         sb.append(" DESC");

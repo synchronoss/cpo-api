@@ -44,8 +44,7 @@ public class TransformStringChar implements JdbcCpoTransform<String, char[]> {
    * @throws CpoException
    */
   @Override
-  public char[] transformIn(String lvc)
-          throws CpoException {
+  public char[] transformIn(String lvc) throws CpoException {
 
     return lvc == null ? null : lvc.toCharArray();
   }
@@ -60,8 +59,7 @@ public class TransformStringChar implements JdbcCpoTransform<String, char[]> {
    * @throws CpoException
    */
   @Override
-  public String transformOut(JdbcPreparedStatementFactory jpsf, char[] attrObj)
-          throws CpoException {
+  public String transformOut(JdbcPreparedStatementFactory jpsf, char[] attrObj) throws CpoException {
     return attrObj == null ? null : String.valueOf(attrObj);
   }
 

@@ -37,8 +37,7 @@ public class PreparedStatementCpoData extends AbstractJdbcCpoData {
 
   private static final Logger logger = LoggerFactory.getLogger(PreparedStatementCpoData.class);
   private JdbcPreparedStatementFactory jpsf = null;
-  private int index = -1;
-  
+
   public PreparedStatementCpoData(JdbcPreparedStatementFactory jpsf, CpoAttribute cpoAttribute, int index) {
     super(cpoAttribute, index);
     this.jpsf = jpsf;
@@ -57,17 +56,17 @@ public class PreparedStatementCpoData extends AbstractJdbcCpoData {
     try {
       switch (javaSqlMethod.getMethodType()) {
         case JavaSqlMethod.METHOD_TYPE_BASIC:
-          javaSqlMethod.getPsSetter().invoke(jpsf.getPreparedStatement(), new Object[]{new Integer(getIndex()), param});
+          javaSqlMethod.getPsSetter().invoke(jpsf.getPreparedStatement(), getIndex(), param);
           break;
         case JavaSqlMethod.METHOD_TYPE_STREAM:
           CpoByteArrayInputStream cbais = CpoByteArrayInputStream.getCpoStream((InputStream) param);
           // Get the length of the InputStream in param
-          javaSqlMethod.getPsSetter().invoke(jpsf.getPreparedStatement(), new Object[]{new Integer(getIndex()), (InputStream) cbais, new Integer(cbais.getLength())});
+          javaSqlMethod.getPsSetter().invoke(jpsf.getPreparedStatement(), getIndex(), cbais, cbais.getLength());
           break;
         case JavaSqlMethod.METHOD_TYPE_READER:
           CpoCharArrayReader ccar = CpoCharArrayReader.getCpoReader((Reader) param);
           // Get the length of the Reader in param
-          javaSqlMethod.getPsSetter().invoke(jpsf.getPreparedStatement(), new Object[]{new Integer(getIndex()), (Reader) ccar, new Integer(ccar.getLength())});
+          javaSqlMethod.getPsSetter().invoke(jpsf.getPreparedStatement(), getIndex(), ccar, ccar.getLength());
           break;
       }
     } catch (Exception e) {

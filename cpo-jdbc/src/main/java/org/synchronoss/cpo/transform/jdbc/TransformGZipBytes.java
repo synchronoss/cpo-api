@@ -20,16 +20,12 @@
  */
 package org.synchronoss.cpo.transform.jdbc;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
-import java.util.zip.GZIPInputStream;
-import java.util.zip.GZIPOutputStream;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.slf4j.*;
 import org.synchronoss.cpo.CpoException;
-import org.synchronoss.cpo.jdbc.JdbcCallableStatementFactory;
-import org.synchronoss.cpo.jdbc.JdbcPreparedStatementFactory;
+import org.synchronoss.cpo.jdbc.*;
+
+import java.io.*;
+import java.util.zip.*;
 
 /**
  * Converts a compressed byte[] from a jdbc datasource to an uncompressed byte[] and from a byte[] to a compressed
@@ -54,8 +50,7 @@ public class TransformGZipBytes implements JdbcCpoTransform<byte[], byte[]> {
    * @throws CpoException
    */
   @Override
-  public byte[] transformIn(byte[] inBytes)
-          throws CpoException {
+  public byte[] transformIn(byte[] inBytes) throws CpoException {
 
     byte[] buffBytes = new byte[1024];
     byte[] retBytes = null;
@@ -100,8 +95,7 @@ public class TransformGZipBytes implements JdbcCpoTransform<byte[], byte[]> {
    * @throws CpoException
    */
   @Override
-  public byte[] transformOut(JdbcPreparedStatementFactory jpsf, byte[] attributeObject)
-          throws CpoException {
+  public byte[] transformOut(JdbcPreparedStatementFactory jpsf, byte[] attributeObject) throws CpoException {
 
     byte[] retBytes = null;
 

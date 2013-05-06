@@ -66,7 +66,6 @@ public class ClassDataSourceInfo extends AbstractDataSource implements Connectio
 
   @Override
   public Connection getConnection() throws SQLException {
-    Connection conn = null;
     return getPooledConnection();
   }
 
@@ -143,7 +142,7 @@ public class ClassDataSourceInfo extends AbstractDataSource implements Connectio
   }
 
   @Override
-  public void finalize() throws Throwable {
+  protected void finalize() throws Throwable {
     super.finalize();
     for (PooledConnection pc : freeConnections) {
       pc.removeConnectionEventListener(this);

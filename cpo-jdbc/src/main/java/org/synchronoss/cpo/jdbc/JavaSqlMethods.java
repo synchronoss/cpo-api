@@ -32,7 +32,7 @@ import java.util.HashMap;
  *
  * @author david berry
  */
-public class JavaSqlMethods extends java.lang.Object implements java.io.Serializable, java.lang.Cloneable {
+public class JavaSqlMethods implements java.io.Serializable, java.lang.Cloneable {
 
   /**
    * Version Id for this class.
@@ -75,9 +75,7 @@ public class JavaSqlMethods extends java.lang.Object implements java.io.Serializ
   }
 
   static public JavaSqlMethod<?> getJavaSqlMethod(Class<?> c) throws CpoException {
-    JavaSqlMethod<?> javaSqlMethod = getJavaSqlMethodMap().get(c);
-    return javaSqlMethod;
-
+    return getJavaSqlMethodMap().get(c);
   }
 
   static private void initMaps() {

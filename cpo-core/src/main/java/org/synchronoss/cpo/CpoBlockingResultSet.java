@@ -34,7 +34,6 @@ public class CpoBlockingResultSet<E> implements CpoResultSet<E>, Iterator<E> {
   private LinkedBlockingQueue<E> lbq = null;
   private final Set<Thread> producers = new HashSet<Thread>();
   private final Set<Thread> consumers = new HashSet<Thread>();
-  private boolean done = false;
 
   private CpoBlockingResultSet() {
   }

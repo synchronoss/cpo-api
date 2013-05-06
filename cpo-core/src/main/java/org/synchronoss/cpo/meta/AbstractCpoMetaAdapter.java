@@ -128,6 +128,9 @@ public abstract class AbstractCpoMetaAdapter implements CpoMetaAdapter {
         functionGroup = cpoClass.getFunctionGroup(ctFunctionGroup.getType().toString(), ctFunctionGroup.getName());
       } catch (Exception e){
         // this a runtime exception that we can ignore during load time.
+        if (logger.isTraceEnabled()) {
+          logger.trace(e.getLocalizedMessage());
+        }
       }
       
       if (functionGroup == null) {

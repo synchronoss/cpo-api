@@ -35,7 +35,6 @@ import java.lang.reflect.*;
 import java.util.*;
 
 /**
- *
  * @author dberry
  */
 public class CpoMetaDescriptor extends CpoMetaDescriptorCache implements CpoMetaAdapter, CpoMetaExportable {
@@ -47,37 +46,36 @@ public class CpoMetaDescriptor extends CpoMetaDescriptorCache implements CpoMeta
 
   // used by cpo util
   private String defaultPackageName;
-  
-  private CpoMetaDescriptor(){}
-  
+
+  private CpoMetaDescriptor() {
+  }
+
   protected CpoMetaDescriptor(String name, boolean caseSensitive) throws CpoException {
     this.name = name;
     this.caseSensitive = caseSensitive;
-    
+
     // Lets create the metaAdapter
     try {
       Class metaAdapterClass = getMetaAdapterClass();
-      metaAdapter = (AbstractCpoMetaAdapter) metaAdapterClass.newInstance();
-      logger.debug("Created MetaAdapter: "+metaAdapterClass.getName());
+      metaAdapter = (AbstractCpoMetaAdapter)metaAdapterClass.newInstance();
+      logger.debug("Created MetaAdapter: " + metaAdapterClass.getName());
     } catch (InstantiationException ie) {
       throw new CpoException("Could not instantiate CpoMetaAdapter: " + ExceptionHelper.getLocalizedMessage(ie));
     } catch (IllegalAccessException iae) {
       throw new CpoException("Could not access CpoMetaAdapter: " + ExceptionHelper.getLocalizedMessage(iae));
     } catch (ClassCastException cce) {
-      throw new CpoException("CpoMetaAdapter must extend AbstractCpoMetaAdapter: " + getMetaAdapterClass().getName() + ":" +ExceptionHelper.getLocalizedMessage(cce));
-    } catch (CpoException ce) {
-      throw ce;
+      throw new CpoException("CpoMetaAdapter must extend AbstractCpoMetaAdapter: " + getMetaAdapterClass().getName() + ":" + ExceptionHelper.getLocalizedMessage(cce));
     }
   }
-  
+
   protected Class getMetaAdapterClass() throws CpoException {
     throw new CpoException("getMetaAdapterClass() must be implemented");
   }
-  
+
   public static boolean isValidMetaDescriptor(CpoMetaDescriptor metaDescriptor) {
     return (findCpoMetaDescriptor(metaDescriptor.getName()) != null);
   }
-  
+
   public static CpoMetaDescriptor getInstance(String name) throws CpoException {
     return findCpoMetaDescriptor(name);
   }
@@ -86,22 +84,22 @@ public class CpoMetaDescriptor extends CpoMetaDescriptorCache implements CpoMeta
     removeCpoMetaDescriptor(name);
   }
 
-   public static void clearAllInstances() throws CpoException {
+  public static void clearAllInstances() throws CpoException {
     clearCpoMetaDescriptorCache();
   }
 
- public static CpoMetaDescriptor getInstance(String name, String metaXml, boolean caseSensitive) throws CpoException {
+  public static CpoMetaDescriptor getInstance(String name, String metaXml, boolean caseSensitive) throws CpoException {
     List<String> metaXmls = new ArrayList<String>();
     metaXmls.add(metaXml);
-    return createUpdateInstance(name,metaXmls, caseSensitive);
+    return createUpdateInstance(name, metaXmls, caseSensitive);
   }
-    
+
   public static CpoMetaDescriptor getInstance(String name, List<String> metaXmls, boolean caseSensitive) throws CpoException {
-    return createUpdateInstance(name,metaXmls, caseSensitive);
+    return createUpdateInstance(name, metaXmls, caseSensitive);
   }
-    
+
   public static CpoMetaDescriptor getInstance(String name, String[] metaXmls, boolean caseSensitive) throws CpoException {
-    return createUpdateInstance(name,metaXmls, caseSensitive);
+    return createUpdateInstance(name, metaXmls, caseSensitive);
   }
 
   /**
@@ -113,19 +111,19 @@ public class CpoMetaDescriptor extends CpoMetaDescriptorCache implements CpoMeta
 
   public static void refreshDescriptorMeta(String name, List<String> metaXmls) throws CpoException {
     CpoMetaDescriptor metaDescriptor = findCpoMetaDescriptor(name);
-    if (metaDescriptor!=null) {
+    if (metaDescriptor != null) {
       metaDescriptor.refreshDescriptorMeta(metaXmls);
     }
   }
-    
+
   public void refreshDescriptorMeta(List<String> metaXmls) throws CpoException {
     createUpdateInstance(this.getName(), metaXmls, caseSensitive);
   }
-    
+
   protected static CpoMetaDescriptor createUpdateInstance(String name, List<String> metaXmls, boolean caseSensitive) throws CpoException {
     return createUpdateInstance(name, metaXmls.toArray(new String[metaXmls.size()]), caseSensitive);
   }
-    
+
   protected static CpoMetaDescriptor createUpdateInstance(String name, String[] metaXmls, boolean caseSensitive) throws CpoException {
     CpoMetaDescriptor metaDescriptor = findCpoMetaDescriptor(name);
     String metaDescriptorClassName = null;
@@ -133,11 +131,11 @@ public class CpoMetaDescriptor extends CpoMetaDescriptorCache implements CpoMeta
     for (String metaXml : metaXmls) {
       InputStream is = CpoClassLoader.getResourceAsStream(metaXml);
       if (is == null) {
-        logger.info("Resource Not Found: "+metaXml);
+        logger.info("Resource Not Found: " + metaXml);
         try {
           is = new FileInputStream(metaXml);
         } catch (FileNotFoundException fnfe) {
-          logger.info("File Not Found: "+metaXml);
+          logger.info("File Not Found: " + metaXml);
           is = null;
         }
       }
@@ -150,8 +148,8 @@ public class CpoMetaDescriptor extends CpoMetaDescriptorCache implements CpoMeta
         }
 
         String errMsg = XmlBeansHelper.validateXml(metaDataDoc);
-        if (errMsg!=null) {
-          throw new CpoException("Invalid metaXml: "+metaXml+":"+errMsg);
+        if (errMsg != null) {
+          throw new CpoException("Invalid metaXml: " + metaXml + ":" + errMsg);
         }
 
         if (metaDescriptor == null) {
@@ -160,31 +158,29 @@ public class CpoMetaDescriptor extends CpoMetaDescriptorCache implements CpoMeta
           logger.debug("Getting the Class");
           Class<?> clazz = CpoClassLoader.forName(metaDescriptorClassName);
           logger.debug("Getting the Constructor");
-          if (clazz==null)
+          if (clazz == null) {
             logger.debug("clazz==null");
+          }
           Constructor<?> cons = clazz.getConstructor(String.class, boolean.class);
           logger.debug("Creating the instance");
-          metaDescriptor = (CpoMetaDescriptor) cons.newInstance(name, caseSensitive);
+          metaDescriptor = (CpoMetaDescriptor)cons.newInstance(name, caseSensitive);
           addCpoMetaDescriptor(metaDescriptor);
-        } else if (!metaDescriptor.getClass().getName().equals(metaDataDoc.getCpoMetaData().getMetaDescriptor())){
+        } else if (!metaDescriptor.getClass().getName().equals(metaDataDoc.getCpoMetaData().getMetaDescriptor())) {
           throw new CpoException("Error processing multiple metaXml files. All files must have the same CpoMetaDescriptor class name.");
         }
 
         metaDescriptor.setDefaultPackageName(metaDataDoc.getCpoMetaData().getDefaultPackageName());
         metaDescriptor.getCpoMetaAdapter().loadCpoMetaDataDocument(metaDataDoc, caseSensitive);
-
       } catch (IOException ioe) {
-        throw new CpoException("Error processing metaData from InputStream: "+metaXml + ": " + ExceptionHelper.getLocalizedMessage(ioe));
+        throw new CpoException("Error processing metaData from InputStream: " + metaXml + ": " + ExceptionHelper.getLocalizedMessage(ioe));
       } catch (XmlException xe) {
-        throw new CpoException("Error processing metaData from String: "+metaXml + ": " + ExceptionHelper.getLocalizedMessage(xe));
+        throw new CpoException("Error processing metaData from String: " + metaXml + ": " + ExceptionHelper.getLocalizedMessage(xe));
       } catch (ClassNotFoundException cnfe) {
         throw new CpoException("CpoMetaAdapter not found: " + metaDescriptorClassName + ": " + ExceptionHelper.getLocalizedMessage(cnfe));
       } catch (IllegalAccessException iae) {
         throw new CpoException("Could not access CpoMetaAdapter: " + metaDescriptorClassName + ": " + ExceptionHelper.getLocalizedMessage(iae));
       } catch (InstantiationException ie) {
         throw new CpoException("Could not instantiate CpoMetaAdapter: " + metaDescriptorClassName + ": " + ExceptionHelper.getLocalizedMessage(ie));
-      } catch (CpoException ce) {
-        throw ce;
       } catch (InvocationTargetException ite) {
         throw new CpoException("Could not invoke constructor: " + metaDescriptorClassName + ": " + ExceptionHelper.getLocalizedMessage(ite));
       } catch (IllegalArgumentException iae) {
@@ -194,28 +190,30 @@ public class CpoMetaDescriptor extends CpoMetaDescriptorCache implements CpoMeta
       } catch (SecurityException se) {
         throw new CpoException("Not allowed to access constructor: " + metaDescriptorClassName + ": " + ExceptionHelper.getLocalizedMessage(se));
       } catch (ClassCastException cce) {
-        throw new CpoException("Class is not instance of CpoMetaDescriptor: " + metaDescriptorClassName + ":" +ExceptionHelper.getLocalizedMessage(cce));
+        throw new CpoException("Class is not instance of CpoMetaDescriptor: " + metaDescriptorClassName + ":" + ExceptionHelper.getLocalizedMessage(cce));
       } finally {
         if (is != null) {
           try {
             is.close();
           } catch (Exception e) {
-
+            if (logger.isTraceEnabled()) {
+              logger.trace(e.getLocalizedMessage());
+            }
           }
         }
       }
-    } 
-         
+    }
+
     return metaDescriptor;
   }
-    
+
   protected static CpoMetaDescriptor createUpdateInstance(CpoMetaDescriptor metaDescriptor, CpoMetaAdapter metaAdapter) throws CpoException {
     if (metaDescriptor != null && metaAdapter != null) {
       addCpoMetaDescriptor(metaDescriptor);
     }
     return metaDescriptor;
   }
-      
+
   protected AbstractCpoMetaAdapter getCpoMetaAdapter() {
     return metaAdapter;
   }
@@ -296,7 +294,7 @@ public class CpoMetaDescriptor extends CpoMetaDescriptorCache implements CpoMeta
   public String getName() {
     return name;
   }
-  
+
   protected MetaXmlObjectExporter getMetaXmlObjectExporter() {
     return new CoreMetaXmlObjectExporter(this);
   }

@@ -34,12 +34,11 @@ public class CpoClassCaseInsensitive extends CpoClass {
 
   @Override
   public void addDataNameToMap(String dataName, CpoAttribute cpoAttribute) {
-      getDataMap().put(dataName.toUpperCase(), cpoAttribute);
+    getDataMap().put(dataName.toUpperCase(), cpoAttribute);
   }
 
   @Override
   public void removeDataNameFromMap(String dataName) {
-      getDataMap().remove(dataName.toUpperCase());
+    getDataMap().remove(dataName.toUpperCase());
   }
-
 }

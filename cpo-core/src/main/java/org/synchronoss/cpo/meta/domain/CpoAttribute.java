@@ -22,14 +22,13 @@ package org.synchronoss.cpo.meta.domain;
 
 import org.slf4j.*;
 import org.synchronoss.cpo.*;
-import org.synchronoss.cpo.helper.ExceptionHelper;
+import org.synchronoss.cpo.helper.*;
 import org.synchronoss.cpo.meta.CpoMetaDescriptor;
 import org.synchronoss.cpo.meta.bean.CpoAttributeBean;
 import org.synchronoss.cpo.transform.CpoTransform;
 
 import java.lang.reflect.*;
 import java.util.*;
-import org.synchronoss.cpo.helper.CpoClassLoader;
 
 public class CpoAttribute extends CpoAttributeBean {
 
@@ -101,12 +100,11 @@ public class CpoAttribute extends CpoAttributeBean {
     setterName_ = setterName;
   }
 
-  static protected List<Method> findMethods(Class clazz, String methodName, int args, boolean hasReturn) throws CpoException {
-    int count = 0;
+  protected List<Method> findMethods(Class clazz, String methodName, int args, boolean hasReturn) throws CpoException {
     List<Method> retMethods = new ArrayList<Method>();
 
     try {
-      Method methods[] = clazz.getMethods();
+      Method[] methods = clazz.getMethods();
 
       // go through once and find the accessor methods that match the method name
       for (Method m : methods) {
@@ -123,7 +121,7 @@ public class CpoAttribute extends CpoAttributeBean {
     return retMethods;
   }
 
-  static protected String buildMethodName(String prefix, String base) {
+  protected String buildMethodName(String prefix, String base) {
 
     StringBuilder methodName = new StringBuilder();
     methodName.append(prefix);
@@ -137,7 +135,7 @@ public class CpoAttribute extends CpoAttributeBean {
     Logger localLogger = instanceObject == null ? logger : LoggerFactory.getLogger(instanceObject.getClass());
 
     try {
-      setter_.invoke(instanceObject, new Object[]{cpoData.invokeGetter()});
+      setter_.invoke(instanceObject, cpoData.invokeGetter());
     } catch (IllegalAccessException iae) {
       localLogger.debug("Error Invoking Setter Method: " + ExceptionHelper.getLocalizedMessage(iae));
     } catch (InvocationTargetException ite) {
@@ -189,7 +187,7 @@ public class CpoAttribute extends CpoAttributeBean {
         // go through the constructors of the wrapper to see if there one with a parameter type
         // that is the same as the primitive
         for (Constructor ctor : objClass.getConstructors()) {
-          Class types[] = ctor.getParameterTypes();
+          Class[] types = ctor.getParameterTypes();
           if (types.length > 0 && types[0].isAssignableFrom(primClass)) {
             return true;
           }
@@ -247,8 +245,6 @@ public class CpoAttribute extends CpoAttributeBean {
       try {
         transformClass = CpoClassLoader.forName(className);
       } catch (Exception e) {
-        String msg = ExceptionHelper.getLocalizedMessage(e);
-
         localLogger.error("Invalid Transform Class specified:<" + className + ">");
         throw new CpoException("Invalid Transform Class specified:<" + className + ">:");
       }

@@ -20,26 +20,18 @@
  */
 package org.synchronoss.cpo.jdbc;
 
-import org.synchronoss.cpo.cache.CpoAdapterCache;
-import java.sql.*;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-import javax.naming.Context;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
-import javax.sql.DataSource;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.slf4j.*;
 import org.synchronoss.cpo.*;
+import org.synchronoss.cpo.cache.CpoAdapterCache;
 import org.synchronoss.cpo.helper.ExceptionHelper;
 import org.synchronoss.cpo.jdbc.meta.JdbcCpoMetaDescriptor;
 import org.synchronoss.cpo.meta.CpoMetaDescriptor;
-import org.synchronoss.cpo.meta.domain.CpoArgument;
-import org.synchronoss.cpo.meta.domain.CpoAttribute;
-import org.synchronoss.cpo.meta.domain.CpoClass;
-import org.synchronoss.cpo.meta.domain.CpoFunction;
+import org.synchronoss.cpo.meta.domain.*;
+
+import javax.naming.*;
+import javax.sql.DataSource;
+import java.sql.*;
+import java.util.*;
 
 /**
  * JdbcCpoAdapter is an interface for a set of routines that are responsible for managing value objects from a
@@ -61,7 +53,7 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
    * DOCUMENT ME!
    */
   private static final String[] GROUP_IDS = {
-    "CREATE", "UPDATE", "DELETE", "RETRIEVE", "LIST", "PERSIST", "EXIST", "EXECUTE"
+      "CREATE", "UPDATE", "DELETE", "RETRIEVE", "LIST", "PERSIST", "EXIST", "EXECUTE"
   };
   // Function Group Name Constants
   /**
@@ -101,7 +93,6 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
    */
   private Context context_ = null;
 
-
   // DataSource Information
 
   /**
@@ -132,15 +123,14 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
   /**
    * Creates a JdbcCpoAdapter.
    *
-   * @param jdsiMeta This datasource that identifies the cpo metadata datasource
+   * @param metaDescriptor This datasource that identifies the cpo metadata datasource
    * @param jdsiTrx The datasoruce that identifies the transaction database.
    * @throws org.synchronoss.cpo.CpoException exception
    */
-  protected JdbcCpoAdapter(JdbcCpoMetaDescriptor metaDescriptor, DataSourceInfo jdsiTrx)
-          throws CpoException {
+  protected JdbcCpoAdapter(JdbcCpoMetaDescriptor metaDescriptor, DataSourceInfo jdsiTrx) throws CpoException {
 
     this.metaDescriptor = metaDescriptor;
-    writeDataSource_=jdsiTrx.getDataSource();
+    writeDataSource_ = jdsiTrx.getDataSource();
     readDataSource_ = writeDataSource_;
     dataSourceName_ = jdsiTrx.getDataSourceName();
     processDatabaseMetaData();
@@ -149,15 +139,14 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
   /**
    * Creates a JdbcCpoAdapter.
    *
-   * @param jdsiMeta This datasource that identifies the cpo metadata datasource
+   * @param metaDescriptor This datasource that identifies the cpo metadata datasource
    * @param jdsiWrite The datasource that identifies the transaction database for write transactions.
    * @param jdsiRead The datasource that identifies the transaction database for read-only transactions.
    * @throws org.synchronoss.cpo.CpoException exception
    */
-  protected JdbcCpoAdapter(JdbcCpoMetaDescriptor metaDescriptor, DataSourceInfo jdsiWrite, DataSourceInfo jdsiRead)
-          throws CpoException {
+  protected JdbcCpoAdapter(JdbcCpoMetaDescriptor metaDescriptor, DataSourceInfo jdsiWrite, DataSourceInfo jdsiRead) throws CpoException {
     this.metaDescriptor = metaDescriptor;
-    writeDataSource_=jdsiWrite.getDataSource();
+    writeDataSource_ = jdsiWrite.getDataSource();
     readDataSource_ = jdsiRead.getDataSource();
     dataSourceName_ = jdsiWrite.getDataSourceName();
     processDatabaseMetaData();
@@ -165,14 +154,13 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
 
   /**
    * This constructor is used specifically to create a JdbcCpoTrxAdapter.
-   * 
+   *
    * @param metaDescriptor
    * @param batchSupported
    * @param dataSourceName
-   * @throws CpoException 
+   * @throws CpoException
    */
-  protected JdbcCpoAdapter(JdbcCpoMetaDescriptor metaDescriptor, boolean batchSupported, String dataSourceName)
-          throws CpoException {
+  protected JdbcCpoAdapter(JdbcCpoMetaDescriptor metaDescriptor, boolean batchSupported, String dataSourceName) throws CpoException {
     this.metaDescriptor = metaDescriptor;
     batchUpdatesSupported_ = batchSupported;
     dataSourceName_ = dataSourceName;
@@ -197,9 +185,9 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
   }
 
   public static JdbcCpoAdapter getInstance(JdbcCpoMetaDescriptor metaDescriptor, DataSourceInfo jdsiTrx) throws CpoException {
-    String adapterKey = metaDescriptor+":"+jdsiTrx.getDataSourceName();
+    String adapterKey = metaDescriptor + ":" + jdsiTrx.getDataSourceName();
     JdbcCpoAdapter adapter = (JdbcCpoAdapter)findCpoAdapter(adapterKey);
-    if (adapter==null) {
+    if (adapter == null) {
       adapter = new JdbcCpoAdapter(metaDescriptor, jdsiTrx);
       addCpoAdapter(adapterKey, adapter);
     }
@@ -209,15 +197,15 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
   /**
    * Creates a JdbcCpoAdapter.
    *
-   * @param jdsiMeta This datasource that identifies the cpo metadata datasource
+   * @param metaDescriptor This datasource that identifies the cpo metadata datasource
    * @param jdsiWrite The datasource that identifies the transaction database for write transactions.
    * @param jdsiRead The datasource that identifies the transaction database for read-only transactions.
    * @throws org.synchronoss.cpo.CpoException exception
    */
   public static JdbcCpoAdapter getInstance(JdbcCpoMetaDescriptor metaDescriptor, DataSourceInfo jdsiWrite, DataSourceInfo jdsiRead) throws CpoException {
-    String adapterKey = metaDescriptor+":"+jdsiWrite.getDataSourceName()+":"+jdsiRead.getDataSourceName();
+    String adapterKey = metaDescriptor + ":" + jdsiWrite.getDataSourceName() + ":" + jdsiRead.getDataSourceName();
     JdbcCpoAdapter adapter = (JdbcCpoAdapter)findCpoAdapter(adapterKey);
-    if (adapter==null) {
+    if (adapter == null) {
       adapter = new JdbcCpoAdapter(metaDescriptor, jdsiWrite);
       addCpoAdapter(adapterKey, adapter);
     }
@@ -246,14 +234,13 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
    * 	so.setName("SomeName");
    * 	try{
    * 		cpo.insertObject(so);
-   * 	} catch (CpoException ce) {
+   *  } catch (CpoException ce) {
    * 		// Handle the error
    *
-   * 	}
+   *  }
    * }
    * </code>
    * </pre>
-   *
    *
    * @param obj This is an object that has been defined within the metadata of the datasource. If the class is not
    * defined an exception will be thrown.
@@ -287,13 +274,12 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
    * 	so.setName("SomeName");
    * 	try{
    * 		cpo.insertObject("IDNameInsert",so);
-   * 	} catch (CpoException ce) {
+   *  } catch (CpoException ce) {
    * 		// Handle the error
-   * 	}
+   *  }
    * }
    * </code>
    * </pre>
-   *
    *
    * @param name The String name of the CREATE Function Group that will be used to create the object in the datasource.
    * null signifies that the default rules will be used which is equivalent to insertObject(Object obj);
@@ -329,13 +315,12 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
    * 	so.setName("SomeName");
    * 	try{
    * 		cpo.insertObject("IDNameInsert",so);
-   * 	} catch (CpoException ce) {
+   *  } catch (CpoException ce) {
    * 		// Handle the error
-   * 	}
+   *  }
    * }
    * </code>
    * </pre>
-   *
    *
    * @param name The String name of the CREATE Function Group that will be used to create the object in the datasource.
    * null signifies that the default rules will be used which is equivalent to insertObject(Object obj);
@@ -349,8 +334,7 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
   @Override
-  public <T> long insertObject(String name, T obj, Collection<CpoWhere> wheres,
-          Collection<CpoOrderBy> orderBy, Collection<CpoNativeFunction> nativeExpressions) throws CpoException {
+  public <T> long insertObject(String name, T obj, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeFunction> nativeExpressions) throws CpoException {
     return processUpdateGroup(obj, JdbcCpoAdapter.CREATE_GROUP, name, wheres, orderBy, nativeExpressions);
   }
 
@@ -385,14 +369,14 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
    * 		so.setId(1);
    * 		so.setName("SomeName");
    * 		al.add(so);
-   * 	}
+   *  }
    * 	try{
    * 		cpo.insertObjects(al);
-   * 	} catch (CpoException ce) {
+   *  } catch (CpoException ce) {
    * 		// Handle the error
-   * 	}
+   *  }
    * }
-   *</code>
+   * </code>
    * </pre>
    *
    * @param coll This is a collection of objects that have been defined within the metadata of the datasource. If the
@@ -401,8 +385,7 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
   @Override
-  public <T> long insertObjects(Collection<T> coll)
-          throws CpoException {
+  public <T> long insertObjects(Collection<T> coll) throws CpoException {
     return processUpdateGroup(coll, JdbcCpoAdapter.CREATE_GROUP, null, null, null, null);
   }
 
@@ -435,14 +418,14 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
    * 		so.setId(1);
    * 		so.setName("SomeName");
    * 		al.add(so);
-   * 	}
+   *  }
    * 	try{
    * 		cpo.insertObjects("IdNameInsert",al);
-   * 	} catch (CpoException ce) {
+   *  } catch (CpoException ce) {
    * 		// Handle the error
-   * 	}
+   *  }
    * }
-   *</code>
+   * </code>
    * </pre>
    *
    * @param name The String name of the CREATE Function Group that will be used to create the object in the datasource.
@@ -453,8 +436,7 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
   @Override
-  public <T> long insertObjects(String name, Collection<T> coll)
-          throws CpoException {
+  public <T> long insertObjects(String name, Collection<T> coll) throws CpoException {
     return processUpdateGroup(coll, JdbcCpoAdapter.CREATE_GROUP, name, null, null, null);
   }
 
@@ -487,14 +469,14 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
    * 		so.setId(1);
    * 		so.setName("SomeName");
    * 		al.add(so);
-   * 	}
+   *  }
    * 	try{
    * 		cpo.insertObjects("IdNameInsert",al);
-   * 	} catch (CpoException ce) {
+   *  } catch (CpoException ce) {
    * 		// Handle the error
-   * 	}
+   *  }
    * }
-   *</code>
+   * </code>
    * </pre>
    *
    * @param name The String name of the CREATE Function Group that will be used to create the object in the datasource.
@@ -509,9 +491,7 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
   @Override
-  public <T> long insertObjects(String name, Collection<T> coll, Collection<CpoWhere> wheres,
-          Collection<CpoOrderBy> orderBy, Collection<CpoNativeFunction> nativeExpressions)
-          throws CpoException {
+  public <T> long insertObjects(String name, Collection<T> coll, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeFunction> nativeExpressions) throws CpoException {
     return processUpdateGroup(coll, JdbcCpoAdapter.CREATE_GROUP, name, wheres, orderBy, nativeExpressions);
   }
 
@@ -537,9 +517,9 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
    * 	so.setName("SomeName");
    * 	try{
    * 		cpo.deleteObject(so);
-   * 	} catch (CpoException ce) {
+   *  } catch (CpoException ce) {
    * 		// Handle the error
-   * 	}
+   *  }
    * }
    * </code>
    * </pre>
@@ -576,9 +556,9 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
    * 	so.setName("SomeName");
    * 	try{
    * 		cpo.deleteObject("DeleteById",so);
-   * 	} catch (CpoException ce) {
+   *  } catch (CpoException ce) {
    * 	// Handle the error
-   * 	}
+   *  }
    * }
    * </code>
    * </pre>
@@ -617,9 +597,9 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
    * 	so.setName("SomeName");
    * 	try{
    * 		cpo.deleteObject("DeleteById",so);
-   * 	} catch (CpoException ce) {
+   *  } catch (CpoException ce) {
    * 	// Handle the error
-   * 	}
+   *  }
    * }
    * </code>
    * </pre>
@@ -636,8 +616,7 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
   @Override
-  public <T> long deleteObject(String name, T obj, Collection<CpoWhere> wheres,
-          Collection<CpoOrderBy> orderBy, Collection<CpoNativeFunction> nativeExpressions) throws CpoException {
+  public <T> long deleteObject(String name, T obj, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeFunction> nativeExpressions) throws CpoException {
     return processUpdateGroup(obj, JdbcCpoAdapter.DELETE_GROUP, name, wheres, orderBy, nativeExpressions);
   }
 
@@ -669,14 +648,14 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
    * 		so.setId(1);
    * 		so.setName("SomeName");
    * 		al.add(so);
-   * 	}
+   *  }
    * 	try{
    * 		cpo.deleteObjects(al);
-   * 	} catch (CpoException ce) {
+   *  } catch (CpoException ce) {
    * 		// Handle the error
-   * 	}
+   *  }
    * }
-   *</code>
+   * </code>
    * </pre>
    *
    * @param coll This is a collection of objects that have been defined within the metadata of the datasource. If the
@@ -685,8 +664,7 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
   @Override
-  public <T> long deleteObjects(Collection<T> coll)
-          throws CpoException {
+  public <T> long deleteObjects(Collection<T> coll) throws CpoException {
     return processUpdateGroup(coll, JdbcCpoAdapter.DELETE_GROUP, null, null, null, null);
   }
 
@@ -718,15 +696,15 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
    * 		so.setId(1);
    * 		so.setName("SomeName");
    * 		al.add(so);
-   * 	}
+   *  }
    *
    * 	try{
    * 		cpo.deleteObjects("IdNameDelete",al);
-   * 	} catch (CpoException ce) {
+   *  } catch (CpoException ce) {
    * 		// Handle the error
-   * 	}
+   *  }
    * }
-   *</code>
+   * </code>
    * </pre>
    *
    * @param name The String name of the DELETE Function Group that will be used to create the object in the datasource.
@@ -737,8 +715,7 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
   @Override
-  public <T> long deleteObjects(String name, Collection<T> coll)
-          throws CpoException {
+  public <T> long deleteObjects(String name, Collection<T> coll) throws CpoException {
     return processUpdateGroup(coll, JdbcCpoAdapter.DELETE_GROUP, name, null, null, null);
   }
 
@@ -770,15 +747,15 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
    * 		so.setId(1);
    * 		so.setName("SomeName");
    * 		al.add(so);
-   * 	}
+   *  }
    *
    * 	try{
    * 		cpo.deleteObjects("IdNameDelete",al);
-   * 	} catch (CpoException ce) {
+   *  } catch (CpoException ce) {
    * 		// Handle the error
-   * 	}
+   *  }
    * }
-   *</code>
+   * </code>
    * </pre>
    *
    * @param name The String name of the DELETE Function Group that will be used to create the object in the datasource.
@@ -793,9 +770,7 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
   @Override
-  public <T> long deleteObjects(String name, Collection<T> coll, Collection<CpoWhere> wheres,
-          Collection<CpoOrderBy> orderBy, Collection<CpoNativeFunction> nativeExpressions)
-          throws CpoException {
+  public <T> long deleteObjects(String name, Collection<T> coll, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeFunction> nativeExpressions) throws CpoException {
     return processUpdateGroup(coll, JdbcCpoAdapter.DELETE_GROUP, name, wheres, orderBy, nativeExpressions);
   }
 
@@ -821,9 +796,9 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
    * 	so.setName("SomeName");
    * 	try{
    * 		cpo.executeObject(so);
-   * 	} catch (CpoException ce) {
+   *  } catch (CpoException ce) {
    * 		// Handle the error
-   * 	}
+   *  }
    * }
    * </code>
    * </pre>
@@ -838,8 +813,7 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
   @Override
-  public <T> T executeObject(T object)
-          throws CpoException {
+  public <T> T executeObject(T object) throws CpoException {
     return processExecuteGroup(null, object, object);
   }
 
@@ -865,9 +839,9 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
    * 	so.setName("SomeName");
    * 	try{
    * 		cpo.executeObject("execNotifyProc",so);
-   * 	} catch (CpoException ce) {
+   *  } catch (CpoException ce) {
    * 	// Handle the error
-   * 	}
+   *  }
    * }
    * </code>
    * </pre>
@@ -882,8 +856,7 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
    * @throws CpoException if there are errors accessing the datasource
    */
   @Override
-  public <T> T executeObject(String name, T object)
-          throws CpoException {
+  public <T> T executeObject(String name, T object) throws CpoException {
     return processExecuteGroup(name, object, object);
   }
 
@@ -910,9 +883,9 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
    * 	so.setName("SomeName");
    * 	try{
    * 		sr = (SomeResult)cpo.executeObject("execNotifyProc",so, sr);
-   * 	} catch (CpoException ce) {
+   *  } catch (CpoException ce) {
    * 		// Handle the error
-   * 	}
+   *  }
    * }
    * </code>
    * </pre>
@@ -930,8 +903,7 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
   @Override
-  public <T, C> T executeObject(String name, C criteria, T result)
-          throws CpoException {
+  public <T, C> T executeObject(String name, C criteria, T result) throws CpoException {
     return processExecuteGroup(name, criteria, result);
   }
 
@@ -959,12 +931,12 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
    * 		count = cpo.existsObject(so);
    * 		if (count>0) {
    * 			// object exists
-   * 		} else {
+   *    } else {
    * 			// object does not exist
-   * 		}
-   * 	} catch (CpoException ce) {
+   *    }
+   *  } catch (CpoException ce) {
    * 		// Handle the error
-   * 	}
+   *  }
    * }
    * </code>
    * </pre>
@@ -1003,12 +975,12 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
    * 		count = cpo.existsObject("SomeExistCheck",so);
    * 		if (count>0) {
    * 			// object exists
-   * 		} else {
+   *    } else {
    * 			// object does not exist
-   * 		}
-   * 	} catch (CpoException ce) {
+   *    }
+   *  } catch (CpoException ce) {
    * 		// Handle the error
-   * 	}
+   *  }
    * }
    * </code>
    * </pre>
@@ -1065,9 +1037,8 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
    * null signifies that the default rules will be used.
    * @param obj This is an object that has been defined within the metadata of the datasource. If the class is not
    * defined an exception will be thrown. This object will be searched for inside the datasource.
-   * @param where A CpoWhere object that passes in run-time constraints to the function that performs the the exist
+   * @param wheres A CpoWhere object that passes in run-time constraints to the function that performs the the exist
    * @return The number of objects that exist in the datasource that match the specified object
-   *
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
   @Override
@@ -1099,8 +1070,7 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
    * @return The int value of the first column returned in the record set
    * @throws CpoException exception will be thrown if the Function Group has a function count != 1
    */
-  protected <T> long existsObject(String name, T obj, Connection con, Collection<CpoWhere> wheres)
-          throws CpoException {
+  protected <T> long existsObject(String name, T obj, Connection con, Collection<CpoWhere> wheres) throws CpoException {
     PreparedStatement ps = null;
     ResultSet rs = null;
     ResultSetMetaData rsmd;
@@ -1156,8 +1126,6 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
         rs = null;
         ps = null;
       }
-
-
     } catch (SQLException e) {
       String msg = "existsObject(name, obj, con) failed:";
       localLogger.error(msg, e);
@@ -1180,8 +1148,7 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
   @Override
-  public CpoOrderBy newOrderBy(String attribute, boolean ascending)
-          throws CpoException {
+  public CpoOrderBy newOrderBy(String attribute, boolean ascending) throws CpoException {
     return new JdbcCpoOrderBy(attribute, ascending);
   }
 
@@ -1196,8 +1163,7 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
   @Override
-  public CpoOrderBy newOrderBy(String marker, String attribute, boolean ascending)
-          throws CpoException {
+  public CpoOrderBy newOrderBy(String marker, String attribute, boolean ascending) throws CpoException {
     return new JdbcCpoOrderBy(marker, attribute, ascending);
   }
 
@@ -1213,8 +1179,7 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
   @Override
-  public CpoOrderBy newOrderBy(String attribute, boolean ascending, String function)
-          throws CpoException {
+  public CpoOrderBy newOrderBy(String attribute, boolean ascending, String function) throws CpoException {
     return new JdbcCpoOrderBy(attribute, ascending, function);
   }
 
@@ -1231,8 +1196,7 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
   @Override
-  public CpoOrderBy newOrderBy(String marker, String attribute, boolean ascending, String function)
-          throws CpoException {
+  public CpoOrderBy newOrderBy(String marker, String attribute, boolean ascending, String function) throws CpoException {
     return new JdbcCpoOrderBy(marker, attribute, ascending, function);
   }
 
@@ -1258,8 +1222,7 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
    * @throws CpoException DOCUMENT ME!
    */
   @Override
-  public <T> CpoWhere newWhere(int logical, String attr, int comp, T value)
-          throws CpoException {
+  public <T> CpoWhere newWhere(int logical, String attr, int comp, T value) throws CpoException {
     return new JdbcCpoWhere(logical, attr, comp, value);
   }
 
@@ -1303,9 +1266,9 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
    * 	so.setName("SomeName");
    * 	try{
    * 		cpo.persistObject(so);
-   * 	} catch (CpoException ce) {
+   *  } catch (CpoException ce) {
    * 		// Handle the error
-   * 	}
+   *  }
    * }
    * </code>
    * </pre>
@@ -1319,8 +1282,7 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
    * @see #updateObject
    */
   @Override
-  public <T> long persistObject(T obj)
-          throws CpoException {
+  public <T> long persistObject(T obj) throws CpoException {
     return processUpdateGroup(obj, JdbcCpoAdapter.PERSIST_GROUP, null, null, null, null);
   }
 
@@ -1347,9 +1309,9 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
    * 	so.setName("SomeName");
    * 	try{
    * 		cpo.persistObject("persistSomeObject",so);
-   * 	} catch (CpoException ce) {
+   *  } catch (CpoException ce) {
    * 		// Handle the error
-   * 	}
+   *  }
    * }
    * </code>
    * </pre>
@@ -1365,8 +1327,7 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
    * @see #updateObject
    */
   @Override
-  public <T> long persistObject(String name, T obj)
-          throws CpoException {
+  public <T> long persistObject(String name, T obj) throws CpoException {
     return processUpdateGroup(obj, JdbcCpoAdapter.PERSIST_GROUP, name, null, null, null);
   }
 
@@ -1397,14 +1358,14 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
    * 		so.setId(1);
    * 		so.setName("SomeName");
    * 		al.add(so);
-   * 	}
+   *  }
    * 	try{
    * 		cpo.persistObjects(al);
-   * 	} catch (CpoException ce) {
+   *  } catch (CpoException ce) {
    * 		// Handle the error
-   * 	}
+   *  }
    * }
-   *</code>
+   * </code>
    * </pre>
    *
    * @param coll This is a collection of objects that have been defined within the metadata of the datasource. If the
@@ -1416,8 +1377,7 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
    * @see #updateObject
    */
   @Override
-  public <T> long persistObjects(Collection<T> coll)
-          throws CpoException {
+  public <T> long persistObjects(Collection<T> coll) throws CpoException {
     return processUpdateGroup(coll, JdbcCpoAdapter.PERSIST_GROUP, null, null, null, null);
   }
 
@@ -1448,14 +1408,14 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
    * 		so.setId(1);
    * 		so.setName("SomeName");
    * 		al.add(so);
-   * 	}
+   *  }
    * 	try{
    * 		cpo.persistObjects("myPersist",al);
-   * 	} catch (CpoException ce) {
+   *  } catch (CpoException ce) {
    * 		// Handle the error
-   * 	}
+   *  }
    * }
-   *</code>
+   * </code>
    * </pre>
    *
    * @param name The name which identifies which EXISTS, INSERT, and UPDATE Function Groups to execute to persist the
@@ -1469,8 +1429,7 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
    * @see #updateObject
    */
   @Override
-  public <T> long persistObjects(String name, Collection<T> coll)
-          throws CpoException {
+  public <T> long persistObjects(String name, Collection<T> coll) throws CpoException {
     return processUpdateGroup(coll, JdbcCpoAdapter.PERSIST_GROUP, name, null, null, null);
   }
 
@@ -1482,12 +1441,11 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
    * defined an exception will be thrown. If the bean does not exist in the datasource, an exception will be thrown. The
    * input bean is used to specify the search criteria, the output bean is populated with the results of the function.
    * @return An bean of the same type as the result argument that is filled in as specified the metadata for the
-   * retireve.
+   *         retireve.
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
   @Override
-  public <T> T retrieveBean(T bean)
-          throws CpoException {
+  public <T> T retrieveBean(T bean) throws CpoException {
     T o = processSelectGroup(bean, null, null, null, null);
 
     return (o);
@@ -1502,12 +1460,11 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
    * defined an exception will be thrown. If the bean does not exist in the datasource, an exception will be thrown. The
    * input bean is used to specify the search criteria, the output bean is populated with the results of the function.
    * @return An bean of the same type as the result argument that is filled in as specified the metadata for the
-   * retireve.
+   *         retireve.
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
   @Override
-  public <T> T retrieveBean(String name, T bean)
-          throws CpoException {
+  public <T> T retrieveBean(String name, T bean) throws CpoException {
     T o = processSelectGroup(bean, name, null, null, null);
 
     return (o);
@@ -1526,13 +1483,11 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
    * @param nativeExpressions Native expression that will be used to augment the expression stored in the meta data. This
    * text will be embedded at run-time
    * @return An bean of the same type as the result argument that is filled in as specified the metadata for the
-   * retireve.
+   *         retireve.
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
   @Override
-  public <T> T retrieveBean(String name, T bean, Collection<CpoWhere> wheres,
-          Collection<CpoOrderBy> orderBy, Collection<CpoNativeFunction> nativeExpressions)
-          throws CpoException {
+  public <T> T retrieveBean(String name, T bean, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeFunction> nativeExpressions) throws CpoException {
     T o = processSelectGroup(bean, name, wheres, orderBy, nativeExpressions);
 
     return (o);
@@ -1553,12 +1508,11 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
    * @param wheres A collection of CpoWhere beans that define the constraints that should be used when retrieving beans
    * @param orderBy The CpoOrderBy bean that defines the order in which beans should be returned
    * @return An bean of the same type as the result argument that is filled in as specified the metadata for the
-   * retireve.
+   *         retireve.
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
   @Override
-  public <T, C> T retrieveBean(String name, C criteria, T result, Collection<CpoWhere> wheres,
-          Collection<CpoOrderBy> orderBy) throws CpoException {
+  public <T, C> T retrieveBean(String name, C criteria, T result, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy) throws CpoException {
     return retrieveBean(name, criteria, result, wheres, orderBy, null);
   }
 
@@ -1579,12 +1533,11 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
    * @param nativeExpressions Native expression that will be used to augment the expression stored in the meta data. This
    * text will be embedded at run-time
    * @return An bean of the same type as the result argument that is filled in as specified the metadata for the
-   * retireve.
+   *         retireve.
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
   @Override
-  public <T, C> T retrieveBean(String name, C criteria, T result, Collection<CpoWhere> wheres,
-          Collection<CpoOrderBy> orderBy, Collection<CpoNativeFunction> nativeExpressions) throws CpoException {
+  public <T, C> T retrieveBean(String name, C criteria, T result, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeFunction> nativeExpressions) throws CpoException {
     Iterator<T> it = processSelectGroup(name, criteria, result, wheres, orderBy, nativeExpressions, true).iterator();
     if (it.hasNext()) {
       return it.next();
@@ -1602,8 +1555,7 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
    * defined an exception will be thrown. If the bean does not exist in the datasource, an exception will be thrown.
    * This bean is used to specify the arguments used to retrieve the collection of beans.
    * @return A collection of beans will be returned that meet the criteria specified by obj. The beans will be of the
-   * same type as the bean that was passed in. If no beans match the criteria, an empty collection will be returned
-   *
+   *         same type as the bean that was passed in. If no beans match the criteria, an empty collection will be returned
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
   @Override
@@ -1622,13 +1574,11 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
    * @param where A CpoWhere bean that defines the constraints that should be used when retrieving beans
    * @param orderBy The CpoOrderBy bean that defines the order in which beans should be returned
    * @return A collection of beans will be returned that meet the criteria specified by obj. The beans will be of the
-   * same type as the bean that was passed in. If no beans match the criteria, an empty collection will be returned
-   *
+   *         same type as the bean that was passed in. If no beans match the criteria, an empty collection will be returned
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
   @Override
-  public <C> List<C> retrieveBeans(String name, C criteria, CpoWhere where,
-          Collection<CpoOrderBy> orderBy) throws CpoException {
+  public <C> List<C> retrieveBeans(String name, C criteria, CpoWhere where, Collection<CpoOrderBy> orderBy) throws CpoException {
     ArrayList<CpoWhere> wheres = null;
     if (where != null) {
       wheres = new ArrayList<CpoWhere>();
@@ -1648,13 +1598,11 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
    * @param wheres A collection of CpoWhere beans that define the constraints that should be used when retrieving beans
    * @param orderBy The CpoOrderBy bean that defines the order in which beans should be returned
    * @return A collection of beans will be returned that meet the criteria specified by obj. The beans will be of the
-   * same type as the bean that was passed in. If no beans match the criteria, an empty collection will be returned
-   *
+   *         same type as the bean that was passed in. If no beans match the criteria, an empty collection will be returned
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
   @Override
-  public <C> List<C> retrieveBeans(String name, C criteria, Collection<CpoWhere> wheres,
-          Collection<CpoOrderBy> orderBy) throws CpoException {
+  public <C> List<C> retrieveBeans(String name, C criteria, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy) throws CpoException {
     return processSelectGroup(name, criteria, criteria, wheres, orderBy, null, false);
   }
 
@@ -1668,8 +1616,7 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
    * This bean is used to specify the arguments used to retrieve the collection of beans.
    * @param orderBy The CpoOrderBy bean that defines the order in which beans should be returned
    * @return A collection of beans will be returned that meet the criteria specified by obj. The beans will be of the
-   * same type as the bean that was passed in. If no beans match the criteria, an empty collection will be returned
-   *
+   *         same type as the bean that was passed in. If no beans match the criteria, an empty collection will be returned
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
   @Override
@@ -1689,8 +1636,7 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
    * defined an exception will be thrown. If the bean does not exist in the datasource, an exception will be thrown.
    * This bean is used to specify the bean type that will be returned in the collection.
    * @return A collection of beans will be returned that meet the criteria specified by obj. The beans will be of the
-   * same type as the bean that was passed in. If no beans match the criteria, an empty collection will be returned
-   *
+   *         same type as the bean that was passed in. If no beans match the criteria, an empty collection will be returned
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
   @Override
@@ -1712,13 +1658,11 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
    * @param where A CpoWhere bean that defines the constraints that should be used when retrieving beans
    * @param orderBy The CpoOrderBy bean that defines the order in which beans should be returned
    * @return A collection of beans will be returned that meet the criteria specified by obj. The beans will be of the
-   * same type as the bean that was passed in. If no beans match the criteria, an empty collection will be returned
-   *
+   *         same type as the bean that was passed in. If no beans match the criteria, an empty collection will be returned
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
   @Override
-  public <T, C> List<T> retrieveBeans(String name, C criteria, T result, CpoWhere where,
-          Collection<CpoOrderBy> orderBy) throws CpoException {
+  public <T, C> List<T> retrieveBeans(String name, C criteria, T result, CpoWhere where, Collection<CpoOrderBy> orderBy) throws CpoException {
     ArrayList<CpoWhere> wheres = null;
     if (where != null) {
       wheres = new ArrayList<CpoWhere>();
@@ -1741,12 +1685,11 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
    * @param wheres A collection of CpoWhere beans that define the constraints that should be used when retrieving beans
    * @param orderBy The CpoOrderBy bean that defines the order in which beans should be returned
    * @return A collection of beans will be returned that meet the criteria specified by obj. The beans will be of the
-   * same type as the bean that was passed in. If no beans match the criteria, an empty collection will be returned
+   *         same type as the bean that was passed in. If no beans match the criteria, an empty collection will be returned
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
   @Override
-  public <T, C> List<T> retrieveBeans(String name, C criteria, T result, Collection<CpoWhere> wheres,
-          Collection<CpoOrderBy> orderBy) throws CpoException {
+  public <T, C> List<T> retrieveBeans(String name, C criteria, T result, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy) throws CpoException {
     return processSelectGroup(name, criteria, result, wheres, orderBy, null, false);
   }
 
@@ -1766,12 +1709,11 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
    * @param nativeExpressions Native expression that will be used to augment the expression stored in the meta data. This
    * text will be embedded at run-time
    * @return A collection of beans will be returned that meet the criteria specified by obj. The beans will be of the
-   * same type as the bean that was passed in. If no beans match the criteria, an empty collection will be returned
+   *         same type as the bean that was passed in. If no beans match the criteria, an empty collection will be returned
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
   @Override
-  public <T, C> List<T> retrieveBeans(String name, C criteria, T result, Collection<CpoWhere> wheres,
-          Collection<CpoOrderBy> orderBy, Collection<CpoNativeFunction> nativeExpressions) throws CpoException {
+  public <T, C> List<T> retrieveBeans(String name, C criteria, T result, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeFunction> nativeExpressions) throws CpoException {
     return processSelectGroup(name, criteria, result, wheres, orderBy, nativeExpressions, false);
   }
 
@@ -1795,16 +1737,13 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
    * @param orderBy The CpoOrderBy bean that defines the order in which beans should be returned
    * @param nativeExpressions Native expression that will be used to augment the expression stored in the meta data. This
    * text will be embedded at run-time
-   * @param beanBufferSize the maximum number of beans that the Iterator is allowed to cache. Once reached, the CPO
+   * @param queueSize the maximum number of beans that the Iterator is allowed to cache. Once reached, the CPO
    * framework will halt processing records from the datasource.
-   *
    * @return An iterator that will be fed beans from the CPO framework.
-   *
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
   @Override
-  public <T, C> CpoResultSet<T> retrieveBeans(String name, C criteria, T result, Collection<CpoWhere> wheres,
-          Collection<CpoOrderBy> orderBy, Collection<CpoNativeFunction> nativeExpressions, int queueSize) throws CpoException {
+  public <T, C> CpoResultSet<T> retrieveBeans(String name, C criteria, T result, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeFunction> nativeExpressions, int queueSize) throws CpoException {
     CpoBlockingResultSet<T> resultSet = new CpoBlockingResultSet<T>(queueSize);
     RetrieverThread<T, C> retrieverThread = new RetrieverThread<T, C>(name, criteria, result, wheres, orderBy, nativeExpressions, false, resultSet);
 
@@ -1834,9 +1773,9 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
    * 	so.setName("SomeName");
    * 	try{
    * 		cpo.updateObject(so);
-   * 	} catch (CpoException ce) {
+   *  } catch (CpoException ce) {
    * 		// Handle the error
-   * 	}
+   *  }
    * }
    * </code>
    * </pre>
@@ -1873,9 +1812,9 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
    * 	so.setName("SomeName");
    * 	try{
    * 		cpo.updateObject("updateSomeObject",so);
-   * 	} catch (CpoException ce) {
+   *  } catch (CpoException ce) {
    * 		// Handle the error
-   * 	}
+   *  }
    * }
    * </code>
    * </pre>
@@ -1914,9 +1853,9 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
    * 	so.setName("SomeName");
    * 	try{
    * 		cpo.updateObject("updateSomeObject",so);
-   * 	} catch (CpoException ce) {
+   *  } catch (CpoException ce) {
    * 		// Handle the error
-   * 	}
+   *  }
    * }
    * </code>
    * </pre>
@@ -1962,14 +1901,14 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
    * 		so.setId(1);
    * 		so.setName("SomeName");
    * 		al.add(so);
-   * 	}
+   *  }
    * 	try{
    * 		cpo.updateObjects(al);
-   * 	} catch (CpoException ce) {
+   *  } catch (CpoException ce) {
    * 		// Handle the error
-   * 	}
+   *  }
    * }
-   *</code>
+   * </code>
    * </pre>
    *
    * @param coll This is a collection of objects that have been defined within the metadata of the datasource. If the
@@ -1978,8 +1917,7 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
   @Override
-  public <T> long updateObjects(Collection<T> coll)
-          throws CpoException {
+  public <T> long updateObjects(Collection<T> coll) throws CpoException {
     return processUpdateGroup(coll, JdbcCpoAdapter.UPDATE_GROUP, null, null, null, null);
   }
 
@@ -2009,14 +1947,14 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
    * 		so.setId(1);
    * 		so.setName("SomeName");
    * 		al.add(so);
-   * 	}
+   *  }
    * 	try{
    * 		cpo.updateObjects("myUpdate",al);
-   * 	} catch (CpoException ce) {
+   *  } catch (CpoException ce) {
    * 		// Handle the error
-   * 	}
+   *  }
    * }
-   *</code>
+   * </code>
    * </pre>
    *
    * @param name The String name of the UPDATE Function Group that will be used to create the object in the datasource.
@@ -2027,8 +1965,7 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
   @Override
-  public <T> long updateObjects(String name, Collection<T> coll)
-          throws CpoException {
+  public <T> long updateObjects(String name, Collection<T> coll) throws CpoException {
     return processUpdateGroup(coll, JdbcCpoAdapter.UPDATE_GROUP, name, null, null, null);
   }
 
@@ -2058,14 +1995,14 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
    * 		so.setId(1);
    * 		so.setName("SomeName");
    * 		al.add(so);
-   * 	}
+   *  }
    * 	try{
    * 		cpo.updateObjects("myUpdate",al);
-   * 	} catch (CpoException ce) {
+   *  } catch (CpoException ce) {
    * 		// Handle the error
-   * 	}
+   *  }
    * }
-   *</code>
+   * </code>
    * </pre>
    *
    * @param name The String name of the UPDATE Function Group that will be used to create the object in the datasource.
@@ -2079,8 +2016,7 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
   @Override
-  public <T> long updateObjects(String name, Collection<T> coll, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeFunction> nativeExpressions)
-          throws CpoException {
+  public <T> long updateObjects(String name, Collection<T> coll, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeFunction> nativeExpressions) throws CpoException {
     return processUpdateGroup(coll, JdbcCpoAdapter.UPDATE_GROUP, name, wheres, orderBy, nativeExpressions);
   }
 
@@ -2118,16 +2054,14 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
    * @param type DOCUMENT ME!
    * @param name DOCUMENT ME!
    * @param c DOCUMENT ME!
-   * @param meta metadata conn
    * @return DOCUMENT ME!
    * @throws CpoException DOCUMENT ME!
    */
-  protected <T> String getGroupType(T obj, String type, String name, Connection c)
-          throws CpoException {
+  protected <T> String getGroupType(T obj, String type, String name, Connection c) throws CpoException {
     String retType = type;
     long objCount;
 
-    if (JdbcCpoAdapter.PERSIST_GROUP.equals(retType) == true) {
+    if (JdbcCpoAdapter.PERSIST_GROUP.equals(retType)) {
       objCount = existsObject(name, obj, c, null);
 
       if (objCount == 0) {
@@ -2153,7 +2087,7 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
 
     if (connection == null) {
       try {
-        if (invalidReadConnection_ == false) {
+        if (!(invalidReadConnection_)) {
           connection = getReadDataSource().getConnection();
         } else {
           connection = getWriteDataSource().getConnection();
@@ -2228,7 +2162,6 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
     // overridden by JdbcTrxAdapter
   }
 
-
   /**
    * DOCUMENT ME!
    *
@@ -2250,6 +2183,9 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
         connection.close();
       }
     } catch (SQLException e) {
+      if (logger.isTraceEnabled()) {
+        logger.trace(e.getMessage());
+      }
     }
   }
 
@@ -2264,6 +2200,9 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
         connection.commit();
       }
     } catch (SQLException e) {
+      if (logger.isTraceEnabled()) {
+        logger.trace(e.getMessage());
+      }
     }
   }
 
@@ -2278,7 +2217,13 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
         connection.rollback();
       }
     } catch (SQLException se) {
+      if (logger.isTraceEnabled()) {
+        logger.trace(se.getMessage());
+      }
     } catch (Exception e) {
+      if (logger.isTraceEnabled()) {
+        logger.trace(e.getMessage());
+      }
     }
   }
 
@@ -2297,8 +2242,7 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
    * @return A result object populate with the OUT arguments
    * @throws CpoException DOCUMENT ME!
    */
-  protected <T, C> T processExecuteGroup(String name, C criteria, T result)
-          throws CpoException {
+  protected <T, C> T processExecuteGroup(String name, C criteria, T result) throws CpoException {
     Connection c = null;
     T obj = null;
 
@@ -2327,8 +2271,7 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
    * @return DOCUMENT ME!
    * @throws CpoException DOCUMENT ME!
    */
-  protected <T, C> T processExecuteGroup(String name, C criteria, T result,
-          Connection conn) throws CpoException {
+  protected <T, C> T processExecuteGroup(String name, C criteria, T result, Connection conn) throws CpoException {
     CallableStatement cstmt = null;
     CpoClass criteriaClass;
     T returnObject = null;
@@ -2343,11 +2286,10 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
     try {
       criteriaClass = metaDescriptor.getMetaClass(criteria);
       List<CpoFunction> functions = criteriaClass.getFunctionGroup(JdbcCpoAdapter.EXECUTE_GROUP, name).getFunctions();
-      localLogger.info("===================processExecuteGroup (" + name + ") Count<"
-              + functions.size() + ">=========================");
+      localLogger.info("===================processExecuteGroup (" + name + ") Count<" + functions.size() + ">=========================");
 
       try {
-        returnObject = (T) result.getClass().newInstance();
+        returnObject = (T)result.getClass().newInstance();
       } catch (IllegalAccessException iae) {
         throw new CpoException("Unable to access the constructor of the Return Object", iae);
       } catch (InstantiationException iae) {
@@ -2356,7 +2298,7 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
 
       // Loop through the queries and process each one
       for (CpoFunction function : functions) {
-        
+
         localLogger.debug("Executing Call:" + criteriaClass.getName() + ":" + name);
 
         jcsf = new JdbcCallableStatementFactory(conn, this, function, criteria);
@@ -2373,9 +2315,9 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
 
         // Loop through the OUT Parameters and set them in the result
         // object
-        int j=1;
+        int j = 1;
         for (CpoArgument cpoArgument : jcsf.getOutArguments()) {
-          JdbcCpoArgument jdbcArgument = (JdbcCpoArgument) cpoArgument;
+          JdbcCpoArgument jdbcArgument = (JdbcCpoArgument)cpoArgument;
           if (jdbcArgument.isOutParameter()) {
             JdbcCpoAttribute jdbcAttribute = jdbcArgument.getAttribute();
             jdbcAttribute.invokeSetter(returnObject, new CallableStatementCpoData(cstmt, jdbcAttribute, j));
@@ -2409,12 +2351,11 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
    * @param orderBy A collection of CpoOrderBy objects to be used by the function
    * @param nativeExpressions A collection of CpoNativeFunction objects to be used by the function
    * @return A populated object of the same type as the Object passed in as a argument. If no objects match the criteria
-   * a NULL will be returned.
+   *         a NULL will be returned.
    * @throws CpoException the retrieve function defined for this objects returns more than one row, an exception will be
    * thrown.
    */
-  protected <T> T processSelectGroup(T obj, String groupName, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeFunction> nativeExpressions)
-          throws CpoException {
+  protected <T> T processSelectGroup(T obj, String groupName, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeFunction> nativeExpressions) throws CpoException {
     Connection c = null;
     T result = null;
 
@@ -2433,7 +2374,6 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
       closeConnection(c);
     }
 
-
     return result;
   }
 
@@ -2446,8 +2386,7 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
    * @return DOCUMENT ME!
    * @throws CpoException DOCUMENT ME!
    */
-  protected <T> T processSelectGroup(T obj, String groupName, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeFunction> nativeExpressions, Connection con)
-          throws CpoException {
+  protected <T> T processSelectGroup(T obj, String groupName, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeFunction> nativeExpressions, Connection con) throws CpoException {
     PreparedStatement ps = null;
     ResultSet rs = null;
     ResultSetMetaData rsmd;
@@ -2474,7 +2413,7 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
       localLogger.info("=================== Class=<" + criteriaObj.getClass() + "> Type=<" + JdbcCpoAdapter.RETRIEVE_GROUP + "> Name=<" + groupName + "> =========================");
 
       try {
-        rObj = (T) obj.getClass().newInstance();
+        rObj = (T)obj.getClass().newInstance();
       } catch (IllegalAccessException iae) {
         if (obj != null) {
           localLogger.error("=================== Could not access default constructor for Class=<" + obj.getClass() + "> ==================");
@@ -2487,7 +2426,6 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
         throw new CpoException("Unable to instantiate Return Object", iae);
       }
 
-
       for (CpoFunction cpoFunction : functions) {
 
         JdbcPreparedStatementFactory jpsf = new JdbcPreparedStatementFactory(con, this, cpoClass, cpoFunction, criteriaObj, wheres, orderBy, nativeExpressions);
@@ -2498,16 +2436,14 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
         rs = ps.executeQuery();
         jpsf.release();
 
-        if (rs.isBeforeFirst() == true) {
+        if (rs.isBeforeFirst()) {
           rsmd = rs.getMetaData();
 
-          if ((rsmd.getColumnCount() == 2)
-                  && "CPO_ATTRIBUTE".equalsIgnoreCase(rsmd.getColumnLabel(1))
-                  && "CPO_VALUE".equalsIgnoreCase(rsmd.getColumnLabel(2))) {
+          if ((rsmd.getColumnCount() == 2) && "CPO_ATTRIBUTE".equalsIgnoreCase(rsmd.getColumnLabel(1)) && "CPO_VALUE".equalsIgnoreCase(rsmd.getColumnLabel(2))) {
             while (rs.next()) {
               recordsExist = true;
               recordCount++;
-              attribute = (JdbcCpoAttribute) cpoClass.getAttributeData(rs.getString(1));
+              attribute = (JdbcCpoAttribute)cpoClass.getAttributeData(rs.getString(1));
 
               if (attribute != null) {
                 attribute.invokeSetter(rObj, new ResultSetCpoData(rs, attribute, 2));
@@ -2518,7 +2454,7 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
             recordsExist = true;
             recordCount++;
             for (k = 1; k <= rsmd.getColumnCount(); k++) {
-              attribute = (JdbcCpoAttribute) cpoClass.getAttributeData(rsmd.getColumnLabel(k));
+              attribute = (JdbcCpoAttribute)cpoClass.getAttributeData(rsmd.getColumnLabel(k));
 
               if (attribute != null) {
                 attribute.invokeSetter(rObj, new ResultSetCpoData(rs, attribute, k));
@@ -2533,7 +2469,6 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
             }
           }
           criteriaObj = rObj;
-
         }
 
         rs.close();
@@ -2548,7 +2483,6 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
       } else {
         localLogger.info("=================== " + recordCount + " Records - " + attributesSet + " Attributes - Class=<" + criteriaObj.getClass() + ">  Type=<" + JdbcCpoAdapter.RETRIEVE_GROUP + "> Name=<" + groupName + "> =========================");
       }
-
     } catch (Throwable t) {
       String msg = "ProcessSeclectGroup(Object) failed: " + ExceptionHelper.getLocalizedMessage(t);
       localLogger.error(msg, t);
@@ -2568,14 +2502,13 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
    * @param name DOCUMENT ME!
    * @param criteria DOCUMENT ME!
    * @param result DOCUMENT ME!
-   * @param where DOCUMENT ME!
+   * @param wheres DOCUMENT ME!
    * @param orderBy DOCUMENT ME!
    * @param useRetrieve DOCUMENT ME!
    * @return DOCUMENT ME!
    * @throws CpoException DOCUMENT ME!
    */
-  protected <T, C> List<T> processSelectGroup(String name, C criteria, T result,
-          Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeFunction> nativeExpressions, boolean useRetrieve) throws CpoException {
+  protected <T, C> List<T> processSelectGroup(String name, C criteria, T result, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeFunction> nativeExpressions, boolean useRetrieve) throws CpoException {
     Connection con = null;
     CpoArrayResultSet<T> resultSet = new CpoArrayResultSet<T>();
 
@@ -2596,8 +2529,7 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
     return resultSet;
   }
 
-  protected <T, C> void processSelectGroup(String name, C criteria, T result,
-          Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeFunction> nativeExpressions, boolean useRetrieve, CpoResultSet<T> resultSet) throws CpoException {
+  protected <T, C> void processSelectGroup(String name, C criteria, T result, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeFunction> nativeExpressions, boolean useRetrieve, CpoResultSet<T> resultSet) throws CpoException {
     Connection con = null;
 
     try {
@@ -2621,16 +2553,13 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
    * @param name DOCUMENT ME!
    * @param criteria DOCUMENT ME!
    * @param result DOCUMENT ME!
-   * @param where DOCUMENT ME!
+   * @param wheres DOCUMENT ME!
    * @param orderBy DOCUMENT ME!
    * @param con DOCUMENT ME!
    * @param useRetrieve DOCUMENT ME!
-   * @return DOCUMENT ME!
    * @throws CpoException DOCUMENT ME!
    */
-  protected <T, C> void processSelectGroup(String name, C criteria, T result,
-          Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeFunction> nativeExpressions, Connection con, boolean useRetrieve, CpoResultSet<T> resultSet)
-          throws CpoException {
+  protected <T, C> void processSelectGroup(String name, C criteria, T result, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeFunction> nativeExpressions, Connection con, boolean useRetrieve, CpoResultSet<T> resultSet) throws CpoException {
     Logger localLogger = criteria == null ? logger : LoggerFactory.getLogger(criteria.getClass());
     PreparedStatement ps = null;
     List<CpoFunction> cpoFunctions;
@@ -2663,8 +2592,9 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
       for (CpoFunction cpoFunction : cpoFunctions) {
         jpsf = new JdbcPreparedStatementFactory(con, this, criteriaClass, cpoFunction, criteria, wheres, orderBy, nativeExpressions);
         ps = jpsf.getPreparedStatement();
-        if (resultSet.getFetchSize()!=-1)
+        if (resultSet.getFetchSize() != -1) {
           ps.setFetchSize(resultSet.getFetchSize());
+        }
 
         localLogger.debug("Retrieving Records");
 
@@ -2680,12 +2610,12 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
         attributes = new JdbcCpoAttribute[columnCount + 1];
 
         for (k = 1; k <= columnCount; k++) {
-          attributes[k] = (JdbcCpoAttribute) resultClass.getAttributeData(rsmd.getColumnLabel(k));
+          attributes[k] = (JdbcCpoAttribute)resultClass.getAttributeData(rsmd.getColumnLabel(k));
         }
 
         while (rs.next()) {
           try {
-            obj = (T) result.getClass().newInstance();
+            obj = (T)result.getClass().newInstance();
           } catch (IllegalAccessException iae) {
             if (result != null) {
               localLogger.error("=================== Could not access default constructor for Class=<" + result.getClass() + "> ==================");
@@ -2700,7 +2630,7 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
 
           for (k = 1; k <= columnCount; k++) {
             if (attributes[k] != null) {
-                attributes[k].invokeSetter(obj, new ResultSetCpoData(rs, attributes[k], k));
+              attributes[k].invokeSetter(obj, new ResultSetCpoData(rs, attributes[k], k));
             }
           }
 
@@ -2718,8 +2648,7 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
         localLogger.info("=================== " + resultSet.size() + " Records - Class=<" + criteria.getClass() + "> Type=<" + JdbcCpoAdapter.LIST_GROUP + "> Name=<" + name + "> Result=<" + result.getClass() + "> ====================");
       }
     } catch (Throwable t) {
-      String msg =
-              "ProcessSelectGroup(String name, Object criteria, Object result, CpoWhere where, Collection orderBy, Connection con) failed. Error:";
+      String msg = "ProcessSelectGroup(String name, Object criteria, Object result, CpoWhere where, Collection orderBy, Connection con) failed. Error:";
       localLogger.error(msg, t);
       throw new CpoException(msg, t);
     } finally {
@@ -2737,8 +2666,7 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
    * @return DOCUMENT ME!
    * @throws CpoException DOCUMENT ME!
    */
-  protected <T> long processUpdateGroup(T obj, String groupType, String groupName, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeFunction> nativeExpressions)
-          throws CpoException {
+  protected <T> long processUpdateGroup(T obj, String groupType, String groupName, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeFunction> nativeExpressions) throws CpoException {
     Connection c = null;
     long updateCount = 0;
 
@@ -2767,12 +2695,11 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
    * @return DOCUMENT ME!
    * @throws CpoException DOCUMENT ME!
    */
-  protected <T> long processUpdateGroup(T obj, String groupType, String groupName, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeFunction> nativeExpressions, Connection con)
-          throws CpoException {
+  protected <T> long processUpdateGroup(T obj, String groupType, String groupName, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeFunction> nativeExpressions, Connection con) throws CpoException {
     Logger localLogger = obj == null ? logger : LoggerFactory.getLogger(obj.getClass());
     CpoClass cpoClass;
     PreparedStatement ps = null;
-    
+
     JdbcPreparedStatementFactory jpsf = null;
     long updateCount = 0;
 
@@ -2800,10 +2727,9 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
         updateCount++;
       }
     } catch (Throwable t) {
-      String msg = "ProcessUpdateGroup failed:" + groupType + "," + groupName + ","
-              + obj.getClass().getName();
-      // TODO: FIX THIS
-//      localLogger.error("bound values:" + this.parameterToString(jq));
+      String msg = "ProcessUpdateGroup failed:" + groupType + "," + groupName + "," + obj.getClass().getName();
+      // TODO FIX THIS
+      // localLogger.error("bound values:" + this.parameterToString(jq));
       localLogger.error(msg, t);
       throw new CpoException(msg, t);
     } finally {
@@ -2811,7 +2737,6 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
       if (jpsf != null) {
         jpsf.release();
       }
-
     }
 
     return updateCount;
@@ -2827,8 +2752,7 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
    * @return DOCUMENT ME!
    * @throws CpoException DOCUMENT ME!
    */
-  protected <T> long processBatchUpdateGroup(T[] arr, String groupType, String groupName, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeFunction> nativeExpressions, Connection con)
-          throws CpoException {
+  protected <T> long processBatchUpdateGroup(T[] arr, String groupType, String groupName, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeFunction> nativeExpressions, Connection con) throws CpoException {
     CpoClass jmc;
     List<CpoFunction> cpoFunctions;
     PreparedStatement ps = null;
@@ -2842,7 +2766,6 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
       jmc = metaDescriptor.getMetaClass(arr[0]);
       cpoFunctions = jmc.getFunctionGroup(getGroupType(arr[0], groupType, groupName, con), groupName).getFunctions();
       localLogger = LoggerFactory.getLogger(jmc.getMetaClass());
-
 
       int numRows = 0;
 
@@ -2870,11 +2793,10 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
           }
         }
         localLogger.info("=================== BATCH - " + numRows + " Updates - Class=<" + arr[0].getClass() + "> Type=<" + groupType + "> Name=<" + groupName + "> =========================");
-
       } else {
         localLogger.info("=================== Class=<" + arr[0].getClass() + "> Type=<" + groupType + "> Name=<" + groupName + "> =========================");
         for (T obj : arr) {
-          for (CpoFunction function : cpoFunctions){
+          for (CpoFunction function : cpoFunctions) {
             jpsf = new JdbcPreparedStatementFactory(con, this, jmc, function, obj, wheres, orderBy, nativeExpressions);
             ps = jpsf.getPreparedStatement();
             numRows += ps.executeUpdate();
@@ -2889,10 +2811,9 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
         updateCount = numRows;
       }
     } catch (Throwable t) {
-      String msg = "ProcessUpdateGroup failed:" + groupType + "," + groupName + ","
-              + arr[0].getClass().getName();
-// TODO: FIX This
-//      localLogger.error("bound values:" + this.parameterToString(jq));
+      String msg = "ProcessUpdateGroup failed:" + groupType + "," + groupName + "," + arr[0].getClass().getName();
+      // TODO FIX This
+      // localLogger.error("bound values:" + this.parameterToString(jq));
       localLogger.error(msg, t);
       throw new CpoException(msg, t);
     } finally {
@@ -2900,7 +2821,6 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
       if (jpsf != null) {
         jpsf.release();
       }
-
     }
 
     return updateCount;
@@ -2915,8 +2835,7 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
    * @return DOCUMENT ME!
    * @throws CpoException DOCUMENT ME!
    */
-  protected <T> long processUpdateGroup(Collection<T> coll, String groupType, String groupName, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeFunction> nativeExpressions)
-          throws CpoException {
+  protected <T> long processUpdateGroup(Collection<T> coll, String groupType, String groupName, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeFunction> nativeExpressions) throws CpoException {
     Connection c = null;
     long updateCount = 0;
 
@@ -2942,13 +2861,14 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
    * @param coll DOCUMENT ME!
    * @param groupType DOCUMENT ME!
    * @param groupName DOCUMENT ME!
+   * @param wheres DOCUMENT ME!
+   * @param orderBy DOCUMENT ME!
+   * @param nativeExpressions DOCUMENT ME!
    * @param con DOCUMENT ME!
-   * @param meta DOCUMENT ME!
    * @return DOCUMENT ME!
    * @throws CpoException DOCUMENT ME!
    */
-  protected <T> long processUpdateGroup(Collection<T> coll, String groupType, String groupName,
-          Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeFunction> nativeExpressions, Connection con) throws CpoException {
+  protected <T> long processUpdateGroup(Collection<T> coll, String groupType, String groupName, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeFunction> nativeExpressions, Connection con) throws CpoException {
     long updateCount = 0;
 
     if (!coll.isEmpty()) {
@@ -2966,7 +2886,7 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
       if (allEqual && batchUpdatesSupported_ && !JdbcCpoAdapter.PERSIST_GROUP.equals(groupType)) {
         updateCount = processBatchUpdateGroup(arr, groupType, groupName, wheres, orderBy, nativeExpressions, con);
       } else {
-        for (T obj :  arr) {
+        for (T obj : arr) {
           updateCount += processUpdateGroup(obj, groupType, groupName, wheres, orderBy, nativeExpressions, con);
         }
       }
@@ -3002,14 +2922,14 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
    * 			so.setId(1);
    * 			so.setName("SomeName");
    * 			cpo.updateObject("myUpdate",so);
-   * 		}
+   *    }
    * 		cpoTrx.commit();
-   * 	} catch (CpoException ce) {
+   *  } catch (CpoException ce) {
    * 		// Handle the error
    * 		cpoTrx.rollback();
-   * 	}
+   *  }
    * }
-   *</code>
+   * </code>
    * </pre>
    *
    * @return A CpoTrxAdapter to manage the transactionality of CPO
@@ -3019,48 +2939,6 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
   @Override
   public CpoTrxAdapter getCpoTrxAdapter() throws CpoException {
     return new JdbcCpoTrxAdapter(metaDescriptor, getWriteConnection(), batchUpdatesSupported_, getDataSourceName());
-  }
-
-  private class RetrieverThread<T, C> extends Thread {
-
-    String name;
-    C criteria;
-    T result;
-    Collection<CpoWhere> wheres;
-    Collection<CpoOrderBy> orderBy;
-    Collection<CpoNativeFunction> nativeExpressions;
-    boolean useRetrieve;
-    CpoBlockingResultSet<T> resultSet;
-    Thread callingThread = null;
-
-    public RetrieverThread(String name, C criteria, T result,
-            Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeFunction> nativeExpressions, boolean useRetrieve, CpoBlockingResultSet<T> resultSet) {
-      this.name = name;
-      this.criteria = criteria;
-      this.result = result;
-      this.wheres = wheres;
-      this.orderBy = orderBy;
-      this.useRetrieve = useRetrieve;
-      this.resultSet = resultSet;
-      this.nativeExpressions = nativeExpressions;
-      callingThread = Thread.currentThread();
-    }
-
-    @Override
-    public void run() {
-      try {
-        processSelectGroup(name, criteria, result, wheres, orderBy, nativeExpressions, false, resultSet);
-      } catch (CpoException e) {
-        logger.error(ExceptionHelper.getLocalizedMessage(e));
-      } finally {
-        //wait until the calling thread is finished processing the records
-        while (resultSet.size() > 0) {
-          Thread.yield();
-        }
-        //Tell the calling thread that it should not wait on the blocking queue any longer.
-        callingThread.interrupt();
-      }
-    }
   }
 
   protected boolean isConnectionBusy(Connection c) {
@@ -3078,40 +2956,45 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
     // do nothing for JdbcCpoAdapter
     // overridden by JdbcTrxAdapter
   }
-  
+
   private void statementClose(Statement s) {
     if (s != null) {
       try {
         s.close();
       } catch (Exception e) {
+        if (logger.isTraceEnabled()) {
+          logger.trace(e.getMessage());
+        }
       }
     }
   }
-  
+
   private void resultSetClose(ResultSet rs) {
     if (rs != null) {
       try {
         rs.close();
       } catch (Exception e) {
+        if (logger.isTraceEnabled()) {
+          logger.trace(e.getMessage());
+        }
       }
     }
   }
-  
+
   @Override
   public CpoMetaDescriptor getCpoMetaDescriptor() {
     return metaDescriptor;
   }
-  
+
   @Override
   public String getDataSourceName() {
     return dataSourceName_;
   }
-  
-  
+
   @Override
   public List<CpoAttribute> getCpoAttributes(String expression) throws CpoException {
     List<CpoAttribute> attributes = new ArrayList<CpoAttribute>();
-    
+
     if (expression != null && !expression.isEmpty()) {
       Connection c = null;
       PreparedStatement ps = null;
@@ -3121,7 +3004,7 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
         ps = c.prepareStatement(expression);
         rs = ps.executeQuery();
         ResultSetMetaData rsmd = rs.getMetaData();
-        for(int i=1; i<=rsmd.getColumnCount(); i++) {
+        for (int i = 1; i <= rsmd.getColumnCount(); i++) {
           JdbcCpoAttribute attribute = new JdbcCpoAttribute();
           attribute.setDataName(rsmd.getColumnLabel(i));
           attribute.setDbColumn(rsmd.getColumnName(i));
@@ -3151,4 +3034,44 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
     return attributes;
   }
 
+  private class RetrieverThread<T, C> extends Thread {
+
+    String name;
+    C criteria;
+    T result;
+    Collection<CpoWhere> wheres;
+    Collection<CpoOrderBy> orderBy;
+    Collection<CpoNativeFunction> nativeExpressions;
+    boolean useRetrieve;
+    CpoBlockingResultSet<T> resultSet;
+    Thread callingThread = null;
+
+    public RetrieverThread(String name, C criteria, T result, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeFunction> nativeExpressions, boolean useRetrieve, CpoBlockingResultSet<T> resultSet) {
+      this.name = name;
+      this.criteria = criteria;
+      this.result = result;
+      this.wheres = wheres;
+      this.orderBy = orderBy;
+      this.useRetrieve = useRetrieve;
+      this.resultSet = resultSet;
+      this.nativeExpressions = nativeExpressions;
+      callingThread = Thread.currentThread();
+    }
+
+    @Override
+    public void run() {
+      try {
+        processSelectGroup(name, criteria, result, wheres, orderBy, nativeExpressions, false, resultSet);
+      } catch (CpoException e) {
+        logger.error(ExceptionHelper.getLocalizedMessage(e));
+      } finally {
+        //wait until the calling thread is finished processing the records
+        while (resultSet.size() > 0) {
+          Thread.yield();
+        }
+        //Tell the calling thread that it should not wait on the blocking queue any longer.
+        callingThread.interrupt();
+      }
+    }
+  }
 }

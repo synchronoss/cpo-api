@@ -49,8 +49,7 @@ public class TransformBlob implements JdbcCpoTransform<Blob, byte[]> {
    * @throws CpoException
    */
   @Override
-  public byte[] transformIn(Blob blob)
-          throws CpoException {
+  public byte[] transformIn(Blob blob) throws CpoException {
 
     byte[] buffBytes = new byte[1024];
     byte[] retBytes = null;
@@ -86,8 +85,7 @@ public class TransformBlob implements JdbcCpoTransform<Blob, byte[]> {
    * @throws CpoException
    */
   @Override
-  public Blob transformOut(JdbcPreparedStatementFactory jpsf, byte[] attributeObject)
-          throws CpoException {
+  public Blob transformOut(JdbcPreparedStatementFactory jpsf, byte[] attributeObject) throws CpoException {
 
     BLOB newBlob = null;
 

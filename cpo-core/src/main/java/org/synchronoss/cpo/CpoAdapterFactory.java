@@ -37,29 +37,22 @@ public final class CpoAdapterFactory {
 
   private static final Logger logger = LoggerFactory.getLogger(CpoAdapterFactory.class);
   private static final String CPO_CONFIG_XML = "/cpoConfig.xml";
-  private static volatile Map<String, CpoAdapter> adapterMap = null;
+  private static volatile Map<String, CpoAdapter> adapterMap = new HashMap<String, CpoAdapter>();
   private static String defaultContext = null;
+
+  static {
+    loadAdapters(CPO_CONFIG_XML);
+  }
 
   public static CpoAdapter getCpoAdapter() throws CpoException {
     return getCpoAdapter(defaultContext);
   }
 
   public static CpoAdapter getCpoAdapter(String context) throws CpoException {
-    if (adapterMap == null) {
-      synchronized (CpoAdapterFactory.class) {
-        if (adapterMap == null) {
-          loadAdapters(CPO_CONFIG_XML);
-        }
-      }
-    }
     return adapterMap.get(context);
   }
 
   public static void loadAdapters(String configFile) {
-    if (adapterMap == null) {
-      adapterMap = new HashMap<String, CpoAdapter>();
-    }
-
     InputStream is = CpoClassLoader.getResourceAsStream(configFile);
     if (is == null) {
       logger.info("Resource Not Found: " + configFile);

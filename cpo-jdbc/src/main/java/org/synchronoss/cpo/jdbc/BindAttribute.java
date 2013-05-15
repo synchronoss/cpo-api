@@ -29,23 +29,15 @@ public class BindAttribute {
   private JdbcCpoAttribute jdbcAttribute = null;
   private Object bindObject = null;
   private String name = null;
-  private boolean isIn = false;
 
   public BindAttribute(JdbcCpoAttribute jdbcAttribute, Object bindObject) {
     this.jdbcAttribute = jdbcAttribute;
     this.bindObject = bindObject;
   }
 
-  public BindAttribute(JdbcCpoAttribute jdbcAttribute, Object bindObject, boolean isIn) {
-    this.jdbcAttribute = jdbcAttribute;
-    this.bindObject = bindObject;
-    this.isIn = isIn;
-  }
-
-  public BindAttribute(String name, Object bindObject, boolean isIn) {
+  public BindAttribute(String name, Object bindObject) {
     this.name = name;
     this.bindObject = bindObject;
-    this.isIn = isIn;
   }
 
   public JdbcCpoAttribute getJdbcAttribute() {
@@ -60,7 +52,4 @@ public class BindAttribute {
     return name;
   }
 
-  public boolean isIn() {
-    return isIn;
-  }
 }

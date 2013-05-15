@@ -114,9 +114,21 @@ public class JdbcWhereBuilder<T> implements NodeVisitor {
         attribute = (JdbcCpoAttribute) cpoClass.getAttributeJava(jcw.getRightAttribute());
       }
       if (attribute == null) {
-        bindValues.add(new BindAttribute(jcw.getAttribute() == null ? jcw.getRightAttribute() : jcw.getAttribute(), jcw.getValue(), jcw.getComparison() == CpoWhere.COMP_IN));
+        if (jcw.getComparison() == CpoWhere.COMP_IN && jcw.getValue() instanceof Collection) {
+          for (Object obj : (Collection) jcw.getValue()) {
+            bindValues.add(new BindAttribute(jcw.getAttribute() == null ? jcw.getRightAttribute() : jcw.getAttribute(), obj));
+          }
+        } else {
+          bindValues.add(new BindAttribute(jcw.getAttribute() == null ? jcw.getRightAttribute() : jcw.getAttribute(), jcw.getValue()));
+        }
       } else {
-        bindValues.add(new BindAttribute(attribute, jcw.getValue(), jcw.getComparison() == CpoWhere.COMP_IN));
+        if (jcw.getComparison() == CpoWhere.COMP_IN && jcw.getValue() instanceof Collection) {
+          for (Object obj : (Collection) jcw.getValue()) {
+            bindValues.add(new BindAttribute(attribute, obj));
+          }
+        } else {
+          bindValues.add(new BindAttribute(attribute, jcw.getValue()));
+        }
       }
     }
     return true;

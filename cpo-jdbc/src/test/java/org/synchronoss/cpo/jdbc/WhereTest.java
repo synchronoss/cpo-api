@@ -22,6 +22,8 @@ package org.synchronoss.cpo.jdbc;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import static junit.framework.Assert.assertTrue;
+import static junit.framework.Assert.fail;
 import junit.framework.TestCase;
 import org.synchronoss.cpo.*;
 
@@ -534,6 +536,44 @@ public class WhereTest extends TestCase {
       Collection<ValueObject> coll = cpoAdapter.retrieveBeans("TestWhereRetrieve", valObj, wheres, null);
 
       assertTrue("Collection size is " + coll.size(), coll.size() == 3);
+
+
+    } catch (Exception e) {
+      fail(method + e.getMessage());
+    }
+
+  }
+
+  public void testMultiInWhereCollection() {
+    String method = "testNonAttributeWhere:";
+
+    try {
+      ValueObject valObj = new ValueObject(1);
+      Collection<Integer> inColl1 = new ArrayList<Integer>();
+      inColl1.add(new Integer(1));
+      inColl1.add(new Integer(2));
+      
+      Collection<Integer> inColl2 = new ArrayList<Integer>();
+      inColl2.add(new Integer(3));
+      inColl2.add(new Integer(4));
+      
+      Collection<Integer> inColl3 = new ArrayList<Integer>();
+      inColl3.add(new Integer(5));
+      inColl3.add(new Integer(-6));
+
+//      CpoWhere cw = cpoAdapter.newWhere();
+      CpoWhere cw1 = cpoAdapter.newWhere(CpoWhere.LOGIC_NONE, "id", CpoWhere.COMP_IN, inColl1);
+      CpoWhere cw2 = cpoAdapter.newWhere(CpoWhere.LOGIC_OR, "id", CpoWhere.COMP_IN, inColl2);
+      CpoWhere cw3 = cpoAdapter.newWhere(CpoWhere.LOGIC_OR, "id", CpoWhere.COMP_IN, inColl3);
+
+
+      ArrayList<CpoWhere> wheres = new ArrayList<CpoWhere>();
+      wheres.add(cw1);
+      wheres.add(cw2);
+      wheres.add(cw3);
+      Collection<ValueObject> coll = cpoAdapter.retrieveBeans("TestOrderByRetrieve", valObj, wheres, null);
+
+      assertTrue("Collection size is " + coll.size(), coll.size() == 6);
 
 
     } catch (Exception e) {

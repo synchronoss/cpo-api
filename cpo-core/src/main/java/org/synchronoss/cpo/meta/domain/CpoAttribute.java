@@ -212,7 +212,12 @@ public class CpoAttribute extends CpoAttributeBean {
     }
     if (cpoClass != null) {
       try {
-        setGetter(findMethods(cpoClass.getMetaClass(), getGetterName(), 0, true).get(0));
+        List<Method> methods = findMethods(cpoClass.getMetaClass(), getGetterName(), 0, true);
+        if (methods.isEmpty()){
+          failedMessage.append("loadRunTimeInfo: Could not find a Getter:" + getGetterName() + "(" + cpoClass.getName() + ")");
+        } else {
+          setGetter(methods.get(0));
+        }
       } catch (CpoException ce1) {
         failedMessage.append(ce1.getMessage());
       }
@@ -225,7 +230,7 @@ public class CpoAttribute extends CpoAttributeBean {
           }
         }
         if (getSetter()==null){
-          failedMessage.append("invokeSetter: Could not find a Setter:" + getSetterName() + "(" + actualClass.getName() + ")");
+          failedMessage.append("loadRunTimeInfo: Could not find a Setter:" + getSetterName() + "(" + actualClass.getName() + ")");
         }
       } catch (Exception ce2) {
         failedMessage.append(ce2.getMessage());

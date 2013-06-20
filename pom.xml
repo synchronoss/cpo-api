@@ -96,9 +96,9 @@
     </site>
   </distributionManagement>
   <scm>
-    <connection>scm:svn:https://cpo.svn.sourceforge.net/svnroot/cpo/api/trunk</connection>
-    <developerConnection>scm:svn:https://cpo.svn.sourceforge.net/svnroot/cpo/api/trunk</developerConnection>
-    <url>https://cpo.svn.sourceforge.net/svnroot/cpo/api/trunk</url>
+    <connection>scm:svn:svn+ssh://svn.code.sf.net/p/cpo/code/api/trunk</connection>
+    <developerConnection>scm:svn:svn+ssh://svn.code.sf.net/p/cpo/code/api/trunk</developerConnection>
+    <url>https://svn.code.sf.net/p/cpo/code/api/trunk</url>
   </scm>
   <build>
     <resources>

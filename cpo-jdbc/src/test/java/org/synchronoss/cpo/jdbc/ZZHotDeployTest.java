@@ -25,6 +25,9 @@ import org.slf4j.*;
 import org.synchronoss.cpo.*;
 
 import java.util.*;
+import static junit.framework.Assert.assertNotNull;
+import static junit.framework.Assert.assertTrue;
+import static junit.framework.Assert.fail;
 import org.synchronoss.cpo.helper.ExceptionHelper;
 
 /**
@@ -54,7 +57,22 @@ public class ZZHotDeployTest extends TestCase {
 
     try {
       cpoAdapter = CpoAdapterFactory.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_JDBC);
-      assertNotNull(method + "IdoAdapter is null", cpoAdapter);
+      assertNotNull(method + "CpoAdapter is null", cpoAdapter);
+    } catch (Exception e) {
+      fail(method + e.getMessage());
+    }
+    ValueObject vo = new ValueObject(1);
+    vo.setAttrVarChar("Test");
+    vo.setAttrSmallInt(1);
+    vo.setAttrInteger(1);
+    al.add(vo);
+    al.add(new ValueObject(2));
+    al.add(new ValueObject(3));
+    al.add(new ValueObject(4));
+    al.add(new ValueObject(5));
+    al.add(new ValueObject(-6));
+    try {
+      cpoAdapter.insertObjects("TestOrderByInsert", al);
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -62,7 +80,7 @@ public class ZZHotDeployTest extends TestCase {
 
   public void testRefresh() {
     String method = "testRetrieveBeans:";
-    Collection<ValueObject> col;
+    List<ValueObject> col;
 
 
     try {
@@ -83,14 +101,20 @@ public class ZZHotDeployTest extends TestCase {
       metaFiles.add("/hotDeployMetaData.xml");
       cpoAdapter.getCpoMetaDescriptor().refreshDescriptorMeta(metaFiles);
 
-      ValueObject valObj = new ValueObject();
+      ValueObject valObj = new ValueObject(2);
       
       // make sure the default retrieve still works
       col = cpoAdapter.retrieveBeans(null, valObj);
-      assertTrue("Col size is " + col.size(), col!=null);
+      assertTrue("Col size is " + col.size(), col.size()==6);
       
-      col = cpoAdapter.retrieveBeans("HotDeploySelect", valObj);
-      assertTrue("Col size is " + col.size(), col!=null);
+      List<ValueObject> col2 = cpoAdapter.retrieveBeans("HotDeploySelect", valObj);
+      assertTrue("Col size is " + col2.size(), col2.size()==6);
+
+      for (int i=0; i<col.size(); i++) {
+        assertTrue("IDs must be equal", col.get(i).getId() == col2.get(i).getId());
+      }
+      
+      // make sure the first objects are the same
       
     } catch (Exception e) {
       String msg = ExceptionHelper.getLocalizedMessage(e);
@@ -103,6 +127,12 @@ public class ZZHotDeployTest extends TestCase {
   @Override
   public void tearDown() {
     String method = "tearDown:";
+    try {
+      cpoAdapter.deleteObjects("TestOrderByDelete", al);
+
+    } catch (Exception e) {
+      fail(method + e.getMessage());
+    }
     cpoAdapter = null;
   }
 }

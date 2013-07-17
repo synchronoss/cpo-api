@@ -183,7 +183,15 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-site-plugin</artifactId>
-          <version>3.1</version>
+          <version>3.3</version>
+          <dependencies>
+            <dependency>
+              <!-- add support for ssh/scp -->
+              <groupId>org.apache.maven.wagon</groupId>
+              <artifactId>wagon-ssh</artifactId>
+              <version>2.4</version>
+            </dependency>
+          </dependencies>
         </plugin>
       </plugins>
     </pluginManagement>
@@ -353,17 +361,17 @@
     <module>cpo-plugin</module>
   </modules>
   <repositories>
-		<repository>
-			<id>sourceforge-svn</id>
-			<name>SF Maven Plugin SVN Repository</name>
-			<url>http://sf-mvn-plugins.svn.sourceforge.net/svnroot/sf-mvn-plugins/_m2-repo</url>
-		</repository>
-	</repositories>
-	<pluginRepositories>
-		<pluginRepository>
-			<id>sourceforge-frs</id>
-			<name>SF Maven Plugin Repository</name>
-			<url>http://sourceforge.net/projects/sf-mvn-plugins/files/m2-repo</url>
-		</pluginRepository>
-	</pluginRepositories>
+    <repository>
+      <id>sourceforge-svn</id>
+      <name>SF Maven Plugin SVN Repository</name>
+      <url>http://sf-mvn-plugins.svn.sourceforge.net/svnroot/sf-mvn-plugins/_m2-repo</url>
+    </repository>
+  </repositories>
+  <pluginRepositories>
+    <pluginRepository>
+      <id>sourceforge-frs</id>
+      <name>SF Maven Plugin Repository</name>
+      <url>http://sourceforge.net/projects/sf-mvn-plugins/files/m2-repo</url>
+    </pluginRepository>
+  </pluginRepositories>
 </project>

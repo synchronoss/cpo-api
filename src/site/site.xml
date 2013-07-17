@@ -33,15 +33,15 @@
   </bannerRight>
   <body>
     <links>
-	  <item name="SourceForge Project" href="https://sourceforge.net/projects/cpo/"/>
+      <item name="SourceForge Project" href="https://sourceforge.net/projects/cpo/"/>
       <item name="SourceForge Files" href="https://sourceforge.net/project/showfiles.php?group_id=168495"/>
       <item name="Continuous Builds" href="http://continuous.synchronoss.net:8111/viewType.html?buildTypeId=bt2"/>
     </links>
-    <menu ref="parent" />
-    <menu ref="modules" />
-    <menu ref="reports" />
-    <menu name="Related Links">
-	  <item name="CPO Util" href="cpo-util-sourceforge/"/>
+    <menu ref="parent" inherit="top" />
+    <menu ref="modules" inherit="top" />
+    <menu ref="reports" inherit="top" />
+    <menu name="Related Links" inherit="top">
+      <item name="CPO Util" href="cpo-util-sourceforge/"/>
     </menu>
   </body>
 </project>

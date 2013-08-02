@@ -53,6 +53,8 @@ public final class CpoAdapterFactory {
   }
 
   public static void loadAdapters(String configFile) {
+
+    
     InputStream is = CpoClassLoader.getResourceAsStream(configFile);
     if (is == null) {
       logger.info("Resource Not Found: " + configFile);
@@ -65,6 +67,10 @@ public final class CpoAdapterFactory {
     }
 
     try {
+      // We are doing a load clear all the caches first, in case the load gets called more than once.
+      CpoMetaDescriptor.clearAllInstances();
+      adapterMap.clear();
+      
       CpoConfigDocument configDoc;
       if (is == null) {
         configDoc = CpoConfigDocument.Factory.parse(configFile);

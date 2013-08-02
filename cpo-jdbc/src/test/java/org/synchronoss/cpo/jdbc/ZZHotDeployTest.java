@@ -20,6 +20,7 @@
  */
 package org.synchronoss.cpo.jdbc;
 
+import java.io.File;
 import junit.framework.TestCase;
 import org.slf4j.*;
 import org.synchronoss.cpo.*;
@@ -40,6 +41,7 @@ public class ZZHotDeployTest extends TestCase {
   private static final Logger logger = LoggerFactory.getLogger(ZZHotDeployTest.class);
   private CpoAdapter cpoAdapter = null;
   private ArrayList<ValueObject> al = new ArrayList<ValueObject>();
+  private File metaFile = new File("metaData.xml");
 
   public ZZHotDeployTest(String name) {
     super(name);
@@ -58,6 +60,8 @@ public class ZZHotDeployTest extends TestCase {
     try {
       cpoAdapter = CpoAdapterFactory.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_JDBC);
       assertNotNull(method + "CpoAdapter is null", cpoAdapter);
+      // lets save the existing config before we monkey with it
+      cpoAdapter.getCpoMetaDescriptor().export(metaFile);
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -123,13 +127,60 @@ public class ZZHotDeployTest extends TestCase {
     }
   }
 
+  public void testRefreshOverwrite() {
+    String method = "testRetrieveBeans:";
+    List<ValueObject> col;
+
+
+    try {
+      ValueObject valObj = new ValueObject();
+      
+      // make sure the default retrieve works
+      col = cpoAdapter.retrieveBeans(null, valObj);
+      assertTrue("Col size is " + col.size(), col!=null);
+      
+      col = cpoAdapter.retrieveBeans("HotDeploySelect", valObj);
+      fail("Should not have gotten here:");
+    } catch (Exception e) {
+      logger.debug("Received an expected Exception: "+e.getLocalizedMessage());
+    }
+    
+    try {
+      List<String> metaFiles = new ArrayList<String>();
+      metaFiles.add("/hotDeployMetaData.xml");
+      cpoAdapter.getCpoMetaDescriptor().refreshDescriptorMeta(metaFiles, true);
+
+      ValueObject valObj = new ValueObject(2);
+      
+      // the old retrieve should no longer be there
+      try {
+        col = cpoAdapter.retrieveBeans(null, valObj);
+        fail("should have thrown a cpo exception");
+      } catch (CpoException ce) {
+        // do nothing, this is expected
+      }
+      
+      List<ValueObject> col2 = cpoAdapter.retrieveBeans("HotDeploySelect", valObj);
+      assertTrue("Col size is " + col2.size(), col2.size()==6);
+
+    } catch (Exception e) {
+      String msg = ExceptionHelper.getLocalizedMessage(e);
+      
+      fail("Received an unexpected exception: "+msg);
+    }
+  }
  
   @Override
   public void tearDown() {
     String method = "tearDown:";
     try {
-      cpoAdapter.deleteObjects("TestOrderByDelete", al);
+      // lets reset the metadata to before we changed it
+      List<String> metaFiles = new ArrayList<String>();
+      metaFiles.add(metaFile.getName());
+      cpoAdapter.getCpoMetaDescriptor().refreshDescriptorMeta(metaFiles, true);
+      metaFile.delete();
 
+      cpoAdapter.deleteObjects("TestOrderByDelete", al);
     } catch (Exception e) {
       fail(method + e.getMessage());
     }

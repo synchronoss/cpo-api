@@ -231,4 +231,9 @@ public abstract class AbstractCpoMetaAdapter implements CpoMetaAdapter {
       classMap.remove(metaClass.getName());
     }
   }
+  
+  protected void removeAllCpoClass() {
+      classMap.clear();
+  }
+
 }

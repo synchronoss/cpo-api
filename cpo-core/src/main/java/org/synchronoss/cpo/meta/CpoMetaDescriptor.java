@@ -110,13 +110,24 @@ public class CpoMetaDescriptor extends CpoMetaDescriptorCache implements CpoMeta
   }
 
   public static void refreshDescriptorMeta(String name, List<String> metaXmls) throws CpoException {
+    refreshDescriptorMeta(name,metaXmls, false);
+  }
+  
+  public static void refreshDescriptorMeta(String name, List<String> metaXmls, boolean overwrite) throws CpoException {
     CpoMetaDescriptor metaDescriptor = findCpoMetaDescriptor(name);
     if (metaDescriptor != null) {
-      metaDescriptor.refreshDescriptorMeta(metaXmls);
+      metaDescriptor.refreshDescriptorMeta(metaXmls, overwrite);
     }
   }
 
   public void refreshDescriptorMeta(List<String> metaXmls) throws CpoException {
+    refreshDescriptorMeta(metaXmls, false);
+  }
+
+  public void refreshDescriptorMeta(List<String> metaXmls, boolean overwrite) throws CpoException {
+    if (overwrite) {
+      getCpoMetaAdapter().removeAllCpoClass();
+    }
     createUpdateInstance(this.getName(), metaXmls, caseSensitive);
   }
 

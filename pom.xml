@@ -6,6 +6,11 @@
   <name>cpo</name>
   <packaging>pom</packaging>
   <version>5.0.5-SNAPSHOT</version>
+  <parent>
+    <groupId>org.sonatype.oss</groupId>
+    <artifactId>oss-parent</artifactId>
+    <version>7</version>
+  </parent>
   <description>CPO is a persistence layer that is thin wrapper around JDBC that consumes and produces POJOs</description>
   <url>http://cpo.sourceforge.net/</url>
   <licenses>
@@ -75,26 +80,6 @@
       <timezone>EST</timezone>
     </developer>
   </developers>
-  <distributionManagement>
-    <repository>
-      <id>sf-cpo-releases</id>
-      <name>Sourceforge CPO Repository</name>
-      <url>scp://shell.sourceforge.net/home/project-web/cpo/htdocs/sf-cpo-releases</url>
-      <!--<url>sftp://web.sourceforge.net/home/groups/c/cp/cpo/htdocs/sf-cpo-releases</url>-->
-    </repository>
-    <snapshotRepository>
-      <id>sf-cpo-snapshots</id>
-      <name>Sourceforge CPO Snapshot Repository</name>
-      <url>scp://shell.sourceforge.net/home/project-web/cpo/htdocs/sf-cpo-snapshots</url>
-      <!--<url>sftp://web.sourceforge.net/home/groups/c/cp/cpo/htdocs/sf-cpo-snapshots</url>-->
-    </snapshotRepository>
-    <site>
-      <!-- must create a shell for your account at sourceforge by execing: ssh -t <username>,<project name>@shell.sf.net create-->
-      <id>sf-cpo-site</id>
-      <url>scp://shell.sourceforge.net/home/project-web/cpo/htdocs</url>
-      <!--<url>sftp://web.sourceforge.net/home/groups/c/cp/cpo/htdocs</url>-->
-    </site>
-  </distributionManagement>
   <scm>
     <connection>scm:svn:svn+ssh://svn.code.sf.net/p/cpo/code/api/trunk</connection>
     <developerConnection>scm:svn:svn+ssh://svn.code.sf.net/p/cpo/code/api/trunk</developerConnection>
@@ -113,13 +98,6 @@
         <filtering>true</filtering>
       </testResource>
     </testResources>
-    <extensions>
-			<extension>
-				<groupId>org.apache.maven.wagon</groupId>
-				<artifactId>wagon-ssh</artifactId>
-				<version>2.4</version>
-			</extension>
-    </extensions>
     <pluginManagement>
       <plugins>
         <plugin>
@@ -352,18 +330,4 @@
     <module>cpo-cassandra</module>
     <module>cpo-plugin</module>
   </modules>
-  <repositories>
-    <repository>
-      <id>sourceforge-svn</id>
-      <name>SF Maven Plugin SVN Repository</name>
-      <url>http://sf-mvn-plugins.svn.sourceforge.net/svnroot/sf-mvn-plugins/_m2-repo</url>
-    </repository>
-  </repositories>
-  <pluginRepositories>
-    <pluginRepository>
-      <id>sourceforge-frs</id>
-      <name>SF Maven Plugin Repository</name>
-      <url>http://sourceforge.net/projects/sf-mvn-plugins/files/m2-repo</url>
-    </pluginRepository>
-  </pluginRepositories>
 </project>

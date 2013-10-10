@@ -59,7 +59,7 @@
       <xs:element name="clusterName" type="xs:string" minOccurs="0">
         <xs:annotation>
           <xs:documentation>
-            An optional name for the create cluster.
+            An optional name for the create cluster. Defaults to the name of the core:dataConfig
             Note: this is not related to the Cassandra cluster name (though you are free to provide the same name). See Cluster.getClusterName() for details.
             If you use this method and create more than one Cluster instance in the same JVM (which should be avoided unless you need to connect to multiple Cassandra clusters),
             you should make sure each Cluster instance get a unique name or you may have a problem with JMX reporting.

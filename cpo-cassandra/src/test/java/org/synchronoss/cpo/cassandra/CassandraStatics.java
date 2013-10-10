@@ -18,34 +18,14 @@
  * A copy of the GNU Lesser General Public License may also be found at
  * http://www.gnu.org/licenses/lgpl.txt
  */
-package org.synchronoss.cpo.cassandra.meta;
-
-import org.synchronoss.cpo.CpoException;
-import org.synchronoss.cpo.cassandra.exporter.CassandraMetaXmlObjectExporter;
-import org.synchronoss.cpo.exporter.MetaXmlObjectExporter;
-import org.synchronoss.cpo.meta.CpoMetaDescriptor;
+package org.synchronoss.cpo.cassandra;
 
 /**
- * Created with IntelliJ IDEA.
- * User: dberry
- * Date: 9/10/13
- * Time: 07:56 AM
- * To change this template use File | Settings | File Templates.
+ *
+ * @author dberry
  */
-public class CassandraCpoMetaDescriptor extends CpoMetaDescriptor {
+public interface CassandraStatics {
 
-  public CassandraCpoMetaDescriptor(String name, boolean caseSensitive) throws CpoException {
-    super(name, caseSensitive);
-  }
-
-  @Override
-  protected Class getMetaAdapterClass() throws CpoException {
-    return CassandraCpoMetaAdapter.class;
-  }
-
-  @Override
-  protected MetaXmlObjectExporter getMetaXmlObjectExporter() {
-    return new CassandraMetaXmlObjectExporter(this);
-  }
+  public static final String ADAPTER_CONTEXT_DEFAULT = "defaultCluster";
 
 }

@@ -24,6 +24,8 @@ import com.datastax.driver.core.*;
 import com.datastax.driver.core.policies.LoadBalancingPolicy;
 import com.datastax.driver.core.policies.ReconnectionPolicy;
 import com.datastax.driver.core.policies.RetryPolicy;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.AbstractDataSourceInfo;
 import org.synchronoss.cpo.CpoException;
 
@@ -37,6 +39,7 @@ import java.util.Collection;
  * To change this template use File | Settings | File Templates.
  */
 public class ClusterDataSourceInfo extends AbstractDataSourceInfo<Cluster>{
+  private static final Logger logger = LoggerFactory.getLogger(ClusterDataSourceInfo.class);
   private String[] contactPoints;
   private String clusterName;
   private Integer port;
@@ -192,8 +195,9 @@ public class ClusterDataSourceInfo extends AbstractDataSourceInfo<Cluster>{
     this.queryOptions = queryOptions;
   }
 
-  public ClusterDataSourceInfo(String[] contactPoints) {
-    super(buildDataSourceName(contactPoints));
+  public ClusterDataSourceInfo(String clusterName, String[] contactPoints) {
+    super(buildDataSourceName(clusterName, contactPoints));
+    this.clusterName=clusterName;
     this.contactPoints=contactPoints;
   }
 
@@ -245,7 +249,7 @@ public class ClusterDataSourceInfo extends AbstractDataSourceInfo<Cluster>{
       clusterBuilder.withSSL(sslOptions);
 
     // add Listeners
-    if (!listeners.isEmpty() && listeners.size()>0)
+    if (listeners!=null && !listeners.isEmpty() && listeners.size()>0)
       clusterBuilder.withInitialListeners(listeners);
 
     // add JMX Reporting
@@ -267,10 +271,12 @@ public class ClusterDataSourceInfo extends AbstractDataSourceInfo<Cluster>{
     return clusterBuilder.build();
   }
 
-  private static String buildDataSourceName(String[] contactPoints) {
+  private static String buildDataSourceName(String clusterName, String[] contactPoints) {
     StringBuilder sb = new StringBuilder();
+    sb.append(clusterName);
     for (String s : contactPoints)
       sb.append(s);
+    logger.debug("DatasourceName="+sb.toString());
     return sb.toString();
   }
 

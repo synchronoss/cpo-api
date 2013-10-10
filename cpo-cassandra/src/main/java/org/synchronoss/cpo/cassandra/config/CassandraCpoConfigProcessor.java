@@ -65,20 +65,21 @@ public class CassandraCpoConfigProcessor implements CpoConfigProcessor {
 
     // build the cluster information
     if (cassandraConfig.isSetReadWriteConfig()) {
-      ClusterDataSourceInfo clusterInfo = buildDataSourceInfo(cassandraConfig.getReadWriteConfig());
+      ClusterDataSourceInfo clusterInfo = buildDataSourceInfo(cassandraConfig.getName(), cassandraConfig.getReadWriteConfig());
       cpoAdapter = CassandraCpoAdapter.getInstance(metaDescriptor, clusterInfo);
     } else {
-      ClusterDataSourceInfo readClusterInfo = buildDataSourceInfo(cassandraConfig.getReadConfig());
-      ClusterDataSourceInfo writeClusterInfo = buildDataSourceInfo(cassandraConfig.getWriteConfig());
+      ClusterDataSourceInfo readClusterInfo = buildDataSourceInfo(cassandraConfig.getName(), cassandraConfig.getReadConfig());
+      ClusterDataSourceInfo writeClusterInfo = buildDataSourceInfo(cassandraConfig.getName(), cassandraConfig.getWriteConfig());
       cpoAdapter = CassandraCpoAdapter.getInstance(metaDescriptor, writeClusterInfo, readClusterInfo);
     }
+    logger.debug("Adapter Datasourcename ="+cpoAdapter.getDataSourceName());
 
     return cpoAdapter;
 
   }
 
-  private ClusterDataSourceInfo buildDataSourceInfo(CtCassandraReadWriteConfig readWriteConfig) throws CpoException {
-    ClusterDataSourceInfo clusterInfo = new ClusterDataSourceInfo(readWriteConfig.getContactPointArray());
+  private ClusterDataSourceInfo buildDataSourceInfo(String dataConfigName, CtCassandraReadWriteConfig readWriteConfig) throws CpoException {
+    ClusterDataSourceInfo clusterInfo = new ClusterDataSourceInfo(dataConfigName, readWriteConfig.getContactPointArray());
 
     // add clusterName
     if(readWriteConfig.isSetClusterName())

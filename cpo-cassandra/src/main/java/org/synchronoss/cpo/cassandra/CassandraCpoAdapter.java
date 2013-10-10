@@ -22,6 +22,8 @@
 package org.synchronoss.cpo.cassandra;
 
 import com.datastax.driver.core.Cluster;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.*;
 import org.synchronoss.cpo.cassandra.meta.CassandraCpoMetaDescriptor;
 import org.synchronoss.cpo.meta.CpoMetaDescriptor;
@@ -39,6 +41,7 @@ import java.util.List;
  * To change this template use File | Settings | File Templates.
  */
 public class CassandraCpoAdapter extends CpoBaseAdapter<Cluster> {
+  private static final Logger logger = LoggerFactory.getLogger(CassandraCpoAdapter.class);
   /**
    * CpoMetaDescriptor allows you to get the meta data for a class.
    */
@@ -1570,7 +1573,7 @@ public class CassandraCpoAdapter extends CpoBaseAdapter<Cluster> {
    * @param orderBy           The CpoOrderBy bean that defines the order in which beans should be returned
    * @param nativeExpressions Native expression that will be used to augment the expression stored in the meta data. This
    *                          text will be embedded at run-time
-   * @param queuesize         queue size of the buffer that it uses to send the beans from the producer to the consumer.
+   * @param queueSize         queue size of the buffer that it uses to send the beans from the producer to the consumer.
    * @return A CpoResultSet that can be iterated through
    * @throws org.synchronoss.cpo.CpoException
    *          Thrown if there are errors accessing the datasource
@@ -1918,11 +1921,6 @@ public class CassandraCpoAdapter extends CpoBaseAdapter<Cluster> {
 
   @Override
   public CpoMetaDescriptor getCpoMetaDescriptor() {
-    return null;  //To change body of implemented methods use File | Settings | File Templates.
-  }
-
-  @Override
-  public String getDataSourceName() {
     return null;  //To change body of implemented methods use File | Settings | File Templates.
   }
 

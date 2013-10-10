@@ -39,7 +39,7 @@ import java.util.*;
  *
  * @author david berry
  */
-public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
+public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
 
   /**
    * Version Id for this class.
@@ -49,64 +49,12 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
    * DOCUMENT ME!
    */
   private static final Logger logger = LoggerFactory.getLogger(JdbcCpoAdapter.class);
-  /**
-   * DOCUMENT ME!
-   */
-  private static final String[] GROUP_IDS = {
-      "CREATE", "UPDATE", "DELETE", "RETRIEVE", "LIST", "PERSIST", "EXIST", "EXECUTE"
-  };
-  // Function Group Name Constants
-  /**
-   * DOCUMENT ME!
-   */
-  private static final String CREATE_GROUP = GROUP_IDS[CpoAdapter.CREATE];
-  /**
-   * DOCUMENT ME!
-   */
-  private static final String UPDATE_GROUP = GROUP_IDS[CpoAdapter.UPDATE];
-  /**
-   * DOCUMENT ME!
-   */
-  private static final String DELETE_GROUP = GROUP_IDS[CpoAdapter.DELETE];
-  /**
-   * DOCUMENT ME!
-   */
-  private static final String RETRIEVE_GROUP = GROUP_IDS[CpoAdapter.RETRIEVE];
-  /**
-   * DOCUMENT ME!
-   */
-  private static final String LIST_GROUP = GROUP_IDS[CpoAdapter.LIST];
-  /**
-   * DOCUMENT ME!
-   */
-  private static final String PERSIST_GROUP = GROUP_IDS[CpoAdapter.PERSIST];
-  /**
-   * DOCUMENT ME!
-   */
-  private static final String EXIST_GROUP = GROUP_IDS[CpoAdapter.EXIST];
-  /**
-   * DOCUMENT ME!
-   */
-  private static final String EXECUTE_GROUP = GROUP_IDS[CpoAdapter.EXECUTE];
+
   /**
    * DOCUMENT ME!
    */
   private Context context_ = null;
 
-  // DataSource Information
-
-  /**
-   * DOCUMENT ME!
-   */
-  private DataSource readDataSource_ = null;
-  /**
-   * DOCUMENT ME!
-   */
-  private DataSource writeDataSource_ = null;
-  /**
-   * DOCUMENT ME!
-   */
-  private String dataSourceName_ = null;
   /**
    * DOCUMENT ME!
    */
@@ -124,15 +72,16 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
    * Creates a JdbcCpoAdapter.
    *
    * @param metaDescriptor This datasource that identifies the cpo metadata datasource
-   * @param jdsiTrx The datasoruce that identifies the transaction database.
-   * @throws org.synchronoss.cpo.CpoException exception
+   * @param jdsiTrx        The datasoruce that identifies the transaction database.
+   * @throws org.synchronoss.cpo.CpoException
+   *          exception
    */
-  protected JdbcCpoAdapter(JdbcCpoMetaDescriptor metaDescriptor, DataSourceInfo jdsiTrx) throws CpoException {
+  protected JdbcCpoAdapter(JdbcCpoMetaDescriptor metaDescriptor, DataSourceInfo<DataSource> jdsiTrx) throws CpoException {
 
     this.metaDescriptor = metaDescriptor;
-    writeDataSource_ = jdsiTrx.getDataSource();
-    readDataSource_ = writeDataSource_;
-    dataSourceName_ = jdsiTrx.getDataSourceName();
+    setWriteDataSource(jdsiTrx.getDataSource());
+    setReadDataSource(jdsiTrx.getDataSource());
+    setDataSourceName(jdsiTrx.getDataSourceName());
     processDatabaseMetaData();
   }
 
@@ -140,15 +89,16 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
    * Creates a JdbcCpoAdapter.
    *
    * @param metaDescriptor This datasource that identifies the cpo metadata datasource
-   * @param jdsiWrite The datasource that identifies the transaction database for write transactions.
-   * @param jdsiRead The datasource that identifies the transaction database for read-only transactions.
-   * @throws org.synchronoss.cpo.CpoException exception
+   * @param jdsiWrite      The datasource that identifies the transaction database for write transactions.
+   * @param jdsiRead       The datasource that identifies the transaction database for read-only transactions.
+   * @throws org.synchronoss.cpo.CpoException
+   *          exception
    */
-  protected JdbcCpoAdapter(JdbcCpoMetaDescriptor metaDescriptor, DataSourceInfo jdsiWrite, DataSourceInfo jdsiRead) throws CpoException {
+  protected JdbcCpoAdapter(JdbcCpoMetaDescriptor metaDescriptor, DataSourceInfo<DataSource> jdsiWrite, DataSourceInfo<DataSource> jdsiRead) throws CpoException {
     this.metaDescriptor = metaDescriptor;
-    writeDataSource_ = jdsiWrite.getDataSource();
-    readDataSource_ = jdsiRead.getDataSource();
-    dataSourceName_ = jdsiWrite.getDataSourceName();
+    setWriteDataSource(jdsiWrite.getDataSource());
+    setReadDataSource(jdsiRead.getDataSource());
+    setDataSourceName(jdsiWrite.getDataSourceName());
     processDatabaseMetaData();
   }
 
@@ -163,7 +113,7 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
   protected JdbcCpoAdapter(JdbcCpoMetaDescriptor metaDescriptor, boolean batchSupported, String dataSourceName) throws CpoException {
     this.metaDescriptor = metaDescriptor;
     batchUpdatesSupported_ = batchSupported;
-    dataSourceName_ = dataSourceName;
+    setDataSourceName(dataSourceName);
   }
 
   private void processDatabaseMetaData() throws CpoException {
@@ -186,7 +136,7 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
 
   public static JdbcCpoAdapter getInstance(JdbcCpoMetaDescriptor metaDescriptor, DataSourceInfo jdsiTrx) throws CpoException {
     String adapterKey = metaDescriptor + ":" + jdsiTrx.getDataSourceName();
-    JdbcCpoAdapter adapter = (JdbcCpoAdapter)findCpoAdapter(adapterKey);
+    JdbcCpoAdapter adapter = (JdbcCpoAdapter) findCpoAdapter(adapterKey);
     if (adapter == null) {
       adapter = new JdbcCpoAdapter(metaDescriptor, jdsiTrx);
       addCpoAdapter(adapterKey, adapter);
@@ -198,15 +148,16 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
    * Creates a JdbcCpoAdapter.
    *
    * @param metaDescriptor This datasource that identifies the cpo metadata datasource
-   * @param jdsiWrite The datasource that identifies the transaction database for write transactions.
-   * @param jdsiRead The datasource that identifies the transaction database for read-only transactions.
-   * @throws org.synchronoss.cpo.CpoException exception
+   * @param jdsiWrite      The datasource that identifies the transaction database for write transactions.
+   * @param jdsiRead       The datasource that identifies the transaction database for read-only transactions.
+   * @throws org.synchronoss.cpo.CpoException
+   *          exception
    */
   public static JdbcCpoAdapter getInstance(JdbcCpoMetaDescriptor metaDescriptor, DataSourceInfo jdsiWrite, DataSourceInfo jdsiRead) throws CpoException {
     String adapterKey = metaDescriptor + ":" + jdsiWrite.getDataSourceName() + ":" + jdsiRead.getDataSourceName();
-    JdbcCpoAdapter adapter = (JdbcCpoAdapter)findCpoAdapter(adapterKey);
+    JdbcCpoAdapter adapter = (JdbcCpoAdapter) findCpoAdapter(adapterKey);
     if (adapter == null) {
-      adapter = new JdbcCpoAdapter(metaDescriptor, jdsiWrite);
+      adapter = new JdbcCpoAdapter(metaDescriptor, jdsiWrite, jdsiRead);
       addCpoAdapter(adapterKey, adapter);
     }
     return adapter;
@@ -215,20 +166,20 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
   /**
    * Creates the Object in the datasource. The assumption is that the object does not exist in the datasource. This
    * method creates and stores the object in the datasource.
-   *
+   * <p/>
    * <pre>Example:
    * <code>
-   *
+   * <p/>
    * class SomeObject so = new SomeObject();
    * class CpoAdapter cpo = null;
-   *
+   * <p/>
    * try {
    * 	cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));
    * } catch (CpoException ce) {
    * 	// Handle the error
    * 	cpo = null;
    * }
-   *
+   * <p/>
    * if (cpo!=null) {
    * 	so.setId(1);
    * 	so.setName("SomeName");
@@ -236,14 +187,14 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
    * 		cpo.insertObject(so);
    *  } catch (CpoException ce) {
    * 		// Handle the error
-   *
+   * <p/>
    *  }
    * }
    * </code>
    * </pre>
    *
    * @param obj This is an object that has been defined within the metadata of the datasource. If the class is not
-   * defined an exception will be thrown.
+   *            defined an exception will be thrown.
    * @return The number of objects created in the datasource
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
@@ -255,20 +206,20 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
   /**
    * Creates the Object in the datasource. The assumption is that the object does not exist in the datasource. This
    * method creates and stores the object in the datasource
-   *
+   * <p/>
    * <pre>Example:
    * <code>
-   *
+   * <p/>
    * class SomeObject so = new SomeObject();
    * class CpoAdapter cpo = null;
-   *
+   * <p/>
    * try {
    * 	cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));
    * } catch (CpoException ce) {
    * 	// Handle the error
    * 	cpo = null;
    * }
-   *
+   * <p/>
    * if (cpo!=null) {
    * 	so.setId(1);
    * 	so.setName("SomeName");
@@ -282,9 +233,9 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
    * </pre>
    *
    * @param name The String name of the CREATE Function Group that will be used to create the object in the datasource.
-   * null signifies that the default rules will be used which is equivalent to insertObject(Object obj);
-   * @param obj This is an object that has been defined within the metadata of the datasource. If the class is not
-   * defined an exception will be thrown.
+   *             null signifies that the default rules will be used which is equivalent to insertObject(Object obj);
+   * @param obj  This is an object that has been defined within the metadata of the datasource. If the class is not
+   *             defined an exception will be thrown.
    * @return The number of objects created in the datasource
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
@@ -296,20 +247,20 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
   /**
    * Creates the Object in the datasource. The assumption is that the object does not exist in the datasource. This
    * method creates and stores the object in the datasource
-   *
+   * <p/>
    * <pre>Example:
    * <code>
-   *
+   * <p/>
    * class SomeObject so = new SomeObject();
    * class CpoAdapter cpo = null;
-   *
+   * <p/>
    * try {
    * 	cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));
    * } catch (CpoException ce) {
    * 	// Handle the error
    * 	cpo = null;
    * }
-   *
+   * <p/>
    * if (cpo!=null) {
    * 	so.setId(1);
    * 	so.setName("SomeName");
@@ -322,14 +273,14 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
    * </code>
    * </pre>
    *
-   * @param name The String name of the CREATE Function Group that will be used to create the object in the datasource.
-   * null signifies that the default rules will be used which is equivalent to insertObject(Object obj);
-   * @param obj This is an object that has been defined within the metadata of the datasource. If the class is not
-   * defined an exception will be thrown.
-   * @param wheres A collection of CpoWhere beans that define the constraints that should be used when retrieving beans
-   * @param orderBy The CpoOrderBy bean that defines the order in which beans should be returned
+   * @param name              The String name of the CREATE Function Group that will be used to create the object in the datasource.
+   *                          null signifies that the default rules will be used which is equivalent to insertObject(Object obj);
+   * @param obj               This is an object that has been defined within the metadata of the datasource. If the class is not
+   *                          defined an exception will be thrown.
+   * @param wheres            A collection of CpoWhere beans that define the constraints that should be used when retrieving beans
+   * @param orderBy           The CpoOrderBy bean that defines the order in which beans should be returned
    * @param nativeExpressions Native expression that will be used to augment the expression stored in the meta data. This
-   * text will be embedded at run-time
+   *                          text will be embedded at run-time
    * @return The number of objects created in the datasource
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
@@ -341,27 +292,27 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
   /**
    * Iterates through a collection of Objects, creates and stores them in the datasource. The assumption is that the
    * objects contained in the collection do not exist in the datasource.
-   *
+   * <p/>
    * This method creates and stores the objects in the datasource. The objects in the collection will be treated as one
    * transaction, assuming the datasource supports transactions.
-   *
+   * <p/>
    * This means that if one of the objects fail being created in the datasource then the CpoAdapter will stop processing
    * the remainder of the collection and rollback all the objects created thus far. Rollback is on the underlying
    * datasource's support of rollback.
-   *
+   * <p/>
    * <pre>Example:
    * <code>
-   *
+   * <p/>
    * class SomeObject so = null;
    * class CpoAdapter cpo = null;
-   *
+   * <p/>
    * try {
    * 	cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));
    * } catch (CpoException ce) {
    * 	// Handle the error
    * 	cpo = null;
    * }
-   *
+   * <p/>
    * if (cpo!=null) {
    * 	ArrayList al = new ArrayList();
    * 	for (int i=0; i<3; i++){
@@ -380,7 +331,7 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
    * </pre>
    *
    * @param coll This is a collection of objects that have been defined within the metadata of the datasource. If the
-   * class is not defined an exception will be thrown.
+   *             class is not defined an exception will be thrown.
    * @return The number of objects created in the datasource
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
@@ -392,19 +343,19 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
   /**
    * Iterates through a collection of Objects, creates and stores them in the datasource. The assumption is that the
    * objects contained in the collection do not exist in the datasource.
-   *
+   * <p/>
    * This method creates and stores the objects in the datasource. The objects in the collection will be treated as one
    * transaction, assuming the datasource supports transactions.
-   *
+   * <p/>
    * This means that if one of the objects fail being created in the datasource then the CpoAdapter should stop
    * processing the remainder of the collection, and if supported, rollback all the objects created thus far.
-   *
+   * <p/>
    * <pre>Example:
    * <code>
-   *
+   * <p/>
    * class SomeObject so = null;
    * class CpoAdapter cpo = null;
-   *
+   * <p/>
    * try {
    * 	cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));
    * } catch (CpoException ce) {
@@ -429,9 +380,9 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
    * </pre>
    *
    * @param name The String name of the CREATE Function Group that will be used to create the object in the datasource.
-   * null signifies that the default rules will be used.
+   *             null signifies that the default rules will be used.
    * @param coll This is a collection of objects that have been defined within the metadata of the datasource. If the
-   * class is not defined an exception will be thrown.
+   *             class is not defined an exception will be thrown.
    * @return The number of objects created in the datasource
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
@@ -443,19 +394,19 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
   /**
    * Iterates through a collection of Objects, creates and stores them in the datasource. The assumption is that the
    * objects contained in the collection do not exist in the datasource.
-   *
+   * <p/>
    * This method creates and stores the objects in the datasource. The objects in the collection will be treated as one
    * transaction, assuming the datasource supports transactions.
-   *
+   * <p/>
    * This means that if one of the objects fail being created in the datasource then the CpoAdapter should stop
    * processing the remainder of the collection, and if supported, rollback all the objects created thus far.
-   *
+   * <p/>
    * <pre>Example:
    * <code>
-   *
+   * <p/>
    * class SomeObject so = null;
    * class CpoAdapter cpo = null;
-   *
+   * <p/>
    * try {
    * 	cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));
    * } catch (CpoException ce) {
@@ -479,14 +430,14 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
    * </code>
    * </pre>
    *
-   * @param name The String name of the CREATE Function Group that will be used to create the object in the datasource.
-   * null signifies that the default rules will be used.
-   * @param coll This is a collection of objects that have been defined within the metadata of the datasource. If the
-   * class is not defined an exception will be thrown.
-   * @param wheres A collection of CpoWhere beans that define the constraints that should be used when retrieving beans
-   * @param orderBy The CpoOrderBy bean that defines the order in which beans should be returned
+   * @param name              The String name of the CREATE Function Group that will be used to create the object in the datasource.
+   *                          null signifies that the default rules will be used.
+   * @param coll              This is a collection of objects that have been defined within the metadata of the datasource. If the
+   *                          class is not defined an exception will be thrown.
+   * @param wheres            A collection of CpoWhere beans that define the constraints that should be used when retrieving beans
+   * @param orderBy           The CpoOrderBy bean that defines the order in which beans should be returned
    * @param nativeExpressions Native expression that will be used to augment the expression stored in the meta data. This
-   * text will be embedded at run-time
+   *                          text will be embedded at run-time
    * @return The number of objects created in the datasource
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
@@ -498,20 +449,20 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
   /**
    * Removes the Object from the datasource. The assumption is that the object exists in the datasource. This method
    * stores the object in the datasource
-   *
+   * <p/>
    * <pre>Example:
    * <code>
-   *
+   * <p/>
    * class SomeObject so = new SomeObject();
    * class CpoAdapter cpo = null;
-   *
+   * <p/>
    * try {
    * 	cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));
    * } catch (CpoException ce) {
    * 	// Handle the error
    * 	cpo = null;
    * }
-   *
+   * <p/>
    * if (cpo!=null) {
    * 	so.setId(1);
    * 	so.setName("SomeName");
@@ -525,7 +476,7 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
    * </pre>
    *
    * @param obj This is an object that has been defined within the metadata of the datasource. If the class is not
-   * defined an exception will be thrown. If the object does not exist in the datasource an exception will be thrown.
+   *            defined an exception will be thrown. If the object does not exist in the datasource an exception will be thrown.
    * @return The number of objects deleted from the datasource
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
@@ -537,20 +488,20 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
   /**
    * Removes the Object from the datasource. The assumption is that the object exists in the datasource. This method
    * stores the object in the datasource
-   *
+   * <p/>
    * <pre>Example:
    * <code>
-   *
+   * <p/>
    * class SomeObject so = new SomeObject();
    * class CpoAdapter cpo = null;
-   *
+   * <p/>
    * try {
    * 	cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));
    * } catch (CpoException ce) {
    * 	// Handle the error
    * 	cpo = null;
    * }
-   *
+   * <p/>
    * if (cpo!=null) {
    * 	so.setId(1);
    * 	so.setName("SomeName");
@@ -564,9 +515,9 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
    * </pre>
    *
    * @param name The String name of the DELETE Function Group that will be used to create the object in the datasource.
-   * null signifies that the default rules will be used.
-   * @param obj This is an object that has been defined within the metadata of the datasource. If the class is not
-   * defined an exception will be thrown. If the object does not exist in the datasource an exception will be thrown.
+   *             null signifies that the default rules will be used.
+   * @param obj  This is an object that has been defined within the metadata of the datasource. If the class is not
+   *             defined an exception will be thrown. If the object does not exist in the datasource an exception will be thrown.
    * @return The number of objects deleted from the datasource
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
@@ -578,20 +529,20 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
   /**
    * Removes the Object from the datasource. The assumption is that the object exists in the datasource. This method
    * stores the object in the datasource
-   *
+   * <p/>
    * <pre>Example:
    * <code>
-   *
+   * <p/>
    * class SomeObject so = new SomeObject();
    * class CpoAdapter cpo = null;
-   *
+   * <p/>
    * try {
    * 	cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));
    * } catch (CpoException ce) {
    * 	// Handle the error
    * 	cpo = null;
    * }
-   *
+   * <p/>
    * if (cpo!=null) {
    * 	so.setId(1);
    * 	so.setName("SomeName");
@@ -604,14 +555,14 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
    * </code>
    * </pre>
    *
-   * @param name The String name of the DELETE Function Group that will be used to create the object in the datasource.
-   * null signifies that the default rules will be used.
-   * @param obj This is an object that has been defined within the metadata of the datasource. If the class is not
-   * defined an exception will be thrown. If the object does not exist in the datasource an exception will be thrown.
-   * @param wheres A collection of CpoWhere beans that define the constraints that should be used when retrieving beans
-   * @param orderBy The CpoOrderBy bean that defines the order in which beans should be returned
+   * @param name              The String name of the DELETE Function Group that will be used to create the object in the datasource.
+   *                          null signifies that the default rules will be used.
+   * @param obj               This is an object that has been defined within the metadata of the datasource. If the class is not
+   *                          defined an exception will be thrown. If the object does not exist in the datasource an exception will be thrown.
+   * @param wheres            A collection of CpoWhere beans that define the constraints that should be used when retrieving beans
+   * @param orderBy           The CpoOrderBy bean that defines the order in which beans should be returned
    * @param nativeExpressions Native expression that will be used to augment the expression stored in the meta data. This
-   * text will be embedded at run-time
+   *                          text will be embedded at run-time
    * @return The number of objects deleted from the datasource
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
@@ -624,23 +575,23 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
    * Removes the Objects contained in the collection from the datasource. The assumption is that the object exists in
    * the datasource. This method stores the objects contained in the collection in the datasource. The objects in the
    * collection will be treated as one transaction, assuming the datasource supports transactions.
-   *
+   * <p/>
    * This means that if one of the objects fail being deleted in the datasource then the CpoAdapter should stop
    * processing the remainder of the collection, and if supported, rollback all the objects deleted thus far.
-   *
+   * <p/>
    * <pre>Example:
    * <code>
-   *
+   * <p/>
    * class SomeObject so = null;
    * class CpoAdapter cpo = null;
-   *
+   * <p/>
    * try {
    * 	cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));
    * } catch (CpoException ce) {
    * 	// Handle the error
    * 	cpo = null;
    * }
-   *
+   * <p/>
    * if (cpo!=null) {
    * 	ArrayList al = new ArrayList();
    * 	for (int i=0; i<3; i++){
@@ -659,7 +610,7 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
    * </pre>
    *
    * @param coll This is a collection of objects that have been defined within the metadata of the datasource. If the
-   * class is not defined an exception will be thrown.
+   *             class is not defined an exception will be thrown.
    * @return The number of objects deleted from the datasource
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
@@ -672,23 +623,23 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
    * Removes the Objects contained in the collection from the datasource. The assumption is that the object exists in
    * the datasource. This method stores the objects contained in the collection in the datasource. The objects in the
    * collection will be treated as one transaction, assuming the datasource supports transactions.
-   *
+   * <p/>
    * This means that if one of the objects fail being deleted in the datasource then the CpoAdapter should stop
    * processing the remainder of the collection, and if supported, rollback all the objects deleted thus far.
-   *
+   * <p/>
    * <pre>Example:
    * <code>
-   *
+   * <p/>
    * class SomeObject so = null;
    * class CpoAdapter cpo = null;
-   *
+   * <p/>
    * try {
    * 	cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));
    * } catch (CpoException ce) {
    * 	// Handle the error
    * 	cpo = null;
    * }
-   *
+   * <p/>
    * if (cpo!=null) {
    * 	ArrayList al = new ArrayList();
    * 	for (int i=0; i<3; i++){
@@ -697,7 +648,7 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
    * 		so.setName("SomeName");
    * 		al.add(so);
    *  }
-   *
+   * <p/>
    * 	try{
    * 		cpo.deleteObjects("IdNameDelete",al);
    *  } catch (CpoException ce) {
@@ -708,9 +659,9 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
    * </pre>
    *
    * @param name The String name of the DELETE Function Group that will be used to create the object in the datasource.
-   * null signifies that the default rules will be used.
+   *             null signifies that the default rules will be used.
    * @param coll This is a collection of objects that have been defined within the metadata of the datasource. If the
-   * class is not defined an exception will be thrown.
+   *             class is not defined an exception will be thrown.
    * @return The number of objects deleted from the datasource
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
@@ -723,23 +674,23 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
    * Removes the Objects contained in the collection from the datasource. The assumption is that the object exists in
    * the datasource. This method stores the objects contained in the collection in the datasource. The objects in the
    * collection will be treated as one transaction, assuming the datasource supports transactions.
-   *
+   * <p/>
    * This means that if one of the objects fail being deleted in the datasource then the CpoAdapter should stop
    * processing the remainder of the collection, and if supported, rollback all the objects deleted thus far.
-   *
+   * <p/>
    * <pre>Example:
    * <code>
-   *
+   * <p/>
    * class SomeObject so = null;
    * class CpoAdapter cpo = null;
-   *
+   * <p/>
    * try {
    * 	cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));
    * } catch (CpoException ce) {
    * 	// Handle the error
    * 	cpo = null;
    * }
-   *
+   * <p/>
    * if (cpo!=null) {
    * 	ArrayList al = new ArrayList();
    * 	for (int i=0; i<3; i++){
@@ -748,7 +699,7 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
    * 		so.setName("SomeName");
    * 		al.add(so);
    *  }
-   *
+   * <p/>
    * 	try{
    * 		cpo.deleteObjects("IdNameDelete",al);
    *  } catch (CpoException ce) {
@@ -758,14 +709,14 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
    * </code>
    * </pre>
    *
-   * @param name The String name of the DELETE Function Group that will be used to create the object in the datasource.
-   * null signifies that the default rules will be used.
-   * @param coll This is a collection of objects that have been defined within the metadata of the datasource. If the
-   * class is not defined an exception will be thrown.
-   * @param wheres A collection of CpoWhere beans that define the constraints that should be used when retrieving beans
-   * @param orderBy The CpoOrderBy bean that defines the order in which beans should be returned
+   * @param name              The String name of the DELETE Function Group that will be used to create the object in the datasource.
+   *                          null signifies that the default rules will be used.
+   * @param coll              This is a collection of objects that have been defined within the metadata of the datasource. If the
+   *                          class is not defined an exception will be thrown.
+   * @param wheres            A collection of CpoWhere beans that define the constraints that should be used when retrieving beans
+   * @param orderBy           The CpoOrderBy bean that defines the order in which beans should be returned
    * @param nativeExpressions Native expression that will be used to augment the expression stored in the meta data. This
-   * text will be embedded at run-time
+   *                          text will be embedded at run-time
    * @return The number of objects deleted from the datasource
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
@@ -777,20 +728,20 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
   /**
    * Executes an Object whose metadata will call an executable within the datasource. It is assumed that the executable
    * object exists in the metadatasource. If the executable does not exist, an exception will be thrown.
-   *
+   * <p/>
    * <pre>Example:
    * <code>
-   *
+   * <p/>
    * class SomeObject so = new SomeObject();
    * class CpoAdapter cpo = null;
-   *
+   * <p/>
    * try {
    * 	cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));
    * } catch (CpoException ce) {
    * 	// Handle the error
    * 	cpo = null;
    * }
-   *
+   * <p/>
    * if (cpo!=null) {
    * 	so.setId(1);
    * 	so.setName("SomeName");
@@ -804,11 +755,11 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
    * </pre>
    *
    * @param object This is an Object that has been defined within the metadata of the datasource. If the class is not
-   * defined an exception will be thrown. If the object does not exist in the datasource, an exception will be thrown.
-   * This object is used to populate the IN arguments used to executed the datasource object.
-   *
-   * An object of this type will be created and filled with the returned data from the value_object. This newly created
-   * object will be returned from this method.
+   *               defined an exception will be thrown. If the object does not exist in the datasource, an exception will be thrown.
+   *               This object is used to populate the IN arguments used to executed the datasource object.
+   *               <p/>
+   *               An object of this type will be created and filled with the returned data from the value_object. This newly created
+   *               object will be returned from this method.
    * @return An object populated with the OUT arguments returned from the executable object
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
@@ -820,20 +771,20 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
   /**
    * Executes an Object whose metadata will call an executable within the datasource. It is assumed that the executable
    * object exists in the metadatasource. If the executable does not exist, an exception will be thrown.
-   *
+   * <p/>
    * <pre>Example:
    * <code>
-   *
+   * <p/>
    * class SomeObject so = new SomeObject();
    * class CpoAdapter cpo = null;
-   *
+   * <p/>
    * try {
    * 	cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));
    * } catch (CpoException ce) {
    * 	// Handle the error
    * 	cpo = null;
    * }
-   *
+   * <p/>
    * if (cpo!=null) {
    * 	so.setId(1);
    * 	so.setName("SomeName");
@@ -846,12 +797,12 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
    * </code>
    * </pre>
    *
-   * @param name The filter name which tells the datasource which objects should be returned. The name also signifies
-   * what data in the object will be populated.
+   * @param name   The filter name which tells the datasource which objects should be returned. The name also signifies
+   *               what data in the object will be populated.
    * @param object This is an object that has been defined within the metadata of the datasource. If the class is not
-   * defined an exception will be thrown. If the object does not exist in the datasource, an exception will be thrown.
-   * This object is used to populate the IN arguments used to retrieve the collection of objects. This object defines
-   * the object type that will be returned in the collection and contain the result set data or the OUT Parameters.
+   *               defined an exception will be thrown. If the object does not exist in the datasource, an exception will be thrown.
+   *               This object is used to populate the IN arguments used to retrieve the collection of objects. This object defines
+   *               the object type that will be returned in the collection and contain the result set data or the OUT Parameters.
    * @return A result object populate with the OUT arguments
    * @throws CpoException if there are errors accessing the datasource
    */
@@ -863,21 +814,21 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
   /**
    * Executes an Object that represents an executable object within the datasource. It is assumed that the object exists
    * in the datasource. If the object does not exist, an exception will be thrown
-   *
+   * <p/>
    * <pre>Example:
    * <code>
-   *
+   * <p/>
    * class SomeObject so = new SomeObject();
    * class SomeResult sr = new SomeResult();
    * class CpoAdapter cpo = null;
-   *
+   * <p/>
    * try {
    * 	cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));
    * } catch (CpoException ce) {
    * 	// Handle the error
    * 	cpo = null;
    * }
-   *
+   * <p/>
    * if (cpo!=null) {
    * 	so.setId(1);
    * 	so.setName("SomeName");
@@ -890,15 +841,15 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
    * </code>
    * </pre>
    *
-   * @param name The String name of the EXECUTE Function Group that will be used to create the object in the datasource.
-   * null signifies that the default rules will be used.
+   * @param name     The String name of the EXECUTE Function Group that will be used to create the object in the datasource.
+   *                 null signifies that the default rules will be used.
    * @param criteria This is an object that has been defined within the metadata of the datasource. If the class is not
-   * defined an exception will be thrown. If the object does not exist in the datasource, an exception will be thrown.
-   * This object is used to populate the IN arguments used to retrieve the collection of objects.
-   * @param result This is an object that has been defined within the metadata of the datasource. If the class is not
-   * defined an exception will be thrown. If the object does not exist in the datasource, an exception will be thrown.
-   * This object defines the object type that will be created, filled with the return data and returned from this
-   * method.
+   *                 defined an exception will be thrown. If the object does not exist in the datasource, an exception will be thrown.
+   *                 This object is used to populate the IN arguments used to retrieve the collection of objects.
+   * @param result   This is an object that has been defined within the metadata of the datasource. If the class is not
+   *                 defined an exception will be thrown. If the object does not exist in the datasource, an exception will be thrown.
+   *                 This object defines the object type that will be created, filled with the return data and returned from this
+   *                 method.
    * @return An object populated with the out arguments
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
@@ -909,21 +860,21 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
 
   /**
    * The CpoAdapter will check to see if this object exists in the datasource.
-   *
+   * <p/>
    * <pre>Example:
    * <code>
-   *
+   * <p/>
    * class SomeObject so = new SomeObject();
    * long count = 0;
    * class CpoAdapter cpo = null;
-   *
+   * <p/>
    * try {
    * 	cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));
    * } catch (CpoException ce) {
    * 	// Handle the error
    * 	cpo = null;
    * }
-   *
+   * <p/>
    * if (cpo!=null) {
    * 	so.setId(1);
    * 	so.setName("SomeName");
@@ -942,7 +893,7 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
    * </pre>
    *
    * @param obj This is an object that has been defined within the metadata of the datasource. If the class is not
-   * defined an exception will be thrown. This object will be searched for inside the datasource.
+   *            defined an exception will be thrown. This object will be searched for inside the datasource.
    * @return The number of objects that exist in the datasource that match the specified object
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
@@ -953,21 +904,21 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
 
   /**
    * The CpoAdapter will check to see if this object exists in the datasource.
-   *
+   * <p/>
    * <pre>Example:
    * <code>
-   *
+   * <p/>
    * class SomeObject so = new SomeObject();
    * long count = 0;
    * class CpoAdapter cpo = null;
-   *
+   * <p/>
    * try {
    * 	cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));
    * } catch (CpoException ce) {
    * 	// Handle the error
    * 	cpo = null;
    * }
-   *
+   * <p/>
    * if (cpo!=null) {
    * 	so.setId(1);
    * 	so.setName("SomeName");
@@ -986,9 +937,9 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
    * </pre>
    *
    * @param name The String name of the EXISTS Function Group that will be used to create the object in the datasource.
-   * null signifies that the default rules will be used.
-   * @param obj This is an object that has been defined within the metadata of the datasource. If the class is not
-   * defined an exception will be thrown. This object will be searched for inside the datasource.
+   *             null signifies that the default rules will be used.
+   * @param obj  This is an object that has been defined within the metadata of the datasource. If the class is not
+   *             defined an exception will be thrown. This object will be searched for inside the datasource.
    * @return The number of objects that exist in the datasource that match the specified object
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
@@ -999,22 +950,22 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
 
   /**
    * The CpoAdapter will check to see if this object exists in the datasource.
-   *
+   * <p/>
    * <pre>Example:
    * <code>
-   *
+   * <p/>
    * class SomeObject so = new SomeObject();
    * long count = 0;
    * class CpoAdapter cpo = null;
-   *
-   *
+   * <p/>
+   * <p/>
    *  try {
    *    cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));
    *  } catch (CpoException ce) {
    *    // Handle the error
    *    cpo = null;
    *  }
-   *
+   * <p/>
    *  if (cpo!=null) {
    *    so.setId(1);
    *    so.setName("SomeName");
@@ -1033,10 +984,10 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
    * </code>
    * </pre>
    *
-   * @param name The String name of the EXISTS Function Group that will be used to create the object in the datasource.
-   * null signifies that the default rules will be used.
-   * @param obj This is an object that has been defined within the metadata of the datasource. If the class is not
-   * defined an exception will be thrown. This object will be searched for inside the datasource.
+   * @param name   The String name of the EXISTS Function Group that will be used to create the object in the datasource.
+   *               null signifies that the default rules will be used.
+   * @param obj    This is an object that has been defined within the metadata of the datasource. If the class is not
+   *               defined an exception will be thrown. This object will be searched for inside the datasource.
    * @param wheres A CpoWhere object that passes in run-time constraints to the function that performs the the exist
    * @return The number of objects that exist in the datasource that match the specified object
    * @throws CpoException Thrown if there are errors accessing the datasource
@@ -1063,10 +1014,10 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
    * The CpoAdapter will check to see if this object exists in the datasource.
    *
    * @param name The name which identifies which EXISTS, INSERT, and UPDATE Function Groups to execute to persist the
-   * object.
-   * @param obj This is an object that has been defined within the metadata of the datasource. If the class is not
-   * defined an exception will be thrown.
-   * @param con The datasource Connection with which to check if the object exists
+   *             object.
+   * @param obj  This is an object that has been defined within the metadata of the datasource. If the class is not
+   *             defined an exception will be thrown.
+   * @param con  The datasource Connection with which to check if the object exists
    * @return The int value of the first column returned in the record set
    * @throws CpoException exception will be thrown if the Function Group has a function count != 1
    */
@@ -1156,7 +1107,7 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
    * newOrderBy allows you to dynamically change the order of the objects in the resulting collection. This allows you
    * to apply user input in determining the order of the collection
    *
-   * @param marker the marker that will be replaced in the expression with the string representation of this orderBy
+   * @param marker    the marker that will be replaced in the expression with the string representation of this orderBy
    * @param attribute The name of the attribute from the pojo that will be sorted.
    * @param ascending If true, sort ascending. If false sort descending.
    * @return A CpoOrderBy object to be passed into retrieveBeans.
@@ -1173,8 +1124,8 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
    *
    * @param attribute The name of the attribute from the pojo that will be sorted.
    * @param ascending If true, sort ascending. If false sort descending.
-   * @param function A string which represents a datasource function that will be called on the attribute. must be
-   * contained in the function string. The attribute name will be replaced at run-time with its datasource counterpart
+   * @param function  A string which represents a datasource function that will be called on the attribute. must be
+   *                  contained in the function string. The attribute name will be replaced at run-time with its datasource counterpart
    * @return A CpoOrderBy object to be passed into retrieveBeans.
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
@@ -1187,11 +1138,11 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
    * newOrderBy allows you to dynamically change the order of the objects in the resulting collection. This allows you
    * to apply user input in determining the order of the collection
    *
-   * @param marker the marker that will be replaced in the expression with the string representation of this orderBy
+   * @param marker    the marker that will be replaced in the expression with the string representation of this orderBy
    * @param attribute The name of the attribute from the pojo that will be sorted.
    * @param ascending If true, sort ascending. If false sort descending.
-   * @param function A string which represents a datasource function that will be called on the attribute. must be
-   * contained in the function string. The attribute name will be replaced at run-time with its datasource counterpart
+   * @param function  A string which represents a datasource function that will be called on the attribute. must be
+   *                  contained in the function string. The attribute name will be replaced at run-time with its datasource counterpart
    * @return A CpoOrderBy object to be passed into retrieveBeans.
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
@@ -1215,9 +1166,9 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
    * DOCUMENT ME!
    *
    * @param logical DOCUMENT ME!
-   * @param attr DOCUMENT ME!
-   * @param comp DOCUMENT ME!
-   * @param value DOCUMENT ME!
+   * @param attr    DOCUMENT ME!
+   * @param comp    DOCUMENT ME!
+   * @param value   DOCUMENT ME!
    * @return DOCUMENT ME!
    * @throws CpoException DOCUMENT ME!
    */
@@ -1230,10 +1181,10 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
    * DOCUMENT ME!
    *
    * @param logical DOCUMENT ME!
-   * @param attr DOCUMENT ME!
-   * @param comp DOCUMENT ME!
-   * @param value DOCUMENT ME!
-   * @param not DOCUMENT ME!
+   * @param attr    DOCUMENT ME!
+   * @param comp    DOCUMENT ME!
+   * @param value   DOCUMENT ME!
+   * @param not     DOCUMENT ME!
    * @return DOCUMENT ME!
    * @throws CpoException DOCUMENT ME!
    */
@@ -1247,20 +1198,20 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
    * If it exists, the object is updated in the datasource If the object does not exist, then it is created in the
    * datasource. This method stores the object in the datasource. This method uses the default EXISTS, CREATE, and
    * UPDATE Function Groups specified for this object.
-   *
+   * <p/>
    * <pre>Example:
    * <code>
-   *
+   * <p/>
    * class SomeObject so = new SomeObject();
    * class CpoAdapter cpo = null;
-   *
+   * <p/>
    * try {
    * 	cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));
    * } catch (CpoException ce) {
    * 	// Handle the error
    * 	cpo = null;
    * }
-   *
+   * <p/>
    * if (cpo!=null) {
    * 	so.setId(1);
    * 	so.setName("SomeName");
@@ -1274,7 +1225,7 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
    * </pre>
    *
    * @param obj This is an object that has been defined within the metadata of the datasource. If the class is not
-   * defined an exception will be thrown.
+   *            defined an exception will be thrown.
    * @return A count of the number of objects persisted
    * @throws CpoException Thrown if there are errors accessing the datasource
    * @see #existsObject
@@ -1290,20 +1241,20 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
    * Persists the Object into the datasource. The CpoAdapter will check to see if this object exists in the datasource.
    * If it exists, the object is updated in the datasource If the object does not exist, then it is created in the
    * datasource. This method stores the object in the datasource.
-   *
+   * <p/>
    * <pre>Example:
    * <code>
-   *
+   * <p/>
    * class SomeObject so = new SomeObject();
    * class CpoAdapter cpo = null;
-   *
+   * <p/>
    * try {
    * 	cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));
    * } catch (CpoException ce) {
    * 	// Handle the error
    * 	cpo = null;
    * }
-   *
+   * <p/>
    * if (cpo!=null) {
    * 	so.setId(1);
    * 	so.setName("SomeName");
@@ -1317,9 +1268,9 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
    * </pre>
    *
    * @param name The name which identifies which EXISTS, INSERT, and UPDATE Function Groups to execute to persist the
-   * object.
-   * @param obj This is an object that has been defined within the metadata of the datasource. If the class is not
-   * defined an exception will be thrown.
+   *             object.
+   * @param obj  This is an object that has been defined within the metadata of the datasource. If the class is not
+   *             defined an exception will be thrown.
    * @return A count of the number of objects persisted
    * @throws CpoException Thrown if there are errors accessing the datasource
    * @see #existsObject
@@ -1337,20 +1288,20 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
    * in the datasource. This method stores the object in the datasource. The objects in the collection will be treated
    * as one transaction, meaning that if one of the objects fail being inserted or updated in the datasource then the
    * entire collection will be rolled back.
-   *
+   * <p/>
    * <pre>Example:
    * <code>
-   *
+   * <p/>
    * class SomeObject so = null;
    * class CpoAdapter cpo = null;
-   *
+   * <p/>
    * try {
    * 	cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));
    * } catch (CpoException ce) {
    * 	// Handle the error
    * 	cpo = null;
    * }
-   *
+   * <p/>
    * if (cpo!=null) {
    * 	ArrayList al = new ArrayList();
    * 	for (int i=0; i<3; i++){
@@ -1369,7 +1320,7 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
    * </pre>
    *
    * @param coll This is a collection of objects that have been defined within the metadata of the datasource. If the
-   * class is not defined an exception will be thrown.
+   *             class is not defined an exception will be thrown.
    * @return DOCUMENT ME!
    * @throws CpoException Thrown if there are errors accessing the datasource
    * @see #existsObject
@@ -1387,20 +1338,20 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
    * in the datasource. This method stores the object in the datasource. The objects in the collection will be treated
    * as one transaction, meaning that if one of the objects fail being inserted or updated in the datasource then the
    * entire collection will be rolled back.
-   *
+   * <p/>
    * <pre>Example:
    * <code>
-   *
+   * <p/>
    * class SomeObject so = null;
    * class CpoAdapter cpo = null;
-   *
+   * <p/>
    * try {
    * 	cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));
    * } catch (CpoException ce) {
    * 	// Handle the error
    * 	cpo = null;
    * }
-   *
+   * <p/>
    * if (cpo!=null) {
    * 	ArrayList al = new ArrayList();
    * 	for (int i=0; i<3; i++){
@@ -1419,9 +1370,9 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
    * </pre>
    *
    * @param name The name which identifies which EXISTS, INSERT, and UPDATE Function Groups to execute to persist the
-   * object.
+   *             object.
    * @param coll This is a collection of objects that have been defined within the metadata of the datasource. If the
-   * class is not defined an exception will be thrown.
+   *             class is not defined an exception will be thrown.
    * @return DOCUMENT ME!
    * @throws CpoException Thrown if there are errors accessing the datasource
    * @see #existsObject
@@ -1438,8 +1389,8 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
    * function defined for this beans returns more than one row, an exception will be thrown.
    *
    * @param bean This is an bean that has been defined within the metadata of the datasource. If the class is not
-   * defined an exception will be thrown. If the bean does not exist in the datasource, an exception will be thrown. The
-   * input bean is used to specify the search criteria, the output bean is populated with the results of the function.
+   *             defined an exception will be thrown. If the bean does not exist in the datasource, an exception will be thrown. The
+   *             input bean is used to specify the search criteria, the output bean is populated with the results of the function.
    * @return An bean of the same type as the result argument that is filled in as specified the metadata for the
    *         retireve.
    * @throws CpoException Thrown if there are errors accessing the datasource
@@ -1457,8 +1408,8 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
    *
    * @param name DOCUMENT ME!
    * @param bean This is an bean that has been defined within the metadata of the datasource. If the class is not
-   * defined an exception will be thrown. If the bean does not exist in the datasource, an exception will be thrown. The
-   * input bean is used to specify the search criteria, the output bean is populated with the results of the function.
+   *             defined an exception will be thrown. If the bean does not exist in the datasource, an exception will be thrown. The
+   *             input bean is used to specify the search criteria, the output bean is populated with the results of the function.
    * @return An bean of the same type as the result argument that is filled in as specified the metadata for the
    *         retireve.
    * @throws CpoException Thrown if there are errors accessing the datasource
@@ -1474,14 +1425,14 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
    * Retrieves the bean from the datasource. The assumption is that the bean exists in the datasource. If the retrieve
    * function defined for this beans returns more than one row, an exception will be thrown.
    *
-   * @param name DOCUMENT ME!
-   * @param bean This is an bean that has been defined within the metadata of the datasource. If the class is not
-   * defined an exception will be thrown. If the bean does not exist in the datasource, an exception will be thrown. The
-   * input bean is used to specify the search criteria, the output bean is populated with the results of the function.
-   * @param wheres A collection of CpoWhere beans that define the constraints that should be used when retrieving beans
-   * @param orderBy The CpoOrderBy bean that defines the order in which beans should be returned
+   * @param name              DOCUMENT ME!
+   * @param bean              This is an bean that has been defined within the metadata of the datasource. If the class is not
+   *                          defined an exception will be thrown. If the bean does not exist in the datasource, an exception will be thrown. The
+   *                          input bean is used to specify the search criteria, the output bean is populated with the results of the function.
+   * @param wheres            A collection of CpoWhere beans that define the constraints that should be used when retrieving beans
+   * @param orderBy           The CpoOrderBy bean that defines the order in which beans should be returned
    * @param nativeExpressions Native expression that will be used to augment the expression stored in the meta data. This
-   * text will be embedded at run-time
+   *                          text will be embedded at run-time
    * @return An bean of the same type as the result argument that is filled in as specified the metadata for the
    *         retireve.
    * @throws CpoException Thrown if there are errors accessing the datasource
@@ -1497,16 +1448,16 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
    * Retrieves the bean from the datasource. The assumption is that the bean exists in the datasource. If the retrieve
    * function defined for this beans returns more than one row, an exception will be thrown.
    *
-   * @param name The filter name which tells the datasource which beans should be returned. The name also signifies what
-   * data in the bean will be populated.
+   * @param name     The filter name which tells the datasource which beans should be returned. The name also signifies what
+   *                 data in the bean will be populated.
    * @param criteria This is an bean that has been defined within the metadata of the datasource. If the class is not
-   * defined an exception will be thrown. If the bean does not exist in the datasource, an exception will be thrown.
-   * This bean is used to specify the arguments used to retrieve the collection of beans.
-   * @param result This is an bean that has been defined within the metadata of the datasource. If the class is not
-   * defined an exception will be thrown. If the bean does not exist in the datasource, an exception will be thrown.
-   * This bean is used to specify the bean type that will be returned in the collection.
-   * @param wheres A collection of CpoWhere beans that define the constraints that should be used when retrieving beans
-   * @param orderBy The CpoOrderBy bean that defines the order in which beans should be returned
+   *                 defined an exception will be thrown. If the bean does not exist in the datasource, an exception will be thrown.
+   *                 This bean is used to specify the arguments used to retrieve the collection of beans.
+   * @param result   This is an bean that has been defined within the metadata of the datasource. If the class is not
+   *                 defined an exception will be thrown. If the bean does not exist in the datasource, an exception will be thrown.
+   *                 This bean is used to specify the bean type that will be returned in the collection.
+   * @param wheres   A collection of CpoWhere beans that define the constraints that should be used when retrieving beans
+   * @param orderBy  The CpoOrderBy bean that defines the order in which beans should be returned
    * @return An bean of the same type as the result argument that is filled in as specified the metadata for the
    *         retireve.
    * @throws CpoException Thrown if there are errors accessing the datasource
@@ -1520,18 +1471,18 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
    * Retrieves the bean from the datasource. The assumption is that the bean exists in the datasource. If the retrieve
    * function defined for this beans returns more than one row, an exception will be thrown.
    *
-   * @param name The filter name which tells the datasource which beans should be returned. The name also signifies what
-   * data in the bean will be populated.
-   * @param criteria This is an bean that has been defined within the metadata of the datasource. If the class is not
-   * defined an exception will be thrown. If the bean does not exist in the datasource, an exception will be thrown.
-   * This bean is used to specify the arguments used to retrieve the collection of beans.
-   * @param result This is an bean that has been defined within the metadata of the datasource. If the class is not
-   * defined an exception will be thrown. If the bean does not exist in the datasource, an exception will be thrown.
-   * This bean is used to specify the bean type that will be returned in the collection.
-   * @param wheres A collection of CpoWhere beans that define the constraints that should be used when retrieving beans
-   * @param orderBy The CpoOrderBy bean that defines the order in which beans should be returned
+   * @param name              The filter name which tells the datasource which beans should be returned. The name also signifies what
+   *                          data in the bean will be populated.
+   * @param criteria          This is an bean that has been defined within the metadata of the datasource. If the class is not
+   *                          defined an exception will be thrown. If the bean does not exist in the datasource, an exception will be thrown.
+   *                          This bean is used to specify the arguments used to retrieve the collection of beans.
+   * @param result            This is an bean that has been defined within the metadata of the datasource. If the class is not
+   *                          defined an exception will be thrown. If the bean does not exist in the datasource, an exception will be thrown.
+   *                          This bean is used to specify the bean type that will be returned in the collection.
+   * @param wheres            A collection of CpoWhere beans that define the constraints that should be used when retrieving beans
+   * @param orderBy           The CpoOrderBy bean that defines the order in which beans should be returned
    * @param nativeExpressions Native expression that will be used to augment the expression stored in the meta data. This
-   * text will be embedded at run-time
+   *                          text will be embedded at run-time
    * @return An bean of the same type as the result argument that is filled in as specified the metadata for the
    *         retireve.
    * @throws CpoException Thrown if there are errors accessing the datasource
@@ -1549,11 +1500,11 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
   /**
    * Retrieves the bean from the datasource. The assumption is that the bean exists in the datasource.
    *
-   * @param name The filter name which tells the datasource which beans should be returned. The name also signifies what
-   * data in the bean will be populated.
+   * @param name     The filter name which tells the datasource which beans should be returned. The name also signifies what
+   *                 data in the bean will be populated.
    * @param criteria This is an bean that has been defined within the metadata of the datasource. If the class is not
-   * defined an exception will be thrown. If the bean does not exist in the datasource, an exception will be thrown.
-   * This bean is used to specify the arguments used to retrieve the collection of beans.
+   *                 defined an exception will be thrown. If the bean does not exist in the datasource, an exception will be thrown.
+   *                 This bean is used to specify the arguments used to retrieve the collection of beans.
    * @return A collection of beans will be returned that meet the criteria specified by obj. The beans will be of the
    *         same type as the bean that was passed in. If no beans match the criteria, an empty collection will be returned
    * @throws CpoException Thrown if there are errors accessing the datasource
@@ -1566,13 +1517,13 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
   /**
    * Retrieves the bean from the datasource. The assumption is that the bean exists in the datasource.
    *
-   * @param name The filter name which tells the datasource which beans should be returned. The name also signifies what
-   * data in the bean will be populated.
+   * @param name     The filter name which tells the datasource which beans should be returned. The name also signifies what
+   *                 data in the bean will be populated.
    * @param criteria This is an bean that has been defined within the metadata of the datasource. If the class is not
-   * defined an exception will be thrown. If the bean does not exist in the datasource, an exception will be thrown.
-   * This bean is used to specify the arguments used to retrieve the collection of beans.
-   * @param where A CpoWhere bean that defines the constraints that should be used when retrieving beans
-   * @param orderBy The CpoOrderBy bean that defines the order in which beans should be returned
+   *                 defined an exception will be thrown. If the bean does not exist in the datasource, an exception will be thrown.
+   *                 This bean is used to specify the arguments used to retrieve the collection of beans.
+   * @param where    A CpoWhere bean that defines the constraints that should be used when retrieving beans
+   * @param orderBy  The CpoOrderBy bean that defines the order in which beans should be returned
    * @return A collection of beans will be returned that meet the criteria specified by obj. The beans will be of the
    *         same type as the bean that was passed in. If no beans match the criteria, an empty collection will be returned
    * @throws CpoException Thrown if there are errors accessing the datasource
@@ -1590,13 +1541,13 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
   /**
    * Retrieves the bean from the datasource. The assumption is that the bean exists in the datasource.
    *
-   * @param name The filter name which tells the datasource which beans should be returned. The name also signifies what
-   * data in the bean will be populated.
+   * @param name     The filter name which tells the datasource which beans should be returned. The name also signifies what
+   *                 data in the bean will be populated.
    * @param criteria This is an bean that has been defined within the metadata of the datasource. If the class is not
-   * defined an exception will be thrown. If the bean does not exist in the datasource, an exception will be thrown.
-   * This bean is used to specify the arguments used to retrieve the collection of beans.
-   * @param wheres A collection of CpoWhere beans that define the constraints that should be used when retrieving beans
-   * @param orderBy The CpoOrderBy bean that defines the order in which beans should be returned
+   *                 defined an exception will be thrown. If the bean does not exist in the datasource, an exception will be thrown.
+   *                 This bean is used to specify the arguments used to retrieve the collection of beans.
+   * @param wheres   A collection of CpoWhere beans that define the constraints that should be used when retrieving beans
+   * @param orderBy  The CpoOrderBy bean that defines the order in which beans should be returned
    * @return A collection of beans will be returned that meet the criteria specified by obj. The beans will be of the
    *         same type as the bean that was passed in. If no beans match the criteria, an empty collection will be returned
    * @throws CpoException Thrown if there are errors accessing the datasource
@@ -1609,12 +1560,12 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
   /**
    * Retrieves the bean from the datasource. The assumption is that the bean exists in the datasource.
    *
-   * @param name The filter name which tells the datasource which beans should be returned. The name also signifies what
-   * data in the bean will be populated.
+   * @param name     The filter name which tells the datasource which beans should be returned. The name also signifies what
+   *                 data in the bean will be populated.
    * @param criteria This is an bean that has been defined within the metadata of the datasource. If the class is not
-   * defined an exception will be thrown. If the bean does not exist in the datasource, an exception will be thrown.
-   * This bean is used to specify the arguments used to retrieve the collection of beans.
-   * @param orderBy The CpoOrderBy bean that defines the order in which beans should be returned
+   *                 defined an exception will be thrown. If the bean does not exist in the datasource, an exception will be thrown.
+   *                 This bean is used to specify the arguments used to retrieve the collection of beans.
+   * @param orderBy  The CpoOrderBy bean that defines the order in which beans should be returned
    * @return A collection of beans will be returned that meet the criteria specified by obj. The beans will be of the
    *         same type as the bean that was passed in. If no beans match the criteria, an empty collection will be returned
    * @throws CpoException Thrown if there are errors accessing the datasource
@@ -1627,14 +1578,14 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
   /**
    * Retrieves the bean from the datasource. The assumption is that the bean exists in the datasource.
    *
-   * @param name The filter name which tells the datasource which beans should be returned. The name also signifies what
-   * data in the bean will be populated.
+   * @param name     The filter name which tells the datasource which beans should be returned. The name also signifies what
+   *                 data in the bean will be populated.
    * @param criteria This is an bean that has been defined within the metadata of the datasource. If the class is not
-   * defined an exception will be thrown. If the bean does not exist in the datasource, an exception will be thrown.
-   * This bean is used to specify the arguments used to retrieve the collection of beans.
-   * @param result This is an bean that has been defined within the metadata of the datasource. If the class is not
-   * defined an exception will be thrown. If the bean does not exist in the datasource, an exception will be thrown.
-   * This bean is used to specify the bean type that will be returned in the collection.
+   *                 defined an exception will be thrown. If the bean does not exist in the datasource, an exception will be thrown.
+   *                 This bean is used to specify the arguments used to retrieve the collection of beans.
+   * @param result   This is an bean that has been defined within the metadata of the datasource. If the class is not
+   *                 defined an exception will be thrown. If the bean does not exist in the datasource, an exception will be thrown.
+   *                 This bean is used to specify the bean type that will be returned in the collection.
    * @return A collection of beans will be returned that meet the criteria specified by obj. The beans will be of the
    *         same type as the bean that was passed in. If no beans match the criteria, an empty collection will be returned
    * @throws CpoException Thrown if there are errors accessing the datasource
@@ -1647,16 +1598,16 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
   /**
    * Retrieves the bean from the datasource. The assumption is that the bean exists in the datasource.
    *
-   * @param name The filter name which tells the datasource which beans should be returned. The name also signifies what
-   * data in the bean will be populated.
+   * @param name     The filter name which tells the datasource which beans should be returned. The name also signifies what
+   *                 data in the bean will be populated.
    * @param criteria This is an bean that has been defined within the metadata of the datasource. If the class is not
-   * defined an exception will be thrown. If the bean does not exist in the datasource, an exception will be thrown.
-   * This bean is used to specify the arguments used to retrieve the collection of beans.
-   * @param result This is an bean that has been defined within the metadata of the datasource. If the class is not
-   * defined an exception will be thrown. If the bean does not exist in the datasource, an exception will be thrown.
-   * This bean is used to specify the bean type that will be returned in the collection.
-   * @param where A CpoWhere bean that defines the constraints that should be used when retrieving beans
-   * @param orderBy The CpoOrderBy bean that defines the order in which beans should be returned
+   *                 defined an exception will be thrown. If the bean does not exist in the datasource, an exception will be thrown.
+   *                 This bean is used to specify the arguments used to retrieve the collection of beans.
+   * @param result   This is an bean that has been defined within the metadata of the datasource. If the class is not
+   *                 defined an exception will be thrown. If the bean does not exist in the datasource, an exception will be thrown.
+   *                 This bean is used to specify the bean type that will be returned in the collection.
+   * @param where    A CpoWhere bean that defines the constraints that should be used when retrieving beans
+   * @param orderBy  The CpoOrderBy bean that defines the order in which beans should be returned
    * @return A collection of beans will be returned that meet the criteria specified by obj. The beans will be of the
    *         same type as the bean that was passed in. If no beans match the criteria, an empty collection will be returned
    * @throws CpoException Thrown if there are errors accessing the datasource
@@ -1674,16 +1625,16 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
   /**
    * Retrieves the bean from the datasource. The assumption is that the bean exists in the datasource.
    *
-   * @param name The filter name which tells the datasource which beans should be returned. The name also signifies what
-   * data in the bean will be populated.
+   * @param name     The filter name which tells the datasource which beans should be returned. The name also signifies what
+   *                 data in the bean will be populated.
    * @param criteria This is an bean that has been defined within the metadata of the datasource. If the class is not
-   * defined an exception will be thrown. If the bean does not exist in the datasource, an exception will be thrown.
-   * This bean is used to specify the arguments used to retrieve the collection of beans.
-   * @param result This is an bean that has been defined within the metadata of the datasource. If the class is not
-   * defined an exception will be thrown. If the bean does not exist in the datasource, an exception will be thrown.
-   * This bean is used to specify the bean type that will be returned in the collection.
-   * @param wheres A collection of CpoWhere beans that define the constraints that should be used when retrieving beans
-   * @param orderBy The CpoOrderBy bean that defines the order in which beans should be returned
+   *                 defined an exception will be thrown. If the bean does not exist in the datasource, an exception will be thrown.
+   *                 This bean is used to specify the arguments used to retrieve the collection of beans.
+   * @param result   This is an bean that has been defined within the metadata of the datasource. If the class is not
+   *                 defined an exception will be thrown. If the bean does not exist in the datasource, an exception will be thrown.
+   *                 This bean is used to specify the bean type that will be returned in the collection.
+   * @param wheres   A collection of CpoWhere beans that define the constraints that should be used when retrieving beans
+   * @param orderBy  The CpoOrderBy bean that defines the order in which beans should be returned
    * @return A collection of beans will be returned that meet the criteria specified by obj. The beans will be of the
    *         same type as the bean that was passed in. If no beans match the criteria, an empty collection will be returned
    * @throws CpoException Thrown if there are errors accessing the datasource
@@ -1696,18 +1647,18 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
   /**
    * Retrieves the bean from the datasource. The assumption is that the bean exists in the datasource.
    *
-   * @param name The filter name which tells the datasource which beans should be returned. The name also signifies what
-   * data in the bean will be populated.
-   * @param criteria This is an bean that has been defined within the metadata of the datasource. If the class is not
-   * defined an exception will be thrown. If the bean does not exist in the datasource, an exception will be thrown.
-   * This bean is used to specify the arguments used to retrieve the collection of beans.
-   * @param result This is an bean that has been defined within the metadata of the datasource. If the class is not
-   * defined an exception will be thrown. If the bean does not exist in the datasource, an exception will be thrown.
-   * This bean is used to specify the bean type that will be returned in the collection.
-   * @param wheres A collection of CpoWhere beans that define the constraints that should be used when retrieving beans
-   * @param orderBy The CpoOrderBy bean that defines the order in which beans should be returned
+   * @param name              The filter name which tells the datasource which beans should be returned. The name also signifies what
+   *                          data in the bean will be populated.
+   * @param criteria          This is an bean that has been defined within the metadata of the datasource. If the class is not
+   *                          defined an exception will be thrown. If the bean does not exist in the datasource, an exception will be thrown.
+   *                          This bean is used to specify the arguments used to retrieve the collection of beans.
+   * @param result            This is an bean that has been defined within the metadata of the datasource. If the class is not
+   *                          defined an exception will be thrown. If the bean does not exist in the datasource, an exception will be thrown.
+   *                          This bean is used to specify the bean type that will be returned in the collection.
+   * @param wheres            A collection of CpoWhere beans that define the constraints that should be used when retrieving beans
+   * @param orderBy           The CpoOrderBy bean that defines the order in which beans should be returned
    * @param nativeExpressions Native expression that will be used to augment the expression stored in the meta data. This
-   * text will be embedded at run-time
+   *                          text will be embedded at run-time
    * @return A collection of beans will be returned that meet the criteria specified by obj. The beans will be of the
    *         same type as the bean that was passed in. If no beans match the criteria, an empty collection will be returned
    * @throws CpoException Thrown if there are errors accessing the datasource
@@ -1721,24 +1672,24 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
    * Retrieves the bean from the datasource. This method returns an Iterator immediately. The iterator will get filled
    * asynchronously by the cpo framework. The framework will stop supplying the iterator with beans if the
    * beanBufferSize is reached.
-   *
+   * <p/>
    * If the consumer of the iterator is processing records faster than the framework is filling it, then the iterator
    * will wait until it has data to provide.
    *
-   * @param name The filter name which tells the datasource which beans should be returned. The name also signifies what
-   * data in the bean will be populated.
-   * @param criteria This is an bean that has been defined within the metadata of the datasource. If the class is not
-   * defined an exception will be thrown. If the bean does not exist in the datasource, an exception will be thrown.
-   * This bean is used to specify the arguments used to retrieve the collection of beans.
-   * @param result This is an bean that has been defined within the metadata of the datasource. If the class is not
-   * defined an exception will be thrown. If the bean does not exist in the datasource, an exception will be thrown.
-   * This bean is used to specify the bean type that will be returned in the collection.
-   * @param wheres A collection of CpoWhere beans that define the constraints that should be used when retrieving beans
-   * @param orderBy The CpoOrderBy bean that defines the order in which beans should be returned
+   * @param name              The filter name which tells the datasource which beans should be returned. The name also signifies what
+   *                          data in the bean will be populated.
+   * @param criteria          This is an bean that has been defined within the metadata of the datasource. If the class is not
+   *                          defined an exception will be thrown. If the bean does not exist in the datasource, an exception will be thrown.
+   *                          This bean is used to specify the arguments used to retrieve the collection of beans.
+   * @param result            This is an bean that has been defined within the metadata of the datasource. If the class is not
+   *                          defined an exception will be thrown. If the bean does not exist in the datasource, an exception will be thrown.
+   *                          This bean is used to specify the bean type that will be returned in the collection.
+   * @param wheres            A collection of CpoWhere beans that define the constraints that should be used when retrieving beans
+   * @param orderBy           The CpoOrderBy bean that defines the order in which beans should be returned
    * @param nativeExpressions Native expression that will be used to augment the expression stored in the meta data. This
-   * text will be embedded at run-time
-   * @param queueSize the maximum number of beans that the Iterator is allowed to cache. Once reached, the CPO
-   * framework will halt processing records from the datasource.
+   *                          text will be embedded at run-time
+   * @param queueSize         the maximum number of beans that the Iterator is allowed to cache. Once reached, the CPO
+   *                          framework will halt processing records from the datasource.
    * @return An iterator that will be fed beans from the CPO framework.
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
@@ -1754,20 +1705,20 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
   /**
    * Update the Object in the datasource. The CpoAdapter will check to see if the object exists in the datasource. If it
    * exists then the object will be updated. If it does not exist, an exception will be thrown
-   *
+   * <p/>
    * <pre>Example:
    * <code>
-   *
+   * <p/>
    * class SomeObject so = new SomeObject();
    * class CpoAdapter cpo = null;
-   *
+   * <p/>
    * try {
    * 	cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));
    * } catch (CpoException ce) {
    * 	// Handle the error
    * 	cpo = null;
    * }
-   *
+   * <p/>
    * if (cpo!=null) {
    * 	so.setId(1);
    * 	so.setName("SomeName");
@@ -1781,7 +1732,7 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
    * </pre>
    *
    * @param obj This is an object that has been defined within the metadata of the datasource. If the class is not
-   * defined an exception will be thrown.
+   *            defined an exception will be thrown.
    * @return The number of objects updated in the datasource
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
@@ -1793,20 +1744,20 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
   /**
    * Update the Object in the datasource. The CpoAdapter will check to see if the object exists in the datasource. If it
    * exists then the object will be updated. If it does not exist, an exception will be thrown
-   *
+   * <p/>
    * <pre>Example:
    * <code>
-   *
+   * <p/>
    * class SomeObject so = new SomeObject();
    * class CpoAdapter cpo = null;
-   *
+   * <p/>
    * try {
    * 	cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));
    * } catch (CpoException ce) {
    * 	// Handle the error
    * 	cpo = null;
    * }
-   *
+   * <p/>
    * if (cpo!=null) {
    * 	so.setId(1);
    * 	so.setName("SomeName");
@@ -1820,9 +1771,9 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
    * </pre>
    *
    * @param name The String name of the UPDATE Function Group that will be used to create the object in the datasource.
-   * null signifies that the default rules will be used.
-   * @param obj This is an object that has been defined within the metadata of the datasource. If the class is not
-   * defined an exception will be thrown.
+   *             null signifies that the default rules will be used.
+   * @param obj  This is an object that has been defined within the metadata of the datasource. If the class is not
+   *             defined an exception will be thrown.
    * @return The number of objects updated in the datasource
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
@@ -1834,20 +1785,20 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
   /**
    * Update the Object in the datasource. The CpoAdapter will check to see if the object exists in the datasource. If it
    * exists then the object will be updated. If it does not exist, an exception will be thrown
-   *
+   * <p/>
    * <pre>Example:
    * <code>
-   *
+   * <p/>
    * class SomeObject so = new SomeObject();
    * class CpoAdapter cpo = null;
-   *
+   * <p/>
    * try {
    * 	cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));
    * } catch (CpoException ce) {
    * 	// Handle the error
    * 	cpo = null;
    * }
-   *
+   * <p/>
    * if (cpo!=null) {
    * 	so.setId(1);
    * 	so.setName("SomeName");
@@ -1860,12 +1811,12 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
    * </code>
    * </pre>
    *
-   * @param name The String name of the UPDATE Function Group that will be used to create the object in the datasource.
-   * null signifies that the default rules will be used.
-   * @param obj This is an object that has been defined within the metadata of the datasource. If the class is not
-   * defined an exception will be thrown.
-   * @param wheres A collection of CpoWhere objects to be used by the function
-   * @param orderBy A collection of CpoOrderBy objects to be used by the function
+   * @param name              The String name of the UPDATE Function Group that will be used to create the object in the datasource.
+   *                          null signifies that the default rules will be used.
+   * @param obj               This is an object that has been defined within the metadata of the datasource. If the class is not
+   *                          defined an exception will be thrown.
+   * @param wheres            A collection of CpoWhere objects to be used by the function
+   * @param orderBy           A collection of CpoOrderBy objects to be used by the function
    * @param nativeExpressions A collection of CpoNativeFunction objects to be used by the function
    * @return The number of objects updated in the datasource
    * @throws CpoException Thrown if there are errors accessing the datasource
@@ -1880,20 +1831,20 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
    * exist in the datasource. This method stores the object in the datasource. The objects in the collection will be
    * treated as one transaction, meaning that if one of the objects fail being updated in the datasource then the entire
    * collection will be rolled back, if supported by the datasource.
-   *
+   * <p/>
    * <pre>Example:
    * <code>
-   *
+   * <p/>
    * class SomeObject so = null;
    * class CpoAdapter cpo = null;
-   *
+   * <p/>
    * try {
    * 	cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));
    * } catch (CpoException ce) {
    * 	// Handle the error
    * 	cpo = null;
    * }
-   *
+   * <p/>
    * if (cpo!=null) {
    * 	ArrayList al = new ArrayList();
    * 	for (int i=0; i<3; i++){
@@ -1912,7 +1863,7 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
    * </pre>
    *
    * @param coll This is a collection of objects that have been defined within the metadata of the datasource. If the
-   * class is not defined an exception will be thrown.
+   *             class is not defined an exception will be thrown.
    * @return The number of objects updated in the datasource
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
@@ -1926,20 +1877,20 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
    * exist in the datasource. This method stores the object in the datasource. The objects in the collection will be
    * treated as one transaction, meaning that if one of the objects fail being updated in the datasource then the entire
    * collection will be rolled back, if supported by the datasource.
-   *
+   * <p/>
    * <pre>Example:
    * <code>
-   *
+   * <p/>
    * class SomeObject so = null;
    * class CpoAdapter cpo = null;
-   *
+   * <p/>
    * try {
    * 	cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));
    * } catch (CpoException ce) {
    * 	// Handle the error
    * 	cpo = null;
    * }
-   *
+   * <p/>
    * if (cpo!=null) {
    * 	ArrayList al = new ArrayList();
    * 	for (int i=0; i<3; i++){
@@ -1958,9 +1909,9 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
    * </pre>
    *
    * @param name The String name of the UPDATE Function Group that will be used to create the object in the datasource.
-   * null signifies that the default rules will be used.
+   *             null signifies that the default rules will be used.
    * @param coll This is a collection of objects that have been defined within the metadata of the datasource. If the
-   * class is not defined an exception will be thrown.
+   *             class is not defined an exception will be thrown.
    * @return The number of objects updated in the datasource
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
@@ -1974,20 +1925,20 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
    * exist in the datasource. This method stores the object in the datasource. The objects in the collection will be
    * treated as one transaction, meaning that if one of the objects fail being updated in the datasource then the entire
    * collection will be rolled back, if supported by the datasource.
-   *
+   * <p/>
    * <pre>Example:
    * <code>
-   *
+   * <p/>
    * class SomeObject so = null;
    * class CpoAdapter cpo = null;
-   *
+   * <p/>
    * try {
    * 	cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));
    * } catch (CpoException ce) {
    * 	// Handle the error
    * 	cpo = null;
    * }
-   *
+   * <p/>
    * if (cpo!=null) {
    * 	ArrayList al = new ArrayList();
    * 	for (int i=0; i<3; i++){
@@ -2005,12 +1956,12 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
    * </code>
    * </pre>
    *
-   * @param name The String name of the UPDATE Function Group that will be used to create the object in the datasource.
-   * null signifies that the default rules will be used.
-   * @param coll This is a collection of objects that have been defined within the metadata of the datasource. If the
-   * class is not defined an exception will be thrown.
-   * @param wheres A collection of CpoWhere objects to be used by the function
-   * @param orderBy A collection of CpoOrderBy objects to be used by the function
+   * @param name              The String name of the UPDATE Function Group that will be used to create the object in the datasource.
+   *                          null signifies that the default rules will be used.
+   * @param coll              This is a collection of objects that have been defined within the metadata of the datasource. If the
+   *                          class is not defined an exception will be thrown.
+   * @param wheres            A collection of CpoWhere objects to be used by the function
+   * @param orderBy           A collection of CpoOrderBy objects to be used by the function
    * @param nativeExpressions A collection of CpoNativeFunction objects to be used by the function
    * @return The number of objects updated in the datasource
    * @throws CpoException Thrown if there are errors accessing the datasource
@@ -2050,10 +2001,10 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
   /**
    * DOCUMENT ME!
    *
-   * @param obj DOCUMENT ME!
+   * @param obj  DOCUMENT ME!
    * @param type DOCUMENT ME!
    * @param name DOCUMENT ME!
-   * @param c DOCUMENT ME!
+   * @param c    DOCUMENT ME!
    * @return DOCUMENT ME!
    * @throws CpoException DOCUMENT ME!
    */
@@ -2117,15 +2068,6 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
    * DOCUMENT ME!
    *
    * @return DOCUMENT ME!
-   */
-  protected DataSource getReadDataSource() {
-    return readDataSource_;
-  }
-
-  /**
-   * DOCUMENT ME!
-   *
-   * @return DOCUMENT ME!
    * @throws CpoException DOCUMENT ME!
    */
   protected Connection getWriteConnection() throws CpoException {
@@ -2160,15 +2102,6 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
   protected void setStaticConnection(Connection c) {
     // do nothing for JdbcCpoAdapter
     // overridden by JdbcTrxAdapter
-  }
-
-  /**
-   * DOCUMENT ME!
-   *
-   * @return DOCUMENT ME!
-   */
-  protected DataSource getWriteDataSource() {
-    return writeDataSource_;
   }
 
   /**
@@ -2231,14 +2164,14 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
    * Executes an Object whose MetaData contains a stored procedure. An assumption is that the object exists in the
    * datasource.
    *
-   * @param name The filter name which tells the datasource which objects should be returned. The name also signifies
-   * what data in the object will be populated.
+   * @param name     The filter name which tells the datasource which objects should be returned. The name also signifies
+   *                 what data in the object will be populated.
    * @param criteria This is an object that has been defined within the metadata of the datasource. If the class is not
-   * defined an exception will be thrown. If the object does not exist in the datasource, an exception will be thrown.
-   * This object is used to populate the IN arguments used to retrieve the collection of objects.
-   * @param result This is an object that has been defined within the metadata of the datasource. If the class is not
-   * defined an exception will be thrown. If the object does not exist in the datasource, an exception will be thrown.
-   * This object defines the object type that will be returned in the
+   *                 defined an exception will be thrown. If the object does not exist in the datasource, an exception will be thrown.
+   *                 This object is used to populate the IN arguments used to retrieve the collection of objects.
+   * @param result   This is an object that has been defined within the metadata of the datasource. If the class is not
+   *                 defined an exception will be thrown. If the object does not exist in the datasource, an exception will be thrown.
+   *                 This object defines the object type that will be returned in the
    * @return A result object populate with the OUT arguments
    * @throws CpoException DOCUMENT ME!
    */
@@ -2264,10 +2197,10 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
   /**
    * DOCUMENT ME!
    *
-   * @param name DOCUMENT ME!
+   * @param name     DOCUMENT ME!
    * @param criteria DOCUMENT ME!
-   * @param result DOCUMENT ME!
-   * @param conn DOCUMENT ME!
+   * @param result   DOCUMENT ME!
+   * @param conn     DOCUMENT ME!
    * @return DOCUMENT ME!
    * @throws CpoException DOCUMENT ME!
    */
@@ -2289,7 +2222,7 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
       localLogger.info("===================processExecuteGroup (" + name + ") Count<" + functions.size() + ">=========================");
 
       try {
-        returnObject = (T)result.getClass().newInstance();
+        returnObject = (T) result.getClass().newInstance();
       } catch (IllegalAccessException iae) {
         throw new CpoException("Unable to access the constructor of the Return Object", iae);
       } catch (InstantiationException iae) {
@@ -2317,7 +2250,7 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
         // object
         int j = 1;
         for (CpoArgument cpoArgument : jcsf.getOutArguments()) {
-          JdbcCpoArgument jdbcArgument = (JdbcCpoArgument)cpoArgument;
+          JdbcCpoArgument jdbcArgument = (JdbcCpoArgument) cpoArgument;
           if (jdbcArgument.isOutParameter()) {
             JdbcCpoAttribute jdbcAttribute = jdbcArgument.getAttribute();
             jdbcAttribute.invokeSetter(returnObject, new CallableStatementCpoData(cstmt, jdbcAttribute, j));
@@ -2344,16 +2277,16 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
   /**
    * Retrieves the Object from the datasource.
    *
-   * @param obj This is an object that has been defined within the metadata of the datasource. If the class is not
-   * defined an exception will be thrown. The input object is used to specify the search criteria.
-   * @param groupName The name which identifies which RETRIEVE Function Group to execute to retrieve the object.
-   * @param wheres A collection of CpoWhere objects to be used by the function
-   * @param orderBy A collection of CpoOrderBy objects to be used by the function
+   * @param obj               This is an object that has been defined within the metadata of the datasource. If the class is not
+   *                          defined an exception will be thrown. The input object is used to specify the search criteria.
+   * @param groupName         The name which identifies which RETRIEVE Function Group to execute to retrieve the object.
+   * @param wheres            A collection of CpoWhere objects to be used by the function
+   * @param orderBy           A collection of CpoOrderBy objects to be used by the function
    * @param nativeExpressions A collection of CpoNativeFunction objects to be used by the function
    * @return A populated object of the same type as the Object passed in as a argument. If no objects match the criteria
    *         a NULL will be returned.
    * @throws CpoException the retrieve function defined for this objects returns more than one row, an exception will be
-   * thrown.
+   *                      thrown.
    */
   protected <T> T processSelectGroup(T obj, String groupName, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeFunction> nativeExpressions) throws CpoException {
     Connection c = null;
@@ -2380,9 +2313,9 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
   /**
    * DOCUMENT ME!
    *
-   * @param obj DOCUMENT ME!
+   * @param obj       DOCUMENT ME!
    * @param groupName DOCUMENT ME!
-   * @param con DOCUMENT ME!
+   * @param con       DOCUMENT ME!
    * @return DOCUMENT ME!
    * @throws CpoException DOCUMENT ME!
    */
@@ -2413,7 +2346,7 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
       localLogger.info("=================== Class=<" + criteriaObj.getClass() + "> Type=<" + JdbcCpoAdapter.RETRIEVE_GROUP + "> Name=<" + groupName + "> =========================");
 
       try {
-        rObj = (T)obj.getClass().newInstance();
+        rObj = (T) obj.getClass().newInstance();
       } catch (IllegalAccessException iae) {
         if (obj != null) {
           localLogger.error("=================== Could not access default constructor for Class=<" + obj.getClass() + "> ==================");
@@ -2443,7 +2376,7 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
             while (rs.next()) {
               recordsExist = true;
               recordCount++;
-              attribute = (JdbcCpoAttribute)cpoClass.getAttributeData(rs.getString(1));
+              attribute = (JdbcCpoAttribute) cpoClass.getAttributeData(rs.getString(1));
 
               if (attribute != null) {
                 attribute.invokeSetter(rObj, new ResultSetCpoData(rs, attribute, 2));
@@ -2454,7 +2387,7 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
             recordsExist = true;
             recordCount++;
             for (k = 1; k <= rsmd.getColumnCount(); k++) {
-              attribute = (JdbcCpoAttribute)cpoClass.getAttributeData(rsmd.getColumnLabel(k));
+              attribute = (JdbcCpoAttribute) cpoClass.getAttributeData(rsmd.getColumnLabel(k));
 
               if (attribute != null) {
                 attribute.invokeSetter(rObj, new ResultSetCpoData(rs, attribute, k));
@@ -2499,11 +2432,11 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
   /**
    * DOCUMENT ME!
    *
-   * @param name DOCUMENT ME!
-   * @param criteria DOCUMENT ME!
-   * @param result DOCUMENT ME!
-   * @param wheres DOCUMENT ME!
-   * @param orderBy DOCUMENT ME!
+   * @param name        DOCUMENT ME!
+   * @param criteria    DOCUMENT ME!
+   * @param result      DOCUMENT ME!
+   * @param wheres      DOCUMENT ME!
+   * @param orderBy     DOCUMENT ME!
    * @param useRetrieve DOCUMENT ME!
    * @return DOCUMENT ME!
    * @throws CpoException DOCUMENT ME!
@@ -2550,12 +2483,12 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
   /**
    * DOCUMENT ME!
    *
-   * @param name DOCUMENT ME!
-   * @param criteria DOCUMENT ME!
-   * @param result DOCUMENT ME!
-   * @param wheres DOCUMENT ME!
-   * @param orderBy DOCUMENT ME!
-   * @param con DOCUMENT ME!
+   * @param name        DOCUMENT ME!
+   * @param criteria    DOCUMENT ME!
+   * @param result      DOCUMENT ME!
+   * @param wheres      DOCUMENT ME!
+   * @param orderBy     DOCUMENT ME!
+   * @param con         DOCUMENT ME!
    * @param useRetrieve DOCUMENT ME!
    * @throws CpoException DOCUMENT ME!
    */
@@ -2610,12 +2543,12 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
         attributes = new JdbcCpoAttribute[columnCount + 1];
 
         for (k = 1; k <= columnCount; k++) {
-          attributes[k] = (JdbcCpoAttribute)resultClass.getAttributeData(rsmd.getColumnLabel(k));
+          attributes[k] = (JdbcCpoAttribute) resultClass.getAttributeData(rsmd.getColumnLabel(k));
         }
 
         while (rs.next()) {
           try {
-            obj = (T)result.getClass().newInstance();
+            obj = (T) result.getClass().newInstance();
           } catch (IllegalAccessException iae) {
             if (result != null) {
               localLogger.error("=================== Could not access default constructor for Class=<" + result.getClass() + "> ==================");
@@ -2660,7 +2593,7 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
   /**
    * DOCUMENT ME!
    *
-   * @param obj DOCUMENT ME!
+   * @param obj       DOCUMENT ME!
    * @param groupType DOCUMENT ME!
    * @param groupName DOCUMENT ME!
    * @return DOCUMENT ME!
@@ -2688,10 +2621,10 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
   /**
    * DOCUMENT ME!
    *
-   * @param obj DOCUMENT ME!
+   * @param obj       DOCUMENT ME!
    * @param groupType DOCUMENT ME!
    * @param groupName DOCUMENT ME!
-   * @param con DOCUMENT ME!
+   * @param con       DOCUMENT ME!
    * @return DOCUMENT ME!
    * @throws CpoException DOCUMENT ME!
    */
@@ -2745,10 +2678,10 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
   /**
    * DOCUMENT ME!
    *
-   * @param arr DOCUMENT ME!
+   * @param arr       DOCUMENT ME!
    * @param groupType DOCUMENT ME!
    * @param groupName DOCUMENT ME!
-   * @param con DOCUMENT ME!
+   * @param con       DOCUMENT ME!
    * @return DOCUMENT ME!
    * @throws CpoException DOCUMENT ME!
    */
@@ -2829,7 +2762,7 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
   /**
    * DOCUMENT ME!
    *
-   * @param coll DOCUMENT ME!
+   * @param coll      DOCUMENT ME!
    * @param groupType DOCUMENT ME!
    * @param groupName DOCUMENT ME!
    * @return DOCUMENT ME!
@@ -2858,13 +2791,13 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
   /**
    * DOCUMENT ME!
    *
-   * @param coll DOCUMENT ME!
-   * @param groupType DOCUMENT ME!
-   * @param groupName DOCUMENT ME!
-   * @param wheres DOCUMENT ME!
-   * @param orderBy DOCUMENT ME!
+   * @param coll              DOCUMENT ME!
+   * @param groupType         DOCUMENT ME!
+   * @param groupName         DOCUMENT ME!
+   * @param wheres            DOCUMENT ME!
+   * @param orderBy           DOCUMENT ME!
    * @param nativeExpressions DOCUMENT ME!
-   * @param con DOCUMENT ME!
+   * @param con               DOCUMENT ME!
    * @return DOCUMENT ME!
    * @throws CpoException DOCUMENT ME!
    */
@@ -2872,7 +2805,7 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
     long updateCount = 0;
 
     if (!coll.isEmpty()) {
-      T[] arr = (T[])coll.toArray();
+      T[] arr = (T[]) coll.toArray();
 
       T obj1 = arr[0];
       boolean allEqual = true;
@@ -2898,15 +2831,15 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
   /**
    * Provides a mechanism for the user to obtain a CpoTrxAdapter object. This object allows the to control when commits
    * and rollbacks occur on CPO.
-   *
-   *
+   * <p/>
+   * <p/>
    * <pre>Example:
    * <code>
-   *
+   * <p/>
    * class SomeObject so = null;
    * class CpoAdapter cpo = null;
    * class CpoTrxAdapter cpoTrx = null;
-   *
+   * <p/>
    * try {
    * 	cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));
    * 	cpoTrx = cpo.getCpoTrxAdapter();
@@ -2914,7 +2847,7 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
    * 	// Handle the error
    * 	cpo = null;
    * }
-   *
+   * <p/>
    * if (cpo!=null) {
    * 	try{
    * 		for (int i=0; i<3; i++){
@@ -2984,11 +2917,6 @@ public class JdbcCpoAdapter extends CpoAdapterCache implements CpoAdapter {
   @Override
   public CpoMetaDescriptor getCpoMetaDescriptor() {
     return metaDescriptor;
-  }
-
-  @Override
-  public String getDataSourceName() {
-    return dataSourceName_;
   }
 
   @Override

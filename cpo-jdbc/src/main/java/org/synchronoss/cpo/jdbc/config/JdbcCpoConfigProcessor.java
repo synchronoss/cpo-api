@@ -42,7 +42,7 @@ public class JdbcCpoConfigProcessor implements CpoConfigProcessor {
   private static final String PROP_URL2 = "URL";
   private static final String PROP_USER = "user";
   private static final String PROP_PASSWORD = "password";
-  
+
   public JdbcCpoConfigProcessor() {
   }
 
@@ -58,19 +58,19 @@ public class JdbcCpoConfigProcessor implements CpoConfigProcessor {
     CtJdbcConfig jdbcConfig = (CtJdbcConfig) cpoConfig;
 
     JdbcCpoMetaDescriptor metaDescriptor = (JdbcCpoMetaDescriptor)CpoMetaDescriptor.getInstance(jdbcConfig.getMetaDescriptorName());
-    
+
     if (jdbcConfig.isSetSupportsBlobs())
       metaDescriptor.setSupportsBlobs(jdbcConfig.getSupportsBlobs());
-    
+
     if (jdbcConfig.isSetSupportsCalls())
       metaDescriptor.setSupportsCalls(jdbcConfig.getSupportsCalls());
-    
+
     if (jdbcConfig.isSetSupportsMillis())
       metaDescriptor.setSupportsMillis(jdbcConfig.getSupportsMillis());
-    
+
     if (jdbcConfig.isSetSupportsSelect4Update())
       metaDescriptor.setSupportsSelect4Update(jdbcConfig.getSupportsSelect4Update());
-    
+
     // build a datasource info
     if (jdbcConfig.isSetReadWriteConfig()) {
       DataSourceInfo dataSourceInfo = buildDataSourceInfo(jdbcConfig.getReadWriteConfig());
@@ -80,15 +80,15 @@ public class JdbcCpoConfigProcessor implements CpoConfigProcessor {
       DataSourceInfo writeDataSourceInfo = buildDataSourceInfo(jdbcConfig.getWriteConfig());
       cpoAdapter = JdbcCpoAdapter.getInstance(metaDescriptor, writeDataSourceInfo, readDataSourceInfo);
     }
-    
+
     return cpoAdapter;
   }
-  
+
   private DataSourceInfo buildDataSourceInfo(CtJdbcReadWriteConfig readWriteConfig) throws CpoException {
     DataSourceInfo dataSourceInfo = null;
-    
+
     if (readWriteConfig.isSetJndiName()) {
-      dataSourceInfo = new JndiDataSourceInfo(readWriteConfig.getJndiName());
+      dataSourceInfo = new JndiJdbcDataSourceInfo(readWriteConfig.getJndiName());
     } else if (readWriteConfig.isSetDataSourceClassName()) {
       SortedMap<String, String> props = new TreeMap<String, String>();
 
@@ -104,29 +104,29 @@ public class JdbcCpoConfigProcessor implements CpoConfigProcessor {
       if (readWriteConfig.isSetPassword()) {
         props.put(PROP_PASSWORD, readWriteConfig.getPassword());
       }
-      
+
       for (CtProperty property : readWriteConfig.getPropertyArray()){
         props.put(property.getName(), property.getValue());
         logger.debug("Adding property "+property.getName()+"="+property.getValue());
       }
 
-      dataSourceInfo = new ClassDataSourceInfo(readWriteConfig.getDataSourceClassName(), props);
+      dataSourceInfo = new ClassJdbcDataSourceInfo(readWriteConfig.getDataSourceClassName(), props);
     } else if (readWriteConfig.isSetDriverClassName()) {
       if (readWriteConfig.isSetUser()) {
-        dataSourceInfo = new DriverDataSourceInfo(readWriteConfig.getDriverClassName(), readWriteConfig.getUrl(), readWriteConfig.getUser(), readWriteConfig.getPassword());
+        dataSourceInfo = new DriverJdbcDataSourceInfo(readWriteConfig.getDriverClassName(), readWriteConfig.getUrl(), readWriteConfig.getUser(), readWriteConfig.getPassword());
       } else if (readWriteConfig.getPropertyArray().length>0) {
         Properties props = new Properties();
         for (CtProperty property : readWriteConfig.getPropertyArray()){
           props.put(property.getName(), property.getValue());
         }
-        dataSourceInfo = new DriverDataSourceInfo(readWriteConfig.getDriverClassName(), readWriteConfig.getUrl(), props);
+        dataSourceInfo = new DriverJdbcDataSourceInfo(readWriteConfig.getDriverClassName(), readWriteConfig.getUrl(), props);
       } else {
-        dataSourceInfo = new DriverDataSourceInfo(readWriteConfig.getDriverClassName(), readWriteConfig.getUrl());
+        dataSourceInfo = new DriverJdbcDataSourceInfo(readWriteConfig.getDriverClassName(), readWriteConfig.getUrl());
       }
     }
 
     logger.debug("Created DataSourceInfo: "+dataSourceInfo);
     return dataSourceInfo;
   }
-  
+
 }

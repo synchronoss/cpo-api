@@ -32,28 +32,28 @@ import javax.sql.DataSource;
  *
  * @author dberry
  */
-public class JndiDataSourceInfo extends AbstractDataSourceInfo {
+public class JndiJdbcDataSourceInfo extends AbstractJdbcDataSourceInfo {
 
   private String jndiName = null;
   private Context jndiCtx = null;
 
   /**
-   * Creates a JndiDataSourceInfo from a JNDIName that represents the datasource in the application server.
+   * Creates a JndiJdbcDataSourceInfo from a JNDIName that represents the datasource in the application server.
    *
    * @param jndiName The JndiName of the app server datasource
    */
-  public JndiDataSourceInfo(String jndiName) {
+  public JndiJdbcDataSourceInfo(String jndiName) {
     super(jndiName);
     this.jndiName = jndiName;
   }
 
   /**
-   * Creates a JndiDataSourceInfo from a JNDIName that represents the datasource in the application server.
+   * Creates a JndiJdbcDataSourceInfo from a JNDIName that represents the datasource in the application server.
    *
    * @param jndiName The JndiName of the app server datasource
    * @param ctx - The context for which the Jndi Lookup should use.
    */
-  public JndiDataSourceInfo(String jndiName, Context ctx) {
+  public JndiJdbcDataSourceInfo(String jndiName, Context ctx) {
     super(jndiName);
     this.jndiName = jndiName;
     jndiCtx = ctx;

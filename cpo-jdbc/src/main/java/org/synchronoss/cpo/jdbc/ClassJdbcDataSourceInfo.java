@@ -41,7 +41,7 @@ import org.synchronoss.cpo.helper.ExceptionHelper;
  *
  * @author dberry
  */
-public class ClassDataSourceInfo extends AbstractDataSource implements ConnectionEventListener {
+public class ClassJdbcDataSourceInfo extends AbstractJdbcDataSource implements ConnectionEventListener {
 
   private Logger logger = LoggerFactory.getLogger(this.getClass());
   private ConnectionPoolDataSource poolDataSource = null;
@@ -53,12 +53,12 @@ public class ClassDataSourceInfo extends AbstractDataSource implements Connectio
   private Queue<PooledConnection> usedConnections = new LinkedList<PooledConnection>();
 
   /**
-   * Creates a ClassDataSourceInfo from a Jdbc Driver
+   * Creates a ClassJdbcDataSourceInfo from a Jdbc Driver
    *
    * @param classname The classname of a class that implements datasource
    * @param properties - The connection properties for connecting to the database
    */
-  public ClassDataSourceInfo(String className, SortedMap<String, String> properties) throws CpoException {
+  public ClassJdbcDataSourceInfo(String className, SortedMap<String, String> properties) throws CpoException {
     super(className, properties);
     this.className=className;
     this.properties=properties;
@@ -116,7 +116,7 @@ public class ClassDataSourceInfo extends AbstractDataSource implements Connectio
     } catch (IllegalAccessException iae) {
       throw new CpoException("Could Not Access Class: " + className, iae);
     }
-    
+
     return dataSource;
   }
 

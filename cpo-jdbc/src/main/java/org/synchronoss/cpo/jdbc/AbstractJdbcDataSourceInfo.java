@@ -29,52 +29,25 @@ import java.util.*;
  *
  * @author dberry
  */
-public abstract class AbstractDataSourceInfo implements DataSourceInfo {
-  private DataSource dataSource = null;
-  private String dataSourceName = null;
-  // Make sure DataSource creation is thread safe.
-  private final Object LOCK = new Object();
-  
+public abstract class AbstractJdbcDataSourceInfo extends AbstractDataSourceInfo {
   // common password strings
-  private final String PASSWORD = "password";
-  private final String PASSWD = "passwd";
-  private final String PWD = "pwd";
+  private static final String PASSWORD = "password";
+  private static final String PASSWD = "passwd";
+  private static final String PWD = "pwd";
 
-  public AbstractDataSourceInfo(String dataSourceName) {
-    this.dataSourceName=dataSourceName;
-  }
-  
-  public AbstractDataSourceInfo(String className, SortedMap<String, String> properties) {
-    this.dataSourceName=BuildDataSourceName(className, properties);
+  public AbstractJdbcDataSourceInfo(String dataSourceName) {
+    super(dataSourceName);
   }
 
-  public AbstractDataSourceInfo(String className, Properties properties) {
-    this.dataSourceName=BuildDataSourceName(className, properties);
+  public AbstractJdbcDataSourceInfo(String className, SortedMap<String, String> properties) {
+    super(BuildDataSourceName(className, properties));
   }
 
-  protected abstract DataSource createDataSource() throws CpoException ;
-  
-  @Override
-  public String getDataSourceName() {
-    return dataSourceName;
+  public AbstractJdbcDataSourceInfo(String className, Properties properties) {
+    super(BuildDataSourceName(className, properties));
   }
 
-  @Override
-  public DataSource getDataSource() throws CpoException {
-    if (dataSource == null) {
-      synchronized (LOCK) {
-        try {
-          dataSource = createDataSource();
-        } catch (Exception e) {
-          throw new CpoException("Error instantiating DataSource", e);
-        }
-      }
-    }
-
-    return dataSource;
-  }
-  
-  private String BuildDataSourceName(String s, Properties properties) {
+  private static String BuildDataSourceName(String s, Properties properties) {
     // Use a tree map so that the properties are sorted. This way if we have
     // the same datasource with the same properties but in different order,
     // we will generate the same key.
@@ -84,8 +57,8 @@ public abstract class AbstractDataSourceInfo implements DataSourceInfo {
     }
     return BuildDataSourceName(s, map);
   }
-  
-  private String BuildDataSourceName(String s, SortedMap<String, String> map) {
+
+  private static String BuildDataSourceName(String s, SortedMap<String, String> map) {
     StringBuilder dsName = new StringBuilder(s);
 
     for (Object obj : map.keySet()) {

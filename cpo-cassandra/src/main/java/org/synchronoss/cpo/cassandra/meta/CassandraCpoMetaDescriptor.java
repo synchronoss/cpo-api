@@ -18,26 +18,33 @@
  * A copy of the GNU Lesser General Public License may also be found at
  * http://www.gnu.org/licenses/lgpl.txt
  */
-package org.synchronoss.cpo;
+package org.synchronoss.cpo.cassandra.meta;
 
-import javax.sql.DataSource;
+import org.synchronoss.cpo.CpoException;
+import org.synchronoss.cpo.cassandra.exporter.CassandraMetaXmlObjectExporter;
+import org.synchronoss.cpo.exporter.MetaXmlObjectExporter;
+import org.synchronoss.cpo.meta.CpoMetaDescriptor;
 
 /**
- * Interface that defines the methods needed by CPO for any class that collects DataSource info and instantiates the
- * DataSource
- *
- * @author david.berry
- *
+ * Created with IntelliJ IDEA.
+ * User: dberry
+ * Date: 9/10/13
+ * Time: 07:56 AM
+ * To change this template use File | Settings | File Templates.
  */
-public interface DataSourceInfo<T> {
+public class CassandraCpoMetaDescriptor extends CpoMetaDescriptor {
+  protected CassandraCpoMetaDescriptor(String name, boolean caseSensitive) throws CpoException {
+    super(name, caseSensitive);
+  }
 
-  /**
-   * @return Returns the dataSourceName.
-   */
-  public String getDataSourceName();
+  @Override
+  protected Class getMetaAdapterClass() throws CpoException {
+    return CassandraCpoMetaAdapter.class;
+  }
 
-  /**
-   * @return Returns the DataSource
-   */
-  public T getDataSource() throws CpoException;
+  @Override
+  protected MetaXmlObjectExporter getMetaXmlObjectExporter() {
+    return new CassandraMetaXmlObjectExporter(this);
+  }
+
 }

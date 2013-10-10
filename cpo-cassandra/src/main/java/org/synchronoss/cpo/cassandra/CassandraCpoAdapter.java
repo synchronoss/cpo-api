@@ -18,117 +18,100 @@
  * A copy of the GNU Lesser General Public License may also be found at
  * http://www.gnu.org/licenses/lgpl.txt
  */
-package org.synchronoss.cpo;
+
+package org.synchronoss.cpo.cassandra;
+
+import com.datastax.driver.core.Cluster;
+import org.synchronoss.cpo.*;
+import org.synchronoss.cpo.cassandra.meta.CassandraCpoMetaDescriptor;
+import org.synchronoss.cpo.meta.CpoMetaDescriptor;
+import org.synchronoss.cpo.meta.domain.CpoAttribute;
 
 import java.util.Collection;
 import java.util.List;
 
-import org.synchronoss.cpo.meta.CpoMetaDescriptor;
-import org.synchronoss.cpo.meta.domain.CpoAttribute;
-
 /**
- * CpoAdapter is an interface for a set of routines that are responsible for Creating, Retrieving, Updating, and
- * Deleting (CRUD) value objects within a datasource.
- * <p/>
- * CpoAdapter is an interface that acts as a common facade for different datasources. It is conceivable that an
- * CpoAdapter can be implemented for JDBC, CSV, XML, LDAP, and more datasources producing classes such as
- * JdbcCpoAdapter, CsvCpoAdapter, XmlCpoAdapter, LdapCpoAdapter, etc.
- *
- * @author david berry
+ * CassandraCpoAdapter is an interface for a set of routines that are responsible for managing value objects from a
+ * datasource.
+ * User: dberry
+ * Date: 9/10/13
+ * Time: 07:38 AM
+ * To change this template use File | Settings | File Templates.
  */
-public interface CpoAdapter extends java.io.Serializable {
+public class CassandraCpoAdapter extends CpoBaseAdapter<Cluster> {
+  /**
+   * CpoMetaDescriptor allows you to get the meta data for a class.
+   */
+  private CassandraCpoMetaDescriptor metaDescriptor = null;
 
   /**
-   * Identifies the operation to be processed by the CPO. CREATE signifies that the CPO will try to add the object to the datasource.
+   * Creates a CassandraCpoAdapter.
+   *
+   * @param metaDescriptor This datasource that identifies the cpo metadata datasource
+   * @param jdsiTrx        The datasoruce that identifies the transaction database.
+   * @throws org.synchronoss.cpo.CpoException
+   *          exception
    */
-  static final int CREATE = 0;
+  protected CassandraCpoAdapter(CassandraCpoMetaDescriptor metaDescriptor, DataSourceInfo<Cluster> jdsiTrx) throws CpoException {
+
+    this.metaDescriptor = metaDescriptor;
+    setWriteDataSource(jdsiTrx.getDataSource());
+    setReadDataSource(jdsiTrx.getDataSource());
+    setDataSourceName(jdsiTrx.getDataSourceName());
+  }
 
   /**
-   * Identifies the operation to be processed by CPO. INSERT signifies that the CPO will try to add the object to the datasource.
+   * Creates a CassandraCpoAdapter.
+   *
+   * @param metaDescriptor This datasource that identifies the cpo metadata datasource
+   * @param jdsiWrite      The datasource that identifies the transaction database for write transactions.
+   * @param jdsiRead       The datasource that identifies the transaction database for read-only transactions.
+   * @throws org.synchronoss.cpo.CpoException
+   *          exception
    */
-  static final int INSERT = 0;
+  protected CassandraCpoAdapter(CassandraCpoMetaDescriptor metaDescriptor, DataSourceInfo<Cluster> jdsiWrite, DataSourceInfo<Cluster> jdsiRead) throws CpoException {
+    this.metaDescriptor = metaDescriptor;
+    setWriteDataSource(jdsiWrite.getDataSource());
+    setReadDataSource(jdsiRead.getDataSource());
+    setDataSourceName(jdsiWrite.getDataSourceName());
+  }
 
   /**
-   * Identifies the operation to be processed by CPO. UPDATE signifies that the CPO will try to update the object in the datasource.
+   * Creates a CassandraCpoAdapter.
+   *
+   * @param metaDescriptor This datasource that identifies the cpo metadata datasource
+   * @param cdsiTrx        The datasource that identifies the transaction database for read and write transactions.
+   * @throws org.synchronoss.cpo.CpoException
+   *          exception
    */
-  static final int UPDATE = 1;
+  public static CassandraCpoAdapter getInstance(CassandraCpoMetaDescriptor metaDescriptor, DataSourceInfo cdsiTrx) throws CpoException {
+    String adapterKey = metaDescriptor + ":" + cdsiTrx.getDataSourceName();
+    CassandraCpoAdapter adapter = (CassandraCpoAdapter) findCpoAdapter(adapterKey);
+    if (adapter == null) {
+      adapter = new CassandraCpoAdapter(metaDescriptor, cdsiTrx);
+      addCpoAdapter(adapterKey, adapter);
+    }
+    return adapter;
+  }
 
   /**
-   * Identifies the operation to be processed by CPO. DELETE signifies that the CPO will try to delete the object in the datasource.
+   * Creates a CassandraCpoAdapter.
+   *
+   * @param metaDescriptor This datasource that identifies the cpo metadata datasource
+   * @param cdsiWrite      The datasource that identifies the transaction database for write transactions.
+   * @param cdsiRead       The datasource that identifies the transaction database for read-only transactions.
+   * @throws org.synchronoss.cpo.CpoException
+   *          exception
    */
-  static final int DELETE = 2;
-
-  /**
-   * Identifies the operation to be processed by CPO. RETRIEVE signifies that the CPO will try to retrieve a single object from the datasource.
-   */
-  static final int RETRIEVE = 3;
-
-  /**
-   * Identifies the operation to be processed by CPO. LIST signifies that the CPO will try to retrieve one or more objects from the datasource.
-   */
-  static final int LIST = 4;
-
-  /**
-   * Identifies the operation to be processed by CPO. PERSIST signifies that the CPO will try to add or update the object in the datasource.
-   */
-  static final int PERSIST = 5;
-
-  /**
-   * Identifies the operation to be processed by CPO. EXIST signifies that the CPO will check to see if the object exists in the datasource.
-   */
-  static final int EXIST = 6;
-
-  /**
-   * Identifies the operation to be processed by the CPO. EXECUTE signifies that the CPO will try to execute a function or procedure in the datasource.
-   */
-  static final int EXECUTE = 7;
-
-  /**
-   * Identifies the string constants that goes along with the numeric constants defined above
-   */
-  static final String[] GROUP_IDS = {
-    "CREATE", "UPDATE", "DELETE", "RETRIEVE", "LIST", "PERSIST", "EXIST", "EXECUTE"
-  };
-
-  /**
-   * String constant for CREATE
-   */
-  static final String CREATE_GROUP = GROUP_IDS[CpoAdapter.CREATE];
-
-  /**
-   * String constant for UPDATE
-   */
-  static final String UPDATE_GROUP = GROUP_IDS[CpoAdapter.UPDATE];
-
-  /**
-   * String constant for DELETE
-   */
-  static final String DELETE_GROUP = GROUP_IDS[CpoAdapter.DELETE];
-
-  /**
-   * String constant for RETRIEVE
-   */
-  static final String RETRIEVE_GROUP = GROUP_IDS[CpoAdapter.RETRIEVE];
-
-  /**
-   * String constant for LIST
-   */
-  static final String LIST_GROUP = GROUP_IDS[CpoAdapter.LIST];
-
-  /**
-   * String constant for PERSIST
-   */
-  static final String PERSIST_GROUP = GROUP_IDS[CpoAdapter.PERSIST];
-
-  /**
-   * String constant for EXIST
-   */
-  static final String EXIST_GROUP = GROUP_IDS[CpoAdapter.EXIST];
-
-  /**
-   * String constant for EXECUTE
-   */
-  static final String EXECUTE_GROUP = GROUP_IDS[CpoAdapter.EXECUTE];
+  public static CassandraCpoAdapter getInstance(CassandraCpoMetaDescriptor metaDescriptor, DataSourceInfo cdsiWrite, DataSourceInfo cdsiRead) throws CpoException {
+    String adapterKey = metaDescriptor + ":" + cdsiWrite.getDataSourceName() + ":" + cdsiRead.getDataSourceName();
+    CassandraCpoAdapter adapter = (CassandraCpoAdapter) findCpoAdapter(adapterKey);
+    if (adapter == null) {
+      adapter = new CassandraCpoAdapter(metaDescriptor, cdsiWrite, cdsiRead);
+      addCpoAdapter(adapterKey, adapter);
+    }
+    return adapter;
+  }
 
   /**
    * Creates the Object in the datasource. The assumption is that the object does not exist in the datasource. This
@@ -162,9 +145,13 @@ public interface CpoAdapter extends java.io.Serializable {
    * @param obj This is an object that has been defined within the metadata of the datasource. If the class is not
    *            defined an exception will be thrown.
    * @return The number of objects created in the datasource
-   * @throws CpoException Thrown if there are errors accessing the datasource
+   * @throws org.synchronoss.cpo.CpoException
+   *          Thrown if there are errors accessing the datasource
    */
-  public <T> long insertObject(T obj) throws CpoException;
+  @Override
+  public <T> long insertObject(T obj) throws CpoException {
+    return 0;  //To change body of implemented methods use File | Settings | File Templates.
+  }
 
   /**
    * Creates the Object in the datasource. The assumption is that the object does not exist in the datasource. This
@@ -199,9 +186,13 @@ public interface CpoAdapter extends java.io.Serializable {
    * @param obj  This is an object that has been defined within the metadata of the datasource. If the class is not
    *             defined an exception will be thrown.
    * @return The number of objects created in the datasource
-   * @throws CpoException Thrown if there are errors accessing the datasource
+   * @throws org.synchronoss.cpo.CpoException
+   *          Thrown if there are errors accessing the datasource
    */
-  public <T> long insertObject(String name, T obj) throws CpoException;
+  @Override
+  public <T> long insertObject(String name, T obj) throws CpoException {
+    return 0;  //To change body of implemented methods use File | Settings | File Templates.
+  }
 
   /**
    * Creates the Object in the datasource. The assumption is that the object does not exist in the datasource. This
@@ -241,9 +232,13 @@ public interface CpoAdapter extends java.io.Serializable {
    * @param nativeExpressions Native expression that will be used to augment the expression stored in the meta data. This
    *                          text will be embedded at run-time
    * @return The number of objects created in the datasource
-   * @throws CpoException Thrown if there are errors accessing the datasource
+   * @throws org.synchronoss.cpo.CpoException
+   *          Thrown if there are errors accessing the datasource
    */
-  public <T> long insertObject(String name, T obj, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeFunction> nativeExpressions) throws CpoException;
+  @Override
+  public <T> long insertObject(String name, T obj, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeFunction> nativeExpressions) throws CpoException {
+    return 0;  //To change body of implemented methods use File | Settings | File Templates.
+  }
 
   /**
    * Iterates through a collection of Objects, creates and stores them in the datasource. The assumption is that the
@@ -290,9 +285,13 @@ public interface CpoAdapter extends java.io.Serializable {
    * @param coll This is a collection of objects that have been defined within the metadata of the datasource. If the
    *             class is not defined an exception will be thrown.
    * @return The number of objects created in the datasource
-   * @throws CpoException Thrown if there are errors accessing the datasource
+   * @throws org.synchronoss.cpo.CpoException
+   *          Thrown if there are errors accessing the datasource
    */
-  public <T> long insertObjects(Collection<T> coll) throws CpoException;
+  @Override
+  public <T> long insertObjects(Collection<T> coll) throws CpoException {
+    return 0;  //To change body of implemented methods use File | Settings | File Templates.
+  }
 
   /**
    * Iterates through a collection of Objects, creates and stores them in the datasource. The assumption is that the
@@ -340,9 +339,13 @@ public interface CpoAdapter extends java.io.Serializable {
    * @param coll This is a collection of objects that have been defined within the metadata of the datasource. If the
    *             class is not defined an exception will be thrown.
    * @return The number of objects created in the datasource
-   * @throws CpoException Thrown if there are errors accessing the datasource
+   * @throws org.synchronoss.cpo.CpoException
+   *          Thrown if there are errors accessing the datasource
    */
-  public <T> long insertObjects(String name, Collection<T> coll) throws CpoException;
+  @Override
+  public <T> long insertObjects(String name, Collection<T> coll) throws CpoException {
+    return 0;  //To change body of implemented methods use File | Settings | File Templates.
+  }
 
   /**
    * Iterates through a collection of Objects, creates and stores them in the datasource. The assumption is that the
@@ -392,9 +395,13 @@ public interface CpoAdapter extends java.io.Serializable {
    * @param nativeExpressions Native expression that will be used to augment the expression stored in the meta data. This
    *                          text will be embedded at run-time
    * @return The number of objects created in the datasource
-   * @throws CpoException Thrown if there are errors accessing the datasource
+   * @throws org.synchronoss.cpo.CpoException
+   *          Thrown if there are errors accessing the datasource
    */
-  public <T> long insertObjects(String name, Collection<T> coll, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeFunction> nativeExpressions) throws CpoException;
+  @Override
+  public <T> long insertObjects(String name, Collection<T> coll, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeFunction> nativeExpressions) throws CpoException {
+    return 0;  //To change body of implemented methods use File | Settings | File Templates.
+  }
 
   /**
    * Removes the Object from the datasource. The assumption is that the object exists in the datasource. This method
@@ -428,9 +435,13 @@ public interface CpoAdapter extends java.io.Serializable {
    * @param obj This is an object that has been defined within the metadata of the datasource. If the class is not
    *            defined an exception will be thrown. If the object does not exist in the datasource an exception will be thrown.
    * @return The number of objects deleted from the datasource
-   * @throws CpoException Thrown if there are errors accessing the datasource
+   * @throws org.synchronoss.cpo.CpoException
+   *          Thrown if there are errors accessing the datasource
    */
-  public <T> long deleteObject(T obj) throws CpoException;
+  @Override
+  public <T> long deleteObject(T obj) throws CpoException {
+    return 0;  //To change body of implemented methods use File | Settings | File Templates.
+  }
 
   /**
    * Removes the Object from the datasource. The assumption is that the object exists in the datasource. This method
@@ -466,9 +477,13 @@ public interface CpoAdapter extends java.io.Serializable {
    * @param obj  This is an object that has been defined within the metadata of the datasource. If the class is not
    *             defined an exception will be thrown. If the object does not exist in the datasource an exception will be thrown.
    * @return The number of objects deleted from the datasource
-   * @throws CpoException Thrown if there are errors accessing the datasource
+   * @throws org.synchronoss.cpo.CpoException
+   *          Thrown if there are errors accessing the datasource
    */
-  public <T> long deleteObject(String name, T obj) throws CpoException;
+  @Override
+  public <T> long deleteObject(String name, T obj) throws CpoException {
+    return 0;  //To change body of implemented methods use File | Settings | File Templates.
+  }
 
   /**
    * Removes the Object from the datasource. The assumption is that the object exists in the datasource. This method
@@ -508,9 +523,13 @@ public interface CpoAdapter extends java.io.Serializable {
    * @param nativeExpressions Native expression that will be used to augment the expression stored in the meta data. This
    *                          text will be embedded at run-time
    * @return The number of objects deleted from the datasource
-   * @throws CpoException Thrown if there are errors accessing the datasource
+   * @throws org.synchronoss.cpo.CpoException
+   *          Thrown if there are errors accessing the datasource
    */
-  public <T> long deleteObject(String name, T obj, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeFunction> nativeExpressions) throws CpoException;
+  @Override
+  public <T> long deleteObject(String name, T obj, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeFunction> nativeExpressions) throws CpoException {
+    return 0;  //To change body of implemented methods use File | Settings | File Templates.
+  }
 
   /**
    * Removes the Objects contained in the collection from the datasource. The assumption is that the object exists in
@@ -555,9 +574,13 @@ public interface CpoAdapter extends java.io.Serializable {
    * @param coll This is a collection of objects that have been defined within the metadata of the datasource. If the
    *             class is not defined an exception will be thrown.
    * @return The number of objects deleted from the datasource
-   * @throws CpoException Thrown if there are errors accessing the datasource
+   * @throws org.synchronoss.cpo.CpoException
+   *          Thrown if there are errors accessing the datasource
    */
-  public <T> long deleteObjects(Collection<T> coll) throws CpoException;
+  @Override
+  public <T> long deleteObjects(Collection<T> coll) throws CpoException {
+    return 0;  //To change body of implemented methods use File | Settings | File Templates.
+  }
 
   /**
    * Removes the Objects contained in the collection from the datasource. The assumption is that the object exists in
@@ -604,9 +627,13 @@ public interface CpoAdapter extends java.io.Serializable {
    * @param coll This is a collection of objects that have been defined within the metadata of the datasource. If the
    *             class is not defined an exception will be thrown.
    * @return The number of objects deleted from the datasource
-   * @throws CpoException Thrown if there are errors accessing the datasource
+   * @throws org.synchronoss.cpo.CpoException
+   *          Thrown if there are errors accessing the datasource
    */
-  public <T> long deleteObjects(String name, Collection<T> coll) throws CpoException;
+  @Override
+  public <T> long deleteObjects(String name, Collection<T> coll) throws CpoException {
+    return 0;  //To change body of implemented methods use File | Settings | File Templates.
+  }
 
   /**
    * Removes the Objects contained in the collection from the datasource. The assumption is that the object exists in
@@ -656,9 +683,13 @@ public interface CpoAdapter extends java.io.Serializable {
    * @param nativeExpressions Native expression that will be used to augment the expression stored in the meta data. This
    *                          text will be embedded at run-time
    * @return The number of objects deleted from the datasource
-   * @throws CpoException Thrown if there are errors accessing the datasource
+   * @throws org.synchronoss.cpo.CpoException
+   *          Thrown if there are errors accessing the datasource
    */
-  public <T> long deleteObjects(String name, Collection<T> coll, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeFunction> nativeExpressions) throws CpoException;
+  @Override
+  public <T> long deleteObjects(String name, Collection<T> coll, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeFunction> nativeExpressions) throws CpoException {
+    return 0;  //To change body of implemented methods use File | Settings | File Templates.
+  }
 
   /**
    * Executes an Object whose metadata will call an executable within the datasource. It is assumed that the executable
@@ -696,9 +727,13 @@ public interface CpoAdapter extends java.io.Serializable {
    *            An object of this type will be created and filled with the returned data from the value_object. This newly created
    *            object will be returned from this method.
    * @return An object populated with the OUT parameters returned from the executable object
-   * @throws CpoException Thrown if there are errors accessing the datasource
+   * @throws org.synchronoss.cpo.CpoException
+   *          Thrown if there are errors accessing the datasource
    */
-  public <T> T executeObject(T obj) throws CpoException;
+  @Override
+  public <T> T executeObject(T obj) throws CpoException {
+    return null;  //To change body of implemented methods use File | Settings | File Templates.
+  }
 
   /**
    * Executes an Object whose metadata will call an executable within the datasource. It is assumed that the executable
@@ -736,9 +771,13 @@ public interface CpoAdapter extends java.io.Serializable {
    *               This object is used to populate the IN parameters used to retrieve the collection of objects. This object defines
    *               the object type that will be returned in the collection and contain the result set data or the OUT Parameters.
    * @return A result object populate with the OUT parameters
-   * @throws CpoException DOCUMENT ME!
+   * @throws org.synchronoss.cpo.CpoException
+   *          DOCUMENT ME!
    */
-  public <T> T executeObject(String name, T object) throws CpoException;
+  @Override
+  public <T> T executeObject(String name, T object) throws CpoException {
+    return null;  //To change body of implemented methods use File | Settings | File Templates.
+  }
 
   /**
    * Executes an Object that represents an executable object within the datasource. It is assumed that the object exists
@@ -780,9 +819,13 @@ public interface CpoAdapter extends java.io.Serializable {
    *                 This object defines the object type that will be created, filled with the return data and returned from this
    *                 method.
    * @return An object populated with the out parameters
-   * @throws CpoException Thrown if there are errors accessing the datasource
+   * @throws org.synchronoss.cpo.CpoException
+   *          Thrown if there are errors accessing the datasource
    */
-  public <T, C> T executeObject(String name, C criteria, T result) throws CpoException;
+  @Override
+  public <T, C> T executeObject(String name, C criteria, T result) throws CpoException {
+    return null;  //To change body of implemented methods use File | Settings | File Templates.
+  }
 
   /**
    * The CpoAdapter will check to see if this object exists in the datasource.
@@ -821,9 +864,13 @@ public interface CpoAdapter extends java.io.Serializable {
    * @param obj This is an object that has been defined within the metadata of the datasource. If the class is not
    *            defined an exception will be thrown. This object will be searched for inside the datasource.
    * @return The number of objects that exist in the datasource that match the specified object
-   * @throws CpoException Thrown if there are errors accessing the datasource
+   * @throws org.synchronoss.cpo.CpoException
+   *          Thrown if there are errors accessing the datasource
    */
-  public <T> long existsObject(T obj) throws CpoException;
+  @Override
+  public <T> long existsObject(T obj) throws CpoException {
+    return 0;  //To change body of implemented methods use File | Settings | File Templates.
+  }
 
   /**
    * The CpoAdapter will check to see if this object exists in the datasource.
@@ -865,9 +912,13 @@ public interface CpoAdapter extends java.io.Serializable {
    * @param obj  This is an object that has been defined within the metadata of the datasource. If the class is not
    *             defined an exception will be thrown. This object will be searched for inside the datasource.
    * @return The number of objects that exist in the datasource that match the specified object
-   * @throws CpoException Thrown if there are errors accessing the datasource
+   * @throws org.synchronoss.cpo.CpoException
+   *          Thrown if there are errors accessing the datasource
    */
-  public <T> long existsObject(String name, T obj) throws CpoException;
+  @Override
+  public <T> long existsObject(String name, T obj) throws CpoException {
+    return 0;  //To change body of implemented methods use File | Settings | File Templates.
+  }
 
   /**
    * The CpoAdapter will check to see if this object exists in the datasource.
@@ -913,9 +964,13 @@ public interface CpoAdapter extends java.io.Serializable {
    * @param wheres A collection of CpoWhere objects that pass in run-time constraints to the function that performs the the
    *               exist
    * @return The number of objects that exist in the datasource that match the specified object
-   * @throws CpoException Thrown if there are errors accessing the datasource
+   * @throws org.synchronoss.cpo.CpoException
+   *          Thrown if there are errors accessing the datasource
    */
-  public <T> long existsObject(String name, T obj, Collection<CpoWhere> wheres) throws CpoException;
+  @Override
+  public <T> long existsObject(String name, T obj, Collection<CpoWhere> wheres) throws CpoException {
+    return 0;  //To change body of implemented methods use File | Settings | File Templates.
+  }
 
   /**
    * newOrderBy allows you to dynamically change the order of the objects in the resulting collection. This allows you
@@ -924,9 +979,13 @@ public interface CpoAdapter extends java.io.Serializable {
    * @param attribute The name of the attribute from the pojo that will be sorted.
    * @param ascending If true, sort ascending. If false sort descending.
    * @return A CpoOrderBy object to be passed into retrieveBeans.
-   * @throws CpoException Thrown if there are errors accessing the datasource
+   * @throws org.synchronoss.cpo.CpoException
+   *          Thrown if there are errors accessing the datasource
    */
-  public CpoOrderBy newOrderBy(String attribute, boolean ascending) throws CpoException;
+  @Override
+  public CpoOrderBy newOrderBy(String attribute, boolean ascending) throws CpoException {
+    return null;  //To change body of implemented methods use File | Settings | File Templates.
+  }
 
   /**
    * newOrderBy allows you to dynamically change the order of the objects in the resulting collection. This allows you
@@ -936,9 +995,13 @@ public interface CpoAdapter extends java.io.Serializable {
    * @param attribute The name of the attribute from the pojo that will be sorted.
    * @param ascending If true, sort ascending. If false sort descending.
    * @return A CpoOrderBy object to be passed into retrieveBeans.
-   * @throws CpoException Thrown if there are errors accessing the datasource
+   * @throws org.synchronoss.cpo.CpoException
+   *          Thrown if there are errors accessing the datasource
    */
-  public CpoOrderBy newOrderBy(String marker, String attribute, boolean ascending) throws CpoException;
+  @Override
+  public CpoOrderBy newOrderBy(String marker, String attribute, boolean ascending) throws CpoException {
+    return null;  //To change body of implemented methods use File | Settings | File Templates.
+  }
 
   /**
    * newOrderBy allows you to dynamically change the order of the objects in the resulting collection. This allows you
@@ -949,9 +1012,13 @@ public interface CpoAdapter extends java.io.Serializable {
    * @param function  A string which represents a datasource function that will be called on the attribute. must be
    *                  contained in the function string. The attribute name will be replaced at run-time with its datasource counterpart
    * @return A CpoOrderBy object to be passed into retrieveBeans.
-   * @throws CpoException Thrown if there are errors accessing the datasource
+   * @throws org.synchronoss.cpo.CpoException
+   *          Thrown if there are errors accessing the datasource
    */
-  public CpoOrderBy newOrderBy(String attribute, boolean ascending, String function) throws CpoException;
+  @Override
+  public CpoOrderBy newOrderBy(String attribute, boolean ascending, String function) throws CpoException {
+    return null;  //To change body of implemented methods use File | Settings | File Templates.
+  }
 
   /**
    * newOrderBy allows you to dynamically change the order of the objects in the resulting collection. This allows you
@@ -963,17 +1030,25 @@ public interface CpoAdapter extends java.io.Serializable {
    * @param function  A string which represents a datasource function that will be called on the attribute. must be
    *                  contained in the function string. The attribute name will be replaced at run-time with its datasource counterpart
    * @return A CpoOrderBy object to be passed into retrieveBeans.
-   * @throws CpoException Thrown if there are errors accessing the datasource
+   * @throws org.synchronoss.cpo.CpoException
+   *          Thrown if there are errors accessing the datasource
    */
-  public CpoOrderBy newOrderBy(String marker, String attribute, boolean ascending, String function) throws CpoException;
+  @Override
+  public CpoOrderBy newOrderBy(String marker, String attribute, boolean ascending, String function) throws CpoException {
+    return null;  //To change body of implemented methods use File | Settings | File Templates.
+  }
 
   /**
    * DOCUMENT ME!
    *
    * @return DOCUMENT ME!
-   * @throws CpoException Thrown if there are errors accessing the datasource
+   * @throws org.synchronoss.cpo.CpoException
+   *          Thrown if there are errors accessing the datasource
    */
-  public CpoWhere newWhere() throws CpoException;
+  @Override
+  public CpoWhere newWhere() throws CpoException {
+    return null;  //To change body of implemented methods use File | Settings | File Templates.
+  }
 
   /**
    * DOCUMENT ME!
@@ -983,9 +1058,13 @@ public interface CpoAdapter extends java.io.Serializable {
    * @param comp    DOCUMENT ME!
    * @param value   DOCUMENT ME!
    * @return DOCUMENT ME!
-   * @throws CpoException Thrown if there are errors accessing the datasource
+   * @throws org.synchronoss.cpo.CpoException
+   *          Thrown if there are errors accessing the datasource
    */
-  public <T> CpoWhere newWhere(int logical, String attr, int comp, T value) throws CpoException;
+  @Override
+  public <T> CpoWhere newWhere(int logical, String attr, int comp, T value) throws CpoException {
+    return null;  //To change body of implemented methods use File | Settings | File Templates.
+  }
 
   /**
    * DOCUMENT ME!
@@ -996,9 +1075,13 @@ public interface CpoAdapter extends java.io.Serializable {
    * @param value   DOCUMENT ME!
    * @param not     DOCUMENT ME!
    * @return DOCUMENT ME!
-   * @throws CpoException Thrown if there are errors accessing the datasource
+   * @throws org.synchronoss.cpo.CpoException
+   *          Thrown if there are errors accessing the datasource
    */
-  public <T> CpoWhere newWhere(int logical, String attr, int comp, T value, boolean not) throws CpoException;
+  @Override
+  public <T> CpoWhere newWhere(int logical, String attr, int comp, T value, boolean not) throws CpoException {
+    return null;  //To change body of implemented methods use File | Settings | File Templates.
+  }
 
   /**
    * Persists the Object into the datasource. The CpoAdapter will check to see if this object exists in the datasource.
@@ -1034,12 +1117,16 @@ public interface CpoAdapter extends java.io.Serializable {
    * @param obj This is an object that has been defined within the metadata of the datasource. If the class is not
    *            defined an exception will be thrown.
    * @return A count of the number of objects persisted
-   * @throws CpoException Thrown if there are errors accessing the datasource
+   * @throws org.synchronoss.cpo.CpoException
+   *          Thrown if there are errors accessing the datasource
    * @see #existsObject
    * @see #insertObject
    * @see #updateObject
    */
-  public <T> long persistObject(T obj) throws CpoException;
+  @Override
+  public <T> long persistObject(T obj) throws CpoException {
+    return 0;  //To change body of implemented methods use File | Settings | File Templates.
+  }
 
   /**
    * Persists the Object into the datasource. The CpoAdapter will check to see if this object exists in the datasource.
@@ -1076,12 +1163,16 @@ public interface CpoAdapter extends java.io.Serializable {
    * @param obj  This is an object that has been defined within the metadata of the datasource. If the class is not
    *             defined an exception will be thrown.
    * @return A count of the number of objects persisted
-   * @throws CpoException Thrown if there are errors accessing the datasource
+   * @throws org.synchronoss.cpo.CpoException
+   *          Thrown if there are errors accessing the datasource
    * @see #existsObject
    * @see #insertObject
    * @see #updateObject
    */
-  public <T> long persistObject(String name, T obj) throws CpoException;
+  @Override
+  public <T> long persistObject(String name, T obj) throws CpoException {
+    return 0;  //To change body of implemented methods use File | Settings | File Templates.
+  }
 
   /**
    * Persists a collection of Objects into the datasource. The CpoAdapter will check to see if this object exists in the
@@ -1123,12 +1214,16 @@ public interface CpoAdapter extends java.io.Serializable {
    * @param coll This is a collection of objects that have been defined within the metadata of the datasource. If the
    *             class is not defined an exception will be thrown.
    * @return DOCUMENT ME!
-   * @throws CpoException Thrown if there are errors accessing the datasource
+   * @throws org.synchronoss.cpo.CpoException
+   *          Thrown if there are errors accessing the datasource
    * @see #existsObject
    * @see #insertObject
    * @see #updateObject
    */
-  public <T> long persistObjects(Collection<T> coll) throws CpoException;
+  @Override
+  public <T> long persistObjects(Collection<T> coll) throws CpoException {
+    return 0;  //To change body of implemented methods use File | Settings | File Templates.
+  }
 
   /**
    * Persists a collection of Objects into the datasource. The CpoAdapter will check to see if this object exists in the
@@ -1173,12 +1268,16 @@ public interface CpoAdapter extends java.io.Serializable {
    * @param coll This is a collection of objects that have been defined within the metadata of the datasource. If the
    *             class is not defined an exception will be thrown.
    * @return DOCUMENT ME!
-   * @throws CpoException Thrown if there are errors accessing the datasource
+   * @throws org.synchronoss.cpo.CpoException
+   *          Thrown if there are errors accessing the datasource
    * @see #existsObject
    * @see #insertObject
    * @see #updateObject
    */
-  public <T> long persistObjects(String name, Collection<T> coll) throws CpoException;
+  @Override
+  public <T> long persistObjects(String name, Collection<T> coll) throws CpoException {
+    return 0;  //To change body of implemented methods use File | Settings | File Templates.
+  }
 
   /**
    * Retrieves the Bean from the datasource. The assumption is that the bean exists in the datasource. If the retrieve
@@ -1189,9 +1288,13 @@ public interface CpoAdapter extends java.io.Serializable {
    *             bean is used to specify the search criteria, the output bean is populated with the results of the function.
    * @return A bean of the same type as the result parameter that is filled in as specified the metadata for the
    *         retireve.
-   * @throws CpoException Thrown if there are errors accessing the datasource
+   * @throws org.synchronoss.cpo.CpoException
+   *          Thrown if there are errors accessing the datasource
    */
-  public <T> T retrieveBean(T bean) throws CpoException;
+  @Override
+  public <T> T retrieveBean(T bean) throws CpoException {
+    return null;  //To change body of implemented methods use File | Settings | File Templates.
+  }
 
   /**
    * Retrieves the bean from the datasource. The assumption is that the bean exists in the datasource. If the retrieve
@@ -1203,9 +1306,13 @@ public interface CpoAdapter extends java.io.Serializable {
    *             input bean is used to specify the search criteria, the output bean is populated with the results of the function.
    * @return An bean of the same type as the result parameter that is filled in as specified the metadata for the
    *         retireve.
-   * @throws CpoException Thrown if there are errors accessing the datasource
+   * @throws org.synchronoss.cpo.CpoException
+   *          Thrown if there are errors accessing the datasource
    */
-  public <T> T retrieveBean(String name, T bean) throws CpoException;
+  @Override
+  public <T> T retrieveBean(String name, T bean) throws CpoException {
+    return null;  //To change body of implemented methods use File | Settings | File Templates.
+  }
 
   /**
    * Retrieves the bean from the datasource. The assumption is that the bean exists in the datasource. If the retrieve
@@ -1221,9 +1328,13 @@ public interface CpoAdapter extends java.io.Serializable {
    *                          text will be embedded at run-time
    * @return An bean of the same type as the result parameter that is filled in as specified the metadata for the
    *         retireve.
-   * @throws CpoException Thrown if there are errors accessing the datasource
+   * @throws org.synchronoss.cpo.CpoException
+   *          Thrown if there are errors accessing the datasource
    */
-  public <T> T retrieveBean(String name, T bean, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeFunction> nativeExpressions) throws CpoException;
+  @Override
+  public <T> T retrieveBean(String name, T bean, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeFunction> nativeExpressions) throws CpoException {
+    return null;  //To change body of implemented methods use File | Settings | File Templates.
+  }
 
   /**
    * Retrieves the bean from the datasource. The assumption is that the bean exists in the datasource. If the retrieve
@@ -1241,9 +1352,13 @@ public interface CpoAdapter extends java.io.Serializable {
    * @param orderBy  The CpoOrderBy bean that defines the order in which beans should be returned
    * @return An bean of the same type as the result parameter that is filled in as specified the metadata for the
    *         retireve.
-   * @throws CpoException Thrown if there are errors accessing the datasource
+   * @throws org.synchronoss.cpo.CpoException
+   *          Thrown if there are errors accessing the datasource
    */
-  public <T, C> T retrieveBean(String name, C criteria, T result, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy) throws CpoException;
+  @Override
+  public <T, C> T retrieveBean(String name, C criteria, T result, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy) throws CpoException {
+    return null;  //To change body of implemented methods use File | Settings | File Templates.
+  }
 
   /**
    * Retrieves the bean from the datasource. The assumption is that the bean exists in the datasource. If the retrieve
@@ -1263,9 +1378,13 @@ public interface CpoAdapter extends java.io.Serializable {
    *                          text will be embedded at run-time
    * @return An bean of the same type as the result parameter that is filled in as specified the metadata for the
    *         retireve.
-   * @throws CpoException Thrown if there are errors accessing the datasource
+   * @throws org.synchronoss.cpo.CpoException
+   *          Thrown if there are errors accessing the datasource
    */
-  public <T, C> T retrieveBean(String name, C criteria, T result, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeFunction> nativeExpressions) throws CpoException;
+  @Override
+  public <T, C> T retrieveBean(String name, C criteria, T result, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeFunction> nativeExpressions) throws CpoException {
+    return null;  //To change body of implemented methods use File | Settings | File Templates.
+  }
 
   /**
    * Retrieves the bean from the datasource. The assumption is that the bean exists in the datasource.
@@ -1277,9 +1396,13 @@ public interface CpoAdapter extends java.io.Serializable {
    *                 This bean is used to specify the parameters used to retrieve the collection of beans.
    * @return A collection of beans will be returned that meet the criteria specified by obj. The beans will be of the
    *         same type as the bean that was passed in. If no beans match the criteria, an empty collection will be returned
-   * @throws CpoException Thrown if there are errors accessing the datasource
+   * @throws org.synchronoss.cpo.CpoException
+   *          Thrown if there are errors accessing the datasource
    */
-  public <C> List<C> retrieveBeans(String name, C criteria) throws CpoException;
+  @Override
+  public <C> List<C> retrieveBeans(String name, C criteria) throws CpoException {
+    return null;  //To change body of implemented methods use File | Settings | File Templates.
+  }
 
   /**
    * Retrieves the bean from the datasource. The assumption is that the bean exists in the datasource.
@@ -1293,9 +1416,13 @@ public interface CpoAdapter extends java.io.Serializable {
    * @param orderBy  The CpoOrderBy bean that defines the order in which beans should be returned
    * @return A collection of beans will be returned that meet the criteria specified by obj. The beans will be of the
    *         same type as the bean that was passed in. If no beans match the criteria, an empty collection will be returned
-   * @throws CpoException Thrown if there are errors accessing the datasource
+   * @throws org.synchronoss.cpo.CpoException
+   *          Thrown if there are errors accessing the datasource
    */
-  public <C> List<C> retrieveBeans(String name, C criteria, CpoWhere where, Collection<CpoOrderBy> orderBy) throws CpoException;
+  @Override
+  public <C> List<C> retrieveBeans(String name, C criteria, CpoWhere where, Collection<CpoOrderBy> orderBy) throws CpoException {
+    return null;  //To change body of implemented methods use File | Settings | File Templates.
+  }
 
   /**
    * Retrieves the bean from the datasource. The assumption is that the bean exists in the datasource.
@@ -1308,9 +1435,13 @@ public interface CpoAdapter extends java.io.Serializable {
    * @param orderBy  The CpoOrderBy bean that defines the order in which beans should be returned
    * @return A collection of beans will be returned that meet the criteria specified by obj. The beans will be of the
    *         same type as the bean that was passed in. If no beans match the criteria, an empty collection will be returned
-   * @throws CpoException Thrown if there are errors accessing the datasource
+   * @throws org.synchronoss.cpo.CpoException
+   *          Thrown if there are errors accessing the datasource
    */
-  public <C> List<C> retrieveBeans(String name, C criteria, Collection<CpoOrderBy> orderBy) throws CpoException;
+  @Override
+  public <C> List<C> retrieveBeans(String name, C criteria, Collection<CpoOrderBy> orderBy) throws CpoException {
+    return null;  //To change body of implemented methods use File | Settings | File Templates.
+  }
 
   /**
    * Retrieves the bean from the datasource. The assumption is that the bean exists in the datasource.
@@ -1324,9 +1455,13 @@ public interface CpoAdapter extends java.io.Serializable {
    * @param orderBy  The CpoOrderBy bean that defines the order in which beans should be returned
    * @return A collection of beans will be returned that meet the criteria specified by obj. The beans will be of the
    *         same type as the bean that was passed in. If no beans match the criteria, an empty collection will be returned
-   * @throws CpoException Thrown if there are errors accessing the datasource
+   * @throws org.synchronoss.cpo.CpoException
+   *          Thrown if there are errors accessing the datasource
    */
-  public <C> List<C> retrieveBeans(String name, C criteria, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy) throws CpoException;
+  @Override
+  public <C> List<C> retrieveBeans(String name, C criteria, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy) throws CpoException {
+    return null;  //To change body of implemented methods use File | Settings | File Templates.
+  }
 
   /**
    * Retrieves the bean from the datasource. The assumption is that the bean exists in the datasource.
@@ -1341,9 +1476,13 @@ public interface CpoAdapter extends java.io.Serializable {
    *                 This bean is used to specify the bean type that will be returned in the collection.
    * @return A collection of beans will be returned that meet the criteria specified by obj. The beans will be of the
    *         same type as the bean that was passed in. If no beans match the criteria, an empty collection will be returned
-   * @throws CpoException Thrown if there are errors accessing the datasource
+   * @throws org.synchronoss.cpo.CpoException
+   *          Thrown if there are errors accessing the datasource
    */
-  public <T, C> List<T> retrieveBeans(String name, C criteria, T result) throws CpoException;
+  @Override
+  public <T, C> List<T> retrieveBeans(String name, C criteria, T result) throws CpoException {
+    return null;  //To change body of implemented methods use File | Settings | File Templates.
+  }
 
   /**
    * Retrieves the bean from the datasource. The assumption is that the bean exists in the datasource.
@@ -1360,9 +1499,13 @@ public interface CpoAdapter extends java.io.Serializable {
    * @param orderBy  The CpoOrderBy bean that defines the order in which beans should be returned
    * @return A collection of beans will be returned that meet the criteria specified by obj. The beans will be of the
    *         same type as the bean that was passed in. If no beans match the criteria, an empty collection will be returned
-   * @throws CpoException Thrown if there are errors accessing the datasource
+   * @throws org.synchronoss.cpo.CpoException
+   *          Thrown if there are errors accessing the datasource
    */
-  public <T, C> List<T> retrieveBeans(String name, C criteria, T result, CpoWhere where, Collection<CpoOrderBy> orderBy) throws CpoException;
+  @Override
+  public <T, C> List<T> retrieveBeans(String name, C criteria, T result, CpoWhere where, Collection<CpoOrderBy> orderBy) throws CpoException {
+    return null;  //To change body of implemented methods use File | Settings | File Templates.
+  }
 
   /**
    * Retrieves the bean from the datasource. The assumption is that the bean exists in the datasource.
@@ -1379,9 +1522,13 @@ public interface CpoAdapter extends java.io.Serializable {
    * @param orderBy  The CpoOrderBy bean that defines the order in which beans should be returned
    * @return A collection of beans will be returned that meet the criteria specified by obj. The beans will be of the
    *         same type as the bean that was passed in. If no beans match the criteria, an empty collection will be returned
-   * @throws CpoException Thrown if there are errors accessing the datasource
+   * @throws org.synchronoss.cpo.CpoException
+   *          Thrown if there are errors accessing the datasource
    */
-  public <T, C> List<T> retrieveBeans(String name, C criteria, T result, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy) throws CpoException;
+  @Override
+  public <T, C> List<T> retrieveBeans(String name, C criteria, T result, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy) throws CpoException {
+    return null;  //To change body of implemented methods use File | Settings | File Templates.
+  }
 
   /**
    * Retrieves the bean from the datasource. The assumption is that the bean exists in the datasource.
@@ -1400,9 +1547,13 @@ public interface CpoAdapter extends java.io.Serializable {
    *                          text will be embedded at run-time
    * @return A collection of beans will be returned that meet the criteria specified by obj. The beans will be of the
    *         same type as the bean that was passed in. If no beans match the criteria, an empty collection will be returned
-   * @throws CpoException Thrown if there are errors accessing the datasource
+   * @throws org.synchronoss.cpo.CpoException
+   *          Thrown if there are errors accessing the datasource
    */
-  public <T, C> List<T> retrieveBeans(String name, C criteria, T result, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeFunction> nativeExpressions) throws CpoException;
+  @Override
+  public <T, C> List<T> retrieveBeans(String name, C criteria, T result, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeFunction> nativeExpressions) throws CpoException {
+    return null;  //To change body of implemented methods use File | Settings | File Templates.
+  }
 
   /**
    * Retrieves the bean from the datasource. The assumption is that the bean exists in the datasource.
@@ -1419,11 +1570,15 @@ public interface CpoAdapter extends java.io.Serializable {
    * @param orderBy           The CpoOrderBy bean that defines the order in which beans should be returned
    * @param nativeExpressions Native expression that will be used to augment the expression stored in the meta data. This
    *                          text will be embedded at run-time
-   * @param the               queue size of the buffer that it uses to send the beans from the producer to the consumer.
+   * @param queuesize         queue size of the buffer that it uses to send the beans from the producer to the consumer.
    * @return A CpoResultSet that can be iterated through
-   * @throws CpoException Thrown if there are errors accessing the datasource
+   * @throws org.synchronoss.cpo.CpoException
+   *          Thrown if there are errors accessing the datasource
    */
-  public <T, C> CpoResultSet<T> retrieveBeans(String name, C criteria, T result, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeFunction> nativeExpressions, int queueSize) throws CpoException;
+  @Override
+  public <T, C> CpoResultSet<T> retrieveBeans(String name, C criteria, T result, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeFunction> nativeExpressions, int queueSize) throws CpoException {
+    return null;  //To change body of implemented methods use File | Settings | File Templates.
+  }
 
   /**
    * Update the Object in the datasource. The CpoAdapter will check to see if the object exists in the datasource. If it
@@ -1457,9 +1612,13 @@ public interface CpoAdapter extends java.io.Serializable {
    * @param obj This is an object that has been defined within the metadata of the datasource. If the class is not
    *            defined an exception will be thrown.
    * @return The number of objects updated in the datasource
-   * @throws CpoException Thrown if there are errors accessing the datasource
+   * @throws org.synchronoss.cpo.CpoException
+   *          Thrown if there are errors accessing the datasource
    */
-  public <T> long updateObject(T obj) throws CpoException;
+  @Override
+  public <T> long updateObject(T obj) throws CpoException {
+    return 0;  //To change body of implemented methods use File | Settings | File Templates.
+  }
 
   /**
    * Update the Object in the datasource. The CpoAdapter will check to see if the object exists in the datasource. If it
@@ -1495,9 +1654,13 @@ public interface CpoAdapter extends java.io.Serializable {
    * @param obj  This is an object that has been defined within the metadata of the datasource. If the class is not
    *             defined an exception will be thrown.
    * @return The number of objects updated in the datasource
-   * @throws CpoException Thrown if there are errors accessing the datasource
+   * @throws org.synchronoss.cpo.CpoException
+   *          Thrown if there are errors accessing the datasource
    */
-  public <T> long updateObject(String name, T obj) throws CpoException;
+  @Override
+  public <T> long updateObject(String name, T obj) throws CpoException {
+    return 0;  //To change body of implemented methods use File | Settings | File Templates.
+  }
 
   /**
    * Update the Object in the datasource. The CpoAdapter will check to see if the object exists in the datasource. If it
@@ -1536,9 +1699,13 @@ public interface CpoAdapter extends java.io.Serializable {
    * @param orderBy           A collection of CpoOrderBy objects to be used by the function
    * @param nativeExpressions A collection of CpoNativeFunction objects to be used by the function
    * @return The number of objects updated in the datasource
-   * @throws CpoException Thrown if there are errors accessing the datasource
+   * @throws org.synchronoss.cpo.CpoException
+   *          Thrown if there are errors accessing the datasource
    */
-  public <T> long updateObject(String name, T obj, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeFunction> nativeExpressions) throws CpoException;
+  @Override
+  public <T> long updateObject(String name, T obj, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeFunction> nativeExpressions) throws CpoException {
+    return 0;  //To change body of implemented methods use File | Settings | File Templates.
+  }
 
   /**
    * Updates a collection of Objects in the datasource. The assumption is that the objects contained in the collection
@@ -1580,9 +1747,13 @@ public interface CpoAdapter extends java.io.Serializable {
    * @param coll This is a collection of objects that have been defined within the metadata of the datasource. If the
    *             class is not defined an exception will be thrown.
    * @return The number of objects updated in the datasource
-   * @throws CpoException Thrown if there are errors accessing the datasource
+   * @throws org.synchronoss.cpo.CpoException
+   *          Thrown if there are errors accessing the datasource
    */
-  public <T> long updateObjects(Collection<T> coll) throws CpoException;
+  @Override
+  public <T> long updateObjects(Collection<T> coll) throws CpoException {
+    return 0;  //To change body of implemented methods use File | Settings | File Templates.
+  }
 
   /**
    * Updates a collection of Objects in the datasource. The assumption is that the objects contained in the collection
@@ -1638,9 +1809,13 @@ public interface CpoAdapter extends java.io.Serializable {
    * @param coll This is a collection of objects that have been defined within the metadata of the datasource. If the
    *             class is not defined an exception will be thrown.
    * @return The number of objects updated in the datasource
-   * @throws CpoException Thrown if there are errors accessing the datasource
+   * @throws org.synchronoss.cpo.CpoException
+   *          Thrown if there are errors accessing the datasource
    */
-  public <T> long updateObjects(String name, Collection<T> coll) throws CpoException;
+  @Override
+  public <T> long updateObjects(String name, Collection<T> coll) throws CpoException {
+    return 0;  //To change body of implemented methods use File | Settings | File Templates.
+  }
 
   /**
    * Updates a collection of Objects in the datasource. The assumption is that the objects contained in the collection
@@ -1686,9 +1861,13 @@ public interface CpoAdapter extends java.io.Serializable {
    * @param orderBy           A collection of CpoOrderBy objects to be used by the function
    * @param nativeExpressions A collection of CpoNativeFunction objects to be used by the function
    * @return The number of objects updated in the datasource
-   * @throws CpoException Thrown if there are errors accessing the datasource
+   * @throws org.synchronoss.cpo.CpoException
+   *          Thrown if there are errors accessing the datasource
    */
-  public <T> long updateObjects(String name, Collection<T> coll, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeFunction> nativeExpressions) throws CpoException;
+  @Override
+  public <T> long updateObjects(String name, Collection<T> coll, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeFunction> nativeExpressions) throws CpoException {
+    return 0;  //To change body of implemented methods use File | Settings | File Templates.
+  }
 
   /**
    * Provides a mechanism for the user to obtain a CpoTrxAdapter object. This object allows the to control when commits
@@ -1728,14 +1907,27 @@ public interface CpoAdapter extends java.io.Serializable {
    * </pre>
    *
    * @return A CpoTrxAdapter to manage the transactionality of CPO
-   * @throws CpoException Thrown if there are errors accessing the datasource
-   * @see CpoTrxAdapter
+   * @throws org.synchronoss.cpo.CpoException
+   *          Thrown if there are errors accessing the datasource
+   * @see org.synchronoss.cpo.CpoTrxAdapter
    */
-  public CpoTrxAdapter getCpoTrxAdapter() throws CpoException;
+  @Override
+  public CpoTrxAdapter getCpoTrxAdapter() throws CpoException {
+    return null;  //To change body of implemented methods use File | Settings | File Templates.
+  }
 
-  public CpoMetaDescriptor getCpoMetaDescriptor();
+  @Override
+  public CpoMetaDescriptor getCpoMetaDescriptor() {
+    return null;  //To change body of implemented methods use File | Settings | File Templates.
+  }
 
-  public String getDataSourceName();
+  @Override
+  public String getDataSourceName() {
+    return null;  //To change body of implemented methods use File | Settings | File Templates.
+  }
 
-  public List<CpoAttribute> getCpoAttributes(String expression) throws CpoException;
+  @Override
+  public List<CpoAttribute> getCpoAttributes(String expression) throws CpoException {
+    return null;  //To change body of implemented methods use File | Settings | File Templates.
+  }
 }

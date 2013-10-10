@@ -34,7 +34,7 @@ import java.util.Properties;
  *
  * @author dberry
  */
-public class DriverDataSourceInfo extends AbstractDataSource {
+public class DriverJdbcDataSourceInfo extends AbstractJdbcDataSource {
 
   private static final int URL_CONNECTION = 1;
   private static final int URL_PROPS_CONNECTION = 2;
@@ -46,12 +46,12 @@ public class DriverDataSourceInfo extends AbstractDataSource {
   private Properties properties = null;
 
   /**
-   * Creates a DriverDataSourceInfo from a Jdbc Driver
+   * Creates a DriverJdbcDataSourceInfo from a Jdbc Driver
    *
    * @param driver The text name of the driver
    * @param url - The url that points to the database.
    */
-  public DriverDataSourceInfo(String driver, String url) throws CpoException {
+  public DriverJdbcDataSourceInfo(String driver, String url) throws CpoException {
     super(url);
     loadDriver(driver);
     connectionType = URL_CONNECTION;
@@ -59,13 +59,13 @@ public class DriverDataSourceInfo extends AbstractDataSource {
   }
 
   /**
-   * Creates a DriverDataSourceInfo from a Jdbc Driver
+   * Creates a DriverJdbcDataSourceInfo from a Jdbc Driver
    *
    * @param driver The text name of the driver
    * @param url - The url that points to the database.
    * @param properties - The connection properties for connecting to the database
    */
-  public DriverDataSourceInfo(String driver, String url, Properties properties) throws CpoException {
+  public DriverJdbcDataSourceInfo(String driver, String url, Properties properties) throws CpoException {
     super(url, properties);
     loadDriver(driver);
     connectionType = URL_PROPS_CONNECTION;
@@ -74,14 +74,14 @@ public class DriverDataSourceInfo extends AbstractDataSource {
   }
 
   /**
-   * Creates a DriverDataSourceInfo from a Jdbc Driver
+   * Creates a DriverJdbcDataSourceInfo from a Jdbc Driver
    *
    * @param driver The text name of the driver
    * @param url - The url that points to the database.
    * @param username - The username for connecting to the database
    * @param password - The password for connectinf to the database
    */
-  public DriverDataSourceInfo(String driver, String url, String username, String password) throws CpoException {
+  public DriverJdbcDataSourceInfo(String driver, String url, String username, String password) throws CpoException {
     super(url + username);
     loadDriver(driver);
     connectionType = URL_USER_PASSWORD_CONNECTION;
@@ -103,13 +103,13 @@ public class DriverDataSourceInfo extends AbstractDataSource {
   private Connection makeNewConnection() throws SQLException {
     Connection connection = null;
     switch (connectionType) {
-      case DriverDataSourceInfo.URL_CONNECTION:
+      case DriverJdbcDataSourceInfo.URL_CONNECTION:
         connection = DriverManager.getConnection(url);
         break;
-      case DriverDataSourceInfo.URL_PROPS_CONNECTION:
+      case DriverJdbcDataSourceInfo.URL_PROPS_CONNECTION:
         connection = DriverManager.getConnection(url, properties);
         break;
-      case DriverDataSourceInfo.URL_USER_PASSWORD_CONNECTION:
+      case DriverJdbcDataSourceInfo.URL_USER_PASSWORD_CONNECTION:
         connection = DriverManager.getConnection(url, username, password);
         break;
       default:

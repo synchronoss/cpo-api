@@ -28,20 +28,20 @@ import java.util.*;
 /**
  * @author dberry
  */
-public abstract class AbstractDataSource extends AbstractDataSourceInfo implements DataSource {
+public abstract class AbstractJdbcDataSource extends AbstractJdbcDataSourceInfo implements DataSource {
 
   private PrintWriter printWriter_ = null;
   private int timeout_ = 0;
 
-  public AbstractDataSource(String dataSourceName) {
+  public AbstractJdbcDataSource(String dataSourceName) {
     super(dataSourceName);
   }
 
-  public AbstractDataSource(String className, SortedMap<String, String> properties) {
+  public AbstractJdbcDataSource(String className, SortedMap<String, String> properties) {
     super(className, properties);
   }
 
-  public AbstractDataSource(String className, Properties properties) {
+  public AbstractJdbcDataSource(String className, Properties properties) {
     super(className, properties);
   }
 

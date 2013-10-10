@@ -18,26 +18,23 @@
  * A copy of the GNU Lesser General Public License may also be found at
  * http://www.gnu.org/licenses/lgpl.txt
  */
-package org.synchronoss.cpo;
+package org.synchronoss.cpo.cassandra.config;
 
-import javax.sql.DataSource;
+import com.datastax.driver.core.AuthProvider;
 
 /**
- * Interface that defines the methods needed by CPO for any class that collects DataSource info and instantiates the
- * DataSource
- *
- * @author david.berry
- *
+ * Created with IntelliJ IDEA.
+ * User: dberry
+ * Date: 10/10/13
+ * Time: 07:57 AM
+ * To change this template use File | Settings | File Templates.
  */
-public interface DataSourceInfo<T> {
+public abstract class AuthProviderFactory implements FactoryMethodName {
 
-  /**
-   * @return Returns the dataSourceName.
-   */
-  public String getDataSourceName();
+  public String getFactoryMethodName() {
+    return "createAuthProvider";
+  }
 
-  /**
-   * @return Returns the DataSource
-   */
-  public T getDataSource() throws CpoException;
+  public abstract AuthProvider createAuthProvider();
+
 }

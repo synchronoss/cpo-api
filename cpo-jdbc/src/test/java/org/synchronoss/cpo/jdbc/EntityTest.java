@@ -35,7 +35,7 @@ import java.util.List;
 public class EntityTest extends TestCase {
 
   private static final Logger logger = LoggerFactory.getLogger(EntityTest.class);
-  
+
   public EntityTest(String name) {
     super(name);
   }
@@ -55,7 +55,7 @@ public class EntityTest extends TestCase {
     try {
       CpoAdapter cpoAdapter = CpoAdapterFactory.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_CLASS);
       assertNotNull(method + "cpoAdapter is null", cpoAdapter);
-      
+
       List<CpoAttribute> attributes = cpoAdapter.getCpoAttributes("select * from lob_test");
       for (CpoAttribute attribute : attributes) {
         if (!(attribute instanceof JdbcCpoAttribute))
@@ -67,7 +67,7 @@ public class EntityTest extends TestCase {
       fail(method + e.getMessage());
     }
   }
-  
+
   private void dumpAttribute(JdbcCpoAttribute attribute) {
     logger.debug("DataName: "+attribute.getDataName());
     logger.debug("DataType: "+attribute.getDataType());
@@ -75,7 +75,7 @@ public class EntityTest extends TestCase {
     logger.debug("DbTable: "+attribute.getDbTable());
     logger.debug("JavaName: "+attribute.getJavaName());
     logger.debug("JavaType: "+attribute.getJavaType());
-    logger.debug("JavaSqlType: "+attribute.getJavaSqlType());
+    logger.debug("DataTypeMapEntry: "+attribute.getJavaSqlType());
   }
 
   @Override

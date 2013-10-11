@@ -22,7 +22,7 @@ package org.synchronoss.cpo.jdbc.meta;
 
 import org.synchronoss.cpo.CpoException;
 import org.synchronoss.cpo.exporter.MetaXmlObjectExporter;
-import org.synchronoss.cpo.jdbc.JavaSqlType;
+import org.synchronoss.cpo.meta.DataTypeMapEntry;
 import org.synchronoss.cpo.jdbc.exporter.JdbcMetaXmlObjectExporter;
 import org.synchronoss.cpo.meta.CpoMetaDescriptor;
 
@@ -35,17 +35,17 @@ public class JdbcCpoMetaDescriptor extends CpoMetaDescriptor {
   private boolean supportsCalls = false;
   private boolean supportsMillis = false;
   private boolean supportsSelect4Update = false;
-  
+
 
   public JdbcCpoMetaDescriptor(String name, boolean caseSensitive) throws CpoException {
     super(name, caseSensitive);
   }
-  
+
   @Override
   protected Class getMetaAdapterClass() throws CpoException {
     return JdbcCpoMetaAdapter.class;
   }
-  
+
   @Override
   protected MetaXmlObjectExporter getMetaXmlObjectExporter() {
     return new JdbcMetaXmlObjectExporter(this);
@@ -81,13 +81,5 @@ public class JdbcCpoMetaDescriptor extends CpoMetaDescriptor {
 
   public void setSupportsSelect4Update(boolean supportsSelect4Update) {
     this.supportsSelect4Update = supportsSelect4Update;
-  }
-  
-  public int getJavaSqlType(String javaSqlTypeName) throws CpoException {
-    return ((JdbcCpoMetaAdapter)getCpoMetaAdapter()).getJavaSqlType(javaSqlTypeName);
-  }
-  
-  public JavaSqlType<?> getJavaSqlType(int sqlType) throws CpoException {
-    return ((JdbcCpoMetaAdapter)getCpoMetaAdapter()).getJavaSqlType(sqlType);
   }
 }

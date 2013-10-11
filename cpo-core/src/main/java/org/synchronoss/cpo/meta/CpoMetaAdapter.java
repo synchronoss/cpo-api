@@ -47,9 +47,13 @@ public interface CpoMetaAdapter {
 
   public ExpressionParser getExpressionParser() throws CpoException ;
 
-  public String getJavaTypeName(CpoAttribute attribute) throws CpoException ;
-  
-  public Class getJavaTypeClass(CpoAttribute attribute) throws CpoException ;
-  
+  public String getDataTypeName(CpoAttribute attribute) throws CpoException ;
+
+  public Class getDataTypeJavaClass(CpoAttribute attribute) throws CpoException ;
+
+  public int getDataTypeInt(String dataTypeName) throws CpoException ;
+
+  public DataTypeMapEntry<?> getDataTypeMapEntry(int dataTypeInt) throws CpoException;
+
   public List<String> getAllowableDataTypes() throws CpoException ;
 }

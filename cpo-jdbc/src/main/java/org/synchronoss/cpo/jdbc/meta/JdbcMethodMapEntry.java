@@ -18,7 +18,7 @@
  * A copy of the GNU Lesser General Public License may also be found at
  * http://www.gnu.org/licenses/lgpl.txt
  */
-package org.synchronoss.cpo.jdbc;
+package org.synchronoss.cpo.jdbc.meta;
 
 import org.slf4j.*;
 import org.synchronoss.cpo.CpoException;
@@ -27,13 +27,13 @@ import java.lang.reflect.Method;
 import java.sql.*;
 
 /**
- * JavaSqlMethod is a class defines the getters and setters for JDBC specific data classes
+ * JdbcMethodMapEntry is a class defines the getters and setters for JDBC specific data classes
  *
  * @author david berry
  */
-public class JavaSqlMethod<T> extends java.lang.Object implements java.io.Serializable, java.lang.Cloneable {
+public class JdbcMethodMapEntry<T> implements java.io.Serializable, java.lang.Cloneable {
 
-  private static final Logger logger = LoggerFactory.getLogger(JavaSqlMethod.class);
+  private static final Logger logger = LoggerFactory.getLogger(JdbcMethodMapEntry.class);
   /**
    * Version Id for this class.
    */
@@ -53,10 +53,10 @@ public class JavaSqlMethod<T> extends java.lang.Object implements java.io.Serial
   private static final Class<CallableStatement> csc = CallableStatement.class;
 
   @SuppressWarnings("unused")
-  private JavaSqlMethod() {
+  private JdbcMethodMapEntry() {
   }
 
-  public JavaSqlMethod(int methodType, Class<T> javaClass, Class<T> javaSqlMethodClass, String getterName, String setterName) {
+  public JdbcMethodMapEntry(int methodType, Class<T> javaClass, Class<T> javaSqlMethodClass, String getterName, String setterName) {
 
     try {
       methodType_ = methodType;
@@ -67,7 +67,7 @@ public class JavaSqlMethod<T> extends java.lang.Object implements java.io.Serial
       setCsGetter(getterName);
       setCsSetter(setterName);
     } catch (CpoException ce) {
-      logger.error("Error In JavaSqlMethod", ce);
+      logger.error("Error In JdbcMethodMapEntry", ce);
     }
   }
 

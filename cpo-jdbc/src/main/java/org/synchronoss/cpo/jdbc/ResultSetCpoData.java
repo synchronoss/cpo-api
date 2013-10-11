@@ -23,6 +23,8 @@ package org.synchronoss.cpo.jdbc;
 import org.slf4j.*;
 import org.synchronoss.cpo.CpoException;
 import org.synchronoss.cpo.helper.ExceptionHelper;
+import org.synchronoss.cpo.jdbc.meta.JdbcMethodMapEntry;
+import org.synchronoss.cpo.jdbc.meta.JdbcMethodMapper;
 import org.synchronoss.cpo.meta.domain.CpoAttribute;
 
 import java.lang.reflect.InvocationTargetException;
@@ -45,14 +47,14 @@ public class ResultSetCpoData extends AbstractJdbcCpoData {
   @Override
   public Object invokeGetter() throws CpoException {
     Object javaObject;
-    JavaSqlMethod<?> javaSqlMethod = JavaSqlMethods.getJavaSqlMethod(getDataGetterReturnType());
-    if (javaSqlMethod == null) {
+    JdbcMethodMapEntry<?> jdbcMethodMapEntry = JdbcMethodMapper.getJavaSqlMethod(getDataGetterReturnType());
+    if (jdbcMethodMapEntry == null) {
       throw new CpoException("Error Retrieveing Jdbc Method for type: " + getDataGetterReturnType().getName());
     }
-    
+
     try {
       // Get the getter for the Callable Statement
-      javaObject = transformIn(javaSqlMethod.getRsGetter().invoke(rs, getIndex()));
+      javaObject = transformIn(jdbcMethodMapEntry.getRsGetter().invoke(rs, getIndex()));
     } catch (IllegalAccessException iae) {
       logger.debug("Error Invoking ResultSet Method: " + ExceptionHelper.getLocalizedMessage(iae));
       throw new CpoException(iae);

@@ -85,13 +85,13 @@ public class ConvertSQLToXML extends AbstractMojo {
     getLog().info("dbUrl: " + dbUrl);
     getLog().info("dbTablePrefix: " + dbTablePrefix);
     getLog().info("Class: " + dbDriver);
-    
+
     try {
       metaDescriptor = new JdbcCpoMetaDescriptor("Converter", true);
     } catch (Exception e) {
       throw new MojoExecutionException("Couldn't load the MetaDescriptor");
     }
-    
+
     try {
       Class<?> driverClass = CpoClassLoader.forName(dbDriver);
     } catch (Exception e) {
@@ -248,7 +248,7 @@ public class ConvertSQLToXML extends AbstractMojo {
           }
         }
         // figure out the java type
-        cpoAttribute.setJavaType(metaDescriptor.getJavaTypeName(cpoAttribute));
+        cpoAttribute.setJavaType(metaDescriptor.getDataTypeName(cpoAttribute));
 
         attributes.add(cpoAttribute);
       }

@@ -102,8 +102,8 @@ public class JdbcCpoAttribute extends CpoAttribute implements java.io.Serializab
         }
       }
     }
-    
+
     // TODO Revisit this. Initializing the java sql type here. Not sure that this is the right place.
-    setJavaSqlType(((JdbcCpoMetaDescriptor)metaDescriptor).getJavaSqlType(getDataType()));
+    setJavaSqlType(((JdbcCpoMetaDescriptor)metaDescriptor).getDataTypeInt(getDataType()));
   }
 }

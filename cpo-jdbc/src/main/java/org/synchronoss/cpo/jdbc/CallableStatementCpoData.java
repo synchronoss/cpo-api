@@ -23,6 +23,8 @@ package org.synchronoss.cpo.jdbc;
 import org.slf4j.*;
 import org.synchronoss.cpo.*;
 import org.synchronoss.cpo.helper.ExceptionHelper;
+import org.synchronoss.cpo.jdbc.meta.JdbcMethodMapEntry;
+import org.synchronoss.cpo.jdbc.meta.JdbcMethodMapper;
 import org.synchronoss.cpo.meta.domain.CpoAttribute;
 import org.synchronoss.cpo.transform.CpoTransform;
 import org.synchronoss.cpo.transform.jdbc.JdbcCpoTransform;
@@ -36,11 +38,11 @@ import java.sql.CallableStatement;
  * @author dberry
  */
 public class CallableStatementCpoData extends AbstractJdbcCpoData {
-  
+
   private static final Logger logger = LoggerFactory.getLogger(CallableStatementCpoData.class);
   private CallableStatement cs = null;
   JdbcCallableStatementFactory jcsf = null;
-  
+
   public CallableStatementCpoData(CallableStatement cs, CpoAttribute cpoAttribute, int index) {
     super(cpoAttribute, index);
     this.cs = cs;
@@ -54,14 +56,14 @@ public class CallableStatementCpoData extends AbstractJdbcCpoData {
   @Override
   public Object invokeGetter() throws CpoException {
     Object javaObject;
-    JavaSqlMethod<?> javaSqlMethod = JavaSqlMethods.getJavaSqlMethod(getDataGetterReturnType());
-    if (javaSqlMethod == null) {
+    JdbcMethodMapEntry<?> jdbcMethodMapEntry = JdbcMethodMapper.getJavaSqlMethod(getDataGetterReturnType());
+    if (jdbcMethodMapEntry == null) {
       throw new CpoException("Error Retrieveing Jdbc Method for type: " + getDataGetterReturnType().getName());
     }
-    
+
     try {
       // Get the getter for the Callable Statement
-      javaObject = transformIn(javaSqlMethod.getCsGetter().invoke(cs, getIndex()));
+      javaObject = transformIn(jdbcMethodMapEntry.getCsGetter().invoke(cs, getIndex()));
     } catch (IllegalAccessException iae) {
       logger.debug("Error Invoking CallableStatement Method: " + ExceptionHelper.getLocalizedMessage(iae));
       throw new CpoException(iae);
@@ -78,37 +80,37 @@ public class CallableStatementCpoData extends AbstractJdbcCpoData {
     Logger localLogger = instanceObject == null ? logger : LoggerFactory.getLogger(instanceObject.getClass());
     CpoAttribute cpoAttribute = getCpoAttribute();
     Object param = transformOut(cpoAttribute.invokeGetter(instanceObject));
-    JavaSqlMethod<?> javaSqlMethod = JavaSqlMethods.getJavaSqlMethod(getDataSetterParamType());
-    if (javaSqlMethod == null) {
+    JdbcMethodMapEntry<?> jdbcMethodMapEntry = JdbcMethodMapper.getJavaSqlMethod(getDataSetterParamType());
+    if (jdbcMethodMapEntry == null) {
       throw new CpoException("Error Retrieveing Jdbc Method for type: " + getDataSetterParamType().getName());
     }
     localLogger.info(cpoAttribute.getDataName() + "=" + param);
     try {
-      switch (javaSqlMethod.getMethodType()) {
-        case JavaSqlMethod.METHOD_TYPE_BASIC:
-          javaSqlMethod.getCsSetter().invoke(jcsf.getCallableStatement(), getIndex(), param);
+      switch (jdbcMethodMapEntry.getMethodType()) {
+        case JdbcMethodMapEntry.METHOD_TYPE_BASIC:
+          jdbcMethodMapEntry.getCsSetter().invoke(jcsf.getCallableStatement(), getIndex(), param);
           break;
-        case JavaSqlMethod.METHOD_TYPE_STREAM:
+        case JdbcMethodMapEntry.METHOD_TYPE_STREAM:
           CpoByteArrayInputStream cbais = CpoByteArrayInputStream.getCpoStream((InputStream) param);
           // Get the length of the InputStream in param
-          javaSqlMethod.getCsSetter().invoke(jcsf.getCallableStatement(), getIndex(), cbais, cbais.getLength());
+          jdbcMethodMapEntry.getCsSetter().invoke(jcsf.getCallableStatement(), getIndex(), cbais, cbais.getLength());
           break;
-        case JavaSqlMethod.METHOD_TYPE_READER:
+        case JdbcMethodMapEntry.METHOD_TYPE_READER:
           CpoCharArrayReader ccar = CpoCharArrayReader.getCpoReader((Reader) param);
           // Get the length of the Reader in param
-          javaSqlMethod.getCsSetter().invoke(jcsf.getCallableStatement(), getIndex(), ccar, ccar.getLength());
+          jdbcMethodMapEntry.getCsSetter().invoke(jcsf.getCallableStatement(), getIndex(), ccar, ccar.getLength());
           break;
       }
     } catch (Exception e) {
-      throw new CpoException("Error Invoking Jdbc Method: " + javaSqlMethod.getPsSetter().getName() + ":" + ExceptionHelper.getLocalizedMessage(e));
+      throw new CpoException("Error Invoking Jdbc Method: " + jdbcMethodMapEntry.getPsSetter().getName() + ":" + ExceptionHelper.getLocalizedMessage(e));
     }
   }
-  
+
   @Override
   public Object transformOut(Object attributeObject) throws CpoException {
     Object retObj = attributeObject;
     CpoTransform cpoTransform = getCpoAttribute().getCpoTransform();
-    
+
     if (cpoTransform != null) {
       if (cpoTransform instanceof JdbcCpoTransform) {
         retObj = ((JdbcCpoTransform)cpoTransform).transformOut(jcsf, attributeObject);

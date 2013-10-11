@@ -88,6 +88,51 @@ public abstract class AbstractCpoMetaAdapter implements CpoMetaAdapter {
     return result;
   }
 
+  @Override
+  public String getDataTypeName(CpoAttribute attribute) {
+    String clazzName = getDataTypeJavaClass(attribute).getName();
+    byte[] b = new byte[0];
+    char[] c = new char[0];
+
+    if (b.getClass().getName().equals(clazzName)) {
+      clazzName = "byte[]";
+    } else if (c.getClass().getName().equals(clazzName)) {
+      clazzName = "char[]";
+    }
+    return clazzName;
+  }
+
+  @Override
+  public Class<?> getDataTypeJavaClass(CpoAttribute attribute) {
+    Class<?> clazz = String.class;
+    DataTypeMapEntry<?> dataTypeMapEntry = getDataTypeMapper().getDataTypeMapEntry(attribute.getDataType());
+
+    if (attribute.getTransformInMethod() != null) {
+      clazz = attribute.getTransformInMethod().getReturnType();
+    } else if (dataTypeMapEntry != null) {
+      clazz = dataTypeMapEntry.getJavaClass();
+    }
+
+    return clazz;
+  }
+
+  @Override
+  public int getDataTypeInt(String dataTypeName) throws CpoException {
+    return getDataTypeMapper().getDataTypeInt(dataTypeName);
+  }
+
+  @Override
+  public DataTypeMapEntry<?> getDataTypeMapEntry(int dataTypeInt) throws CpoException {
+    return getDataTypeMapper().getDataTypeMapEntry(dataTypeInt);
+  }
+
+  @Override
+  public List<String> getAllowableDataTypes() throws CpoException {
+    return getDataTypeMapper().getDataTypeNames();
+  }
+
+  protected abstract DataTypeMapper getDataTypeMapper();
+
   protected void loadCpoMetaDataDocument(CpoMetaDataDocument metaDataDoc, boolean caseSensitive) throws CpoException {
     for (CtClass ctClass : metaDataDoc.getCpoMetaData().getCpoClassArray()) {
 
@@ -111,7 +156,7 @@ public abstract class AbstractCpoMetaAdapter implements CpoMetaAdapter {
 
     for (CtAttribute ctAttribute : ctClass.getCpoAttributeArray()) {
       CpoAttribute cpoAttribute = cpoClass.getAttributeJava(ctAttribute.getJavaName());
-      
+
       if (cpoAttribute == null) {
         cpoAttribute = createCpoAttribute();
         loadCpoAttribute(cpoAttribute, ctAttribute);
@@ -123,7 +168,7 @@ public abstract class AbstractCpoMetaAdapter implements CpoMetaAdapter {
 
     for (CtFunctionGroup ctFunctionGroup : ctClass.getCpoFunctionGroupArray()) {
       CpoFunctionGroup functionGroup = null;
-      
+
       try {
         functionGroup = cpoClass.getFunctionGroup(ctFunctionGroup.getType().toString(), ctFunctionGroup.getName());
       } catch (Exception e){
@@ -132,7 +177,7 @@ public abstract class AbstractCpoMetaAdapter implements CpoMetaAdapter {
           logger.trace(e.getLocalizedMessage());
         }
       }
-      
+
       if (functionGroup == null) {
         functionGroup = createCpoFunctionGroup();
         loadCpoFunctionGroup(functionGroup, ctFunctionGroup);
@@ -191,7 +236,7 @@ public abstract class AbstractCpoMetaAdapter implements CpoMetaAdapter {
   protected CpoClass createCpoClass(boolean caseSensitive) {
     if (caseSensitive)
       return new CpoClassCaseSensitive();
-    else 
+    else
       return new CpoClassCaseInsensitive();
   }
 
@@ -219,7 +264,7 @@ public abstract class AbstractCpoMetaAdapter implements CpoMetaAdapter {
     CpoClass oldMetaClass = classMap.put(metaClass.getName(), metaClass);
     if (oldMetaClass != null)
       logger.debug("Overwrote class: " + metaClass.getName());
-    else 
+    else
       logger.debug("Added class: " + metaClass.getName());
 
   }
@@ -231,7 +276,7 @@ public abstract class AbstractCpoMetaAdapter implements CpoMetaAdapter {
       classMap.remove(metaClass.getName());
     }
   }
-  
+
   protected void removeAllCpoClass() {
       classMap.clear();
   }

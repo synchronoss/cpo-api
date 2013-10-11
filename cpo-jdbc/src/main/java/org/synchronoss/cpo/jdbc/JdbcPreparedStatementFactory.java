@@ -31,6 +31,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.*;
 import org.synchronoss.cpo.helper.ExceptionHelper;
+import org.synchronoss.cpo.jdbc.meta.JdbcMethodMapEntry;
+import org.synchronoss.cpo.jdbc.meta.JdbcMethodMapper;
 import org.synchronoss.cpo.meta.domain.CpoArgument;
 import org.synchronoss.cpo.meta.domain.CpoClass;
 import org.synchronoss.cpo.meta.domain.CpoFunction;
@@ -333,8 +335,8 @@ public class JdbcPreparedStatementFactory implements CpoReleasible {
 
         // check to see if we are getting a cpo value object or an object that
         // can be put directly in the statement (String, BigDecimal, etc)
-        JavaSqlMethod<?> jsm = null;
-        jsm = JavaSqlMethods.getJavaSqlMethod(bindObject.getClass());
+        JdbcMethodMapEntry<?> jsm = null;
+        jsm = JdbcMethodMapper.getJavaSqlMethod(bindObject.getClass());
 
         if (jsm != null) {
           try {

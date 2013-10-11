@@ -159,12 +159,12 @@ public class CpoClassSourceGenerator implements MetaVisitor {
   public void visit(CpoAttribute cpoAttribute) {
 
     String attName = cpoAttribute.getJavaName();
-    
+
     if (cpoAttribute.getTransformClassName()!=null && cpoAttribute.getTransformInMethod()==null) {
       try {
         cpoAttribute.loadRunTimeInfo(metaDescriptor, null);
       } catch (Exception e) {
-        
+
       }
     }
 
@@ -180,8 +180,8 @@ public class CpoClassSourceGenerator implements MetaVisitor {
     }
 
     try {
-      Class<?> attClass = metaDescriptor.getJavaTypeClass(cpoAttribute);
-      String attClassName = metaDescriptor.getJavaTypeName(cpoAttribute);
+      Class<?> attClass = metaDescriptor.getDataTypeJavaClass(cpoAttribute);
+      String attClassName = metaDescriptor.getDataTypeName(cpoAttribute);
 
       // generate attribute statics
       String staticName = ATTR_PREFIX + attName.toUpperCase();
@@ -227,7 +227,7 @@ public class CpoClassSourceGenerator implements MetaVisitor {
       // toString()
       toString.append("    str.append(\"" + attName + " = \" + " + getterName + " + \"\\n\");\n");
     } catch(CpoException ce) {
-      
+
     }
   }
 

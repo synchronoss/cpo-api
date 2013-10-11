@@ -22,10 +22,10 @@ package org.synchronoss.cpo.jdbc;
 
 import org.slf4j.*;
 import org.synchronoss.cpo.*;
-import org.synchronoss.cpo.cache.CpoAdapterCache;
 import org.synchronoss.cpo.helper.ExceptionHelper;
 import org.synchronoss.cpo.jdbc.meta.JdbcCpoMetaDescriptor;
 import org.synchronoss.cpo.meta.CpoMetaDescriptor;
+import org.synchronoss.cpo.meta.DataTypeMapEntry;
 import org.synchronoss.cpo.meta.domain.*;
 
 import javax.naming.*;
@@ -2942,11 +2942,11 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
             // do nothing if this call is not supported
           }
 
-          JavaSqlType<?> javaSqlType = metaDescriptor.getJavaSqlType(rsmd.getColumnType(i));
-          attribute.setDataType(javaSqlType.getJavaSqlTypeName());
-          attribute.setJavaSqlType(javaSqlType.getJavaSqlType());
-          attribute.setJavaType(javaSqlType.getJavaClass().getName());
-          attribute.setJavaName(javaSqlType.makeJavaName(rsmd.getColumnLabel(i)));
+          DataTypeMapEntry<?> dataTypeMapEntry = metaDescriptor.getDataTypeMapEntry(rsmd.getColumnType(i));
+          attribute.setDataType(dataTypeMapEntry.getDataTypeName());
+          attribute.setJavaSqlType(dataTypeMapEntry.getDataTypeInt());
+          attribute.setJavaType(dataTypeMapEntry.getJavaClass().getName());
+          attribute.setJavaName(dataTypeMapEntry.makeJavaName(rsmd.getColumnLabel(i)));
 
           attributes.add(attribute);
         }

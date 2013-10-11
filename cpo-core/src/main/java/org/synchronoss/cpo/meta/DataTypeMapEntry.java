@@ -18,53 +18,53 @@
  * A copy of the GNU Lesser General Public License may also be found at
  * http://www.gnu.org/licenses/lgpl.txt
  */
-package org.synchronoss.cpo.jdbc;
+package org.synchronoss.cpo.meta;
 
 /**
- * JavaSqlType is a class that defines the mapping of  datasource datatypes to java types
+ * DataTypeMapEntry is a class that defines the mapping of datasource datatypes to java types
  *
  * @author david berry
  */
-public class JavaSqlType<T> extends java.lang.Object implements java.io.Serializable, java.lang.Cloneable {
+public class DataTypeMapEntry<T> implements java.io.Serializable, java.lang.Cloneable {
 
   /**
    * Version Id for this class.
    */
   private static final long serialVersionUID = 1L;
-  private int javaSqlType_ = java.sql.Types.NULL;
-  private String javaSqlTypeName_ = null;
-  private Class<T> javaClass_ = null;
+  private int dataTypeInt = Integer.MIN_VALUE;
+  private String dataTypeName = null;
+  private Class<T> javaClass = null;
 
   @SuppressWarnings("unused")
-  private JavaSqlType() {
+  private DataTypeMapEntry() {
   }
 
-  public JavaSqlType(int javaSqlType, String javaSqlTypeName, Class<T> javaClass) {
-    javaSqlType_ = javaSqlType;
-    javaSqlTypeName_ = javaSqlTypeName;
-    javaClass_ = javaClass;
+  public DataTypeMapEntry(int dataTypeInt, String dataTypeName, Class<T> javaClass) {
+    this.dataTypeInt = dataTypeInt;
+    this.dataTypeName = dataTypeName;
+    this.javaClass = javaClass;
   }
 
-  public int getJavaSqlType() {
-    return javaSqlType_;
+  public int getDataTypeInt() {
+    return dataTypeInt;
   }
 
-  public String getJavaSqlTypeName() {
-    return javaSqlTypeName_;
+  public String getDataTypeName() {
+    return dataTypeName;
   }
 
   public Class<T> getJavaClass() {
-    return javaClass_;
+    return javaClass;
   }
-  
-  public String makeJavaName(String dataName){
-    dataName = dataName.toLowerCase();
+
+  public String makeJavaName(String dataTypeName){
+    dataTypeName = dataTypeName.toLowerCase();
 
     int idx;
-    while ((idx = dataName.indexOf("_")) > 0) {
+    while ((idx = dataTypeName.indexOf("_")) > 0) {
       // remove the underscore, upper case the following character
-      dataName = dataName.substring(0, idx) + dataName.substring(idx + 1, idx + 2).toUpperCase() + dataName.substring(idx + 2);
+      dataTypeName = dataTypeName.substring(0, idx) + dataTypeName.substring(idx + 1, idx + 2).toUpperCase() + dataTypeName.substring(idx + 2);
     }
-    return dataName;
+    return dataTypeName;
   }
 }

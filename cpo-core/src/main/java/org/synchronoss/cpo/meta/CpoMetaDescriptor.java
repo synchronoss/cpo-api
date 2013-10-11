@@ -38,7 +38,6 @@ import java.util.*;
  * @author dberry
  */
 public class CpoMetaDescriptor extends CpoMetaDescriptorCache implements CpoMetaAdapter, CpoMetaExportable {
-
   private static final Logger logger = LoggerFactory.getLogger(CpoMetaDescriptor.class);
   private String name = null;
   private boolean caseSensitive = true;
@@ -57,6 +56,7 @@ public class CpoMetaDescriptor extends CpoMetaDescriptorCache implements CpoMeta
     // Lets create the metaAdapter
     try {
       Class metaAdapterClass = getMetaAdapterClass();
+      logger.debug("Creating MetaAdapter: " + metaAdapterClass.getName());
       metaAdapter = (AbstractCpoMetaAdapter)metaAdapterClass.newInstance();
       logger.debug("Created MetaAdapter: " + metaAdapterClass.getName());
     } catch (InstantiationException ie) {
@@ -112,7 +112,7 @@ public class CpoMetaDescriptor extends CpoMetaDescriptorCache implements CpoMeta
   public static void refreshDescriptorMeta(String name, List<String> metaXmls) throws CpoException {
     refreshDescriptorMeta(name,metaXmls, false);
   }
-  
+
   public static void refreshDescriptorMeta(String name, List<String> metaXmls, boolean overwrite) throws CpoException {
     CpoMetaDescriptor metaDescriptor = findCpoMetaDescriptor(name);
     if (metaDescriptor != null) {
@@ -175,6 +175,7 @@ public class CpoMetaDescriptor extends CpoMetaDescriptorCache implements CpoMeta
           Constructor<?> cons = clazz.getConstructor(String.class, boolean.class);
           logger.debug("Creating the instance");
           metaDescriptor = (CpoMetaDescriptor)cons.newInstance(name, caseSensitive);
+          logger.debug("Adding the MetaDescriptor");
           addCpoMetaDescriptor(metaDescriptor);
         } else if (!metaDescriptor.getClass().getName().equals(metaDataDoc.getCpoMetaData().getMetaDescriptor())) {
           throw new CpoException("Error processing multiple metaXml files. All files must have the same CpoMetaDescriptor class name.");
@@ -258,13 +259,23 @@ public class CpoMetaDescriptor extends CpoMetaDescriptorCache implements CpoMeta
   }
 
   @Override
-  public String getJavaTypeName(CpoAttribute attribute) throws CpoException {
-    return getCpoMetaAdapter().getJavaTypeName(attribute);
+  public String getDataTypeName(CpoAttribute attribute) throws CpoException {
+    return getCpoMetaAdapter().getDataTypeName(attribute);
   }
 
   @Override
-  public Class getJavaTypeClass(CpoAttribute attribute) throws CpoException {
-    return getCpoMetaAdapter().getJavaTypeClass(attribute);
+  public Class getDataTypeJavaClass(CpoAttribute attribute) throws CpoException {
+    return getCpoMetaAdapter().getDataTypeJavaClass(attribute);
+  }
+
+  @Override
+  public int getDataTypeInt(String dataTypeName) throws CpoException {
+    return getCpoMetaAdapter().getDataTypeInt(dataTypeName);
+  }
+
+  @Override
+  public DataTypeMapEntry<?> getDataTypeMapEntry(int dataTypeInt) throws CpoException {
+    return getCpoMetaAdapter().getDataTypeMapEntry(dataTypeInt);
   }
 
   @Override

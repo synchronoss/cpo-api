@@ -18,10 +18,9 @@
  * A copy of the GNU Lesser General Public License may also be found at
  * http://www.gnu.org/licenses/lgpl.txt
  */
-package org.synchronoss.cpo.jdbc.parser;
+package org.synchronoss.cpo.parser;
 
 import org.slf4j.*;
-import org.synchronoss.cpo.parser.ExpressionParser;
 
 import java.io.StringReader;
 import java.text.ParseException;
@@ -31,16 +30,16 @@ import java.util.*;
  * @author Michael Bellomo
  * @since 10/20/2008
  */
-public class SQLExpressionParser implements ExpressionParser {
+public class BoundExpressionParser implements ExpressionParser {
 
-  private static final Logger logger = LoggerFactory.getLogger(SQLExpressionParser.class);
+  private static final Logger logger = LoggerFactory.getLogger(BoundExpressionParser.class);
 
   private final static String COMPARE_CHARS = " =<>!()";
   private final static String SEPARATOR_CHARS = " .,()\n";
 
   private String expression;
 
-  public SQLExpressionParser() {
+  public BoundExpressionParser() {
   }
 
   @Override
@@ -69,7 +68,7 @@ public class SQLExpressionParser implements ExpressionParser {
       StringReader reader = new StringReader(expression);
 
       try {
-        
+
         int idx = 0;
         int rc = -1;
         boolean inDoubleQuotes = false;
@@ -167,7 +166,7 @@ public class SQLExpressionParser implements ExpressionParser {
           colList.add(cols[i].trim());
         } else if (val.contains("?")) {
           // more than just a ?, parse the val
-          ExpressionParser qp = new SQLExpressionParser();
+          ExpressionParser qp = new BoundExpressionParser();
           qp.setExpression(val);
           colList.addAll(qp.parse());
         }

@@ -39,7 +39,8 @@ public class CpoAttribute extends CpoAttributeBean {
   private String setterName_ = null;
   private Method getter_ = null;
   private Method setter_ = null;
-  
+  private int dataTypeInt = Integer.MIN_VALUE;
+
   //Transform attributes
   private CpoTransform cpoTransform = null;
   private Method transformInMethod = null;
@@ -63,11 +64,11 @@ public class CpoAttribute extends CpoAttributeBean {
   public Class getSetterParamType() {
     return getter_.getReturnType();
   }
- 
+
   public Class getGetterReturnType() {
     return getter_.getReturnType();
    }
-  
+
   protected Method getGetter() {
     return getter_;
   }
@@ -99,6 +100,15 @@ public class CpoAttribute extends CpoAttributeBean {
   protected void setSetterName(String setterName) {
     setterName_ = setterName;
   }
+
+  public void setDataTypeInt(int dataTypeInt) {
+    this.dataTypeInt = dataTypeInt;
+  }
+
+  public int getDataTypeInt() {
+    return this.dataTypeInt;
+  }
+
 
   protected List<Method> findMethods(Class clazz, String methodName, int args, boolean hasReturn) throws CpoException {
     List<Method> retMethods = new ArrayList<Method>();
@@ -141,7 +151,7 @@ public class CpoAttribute extends CpoAttributeBean {
     } catch (InvocationTargetException ite) {
       localLogger.debug("Error Invoking Setter Method: " + ExceptionHelper.getLocalizedMessage(ite));
     }
-    
+
   }
 
   public Object invokeGetter(Object obj) throws CpoException {

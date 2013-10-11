@@ -21,14 +21,16 @@
 
 package org.synchronoss.cpo.cassandra;
 
-import com.datastax.driver.core.Cluster;
+import com.datastax.driver.core.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.*;
 import org.synchronoss.cpo.cassandra.meta.CassandraCpoMetaDescriptor;
+import org.synchronoss.cpo.helper.ExceptionHelper;
 import org.synchronoss.cpo.meta.CpoMetaDescriptor;
+import org.synchronoss.cpo.meta.DataTypeMapEntry;
 import org.synchronoss.cpo.meta.domain.CpoAttribute;
-
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -40,12 +42,14 @@ import java.util.List;
  * Time: 07:38 AM
  * To change this template use File | Settings | File Templates.
  */
-public class CassandraCpoAdapter extends CpoBaseAdapter<Cluster> {
+public class CassandraCpoAdapter extends CpoBaseAdapter<ClusterDataSource> {
   private static final Logger logger = LoggerFactory.getLogger(CassandraCpoAdapter.class);
   /**
    * CpoMetaDescriptor allows you to get the meta data for a class.
    */
   private CassandraCpoMetaDescriptor metaDescriptor = null;
+
+  private boolean invalidReadSession = false;
 
   /**
    * Creates a CassandraCpoAdapter.
@@ -55,7 +59,7 @@ public class CassandraCpoAdapter extends CpoBaseAdapter<Cluster> {
    * @throws org.synchronoss.cpo.CpoException
    *          exception
    */
-  protected CassandraCpoAdapter(CassandraCpoMetaDescriptor metaDescriptor, DataSourceInfo<Cluster> jdsiTrx) throws CpoException {
+  protected CassandraCpoAdapter(CassandraCpoMetaDescriptor metaDescriptor, DataSourceInfo<ClusterDataSource> jdsiTrx) throws CpoException {
 
     this.metaDescriptor = metaDescriptor;
     setWriteDataSource(jdsiTrx.getDataSource());
@@ -72,7 +76,7 @@ public class CassandraCpoAdapter extends CpoBaseAdapter<Cluster> {
    * @throws org.synchronoss.cpo.CpoException
    *          exception
    */
-  protected CassandraCpoAdapter(CassandraCpoMetaDescriptor metaDescriptor, DataSourceInfo<Cluster> jdsiWrite, DataSourceInfo<Cluster> jdsiRead) throws CpoException {
+  protected CassandraCpoAdapter(CassandraCpoMetaDescriptor metaDescriptor, DataSourceInfo<ClusterDataSource> jdsiWrite, DataSourceInfo<ClusterDataSource> jdsiRead) throws CpoException {
     this.metaDescriptor = metaDescriptor;
     setWriteDataSource(jdsiWrite.getDataSource());
     setReadDataSource(jdsiRead.getDataSource());
@@ -1916,16 +1920,92 @@ public class CassandraCpoAdapter extends CpoBaseAdapter<Cluster> {
    */
   @Override
   public CpoTrxAdapter getCpoTrxAdapter() throws CpoException {
-    return null;  //To change body of implemented methods use File | Settings | File Templates.
+    throw new UnsupportedOperationException();
   }
 
   @Override
   public CpoMetaDescriptor getCpoMetaDescriptor() {
-    return null;  //To change body of implemented methods use File | Settings | File Templates.
+    return metaDescriptor;
   }
 
+  /**
+   * DOCUMENT ME!
+   *
+   * @return DOCUMENT ME!
+   * @throws CpoException DOCUMENT ME!
+   */
+  protected Session getReadSession() throws CpoException {
+    Session session;
+
+    try {
+      if (!(invalidReadSession)) {
+        session = getReadDataSource().getSession();
+      } else {
+        session = getWriteDataSource().getSession();
+      }
+    } catch (Exception e) {
+      invalidReadSession = true;
+
+      String msg = "getReadConnection(): failed";
+      logger.error(msg, e);
+
+      session = getWriteSession();
+    }
+
+    return session;
+  }
+
+  /**
+   * DOCUMENT ME!
+   *
+   * @return DOCUMENT ME!
+   * @throws CpoException DOCUMENT ME!
+   */
+  protected Session getWriteSession() throws CpoException {
+    Session session;
+
+    try {
+      session = getWriteDataSource().getSession();
+    } catch (Throwable t) {
+      String msg = "getWriteConnection(): failed";
+      logger.error(msg, t);
+      throw new CpoException(msg, t);
+    }
+
+    return session;
+  }
   @Override
   public List<CpoAttribute> getCpoAttributes(String expression) throws CpoException {
-    return null;  //To change body of implemented methods use File | Settings | File Templates.
+    List<CpoAttribute> attributes = new ArrayList<CpoAttribute>();
+
+    if (expression != null && !expression.isEmpty()) {
+      Session session;
+      PreparedStatement ps;
+      BoundStatement bs;
+      ResultSet rs;
+      try {
+        session = getWriteSession();
+        ps = session.prepare(expression);
+        bs = ps.bind();
+        rs = session.execute(bs);
+        ColumnDefinitions columnDefs = rs.getColumnDefinitions();
+        for (int i = 0; i < columnDefs.size(); i++) {
+          CpoAttribute attribute = new CpoAttribute();
+          attribute.setDataName(columnDefs.getName(i));
+
+          DataTypeMapEntry<?> dataTypeMapEntry = metaDescriptor.getDataTypeMapEntry(columnDefs.getType(i).getName().ordinal());
+          attribute.setDataType(dataTypeMapEntry.getDataTypeName());
+          attribute.setDataTypeInt(dataTypeMapEntry.getDataTypeInt());
+          attribute.setJavaType(dataTypeMapEntry.getJavaClass().getName());
+          attribute.setJavaName(dataTypeMapEntry.makeJavaName(columnDefs.getName(i)));
+
+          attributes.add(attribute);
+        }
+      } catch (Throwable t) {
+        logger.error(ExceptionHelper.getLocalizedMessage(t), t);
+        throw new CpoException("Error Generating Attributes", t);
+      }
+    }
+    return attributes;
   }
 }

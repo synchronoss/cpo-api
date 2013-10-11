@@ -2944,7 +2944,7 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
 
           DataTypeMapEntry<?> dataTypeMapEntry = metaDescriptor.getDataTypeMapEntry(rsmd.getColumnType(i));
           attribute.setDataType(dataTypeMapEntry.getDataTypeName());
-          attribute.setJavaSqlType(dataTypeMapEntry.getDataTypeInt());
+          attribute.setDataTypeInt(dataTypeMapEntry.getDataTypeInt());
           attribute.setJavaType(dataTypeMapEntry.getJavaClass().getName());
           attribute.setJavaName(dataTypeMapEntry.makeJavaName(rsmd.getColumnLabel(i)));
 

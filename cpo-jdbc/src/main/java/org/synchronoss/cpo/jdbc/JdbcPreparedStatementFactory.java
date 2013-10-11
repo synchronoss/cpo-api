@@ -111,7 +111,7 @@ public class JdbcPreparedStatementFactory implements CpoReleasible {
    *
    * @param cpoClass DOCUMENT ME!
    * @param sql DOCUMENT ME!
-   * @param where DOCUMENT ME!
+   * @param wheres DOCUMENT ME!
    * @param orderBy DOCUMENT ME!
    *
    * @return DOCUMENT ME!

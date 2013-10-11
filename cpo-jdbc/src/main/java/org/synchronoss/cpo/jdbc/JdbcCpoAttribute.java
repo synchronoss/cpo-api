@@ -44,7 +44,6 @@ public class JdbcCpoAttribute extends CpoAttribute implements java.io.Serializab
   private static final long serialVersionUID = 1L;
   private String dbTable_ = null;
   private String dbColumn_ = null;
-  private int javaSqlType_ = Types.NULL;
   //Transform attributes
   private JdbcCpoTransform jdbcTransform = null;
   private Method transformPSOutMethod = null;
@@ -67,15 +66,6 @@ public class JdbcCpoAttribute extends CpoAttribute implements java.io.Serializab
 
   public String getDbColumn() {
     return dbColumn_;
-  }
-
-  protected void setJavaSqlType(int type) {
-    javaSqlType_ = type;
-
-  }
-
-  protected int getJavaSqlType() {
-    return this.javaSqlType_;
   }
 
 //  private void dumpMethod(Method m) {
@@ -104,6 +94,6 @@ public class JdbcCpoAttribute extends CpoAttribute implements java.io.Serializab
     }
 
     // TODO Revisit this. Initializing the java sql type here. Not sure that this is the right place.
-    setJavaSqlType(((JdbcCpoMetaDescriptor)metaDescriptor).getDataTypeInt(getDataType()));
+    setDataTypeInt(metaDescriptor.getDataTypeInt(getDataType()));
   }
 }

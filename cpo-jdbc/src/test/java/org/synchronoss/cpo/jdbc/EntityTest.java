@@ -75,7 +75,7 @@ public class EntityTest extends TestCase {
     logger.debug("DbTable: "+attribute.getDbTable());
     logger.debug("JavaName: "+attribute.getJavaName());
     logger.debug("JavaType: "+attribute.getJavaType());
-    logger.debug("DataTypeMapEntry: "+attribute.getJavaSqlType());
+    logger.debug("DataTypeMapEntry: "+attribute.getDataTypeInt());
   }
 
   @Override

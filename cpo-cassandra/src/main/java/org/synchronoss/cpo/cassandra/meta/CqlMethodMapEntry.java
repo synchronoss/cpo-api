@@ -41,6 +41,10 @@ public class CqlMethodMapEntry<T> implements java.io.Serializable, Cloneable {
    * Version Id for this class.
    */
   private static final long serialVersionUID = 1L;
+  public static final int METHOD_TYPE_BASIC = 0;
+  public static final int METHOD_TYPE_ONE = 1;
+  public static final int METHOD_TYPE_TWO = 2;
+
   private Class<T> javaClass_ = null;
   private Class<T> javaSqlMethodClass_ = null;
   private Method rsGetter_ = null;
@@ -55,7 +59,7 @@ public class CqlMethodMapEntry<T> implements java.io.Serializable, Cloneable {
   private CqlMethodMapEntry() {
   }
 
-  public CqlMethodMapEntry(Class<T> javaClass, Class<T> javaSqlMethodClass, String getterName, String setterName) {
+  public CqlMethodMapEntry(int methodType, Class<T> javaClass, Class<T> javaSqlMethodClass, String getterName, String setterName) {
 
     try {
       this.javaClass_ = javaClass;

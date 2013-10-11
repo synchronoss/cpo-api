@@ -91,11 +91,11 @@ public class JdbcCallableStatementFactory implements CpoReleasible {
         }
 
         if (jdbcArgument.isOutParameter()) {
-          localLogger.debug("Setting OUT parameter " + j + " as Type " + attribute.getJavaSqlType());
+          localLogger.debug("Setting OUT parameter " + j + " as Type " + attribute.getDataTypeInt());
           if (jdbcArgument.getTypeInfo()!=null)
-            cstmt.registerOutParameter(j, attribute.getJavaSqlType(), jdbcArgument.getTypeInfo());
-          else 
-            cstmt.registerOutParameter(j, attribute.getJavaSqlType());
+            cstmt.registerOutParameter(j, attribute.getDataTypeInt(), jdbcArgument.getTypeInfo());
+          else
+            cstmt.registerOutParameter(j, attribute.getDataTypeInt());
         }
         j++;
       }

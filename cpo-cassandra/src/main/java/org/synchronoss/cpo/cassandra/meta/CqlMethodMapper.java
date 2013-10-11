@@ -45,26 +45,26 @@ public class CqlMethodMapper implements Serializable, Cloneable {
   private static final long serialVersionUID = 1L;
   // JDK 1.4.2 Values
   private static final CqlMethodMapEntry<?>[] JDBC_METHOD_MAP_ENTRies = {
-    new CqlMethodMapEntry<Boolean>(boolean.class, boolean.class, "getBoolean", "setBoolean"),
-    new CqlMethodMapEntry<Boolean>(Boolean.class, boolean.class, "getBoolean", "setBoolean"),
-    new CqlMethodMapEntry<ByteBuffer>(ByteBuffer.class, ByteBuffer.class, "getBytes", "setBytes"),
-    new CqlMethodMapEntry<Date>(Date.class, Date.class, "getDate", "setDate"),
-    new CqlMethodMapEntry<BigDecimal>(BigDecimal.class, BigDecimal.class, "getDecimal", "setDecimal"),
-    new CqlMethodMapEntry<Double>(double.class, double.class, "getDouble", "setDouble"),
-    new CqlMethodMapEntry<Double>(Double.class, double.class, "getDouble", "setDouble"),
-    new CqlMethodMapEntry<Float>(float.class, float.class, "getFloat", "setFloat"),
-    new CqlMethodMapEntry<Float>(Float.class, float.class, "getFloat", "setFloat"),
-    new CqlMethodMapEntry<InetAddress>(InetAddress.class, InetAddress.class, "getInet", "setInet"),
-    new CqlMethodMapEntry<Integer>(int.class, int.class, "getInt", "setInt"),
-    new CqlMethodMapEntry<Integer>(Integer.class, int.class, "getInt", "setInt"),
-    new CqlMethodMapEntry<List>(List.class, List.class, "getList", "setList"),
-    new CqlMethodMapEntry<Long>(long.class, long.class, "getLong", "setLong"),
-    new CqlMethodMapEntry<Long>(Long.class, long.class, "getLong", "setLong"),
-    new CqlMethodMapEntry<Map>(Map.class, Map.class, "getMap", "setMap"),
-    new CqlMethodMapEntry<Set>(Set.class, Set.class, "getSet", "setSet"),
-    new CqlMethodMapEntry<String>(String.class, String.class, "getString", "setString"),
-    new CqlMethodMapEntry<UUID>(UUID.class, UUID.class, "getUUID", "setUUID"),
-    new CqlMethodMapEntry<BigInteger>(BigInteger.class, BigInteger.class, "getVarint", "setVarint")
+    new CqlMethodMapEntry<Boolean>(CqlMethodMapEntry.METHOD_TYPE_BASIC, boolean.class, boolean.class, "getBoolean", "setBoolean"),
+    new CqlMethodMapEntry<Boolean>(CqlMethodMapEntry.METHOD_TYPE_BASIC, Boolean.class, boolean.class, "getBoolean", "setBoolean"),
+    new CqlMethodMapEntry<ByteBuffer>(CqlMethodMapEntry.METHOD_TYPE_BASIC, ByteBuffer.class, ByteBuffer.class, "getBytes", "setBytes"),
+    new CqlMethodMapEntry<Date>(CqlMethodMapEntry.METHOD_TYPE_BASIC, Date.class, Date.class, "getDate", "setDate"),
+    new CqlMethodMapEntry<BigDecimal>(CqlMethodMapEntry.METHOD_TYPE_BASIC, BigDecimal.class, BigDecimal.class, "getDecimal", "setDecimal"),
+    new CqlMethodMapEntry<Double>(CqlMethodMapEntry.METHOD_TYPE_BASIC, double.class, double.class, "getDouble", "setDouble"),
+    new CqlMethodMapEntry<Double>(CqlMethodMapEntry.METHOD_TYPE_BASIC, Double.class, double.class, "getDouble", "setDouble"),
+    new CqlMethodMapEntry<Float>(CqlMethodMapEntry.METHOD_TYPE_BASIC, float.class, float.class, "getFloat", "setFloat"),
+    new CqlMethodMapEntry<Float>(CqlMethodMapEntry.METHOD_TYPE_BASIC, Float.class, float.class, "getFloat", "setFloat"),
+    new CqlMethodMapEntry<InetAddress>(CqlMethodMapEntry.METHOD_TYPE_BASIC, InetAddress.class, InetAddress.class, "getInet", "setInet"),
+    new CqlMethodMapEntry<Integer>(CqlMethodMapEntry.METHOD_TYPE_BASIC, int.class, int.class, "getInt", "setInt"),
+    new CqlMethodMapEntry<Integer>(CqlMethodMapEntry.METHOD_TYPE_BASIC, Integer.class, int.class, "getInt", "setInt"),
+    new CqlMethodMapEntry<List>(CqlMethodMapEntry.METHOD_TYPE_ONE, List.class, List.class, "getList", "setList"),
+    new CqlMethodMapEntry<Long>(CqlMethodMapEntry.METHOD_TYPE_BASIC, long.class, long.class, "getLong", "setLong"),
+    new CqlMethodMapEntry<Long>(CqlMethodMapEntry.METHOD_TYPE_BASIC, Long.class, long.class, "getLong", "setLong"),
+    new CqlMethodMapEntry<Map>(CqlMethodMapEntry.METHOD_TYPE_TWO, Map.class, Map.class, "getMap", "setMap"),
+    new CqlMethodMapEntry<Set>(CqlMethodMapEntry.METHOD_TYPE_TWO, Set.class, Set.class, "getSet", "setSet"),
+    new CqlMethodMapEntry<String>(CqlMethodMapEntry.METHOD_TYPE_BASIC, String.class, String.class, "getString", "setString"),
+    new CqlMethodMapEntry<UUID>(CqlMethodMapEntry.METHOD_TYPE_BASIC, UUID.class, UUID.class, "getUUID", "setUUID"),
+    new CqlMethodMapEntry<BigInteger>(CqlMethodMapEntry.METHOD_TYPE_BASIC, BigInteger.class, BigInteger.class, "getVarint", "setVarint")
   };
 
   private static HashMap<Class<?>, CqlMethodMapEntry<?>> cqlMethodMap = null;

@@ -18,34 +18,39 @@
  * A copy of the GNU Lesser General Public License may also be found at
  * http://www.gnu.org/licenses/lgpl.txt
  */
-package org.synchronoss.cpo.cassandra.meta;
 
-import org.synchronoss.cpo.CpoException;
-import org.synchronoss.cpo.cassandra.exporter.CassandraMetaXmlObjectExporter;
-import org.synchronoss.cpo.exporter.MetaXmlObjectExporter;
-import org.synchronoss.cpo.meta.CpoMetaDescriptor;
+package org.synchronoss.cpo.cassandra;
+
+import com.datastax.driver.core.Cluster;
+import com.datastax.driver.core.Session;
 
 /**
  * Created with IntelliJ IDEA.
  * User: dberry
- * Date: 9/10/13
- * Time: 07:56 AM
+ * Date: 11/10/13
+ * Time: 13:44 PM
  * To change this template use File | Settings | File Templates.
  */
-public class CassandraCpoMetaDescriptor extends CpoMetaDescriptor {
+public class ClusterDataSource {
+  private Cluster cluster = null;
+  private String keySpace = null;
+  private Session session = null;
 
-  public CassandraCpoMetaDescriptor(String name, boolean caseSensitive) throws CpoException {
-    super(name, caseSensitive);
+  private ClusterDataSource(){
   }
 
-  @Override
-  protected Class getMetaAdapterClass() throws CpoException {
-    return CassandraCpoMetaAdapter.class;
+  public ClusterDataSource(Cluster cluster, String keySpace){
+    this.cluster=cluster;
+    this.keySpace=keySpace;
+
+    if (cluster==null)
+      throw new IllegalArgumentException("Cluster cannot be null");
+    if (keySpace==null)
+      throw new IllegalArgumentException("KeySpace cannot be null");
+    session = cluster.connect(keySpace);
   }
 
-  @Override
-  protected MetaXmlObjectExporter getMetaXmlObjectExporter() {
-    return new CassandraMetaXmlObjectExporter(this);
+  Session getSession() {
+    return session;
   }
-
 }

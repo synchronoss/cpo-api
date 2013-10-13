@@ -46,6 +46,13 @@
 
   <xs:complexType name="ctCassandraReadWriteConfig">
     <xs:sequence>
+      <xs:element name="keySpace" type="xs:string" minOccurs="1">
+        <xs:annotation>
+          <xs:documentation>
+            This is the keyspace in the cluster that this config is pointing at.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
       <xs:element name="contactPoint" type="xs:string" maxOccurs="unbounded">
         <xs:annotation>
           <xs:documentation>

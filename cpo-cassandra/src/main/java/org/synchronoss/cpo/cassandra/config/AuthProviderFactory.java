@@ -20,7 +20,7 @@
  */
 package org.synchronoss.cpo.cassandra.config;
 
-import com.datastax.driver.core.AuthProvider;
+//import com.datastax.driver.core.AuthProvider;
 
 /**
  * Created with IntelliJ IDEA.
@@ -35,6 +35,6 @@ public abstract class AuthProviderFactory implements FactoryMethodName {
     return "createAuthProvider";
   }
 
-  public abstract AuthProvider createAuthProvider();
+//  public abstract AuthProvider createAuthProvider();
 
 }

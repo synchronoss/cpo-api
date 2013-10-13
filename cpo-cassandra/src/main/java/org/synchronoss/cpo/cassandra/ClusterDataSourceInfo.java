@@ -38,9 +38,10 @@ import java.util.Collection;
  * Time: 12:44 PM
  * To change this template use File | Settings | File Templates.
  */
-public class ClusterDataSourceInfo extends AbstractDataSourceInfo<Cluster>{
+public class ClusterDataSourceInfo extends AbstractDataSourceInfo<ClusterDataSource>{
   private static final Logger logger = LoggerFactory.getLogger(ClusterDataSourceInfo.class);
   private String[] contactPoints;
+  private String keySpace;
   private String clusterName;
   private Integer port;
   private LoadBalancingPolicy loadBalancingPolicy;
@@ -49,7 +50,7 @@ public class ClusterDataSourceInfo extends AbstractDataSourceInfo<Cluster>{
   private boolean credentials;
   private String userName;
   private String password;
-  private AuthProvider authProvider;
+//  private AuthProvider authProvider;
   private ProtocolOptions.Compression compressionType;
   private Boolean useMetrics;
   private SSLOptions sslOptions;
@@ -57,7 +58,14 @@ public class ClusterDataSourceInfo extends AbstractDataSourceInfo<Cluster>{
   private Boolean useJmxReporting;
   private PoolingOptions poolingOptions;
   private SocketOptions socketOptions;
-  private QueryOptions queryOptions;
+//  private QueryOptions queryOptions;
+
+  public ClusterDataSourceInfo(String clusterName, String keySpace, String[] contactPoints) {
+    super(buildDataSourceName(clusterName, keySpace, contactPoints));
+    this.keySpace=keySpace;
+    this.clusterName=clusterName;
+    this.contactPoints=contactPoints;
+  }
 
   public String getClusterName() {
     return clusterName;
@@ -65,6 +73,10 @@ public class ClusterDataSourceInfo extends AbstractDataSourceInfo<Cluster>{
 
   public void setClusterName(String clusterName) {
     this.clusterName = clusterName;
+  }
+
+  public String getKeySpace() {
+    return keySpace;
   }
 
   public int getPort() {
@@ -123,13 +135,13 @@ public class ClusterDataSourceInfo extends AbstractDataSourceInfo<Cluster>{
     this.password = password;
   }
 
-  public AuthProvider getAuthProvider() {
-    return authProvider;
-  }
-
-  public void setAuthProvider(AuthProvider authProvider) {
-    this.authProvider = authProvider;
-  }
+//  public AuthProvider getAuthProvider() {
+//    return authProvider;
+//  }
+//
+//  public void setAuthProvider(AuthProvider authProvider) {
+//    this.authProvider = authProvider;
+//  }
 
   public ProtocolOptions.Compression getCompressionType() {
     return compressionType;
@@ -187,22 +199,16 @@ public class ClusterDataSourceInfo extends AbstractDataSourceInfo<Cluster>{
     this.socketOptions = socketOptions;
   }
 
-  public QueryOptions getQueryOptions() {
-    return queryOptions;
-  }
-
-  public void setQueryOptions(QueryOptions queryOptions) {
-    this.queryOptions = queryOptions;
-  }
-
-  public ClusterDataSourceInfo(String clusterName, String[] contactPoints) {
-    super(buildDataSourceName(clusterName, contactPoints));
-    this.clusterName=clusterName;
-    this.contactPoints=contactPoints;
-  }
+//  public QueryOptions getQueryOptions() {
+//    return queryOptions;
+//  }
+//
+//  public void setQueryOptions(QueryOptions queryOptions) {
+//    this.queryOptions = queryOptions;
+//  }
 
   @Override
-  protected Cluster createDataSource() throws CpoException {
+  protected ClusterDataSource createDataSource() throws CpoException {
     Cluster.Builder clusterBuilder = Cluster.builder();
 
     // add the contact points
@@ -210,7 +216,7 @@ public class ClusterDataSourceInfo extends AbstractDataSourceInfo<Cluster>{
       clusterBuilder.addContactPoint(s);
 
     // add clusterName
-      clusterBuilder.withClusterName(clusterName);
+//      clusterBuilder.withClusterName(clusterName);
 
     // add port
     if (port != null)
@@ -233,8 +239,8 @@ public class ClusterDataSourceInfo extends AbstractDataSourceInfo<Cluster>{
       clusterBuilder.withCredentials(userName, password);
 
     // add AuthProvider
-    if (authProvider != null)
-      clusterBuilder.withAuthProvider(authProvider);
+//    if (authProvider != null)
+//      clusterBuilder.withAuthProvider(authProvider);
 
     // add Compression
     if (compressionType != null)
@@ -249,31 +255,32 @@ public class ClusterDataSourceInfo extends AbstractDataSourceInfo<Cluster>{
       clusterBuilder.withSSL(sslOptions);
 
     // add Listeners
-    if (listeners!=null && !listeners.isEmpty() && listeners.size()>0)
-      clusterBuilder.withInitialListeners(listeners);
+//    if (listeners!=null && !listeners.isEmpty() && listeners.size()>0)
+//      clusterBuilder.withInitialListeners(listeners);
 
     // add JMX Reporting
     if (useJmxReporting != null && !useJmxReporting)
       clusterBuilder.withoutJMXReporting();
 
     // add pooling options
-    if (poolingOptions != null)
-      clusterBuilder.withPoolingOptions(poolingOptions);
+//    if (poolingOptions != null)
+//      clusterBuilder.withPoolingOptions(poolingOptions);
 
     // add socket options
-    if (socketOptions != null)
-      clusterBuilder.withSocketOptions(socketOptions);
+//    if (socketOptions != null)
+//      clusterBuilder.withSocketOptions(socketOptions);
 
     // add query options
-    if (queryOptions != null)
-      clusterBuilder.withQueryOptions(queryOptions);
+//    if (queryOptions != null)
+//      clusterBuilder.withQueryOptions(queryOptions);
 
-    return clusterBuilder.build();
+    return new ClusterDataSource(clusterBuilder.build(), keySpace);
   }
 
-  private static String buildDataSourceName(String clusterName, String[] contactPoints) {
+  private static String buildDataSourceName(String clusterName, String keySpace, String[] contactPoints) {
     StringBuilder sb = new StringBuilder();
     sb.append(clusterName);
+    sb.append(keySpace);
     for (String s : contactPoints)
       sb.append(s);
     logger.debug("DatasourceName="+sb.toString());

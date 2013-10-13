@@ -20,7 +20,7 @@
  */
 package org.synchronoss.cpo.cassandra.config;
 
-import com.datastax.driver.core.QueryOptions;
+//import com.datastax.driver.core.QueryOptions;
 
 /**
  * Created with IntelliJ IDEA.
@@ -35,5 +35,5 @@ public abstract class QueryOptionsFactory implements FactoryMethodName {
     return "createQueryOptions";
   }
 
-  public abstract QueryOptions createQueryOptions();
+//  public abstract QueryOptions createQueryOptions();
 }

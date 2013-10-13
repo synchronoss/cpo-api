@@ -79,7 +79,7 @@ public class CassandraCpoConfigProcessor implements CpoConfigProcessor {
   }
 
   private ClusterDataSourceInfo buildDataSourceInfo(String dataConfigName, CtCassandraReadWriteConfig readWriteConfig) throws CpoException {
-    ClusterDataSourceInfo clusterInfo = new ClusterDataSourceInfo(dataConfigName, readWriteConfig.getContactPointArray());
+    ClusterDataSourceInfo clusterInfo = new ClusterDataSourceInfo(dataConfigName, readWriteConfig.getKeySpace(), readWriteConfig.getContactPointArray());
 
     // add clusterName
     if(readWriteConfig.isSetClusterName())
@@ -110,8 +110,8 @@ public class CassandraCpoConfigProcessor implements CpoConfigProcessor {
     }
 
     // add AuthProvider
-    if (readWriteConfig.isSetAuthProvider())
-      clusterInfo.setAuthProvider(new ConfigInstantiator<AuthProvider>().instantiate(readWriteConfig.getAuthProvider()));
+//    if (readWriteConfig.isSetAuthProvider())
+//      clusterInfo.setAuthProvider(new ConfigInstantiator<AuthProvider>().instantiate(readWriteConfig.getAuthProvider()));
 
     // add Compression
     if (readWriteConfig.isSetCompression())
@@ -146,9 +146,9 @@ public class CassandraCpoConfigProcessor implements CpoConfigProcessor {
     if (readWriteConfig.isSetSocketOptions())
       clusterInfo.setSocketOptions(new ConfigInstantiator<SocketOptions>().instantiate(readWriteConfig.getSocketOptions()));
 
-    // add query options
-    if (readWriteConfig.isSetQueryOptions())
-      clusterInfo.setQueryOptions(new ConfigInstantiator<QueryOptions>().instantiate(readWriteConfig.getQueryOptions()));
+    // TODO: Add back in when add query options
+//    if (readWriteConfig.isSetQueryOptions())
+//      clusterInfo.setQueryOptions(new ConfigInstantiator<QueryOptions>().instantiate(readWriteConfig.getQueryOptions()));
 
 
     logger.debug("Created DataSourceInfo: " + clusterInfo);

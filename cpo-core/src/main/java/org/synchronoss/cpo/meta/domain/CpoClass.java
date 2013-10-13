@@ -22,12 +22,11 @@ package org.synchronoss.cpo.meta.domain;
 
 import org.slf4j.*;
 import org.synchronoss.cpo.*;
-import org.synchronoss.cpo.helper.ExceptionHelper;
+import org.synchronoss.cpo.helper.*;
 import org.synchronoss.cpo.meta.CpoMetaDescriptor;
 import org.synchronoss.cpo.meta.bean.CpoClassBean;
 
 import java.util.*;
-import org.synchronoss.cpo.helper.CpoClassLoader;
 
 public abstract class CpoClass extends CpoClassBean implements Comparable<CpoClass>, MetaDFVisitable {
 
@@ -91,6 +90,12 @@ public abstract class CpoClass extends CpoClassBean implements Comparable<CpoCla
       throw new CpoException("Function Group Not Found: " + groupType + ":" + groupName);
     }
     return group;
+  }
+
+  public boolean existsFunctionGroup(String groupType, String groupName) throws CpoException {
+    String key = buildFunctionGroupKey(groupType, groupName);
+    CpoFunctionGroup group = functionGroups.get(key);
+    return (group != null);
   }
 
   public CpoFunctionGroup addFunctionGroup(CpoFunctionGroup group) {

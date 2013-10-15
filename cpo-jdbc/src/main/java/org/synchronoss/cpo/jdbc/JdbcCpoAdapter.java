@@ -24,8 +24,10 @@ import org.slf4j.*;
 import org.synchronoss.cpo.*;
 import org.synchronoss.cpo.helper.ExceptionHelper;
 import org.synchronoss.cpo.jdbc.meta.JdbcCpoMetaDescriptor;
+import org.synchronoss.cpo.jdbc.meta.JdbcMethodMapper;
 import org.synchronoss.cpo.meta.CpoMetaDescriptor;
 import org.synchronoss.cpo.meta.DataTypeMapEntry;
+import org.synchronoss.cpo.meta.ResultSetCpoData;
 import org.synchronoss.cpo.meta.domain.*;
 
 import javax.naming.*;
@@ -1100,7 +1102,7 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
    */
   @Override
   public CpoOrderBy newOrderBy(String attribute, boolean ascending) throws CpoException {
-    return new JdbcCpoOrderBy(attribute, ascending);
+    return new BindableCpoOrderBy(attribute, ascending);
   }
 
   /**
@@ -1115,7 +1117,7 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
    */
   @Override
   public CpoOrderBy newOrderBy(String marker, String attribute, boolean ascending) throws CpoException {
-    return new JdbcCpoOrderBy(marker, attribute, ascending);
+    return new BindableCpoOrderBy(marker, attribute, ascending);
   }
 
   /**
@@ -1131,7 +1133,7 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
    */
   @Override
   public CpoOrderBy newOrderBy(String attribute, boolean ascending, String function) throws CpoException {
-    return new JdbcCpoOrderBy(attribute, ascending, function);
+    return new BindableCpoOrderBy(attribute, ascending, function);
   }
 
   /**
@@ -1148,7 +1150,7 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
    */
   @Override
   public CpoOrderBy newOrderBy(String marker, String attribute, boolean ascending, String function) throws CpoException {
-    return new JdbcCpoOrderBy(marker, attribute, ascending, function);
+    return new BindableCpoOrderBy(marker, attribute, ascending, function);
   }
 
   /**
@@ -2379,7 +2381,7 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
               attribute = (JdbcCpoAttribute) cpoClass.getAttributeData(rs.getString(1));
 
               if (attribute != null) {
-                attribute.invokeSetter(rObj, new ResultSetCpoData(rs, attribute, 2));
+                attribute.invokeSetter(rObj, new ResultSetCpoData(JdbcMethodMapper.getMethodMapper(), rs, attribute, 2));
                 attributesSet++;
               }
             }
@@ -2390,7 +2392,7 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
               attribute = (JdbcCpoAttribute) cpoClass.getAttributeData(rsmd.getColumnLabel(k));
 
               if (attribute != null) {
-                attribute.invokeSetter(rObj, new ResultSetCpoData(rs, attribute, k));
+                attribute.invokeSetter(rObj, new ResultSetCpoData(JdbcMethodMapper.getMethodMapper(), rs, attribute, k));
                 attributesSet++;
               }
             }
@@ -2441,7 +2443,8 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
    * @return DOCUMENT ME!
    * @throws CpoException DOCUMENT ME!
    */
-  protected <T, C> List<T> processSelectGroup(String name, C criteria, T result, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeFunction> nativeExpressions, boolean useRetrieve) throws CpoException {
+  protected <T, C> List<T> processSelectGroup(String name, C criteria, T result, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeFunction> nativeExpressions,
+                                              boolean useRetrieve) throws CpoException {
     Connection con = null;
     CpoArrayResultSet<T> resultSet = new CpoArrayResultSet<T>();
 
@@ -2462,7 +2465,8 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
     return resultSet;
   }
 
-  protected <T, C> void processSelectGroup(String name, C criteria, T result, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeFunction> nativeExpressions, boolean useRetrieve, CpoResultSet<T> resultSet) throws CpoException {
+  protected <T, C> void processSelectGroup(String name, C criteria, T result, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeFunction> nativeExpressions,
+                                           boolean useRetrieve, CpoResultSet<T> resultSet) throws CpoException {
     Connection con = null;
 
     try {
@@ -2563,7 +2567,7 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
 
           for (k = 1; k <= columnCount; k++) {
             if (attributes[k] != null) {
-              attributes[k].invokeSetter(obj, new ResultSetCpoData(rs, attributes[k], k));
+              attributes[k].invokeSetter(obj, new ResultSetCpoData(JdbcMethodMapper.getMethodMapper(), rs, attributes[k], k));
             }
           }
 
@@ -2962,44 +2966,4 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
     return attributes;
   }
 
-  private class RetrieverThread<T, C> extends Thread {
-
-    String name;
-    C criteria;
-    T result;
-    Collection<CpoWhere> wheres;
-    Collection<CpoOrderBy> orderBy;
-    Collection<CpoNativeFunction> nativeExpressions;
-    boolean useRetrieve;
-    CpoBlockingResultSet<T> resultSet;
-    Thread callingThread = null;
-
-    public RetrieverThread(String name, C criteria, T result, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeFunction> nativeExpressions, boolean useRetrieve, CpoBlockingResultSet<T> resultSet) {
-      this.name = name;
-      this.criteria = criteria;
-      this.result = result;
-      this.wheres = wheres;
-      this.orderBy = orderBy;
-      this.useRetrieve = useRetrieve;
-      this.resultSet = resultSet;
-      this.nativeExpressions = nativeExpressions;
-      callingThread = Thread.currentThread();
-    }
-
-    @Override
-    public void run() {
-      try {
-        processSelectGroup(name, criteria, result, wheres, orderBy, nativeExpressions, false, resultSet);
-      } catch (CpoException e) {
-        logger.error(ExceptionHelper.getLocalizedMessage(e));
-      } finally {
-        //wait until the calling thread is finished processing the records
-        while (resultSet.size() > 0) {
-          Thread.yield();
-        }
-        //Tell the calling thread that it should not wait on the blocking queue any longer.
-        callingThread.interrupt();
-      }
-    }
-  }
 }

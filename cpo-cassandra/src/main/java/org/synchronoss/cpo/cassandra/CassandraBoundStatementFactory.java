@@ -18,34 +18,32 @@
  * A copy of the GNU Lesser General Public License may also be found at
  * http://www.gnu.org/licenses/lgpl.txt
  */
-package org.synchronoss.cpo.jdbc;
+package org.synchronoss.cpo.cassandra;
 
-import java.io.StringReader;
-import java.lang.reflect.InvocationTargetException;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.util.Map.Entry;
-import java.util.*;
+import com.datastax.driver.core.BoundStatement;
+import com.datastax.driver.core.PreparedStatement;
+import com.datastax.driver.core.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.*;
+import org.synchronoss.cpo.cassandra.meta.CassandraMethodMapper;
 import org.synchronoss.cpo.helper.ExceptionHelper;
-import org.synchronoss.cpo.jdbc.meta.JdbcMethodMapEntry;
-import org.synchronoss.cpo.jdbc.meta.JdbcMethodMapper;
 import org.synchronoss.cpo.meta.MethodMapper;
-import org.synchronoss.cpo.meta.domain.CpoArgument;
 import org.synchronoss.cpo.meta.domain.CpoAttribute;
 import org.synchronoss.cpo.meta.domain.CpoClass;
 import org.synchronoss.cpo.meta.domain.CpoFunction;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
 /**
- * JdbcPreparedStatementFactory is the object that encapsulates the creation of the actual PreparedStatement for the
+ * CassandraBoundStatementFactory is the object that encapsulates the creation of the actual PreparedStatement for the
  * JDBC driver.
  *
  * @author david berry
  */
-public class JdbcPreparedStatementFactory extends CpoStatementFactory implements CpoReleasible {
+public class CassandraBoundStatementFactory extends CpoStatementFactory implements CpoReleasible {
 
   /**
    * Version Id for this class.
@@ -54,8 +52,8 @@ public class JdbcPreparedStatementFactory extends CpoStatementFactory implements
   /**
    * DOCUMENT ME!
    */
-  private static final Logger logger = LoggerFactory.getLogger(JdbcPreparedStatementFactory.class);
-  private PreparedStatement ps_ = null;
+  private static final Logger logger = LoggerFactory.getLogger(CassandraBoundStatementFactory.class);
+  private BoundStatement boundStatement;
 
   private List<CpoReleasible> releasibles = new ArrayList<CpoReleasible>();
   private static final String WHERE_MARKER = "__CPO_WHERE__";
@@ -67,8 +65,8 @@ public class JdbcPreparedStatementFactory extends CpoStatementFactory implements
    * The constructor is called by the internal CPO framework. This is not to be used by users of CPO. Programmers that
    * build Transforms may need to use this object to get access to the actual connection.
    *
-   * @param conn The actual jdbc connection that will be used to create the callable statement.
-   * @param jca The JdbcCpoAdapter that is controlling this transaction
+   * @param sess The actual jdbc connection that will be used to create the callable statement.
+   * @param cassandraCpoAdapter The JdbcCpoAdapter that is controlling this transaction
    * @param criteria The object that will be used to look up the cpo meta data
    * @param function The CpoFunction that is being executed
    * @param obj The pojo that is being acted upon
@@ -77,12 +75,12 @@ public class JdbcPreparedStatementFactory extends CpoStatementFactory implements
    * @param nativeQueries Additional sql to be embedded into the CpoFunction sql that is used to create the actual JDBC
    * PreparedStatement
    *
-   * @throws CpoException if a CPO error occurs
-   * @throws SQLException if a JDBC error occurs
+   * @throws org.synchronoss.cpo.CpoException if a CPO error occurs
+   * @throws java.sql.SQLException if a JDBC error occurs
    */
-  public <T> JdbcPreparedStatementFactory(Connection conn, JdbcCpoAdapter jca, CpoClass criteria,
-          CpoFunction function, T obj, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy,
-          Collection<CpoNativeFunction> nativeQueries) throws CpoException {
+  public <T> CassandraBoundStatementFactory(Session sess, CassandraCpoAdapter cassandraCpoAdapter, CpoClass criteria,
+                                            CpoFunction function, T obj, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy,
+                                            Collection<CpoNativeFunction> nativeQueries) throws CpoException {
     super(obj == null ? logger : LoggerFactory.getLogger(obj.getClass()));
     // get the list of bindValues from the function parameters
     List<BindAttribute> bindValues = getBindValues(function, obj);
@@ -91,15 +89,17 @@ public class JdbcPreparedStatementFactory extends CpoStatementFactory implements
 
     getLocalLogger().debug("CpoFunction SQL = <" + sql + ">");
 
-    PreparedStatement pstmt = null;
+    PreparedStatement pstmt;
+    BoundStatement bstmt;
 
     try {
-      pstmt = conn.prepareStatement(sql);
-    } catch (SQLException se) {
-      getLocalLogger().error("Error Instantiating JdbcPreparedStatementFactory SQL=<" + sql + ">" + ExceptionHelper.getLocalizedMessage(se));
-      throw new CpoException(se);
+      pstmt = sess.prepare(sql);
+      bstmt = pstmt.bind();
+    } catch (Throwable t) {
+      getLocalLogger().error("Error Instantiating CassandraBoundStatementFactory SQL=<" + sql + ">" + ExceptionHelper.getLocalizedMessage(t));
+      throw new CpoException(t);
     }
-    setPreparedStatement(pstmt);
+    setBoundStatement(bstmt);
 
     setBindValues(bindValues);
 
@@ -107,28 +107,24 @@ public class JdbcPreparedStatementFactory extends CpoStatementFactory implements
 
   @Override
   protected MethodMapper getMethodMapper() {
-    return JdbcMethodMapper.getMethodMapper();  //To change body of implemented methods use File | Settings | File Templates.
+    return CassandraMethodMapper.getMethodMapper();  //To change body of implemented methods use File | Settings | File Templates.
   }
 
   @Override
   protected CpoData getCpoData(CpoAttribute cpoAttribute, int index) {
-    return new JdbcPreparedStatementCpoData(this, cpoAttribute, index);  //To change body of implemented methods use File | Settings | File Templates.
+    return new CassandraBoundStatementCpoData(this, cpoAttribute, index);  //To change body of implemented methods use File | Settings | File Templates.
   }
 
   @Override
   protected Object getBindableStatement() {
-    return getPreparedStatement();
+    return getBoundStatement();
   }
 
-  /**
-    * Returns the jdbc prepared statment associated with this object
-    */
-   public PreparedStatement getPreparedStatement() {
-     return ps_;
-   }
+  public BoundStatement getBoundStatement() {
+    return boundStatement;
+  }
 
-   protected void setPreparedStatement(PreparedStatement ps) {
-     ps_ = ps;
-   }
-
+  public void setBoundStatement(BoundStatement boundStatement) {
+    this.boundStatement = boundStatement;
+  }
 }

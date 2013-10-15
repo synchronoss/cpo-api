@@ -25,6 +25,9 @@ import org.synchronoss.cpo.*;
 import org.synchronoss.cpo.helper.ExceptionHelper;
 import org.synchronoss.cpo.jdbc.meta.JdbcMethodMapEntry;
 import org.synchronoss.cpo.jdbc.meta.JdbcMethodMapper;
+import org.synchronoss.cpo.meta.AbstractBindableCpoData;
+import org.synchronoss.cpo.meta.MethodMapEntry;
+import org.synchronoss.cpo.meta.MethodMapper;
 import org.synchronoss.cpo.meta.domain.CpoAttribute;
 import org.synchronoss.cpo.transform.CpoTransform;
 import org.synchronoss.cpo.transform.jdbc.JdbcCpoTransform;
@@ -35,14 +38,14 @@ import java.io.*;
  *
  * @author dberry
  */
-public class PreparedStatementCpoData extends AbstractJdbcCpoData {
+public class JdbcPreparedStatementCpoData extends AbstractBindableCpoData {
 
-  private static final Logger logger = LoggerFactory.getLogger(PreparedStatementCpoData.class);
-  private JdbcPreparedStatementFactory jpsf = null;
+  private static final Logger logger = LoggerFactory.getLogger(JdbcPreparedStatementCpoData.class);
+  private JdbcPreparedStatementFactory cpoStatementFactory = null;
 
-  public PreparedStatementCpoData(JdbcPreparedStatementFactory jpsf, CpoAttribute cpoAttribute, int index) {
+  public JdbcPreparedStatementCpoData(JdbcPreparedStatementFactory cpoStatementFactory, CpoAttribute cpoAttribute, int index) {
     super(cpoAttribute, index);
-    this.jpsf = jpsf;
+    this.cpoStatementFactory = cpoStatementFactory;
   }
 
   @Override
@@ -50,29 +53,29 @@ public class PreparedStatementCpoData extends AbstractJdbcCpoData {
     Logger localLogger = instanceObject == null ? logger : LoggerFactory.getLogger(instanceObject.getClass());
     CpoAttribute cpoAttribute = getCpoAttribute();
     Object param = transformOut(cpoAttribute.invokeGetter(instanceObject));
-    JdbcMethodMapEntry<?> jdbcMethodMapEntry = JdbcMethodMapper.getJavaSqlMethod(getDataSetterParamType());
-    if (jdbcMethodMapEntry == null) {
+    JdbcMethodMapEntry<?,?> methodMapEntry = JdbcMethodMapper.getJavaSqlMethod(getDataSetterParamType());
+    if (methodMapEntry == null) {
       throw new CpoException("Error Retrieveing Jdbc Method for type: " + getDataSetterParamType().getName());
     }
     localLogger.info(cpoAttribute.getDataName() + "=" + param);
     try {
-      switch (jdbcMethodMapEntry.getMethodType()) {
+      switch (methodMapEntry.getMethodType()) {
         case JdbcMethodMapEntry.METHOD_TYPE_BASIC:
-          jdbcMethodMapEntry.getPsSetter().invoke(jpsf.getPreparedStatement(), getIndex(), param);
+          methodMapEntry.getBsSetter().invoke(cpoStatementFactory.getPreparedStatement(), getIndex(), param);
           break;
         case JdbcMethodMapEntry.METHOD_TYPE_STREAM:
           CpoByteArrayInputStream cbais = CpoByteArrayInputStream.getCpoStream((InputStream) param);
           // Get the length of the InputStream in param
-          jdbcMethodMapEntry.getPsSetter().invoke(jpsf.getPreparedStatement(), getIndex(), cbais, cbais.getLength());
+          methodMapEntry.getBsSetter().invoke(cpoStatementFactory.getPreparedStatement(), getIndex(), cbais, cbais.getLength());
           break;
         case JdbcMethodMapEntry.METHOD_TYPE_READER:
           CpoCharArrayReader ccar = CpoCharArrayReader.getCpoReader((Reader) param);
           // Get the length of the Reader in param
-          jdbcMethodMapEntry.getPsSetter().invoke(jpsf.getPreparedStatement(), getIndex(), ccar, ccar.getLength());
+          methodMapEntry.getBsSetter().invoke(cpoStatementFactory.getPreparedStatement(), getIndex(), ccar, ccar.getLength());
           break;
       }
     } catch (Exception e) {
-      throw new CpoException("Error Invoking Jdbc Method: " + jdbcMethodMapEntry.getPsSetter().getName() + ":" + ExceptionHelper.getLocalizedMessage(e));
+      throw new CpoException("Error Invoking Jdbc Method: " + methodMapEntry.getBsSetter().getName() + ":" + ExceptionHelper.getLocalizedMessage(e));
     }
   }
 
@@ -83,7 +86,7 @@ public class PreparedStatementCpoData extends AbstractJdbcCpoData {
 
     if (cpoTransform != null) {
       if (cpoTransform instanceof JdbcCpoTransform) {
-        retObj = ((JdbcCpoTransform)cpoTransform).transformOut(jpsf, attributeObject);
+        retObj = ((JdbcCpoTransform)cpoTransform).transformOut(cpoStatementFactory, attributeObject);
       } else {
         retObj = cpoTransform.transformOut(attributeObject);
       }

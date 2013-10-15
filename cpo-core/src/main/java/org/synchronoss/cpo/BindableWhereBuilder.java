@@ -18,19 +18,19 @@
  * A copy of the GNU Lesser General Public License may also be found at
  * http://www.gnu.org/licenses/lgpl.txt
  */
-package org.synchronoss.cpo.jdbc;
+package org.synchronoss.cpo;
 
-import org.synchronoss.cpo.*;
+import org.synchronoss.cpo.meta.domain.CpoAttribute;
 import org.synchronoss.cpo.meta.domain.CpoClass;
 
 import java.util.*;
 
 /**
- * JdbcWhereBuilder is an interface for specifying the sort order in which objects are returned from the Datasource.
+ * BindableWhereBuilder is an interface for specifying the sort order in which objects are returned from the Datasource.
  *
  * @author david berry
  */
-public class JdbcWhereBuilder<T> implements NodeVisitor {
+public class BindableWhereBuilder<T> implements NodeVisitor {
 
   private StringBuilder whereClause = new StringBuilder();
   private CpoClass cpoClass = null;
@@ -45,22 +45,22 @@ public class JdbcWhereBuilder<T> implements NodeVisitor {
   }
 
   @SuppressWarnings("unused")
-  private JdbcWhereBuilder() {
+  private BindableWhereBuilder() {
   }
 
-  public JdbcWhereBuilder(CpoClass cpoClass) {
+  public BindableWhereBuilder(CpoClass cpoClass) {
     this.cpoClass = cpoClass;
   }
 
   /**
    * This is called by composite nodes prior to visiting children
    *
-   * @param val The node to be visited
+   * @param node The node to be visited
    * @return a boolean (false) to end visit or (true) to continue visiting
    */
   @Override
   public boolean visitBegin(Node node) throws Exception {
-    JdbcCpoWhere jcw = (JdbcCpoWhere) node;
+    BindableCpoWhere jcw = (BindableCpoWhere) node;
     whereClause.append(jcw.toString(cpoClass));
     if (jcw.hasParent() || jcw.getLogical() != CpoWhere.LOGIC_NONE) {
       whereClause.append(" (");
@@ -74,7 +74,7 @@ public class JdbcWhereBuilder<T> implements NodeVisitor {
   /**
    * This is called for composite nodes between visiting children
    *
-   * @param val The node to be visited
+   * @param node The node to be visited
    * @return a boolean (false) to end visit or (true) to continue visiting
    */
   @Override
@@ -85,13 +85,13 @@ public class JdbcWhereBuilder<T> implements NodeVisitor {
   /**
    * This is called by composite nodes after visiting children
    *
-   * @param val The node to be visited
+   * @param node The node to be visited
    * @return a boolean (false) to end visit or (true) to continue visiting
    */
   @Override
   public boolean visitEnd(Node node) throws Exception {
-    JdbcCpoWhere jcw = (JdbcCpoWhere) node;
-    if (jcw.hasParent() || jcw.getLogical() != CpoWhere.LOGIC_NONE) {
+    BindableCpoWhere bcw = (BindableCpoWhere) node;
+    if (bcw.hasParent() || bcw.getLogical() != CpoWhere.LOGIC_NONE) {
       whereClause.append(")");
     }
     return true;
@@ -100,34 +100,34 @@ public class JdbcWhereBuilder<T> implements NodeVisitor {
   /**
    * This is called for component elements which have no children
    *
-   * @param val The element to be visited
+   * @param node The element to be visited
    * @return a boolean (false) to end visit or (true) to continue visiting
    */
   @Override
   public boolean visit(Node node) throws Exception {
-    JdbcCpoWhere jcw = (JdbcCpoWhere) node;
-    JdbcCpoAttribute attribute;
-    whereClause.append(jcw.toString(cpoClass));
-    if (jcw.getValue() != null) {
-      attribute = (JdbcCpoAttribute) cpoClass.getAttributeJava(jcw.getAttribute());
+    BindableCpoWhere bcw = (BindableCpoWhere) node;
+    CpoAttribute attribute;
+    whereClause.append(bcw.toString(cpoClass));
+    if (bcw.getValue() != null) {
+      attribute = cpoClass.getAttributeJava(bcw.getAttribute());
       if (attribute == null) {
-        attribute = (JdbcCpoAttribute) cpoClass.getAttributeJava(jcw.getRightAttribute());
+        attribute = cpoClass.getAttributeJava(bcw.getRightAttribute());
       }
       if (attribute == null) {
-        if (jcw.getComparison() == CpoWhere.COMP_IN && jcw.getValue() instanceof Collection) {
-          for (Object obj : (Collection) jcw.getValue()) {
-            bindValues.add(new BindAttribute(jcw.getAttribute() == null ? jcw.getRightAttribute() : jcw.getAttribute(), obj));
+        if (bcw.getComparison() == CpoWhere.COMP_IN && bcw.getValue() instanceof Collection) {
+          for (Object obj : (Collection) bcw.getValue()) {
+            bindValues.add(new BindAttribute(bcw.getAttribute() == null ? bcw.getRightAttribute() : bcw.getAttribute(), obj));
           }
         } else {
-          bindValues.add(new BindAttribute(jcw.getAttribute() == null ? jcw.getRightAttribute() : jcw.getAttribute(), jcw.getValue()));
+          bindValues.add(new BindAttribute(bcw.getAttribute() == null ? bcw.getRightAttribute() : bcw.getAttribute(), bcw.getValue()));
         }
       } else {
-        if (jcw.getComparison() == CpoWhere.COMP_IN && jcw.getValue() instanceof Collection) {
-          for (Object obj : (Collection) jcw.getValue()) {
+        if (bcw.getComparison() == CpoWhere.COMP_IN && bcw.getValue() instanceof Collection) {
+          for (Object obj : (Collection) bcw.getValue()) {
             bindValues.add(new BindAttribute(attribute, obj));
           }
         } else {
-          bindValues.add(new BindAttribute(attribute, jcw.getValue()));
+          bindValues.add(new BindAttribute(attribute, bcw.getValue()));
         }
       }
     }

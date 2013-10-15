@@ -20,7 +20,12 @@
  */
 package org.synchronoss.cpo;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.cache.CpoAdapterCache;
+import org.synchronoss.cpo.helper.ExceptionHelper;
+
+import java.util.Collection;
 
 /**
  * Created with IntelliJ IDEA.
@@ -30,6 +35,7 @@ import org.synchronoss.cpo.cache.CpoAdapterCache;
  * To change this template use File | Settings | File Templates.
  */
 public abstract class CpoBaseAdapter<T> extends CpoAdapterCache implements CpoAdapter {
+  private static final Logger logger = LoggerFactory.getLogger(CpoBaseAdapter.class);
   // DataSource Information
 
   /**
@@ -67,5 +73,49 @@ public abstract class CpoBaseAdapter<T> extends CpoAdapterCache implements CpoAd
 
   protected void setDataSourceName(String dataSourceName) {
     this.dataSourceName = dataSourceName;
+  }
+
+  protected abstract <T, C> void processSelectGroup(String name, C criteria, T result, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeFunction> nativeExpressions,
+                                             boolean useRetrieve, CpoResultSet<T> resultSet) throws CpoException;
+
+  protected class RetrieverThread<T, C> extends Thread {
+
+    String name;
+    C criteria;
+    T result;
+    Collection<CpoWhere> wheres;
+    Collection<CpoOrderBy> orderBy;
+    Collection<CpoNativeFunction> nativeExpressions;
+    boolean useRetrieve;
+    CpoBlockingResultSet<T> resultSet;
+    Thread callingThread = null;
+
+    public RetrieverThread(String name, C criteria, T result, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeFunction> nativeExpressions, boolean useRetrieve, CpoBlockingResultSet<T> resultSet) {
+      this.name = name;
+      this.criteria = criteria;
+      this.result = result;
+      this.wheres = wheres;
+      this.orderBy = orderBy;
+      this.useRetrieve = useRetrieve;
+      this.resultSet = resultSet;
+      this.nativeExpressions = nativeExpressions;
+      callingThread = Thread.currentThread();
+    }
+
+    @Override
+    public void run() {
+      try {
+        processSelectGroup(name, criteria, result, wheres, orderBy, nativeExpressions, false, resultSet);
+      } catch (CpoException e) {
+        logger.error(ExceptionHelper.getLocalizedMessage(e));
+      } finally {
+        //wait until the calling thread is finished processing the records
+        while (resultSet.size() > 0) {
+          Thread.yield();
+        }
+        //Tell the calling thread that it should not wait on the blocking queue any longer.
+        callingThread.interrupt();
+      }
+    }
   }
 }

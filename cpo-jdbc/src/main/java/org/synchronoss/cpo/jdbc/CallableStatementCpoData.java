@@ -25,6 +25,7 @@ import org.synchronoss.cpo.*;
 import org.synchronoss.cpo.helper.ExceptionHelper;
 import org.synchronoss.cpo.jdbc.meta.JdbcMethodMapEntry;
 import org.synchronoss.cpo.jdbc.meta.JdbcMethodMapper;
+import org.synchronoss.cpo.meta.AbstractBindableCpoData;
 import org.synchronoss.cpo.meta.domain.CpoAttribute;
 import org.synchronoss.cpo.transform.CpoTransform;
 import org.synchronoss.cpo.transform.jdbc.JdbcCpoTransform;
@@ -37,7 +38,7 @@ import java.sql.CallableStatement;
  *
  * @author dberry
  */
-public class CallableStatementCpoData extends AbstractJdbcCpoData {
+public class CallableStatementCpoData extends AbstractBindableCpoData {
 
   private static final Logger logger = LoggerFactory.getLogger(CallableStatementCpoData.class);
   private CallableStatement cs = null;
@@ -56,7 +57,7 @@ public class CallableStatementCpoData extends AbstractJdbcCpoData {
   @Override
   public Object invokeGetter() throws CpoException {
     Object javaObject;
-    JdbcMethodMapEntry<?> jdbcMethodMapEntry = JdbcMethodMapper.getJavaSqlMethod(getDataGetterReturnType());
+    JdbcMethodMapEntry<?,?> jdbcMethodMapEntry = JdbcMethodMapper.getJavaSqlMethod(getDataGetterReturnType());
     if (jdbcMethodMapEntry == null) {
       throw new CpoException("Error Retrieveing Jdbc Method for type: " + getDataGetterReturnType().getName());
     }
@@ -80,7 +81,7 @@ public class CallableStatementCpoData extends AbstractJdbcCpoData {
     Logger localLogger = instanceObject == null ? logger : LoggerFactory.getLogger(instanceObject.getClass());
     CpoAttribute cpoAttribute = getCpoAttribute();
     Object param = transformOut(cpoAttribute.invokeGetter(instanceObject));
-    JdbcMethodMapEntry<?> jdbcMethodMapEntry = JdbcMethodMapper.getJavaSqlMethod(getDataSetterParamType());
+    JdbcMethodMapEntry<?,?> jdbcMethodMapEntry = JdbcMethodMapper.getJavaSqlMethod(getDataSetterParamType());
     if (jdbcMethodMapEntry == null) {
       throw new CpoException("Error Retrieveing Jdbc Method for type: " + getDataSetterParamType().getName());
     }
@@ -102,7 +103,7 @@ public class CallableStatementCpoData extends AbstractJdbcCpoData {
           break;
       }
     } catch (Exception e) {
-      throw new CpoException("Error Invoking Jdbc Method: " + jdbcMethodMapEntry.getPsSetter().getName() + ":" + ExceptionHelper.getLocalizedMessage(e));
+      throw new CpoException("Error Invoking Jdbc Method: " + jdbcMethodMapEntry.getBsSetter().getName() + ":" + ExceptionHelper.getLocalizedMessage(e));
     }
   }
 

@@ -18,7 +18,7 @@
  * A copy of the GNU Lesser General Public License may also be found at
  * http://www.gnu.org/licenses/lgpl.txt
  */
-package org.synchronoss.cpo.jdbc;
+package org.synchronoss.cpo;
 
 import org.synchronoss.cpo.CpoException;
 import org.synchronoss.cpo.CpoOrderBy;
@@ -26,11 +26,11 @@ import org.synchronoss.cpo.meta.domain.CpoAttribute;
 import org.synchronoss.cpo.meta.domain.CpoClass;
 
 /**
- * JdbcCpoOrderBy is an interface for specifying the sort order in which objects are returned from the Datasource.
+ * BindableCpoOrderBy is an interface for specifying the sort order in which objects are returned from the Datasource.
  *
  * @author david berry
  */
-public class JdbcCpoOrderBy implements CpoOrderBy {
+public class BindableCpoOrderBy implements CpoOrderBy {
 
   private boolean ascending;
   private String attribute;
@@ -38,29 +38,29 @@ public class JdbcCpoOrderBy implements CpoOrderBy {
   private String marker = DEFAULT_MARKER;
 
   @SuppressWarnings("unused")
-  private JdbcCpoOrderBy() {
+  private BindableCpoOrderBy() {
   }
 
-  public JdbcCpoOrderBy(String attr, boolean asc) {
+  public BindableCpoOrderBy(String attr, boolean asc) {
     ascending = asc;
     attribute = attr;
     function = null;
   }
 
-  public JdbcCpoOrderBy(String marker, String attr, boolean asc) {
+  public BindableCpoOrderBy(String marker, String attr, boolean asc) {
     this.marker = marker;
     ascending = asc;
     attribute = attr;
     function = null;
   }
 
-  public JdbcCpoOrderBy(String attr, boolean asc, String func) {
+  public BindableCpoOrderBy(String attr, boolean asc, String func) {
     ascending = asc;
     attribute = attr;
     function = func;
   }
 
-  public JdbcCpoOrderBy(String marker, String attr, boolean asc, String func) {
+  public BindableCpoOrderBy(String marker, String attr, boolean asc, String func) {
     this.marker = marker;
     ascending = asc;
     attribute = attr;

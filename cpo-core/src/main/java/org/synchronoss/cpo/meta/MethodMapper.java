@@ -18,43 +18,38 @@
  * A copy of the GNU Lesser General Public License may also be found at
  * http://www.gnu.org/licenses/lgpl.txt
  */
-package org.synchronoss.cpo.jdbc.meta;
+package org.synchronoss.cpo.meta;
 
-import org.slf4j.*;
 import org.synchronoss.cpo.CpoException;
-import org.synchronoss.cpo.meta.MethodMapEntry;
 
+import java.io.InputStream;
+import java.io.Reader;
+import java.io.Serializable;
 import java.lang.reflect.Method;
+import java.math.BigDecimal;
+import java.net.URL;
 import java.sql.*;
+import java.util.HashMap;
 
 /**
- * MethodMapEntry is a class defines the getters and setters for JDBC specific data classes
+ * MethodMapper is a class defines the getters and setters for all the JDBC specific data classes
  *
  * @author david berry
  */
-public class JdbcMethodMapEntry<J,D> extends MethodMapEntry<J,D> implements java.io.Serializable, java.lang.Cloneable {
+public class MethodMapper<T extends MethodMapEntry<?,?>> implements Serializable, Cloneable {
 
-  private static final Logger logger = LoggerFactory.getLogger(JdbcMethodMapEntry.class);
   /**
    * Version Id for this class.
    */
   private static final long serialVersionUID = 1L;
-  public static final int METHOD_TYPE_STREAM = 1;
-  public static final int METHOD_TYPE_READER = 2;
-  private Method csGetter = null;
-  private Method csSetter = null;
+  private  HashMap<Class<?>, T> dataMethodMap = new HashMap<Class<?>, T>();
 
-  public JdbcMethodMapEntry(int methodType, Class<J> javaClass, Class<D> datasourceMethodClass, Method rsGetter, Method bsSetter, Method csGetter, Method csSetter) {
-    super(methodType, javaClass, datasourceMethodClass, rsGetter, bsSetter);
-    this.csGetter = csGetter;
-    this.csSetter = csSetter;
+  public T getDataMethodMapEntry(Class<?> c) throws CpoException {
+    return dataMethodMap.get(c);
   }
 
-  public Method getCsGetter() {
-    return csGetter;
+ public void addMethodMapEntry(T dataMethodMapEntry) {
+   dataMethodMap.put(dataMethodMapEntry.getJavaClass(), dataMethodMapEntry);
   }
 
-  public Method getCsSetter() {
-    return csSetter;
-  }
 }

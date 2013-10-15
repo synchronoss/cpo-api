@@ -20,78 +20,116 @@
  */
 package org.synchronoss.cpo.jdbc.meta;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.CpoException;
+import org.synchronoss.cpo.meta.MethodMapEntry;
+import org.synchronoss.cpo.meta.MethodMapper;
 
 import java.io.*;
+import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.net.URL;
 import java.sql.*;
 import java.util.HashMap;
 
 /**
- * JdbcMethodMapper is a class defines the getters and setters for all the JDBC specific data classes
+ * MethodMapper is a class defines the getters and setters for all the JDBC specific data classes
  *
  * @author david berry
  */
 public class JdbcMethodMapper implements java.io.Serializable, java.lang.Cloneable {
+  private static final Logger logger = LoggerFactory.getLogger(JdbcMethodMapper.class);
 
   /**
    * Version Id for this class.
    */
   private static final long serialVersionUID = 1L;
-  // JDK 1.4.2 Values
-  private static final JdbcMethodMapEntry<?>[] JDBC_METHOD_MAP_ENTRies = {
-    new JdbcMethodMapEntry<String>(JdbcMethodMapEntry.METHOD_TYPE_BASIC, String.class, String.class, "getString", "setString"), // 12
-    new JdbcMethodMapEntry<BigDecimal>(JdbcMethodMapEntry.METHOD_TYPE_BASIC, BigDecimal.class, BigDecimal.class, "getBigDecimal", "setBigDecimal"), // 3
-    new JdbcMethodMapEntry<Byte>(JdbcMethodMapEntry.METHOD_TYPE_BASIC, byte.class, byte.class, "getByte", "setByte"), // -6
-    new JdbcMethodMapEntry<Byte>(JdbcMethodMapEntry.METHOD_TYPE_BASIC, Byte.class, byte.class, "getByte", "setByte"), // -6
-    new JdbcMethodMapEntry<Short>(JdbcMethodMapEntry.METHOD_TYPE_BASIC, short.class, short.class, "getShort", "setShort"), // 5
-    new JdbcMethodMapEntry<Short>(JdbcMethodMapEntry.METHOD_TYPE_BASIC, Short.class, short.class, "getShort", "setShort"), // 5
-    new JdbcMethodMapEntry<Integer>(JdbcMethodMapEntry.METHOD_TYPE_BASIC, int.class, int.class, "getInt", "setInt"), // 4
-    new JdbcMethodMapEntry<Integer>(JdbcMethodMapEntry.METHOD_TYPE_BASIC, Integer.class, int.class, "getInt", "setInt"), // 4
-    new JdbcMethodMapEntry<Long>(JdbcMethodMapEntry.METHOD_TYPE_BASIC, long.class, long.class, "getLong", "setLong"), // -5
-    new JdbcMethodMapEntry<Long>(JdbcMethodMapEntry.METHOD_TYPE_BASIC, Long.class, long.class, "getLong", "setLong"), // -5
-    new JdbcMethodMapEntry<Float>(JdbcMethodMapEntry.METHOD_TYPE_BASIC, float.class, float.class, "getFloat", "setFloat"), // 7
-    new JdbcMethodMapEntry<Float>(JdbcMethodMapEntry.METHOD_TYPE_BASIC, Float.class, float.class, "getFloat", "setFloat"), // 7
-    new JdbcMethodMapEntry<Double>(JdbcMethodMapEntry.METHOD_TYPE_BASIC, double.class, double.class, "getDouble", "setDouble"), // 6
-    new JdbcMethodMapEntry<Double>(JdbcMethodMapEntry.METHOD_TYPE_BASIC, Double.class, double.class, "getDouble", "setDouble"), // 8
-    new JdbcMethodMapEntry<byte[]>(JdbcMethodMapEntry.METHOD_TYPE_BASIC, byte[].class, byte[].class, "getBytes", "setBytes"), // -2
-    new JdbcMethodMapEntry<Date>(JdbcMethodMapEntry.METHOD_TYPE_BASIC, java.sql.Date.class, java.sql.Date.class, "getDate", "setDate"), // 91
-    new JdbcMethodMapEntry<Time>(JdbcMethodMapEntry.METHOD_TYPE_BASIC, java.sql.Time.class, java.sql.Time.class, "getTime", "setTime"), // 92
-    new JdbcMethodMapEntry<Timestamp>(JdbcMethodMapEntry.METHOD_TYPE_BASIC, java.sql.Timestamp.class, java.sql.Timestamp.class, "getTimestamp", "setTimestamp"), // 93
-    new JdbcMethodMapEntry<Clob>(JdbcMethodMapEntry.METHOD_TYPE_BASIC, java.sql.Clob.class, java.sql.Clob.class, "getClob", "setClob"), // 2005
-    new JdbcMethodMapEntry<Blob>(JdbcMethodMapEntry.METHOD_TYPE_BASIC, java.sql.Blob.class, java.sql.Blob.class, "getBlob", "setBlob"), // 2004
-    new JdbcMethodMapEntry<Array>(JdbcMethodMapEntry.METHOD_TYPE_BASIC, java.sql.Array.class, java.sql.Array.class, "getArray", "setArray"), // 2003
-    new JdbcMethodMapEntry<Ref>(JdbcMethodMapEntry.METHOD_TYPE_BASIC, java.sql.Ref.class, java.sql.Ref.class, "getRef", "setRef"), // 2006
-    new JdbcMethodMapEntry<Object>(JdbcMethodMapEntry.METHOD_TYPE_BASIC, Object.class, Object.class, "getObject", "setObject"), // 2001
-    new JdbcMethodMapEntry<URL>(JdbcMethodMapEntry.METHOD_TYPE_BASIC, URL.class, URL.class, "getURL", "setURL"), // 70
-    new JdbcMethodMapEntry<Boolean>(JdbcMethodMapEntry.METHOD_TYPE_BASIC, boolean.class, boolean.class, "getBoolean", "setBoolean"), // -7
-    new JdbcMethodMapEntry<Boolean>(JdbcMethodMapEntry.METHOD_TYPE_BASIC, Boolean.class, boolean.class, "getBoolean", "setBoolean"), // 16
-    new JdbcMethodMapEntry<InputStream>(JdbcMethodMapEntry.METHOD_TYPE_STREAM, InputStream.class, InputStream.class, "getBlob", "setBinaryStream"), // 16
-    new JdbcMethodMapEntry<Reader>(JdbcMethodMapEntry.METHOD_TYPE_READER, Reader.class, Reader.class, "getClob", "setCharacterStream") // 16
-  };
-  private static HashMap<Class<?>, JdbcMethodMapEntry<?>> javaSqlMethodMap = null;
+  private static final Class<PreparedStatement> psc = PreparedStatement.class;
+  private static final Class<ResultSet> rsc = ResultSet.class;
+  private static final Class<CallableStatement> csc = CallableStatement.class;
+  private static MethodMapper<JdbcMethodMapEntry<?,?>> methodMapper = initMethodMapper();
+
 
   private JdbcMethodMapper() {
   }
 
-  static public JdbcMethodMapEntry<?> getJavaSqlMethod(Class<?> c) throws CpoException {
-    return getJavaSqlMethodMap().get(c);
+  static public JdbcMethodMapEntry<?,?> getJavaSqlMethod(Class<?> c) throws CpoException {
+    return (JdbcMethodMapEntry)methodMapper.getDataMethodMapEntry(c);
   }
 
-  static private void initMaps() {
-    synchronized (JDBC_METHOD_MAP_ENTRies) {
-      javaSqlMethodMap = new HashMap<Class<?>, JdbcMethodMapEntry<?>>();
-      for (JdbcMethodMapEntry<?> jsm : JDBC_METHOD_MAP_ENTRies) {
-        javaSqlMethodMap.put(jsm.getJavaClass(), jsm);
+  static private MethodMapper<JdbcMethodMapEntry<?,?>> initMethodMapper() throws IllegalArgumentException {
+    MethodMapper mapper = new MethodMapper();
+    mapper.addMethodMapEntry(makeJdbcMethodMapEntry(JdbcMethodMapEntry.METHOD_TYPE_BASIC, String.class, String.class, "getString", "setString"));
+    mapper.addMethodMapEntry(makeJdbcMethodMapEntry(JdbcMethodMapEntry.METHOD_TYPE_BASIC, BigDecimal.class, BigDecimal.class, "getBigDecimal", "setBigDecimal"));
+    mapper.addMethodMapEntry(makeJdbcMethodMapEntry(JdbcMethodMapEntry.METHOD_TYPE_BASIC, byte.class, byte.class, "getByte", "setByte"));
+    mapper.addMethodMapEntry(makeJdbcMethodMapEntry(JdbcMethodMapEntry.METHOD_TYPE_BASIC, Byte.class, byte.class, "getByte", "setByte"));
+    mapper.addMethodMapEntry(makeJdbcMethodMapEntry(JdbcMethodMapEntry.METHOD_TYPE_BASIC, short.class, short.class, "getShort", "setShort"));
+    mapper.addMethodMapEntry(makeJdbcMethodMapEntry(JdbcMethodMapEntry.METHOD_TYPE_BASIC, Short.class, short.class, "getShort", "setShort"));
+    mapper.addMethodMapEntry(makeJdbcMethodMapEntry(JdbcMethodMapEntry.METHOD_TYPE_BASIC, int.class, int.class, "getInt", "setInt"));
+    mapper.addMethodMapEntry(makeJdbcMethodMapEntry(JdbcMethodMapEntry.METHOD_TYPE_BASIC, Integer.class, int.class, "getInt", "setInt"));
+    mapper.addMethodMapEntry(makeJdbcMethodMapEntry(JdbcMethodMapEntry.METHOD_TYPE_BASIC, long.class, long.class, "getLong", "setLong"));
+    mapper.addMethodMapEntry(makeJdbcMethodMapEntry(JdbcMethodMapEntry.METHOD_TYPE_BASIC, Long.class, long.class, "getLong", "setLong"));
+    mapper.addMethodMapEntry(makeJdbcMethodMapEntry(JdbcMethodMapEntry.METHOD_TYPE_BASIC, float.class, float.class, "getFloat", "setFloat"));
+    mapper.addMethodMapEntry(makeJdbcMethodMapEntry(JdbcMethodMapEntry.METHOD_TYPE_BASIC, Float.class, float.class, "getFloat", "setFloat"));
+    mapper.addMethodMapEntry(makeJdbcMethodMapEntry(JdbcMethodMapEntry.METHOD_TYPE_BASIC, double.class, double.class, "getDouble", "setDouble"));
+    mapper.addMethodMapEntry(makeJdbcMethodMapEntry(JdbcMethodMapEntry.METHOD_TYPE_BASIC, Double.class, double.class, "getDouble", "setDouble"));
+    mapper.addMethodMapEntry(makeJdbcMethodMapEntry(JdbcMethodMapEntry.METHOD_TYPE_BASIC, byte[].class, byte[].class, "getBytes", "setBytes"));
+    mapper.addMethodMapEntry(makeJdbcMethodMapEntry(JdbcMethodMapEntry.METHOD_TYPE_BASIC, java.sql.Date.class, java.sql.Date.class, "getDate", "setDate"));
+    mapper.addMethodMapEntry(makeJdbcMethodMapEntry(JdbcMethodMapEntry.METHOD_TYPE_BASIC, java.sql.Time.class, java.sql.Time.class, "getTime", "setTime"));
+    mapper.addMethodMapEntry(makeJdbcMethodMapEntry(JdbcMethodMapEntry.METHOD_TYPE_BASIC, java.sql.Timestamp.class, java.sql.Timestamp.class, "getTimestamp", "setTimestamp"));
+    mapper.addMethodMapEntry(makeJdbcMethodMapEntry(JdbcMethodMapEntry.METHOD_TYPE_BASIC, java.sql.Clob.class, java.sql.Clob.class, "getClob", "setClob"));
+    mapper.addMethodMapEntry(makeJdbcMethodMapEntry(JdbcMethodMapEntry.METHOD_TYPE_BASIC, java.sql.Blob.class, java.sql.Blob.class, "getBlob", "setBlob"));
+    mapper.addMethodMapEntry(makeJdbcMethodMapEntry(JdbcMethodMapEntry.METHOD_TYPE_BASIC, java.sql.Array.class, java.sql.Array.class, "getArray", "setArray"));
+    mapper.addMethodMapEntry(makeJdbcMethodMapEntry(JdbcMethodMapEntry.METHOD_TYPE_BASIC, java.sql.Ref.class, java.sql.Ref.class, "getRef", "setRef"));
+    mapper.addMethodMapEntry(makeJdbcMethodMapEntry(JdbcMethodMapEntry.METHOD_TYPE_BASIC, Object.class, Object.class, "getObject", "setObject"));
+    mapper.addMethodMapEntry(makeJdbcMethodMapEntry(JdbcMethodMapEntry.METHOD_TYPE_BASIC, URL.class, URL.class, "getURL", "setURL"));
+    mapper.addMethodMapEntry(makeJdbcMethodMapEntry(JdbcMethodMapEntry.METHOD_TYPE_BASIC, boolean.class, boolean.class, "getBoolean", "setBoolean"));
+    mapper.addMethodMapEntry(makeJdbcMethodMapEntry(JdbcMethodMapEntry.METHOD_TYPE_BASIC, Boolean.class, boolean.class, "getBoolean", "setBoolean"));
+    mapper.addMethodMapEntry(makeJdbcMethodMapEntry(JdbcMethodMapEntry.METHOD_TYPE_STREAM, InputStream.class, InputStream.class, "getBlob", "setBinaryStream"));
+    mapper.addMethodMapEntry(makeJdbcMethodMapEntry(JdbcMethodMapEntry.METHOD_TYPE_READER, Reader.class, Reader.class, "getClob", "setCharacterStream"));
+
+    return mapper;
+  }
+
+  public static MethodMapper getMethodMapper() {
+    return methodMapper;
+  }
+
+  private static <T> JdbcMethodMapEntry<?,?> makeJdbcMethodMapEntry(int methodType, Class<T> javaClass, Class<T> datasourceMethodClass, String getterName, String setterName) throws IllegalArgumentException {
+    Method rsGetter=loadGetter(methodType, rsc, getterName);
+    Method bsSetter=loadSetter(methodType, psc, datasourceMethodClass, setterName);
+    Method csGetter=loadGetter(methodType, csc, getterName);
+    Method csSetter=loadSetter(methodType, csc, datasourceMethodClass, setterName);
+
+    return new JdbcMethodMapEntry(methodType, javaClass, datasourceMethodClass, rsGetter, bsSetter, csGetter, csSetter);
+  }
+
+  private static <M,D> Method loadSetter(int methodType, Class<M> methodClass, Class<D> datasourceClass, String setterName) throws IllegalArgumentException {
+    Method setter;
+    try {
+      if (methodType == JdbcMethodMapEntry.METHOD_TYPE_BASIC) {
+        setter = methodClass.getMethod(setterName, new Class[]{int.class, datasourceClass});
+      } else {
+        setter = methodClass.getMethod(setterName, new Class[]{int.class, datasourceClass, int.class});
       }
+
+    } catch (NoSuchMethodException nsme) {
+      logger.error("Error loading Setter" + setterName, nsme);
+      throw new IllegalArgumentException(nsme);
     }
+    return setter;
   }
 
-  private static HashMap<Class<?>, JdbcMethodMapEntry<?>> getJavaSqlMethodMap() {
-    if (javaSqlMethodMap == null) {
-      initMaps();
+  private static <M> Method loadGetter(int methodType, Class<M> methodClass, String getterName) throws IllegalArgumentException {
+    Method getter;
+    try {
+      getter = methodClass.getMethod(getterName, new Class[]{int.class});
+    } catch (NoSuchMethodException nsme) {
+      logger.error("Error loading Getter" + getterName, nsme);
+      throw new IllegalArgumentException(nsme);
     }
-    return javaSqlMethodMap;
+    return getter;
   }
+
 }

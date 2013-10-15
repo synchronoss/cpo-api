@@ -18,43 +18,42 @@
  * A copy of the GNU Lesser General Public License may also be found at
  * http://www.gnu.org/licenses/lgpl.txt
  */
-package org.synchronoss.cpo.jdbc;
+package org.synchronoss.cpo.meta;
 
 import org.slf4j.*;
 import org.synchronoss.cpo.CpoException;
 import org.synchronoss.cpo.helper.ExceptionHelper;
-import org.synchronoss.cpo.jdbc.meta.JdbcMethodMapEntry;
-import org.synchronoss.cpo.jdbc.meta.JdbcMethodMapper;
 import org.synchronoss.cpo.meta.domain.CpoAttribute;
 
 import java.lang.reflect.InvocationTargetException;
-import java.sql.ResultSet;
 
 /**
  *
  * @author dberry
  */
-public class ResultSetCpoData extends AbstractJdbcCpoData {
+public class ResultSetCpoData extends AbstractBindableCpoData {
 
-  private static final Logger logger = LoggerFactory.getLogger(CallableStatementCpoData.class);
-  private ResultSet rs = null;
+  private static final Logger logger = LoggerFactory.getLogger(ResultSetCpoData.class);
+  private Object rs = null;
+  MethodMapper methodMapper;
 
-  public ResultSetCpoData(ResultSet rs, CpoAttribute cpoAttribute, int index) {
+  public ResultSetCpoData(MethodMapper methodMapper, Object rs, CpoAttribute cpoAttribute, int index) {
     super(cpoAttribute, index);
+    this.methodMapper=methodMapper;
     this.rs = rs;
   }
 
   @Override
   public Object invokeGetter() throws CpoException {
     Object javaObject;
-    JdbcMethodMapEntry<?> jdbcMethodMapEntry = JdbcMethodMapper.getJavaSqlMethod(getDataGetterReturnType());
-    if (jdbcMethodMapEntry == null) {
+    MethodMapEntry<?,?> methodMapEntry = methodMapper.getDataMethodMapEntry(getDataGetterReturnType());
+    if (methodMapEntry == null) {
       throw new CpoException("Error Retrieveing Jdbc Method for type: " + getDataGetterReturnType().getName());
     }
 
     try {
       // Get the getter for the Callable Statement
-      javaObject = transformIn(jdbcMethodMapEntry.getRsGetter().invoke(rs, getIndex()));
+      javaObject = transformIn(methodMapEntry.getRsGetter().invoke(rs, getIndex()));
     } catch (IllegalAccessException iae) {
       logger.debug("Error Invoking ResultSet Method: " + ExceptionHelper.getLocalizedMessage(iae));
       throw new CpoException(iae);

@@ -18,38 +18,30 @@
  * A copy of the GNU Lesser General Public License may also be found at
  * http://www.gnu.org/licenses/lgpl.txt
  */
-package org.synchronoss.cpo.jdbc;
+package org.synchronoss.cpo.cassandra.meta;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.synchronoss.cpo.meta.MethodMapEntry;
+
+import java.lang.reflect.Method;
 
 /**
- * @author david.berry
+ * MethodMapEntry is a class defines the getters and setters for JDBC specific data classes
  *
+ * @author david berry
  */
-public class BindAttribute {
+public class CassandraMethodMapEntry<J,D> extends MethodMapEntry<J,D> implements java.io.Serializable, Cloneable {
 
-  private JdbcCpoAttribute jdbcAttribute = null;
-  private Object bindObject = null;
-  private String name = null;
+  private static final Logger logger = LoggerFactory.getLogger(CassandraMethodMapEntry.class);
+  /**
+   * Version Id for this class.
+   */
+  private static final long serialVersionUID = 1L;
+  public static final int METHOD_TYPE_ONE = 1;
+  public static final int METHOD_TYPE_TWO = 2;
 
-  public BindAttribute(JdbcCpoAttribute jdbcAttribute, Object bindObject) {
-    this.jdbcAttribute = jdbcAttribute;
-    this.bindObject = bindObject;
+  public CassandraMethodMapEntry(int methodType, Class<J> javaClass, Class<D> datasourceMethodClass, Method rsGetter, Method bsSetter) {
+    super(methodType, javaClass, datasourceMethodClass, rsGetter, bsSetter);
   }
-
-  public BindAttribute(String name, Object bindObject) {
-    this.name = name;
-    this.bindObject = bindObject;
-  }
-
-  public JdbcCpoAttribute getJdbcAttribute() {
-    return jdbcAttribute;
-  }
-
-  public Object getBindObject() {
-    return bindObject;
-  }
-
-  public String getName() {
-    return name;
-  }
-
 }

@@ -18,7 +18,7 @@
  * A copy of the GNU Lesser General Public License may also be found at
  * http://www.gnu.org/licenses/lgpl.txt
  */
-package org.synchronoss.cpo.jdbc;
+package org.synchronoss.cpo.meta;
 
 import org.synchronoss.cpo.AbstractCpoData;
 import org.synchronoss.cpo.meta.domain.CpoAttribute;
@@ -27,11 +27,11 @@ import org.synchronoss.cpo.meta.domain.CpoAttribute;
  *
  * @author dberry
  */
-public abstract class AbstractJdbcCpoData extends AbstractCpoData {
-  
+public abstract class AbstractBindableCpoData extends AbstractCpoData {
+
   private int index = -1;
 
-  public AbstractJdbcCpoData(CpoAttribute cpoAttribute, int index) {
+  public AbstractBindableCpoData(CpoAttribute cpoAttribute, int index) {
     super(cpoAttribute);
     this.index = index;
   }

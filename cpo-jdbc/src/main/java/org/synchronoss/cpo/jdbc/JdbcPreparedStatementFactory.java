@@ -120,6 +120,11 @@ public class JdbcPreparedStatementFactory extends CpoStatementFactory implements
     return getPreparedStatement();
   }
 
+  @Override
+  protected int getStartingIndex() {
+    return 1;
+  }
+
   /**
     * Returns the jdbc prepared statment associated with this object
     */

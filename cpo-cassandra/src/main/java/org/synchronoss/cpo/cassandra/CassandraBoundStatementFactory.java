@@ -27,11 +27,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.*;
 import org.synchronoss.cpo.cassandra.meta.CassandraMethodMapper;
+import org.synchronoss.cpo.cassandra.transform.CassandraCpoTransform;
 import org.synchronoss.cpo.helper.ExceptionHelper;
 import org.synchronoss.cpo.meta.MethodMapper;
 import org.synchronoss.cpo.meta.domain.CpoAttribute;
 import org.synchronoss.cpo.meta.domain.CpoClass;
 import org.synchronoss.cpo.meta.domain.CpoFunction;
+import org.synchronoss.cpo.transform.CpoTransform;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -88,21 +90,13 @@ public class CassandraBoundStatementFactory extends CpoStatementFactory implemen
     String sql = buildSql(criteria, function.getExpression(), wheres, orderBy, nativeQueries, bindValues);
 
     getLocalLogger().debug("CpoFunction SQL = <" + sql + ">");
-
-    PreparedStatement pstmt;
-    BoundStatement bstmt;
-
     try {
-      pstmt = sess.prepare(sql);
-      bstmt = pstmt.bind();
+      setBoundStatement(sess.prepare(sql).bind());
+      setBindValues(bindValues);
     } catch (Throwable t) {
       getLocalLogger().error("Error Instantiating CassandraBoundStatementFactory SQL=<" + sql + ">" + ExceptionHelper.getLocalizedMessage(t));
       throw new CpoException(t);
     }
-    setBoundStatement(bstmt);
-
-    setBindValues(bindValues);
-
   }
 
   @Override
@@ -120,6 +114,11 @@ public class CassandraBoundStatementFactory extends CpoStatementFactory implemen
     return getBoundStatement();
   }
 
+  @Override
+  protected int getStartingIndex() {
+    return 0;
+  }
+
   public BoundStatement getBoundStatement() {
     return boundStatement;
   }
@@ -127,4 +126,5 @@ public class CassandraBoundStatementFactory extends CpoStatementFactory implemen
   public void setBoundStatement(BoundStatement boundStatement) {
     this.boundStatement = boundStatement;
   }
+
 }

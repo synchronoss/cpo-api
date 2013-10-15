@@ -51,7 +51,6 @@ public class DataTypeMapper {
   }
 
   public void addDataTypeEntry(DataTypeMapEntry<?> dtme){
-    logger.debug("Adding DataType "+dtme.getDataTypeName());
     dataTypeIntMap.put(dtme.getDataTypeInt(), dtme);
     dataTypeNameMap.put(dtme.getDataTypeName(), dtme);
     logger.debug("Added DataType "+dtme.getDataTypeName());

@@ -2141,7 +2141,7 @@ public class CassandraCpoAdapter extends CpoBaseAdapter<ClusterDataSource> {
 
     try {
       sess = getWriteSession();
-      updateCount = processUpdateGroup(coll, groupType, groupName, wheres, orderBy, nativeExpressions, sess);
+      updateCount = processUpdateGroup((T[]) coll.toArray(), groupType, groupName, wheres, orderBy, nativeExpressions, sess);
     } catch (Exception e) {
       // Any exception has to try to rollback the work;
       ExceptionHelper.reThrowCpoException(e, "processUpdateGroup(Collection coll, String groupType, String groupName) failed");

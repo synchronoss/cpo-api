@@ -276,7 +276,7 @@ public abstract class CpoStatementFactory implements CpoReleasible {
   public void setBindValues(Collection<BindAttribute> bindValues) throws CpoException {
 
     if (bindValues != null) {
-      int index = 1;
+      int index = getStartingIndex();
 
       //runs through the bind attributes and binds them to the prepared statement
       // They must be in correct order.
@@ -286,8 +286,7 @@ public abstract class CpoStatementFactory implements CpoReleasible {
 
         // check to see if we are getting a cpo value object or an object that
         // can be put directly in the statement (String, BigDecimal, etc)
-        MethodMapEntry<?,?> jsm = null;
-        jsm = getMethodMapper().getDataMethodMapEntry(bindObject.getClass());
+        MethodMapEntry<?,?> jsm = getMethodMapper().getDataMethodMapEntry(bindObject.getClass());
 
         if (jsm != null) {
           try {
@@ -317,4 +316,6 @@ public abstract class CpoStatementFactory implements CpoReleasible {
   protected abstract CpoData getCpoData(CpoAttribute cpoAttribute, int index);
 
   protected abstract Object getBindableStatement();
+
+  protected abstract int getStartingIndex();
 }

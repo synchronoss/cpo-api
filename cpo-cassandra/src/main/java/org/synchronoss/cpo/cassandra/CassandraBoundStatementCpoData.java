@@ -27,6 +27,7 @@ import org.synchronoss.cpo.CpoCharArrayReader;
 import org.synchronoss.cpo.CpoException;
 import org.synchronoss.cpo.cassandra.meta.CassandraMethodMapEntry;
 import org.synchronoss.cpo.cassandra.meta.CassandraMethodMapper;
+import org.synchronoss.cpo.cassandra.transform.CassandraCpoTransform;
 import org.synchronoss.cpo.helper.ExceptionHelper;
 import org.synchronoss.cpo.meta.AbstractBindableCpoData;
 import org.synchronoss.cpo.meta.domain.CpoAttribute;
@@ -56,7 +57,7 @@ public class CassandraBoundStatementCpoData extends AbstractBindableCpoData {
     Object param = transformOut(cpoAttribute.invokeGetter(instanceObject));
    CassandraMethodMapEntry<?,?> methodMapEntry = CassandraMethodMapper.getDatasourceMethod(getDataSetterParamType());
     if (methodMapEntry == null) {
-      throw new CpoException("Error Retrieveing Jdbc Method for type: " + getDataSetterParamType().getName());
+      throw new CpoException("Error Retrieveing Cassandra Method for type: " + getDataSetterParamType().getName());
     }
     localLogger.info(cpoAttribute.getDataName() + "=" + param);
     try {
@@ -76,7 +77,7 @@ public class CassandraBoundStatementCpoData extends AbstractBindableCpoData {
           break;
       }
     } catch (Exception e) {
-      throw new CpoException("Error Invoking Jdbc Method: " + methodMapEntry.getBsSetter().getName() + ":" + ExceptionHelper.getLocalizedMessage(e));
+      throw new CpoException("Error Invoking Cassandra Method: " + methodMapEntry.getBsSetter().getName() + ":" + ExceptionHelper.getLocalizedMessage(e));
     }
   }
 
@@ -86,7 +87,11 @@ public class CassandraBoundStatementCpoData extends AbstractBindableCpoData {
     CpoTransform cpoTransform = getCpoAttribute().getCpoTransform();
 
     if (cpoTransform != null) {
+      if (cpoTransform instanceof CassandraCpoTransform) {
+        retObj = ((CassandraCpoTransform)cpoTransform).transformOut(cpoStatementFactory, attributeObject);
+      } else {
         retObj = cpoTransform.transformOut(attributeObject);
+      }
     }
     return retObj;
   }

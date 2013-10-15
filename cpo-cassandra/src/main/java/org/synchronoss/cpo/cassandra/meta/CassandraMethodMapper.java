@@ -22,6 +22,7 @@ package org.synchronoss.cpo.cassandra.meta;
 
 import com.datastax.driver.core.BoundStatement;
 import com.datastax.driver.core.ResultSet;
+import com.datastax.driver.core.Row;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.CpoException;
@@ -51,7 +52,7 @@ public class CassandraMethodMapper implements Serializable, Cloneable {
    */
   private static final long serialVersionUID = 1L;
   private static final Class<BoundStatement> bsc = BoundStatement.class;
-  private static final Class<ResultSet> rsc = ResultSet.class;
+  private static final Class<Row> rsc = Row.class;
   private static MethodMapper<CassandraMethodMapEntry<?,?>> methodMapper = initMethodMapper();
 
 
@@ -64,8 +65,8 @@ public class CassandraMethodMapper implements Serializable, Cloneable {
 
   static private MethodMapper<CassandraMethodMapEntry<?,?>> initMethodMapper() throws IllegalArgumentException {
     MethodMapper mapper = new MethodMapper();
-    mapper.addMethodMapEntry(makeCassandraMethodMapEntry(CassandraMethodMapEntry.METHOD_TYPE_BASIC, boolean.class, boolean.class, "getBoolean", "setBoolean"));
-    mapper.addMethodMapEntry(makeCassandraMethodMapEntry(CassandraMethodMapEntry.METHOD_TYPE_BASIC, Boolean.class, boolean.class, "getBoolean", "setBoolean"));
+    mapper.addMethodMapEntry(makeCassandraMethodMapEntry(CassandraMethodMapEntry.METHOD_TYPE_BASIC, boolean.class, boolean.class, "getBool", "setBool"));
+    mapper.addMethodMapEntry(makeCassandraMethodMapEntry(CassandraMethodMapEntry.METHOD_TYPE_BASIC, Boolean.class, boolean.class, "getBool", "setBool"));
     mapper.addMethodMapEntry(makeCassandraMethodMapEntry(CassandraMethodMapEntry.METHOD_TYPE_BASIC, ByteBuffer.class, ByteBuffer.class, "getBytes", "setBytes"));
     mapper.addMethodMapEntry(makeCassandraMethodMapEntry(CassandraMethodMapEntry.METHOD_TYPE_BASIC, java.util.Date.class, java.util.Date.class, "getDate", "setDate"));
     mapper.addMethodMapEntry(makeCassandraMethodMapEntry(CassandraMethodMapEntry.METHOD_TYPE_BASIC, BigDecimal.class, BigDecimal.class, "getDecimal", "setDecimal"));
@@ -76,11 +77,11 @@ public class CassandraMethodMapper implements Serializable, Cloneable {
     mapper.addMethodMapEntry(makeCassandraMethodMapEntry(CassandraMethodMapEntry.METHOD_TYPE_BASIC, InetAddress.class, InetAddress.class, "getInet", "setInet"));
     mapper.addMethodMapEntry(makeCassandraMethodMapEntry(CassandraMethodMapEntry.METHOD_TYPE_BASIC, int.class, int.class, "getInt", "setInt"));
     mapper.addMethodMapEntry(makeCassandraMethodMapEntry(CassandraMethodMapEntry.METHOD_TYPE_BASIC, Integer.class, int.class, "getInt", "setInt"));
-    mapper.addMethodMapEntry(makeCassandraMethodMapEntry(CassandraMethodMapEntry.METHOD_TYPE_ONE, List.class, List.class, "getList", "setList"));
+//    mapper.addMethodMapEntry(makeCassandraMethodMapEntry(CassandraMethodMapEntry.METHOD_TYPE_ONE, List.class, List.class, "getList", "setList"));
     mapper.addMethodMapEntry(makeCassandraMethodMapEntry(CassandraMethodMapEntry.METHOD_TYPE_BASIC, long.class, long.class, "getLong", "setLong"));
     mapper.addMethodMapEntry(makeCassandraMethodMapEntry(CassandraMethodMapEntry.METHOD_TYPE_BASIC, Long.class, long.class, "getLong", "setLong"));
-    mapper.addMethodMapEntry(makeCassandraMethodMapEntry(CassandraMethodMapEntry.METHOD_TYPE_TWO, Map.class, Map.class, "getMap", "setMap"));
-    mapper.addMethodMapEntry(makeCassandraMethodMapEntry(CassandraMethodMapEntry.METHOD_TYPE_TWO, Set.class, Set.class, "getSet", "setSet"));
+//    mapper.addMethodMapEntry(makeCassandraMethodMapEntry(CassandraMethodMapEntry.METHOD_TYPE_TWO, Map.class, Map.class, "getMap", "setMap"));
+//    mapper.addMethodMapEntry(makeCassandraMethodMapEntry(CassandraMethodMapEntry.METHOD_TYPE_TWO, Set.class, Set.class, "getSet", "setSet"));
     mapper.addMethodMapEntry(makeCassandraMethodMapEntry(CassandraMethodMapEntry.METHOD_TYPE_BASIC, String.class, String.class, "getString", "setString"));
     mapper.addMethodMapEntry(makeCassandraMethodMapEntry(CassandraMethodMapEntry.METHOD_TYPE_BASIC, UUID.class, UUID.class, "getUUID", "setUUID"));
     mapper.addMethodMapEntry(makeCassandraMethodMapEntry(CassandraMethodMapEntry.METHOD_TYPE_BASIC, BigInteger.class, BigInteger.class, "getVarint", "setVarint"));

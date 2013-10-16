@@ -21,122 +21,323 @@
     http://www.gnu.org/licenses/lgpl.txt
 
 -->
-<cpoMetaData xmlns="http://www.synchronoss.org/cpo/core/CpoCoreMeta.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" metaDescriptor="org.synchronoss.cpo.cassandra.meta.CassandraCpoMetaDescriptor" defaultPackageName="">
+<cpoMetaData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xsi:schemaLocation="http://www.synchronoss.org/cpo/core/CpoCoreMeta.xsd ../../main/xsd/CpoCassandraMeta.xsd"
+ xmlns="http://www.synchronoss.org/cpo/core/CpoCoreMeta.xsd"
+ metaDescriptor="org.synchronoss.cpo.cassandra.meta.CassandraCpoMetaDescriptor"
+ defaultPackageName="">
   <cpoClass name="org.synchronoss.cpo.cassandra.ValueObject">
-    <cpoAttribute xmlns:cass="http://www.synchronoss.org/cpo/cassandra/CpoCassandraMeta.xsd" xsi:type="cass:ctCassandraAttribute">
+    <cpoAttribute xmlns:cpoc="http://www.synchronoss.org/cpo/cassandra/CpoCassandraMeta.xsd" xsi:type="cpoc:ctCassandraAttribute">
+      <javaName>id</javaName>
+      <javaType>int</javaType>
+      <dataName>id</dataName>
+      <dataType>INT</dataType>
+    </cpoAttribute>
+    <cpoAttribute xmlns:cpoc="http://www.synchronoss.org/cpo/cassandra/CpoCassandraMeta.xsd" xsi:type="cpoc:ctCassandraAttribute">
       <javaName>attrAscii</javaName>
       <javaType>java.lang.String</javaType>
       <dataName>attr_ascii</dataName>
       <dataType>ASCII</dataType>
     </cpoAttribute>
-    <cpoAttribute xmlns:cass="http://www.synchronoss.org/cpo/cassandra/CpoCassandraMeta.xsd" xsi:type="cass:ctCassandraAttribute">
+    <cpoAttribute xmlns:cpoc="http://www.synchronoss.org/cpo/cassandra/CpoCassandraMeta.xsd" xsi:type="cpoc:ctCassandraAttribute">
       <javaName>attrBigInt</javaName>
       <javaType>long</javaType>
       <dataName>attr_bigint</dataName>
       <dataType>BIGINT</dataType>
     </cpoAttribute>
-    <cpoAttribute xmlns:cass="http://www.synchronoss.org/cpo/cassandra/CpoCassandraMeta.xsd" xsi:type="cass:ctCassandraAttribute">
+    <cpoAttribute xmlns:cpoc="http://www.synchronoss.org/cpo/cassandra/CpoCassandraMeta.xsd" xsi:type="cpoc:ctCassandraAttribute">
       <javaName>attrBlob</javaName>
       <javaType>java.nio.ByteBuffer</javaType>
       <dataName>attr_blob</dataName>
       <dataType>BLOB</dataType>
     </cpoAttribute>
-    <cpoAttribute xmlns:cass="http://www.synchronoss.org/cpo/cassandra/CpoCassandraMeta.xsd" xsi:type="cass:ctCassandraAttribute">
+    <cpoAttribute xmlns:cpoc="http://www.synchronoss.org/cpo/cassandra/CpoCassandraMeta.xsd" xsi:type="cpoc:ctCassandraAttribute">
+      <javaName>attrBlob2</javaName>
+      <javaType>java.nio.ByteBuffer</javaType>
+      <dataName>attr_blob2</dataName>
+      <dataType>BLOB</dataType>
+    </cpoAttribute>
+    <cpoAttribute xmlns:cpoc="http://www.synchronoss.org/cpo/cassandra/CpoCassandraMeta.xsd" xsi:type="cpoc:ctCassandraAttribute">
       <javaName>attrBool</javaName>
       <javaType>boolean</javaType>
       <dataName>attr_bool</dataName>
       <dataType>BOOLEAN</dataType>
     </cpoAttribute>
-    <cpoAttribute xmlns:cass="http://www.synchronoss.org/cpo/cassandra/CpoCassandraMeta.xsd" xsi:type="cass:ctCassandraAttribute">
+    <cpoAttribute xmlns:cpoc="http://www.synchronoss.org/cpo/cassandra/CpoCassandraMeta.xsd" xsi:type="cpoc:ctCassandraAttribute">
       <javaName>attrCounter</javaName>
       <javaType>long</javaType>
       <dataName>attr_counter</dataName>
       <dataType>COUNTER</dataType>
     </cpoAttribute>
-    <cpoAttribute xmlns:cass="http://www.synchronoss.org/cpo/cassandra/CpoCassandraMeta.xsd" xsi:type="cass:ctCassandraAttribute">
+    <cpoAttribute xmlns:cpoc="http://www.synchronoss.org/cpo/cassandra/CpoCassandraMeta.xsd" xsi:type="cpoc:ctCassandraAttribute">
       <javaName>attrDecimal</javaName>
       <javaType>java.math.BigDecimal</javaType>
       <dataName>attr_decimal</dataName>
       <dataType>DECIMAL</dataType>
     </cpoAttribute>
-    <cpoAttribute xmlns:cass="http://www.synchronoss.org/cpo/cassandra/CpoCassandraMeta.xsd" xsi:type="cass:ctCassandraAttribute">
+    <cpoAttribute xmlns:cpoc="http://www.synchronoss.org/cpo/cassandra/CpoCassandraMeta.xsd" xsi:type="cpoc:ctCassandraAttribute">
       <javaName>attrDouble</javaName>
       <javaType>double</javaType>
       <dataName>attr_double</dataName>
       <dataType>DOUBLE</dataType>
     </cpoAttribute>
-    <cpoAttribute xmlns:cass="http://www.synchronoss.org/cpo/cassandra/CpoCassandraMeta.xsd" xsi:type="cass:ctCassandraAttribute">
+    <cpoAttribute xmlns:cpoc="http://www.synchronoss.org/cpo/cassandra/CpoCassandraMeta.xsd" xsi:type="cpoc:ctCassandraAttribute">
       <javaName>attrFloat</javaName>
       <javaType>float</javaType>
       <dataName>attr_float</dataName>
       <dataType>FLOAT</dataType>
     </cpoAttribute>
-    <cpoAttribute xmlns:cass="http://www.synchronoss.org/cpo/cassandra/CpoCassandraMeta.xsd" xsi:type="cass:ctCassandraAttribute">
+    <cpoAttribute xmlns:cpoc="http://www.synchronoss.org/cpo/cassandra/CpoCassandraMeta.xsd" xsi:type="cpoc:ctCassandraAttribute">
       <javaName>attrInet</javaName>
       <javaType>java.net.InetAddress</javaType>
       <dataName>attr_inet</dataName>
       <dataType>INET</dataType>
     </cpoAttribute>
-    <cpoAttribute xmlns:cass="http://www.synchronoss.org/cpo/cassandra/CpoCassandraMeta.xsd" xsi:type="cass:ctCassandraAttribute">
+    <cpoAttribute xmlns:cpoc="http://www.synchronoss.org/cpo/cassandra/CpoCassandraMeta.xsd" xsi:type="cpoc:ctCassandraAttribute">
       <javaName>attrInt</javaName>
       <javaType>int</javaType>
       <dataName>attr_int</dataName>
       <dataType>INT</dataType>
-      <transformClass>org.synchronoss.cpo.transform.cassandra.TransformNoOp</transformClass>
+      <transformClass>org.synchronoss.cpo.cassandra.transform.TransformNoOp</transformClass>
     </cpoAttribute>
-    <cpoAttribute xmlns:cass="http://www.synchronoss.org/cpo/cassandra/CpoCassandraMeta.xsd" xsi:type="cass:ctCassandraAttribute">
+    <cpoAttribute xmlns:cpoc="http://www.synchronoss.org/cpo/cassandra/CpoCassandraMeta.xsd" xsi:type="cpoc:ctCassandraAttribute">
       <javaName>attrList</javaName>
       <javaType>java.util.List</javaType>
       <dataName>attr_list</dataName>
       <dataType>LIST</dataType>
     </cpoAttribute>
-    <cpoAttribute xmlns:cass="http://www.synchronoss.org/cpo/cassandra/CpoCassandraMeta.xsd" xsi:type="cass:ctCassandraAttribute">
+    <cpoAttribute xmlns:cpoc="http://www.synchronoss.org/cpo/cassandra/CpoCassandraMeta.xsd" xsi:type="cpoc:ctCassandraAttribute">
       <javaName>attrMap</javaName>
       <javaType>java.util.Map</javaType>
       <dataName>attr_map</dataName>
       <dataType>MAP</dataType>
     </cpoAttribute>
-    <cpoAttribute xmlns:cass="http://www.synchronoss.org/cpo/cassandra/CpoCassandraMeta.xsd" xsi:type="cass:ctCassandraAttribute">
+    <cpoAttribute xmlns:cpoc="http://www.synchronoss.org/cpo/cassandra/CpoCassandraMeta.xsd" xsi:type="cpoc:ctCassandraAttribute">
       <javaName>attrSet</javaName>
       <javaType>java.util.Set</javaType>
       <dataName>attr_set</dataName>
       <dataType>SET</dataType>
     </cpoAttribute>
-    <cpoAttribute xmlns:cass="http://www.synchronoss.org/cpo/cassandra/CpoCassandraMeta.xsd" xsi:type="cass:ctCassandraAttribute">
+    <cpoAttribute xmlns:cpoc="http://www.synchronoss.org/cpo/cassandra/CpoCassandraMeta.xsd" xsi:type="cpoc:ctCassandraAttribute">
       <javaName>attrText</javaName>
       <javaType>java.lang.String</javaType>
       <dataName>attr_text</dataName>
       <dataType>TEXT</dataType>
     </cpoAttribute>
-    <cpoAttribute xmlns:cass="http://www.synchronoss.org/cpo/cassandra/CpoCassandraMeta.xsd" xsi:type="cass:ctCassandraAttribute">
-      <javaName>attrTimestamp</javaName>
-      <javaType>java.util.Date</javaType>
-      <dataName>attr_timestamp</dataName>
-      <dataType>TIMESTAMP</dataType>
-    </cpoAttribute>
-    <cpoAttribute xmlns:cass="http://www.synchronoss.org/cpo/cassandra/CpoCassandraMeta.xsd" xsi:type="cass:ctCassandraAttribute">
+    <cpoAttribute xmlns:cpoc="http://www.synchronoss.org/cpo/cassandra/CpoCassandraMeta.xsd" xsi:type="cpoc:ctCassandraAttribute">
       <javaName>attrTimeUUID</javaName>
       <javaType>java.util.UUID</javaType>
       <dataName>time_uuid</dataName>
       <dataType>TIMEUUID</dataType>
     </cpoAttribute>
-    <cpoAttribute xmlns:cass="http://www.synchronoss.org/cpo/cassandra/CpoCassandraMeta.xsd" xsi:type="cass:ctCassandraAttribute">
+    <cpoAttribute xmlns:cpoc="http://www.synchronoss.org/cpo/cassandra/CpoCassandraMeta.xsd" xsi:type="cpoc:ctCassandraAttribute">
+      <javaName>attrTimestamp</javaName>
+      <javaType>java.util.Date</javaType>
+      <dataName>attr_timestamp</dataName>
+      <dataType>TIMESTAMP</dataType>
+    </cpoAttribute>
+    <cpoAttribute xmlns:cpoc="http://www.synchronoss.org/cpo/cassandra/CpoCassandraMeta.xsd" xsi:type="cpoc:ctCassandraAttribute">
       <javaName>attrUUID</javaName>
       <javaType>java.util.UUID</javaType>
-      <dataName>uuid</dataName>
+      <dataName>attr_uuid</dataName>
       <dataType>UUID</dataType>
     </cpoAttribute>
-    <cpoAttribute xmlns:cass="http://www.synchronoss.org/cpo/cassandra/CpoCassandraMeta.xsd" xsi:type="cass:ctCassandraAttribute">
+    <cpoAttribute xmlns:cpoc="http://www.synchronoss.org/cpo/cassandra/CpoCassandraMeta.xsd" xsi:type="cpoc:ctCassandraAttribute">
       <javaName>attrVarChar</javaName>
       <javaType>java.lang.String</javaType>
       <dataName>attr_varchar</dataName>
       <dataType>VARCHAR</dataType>
     </cpoAttribute>
-    <cpoAttribute xmlns:cass="http://www.synchronoss.org/cpo/cassandra/CpoCassandraMeta.xsd" xsi:type="cass:ctCassandraAttribute">
+    <cpoAttribute xmlns:cpoc="http://www.synchronoss.org/cpo/cassandra/CpoCassandraMeta.xsd" xsi:type="cpoc:ctCassandraAttribute">
       <javaName>attrVarInt</javaName>
       <javaType>java.math.BigInteger</javaType>
       <dataName>attr_varint</dataName>
       <dataType>VARINT</dataType>
     </cpoAttribute>
+    <cpoFunctionGroup type="CREATE">
+      <cpoFunction name="ValueObject - Create">
+        <expression>insert into value_object(id, attr_ascii, attr_bigint, attr_blob, attr_bool, attr_decimal, attr_double, attr_float, attr_inet, attr_int, attr_text, attr_timestamp, attr_timeuuid, attr_uuid, attr_varchar, attr_varint) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)</expression>
+        <cpoArgument xmlns:cpoc="http://www.synchronoss.org/cpo/cassandra/CpoCassandraMeta.xsd" xsi:type="cpoc:ctCassandraArgument">
+          <attributeName>id</attributeName>
+        </cpoArgument>
+        <cpoArgument xmlns:cpoc="http://www.synchronoss.org/cpo/cassandra/CpoCassandraMeta.xsd" xsi:type="cpoc:ctCassandraArgument">
+          <attributeName>attrAscii</attributeName>
+        </cpoArgument>
+        <cpoArgument xmlns:cpoc="http://www.synchronoss.org/cpo/cassandra/CpoCassandraMeta.xsd" xsi:type="cpoc:ctCassandraArgument">
+          <attributeName>attrBigInt</attributeName>
+        </cpoArgument>
+        <cpoArgument xmlns:cpoc="http://www.synchronoss.org/cpo/cassandra/CpoCassandraMeta.xsd" xsi:type="cpoc:ctCassandraArgument">
+          <attributeName>attrBlob</attributeName>
+        </cpoArgument>
+        <cpoArgument xmlns:cpoc="http://www.synchronoss.org/cpo/cassandra/CpoCassandraMeta.xsd" xsi:type="cpoc:ctCassandraArgument">
+          <attributeName>attrBool</attributeName>
+        </cpoArgument>
+        <cpoArgument xmlns:cpoc="http://www.synchronoss.org/cpo/cassandra/CpoCassandraMeta.xsd" xsi:type="cpoc:ctCassandraArgument">
+          <attributeName>attrDecimal</attributeName>
+        </cpoArgument>
+        <cpoArgument xmlns:cpoc="http://www.synchronoss.org/cpo/cassandra/CpoCassandraMeta.xsd" xsi:type="cpoc:ctCassandraArgument">
+          <attributeName>attrDouble</attributeName>
+        </cpoArgument>
+        <cpoArgument xmlns:cpoc="http://www.synchronoss.org/cpo/cassandra/CpoCassandraMeta.xsd" xsi:type="cpoc:ctCassandraArgument">
+          <attributeName>attrFloat</attributeName>
+        </cpoArgument>
+        <cpoArgument xmlns:cpoc="http://www.synchronoss.org/cpo/cassandra/CpoCassandraMeta.xsd" xsi:type="cpoc:ctCassandraArgument">
+          <attributeName>attrInet</attributeName>
+        </cpoArgument>
+        <cpoArgument xmlns:cpoc="http://www.synchronoss.org/cpo/cassandra/CpoCassandraMeta.xsd" xsi:type="cpoc:ctCassandraArgument">
+          <attributeName>attrInt</attributeName>
+        </cpoArgument>
+        <cpoArgument xmlns:cpoc="http://www.synchronoss.org/cpo/cassandra/CpoCassandraMeta.xsd" xsi:type="cpoc:ctCassandraArgument">
+          <attributeName>attrText</attributeName>
+        </cpoArgument>
+        <cpoArgument xmlns:cpoc="http://www.synchronoss.org/cpo/cassandra/CpoCassandraMeta.xsd" xsi:type="cpoc:ctCassandraArgument">
+          <attributeName>attrTimestamp</attributeName>
+        </cpoArgument>
+        <cpoArgument xmlns:cpoc="http://www.synchronoss.org/cpo/cassandra/CpoCassandraMeta.xsd" xsi:type="cpoc:ctCassandraArgument">
+          <attributeName>attrTimeUUID</attributeName>
+        </cpoArgument>
+        <cpoArgument xmlns:cpoc="http://www.synchronoss.org/cpo/cassandra/CpoCassandraMeta.xsd" xsi:type="cpoc:ctCassandraArgument">
+          <attributeName>attrUUID</attributeName>
+        </cpoArgument>
+        <cpoArgument xmlns:cpoc="http://www.synchronoss.org/cpo/cassandra/CpoCassandraMeta.xsd" xsi:type="cpoc:ctCassandraArgument">
+          <attributeName>attrVarChar</attributeName>
+        </cpoArgument>
+        <cpoArgument xmlns:cpoc="http://www.synchronoss.org/cpo/cassandra/CpoCassandraMeta.xsd" xsi:type="cpoc:ctCassandraArgument">
+          <attributeName>attrVarInt</attributeName>
+        </cpoArgument>
+      </cpoFunction>
+    </cpoFunctionGroup>
+    <cpoFunctionGroup name="TestOrderByInsert" type="CREATE">
+      <cpoFunction name="TestOrderByInsert">
+        <expression>insert into value_object (id,attr_varchar,attr_int) values (?,?,?)</expression>
+        <cpoArgument xmlns:cpoc="http://www.synchronoss.org/cpo/cassandra/CpoCassandraMeta.xsd" xsi:type="cpoc:ctCassandraArgument">
+          <attributeName>id</attributeName>
+        </cpoArgument>
+        <cpoArgument xmlns:cpoc="http://www.synchronoss.org/cpo/cassandra/CpoCassandraMeta.xsd" xsi:type="cpoc:ctCassandraArgument">
+          <attributeName>attrVarChar</attributeName>
+        </cpoArgument>
+        <cpoArgument xmlns:cpoc="http://www.synchronoss.org/cpo/cassandra/CpoCassandraMeta.xsd" xsi:type="cpoc:ctCassandraArgument">
+          <attributeName>attrInt</attributeName>
+        </cpoArgument>
+      </cpoFunction>
+    </cpoFunctionGroup>
+    <cpoFunctionGroup type="DELETE">
+      <cpoFunction name="ValueObject - Delete">
+        <expression>delete from value_object where id = ?</expression>
+        <cpoArgument xmlns:cpoc="http://www.synchronoss.org/cpo/cassandra/CpoCassandraMeta.xsd" xsi:type="cpoc:ctCassandraArgument">
+          <attributeName>id</attributeName>
+        </cpoArgument>
+      </cpoFunction>
+    </cpoFunctionGroup>
+    <cpoFunctionGroup name="TestOrderByDelete" type="DELETE">
+      <cpoFunction name="TestOrderByDelete">
+        <expression>delete from value_object where id = ?</expression>
+        <cpoArgument xmlns:cpoc="http://www.synchronoss.org/cpo/cassandra/CpoCassandraMeta.xsd" xsi:type="cpoc:ctCassandraArgument">
+          <attributeName>id</attributeName>
+        </cpoArgument>
+      </cpoFunction>
+    </cpoFunctionGroup>
+     <cpoFunctionGroup type="EXIST">
+      <cpoFunction name="ValueObject - Exists">
+        <expression>select count(1) from value_object where id = ?</expression>
+        <cpoArgument xmlns:cpoc="http://www.synchronoss.org/cpo/cassandra/CpoCassandraMeta.xsd" xsi:type="cpoc:ctCassandraArgument">
+          <attributeName>id</attributeName>
+        </cpoArgument>
+      </cpoFunction>
+    </cpoFunctionGroup>
+    <cpoFunctionGroup type="LIST">
+      <cpoFunction name="ValueObject - list">
+        <expression>select * from value_object</expression>
+      </cpoFunction>
+    </cpoFunctionGroup>
+    <cpoFunctionGroup name="InterleavedWhere" type="LIST">
+      <cpoFunction name="ValueObject - InterleavedWhere">
+        <expression>select * from value_object where attr_varchar=? __CPO_WHERE__ and attr_int=?</expression>
+        <cpoArgument xmlns:cpoc="http://www.synchronoss.org/cpo/cassandra/CpoCassandraMeta.xsd" xsi:type="cpoc:ctCassandraArgument">
+          <attributeName>attrVarChar</attributeName>
+        </cpoArgument>
+        <cpoArgument xmlns:cpoc="http://www.synchronoss.org/cpo/cassandra/CpoCassandraMeta.xsd" xsi:type="cpoc:ctCassandraArgument">
+          <attributeName>attrInt</attributeName>
+        </cpoArgument>
+      </cpoFunction>
+    </cpoFunctionGroup>
+    <cpoFunctionGroup name="TestOrderByRetrieve" type="LIST">
+      <cpoFunction name="TestOrderByRetrieve">
+        <expression>select * from value_object</expression>
+      </cpoFunction>
+    </cpoFunctionGroup>
+    <cpoFunctionGroup name="TestWhereRetrieve" type="LIST">
+      <cpoFunction name="Value Object - TestWhereRetrieve">
+        <expression>select * from value_object __CPO_WHERE__</expression>
+      </cpoFunction>
+    </cpoFunctionGroup>
+    <cpoFunctionGroup type="RETRIEVE">
+      <cpoFunction name="ValueObject - Retrieve">
+        <expression>select * from value_object where id = ?</expression>
+        <cpoArgument xmlns:cpoc="http://www.synchronoss.org/cpo/cassandra/CpoCassandraMeta.xsd" xsi:type="cpoc:ctCassandraArgument">
+          <attributeName>id</attributeName>
+        </cpoArgument>
+      </cpoFunction>
+    </cpoFunctionGroup>
+    <cpoFunctionGroup name="TestRetrieveObject" type="RETRIEVE">
+      <cpoFunction name="ValueObject - TestRetrieveObject">
+        <expression>Select * from value_object where id = ?</expression>
+        <cpoArgument xmlns:cpoc="http://www.synchronoss.org/cpo/cassandra/CpoCassandraMeta.xsd" xsi:type="cpoc:ctCassandraArgument">
+          <attributeName>id</attributeName>
+        </cpoArgument>
+      </cpoFunction>
+    </cpoFunctionGroup>
+    <cpoFunctionGroup type="UPDATE">
+      <cpoFunction name="ValueObject - Default Update">
+        <expression>update value_object set attr_int=?</expression>
+        <cpoArgument xmlns:cpoc="http://www.synchronoss.org/cpo/cassandra/CpoCassandraMeta.xsd" xsi:type="cpoc:ctCassandraArgument">
+          <attributeName>attrInt</attributeName>
+        </cpoArgument>
+      </cpoFunction>
+    </cpoFunctionGroup>
+    <cpoFunctionGroup name="createLVO" type="CREATE">
+      <cpoFunction name="createLVO">
+        <expression>insert into value_object (id, attr_blob, attr_blob2) values (?,?,?)</expression>
+        <cpoArgument xmlns:cpoc="http://www.synchronoss.org/cpo/cassandra/CpoCassandraMeta.xsd" xsi:type="cpoc:ctCassandraArgument">
+          <attributeName>id</attributeName>
+        </cpoArgument>
+        <cpoArgument xmlns:cpoc="http://www.synchronoss.org/cpo/cassandra/CpoCassandraMeta.xsd" xsi:type="cpoc:ctCassandraArgument">
+          <attributeName>attrBlob</attributeName>
+        </cpoArgument>
+        <cpoArgument xmlns:cpoc="http://www.synchronoss.org/cpo/cassandra/CpoCassandraMeta.xsd" xsi:type="cpoc:ctCassandraArgument">
+          <attributeName>attrBlob2</attributeName>
+        </cpoArgument>
+      </cpoFunction>
+    </cpoFunctionGroup>
+    <cpoFunctionGroup name="deleteLVO" type="DELETE">
+      <cpoFunction name="deleteLVO">
+        <expression>delete from value_object where id = ?</expression>
+        <cpoArgument xmlns:cpoc="http://www.synchronoss.org/cpo/cassandra/CpoCassandraMeta.xsd" xsi:type="cpoc:ctCassandraArgument">
+          <attributeName>id</attributeName>
+        </cpoArgument>
+      </cpoFunction>
+    </cpoFunctionGroup>
+    <cpoFunctionGroup name="retrieveLVO" type="RETRIEVE">
+      <cpoFunction name="retrieveLVO">
+        <expression>select * from value_object where id = ?</expression>
+        <cpoArgument xmlns:cpoc="http://www.synchronoss.org/cpo/cassandra/CpoCassandraMeta.xsd" xsi:type="cpoc:ctCassandraArgument">
+          <attributeName>id</attributeName>
+        </cpoArgument>
+      </cpoFunction>
+    </cpoFunctionGroup>
+    <cpoFunctionGroup name="updateLVO" type="UPDATE">
+      <cpoFunction name="updateLVO">
+        <expression>update value_object set attr_blob=?, attr_blob2=? where id = ?</expression>
+        <cpoArgument xmlns:cpoc="http://www.synchronoss.org/cpo/cassandra/CpoCassandraMeta.xsd" xsi:type="cpoc:ctCassandraArgument">
+          <attributeName>attrBlob</attributeName>
+        </cpoArgument>
+        <cpoArgument xmlns:cpoc="http://www.synchronoss.org/cpo/cassandra/CpoCassandraMeta.xsd" xsi:type="cpoc:ctCassandraArgument">
+          <attributeName>attrBlob2</attributeName>
+        </cpoArgument>
+        <cpoArgument xmlns:cpoc="http://www.synchronoss.org/cpo/cassandra/CpoCassandraMeta.xsd" xsi:type="cpoc:ctCassandraArgument">
+          <attributeName>id</attributeName>
+        </cpoArgument>
+      </cpoFunction>
+    </cpoFunctionGroup>
   </cpoClass>
 </cpoMetaData>

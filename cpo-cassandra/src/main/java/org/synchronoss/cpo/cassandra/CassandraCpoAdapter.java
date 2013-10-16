@@ -25,6 +25,7 @@ import com.datastax.driver.core.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.*;
+import org.synchronoss.cpo.cassandra.meta.CassandraCpoAttribute;
 import org.synchronoss.cpo.cassandra.meta.CassandraCpoMetaDescriptor;
 import org.synchronoss.cpo.cassandra.meta.CassandraMethodMapper;
 import org.synchronoss.cpo.helper.ExceptionHelper;
@@ -2033,7 +2034,7 @@ public class CassandraCpoAdapter extends CpoBaseAdapter<ClusterDataSource> {
         rs = session.execute(expression);
         ColumnDefinitions columnDefs = rs.getColumnDefinitions();
         for (int i = 0; i < columnDefs.size(); i++) {
-          CpoAttribute attribute = new CpoAttribute();
+          CpoAttribute attribute = new CassandraCpoAttribute();
           attribute.setDataName(columnDefs.getName(i));
 
           DataTypeMapEntry<?> dataTypeMapEntry = metaDescriptor.getDataTypeMapEntry(columnDefs.getType(i).getName().ordinal());

@@ -21,3 +21,5 @@ CREATE TABLE value_object (
   attr_varchar text,
   attr_varint varint
 );
+
+CREATE INDEX idx_attr_int on value_object (attr_int);

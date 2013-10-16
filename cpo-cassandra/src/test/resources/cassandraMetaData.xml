@@ -127,7 +127,7 @@
     <cpoAttribute xmlns:cpoc="http://www.synchronoss.org/cpo/cassandra/CpoCassandraMeta.xsd" xsi:type="cpoc:ctCassandraAttribute">
       <javaName>attrTimeUUID</javaName>
       <javaType>java.util.UUID</javaType>
-      <dataName>time_uuid</dataName>
+      <dataName>attr_timeuuid</dataName>
       <dataType>TIMEUUID</dataType>
     </cpoAttribute>
     <cpoAttribute xmlns:cpoc="http://www.synchronoss.org/cpo/cassandra/CpoCassandraMeta.xsd" xsi:type="cpoc:ctCassandraAttribute">

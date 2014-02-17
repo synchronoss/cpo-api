@@ -158,7 +158,7 @@ public class CpoClassSourceGenerator implements MetaVisitor {
   @Override
   public void visit(CpoAttribute cpoAttribute) {
 
-    String attName = cpoAttribute.getJavaName();
+    String attName = scrubName(cpoAttribute.getJavaName());
 
     if (cpoAttribute.getTransformClassName()!=null && cpoAttribute.getTransformInMethod()==null) {
       try {
@@ -239,6 +239,7 @@ public class CpoClassSourceGenerator implements MetaVisitor {
     if (fgName == null) {
       fgName = "NULL";
     }
+    fgName = scrubName(fgName);
 
     String staticName = FG_PREFIX + cpoFunctionGroup.getType() + "_" + fgName.toUpperCase();
 
@@ -257,5 +258,9 @@ public class CpoClassSourceGenerator implements MetaVisitor {
   @Override
   public void visit(CpoArgument cpoArgument) {
     // nothing to do
+  }
+
+  protected String scrubName(String name) {
+    return name.replaceAll("[^0-9a-zA-Z_]", "_");
   }
 }

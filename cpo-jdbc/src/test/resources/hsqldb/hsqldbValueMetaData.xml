@@ -339,6 +339,15 @@
         </cpoArgument>
       </cpoFunction>
     </cpoFunctionGroup>
+    <cpoFunctionGroup name="TestRetrieveObject with spaces" type="RETRIEVE">
+      <cpoFunction name="ValueObject - TestRetrieveObject with spaces">
+        <expression>Select * from value_object where id = ?</expression>
+        <cpoArgument xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xsi:type="cpoj:ctJdbcArgument">
+          <attributeName>id</attributeName>
+          <cpoj:scope>IN</cpoj:scope>
+        </cpoArgument>
+      </cpoFunction>
+    </cpoFunctionGroup>
     <cpoFunctionGroup type="UPDATE">
       <cpoFunction name="ValueObject - Default Update">
         <expression>update value_object set ATTR_VARCHAR=?</expression>

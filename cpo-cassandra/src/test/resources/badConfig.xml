@@ -36,7 +36,7 @@
     <core:metaDescriptorName>cassandraMeta</core:metaDescriptorName>
     <core:cpoConfigProcessor>org.synchronoss.cpo.cassandra.config.CassandraCpoConfigProcessor</core:cpoConfigProcessor>
     <cass:readWriteConfig>
-      <cass:contactPoint>127.0.0.1</cass:contactPoint>
+      <cass:contactPoint>${cpo.cassandra.contactPoint}</cass:contactPoint>
     </cass:readWriteConfig>
   </core:dataConfig>
  </core:cpoConfig>

@@ -63,6 +63,13 @@
       <artifactId>slf4j-api</artifactId>
       <scope>compile</scope>
     </dependency>
+    <!-- for the plugin, have it log to standard out -->
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-simple</artifactId>
+      <version>${slf4jVersion}</version>
+      <scope>compile</scope>
+    </dependency>
     <dependency>
       <groupId>org.synchronoss.cpo</groupId>
       <artifactId>cpo-core</artifactId>

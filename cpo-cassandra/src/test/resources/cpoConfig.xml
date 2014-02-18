@@ -29,37 +29,37 @@
  defaultConfig="defaultCluster">
 
   <core:metaConfig name="cassandraMeta">
-    <core:metaXml>/cassandraMetaData.xml</core:metaXml>
+    <core:metaXml>${cpo.cassandra.metaXml}</core:metaXml>
   </core:metaConfig>
   <core:metaConfig name="caseSensitive" caseSensitive="true">
-    <core:metaXml>/cassandraMetaData.xml</core:metaXml>
+    <core:metaXml>${cpo.cassandra.metaXml}</core:metaXml>
   </core:metaConfig>
   <core:metaConfig name="caseInsensitive"  caseSensitive="false">
-    <core:metaXml>/cassandraMetaData.xml</core:metaXml>
+    <core:metaXml>${cpo.cassandra.metaXml}</core:metaXml>
   </core:metaConfig>
 
    <core:dataConfig xsi:type="cass:ctCassandraConfig" name="defaultCluster">
     <core:metaDescriptorName>cassandraMeta</core:metaDescriptorName>
     <core:cpoConfigProcessor>org.synchronoss.cpo.cassandra.config.CassandraCpoConfigProcessor</core:cpoConfigProcessor>
     <cass:readWriteConfig>
-      <cass:keySpace>cpokeyspace</cass:keySpace>
-      <cass:contactPoint>127.0.0.1</cass:contactPoint>
+      <cass:keySpace>${cpo.cassandra.keyspace}</cass:keySpace>
+      <cass:contactPoint>${cpo.cassandra.contactPoint}</cass:contactPoint>
     </cass:readWriteConfig>
   </core:dataConfig>
   <core:dataConfig xsi:type="cass:ctCassandraConfig" name="caseSensitive">
    <core:metaDescriptorName>caseSensitive</core:metaDescriptorName>
    <core:cpoConfigProcessor>org.synchronoss.cpo.cassandra.config.CassandraCpoConfigProcessor</core:cpoConfigProcessor>
    <cass:readWriteConfig>
-     <cass:keySpace>cpokeyspace</cass:keySpace>
-     <cass:contactPoint>127.0.0.1</cass:contactPoint>
+     <cass:keySpace>${cpo.cassandra.keyspace}</cass:keySpace>
+     <cass:contactPoint>${cpo.cassandra.contactPoint}</cass:contactPoint>
    </cass:readWriteConfig>
  </core:dataConfig>
   <core:dataConfig xsi:type="cass:ctCassandraConfig" name="caseInsensitive">
    <core:metaDescriptorName>caseInsensitive</core:metaDescriptorName>
    <core:cpoConfigProcessor>org.synchronoss.cpo.cassandra.config.CassandraCpoConfigProcessor</core:cpoConfigProcessor>
    <cass:readWriteConfig>
-     <cass:keySpace>cpokeyspace</cass:keySpace>
-     <cass:contactPoint>127.0.0.1</cass:contactPoint>
+     <cass:keySpace>${cpo.cassandra.keyspace}</cass:keySpace>
+     <cass:contactPoint>${cpo.cassandra.contactPoint}</cass:contactPoint>
    </cass:readWriteConfig>
  </core:dataConfig>
  </core:cpoConfig>

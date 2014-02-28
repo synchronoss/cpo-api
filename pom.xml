@@ -1,4 +1,26 @@
 <?xml version="1.0"?>
+<!--
+
+    Copyright (C) 2003-2012 David E. Berry
+
+    This library is free software; you can redistribute it and/or
+    modify it under the terms of the GNU Lesser General Public
+    License as published by the Free Software Foundation; either
+    version 2.1 of the License, or (at your option) any later version.
+
+    This library is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+    Lesser General Public License for more details.
+
+    You should have received a copy of the GNU Lesser General Public
+    License along with this library; if not, write to the Free Software
+    Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+
+    A copy of the GNU Lesser General Public License may also be found at
+    http://www.gnu.org/licenses/lgpl.txt
+
+-->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.synchronoss.cpo</groupId>
@@ -118,6 +140,14 @@
       <plugins>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-release-plugin</artifactId>
+          <version>2.4.1</version>
+          <configuration>
+            <autoVersionSubmodules>true</autoVersionSubmodules>
+          </configuration>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-compiler-plugin</artifactId>
           <version>3.1</version>
           <configuration>
@@ -150,10 +180,11 @@
           </configuration>
         </plugin>
         <plugin>
-          <groupId>com.mycila.maven-license-plugin</groupId>
-          <artifactId>maven-license-plugin</artifactId>
-          <version>1.10.b1</version>
+          <groupId>com.mycila</groupId>
+          <artifactId>license-maven-plugin</artifactId>
+          <version>2.5</version>
           <configuration>
+						<aggregate>true</aggregate>
             <header>src/main/resources/license.txt</header>
             <failIfMissing>false</failIfMissing>
             <strictCheck>true</strictCheck>
@@ -162,8 +193,6 @@
               <java>SLASHSTAR_STYLE</java>
             </mapping>
             <excludes>
-              <!-- intellij folder -->
-              <exclude>.idea/**</exclude>
               <!-- netbeans action file -->
               <exclude>nbactions.xml</exclude>
             </excludes>
@@ -191,12 +220,8 @@
     </pluginManagement>
     <plugins>
       <plugin>
-        <groupId>com.mycila.maven-license-plugin</groupId>
-        <artifactId>maven-license-plugin</artifactId>
-        <configuration>
-          <header>src/main/resources/license.txt</header>
-          <aggregate>true</aggregate>
-        </configuration>
+				<groupId>com.mycila</groupId>
+				<artifactId>license-maven-plugin</artifactId>
         <executions>
           <execution>
             <id>check-headers</id>

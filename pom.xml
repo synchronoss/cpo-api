@@ -144,6 +144,9 @@
           <version>2.4.1</version>
           <configuration>
             <autoVersionSubmodules>true</autoVersionSubmodules>
+            <mavenExecutorId>forked-path</mavenExecutorId>
+            <useReleaseProfile>false</useReleaseProfile>
+            <arguments>-Psonatype-oss-release -Dusername=${username}</arguments>
           </configuration>
         </plugin>
         <plugin>

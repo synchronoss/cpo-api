@@ -80,23 +80,6 @@
         <artifactId>xmlbeans-maven-plugin</artifactId>
       </plugin>
       <plugin>
-        <groupId>com.mycila.maven-license-plugin</groupId>
-        <artifactId>maven-license-plugin</artifactId>
-        <configuration>
-          <header>../src/main/resources/license.txt</header>
-          <aggregate>true</aggregate>
-        </configuration>
-        <executions>
-          <execution>
-            <id>check-headers</id>
-            <phase>validate</phase>
-            <goals>
-              <goal>format</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
         <configuration>

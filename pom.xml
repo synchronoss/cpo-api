@@ -112,8 +112,8 @@
     </developer>
   </developers>
   <scm>
-    <connection>scm:svn:svn+ssh://svn.code.sf.net/p/cpo/code/api/trunk</connection>
-    <developerConnection>scm:svn:svn+ssh://svn.code.sf.net/p/cpo/code/api/trunk</developerConnection>
+    <connection>scm:svn:svn+ssh://${username}@svn.code.sf.net/p/cpo/code/api/trunk</connection>
+    <developerConnection>scm:svn:svn+ssh://${username}@svn.code.sf.net/p/cpo/code/api/trunk</developerConnection>
     <url>https://svn.code.sf.net/p/cpo/code/api/trunk</url>
   </scm>
   <build>

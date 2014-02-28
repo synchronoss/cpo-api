@@ -35,6 +35,17 @@
     <relativePath>../pom.xml</relativePath>
   </parent>
   <description>CPO Maven Plugin</description>
+  <licenses>
+    <license>
+      <name>GNU Lesser General Public License</name>
+      <url>http://www.gnu.org/licenses/lgpl.txt</url>
+      <distribution>repo,manual</distribution>
+      <comments>This library is free software; you can redistribute it and/or modify it under the
+        terms of the GNU Lesser General Public License as published by the Free Software Foundation;
+        either version 2.1 of the License, or (at your option) any later version.
+      </comments>
+    </license>
+  </licenses>
   <properties>
     <oracleVersion>11.2.0.2.0</oracleVersion>
     <mysqlVersion>5.1.16</mysqlVersion>
@@ -129,6 +140,23 @@
           <execution>
             <goals>
               <goal>descriptor</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>com.mycila.maven-license-plugin</groupId>
+        <artifactId>maven-license-plugin</artifactId>
+        <configuration>
+          <header>../src/main/resources/license.txt</header>
+          <aggregate>true</aggregate>
+        </configuration>
+        <executions>
+          <execution>
+            <id>check-headers</id>
+            <phase>validate</phase>
+            <goals>
+              <goal>format</goal>
             </goals>
           </execution>
         </executions>

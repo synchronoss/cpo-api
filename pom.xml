@@ -114,7 +114,7 @@
   <scm>
     <connection>scm:git:git@github.com:berryware/cpo-api.git</connection>
     <developerConnection>scm:git:git@github.com:berryware/cpo-api.git</developerConnection>
-    <url>scm:git:git@github.com:berryware/cpo-api.git</url>
+    <url>https://github.com/berryware/cpo-api</url>
   </scm>
   <build>
     <resources>

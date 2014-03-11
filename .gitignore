@@ -1,3 +1,5 @@
 **/target/*
 **/*.iml
 .idea
+cpo-jdbc/src/test/sql/hsqldb/db/cpo.log
+cpo-jdbc/src/test/sql/hsqldb/db/cpo.properties

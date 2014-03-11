@@ -160,6 +160,8 @@
             <mapping>
               <!-- use /* instead of /** for java files -->
               <java>SLASHSTAR_STYLE</java>
+              <!-- use sql for cql -->
+              <cql>DOUBLEDASHES_STYLE</cql>
             </mapping>
             <excludes>
               <!-- netbeans action file -->

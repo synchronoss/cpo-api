@@ -28,20 +28,19 @@
     <href>/</href>
   </bannerLeft>
   <bannerRight>
-    <src>images/syn_logo.gif</src>
+    <src>images/syn_logo.png</src>
     <href>http://www.synchronoss.com</href>
   </bannerRight>
   <body>
     <links>
-      <item name="SourceForge Project" href="https://sourceforge.net/projects/cpo/"/>
-      <item name="SourceForge Files" href="https://sourceforge.net/project/showfiles.php?group_id=168495"/>
+      <item name="GitHub Project" href="http://github.com/berryware/cpo-util"/>
       <item name="Continuous Builds" href="http://continuous.synchronoss.net:8111/viewType.html?buildTypeId=bt2"/>
     </links>
     <menu ref="parent" inherit="top" />
     <menu ref="modules" inherit="top" />
     <menu ref="reports" inherit="top" />
     <menu name="Related Links" inherit="top">
-      <item name="CPO Util" href="cpo-util-sourceforge/"/>
+      <item name="CPO Util" href="../cpo-util/"/>
     </menu>
   </body>
 </project>

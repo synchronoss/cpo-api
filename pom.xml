@@ -34,7 +34,7 @@
     <version>7</version>
   </parent>
   <description>CPO is a persistence layer that is thin wrapper around JDBC that consumes and produces POJOs</description>
-  <url>http://cpo.sourceforge.net/</url>
+  <url>http://berryware.github.io/cpo-api/</url>
   <licenses>
     <license>
       <name>GNU Lesser General Public License</name>
@@ -55,31 +55,13 @@
     <system>teamcity</system>
     <url>http://continuous.synchronoss.net:8111/viewType.html?buildTypeId=bt2</url>
   </ciManagement>
-  <distributionManagement>
-    <site>
-      <!-- must create a shell for your account at sourceforge by execing: ssh -t <username>,<project name>@shell.sf.net create-->
-      <id>sf-cpo-site</id>
-      <url>scp://shell.sourceforge.net/home/project-web/cpo/htdocs/cpo-util-sourceforge</url>
-      <!--<url>sftp://web.sourceforge.net/home/project-web/cpo/htdocs/cpo-util-sourceforge</url>-->
-    </site>
-  </distributionManagement>
   <issueManagement>
-    <system>SourceForge</system>
-    <url>http://sourceforge.net/projects/cpo</url>
+    <system>GitHub</system>
+    <url>https://github.com/berryware/cpo-api/issues</url>
   </issueManagement>
-  <mailingLists>
-    <mailingList>
-      <name>CPO Users List</name>
-      <subscribe>cpo-users-subscribe@lists.sourceforge.net</subscribe>
-      <unsubscribe>cpo-users-unsubscribe@lists.sourceforge.net</unsubscribe>
-      <post>cpo-users@lists.sourceforge.net</post>
-      <archive>http://lists.sourceforge.net/mailman/listinfo/cpo-users</archive>
-    </mailingList>
-  </mailingLists>
   <developers>
     <developer>
       <name>David Berry</name>
-      <email>berryware@N0SP4M.users.sourceforge.net</email>
       <roles>
         <role>architect</role>
         <role>developer</role>
@@ -87,25 +69,9 @@
       <timezone>EST</timezone>
     </developer>
     <developer>
-      <name>Jay Colson</name>
-      <email>jcolson@N0SP4M.users.sourceforge.net</email>
-      <roles>
-        <role>developer</role>
-      </roles>
-      <timezone>EST</timezone>
-    </developer>
-    <developer>
-      <name>Eric Fedok</name>
-      <email>efedok@N0SP4M.users.sourceforge.net</email>
-      <roles>
-        <role>developer</role>
-      </roles>
-      <timezone>EST</timezone>
-    </developer>
-    <developer>
       <name>Michael Bellomo</name>
-      <email>curly72@N0SP4M.users.sourceforge.net</email>
       <roles>
+        <role>architect</role>
         <role>developer</role>
       </roles>
       <timezone>EST</timezone>

@@ -33,7 +33,7 @@
   </bannerRight>
   <body>
     <links>
-      <item name="GitHub Project" href="http://github.com/berryware/cpo-util"/>
+      <item name="GitHub Project" href="http://github.com/berryware/cpo-api"/>
       <item name="Continuous Builds" href="http://continuous.synchronoss.net:8111/viewType.html?buildTypeId=bt2"/>
     </links>
     <menu ref="parent" inherit="top" />

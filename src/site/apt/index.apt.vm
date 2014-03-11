@@ -33,11 +33,9 @@ Home - CPO ${currentVersion}
 
 * Where are the cpo maven repositories?
 
-  Right here on sourceforge!
+  Releases are sync'd to maven central.  Snapshots can be found on Sonatype's OSS Repository
 
-  Snapshots: http://cpo.sourceforge.net/sf-cpo-snapshots
-
-  Releases: http://cpo.sourceforge.net/sf-cpo-releases
+  Snapshots: https://oss.sonatype.org/content/repositories/snapshots/
 
 * Example Usage Information
 

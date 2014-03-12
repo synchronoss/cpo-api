@@ -40,7 +40,7 @@
     <menu ref="modules" inherit="top" />
     <menu ref="reports" inherit="top" />
     <menu name="Related Links" inherit="top">
-      <item name="CPO Util" href="../cpo-util/"/>
+      <item name="CPO Util" href="http://berryware.github.io/cpo-util/"/>
     </menu>
   </body>
 </project>

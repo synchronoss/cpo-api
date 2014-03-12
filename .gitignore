@@ -2,3 +2,5 @@
 **/*.iml
 .idea
 **/.DS_Store
+cpo-jdbc/src/test/sql/hsqldb/db/cpo.log
+cpo-jdbc/src/test/sql/hsqldb/db/cpo.properties

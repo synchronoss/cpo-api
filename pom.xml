@@ -58,9 +58,9 @@
   </ciManagement>
   <distributionManagement>
     <site>
-      <id>github-pages-site</id>
+      <id>cpo-github</id>
       <name>Deployment through GitHub's site deployment plugin</name>
-      <url>.</url>
+      <url>site</url>
     </site>
   </distributionManagement>
   <issueManagement>
@@ -190,15 +190,6 @@
             <skipDeploy>true</skipDeploy>
           </configuration>
         </plugin>
-        <plugin>
-          <groupId>com.github.github</groupId>
-          <artifactId>site-maven-plugin</artifactId>
-          <version>0.9</version>
-          <configuration>
-            <message>Creating site for ${project.name}</message>
-            <path>${project.distributionManagement.site.url}</path>
-          </configuration>
-        </plugin>
       </plugins>
     </pluginManagement>
     <plugins>
@@ -229,8 +220,16 @@
       <plugin>
         <groupId>com.github.github</groupId>
         <artifactId>site-maven-plugin</artifactId>
+        <version>0.9</version>
+        <configuration>
+          <message>Creating site for ${project.artifactId}, ${project.version}</message>
+          <!-- this does the trick to place every module in the correct subfolder -->
+          <path>${project.distributionManagement.site.url}</path>
+          <merge>true</merge>
+        </configuration>
         <executions>
           <execution>
+            <id>github-site</id>
             <goals>
               <goal>site</goal>
             </goals>
@@ -321,22 +320,37 @@
         <version>2.12.4</version>
       </plugin>
       <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>taglist-maven-plugin</artifactId>
-        <version>2.2</version>
-        <configuration>
-          <tags>
-            <tag>TODO</tag>
-            <tag>FIXME</tag>
-            <tag>@todo</tag>
-            <tag>@deprecated</tag>
-          </tags>
-        </configuration>
-      </plugin>
-      <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-jxr-plugin</artifactId>
         <version>2.3</version>
+      </plugin>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>taglist-maven-plugin</artifactId>
+        <version>2.4</version>
+        <configuration>
+          <tagListOptions>
+            <tagClasses>
+              <tagClass>
+                <displayName>Todo Work</displayName>
+                <tags>
+                  <tag>
+                    <matchString>todo</matchString>
+                    <matchType>ignoreCase</matchType>
+                  </tag>
+                  <tag>
+                    <matchString>FIXME</matchString>
+                    <matchType>exact</matchType>
+                  </tag>
+                  <tag>
+                    <matchString>@deprecated</matchString>
+                    <matchType>exact</matchType>
+                  </tag>
+                </tags>
+              </tagClass>
+            </tagClasses>
+          </tagListOptions>
+        </configuration>
       </plugin>
       <plugin>
         <artifactId>maven-javadoc-plugin</artifactId>

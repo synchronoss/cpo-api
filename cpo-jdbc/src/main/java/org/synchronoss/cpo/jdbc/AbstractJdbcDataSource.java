@@ -24,6 +24,7 @@ import javax.sql.DataSource;
 import java.io.PrintWriter;
 import java.sql.*;
 import java.util.*;
+import java.util.logging.Logger;
 
 /**
  * @author dberry
@@ -78,5 +79,11 @@ public abstract class AbstractJdbcDataSource extends AbstractJdbcDataSourceInfo 
   @Override
   public boolean isWrapperFor(Class<?> iface) throws SQLException {
     return false;
+  }
+
+  // Cannot use @Override if you want this to build in java 6
+  @Override
+  public Logger getParentLogger() throws SQLFeatureNotSupportedException {
+    throw new SQLFeatureNotSupportedException();
   }
 }

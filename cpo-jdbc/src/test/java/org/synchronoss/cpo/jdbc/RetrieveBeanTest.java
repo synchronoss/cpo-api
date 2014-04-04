@@ -76,6 +76,18 @@ public class RetrieveBeanTest extends TestCase {
     }
   }
 
+  public void testAutoCloseable() throws CpoException {
+    String method = "testAutoCloseable:";
+    CpoTrxAdapter cpoAdapter1 = null;
+    try (CpoTrxAdapter cpoAdapter2 = CpoAdapterFactory.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_JDBC).getCpoTrxAdapter()) {
+      cpoAdapter1 = cpoAdapter2;
+      assertFalse(cpoAdapter1.isClosed());
+    } catch (Exception e) {
+      fail(method + e.getMessage());
+    }
+    assertTrue(cpoAdapter1.isClosed());
+  }
+
   public void testRetrieveBeans() {
     String method = "testRetrieveBeans:";
     Collection<ValueObject> col;

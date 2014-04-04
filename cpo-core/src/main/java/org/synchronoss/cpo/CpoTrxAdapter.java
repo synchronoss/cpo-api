@@ -26,7 +26,7 @@ package org.synchronoss.cpo;
  *
  * @author david berry
  */
-public interface CpoTrxAdapter extends CpoAdapter {
+public interface CpoTrxAdapter extends CpoAdapter, AutoCloseable {
 
   /**
    * Commits the current transaction behind the CpoTrxAdapter

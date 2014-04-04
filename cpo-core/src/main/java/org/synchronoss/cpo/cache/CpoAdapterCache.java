@@ -25,29 +25,29 @@ import org.synchronoss.cpo.CpoAdapter;
 import java.util.*;
 
 /**
- *
  * @author dberry
  */
 public class CpoAdapterCache {
-  
+
   private static final Map<String, CpoAdapter> adapterMap = new HashMap<String, CpoAdapter>();
-  
-  protected static CpoAdapter findCpoAdapter(String adapterKey){
-    CpoAdapter adapter=null;
-    
-    if (adapterKey!=null)
+
+  protected static CpoAdapter findCpoAdapter(String adapterKey) {
+    CpoAdapter adapter = null;
+
+    if (adapterKey != null) {
       adapter = adapterMap.get(adapterKey);
-    
+    }
+
     return adapter;
   }
-  
-  protected static CpoAdapter addCpoAdapter(String adapterKey, CpoAdapter adapter){
-    CpoAdapter oldAdapter=null;
-    
-    if (adapterKey!=null && adapter != null)
+
+  protected static CpoAdapter addCpoAdapter(String adapterKey, CpoAdapter adapter) {
+    CpoAdapter oldAdapter = null;
+
+    if (adapterKey != null && adapter != null) {
       oldAdapter = adapterMap.put(adapterKey, adapter);
-    
+    }
+
     return oldAdapter;
   }
-  
 }

@@ -21,17 +21,15 @@
 package org.synchronoss.cpo;
 
 /**
- *
  * @author dberry
  */
 public interface CpoData {
-  
+
   public Object invokeGetter() throws CpoException;
-  
+
   public void invokeSetter(Object instanceObject) throws CpoException;
-  
+
   public Object transformIn(Object datasourceObject) throws CpoException;
 
   public Object transformOut(Object attributeObject) throws CpoException;
-
 }

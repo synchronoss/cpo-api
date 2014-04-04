@@ -34,7 +34,7 @@ public class BindableWhereBuilder<T> implements NodeVisitor {
 
   private StringBuilder whereClause = new StringBuilder();
   private CpoClass cpoClass = null;
-  private Collection<BindAttribute> bindValues = new ArrayList<BindAttribute>();
+  private Collection<BindAttribute> bindValues = new ArrayList<>();
 
   public String getWhereClause() {
     return whereClause.toString();

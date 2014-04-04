@@ -28,25 +28,24 @@ import org.synchronoss.cpo.meta.domain.CpoAttribute;
 import java.lang.reflect.InvocationTargetException;
 
 /**
- *
  * @author dberry
  */
 public class ResultSetCpoData extends AbstractBindableCpoData {
 
   private static final Logger logger = LoggerFactory.getLogger(ResultSetCpoData.class);
   private Object rs = null;
-  MethodMapper methodMapper;
+  MethodMapper<?> methodMapper;
 
-  public ResultSetCpoData(MethodMapper methodMapper, Object rs, CpoAttribute cpoAttribute, int index) {
+  public ResultSetCpoData(MethodMapper<?> methodMapper, Object rs, CpoAttribute cpoAttribute, int index) {
     super(cpoAttribute, index);
-    this.methodMapper=methodMapper;
+    this.methodMapper = methodMapper;
     this.rs = rs;
   }
 
   @Override
   public Object invokeGetter() throws CpoException {
     Object javaObject;
-    MethodMapEntry<?,?> methodMapEntry = methodMapper.getDataMethodMapEntry(getDataGetterReturnType());
+    MethodMapEntry<?, ?> methodMapEntry = methodMapper.getDataMethodMapEntry(getDataGetterReturnType());
     if (methodMapEntry == null) {
       throw new CpoException("Error Retrieveing Jdbc Method for type: " + getDataGetterReturnType().getName());
     }
@@ -64,5 +63,4 @@ public class ResultSetCpoData extends AbstractBindableCpoData {
 
     return javaObject;
   }
-
 }

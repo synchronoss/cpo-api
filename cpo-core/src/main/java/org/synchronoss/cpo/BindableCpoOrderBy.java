@@ -20,10 +20,7 @@
  */
 package org.synchronoss.cpo;
 
-import org.synchronoss.cpo.CpoException;
-import org.synchronoss.cpo.CpoOrderBy;
-import org.synchronoss.cpo.meta.domain.CpoAttribute;
-import org.synchronoss.cpo.meta.domain.CpoClass;
+import org.synchronoss.cpo.meta.domain.*;
 
 /**
  * BindableCpoOrderBy is an interface for specifying the sort order in which objects are returned from the Datasource.

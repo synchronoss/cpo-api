@@ -24,7 +24,6 @@ import org.synchronoss.cpo.AbstractCpoData;
 import org.synchronoss.cpo.meta.domain.CpoAttribute;
 
 /**
- *
  * @author dberry
  */
 public abstract class AbstractBindableCpoData extends AbstractCpoData {
@@ -39,5 +38,4 @@ public abstract class AbstractBindableCpoData extends AbstractCpoData {
   public int getIndex() {
     return index;
   }
-
 }

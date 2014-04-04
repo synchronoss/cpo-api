@@ -20,10 +20,6 @@
  */
 package org.synchronoss.cpo;
 
-import javax.sql.DataSource;
-import java.util.Properties;
-import java.util.SortedMap;
-
 /**
  * Created with IntelliJ IDEA.
  * User: dberry

@@ -42,10 +42,12 @@ public abstract class CpoBaseAdapter<T> extends CpoAdapterCache implements CpoAd
    * The datasource where read queries are executed against
    */
   private T readDataSource = null;
+
   /**
    * The datasource where write queries are executed against
    */
   private T writeDataSource = null;
+
   /**
    * The name of the datasource
    */

@@ -35,16 +35,16 @@ public abstract class CpoClass extends CpoClassBean implements Comparable<CpoCla
   /**
    * javaMap contains a Map of CpoAttribute Objects the key is the javaName of the attribute
    */
-  private Map<String, CpoAttribute> javaMap = new HashMap<String, CpoAttribute>();
+  private Map<String, CpoAttribute> javaMap = new HashMap<>();
   /**
    * dataMap contains a Map of CpoAttribute Objects the key is the dataName of the attribute
    */
-  private Map<String, CpoAttribute> dataMap = new HashMap<String, CpoAttribute>();
+  private Map<String, CpoAttribute> dataMap = new HashMap<>();
   /**
    * functionGroups is a hashMap that contains a hashMap of CpoFunctionGroup Lists that are used by this object to persist and
    * retrieve it into a datasource.
    */
-  private Map<String, CpoFunctionGroup> functionGroups = new HashMap<String, CpoFunctionGroup>();
+  private Map<String, CpoFunctionGroup> functionGroups = new HashMap<>();
 
   public CpoClass() {
   }
@@ -137,13 +137,13 @@ public abstract class CpoClass extends CpoClassBean implements Comparable<CpoCla
     visitor.visit(this);
 
     // visit attributes -- need these sorted
-    TreeMap<String, CpoAttribute> attributeMap = new TreeMap<String, CpoAttribute>(javaMap);
+    TreeMap<String, CpoAttribute> attributeMap = new TreeMap<>(javaMap);
     for (CpoAttribute cpoAttribute : attributeMap.values()) {
       visitor.visit(cpoAttribute);
     }
 
     // visit function groups -- need these sorted
-    TreeMap<String, CpoFunctionGroup> functionGroupMap = new TreeMap<String, CpoFunctionGroup>(functionGroups);
+    TreeMap<String, CpoFunctionGroup> functionGroupMap = new TreeMap<>(functionGroups);
     for (CpoFunctionGroup cpoFunctionGroup : functionGroupMap.values()) {
       visitor.visit(cpoFunctionGroup);
 

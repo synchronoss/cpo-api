@@ -20,19 +20,13 @@
  */
 package org.synchronoss.cpo;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.slf4j.*;
 import org.synchronoss.cpo.helper.ExceptionHelper;
-import org.synchronoss.cpo.meta.MethodMapEntry;
-import org.synchronoss.cpo.meta.MethodMapper;
-import org.synchronoss.cpo.meta.domain.CpoArgument;
-import org.synchronoss.cpo.meta.domain.CpoAttribute;
-import org.synchronoss.cpo.meta.domain.CpoClass;
-import org.synchronoss.cpo.meta.domain.CpoFunction;
+import org.synchronoss.cpo.meta.*;
+import org.synchronoss.cpo.meta.domain.*;
 
 import java.io.StringReader;
 import java.lang.reflect.InvocationTargetException;
-import java.sql.PreparedStatement;
 import java.util.*;
 import java.util.Map.Entry;
 
@@ -48,17 +42,20 @@ public abstract class CpoStatementFactory implements CpoReleasible {
    * Version Id for this class.
    */
   private static final long serialVersionUID = 1L;
+
   /**
    * DOCUMENT ME!
    */
   private static final Logger logger = LoggerFactory.getLogger(CpoStatementFactory.class);
   private Logger localLogger = null;
 
-  private List<CpoReleasible> releasibles = new ArrayList<CpoReleasible>();
+  private List<CpoReleasible> releasibles = new ArrayList<>();
   private static final String WHERE_MARKER = "__CPO_WHERE__";
   private static final String ORDERBY_MARKER = "__CPO_ORDERBY__";
 
-  private CpoStatementFactory(){}
+  private CpoStatementFactory() {
+    // hidden constructor
+  }
 
   public CpoStatementFactory(Logger localLogger){
     this.localLogger = localLogger;
@@ -87,7 +84,7 @@ public abstract class CpoStatementFactory implements CpoReleasible {
 
     if (wheres != null) {
       for (CpoWhere where : wheres) {
-        BindableWhereBuilder<T> jwb = new BindableWhereBuilder<T>(cpoClass);
+        BindableWhereBuilder<T> jwb = new BindableWhereBuilder<>(cpoClass);
         BindableCpoWhere jcw = (BindableCpoWhere) where;
 
         // do the where stuff here when ready
@@ -109,7 +106,7 @@ public abstract class CpoStatementFactory implements CpoReleasible {
 
     // do the order by stuff now
     if (orderBy != null) {
-      HashMap<String, StringBuilder> mapOrderBy = new HashMap<String, StringBuilder>();
+      HashMap<String, StringBuilder> mapOrderBy = new HashMap<>();
       try {
         for (CpoOrderBy ob : orderBy) {
           StringBuilder sb = mapOrderBy.get(ob.getMarker());
@@ -295,7 +292,7 @@ public abstract class CpoStatementFactory implements CpoReleasible {
             } else {
               localLogger.debug(cpoAttribute.getDataName() + "=" + bindObject);
             }
-            jsm.getBsSetter().invoke(this.getBindableStatement(), new Object[]{index++, bindObject});
+            jsm.getBsSetter().invoke(this.getBindableStatement(), index++, bindObject);
           } catch (IllegalAccessException iae) {
             localLogger.error("Error Accessing Prepared Statement Setter: " + ExceptionHelper.getLocalizedMessage(iae));
             throw new CpoException(iae);

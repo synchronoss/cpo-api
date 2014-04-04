@@ -30,17 +30,17 @@ public class CpoBlockingResultSet<E> implements CpoResultSet<E>, Iterator<E> {
   private static final Logger logger = LoggerFactory.getLogger(CpoBlockingResultSet.class);
   private static final long serialVersionUID = 1L;
   private int capacity = 0;
-  private final ThreadLocal<E> tlObj = new ThreadLocal<E>();
+  private final ThreadLocal<E> tlObj = new ThreadLocal<>();
   private LinkedBlockingQueue<E> lbq = null;
-  private final Set<Thread> producers = new HashSet<Thread>();
-  private final Set<Thread> consumers = new HashSet<Thread>();
+  private final Set<Thread> producers = new HashSet<>();
+  private final Set<Thread> consumers = new HashSet<>();
 
   private CpoBlockingResultSet() {
   }
 
   public CpoBlockingResultSet(int capacity) {
     this.capacity = capacity;
-    lbq = new LinkedBlockingQueue<E>(capacity);
+    lbq = new LinkedBlockingQueue<>(capacity);
   }
 
   @Override
@@ -69,7 +69,6 @@ public class CpoBlockingResultSet<E> implements CpoResultSet<E>, Iterator<E> {
       return false;
     }
     return true;
-
   }
 
   @Override

@@ -33,6 +33,7 @@ public class CpoException extends Exception {
    * Version Id for this class.
    */
   private static final long serialVersionUID = 1L;
+
   /**
    * Nested Exception to hold wrapped exception.
    *

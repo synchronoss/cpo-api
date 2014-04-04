@@ -64,7 +64,7 @@ public interface CpoOrderBy {
   public String getMarker();  
   
   /**
-   * @param s returns the string that will be added into the expression 
+   * @return the string that will be added into the expression
    */
   public String toString(CpoClass cpoClass) throws CpoException;
 }

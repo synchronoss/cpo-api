@@ -49,7 +49,7 @@ public interface CpoMetaAdapter {
 
   public String getDataTypeName(CpoAttribute attribute) throws CpoException ;
 
-  public Class getDataTypeJavaClass(CpoAttribute attribute) throws CpoException ;
+  public Class<?> getDataTypeJavaClass(CpoAttribute attribute) throws CpoException ;
 
   public int getDataTypeInt(String dataTypeName) throws CpoException ;
 

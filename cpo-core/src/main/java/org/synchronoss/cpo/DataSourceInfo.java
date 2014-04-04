@@ -20,14 +20,11 @@
  */
 package org.synchronoss.cpo;
 
-import javax.sql.DataSource;
-
 /**
  * Interface that defines the methods needed by CPO for any class that collects DataSource info and instantiates the
  * DataSource
  *
  * @author david.berry
- *
  */
 public interface DataSourceInfo<T> {
 

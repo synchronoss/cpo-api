@@ -28,7 +28,6 @@ import org.synchronoss.cpo.meta.domain.*;
 import java.util.*;
 
 /**
- *
  * @author dberry
  */
 public abstract class AbstractCpoMetaAdapter implements CpoMetaAdapter {
@@ -37,7 +36,7 @@ public abstract class AbstractCpoMetaAdapter implements CpoMetaAdapter {
   /**
    * The map of classes in this metaAdapter
    */
-  private Map<String, CpoClass> classMap = new HashMap<String, CpoClass>();
+  private Map<String, CpoClass> classMap = new HashMap<>();
   private CpoClass currentClass = null;
 
   protected AbstractCpoMetaAdapter() {
@@ -83,7 +82,7 @@ public abstract class AbstractCpoMetaAdapter implements CpoMetaAdapter {
 
   @Override
   public List<CpoClass> getCpoClasses() {
-    List<CpoClass> result = new ArrayList<CpoClass>();
+    List<CpoClass> result = new ArrayList<>();
     result.addAll(classMap.values());
     return result;
   }
@@ -171,7 +170,7 @@ public abstract class AbstractCpoMetaAdapter implements CpoMetaAdapter {
 
       try {
         functionGroup = cpoClass.getFunctionGroup(ctFunctionGroup.getType().toString(), ctFunctionGroup.getName());
-      } catch (Exception e){
+      } catch (Exception e) {
         // this a runtime exception that we can ignore during load time.
         if (logger.isTraceEnabled()) {
           logger.trace(e.getLocalizedMessage());
@@ -211,7 +210,6 @@ public abstract class AbstractCpoMetaAdapter implements CpoMetaAdapter {
       cpoFunctionGroup.addFunction(cpoFunction);
       loadCpoFunction(cpoFunction, ctFunction);
     }
-
   }
 
   protected void loadCpoFunction(CpoFunction cpoFunction, CtFunction ctFunction) {
@@ -234,10 +232,11 @@ public abstract class AbstractCpoMetaAdapter implements CpoMetaAdapter {
   }
 
   protected CpoClass createCpoClass(boolean caseSensitive) {
-    if (caseSensitive)
+    if (caseSensitive) {
       return new CpoClassCaseSensitive();
-    else
+    } else {
       return new CpoClassCaseInsensitive();
+    }
   }
 
   protected CpoAttribute createCpoAttribute() {
@@ -262,11 +261,11 @@ public abstract class AbstractCpoMetaAdapter implements CpoMetaAdapter {
 
   protected void addCpoClass(CpoClass metaClass) {
     CpoClass oldMetaClass = classMap.put(metaClass.getName(), metaClass);
-    if (oldMetaClass != null)
+    if (oldMetaClass != null) {
       logger.debug("Overwrote class: " + metaClass.getName());
-    else
+    } else {
       logger.debug("Added class: " + metaClass.getName());
-
+    }
   }
 
   protected void removeCpoClass(CpoClass metaClass) {
@@ -278,7 +277,6 @@ public abstract class AbstractCpoMetaAdapter implements CpoMetaAdapter {
   }
 
   protected void removeAllCpoClass() {
-      classMap.clear();
+    classMap.clear();
   }
-
 }

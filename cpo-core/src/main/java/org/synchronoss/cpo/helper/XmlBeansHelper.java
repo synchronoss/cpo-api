@@ -25,14 +25,13 @@ import org.apache.xmlbeans.*;
 import java.util.ArrayList;
 
 /**
- *
  * @author dberry
  */
 public class XmlBeansHelper {
   public static String validateXml(XmlObject xmlObj) {
     StringBuilder sb = new StringBuilder();
     String errMsg = null;
-    ArrayList<XmlValidationError> validationErrors = new ArrayList<XmlValidationError>(); 
+    ArrayList<XmlValidationError> validationErrors = new ArrayList<>();
     XmlOptions validationOptions = new XmlOptions(); 
     validationOptions.setErrorListener(validationErrors); 
     boolean isValid = xmlObj.validate(validationOptions); // to display error we should pass options.

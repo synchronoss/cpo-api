@@ -24,7 +24,6 @@ import org.synchronoss.cpo.meta.domain.CpoAttribute;
 
 /**
  * @author david.berry
- *
  */
 public class BindAttribute {
 
@@ -53,5 +52,4 @@ public class BindAttribute {
   public String getName() {
     return name;
   }
-
 }

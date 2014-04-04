@@ -29,7 +29,7 @@ public interface NodeVisitor {
   /**
    * This is called by composite nodes prior to visiting children
    *
-   * @param val The node to be visited
+   * @param node The node to be visited
    * @return a boolean (false) to end visit or (true) to continue visiting
    */
   public boolean visitBegin(Node node) throws Exception;
@@ -37,7 +37,7 @@ public interface NodeVisitor {
   /**
    * This is called for composite nodes between visiting children
    *
-   * @param val The node to be visited
+   * @param node The node to be visited
    * @return a boolean (false) to end visit or (true) to continue visiting
    */
   public boolean visitMiddle(Node node) throws Exception;
@@ -45,7 +45,7 @@ public interface NodeVisitor {
   /**
    * This is called by composite nodes after visiting children
    *
-   * @param val The node to be visited
+   * @param node The node to be visited
    * @return a boolean (false) to end visit or (true) to continue visiting
    */
   public boolean visitEnd(Node node) throws Exception;
@@ -53,7 +53,7 @@ public interface NodeVisitor {
   /**
    * This is called for component elements which have no children
    *
-   * @param val The element to be visited
+   * @param node The element to be visited
    * @return a boolean (false) to end visit or (true) to continue visiting
    */
   public boolean visit(Node node) throws Exception;

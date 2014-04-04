@@ -35,9 +35,10 @@ import java.util.List;
  * To change this template use File | Settings | File Templates.
  */
 public class DataTypeMapper {
+
   private static final Logger logger = LoggerFactory.getLogger(DataTypeMapper.class);
-  private HashMap<Integer, DataTypeMapEntry<?>> dataTypeIntMap = new HashMap<Integer, DataTypeMapEntry<?>>();
-  private HashMap<String, DataTypeMapEntry<?>> dataTypeNameMap = new HashMap<String, DataTypeMapEntry<?>>();
+  private HashMap<Integer, DataTypeMapEntry<?>> dataTypeIntMap = new HashMap<>();
+  private HashMap<String, DataTypeMapEntry<?>> dataTypeNameMap = new HashMap<>();
   DataTypeMapEntry<?> defaultDataTypeMapEntry = null;
 
   // Do not allow default constructor
@@ -45,22 +46,24 @@ public class DataTypeMapper {
   }
 
   public DataTypeMapper(DataTypeMapEntry<?> defaultDataTypeMapEntry) {
-    if (defaultDataTypeMapEntry == null)
+    if (defaultDataTypeMapEntry == null) {
       throw new IllegalArgumentException();
+    }
     this.defaultDataTypeMapEntry = defaultDataTypeMapEntry;
   }
 
-  public void addDataTypeEntry(DataTypeMapEntry<?> dtme){
+  public void addDataTypeEntry(DataTypeMapEntry<?> dtme) {
     dataTypeIntMap.put(dtme.getDataTypeInt(), dtme);
     dataTypeNameMap.put(dtme.getDataTypeName(), dtme);
-    logger.debug("Added DataType "+dtme.getDataTypeName());
+    logger.debug("Added DataType " + dtme.getDataTypeName());
   }
 
   public DataTypeMapEntry<?> getDataTypeMapEntry(int dataTypeInt) {
     DataTypeMapEntry<?> dataTypeMapEntry = dataTypeIntMap.get(dataTypeInt);
 
-    if (dataTypeMapEntry == null)
+    if (dataTypeMapEntry == null) {
       dataTypeMapEntry = defaultDataTypeMapEntry;
+    }
 
     return dataTypeMapEntry;
   }
@@ -68,8 +71,9 @@ public class DataTypeMapper {
   public DataTypeMapEntry<?> getDataTypeMapEntry(String dataTypeName) {
     DataTypeMapEntry<?> dataTypeMapEntry = dataTypeNameMap.get(dataTypeName);
 
-    if (dataTypeMapEntry == null)
+    if (dataTypeMapEntry == null) {
       dataTypeMapEntry = defaultDataTypeMapEntry;
+    }
 
     return dataTypeMapEntry;
   }
@@ -77,8 +81,9 @@ public class DataTypeMapper {
   public int getDataTypeInt(String dataTypeName) {
     DataTypeMapEntry<?> dataTypeMapEntry = dataTypeNameMap.get(dataTypeName);
 
-    if (dataTypeMapEntry == null)
+    if (dataTypeMapEntry == null) {
       dataTypeMapEntry = defaultDataTypeMapEntry;
+    }
 
     return dataTypeMapEntry.getDataTypeInt();
   }
@@ -90,8 +95,9 @@ public class DataTypeMapper {
   public Class<?> getDataTypeJavaClass(Integer dataTypeInt) {
     DataTypeMapEntry<?> dataTypeMapEntry = dataTypeIntMap.get(dataTypeInt);
 
-    if (dataTypeMapEntry == null)
+    if (dataTypeMapEntry == null) {
       dataTypeMapEntry = defaultDataTypeMapEntry;
+    }
 
     return dataTypeMapEntry.getJavaClass();
   }
@@ -99,8 +105,9 @@ public class DataTypeMapper {
   public Class<?> getDataTypeJavaClass(String dataTypeName) {
     DataTypeMapEntry<?> dataTypeMapEntry = dataTypeNameMap.get(dataTypeName);
 
-    if (dataTypeMapEntry == null)
+    if (dataTypeMapEntry == null) {
       dataTypeMapEntry = defaultDataTypeMapEntry;
+    }
 
     return dataTypeMapEntry.getJavaClass();
   }
@@ -111,5 +118,4 @@ public class DataTypeMapper {
     al.addAll(dataTypeNameMap.keySet());
     return al;
   }
-
 }

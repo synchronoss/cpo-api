@@ -26,6 +26,8 @@ import java.util.*;
 
 public class CpoFunctionGroup extends CpoFunctionGroupBean implements Comparable<CpoFunctionGroup> {
 
+  private static final long serialVersionUID = 1L;
+
   List<CpoFunction> functions = new ArrayList<CpoFunction>();
 
   public CpoFunctionGroup() {

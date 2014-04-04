@@ -20,7 +20,6 @@
  */
 package org.synchronoss.cpo;
 
-import org.synchronoss.cpo.*;
 import org.synchronoss.cpo.meta.domain.*;
 
 import java.util.Collection;

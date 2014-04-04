@@ -37,7 +37,7 @@ public final class CpoAdapterFactory {
 
   private static final Logger logger = LoggerFactory.getLogger(CpoAdapterFactory.class);
   private static final String CPO_CONFIG_XML = "/cpoConfig.xml";
-  private static volatile Map<String, CpoAdapter> adapterMap = new HashMap<String, CpoAdapter>();
+  private static volatile Map<String, CpoAdapter> adapterMap = new HashMap<>();
   private static String defaultContext = null;
 
   static {
@@ -120,7 +120,7 @@ public final class CpoAdapterFactory {
   }
 
   public static CpoAdapter makeCpoAdapter(CtDataSourceConfig dataSourceConfig) throws CpoException {
-    CpoAdapter cpoAdapter = null;
+    CpoAdapter cpoAdapter;
 
     // make the CpoAdapter
     try {

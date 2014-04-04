@@ -55,7 +55,7 @@ public class CpoMetaDescriptor extends CpoMetaDescriptorCache implements CpoMeta
 
     // Lets create the metaAdapter
     try {
-      Class metaAdapterClass = getMetaAdapterClass();
+      Class<?> metaAdapterClass = getMetaAdapterClass();
       logger.debug("Creating MetaAdapter: " + metaAdapterClass.getName());
       metaAdapter = (AbstractCpoMetaAdapter)metaAdapterClass.newInstance();
       logger.debug("Created MetaAdapter: " + metaAdapterClass.getName());
@@ -68,7 +68,7 @@ public class CpoMetaDescriptor extends CpoMetaDescriptorCache implements CpoMeta
     }
   }
 
-  protected Class getMetaAdapterClass() throws CpoException {
+  protected Class<?> getMetaAdapterClass() throws CpoException {
     throw new CpoException("getMetaAdapterClass() must be implemented");
   }
 
@@ -264,7 +264,7 @@ public class CpoMetaDescriptor extends CpoMetaDescriptorCache implements CpoMeta
   }
 
   @Override
-  public Class getDataTypeJavaClass(CpoAttribute attribute) throws CpoException {
+  public Class<?> getDataTypeJavaClass(CpoAttribute attribute) throws CpoException {
     return getCpoMetaAdapter().getDataTypeJavaClass(attribute);
   }
 

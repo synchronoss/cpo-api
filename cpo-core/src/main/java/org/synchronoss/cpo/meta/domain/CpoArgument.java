@@ -24,6 +24,8 @@ import org.synchronoss.cpo.meta.bean.CpoArgumentBean;
 
 public class CpoArgument extends CpoArgumentBean {
 
+  private static final long serialVersionUID = 1L;
+
   CpoAttribute attribute = null;
 
   public CpoArgument() {

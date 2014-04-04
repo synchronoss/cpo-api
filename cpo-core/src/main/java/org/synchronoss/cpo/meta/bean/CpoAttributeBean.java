@@ -22,6 +22,8 @@ package org.synchronoss.cpo.meta.bean;
 
 public class CpoAttributeBean implements java.io.Serializable {
 
+  private static final long serialVersionUID = 1L;
+
   /*
    * Properties
    */

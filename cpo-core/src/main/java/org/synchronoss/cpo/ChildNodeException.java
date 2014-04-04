@@ -25,8 +25,7 @@ package org.synchronoss.cpo;
  *
  * @author Walter Jordan
  */
-public class ChildNodeException
-        extends Exception {
+public class ChildNodeException extends Exception {
 
   /**
    * Version Id for this class.

@@ -20,11 +20,10 @@
  */
 package org.synchronoss.cpo;
 
-import java.util.Collection;
-import java.util.List;
-
 import org.synchronoss.cpo.meta.CpoMetaDescriptor;
 import org.synchronoss.cpo.meta.domain.CpoAttribute;
+
+import java.util.*;
 
 /**
  * CpoAdapter is an interface for a set of routines that are responsible for Creating, Retrieving, Updating, and
@@ -1419,7 +1418,7 @@ public interface CpoAdapter extends java.io.Serializable {
    * @param orderBy           The CpoOrderBy bean that defines the order in which beans should be returned
    * @param nativeExpressions Native expression that will be used to augment the expression stored in the meta data. This
    *                          text will be embedded at run-time
-   * @param the               queue size of the buffer that it uses to send the beans from the producer to the consumer.
+   * @param queueSize         queue size of the buffer that it uses to send the beans from the producer to the consumer.
    * @return A CpoResultSet that can be iterated through
    * @throws CpoException Thrown if there are errors accessing the datasource
    */

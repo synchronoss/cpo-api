@@ -157,7 +157,7 @@ public class Node implements Serializable, Cloneable, Comparable<Node> {
    * @return an Node representing the parent of this node or null if no parent exists.
    */
   public Node getParentNode() {
-    return (Node)this.parent;
+    return this.parent;
   }
 
   /**
@@ -200,7 +200,7 @@ public class Node implements Serializable, Cloneable, Comparable<Node> {
    * This function adds a child to the linked-list of children for this node. It adds the child to the end of the list.
    *
    * @param node Node that is the node to be added as a child of this Node.
-   * @throws NodeException
+   * @throws ChildNodeException
    */
   public void addChild(Node node) throws ChildNodeException {
     if (node != null) {
@@ -219,7 +219,7 @@ public class Node implements Serializable, Cloneable, Comparable<Node> {
         }
         node.setNextSibling(getFirstChild());
       }
-      node.setParent((Node)this);
+      node.setParent(this);
     }
   }
 
@@ -227,7 +227,7 @@ public class Node implements Serializable, Cloneable, Comparable<Node> {
    * This function adds a child to the linked-list of children for this node. It adds the child to the end of the list.
    *
    * @param node Node that is the node to be added as a child of this Node.
-   * @throws NodeException
+   * @throws ChildNodeException
    */
   public void addChildSort(Node node) throws ChildNodeException {
     addChildSort(node, null);
@@ -268,7 +268,7 @@ public class Node implements Serializable, Cloneable, Comparable<Node> {
           node.setNextSibling(getFirstChild());
         }
       }
-      node.setParent((Node)this);
+      node.setParent(this);
     }
   }
 
@@ -444,7 +444,7 @@ public class Node implements Serializable, Cloneable, Comparable<Node> {
    * visitMiddle(), and visitEnd() for parent nodes and will call visit() for leaf nodes.
    *
    * @param nv INodeVisitor to call upon reaching a node when traversing the tree.
-   * @see INodeVisitor
+   * @see NodeVisitor
    */
   public boolean acceptDFVisitor(NodeVisitor nv) throws Exception {
     Node currNode;

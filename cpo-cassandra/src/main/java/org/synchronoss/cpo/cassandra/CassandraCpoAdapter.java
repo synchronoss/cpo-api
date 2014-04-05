@@ -2053,6 +2053,29 @@ public class CassandraCpoAdapter extends CpoBaseAdapter<ClusterDataSource> {
     return attributes;
   }
 
+  private ResultSet executeBatchStatements(Session session, ArrayList<CassandraBoundStatementFactory> statementFactories) throws Exception {
+    ResultSet resultSet;
+
+    ArrayList<BoundStatement> boundStatements = new ArrayList<>(statementFactories.size());
+
+    for (CassandraBoundStatementFactory factory : statementFactories) {
+      boundStatements.add(factory.getBoundStatement());
+    }
+
+    try {
+      BatchStatement batchStatement = new BatchStatement();
+      batchStatement.addAll(boundStatements);
+      resultSet = session.execute(batchStatement);
+    } catch (Exception e) {
+      throw e;
+    } finally {
+        for (CassandraBoundStatementFactory factory : statementFactories) {
+          factory.release();
+        }
+    }
+    return resultSet;
+  }
+
   private ResultSet executeBoundStatement(Session session, CassandraBoundStatementFactory boundStatementFactory) throws Exception {
     ResultSet resultSet;
     try {
@@ -2175,19 +2198,16 @@ public class CassandraCpoAdapter extends CpoBaseAdapter<ClusterDataSource> {
 
       int numStatements=0;
       localLogger.info("=================== Class=<" + arr[0].getClass() + "> Type=<" + groupType + "> Name=<" + groupName + "> =========================");
-      ArrayList<BoundStatement> boundStatements = new ArrayList<BoundStatement>();
+      ArrayList<CassandraBoundStatementFactory> statemetnFactories = new ArrayList<>();
       for (T obj : arr) {
         for (CpoFunction function : cpoFunctions) {
           boundStatementFactory = new CassandraBoundStatementFactory(sess, this, cpoClass, function, obj, wheres, orderBy, nativeExpressions);
-          executeBoundStatement(sess, boundStatementFactory);
-          boundStatements.add(boundStatementFactory.getBoundStatement());
+          statemetnFactories.add(boundStatementFactory);
           numStatements++;
         }
       }
-      // TODO - add back in when 2.0 driver is used
-//      BatchStatement batchStatement = new BatchStatement();
-//      batchStatement.addAll(boundStatements);
-//      sess.execute(batchStatement);
+
+      executeBatchStatements(sess, statemetnFactories);
 
       localLogger.info("=================== " + numStatements + " Updates - Class=<" + arr[0].getClass() + "> Type=<" + groupType + "> Name=<" + groupName + "> =========================");
 
@@ -2442,10 +2462,9 @@ public class CassandraCpoAdapter extends CpoBaseAdapter<ClusterDataSource> {
          boundStatementFactory = new CassandraBoundStatementFactory(sess, this, criteriaClass, cpoFunction, criteria, wheres, orderBy, nativeExpressions);
          BoundStatement boundStatement = boundStatementFactory.getBoundStatement();
 
-         // TODO: add back in when driver goes to 2.0
-//         if (cpoResultSet.getFetchSize() != -1) {
-//           boundStatement.setFetchSize(cpoResultSet.getFetchSize());
-//         }
+         if (cpoResultSet.getFetchSize() != -1) {
+           boundStatement.setFetchSize(cpoResultSet.getFetchSize());
+         }
 
          localLogger.debug("Retrieving Records");
 

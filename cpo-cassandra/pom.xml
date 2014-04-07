@@ -71,12 +71,6 @@
       <artifactId>cassandra-driver-core</artifactId>
       <version>2.0.1</version>
     </dependency>
-    <dependency>
-      <groupId>org.cassandraunit</groupId>
-      <artifactId>cassandra-unit-spring</artifactId>
-      <version>2.0.2.1</version>
-      <scope>test</scope>
-    </dependency>
   </dependencies>
   <build>
     <plugins>
@@ -103,7 +97,8 @@
         <activeByDefault>true</activeByDefault>
       </activation>
       <properties>
-        <cpo.cassandra.contactPoint>127.0.0.1</cpo.cassandra.contactPoint>
+        <cpo.cassandra.contactPoint>localhost</cpo.cassandra.contactPoint>
+        <cpo.cassandra.port>9171</cpo.cassandra.port>
         <cpo.cassandra.keyspace>cpokeyspace</cpo.cassandra.keyspace>
         <cpo.cassandra.metaXml>/cassandraMetaData.xml</cpo.cassandra.metaXml>
       </properties>

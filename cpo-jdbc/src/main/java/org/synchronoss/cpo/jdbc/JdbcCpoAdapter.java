@@ -1399,9 +1399,7 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
    */
   @Override
   public <T> T retrieveBean(T bean) throws CpoException {
-    T o = processSelectGroup(bean, null, null, null, null);
-
-    return (o);
+    return processSelectGroup(bean, null, null, null, null);
   }
 
   /**
@@ -1418,9 +1416,7 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
    */
   @Override
   public <T> T retrieveBean(String name, T bean) throws CpoException {
-    T o = processSelectGroup(bean, name, null, null, null);
-
-    return (o);
+    return processSelectGroup(bean, name, null, null, null);
   }
 
   /**
@@ -1441,9 +1437,7 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
    */
   @Override
   public <T> T retrieveBean(String name, T bean, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeFunction> nativeExpressions) throws CpoException {
-    T o = processSelectGroup(bean, name, wheres, orderBy, nativeExpressions);
-
-    return (o);
+    return processSelectGroup(bean, name, wheres, orderBy, nativeExpressions);
   }
 
   /**
@@ -1534,7 +1528,7 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
   public <C> List<C> retrieveBeans(String name, C criteria, CpoWhere where, Collection<CpoOrderBy> orderBy) throws CpoException {
     ArrayList<CpoWhere> wheres = null;
     if (where != null) {
-      wheres = new ArrayList<CpoWhere>();
+      wheres = new ArrayList<>();
       wheres.add(where);
     }
     return processSelectGroup(name, criteria, criteria, wheres, orderBy, null, false);
@@ -1618,7 +1612,7 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
   public <T, C> List<T> retrieveBeans(String name, C criteria, T result, CpoWhere where, Collection<CpoOrderBy> orderBy) throws CpoException {
     ArrayList<CpoWhere> wheres = null;
     if (where != null) {
-      wheres = new ArrayList<CpoWhere>();
+      wheres = new ArrayList<>();
       wheres.add(where);
     }
     return processSelectGroup(name, criteria, result, wheres, orderBy, null, false);
@@ -1697,8 +1691,8 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
    */
   @Override
   public <T, C> CpoResultSet<T> retrieveBeans(String name, C criteria, T result, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeFunction> nativeExpressions, int queueSize) throws CpoException {
-    CpoBlockingResultSet<T> resultSet = new CpoBlockingResultSet<T>(queueSize);
-    RetrieverThread<T, C> retrieverThread = new RetrieverThread<T, C>(name, criteria, result, wheres, orderBy, nativeExpressions, false, resultSet);
+    CpoBlockingResultSet<T> resultSet = new CpoBlockingResultSet<>(queueSize);
+    RetrieverThread<T, C> retrieverThread = new RetrieverThread<>(name, criteria, result, wheres, orderBy, nativeExpressions, false, resultSet);
 
     retrieverThread.start();
     return resultSet;
@@ -2151,10 +2145,6 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
       if (connection != null && !isStaticConnection(connection)) {
         connection.rollback();
       }
-    } catch (SQLException se) {
-      if (logger.isTraceEnabled()) {
-        logger.trace(se.getMessage());
-      }
     } catch (Exception e) {
       if (logger.isTraceEnabled()) {
         logger.trace(e.getMessage());
@@ -2446,7 +2436,7 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
   protected <T, C> List<T> processSelectGroup(String name, C criteria, T result, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeFunction> nativeExpressions,
                                               boolean useRetrieve) throws CpoException {
     Connection con = null;
-    CpoArrayResultSet<T> resultSet = new CpoArrayResultSet<T>();
+    CpoArrayResultSet<T> resultSet = new CpoArrayResultSet<>();
 
     try {
       con = getReadConnection();
@@ -2925,7 +2915,7 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
 
   @Override
   public List<CpoAttribute> getCpoAttributes(String expression) throws CpoException {
-    List<CpoAttribute> attributes = new ArrayList<CpoAttribute>();
+    List<CpoAttribute> attributes = new ArrayList<>();
 
     if (expression != null && !expression.isEmpty()) {
       Connection c = null;

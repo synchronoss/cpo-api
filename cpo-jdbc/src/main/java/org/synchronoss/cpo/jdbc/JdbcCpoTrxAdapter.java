@@ -42,7 +42,7 @@ public class JdbcCpoTrxAdapter extends JdbcCpoAdapter implements CpoTrxAdapter {
   // Default Connection. Only used JdbcCpoTrxAdapter
   private Connection writeConnection_ = null;
   // map to keep track of busy connections
-  private static final HashMap<Connection, Connection> busyMap_ = new HashMap<Connection, Connection>();
+  private static final HashMap<Connection, Connection> busyMap_ = new HashMap<>();
 
   @SuppressWarnings("unused")
   private JdbcCpoTrxAdapter() {

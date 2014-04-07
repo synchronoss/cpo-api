@@ -97,7 +97,7 @@ public class ExistObjectTest extends TestCase {
     try {
       ValueObject valObj = new ValueObject(1);
       CpoWhere where = cpoAdapter.newWhere(CpoWhere.LOGIC_AND, "attrVarChar", CpoWhere.COMP_EQ, "WHERE");
-      ArrayList<CpoWhere> wheres = new ArrayList<CpoWhere>();
+      ArrayList<CpoWhere> wheres = new ArrayList<>();
       wheres.add(where);
       long count = cpoAdapter.existsObject(null, valObj, wheres);
       assertTrue("Object not Found", count == 1);
@@ -108,7 +108,7 @@ public class ExistObjectTest extends TestCase {
     try {
       ValueObject valObj = new ValueObject(1);
       CpoWhere where = cpoAdapter.newWhere(CpoWhere.LOGIC_AND, "attrVarChar", CpoWhere.COMP_EQ, "NOWHERE");
-      ArrayList<CpoWhere> wheres = new ArrayList<CpoWhere>();
+      ArrayList<CpoWhere> wheres = new ArrayList<>();
       wheres.add(where);
       long count = cpoAdapter.existsObject(null, valObj, wheres);
       assertTrue("Object Found", count == 0);

@@ -34,7 +34,7 @@ import java.util.*;
  */
 public class InsertObjectTest extends TestCase {
 
-  private ArrayList<ValueObject> al = new ArrayList<ValueObject>();
+  private ArrayList<ValueObject> al = new ArrayList<>();
   private CpoAdapter cpoAdapter = null;
   private CpoAdapter readAdapter = null;
   private CassandraCpoMetaDescriptor metaDescriptor = null;

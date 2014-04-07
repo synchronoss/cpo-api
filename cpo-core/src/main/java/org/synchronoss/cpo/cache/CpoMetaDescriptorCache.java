@@ -29,7 +29,7 @@ import java.util.*;
  */
 public class CpoMetaDescriptorCache {
 
-  private static final Map<String, CpoMetaDescriptor> metaDescriptorMap = new HashMap<String, CpoMetaDescriptor>();
+  private static final Map<String, CpoMetaDescriptor> metaDescriptorMap = new HashMap<>();
 
   protected static CpoMetaDescriptor findCpoMetaDescriptor(String adapterKey) {
     CpoMetaDescriptor metaDescriptor = null;

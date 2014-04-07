@@ -82,7 +82,7 @@ public class ExecuteTest extends TestCase {
       ValueObject rvo;
 
       try {
-        rvo = (ValueObject) cpoAdapter.executeObject("TestExecuteObject", vo);
+        rvo = cpoAdapter.executeObject("TestExecuteObject", vo);
         assertNotNull(method + "Returned Value object is null");
         assertTrue("power(3,3)=" + rvo.getAttrDouble(), rvo.getAttrDouble() == 27);
       } catch (Exception e) {
@@ -94,7 +94,7 @@ public class ExecuteTest extends TestCase {
       try {
         vo = new ValueObject(1);
         vo.setAttrSmallInt(3);
-        rvo = (ValueObject) cpoAdapter.executeObject("TestExecuteObjectNoTransform", vo);
+        rvo = cpoAdapter.executeObject("TestExecuteObjectNoTransform", vo);
         assertNotNull(method + "Returned Value object is null");
         assertTrue("power(3,3)=" + rvo.getAttrDouble(), rvo.getAttrDouble() == 27);
       } catch (Exception e) {
@@ -114,7 +114,7 @@ public class ExecuteTest extends TestCase {
       ValueObject rvo;
 
       try {
-        rvo = (ValueObject) cpoAdapter.executeObject("TestExecuteObject", vo, vo);
+        rvo = cpoAdapter.executeObject("TestExecuteObject", vo, vo);
         assertNotNull(method + "Returned Value object is null");
         assertTrue("power(3,3)=" + rvo.getAttrDouble(), rvo.getAttrDouble() == 27);
       } catch (Exception e) {

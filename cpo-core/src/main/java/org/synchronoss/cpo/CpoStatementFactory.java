@@ -254,7 +254,7 @@ public abstract class CpoStatementFactory implements CpoReleasible {
    *
    */
   public List<BindAttribute> getBindValues(CpoFunction function, Object obj) throws CpoException {
-    List<BindAttribute> bindValues = new ArrayList<BindAttribute>();
+    List<BindAttribute> bindValues = new ArrayList<>();
     List<CpoArgument> arguments = function.getArguments();
     for (CpoArgument argument : arguments) {
       if (argument == null) {

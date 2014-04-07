@@ -49,8 +49,8 @@ public class ClassJdbcDataSourceInfo extends AbstractJdbcDataSource implements C
   private SortedMap<String, String> properties = null;
   // Make sure DataSource creation is thread safe.
   final private Object LOCK = new Object();
-  private Queue<PooledConnection> freeConnections = new LinkedList<PooledConnection>();
-  private Queue<PooledConnection> usedConnections = new LinkedList<PooledConnection>();
+  private Queue<PooledConnection> freeConnections = new LinkedList<>();
+  private Queue<PooledConnection> usedConnections = new LinkedList<>();
 
   /**
    * Creates a ClassJdbcDataSourceInfo from a Jdbc Driver

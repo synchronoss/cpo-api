@@ -84,7 +84,7 @@ public class RollbackTest extends TestCase {
     String method = "testRollbackProcessUpdateCollection:";
     ValueObject vo = new ValueObject(2);
     ValueObject vo2 = new ValueObject(1);
-    ArrayList<ValueObject> al = new ArrayList<ValueObject>();
+    ArrayList<ValueObject> al = new ArrayList<>();
 
     al.add(vo);
     al.add(vo2);

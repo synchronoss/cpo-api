@@ -36,7 +36,7 @@ import org.synchronoss.cpo.CpoWhere;
 public class NativeExpressionTest extends TestCase {
 
   private CpoAdapter cpoAdapter = null;
-  private ArrayList<ValueObject> al = new ArrayList<ValueObject>();
+  private ArrayList<ValueObject> al = new ArrayList<>();
 
   public NativeExpressionTest() {
   }
@@ -97,7 +97,7 @@ public class NativeExpressionTest extends TestCase {
 
 
     try {
-      ArrayList<CpoNativeFunction> cnqAl = new ArrayList<CpoNativeFunction>();
+      ArrayList<CpoNativeFunction> cnqAl = new ArrayList<>();
 
 
       cnqAl.add(new CpoNativeFunction("__CPO_WHERE__", "WHERE id IN (2,3)"));

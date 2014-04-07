@@ -20,14 +20,10 @@
  */
 package org.synchronoss.cpo.cassandra;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
 import junit.framework.TestCase;
-import org.synchronoss.cpo.CpoAdapter;
-import org.synchronoss.cpo.CpoAdapterFactory;
-import org.synchronoss.cpo.CpoOrderBy;
-import org.synchronoss.cpo.CpoWhere;
+import org.synchronoss.cpo.*;
+
+import java.util.*;
 
 /**
  * BlobTest is a JUnit test class for testing the JdbcAdapter class Constructors
@@ -37,7 +33,7 @@ import org.synchronoss.cpo.CpoWhere;
 public class OrderByTest extends TestCase {
 
   private CpoAdapter cpoAdapter = null;
-  private ArrayList<ValueObject> al = new ArrayList<ValueObject>();
+  private ArrayList<ValueObject> al = new ArrayList<>();
 
   public OrderByTest() {
   }

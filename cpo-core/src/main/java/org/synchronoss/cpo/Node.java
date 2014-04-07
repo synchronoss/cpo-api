@@ -494,7 +494,7 @@ public class Node implements Serializable, Cloneable, Comparable<Node> {
 
   public List<Node> getChildList() {
     Node currNode;
-    ArrayList<Node> al = new ArrayList<Node>();
+    ArrayList<Node> al = new ArrayList<>();
 
     //Do we have any children
     if (!isLeaf()) {

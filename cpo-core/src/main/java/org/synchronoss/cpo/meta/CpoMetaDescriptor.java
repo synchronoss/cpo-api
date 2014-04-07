@@ -89,7 +89,7 @@ public class CpoMetaDescriptor extends CpoMetaDescriptorCache implements CpoMeta
   }
 
   public static CpoMetaDescriptor getInstance(String name, String metaXml, boolean caseSensitive) throws CpoException {
-    List<String> metaXmls = new ArrayList<String>();
+    List<String> metaXmls = new ArrayList<>();
     metaXmls.add(metaXml);
     return createUpdateInstance(name, metaXmls, caseSensitive);
   }
@@ -325,7 +325,7 @@ public class CpoMetaDescriptor extends CpoMetaDescriptorCache implements CpoMeta
     MetaXmlObjectExporter metaXmlObjectExporter = getMetaXmlObjectExporter();
 
     // need these sorted
-    List<CpoClass> classList = new ArrayList<CpoClass>();
+    List<CpoClass> classList = new ArrayList<>();
     classList.addAll(getCpoMetaAdapter().getCpoClasses());
     Collections.sort(classList);
     for (CpoClass cpoClass : classList) {

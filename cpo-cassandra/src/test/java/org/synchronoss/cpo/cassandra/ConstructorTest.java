@@ -26,8 +26,6 @@ import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.CpoAdapter;
 import org.synchronoss.cpo.CpoAdapterFactory;
 
-import java.util.List;
-
 /**
  * ConstructorTest is a JUnit test class for testing the JdbcAdapter class Constructors
  *

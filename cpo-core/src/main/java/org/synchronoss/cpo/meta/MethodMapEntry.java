@@ -22,7 +22,6 @@ package org.synchronoss.cpo.meta;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.synchronoss.cpo.CpoException;
 
 import java.lang.reflect.Method;
 

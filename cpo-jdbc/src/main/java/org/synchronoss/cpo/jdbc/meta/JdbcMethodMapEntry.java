@@ -21,11 +21,9 @@
 package org.synchronoss.cpo.jdbc.meta;
 
 import org.slf4j.*;
-import org.synchronoss.cpo.CpoException;
 import org.synchronoss.cpo.meta.MethodMapEntry;
 
 import java.lang.reflect.Method;
-import java.sql.*;
 
 /**
  * MethodMapEntry is a class defines the getters and setters for JDBC specific data classes

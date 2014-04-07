@@ -127,7 +127,7 @@ public class CassandraCpoConfigProcessor implements CpoConfigProcessor {
 
     // add Listeners
     if (readWriteConfig.getInitialListenersArray().length>0){
-      ArrayList<Host.StateListener> listeners = new ArrayList<Host.StateListener>();
+      ArrayList<Host.StateListener> listeners = new ArrayList<>();
       for (String s : readWriteConfig.getInitialListenersArray()) {
         listeners.add(new ConfigInstantiator<Host.StateListener>().instantiate(s));
       }

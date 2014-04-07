@@ -30,7 +30,7 @@ public class CpoFunction extends CpoFunctionBean {
   private static final long serialVersionUID = 1L;
 
   private static final Logger logger = LoggerFactory.getLogger(CpoFunction.class);
-  List<CpoArgument> arguments = new ArrayList<CpoArgument>();
+  List<CpoArgument> arguments = new ArrayList<>();
 
   public CpoFunction() {
   }

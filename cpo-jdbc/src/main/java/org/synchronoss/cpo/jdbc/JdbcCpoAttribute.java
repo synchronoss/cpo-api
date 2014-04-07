@@ -22,13 +22,11 @@ package org.synchronoss.cpo.jdbc;
 
 import org.slf4j.*;
 import org.synchronoss.cpo.CpoException;
-import org.synchronoss.cpo.jdbc.meta.JdbcCpoMetaDescriptor;
 import org.synchronoss.cpo.meta.CpoMetaDescriptor;
 import org.synchronoss.cpo.meta.domain.CpoAttribute;
 import org.synchronoss.cpo.transform.jdbc.JdbcCpoTransform;
 
 import java.lang.reflect.Method;
-import java.sql.Types;
 
 /**
  * JdbcCpoAttribute. A class that includes the Jdbc specifc attributes that are additional to the CpoAttribute attributes

@@ -37,7 +37,7 @@ import java.util.*;
 public class DeleteObjectTest extends TestCase {
 
   private static final Logger logger = LoggerFactory.getLogger(DeleteObjectTest.class);
-  private ArrayList<ValueObject> al = new ArrayList<ValueObject>();
+  private ArrayList<ValueObject> al = new ArrayList<>();
   private CpoAdapter cpoAdapter = null;
   private JdbcCpoMetaDescriptor metaDescriptor = null;
 
@@ -91,8 +91,8 @@ public class DeleteObjectTest extends TestCase {
 
     // try the where on the delete, should delete 0
     try {
-      List<CpoWhere> cws = new ArrayList<CpoWhere>();
-      cws.add(cpoAdapter.newWhere(CpoWhere.LOGIC_AND, "id", CpoWhere.COMP_EQ, new Integer(2)));
+      List<CpoWhere> cws = new ArrayList<>();
+      cws.add(cpoAdapter.newWhere(CpoWhere.LOGIC_AND, "id", CpoWhere.COMP_EQ, 2));
       long deleted = cpoAdapter.deleteObject(null, valObj, cws, null, null);
       assertEquals("Should not have deleted anything", 0, deleted);
     } catch (Exception e) {
@@ -102,8 +102,8 @@ public class DeleteObjectTest extends TestCase {
 
     // try the where on the delete, should delete 1
     try {
-      List<CpoWhere> cws = new ArrayList<CpoWhere>();
-      cws.add(cpoAdapter.newWhere(CpoWhere.LOGIC_OR, "id", CpoWhere.COMP_EQ, new Integer(2)));
+      List<CpoWhere> cws = new ArrayList<>();
+      cws.add(cpoAdapter.newWhere(CpoWhere.LOGIC_OR, "id", CpoWhere.COMP_EQ, 2));
       long deleted = cpoAdapter.deleteObject(null, valObj, cws, null, null);
       assertEquals("Should have deleted 1", 1, deleted);
     } catch (Exception e) {

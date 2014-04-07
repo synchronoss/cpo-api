@@ -29,7 +29,7 @@ import java.util.*;
  */
 public class CpoAdapterCache {
 
-  private static final Map<String, CpoAdapter> adapterMap = new HashMap<String, CpoAdapter>();
+  private static final Map<String, CpoAdapter> adapterMap = new HashMap<>();
 
   protected static CpoAdapter findCpoAdapter(String adapterKey) {
     CpoAdapter adapter = null;

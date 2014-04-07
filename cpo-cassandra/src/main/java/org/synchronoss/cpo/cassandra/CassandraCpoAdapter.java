@@ -1351,9 +1351,7 @@ public class CassandraCpoAdapter extends CpoBaseAdapter<ClusterDataSource> {
    */
   @Override
   public <T> T retrieveBean(T bean) throws CpoException {
-    T o = processSelectGroup(bean, null, null, null, null);
-
-    return (o);
+    return processSelectGroup(bean, null, null, null, null);
   }
 
   /**
@@ -1370,9 +1368,7 @@ public class CassandraCpoAdapter extends CpoBaseAdapter<ClusterDataSource> {
    */
   @Override
   public <T> T retrieveBean(String name, T bean) throws CpoException {
-    T o = processSelectGroup(bean, name, null, null, null);
-
-    return (o);
+    return processSelectGroup(bean, name, null, null, null);
   }
 
   /**
@@ -1393,9 +1389,7 @@ public class CassandraCpoAdapter extends CpoBaseAdapter<ClusterDataSource> {
    */
   @Override
   public <T> T retrieveBean(String name, T bean, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeFunction> nativeExpressions) throws CpoException {
-    T o = processSelectGroup(bean, name, wheres, orderBy, nativeExpressions);
-
-    return (o);
+    return processSelectGroup(bean, name, wheres, orderBy, nativeExpressions);
   }
 
   /**
@@ -1486,7 +1480,7 @@ public class CassandraCpoAdapter extends CpoBaseAdapter<ClusterDataSource> {
   public <C> List<C> retrieveBeans(String name, C criteria, CpoWhere where, Collection<CpoOrderBy> orderBy) throws CpoException {
     ArrayList<CpoWhere> wheres = null;
     if (where != null) {
-      wheres = new ArrayList<CpoWhere>();
+      wheres = new ArrayList<>();
       wheres.add(where);
     }
     return processSelectGroup(name, criteria, criteria, wheres, orderBy, null, false);
@@ -1570,7 +1564,7 @@ public class CassandraCpoAdapter extends CpoBaseAdapter<ClusterDataSource> {
   public <T, C> List<T> retrieveBeans(String name, C criteria, T result, CpoWhere where, Collection<CpoOrderBy> orderBy) throws CpoException {
     ArrayList<CpoWhere> wheres = null;
     if (where != null) {
-      wheres = new ArrayList<CpoWhere>();
+      wheres = new ArrayList<>();
       wheres.add(where);
     }
     return processSelectGroup(name, criteria, result, wheres, orderBy, null, false);
@@ -1649,8 +1643,8 @@ public class CassandraCpoAdapter extends CpoBaseAdapter<ClusterDataSource> {
    */
   @Override
   public <T, C> CpoResultSet<T> retrieveBeans(String name, C criteria, T result, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeFunction> nativeExpressions, int queueSize) throws CpoException {
-    CpoBlockingResultSet<T> resultSet = new CpoBlockingResultSet<T>(queueSize);
-    RetrieverThread<T, C> retrieverThread = new RetrieverThread<T, C>(name, criteria, result, wheres, orderBy, nativeExpressions, false, resultSet);
+    CpoBlockingResultSet<T> resultSet = new CpoBlockingResultSet<>(queueSize);
+    RetrieverThread<T, C> retrieverThread = new RetrieverThread<>(name, criteria, result, wheres, orderBy, nativeExpressions, false, resultSet);
 
     retrieverThread.start();
     return resultSet;
@@ -2024,7 +2018,7 @@ public class CassandraCpoAdapter extends CpoBaseAdapter<ClusterDataSource> {
   }
   @Override
   public List<CpoAttribute> getCpoAttributes(String expression) throws CpoException {
-    List<CpoAttribute> attributes = new ArrayList<CpoAttribute>();
+    List<CpoAttribute> attributes = new ArrayList<>();
 
     if (expression != null && !expression.isEmpty()) {
       Session session;
@@ -2080,8 +2074,6 @@ public class CassandraCpoAdapter extends CpoBaseAdapter<ClusterDataSource> {
     ResultSet resultSet;
     try {
       resultSet = session.execute(boundStatementFactory.getBoundStatement());
-    } catch (Exception e) {
-      throw e;
     } finally {
       boundStatementFactory.release();
     }
@@ -2135,7 +2127,7 @@ public class CassandraCpoAdapter extends CpoBaseAdapter<ClusterDataSource> {
       localLogger.info("=================== Class=<" + obj.getClass() + "> Type=<" + groupType + "> Name=<" + groupName + "> =========================");
 
       for (CpoFunction cpoFunction : cpoFunctions) {
-        CassandraBoundStatementFactory boundStatementFactory = new CassandraBoundStatementFactory(sess, this, cpoClass, cpoFunction, obj, wheres, orderBy, nativeExpressions);;
+        CassandraBoundStatementFactory boundStatementFactory = new CassandraBoundStatementFactory(sess, this, cpoClass, cpoFunction, obj, wheres, orderBy, nativeExpressions);
         executeBoundStatement(sess, boundStatementFactory);
       }
       localLogger.info("=================== " + " Updates - Class=<" + obj.getClass() + "> Type=<" + groupType + "> Name=<" + groupName + "> =========================");
@@ -2165,7 +2157,7 @@ public class CassandraCpoAdapter extends CpoBaseAdapter<ClusterDataSource> {
 
     try {
       sess = getWriteSession();
-      updateCount = processUpdateGroup((T[]) coll.toArray(), groupType, groupName, wheres, orderBy, nativeExpressions, sess);
+      updateCount = processUpdateGroup(coll.toArray(), groupType, groupName, wheres, orderBy, nativeExpressions, sess);
     } catch (Exception e) {
       // Any exception has to try to rollback the work;
       ExceptionHelper.reThrowCpoException(e, "processUpdateGroup(Collection coll, String groupType, String groupName) failed");

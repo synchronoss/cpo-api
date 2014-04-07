@@ -23,7 +23,6 @@ package org.synchronoss.cpo.jdbc.meta;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.CpoException;
-import org.synchronoss.cpo.meta.MethodMapEntry;
 import org.synchronoss.cpo.meta.MethodMapper;
 
 import java.io.*;
@@ -31,7 +30,6 @@ import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.net.URL;
 import java.sql.*;
-import java.util.HashMap;
 
 /**
  * MethodMapper is a class defines the getters and setters for all the JDBC specific data classes
@@ -59,7 +57,7 @@ public class JdbcMethodMapper implements java.io.Serializable, java.lang.Cloneab
   }
 
   static private MethodMapper<JdbcMethodMapEntry<?,?>> initMethodMapper() throws IllegalArgumentException {
-    MethodMapper mapper = new MethodMapper();
+    MethodMapper<JdbcMethodMapEntry<?,?>> mapper = new MethodMapper<>();
     mapper.addMethodMapEntry(makeJdbcMethodMapEntry(JdbcMethodMapEntry.METHOD_TYPE_BASIC, String.class, String.class, "getString", "setString"));
     mapper.addMethodMapEntry(makeJdbcMethodMapEntry(JdbcMethodMapEntry.METHOD_TYPE_BASIC, BigDecimal.class, BigDecimal.class, "getBigDecimal", "setBigDecimal"));
     mapper.addMethodMapEntry(makeJdbcMethodMapEntry(JdbcMethodMapEntry.METHOD_TYPE_BASIC, byte.class, byte.class, "getByte", "setByte"));
@@ -102,7 +100,7 @@ public class JdbcMethodMapper implements java.io.Serializable, java.lang.Cloneab
     Method csGetter=loadGetter(methodType, csc, getterName);
     Method csSetter=loadSetter(methodType, csc, datasourceMethodClass, setterName);
 
-    return new JdbcMethodMapEntry(methodType, javaClass, datasourceMethodClass, rsGetter, bsSetter, csGetter, csSetter);
+    return new JdbcMethodMapEntry<>(methodType, javaClass, datasourceMethodClass, rsGetter, bsSetter, csGetter, csSetter);
   }
 
   private static <M,D> Method loadSetter(int methodType, Class<M> methodClass, Class<D> datasourceClass, String setterName) throws IllegalArgumentException {

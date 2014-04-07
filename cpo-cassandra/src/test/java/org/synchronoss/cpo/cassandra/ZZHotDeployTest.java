@@ -40,7 +40,7 @@ public class ZZHotDeployTest extends TestCase {
 
   private static final Logger logger = LoggerFactory.getLogger(ZZHotDeployTest.class);
   private CpoAdapter cpoAdapter = null;
-  private ArrayList<ValueObject> al = new ArrayList<ValueObject>();
+  private ArrayList<ValueObject> al = new ArrayList<>();
   private File metaFile = new File("metaData.xml");
 
   public ZZHotDeployTest(String name) {
@@ -101,7 +101,7 @@ public class ZZHotDeployTest extends TestCase {
     }
 
     try {
-      List<String> metaFiles = new ArrayList<String>();
+      List<String> metaFiles = new ArrayList<>();
       metaFiles.add("/hotDeployMetaData.xml");
       cpoAdapter.getCpoMetaDescriptor().refreshDescriptorMeta(metaFiles);
 
@@ -146,7 +146,7 @@ public class ZZHotDeployTest extends TestCase {
     }
 
     try {
-      List<String> metaFiles = new ArrayList<String>();
+      List<String> metaFiles = new ArrayList<>();
       metaFiles.add("/hotDeployMetaData.xml");
       cpoAdapter.getCpoMetaDescriptor().refreshDescriptorMeta(metaFiles, true);
 
@@ -175,7 +175,7 @@ public class ZZHotDeployTest extends TestCase {
     String method = "tearDown:";
     try {
       // lets reset the metadata to before we changed it
-      List<String> metaFiles = new ArrayList<String>();
+      List<String> metaFiles = new ArrayList<>();
       metaFiles.add(metaFile.getName());
       cpoAdapter.getCpoMetaDescriptor().refreshDescriptorMeta(metaFiles, true);
       metaFile.delete();

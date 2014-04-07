@@ -163,7 +163,7 @@ public class ConvertSQLToXML extends AbstractMojo {
 	}
 
   private List<CpoClass> getClasses(Connection conn) throws SQLException {
-    List<CpoClass> classes = new ArrayList<CpoClass>();
+    List<CpoClass> classes = new ArrayList<>();
 
     StringBuilder sql = new StringBuilder();
     sql.append("select name from ");
@@ -212,7 +212,7 @@ public class ConvertSQLToXML extends AbstractMojo {
   }
 
   private List<CpoAttribute> getAttributes(CpoClass cpoClass, Connection conn) throws Exception {
-    List<CpoAttribute> attributes = new ArrayList<CpoAttribute>();
+    List<CpoAttribute> attributes = new ArrayList<>();
 
     StringBuilder sql = new StringBuilder();
     sql.append("select cam.column_name, cam.attribute, cam.column_type, cam.db_table, cam.db_column, cam.transform_class from ");
@@ -284,7 +284,7 @@ public class ConvertSQLToXML extends AbstractMojo {
   }
 
   private List<CpoFunctionGroup> getFunctionGroups(CpoClass cpoClass, Connection conn) {
-    List<CpoFunctionGroup> functionGroups = new ArrayList<CpoFunctionGroup>();
+    List<CpoFunctionGroup> functionGroups = new ArrayList<>();
 
     StringBuilder sql = new StringBuilder();
     sql.append("select cqg.group_type, cqg.name, cqt.sql_text, cqt.description, cam.attribute, cqp.param_type ");

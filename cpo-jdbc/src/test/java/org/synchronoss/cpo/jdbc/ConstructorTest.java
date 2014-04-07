@@ -21,11 +21,10 @@
 package org.synchronoss.cpo.jdbc;
 
 import junit.framework.TestCase;
+import org.slf4j.*;
 import org.synchronoss.cpo.*;
 
 import java.util.List;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * ConstructorTest is a JUnit test class for testing the JdbcAdapter class Constructors
@@ -58,7 +57,7 @@ public class ConstructorTest extends TestCase {
       
       logger.debug("=====> DatasourceName: "+cpoAdapter.getDataSourceName());
       // make sure the password is not in the name
-      assertTrue("password is in datasource name",cpoAdapter.getDataSourceName().indexOf(PASSWORDSTRING)==-1);
+      assertTrue("password is in datasource name", !cpoAdapter.getDataSourceName().contains(PASSWORDSTRING));
       
       ValueObject valObj = new ValueObject();
       List<ValueObject> objs = cpoAdapter.retrieveBeans(null, valObj);
@@ -75,7 +74,7 @@ public class ConstructorTest extends TestCase {
       assertNotNull(method + "cpoAdapter is null", cpoAdapter);
       
       // make sure the password is not in the name
-      assertTrue("password is in datasource name:",cpoAdapter.getDataSourceName().indexOf(PASSWORDSTRING)==-1);
+      assertTrue("password is in datasource name:", !cpoAdapter.getDataSourceName().contains(PASSWORDSTRING));
       
       ValueObject valObj = new ValueObject();
       List<ValueObject> objs = cpoAdapter.retrieveBeans(null, valObj);
@@ -92,7 +91,7 @@ public class ConstructorTest extends TestCase {
       assertNotNull(method + "cpoAdapter is null", cpoAdapter);
       
       // make sure the password is not in the name
-      assertTrue("password is in datasource name",cpoAdapter.getDataSourceName().indexOf(PASSWORDSTRING)==-1);
+      assertTrue("password is in datasource name", !cpoAdapter.getDataSourceName().contains(PASSWORDSTRING));
       
       ValueObject valObj = new ValueObject();
       List<ValueObject> objs = cpoAdapter.retrieveBeans(null, valObj);
@@ -127,7 +126,7 @@ public class ConstructorTest extends TestCase {
       assertNotNull(method + "cpoAdapter is null", cpoAdapter);
       
       // make sure the password is not in the name
-      assertTrue("password is in datasource name",cpoAdapter.getDataSourceName().indexOf(PASSWORDSTRING)==-1);
+      assertTrue("password is in datasource name", !cpoAdapter.getDataSourceName().contains(PASSWORDSTRING));
       
       ValueObject valObj = new ValueObject();
       List<ValueObject> objs = cpoAdapter.retrieveBeans(null, valObj);
@@ -144,7 +143,7 @@ public class ConstructorTest extends TestCase {
       assertNotNull(method + "cpoAdapter is null", cpoAdapter);
       
       // make sure the password is not in the name
-      assertTrue("password is in datasource name",cpoAdapter.getDataSourceName().indexOf(PASSWORDSTRING)==-1);
+      assertTrue("password is in datasource name", !cpoAdapter.getDataSourceName().contains(PASSWORDSTRING));
       
       ValueObject valObj = new ValueObject();
       List<ValueObject> objs = cpoAdapter.retrieveBeans(null, valObj);
@@ -161,7 +160,7 @@ public class ConstructorTest extends TestCase {
       assertNotNull(method + "cpoAdapter is null", cpoAdapter);
       
       // make sure the password is not in the name
-      assertTrue("password is in datasource name",cpoAdapter.getDataSourceName().indexOf(PASSWORDSTRING)==-1);
+      assertTrue("password is in datasource name", !cpoAdapter.getDataSourceName().contains(PASSWORDSTRING));
       
       ValueObject valObj = new ValueObject();
       List<ValueObject> objs = cpoAdapter.retrieveBeans(null, valObj);
@@ -178,7 +177,7 @@ public class ConstructorTest extends TestCase {
       assertNotNull(method + "cpoAdapter is null", cpoAdapter);
       
       // make sure the password is not in the name
-      assertTrue("password is in datasource name",cpoAdapter.getDataSourceName().indexOf(PASSWORDSTRING)==-1);
+      assertTrue("password is in datasource name", !cpoAdapter.getDataSourceName().contains(PASSWORDSTRING));
       
       ValueObject valObj = new ValueObject();
       List<ValueObject> objs = cpoAdapter.retrieveBeans(null, valObj);
@@ -195,7 +194,7 @@ public class ConstructorTest extends TestCase {
       assertNotNull(method + "cpoAdapter is null", cpoAdapter);
       
       // make sure the password is not in the name
-      assertTrue("password is in datasource name",cpoAdapter.getDataSourceName().indexOf(PASSWORDSTRING)==-1);
+      assertTrue("password is in datasource name", !cpoAdapter.getDataSourceName().contains(PASSWORDSTRING));
       
       ValueObject valObj = new ValueObject();
       List<ValueObject> objs = cpoAdapter.retrieveBeans(null, valObj);

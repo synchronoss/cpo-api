@@ -35,7 +35,7 @@ import java.util.Date;
  */
 public class InheritanceTest extends TestCase {
 
-  private ArrayList<ChildValueObject> al = new ArrayList<ChildValueObject>();
+  private ArrayList<ChildValueObject> al = new ArrayList<>();
   private CpoAdapter cpoAdapter = null;
   private CassandraCpoMetaDescriptor metaDescriptor = null;
 

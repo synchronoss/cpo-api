@@ -20,21 +20,16 @@
  */
 package org.synchronoss.cpo.jdbc;
 
-import java.io.StringReader;
-import java.lang.reflect.InvocationTargetException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.util.Map.Entry;
 import java.util.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.*;
 import org.synchronoss.cpo.helper.ExceptionHelper;
-import org.synchronoss.cpo.jdbc.meta.JdbcMethodMapEntry;
 import org.synchronoss.cpo.jdbc.meta.JdbcMethodMapper;
 import org.synchronoss.cpo.meta.MethodMapper;
-import org.synchronoss.cpo.meta.domain.CpoArgument;
 import org.synchronoss.cpo.meta.domain.CpoAttribute;
 import org.synchronoss.cpo.meta.domain.CpoClass;
 import org.synchronoss.cpo.meta.domain.CpoFunction;
@@ -57,7 +52,7 @@ public class JdbcPreparedStatementFactory extends CpoStatementFactory implements
   private static final Logger logger = LoggerFactory.getLogger(JdbcPreparedStatementFactory.class);
   private PreparedStatement ps_ = null;
 
-  private List<CpoReleasible> releasibles = new ArrayList<CpoReleasible>();
+  private List<CpoReleasible> releasibles = new ArrayList<>();
   private static final String WHERE_MARKER = "__CPO_WHERE__";
   private static final String ORDERBY_MARKER = "__CPO_ORDERBY__";
 

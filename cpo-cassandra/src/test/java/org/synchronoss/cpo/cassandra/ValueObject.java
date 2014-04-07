@@ -31,7 +31,7 @@ import java.util.*;
  *
  * @author david berry
  */
-public class ValueObject extends Object implements java.io.Serializable, Cloneable {
+public class ValueObject implements java.io.Serializable, Cloneable {
 
   /**
    * Version Id for this class.

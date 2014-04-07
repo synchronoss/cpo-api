@@ -49,8 +49,8 @@ public class JdbcCallableStatementFactory implements CpoReleasible {
   @SuppressWarnings("unused")
   private JdbcCallableStatementFactory() {
   }
-  private List<CpoReleasible> releasibles = new ArrayList<CpoReleasible>();
-  private List<CpoArgument> outArguments = new ArrayList<CpoArgument>();
+  private List<CpoReleasible> releasibles = new ArrayList<>();
+  private List<CpoArgument> outArguments = new ArrayList<>();
 
   /**
    * Used to build the CallableStatement that is used by CPO to create the actual JDBC CallableStatement.

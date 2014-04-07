@@ -62,7 +62,7 @@ public class BoundExpressionParser implements ExpressionParser {
   }
 
   private Collection<Integer> getArgumentIndexes() {
-    Collection<Integer> indexes = new ArrayList<Integer>();
+    Collection<Integer> indexes = new ArrayList<>();
 
     if (expression != null) {
       StringReader reader = new StringReader(expression);
@@ -119,7 +119,7 @@ public class BoundExpressionParser implements ExpressionParser {
     // upper case the expression, to make things easier
     expression = expression.toUpperCase();
 
-    List<String> colList = new ArrayList<String>();
+    List<String> colList = new ArrayList<>();
 
     if (expression.startsWith("INSERT")) {
       // expression is in the format of:  insert into table(col1, col2...) values(val1, val2...)

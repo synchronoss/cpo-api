@@ -20,9 +20,8 @@
  */
 package org.synchronoss.cpo.jdbc;
 
-import org.synchronoss.cpo.*;
+import org.synchronoss.cpo.AbstractDataSourceInfo;
 
-import javax.sql.DataSource;
 import java.util.*;
 
 /**
@@ -51,7 +50,7 @@ public abstract class AbstractJdbcDataSourceInfo extends AbstractDataSourceInfo 
     // Use a tree map so that the properties are sorted. This way if we have
     // the same datasource with the same properties but in different order,
     // we will generate the same key.
-    SortedMap<String, String> map = new TreeMap<String, String>();
+    SortedMap<String, String> map = new TreeMap<>();
     for (Object key : properties.keySet()){
       map.put((String)key, properties.getProperty((String)key));
     }

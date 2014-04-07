@@ -38,7 +38,7 @@ import static junit.framework.Assert.fail;
 public class BigRetrieveTest extends TestCase {
 
   private static final Logger logger = LoggerFactory.getLogger(BigRetrieveTest.class);
-  private ArrayList<ValueObject> al = new ArrayList<ValueObject>();
+  private ArrayList<ValueObject> al = new ArrayList<>();
   private CpoAdapter cpoAdapter = null;
 
   public BigRetrieveTest(String name) {

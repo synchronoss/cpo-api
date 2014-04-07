@@ -22,7 +22,6 @@ package org.synchronoss.cpo.jdbc.meta;
 
 import org.synchronoss.cpo.CpoException;
 import org.synchronoss.cpo.exporter.MetaXmlObjectExporter;
-import org.synchronoss.cpo.meta.DataTypeMapEntry;
 import org.synchronoss.cpo.jdbc.exporter.JdbcMetaXmlObjectExporter;
 import org.synchronoss.cpo.meta.CpoMetaDescriptor;
 

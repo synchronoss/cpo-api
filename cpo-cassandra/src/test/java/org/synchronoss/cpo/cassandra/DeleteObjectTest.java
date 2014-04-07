@@ -37,7 +37,7 @@ import java.util.*;
 public class DeleteObjectTest extends TestCase {
 
   private static final Logger logger = LoggerFactory.getLogger(DeleteObjectTest.class);
-  private ArrayList<ValueObject> al = new ArrayList<ValueObject>();
+  private ArrayList<ValueObject> al = new ArrayList<>();
   private CpoAdapter cpoAdapter = null;
   private CassandraCpoMetaDescriptor metaDescriptor = null;
 

@@ -30,7 +30,7 @@ import java.sql.Timestamp;
  *
  * @author david berry
  */
-public class ValueObject extends java.lang.Object implements java.io.Serializable, java.lang.Cloneable {
+public class ValueObject implements java.io.Serializable, java.lang.Cloneable {
 
   /**
    * Version Id for this class.

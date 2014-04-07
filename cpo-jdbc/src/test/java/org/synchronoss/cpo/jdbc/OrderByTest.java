@@ -36,7 +36,7 @@ import org.synchronoss.cpo.CpoOrderBy;
 public class OrderByTest extends TestCase {
 
   private CpoAdapter cpoAdapter = null;
-  private ArrayList<ValueObject> al = new ArrayList<ValueObject>();
+  private ArrayList<ValueObject> al = new ArrayList<>();
 
   /**
    * Creates a new RollbackTest object.
@@ -124,7 +124,7 @@ public class OrderByTest extends TestCase {
     try {
       CpoOrderBy cob = cpoAdapter.newOrderBy("id", true);
       CpoOrderBy cob1 = cpoAdapter.newOrderBy(CpoOrderBy.DEFAULT_MARKER, "attrVarChar", true);
-      Collection<CpoOrderBy> colCob = new ArrayList<CpoOrderBy>();
+      Collection<CpoOrderBy> colCob = new ArrayList<>();
       colCob.add(cob);
       colCob.add(cob1);
       ValueObject valObj = new ValueObject();
@@ -150,7 +150,7 @@ public class OrderByTest extends TestCase {
     try {
       CpoOrderBy cob = cpoAdapter.newOrderBy("id", false, null);
       CpoOrderBy cob2 = cpoAdapter.newOrderBy(CpoOrderBy.DEFAULT_MARKER, "attrVarChar", false, null);
-      Collection<CpoOrderBy> colCob = new ArrayList<CpoOrderBy>();
+      Collection<CpoOrderBy> colCob = new ArrayList<>();
       colCob.add(cob);
       colCob.add(cob2);
       ValueObject valObj = new ValueObject();
@@ -177,7 +177,7 @@ public class OrderByTest extends TestCase {
     }
     try {
       CpoOrderBy cob = cpoAdapter.newOrderBy("id", true, "ABS(id)");
-      Collection<CpoOrderBy> colCob = new ArrayList<CpoOrderBy>();
+      Collection<CpoOrderBy> colCob = new ArrayList<>();
       colCob.add(cob);
       ValueObject valObj = new ValueObject();
       col = cpoAdapter.retrieveBeans("TestOrderByRetrieve", valObj, colCob);

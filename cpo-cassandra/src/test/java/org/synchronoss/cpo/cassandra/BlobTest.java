@@ -21,10 +21,8 @@
 package org.synchronoss.cpo.cassandra;
 
 import junit.framework.TestCase;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.synchronoss.cpo.CpoAdapter;
-import org.synchronoss.cpo.CpoAdapterFactory;
+import org.slf4j.*;
+import org.synchronoss.cpo.*;
 import org.synchronoss.cpo.cassandra.meta.CassandraCpoMetaDescriptor;
 
 import java.nio.ByteBuffer;
@@ -60,7 +58,7 @@ public class BlobTest extends TestCase {
     try {
       cpoAdapter = CpoAdapterFactory.getCpoAdapter(CassandraStatics.ADAPTER_CONTEXT_DEFAULT);
       assertNotNull(method + "IdoAdapter is null", cpoAdapter);
-      metaDescriptor = (CassandraCpoMetaDescriptor) cpoAdapter.getCpoMetaDescriptor();
+      metaDescriptor = (CassandraCpoMetaDescriptor)cpoAdapter.getCpoMetaDescriptor();
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -70,12 +68,12 @@ public class BlobTest extends TestCase {
 
     testBlob = ByteBuffer.allocate(CassandraStatics.BLOB_SIZE);
     for (int i = 0; i < CassandraStatics.BLOB_SIZE; i++) {
-      testBlob.put((byte) (((int) 'a') + (i % 26)));
+      testBlob.put((byte)(((int)'a') + (i % 26)));
     }
 
     testBlob2 = ByteBuffer.allocate(CassandraStatics.BLOB_SIZE);
     for (int i = 0; i < CassandraStatics.BLOB_SIZE; i++) {
-      testBlob2.put((byte) (((int) 'z') - (i % 26)));
+      testBlob2.put((byte)(((int)'z') - (i % 26)));
     }
 
     ValueObject lvo = new ValueObject(1, testBlob);
@@ -103,7 +101,6 @@ public class BlobTest extends TestCase {
       ByteBuffer blob2 = lvo2.getAttrBlob();
 
       assertTrue(blob1.equals(blob2));
-
     } catch (Exception ie) {
       logger.error("error retrieving lob", ie);
       fail(ie.getMessage());
@@ -117,7 +114,6 @@ public class BlobTest extends TestCase {
       ByteBuffer blob2 = lvo2.getAttrBlob();
 
       assertTrue(blob1.equals(blob2));
-
     } catch (Exception ie) {
       logger.error("error updating lob", ie);
       fail(ie.getMessage());
@@ -128,12 +124,12 @@ public class BlobTest extends TestCase {
 
     testBlob = ByteBuffer.allocate(CassandraStatics.BLOB_SIZE);
     for (int i = 0; i < CassandraStatics.BLOB_SIZE; i++) {
-      testBlob.put((byte) (((int) 'a') + (i % 26)));
+      testBlob.put((byte)(((int)'a') + (i % 26)));
     }
 
     testBlob2 = ByteBuffer.allocate(CassandraStatics.BLOB_SIZE);
     for (int i = 0; i < CassandraStatics.BLOB_SIZE; i++) {
-      testBlob2.put((byte) (((int) 'z') - (i % 26)));
+      testBlob2.put((byte)(((int)'z') - (i % 26)));
     }
 
     ValueObject lvo = new ValueObject(1, testBlob);
@@ -236,8 +232,6 @@ public class BlobTest extends TestCase {
       assertNotNull(blob2);
 
       assertTrue(blob1.equals(blob2));
-
-
     } catch (Exception ie) {
       logger.error("error retrieving lob", ie);
       fail(ie.getMessage());
@@ -254,8 +248,6 @@ public class BlobTest extends TestCase {
       assertNotNull(blob2);
 
       assertTrue(blob1.equals(blob2));
-
-
     } catch (Exception ie) {
       logger.error("error updating lob", ie);
       fail(ie.getMessage());
@@ -288,7 +280,6 @@ public class BlobTest extends TestCase {
 
       assertNull(lvo2.getAttrBlob());
       assertNull(lvo2.getAttrBlob2());
-
     } catch (Exception ie) {
       logger.error("error retrieving lob", ie);
       fail(ie.getMessage());
@@ -301,7 +292,6 @@ public class BlobTest extends TestCase {
 
       assertNull(lvo2.getAttrBlob());
       assertNull(lvo2.getAttrBlob2());
-
     } catch (Exception ie) {
       logger.error("error updating lob", ie);
       fail(ie.getMessage());
@@ -310,10 +300,7 @@ public class BlobTest extends TestCase {
 
   @Override
   public void tearDown() {
-
     cpoAdapter = null;
-
-
   }
 
   private boolean isEqual(byte[] b1, byte[] b2) {
@@ -337,6 +324,5 @@ public class BlobTest extends TestCase {
     }
 
     return true;
-
   }
 }

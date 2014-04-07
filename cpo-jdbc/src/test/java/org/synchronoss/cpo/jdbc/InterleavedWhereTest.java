@@ -35,7 +35,7 @@ import org.synchronoss.cpo.CpoWhere;
 public class InterleavedWhereTest extends TestCase {
 
   private CpoAdapter cpoAdapter = null;
-  private ArrayList<ValueObject> al = new ArrayList<ValueObject>();
+  private ArrayList<ValueObject> al = new ArrayList<>();
 
   /**
    * Creates a new RollbackTest object.
@@ -107,14 +107,14 @@ public class InterleavedWhereTest extends TestCase {
       ValueObject valObj = new ValueObject(1);
       valObj.setAttrBit(true);
       valObj.setAttrVarChar("Test");
-      Collection<Integer> inColl = new ArrayList<Integer>();
-      inColl.add(new Integer(1));
-      inColl.add(new Integer(3));
-      inColl.add(new Integer(5));
+      Collection<Integer> inColl = new ArrayList<>();
+      inColl.add(1);
+      inColl.add(3);
+      inColl.add(5);
 
       cw = cpoAdapter.newWhere(CpoWhere.LOGIC_AND, "id", CpoWhere.COMP_IN, inColl);
 
-      ArrayList<CpoWhere> wheres = new ArrayList<CpoWhere>();
+      ArrayList<CpoWhere> wheres = new ArrayList<>();
       wheres.add(cw);
       coll = cpoAdapter.retrieveBeans("InterleavedWhere", valObj, wheres, null);
 

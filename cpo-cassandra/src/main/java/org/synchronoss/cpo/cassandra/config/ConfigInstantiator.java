@@ -20,14 +20,11 @@
  */
 package org.synchronoss.cpo.cassandra.config;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.slf4j.*;
 import org.synchronoss.cpo.CpoException;
 import org.synchronoss.cpo.helper.ExceptionHelper;
-import org.synchronoss.cpo.meta.AbstractCpoMetaAdapter;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
+import java.lang.reflect.*;
 
 /**
  * Created with IntelliJ IDEA.
@@ -52,12 +49,10 @@ public class ConfigInstantiator<T> {
       throw new CpoException("Could not instantiate Factory Class: " + className + ":" + ExceptionHelper.getLocalizedMessage(ie));
     } catch (IllegalAccessException iae) {
       throw new CpoException("Could not access Factory Class: " + className + ":" + ExceptionHelper.getLocalizedMessage(iae));
-    } catch (ClassCastException cce) {
+    } catch (ClassCastException | NoSuchMethodException cce) {
       throw new CpoException("Factory class must implement FactoryMethodName: " + className + ":" + ExceptionHelper.getLocalizedMessage(cce));
     } catch (ClassNotFoundException cnfe) {
       throw new CpoException("Could not find Factory Class: " + className + ":" + ExceptionHelper.getLocalizedMessage(cnfe));
-    } catch (NoSuchMethodException nsme) {
-      throw new CpoException("Factory class must implement FactoryMethodName: " + className + ":" + ExceptionHelper.getLocalizedMessage(nsme));
     } catch (InvocationTargetException ite) {
       throw new CpoException("Factory class method threw an exception: " + className + ":" + ExceptionHelper.getLocalizedMessage(ite));
     }

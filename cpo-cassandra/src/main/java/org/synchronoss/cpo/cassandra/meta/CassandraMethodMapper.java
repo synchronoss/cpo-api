@@ -21,7 +21,6 @@
 package org.synchronoss.cpo.cassandra.meta;
 
 import com.datastax.driver.core.BoundStatement;
-import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.core.Row;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,9 +33,6 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.net.InetAddress;
 import java.nio.ByteBuffer;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
 import java.util.UUID;
 
 /**

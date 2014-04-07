@@ -34,7 +34,7 @@ import java.util.*;
  */
 public class UpdateObjectTest extends TestCase {
 
-  private ArrayList<ValueObject> al = new ArrayList<ValueObject>();
+  private ArrayList<ValueObject> al = new ArrayList<>();
   private CpoAdapter cpoAdapter = null;
   private JdbcCpoMetaDescriptor metaDescriptor = null;
 
@@ -87,8 +87,8 @@ public class UpdateObjectTest extends TestCase {
 
     // try the where on the update, should update 0
     try {
-      List<CpoWhere> cws = new ArrayList<CpoWhere>();
-      cws.add(cpoAdapter.newWhere(CpoWhere.LOGIC_NONE, "id", CpoWhere.COMP_EQ, new Integer(2)));
+      List<CpoWhere> cws = new ArrayList<>();
+      cws.add(cpoAdapter.newWhere(CpoWhere.LOGIC_NONE, "id", CpoWhere.COMP_EQ, 2));
       long updated = cpoAdapter.updateObject(null, valObj, cws, null, null);
       assertEquals("Should not have updated anything", 0, updated);
     } catch (Exception e) {
@@ -97,8 +97,8 @@ public class UpdateObjectTest extends TestCase {
 
     // try the where on the update, should update 1
     try {
-      List<CpoWhere> cws = new ArrayList<CpoWhere>();
-      cws.add(cpoAdapter.newWhere(CpoWhere.LOGIC_NONE, "id", CpoWhere.COMP_EQ, new Integer(5)));
+      List<CpoWhere> cws = new ArrayList<>();
+      cws.add(cpoAdapter.newWhere(CpoWhere.LOGIC_NONE, "id", CpoWhere.COMP_EQ, 5));
       long updated = cpoAdapter.updateObject(null, valObj, cws, null, null);
       assertEquals("Should have updated 1", 1, updated);
     } catch (Exception e) {

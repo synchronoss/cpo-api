@@ -36,7 +36,7 @@ import org.synchronoss.cpo.CpoWhere;
 public class NativeExpressionTest extends TestCase {
 
   private CpoAdapter cpoAdapter = null;
-  private ArrayList<ValueObject> al = new ArrayList<ValueObject>();
+  private ArrayList<ValueObject> al = new ArrayList<>();
 
   /**
    * Creates a new RollbackTest object.
@@ -102,7 +102,7 @@ public class NativeExpressionTest extends TestCase {
 
 
     try {
-      ArrayList<CpoNativeFunction> cnqAl = new ArrayList<CpoNativeFunction>();
+      ArrayList<CpoNativeFunction> cnqAl = new ArrayList<>();
 
 
       cnqAl.add(new CpoNativeFunction("__CPO_WHERE__", "WHERE ID = 2 OR ID = 3"));
@@ -126,7 +126,7 @@ public class NativeExpressionTest extends TestCase {
 
 
     try {
-      ArrayList<CpoNativeFunction> cnqAl = new ArrayList<CpoNativeFunction>();
+      ArrayList<CpoNativeFunction> cnqAl = new ArrayList<>();
 
 
 

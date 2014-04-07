@@ -21,19 +21,16 @@
 package org.synchronoss.cpo.cassandra;
 
 import com.datastax.driver.core.BoundStatement;
-import com.datastax.driver.core.PreparedStatement;
 import com.datastax.driver.core.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.*;
 import org.synchronoss.cpo.cassandra.meta.CassandraMethodMapper;
-import org.synchronoss.cpo.cassandra.transform.CassandraCpoTransform;
 import org.synchronoss.cpo.helper.ExceptionHelper;
 import org.synchronoss.cpo.meta.MethodMapper;
 import org.synchronoss.cpo.meta.domain.CpoAttribute;
 import org.synchronoss.cpo.meta.domain.CpoClass;
 import org.synchronoss.cpo.meta.domain.CpoFunction;
-import org.synchronoss.cpo.transform.CpoTransform;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -57,7 +54,7 @@ public class CassandraBoundStatementFactory extends CpoStatementFactory implemen
   private static final Logger logger = LoggerFactory.getLogger(CassandraBoundStatementFactory.class);
   private BoundStatement boundStatement;
 
-  private List<CpoReleasible> releasibles = new ArrayList<CpoReleasible>();
+  private List<CpoReleasible> releasibles = new ArrayList<>();
   private static final String WHERE_MARKER = "__CPO_WHERE__";
   private static final String ORDERBY_MARKER = "__CPO_ORDERBY__";
 

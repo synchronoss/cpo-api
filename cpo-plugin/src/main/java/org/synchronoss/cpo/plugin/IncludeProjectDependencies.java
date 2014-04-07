@@ -53,7 +53,7 @@ public class IncludeProjectDependencies extends AbstractComponentConfigurator {
   }
 
   private void addProjectDependenciesToClassRealm(ExpressionEvaluator expressionEvaluator, ClassRealm containerRealm) throws ComponentConfigurationException {
-    List<String> myClasspathElements = new ArrayList<String>();
+    List<String> myClasspathElements = new ArrayList<>();
     try {
       List<String> runtimeClasspathElements = (List<String>)expressionEvaluator.evaluate("${project.runtimeClasspathElements}");
       if (runtimeClasspathElements != null) {
@@ -73,7 +73,7 @@ public class IncludeProjectDependencies extends AbstractComponentConfigurator {
 
   private URL[] buildURLs(List<String> runtimeClasspathElements) throws ComponentConfigurationException {
     // Add the projects classes and dependencies
-    List<URL> urls = new ArrayList<URL>(runtimeClasspathElements.size());
+    List<URL> urls = new ArrayList<>(runtimeClasspathElements.size());
     for (String element : runtimeClasspathElements) {
       try {
         final URL url = new File(element).toURI().toURL();

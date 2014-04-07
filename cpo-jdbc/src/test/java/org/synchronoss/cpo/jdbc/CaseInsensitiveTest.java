@@ -25,8 +25,7 @@ import org.synchronoss.cpo.*;
 import org.synchronoss.cpo.jdbc.meta.JdbcCpoMetaDescriptor;
 
 import java.sql.Timestamp;
-import java.util.*;
-import org.synchronoss.cpo.meta.CpoMetaDescriptor;
+import java.util.ArrayList;
 
 /**
  * InsertObjectTest is a JUnit test class for testing the insert api calls of cpo
@@ -35,7 +34,7 @@ import org.synchronoss.cpo.meta.CpoMetaDescriptor;
  */
 public class CaseInsensitiveTest extends TestCase {
 
-  private ArrayList<ValueObject> al = new ArrayList<ValueObject>();
+  private ArrayList<ValueObject> al = new ArrayList<>();
   private CpoAdapter cpoAdapter = null;
   private CpoAdapter readAdapter = null;
   private JdbcCpoMetaDescriptor metaDescriptor = null;

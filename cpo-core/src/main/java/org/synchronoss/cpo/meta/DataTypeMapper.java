@@ -113,7 +113,7 @@ public class DataTypeMapper {
   }
 
   public List<String> getDataTypeNames() {
-    ArrayList<String> al = new ArrayList<String>();
+    ArrayList<String> al = new ArrayList<>();
     // need to put the keySet into an arraylist. The inner class is not serializable
     al.addAll(dataTypeNameMap.keySet());
     return al;

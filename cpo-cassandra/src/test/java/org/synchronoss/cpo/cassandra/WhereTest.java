@@ -20,12 +20,10 @@
  */
 package org.synchronoss.cpo.cassandra;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import static junit.framework.Assert.assertTrue;
-import static junit.framework.Assert.fail;
 import junit.framework.TestCase;
 import org.synchronoss.cpo.*;
+
+import java.util.*;
 
 /**
  * BlobTest is a JUnit test class for testing the JdbcAdapter class Constructors
@@ -35,7 +33,7 @@ import org.synchronoss.cpo.*;
 public class WhereTest extends TestCase {
 
   private CpoAdapter cpoAdapter = null;
-  private ArrayList<ValueObject> al = new ArrayList<ValueObject>();
+  private ArrayList<ValueObject> al = new ArrayList<>();
 
   public WhereTest() {
   }
@@ -98,7 +96,7 @@ public class WhereTest extends TestCase {
       ValueObject valObj = new ValueObject();
       cw = cpoAdapter.newWhere(CpoWhere.LOGIC_NONE, "id", CpoWhere.COMP_EQ, null);
       cw.setStaticValue("3");
-      ArrayList<CpoWhere> wheres = new ArrayList<CpoWhere>();
+      ArrayList<CpoWhere> wheres = new ArrayList<>();
       wheres.add(cw);
       col = cpoAdapter.retrieveBeans("TestWhereRetrieve", valObj, wheres, null);
 
@@ -118,7 +116,7 @@ public class WhereTest extends TestCase {
       ValueObject valObj = new ValueObject(3);
       cw = cpoAdapter.newWhere(CpoWhere.LOGIC_NONE, "id", CpoWhere.COMP_EQ, valObj);
 
-      ArrayList<CpoWhere> wheres = new ArrayList<CpoWhere>();
+      ArrayList<CpoWhere> wheres = new ArrayList<>();
       wheres.add(cw);
       col = cpoAdapter.retrieveBeans("TestWhereRetrieve", valObj, wheres, null);
 
@@ -138,7 +136,7 @@ public class WhereTest extends TestCase {
       ValueObject valObj = new ValueObject(3);
       cw = cpoAdapter.newWhere(CpoWhere.LOGIC_NONE, "id", CpoWhere.COMP_EQ, valObj);
 
-      ArrayList<CpoWhere> wheres = new ArrayList<CpoWhere>();
+      ArrayList<CpoWhere> wheres = new ArrayList<>();
       wheres.add(cw);
       col = cpoAdapter.retrieveBeans(null, valObj, wheres, null);
 
@@ -180,7 +178,7 @@ public class WhereTest extends TestCase {
       cw.addWhere(cw1);
       cw.addWhere(cw2);
 
-      ArrayList<CpoWhere> wheres = new ArrayList<CpoWhere>();
+      ArrayList<CpoWhere> wheres = new ArrayList<>();
       wheres.add(cw);
       Collection<ValueObject> col = cpoAdapter.retrieveBeans("TestWhereRetrieve", valObj, wheres, null);
 
@@ -205,7 +203,7 @@ public class WhereTest extends TestCase {
       cw.addWhere(cw1);
       cw.addWhere(cw2);
 
-      ArrayList<CpoWhere> wheres = new ArrayList<CpoWhere>();
+      ArrayList<CpoWhere> wheres = new ArrayList<>();
       wheres.add(cw);
       Collection<ValueObject> col = cpoAdapter.retrieveBeans("TestWhereRetrieve", valObj, wheres, null);
 
@@ -225,11 +223,11 @@ public class WhereTest extends TestCase {
       ValueObject valObj = new ValueObject(1);
 
       CpoWhere cw = cpoAdapter.newWhere();
-      CpoWhere cw1 = cpoAdapter.newWhere(CpoWhere.LOGIC_NONE, "id", CpoWhere.COMP_EQ, new Integer(1));
+      CpoWhere cw1 = cpoAdapter.newWhere(CpoWhere.LOGIC_NONE, "id", CpoWhere.COMP_EQ, 1);
 
       cw.addWhere(cw1);
 
-      ArrayList<CpoWhere> wheres = new ArrayList<CpoWhere>();
+      ArrayList<CpoWhere> wheres = new ArrayList<>();
       wheres.add(cw);
       Collection<ValueObject> col = cpoAdapter.retrieveBeans("TestWhereRetrieve", valObj, wheres, null);
 
@@ -254,7 +252,7 @@ public class WhereTest extends TestCase {
 
       cw.addWhere(cw1);
 
-      ArrayList<CpoWhere> wheres = new ArrayList<CpoWhere>();
+      ArrayList<CpoWhere> wheres = new ArrayList<>();
       wheres.add(cw);
       Collection<ValueObject> coll = cpoAdapter.retrieveBeans("TestWhereRetrieve", valObj, wheres, null);
 
@@ -272,17 +270,17 @@ public class WhereTest extends TestCase {
 
     try {
       ValueObject valObj = new ValueObject(1);
-      Collection<Integer> inColl = new ArrayList<Integer>();
-      inColl.add(new Integer(1));
-      inColl.add(new Integer(3));
-      inColl.add(new Integer(5));
+      Collection<Integer> inColl = new ArrayList<>();
+      inColl.add(1);
+      inColl.add(3);
+      inColl.add(5);
 
       CpoWhere cw = cpoAdapter.newWhere();
       CpoWhere cw1 = cpoAdapter.newWhere(CpoWhere.LOGIC_NONE, "id", CpoWhere.COMP_IN, inColl);
 
       cw.addWhere(cw1);
 
-      ArrayList<CpoWhere> wheres = new ArrayList<CpoWhere>();
+      ArrayList<CpoWhere> wheres = new ArrayList<>();
       wheres.add(cw);
       Collection<ValueObject> coll = cpoAdapter.retrieveBeans("TestWhereRetrieve", valObj, wheres, null);
 
@@ -300,17 +298,17 @@ public class WhereTest extends TestCase {
 
     try {
       ValueObject valObj = new ValueObject(1);
-      Collection<Integer> inColl = new ArrayList<Integer>();
-      inColl.add(new Integer(1));
-      inColl.add(new Integer(3));
-      inColl.add(new Integer(5));
+      Collection<Integer> inColl = new ArrayList<>();
+      inColl.add(1);
+      inColl.add(3);
+      inColl.add(5);
 
       CpoWhere cw = cpoAdapter.newWhere();
       CpoWhere cw1 = cpoAdapter.newWhere(CpoWhere.LOGIC_NONE, "id", CpoWhere.COMP_IN, inColl);
 
       cw.addWhere(cw1);
 
-      ArrayList<CpoWhere> wheres = new ArrayList<CpoWhere>();
+      ArrayList<CpoWhere> wheres = new ArrayList<>();
       wheres.add(cw);
       Collection<ValueObject> coll = cpoAdapter.retrieveBeans("TestWhereRetrieve", valObj, wheres, null);
 

@@ -90,7 +90,7 @@ public class JdbcCpoConfigProcessor implements CpoConfigProcessor {
     if (readWriteConfig.isSetJndiName()) {
       dataSourceInfo = new JndiJdbcDataSourceInfo(readWriteConfig.getJndiName());
     } else if (readWriteConfig.isSetDataSourceClassName()) {
-      SortedMap<String, String> props = new TreeMap<String, String>();
+      SortedMap<String, String> props = new TreeMap<>();
 
       if (readWriteConfig.isSetUrl()) {
         props.put(PROP_URL1, readWriteConfig.getUrl());

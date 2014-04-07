@@ -33,8 +33,6 @@ import org.synchronoss.cpo.meta.domain.*;
 import org.synchronoss.cpo.parser.ExpressionParser;
 
 import java.math.BigDecimal;
-import java.net.URL;
-import java.sql.*;
 import java.util.*;
 
 /**
@@ -42,7 +40,7 @@ import java.util.*;
  */
 public class JdbcCpoMetaAdapter extends AbstractCpoMetaAdapter {
   private static final Logger logger = LoggerFactory.getLogger(JdbcCpoMetaAdapter.class);
-  private static final DataTypeMapEntry<String> defaultDataTypeMapEntry = new DataTypeMapEntry<String>(java.sql.Types.VARCHAR, "VARCHAR", String.class); //12
+  private static final DataTypeMapEntry<String> defaultDataTypeMapEntry = new DataTypeMapEntry<>(java.sql.Types.VARCHAR, "VARCHAR", String.class); //12
   private static final DataTypeMapper dataTypeMapper = initDataTypeMapper();
 
   @Override
@@ -100,38 +98,38 @@ public class JdbcCpoMetaAdapter extends AbstractCpoMetaAdapter {
     DataTypeMapper dataTypeMapper = new DataTypeMapper(defaultDataTypeMapEntry);
 
     // JDK 1.4.2 Values
-    dataTypeMapper.addDataTypeEntry(new DataTypeMapEntry<String>(java.sql.Types.CHAR, "CHAR", String.class)); // 1
-    dataTypeMapper.addDataTypeEntry(new DataTypeMapEntry<String>(java.sql.Types.LONGVARCHAR, "LONGVARCHAR", String.class)); // -1
+    dataTypeMapper.addDataTypeEntry(new DataTypeMapEntry<>(java.sql.Types.CHAR, "CHAR", String.class)); // 1
+    dataTypeMapper.addDataTypeEntry(new DataTypeMapEntry<>(java.sql.Types.LONGVARCHAR, "LONGVARCHAR", String.class)); // -1
     dataTypeMapper.addDataTypeEntry(defaultDataTypeMapEntry); // 12
-    dataTypeMapper.addDataTypeEntry(new DataTypeMapEntry<BigDecimal>(java.sql.Types.DECIMAL, "DECIMAL", BigDecimal.class)); // 3
-    dataTypeMapper.addDataTypeEntry(new DataTypeMapEntry<BigDecimal>(java.sql.Types.NUMERIC, "NUMERIC", BigDecimal.class)); // 2
-    dataTypeMapper.addDataTypeEntry(new DataTypeMapEntry<Byte>(java.sql.Types.TINYINT, "TINYINT", byte.class)); // -6
-    dataTypeMapper.addDataTypeEntry(new DataTypeMapEntry<Short>(java.sql.Types.SMALLINT, "SMALLINT", short.class)); // 5
-    dataTypeMapper.addDataTypeEntry(new DataTypeMapEntry<Integer>(java.sql.Types.INTEGER, "INTEGER", int.class)); // 4
-    dataTypeMapper.addDataTypeEntry(new DataTypeMapEntry<Long>(java.sql.Types.BIGINT, "BIGINT", long.class)); // -5
-    dataTypeMapper.addDataTypeEntry(new DataTypeMapEntry<Float>(java.sql.Types.REAL, "REAL", float.class)); // 7
-    dataTypeMapper.addDataTypeEntry(new DataTypeMapEntry<Double>(java.sql.Types.FLOAT, "FLOAT", double.class)); // 6
-    dataTypeMapper.addDataTypeEntry(new DataTypeMapEntry<Double>(java.sql.Types.DOUBLE, "DOUBLE", double.class)); // 8
-    dataTypeMapper.addDataTypeEntry(new DataTypeMapEntry<byte[]>(java.sql.Types.BINARY, "BINARY", byte[].class)); // -2
-    dataTypeMapper.addDataTypeEntry(new DataTypeMapEntry<byte[]>(java.sql.Types.VARBINARY, "VARBINARY", byte[].class)); // -3
-    dataTypeMapper.addDataTypeEntry(new DataTypeMapEntry<byte[]>(java.sql.Types.LONGVARBINARY, "LONGVARBINARY", byte[].class)); // -4
-    dataTypeMapper.addDataTypeEntry(new DataTypeMapEntry<java.sql.Date>(java.sql.Types.DATE, "DATE", java.sql.Date.class)); // 91
-    dataTypeMapper.addDataTypeEntry(new DataTypeMapEntry<Time>(java.sql.Types.TIME, "TIME", java.sql.Time.class)); // 92
-    dataTypeMapper.addDataTypeEntry(new DataTypeMapEntry<Timestamp>(java.sql.Types.TIMESTAMP, "TIMESTAMP", java.sql.Timestamp.class)); // 93
-    dataTypeMapper.addDataTypeEntry(new DataTypeMapEntry<Clob>(java.sql.Types.CLOB, "CLOB", java.sql.Clob.class)); // 2005
-    dataTypeMapper.addDataTypeEntry(new DataTypeMapEntry<Blob>(java.sql.Types.BLOB, "BLOB", java.sql.Blob.class)); // 2004
-    dataTypeMapper.addDataTypeEntry(new DataTypeMapEntry<Array>(java.sql.Types.ARRAY, "ARRAY", java.sql.Array.class)); // 2003
-    dataTypeMapper.addDataTypeEntry(new DataTypeMapEntry<Ref>(java.sql.Types.REF, "REF", java.sql.Ref.class)); // 2006
-    dataTypeMapper.addDataTypeEntry(new DataTypeMapEntry<Object>(java.sql.Types.DISTINCT, "DISTINCT", Object.class)); // 2001
-    dataTypeMapper.addDataTypeEntry(new DataTypeMapEntry<Object>(java.sql.Types.STRUCT, "STRUCT", Object.class)); // 2002
-    dataTypeMapper.addDataTypeEntry(new DataTypeMapEntry<Object>(java.sql.Types.OTHER, "OTHER", Object.class)); // 1111
-    dataTypeMapper.addDataTypeEntry(new DataTypeMapEntry<Object>(java.sql.Types.JAVA_OBJECT, "JAVA_OBJECT", Object.class)); // 2000
-    dataTypeMapper.addDataTypeEntry(new DataTypeMapEntry<URL>(java.sql.Types.DATALINK, "DATALINK", java.net.URL.class)); // 70
-    dataTypeMapper.addDataTypeEntry(new DataTypeMapEntry<Boolean>(java.sql.Types.BIT, "BIT", boolean.class)); // -7
-    dataTypeMapper.addDataTypeEntry(new DataTypeMapEntry<Boolean>(java.sql.Types.BOOLEAN, "BOOLEAN", boolean.class)); //16
+    dataTypeMapper.addDataTypeEntry(new DataTypeMapEntry<>(java.sql.Types.DECIMAL, "DECIMAL", BigDecimal.class)); // 3
+    dataTypeMapper.addDataTypeEntry(new DataTypeMapEntry<>(java.sql.Types.NUMERIC, "NUMERIC", BigDecimal.class)); // 2
+    dataTypeMapper.addDataTypeEntry(new DataTypeMapEntry<>(java.sql.Types.TINYINT, "TINYINT", byte.class)); // -6
+    dataTypeMapper.addDataTypeEntry(new DataTypeMapEntry<>(java.sql.Types.SMALLINT, "SMALLINT", short.class)); // 5
+    dataTypeMapper.addDataTypeEntry(new DataTypeMapEntry<>(java.sql.Types.INTEGER, "INTEGER", int.class)); // 4
+    dataTypeMapper.addDataTypeEntry(new DataTypeMapEntry<>(java.sql.Types.BIGINT, "BIGINT", long.class)); // -5
+    dataTypeMapper.addDataTypeEntry(new DataTypeMapEntry<>(java.sql.Types.REAL, "REAL", float.class)); // 7
+    dataTypeMapper.addDataTypeEntry(new DataTypeMapEntry<>(java.sql.Types.FLOAT, "FLOAT", double.class)); // 6
+    dataTypeMapper.addDataTypeEntry(new DataTypeMapEntry<>(java.sql.Types.DOUBLE, "DOUBLE", double.class)); // 8
+    dataTypeMapper.addDataTypeEntry(new DataTypeMapEntry<>(java.sql.Types.BINARY, "BINARY", byte[].class)); // -2
+    dataTypeMapper.addDataTypeEntry(new DataTypeMapEntry<>(java.sql.Types.VARBINARY, "VARBINARY", byte[].class)); // -3
+    dataTypeMapper.addDataTypeEntry(new DataTypeMapEntry<>(java.sql.Types.LONGVARBINARY, "LONGVARBINARY", byte[].class)); // -4
+    dataTypeMapper.addDataTypeEntry(new DataTypeMapEntry<>(java.sql.Types.DATE, "DATE", java.sql.Date.class)); // 91
+    dataTypeMapper.addDataTypeEntry(new DataTypeMapEntry<>(java.sql.Types.TIME, "TIME", java.sql.Time.class)); // 92
+    dataTypeMapper.addDataTypeEntry(new DataTypeMapEntry<>(java.sql.Types.TIMESTAMP, "TIMESTAMP", java.sql.Timestamp.class)); // 93
+    dataTypeMapper.addDataTypeEntry(new DataTypeMapEntry<>(java.sql.Types.CLOB, "CLOB", java.sql.Clob.class)); // 2005
+    dataTypeMapper.addDataTypeEntry(new DataTypeMapEntry<>(java.sql.Types.BLOB, "BLOB", java.sql.Blob.class)); // 2004
+    dataTypeMapper.addDataTypeEntry(new DataTypeMapEntry<>(java.sql.Types.ARRAY, "ARRAY", java.sql.Array.class)); // 2003
+    dataTypeMapper.addDataTypeEntry(new DataTypeMapEntry<>(java.sql.Types.REF, "REF", java.sql.Ref.class)); // 2006
+    dataTypeMapper.addDataTypeEntry(new DataTypeMapEntry<>(java.sql.Types.DISTINCT, "DISTINCT", Object.class)); // 2001
+    dataTypeMapper.addDataTypeEntry(new DataTypeMapEntry<>(java.sql.Types.STRUCT, "STRUCT", Object.class)); // 2002
+    dataTypeMapper.addDataTypeEntry(new DataTypeMapEntry<>(java.sql.Types.OTHER, "OTHER", Object.class)); // 1111
+    dataTypeMapper.addDataTypeEntry(new DataTypeMapEntry<>(java.sql.Types.JAVA_OBJECT, "JAVA_OBJECT", Object.class)); // 2000
+    dataTypeMapper.addDataTypeEntry(new DataTypeMapEntry<>(java.sql.Types.DATALINK, "DATALINK", java.net.URL.class)); // 70
+    dataTypeMapper.addDataTypeEntry(new DataTypeMapEntry<>(java.sql.Types.BIT, "BIT", boolean.class)); // -7
+    dataTypeMapper.addDataTypeEntry(new DataTypeMapEntry<>(java.sql.Types.BOOLEAN, "BOOLEAN", boolean.class)); //16
 
     // dbspecific types needed to generate the class from a function.
-    dataTypeMapper.addDataTypeEntry(new DataTypeMapEntry<String>(100, "VARCHAR_IGNORECASE", java.lang.String.class)); // HSQLDB TYPE for VARCHAR_IGNORE_CASE
+    dataTypeMapper.addDataTypeEntry(new DataTypeMapEntry<>(100, "VARCHAR_IGNORECASE", java.lang.String.class)); // HSQLDB TYPE for VARCHAR_IGNORE_CASE
 
     logger.debug("Returning the DataMapper");
     return dataTypeMapper;

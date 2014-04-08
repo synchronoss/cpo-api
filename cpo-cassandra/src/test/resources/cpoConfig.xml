@@ -44,6 +44,7 @@
     <cass:readWriteConfig>
       <cass:keySpace>${cpo.cassandra.keyspace}</cass:keySpace>
       <cass:contactPoint>${cpo.cassandra.contactPoint}</cass:contactPoint>
+      <cass:port>${cpo.cassandra.port}</cass:port>
     </cass:readWriteConfig>
   </core:dataConfig>
   <core:dataConfig xsi:type="cass:ctCassandraConfig" name="caseSensitive">
@@ -52,6 +53,7 @@
    <cass:readWriteConfig>
      <cass:keySpace>${cpo.cassandra.keyspace}</cass:keySpace>
      <cass:contactPoint>${cpo.cassandra.contactPoint}</cass:contactPoint>
+     <cass:port>${cpo.cassandra.port}</cass:port>
    </cass:readWriteConfig>
  </core:dataConfig>
   <core:dataConfig xsi:type="cass:ctCassandraConfig" name="caseInsensitive">
@@ -60,6 +62,7 @@
    <cass:readWriteConfig>
      <cass:keySpace>${cpo.cassandra.keyspace}</cass:keySpace>
      <cass:contactPoint>${cpo.cassandra.contactPoint}</cass:contactPoint>
+     <cass:port>${cpo.cassandra.port}</cass:port>
    </cass:readWriteConfig>
  </core:dataConfig>
  </core:cpoConfig>

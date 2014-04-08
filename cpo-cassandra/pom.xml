@@ -98,6 +98,7 @@
       </activation>
       <properties>
         <cpo.cassandra.contactPoint>127.0.0.1</cpo.cassandra.contactPoint>
+        <cpo.cassandra.port>9042</cpo.cassandra.port>
         <cpo.cassandra.keyspace>cpokeyspace</cpo.cassandra.keyspace>
         <cpo.cassandra.metaXml>/cassandraMetaData.xml</cpo.cassandra.metaXml>
       </properties>

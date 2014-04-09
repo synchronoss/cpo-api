@@ -20,26 +20,18 @@
  */
 package org.synchronoss.cpo.cassandra;
 
-import org.cassandraunit.AbstractCassandraUnit4TestCase;
-import org.cassandraunit.dataset.DataSet;
-import org.cassandraunit.dataset.xml.ClassPathXmlDataSet;
+import org.cassandraunit.CassandraCQLUnit;
+import org.cassandraunit.dataset.cql.ClassPathCQLDataSet;
+import org.junit.Rule;
 
 /**
- * FIXME - add description
+ * This is the base of all cassandra tests.  It will initialize the keyspace, as well as create the schema required.
  *
  * @author Michael Bellomo
  * @since 04/05/2014
  */
-public abstract class AbstractCassandraTest extends AbstractCassandraUnit4TestCase {
+public class AbstractCassandraTest {
 
-  public AbstractCassandraTest() {
-//    super("embeddedCassandra.yaml");
-    super();
-  }
-
-  @Override
-  public DataSet getDataSet() {
-    return new ClassPathXmlDataSet("cpoDataSet.xml");
-    //return new ClassPathXmlDataSet("simpleDataSet.xml");
-  }
+  @Rule
+  public CassandraCQLUnit cassandraCQLUnit = new CassandraCQLUnit(new ClassPathCQLDataSet("test.cql", "cpokeyspace"));
 }

@@ -20,32 +20,29 @@
  */
 package org.synchronoss.cpo.cassandra;
 
-import java.io.File;
-import junit.framework.TestCase;
+import org.junit.*;
 import org.slf4j.*;
 import org.synchronoss.cpo.*;
-
-import java.util.*;
-import static junit.framework.Assert.assertNotNull;
-import static junit.framework.Assert.assertTrue;
-import static junit.framework.Assert.fail;
 import org.synchronoss.cpo.helper.ExceptionHelper;
+
+import java.io.File;
+import java.util.*;
+
+import static junit.framework.TestCase.assertTrue;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.fail;
 
 /**
  * RetrieveBeanTest is a JUnit test class for testing the JdbcAdapter class Constructors
  *
  * @author david berry
  */
-public class ZZHotDeployTest extends TestCase {
+public class ZZHotDeployTest extends AbstractCassandraTest {
 
   private static final Logger logger = LoggerFactory.getLogger(ZZHotDeployTest.class);
   private CpoAdapter cpoAdapter = null;
   private ArrayList<ValueObject> al = new ArrayList<>();
   private File metaFile = new File("metaData.xml");
-
-  public ZZHotDeployTest(String name) {
-    super(name);
-  }
 
   /**
    * <code>setUp</code> Load the datasource from the properties in the property file jdbc_en_US.properties
@@ -53,7 +50,7 @@ public class ZZHotDeployTest extends TestCase {
    * @author david berry
    * @version '$Id: RetrieveBeanTest.java,v 1.6 2006/01/30 19:09:23 dberry Exp $'
    */
-  @Override
+  @Before
   public void setUp() {
     String method = "setUp:";
 
@@ -82,6 +79,7 @@ public class ZZHotDeployTest extends TestCase {
     }
   }
 
+  @Test
   public void testRefresh() {
     String method = "testRetrieveBeans:";
     List<ValueObject> col;
@@ -127,6 +125,7 @@ public class ZZHotDeployTest extends TestCase {
     }
   }
 
+  @Test
   public void testRefreshOverwrite() {
     String method = "testRetrieveBeans:";
     List<ValueObject> col;
@@ -170,7 +169,7 @@ public class ZZHotDeployTest extends TestCase {
     }
   }
 
-  @Override
+  @After
   public void tearDown() {
     String method = "tearDown:";
     try {

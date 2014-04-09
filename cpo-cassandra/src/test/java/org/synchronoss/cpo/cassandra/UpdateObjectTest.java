@@ -20,27 +20,25 @@
  */
 package org.synchronoss.cpo.cassandra;
 
-import junit.framework.TestCase;
+import org.junit.*;
 import org.synchronoss.cpo.*;
 import org.synchronoss.cpo.cassandra.meta.CassandraCpoMetaDescriptor;
 
 import java.sql.Timestamp;
 import java.util.*;
 
+import static org.junit.Assert.*;
+
 /**
  * DeleteObjectTest is a JUnit test class for testing the JdbcAdapter deleteObject method
  *
  * @author david berry
  */
-public class UpdateObjectTest extends TestCase {
+public class UpdateObjectTest extends AbstractCassandraTest {
 
   private ArrayList<ValueObject> al = new ArrayList<>();
   private CpoAdapter cpoAdapter = null;
   private CassandraCpoMetaDescriptor metaDescriptor = null;
-
-  public UpdateObjectTest(String name) {
-    super(name);
-  }
 
   /**
    * <code>setUp</code> Load the datasource from the properties in the property file jdbc_en_US.properties
@@ -48,7 +46,7 @@ public class UpdateObjectTest extends TestCase {
    * @author david berry
    * @version '$Id: InsertObjectTest.java,v 1.3 2006/01/30 19:09:23 dberry Exp $'
    */
-  @Override
+  @Before
   public void setUp() {
     String method = "setUp:";
 
@@ -61,6 +59,7 @@ public class UpdateObjectTest extends TestCase {
     }
   }
 
+  @Test
   public void testUpdateObject() {
     String method = "testUpdateObject:";
     ValueObject valObj = new ValueObject(5);
@@ -109,7 +108,7 @@ public class UpdateObjectTest extends TestCase {
     }
   }
 
-  @Override
+  @After
   public void tearDown() {
     String method = "tearDown:";
     try {

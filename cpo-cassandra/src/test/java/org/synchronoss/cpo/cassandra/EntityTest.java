@@ -20,7 +20,7 @@
  */
 package org.synchronoss.cpo.cassandra;
 
-import junit.framework.TestCase;
+import org.junit.Test;
 import org.slf4j.*;
 import org.synchronoss.cpo.*;
 import org.synchronoss.cpo.cassandra.meta.CassandraCpoAttribute;
@@ -28,29 +28,18 @@ import org.synchronoss.cpo.meta.domain.CpoAttribute;
 
 import java.util.List;
 
+import static org.junit.Assert.*;
+
 /**
  * ConstructorTest is a JUnit test class for testing the JdbcAdapter class Constructors
  *
  * @author david berry
  */
-public class EntityTest extends TestCase {
+public class EntityTest extends AbstractCassandraTest {
 
   private static final Logger logger = LoggerFactory.getLogger(EntityTest.class);
 
-  public EntityTest(String name) {
-    super(name);
-  }
-
-  /**
-   * <code>setUp</code> Load the datasource from the properties in the property file jdbc_en_US.properties
-   *
-   * @author david berry
-   * @version '$Id: ConstructorTest.java,v 1.7 2006/01/31 22:55:03 dberry Exp $'
-   */
-  @Override
-  public void setUp() {
-  }
-
+  @Test
   public void testGetDataSourceEntities() {
     String method = "testGetDataSourceEntities:";
     try {
@@ -75,9 +64,5 @@ public class EntityTest extends TestCase {
     logger.debug("JavaName: "+attribute.getJavaName());
     logger.debug("JavaType: "+attribute.getJavaType());
     logger.debug("DataTypeMapEntry: "+attribute.getDataTypeInt());
-  }
-
-  @Override
-  public void tearDown() {
   }
 }

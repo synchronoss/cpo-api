@@ -20,19 +20,21 @@
  */
 package org.synchronoss.cpo.cassandra;
 
-import junit.framework.TestCase;
+import org.junit.*;
 import org.slf4j.*;
 import org.synchronoss.cpo.*;
 import org.synchronoss.cpo.cassandra.meta.CassandraCpoMetaDescriptor;
 
 import java.nio.ByteBuffer;
 
+import static org.junit.Assert.*;
+
 /**
  * BlobTest is a JUnit test class for testing the JdbcAdapter class Constructors
  *
  * @author david berry
  */
-public class BlobTest extends TestCase {
+public class BlobTest extends AbstractCassandraTest {
 
   private static final Logger logger = LoggerFactory.getLogger(BlobTest.class);
   private CassandraCpoMetaDescriptor metaDescriptor = null;
@@ -40,17 +42,13 @@ public class BlobTest extends TestCase {
   private ByteBuffer testBlob = null;
   private ByteBuffer testBlob2 = null;
 
-  public BlobTest(String name) {
-    super(name);
-  }
-
   /**
    * <code>setUp</code> Load the datasource from the properties in the property file jdbc_en_US.properties
    *
    * @author david berry
    * @version '$Id: BlobTest.java,v 1.15 2006/02/15 18:34:19 dberry Exp $'
    */
-  @Override
+  @Before
   public void setUp() {
 
     String method = "setUp:";
@@ -64,6 +62,7 @@ public class BlobTest extends TestCase {
     }
   }
 
+  @Test
   public void testTrxGZipBlobInsertandDelete() {
 
     testBlob = ByteBuffer.allocate(CassandraStatics.BLOB_SIZE);
@@ -120,6 +119,7 @@ public class BlobTest extends TestCase {
     }
   }
 
+  @Test
   public void testTrxBlobInsertandDelete() {
 
     testBlob = ByteBuffer.allocate(CassandraStatics.BLOB_SIZE);
@@ -199,6 +199,7 @@ public class BlobTest extends TestCase {
    *
    * }
    */
+  @Test
   public void testTrxEmptyGZipBlobInsertandDelete() {
 
     testBlob = ByteBuffer.allocate(0);
@@ -254,6 +255,7 @@ public class BlobTest extends TestCase {
     }
   }
 
+  @Test
   public void testTrxNullGZipBlobInsertandDelete() {
 
     ValueObject lvo = new ValueObject(1, null);
@@ -298,7 +300,7 @@ public class BlobTest extends TestCase {
     }
   }
 
-  @Override
+  @After
   public void tearDown() {
     cpoAdapter = null;
   }

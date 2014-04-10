@@ -22,7 +22,7 @@ package org.synchronoss.cpo.cassandra;
 
 import org.cassandraunit.CassandraCQLUnit;
 import org.cassandraunit.dataset.cql.ClassPathCQLDataSet;
-import org.junit.Rule;
+import org.junit.*;
 
 /**
  * This is the base of all cassandra tests.  It will initialize the keyspace, as well as create the schema required.
@@ -30,8 +30,21 @@ import org.junit.Rule;
  * @author Michael Bellomo
  * @since 04/05/2014
  */
-public class AbstractCassandraTest {
+public abstract class AbstractCassandraTest {
 
   @Rule
   public CassandraCQLUnit cassandraCQLUnit = new CassandraCQLUnit(new ClassPathCQLDataSet("test.cql", "cpokeyspace"));
+
+  @After
+  public void stopCassandra() {
+    System.out.println("========== KILLING ==========");
+    if (cassandraCQLUnit != null) {
+      if (cassandraCQLUnit.session != null && !cassandraCQLUnit.session.isClosed()) {
+        cassandraCQLUnit.session.close();
+      }
+      if (cassandraCQLUnit.cluster != null && !cassandraCQLUnit.cluster.isClosed()) {
+        cassandraCQLUnit.cluster.close();
+      }
+    }
+  }
 }

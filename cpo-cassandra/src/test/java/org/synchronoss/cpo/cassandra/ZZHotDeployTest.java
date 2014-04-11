@@ -37,7 +37,7 @@ import static org.junit.Assert.fail;
  *
  * @author david berry
  */
-public class ZZHotDeployTest extends AbstractCassandraTest {
+public class ZZHotDeployTest {
 
   private static final Logger logger = LoggerFactory.getLogger(ZZHotDeployTest.class);
   private CpoAdapter cpoAdapter = null;

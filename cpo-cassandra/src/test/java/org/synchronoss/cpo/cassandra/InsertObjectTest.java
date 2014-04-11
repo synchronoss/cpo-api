@@ -34,7 +34,7 @@ import static org.junit.Assert.*;
  *
  * @author david berry
  */
-public class InsertObjectTest extends AbstractCassandraTest {
+public class InsertObjectTest {
 
   private ArrayList<ValueObject> al = new ArrayList<>();
   private CpoAdapter cpoAdapter = null;

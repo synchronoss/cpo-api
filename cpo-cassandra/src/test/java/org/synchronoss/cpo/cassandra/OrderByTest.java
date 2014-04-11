@@ -32,7 +32,7 @@ import static org.junit.Assert.*;
  *
  * @author david berry
  */
-public class OrderByTest extends AbstractCassandraTest {
+public class OrderByTest {
 
   private CpoAdapter cpoAdapter = null;
   private ArrayList<ValueObject> al = new ArrayList<>();

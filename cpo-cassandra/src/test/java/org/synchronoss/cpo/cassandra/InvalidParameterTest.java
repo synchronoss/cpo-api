@@ -29,7 +29,7 @@ import java.util.Collection;
 
 import static org.junit.Assert.*;
 
-public class InvalidParameterTest extends AbstractCassandraTest {
+public class InvalidParameterTest {
 
   private static final Logger logger = LoggerFactory.getLogger(InvalidParameterTest.class);
   private CpoAdapter cpoAdapter = null;

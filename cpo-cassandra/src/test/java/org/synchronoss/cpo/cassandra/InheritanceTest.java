@@ -34,7 +34,7 @@ import static org.junit.Assert.*;
  *
  * @author david berry
  */
-public class InheritanceTest extends AbstractCassandraTest {
+public class InheritanceTest {
 
   private ArrayList<ChildValueObject> al = new ArrayList<>();
   private CpoAdapter cpoAdapter = null;

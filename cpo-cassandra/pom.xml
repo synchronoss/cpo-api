@@ -94,10 +94,10 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
         <configuration>
-          <excludes>
-            <exclude>org/synchronoss/cpo/cassandra/BigBatchTest.java</exclude>
-            <exclude>org/synchronoss/cpo/cassandra/BigRetrieveTest.java</exclude>
-          </excludes>
+          <includes>
+            <!-- all tests should be in the suite -->
+            <include>org/synchronoss/cpo/cassandra/CassandraTestSuite.java</include>
+          </includes>
         </configuration>
       </plugin>
     </plugins>

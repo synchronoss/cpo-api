@@ -35,7 +35,7 @@ import static org.junit.Assert.*;
  *
  * @author david berry
  */
-public class EntityTest extends AbstractCassandraTest {
+public class EntityTest {
 
   private static final Logger logger = LoggerFactory.getLogger(EntityTest.class);
 

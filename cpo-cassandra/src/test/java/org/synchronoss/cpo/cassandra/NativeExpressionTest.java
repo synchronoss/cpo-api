@@ -32,7 +32,7 @@ import static org.junit.Assert.*;
  *
  * @author david berry
  */
-public class NativeExpressionTest extends AbstractCassandraTest {
+public class NativeExpressionTest {
 
   private CpoAdapter cpoAdapter = null;
   private ArrayList<ValueObject> al = new ArrayList<>();

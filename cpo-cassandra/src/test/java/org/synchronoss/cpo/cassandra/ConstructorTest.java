@@ -32,7 +32,7 @@ import static org.junit.Assert.fail;
  *
  * @author david berry
  */
-public class ConstructorTest extends AbstractCassandraTest {
+public class ConstructorTest {
   private static final Logger logger = LoggerFactory.getLogger(ConstructorTest.class);
 
   @Test

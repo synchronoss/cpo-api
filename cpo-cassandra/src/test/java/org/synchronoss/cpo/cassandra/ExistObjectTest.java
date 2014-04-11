@@ -34,7 +34,7 @@ import static org.junit.Assert.*;
  *
  * @author david berry
  */
-public class ExistObjectTest extends AbstractCassandraTest {
+public class ExistObjectTest {
 
   private static final Logger logger = LoggerFactory.getLogger(ExistObjectTest.class);
   private CpoAdapter cpoAdapter = null;

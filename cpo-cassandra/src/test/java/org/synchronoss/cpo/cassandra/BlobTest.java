@@ -34,7 +34,7 @@ import static org.junit.Assert.*;
  *
  * @author david berry
  */
-public class BlobTest extends AbstractCassandraTest {
+public class BlobTest {
 
   private static final Logger logger = LoggerFactory.getLogger(BlobTest.class);
   private CassandraCpoMetaDescriptor metaDescriptor = null;

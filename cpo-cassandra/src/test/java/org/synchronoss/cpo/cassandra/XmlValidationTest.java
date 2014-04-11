@@ -34,7 +34,7 @@ import static org.junit.Assert.fail;
  *
  * @author dberry
  */
-public class XmlValidationTest extends AbstractCassandraTest {
+public class XmlValidationTest {
 
   private static final Logger logger = LoggerFactory.getLogger(XmlValidationTest.class);
   static final String CPO_CONFIG_XML = "/cpoConfig.xml";

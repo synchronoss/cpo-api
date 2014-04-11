@@ -38,21 +38,21 @@ import static org.junit.Assert.fail;
  */
 @RunWith (Suite.class)
 @Suite.SuiteClasses ({
-//  BlobTest.class,
-//  ConstructorTest.class,
-//  DeleteObjectTest.class,
-//  EntityTest.class,
+  BlobTest.class,
+  ConstructorTest.class,
+  DeleteObjectTest.class,
+  EntityTest.class,
   ExistObjectTest.class,
-//  InheritanceTest.class,
-//  InsertObjectTest.class,
-//  InvalidParameterTest.class,
-//  NativeExpressionTest.class,
-//  OrderByTest.class,
-//  RetrieveBeanTest.class,
-//  UpdateObjectTest.class,
-//  WhereTest.class,
-//  XmlValidationTest.class,
-//  ZZHotDeployTest.class
+  InheritanceTest.class,
+  InsertObjectTest.class,
+  InvalidParameterTest.class,
+  NativeExpressionTest.class,
+  OrderByTest.class,
+  RetrieveBeanTest.class,
+  UpdateObjectTest.class,
+  WhereTest.class,
+  XmlValidationTest.class,
+  ZZHotDeployTest.class
 })
 public class CassandraTestSuite {
 

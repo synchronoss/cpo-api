@@ -20,28 +20,25 @@
  */
 package org.synchronoss.cpo.cassandra;
 
-import junit.framework.TestCase;
+import org.junit.*;
 import org.synchronoss.cpo.*;
 import org.synchronoss.cpo.cassandra.meta.CassandraCpoMetaDescriptor;
 
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.Date;
+import java.util.*;
+
+import static org.junit.Assert.*;
 
 /**
  * InheritanceTest is a JUnit test class for testing the polymorphic capabilites of CPO
  *
  * @author david berry
  */
-public class InheritanceTest extends TestCase {
+public class InheritanceTest {
 
   private ArrayList<ChildValueObject> al = new ArrayList<>();
   private CpoAdapter cpoAdapter = null;
   private CassandraCpoMetaDescriptor metaDescriptor = null;
-
-  public InheritanceTest(String name) {
-    super(name);
-  }
 
   /**
    * <code>setUp</code> Load the datasource from the properties in the property file jdbc_en_US.properties
@@ -49,19 +46,20 @@ public class InheritanceTest extends TestCase {
    * @author david berry
    * @version '$Id: InsertObjectTest.java,v 1.3 2006/01/30 19:09:23 dberry Exp $'
    */
-  @Override
+  @Before
   public void setUp() {
     String method = "setUp:";
 
     try {
       cpoAdapter = CpoAdapterFactory.getCpoAdapter(CassandraStatics.ADAPTER_CONTEXT_DEFAULT);
       assertNotNull(method + "IdoAdapter is null", cpoAdapter);
-      metaDescriptor = (CassandraCpoMetaDescriptor) cpoAdapter.getCpoMetaDescriptor();
+      metaDescriptor = (CassandraCpoMetaDescriptor)cpoAdapter.getCpoMetaDescriptor();
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
   }
 
+  @Test
   public void testInsertObject() {
     String method = "testInsertObject:";
     ChildValueObject valObj = new ChildValueObject();
@@ -94,20 +92,16 @@ public class InheritanceTest extends TestCase {
       assertEquals("Strings do not match", vo.getAttrVarChar(), valObj.getAttrVarChar());
       assertEquals("Timestamps do not match", vo.getAttrTimestamp(), valObj.getAttrTimestamp());
       assertTrue("boolean not stored correctly", vo.getAttrBool());
-
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
-
-
   }
 
-  @Override
+  @After
   public void tearDown() {
     String method = "tearDown:";
     try {
       cpoAdapter.deleteObjects(al);
-
     } catch (Exception e) {
       fail(method + e.getMessage());
     }

@@ -20,28 +20,26 @@
  */
 package org.synchronoss.cpo.cassandra;
 
-import junit.framework.TestCase;
+import org.junit.*;
 import org.slf4j.*;
 import org.synchronoss.cpo.*;
 import org.synchronoss.cpo.helper.ExceptionHelper;
 
 import java.util.Collection;
 
-public class InvalidParameterTest extends TestCase {
+import static org.junit.Assert.*;
+
+public class InvalidParameterTest {
 
   private static final Logger logger = LoggerFactory.getLogger(InvalidParameterTest.class);
   private CpoAdapter cpoAdapter = null;
-
-  public InvalidParameterTest(String name) {
-    super(name);
-  }
 
   /**
    * <code>setUp</code> Load the datasource from the properties in the property file jdbc_en_US.properties
    *
    * @author david berry
    */
-  @Override
+  @Before
   public void setUp() {
     String method = "setUp:";
 
@@ -53,10 +51,10 @@ public class InvalidParameterTest extends TestCase {
     }
   }
 
+  @Test
   public void testRetrieveBeanBadContext() {
     String method = "testRetrieveBeanBadContext:";
     Collection<ValueObject> col = null;
-
 
     try {
       ValueObject valObj = new ValueObject();
@@ -70,10 +68,10 @@ public class InvalidParameterTest extends TestCase {
     }
   }
 
+  @Test
   public void testRetrieveBeansNullBean() {
     String method = "testRetrieveBeansNullBean:";
     Collection<ValueObject> col = null;
-
 
     try {
       ValueObject valObj = null;
@@ -87,10 +85,10 @@ public class InvalidParameterTest extends TestCase {
     }
   }
 
+  @Test
   public void testRetrieveBeanNullBean() {
     String method = "testRetrieveBeanNullBean:";
     Collection<ValueObject> col = null;
-
 
     try {
       ValueObject valObj = cpoAdapter.retrieveBean(null, null);
@@ -103,10 +101,10 @@ public class InvalidParameterTest extends TestCase {
     }
   }
 
+  @Test
   public void testInsertObjectNullBean() {
     String method = "testInsertObjectNullBean:";
     Collection<ValueObject> col = null;
-
 
     try {
       ValueObject valObj = null;
@@ -120,10 +118,10 @@ public class InvalidParameterTest extends TestCase {
     }
   }
 
+  @Test
   public void testRetrieveBeanNullContext() {
     String method = "testRetrieveBeanNullContext:";
     Collection<ValueObject> lvos = null;
-
 
     try {
       ValueObject lvo = new ValueObject();

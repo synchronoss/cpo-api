@@ -27,8 +27,5 @@ package org.synchronoss.cpo.cassandra;
  */
 public class ChildValueObject extends ValueObject implements java.io.Serializable, Cloneable {
 
-  /**
-   *
-   */
   private static final long serialVersionUID = 1L;
 }

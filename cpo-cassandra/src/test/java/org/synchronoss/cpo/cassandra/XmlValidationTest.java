@@ -20,29 +20,27 @@
  */
 package org.synchronoss.cpo.cassandra;
 
-import junit.framework.TestCase;
 import org.apache.xmlbeans.XmlException;
+import org.junit.Test;
 import org.slf4j.*;
 import org.synchronoss.cpo.core.cpoCoreConfig.CpoConfigDocument;
-import org.synchronoss.cpo.helper.XmlBeansHelper;
+import org.synchronoss.cpo.helper.*;
 
 import java.io.*;
-import org.synchronoss.cpo.helper.CpoClassLoader;
+
+import static org.junit.Assert.fail;
 
 /**
  *
  * @author dberry
  */
-public class XmlValidationTest extends TestCase {
+public class XmlValidationTest {
 
   private static final Logger logger = LoggerFactory.getLogger(XmlValidationTest.class);
   static final String CPO_CONFIG_XML = "/cpoConfig.xml";
   static final String BAD_CPO_CONFIG_XML = "/badConfig.xml";
 
-  public XmlValidationTest(String testName) {
-    super(testName);
-  }
-
+  @Test
   public void testBadXml(){
     InputStream is = CpoClassLoader.getResourceAsStream(BAD_CPO_CONFIG_XML);
 
@@ -61,6 +59,7 @@ public class XmlValidationTest extends TestCase {
     }
   }
 
+  @Test
   public void testGoodXml(){
     InputStream is = CpoClassLoader.getResourceAsStream(CPO_CONFIG_XML);
 
@@ -75,15 +74,5 @@ public class XmlValidationTest extends TestCase {
     } catch (XmlException xe) {
         fail("Config xml was not well formed");
     }
-  }
-
-  @Override
-  protected void setUp() throws Exception {
-    super.setUp();
-  }
-
-  @Override
-  protected void tearDown() throws Exception {
-    super.tearDown();
   }
 }

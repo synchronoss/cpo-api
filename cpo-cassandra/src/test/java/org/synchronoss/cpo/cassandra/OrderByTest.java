@@ -20,17 +20,19 @@
  */
 package org.synchronoss.cpo.cassandra;
 
-import junit.framework.TestCase;
+import org.junit.*;
 import org.synchronoss.cpo.*;
 
 import java.util.*;
+
+import static org.junit.Assert.*;
 
 /**
  * BlobTest is a JUnit test class for testing the JdbcAdapter class Constructors
  *
  * @author david berry
  */
-public class OrderByTest extends TestCase {
+public class OrderByTest {
 
   private CpoAdapter cpoAdapter = null;
   private ArrayList<ValueObject> al = new ArrayList<>();
@@ -41,7 +43,7 @@ public class OrderByTest extends TestCase {
   /**
    * <code>setUp</code> Load the datasource from the properties in the property file jdbc_en_US.properties
    */
-  @Override
+  @Before
   public void setUp() {
     String method = "setUp:";
 
@@ -63,28 +65,20 @@ public class OrderByTest extends TestCase {
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
-
-
   }
 
-  /**
-   * DOCUMENT ME!
-   */
-  @Override
+  @After
   public void tearDown() {
     String method = "tearDown:";
     try {
       cpoAdapter.deleteObjects("TestOrderByDelete", al);
-
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
     cpoAdapter = null;
   }
 
-  /**
-   * DOCUMENT ME!
-   */
+  @Test
   public void testNewOrderBy() {
     String method = "testOrderByAscending:";
     Collection<ValueObject> col;
@@ -92,7 +86,6 @@ public class OrderByTest extends TestCase {
     String attribute = "MY_ATTRIBUTE";
     String function = "MY_FUNCTION";
     boolean ascending = false;
-
 
     try {
       CpoOrderBy cob = cpoAdapter.newOrderBy(marker, attribute, ascending, function);
@@ -108,6 +101,7 @@ public class OrderByTest extends TestCase {
   /**
    * TODO - add back in when you get the tables correct
    */
+  @Test
   public void testOrderByAscending() {
 //    String method = "testOrderByAscending:";
 //    Collection<ValueObject> col;
@@ -143,6 +137,7 @@ public class OrderByTest extends TestCase {
   /**
    * TODO - add back in when you get the tables correct
    */
+  @Test
   public void testOrderByDescending() {
 //    String method = "testOrderByDescending:";
 //    List<ValueObject> col;
@@ -165,6 +160,7 @@ public class OrderByTest extends TestCase {
 //    }
   }
 
+  @Test
   public void testOrderByFunction() {
 //    String method = "testOrderByAscending:";
 //    Collection<ValueObject> col;

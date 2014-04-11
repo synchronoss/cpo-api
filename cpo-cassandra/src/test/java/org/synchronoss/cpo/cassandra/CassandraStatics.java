@@ -21,7 +21,6 @@
 package org.synchronoss.cpo.cassandra;
 
 /**
- *
  * @author dberry
  */
 public interface CassandraStatics {

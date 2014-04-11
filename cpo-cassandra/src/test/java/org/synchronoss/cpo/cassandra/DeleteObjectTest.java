@@ -20,7 +20,7 @@
  */
 package org.synchronoss.cpo.cassandra;
 
-import junit.framework.TestCase;
+import org.junit.*;
 import org.slf4j.*;
 import org.synchronoss.cpo.*;
 import org.synchronoss.cpo.cassandra.meta.CassandraCpoMetaDescriptor;
@@ -29,21 +29,19 @@ import org.synchronoss.cpo.helper.ExceptionHelper;
 import java.sql.Timestamp;
 import java.util.*;
 
+import static org.junit.Assert.*;
+
 /**
  * DeleteObjectTest is a JUnit test class for testing the JdbcAdapter deleteObject method
  *
  * @author david berry
  */
-public class DeleteObjectTest extends TestCase {
+public class DeleteObjectTest {
 
   private static final Logger logger = LoggerFactory.getLogger(DeleteObjectTest.class);
   private ArrayList<ValueObject> al = new ArrayList<>();
   private CpoAdapter cpoAdapter = null;
   private CassandraCpoMetaDescriptor metaDescriptor = null;
-
-  public DeleteObjectTest(String name) {
-    super(name);
-  }
 
   /**
    * <code>setUp</code> Load the datasource from the properties in the property file jdbc_en_US.properties
@@ -51,19 +49,20 @@ public class DeleteObjectTest extends TestCase {
    * @author david berry
    * @version '$Id: InsertObjectTest.java,v 1.3 2006/01/30 19:09:23 dberry Exp $'
    */
-  @Override
+  @Before
   public void setUp() {
     String method = "setUp:";
 
     try {
       cpoAdapter = CpoAdapterFactory.getCpoAdapter(CassandraStatics.ADAPTER_CONTEXT_DEFAULT);
       assertNotNull(method + "IdoAdapter is null", cpoAdapter);
-      metaDescriptor = (CassandraCpoMetaDescriptor) cpoAdapter.getCpoMetaDescriptor();
+      metaDescriptor = (CassandraCpoMetaDescriptor)cpoAdapter.getCpoMetaDescriptor();
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
   }
 
+  @Test
   public void testDeleteObject() {
     String method = "testDeleteObject:";
     ValueObject valObj = new ValueObject(5);
@@ -77,9 +76,7 @@ public class DeleteObjectTest extends TestCase {
 //    }
 
     valObj.setAttrTimestamp(ts);
-
     valObj.setAttrBool(true);
-
     al.add(valObj);
 
     try {
@@ -96,15 +93,13 @@ public class DeleteObjectTest extends TestCase {
       logger.error(ExceptionHelper.getLocalizedMessage(e));
       fail(method + e.getMessage());
     }
-
   }
 
-  @Override
+  @After
   public void tearDown() {
     String method = "tearDown:";
     try {
       cpoAdapter.deleteObjects(al);
-
     } catch (Exception e) {
       logger.error(ExceptionHelper.getLocalizedMessage(e));
       fail(method + e.getMessage());

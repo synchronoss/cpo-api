@@ -110,9 +110,12 @@
       </activation>
       <properties>
         <cpo.cassandra.contactPoint>127.0.0.1</cpo.cassandra.contactPoint>
-        <cpo.cassandra.port>9142</cpo.cassandra.port>
         <cpo.cassandra.keyspace>cpokeyspace</cpo.cassandra.keyspace>
         <cpo.cassandra.metaXml>/cassandraMetaData.xml</cpo.cassandra.metaXml>
+        <cpo.cassandra.nativeport>9142</cpo.cassandra.nativeport>
+        <cpo.cassandra.storageport>7010</cpo.cassandra.storageport>
+        <cpo.cassandra.sslstorageport>7011</cpo.cassandra.sslstorageport>
+        <cpo.cassandra.rpcport>9171</cpo.cassandra.rpcport>
       </properties>
     </profile>
   </profiles>

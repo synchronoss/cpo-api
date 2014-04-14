@@ -56,6 +56,7 @@ import static org.junit.Assert.fail;
 })
 public class CassandraTestSuite {
 
+  private static final String yaml = "testCassandra.yaml";
   private static final String keyspace = "cpokeyspace";
   private static final String cqlDataSet = "test.cql";
   private static final String hostIp = "127.0.0.1";
@@ -67,7 +68,7 @@ public class CassandraTestSuite {
   public static void startCassandra() {
     System.out.println("===== start setting up =====");
     try {
-      EmbeddedCassandraServerHelper.startEmbeddedCassandra();
+      EmbeddedCassandraServerHelper.startEmbeddedCassandra(yaml);
       cluster = new Cluster.Builder().addContactPoints(hostIp).withPort(port).build();
       session = cluster.connect();
       CQLDataLoader dataLoader = new CQLDataLoader(session);

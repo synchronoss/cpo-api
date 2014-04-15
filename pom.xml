@@ -86,8 +86,8 @@
     </developer>
   </developers>
   <scm>
-    <connection>scm:git:git@github.com:berryware/cpo-api.git</connection>
-    <developerConnection>scm:git:git@github.com:berryware/cpo-api.git</developerConnection>
+    <connection>scm:git:https://github.com/berryware/cpo-api.git</connection>
+    <developerConnection>scm:git:https://github.com/berryware/cpo-api.git</developerConnection>
     <url>https://github.com/berryware/cpo-api</url>
   </scm>
   <build>

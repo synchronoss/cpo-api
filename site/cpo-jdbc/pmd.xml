@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pmd version="4.3" timestamp="2014-04-15T17:15:17.317">
+<file name="/Users/michael/src/cpo/cpo-api/cpo-jdbc/src/main/java/org/synchronoss/cpo/jdbc/ClassJdbcDataSourceInfo.java">
+<violation beginline="151" endline="152" begincolumn="9" endcolumn="7" rule="EmptyCatchBlock" ruleset="Basic Rules" package="org.synchronoss.cpo.jdbc" class="ClassJdbcDataSourceInfo" method="finalize" externalInfoUrl="http://pmd.sourceforge.net/rules/basic.html#EmptyCatchBlock" priority="3">
+Avoid empty catch blocks
+</violation>
+<violation beginline="158" endline="159" begincolumn="9" endcolumn="7" rule="EmptyCatchBlock" ruleset="Basic Rules" package="org.synchronoss.cpo.jdbc" class="ClassJdbcDataSourceInfo" method="finalize" externalInfoUrl="http://pmd.sourceforge.net/rules/basic.html#EmptyCatchBlock" priority="3">
+Avoid empty catch blocks
+</violation>
+</file>
+<file name="/Users/michael/src/cpo/cpo-api/cpo-jdbc/src/main/java/org/synchronoss/cpo/jdbc/JdbcCallableStatementFactory.java">
+<violation beginline="69" endline="108" begincolumn="10" endcolumn="3" rule="UnusedFormalParameter" ruleset="Unused Code Rules" package="org.synchronoss.cpo.jdbc" class="JdbcCallableStatementFactory" externalInfoUrl="http://pmd.sourceforge.net/rules/unusedcode.html#UnusedFormalParameter" priority="3">
+Avoid unused constructor parameters such as 'jca'.
+</violation>
+</file>
+<file name="/Users/michael/src/cpo/cpo-api/cpo-jdbc/src/main/java/org/synchronoss/cpo/jdbc/JdbcCpoAdapter.java">
+<violation beginline="1056" endline="1068" begincolumn="11" endcolumn="11" rule="CollapsibleIfStatements" ruleset="Basic Rules" package="org.synchronoss.cpo.jdbc" class="JdbcCpoAdapter" externalInfoUrl="http://pmd.sourceforge.net/rules/basic.html#CollapsibleIfStatements" priority="3">
+These nested if statements could be combined
+</violation>
+<violation beginline="2497" endline="2497" begincolumn="9" endcolumn="9" rule="UnusedLocalVariable" ruleset="Unused Code Rules" package="org.synchronoss.cpo.jdbc" class="JdbcCpoAdapter" variable="i" externalInfoUrl="http://pmd.sourceforge.net/rules/unusedcode.html#UnusedLocalVariable" priority="3">
+Avoid unused local variables such as 'i'.
+</violation>
+<violation beginline="2792" endline="2792" begincolumn="23" endcolumn="36" rule="ClassCastExceptionWithToArray" ruleset="Basic Rules" package="org.synchronoss.cpo.jdbc" class="JdbcCpoAdapter" externalInfoUrl="http://pmd.sourceforge.net/rules/basic.html#ClassCastExceptionWithToArray" priority="3">
+This usage of the Collection.toArray() method will throw a ClassCastException.
+</violation>
+<violation beginline="2925" endline="2927" begincolumn="13" endcolumn="11" rule="EmptyCatchBlock" ruleset="Basic Rules" package="org.synchronoss.cpo.jdbc" class="JdbcCpoAdapter" method="getCpoAttributes" externalInfoUrl="http://pmd.sourceforge.net/rules/basic.html#EmptyCatchBlock" priority="3">
+Avoid empty catch blocks
+</violation>
+</file>
+<file name="/Users/michael/src/cpo/cpo-api/cpo-jdbc/src/main/java/org/synchronoss/cpo/jdbc/JdbcCpoAttribute.java">
+<violation beginline="38" endline="38" begincolumn="31" endcolumn="36" rule="UnusedPrivateField" ruleset="Unused Code Rules" package="org.synchronoss.cpo.jdbc" class="JdbcCpoAttribute" variable="logger" externalInfoUrl="http://pmd.sourceforge.net/rules/unusedcode.html#UnusedPrivateField" priority="3">
+Avoid unused private fields such as 'logger'.
+</violation>
+<violation beginline="47" endline="47" begincolumn="18" endcolumn="37" rule="UnusedPrivateField" ruleset="Unused Code Rules" package="org.synchronoss.cpo.jdbc" class="JdbcCpoAttribute" variable="transformPSOutMethod" externalInfoUrl="http://pmd.sourceforge.net/rules/unusedcode.html#UnusedPrivateField" priority="3">
+Avoid unused private fields such as 'transformPSOutMethod'.
+</violation>
+<violation beginline="48" endline="48" begincolumn="18" endcolumn="37" rule="UnusedPrivateField" ruleset="Unused Code Rules" package="org.synchronoss.cpo.jdbc" class="JdbcCpoAttribute" variable="transformCSOutMethod" externalInfoUrl="http://pmd.sourceforge.net/rules/unusedcode.html#UnusedPrivateField" priority="3">
+Avoid unused private fields such as 'transformCSOutMethod'.
+</violation>
+</file>
+<file name="/Users/michael/src/cpo/cpo-api/cpo-jdbc/src/main/java/org/synchronoss/cpo/jdbc/JdbcPreparedStatementFactory.java">
+<violation beginline="55" endline="55" begincolumn="31" endcolumn="41" rule="UnusedPrivateField" ruleset="Unused Code Rules" package="org.synchronoss.cpo.jdbc" class="JdbcPreparedStatementFactory" variable="releasibles" externalInfoUrl="http://pmd.sourceforge.net/rules/unusedcode.html#UnusedPrivateField" priority="3">
+Avoid unused private fields such as 'releasibles'.
+</violation>
+<violation beginline="56" endline="56" begincolumn="31" endcolumn="42" rule="UnusedPrivateField" ruleset="Unused Code Rules" package="org.synchronoss.cpo.jdbc" class="JdbcPreparedStatementFactory" variable="WHERE_MARKER" externalInfoUrl="http://pmd.sourceforge.net/rules/unusedcode.html#UnusedPrivateField" priority="3">
+Avoid unused private fields such as 'WHERE_MARKER'.
+</violation>
+<violation beginline="57" endline="57" begincolumn="31" endcolumn="44" rule="UnusedPrivateField" ruleset="Unused Code Rules" package="org.synchronoss.cpo.jdbc" class="JdbcPreparedStatementFactory" variable="ORDERBY_MARKER" externalInfoUrl="http://pmd.sourceforge.net/rules/unusedcode.html#UnusedPrivateField" priority="3">
+Avoid unused private fields such as 'ORDERBY_MARKER'.
+</violation>
+<violation beginline="78" endline="101" begincolumn="10" endcolumn="3" rule="UnusedFormalParameter" ruleset="Unused Code Rules" package="org.synchronoss.cpo.jdbc" class="JdbcPreparedStatementFactory" externalInfoUrl="http://pmd.sourceforge.net/rules/unusedcode.html#UnusedFormalParameter" priority="3">
+Avoid unused constructor parameters such as 'jca'.
+</violation>
+</file>
+<file name="/Users/michael/src/cpo/cpo-api/cpo-jdbc/src/main/java/org/synchronoss/cpo/jdbc/meta/JdbcMethodMapEntry.java">
+<violation beginline="35" endline="35" begincolumn="31" endcolumn="36" rule="UnusedPrivateField" ruleset="Unused Code Rules" package="org.synchronoss.cpo.jdbc.meta" class="JdbcMethodMapEntry" variable="logger" externalInfoUrl="http://pmd.sourceforge.net/rules/unusedcode.html#UnusedPrivateField" priority="3">
+Avoid unused private fields such as 'logger'.
+</violation>
+</file>
+<file name="/Users/michael/src/cpo/cpo-api/cpo-jdbc/src/main/java/org/synchronoss/cpo/jdbc/meta/JdbcMethodMapper.java">
+<violation beginline="122" endline="131" begincolumn="18" endcolumn="3" rule="UnusedFormalParameter" ruleset="Unused Code Rules" package="org.synchronoss.cpo.jdbc.meta" class="JdbcMethodMapper" externalInfoUrl="http://pmd.sourceforge.net/rules/unusedcode.html#UnusedFormalParameter" priority="3">
+Avoid unused method parameters such as 'methodType'.
+</violation>
+</file>
+</pmd>

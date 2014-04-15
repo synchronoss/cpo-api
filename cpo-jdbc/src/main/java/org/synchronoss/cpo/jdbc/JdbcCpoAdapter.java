@@ -136,7 +136,7 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
     }
   }
 
-  public static JdbcCpoAdapter getInstance(JdbcCpoMetaDescriptor metaDescriptor, DataSourceInfo jdsiTrx) throws CpoException {
+  public static JdbcCpoAdapter getInstance(JdbcCpoMetaDescriptor metaDescriptor, DataSourceInfo<DataSource> jdsiTrx) throws CpoException {
     String adapterKey = metaDescriptor + ":" + jdsiTrx.getDataSourceName();
     JdbcCpoAdapter adapter = (JdbcCpoAdapter) findCpoAdapter(adapterKey);
     if (adapter == null) {
@@ -155,7 +155,7 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
    * @throws org.synchronoss.cpo.CpoException
    *          exception
    */
-  public static JdbcCpoAdapter getInstance(JdbcCpoMetaDescriptor metaDescriptor, DataSourceInfo jdsiWrite, DataSourceInfo jdsiRead) throws CpoException {
+  public static JdbcCpoAdapter getInstance(JdbcCpoMetaDescriptor metaDescriptor, DataSourceInfo<DataSource> jdsiWrite, DataSourceInfo<DataSource> jdsiRead) throws CpoException {
     String adapterKey = metaDescriptor + ":" + jdsiWrite.getDataSourceName() + ":" + jdsiRead.getDataSourceName();
     JdbcCpoAdapter adapter = (JdbcCpoAdapter) findCpoAdapter(adapterKey);
     if (adapter == null) {
@@ -2340,12 +2340,7 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
       try {
         rObj = (T) obj.getClass().newInstance();
       } catch (IllegalAccessException iae) {
-        if (obj != null) {
-          localLogger.error("=================== Could not access default constructor for Class=<" + obj.getClass() + "> ==================");
-        } else {
-          localLogger.error("=================== Could not access default constructor for class ==================");
-        }
-
+        localLogger.error("=================== Could not access default constructor for Class=<" + obj.getClass() + "> ==================");
         throw new CpoException("Unable to access the constructor of the Return Object", iae);
       } catch (InstantiationException iae) {
         throw new CpoException("Unable to instantiate Return Object", iae);
@@ -2544,12 +2539,7 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
           try {
             obj = (T) result.getClass().newInstance();
           } catch (IllegalAccessException iae) {
-            if (result != null) {
-              localLogger.error("=================== Could not access default constructor for Class=<" + result.getClass() + "> ==================");
-            } else {
-              localLogger.error("=================== Could not access default constructor for class ==================");
-            }
-
+            localLogger.error("=================== Could not access default constructor for Class=<" + result.getClass() + "> ==================");
             throw new CpoException("Unable to access the constructor of the Return Object", iae);
           } catch (InstantiationException iae) {
             throw new CpoException("Unable to instantiate Return Object", iae);

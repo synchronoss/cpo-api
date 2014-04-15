@@ -121,10 +121,8 @@ public class RetrieveBeanTest extends TestCase {
   public void testIsClosed() {
     String method = "testIsClosed:";
     Collection<ValueObject> col;
-    CpoTrxAdapter trx = null;
 
-    try {
-      trx = cpoAdapter.getCpoTrxAdapter();
+    try (CpoTrxAdapter trx = cpoAdapter.getCpoTrxAdapter()) {
       trx.isClosed();
       ValueObject valObj = new ValueObject();
       col = trx.retrieveBeans(null, valObj);
@@ -132,11 +130,6 @@ public class RetrieveBeanTest extends TestCase {
       trx.commit();
     } catch (Exception e) {
       fail(method + e.getMessage());
-    } finally {
-      try {
-        trx.close();
-      } catch (Exception e) {
-      }
     }
   }
 
@@ -226,10 +219,8 @@ public class RetrieveBeanTest extends TestCase {
     String method = "testConnectionBusy:";
     CpoResultSet<ValueObject> crs;
     int count = 0;
-    CpoTrxAdapter trx = null;
 
-    try {
-      trx = cpoAdapter.getCpoTrxAdapter();
+    try (CpoTrxAdapter trx = cpoAdapter.getCpoTrxAdapter()) {
 
       ValueObject valObj = new ValueObject();
       crs = trx.retrieveBeans(null, valObj, valObj, null, null, null, 2);
@@ -261,11 +252,6 @@ public class RetrieveBeanTest extends TestCase {
 
     } catch (Exception e) {
       fail(method + e.getMessage());
-    } finally {
-      try {
-        trx.close();
-      } catch (Exception e) {
-      }
     }
   }
 

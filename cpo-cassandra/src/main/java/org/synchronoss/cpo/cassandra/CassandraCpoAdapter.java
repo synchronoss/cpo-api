@@ -22,24 +22,14 @@
 package org.synchronoss.cpo.cassandra;
 
 import com.datastax.driver.core.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.slf4j.*;
 import org.synchronoss.cpo.*;
-import org.synchronoss.cpo.cassandra.meta.CassandraCpoAttribute;
-import org.synchronoss.cpo.cassandra.meta.CassandraCpoMetaDescriptor;
-import org.synchronoss.cpo.cassandra.meta.CassandraMethodMapper;
+import org.synchronoss.cpo.cassandra.meta.*;
 import org.synchronoss.cpo.helper.ExceptionHelper;
-import org.synchronoss.cpo.meta.CpoMetaDescriptor;
-import org.synchronoss.cpo.meta.DataTypeMapEntry;
-import org.synchronoss.cpo.meta.ResultSetCpoData;
-import org.synchronoss.cpo.meta.domain.CpoAttribute;
-import org.synchronoss.cpo.meta.domain.CpoClass;
-import org.synchronoss.cpo.meta.domain.CpoFunction;
+import org.synchronoss.cpo.meta.*;
+import org.synchronoss.cpo.meta.domain.*;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 /**
  * CassandraCpoAdapter is an interface for a set of routines that are responsible for managing value objects from a
@@ -100,7 +90,7 @@ public class CassandraCpoAdapter extends CpoBaseAdapter<ClusterDataSource> {
    * @throws org.synchronoss.cpo.CpoException
    *          exception
    */
-  public static CassandraCpoAdapter getInstance(CassandraCpoMetaDescriptor metaDescriptor, DataSourceInfo cdsiTrx) throws CpoException {
+  public static CassandraCpoAdapter getInstance(CassandraCpoMetaDescriptor metaDescriptor, DataSourceInfo<ClusterDataSource> cdsiTrx) throws CpoException {
     String adapterKey = metaDescriptor + ":" + cdsiTrx.getDataSourceName();
     CassandraCpoAdapter adapter = (CassandraCpoAdapter) findCpoAdapter(adapterKey);
     if (adapter == null) {
@@ -119,7 +109,7 @@ public class CassandraCpoAdapter extends CpoBaseAdapter<ClusterDataSource> {
    * @throws org.synchronoss.cpo.CpoException
    *          exception
    */
-  public static CassandraCpoAdapter getInstance(CassandraCpoMetaDescriptor metaDescriptor, DataSourceInfo cdsiWrite, DataSourceInfo cdsiRead) throws CpoException {
+  public static CassandraCpoAdapter getInstance(CassandraCpoMetaDescriptor metaDescriptor, DataSourceInfo<ClusterDataSource> cdsiWrite, DataSourceInfo<ClusterDataSource> cdsiRead) throws CpoException {
     String adapterKey = metaDescriptor + ":" + cdsiWrite.getDataSourceName() + ":" + cdsiRead.getDataSourceName();
     CassandraCpoAdapter adapter = (CassandraCpoAdapter) findCpoAdapter(adapterKey);
     if (adapter == null) {
@@ -2060,8 +2050,6 @@ public class CassandraCpoAdapter extends CpoBaseAdapter<ClusterDataSource> {
       BatchStatement batchStatement = new BatchStatement();
       batchStatement.addAll(boundStatements);
       resultSet = session.execute(batchStatement);
-    } catch (Exception e) {
-      throw e;
     } finally {
         for (CassandraBoundStatementFactory factory : statementFactories) {
           factory.release();
@@ -2302,12 +2290,7 @@ public class CassandraCpoAdapter extends CpoBaseAdapter<ClusterDataSource> {
       try {
         rObj = (T) obj.getClass().newInstance();
       } catch (IllegalAccessException iae) {
-        if (obj != null) {
-          localLogger.error("=================== Could not access default constructor for Class=<" + obj.getClass() + "> ==================");
-        } else {
-          localLogger.error("=================== Could not access default constructor for class ==================");
-        }
-
+        localLogger.error("=================== Could not access default constructor for Class=<" + obj.getClass() + "> ==================");
         throw new CpoException("Unable to access the constructor of the Return Object", iae);
       } catch (InstantiationException iae) {
         throw new CpoException("Unable to instantiate Return Object", iae);
@@ -2387,7 +2370,7 @@ public class CassandraCpoAdapter extends CpoBaseAdapter<ClusterDataSource> {
    */
   protected <T, C> List<T> processSelectGroup(String name, C criteria, T result, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeFunction> nativeExpressions, boolean useRetrieve) throws CpoException {
     Session session = null;
-    CpoArrayResultSet<T> resultSet = new CpoArrayResultSet<T>();
+    CpoArrayResultSet<T> resultSet = new CpoArrayResultSet<>();
 
     try {
       session = getWriteSession();
@@ -2479,12 +2462,7 @@ public class CassandraCpoAdapter extends CpoBaseAdapter<ClusterDataSource> {
            try {
              obj = (T) result.getClass().newInstance();
            } catch (IllegalAccessException iae) {
-             if (result != null) {
-               localLogger.error("=================== Could not access default constructor for Class=<" + result.getClass() + "> ==================");
-             } else {
-               localLogger.error("=================== Could not access default constructor for class ==================");
-             }
-
+             localLogger.error("=================== Could not access default constructor for Class=<" + result.getClass() + "> ==================");
              throw new CpoException("Unable to access the constructor of the Return Object", iae);
            } catch (InstantiationException iae) {
              throw new CpoException("Unable to instantiate Return Object", iae);

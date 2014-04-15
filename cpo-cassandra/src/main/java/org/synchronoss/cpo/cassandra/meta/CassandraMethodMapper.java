@@ -60,7 +60,7 @@ public class CassandraMethodMapper implements Serializable, Cloneable {
   }
 
   static private MethodMapper<CassandraMethodMapEntry<?,?>> initMethodMapper() throws IllegalArgumentException {
-    MethodMapper mapper = new MethodMapper();
+    MethodMapper<CassandraMethodMapEntry<?,?>> mapper = new MethodMapper<>();
     mapper.addMethodMapEntry(makeCassandraMethodMapEntry(CassandraMethodMapEntry.METHOD_TYPE_BASIC, boolean.class, boolean.class, "getBool", "setBool"));
     mapper.addMethodMapEntry(makeCassandraMethodMapEntry(CassandraMethodMapEntry.METHOD_TYPE_BASIC, Boolean.class, boolean.class, "getBool", "setBool"));
     mapper.addMethodMapEntry(makeCassandraMethodMapEntry(CassandraMethodMapEntry.METHOD_TYPE_BASIC, ByteBuffer.class, ByteBuffer.class, "getBytes", "setBytes"));

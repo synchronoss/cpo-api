@@ -24,10 +24,9 @@ import junit.framework.TestCase;
 import org.apache.xmlbeans.XmlException;
 import org.slf4j.*;
 import org.synchronoss.cpo.core.cpoCoreConfig.CpoConfigDocument;
-import org.synchronoss.cpo.helper.XmlBeansHelper;
+import org.synchronoss.cpo.helper.*;
 
 import java.io.*;
-import org.synchronoss.cpo.helper.CpoClassLoader;
 
 /**
  *
@@ -75,15 +74,5 @@ public class XmlValidationTest extends TestCase {
     } catch (XmlException xe) {
         fail("Config xml was not well formed");
     }
-  }
-  
-  @Override
-  protected void setUp() throws Exception {
-    super.setUp();
-  }
-  
-  @Override
-  protected void tearDown() throws Exception {
-    super.tearDown();
   }
 }

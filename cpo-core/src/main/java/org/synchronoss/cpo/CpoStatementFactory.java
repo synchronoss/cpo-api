@@ -283,7 +283,7 @@ public abstract class CpoStatementFactory implements CpoReleasible {
 
         // check to see if we are getting a cpo value object or an object that
         // can be put directly in the statement (String, BigDecimal, etc)
-        MethodMapEntry<?,?> jsm = getMethodMapper().getDataMethodMapEntry(bindObject.getClass());
+        MethodMapEntry<?, ?> jsm = ((MethodMapper<?>)getMethodMapper()).getDataMethodMapEntry(bindObject.getClass());
 
         if (jsm != null) {
           try {

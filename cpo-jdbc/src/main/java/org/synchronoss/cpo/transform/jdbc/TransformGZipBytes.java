@@ -62,18 +62,16 @@ public class TransformGZipBytes implements JdbcCpoTransform<byte[], byte[]> {
       if (inBytes.length > 0) {
         try {
           InputStream bis = new ByteArrayInputStream(inBytes);
-          if (bis != null) {
-            GZIPInputStream gzis = new GZIPInputStream(bis);
+          GZIPInputStream gzis = new GZIPInputStream(bis);
 
-            while ((length = gzis.read(buffBytes)) != -1) {
-              bos.write(buffBytes, 0, length);
-            }
-            bos.flush();
-            bos.close();
-            gzis.close();
-            bis.close();
-            retBytes = bos.toByteArray();
+          while ((length = gzis.read(buffBytes)) != -1) {
+            bos.write(buffBytes, 0, length);
           }
+          bos.flush();
+          bos.close();
+          gzis.close();
+          bis.close();
+          retBytes = bos.toByteArray();
         } catch (Exception e) {
           logger.error("Error in transform GZipBytes", e);
           throw new CpoException(e);

@@ -152,12 +152,11 @@ public class WhereTest {
   public void testNoWhere() {
     String method = "testNoWhere:";
     Collection<ValueObject> col = null;
-    CpoWhere cw = null;
 
     try {
       ValueObject valObj = new ValueObject(3);
 
-      col = cpoAdapter.retrieveBeans("TestWhereRetrieve", valObj, cw, null);
+      col = cpoAdapter.retrieveBeans("TestWhereRetrieve", valObj);
     } catch (Exception e) {
       fail(method + e.getMessage());
     }

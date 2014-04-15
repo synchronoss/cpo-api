@@ -1,0 +1,32 @@
+<map id="G" name="G">
+<area shape="rect" id="node1_0" href="./ZZHotDeployTest.html" title="&lt;TABLE&gt;" alt="" coords="15,19,126,43"/>
+<area shape="rect" id="node4_1" href="./ValueObject.html" title="&lt;TABLE&gt;" alt="" coords="947,116,1029,140"/>
+<area shape="rect" id="node2_2" href="./XmlValidationTest.html" title="&lt;TABLE&gt;" alt="" coords="2023,19,2135,43"/>
+<area shape="rect" id="node3_3" href="./WhereTest.html" title="&lt;TABLE&gt;" alt="" coords="171,19,247,43"/>
+<area shape="rect" id="node24_4" href="./ChildValueObject.html" title="&lt;TABLE&gt;" alt="" coords="1001,212,1111,236"/>
+<area shape="rect" id="node5_5" href="./UpdateObjectTest.html" title="&lt;TABLE&gt;" alt="" coords="293,19,406,43"/>
+<area shape="rect" id="node6_6" href="./SelectForUpdateTest.html" title="&lt;TABLE&gt;" alt="" coords="2180,19,2311,43"/>
+<area shape="rect" id="node7_7" href="./RollbackTrxTest.html" title="&lt;TABLE&gt;" alt="" coords="2357,19,2459,43"/>
+<area shape="rect" id="node8_8" href="./RollbackTest.html" title="&lt;TABLE&gt;" alt="" coords="2505,19,2591,43"/>
+<area shape="rect" id="node9_9" href="./RetrieveBeanTest.html" title="&lt;TABLE&gt;" alt="" coords="451,19,565,43"/>
+<area shape="rect" id="node10_10" href="./OrderByTest.html" title="&lt;TABLE&gt;" alt="" coords="611,19,696,43"/>
+<area shape="rect" id="node11_11" href="./NativeExpressionTest.html" title="&lt;TABLE&gt;" alt="" coords="741,19,875,43"/>
+<area shape="rect" id="node12_12" href="./LobValueObject.html" title="&lt;TABLE&gt;" alt="" coords="2637,19,2739,43"/>
+<area shape="rect" id="node13_13" href="./JdbcStatics.html" title="&lt;TABLE&gt;" alt="" coords="2785,11,2865,50"/>
+<area shape="rect" id="node14_14" href="./InvalidParameterTest.html" title="&lt;TABLE&gt;" alt="" coords="2911,19,3041,43"/>
+<area shape="rect" id="node15_15" href="./InterleavedWhereTest.html" title="&lt;TABLE&gt;" alt="" coords="921,19,1055,43"/>
+<area shape="rect" id="node16_16" href="./InsertObjectTest.html" title="&lt;TABLE&gt;" alt="" coords="1101,19,1206,43"/>
+<area shape="rect" id="node17_17" href="./InheritanceTest.html" title="&lt;TABLE&gt;" alt="" coords="1075,116,1175,140"/>
+<area shape="rect" id="node18_18" href="./ExistObjectTest.html" title="&lt;TABLE&gt;" alt="" coords="3087,19,3188,43"/>
+<area shape="rect" id="node19_19" href="./ExecuteTrxTest.html" title="&lt;TABLE&gt;" alt="" coords="3234,19,3334,43"/>
+<area shape="rect" id="node20_20" href="./ExecuteTest.html" title="&lt;TABLE&gt;" alt="" coords="3379,19,3463,43"/>
+<area shape="rect" id="node21_21" href="./EntityTest.html" title="&lt;TABLE&gt;" alt="" coords="3509,19,3579,43"/>
+<area shape="rect" id="node22_22" href="./DeleteObjectTest.html" title="&lt;TABLE&gt;" alt="" coords="1252,19,1361,43"/>
+<area shape="rect" id="node23_23" href="./ConstructorTest.html" title="&lt;TABLE&gt;" alt="" coords="3625,19,3727,43"/>
+<area shape="rect" id="node25_24" href="./CaseSensitiveTest.html" title="&lt;TABLE&gt;" alt="" coords="1407,19,1524,43"/>
+<area shape="rect" id="node26_25" href="./CaseInsensitiveTest.html" title="&lt;TABLE&gt;" alt="" coords="1569,19,1695,43"/>
+<area shape="rect" id="node27_26" href="./BlobTrxTest.html" title="&lt;TABLE&gt;" alt="" coords="3773,19,3854,43"/>
+<area shape="rect" id="node28_27" href="./BlobTest.html" title="&lt;TABLE&gt;" alt="" coords="3900,19,3964,43"/>
+<area shape="rect" id="node29_28" href="./BigRetrieveTest.html" title="&lt;TABLE&gt;" alt="" coords="1741,19,1843,43"/>
+<area shape="rect" id="node30_29" href="./BigBatchTest.html" title="&lt;TABLE&gt;" alt="" coords="1889,19,1977,43"/>
+</map>

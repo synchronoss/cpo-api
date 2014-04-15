@@ -1,0 +1,5 @@
+org.synchronoss.cpo.cassandra
+org.synchronoss.cpo.jdbc
+org.synchronoss.cpo.jdbc.exporter
+org.synchronoss.cpo.jdbc.jmeter
+org.synchronoss.cpo.jdbc.parser

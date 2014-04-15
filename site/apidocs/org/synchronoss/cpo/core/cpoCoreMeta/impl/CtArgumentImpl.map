@@ -1,0 +1,8 @@
+<map id="G" name="G">
+<area shape="rect" id="node1_0" href="../CtArgument.html" title="&lt;TABLE&gt;" alt="" coords="517,11,699,61"/>
+<area shape="rect" id="node2_1" href="./CtArgumentImpl.html" title="&lt;TABLE&gt;" alt="" coords="338,127,443,151"/>
+<area shape="rect" id="node6_2" href="http://java.sun.com/j2se/1.4.2/docs/api/org/apache/xmlbeans/XmlString.html" title="&lt;TABLE&gt;" alt="" coords="510,312,615,363"/>
+<area shape="rect" id="node3_3" href="../../../jdbc/cpoJdbcMeta/impl/CtJdbcArgumentImpl.html" title="&lt;TABLE&gt;" alt="" coords="16,217,216,253"/>
+<area shape="rect" id="node4_4" href="../../../cassandra/cpoCassandraMeta/impl/CtCassandraArgumentImpl.html" title="&lt;TABLE&gt;" alt="" coords="262,217,514,253"/>
+<area shape="rect" id="node5_5" href="http://java.sun.com/j2se/1.4.2/docs/api/org/apache/xmlbeans/impl/values/XmlComplexContentImpl.html" title="&lt;TABLE&gt;" alt="" coords="313,18,468,54"/>
+</map>

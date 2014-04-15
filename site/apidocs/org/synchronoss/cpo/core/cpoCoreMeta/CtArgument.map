@@ -1,0 +1,11 @@
+<map id="G" name="G">
+<area shape="rect" id="node1_0" href="../../meta/AbstractCpoMetaAdapter.html" title="&lt;TABLE&gt;" alt="" coords="296,11,448,47"/>
+<area shape="rect" id="node2_1" href="./CtArgument.html" title="&lt;TABLE&gt;" alt="" coords="563,217,645,255"/>
+<area shape="rect" id="node5_2" href="../../jdbc/meta/JdbcCpoMetaAdapter.html" title="&lt;TABLE&gt;" alt="" coords="361,114,506,150"/>
+<area shape="rect" id="node4_3" href="./impl/CtArgumentImpl.html" title="&lt;TABLE&gt;" alt="" coords="15,322,217,358"/>
+<area shape="rect" id="node6_4" href="../../jdbc/cpoJdbcMeta/CtJdbcArgument.html" title="&lt;TABLE&gt;" alt="" coords="262,315,442,365"/>
+<area shape="rect" id="node7_5" href="../../cassandra/cpoCassandraMeta/CtCassandraArgument.html" title="&lt;TABLE&gt;" alt="" coords="488,315,720,365"/>
+<area shape="rect" id="node9_6" href="http://java.sun.com/j2se/1.4.2/docs/api/org/apache/xmlbeans/XmlString.html" title="&lt;TABLE&gt;" alt="" coords="507,424,613,475"/>
+<area shape="rect" id="node3_7" href="./impl/CtFunctionImpl.html" title="&lt;TABLE&gt;" alt="" coords="702,114,903,150"/>
+<area shape="rect" id="node8_8" href="http://java.sun.com/j2se/1.4.2/docs/api/org/apache/xmlbeans/XmlObject.html" title="&lt;TABLE&gt;" alt="" coords="551,107,657,157"/>
+</map>

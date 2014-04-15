@@ -34,7 +34,7 @@
     <version>7</version>
   </parent>
   <description>CPO is a persistence layer that is thin wrapper around JDBC that consumes and produces POJOs</description>
-  <url>http://berryware.github.io/cpo-api/</url>
+  <url>http://cpo-org.github.io/cpo-api/</url>
   <licenses>
     <license>
       <name>GNU Lesser General Public License</name>
@@ -65,7 +65,7 @@
   </distributionManagement>
   <issueManagement>
     <system>GitHub</system>
-    <url>https://github.com/berryware/cpo-api/issues</url>
+    <url>https://github.com/cpo-org/cpo-api/issues</url>
   </issueManagement>
   <developers>
     <developer>
@@ -86,9 +86,9 @@
     </developer>
   </developers>
   <scm>
-    <connection>scm:git:https://github.com/berryware/cpo-api.git</connection>
-    <developerConnection>scm:git:https://github.com/berryware/cpo-api.git</developerConnection>
-    <url>https://github.com/berryware/cpo-api</url>
+    <connection>scm:git:https://github.com/cpo-org/cpo-api.git</connection>
+    <developerConnection>scm:git:https://github.com/cpo-org/cpo-api.git</developerConnection>
+    <url>https://github.com/cpo-org/cpo-api</url>
   </scm>
   <build>
     <resources>

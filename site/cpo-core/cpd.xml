@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pmd-cpd>
+<duplication lines="32" tokens="113">
+<file line="59" path="/Users/michael/src/cpo/cpo-api/cpo-core/src/main/java/org/synchronoss/cpo/CpoByteArrayInputStream.java"/>
+<file line="59" path="/Users/michael/src/cpo/cpo-api/cpo-core/src/main/java/org/synchronoss/cpo/CpoCharArrayReader.java"/>
+<codefragment>
+<![CDATA[
+  protected byte[] getBuffer() {
+    return buffer_;
+  }
+
+  protected void setOffset(int offset) {
+    offset_ = offset;
+  }
+
+  protected int getOffset() {
+    return offset_;
+  }
+
+  protected void setSize(int size) {
+    size_ = size;
+  }
+
+  protected int getSize() {
+    return size_;
+  }
+
+  public int getLength() {
+    int l;
+
+    if (getOffset() == 0) {
+      l = getBuffer().length;
+    } else {
+      l = getSize() < getBuffer().length - getOffset() ? getSize() : getBuffer().length - getOffset();
+    }
+    return l;
+  }
+
+  static public CpoByteArrayInputStream getCpoStream(InputStream is) {
+]]>
+</codefragment>
+</duplication>
+<duplication lines="16" tokens="105">
+<file line="66" path="/Users/michael/src/cpo/cpo-api/cpo-core/src/main/java/org/synchronoss/cpo/meta/bean/CpoClassBean.java"/>
+<file line="78" path="/Users/michael/src/cpo/cpo-api/cpo-core/src/main/java/org/synchronoss/cpo/meta/bean/CpoFunctionGroupBean.java"/>
+<codefragment>
+<![CDATA[
+    if (getName() != null ? !getName().equals(that.getName()) : that.getName() != null) {
+      return false;
+    }
+    if (getDescription() != null ? !getDescription().equals(that.getDescription()) : that.getDescription() != null) {
+      return false;
+    }
+
+    return true;
+  }
+
+  @Override
+  public int hashCode() {
+    int result = 0;
+    result = 31 * result + getClass().getName().hashCode();
+    result = 31 * result + (getName() != null ? getName().hashCode() : 0);
+    result = 31 * result + (getDescription() != null ? getDescription().hashCode() : 0);
+]]>
+</codefragment>
+</duplication>
+</pmd-cpd>

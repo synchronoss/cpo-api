@@ -86,8 +86,8 @@
     </developer>
   </developers>
   <scm>
-    <connection>scm:git:https://github.com/cpo-org/cpo-api.git</connection>
-    <developerConnection>scm:git:https://github.com/cpo-org/cpo-api.git</developerConnection>
+    <connection>scm:git:git@github.com:cpo-org/cpo-api.git</connection>
+    <developerConnection>scm:git:git@github.com:cpo-org/cpo-api.git</developerConnection>
     <url>https://github.com/cpo-org/cpo-api</url>
   </scm>
   <build>

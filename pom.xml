@@ -34,7 +34,7 @@
     <version>7</version>
   </parent>
   <description>CPO is a persistence layer that is thin wrapper around JDBC that consumes and produces POJOs</description>
-  <url>http://cpo.sourceforge.net/</url>
+  <url>http://cpo-org.github.io/cpo-api/</url>
   <licenses>
     <license>
       <name>GNU Lesser General Public License</name>
@@ -50,6 +50,7 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <currentVersion>${project.version}</currentVersion>
     <slf4jVersion>1.6.4</slf4jVersion>
+    <github.global.server>cpo-github</github.global.server>
   </properties>
   <ciManagement>
     <system>teamcity</system>
@@ -57,29 +58,18 @@
   </ciManagement>
   <distributionManagement>
     <site>
-      <!-- must create a shell for your account at sourceforge by execing: ssh -t <username>,<project name>@shell.sf.net create-->
-      <id>sf-cpo-site</id>
-      <url>scp://shell.sourceforge.net/home/project-web/cpo/htdocs/cpo-util-sourceforge</url>
-      <!--<url>sftp://web.sourceforge.net/home/project-web/cpo/htdocs/cpo-util-sourceforge</url>-->
+      <id>cpo-github</id>
+      <name>Deployment through GitHub's site deployment plugin</name>
+      <url>site</url>
     </site>
   </distributionManagement>
   <issueManagement>
-    <system>SourceForge</system>
-    <url>http://sourceforge.net/projects/cpo</url>
+    <system>GitHub</system>
+    <url>https://github.com/cpo-org/cpo-api/issues</url>
   </issueManagement>
-  <mailingLists>
-    <mailingList>
-      <name>CPO Users List</name>
-      <subscribe>cpo-users-subscribe@lists.sourceforge.net</subscribe>
-      <unsubscribe>cpo-users-unsubscribe@lists.sourceforge.net</unsubscribe>
-      <post>cpo-users@lists.sourceforge.net</post>
-      <archive>http://lists.sourceforge.net/mailman/listinfo/cpo-users</archive>
-    </mailingList>
-  </mailingLists>
   <developers>
     <developer>
       <name>David Berry</name>
-      <email>berryware@N0SP4M.users.sourceforge.net</email>
       <roles>
         <role>architect</role>
         <role>developer</role>
@@ -87,34 +77,18 @@
       <timezone>EST</timezone>
     </developer>
     <developer>
-      <name>Jay Colson</name>
-      <email>jcolson@N0SP4M.users.sourceforge.net</email>
-      <roles>
-        <role>developer</role>
-      </roles>
-      <timezone>EST</timezone>
-    </developer>
-    <developer>
-      <name>Eric Fedok</name>
-      <email>efedok@N0SP4M.users.sourceforge.net</email>
-      <roles>
-        <role>developer</role>
-      </roles>
-      <timezone>EST</timezone>
-    </developer>
-    <developer>
       <name>Michael Bellomo</name>
-      <email>curly72@N0SP4M.users.sourceforge.net</email>
       <roles>
+        <role>architect</role>
         <role>developer</role>
       </roles>
       <timezone>EST</timezone>
     </developer>
   </developers>
   <scm>
-    <connection>scm:git:git@github.com:berryware/cpo-api.git</connection>
-    <developerConnection>scm:git:git@github.com:berryware/cpo-api.git</developerConnection>
-    <url>https://github.com/berryware/cpo-api</url>
+    <connection>scm:git:https://github.com/cpo-org/cpo-api.git</connection>
+    <developerConnection>scm:git:https://github.com/cpo-org/cpo-api.git</developerConnection>
+    <url>https://github.com/cpo-org/cpo-api</url>
   </scm>
   <build>
     <resources>
@@ -140,13 +114,50 @@
       <plugins>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-clean-plugin</artifactId>
+          <version>2.4.1</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-install-plugin</artifactId>
+          <version>2.3.1</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-dependency-plugin</artifactId>
+          <version>2.8</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-assembly-plugin</artifactId>
+          <version>2.3</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-jar-plugin</artifactId>
+          <version>2.4</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-deploy-plugin</artifactId>
+          <version>2.7</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-source-plugin</artifactId>
+          <version>2.2.1</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-resources-plugin</artifactId>
+          <version>2.6</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-release-plugin</artifactId>
           <version>2.4.1</version>
           <configuration>
             <autoVersionSubmodules>true</autoVersionSubmodules>
-            <mavenExecutorId>forked-path</mavenExecutorId>
-            <useReleaseProfile>false</useReleaseProfile>
-            <arguments>-Psonatype-oss-release -Dusername=${username}</arguments>
           </configuration>
         </plugin>
         <plugin>
@@ -187,44 +198,38 @@
           <artifactId>license-maven-plugin</artifactId>
           <version>2.5</version>
           <configuration>
-						<aggregate>true</aggregate>
             <header>src/main/resources/license.txt</header>
             <failIfMissing>false</failIfMissing>
             <strictCheck>true</strictCheck>
             <mapping>
               <!-- use /* instead of /** for java files -->
               <java>SLASHSTAR_STYLE</java>
+              <!-- use sql for cql -->
+              <cql>DOUBLEDASHES_STYLE</cql>
             </mapping>
             <excludes>
               <!-- netbeans action file -->
               <exclude>nbactions.xml</exclude>
+              <exclude>**/*.example</exclude>
+              <exclude>**/*.cql</exclude>
+              <!-- this causes issues w/ the embedded cassandra, so don't add comments to cql -->
             </excludes>
           </configuration>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-deploy-plugin</artifactId>
-          <version>2.7</version>
-        </plugin>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-site-plugin</artifactId>
           <version>3.3</version>
-          <dependencies>
-            <dependency>
-              <!-- add support for ssh/scp -->
-              <groupId>org.apache.maven.wagon</groupId>
-              <artifactId>wagon-ssh</artifactId>
-              <version>2.2</version>
-            </dependency>
-          </dependencies>
+          <configuration>
+            <skipDeploy>true</skipDeploy>
+          </configuration>
         </plugin>
       </plugins>
     </pluginManagement>
     <plugins>
       <plugin>
-				<groupId>com.mycila</groupId>
-				<artifactId>license-maven-plugin</artifactId>
+        <groupId>com.mycila</groupId>
+        <artifactId>license-maven-plugin</artifactId>
         <executions>
           <execution>
             <id>check-headers</id>
@@ -243,6 +248,26 @@
             <goals>
               <goal>attach-descriptor</goal>
             </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>com.github.github</groupId>
+        <artifactId>site-maven-plugin</artifactId>
+        <version>0.9</version>
+        <configuration>
+          <message>Creating site for ${project.artifactId}, ${project.version}</message>
+          <!-- this does the trick to place every module in the correct subfolder -->
+          <path>${project.distributionManagement.site.url}</path>
+          <merge>true</merge>
+        </configuration>
+        <executions>
+          <execution>
+            <id>github-site</id>
+            <goals>
+              <goal>site</goal>
+            </goals>
+            <phase>site-deploy</phase>
           </execution>
         </executions>
       </plugin>
@@ -329,22 +354,37 @@
         <version>2.12.4</version>
       </plugin>
       <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>taglist-maven-plugin</artifactId>
-        <version>2.2</version>
-        <configuration>
-          <tags>
-            <tag>TODO</tag>
-            <tag>FIXME</tag>
-            <tag>@todo</tag>
-            <tag>@deprecated</tag>
-          </tags>
-        </configuration>
-      </plugin>
-      <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-jxr-plugin</artifactId>
         <version>2.3</version>
+      </plugin>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>taglist-maven-plugin</artifactId>
+        <version>2.4</version>
+        <configuration>
+          <tagListOptions>
+            <tagClasses>
+              <tagClass>
+                <displayName>Todo Work</displayName>
+                <tags>
+                  <tag>
+                    <matchString>todo</matchString>
+                    <matchType>ignoreCase</matchType>
+                  </tag>
+                  <tag>
+                    <matchString>FIXME</matchString>
+                    <matchType>exact</matchType>
+                  </tag>
+                  <tag>
+                    <matchString>@deprecated</matchString>
+                    <matchType>exact</matchType>
+                  </tag>
+                </tags>
+              </tagClass>
+            </tagClasses>
+          </tagListOptions>
+        </configuration>
       </plugin>
       <plugin>
         <artifactId>maven-javadoc-plugin</artifactId>

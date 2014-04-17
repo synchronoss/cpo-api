@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<pmd version="4.3" timestamp="2014-04-15T17:16:40.054">
-<file name="/Users/michael/src/cpo/cpo-api/cpo-plugin/src/main/java/org/synchronoss/cpo/plugin/ConvertSQLToXML.java">
+<pmd version="4.3" timestamp="2014-04-17T02:13:49.249">
+<file name="/home/devtools/teamcity-agent/work/d3124324d56a95aa/cpo-plugin/src/main/java/org/synchronoss/cpo/plugin/ConvertSQLToXML.java">
 <violation beginline="96" endline="96" begincolumn="16" endcolumn="26" rule="UnusedLocalVariable" ruleset="Unused Code Rules" package="org.synchronoss.cpo.plugin" class="ConvertSQLToXML" method="execute" variable="driverClass" externalInfoUrl="http://pmd.sourceforge.net/rules/unusedcode.html#UnusedLocalVariable" priority="3">
 Avoid unused local variables such as 'driverClass'.
 </violation>
@@ -8,7 +8,7 @@ Avoid unused local variables such as 'driverClass'.
 Avoid empty catch blocks
 </violation>
 </file>
-<file name="/Users/michael/src/cpo/cpo-api/cpo-plugin/src/main/java/org/synchronoss/cpo/plugin/GenerateJavaSources.java">
+<file name="/home/devtools/teamcity-agent/work/d3124324d56a95aa/cpo-plugin/src/main/java/org/synchronoss/cpo/plugin/GenerateJavaSources.java">
 <violation beginline="112" endline="114" begincolumn="7" endcolumn="7" rule="CollapsibleIfStatements" ruleset="Basic Rules" package="org.synchronoss.cpo.plugin" class="GenerateJavaSources" method="execute" externalInfoUrl="http://pmd.sourceforge.net/rules/basic.html#CollapsibleIfStatements" priority="3">
 These nested if statements could be combined
 </violation>

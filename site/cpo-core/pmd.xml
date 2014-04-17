@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<pmd version="4.3" timestamp="2014-04-15T17:14:32.911">
-<file name="/Users/michael/src/cpo/cpo-api/cpo-core/src/main/java/org/synchronoss/cpo/AbstractCpoData.java">
+<pmd version="4.3" timestamp="2014-04-17T02:10:07.595">
+<file name="/home/devtools/teamcity-agent/work/d3124324d56a95aa/cpo-core/src/main/java/org/synchronoss/cpo/AbstractCpoData.java">
 <violation beginline="32" endline="32" begincolumn="31" endcolumn="36" rule="UnusedPrivateField" ruleset="Unused Code Rules" package="org.synchronoss.cpo" class="AbstractCpoData" variable="logger" externalInfoUrl="http://pmd.sourceforge.net/rules/unusedcode.html#UnusedPrivateField" priority="3">
 Avoid unused private fields such as 'logger'.
 </violation>
 </file>
-<file name="/Users/michael/src/cpo/cpo-api/cpo-core/src/main/java/org/synchronoss/cpo/CpoByteArrayInputStream.java">
+<file name="/home/devtools/teamcity-agent/work/d3124324d56a95aa/cpo-core/src/main/java/org/synchronoss/cpo/CpoByteArrayInputStream.java">
 <violation beginline="104" endline="106" begincolumn="9" endcolumn="7" rule="EmptyCatchBlock" ruleset="Basic Rules" package="org.synchronoss.cpo" class="CpoByteArrayInputStream" method="getCpoStream" externalInfoUrl="http://pmd.sourceforge.net/rules/basic.html#EmptyCatchBlock" priority="3">
 Avoid empty catch blocks
 </violation>
@@ -13,7 +13,7 @@ Avoid empty catch blocks
 Avoid empty catch blocks
 </violation>
 </file>
-<file name="/Users/michael/src/cpo/cpo-api/cpo-core/src/main/java/org/synchronoss/cpo/CpoCharArrayReader.java">
+<file name="/home/devtools/teamcity-agent/work/d3124324d56a95aa/cpo-core/src/main/java/org/synchronoss/cpo/CpoCharArrayReader.java">
 <violation beginline="104" endline="106" begincolumn="9" endcolumn="7" rule="EmptyCatchBlock" ruleset="Basic Rules" package="org.synchronoss.cpo" class="CpoCharArrayReader" method="getCpoReader" externalInfoUrl="http://pmd.sourceforge.net/rules/basic.html#EmptyCatchBlock" priority="3">
 Avoid empty catch blocks
 </violation>
@@ -21,7 +21,7 @@ Avoid empty catch blocks
 Avoid empty catch blocks
 </violation>
 </file>
-<file name="/Users/michael/src/cpo/cpo-api/cpo-core/src/main/java/org/synchronoss/cpo/Node.java">
+<file name="/home/devtools/teamcity-agent/work/d3124324d56a95aa/cpo-core/src/main/java/org/synchronoss/cpo/Node.java">
 <violation beginline="280" endline="284" begincolumn="12" endcolumn="5" rule="BrokenNullCheck" ruleset="Basic Rules" package="org.synchronoss.cpo" class="Node" method="doCompare" externalInfoUrl="http://pmd.sourceforge.net/rules/basic.html#BrokenNullCheck" priority="2">
 Method call on object which may be null
 </violation>
@@ -29,7 +29,7 @@ Method call on object which may be null
 Avoid empty catch blocks
 </violation>
 </file>
-<file name="/Users/michael/src/cpo/cpo-api/cpo-core/src/main/java/org/synchronoss/cpo/exporter/CpoClassSourceGenerator.java">
+<file name="/home/devtools/teamcity-agent/work/d3124324d56a95aa/cpo-core/src/main/java/org/synchronoss/cpo/exporter/CpoClassSourceGenerator.java">
 <violation beginline="166" endline="168" begincolumn="9" endcolumn="7" rule="EmptyCatchBlock" ruleset="Basic Rules" package="org.synchronoss.cpo.exporter" class="CpoClassSourceGenerator" method="visit" externalInfoUrl="http://pmd.sourceforge.net/rules/basic.html#EmptyCatchBlock" priority="3">
 Avoid empty catch blocks
 </violation>
@@ -37,12 +37,12 @@ Avoid empty catch blocks
 Avoid empty catch blocks
 </violation>
 </file>
-<file name="/Users/michael/src/cpo/cpo-api/cpo-core/src/main/java/org/synchronoss/cpo/meta/MethodMapEntry.java">
+<file name="/home/devtools/teamcity-agent/work/d3124324d56a95aa/cpo-core/src/main/java/org/synchronoss/cpo/meta/MethodMapEntry.java">
 <violation beginline="35" endline="35" begincolumn="31" endcolumn="36" rule="UnusedPrivateField" ruleset="Unused Code Rules" package="org.synchronoss.cpo.meta" class="MethodMapEntry" variable="logger" externalInfoUrl="http://pmd.sourceforge.net/rules/unusedcode.html#UnusedPrivateField" priority="3">
 Avoid unused private fields such as 'logger'.
 </violation>
 </file>
-<file name="/Users/michael/src/cpo/cpo-api/cpo-core/src/main/java/org/synchronoss/cpo/meta/domain/CpoAttribute.java">
+<file name="/home/devtools/teamcity-agent/work/d3124324d56a95aa/cpo-core/src/main/java/org/synchronoss/cpo/meta/domain/CpoAttribute.java">
 <violation beginline="124" endline="126" begincolumn="11" endcolumn="11" rule="CollapsibleIfStatements" ruleset="Basic Rules" package="org.synchronoss.cpo.meta.domain" class="CpoAttribute" method="findMethods" externalInfoUrl="http://pmd.sourceforge.net/rules/basic.html#CollapsibleIfStatements" priority="3">
 These nested if statements could be combined
 </violation>

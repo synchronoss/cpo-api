@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<pmd version="4.3" timestamp="2014-04-15T17:15:17.317">
-<file name="/Users/michael/src/cpo/cpo-api/cpo-jdbc/src/main/java/org/synchronoss/cpo/jdbc/ClassJdbcDataSourceInfo.java">
+<pmd version="4.3" timestamp="2014-04-17T02:11:56.334">
+<file name="/home/devtools/teamcity-agent/work/d3124324d56a95aa/cpo-jdbc/src/main/java/org/synchronoss/cpo/jdbc/ClassJdbcDataSourceInfo.java">
 <violation beginline="151" endline="152" begincolumn="9" endcolumn="7" rule="EmptyCatchBlock" ruleset="Basic Rules" package="org.synchronoss.cpo.jdbc" class="ClassJdbcDataSourceInfo" method="finalize" externalInfoUrl="http://pmd.sourceforge.net/rules/basic.html#EmptyCatchBlock" priority="3">
 Avoid empty catch blocks
 </violation>
@@ -8,12 +8,12 @@ Avoid empty catch blocks
 Avoid empty catch blocks
 </violation>
 </file>
-<file name="/Users/michael/src/cpo/cpo-api/cpo-jdbc/src/main/java/org/synchronoss/cpo/jdbc/JdbcCallableStatementFactory.java">
+<file name="/home/devtools/teamcity-agent/work/d3124324d56a95aa/cpo-jdbc/src/main/java/org/synchronoss/cpo/jdbc/JdbcCallableStatementFactory.java">
 <violation beginline="69" endline="108" begincolumn="10" endcolumn="3" rule="UnusedFormalParameter" ruleset="Unused Code Rules" package="org.synchronoss.cpo.jdbc" class="JdbcCallableStatementFactory" externalInfoUrl="http://pmd.sourceforge.net/rules/unusedcode.html#UnusedFormalParameter" priority="3">
 Avoid unused constructor parameters such as 'jca'.
 </violation>
 </file>
-<file name="/Users/michael/src/cpo/cpo-api/cpo-jdbc/src/main/java/org/synchronoss/cpo/jdbc/JdbcCpoAdapter.java">
+<file name="/home/devtools/teamcity-agent/work/d3124324d56a95aa/cpo-jdbc/src/main/java/org/synchronoss/cpo/jdbc/JdbcCpoAdapter.java">
 <violation beginline="1056" endline="1068" begincolumn="11" endcolumn="11" rule="CollapsibleIfStatements" ruleset="Basic Rules" package="org.synchronoss.cpo.jdbc" class="JdbcCpoAdapter" externalInfoUrl="http://pmd.sourceforge.net/rules/basic.html#CollapsibleIfStatements" priority="3">
 These nested if statements could be combined
 </violation>
@@ -27,7 +27,7 @@ This usage of the Collection.toArray() method will throw a ClassCastException.
 Avoid empty catch blocks
 </violation>
 </file>
-<file name="/Users/michael/src/cpo/cpo-api/cpo-jdbc/src/main/java/org/synchronoss/cpo/jdbc/JdbcCpoAttribute.java">
+<file name="/home/devtools/teamcity-agent/work/d3124324d56a95aa/cpo-jdbc/src/main/java/org/synchronoss/cpo/jdbc/JdbcCpoAttribute.java">
 <violation beginline="38" endline="38" begincolumn="31" endcolumn="36" rule="UnusedPrivateField" ruleset="Unused Code Rules" package="org.synchronoss.cpo.jdbc" class="JdbcCpoAttribute" variable="logger" externalInfoUrl="http://pmd.sourceforge.net/rules/unusedcode.html#UnusedPrivateField" priority="3">
 Avoid unused private fields such as 'logger'.
 </violation>
@@ -38,7 +38,7 @@ Avoid unused private fields such as 'transformPSOutMethod'.
 Avoid unused private fields such as 'transformCSOutMethod'.
 </violation>
 </file>
-<file name="/Users/michael/src/cpo/cpo-api/cpo-jdbc/src/main/java/org/synchronoss/cpo/jdbc/JdbcPreparedStatementFactory.java">
+<file name="/home/devtools/teamcity-agent/work/d3124324d56a95aa/cpo-jdbc/src/main/java/org/synchronoss/cpo/jdbc/JdbcPreparedStatementFactory.java">
 <violation beginline="55" endline="55" begincolumn="31" endcolumn="41" rule="UnusedPrivateField" ruleset="Unused Code Rules" package="org.synchronoss.cpo.jdbc" class="JdbcPreparedStatementFactory" variable="releasibles" externalInfoUrl="http://pmd.sourceforge.net/rules/unusedcode.html#UnusedPrivateField" priority="3">
 Avoid unused private fields such as 'releasibles'.
 </violation>
@@ -52,12 +52,12 @@ Avoid unused private fields such as 'ORDERBY_MARKER'.
 Avoid unused constructor parameters such as 'jca'.
 </violation>
 </file>
-<file name="/Users/michael/src/cpo/cpo-api/cpo-jdbc/src/main/java/org/synchronoss/cpo/jdbc/meta/JdbcMethodMapEntry.java">
+<file name="/home/devtools/teamcity-agent/work/d3124324d56a95aa/cpo-jdbc/src/main/java/org/synchronoss/cpo/jdbc/meta/JdbcMethodMapEntry.java">
 <violation beginline="35" endline="35" begincolumn="31" endcolumn="36" rule="UnusedPrivateField" ruleset="Unused Code Rules" package="org.synchronoss.cpo.jdbc.meta" class="JdbcMethodMapEntry" variable="logger" externalInfoUrl="http://pmd.sourceforge.net/rules/unusedcode.html#UnusedPrivateField" priority="3">
 Avoid unused private fields such as 'logger'.
 </violation>
 </file>
-<file name="/Users/michael/src/cpo/cpo-api/cpo-jdbc/src/main/java/org/synchronoss/cpo/jdbc/meta/JdbcMethodMapper.java">
+<file name="/home/devtools/teamcity-agent/work/d3124324d56a95aa/cpo-jdbc/src/main/java/org/synchronoss/cpo/jdbc/meta/JdbcMethodMapper.java">
 <violation beginline="122" endline="131" begincolumn="18" endcolumn="3" rule="UnusedFormalParameter" ruleset="Unused Code Rules" package="org.synchronoss.cpo.jdbc.meta" class="JdbcMethodMapper" externalInfoUrl="http://pmd.sourceforge.net/rules/unusedcode.html#UnusedFormalParameter" priority="3">
 Avoid unused method parameters such as 'methodType'.
 </violation>

@@ -1,6 +1,6 @@
 <map id="G" name="G">
-<area shape="rect" id="node1_0" href="../meta/domain/CpoClass.html" title="&lt;TABLE&gt;" alt="" coords="15,203,174,239"/>
-<area shape="rect" id="node2_1" href="../jdbc/meta/JdbcCpoMetaDescriptor.html" title="&lt;TABLE&gt;" alt="" coords="220,203,367,239"/>
-<area shape="rect" id="node3_2" href="./ConvertSQLToXML.html" title="&lt;TABLE&gt;" alt="" coords="133,113,253,137"/>
-<area shape="rect" id="node4_3" href="http://java.sun.com/j2se/1.4.2/docs/api/org/apache/maven/plugin/AbstractMojo.html" title="&lt;TABLE&gt;" alt="" coords="133,11,254,47"/>
+<area shape="rect" id="c53462" href="../meta/domain/CpoClass.html" title="&lt;TABLE&gt;" alt="" coords="16,203,179,239"/>
+<area shape="rect" id="c53551" href="../jdbc/meta/JdbcCpoMetaDescriptor.html" title="&lt;TABLE&gt;" alt="" coords="223,203,374,239"/>
+<area shape="rect" id="c53618" href="./ConvertSQLToXML.html" title="&lt;TABLE&gt;" alt="" coords="135,113,260,137"/>
+<area shape="rect" id="c53621" href="http://java.sun.com/j2se/1.4.2/docs/api/org/apache/maven/plugin/AbstractMojo.html" title="&lt;TABLE&gt;" alt="" coords="136,11,259,47"/>
 </map>

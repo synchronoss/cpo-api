@@ -1,7 +1,7 @@
 <map id="G" name="G">
-<area shape="rect" id="node1_0" href="./StFunctionGroupType.html" title="&lt;TABLE&gt;" alt="" coords="159,217,294,255"/>
-<area shape="rect" id="node2_1" href="./impl/StFunctionGroupTypeImpl.html" title="&lt;TABLE&gt;" alt="" coords="15,315,217,351"/>
-<area shape="rect" id="node5_2" href="http://java.sun.com/j2se/1.4.2/docs/api/org/apache/xmlbeans/StringEnumAbstractBase.html" title="&lt;TABLE&gt;" alt="" coords="263,315,415,351"/>
-<area shape="rect" id="node3_3" href="./impl/CtFunctionGroupImpl.html" title="&lt;TABLE&gt;" alt="" coords="126,11,327,47"/>
-<area shape="rect" id="node4_4" href="http://java.sun.com/j2se/1.4.2/docs/api/org/apache/xmlbeans/XmlString.html" title="&lt;TABLE&gt;" alt="" coords="225,107,330,157"/>
+<area shape="rect" id="c22455" href="./StFunctionGroupType.html" title="&lt;TABLE&gt;" alt="" coords="162,217,299,255"/>
+<area shape="rect" id="c22473" href="./impl/StFunctionGroupTypeImpl.html" title="&lt;TABLE&gt;" alt="" coords="16,315,221,351"/>
+<area shape="rect" id="c22605" href="http://java.sun.com/j2se/1.4.2/docs/api/org/apache/xmlbeans/StringEnumAbstractBase.html" title="&lt;TABLE&gt;" alt="" coords="267,315,421,351"/>
+<area shape="rect" id="c22477" href="./impl/CtFunctionGroupImpl.html" title="&lt;TABLE&gt;" alt="" coords="128,11,333,47"/>
+<area shape="rect" id="c22602" href="http://java.sun.com/j2se/1.4.2/docs/api/org/apache/xmlbeans/XmlString.html" title="&lt;TABLE&gt;" alt="" coords="227,107,335,157"/>
 </map>

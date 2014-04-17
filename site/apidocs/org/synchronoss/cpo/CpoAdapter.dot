@@ -7,35 +7,28 @@
 digraph G {
 	edge [fontname="Helvetica",fontsize=10,labelfontname="Helvetica",labelfontsize=10];
 	node [fontname="Helvetica",fontsize=10,shape=plaintext];
+	// org.synchronoss.cpo.CpoAdapter
+	c7496 [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./CpoAdapter.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+			<tr><td> &laquo;interface&raquo; </td></tr>
+			<tr><td> CpoAdapter </td></tr>
+		</table></td></tr>
+		</table>>, fontname="Helvetica", fontcolor="black", fontsize=9.0];
 	// org.synchronoss.cpo.CpoTrxAdapter
-	c12526 [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./CpoTrxAdapter.html">
+	c7542 [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./CpoTrxAdapter.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 			<tr><td> &laquo;interface&raquo; </td></tr>
 			<tr><td> CpoTrxAdapter </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=9.0];
 	// org.synchronoss.cpo.CpoBaseAdapter<T>
-	c12537 [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./CpoBaseAdapter.html">
+	c7574 [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./CpoBaseAdapter.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 			<tr><td><font face="Helvetica-Oblique"> CpoBaseAdapter&lt;T&gt; </font></td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=9.0];
-	// org.synchronoss.cpo.CpoAdapter
-	c12540 [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./CpoAdapter.html">
-		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-			<tr><td> &laquo;interface&raquo; </td></tr>
-			<tr><td> CpoAdapter </td></tr>
-		</table></td></tr>
-		</table>>, fontname="Helvetica", fontcolor="black", fontsize=9.0];
-	// org.synchronoss.cpo.cache.CpoAdapterCache
-	c12549 [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./cache/CpoAdapterCache.html">
-		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-			<tr><td> CpoAdapterCache </td></tr>
-			<tr><td><font point-size="7.0"> org.synchronoss.cpo.cache </font></td></tr>
-		</table></td></tr>
-		</table>>, fontname="Helvetica", fontcolor="black", fontsize=9.0];
 	// org.synchronoss.cpo.config.CpoConfigProcessor
-	c12550 [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./config/CpoConfigProcessor.html">
+	c7603 [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./config/CpoConfigProcessor.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 			<tr><td> &laquo;interface&raquo; </td></tr>
 			<tr><td> CpoConfigProcessor </td></tr>
@@ -43,45 +36,52 @@ digraph G {
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=9.0];
 	// org.synchronoss.cpo.meta.CpoMetaDescriptor
-	c12564 [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./meta/CpoMetaDescriptor.html">
+	c7622 [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./meta/CpoMetaDescriptor.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 			<tr><td> CpoMetaDescriptor </td></tr>
 			<tr><td><font point-size="7.0"> org.synchronoss.cpo.meta </font></td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=9.0];
+	// org.synchronoss.cpo.cache.CpoAdapterCache
+	c7662 [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./cache/CpoAdapterCache.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+			<tr><td> CpoAdapterCache </td></tr>
+			<tr><td><font point-size="7.0"> org.synchronoss.cpo.cache </font></td></tr>
+		</table></td></tr>
+		</table>>, fontname="Helvetica", fontcolor="black", fontsize=9.0];
 	// org.synchronoss.cpo.jdbc.config.JdbcCpoConfigProcessor
-	c12650 [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./jdbc/config/JdbcCpoConfigProcessor.html">
+	c7846 [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./jdbc/config/JdbcCpoConfigProcessor.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 			<tr><td> JdbcCpoConfigProcessor </td></tr>
 			<tr><td><font point-size="7.0"> org.synchronoss.cpo.jdbc.config </font></td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=9.0];
 	// org.synchronoss.cpo.cassandra.config.CassandraCpoConfigProcessor
-	c12701 [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./cassandra/config/CassandraCpoConfigProcessor.html">
+	c7935 [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./cassandra/config/CassandraCpoConfigProcessor.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 			<tr><td> CassandraCpoConfigProcessor </td></tr>
 			<tr><td><font point-size="7.0"> org.synchronoss.cpo.cassandra.config </font></td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=9.0];
 	//org.synchronoss.cpo.CpoTrxAdapter implements org.synchronoss.cpo.CpoAdapter
-	c12540:p -> c12526:p [dir=back,arrowtail=empty,style=dashed];
+	c7496:p -> c7542:p [dir=back,arrowtail=empty,style=dashed];
 	//org.synchronoss.cpo.CpoBaseAdapter<T> extends org.synchronoss.cpo.cache.CpoAdapterCache
-	c12549:p -> c12537:p [dir=back,arrowtail=empty];
+	c7662:p -> c7574:p [dir=back,arrowtail=empty];
 	//org.synchronoss.cpo.CpoBaseAdapter<T> implements org.synchronoss.cpo.CpoAdapter
-	c12540:p -> c12537:p [dir=back,arrowtail=empty,style=dashed];
+	c7496:p -> c7574:p [dir=back,arrowtail=empty,style=dashed];
 	//org.synchronoss.cpo.jdbc.config.JdbcCpoConfigProcessor implements org.synchronoss.cpo.config.CpoConfigProcessor
-	c12550:p -> c12650:p [dir=back,arrowtail=empty,style=dashed];
+	c7603:p -> c7846:p [dir=back,arrowtail=empty,style=dashed];
 	//org.synchronoss.cpo.cassandra.config.CassandraCpoConfigProcessor implements org.synchronoss.cpo.config.CpoConfigProcessor
-	c12550:p -> c12701:p [dir=back,arrowtail=empty,style=dashed];
+	c7603:p -> c7935:p [dir=back,arrowtail=empty,style=dashed];
 	// org.synchronoss.cpo.CpoAdapter DEPEND org.synchronoss.cpo.meta.CpoMetaDescriptor
-	c12540:p -> c12564:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
-	// org.synchronoss.cpo.cache.CpoAdapterCache DEPEND org.synchronoss.cpo.CpoAdapter
-	c12549:p -> c12540:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
+	c7496:p -> c7622:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
 	// org.synchronoss.cpo.config.CpoConfigProcessor DEPEND org.synchronoss.cpo.CpoAdapter
-	c12550:p -> c12540:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
+	c7603:p -> c7496:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
+	// org.synchronoss.cpo.cache.CpoAdapterCache DEPEND org.synchronoss.cpo.CpoAdapter
+	c7662:p -> c7496:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
 	// org.synchronoss.cpo.jdbc.config.JdbcCpoConfigProcessor DEPEND org.synchronoss.cpo.CpoAdapter
-	c12650:p -> c12540:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
+	c7846:p -> c7496:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
 	// org.synchronoss.cpo.cassandra.config.CassandraCpoConfigProcessor DEPEND org.synchronoss.cpo.CpoAdapter
-	c12701:p -> c12540:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
+	c7935:p -> c7496:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
 }
 

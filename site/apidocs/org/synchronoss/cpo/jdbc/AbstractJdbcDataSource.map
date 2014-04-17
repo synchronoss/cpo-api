@@ -1,6 +1,6 @@
 <map id="G" name="G">
-<area shape="rect" id="node1_0" href="./DriverJdbcDataSourceInfo.html" title="&lt;TABLE&gt;" alt="" coords="15,209,174,233"/>
-<area shape="rect" id="node2_1" href="./ClassJdbcDataSourceInfo.html" title="&lt;TABLE&gt;" alt="" coords="220,209,377,233"/>
-<area shape="rect" id="node3_2" href="./AbstractJdbcDataSourceInfo.html" title="&lt;TABLE&gt;" alt="" coords="111,17,281,41"/>
-<area shape="rect" id="node4_3" href="./AbstractJdbcDataSource.html" title="&lt;TABLE&gt;" alt="" coords="121,113,271,137"/>
+<area shape="rect" id="c37393" href="./AbstractJdbcDataSourceInfo.html" title="&lt;TABLE&gt;" alt="" coords="113,17,287,41"/>
+<area shape="rect" id="c37400" href="./AbstractJdbcDataSource.html" title="&lt;TABLE&gt;" alt="" coords="123,113,277,137"/>
+<area shape="rect" id="c37396" href="./DriverJdbcDataSourceInfo.html" title="&lt;TABLE&gt;" alt="" coords="16,209,179,233"/>
+<area shape="rect" id="c37406" href="./ClassJdbcDataSourceInfo.html" title="&lt;TABLE&gt;" alt="" coords="223,209,385,233"/>
 </map>

@@ -1,9 +1,9 @@
 <map id="G" name="G">
-<area shape="rect" id="node1_0" href="../../exporter/CoreMetaXmlObjectExporter.html" title="&lt;TABLE&gt;" alt="" coords="15,18,187,54"/>
-<area shape="rect" id="node3_1" href="./CtFunction.html" title="&lt;TABLE&gt;" alt="" coords="501,121,579,159"/>
-<area shape="rect" id="node2_2" href="../../meta/AbstractCpoMetaAdapter.html" title="&lt;TABLE&gt;" alt="" coords="233,18,385,54"/>
-<area shape="rect" id="node4_3" href="./impl/CtFunctionImpl.html" title="&lt;TABLE&gt;" alt="" coords="382,219,583,255"/>
-<area shape="rect" id="node7_4" href="http://java.sun.com/j2se/1.4.2/docs/api/org/apache/xmlbeans/XmlString.html" title="&lt;TABLE&gt;" alt="" coords="579,315,685,365"/>
-<area shape="rect" id="node5_5" href="./impl/CtFunctionGroupImpl.html" title="&lt;TABLE&gt;" alt="" coords="582,18,783,54"/>
-<area shape="rect" id="node6_6" href="http://java.sun.com/j2se/1.4.2/docs/api/org/apache/xmlbeans/XmlObject.html" title="&lt;TABLE&gt;" alt="" coords="431,11,537,61"/>
+<area shape="rect" id="c24367" href="../../exporter/CoreMetaXmlObjectExporter.html" title="&lt;TABLE&gt;" alt="" coords="15,18,190,54"/>
+<area shape="rect" id="c24412" href="./CtFunction.html" title="&lt;TABLE&gt;" alt="" coords="504,121,584,159"/>
+<area shape="rect" id="c24376" href="../../meta/AbstractCpoMetaAdapter.html" title="&lt;TABLE&gt;" alt="" coords="234,18,390,54"/>
+<area shape="rect" id="c24424" href="./impl/CtFunctionImpl.html" title="&lt;TABLE&gt;" alt="" coords="385,219,591,255"/>
+<area shape="rect" id="c24551" href="http://java.sun.com/j2se/1.4.2/docs/api/org/apache/xmlbeans/XmlString.html" title="&lt;TABLE&gt;" alt="" coords="585,315,693,365"/>
+<area shape="rect" id="c24425" href="./impl/CtFunctionGroupImpl.html" title="&lt;TABLE&gt;" alt="" coords="587,18,792,54"/>
+<area shape="rect" id="c24550" href="http://java.sun.com/j2se/1.4.2/docs/api/org/apache/xmlbeans/XmlObject.html" title="&lt;TABLE&gt;" alt="" coords="434,11,542,61"/>
 </map>

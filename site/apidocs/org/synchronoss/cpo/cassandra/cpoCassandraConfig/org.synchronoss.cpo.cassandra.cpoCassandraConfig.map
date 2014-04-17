@@ -1,11 +1,11 @@
 <map id="G" name="G">
-<area shape="rect" id="node1_0" href="./StCompression.html" title="&lt;TABLE&gt;" alt="" coords="15,11,115,50"/>
-<area shape="rect" id="node2_1" href="./StCompression.Enum.html" title="&lt;TABLE&gt;" alt="" coords="162,19,211,43"/>
-<area shape="rect" id="node3_2" href="./StCompression.Factory.html" title="&lt;TABLE&gt;" alt="" coords="257,19,316,43"/>
-<area shape="rect" id="node4_3" href="./CtCredentials.html" title="&lt;TABLE&gt;" alt="" coords="361,11,452,50"/>
-<area shape="rect" id="node5_4" href="./CtCredentials.Factory.html" title="&lt;TABLE&gt;" alt="" coords="497,19,556,43"/>
-<area shape="rect" id="node6_5" href="./CtCassandraReadWriteConfig.html" title="&lt;TABLE&gt;" alt="" coords="601,11,780,50"/>
-<area shape="rect" id="node7_6" href="./CtCassandraReadWriteConfig.Factory.html" title="&lt;TABLE&gt;" alt="" coords="825,19,884,43"/>
-<area shape="rect" id="node8_7" href="./CtCassandraConfig.html" title="&lt;TABLE&gt;" alt="" coords="929,11,1052,50"/>
-<area shape="rect" id="node9_8" href="./CtCassandraConfig.Factory.html" title="&lt;TABLE&gt;" alt="" coords="1097,19,1156,43"/>
+<area shape="rect" id="c7046" href="./CtCredentials.html" title="&lt;TABLE&gt;" alt="" coords="16,11,109,50"/>
+<area shape="rect" id="c7047" href="./CtCredentials.Factory.html" title="&lt;TABLE&gt;" alt="" coords="155,19,213,43"/>
+<area shape="rect" id="c7048" href="./CtCassandraReadWriteConfig.html" title="&lt;TABLE&gt;" alt="" coords="258,11,443,50"/>
+<area shape="rect" id="c7049" href="./CtCassandraReadWriteConfig.Factory.html" title="&lt;TABLE&gt;" alt="" coords="488,19,547,43"/>
+<area shape="rect" id="c7050" href="./CtCassandraConfig.html" title="&lt;TABLE&gt;" alt="" coords="591,11,718,50"/>
+<area shape="rect" id="c7051" href="./CtCassandraConfig.Factory.html" title="&lt;TABLE&gt;" alt="" coords="763,19,821,43"/>
+<area shape="rect" id="c7052" href="./StCompression.html" title="&lt;TABLE&gt;" alt="" coords="866,11,969,50"/>
+<area shape="rect" id="c7053" href="./StCompression.Enum.html" title="&lt;TABLE&gt;" alt="" coords="1013,19,1064,43"/>
+<area shape="rect" id="c7054" href="./StCompression.Factory.html" title="&lt;TABLE&gt;" alt="" coords="1109,19,1168,43"/>
 </map>

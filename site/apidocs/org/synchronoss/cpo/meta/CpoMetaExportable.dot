@@ -8,19 +8,19 @@ digraph G {
 	edge [fontname="Helvetica",fontsize=10,labelfontname="Helvetica",labelfontsize=10];
 	node [fontname="Helvetica",fontsize=10,shape=plaintext];
 	// org.synchronoss.cpo.meta.CpoMetaExportable
-	c17496 [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./CpoMetaExportable.html">
+	c15987 [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./CpoMetaExportable.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 			<tr><td> &laquo;interface&raquo; </td></tr>
 			<tr><td> CpoMetaExportable </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=9.0];
 	// org.synchronoss.cpo.meta.CpoMetaDescriptor
-	c17497 [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./CpoMetaDescriptor.html">
+	c15991 [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./CpoMetaDescriptor.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 			<tr><td> CpoMetaDescriptor </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=9.0];
 	//org.synchronoss.cpo.meta.CpoMetaDescriptor implements org.synchronoss.cpo.meta.CpoMetaExportable
-	c17496:p -> c17497:p [dir=back,arrowtail=empty,style=dashed];
+	c15987:p -> c15991:p [dir=back,arrowtail=empty,style=dashed];
 }
 

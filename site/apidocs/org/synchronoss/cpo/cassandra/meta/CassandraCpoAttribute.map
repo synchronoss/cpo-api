@@ -1,6 +1,6 @@
 <map id="G" name="G">
-<area shape="rect" id="node1_0" href="../../meta/CpoMetaDescriptor.html" title="&lt;TABLE&gt;" alt="" coords="96,11,221,47"/>
-<area shape="rect" id="node2_1" href="../../meta/domain/CpoAttribute.html" title="&lt;TABLE&gt;" alt="" coords="15,107,174,143"/>
-<area shape="rect" id="node3_2" href="./CassandraCpoAttribute.html" title="&lt;TABLE&gt;" alt="" coords="87,209,230,233"/>
-<area shape="rect" id="node4_3" href="../transform/CassandraCpoTransform.html" title="&lt;TABLE&gt;" alt="" coords="63,299,254,349"/>
+<area shape="rect" id="c48706" href="../../meta/CpoMetaDescriptor.html" title="&lt;TABLE&gt;" alt="" coords="97,11,226,47"/>
+<area shape="rect" id="c48716" href="../../meta/domain/CpoAttribute.html" title="&lt;TABLE&gt;" alt="" coords="16,107,179,143"/>
+<area shape="rect" id="c48854" href="./CassandraCpoAttribute.html" title="&lt;TABLE&gt;" alt="" coords="88,209,235,233"/>
+<area shape="rect" id="c48855" href="../transform/CassandraCpoTransform.html" title="&lt;TABLE&gt;" alt="" coords="64,299,259,349"/>
 </map>

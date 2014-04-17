@@ -1,0 +1,18 @@
+<map id="G" name="G">
+<area shape="rect" id="c16628" href="./CpoMetaAdapter.html" title="&lt;TABLE&gt;" alt="" coords="123,11,235,50"/>
+<area shape="rect" id="c16632" href="./AbstractCpoMetaAdapter.html" title="&lt;TABLE&gt;" alt="" coords="745,212,901,236"/>
+<area shape="rect" id="c16633" href="./CpoMetaDescriptor.html" title="&lt;TABLE&gt;" alt="" coords="188,116,313,140"/>
+<area shape="rect" id="c16643" href="./domain/CpoAttribute.html" title="&lt;TABLE&gt;" alt="" coords="301,713,464,749"/>
+<area shape="rect" id="c16647" href="./domain/CpoClass.html" title="&lt;TABLE&gt;" alt="" coords="231,309,393,345"/>
+<area shape="rect" id="c16644" href="./domain/CpoArgument.html" title="&lt;TABLE&gt;" alt="" coords="372,617,535,653"/>
+<area shape="rect" id="c16646" href="./domain/CpoFunctionGroup.html" title="&lt;TABLE&gt;" alt="" coords="372,418,535,454"/>
+<area shape="rect" id="c16649" href="./domain/CpoFunction.html" title="&lt;TABLE&gt;" alt="" coords="372,521,535,557"/>
+<area shape="rect" id="c16657" href="../core/cpoCoreMeta/CtAttribute.html" title="&lt;TABLE&gt;" alt="" coords="1449,411,1634,461"/>
+<area shape="rect" id="c16662" href="../core/cpoCoreMeta/CpoMetaDataDocument.html" title="&lt;TABLE&gt;" alt="" coords="489,301,674,352"/>
+<area shape="rect" id="c16666" href="../core/cpoCoreMeta/CtFunctionGroup.html" title="&lt;TABLE&gt;" alt="" coords="870,301,1055,352"/>
+<area shape="rect" id="c16668" href="../core/cpoCoreMeta/CtFunction.html" title="&lt;TABLE&gt;" alt="" coords="1345,301,1530,352"/>
+<area shape="rect" id="c16670" href="../core/cpoCoreMeta/CtClass.html" title="&lt;TABLE&gt;" alt="" coords="1574,301,1759,352"/>
+<area shape="rect" id="c16672" href="../core/cpoCoreMeta/CtArgument.html" title="&lt;TABLE&gt;" alt="" coords="967,411,1153,461"/>
+<area shape="rect" id="c16738" href="../jdbc/meta/JdbcCpoMetaAdapter.html" title="&lt;TABLE&gt;" alt="" coords="1151,309,1300,345"/>
+<area shape="rect" id="c16778" href="../cassandra/meta/CassandraCpoMetaAdapter.html" title="&lt;TABLE&gt;" alt="" coords="1504,521,1680,557"/>
+</map>

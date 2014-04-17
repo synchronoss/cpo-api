@@ -1,0 +1,12 @@
+<map id="G" name="G">
+<area shape="rect" id="c37480" href="../CpoResultSet.html" title="&lt;TABLE&gt;" alt="" coords="16,203,133,253"/>
+<area shape="rect" id="c37481" href="../CpoWhere.html" title="&lt;TABLE&gt;" alt="" coords="178,203,283,253"/>
+<area shape="rect" id="c37486" href="../CpoOrderBy.html" title="&lt;TABLE&gt;" alt="" coords="327,203,433,253"/>
+<area shape="rect" id="c37492" href="../CpoTrxAdapter.html" title="&lt;TABLE&gt;" alt="" coords="477,203,582,253"/>
+<area shape="rect" id="c37616" href="./JdbcCpoTrxAdapter.html" title="&lt;TABLE&gt;" alt="" coords="601,319,729,343"/>
+<area shape="rect" id="c37493" href="../DataSourceInfo.html" title="&lt;TABLE&gt;" alt="" coords="627,203,752,253"/>
+<area shape="rect" id="c37503" href="../CpoBaseAdapter.html" title="&lt;TABLE&gt;" alt="" coords="623,11,756,47"/>
+<area shape="rect" id="c37615" href="./JdbcCpoAdapter.html" title="&lt;TABLE&gt;" alt="" coords="634,113,745,137"/>
+<area shape="rect" id="c37519" href="../meta/CpoMetaDescriptor.html" title="&lt;TABLE&gt;" alt="" coords="847,210,977,246"/>
+<area shape="rect" id="c37622" href="./meta/JdbcCpoMetaDescriptor.html" title="&lt;TABLE&gt;" alt="" coords="961,313,1111,349"/>
+</map>

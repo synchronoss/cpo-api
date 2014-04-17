@@ -1,5 +1,5 @@
 <map id="G" name="G">
-<area shape="rect" id="node1_0" href="./PoolingOptionsFactory.html" title="&lt;TABLE&gt;" alt="" coords="15,116,155,140"/>
-<area shape="rect" id="node3_1" href="http://java.sun.com/j2se/1.4.2/docs/api/com/datastax/driver/core/PoolingOptions.html" title="&lt;TABLE&gt;" alt="" coords="26,206,145,242"/>
-<area shape="rect" id="node2_2" href="./FactoryMethodName.html" title="&lt;TABLE&gt;" alt="" coords="20,11,151,50"/>
+<area shape="rect" id="c46694" href="./FactoryMethodName.html" title="&lt;TABLE&gt;" alt="" coords="20,11,153,50"/>
+<area shape="rect" id="c46698" href="./PoolingOptionsFactory.html" title="&lt;TABLE&gt;" alt="" coords="15,116,158,140"/>
+<area shape="rect" id="c46733" href="http://java.sun.com/j2se/1.4.2/docs/api/com/datastax/driver/core/PoolingOptions.html" title="&lt;TABLE&gt;" alt="" coords="25,206,148,242"/>
 </map>

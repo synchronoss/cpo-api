@@ -1,0 +1,11 @@
+<map id="G" name="G">
+<area shape="rect" id="c12750" href="./MetaVisitor.html" title="&lt;TABLE&gt;" alt="" coords="303,11,383,50"/>
+<area shape="rect" id="c12756" href="./exporter/CpoClassSourceGenerator.html" title="&lt;TABLE&gt;" alt="" coords="103,219,270,255"/>
+<area shape="rect" id="c12758" href="./exporter/CoreMetaXmlObjectExporter.html" title="&lt;TABLE&gt;" alt="" coords="475,219,650,255"/>
+<area shape="rect" id="c12759" href="./exporter/MetaXmlObjectExporter.html" title="&lt;TABLE&gt;" alt="" coords="415,109,563,160"/>
+<area shape="rect" id="c12778" href="./meta/domain/CpoAttribute.html" title="&lt;TABLE&gt;" alt="" coords="419,699,581,735"/>
+<area shape="rect" id="c12779" href="./meta/domain/CpoArgument.html" title="&lt;TABLE&gt;" alt="" coords="256,603,419,639"/>
+<area shape="rect" id="c12781" href="./meta/domain/CpoFunctionGroup.html" title="&lt;TABLE&gt;" alt="" coords="307,411,469,447"/>
+<area shape="rect" id="c12782" href="./meta/domain/CpoClass.html" title="&lt;TABLE&gt;" alt="" coords="616,315,779,351"/>
+<area shape="rect" id="c12784" href="./meta/domain/CpoFunction.html" title="&lt;TABLE&gt;" alt="" coords="256,507,419,543"/>
+</map>

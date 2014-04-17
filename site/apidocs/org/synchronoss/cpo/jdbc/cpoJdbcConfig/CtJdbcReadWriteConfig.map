@@ -1,8 +1,8 @@
 <map id="G" name="G">
-<area shape="rect" id="node1_0" href="../config/JdbcCpoConfigProcessor.html" title="&lt;TABLE&gt;" alt="" coords="16,18,171,54"/>
-<area shape="rect" id="node2_1" href="./CtJdbcReadWriteConfig.html" title="&lt;TABLE&gt;" alt="" coords="247,121,393,159"/>
-<area shape="rect" id="node3_2" href="./impl/CtJdbcReadWriteConfigImpl.html" title="&lt;TABLE&gt;" alt="" coords="141,219,347,255"/>
-<area shape="rect" id="node6_3" href="http://java.sun.com/j2se/1.4.2/docs/api/org/apache/xmlbeans/XmlString.html" title="&lt;TABLE&gt;" alt="" coords="267,315,373,365"/>
-<area shape="rect" id="node4_4" href="./impl/CtJdbcConfigImpl.html" title="&lt;TABLE&gt;" alt="" coords="217,18,423,54"/>
-<area shape="rect" id="node5_5" href="http://java.sun.com/j2se/1.4.2/docs/api/org/apache/xmlbeans/XmlObject.html" title="&lt;TABLE&gt;" alt="" coords="469,11,574,61"/>
+<area shape="rect" id="c39976" href="../config/JdbcCpoConfigProcessor.html" title="&lt;TABLE&gt;" alt="" coords="15,18,174,54"/>
+<area shape="rect" id="c39981" href="./CtJdbcReadWriteConfig.html" title="&lt;TABLE&gt;" alt="" coords="249,121,399,159"/>
+<area shape="rect" id="c39989" href="./impl/CtJdbcReadWriteConfigImpl.html" title="&lt;TABLE&gt;" alt="" coords="143,219,353,255"/>
+<area shape="rect" id="c40048" href="http://java.sun.com/j2se/1.4.2/docs/api/org/apache/xmlbeans/XmlString.html" title="&lt;TABLE&gt;" alt="" coords="270,315,378,365"/>
+<area shape="rect" id="c39988" href="./impl/CtJdbcConfigImpl.html" title="&lt;TABLE&gt;" alt="" coords="219,18,429,54"/>
+<area shape="rect" id="c40047" href="http://java.sun.com/j2se/1.4.2/docs/api/org/apache/xmlbeans/XmlObject.html" title="&lt;TABLE&gt;" alt="" coords="474,11,582,61"/>
 </map>

@@ -1,6 +1,6 @@
 <map id="G" name="G">
-<area shape="rect" id="node1_0" href="../meta/CpoMetaDescriptor.html" title="&lt;TABLE&gt;" alt="" coords="96,11,221,47"/>
-<area shape="rect" id="node2_1" href="../meta/domain/CpoAttribute.html" title="&lt;TABLE&gt;" alt="" coords="15,107,174,143"/>
-<area shape="rect" id="node3_2" href="./JdbcCpoAttribute.html" title="&lt;TABLE&gt;" alt="" coords="103,209,214,233"/>
-<area shape="rect" id="node4_3" href="../transform/jdbc/JdbcCpoTransform.html" title="&lt;TABLE&gt;" alt="" coords="77,299,241,349"/>
+<area shape="rect" id="c38375" href="../meta/CpoMetaDescriptor.html" title="&lt;TABLE&gt;" alt="" coords="97,11,226,47"/>
+<area shape="rect" id="c38385" href="../meta/domain/CpoAttribute.html" title="&lt;TABLE&gt;" alt="" coords="16,107,179,143"/>
+<area shape="rect" id="c38475" href="./JdbcCpoAttribute.html" title="&lt;TABLE&gt;" alt="" coords="105,209,218,233"/>
+<area shape="rect" id="c38455" href="../transform/jdbc/JdbcCpoTransform.html" title="&lt;TABLE&gt;" alt="" coords="77,299,246,349"/>
 </map>

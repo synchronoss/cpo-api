@@ -241,6 +241,19 @@
         </executions>
       </plugin>
       <plugin>
+        <groupId>org.sonatype.plugins</groupId>
+        <artifactId>nexus-staging-maven-plugin</artifactId>
+        <version>1.6.1</version>
+        <extensions>true</extensions>
+        <inherited>false</inherited>
+        <configuration>
+          <serverId>sonatype-nexus-staging</serverId>
+          <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+          <stagingProfileId>b2828f5f73ba8</stagingProfileId>
+          <autoReleaseAfterClose>true</autoReleaseAfterClose>
+        </configuration>
+      </plugin>
+      <plugin>
         <artifactId>maven-site-plugin</artifactId>
         <executions>
           <execution>

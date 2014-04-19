@@ -1,8 +1,8 @@
 <map id="G" name="G">
-<area shape="rect" id="c53834" href="./IncludeProjectDependencies.html" title="&lt;TABLE&gt;" alt="" coords="334,113,511,137"/>
-<area shape="rect" id="c53839" href="http://java.sun.com/j2se/1.4.2/docs/api/org/codehaus/plexus/component/configurator/ConfigurationListener.html" title="&lt;TABLE&gt;" alt="" coords="16,203,221,253"/>
-<area shape="rect" id="c53842" href="http://java.sun.com/j2se/1.4.2/docs/api/org/codehaus/classworlds/ClassRealm.html" title="&lt;TABLE&gt;" alt="" coords="266,203,393,253"/>
-<area shape="rect" id="c53843" href="http://java.sun.com/j2se/1.4.2/docs/api/org/codehaus/plexus/configuration/PlexusConfiguration.html" title="&lt;TABLE&gt;" alt="" coords="437,203,598,253"/>
+<area shape="rect" id="c53834" href="./IncludeProjectDependencies.html" title="&lt;TABLE&gt;" alt="" coords="291,113,469,137"/>
+<area shape="rect" id="c53841" href="http://java.sun.com/j2se/1.4.2/docs/api/org/codehaus/classworlds/ClassRealm.html" title="&lt;TABLE&gt;" alt="" coords="15,203,142,253"/>
+<area shape="rect" id="c53842" href="http://java.sun.com/j2se/1.4.2/docs/api/org/codehaus/plexus/configuration/PlexusConfiguration.html" title="&lt;TABLE&gt;" alt="" coords="186,203,347,253"/>
+<area shape="rect" id="c53843" href="http://java.sun.com/j2se/1.4.2/docs/api/org/codehaus/plexus/component/configurator/ConfigurationListener.html" title="&lt;TABLE&gt;" alt="" coords="392,203,597,253"/>
 <area shape="rect" id="c53844" href="http://java.sun.com/j2se/1.4.2/docs/api/org/codehaus/plexus/component/configurator/expression/ExpressionEvaluator.html" title="&lt;TABLE&gt;" alt="" coords="643,203,896,253"/>
-<area shape="rect" id="c53838" href="http://java.sun.com/j2se/1.4.2/docs/api/org/codehaus/plexus/component/configurator/AbstractComponentConfigurator.html" title="&lt;TABLE&gt;" alt="" coords="320,11,525,47"/>
+<area shape="rect" id="c53838" href="http://java.sun.com/j2se/1.4.2/docs/api/org/codehaus/plexus/component/configurator/AbstractComponentConfigurator.html" title="&lt;TABLE&gt;" alt="" coords="277,11,483,47"/>
 </map>

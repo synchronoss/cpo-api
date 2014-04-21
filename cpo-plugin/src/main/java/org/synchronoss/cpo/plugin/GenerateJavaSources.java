@@ -21,6 +21,8 @@
 package org.synchronoss.cpo.plugin;
 
 import org.apache.maven.plugin.*;
+import org.apache.maven.plugins.annotations.*;
+import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.project.MavenProject;
 import org.synchronoss.cpo.exporter.CpoClassSourceGenerator;
 import org.synchronoss.cpo.meta.CpoMetaDescriptor;
@@ -31,64 +33,48 @@ import java.util.StringTokenizer;
 
 /**
  * Plugin goal that will generate the cpo classes based on the xml configuration file
- *
- * @requiresDependencyResolution
- * @goal generatejavasource
- * @phase generate-sources
- * @configurator include-project-dependencies
  */
+@Mojo (name = "generatejavasource",
+    requiresDependencyResolution = ResolutionScope.RUNTIME,
+    configurator = "include-project-dependencies",
+    defaultPhase = LifecyclePhase.GENERATE_SOURCES)
 public class GenerateJavaSources extends AbstractMojo {
 
   private enum Scopes {
     test
   }
 
-  /**
-   * @parameter expression="${cpoConfig}"
-   * @required
-   */
+  @Parameter (property = "cpoConfig", required = true)
   private String cpoConfig;
 
   /**
    * Default output directory
-   *
-   * @parameter expression="${project.build.directory}/generated-sources/cpo"
-   * @required
    */
+  @Parameter (property = "outputDir", required = true, defaultValue = "${project.build.directory}/generated-sources/cpo")
   private String outputDir;
 
   /**
    * Output directory for test scope executions
-   *
-   * @parameter expression="${project.build.directory}/generated-test-sources/cpo"
-   * @required
    */
+  @Parameter (property = "testOutputDir", required = true, defaultValue = "${project.build.directory}/generated-test-sources/cpo")
   private String testOutputDir;
 
-  /**
-   * @parameter expression="${scope}" default-value="compile"
-   * @required
-   */
+  @Parameter (property = "scope", required = true, defaultValue = "compile")
   private String scope;
 
-  /**
-   * @parameter expression="${filter}" default-value=".*"
-   */
+  @Parameter (property = "filter", defaultValue = ".*")
   private String filter;
 
   /**
    * A reference to the Maven Project metadata.
-   *
-   * @parameter expression="${project}"
-   * @required
-   * @readonly
    */
+  @Component
   protected MavenProject project;
 
   private final String JAVA_EXT = ".java";
   private final String META_DESCRIPTOR_NAME = "Generator-" + System.currentTimeMillis();
 
-	public void execute() throws MojoExecutionException {
+  public void execute() throws MojoExecutionException {
     getLog().info("Cpo config: " + cpoConfig);
 
     File srcDir;
@@ -155,6 +141,6 @@ public class GenerateJavaSources extends AbstractMojo {
     } catch (Exception ex) {
       throw new MojoExecutionException("Exception caught", ex);
     }
-	}
+  }
 }
 

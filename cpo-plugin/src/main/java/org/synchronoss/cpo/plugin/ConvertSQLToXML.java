@@ -21,6 +21,8 @@
 package org.synchronoss.cpo.plugin;
 
 import org.apache.maven.plugin.*;
+import org.apache.maven.plugins.annotations.Mojo;
+import org.apache.maven.plugins.annotations.*;
 import org.synchronoss.cpo.core.cpoCoreMeta.CpoMetaDataDocument;
 import org.synchronoss.cpo.exporter.MetaXmlObjectExporter;
 import org.synchronoss.cpo.helper.*;
@@ -33,35 +35,22 @@ import java.io.File;
 import java.sql.*;
 import java.util.*;
 
-/**
- * @goal convertsqltoxml
- */
+@Mojo (name = "convertsqltoxml")
 public class ConvertSQLToXML extends AbstractMojo {
 
-  /**
-   * @parameter expression="${dbUrl}"
-   * @required
-   */
+  @Parameter (property = "dbUrl", required = true)
   private String dbUrl;
 
-  /**
-   * @parameter expression="${dbTablePrefix}" default-value=" "
-   */
+  @Parameter (property = "dbTablePrefix", defaultValue = " ")
   private String dbTablePrefix;
 
-  /**
-   * @parameter expression="${dbDriver}" default-value="oracle.jdbc.OracleDriver"
-   */
+  @Parameter (property = "dbDriver", defaultValue = "oracle.jdbc.OracleDriver")
   private String dbDriver;
 
-  /**
-   * @parameter expression="${dbParams}"
-   */
+  @Parameter (property = "dbParams")
   private String dbParams;
 
-  /**
-   * @parameter expression="${filter}" default-value=".*"
-   */
+  @Parameter (property = "filter", defaultValue = ".*")
   private String filter;
 
   public static final File TARGET = new File("target");
@@ -79,8 +68,8 @@ public class ConvertSQLToXML extends AbstractMojo {
   }
 
   @Override
-	public void execute() throws MojoExecutionException {
-		getLog().info("Converting SQL to XML...");
+  public void execute() throws MojoExecutionException {
+    getLog().info("Converting SQL to XML...");
 
     getLog().info("dbUrl: " + dbUrl);
     getLog().info("dbTablePrefix: " + dbTablePrefix);
@@ -105,10 +94,12 @@ public class ConvertSQLToXML extends AbstractMojo {
         String token = st.nextToken();
         StringTokenizer stNameValue = new StringTokenizer(token, "=");
         String name = null, value = null;
-        if (stNameValue.hasMoreTokens())
+        if (stNameValue.hasMoreTokens()) {
           name = stNameValue.nextToken();
-        if (stNameValue.hasMoreTokens())
+        }
+        if (stNameValue.hasMoreTokens()) {
           value = stNameValue.nextToken();
+        }
         connectionProperties.setProperty(name, value);
       }
     }
@@ -121,7 +112,7 @@ public class ConvertSQLToXML extends AbstractMojo {
       List<CpoClass> classes = getClasses(conn);
 
       for (CpoClass cpoClass : classes) {
-        for (CpoAttribute att : getAttributes(cpoClass,  conn)) {
+        for (CpoAttribute att : getAttributes(cpoClass, conn)) {
           cpoClass.addAttribute(att);
         }
 
@@ -144,7 +135,6 @@ public class ConvertSQLToXML extends AbstractMojo {
 
       // save to file
       cpoMetaDataDocument.save(new File(TARGET, CPO_META_DATA_XML), XmlBeansHelper.getXmlOptions());
-
     } catch (Exception ex) {
       getLog().error("Exception caught", ex);
       throw new MojoExecutionException(ex.getMessage(), ex);
@@ -160,7 +150,7 @@ public class ConvertSQLToXML extends AbstractMojo {
         }
       }
     }
-	}
+  }
 
   private List<CpoClass> getClasses(Connection conn) throws SQLException {
     List<CpoClass> classes = new ArrayList<>();
@@ -240,7 +230,7 @@ public class ConvertSQLToXML extends AbstractMojo {
         cpoAttribute.setDbColumn(rs.getString(5));
         cpoAttribute.setTransformClassName(rs.getString(6));
 
-        if (cpoAttribute.getTransformClassName()!=null) {
+        if (cpoAttribute.getTransformClassName() != null) {
           try {
             cpoAttribute.loadRunTimeInfo(metaDescriptor, null);
           } catch (Exception e) {

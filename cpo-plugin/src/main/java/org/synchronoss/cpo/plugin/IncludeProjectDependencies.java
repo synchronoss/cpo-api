@@ -21,6 +21,7 @@
 package org.synchronoss.cpo.plugin;
 
 import org.codehaus.classworlds.ClassRealm;
+import org.codehaus.plexus.component.annotations.*;
 import org.codehaus.plexus.component.configurator.*;
 import org.codehaus.plexus.component.configurator.converters.composite.ObjectWithFieldsConverter;
 import org.codehaus.plexus.component.configurator.converters.special.ClassRealmConverter;
@@ -34,12 +35,8 @@ import java.util.*;
 
 /**
  * A custom ComponentConfigurator which adds the project's runtime classpath elements
- *
- * @plexus.component role="org.codehaus.plexus.component.configurator.ComponentConfigurator"
- * role-hint="include-project-dependencies"
- * @plexus.requirement role="org.codehaus.plexus.component.configurator.converters.lookup.ConverterLookup"
- * role-hint="default"
  */
+@Component ( role = ComponentConfigurator.class, hint = "include-project-dependencies" )
 public class IncludeProjectDependencies extends AbstractComponentConfigurator {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(IncludeProjectDependencies.class);

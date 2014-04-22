@@ -56,16 +56,16 @@ digraph G {
 	c27221:p -> c27359:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
 	// org.synchronoss.cpo.core.cpoCoreMeta.impl.CtFunctionGroupImpl DEPEND org.synchronoss.cpo.core.cpoCoreMeta.CtFunction
 	c27234:p -> c27221:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
+	// org.synchronoss.cpo.core.cpoCoreMeta.impl.CtFunctionGroupImpl DEPEND org.synchronoss.cpo.core.cpoCoreMeta.StFunctionGroupType.Enum
+	c27234:p -> c27213:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
+	// org.synchronoss.cpo.core.cpoCoreMeta.impl.CtFunctionGroupImpl DEPEND org.synchronoss.cpo.core.cpoCoreMeta.StFunctionGroupType
+	c27234:p -> c27212:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
 	// org.synchronoss.cpo.core.cpoCoreMeta.impl.CtFunctionGroupImpl DEPEND org.synchronoss.cpo.core.cpoCoreMeta.CtFunction
 	c27234:p -> c27221:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
 	// org.synchronoss.cpo.core.cpoCoreMeta.impl.CtFunctionGroupImpl DEPEND org.apache.xmlbeans.XmlString
 	c27234:p -> c27359:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
 	// org.synchronoss.cpo.core.cpoCoreMeta.impl.CtFunctionGroupImpl DEPEND org.synchronoss.cpo.core.cpoCoreMeta.CtFunction
 	c27234:p -> c27221:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
-	// org.synchronoss.cpo.core.cpoCoreMeta.impl.CtFunctionGroupImpl DEPEND org.synchronoss.cpo.core.cpoCoreMeta.StFunctionGroupType.Enum
-	c27234:p -> c27213:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
-	// org.synchronoss.cpo.core.cpoCoreMeta.impl.CtFunctionGroupImpl DEPEND org.synchronoss.cpo.core.cpoCoreMeta.StFunctionGroupType
-	c27234:p -> c27212:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
 	// org.apache.xmlbeans.XmlString
 	c27359 [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="http://java.sun.com/j2se/1.4.2/docs/api/org/apache/xmlbeans/XmlString.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">

@@ -20,7 +20,7 @@ CQL is used for Cassandra, and XPath is used for XML. Each language consists of 
 data in the datastore. CPO provides the means to map POJOs into the parameters of these expressions prior to execution and then map the results
 of the executed expressions into one POJO or a java.util.List of POJOs
 
-cpo-api has a companion project berryware/cpo-util which is a utility program for managing cpo's xml configuration file.
+cpo-api has a companion project cpo-org/cpo-util which is a utility program for managing cpo's xml configuration file.
 
 CPO is well suited for use in libraries that are later included in larger programs. The larger program will be able to refer to include the
 libraries' cpo configuration into its own and can overwrite class level configurations by taking advantage of CPO's polymorphic configuration

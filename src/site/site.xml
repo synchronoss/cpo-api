@@ -23,6 +23,11 @@
 -->
 <project>
   <publishDate position="left" format="MM-dd-yyyy hh:mm:ss a"/>
+  <skin>
+    <groupId>org.apache.maven.skins</groupId>
+    <artifactId>maven-fluido-skin</artifactId>
+    <version>1.3.1</version>
+  </skin>
   <bannerLeft>
     <name>CPO</name>
     <href>/</href>
@@ -33,14 +38,14 @@
   </bannerRight>
   <body>
     <links>
-      <item name="GitHub Project" href="http://github.com/berryware/cpo-api"/>
+      <item name="GitHub Project" href="http://github.com/cpo-org/cpo-api"/>
       <item name="Continuous Builds" href="http://continuous.synchronoss.net:8111/viewType.html?buildTypeId=bt2"/>
     </links>
     <menu ref="parent" inherit="top" />
     <menu ref="modules" inherit="top" />
     <menu ref="reports" inherit="top" />
     <menu name="Related Links" inherit="top">
-      <item name="CPO Util" href="http://berryware.github.io/cpo-util/"/>
+      <item name="CPO Util" href="http://cpo-org.github.io/cpo-util/"/>
     </menu>
   </body>
 </project>

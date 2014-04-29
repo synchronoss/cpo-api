@@ -8,26 +8,26 @@ digraph G {
 	edge [fontname="Helvetica",fontsize=10,labelfontname="Helvetica",labelfontsize=10];
 	node [fontname="Helvetica",fontsize=10,shape=plaintext];
 	// org.synchronoss.cpo.cassandra.ChildValueObject
-	c2240 [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./ChildValueObject.html">
+	c2404 [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./ChildValueObject.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 			<tr><td> ChildValueObject </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=9.0];
 	// org.synchronoss.cpo.cassandra.InheritanceTest
-	c2243 [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./InheritanceTest.html">
+	c2405 [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./InheritanceTest.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 			<tr><td> InheritanceTest </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=9.0];
 	// org.synchronoss.cpo.cassandra.ValueObject
-	c2248 [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ValueObject.html">
+	c2414 [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ValueObject.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 			<tr><td> ValueObject </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=9.0];
 	//org.synchronoss.cpo.cassandra.ChildValueObject extends org.synchronoss.cpo.cassandra.ValueObject
-	c2248:p -> c2240:p [dir=back,arrowtail=empty];
+	c2414:p -> c2404:p [dir=back,arrowtail=empty];
 	// org.synchronoss.cpo.cassandra.InheritanceTest NAVASSOC org.synchronoss.cpo.cassandra.ChildValueObject
-	c2243:p -> c2240:p [taillabel="", label="", headlabel="*", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
+	c2405:p -> c2404:p [taillabel="", label="", headlabel="*", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
 }
 

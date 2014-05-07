@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<pmd version="4.3" timestamp="2014-04-29T02:08:28.888">
-<file name="/home/devtools/teamcity-agent/work/d3124324d56a95aa/cpo-cassandra/src/main/java/org/synchronoss/cpo/cassandra/CassandraBoundStatementFactory.java">
+<pmd version="4.3" timestamp="2014-05-07T08:02:40.780">
+<file name="/home/devtools/bamboo-agent-home/xml-data/build-dir/CPO-APISD-JOB1/cpo-cassandra/src/main/java/org/synchronoss/cpo/cassandra/CassandraBoundStatementFactory.java">
 <violation beginline="57" endline="57" begincolumn="31" endcolumn="41" rule="UnusedPrivateField" ruleset="Unused Code Rules" package="org.synchronoss.cpo.cassandra" class="CassandraBoundStatementFactory" variable="releasibles" externalInfoUrl="http://pmd.sourceforge.net/rules/unusedcode.html#UnusedPrivateField" priority="3">
 Avoid unused private fields such as 'releasibles'.
 </violation>
@@ -14,12 +14,12 @@ Avoid unused private fields such as 'ORDERBY_MARKER'.
 Avoid unused constructor parameters such as 'cassandraCpoAdapter'.
 </violation>
 </file>
-<file name="/home/devtools/teamcity-agent/work/d3124324d56a95aa/cpo-cassandra/src/main/java/org/synchronoss/cpo/cassandra/CassandraCpoAdapter.java">
+<file name="/home/devtools/bamboo-agent-home/xml-data/build-dir/CPO-APISD-JOB1/cpo-cassandra/src/main/java/org/synchronoss/cpo/cassandra/CassandraCpoAdapter.java">
 <violation beginline="2170" endline="2170" begincolumn="17" endcolumn="27" rule="UnusedLocalVariable" ruleset="Unused Code Rules" package="org.synchronoss.cpo.cassandra" class="CassandraCpoAdapter" variable="cpoFunction" externalInfoUrl="http://pmd.sourceforge.net/rules/unusedcode.html#UnusedLocalVariable" priority="3">
 Avoid unused local variables such as 'cpoFunction'.
 </violation>
 </file>
-<file name="/home/devtools/teamcity-agent/work/d3124324d56a95aa/cpo-cassandra/src/main/java/org/synchronoss/cpo/cassandra/ClusterDataSource.java">
+<file name="/home/devtools/bamboo-agent-home/xml-data/build-dir/CPO-APISD-JOB1/cpo-cassandra/src/main/java/org/synchronoss/cpo/cassandra/ClusterDataSource.java">
 <violation beginline="35" endline="35" begincolumn="19" endcolumn="25" rule="UnusedPrivateField" ruleset="Unused Code Rules" package="org.synchronoss.cpo.cassandra" class="ClusterDataSource" variable="cluster" externalInfoUrl="http://pmd.sourceforge.net/rules/unusedcode.html#UnusedPrivateField" priority="3">
 Avoid unused private fields such as 'cluster'.
 </violation>
@@ -27,7 +27,7 @@ Avoid unused private fields such as 'cluster'.
 Avoid unused private fields such as 'keySpace'.
 </violation>
 </file>
-<file name="/home/devtools/teamcity-agent/work/d3124324d56a95aa/cpo-cassandra/src/main/java/org/synchronoss/cpo/cassandra/meta/CassandraCpoAttribute.java">
+<file name="/home/devtools/bamboo-agent-home/xml-data/build-dir/CPO-APISD-JOB1/cpo-cassandra/src/main/java/org/synchronoss/cpo/cassandra/meta/CassandraCpoAttribute.java">
 <violation beginline="39" endline="39" begincolumn="31" endcolumn="36" rule="UnusedPrivateField" ruleset="Unused Code Rules" package="org.synchronoss.cpo.cassandra.meta" class="CassandraCpoAttribute" variable="logger" externalInfoUrl="http://pmd.sourceforge.net/rules/unusedcode.html#UnusedPrivateField" priority="3">
 Avoid unused private fields such as 'logger'.
 </violation>
@@ -35,12 +35,12 @@ Avoid unused private fields such as 'logger'.
 Avoid unused private fields such as 'transformPSOutMethod'.
 </violation>
 </file>
-<file name="/home/devtools/teamcity-agent/work/d3124324d56a95aa/cpo-cassandra/src/main/java/org/synchronoss/cpo/cassandra/meta/CassandraMethodMapEntry.java">
+<file name="/home/devtools/bamboo-agent-home/xml-data/build-dir/CPO-APISD-JOB1/cpo-cassandra/src/main/java/org/synchronoss/cpo/cassandra/meta/CassandraMethodMapEntry.java">
 <violation beginline="36" endline="36" begincolumn="31" endcolumn="36" rule="UnusedPrivateField" ruleset="Unused Code Rules" package="org.synchronoss.cpo.cassandra.meta" class="CassandraMethodMapEntry" variable="logger" externalInfoUrl="http://pmd.sourceforge.net/rules/unusedcode.html#UnusedPrivateField" priority="3">
 Avoid unused private fields such as 'logger'.
 </violation>
 </file>
-<file name="/home/devtools/teamcity-agent/work/d3124324d56a95aa/cpo-cassandra/src/main/java/org/synchronoss/cpo/cassandra/meta/CassandraMethodMapper.java">
+<file name="/home/devtools/bamboo-agent-home/xml-data/build-dir/CPO-APISD-JOB1/cpo-cassandra/src/main/java/org/synchronoss/cpo/cassandra/meta/CassandraMethodMapper.java">
 <violation beginline="99" endline="108" begincolumn="18" endcolumn="3" rule="UnusedFormalParameter" ruleset="Unused Code Rules" package="org.synchronoss.cpo.cassandra.meta" class="CassandraMethodMapper" externalInfoUrl="http://pmd.sourceforge.net/rules/unusedcode.html#UnusedFormalParameter" priority="3">
 Avoid unused method parameters such as 'methodType'.
 </violation>

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <pmd-cpd>
 <duplication lines="32" tokens="113">
-<file line="59" path="/home/devtools/teamcity-agent/work/d3124324d56a95aa/cpo-core/src/main/java/org/synchronoss/cpo/CpoByteArrayInputStream.java"/>
-<file line="59" path="/home/devtools/teamcity-agent/work/d3124324d56a95aa/cpo-core/src/main/java/org/synchronoss/cpo/CpoCharArrayReader.java"/>
+<file line="59" path="/home/devtools/bamboo-agent-home/xml-data/build-dir/CPO-APISD-JOB1/cpo-core/src/main/java/org/synchronoss/cpo/CpoByteArrayInputStream.java"/>
+<file line="59" path="/home/devtools/bamboo-agent-home/xml-data/build-dir/CPO-APISD-JOB1/cpo-core/src/main/java/org/synchronoss/cpo/CpoCharArrayReader.java"/>
 <codefragment>
 <![CDATA[
   protected byte[] getBuffer() {
@@ -41,8 +41,8 @@
 </codefragment>
 </duplication>
 <duplication lines="16" tokens="105">
-<file line="66" path="/home/devtools/teamcity-agent/work/d3124324d56a95aa/cpo-core/src/main/java/org/synchronoss/cpo/meta/bean/CpoClassBean.java"/>
-<file line="78" path="/home/devtools/teamcity-agent/work/d3124324d56a95aa/cpo-core/src/main/java/org/synchronoss/cpo/meta/bean/CpoFunctionGroupBean.java"/>
+<file line="66" path="/home/devtools/bamboo-agent-home/xml-data/build-dir/CPO-APISD-JOB1/cpo-core/src/main/java/org/synchronoss/cpo/meta/bean/CpoClassBean.java"/>
+<file line="78" path="/home/devtools/bamboo-agent-home/xml-data/build-dir/CPO-APISD-JOB1/cpo-core/src/main/java/org/synchronoss/cpo/meta/bean/CpoFunctionGroupBean.java"/>
 <codefragment>
 <![CDATA[
     if (getName() != null ? !getName().equals(that.getName()) : that.getName() != null) {

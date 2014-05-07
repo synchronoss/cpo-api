@@ -1,8 +1,8 @@
 <map id="G" name="G">
-<area shape="rect" id="c53834" href="./IncludeProjectDependencies.html" title="&lt;TABLE&gt;" alt="" coords="373,113,550,137"/>
-<area shape="rect" id="c53840" href="http://java.sun.com/j2se/1.4.2/docs/api/org/codehaus/plexus/configuration/PlexusConfiguration.html" title="&lt;TABLE&gt;" alt="" coords="15,203,177,253"/>
-<area shape="rect" id="c53841" href="http://java.sun.com/j2se/1.4.2/docs/api/org/codehaus/plexus/component/configurator/ConfigurationListener.html" title="&lt;TABLE&gt;" alt="" coords="221,203,427,253"/>
+<area shape="rect" id="c53834" href="./IncludeProjectDependencies.html" title="&lt;TABLE&gt;" alt="" coords="383,113,561,137"/>
+<area shape="rect" id="c53840" href="http://java.sun.com/j2se/1.4.2/docs/api/org/codehaus/plexus/component/configurator/ConfigurationListener.html" title="&lt;TABLE&gt;" alt="" coords="16,203,221,253"/>
+<area shape="rect" id="c53841" href="http://java.sun.com/j2se/1.4.2/docs/api/org/codehaus/plexus/configuration/PlexusConfiguration.html" title="&lt;TABLE&gt;" alt="" coords="266,203,427,253"/>
 <area shape="rect" id="c53842" href="http://java.sun.com/j2se/1.4.2/docs/api/org/codehaus/plexus/component/configurator/expression/ExpressionEvaluator.html" title="&lt;TABLE&gt;" alt="" coords="472,203,725,253"/>
 <area shape="rect" id="c53845" href="http://java.sun.com/j2se/1.4.2/docs/api/org/codehaus/classworlds/ClassRealm.html" title="&lt;TABLE&gt;" alt="" coords="770,203,897,253"/>
-<area shape="rect" id="c53839" href="http://java.sun.com/j2se/1.4.2/docs/api/org/codehaus/plexus/component/configurator/AbstractComponentConfigurator.html" title="&lt;TABLE&gt;" alt="" coords="359,11,564,47"/>
+<area shape="rect" id="c53839" href="http://java.sun.com/j2se/1.4.2/docs/api/org/codehaus/plexus/component/configurator/AbstractComponentConfigurator.html" title="&lt;TABLE&gt;" alt="" coords="369,11,575,47"/>
 </map>

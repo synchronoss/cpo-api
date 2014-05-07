@@ -90,27 +90,27 @@ digraph G {
 	c37519:p -> c37622:p [dir=back,arrowtail=empty];
 	// org.synchronoss.cpo.jdbc.JdbcCpoAdapter NAVASSOC org.synchronoss.cpo.jdbc.meta.JdbcCpoMetaDescriptor
 	c37615:p -> c37622:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
-	// org.synchronoss.cpo.jdbc.JdbcCpoAdapter DEPEND org.synchronoss.cpo.CpoOrderBy
-	c37615:p -> c37486:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
 	// org.synchronoss.cpo.jdbc.JdbcCpoAdapter DEPEND org.synchronoss.cpo.CpoResultSet<E>
 	c37615:p -> c37480:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
 	// org.synchronoss.cpo.jdbc.JdbcCpoAdapter DEPEND org.synchronoss.cpo.jdbc.meta.JdbcCpoMetaDescriptor
 	c37615:p -> c37622:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
-	// org.synchronoss.cpo.jdbc.JdbcCpoAdapter DEPEND org.synchronoss.cpo.CpoResultSet<E>
-	c37615:p -> c37480:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
-	// org.synchronoss.cpo.jdbc.JdbcCpoAdapter DEPEND org.synchronoss.cpo.CpoTrxAdapter
-	c37615:p -> c37492:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
+	// org.synchronoss.cpo.jdbc.JdbcCpoAdapter DEPEND org.synchronoss.cpo.CpoOrderBy
+	c37615:p -> c37486:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
 	// org.synchronoss.cpo.jdbc.JdbcCpoAdapter DEPEND org.synchronoss.cpo.CpoResultSet<E>
 	c37615:p -> c37480:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
 	// org.synchronoss.cpo.jdbc.JdbcCpoAdapter DEPEND org.synchronoss.cpo.meta.CpoMetaDescriptor
 	c37615:p -> c37519:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
-	// org.synchronoss.cpo.jdbc.JdbcCpoAdapter DEPEND org.synchronoss.cpo.DataSourceInfo<T>
-	c37615:p -> c37493:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
-	// org.synchronoss.cpo.jdbc.JdbcCpoAdapter DEPEND org.synchronoss.cpo.DataSourceInfo<T>
-	c37615:p -> c37493:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
-	// org.synchronoss.cpo.jdbc.JdbcCpoAdapter DEPEND org.synchronoss.cpo.DataSourceInfo<T>
-	c37615:p -> c37493:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
 	// org.synchronoss.cpo.jdbc.JdbcCpoAdapter DEPEND org.synchronoss.cpo.CpoWhere
 	c37615:p -> c37481:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
+	// org.synchronoss.cpo.jdbc.JdbcCpoAdapter DEPEND org.synchronoss.cpo.CpoTrxAdapter
+	c37615:p -> c37492:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
+	// org.synchronoss.cpo.jdbc.JdbcCpoAdapter DEPEND org.synchronoss.cpo.DataSourceInfo<T>
+	c37615:p -> c37493:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
+	// org.synchronoss.cpo.jdbc.JdbcCpoAdapter DEPEND org.synchronoss.cpo.DataSourceInfo<T>
+	c37615:p -> c37493:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
+	// org.synchronoss.cpo.jdbc.JdbcCpoAdapter DEPEND org.synchronoss.cpo.DataSourceInfo<T>
+	c37615:p -> c37493:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
+	// org.synchronoss.cpo.jdbc.JdbcCpoAdapter DEPEND org.synchronoss.cpo.CpoResultSet<E>
+	c37615:p -> c37480:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
 }
 

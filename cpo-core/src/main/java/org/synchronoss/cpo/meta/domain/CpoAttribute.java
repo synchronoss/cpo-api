@@ -32,6 +32,8 @@ import java.util.*;
 
 public class CpoAttribute extends CpoAttributeBean {
 
+  private static final long serialVersionUID = 1L;
+
   private static final Logger logger = LoggerFactory.getLogger(CpoAttribute.class);
   protected static final String TRANSFORM_IN_NAME = "transformIn";
   protected static final String TRANSFORM_OUT_NAME = "transformOut";
@@ -49,7 +51,7 @@ public class CpoAttribute extends CpoAttributeBean {
   public CpoAttribute() {
   }
 
-  public CpoTransform getCpoTransform() {
+  public <D, J> CpoTransform<D, J> getCpoTransform() {
     return cpoTransform;
   }
 
@@ -61,13 +63,13 @@ public class CpoAttribute extends CpoAttributeBean {
     return transformOutMethod;
   }
 
-  public Class getSetterParamType() {
+  public Class<?> getSetterParamType() {
     return getter_.getReturnType();
   }
 
-  public Class getGetterReturnType() {
+  public Class<?> getGetterReturnType() {
     return getter_.getReturnType();
-   }
+  }
 
   protected Method getGetter() {
     return getter_;
@@ -108,7 +110,6 @@ public class CpoAttribute extends CpoAttributeBean {
   public int getDataTypeInt() {
     return this.dataTypeInt;
   }
-
 
   protected List<Method> findMethods(Class clazz, String methodName, int args, boolean hasReturn) throws CpoException {
     List<Method> retMethods = new ArrayList<Method>();
@@ -151,7 +152,6 @@ public class CpoAttribute extends CpoAttributeBean {
     } catch (InvocationTargetException ite) {
       localLogger.debug("Error Invoking Setter Method: " + ExceptionHelper.getLocalizedMessage(ite));
     }
-
   }
 
   public Object invokeGetter(Object obj) throws CpoException {
@@ -178,12 +178,12 @@ public class CpoAttribute extends CpoAttributeBean {
     logger.debug("========================");
   }
 
-  static public boolean isPrimitiveAssignableFrom(Class clazz, Class paramClass) {
+  static public boolean isPrimitiveAssignableFrom(Class<?> clazz, Class<?> paramClass) {
 
     // check to see if one is primitive and one is a possible wrapper
     if (clazz.isPrimitive() ^ paramClass.isPrimitive()) {
       // identify the prim and the wrapper
-      Class primClass, objClass;
+      Class<?> primClass, objClass;
       if (clazz.isPrimitive()) {
         primClass = clazz;
         objClass = paramClass;
@@ -196,8 +196,8 @@ public class CpoAttribute extends CpoAttributeBean {
       if (objClass.getSimpleName().toLowerCase().startsWith(primClass.getSimpleName())) {
         // go through the constructors of the wrapper to see if there one with a parameter type
         // that is the same as the primitive
-        for (Constructor ctor : objClass.getConstructors()) {
-          Class[] types = ctor.getParameterTypes();
+        for (Constructor<?> ctor : objClass.getConstructors()) {
+          Class<?>[] types = ctor.getParameterTypes();
           if (types.length > 0 && types[0].isAssignableFrom(primClass)) {
             return true;
           }
@@ -210,7 +210,7 @@ public class CpoAttribute extends CpoAttributeBean {
     return false;
   }
 
-  public void loadRunTimeInfo(CpoMetaDescriptor metaDescriptor, CpoClass cpoClass) throws CpoException {
+  public void loadRunTimeInfo(CpoMetaDescriptor metaDescriptor, Class<?> metaClass) throws CpoException {
     StringBuilder failedMessage = new StringBuilder();
     setGetterName(buildMethodName("get", getJavaName()));
     setSetterName(buildMethodName("set", getJavaName()));
@@ -220,11 +220,11 @@ public class CpoAttribute extends CpoAttributeBean {
     } catch (Exception ce2) {
       failedMessage.append(ce2.getMessage());
     }
-    if (cpoClass != null) {
+    if (metaClass != null) {
       try {
-        List<Method> methods = findMethods(cpoClass.getMetaClass(), getGetterName(), 0, true);
-        if (methods.isEmpty()){
-          failedMessage.append("loadRunTimeInfo: Could not find a Getter:" + getGetterName() + "(" + cpoClass.getName() + ")");
+        List<Method> methods = findMethods(metaClass, getGetterName(), 0, true);
+        if (methods.isEmpty()) {
+          failedMessage.append("loadRunTimeInfo: Could not find a Getter:" + getGetterName() + "(" + metaClass.getName() + ")");
         } else {
           setGetter(methods.get(0));
         }
@@ -232,14 +232,14 @@ public class CpoAttribute extends CpoAttributeBean {
         failedMessage.append(ce1.getMessage());
       }
       try {
-        Class actualClass = getGetterReturnType();
+        Class<?> actualClass = getGetterReturnType();
 
-        for (Method setter : findMethods(cpoClass.getMetaClass(), getSetterName(), 1, false)) {
+        for (Method setter : findMethods(metaClass, getSetterName(), 1, false)) {
           if (setter.getParameterTypes()[0].isAssignableFrom(actualClass) || isPrimitiveAssignableFrom(setter.getParameterTypes()[0], actualClass)) {
             setSetter(setter);
           }
         }
-        if (getSetter()==null){
+        if (getSetter() == null) {
           failedMessage.append("loadRunTimeInfo: Could not find a Setter:" + getSetterName() + "(" + actualClass.getName() + ")");
         }
       } catch (Exception ce2) {
@@ -253,7 +253,7 @@ public class CpoAttribute extends CpoAttributeBean {
 
   protected void initTransformClass(CpoMetaDescriptor metaDescriptor) throws CpoException {
     String className = getTransformClassName();
-    Class<?> transformClass = null;
+    Class<?> transformClass;
     Logger localLogger = className == null ? logger : LoggerFactory.getLogger(className);
 
     if (className != null && className.length() > 0) {

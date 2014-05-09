@@ -206,7 +206,7 @@ public class CpoAttribute extends CpoAttributeBean {
     return false;
   }
 
-  public void loadRunTimeInfo(CpoMetaDescriptor metaDescriptor, CpoClass cpoClass) throws CpoException {
+  public void loadRunTimeInfo(CpoMetaDescriptor metaDescriptor, Class<?> metaClass) throws CpoException {
     StringBuilder failedMessage = new StringBuilder();
     setGetterName(buildMethodName("get", getJavaName()));
     setSetterName(buildMethodName("set", getJavaName()));
@@ -216,11 +216,11 @@ public class CpoAttribute extends CpoAttributeBean {
     } catch (Exception ce2) {
       failedMessage.append(ce2.getMessage());
     }
-    if (cpoClass != null) {
+    if (metaClass != null) {
       try {
-        List<Method> methods = findMethods(cpoClass.getMetaClass(), getGetterName(), 0, true);
+        List<Method> methods = findMethods(metaClass, getGetterName(), 0, true);
         if (methods.isEmpty()) {
-          failedMessage.append("loadRunTimeInfo: Could not find a Getter:" + getGetterName() + "(" + cpoClass.getName() + ")");
+          failedMessage.append("loadRunTimeInfo: Could not find a Getter:" + getGetterName() + "(" + metaClass.getName() + ")");
         } else {
           setGetter(methods.get(0));
         }
@@ -230,7 +230,7 @@ public class CpoAttribute extends CpoAttributeBean {
       try {
         Class<?> actualClass = getGetterReturnType();
 
-        for (Method setter : findMethods(cpoClass.getMetaClass(), getSetterName(), 1, false)) {
+        for (Method setter : findMethods(metaClass, getSetterName(), 1, false)) {
           if (setter.getParameterTypes()[0].isAssignableFrom(actualClass) || isPrimitiveAssignableFrom(setter.getParameterTypes()[0], actualClass)) {
             setSetter(setter);
           }

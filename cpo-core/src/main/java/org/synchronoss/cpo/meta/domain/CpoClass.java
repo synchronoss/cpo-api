@@ -54,9 +54,9 @@ public abstract class CpoClass extends CpoClassBean implements Comparable<CpoCla
   }
 
   public abstract void addDataNameToMap(String dataName, CpoAttribute cpoAttribute);
-  
+
   public abstract void removeDataNameFromMap(String dataName);
-  
+
   public abstract CpoAttribute getAttributeData(String dataName);
 
   protected Map<String, CpoAttribute> getDataMap() {
@@ -167,17 +167,21 @@ public abstract class CpoClass extends CpoClassBean implements Comparable<CpoCla
 
   synchronized public void loadRunTimeInfo(CpoMetaDescriptor metaDescriptor) throws CpoException {
     if (metaClass==null) {
+      Class<?> tmpMetaClass = null;
+
       try {
         logger.debug("Loading runtimeinfo for "+getName());
-        metaClass = CpoClassLoader.forName(getName());
+        tmpMetaClass = CpoClassLoader.forName(getName());
       } catch (ClassNotFoundException cnfe) {
         throw new CpoException("Class not found: " + getName() + ": " + ExceptionHelper.getLocalizedMessage(cnfe));
       }
 
       for (CpoAttribute attribute : javaMap.values()) {
-        attribute.loadRunTimeInfo(metaDescriptor, this);
+        attribute.loadRunTimeInfo(metaDescriptor, tmpMetaClass);
       }
       logger.debug("Loaded runtimeinfo for "+getName());
+
+      metaClass = tmpMetaClass;
     }
   }
 
@@ -196,7 +200,7 @@ public abstract class CpoClass extends CpoClassBean implements Comparable<CpoCla
   public String toStringFull() {
     return super.toString();
   }
-  
+
   public void emptyMaps() {
     javaMap.clear();
     dataMap.clear();

@@ -41,10 +41,10 @@ digraph G {
 	c48405:p -> c48424:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
 	// org.synchronoss.cpo.meta.CpoMetaDescriptor DEPEND org.synchronoss.cpo.exporter.MetaXmlObjectExporter
 	c48278:p -> c48269:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
-	// org.synchronoss.cpo.cassandra.CassandraCpoAdapter DEPEND org.synchronoss.cpo.meta.CpoMetaDescriptor
-	c48405:p -> c48278:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
 	// org.synchronoss.cpo.cassandra.CassandraCpoAdapter DEPEND org.synchronoss.cpo.cassandra.meta.CassandraCpoMetaDescriptor
 	c48405:p -> c48424:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
+	// org.synchronoss.cpo.cassandra.CassandraCpoAdapter DEPEND org.synchronoss.cpo.meta.CpoMetaDescriptor
+	c48405:p -> c48278:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
 	// org.synchronoss.cpo.cassandra.meta.CassandraCpoMetaDescriptor DEPEND org.synchronoss.cpo.exporter.MetaXmlObjectExporter
 	c48424:p -> c48269:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
 }

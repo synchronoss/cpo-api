@@ -27,7 +27,7 @@
   <artifactId>cpo</artifactId>
   <name>cpo</name>
   <packaging>pom</packaging>
-  <version>5.1.1-SNAPSHOT</version>
+  <version>5.1.1</version>
   <parent>
     <groupId>org.sonatype.oss</groupId>
     <artifactId>oss-parent</artifactId>
@@ -89,7 +89,7 @@
     <connection>scm:git:git@github.com:cpo-org/cpo-api.git</connection>
     <developerConnection>scm:git:git@github.com:cpo-org/cpo-api.git</developerConnection>
     <url>https://github.com/cpo-org/cpo-api</url>
-    <tag>HEAD</tag>
+    <tag>cpo-5.1.1</tag>
   </scm>
   <build>
     <resources>

@@ -66,10 +66,10 @@ digraph G {
 	c23070:p -> c23108:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
 	// org.synchronoss.cpo.meta.AbstractCpoMetaAdapter DEPEND org.synchronoss.cpo.core.cpoCoreMeta.CpoMetaDataDocument
 	c23078:p -> c23108:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
-	// org.synchronoss.cpo.meta.CpoMetaDescriptor DEPEND org.synchronoss.cpo.core.cpoCoreMeta.CpoMetaDataDocument
-	c23079:p -> c23108:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
 	// org.synchronoss.cpo.meta.CpoMetaDescriptor DEPEND org.synchronoss.cpo.exporter.MetaXmlObjectExporter
 	c23079:p -> c23070:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
+	// org.synchronoss.cpo.meta.CpoMetaDescriptor DEPEND org.synchronoss.cpo.core.cpoCoreMeta.CpoMetaDataDocument
+	c23079:p -> c23108:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
 	// org.apache.xmlbeans.XmlObject
 	c23252 [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="http://java.sun.com/j2se/1.4.2/docs/api/org/apache/xmlbeans/XmlObject.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">

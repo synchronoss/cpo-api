@@ -71,13 +71,13 @@ digraph G {
 	c13402:p -> c13396:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
 	// org.synchronoss.cpo.cache.CpoAdapterCache DEPEND org.synchronoss.cpo.CpoAdapter
 	c13440:p -> c13377:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
-	// org.synchronoss.cpo.jdbc.JdbcCpoAdapter DEPEND org.synchronoss.cpo.CpoOrderBy
-	c13514:p -> c13385:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
 	// org.synchronoss.cpo.jdbc.JdbcCpoAdapter DEPEND org.synchronoss.cpo.CpoWhere
 	c13514:p -> c13380:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
-	// org.synchronoss.cpo.cassandra.CassandraCpoAdapter DEPEND org.synchronoss.cpo.CpoOrderBy
-	c13545:p -> c13385:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
+	// org.synchronoss.cpo.jdbc.JdbcCpoAdapter DEPEND org.synchronoss.cpo.CpoOrderBy
+	c13514:p -> c13385:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
 	// org.synchronoss.cpo.cassandra.CassandraCpoAdapter DEPEND org.synchronoss.cpo.CpoWhere
 	c13545:p -> c13380:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
+	// org.synchronoss.cpo.cassandra.CassandraCpoAdapter DEPEND org.synchronoss.cpo.CpoOrderBy
+	c13545:p -> c13385:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
 }
 

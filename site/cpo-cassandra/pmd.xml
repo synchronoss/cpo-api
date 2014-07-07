@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<pmd version="4.3" timestamp="2014-07-05T02:07:26.167">
+<pmd version="4.3" timestamp="2014-07-07T02:10:12.080">
 <file name="/home/devtools/bamboo-agent-home/xml-data/build-dir/CPO-APISD-JOB1/cpo-cassandra/src/main/java/org/synchronoss/cpo/cassandra/CassandraBoundStatementFactory.java">
 <violation beginline="57" endline="57" begincolumn="31" endcolumn="41" rule="UnusedPrivateField" ruleset="Unused Code Rules" package="org.synchronoss.cpo.cassandra" class="CassandraBoundStatementFactory" variable="releasibles" externalInfoUrl="http://pmd.sourceforge.net/rules/unusedcode.html#UnusedPrivateField" priority="3">
 Avoid unused private fields such as 'releasibles'.

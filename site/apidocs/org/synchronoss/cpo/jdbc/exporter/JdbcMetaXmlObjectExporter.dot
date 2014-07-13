@@ -50,13 +50,13 @@ digraph G {
 	c35584:p -> c35680:p [dir=back,arrowtail=empty,style=dashed];
 	// org.synchronoss.cpo.meta.domain.CpoArgument NAVASSOC org.synchronoss.cpo.meta.domain.CpoAttribute
 	c35604:p -> c35603:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
-	// org.synchronoss.cpo.exporter.CoreMetaXmlObjectExporter DEPEND org.synchronoss.cpo.meta.domain.CpoAttribute
-	c35583:p -> c35603:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
 	// org.synchronoss.cpo.exporter.CoreMetaXmlObjectExporter DEPEND org.synchronoss.cpo.meta.domain.CpoArgument
 	c35583:p -> c35604:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
-	// org.synchronoss.cpo.jdbc.exporter.JdbcMetaXmlObjectExporter DEPEND org.synchronoss.cpo.meta.domain.CpoAttribute
-	c35680:p -> c35603:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
+	// org.synchronoss.cpo.exporter.CoreMetaXmlObjectExporter DEPEND org.synchronoss.cpo.meta.domain.CpoAttribute
+	c35583:p -> c35603:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
 	// org.synchronoss.cpo.jdbc.exporter.JdbcMetaXmlObjectExporter DEPEND org.synchronoss.cpo.meta.domain.CpoArgument
 	c35680:p -> c35604:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
+	// org.synchronoss.cpo.jdbc.exporter.JdbcMetaXmlObjectExporter DEPEND org.synchronoss.cpo.meta.domain.CpoAttribute
+	c35680:p -> c35603:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
 }
 

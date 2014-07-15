@@ -24,9 +24,10 @@ import oracle.sql.BLOB;
 import org.slf4j.*;
 import org.synchronoss.cpo.*;
 import org.synchronoss.cpo.jdbc.*;
+import org.jboss.jca.adapters.jdbc.WrappedConnection;
 
 import java.io.*;
-import java.sql.Blob;
+import java.sql.*;
 import java.util.zip.*;
 
 /**
@@ -47,7 +48,9 @@ public class TransformGZipBlob implements JdbcCpoTransform<Blob, byte[]> {
    * @param cpoAdapter The CpoAdapter for the datasource where the attribute is being retrieved
    * @param parentObject The object that contains the attribute being retrieved.
    * @param The object that represents the datasource object being retrieved
+   *
    * @return The object to be stored in the attribute
+   *
    * @throws CpoException
    */
   @Override
@@ -93,7 +96,9 @@ public class TransformGZipBlob implements JdbcCpoTransform<Blob, byte[]> {
    * @param cpoAdapter The CpoAdapter for the datasource where the attribute is being persisted
    * @param parentObject The object that contains the attribute being persisted.
    * @param attributeObject The object that represents the attribute being persisted.
+   *
    * @return The object to be stored in the datasource
+   *
    * @throws CpoException
    */
   @Override
@@ -111,7 +116,12 @@ public class TransformGZipBlob implements JdbcCpoTransform<Blob, byte[]> {
         os.flush();
         os.close();
 
-        newBlob = BLOB.createTemporary(jpsf.getPreparedStatement().getConnection(), false, BLOB.DURATION_SESSION);
+        Connection connection = jpsf.getPreparedStatement().getConnection();
+        if (connection instanceof WrappedConnection) {
+          WrappedConnection wrappedConnection = (WrappedConnection) connection;
+          connection = wrappedConnection.getUnderlyingConnection();
+        }
+        newBlob = BLOB.createTemporary(connection, false, BLOB.DURATION_SESSION);
         jpsf.AddReleasible(new OracleTemporaryBlob(newBlob));
 
         OutputStream bos = newBlob.setBinaryStream(0);

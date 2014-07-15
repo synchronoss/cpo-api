@@ -144,6 +144,11 @@
   </build>
   <dependencies>
     <dependency>
+      <groupId>org.jboss.ironjacamar</groupId>
+      <artifactId>ironjacamar-jdbc</artifactId>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
       <groupId>org.synchronoss.cpo</groupId>
       <artifactId>cpo-core</artifactId>
       <version>5.1.2-SNAPSHOT</version>

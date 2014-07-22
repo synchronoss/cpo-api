@@ -50,13 +50,13 @@ digraph G {
 	c43965:p -> c44100:p [dir=back,arrowtail=empty,style=dashed];
 	// org.synchronoss.cpo.meta.domain.CpoArgument NAVASSOC org.synchronoss.cpo.meta.domain.CpoAttribute
 	c43985:p -> c43984:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
-	// org.synchronoss.cpo.exporter.CoreMetaXmlObjectExporter DEPEND org.synchronoss.cpo.meta.domain.CpoAttribute
-	c43964:p -> c43984:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
 	// org.synchronoss.cpo.exporter.CoreMetaXmlObjectExporter DEPEND org.synchronoss.cpo.meta.domain.CpoArgument
 	c43964:p -> c43985:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
-	// org.synchronoss.cpo.cassandra.exporter.CassandraMetaXmlObjectExporter DEPEND org.synchronoss.cpo.meta.domain.CpoAttribute
-	c44100:p -> c43984:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
+	// org.synchronoss.cpo.exporter.CoreMetaXmlObjectExporter DEPEND org.synchronoss.cpo.meta.domain.CpoAttribute
+	c43964:p -> c43984:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
 	// org.synchronoss.cpo.cassandra.exporter.CassandraMetaXmlObjectExporter DEPEND org.synchronoss.cpo.meta.domain.CpoArgument
 	c44100:p -> c43985:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
+	// org.synchronoss.cpo.cassandra.exporter.CassandraMetaXmlObjectExporter DEPEND org.synchronoss.cpo.meta.domain.CpoAttribute
+	c44100:p -> c43984:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
 }
 

@@ -25,7 +25,7 @@ import org.synchronoss.cpo.jdbc.JdbcPreparedStatementFactory;
 
 import java.sql.*;
 
-public abstract class TransformBase<D, J> implements JdbcCpoTransform<D, J> {
+public abstract class BaseTransform<D, J> implements JdbcCpoTransform<D, J> {
 
   protected Connection handleConnection(JdbcPreparedStatementFactory jpsf) throws SQLException {
     Connection connection = jpsf.getPreparedStatement().getConnection();

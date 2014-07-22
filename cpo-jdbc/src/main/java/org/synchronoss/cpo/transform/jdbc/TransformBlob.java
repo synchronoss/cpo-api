@@ -35,7 +35,7 @@ import java.sql.Blob;
  *
  * @author david berry
  */
-public class TransformBlob extends TransformBase<Blob, byte[]> {
+public class TransformBlob extends BaseTransform<Blob, byte[]> {
 
   private static final Logger logger = LoggerFactory.getLogger(TransformBlob.class);
 

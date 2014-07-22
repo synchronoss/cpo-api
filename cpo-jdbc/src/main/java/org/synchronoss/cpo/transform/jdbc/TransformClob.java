@@ -33,7 +33,7 @@ import java.sql.*;
  *
  * @author david berry
  */
-public class TransformClob extends TransformBase<Clob, char[]> {
+public class TransformClob extends BaseTransform<Clob, char[]> {
 
   private static final Logger logger = LoggerFactory.getLogger(TransformClob.class);
 

@@ -34,7 +34,7 @@ import java.util.zip.*;
  *
  * @author david berry
  */
-public class TransformGZipBlob extends TransformBase<Blob, byte[]> {
+public class TransformGZipBlob extends BaseTransform<Blob, byte[]> {
 
   private static final Logger logger = LoggerFactory.getLogger(TransformGZipBlob.class);
 

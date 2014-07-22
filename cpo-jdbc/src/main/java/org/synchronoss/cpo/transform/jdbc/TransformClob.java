@@ -26,7 +26,7 @@ import org.synchronoss.cpo.CpoException;
 import org.synchronoss.cpo.jdbc.*;
 
 import java.io.*;
-import java.sql.Clob;
+import java.sql.*;
 
 /**
  * Converts a java.sql.Blob from a jdbc datasource to a byte[] and from a byte[] to a java.sql.Blob
@@ -46,8 +46,10 @@ public class TransformClob implements JdbcCpoTransform<Clob, char[]> {
    * @param cpoAdapter The CpoAdapter for the datasource where the attribute is being retrieved
    * @param parentObject The object that contains the attribute being retrieved.
    * @param The object that represents the datasource object being retrieved
+   *
    * @return The object to be stored in the attribute
-   * @throws CpoException
+   *
+   * @throws org.synchronoss.cpo.CpoException
    */
   @Override
   public char[] transformIn(Clob clob) throws CpoException {
@@ -80,8 +82,10 @@ public class TransformClob implements JdbcCpoTransform<Clob, char[]> {
    * @param cpoAdapter The CpoAdapter for the datasource where the attribute is being persisted
    * @param parentObject The object that contains the attribute being persisted.
    * @param attributeObject The object that represents the attribute being persisted.
+   *
    * @return The object to be stored in the datasource
-   * @throws CpoException
+   *
+   * @throws org.synchronoss.cpo.CpoException
    */
   @Override
   public Clob transformOut(JdbcPreparedStatementFactory jpsf, char[] attributeObject) throws CpoException {
@@ -89,7 +93,8 @@ public class TransformClob implements JdbcCpoTransform<Clob, char[]> {
 
     try {
       if (attributeObject != null) {
-        newClob = CLOB.createTemporary(jpsf.getPreparedStatement().getConnection(), false, CLOB.DURATION_SESSION);
+        Connection connection = HandleTemporaryCreation.handleConnection(jpsf);
+        newClob = CLOB.createTemporary(connection, false, CLOB.DURATION_SESSION);
         jpsf.AddReleasible(new OracleTemporaryClob(newClob));
 
         Writer cos = newClob.setCharacterStream(0);

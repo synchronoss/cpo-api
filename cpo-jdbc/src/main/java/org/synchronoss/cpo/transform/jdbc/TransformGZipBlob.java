@@ -24,7 +24,6 @@ import oracle.sql.BLOB;
 import org.slf4j.*;
 import org.synchronoss.cpo.*;
 import org.synchronoss.cpo.jdbc.*;
-import org.jboss.jca.adapters.jdbc.WrappedConnection;
 
 import java.io.*;
 import java.sql.*;
@@ -51,7 +50,7 @@ public class TransformGZipBlob implements JdbcCpoTransform<Blob, byte[]> {
    *
    * @return The object to be stored in the attribute
    *
-   * @throws CpoException
+   * @throws org.synchronoss.cpo.CpoException
    */
   @Override
   public byte[] transformIn(Blob blob) throws CpoException {
@@ -99,7 +98,7 @@ public class TransformGZipBlob implements JdbcCpoTransform<Blob, byte[]> {
    *
    * @return The object to be stored in the datasource
    *
-   * @throws CpoException
+   * @throws org.synchronoss.cpo.CpoException
    */
   @Override
   public Blob transformOut(JdbcPreparedStatementFactory jpsf, byte[] attributeObject) throws CpoException {
@@ -116,11 +115,7 @@ public class TransformGZipBlob implements JdbcCpoTransform<Blob, byte[]> {
         os.flush();
         os.close();
 
-        Connection connection = jpsf.getPreparedStatement().getConnection();
-        if (connection instanceof WrappedConnection) {
-          WrappedConnection wrappedConnection = (WrappedConnection) connection;
-          connection = wrappedConnection.getUnderlyingConnection();
-        }
+        Connection connection = HandleTemporaryCreation.handleConnection(jpsf);
         newBlob = BLOB.createTemporary(connection, false, BLOB.DURATION_SESSION);
         jpsf.AddReleasible(new OracleTemporaryBlob(newBlob));
 

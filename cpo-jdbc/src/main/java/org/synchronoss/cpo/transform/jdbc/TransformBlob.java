@@ -26,7 +26,7 @@ import org.synchronoss.cpo.CpoException;
 import org.synchronoss.cpo.jdbc.*;
 
 import java.io.*;
-import java.sql.Blob;
+import java.sql.*;
 
 /**
  * Converts a java.sql.Blob from a jdbc datasource to a byte[] and
@@ -45,8 +45,10 @@ public class TransformBlob implements JdbcCpoTransform<Blob, byte[]> {
    * @param cpoAdapter The CpoAdapter for the datasource where the attribute is being retrieved
    * @param parentObject The object that contains the attribute being retrieved.
    * @param The object that represents the datasource object being retrieved
+   *
    * @return The object to be stored in the attribute
-   * @throws CpoException
+   *
+   * @throws org.synchronoss.cpo.CpoException
    */
   @Override
   public byte[] transformIn(Blob blob) throws CpoException {
@@ -81,8 +83,10 @@ public class TransformBlob implements JdbcCpoTransform<Blob, byte[]> {
    * @param cpoAdapter The CpoAdapter for the datasource where the attribute is being persisted
    * @param parentObject The object that contains the attribute being persisted.
    * @param attributeObject The object that represents the attribute being persisted.
+   *
    * @return The object to be stored in the datasource
-   * @throws CpoException
+   *
+   * @throws org.synchronoss.cpo.CpoException
    */
   @Override
   public Blob transformOut(JdbcPreparedStatementFactory jpsf, byte[] attributeObject) throws CpoException {
@@ -91,7 +95,8 @@ public class TransformBlob implements JdbcCpoTransform<Blob, byte[]> {
 
     try {
       if (attributeObject != null) {
-        newBlob = BLOB.createTemporary(jpsf.getPreparedStatement().getConnection(), false, BLOB.DURATION_SESSION);
+        Connection connection = HandleTemporaryCreation.handleConnection(jpsf);
+        newBlob = BLOB.createTemporary(connection, false, BLOB.DURATION_SESSION);
         jpsf.AddReleasible(new OracleTemporaryBlob(newBlob));
 
         //OutputStream os = newBlob.getBinaryOutputStream();

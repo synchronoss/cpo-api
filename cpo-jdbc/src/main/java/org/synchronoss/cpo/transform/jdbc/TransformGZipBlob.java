@@ -34,7 +34,7 @@ import java.util.zip.*;
  *
  * @author david berry
  */
-public class TransformGZipBlob implements JdbcCpoTransform<Blob, byte[]> {
+public class TransformGZipBlob extends TransformBase<Blob, byte[]> {
 
   private static final Logger logger = LoggerFactory.getLogger(TransformGZipBlob.class);
 
@@ -114,9 +114,7 @@ public class TransformGZipBlob implements JdbcCpoTransform<Blob, byte[]> {
         os.write(attributeObject);
         os.flush();
         os.close();
-
-        Connection connection = HandleTemporaryCreation.handleConnection(jpsf);
-        newBlob = BLOB.createTemporary(connection, false, BLOB.DURATION_SESSION);
+        newBlob = BLOB.createTemporary(handleConnection(jpsf), false, BLOB.DURATION_SESSION);
         jpsf.AddReleasible(new OracleTemporaryBlob(newBlob));
 
         OutputStream bos = newBlob.setBinaryStream(0);

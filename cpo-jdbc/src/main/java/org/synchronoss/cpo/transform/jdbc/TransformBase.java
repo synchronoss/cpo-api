@@ -25,14 +25,9 @@ import org.synchronoss.cpo.jdbc.JdbcPreparedStatementFactory;
 
 import java.sql.*;
 
-/**
- * User: Shravan S Naidu
- * Date: 22/07/14
- * Time: 11:22 AM
- */
-public class HandleTemporaryCreation {
+public abstract class TransformBase<D, J> implements JdbcCpoTransform<D, J> {
 
-  public static Connection handleConnection(JdbcPreparedStatementFactory jpsf) throws SQLException {
+  protected Connection handleConnection(JdbcPreparedStatementFactory jpsf) throws SQLException {
     Connection connection = jpsf.getPreparedStatement().getConnection();
     if (connection instanceof WrappedConnection) {
       WrappedConnection wrappedConnection = (WrappedConnection) connection;

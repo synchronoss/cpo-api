@@ -26,7 +26,7 @@ import org.synchronoss.cpo.CpoException;
 import org.synchronoss.cpo.jdbc.*;
 
 import java.io.*;
-import java.sql.*;
+import java.sql.Blob;
 
 /**
  * Converts a java.sql.Blob from a jdbc datasource to a byte[] and
@@ -35,7 +35,7 @@ import java.sql.*;
  *
  * @author david berry
  */
-public class TransformBlob implements JdbcCpoTransform<Blob, byte[]> {
+public class TransformBlob extends TransformBase<Blob, byte[]> {
 
   private static final Logger logger = LoggerFactory.getLogger(TransformBlob.class);
 
@@ -95,8 +95,7 @@ public class TransformBlob implements JdbcCpoTransform<Blob, byte[]> {
 
     try {
       if (attributeObject != null) {
-        Connection connection = HandleTemporaryCreation.handleConnection(jpsf);
-        newBlob = BLOB.createTemporary(connection, false, BLOB.DURATION_SESSION);
+        newBlob = BLOB.createTemporary(handleConnection(jpsf), false, BLOB.DURATION_SESSION);
         jpsf.AddReleasible(new OracleTemporaryBlob(newBlob));
 
         //OutputStream os = newBlob.getBinaryOutputStream();

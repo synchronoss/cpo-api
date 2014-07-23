@@ -33,7 +33,7 @@ import java.sql.*;
  *
  * @author david berry
  */
-public class TransformClob extends BaseTransform<Clob, char[]> {
+public class TransformClob implements JdbcCpoTransform<Clob, char[]> {
 
   private static final Logger logger = LoggerFactory.getLogger(TransformClob.class);
 
@@ -93,7 +93,7 @@ public class TransformClob extends BaseTransform<Clob, char[]> {
 
     try {
       if (attributeObject != null) {
-        newClob = CLOB.createTemporary(handleConnection(jpsf), false, CLOB.DURATION_SESSION);
+        newClob = CLOB.createTemporary(jpsf.getPreparedStatement().getConnection().unwrap(java.sql.Connection.class), false, CLOB.DURATION_SESSION);
         jpsf.AddReleasible(new OracleTemporaryClob(newClob));
 
         Writer cos = newClob.setCharacterStream(0);

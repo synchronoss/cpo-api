@@ -35,7 +35,7 @@ import java.sql.Blob;
  *
  * @author david berry
  */
-public class TransformBlob extends BaseTransform<Blob, byte[]> {
+public class TransformBlob implements JdbcCpoTransform<Blob, byte[]> {
 
   private static final Logger logger = LoggerFactory.getLogger(TransformBlob.class);
 
@@ -95,7 +95,7 @@ public class TransformBlob extends BaseTransform<Blob, byte[]> {
 
     try {
       if (attributeObject != null) {
-        newBlob = BLOB.createTemporary(handleConnection(jpsf), false, BLOB.DURATION_SESSION);
+        newBlob = BLOB.createTemporary(jpsf.getPreparedStatement().getConnection().unwrap(java.sql.Connection.class), false, BLOB.DURATION_SESSION);
         jpsf.AddReleasible(new OracleTemporaryBlob(newBlob));
 
         //OutputStream os = newBlob.getBinaryOutputStream();

@@ -26,7 +26,7 @@ import org.synchronoss.cpo.*;
 import org.synchronoss.cpo.jdbc.*;
 
 import java.io.*;
-import java.sql.*;
+import java.sql.Blob;
 import java.util.zip.*;
 
 /**
@@ -34,7 +34,7 @@ import java.util.zip.*;
  *
  * @author david berry
  */
-public class TransformGZipBlob extends BaseTransform<Blob, byte[]> {
+public class TransformGZipBlob implements JdbcCpoTransform<Blob, byte[]> {
 
   private static final Logger logger = LoggerFactory.getLogger(TransformGZipBlob.class);
 
@@ -114,7 +114,7 @@ public class TransformGZipBlob extends BaseTransform<Blob, byte[]> {
         os.write(attributeObject);
         os.flush();
         os.close();
-        newBlob = BLOB.createTemporary(handleConnection(jpsf), false, BLOB.DURATION_SESSION);
+        newBlob = BLOB.createTemporary(jpsf.getPreparedStatement().getConnection().unwrap(java.sql.Connection.class), false, BLOB.DURATION_SESSION);
         jpsf.AddReleasible(new OracleTemporaryBlob(newBlob));
 
         OutputStream bos = newBlob.setBinaryStream(0);

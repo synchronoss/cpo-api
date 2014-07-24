@@ -322,11 +322,6 @@
   <dependencyManagement>
     <dependencies>
       <dependency>
-	    <groupId>org.jboss.ironjacamar</groupId>
-	    <artifactId>ironjacamar-jdbc</artifactId>
-	    <version>1.1.6.Final</version>
-      </dependency>
-      <dependency>
         <groupId>junit</groupId>
         <artifactId>junit</artifactId>
         <version>4.11</version>

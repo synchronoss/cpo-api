@@ -86,12 +86,12 @@ digraph G {
 	c14195:p -> c14049:p [taillabel="", label="", headlabel="*", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
 	// org.synchronoss.cpo.CpoStatementFactory DEPEND org.synchronoss.cpo.meta.domain.CpoAttribute
 	c14051:p -> c14074:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
-	// org.synchronoss.cpo.CpoStatementFactory DEPEND org.slf4j.Logger
-	c14051:p -> c14237:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
 	// org.synchronoss.cpo.CpoStatementFactory DEPEND org.synchronoss.cpo.meta.domain.CpoFunction
 	c14051:p -> c14080:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
 	// org.synchronoss.cpo.CpoStatementFactory DEPEND org.synchronoss.cpo.meta.MethodMapper<T extends org.synchronoss.cpo.meta.MethodMapEntry<?, ?>>
 	c14051:p -> c14068:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
+	// org.synchronoss.cpo.CpoStatementFactory DEPEND org.slf4j.Logger
+	c14051:p -> c14237:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
 	// org.synchronoss.cpo.CpoStatementFactory DEPEND org.synchronoss.cpo.meta.domain.CpoClass
 	c14051:p -> c14078:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
 	// org.synchronoss.cpo.jdbc.JdbcPreparedStatementFactory DEPEND org.synchronoss.cpo.meta.domain.CpoAttribute

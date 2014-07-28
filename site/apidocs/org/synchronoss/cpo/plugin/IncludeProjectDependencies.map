@@ -1,8 +1,8 @@
 <map id="G" name="G">
-<area shape="rect" id="c53834" href="./IncludeProjectDependencies.html" title="&lt;TABLE&gt;" alt="" coords="362,113,539,137"/>
-<area shape="rect" id="c53842" href="http://java.sun.com/j2se/1.4.2/docs/api/org/codehaus/classworlds/ClassRealm.html" title="&lt;TABLE&gt;" alt="" coords="15,203,142,253"/>
-<area shape="rect" id="c53843" href="http://java.sun.com/j2se/1.4.2/docs/api/org/codehaus/plexus/component/configurator/expression/ExpressionEvaluator.html" title="&lt;TABLE&gt;" alt="" coords="187,203,440,253"/>
-<area shape="rect" id="c53844" href="http://java.sun.com/j2se/1.4.2/docs/api/org/codehaus/plexus/component/configurator/ConfigurationListener.html" title="&lt;TABLE&gt;" alt="" coords="485,203,691,253"/>
-<area shape="rect" id="c53845" href="http://java.sun.com/j2se/1.4.2/docs/api/org/codehaus/plexus/configuration/PlexusConfiguration.html" title="&lt;TABLE&gt;" alt="" coords="735,203,897,253"/>
-<area shape="rect" id="c53839" href="http://java.sun.com/j2se/1.4.2/docs/api/org/codehaus/plexus/component/configurator/AbstractComponentConfigurator.html" title="&lt;TABLE&gt;" alt="" coords="348,11,553,47"/>
+<area shape="rect" id="c53834" href="./IncludeProjectDependencies.html" title="&lt;TABLE&gt;" alt="" coords="382,113,559,137"/>
+<area shape="rect" id="c53840" href="http://java.sun.com/j2se/1.4.2/docs/api/org/codehaus/plexus/component/configurator/expression/ExpressionEvaluator.html" title="&lt;TABLE&gt;" alt="" coords="16,203,269,253"/>
+<area shape="rect" id="c53843" href="http://java.sun.com/j2se/1.4.2/docs/api/org/codehaus/classworlds/ClassRealm.html" title="&lt;TABLE&gt;" alt="" coords="314,203,441,253"/>
+<area shape="rect" id="c53844" href="http://java.sun.com/j2se/1.4.2/docs/api/org/codehaus/plexus/configuration/PlexusConfiguration.html" title="&lt;TABLE&gt;" alt="" coords="485,203,646,253"/>
+<area shape="rect" id="c53845" href="http://java.sun.com/j2se/1.4.2/docs/api/org/codehaus/plexus/component/configurator/ConfigurationListener.html" title="&lt;TABLE&gt;" alt="" coords="691,203,896,253"/>
+<area shape="rect" id="c53839" href="http://java.sun.com/j2se/1.4.2/docs/api/org/codehaus/plexus/component/configurator/AbstractComponentConfigurator.html" title="&lt;TABLE&gt;" alt="" coords="368,11,573,47"/>
 </map>

@@ -50,10 +50,10 @@ digraph G {
 	c28325:p -> c28442:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
 	// org.synchronoss.cpo.core.cpoCoreConfig.impl.CtCpoConfigImpl DEPEND org.synchronoss.cpo.core.cpoCoreConfig.CtMetaDescriptor
 	c28327:p -> c28320:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
-	// org.synchronoss.cpo.core.cpoCoreConfig.impl.CtCpoConfigImpl DEPEND org.apache.xmlbeans.XmlString
-	c28327:p -> c28442:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
 	// org.synchronoss.cpo.core.cpoCoreConfig.impl.CtCpoConfigImpl DEPEND org.synchronoss.cpo.core.cpoCoreConfig.CtMetaDescriptor
 	c28327:p -> c28320:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
+	// org.synchronoss.cpo.core.cpoCoreConfig.impl.CtCpoConfigImpl DEPEND org.apache.xmlbeans.XmlString
+	c28327:p -> c28442:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
 	// org.synchronoss.cpo.core.cpoCoreConfig.impl.CtCpoConfigImpl DEPEND org.synchronoss.cpo.core.cpoCoreConfig.CtMetaDescriptor
 	c28327:p -> c28320:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
 	// org.apache.xmlbeans.XmlObject

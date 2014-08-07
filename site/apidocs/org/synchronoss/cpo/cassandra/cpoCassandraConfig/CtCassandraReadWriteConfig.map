@@ -1,10 +1,10 @@
 <map id="G" name="G">
-<area shape="rect" id="c51211" href="../config/CassandraCpoConfigProcessor.html" title="&lt;TABLE&gt;" alt="" coords="50,18,243,54"/>
-<area shape="rect" id="c51230" href="./CtCassandraReadWriteConfig.html" title="&lt;TABLE&gt;" alt="" coords="326,121,511,159"/>
-<area shape="rect" id="c51237" href="./impl/CtCassandraReadWriteConfigImpl.html" title="&lt;TABLE&gt;" alt="" coords="61,219,323,255"/>
-<area shape="rect" id="c51245" href="http://java.sun.com/j2se/1.4.2/docs/api/org/apache/xmlbeans/XmlBoolean.html" title="&lt;TABLE&gt;" alt="" coords="15,315,123,365"/>
-<area shape="rect" id="c51246" href="http://java.sun.com/j2se/1.4.2/docs/api/org/apache/xmlbeans/XmlString.html" title="&lt;TABLE&gt;" alt="" coords="181,315,289,365"/>
-<area shape="rect" id="c51247" href="http://java.sun.com/j2se/1.4.2/docs/api/org/apache/xmlbeans/XmlInt.html" title="&lt;TABLE&gt;" alt="" coords="419,315,527,365"/>
-<area shape="rect" id="c51238" href="./impl/CtCassandraConfigImpl.html" title="&lt;TABLE&gt;" alt="" coords="288,18,549,54"/>
-<area shape="rect" id="c51244" href="http://java.sun.com/j2se/1.4.2/docs/api/org/apache/xmlbeans/XmlObject.html" title="&lt;TABLE&gt;" alt="" coords="594,11,702,61"/>
+<area shape="rect" id="c51211" href="../config/CassandraCpoConfigProcessor.html" title="&lt;TABLE&gt;" alt="" coords="15,18,209,54"/>
+<area shape="rect" id="c51230" href="./CtCassandraReadWriteConfig.html" title="&lt;TABLE&gt;" alt="" coords="291,121,477,159"/>
+<area shape="rect" id="c51237" href="./impl/CtCassandraReadWriteConfigImpl.html" title="&lt;TABLE&gt;" alt="" coords="480,219,741,255"/>
+<area shape="rect" id="c51245" href="http://java.sun.com/j2se/1.4.2/docs/api/org/apache/xmlbeans/XmlString.html" title="&lt;TABLE&gt;" alt="" coords="386,315,494,365"/>
+<area shape="rect" id="c51246" href="http://java.sun.com/j2se/1.4.2/docs/api/org/apache/xmlbeans/XmlInt.html" title="&lt;TABLE&gt;" alt="" coords="575,315,683,365"/>
+<area shape="rect" id="c51247" href="http://java.sun.com/j2se/1.4.2/docs/api/org/apache/xmlbeans/XmlBoolean.html" title="&lt;TABLE&gt;" alt="" coords="766,315,874,365"/>
+<area shape="rect" id="c51238" href="./impl/CtCassandraConfigImpl.html" title="&lt;TABLE&gt;" alt="" coords="253,18,515,54"/>
+<area shape="rect" id="c51244" href="http://java.sun.com/j2se/1.4.2/docs/api/org/apache/xmlbeans/XmlObject.html" title="&lt;TABLE&gt;" alt="" coords="559,11,667,61"/>
 </map>

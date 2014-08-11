@@ -53,8 +53,8 @@
     <github.global.server>cpo-github</github.global.server>
   </properties>
   <ciManagement>
-    <system>teamcity</system>
-    <url>http://continuous.synchronoss.net:8111/viewType.html?buildTypeId=bt2</url>
+    <system>Synchronoss Bamboo</system>
+    <url>http://bamboo.synchronoss.net:8085/browse/CPO-API</url>
   </ciManagement>
   <distributionManagement>
     <site>
@@ -230,6 +230,16 @@
             <skipDeploy>true</skipDeploy>
           </configuration>
         </plugin>
+        <plugin>
+          <groupId>org.jacoco</groupId>
+          <artifactId>jacoco-maven-plugin</artifactId>
+          <version>0.7.1.201405082137</version>
+          <configuration>
+            <destFile>${project.build.directory}/jacoco.exec</destFile>
+            <dataFile>${project.build.directory}/jacoco.exec</dataFile>
+            <outputDirectory>${project.reporting.outputDirectory}/jacoco</outputDirectory>
+          </configuration>
+        </plugin>
       </plugins>
     </pluginManagement>
     <plugins>
@@ -314,6 +324,39 @@
               <goal>site</goal>
             </goals>
             <phase>site-deploy</phase>
+          </execution>
+        </executions>
+      </plugin>
+      <!-- This JACOCO Configuration generates the test coverage results for Sonar -->
+      <plugin>
+        <groupId>org.jacoco</groupId>
+        <artifactId>jacoco-maven-plugin</artifactId>
+        <executions>
+          <!-- This section is for the junits -->
+          <execution>
+            <id>default-prepare-agent</id>
+            <goals>
+              <goal>prepare-agent</goal>
+            </goals>
+          </execution>
+          <execution>
+            <id>default-report</id>
+            <goals>
+              <goal>report</goal>
+            </goals>
+          </execution>
+          <!-- This section is for the integration tests -->
+          <execution>
+            <id>default-prepare-agent-integration</id>
+            <goals>
+              <goal>prepare-agent-integration</goal>
+            </goals>
+          </execution>
+          <execution>
+            <id>default-report-integration</id>
+            <goals>
+              <goal>report-integration</goal>
+            </goals>
           </execution>
         </executions>
       </plugin>

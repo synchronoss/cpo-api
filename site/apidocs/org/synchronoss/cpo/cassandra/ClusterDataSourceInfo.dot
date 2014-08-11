@@ -45,18 +45,18 @@ digraph G {
 	c44752:p -> c44802:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
 	// org.synchronoss.cpo.cassandra.ClusterDataSourceInfo NAVASSOC com.datastax.driver.core.SocketOptions
 	c44752:p -> c44803:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
-	// org.synchronoss.cpo.cassandra.ClusterDataSourceInfo DEPEND com.datastax.driver.core.policies.RetryPolicy
-	c44752:p -> c44798:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
-	// org.synchronoss.cpo.cassandra.ClusterDataSourceInfo DEPEND com.datastax.driver.core.ProtocolOptions.Compression
-	c44752:p -> c44799:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
-	// org.synchronoss.cpo.cassandra.ClusterDataSourceInfo DEPEND com.datastax.driver.core.PoolingOptions
-	c44752:p -> c44802:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
-	// org.synchronoss.cpo.cassandra.ClusterDataSourceInfo DEPEND com.datastax.driver.core.policies.LoadBalancingPolicy
-	c44752:p -> c44796:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
-	// org.synchronoss.cpo.cassandra.ClusterDataSourceInfo DEPEND com.datastax.driver.core.SSLOptions
-	c44752:p -> c44800:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
 	// org.synchronoss.cpo.cassandra.ClusterDataSourceInfo DEPEND com.datastax.driver.core.SocketOptions
 	c44752:p -> c44803:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
+	// org.synchronoss.cpo.cassandra.ClusterDataSourceInfo DEPEND com.datastax.driver.core.SSLOptions
+	c44752:p -> c44800:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
+	// org.synchronoss.cpo.cassandra.ClusterDataSourceInfo DEPEND com.datastax.driver.core.ProtocolOptions.Compression
+	c44752:p -> c44799:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
+	// org.synchronoss.cpo.cassandra.ClusterDataSourceInfo DEPEND com.datastax.driver.core.policies.LoadBalancingPolicy
+	c44752:p -> c44796:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
+	// org.synchronoss.cpo.cassandra.ClusterDataSourceInfo DEPEND com.datastax.driver.core.PoolingOptions
+	c44752:p -> c44802:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
+	// org.synchronoss.cpo.cassandra.ClusterDataSourceInfo DEPEND com.datastax.driver.core.policies.RetryPolicy
+	c44752:p -> c44798:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
 	// org.synchronoss.cpo.cassandra.ClusterDataSourceInfo DEPEND com.datastax.driver.core.policies.ReconnectionPolicy
 	c44752:p -> c44797:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
 	// org.synchronoss.cpo.cassandra.config.CassandraCpoConfigProcessor DEPEND org.synchronoss.cpo.cassandra.ClusterDataSourceInfo

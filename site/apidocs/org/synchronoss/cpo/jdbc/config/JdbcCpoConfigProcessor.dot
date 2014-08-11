@@ -55,17 +55,17 @@ digraph G {
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=9.0];
 	//org.synchronoss.cpo.jdbc.config.JdbcCpoConfigProcessor implements org.synchronoss.cpo.config.CpoConfigProcessor
 	c38798:p -> c38906:p [dir=back,arrowtail=empty,style=dashed];
-	// org.synchronoss.cpo.config.CpoConfigProcessor DEPEND org.synchronoss.cpo.core.cpoCoreConfig.CtDataSourceConfig
-	c38798:p -> c38853:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
 	// org.synchronoss.cpo.config.CpoConfigProcessor DEPEND org.synchronoss.cpo.CpoAdapter
 	c38798:p -> c38763:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
+	// org.synchronoss.cpo.config.CpoConfigProcessor DEPEND org.synchronoss.cpo.core.cpoCoreConfig.CtDataSourceConfig
+	c38798:p -> c38853:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
 	// org.synchronoss.cpo.jdbc.config.JdbcCpoConfigProcessor DEPEND org.synchronoss.cpo.jdbc.cpoJdbcConfig.CtJdbcReadWriteConfig
 	c38906:p -> c38911:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
-	// org.synchronoss.cpo.jdbc.config.JdbcCpoConfigProcessor DEPEND org.synchronoss.cpo.core.cpoCoreConfig.CtDataSourceConfig
-	c38906:p -> c38853:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
 	// org.synchronoss.cpo.jdbc.config.JdbcCpoConfigProcessor DEPEND org.synchronoss.cpo.CpoAdapter
 	c38906:p -> c38763:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
 	// org.synchronoss.cpo.jdbc.config.JdbcCpoConfigProcessor DEPEND org.synchronoss.cpo.DataSourceInfo<T>
 	c38906:p -> c38778:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
+	// org.synchronoss.cpo.jdbc.config.JdbcCpoConfigProcessor DEPEND org.synchronoss.cpo.core.cpoCoreConfig.CtDataSourceConfig
+	c38906:p -> c38853:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
 }
 

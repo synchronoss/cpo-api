@@ -1,6 +1,6 @@
 <map id="G" name="G">
-<area shape="rect" id="c40633" href="./CtProperty.Factory.html" title="&lt;TABLE&gt;" alt="" coords="191,17,249,41"/>
-<area shape="rect" id="c40696" href="http://java.sun.com/j2se/1.4.2/docs/api/org/w3c/dom/Node.html" title="&lt;TABLE&gt;" alt="" coords="16,107,96,157"/>
-<area shape="rect" id="c40697" href="http://java.sun.com/j2se/1.4.2/docs/api/org/apache/xmlbeans/xml/stream/XMLInputStream.html" title="&lt;TABLE&gt;" alt="" coords="141,107,299,157"/>
-<area shape="rect" id="c40698" href="http://java.sun.com/j2se/1.4.2/docs/api/org/apache/xmlbeans/XmlOptions.html" title="&lt;TABLE&gt;" alt="" coords="343,114,451,150"/>
+<area shape="rect" id="c40633" href="./CtProperty.Factory.html" title="&lt;TABLE&gt;" alt="" coords="243,17,301,41"/>
+<area shape="rect" id="c40696" href="http://java.sun.com/j2se/1.4.2/docs/api/org/apache/xmlbeans/xml/stream/XMLInputStream.html" title="&lt;TABLE&gt;" alt="" coords="16,107,173,157"/>
+<area shape="rect" id="c40697" href="http://java.sun.com/j2se/1.4.2/docs/api/org/apache/xmlbeans/XmlOptions.html" title="&lt;TABLE&gt;" alt="" coords="218,114,326,150"/>
+<area shape="rect" id="c40698" href="http://java.sun.com/j2se/1.4.2/docs/api/org/w3c/dom/Node.html" title="&lt;TABLE&gt;" alt="" coords="371,107,451,157"/>
 </map>

@@ -46,10 +46,10 @@ digraph G {
 	c48063:p -> c48209:p [dir=back,arrowtail=empty];
 	// org.synchronoss.cpo.meta.AbstractCpoMetaAdapter DEPEND org.synchronoss.cpo.meta.domain.CpoAttribute
 	c48063:p -> c48074:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
-	// org.synchronoss.cpo.cassandra.meta.CassandraCpoMetaAdapter DEPEND org.synchronoss.cpo.parser.ExpressionParser
-	c48209:p -> c48057:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
 	// org.synchronoss.cpo.cassandra.meta.CassandraCpoMetaAdapter DEPEND org.synchronoss.cpo.meta.DataTypeMapper
 	c48209:p -> c48067:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
+	// org.synchronoss.cpo.cassandra.meta.CassandraCpoMetaAdapter DEPEND org.synchronoss.cpo.parser.ExpressionParser
+	c48209:p -> c48057:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
 	// org.synchronoss.cpo.cassandra.meta.CassandraCpoMetaAdapter DEPEND org.synchronoss.cpo.meta.domain.CpoAttribute
 	c48209:p -> c48074:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
 }

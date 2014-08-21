@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<pmd version="4.3" timestamp="2014-08-20T02:05:20.734">
+<pmd version="4.3" timestamp="2014-08-21T02:06:04.583">
 <file name="/home/devtools/bamboo-agent-home/xml-data/build-dir/CPO-APISD-JOB1/cpo-jdbc/src/main/java/org/synchronoss/cpo/jdbc/ClassJdbcDataSourceInfo.java">
 <violation beginline="151" endline="152" begincolumn="9" endcolumn="7" rule="EmptyCatchBlock" ruleset="Basic Rules" package="org.synchronoss.cpo.jdbc" class="ClassJdbcDataSourceInfo" method="finalize" externalInfoUrl="http://pmd.sourceforge.net/rules/basic.html#EmptyCatchBlock" priority="3">
 Avoid empty catch blocks

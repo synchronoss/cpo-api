@@ -58,13 +58,13 @@ digraph G {
 	c46984:p -> c46949:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
 	// org.synchronoss.cpo.config.CpoConfigProcessor DEPEND org.synchronoss.cpo.core.cpoCoreConfig.CtDataSourceConfig
 	c46984:p -> c47039:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
-	// org.synchronoss.cpo.cassandra.config.CassandraCpoConfigProcessor DEPEND org.synchronoss.cpo.cassandra.ClusterDataSourceInfo
-	c47130:p -> c47119:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
 	// org.synchronoss.cpo.cassandra.config.CassandraCpoConfigProcessor DEPEND org.synchronoss.cpo.cassandra.cpoCassandraConfig.CtCassandraReadWriteConfig
 	c47130:p -> c47149:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
 	// org.synchronoss.cpo.cassandra.config.CassandraCpoConfigProcessor DEPEND org.synchronoss.cpo.CpoAdapter
 	c47130:p -> c46949:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
 	// org.synchronoss.cpo.cassandra.config.CassandraCpoConfigProcessor DEPEND org.synchronoss.cpo.core.cpoCoreConfig.CtDataSourceConfig
 	c47130:p -> c47039:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
+	// org.synchronoss.cpo.cassandra.config.CassandraCpoConfigProcessor DEPEND org.synchronoss.cpo.cassandra.ClusterDataSourceInfo
+	c47130:p -> c47119:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
 }
 

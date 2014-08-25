@@ -50,10 +50,10 @@ digraph G {
 	c39188:p -> c39121:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
 	// org.synchronoss.cpo.meta.CpoMetaDescriptor DEPEND org.synchronoss.cpo.exporter.MetaXmlObjectExporter
 	c39018:p -> c39009:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
-	// org.synchronoss.cpo.jdbc.JdbcCpoAdapter DEPEND org.synchronoss.cpo.meta.CpoMetaDescriptor
-	c39114:p -> c39018:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
 	// org.synchronoss.cpo.jdbc.JdbcCpoAdapter DEPEND org.synchronoss.cpo.jdbc.meta.JdbcCpoMetaDescriptor
 	c39114:p -> c39121:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
+	// org.synchronoss.cpo.jdbc.JdbcCpoAdapter DEPEND org.synchronoss.cpo.meta.CpoMetaDescriptor
+	c39114:p -> c39018:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
 	// org.synchronoss.cpo.jdbc.meta.JdbcCpoMetaDescriptor DEPEND org.synchronoss.cpo.exporter.MetaXmlObjectExporter
 	c39121:p -> c39009:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
 }

@@ -1,10 +1,10 @@
 <map id="G" name="G">
-<area shape="rect" id="c2114" href="./CpoJavaSamplerClient.html" title="&lt;TABLE&gt;" alt="" coords="394,113,539,137"/>
+<area shape="rect" id="c2114" href="./CpoJavaSamplerClient.html" title="&lt;TABLE&gt;" alt="" coords="397,113,542,137"/>
 <area shape="rect" id="c2141" href="http://java.sun.com/j2se/1.4.2/docs/api/org/apache/log/Logger.html" title="&lt;TABLE&gt;" alt="" coords="16,210,96,246"/>
 <area shape="rect" id="c2142" href="http://java.sun.com/j2se/1.4.2/docs/api/org/synchronoss/cpo/jdbc/meta/JdbcCpoMetaDescriptor.html" title="&lt;TABLE&gt;" alt="" coords="141,210,291,246"/>
 <area shape="rect" id="c2143" href="http://java.sun.com/j2se/1.4.2/docs/api/org/synchronoss/cpo/CpoAdapter.html" title="&lt;TABLE&gt;" alt="" coords="335,203,441,253"/>
-<area shape="rect" id="c2147" href="http://java.sun.com/j2se/1.4.2/docs/api/org/apache/jmeter/config/Arguments.html" title="&lt;TABLE&gt;" alt="" coords="485,210,606,246"/>
-<area shape="rect" id="c2149" href="http://java.sun.com/j2se/1.4.2/docs/api/org/apache/jmeter/protocol/java/sampler/JavaSamplerContext.html" title="&lt;TABLE&gt;" alt="" coords="650,210,835,246"/>
-<area shape="rect" id="c2153" href="http://java.sun.com/j2se/1.4.2/docs/api/org/apache/jmeter/samplers/SampleResult.html" title="&lt;TABLE&gt;" alt="" coords="879,210,1014,246"/>
-<area shape="rect" id="c2135" href="http://java.sun.com/j2se/1.4.2/docs/api/org/apache/jmeter/protocol/java/sampler/AbstractJavaSamplerClient.html" title="&lt;TABLE&gt;" alt="" coords="374,11,559,47"/>
+<area shape="rect" id="c2147" href="http://java.sun.com/j2se/1.4.2/docs/api/org/apache/jmeter/samplers/SampleResult.html" title="&lt;TABLE&gt;" alt="" coords="485,210,619,246"/>
+<area shape="rect" id="c2149" href="http://java.sun.com/j2se/1.4.2/docs/api/org/apache/jmeter/protocol/java/sampler/JavaSamplerContext.html" title="&lt;TABLE&gt;" alt="" coords="663,210,849,246"/>
+<area shape="rect" id="c2153" href="http://java.sun.com/j2se/1.4.2/docs/api/org/apache/jmeter/config/Arguments.html" title="&lt;TABLE&gt;" alt="" coords="893,210,1014,246"/>
+<area shape="rect" id="c2135" href="http://java.sun.com/j2se/1.4.2/docs/api/org/apache/jmeter/protocol/java/sampler/AbstractJavaSamplerClient.html" title="&lt;TABLE&gt;" alt="" coords="377,11,562,47"/>
 </map>

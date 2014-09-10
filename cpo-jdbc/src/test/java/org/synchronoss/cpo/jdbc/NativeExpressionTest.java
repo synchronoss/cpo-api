@@ -118,7 +118,7 @@ public class NativeExpressionTest extends TestCase {
   }
 
   public void testNullNative() {
-    String method = "testNativeOrWhere:";
+    String method = "testNullNative:";
     Collection<ValueObject> col;
     CpoWhere cw = null;
     CpoWhere cw1 = null;

@@ -104,7 +104,7 @@ public class RetrieveBeanTest extends TestCase {
   }
 
   public void testRetrieveBeans2() {
-    String method = "testRetrieveBeans:";
+    String method = "testRetrieveBeans2:";
     Collection<ValueObject> col;
 
 

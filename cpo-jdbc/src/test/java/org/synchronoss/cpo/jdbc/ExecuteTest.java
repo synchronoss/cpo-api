@@ -76,7 +76,7 @@ public class ExecuteTest extends TestCase {
    */
   public void testExecute() {
     if (metaDescriptor.isSupportsCalls()) {
-      String method = "testExecuteObject:";
+      String method = "testExecute:";
       ValueObject vo = new ValueObject(1);
       vo.setAttrInteger(3);
       ValueObject rvo;
@@ -105,7 +105,7 @@ public class ExecuteTest extends TestCase {
       logger.error(cpoAdapter.getDataSourceName() + " does not support CallableStatements");
     }
   }
-  
+
   public void testExecute2() {
     if (metaDescriptor.isSupportsCalls()) {
       String method = "testExecuteObject:";

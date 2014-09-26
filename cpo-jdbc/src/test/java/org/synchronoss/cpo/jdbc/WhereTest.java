@@ -134,7 +134,7 @@ public class WhereTest extends TestCase {
   }
 
   public void testNoMarkerWhere() {
-    String method = "testValueWhere:";
+    String method = "testNoMarkerWhere:";
     Collection<ValueObject> col;
     CpoWhere cw;
 
@@ -172,7 +172,7 @@ public class WhereTest extends TestCase {
   }
 
   public void testNestedWhere() {
-    String method = "testValueWhere:";
+    String method = "testNestedWhere:";
     Collection<ValueObject> col;
     CpoWhere cw;
     ArrayList<CpoWhere> wheres = new ArrayList<>();
@@ -490,7 +490,7 @@ public class WhereTest extends TestCase {
   }
 
   public void testInWhereStaticValue() {
-    String method = "testNonAttributeWhere:";
+    String method = "testInWhereStaticValue:";
 
     try {
       ValueObject valObj = new ValueObject(1);
@@ -515,7 +515,7 @@ public class WhereTest extends TestCase {
   }
 
   public void testInWhereCollection() {
-    String method = "testNonAttributeWhere:";
+    String method = "testInWhereCollection:";
 
     try {
       ValueObject valObj = new ValueObject(1);
@@ -543,18 +543,18 @@ public class WhereTest extends TestCase {
   }
 
   public void testMultiInWhereCollection() {
-    String method = "testNonAttributeWhere:";
+    String method = "testMultiInWhereCollection:";
 
     try {
       ValueObject valObj = new ValueObject(1);
       Collection<Integer> inColl1 = new ArrayList<>();
       inColl1.add(1);
       inColl1.add(2);
-      
+
       Collection<Integer> inColl2 = new ArrayList<>();
       inColl2.add(3);
       inColl2.add(4);
-      
+
       Collection<Integer> inColl3 = new ArrayList<>();
       inColl3.add(5);
       inColl3.add(-6);
@@ -581,7 +581,7 @@ public class WhereTest extends TestCase {
   }
 
   public void testNonAttributeInWhereCollection() {
-    String method = "testNonAttributeWhere:";
+    String method = "testNonAttributeInWhereCollection:";
 
     try {
       ValueObject valObj = new ValueObject(1);
@@ -609,13 +609,13 @@ public class WhereTest extends TestCase {
   }
 
   public void testWhereParens() {
-    String method = "testStaticWhere:";
+    String method = "testWhereParens:";
     Collection<ValueObject> col = null;
 
     try {
       ValueObject valObj = new ValueObject(1);
 
-      // Without the correct parens, this will return multiple rows for a retrieveBean which is a 
+      // Without the correct parens, this will return multiple rows for a retrieveBean which is a
       // failure
       CpoWhere cw1 = cpoAdapter.newWhere();
       cw1.setLogical(CpoWhere.LOGIC_AND);
@@ -634,15 +634,15 @@ public class WhereTest extends TestCase {
       fail(method + e.getMessage());
     }
   }
-  
+
   public void testWhereOrderBy() {
-    String method = "testStaticWhere:";
+    String method = "testWhereOrderBy:";
     Collection<ValueObject> col = null;
 
     try {
       ValueObject valObj = new ValueObject(1);
 
-      // Without the correct parens, this will return multiple rows for a retrieveBean which is a 
+      // Without the correct parens, this will return multiple rows for a retrieveBean which is a
       // failure
       CpoWhere cw1 = cpoAdapter.newWhere();
       cw1.setLogical(CpoWhere.LOGIC_AND);

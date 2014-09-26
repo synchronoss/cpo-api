@@ -91,7 +91,7 @@ public class ExistObjectTest extends TestCase {
   }
 
   public void testExistObjectWhere() {
-    String method = "testExistObject:";
+    String method = "testExistObjectWhere:";
 
 
     try {

@@ -94,12 +94,12 @@ public class OrderByTest extends TestCase {
    * DOCUMENT ME!
    */
   public void testNewOrderBy() {
-    String method = "testOrderByAscending:";
+    String method = "testNewOrderBy:";
     Collection<ValueObject> col;
     String marker = "MY_MARKER";
     String attribute = "MY_ATTRIBUTE";
     String function = "MY_FUNCTION";
-    boolean ascending = false; 
+    boolean ascending = false;
 
 
     try {
@@ -166,7 +166,7 @@ public class OrderByTest extends TestCase {
   }
 
   public void testOrderByFunction() {
-    String method = "testOrderByAscending:";
+    String method = "testOrderByFunction:";
     Collection<ValueObject> col;
 
     ValueObject vobj = new ValueObject(-6);

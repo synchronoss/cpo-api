@@ -101,7 +101,7 @@ public class RollbackTrxTest extends TestCase {
    * DOCUMENT ME!
    */
   public void testTrxRollbackProcessUpdateCollection() {
-    String method = "testRollbackProcessUpdateCollection:";
+    String method = "testTrxRollbackProcessUpdateCollection:";
     ValueObject vo = new ValueObject(2);
     ValueObject vo2 = new ValueObject(1);
     ArrayList<ValueObject> al = new ArrayList<>();
@@ -133,7 +133,7 @@ public class RollbackTrxTest extends TestCase {
    * DOCUMENT ME!
    */
   public void testTrxSingleRollback() {
-    String method = "testSingleRollback:";
+    String method = "testTrxSingleRollback:";
     ValueObject vo = new ValueObject(2);
     try {
       trxAdapter.insertObject("TestSingleRollback", vo);

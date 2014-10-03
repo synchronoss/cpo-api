@@ -3,17 +3,19 @@ cpo-api
 
 Class Persistence Object (CPO) Application Programming Interface (API).
 
+Documentation can be found here: http://cpo-org.github.io/cpo-api/site/cpo-plugin/index.html
+
 CPO 5.x is a java api that maps plain old java objects to persistence functions. Unlike most ORM technologies and the java persistence api (JPA),
 CPO is designed to allow you to fully utilize the native syntax and functionality of your datastore.
 
 CPO supports the following datastores:
 
-MySQL
-MariaDB
-Oracle
-Postgres sans BLOBS
-HSqlDB
-Cassandra
+*MySQL
+*MariaDB
+*Oracle
+*Postgres sans BLOBS
+*HSqlDB
+*Cassandra
 
 CPO exploits that fact that datastores have a language that is used to manipulate data in that datastore. SQL is used for Relational Databases,
 CQL is used for Cassandra, and XPath is used for XML. Each language consists of a defined syntax that allows you to build expressions to access

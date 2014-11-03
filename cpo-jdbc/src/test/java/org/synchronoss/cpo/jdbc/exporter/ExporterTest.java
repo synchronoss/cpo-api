@@ -113,10 +113,10 @@ public class ExporterTest extends TestCase {
       assertFalse(classSource.isEmpty());
 
       // write the file
-      File javaFile = new File("target", ValueObject.class.getSimpleName() + ".java");
+      File javaFile = new File("target", classSourceGenerator.getClassName() + ".java");
       logger.debug("Saving class source to " + javaFile.getAbsolutePath());
       FileWriter cw = new FileWriter(javaFile);
-      cw.write(classSourceGenerator.getSourceCode());
+      cw.write(classSource);
       cw.flush();
       cw.close();
 
@@ -125,6 +125,100 @@ public class ExporterTest extends TestCase {
       JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
       StandardJavaFileManager fileManager = compiler.getStandardFileManager(null, null, null);
       Iterable<? extends JavaFileObject> compilationUnits = fileManager.getJavaFileObjectsFromFiles(Arrays.asList(javaFile));
+      boolean result = compiler.getTask(null, fileManager, null, null, null, compilationUnits).call();
+
+      // validate the result
+      assertTrue(result);
+
+    } catch (Exception e) {
+      fail(e.getMessage());
+    }
+    logger.debug("testClassSourceExport complete");
+  }
+
+  public void testInterfaceSourceExport() {
+    logger.debug("testInterfaceSourceExport");
+    try {
+      CpoInterfaceSourceGenerator interfaceSourceGenerator = new CpoInterfaceSourceGenerator(metaDescriptor);
+
+      logger.debug("Generating interface source");
+      CpoClass cpoClass = metaDescriptor.getMetaClass(new ValueObject());
+      cpoClass.acceptMetaDFVisitor(interfaceSourceGenerator);
+      String interfaceSource = interfaceSourceGenerator.getSourceCode();
+
+      // validate that we got something
+      assertNotNull(interfaceSource);
+      assertFalse(interfaceSource.isEmpty());
+
+      // write the file
+      File javaFile = new File("target", interfaceSourceGenerator.getInterfaceName() + ".java");
+      logger.debug("Saving interface source to " + javaFile.getAbsolutePath());
+      FileWriter cw = new FileWriter(javaFile);
+      cw.write(interfaceSource);
+      cw.flush();
+      cw.close();
+
+      // let's try to compile the file
+      logger.debug("Compiling class source");
+      JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
+      StandardJavaFileManager fileManager = compiler.getStandardFileManager(null, null, null);
+      Iterable<? extends JavaFileObject> compilationUnits = fileManager.getJavaFileObjectsFromFiles(Arrays.asList(javaFile));
+      boolean result = compiler.getTask(null, fileManager, null, null, null, compilationUnits).call();
+
+      // validate the result
+      assertTrue(result);
+
+    } catch (Exception e) {
+      fail(e.getMessage());
+    }
+    logger.debug("testClassSourceExport complete");
+  }
+
+  public void testInterfaceClassSourceExport() {
+    logger.debug("testInterfaceClassSourceExport");
+    try {
+      CpoInterfaceSourceGenerator interfaceSourceGenerator = new CpoInterfaceSourceGenerator(metaDescriptor);
+
+      logger.debug("Generating interface source");
+      CpoClass cpoClass = metaDescriptor.getMetaClass(new ValueObject());
+      cpoClass.acceptMetaDFVisitor(interfaceSourceGenerator);
+      String interfaceSource = interfaceSourceGenerator.getSourceCode();
+
+      // validate that we got something
+      assertNotNull(interfaceSource);
+      assertFalse(interfaceSource.isEmpty());
+
+      // write the file
+      File interfaceFile = new File("target", interfaceSourceGenerator.getInterfaceName() + ".java");
+      logger.debug("Saving interface source to " + interfaceFile.getAbsolutePath());
+      FileWriter iw = new FileWriter(interfaceFile);
+      iw.write(interfaceSource);
+      iw.flush();
+      iw.close();
+
+      CpoInterfaceClassSourceGenerator interfaceClassSourceGenerator = new CpoInterfaceClassSourceGenerator(metaDescriptor);
+
+      logger.debug("Generating java source");
+      cpoClass.acceptMetaDFVisitor(interfaceClassSourceGenerator);
+      String classSource = interfaceClassSourceGenerator.getSourceCode();
+
+      // validate that we got something
+      assertNotNull(classSource);
+      assertFalse(classSource.isEmpty());
+
+      // write the file
+      File javaFile = new File("target", interfaceClassSourceGenerator.getClassName() + ".java");
+      logger.debug("Saving class source to " + javaFile.getAbsolutePath());
+      FileWriter cw = new FileWriter(javaFile);
+      cw.write(interfaceClassSourceGenerator.getSourceCode());
+      cw.flush();
+      cw.close();
+
+      // let's try to compile the files
+      logger.debug("Compiling interface and class source");
+      JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
+      StandardJavaFileManager fileManager = compiler.getStandardFileManager(null, null, null);
+      Iterable<? extends JavaFileObject> compilationUnits = fileManager.getJavaFileObjectsFromFiles(Arrays.asList(interfaceFile, javaFile));
       boolean result = compiler.getTask(null, fileManager, null, null, null, compilationUnits).call();
 
       // validate the result

@@ -31,6 +31,8 @@ import org.synchronoss.cpo.meta.domain.CpoClass;
  */
 public class CpoInterfaceClassSourceGenerator extends CpoClassSourceGenerator {
 
+  public static final String CLASS_SUFFIX = "Impl";
+
   public CpoInterfaceClassSourceGenerator(CpoMetaDescriptor metaDescriptor) {
     super(metaDescriptor);
   }
@@ -94,7 +96,7 @@ public class CpoInterfaceClassSourceGenerator extends CpoClassSourceGenerator {
 
   @Override
   protected String generateClassName(CpoClass cpoClass) {
-    return super.generateClassName(cpoClass) + "Bean";
+    return super.generateClassName(cpoClass) + CLASS_SUFFIX;
   }
 
   @Override

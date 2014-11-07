@@ -25,10 +25,7 @@ import org.slf4j.*;
 import org.synchronoss.cpo.*;
 import org.synchronoss.cpo.helper.ExceptionHelper;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import static junit.framework.Assert.assertTrue;
-import static junit.framework.Assert.fail;
+import java.util.*;
 
 /**
  * BigBatchTest is a JUnit test class for testing big batches
@@ -75,7 +72,7 @@ public class BigRetrieveTest extends TestCase {
     int numInserts = 10000;
 
     for (int i = 0; i < numInserts; i++) {
-      al.add(new ValueObject(i));
+      al.add(new ValueObjectBean(i));
     }
 
     try {
@@ -94,7 +91,7 @@ public class BigRetrieveTest extends TestCase {
     Collection<ValueObject> col;
     
     try {
-      ValueObject valObj = new ValueObject();
+      ValueObject valObj = new ValueObjectBean();
       col = cpoAdapter.retrieveBeans(null, valObj);
       assertTrue("Col size is " + col.size(), col.size() == al.size());
 

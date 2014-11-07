@@ -18,14 +18,59 @@
  * A copy of the GNU Lesser General Public License may also be found at
  * http://www.gnu.org/licenses/lgpl.txt
  */
-package org.synchronoss.cpo.cassandra;
+package org.synchronoss.cpo.jdbc;
 
-/**
- * ChildValueObject is a class used to test the inheritance support of cpo
- *
- * @author david berry
- */
-public class ChildValueObject extends ValueObjectBean implements java.io.Serializable, Cloneable {
+import java.io.Serializable;
 
+public class LobValueObjectBean implements LobValueObject, Serializable {
+
+  /**
+   * Version Id for this class.
+   */
   private static final long serialVersionUID = 1L;
+  private int lobId;
+  private byte[] bLob = null;
+  private byte[] bLob2 = null;
+  private char[] cLob = null;
+
+  public LobValueObjectBean() {
+  }
+
+  public LobValueObjectBean(int id, byte[] bLob, char[] cLob) {
+    this.lobId = id;
+    this.bLob = bLob;
+    this.cLob = cLob;
+  }
+
+  public void setLobId(int lobId) {
+    this.lobId = lobId;
+  }
+
+  public int getLobId() {
+    return this.lobId;
+  }
+
+  public void setBLob(byte[] bLob) {
+    this.bLob = bLob;
+  }
+
+  public byte[] getBLob() {
+    return this.bLob;
+  }
+
+  public void setBLob2(byte[] bLob) {
+    this.bLob2 = bLob;
+  }
+
+  public byte[] getBLob2() {
+    return this.bLob2;
+  }
+
+  public void setCLob(char[] cLob) {
+    this.cLob = cLob;
+  }
+
+  public char[] getCLob() {
+    return this.cLob;
+  }
 }

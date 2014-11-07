@@ -60,7 +60,7 @@ public class RollbackTrxTest extends TestCase {
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
-    ValueObject vo = new ValueObject(1);
+    ValueObject vo = new ValueObjectBean(1);
     vo.setAttrVarChar("Test");
     try {
       trxAdapter.insertObject(vo);
@@ -79,7 +79,7 @@ public class RollbackTrxTest extends TestCase {
    */
   @Override
   public void tearDown() {
-    ValueObject vo = new ValueObject(1);
+    ValueObject vo = new ValueObjectBean(1);
     try {
       trxAdapter.deleteObject(vo);
       trxAdapter.commit();
@@ -102,8 +102,8 @@ public class RollbackTrxTest extends TestCase {
    */
   public void testTrxRollbackProcessUpdateCollection() {
     String method = "testTrxRollbackProcessUpdateCollection:";
-    ValueObject vo = new ValueObject(2);
-    ValueObject vo2 = new ValueObject(1);
+    ValueObject vo = new ValueObjectBean(2);
+    ValueObject vo2 = new ValueObjectBean(1);
     ArrayList<ValueObject> al = new ArrayList<>();
 
     al.add(vo);
@@ -134,7 +134,7 @@ public class RollbackTrxTest extends TestCase {
    */
   public void testTrxSingleRollback() {
     String method = "testTrxSingleRollback:";
-    ValueObject vo = new ValueObject(2);
+    ValueObject vo = new ValueObjectBean(2);
     try {
       trxAdapter.insertObject("TestSingleRollback", vo);
       trxAdapter.commit();

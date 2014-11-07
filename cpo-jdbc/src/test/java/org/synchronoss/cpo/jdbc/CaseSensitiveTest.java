@@ -70,7 +70,7 @@ public class CaseSensitiveTest extends TestCase {
 
   public void testCaseSensitiveObject() {
     String method = "testCaseSensitiveObject:";
-    ValueObject valObj = new ValueObject(5);
+    ValueObject valObj = new ValueObjectBean(5);
 
     valObj.setAttrVarChar("testCaseSensitiveObject");
     valObj.setAttrInteger(3);

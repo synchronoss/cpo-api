@@ -63,7 +63,7 @@ public class UpdateObjectTest extends TestCase {
 
   public void testUpdateObject() {
     String method = "testUpdateObject:";
-    ValueObject valObj = new ValueObject(5);
+    ValueObject valObj = new ValueObjectBean(5);
 
     valObj.setAttrVarChar("testUpdate");
     valObj.setAttrInteger(3);

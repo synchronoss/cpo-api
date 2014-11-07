@@ -61,11 +61,11 @@ public class OrderByTest extends TestCase {
       fail(method + e.getMessage());
     }
 
-    al.add(new ValueObject(1));
-    al.add(new ValueObject(2));
-    al.add(new ValueObject(3));
-    al.add(new ValueObject(4));
-    al.add(new ValueObject(5));
+    al.add(new ValueObjectBean(1));
+    al.add(new ValueObjectBean(2));
+    al.add(new ValueObjectBean(3));
+    al.add(new ValueObjectBean(4));
+    al.add(new ValueObjectBean(5));
     try {
       cpoAdapter.insertObjects("TestOrderByInsert", al);
     } catch (Exception e) {
@@ -127,7 +127,7 @@ public class OrderByTest extends TestCase {
       Collection<CpoOrderBy> colCob = new ArrayList<>();
       colCob.add(cob);
       colCob.add(cob1);
-      ValueObject valObj = new ValueObject();
+      ValueObject valObj = new ValueObjectBean();
       col = cpoAdapter.retrieveBeans("TestOrderByRetrieve", valObj, colCob);
 
       int id = 1;
@@ -153,7 +153,7 @@ public class OrderByTest extends TestCase {
       Collection<CpoOrderBy> colCob = new ArrayList<>();
       colCob.add(cob);
       colCob.add(cob2);
-      ValueObject valObj = new ValueObject();
+      ValueObject valObj = new ValueObjectBean();
       col = cpoAdapter.retrieveBeans("TestOrderByRetrieve", valObj, colCob);
       int id = 5;
       for (ValueObject vo : col) {
@@ -169,7 +169,7 @@ public class OrderByTest extends TestCase {
     String method = "testOrderByFunction:";
     Collection<ValueObject> col;
 
-    ValueObject vobj = new ValueObject(-6);
+    ValueObject vobj = new ValueObjectBean(-6);
     try {
       cpoAdapter.insertObject("TestOrderByInsert", vobj);
     } catch (Exception e) {
@@ -179,7 +179,7 @@ public class OrderByTest extends TestCase {
       CpoOrderBy cob = cpoAdapter.newOrderBy("id", true, "ABS(id)");
       Collection<CpoOrderBy> colCob = new ArrayList<>();
       colCob.add(cob);
-      ValueObject valObj = new ValueObject();
+      ValueObject valObj = new ValueObjectBean();
       col = cpoAdapter.retrieveBeans("TestOrderByRetrieve", valObj, colCob);
 
       int id = 1;

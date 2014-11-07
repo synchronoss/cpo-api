@@ -57,7 +57,7 @@ public class InvalidParameterTest {
     Collection<ValueObject> col = null;
 
     try {
-      ValueObject valObj = new ValueObject();
+      ValueObject valObj = new ValueObjectBean();
       col = cpoAdapter.retrieveBeans("BadContext", valObj);
       fail(method + "Test got to unreachable code");
     } catch (CpoException ce) {
@@ -124,7 +124,7 @@ public class InvalidParameterTest {
     Collection<ValueObject> lvos = null;
 
     try {
-      ValueObject lvo = new ValueObject();
+      ValueObject lvo = new ValueObjectBean();
       logger.debug("Calling the NULL List");
       lvos = cpoAdapter.retrieveBeans("NULL", lvo);
       logger.debug("Called the NULL List");

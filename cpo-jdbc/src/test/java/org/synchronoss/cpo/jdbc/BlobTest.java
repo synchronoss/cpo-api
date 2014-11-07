@@ -80,7 +80,7 @@ public class BlobTest extends TestCase {
         testBlob2[i] = (byte) (((int) 'z') - (i % 26));
       }
 
-      LobValueObject lvo = new LobValueObject(1, testBlob, testClob);
+      LobValueObject lvo = new LobValueObjectBean(1, testBlob, testClob);
       LobValueObject lvo2 = null;
 
       lvo.setBLob2(testBlob2);
@@ -155,7 +155,7 @@ public class BlobTest extends TestCase {
         testBlob2[i] = (byte) (((int) 'z') - (i % 26));
       }
 
-      LobValueObject lvo = new LobValueObject(1, testBlob, testClob);
+      LobValueObject lvo = new LobValueObjectBean(1, testBlob, testClob);
       LobValueObject lvo2 = null;
 
       lvo.setBLob2(testBlob2);
@@ -235,7 +235,7 @@ public class BlobTest extends TestCase {
       testBlob = new byte[0];
       testBlob2 = new byte[0];
 
-      LobValueObject lvo = new LobValueObject(1, testBlob, testClob);
+      LobValueObject lvo = new LobValueObjectBean(1, testBlob, testClob);
       LobValueObject lvo2 = null;
 
       lvo.setBLob2(testBlob2);
@@ -298,7 +298,7 @@ public class BlobTest extends TestCase {
 
     if (metaDescriptor.isSupportsBlobs()) {
 
-      LobValueObject lvo = new LobValueObject(1, null, null);
+      LobValueObject lvo = new LobValueObjectBean(1, null, null);
       LobValueObject lvo2 = null;
 
       lvo.setBLob2(null);

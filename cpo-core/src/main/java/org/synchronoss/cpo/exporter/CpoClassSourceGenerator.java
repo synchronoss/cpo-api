@@ -36,6 +36,7 @@ public class CpoClassSourceGenerator implements MetaVisitor {
   private static final String ATTR_PREFIX = "ATTR_";
   private static final String FG_PREFIX = "FG_";
   private static final String VAR_PREFIX = "_";
+  private static final String CLASS_SUFFIX = "Bean";
 
   protected CpoMetaDescriptor metaDescriptor;
   protected String className = null;
@@ -83,12 +84,6 @@ public class CpoClassSourceGenerator implements MetaVisitor {
     source.append(" */\n");
     source.append(header);
     source.append("\n");
-    source.append("  /* Attribute name statics */\n");
-    source.append(attributeStatics);
-    source.append("\n");
-    source.append("  /* Function group statics */\n");
-    source.append(functionGroupStatics);
-    source.append("\n");
     source.append("  /* Properties */\n");
     source.append(properties);
     source.append("\n");
@@ -134,14 +129,21 @@ public class CpoClassSourceGenerator implements MetaVisitor {
   }
 
   /**
-   * Returns the name of the class to use
+   * The cpoClass name will be used for the name of the interface
    */
-  protected String generateClassName(CpoClass cpoClass) {
+  protected String generateInterfaceName(CpoClass cpoClass) {
     String className = cpoClass.getName();
     if (className.lastIndexOf(".") != -1) {
       className = className.substring(className.lastIndexOf(".") + 1);
     }
     return className;
+  }
+
+  /**
+   * Returns the name of the class to use
+   */
+  protected String generateClassName(CpoClass cpoClass) {
+    return generateInterfaceName(cpoClass) + CLASS_SUFFIX;
   }
 
   @Override
@@ -151,6 +153,7 @@ public class CpoClassSourceGenerator implements MetaVisitor {
     reset();
 
     className = generateClassName(cpoClass);
+    String interfaceName = generateInterfaceName(cpoClass);
 
     // generate class header
     if (cpoClass.getName().lastIndexOf(".") != -1) {
@@ -159,7 +162,7 @@ public class CpoClassSourceGenerator implements MetaVisitor {
     }
 
     // generate class declaration
-    header.append("public class " + className + " implements java.io.Serializable {\n");
+    header.append("public class " + className + " implements " + interfaceName + ", java.io.Serializable {\n");
 
     // footer
     footer.append("}\n");

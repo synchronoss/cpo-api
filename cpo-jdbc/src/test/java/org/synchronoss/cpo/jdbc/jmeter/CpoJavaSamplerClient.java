@@ -25,7 +25,7 @@ import org.apache.jmeter.protocol.java.sampler.*;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.log.Logger;
 import org.synchronoss.cpo.*;
-import org.synchronoss.cpo.jdbc.ValueObject;
+import org.synchronoss.cpo.jdbc.*;
 import org.synchronoss.cpo.jdbc.cpoJdbcConfig.*;
 import org.synchronoss.cpo.jdbc.meta.JdbcCpoMetaDescriptor;
 import org.synchronoss.cpo.meta.CpoMetaDescriptor;
@@ -90,7 +90,7 @@ public class CpoJavaSamplerClient extends AbstractJavaSamplerClient {
 
     int id = Integer.parseInt(javaSamplerContext.getParameter(START_ID));
 
-    ValueObject valueObject = new ValueObject(id);
+    ValueObject valueObject = new ValueObjectBean(id);
     result.setSampleLabel(Thread.currentThread().getName());
 
     valueObject.setAttrVarChar("testInsert");

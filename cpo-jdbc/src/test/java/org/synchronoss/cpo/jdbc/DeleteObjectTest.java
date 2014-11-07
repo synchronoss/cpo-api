@@ -66,7 +66,7 @@ public class DeleteObjectTest extends TestCase {
 
   public void testDeleteObject() {
     String method = "testDeleteObject:";
-    ValueObject valObj = new ValueObject(5);
+    ValueObject valObj = new ValueObjectBean(5);
 
     valObj.setAttrVarChar("testDelete");
     valObj.setAttrInteger(3);

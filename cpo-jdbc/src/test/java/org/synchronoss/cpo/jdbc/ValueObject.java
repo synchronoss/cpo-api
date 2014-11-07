@@ -30,252 +30,109 @@ import java.sql.Timestamp;
  *
  * @author david berry
  */
-public class ValueObject implements java.io.Serializable, java.lang.Cloneable {
+public interface ValueObject {
 
-  /**
-   * Version Id for this class.
-   */
-  private static final long serialVersionUID = 1L;
-  private int id_ = 0; // The id for the value object in the database
-  private int attrInteger_ = 0;
-  private int attrInt_ = 0;
-  private double attrDouble_ = 0.0;
-  private float attrFloat_ = 0;
-  private String attrVarChar_ = null;
-  private String attrVarCharIgnoreCase_ = null;
-  private String attrChar_ = null;
-  private String attrCharacter_ = null;
-  private String attrLongVarChar_ = null;
-  private Date attrDate_ = null;
-  private Time attrTime_ = null;
-  private Timestamp attrTimestamp_ = null;
-  private Timestamp attrDateTime_ = null;
-  private BigDecimal attrDecimal_ = null;
-  private BigDecimal attrNumeric_ = null;
-  private boolean attrBit_ = false;
-  private BigDecimal attrTinyInt_ = null;
-  private int attrSmallInt_ = 0;
-  private BigDecimal attrBigInt_ = null;
-  private BigDecimal attrReal_ = null;
-  private byte[] attrBinary_ = null;
-  private byte[] attrVarBinary_ = null;
-  private byte[] attrLongVarBinary_ = null;
-  private Object attrOther_ = null;
-  private Object attrObject_ = null;
+  public void setId(int id);
 
-  public ValueObject() {
-    // public default constructor as required by cpo
-  }
+  public int getId();
 
-  public ValueObject(int id) {
-    id_ = id;
-  }
+  public int getAttrInteger();
 
-  public void setId(int id) {
-    id_ = id;
-  }
+  public int getAttrInt();
 
-  public int getId() {
-    return id_;
-  }
+  public double getAttrDouble();
 
-  public int getAttrInteger() {
-    return attrInteger_;
-  }
+  public double getAttrFloat();
 
-  public int getAttrInt() {
-    return attrInt_;
-  }
+  public String getAttrVarChar();
 
-  public double getAttrDouble() {
-    return attrDouble_;
-  }
+  public String getAttrVarCharIgnoreCase();
 
-  public double getAttrFloat() {
-    return attrFloat_;
-  }
+  public String getAttrChar();
 
-  public String getAttrVarChar() {
-    return attrVarChar_;
-  }
+  public String getAttrCharacter();
 
-  public String getAttrVarCharIgnoreCase() {
-    return attrVarCharIgnoreCase_;
-  }
+  public String getAttrLongVarChar();
 
-  public String getAttrChar() {
-    return attrChar_;
-  }
+  public Date getAttrDate();
 
-  public String getAttrCharacter() {
-    return attrCharacter_;
-  }
+  public Time getAttrTime();
 
-  public String getAttrLongVarChar() {
-    return attrLongVarChar_;
-  }
+  public Timestamp getAttrTimestamp();
 
-  public Date getAttrDate() {
-    return attrDate_;
-  }
+  public Timestamp getAttrDatetime();
 
-  public Time getAttrTime() {
-    return attrTime_;
-  }
+  public BigDecimal getAttrDecimal();
 
-  public Timestamp getAttrTimestamp() {
-    return attrTimestamp_;
-  }
+  public BigDecimal getAttrNumeric();
 
-  public Timestamp getAttrDatetime() {
-    return attrDateTime_;
-  }
+  public boolean getAttrBit();
 
-  public BigDecimal getAttrDecimal() {
-    return attrDecimal_;
-  }
+  public BigDecimal getAttrTinyInt();
 
-  public BigDecimal getAttrNumeric() {
-    return attrNumeric_;
-  }
+  public int getAttrSmallInt();
 
-  public boolean getAttrBit() {
-    return attrBit_;
-  }
+  public BigDecimal getAttrBigInt();
 
-  public BigDecimal getAttrTinyInt() {
-    return attrTinyInt_;
-  }
+  public BigDecimal getAttrReal();
 
-  public int getAttrSmallInt() {
-    return attrSmallInt_;
-  }
+  public byte[] getAttrBinary();
 
-  public BigDecimal getAttrBigInt() {
-    return attrBigInt_;
-  }
+  public byte[] getAttrVarBinary();
 
-  public BigDecimal getAttrReal() {
-    return attrReal_;
-  }
+  public byte[] getAttrLongVarBinary();
 
-  public byte[] getAttrBinary() {
-    return attrBinary_;
-  }
+  public Object getAttrOther();
 
-  public byte[] getAttrVarBinary() {
-    return attrVarBinary_;
-  }
+  public Object getAttrObject();
 
-  public byte[] getAttrLongVarBinary() {
-    return attrLongVarBinary_;
-  }
+  public void setAttrInteger(int attrInteger);
 
-  public Object getAttrOther() {
-    return attrOther_;
-  }
+  public void setAttrInt(int attrInt);
 
-  public Object getAttrObject() {
-    return attrObject_;
-  }
+  public void setAttrDouble(double attrDouble);
 
-  public void setAttrInteger(int attrInteger) {
-    attrInteger_ = attrInteger;
-  }
+  public void setAttrFloat(float attrFloat);
 
-  public void setAttrInt(int attrInt) {
-    attrInt_ = attrInt;
-  }
+  public void setAttrVarChar(String attrVarChar);
 
-  public void setAttrDouble(double attrDouble) {
-    attrDouble_ = attrDouble;
-  }
+  public void setAttrVarCharIgnoreCase(String attrVarCharIgnoreCase);
 
-  public void setAttrFloat(float attrFloat) {
-    attrFloat_ = attrFloat;
-  }
+  public void setAttrChar(String attrChar);
 
-  public void setAttrVarChar(String attrVarChar) {
-    attrVarChar_ = attrVarChar;
-  }
+  public void setAttrCharacter(String attrCharacter);
 
-  public void setAttrVarCharIgnoreCase(String attrVarCharIgnoreCase) {
-    attrVarCharIgnoreCase_ = attrVarCharIgnoreCase;
-  }
+  public void setAttrLongVarChar(String attrLongVarChar);
 
-  public void setAttrChar(String attrChar) {
-    attrChar_ = attrChar;
-  }
+  public void setAttrDate(Date attrDate);
 
-  public void setAttrCharacter(String attrCharacter) {
-    attrCharacter_ = attrCharacter;
-  }
+  public void setAttrTime(Time attrTime);
 
-  public void setAttrLongVarChar(String attrLongVarChar) {
-    attrLongVarChar_ = attrLongVarChar;
-  }
+  public void setAttrTimestamp(Timestamp attrTimestamp);
 
-  public void setAttrDate(Date attrDate) {
-    attrDate_ = attrDate;
-  }
+  public void setAttrDatetime(Timestamp attrDateTime);
 
-  public void setAttrTime(Time attrTime) {
-    attrTime_ = attrTime;
-  }
+  public void setAttrDecimal(BigDecimal attrDecimal);
 
-  public void setAttrTimestamp(Timestamp attrTimestamp) {
-    attrTimestamp_ = attrTimestamp;
-  }
+  public void setAttrNumeric(BigDecimal attrNumeric);
 
-  public void setAttrDatetime(Timestamp attrDateTime) {
-    attrDateTime_ = attrDateTime;
-  }
+  public void setAttrBit(boolean attrBit);
 
-  public void setAttrDecimal(BigDecimal attrDecimal) {
-    attrDecimal_ = attrDecimal;
-  }
+  public void setAttrTinyInt(BigDecimal attrTinyInt);
 
-  public void setAttrNumeric(BigDecimal attrNumeric) {
-    attrNumeric_ = attrNumeric;
-  }
+  public void setAttrSmallInt(int attrSmallInt);
 
-  public void setAttrBit(boolean attrBit) {
-    attrBit_ = attrBit;
-  }
+  public void setAttrBigInt(BigDecimal attrBigInt);
 
-  public void setAttrTinyInt(BigDecimal attrTinyInt) {
-    attrTinyInt_ = attrTinyInt;
-  }
+  public void setAttrReal(BigDecimal attrReal);
 
-  public void setAttrSmallInt(int attrSmallInt) {
-    attrSmallInt_ = attrSmallInt;
-  }
+  public void setAttrBinary(byte[] attrBinary);
 
-  public void setAttrBigInt(BigDecimal attrBigInt) {
-    attrBigInt_ = attrBigInt;
-  }
+  public void setAttrVarBinary(byte[] attrVarBinary);
 
-  public void setAttrReal(BigDecimal attrReal) {
-    attrReal_ = attrReal;
-  }
+  public void setAttrLongVarBinary(byte[] attrLongVarBinary);
 
-  public void setAttrBinary(byte[] attrBinary) {
-    attrBinary_ = attrBinary;
-  }
+  public void setAttrOther(Object attrOther);
 
-  public void setAttrVarBinary(byte[] attrVarBinary) {
-    attrVarBinary_ = attrVarBinary;
-  }
-
-  public void setAttrLongVarBinary(byte[] attrLongVarBinary) {
-    attrLongVarBinary_ = attrLongVarBinary;
-  }
-
-  public void setAttrOther(Object attrOther) {
-    attrOther_ = attrOther;
-  }
-
-  public void setAttrObject(Object attrObject) {
-    attrObject_ = attrObject;
-  }
+  public void setAttrObject(Object attrObject);
 }

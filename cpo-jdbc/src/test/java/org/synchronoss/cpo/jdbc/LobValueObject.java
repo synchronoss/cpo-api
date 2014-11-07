@@ -20,57 +20,21 @@
  */
 package org.synchronoss.cpo.jdbc;
 
-import java.io.Serializable;
+public interface LobValueObject {
 
-public class LobValueObject implements Serializable {
+  public void setLobId(int lobId);
 
-  /**
-   * Version Id for this class.
-   */
-  private static final long serialVersionUID = 1L;
-  private int lobId;
-  private byte[] bLob = null;
-  private byte[] bLob2 = null;
-  private char[] cLob = null;
+  public int getLobId();
 
-  public LobValueObject() {
-  }
+  public void setBLob(byte[] bLob);
 
-  public LobValueObject(int id, byte[] bLob, char[] cLob) {
-    this.lobId = id;
-    this.bLob = bLob;
-    this.cLob = cLob;
-  }
+  public byte[] getBLob();
 
-  public void setLobId(int lobId) {
-    this.lobId = lobId;
-  }
+  public void setBLob2(byte[] bLob);
 
-  public int getLobId() {
-    return this.lobId;
-  }
+  public byte[] getBLob2();
 
-  public void setBLob(byte[] bLob) {
-    this.bLob = bLob;
-  }
+  public void setCLob(char[] cLob);
 
-  public byte[] getBLob() {
-    return this.bLob;
-  }
-
-  public void setBLob2(byte[] bLob) {
-    this.bLob2 = bLob;
-  }
-
-  public byte[] getBLob2() {
-    return this.bLob2;
-  }
-
-  public void setCLob(char[] cLob) {
-    this.cLob = cLob;
-  }
-
-  public char[] getCLob() {
-    return this.cLob;
-  }
+  public char[] getCLob();
 }

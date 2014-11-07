@@ -77,7 +77,7 @@ public class ExecuteTrxTest extends TestCase {
   public void testExecuteTrx() {
     if (metaDescriptor.isSupportsCalls()) {
       String method = "testExecuteTrx:";
-      ValueObject vo = new ValueObject(1);
+      ValueObject vo = new ValueObjectBean(1);
       vo.setAttrInteger(3);
       ValueObject rvo;
 
@@ -92,7 +92,7 @@ public class ExecuteTrxTest extends TestCase {
 
 
       try {
-        vo = new ValueObject(1);
+        vo = new ValueObjectBean(1);
         vo.setAttrSmallInt(3);
         rvo = cpoAdapter.executeObject("TestExecuteObjectNoTransform", vo);
         assertNotNull(method + "Returned Value object is null");

@@ -71,7 +71,7 @@ public class CaseInsensitiveTest extends TestCase {
   public void testCaseInsensitiveObject() {
     String method = "testCaseInsensitiveObject:";
   
-    ValueObject valObj = new ValueObject(5);
+    ValueObject valObj = new ValueObjectBean(5);
 
     valObj.setAttrVarChar("testCaseInsensitiveObject");
     valObj.setAttrInteger(3);

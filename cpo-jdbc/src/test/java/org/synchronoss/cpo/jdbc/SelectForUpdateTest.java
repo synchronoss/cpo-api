@@ -66,8 +66,8 @@ public class SelectForUpdateTest extends TestCase {
     } catch (Exception e) {
       logger.debug(ExceptionHelper.getLocalizedMessage(e));
     }
-    ValueObject vo = new ValueObject(1);
-    ValueObject vo2 = new ValueObject(2);
+    ValueObject vo = new ValueObjectBean(1);
+    ValueObject vo2 = new ValueObjectBean(2);
     try {
       trxAdapter.insertObject(vo);
       trxAdapter.insertObject(vo2);
@@ -87,8 +87,8 @@ public class SelectForUpdateTest extends TestCase {
   @Override
   public void tearDown() {
    String method = "tearDown:";
-   ValueObject vo = new ValueObject(1);
-    ValueObject vo2 = new ValueObject(2);
+   ValueObject vo = new ValueObjectBean(1);
+    ValueObject vo2 = new ValueObjectBean(2);
     try {
       trxAdapter.deleteObject(vo);
       trxAdapter.deleteObject(vo2);
@@ -114,7 +114,7 @@ public class SelectForUpdateTest extends TestCase {
   public void testSelect4UpdateSingleObject() {
     if (metaDescriptor.isSupportsSelect4Update()) {
       String method = "testSelect4UpdateSingleObject:";
-      ValueObject vo2 = new ValueObject(1);
+      ValueObject vo2 = new ValueObjectBean(1);
 
       try {
         trxAdapter.retrieveBean("SelectForUpdate", vo2);
@@ -159,7 +159,7 @@ public class SelectForUpdateTest extends TestCase {
   public void testSelect4UpdateExists() {
     if (metaDescriptor.isSupportsSelect4Update()) {
       String method = "testSelect4UpdateExists:";
-      ValueObject vo2 = new ValueObject(1);
+      ValueObject vo2 = new ValueObjectBean(1);
 
       try {
         long count = trxAdapter.existsObject("SelectForUpdateExistZero", vo2);

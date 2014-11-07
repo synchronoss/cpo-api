@@ -75,7 +75,7 @@ public class BlobTest {
       testBlob2.put((byte)(((int)'z') - (i % 26)));
     }
 
-    ValueObject lvo = new ValueObject(1, testBlob);
+    ValueObject lvo = new ValueObjectBean(1, testBlob);
     ValueObject lvo2 = null;
 
     lvo.setAttrBlob2(testBlob2);
@@ -132,7 +132,7 @@ public class BlobTest {
       testBlob2.put((byte)(((int)'z') - (i % 26)));
     }
 
-    ValueObject lvo = new ValueObject(1, testBlob);
+    ValueObject lvo = new ValueObjectBean(1, testBlob);
     ValueObject lvo2 = null;
 
     lvo.setAttrBlob2(testBlob2);
@@ -205,7 +205,7 @@ public class BlobTest {
     testBlob = ByteBuffer.allocate(0);
     testBlob2 = ByteBuffer.allocate(0);
 
-    ValueObject lvo = new ValueObject(1, testBlob);
+    ValueObject lvo = new ValueObjectBean(1, testBlob);
     ValueObject lvo2 = null;
 
     lvo.setAttrBlob2(testBlob2);
@@ -258,7 +258,7 @@ public class BlobTest {
   @Test
   public void testTrxNullGZipBlobInsertandDelete() {
 
-    ValueObject lvo = new ValueObject(1, null);
+    ValueObject lvo = new ValueObjectBean(1, null);
     ValueObject lvo2 = null;
 
     lvo.setAttrBlob2(null);

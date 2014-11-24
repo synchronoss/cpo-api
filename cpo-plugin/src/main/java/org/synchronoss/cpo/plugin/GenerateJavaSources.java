@@ -65,6 +65,9 @@ public class GenerateJavaSources extends AbstractMojo {
   @Parameter (property = "filter", defaultValue = ".*")
   private String filter;
 
+  @Parameter (property = "generateInterface", defaultValue = "false")
+  private boolean generateInterface = false;
+
   @Parameter (property = "generateClass", defaultValue = "true")
   private boolean generateClass = true;
 
@@ -79,6 +82,10 @@ public class GenerateJavaSources extends AbstractMojo {
 
   public void execute() throws MojoExecutionException {
     getLog().info("Cpo config: " + cpoConfig);
+
+    if (!generateInterface && !generateClass) {
+      throw new MojoExecutionException("You must generate interfaces, classes or both");
+    }
 
     File srcDir;
 
@@ -128,19 +135,26 @@ public class GenerateJavaSources extends AbstractMojo {
             }
           }
 
-          CpoInterfaceSourceGenerator interfaceSourceGenerator = new CpoInterfaceSourceGenerator(metaDescriptor);
-          cpoClass.acceptMetaDFVisitor(interfaceSourceGenerator);
+          if (generateInterface) {
+            CpoInterfaceSourceGenerator interfaceSourceGenerator = new CpoInterfaceSourceGenerator(metaDescriptor);
+            cpoClass.acceptMetaDFVisitor(interfaceSourceGenerator);
 
-          File interfaceFile = new File(classDir, interfaceSourceGenerator.getInterfaceName() + JAVA_EXT);
-          getLog().info("cpo-plugin generated " + interfaceFile.getAbsolutePath());
+            File interfaceFile = new File(classDir, interfaceSourceGenerator.getInterfaceName() + JAVA_EXT);
+            getLog().info("cpo-plugin generated " + interfaceFile.getAbsolutePath());
 
-          FileWriter iw = new FileWriter(interfaceFile);
-          iw.write(interfaceSourceGenerator.getSourceCode());
-          iw.flush();
-          iw.close();
+            FileWriter iw = new FileWriter(interfaceFile);
+            iw.write(interfaceSourceGenerator.getSourceCode());
+            iw.flush();
+            iw.close();
+          }
 
           if (generateClass) {
-            CpoClassSourceGenerator classSourceGenerator = new CpoClassSourceGenerator(metaDescriptor);
+            CpoClassSourceGenerator classSourceGenerator;
+            if (generateInterface) {
+              classSourceGenerator = new CpoClassSourceGenerator(metaDescriptor);
+            } else {
+              classSourceGenerator = new CpoLegacyClassSourceGenerator(metaDescriptor);
+            }
             cpoClass.acceptMetaDFVisitor(classSourceGenerator);
 
             File javaFile = new File(classDir, classSourceGenerator.getClassName() + JAVA_EXT);

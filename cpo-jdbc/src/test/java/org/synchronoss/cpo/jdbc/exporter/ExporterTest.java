@@ -98,6 +98,44 @@ public class ExporterTest extends TestCase {
     logger.debug("testXmlExport complete");
   }
 
+  public void testLegacyClassSourceExport() {
+    logger.debug("testLegacyClassSourceExport");
+    try {
+      CpoLegacyClassSourceGenerator classSourceGenerator = new CpoLegacyClassSourceGenerator(metaDescriptor);
+
+      logger.debug("Generating java source");
+      CpoClass cpoClass = metaDescriptor.getMetaClass(new ValueObjectBean());
+      cpoClass.acceptMetaDFVisitor(classSourceGenerator);
+      String classSource = classSourceGenerator.getSourceCode();
+
+      // validate that we got something
+      assertNotNull(classSource);
+      assertFalse(classSource.isEmpty());
+
+      // write the file
+      File javaFile = new File("target", classSourceGenerator.getClassName() + ".java");
+      logger.debug("Saving class source to " + javaFile.getAbsolutePath());
+      FileWriter cw = new FileWriter(javaFile);
+      cw.write(classSource);
+      cw.flush();
+      cw.close();
+
+      // let's try to compile the file
+      logger.debug("Compiling class source");
+      JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
+      StandardJavaFileManager fileManager = compiler.getStandardFileManager(null, null, null);
+      Iterable<? extends JavaFileObject> compilationUnits = fileManager.getJavaFileObjectsFromFiles(Arrays.asList(javaFile));
+      boolean result = compiler.getTask(null, fileManager, null, null, null, compilationUnits).call();
+
+      // validate the result
+      assertTrue(result);
+
+    } catch (Exception e) {
+      fail(e.getMessage());
+    }
+    logger.debug("testClassSourceExport complete");
+  }
+
   public void testInterfaceSourceExport() {
     logger.debug("testInterfaceSourceExport");
     try {

@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>JdbcCpoAttribute.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">cpo-jdbc</a> &gt; <a href="index.source.html" class="el_package">org.synchronoss.cpo.jdbc</a> &gt; <span class="el_source">JdbcCpoAttribute.java</span></div><h1>JdbcCpoAttribute.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2003-2012 David E. Berry
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ *
+ * A copy of the GNU Lesser General Public License may also be found at
+ * http://www.gnu.org/licenses/lgpl.txt
+ */
+package org.synchronoss.cpo.jdbc;
+
+import org.slf4j.*;
+import org.synchronoss.cpo.CpoException;
+import org.synchronoss.cpo.meta.CpoMetaDescriptor;
+import org.synchronoss.cpo.meta.domain.CpoAttribute;
+import org.synchronoss.cpo.transform.jdbc.JdbcCpoTransform;
+
+import java.lang.reflect.Method;
+
+/**
+ * JdbcCpoAttribute. A class that includes the Jdbc specifc attributes that are additional to the CpoAttribute attributes
+ *
+ * @author david berry
+ */
+public class JdbcCpoAttribute extends CpoAttribute implements java.io.Serializable, java.lang.Cloneable {
+
+<span class="fc" id="L38">  private static final Logger logger = LoggerFactory.getLogger(JdbcCpoAttribute.class);</span>
+  /**
+   * Version Id for this class.
+   */
+  private static final long serialVersionUID = 1L;
+<span class="fc" id="L43">  private String dbTable_ = null;</span>
+<span class="fc" id="L44">  private String dbColumn_ = null;</span>
+  //Transform attributes
+<span class="fc" id="L46">  private JdbcCpoTransform jdbcTransform = null;</span>
+<span class="fc" id="L47">  private Method transformPSOutMethod = null;</span>
+<span class="fc" id="L48">  private Method transformCSOutMethod = null;</span>
+
+<span class="fc" id="L50">  public JdbcCpoAttribute() {</span>
+<span class="fc" id="L51">  }</span>
+
+  public void setDbTable(String dbTable) {
+<span class="fc" id="L54">    dbTable_ = dbTable;</span>
+<span class="fc" id="L55">  }</span>
+
+  public void setDbColumn(String dbColumn) {
+<span class="fc" id="L58">    dbColumn_ = dbColumn;</span>
+<span class="fc" id="L59">  }</span>
+
+  public String getDbTable() {
+<span class="fc" id="L62">    return dbTable_;</span>
+  }
+
+  public String getDbColumn() {
+<span class="fc" id="L66">    return dbColumn_;</span>
+  }
+
+//  private void dumpMethod(Method m) {
+//    logger.debug(&quot;========================&quot;);
+//    logger.debug(&quot;===&gt; Declaring Class: &quot; + m.getDeclaringClass().getName());
+//    logger.debug(&quot;===&gt; Method Signature: &quot; + m.toString());
+//    logger.debug(&quot;===&gt; Generic Signature: &quot; + m.toGenericString());
+//    logger.debug(&quot;===&gt; Method isBridge: &quot; + m.isBridge());
+//    logger.debug(&quot;===&gt; Method isSynthetic: &quot; + m.isSynthetic());
+//    logger.debug(&quot;========================&quot;);
+//  }
+
+  @Override
+  protected void initTransformClass(CpoMetaDescriptor metaDescriptor) throws CpoException {
+<span class="fc" id="L81">    super.initTransformClass(metaDescriptor);</span>
+<span class="pc bpc" id="L82" title="1 of 4 branches missed.">    if (getCpoTransform() != null &amp;&amp; getCpoTransform() instanceof JdbcCpoTransform) {</span>
+<span class="fc" id="L83">      jdbcTransform = (JdbcCpoTransform) getCpoTransform();</span>
+
+<span class="fc bfc" id="L85" title="All 2 branches covered.">      for (Method m : findMethods(jdbcTransform.getClass(), TRANSFORM_OUT_NAME, 2, true)) {</span>
+<span class="fc bfc" id="L86" title="All 2 branches covered.">        if (m.getParameterTypes()[0].getName().equals(&quot;org.synchronoss.cpo.jdbc.JdbcPreparedStatementFactory&quot;)) {</span>
+<span class="fc" id="L87">          transformPSOutMethod = m;</span>
+<span class="pc bpc" id="L88" title="1 of 2 branches missed.">        } else if (m.getParameterTypes()[0].getName().equals(&quot;org.synchronoss.cpo.jdbc.JdbcCallableStatementFactory&quot;)) {</span>
+<span class="fc" id="L89">          transformCSOutMethod = m;</span>
+        }
+<span class="fc" id="L91">      }</span>
+    }
+
+    // TODO Revisit this. Initializing the java sql type here. Not sure that this is the right place.
+<span class="fc" id="L95">    setDataTypeInt(metaDescriptor.getDataTypeInt(getDataType()));</span>
+<span class="fc" id="L96">  }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.2.201409121644</span></div></body></html>

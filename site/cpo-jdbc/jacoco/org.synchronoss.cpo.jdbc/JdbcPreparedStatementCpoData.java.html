@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>JdbcPreparedStatementCpoData.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">cpo-jdbc</a> &gt; <a href="index.source.html" class="el_package">org.synchronoss.cpo.jdbc</a> &gt; <span class="el_source">JdbcPreparedStatementCpoData.java</span></div><h1>JdbcPreparedStatementCpoData.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2003-2012 David E. Berry
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ *
+ * A copy of the GNU Lesser General Public License may also be found at
+ * http://www.gnu.org/licenses/lgpl.txt
+ */
+package org.synchronoss.cpo.jdbc;
+
+import org.slf4j.*;
+import org.synchronoss.cpo.*;
+import org.synchronoss.cpo.helper.ExceptionHelper;
+import org.synchronoss.cpo.jdbc.meta.JdbcMethodMapEntry;
+import org.synchronoss.cpo.jdbc.meta.JdbcMethodMapper;
+import org.synchronoss.cpo.meta.AbstractBindableCpoData;
+import org.synchronoss.cpo.meta.domain.CpoAttribute;
+import org.synchronoss.cpo.transform.CpoTransform;
+import org.synchronoss.cpo.transform.jdbc.JdbcCpoTransform;
+
+import java.io.*;
+
+/**
+ *
+ * @author dberry
+ */
+public class JdbcPreparedStatementCpoData extends AbstractBindableCpoData {
+
+<span class="fc" id="L41">  private static final Logger logger = LoggerFactory.getLogger(JdbcPreparedStatementCpoData.class);</span>
+<span class="fc" id="L42">  private JdbcPreparedStatementFactory cpoStatementFactory = null;</span>
+
+  public JdbcPreparedStatementCpoData(JdbcPreparedStatementFactory cpoStatementFactory, CpoAttribute cpoAttribute, int index) {
+<span class="fc" id="L45">    super(cpoAttribute, index);</span>
+<span class="fc" id="L46">    this.cpoStatementFactory = cpoStatementFactory;</span>
+<span class="fc" id="L47">  }</span>
+
+  @Override
+  public void invokeSetter(Object instanceObject) throws CpoException {
+<span class="pc bpc" id="L51" title="1 of 2 branches missed.">    Logger localLogger = instanceObject == null ? logger : LoggerFactory.getLogger(instanceObject.getClass());</span>
+<span class="fc" id="L52">    CpoAttribute cpoAttribute = getCpoAttribute();</span>
+<span class="fc" id="L53">    Object param = transformOut(cpoAttribute.invokeGetter(instanceObject));</span>
+<span class="fc" id="L54">    JdbcMethodMapEntry&lt;?,?&gt; methodMapEntry = JdbcMethodMapper.getJavaSqlMethod(getDataSetterParamType());</span>
+<span class="pc bpc" id="L55" title="1 of 2 branches missed.">    if (methodMapEntry == null) {</span>
+<span class="nc" id="L56">      throw new CpoException(&quot;Error Retrieveing Jdbc Method for type: &quot; + getDataSetterParamType().getName());</span>
+    }
+<span class="fc" id="L58">    localLogger.info(cpoAttribute.getDataName() + &quot;=&quot; + param);</span>
+    try {
+<span class="pc bpc" id="L60" title="3 of 4 branches missed.">      switch (methodMapEntry.getMethodType()) {</span>
+        case JdbcMethodMapEntry.METHOD_TYPE_BASIC:
+<span class="fc" id="L62">          methodMapEntry.getBsSetter().invoke(cpoStatementFactory.getPreparedStatement(), getIndex(), param);</span>
+<span class="fc" id="L63">          break;</span>
+        case JdbcMethodMapEntry.METHOD_TYPE_STREAM:
+<span class="nc" id="L65">          CpoByteArrayInputStream cbais = CpoByteArrayInputStream.getCpoStream((InputStream) param);</span>
+          // Get the length of the InputStream in param
+<span class="nc" id="L67">          methodMapEntry.getBsSetter().invoke(cpoStatementFactory.getPreparedStatement(), getIndex(), cbais, cbais.getLength());</span>
+<span class="nc" id="L68">          break;</span>
+        case JdbcMethodMapEntry.METHOD_TYPE_READER:
+<span class="nc" id="L70">          CpoCharArrayReader ccar = CpoCharArrayReader.getCpoReader((Reader) param);</span>
+          // Get the length of the Reader in param
+<span class="nc" id="L72">          methodMapEntry.getBsSetter().invoke(cpoStatementFactory.getPreparedStatement(), getIndex(), ccar, ccar.getLength());</span>
+          break;
+      }
+<span class="nc" id="L75">    } catch (Exception e) {</span>
+<span class="nc" id="L76">      throw new CpoException(&quot;Error Invoking Jdbc Method: &quot; + methodMapEntry.getBsSetter().getName() + &quot;:&quot; + ExceptionHelper.getLocalizedMessage(e));</span>
+<span class="fc" id="L77">    }</span>
+<span class="fc" id="L78">  }</span>
+
+  @Override
+  public Object transformOut(Object attributeObject) throws CpoException {
+<span class="fc" id="L82">    Object retObj = attributeObject;</span>
+<span class="fc" id="L83">    CpoTransform cpoTransform = getCpoAttribute().getCpoTransform();</span>
+
+<span class="fc bfc" id="L85" title="All 2 branches covered.">    if (cpoTransform != null) {</span>
+<span class="pc bpc" id="L86" title="1 of 2 branches missed.">      if (cpoTransform instanceof JdbcCpoTransform) {</span>
+<span class="fc" id="L87">        retObj = ((JdbcCpoTransform)cpoTransform).transformOut(cpoStatementFactory, attributeObject);</span>
+      } else {
+<span class="nc" id="L89">        retObj = cpoTransform.transformOut(attributeObject);</span>
+      }
+    }
+<span class="fc" id="L92">    return retObj;</span>
+  }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.2.201409121644</span></div></body></html>

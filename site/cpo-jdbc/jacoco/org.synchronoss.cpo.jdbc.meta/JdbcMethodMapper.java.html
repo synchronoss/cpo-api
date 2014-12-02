@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>JdbcMethodMapper.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">cpo-jdbc</a> &gt; <a href="index.source.html" class="el_package">org.synchronoss.cpo.jdbc.meta</a> &gt; <span class="el_source">JdbcMethodMapper.java</span></div><h1>JdbcMethodMapper.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2003-2012 David E. Berry
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ *
+ * A copy of the GNU Lesser General Public License may also be found at
+ * http://www.gnu.org/licenses/lgpl.txt
+ */
+package org.synchronoss.cpo.jdbc.meta;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.synchronoss.cpo.CpoException;
+import org.synchronoss.cpo.meta.MethodMapper;
+
+import java.io.*;
+import java.lang.reflect.Method;
+import java.math.BigDecimal;
+import java.net.URL;
+import java.sql.*;
+
+/**
+ * MethodMapper is a class defines the getters and setters for all the JDBC specific data classes
+ *
+ * @author david berry
+ */
+public class JdbcMethodMapper implements java.io.Serializable, java.lang.Cloneable {
+<span class="fc" id="L40">  private static final Logger logger = LoggerFactory.getLogger(JdbcMethodMapper.class);</span>
+
+  /**
+   * Version Id for this class.
+   */
+  private static final long serialVersionUID = 1L;
+<span class="fc" id="L46">  private static final Class&lt;PreparedStatement&gt; psc = PreparedStatement.class;</span>
+<span class="fc" id="L47">  private static final Class&lt;ResultSet&gt; rsc = ResultSet.class;</span>
+<span class="fc" id="L48">  private static final Class&lt;CallableStatement&gt; csc = CallableStatement.class;</span>
+<span class="fc" id="L49">  private static MethodMapper&lt;JdbcMethodMapEntry&lt;?,?&gt;&gt; methodMapper = initMethodMapper();</span>
+
+
+<span class="nc" id="L52">  private JdbcMethodMapper() {</span>
+<span class="nc" id="L53">  }</span>
+
+  static public JdbcMethodMapEntry&lt;?,?&gt; getJavaSqlMethod(Class&lt;?&gt; c) throws CpoException {
+<span class="fc" id="L56">    return (JdbcMethodMapEntry)methodMapper.getDataMethodMapEntry(c);</span>
+  }
+
+  static private MethodMapper&lt;JdbcMethodMapEntry&lt;?,?&gt;&gt; initMethodMapper() throws IllegalArgumentException {
+<span class="fc" id="L60">    MethodMapper&lt;JdbcMethodMapEntry&lt;?,?&gt;&gt; mapper = new MethodMapper&lt;&gt;();</span>
+<span class="fc" id="L61">    mapper.addMethodMapEntry(makeJdbcMethodMapEntry(JdbcMethodMapEntry.METHOD_TYPE_BASIC, String.class, String.class, &quot;getString&quot;, &quot;setString&quot;));</span>
+<span class="fc" id="L62">    mapper.addMethodMapEntry(makeJdbcMethodMapEntry(JdbcMethodMapEntry.METHOD_TYPE_BASIC, BigDecimal.class, BigDecimal.class, &quot;getBigDecimal&quot;, &quot;setBigDecimal&quot;));</span>
+<span class="fc" id="L63">    mapper.addMethodMapEntry(makeJdbcMethodMapEntry(JdbcMethodMapEntry.METHOD_TYPE_BASIC, byte.class, byte.class, &quot;getByte&quot;, &quot;setByte&quot;));</span>
+<span class="fc" id="L64">    mapper.addMethodMapEntry(makeJdbcMethodMapEntry(JdbcMethodMapEntry.METHOD_TYPE_BASIC, Byte.class, byte.class, &quot;getByte&quot;, &quot;setByte&quot;));</span>
+<span class="fc" id="L65">    mapper.addMethodMapEntry(makeJdbcMethodMapEntry(JdbcMethodMapEntry.METHOD_TYPE_BASIC, short.class, short.class, &quot;getShort&quot;, &quot;setShort&quot;));</span>
+<span class="fc" id="L66">    mapper.addMethodMapEntry(makeJdbcMethodMapEntry(JdbcMethodMapEntry.METHOD_TYPE_BASIC, Short.class, short.class, &quot;getShort&quot;, &quot;setShort&quot;));</span>
+<span class="fc" id="L67">    mapper.addMethodMapEntry(makeJdbcMethodMapEntry(JdbcMethodMapEntry.METHOD_TYPE_BASIC, int.class, int.class, &quot;getInt&quot;, &quot;setInt&quot;));</span>
+<span class="fc" id="L68">    mapper.addMethodMapEntry(makeJdbcMethodMapEntry(JdbcMethodMapEntry.METHOD_TYPE_BASIC, Integer.class, int.class, &quot;getInt&quot;, &quot;setInt&quot;));</span>
+<span class="fc" id="L69">    mapper.addMethodMapEntry(makeJdbcMethodMapEntry(JdbcMethodMapEntry.METHOD_TYPE_BASIC, long.class, long.class, &quot;getLong&quot;, &quot;setLong&quot;));</span>
+<span class="fc" id="L70">    mapper.addMethodMapEntry(makeJdbcMethodMapEntry(JdbcMethodMapEntry.METHOD_TYPE_BASIC, Long.class, long.class, &quot;getLong&quot;, &quot;setLong&quot;));</span>
+<span class="fc" id="L71">    mapper.addMethodMapEntry(makeJdbcMethodMapEntry(JdbcMethodMapEntry.METHOD_TYPE_BASIC, float.class, float.class, &quot;getFloat&quot;, &quot;setFloat&quot;));</span>
+<span class="fc" id="L72">    mapper.addMethodMapEntry(makeJdbcMethodMapEntry(JdbcMethodMapEntry.METHOD_TYPE_BASIC, Float.class, float.class, &quot;getFloat&quot;, &quot;setFloat&quot;));</span>
+<span class="fc" id="L73">    mapper.addMethodMapEntry(makeJdbcMethodMapEntry(JdbcMethodMapEntry.METHOD_TYPE_BASIC, double.class, double.class, &quot;getDouble&quot;, &quot;setDouble&quot;));</span>
+<span class="fc" id="L74">    mapper.addMethodMapEntry(makeJdbcMethodMapEntry(JdbcMethodMapEntry.METHOD_TYPE_BASIC, Double.class, double.class, &quot;getDouble&quot;, &quot;setDouble&quot;));</span>
+<span class="fc" id="L75">    mapper.addMethodMapEntry(makeJdbcMethodMapEntry(JdbcMethodMapEntry.METHOD_TYPE_BASIC, byte[].class, byte[].class, &quot;getBytes&quot;, &quot;setBytes&quot;));</span>
+<span class="fc" id="L76">    mapper.addMethodMapEntry(makeJdbcMethodMapEntry(JdbcMethodMapEntry.METHOD_TYPE_BASIC, java.sql.Date.class, java.sql.Date.class, &quot;getDate&quot;, &quot;setDate&quot;));</span>
+<span class="fc" id="L77">    mapper.addMethodMapEntry(makeJdbcMethodMapEntry(JdbcMethodMapEntry.METHOD_TYPE_BASIC, java.sql.Time.class, java.sql.Time.class, &quot;getTime&quot;, &quot;setTime&quot;));</span>
+<span class="fc" id="L78">    mapper.addMethodMapEntry(makeJdbcMethodMapEntry(JdbcMethodMapEntry.METHOD_TYPE_BASIC, java.sql.Timestamp.class, java.sql.Timestamp.class, &quot;getTimestamp&quot;, &quot;setTimestamp&quot;));</span>
+<span class="fc" id="L79">    mapper.addMethodMapEntry(makeJdbcMethodMapEntry(JdbcMethodMapEntry.METHOD_TYPE_BASIC, java.sql.Clob.class, java.sql.Clob.class, &quot;getClob&quot;, &quot;setClob&quot;));</span>
+<span class="fc" id="L80">    mapper.addMethodMapEntry(makeJdbcMethodMapEntry(JdbcMethodMapEntry.METHOD_TYPE_BASIC, java.sql.Blob.class, java.sql.Blob.class, &quot;getBlob&quot;, &quot;setBlob&quot;));</span>
+<span class="fc" id="L81">    mapper.addMethodMapEntry(makeJdbcMethodMapEntry(JdbcMethodMapEntry.METHOD_TYPE_BASIC, java.sql.Array.class, java.sql.Array.class, &quot;getArray&quot;, &quot;setArray&quot;));</span>
+<span class="fc" id="L82">    mapper.addMethodMapEntry(makeJdbcMethodMapEntry(JdbcMethodMapEntry.METHOD_TYPE_BASIC, java.sql.Ref.class, java.sql.Ref.class, &quot;getRef&quot;, &quot;setRef&quot;));</span>
+<span class="fc" id="L83">    mapper.addMethodMapEntry(makeJdbcMethodMapEntry(JdbcMethodMapEntry.METHOD_TYPE_BASIC, Object.class, Object.class, &quot;getObject&quot;, &quot;setObject&quot;));</span>
+<span class="fc" id="L84">    mapper.addMethodMapEntry(makeJdbcMethodMapEntry(JdbcMethodMapEntry.METHOD_TYPE_BASIC, URL.class, URL.class, &quot;getURL&quot;, &quot;setURL&quot;));</span>
+<span class="fc" id="L85">    mapper.addMethodMapEntry(makeJdbcMethodMapEntry(JdbcMethodMapEntry.METHOD_TYPE_BASIC, boolean.class, boolean.class, &quot;getBoolean&quot;, &quot;setBoolean&quot;));</span>
+<span class="fc" id="L86">    mapper.addMethodMapEntry(makeJdbcMethodMapEntry(JdbcMethodMapEntry.METHOD_TYPE_BASIC, Boolean.class, boolean.class, &quot;getBoolean&quot;, &quot;setBoolean&quot;));</span>
+<span class="fc" id="L87">    mapper.addMethodMapEntry(makeJdbcMethodMapEntry(JdbcMethodMapEntry.METHOD_TYPE_STREAM, InputStream.class, InputStream.class, &quot;getBlob&quot;, &quot;setBinaryStream&quot;));</span>
+<span class="fc" id="L88">    mapper.addMethodMapEntry(makeJdbcMethodMapEntry(JdbcMethodMapEntry.METHOD_TYPE_READER, Reader.class, Reader.class, &quot;getClob&quot;, &quot;setCharacterStream&quot;));</span>
+
+<span class="fc" id="L90">    return mapper;</span>
+  }
+
+  public static MethodMapper getMethodMapper() {
+<span class="fc" id="L94">    return methodMapper;</span>
+  }
+
+  private static &lt;T&gt; JdbcMethodMapEntry&lt;?,?&gt; makeJdbcMethodMapEntry(int methodType, Class&lt;T&gt; javaClass, Class&lt;T&gt; datasourceMethodClass, String getterName, String setterName) throws IllegalArgumentException {
+<span class="fc" id="L98">    Method rsGetter=loadGetter(methodType, rsc, getterName);</span>
+<span class="fc" id="L99">    Method bsSetter=loadSetter(methodType, psc, datasourceMethodClass, setterName);</span>
+<span class="fc" id="L100">    Method csGetter=loadGetter(methodType, csc, getterName);</span>
+<span class="fc" id="L101">    Method csSetter=loadSetter(methodType, csc, datasourceMethodClass, setterName);</span>
+
+<span class="fc" id="L103">    return new JdbcMethodMapEntry&lt;&gt;(methodType, javaClass, datasourceMethodClass, rsGetter, bsSetter, csGetter, csSetter);</span>
+  }
+
+  private static &lt;M,D&gt; Method loadSetter(int methodType, Class&lt;M&gt; methodClass, Class&lt;D&gt; datasourceClass, String setterName) throws IllegalArgumentException {
+    Method setter;
+    try {
+<span class="fc bfc" id="L109" title="All 2 branches covered.">      if (methodType == JdbcMethodMapEntry.METHOD_TYPE_BASIC) {</span>
+<span class="fc" id="L110">        setter = methodClass.getMethod(setterName, new Class[]{int.class, datasourceClass});</span>
+      } else {
+<span class="fc" id="L112">        setter = methodClass.getMethod(setterName, new Class[]{int.class, datasourceClass, int.class});</span>
+      }
+
+<span class="nc" id="L115">    } catch (NoSuchMethodException nsme) {</span>
+<span class="nc" id="L116">      logger.error(&quot;Error loading Setter&quot; + setterName, nsme);</span>
+<span class="nc" id="L117">      throw new IllegalArgumentException(nsme);</span>
+<span class="fc" id="L118">    }</span>
+<span class="fc" id="L119">    return setter;</span>
+  }
+
+  private static &lt;M&gt; Method loadGetter(int methodType, Class&lt;M&gt; methodClass, String getterName) throws IllegalArgumentException {
+    Method getter;
+    try {
+<span class="fc" id="L125">      getter = methodClass.getMethod(getterName, new Class[]{int.class});</span>
+<span class="nc" id="L126">    } catch (NoSuchMethodException nsme) {</span>
+<span class="nc" id="L127">      logger.error(&quot;Error loading Getter&quot; + getterName, nsme);</span>
+<span class="nc" id="L128">      throw new IllegalArgumentException(nsme);</span>
+<span class="fc" id="L129">    }</span>
+<span class="fc" id="L130">    return getter;</span>
+  }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.2.201409121644</span></div></body></html>

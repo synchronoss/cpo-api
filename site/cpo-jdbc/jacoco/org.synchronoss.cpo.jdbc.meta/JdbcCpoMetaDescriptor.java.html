@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>JdbcCpoMetaDescriptor.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">cpo-jdbc</a> &gt; <a href="index.source.html" class="el_package">org.synchronoss.cpo.jdbc.meta</a> &gt; <span class="el_source">JdbcCpoMetaDescriptor.java</span></div><h1>JdbcCpoMetaDescriptor.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2003-2012 David E. Berry
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ *
+ * A copy of the GNU Lesser General Public License may also be found at
+ * http://www.gnu.org/licenses/lgpl.txt
+ */
+package org.synchronoss.cpo.jdbc.meta;
+
+import org.synchronoss.cpo.CpoException;
+import org.synchronoss.cpo.exporter.MetaXmlObjectExporter;
+import org.synchronoss.cpo.jdbc.exporter.JdbcMetaXmlObjectExporter;
+import org.synchronoss.cpo.meta.CpoMetaDescriptor;
+
+/**
+ *
+ * @author dberry
+ */
+public class JdbcCpoMetaDescriptor extends CpoMetaDescriptor {
+<span class="fc" id="L33">  private boolean supportsBlobs = false;</span>
+<span class="fc" id="L34">  private boolean supportsCalls = false;</span>
+<span class="fc" id="L35">  private boolean supportsMillis = false;</span>
+<span class="fc" id="L36">  private boolean supportsSelect4Update = false;</span>
+
+
+  public JdbcCpoMetaDescriptor(String name, boolean caseSensitive) throws CpoException {
+<span class="fc" id="L40">    super(name, caseSensitive);</span>
+<span class="fc" id="L41">  }</span>
+
+  @Override
+  protected Class getMetaAdapterClass() throws CpoException {
+<span class="fc" id="L45">    return JdbcCpoMetaAdapter.class;</span>
+  }
+
+  @Override
+  protected MetaXmlObjectExporter getMetaXmlObjectExporter() {
+<span class="fc" id="L50">    return new JdbcMetaXmlObjectExporter(this);</span>
+  }
+
+  public boolean isSupportsBlobs() {
+<span class="fc" id="L54">    return supportsBlobs;</span>
+  }
+
+  public void setSupportsBlobs(boolean supportsBlobs) {
+<span class="fc" id="L58">    this.supportsBlobs = supportsBlobs;</span>
+<span class="fc" id="L59">  }</span>
+
+  public boolean isSupportsCalls() {
+<span class="fc" id="L62">    return supportsCalls;</span>
+  }
+
+  public void setSupportsCalls(boolean supportsCalls) {
+<span class="fc" id="L66">    this.supportsCalls = supportsCalls;</span>
+<span class="fc" id="L67">  }</span>
+
+  public boolean isSupportsMillis() {
+<span class="fc" id="L70">    return supportsMillis;</span>
+  }
+
+  public void setSupportsMillis(boolean supportsMillis) {
+<span class="fc" id="L74">    this.supportsMillis = supportsMillis;</span>
+<span class="fc" id="L75">  }</span>
+
+  public boolean isSupportsSelect4Update() {
+<span class="fc" id="L78">    return supportsSelect4Update;</span>
+  }
+
+  public void setSupportsSelect4Update(boolean supportsSelect4Update) {
+<span class="fc" id="L82">    this.supportsSelect4Update = supportsSelect4Update;</span>
+<span class="fc" id="L83">  }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.2.201409121644</span></div></body></html>

@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>JdbcCallableStatementFactory.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">cpo-jdbc</a> &gt; <a href="index.source.html" class="el_package">org.synchronoss.cpo.jdbc</a> &gt; <span class="el_source">JdbcCallableStatementFactory.java</span></div><h1>JdbcCallableStatementFactory.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2003-2012 David E. Berry
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ *
+ * A copy of the GNU Lesser General Public License may also be found at
+ * http://www.gnu.org/licenses/lgpl.txt
+ */
+package org.synchronoss.cpo.jdbc;
+
+import org.slf4j.*;
+import org.synchronoss.cpo.*;
+import org.synchronoss.cpo.helper.ExceptionHelper;
+import org.synchronoss.cpo.meta.domain.*;
+
+import java.sql.*;
+import java.util.*;
+
+/**
+ * JdbcCallableStatementFactory is the object that encapsulates the creation of the actual CallableStatement for the
+ * JDBC driver.
+ *
+ * @author david berry
+ */
+public class JdbcCallableStatementFactory implements CpoReleasible {
+
+  /**
+   * Version Id for this class.
+   */
+  private static final long serialVersionUID = 1L;
+  /**
+   * DOCUMENT ME!
+   */
+<span class="nc" id="L46">  private static final Logger logger = LoggerFactory.getLogger(JdbcCallableStatementFactory.class);</span>
+<span class="nc" id="L47">  private CallableStatement cs_ = null;</span>
+
+  @SuppressWarnings(&quot;unused&quot;)
+<span class="nc" id="L50">  private JdbcCallableStatementFactory() {</span>
+<span class="nc" id="L51">  }</span>
+<span class="nc" id="L52">  private List&lt;CpoReleasible&gt; releasibles = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L53">  private List&lt;CpoArgument&gt; outArguments = new ArrayList&lt;&gt;();</span>
+
+  /**
+   * Used to build the CallableStatement that is used by CPO to create the actual JDBC CallableStatement.
+   *
+   * The constructor is called by the internal CPO framework. This is not to be used by users of CPO. Programmers that
+   * build Transforms may need to use this object to get access to the actual connection.
+   *
+   * @param conn The actual jdbc connection that will be used to create the callable statement.
+   * @param jca The JdbcCpoAdapter that is controlling this transaction
+   * @param function The CpoFunction that is being executed
+   * @param obj The pojo that is being acted upon
+   *
+   * @throws CpoException if a CPO error occurs
+   * @throws SQLException if a JDBC error occurs
+   */
+<span class="nc" id="L69">  public JdbcCallableStatementFactory(Connection conn, JdbcCpoAdapter jca, CpoFunction function, Object obj) throws CpoException {</span>
+    CallableStatement cstmt;
+    JdbcCpoAttribute attribute;
+<span class="nc bnc" id="L72" title="All 2 branches missed.">    Logger localLogger = obj == null ? logger : LoggerFactory.getLogger(obj.getClass());</span>
+
+    try {
+<span class="nc" id="L75">      outArguments = function.getArguments();</span>
+
+<span class="nc" id="L77">      localLogger.debug(&quot;SQL = &lt;&quot; + function.getExpression() + &quot;&gt;&quot;);</span>
+
+      // prepare the Callable Statement
+<span class="nc" id="L80">      cstmt = conn.prepareCall(function.getExpression());</span>
+<span class="nc" id="L81">      setCallableStatement(cstmt);</span>
+
+<span class="nc" id="L83">      int j = 1;</span>
+<span class="nc bnc" id="L84" title="All 2 branches missed.">      for (CpoArgument argument : outArguments) {</span>
+<span class="nc" id="L85">        JdbcCpoArgument jdbcArgument = (JdbcCpoArgument) argument;</span>
+<span class="nc" id="L86">        attribute = (JdbcCpoAttribute) argument.getAttribute();</span>
+
+<span class="nc bnc" id="L88" title="All 2 branches missed.">        if (jdbcArgument.isInParameter()) {</span>
+<span class="nc" id="L89">          CpoData cpoData = new CallableStatementCpoData(this, attribute, j);</span>
+<span class="nc" id="L90">          cpoData.invokeSetter(obj);</span>
+        }
+
+<span class="nc bnc" id="L93" title="All 2 branches missed.">        if (jdbcArgument.isOutParameter()) {</span>
+<span class="nc" id="L94">          localLogger.debug(&quot;Setting OUT parameter &quot; + j + &quot; as Type &quot; + attribute.getDataTypeInt());</span>
+<span class="nc bnc" id="L95" title="All 2 branches missed.">          if (jdbcArgument.getTypeInfo()!=null)</span>
+<span class="nc" id="L96">            cstmt.registerOutParameter(j, attribute.getDataTypeInt(), jdbcArgument.getTypeInfo());</span>
+          else
+<span class="nc" id="L98">            cstmt.registerOutParameter(j, attribute.getDataTypeInt());</span>
+        }
+<span class="nc" id="L100">        j++;</span>
+<span class="nc" id="L101">      }</span>
+
+<span class="nc" id="L103">    } catch (Exception e) {</span>
+<span class="nc" id="L104">      localLogger.error(&quot;Error Instantiating JdbcCallableStatementFactory&quot; + ExceptionHelper.getLocalizedMessage(e));</span>
+<span class="nc" id="L105">      throw new CpoException(e);</span>
+<span class="nc" id="L106">    }</span>
+
+<span class="nc" id="L108">  }</span>
+
+  /**
+   * returns the jdbc callable statment associated with this object
+   */
+  public CallableStatement getCallableStatement() {
+<span class="nc" id="L114">    return cs_;</span>
+  }
+
+  protected void setCallableStatement(CallableStatement cs) {
+<span class="nc" id="L118">    cs_ = cs;</span>
+<span class="nc" id="L119">  }</span>
+
+  /**
+   * returns the Out parameters from the callable statement
+   *
+   */
+  public List&lt;CpoArgument&gt; getOutArguments() {
+<span class="nc" id="L126">    return outArguments;</span>
+  }
+
+  /**
+   * Adds a releasible object to this object. The release method on the releasible will be called when the
+   * callableStatement is executed.
+   *
+   */
+  public void AddReleasible(CpoReleasible releasible) {
+<span class="nc bnc" id="L135" title="All 2 branches missed.">    if (releasible != null) {</span>
+<span class="nc" id="L136">      releasibles.add(releasible);</span>
+    }
+
+<span class="nc" id="L139">  }</span>
+
+  /**
+   * Called by the CPO framework. This method calls the
+   * &lt;code&gt;release&lt;/code&gt; on all the CpoReleasible associated with this object
+   */
+  @Override
+  public void release() throws CpoException {
+<span class="nc bnc" id="L147" title="All 2 branches missed.">    for (CpoReleasible releasible : releasibles) {</span>
+      try {
+<span class="nc" id="L149">        releasible.release();</span>
+<span class="nc" id="L150">      } catch (CpoException ce) {</span>
+<span class="nc" id="L151">        logger.error(&quot;Error Releasing Callable Statement Transform Object&quot;, ce);</span>
+<span class="nc" id="L152">        throw ce;</span>
+<span class="nc" id="L153">      }</span>
+<span class="nc" id="L154">    }</span>
+<span class="nc" id="L155">  }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.2.201409121644</span></div></body></html>

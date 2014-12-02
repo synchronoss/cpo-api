@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>AbstractJdbcDataSourceInfo.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">cpo-jdbc</a> &gt; <a href="index.source.html" class="el_package">org.synchronoss.cpo.jdbc</a> &gt; <span class="el_source">AbstractJdbcDataSourceInfo.java</span></div><h1>AbstractJdbcDataSourceInfo.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2003-2012 David E. Berry
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ *
+ * A copy of the GNU Lesser General Public License may also be found at
+ * http://www.gnu.org/licenses/lgpl.txt
+ */
+package org.synchronoss.cpo.jdbc;
+
+import org.synchronoss.cpo.AbstractDataSourceInfo;
+
+import java.util.*;
+
+/**
+ *
+ * @author dberry
+ */
+public abstract class AbstractJdbcDataSourceInfo extends AbstractDataSourceInfo {
+  // common password strings
+  private static final String PASSWORD = &quot;password&quot;;
+  private static final String PASSWD = &quot;passwd&quot;;
+  private static final String PWD = &quot;pwd&quot;;
+
+  public AbstractJdbcDataSourceInfo(String dataSourceName) {
+<span class="fc" id="L38">    super(dataSourceName);</span>
+<span class="fc" id="L39">  }</span>
+
+  public AbstractJdbcDataSourceInfo(String className, SortedMap&lt;String, String&gt; properties) {
+<span class="fc" id="L42">    super(BuildDataSourceName(className, properties));</span>
+<span class="fc" id="L43">  }</span>
+
+  public AbstractJdbcDataSourceInfo(String className, Properties properties) {
+<span class="fc" id="L46">    super(BuildDataSourceName(className, properties));</span>
+<span class="fc" id="L47">  }</span>
+
+  private static String BuildDataSourceName(String s, Properties properties) {
+    // Use a tree map so that the properties are sorted. This way if we have
+    // the same datasource with the same properties but in different order,
+    // we will generate the same key.
+<span class="fc" id="L53">    SortedMap&lt;String, String&gt; map = new TreeMap&lt;&gt;();</span>
+<span class="fc bfc" id="L54" title="All 2 branches covered.">    for (Object key : properties.keySet()){</span>
+<span class="fc" id="L55">      map.put((String)key, properties.getProperty((String)key));</span>
+<span class="fc" id="L56">    }</span>
+<span class="fc" id="L57">    return BuildDataSourceName(s, map);</span>
+  }
+
+  private static String BuildDataSourceName(String s, SortedMap&lt;String, String&gt; map) {
+<span class="fc" id="L61">    StringBuilder dsName = new StringBuilder(s);</span>
+
+<span class="fc bfc" id="L63" title="All 2 branches covered.">    for (Object obj : map.keySet()) {</span>
+<span class="fc" id="L64">      String key = (String)obj;</span>
+      // Don't store the password in the datasource generated name.
+<span class="pc bpc" id="L66" title="2 of 6 branches missed.">      if (!PASSWORD.equalsIgnoreCase(key) &amp;&amp; !PASSWD.equalsIgnoreCase(key) &amp;&amp; !PWD.equalsIgnoreCase(key) ) {</span>
+<span class="fc" id="L67">        dsName.append(key);</span>
+<span class="fc" id="L68">        dsName.append(&quot;=&quot;);</span>
+<span class="fc" id="L69">        dsName.append(map.get(key));</span>
+      }
+<span class="fc" id="L71">    }</span>
+
+<span class="fc" id="L73">    return dsName.toString();</span>
+  }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.2.201409121644</span></div></body></html>

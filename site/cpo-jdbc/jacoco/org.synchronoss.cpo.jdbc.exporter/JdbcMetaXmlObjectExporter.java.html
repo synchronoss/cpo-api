@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>JdbcMetaXmlObjectExporter.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">cpo-jdbc</a> &gt; <a href="index.source.html" class="el_package">org.synchronoss.cpo.jdbc.exporter</a> &gt; <span class="el_source">JdbcMetaXmlObjectExporter.java</span></div><h1>JdbcMetaXmlObjectExporter.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2003-2012 David E. Berry
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ *
+ * A copy of the GNU Lesser General Public License may also be found at
+ * http://www.gnu.org/licenses/lgpl.txt
+ */
+package org.synchronoss.cpo.jdbc.exporter;
+
+import org.synchronoss.cpo.core.cpoCoreMeta.CtArgument;
+import org.synchronoss.cpo.core.cpoCoreMeta.CtAttribute;
+import org.synchronoss.cpo.exporter.CoreMetaXmlObjectExporter;
+import org.synchronoss.cpo.exporter.MetaXmlObjectExporter;
+import org.synchronoss.cpo.jdbc.JdbcCpoArgument;
+import org.synchronoss.cpo.jdbc.JdbcCpoAttribute;
+import org.synchronoss.cpo.jdbc.cpoJdbcMeta.CtJdbcArgument;
+import org.synchronoss.cpo.jdbc.cpoJdbcMeta.CtJdbcAttribute;
+import org.synchronoss.cpo.meta.CpoMetaDescriptor;
+import org.synchronoss.cpo.meta.domain.CpoArgument;
+import org.synchronoss.cpo.meta.domain.CpoAttribute;
+
+/**
+ * XmlObject exporter for jdbc meta objects
+ *
+ * @author Michael Bellomo
+ * @since 4/18/12
+ */
+public class JdbcMetaXmlObjectExporter extends CoreMetaXmlObjectExporter implements MetaXmlObjectExporter {
+
+  public JdbcMetaXmlObjectExporter(CpoMetaDescriptor metaDescriptor) {
+<span class="fc" id="L44">    super(metaDescriptor);</span>
+<span class="fc" id="L45">  }</span>
+
+  @Override
+  public void visit(CpoAttribute cpoAttribute) {
+
+    // shouldn't happen, but if what we got wasn't a JdbcAttribute...
+<span class="pc bpc" id="L51" title="1 of 2 branches missed.">    if (!(cpoAttribute instanceof JdbcCpoAttribute)) {</span>
+<span class="nc" id="L52">      super.visit(cpoAttribute);</span>
+<span class="nc" id="L53">      return;</span>
+    }
+
+<span class="fc" id="L56">    JdbcCpoAttribute jdbcAttribute = (JdbcCpoAttribute) cpoAttribute;</span>
+
+<span class="pc bpc" id="L58" title="1 of 2 branches missed.">    if (currentCtClass != null) {</span>
+
+      // CtClass.addNewCpoAttribute() can't be used here because it returns a CtAttribute, not a CtJdbcAttribute
+<span class="fc" id="L61">      CtJdbcAttribute ctJdbcAttribute = CtJdbcAttribute.Factory.newInstance();</span>
+
+<span class="fc" id="L63">      ctJdbcAttribute.setJavaName(jdbcAttribute.getJavaName());</span>
+<span class="fc" id="L64">      ctJdbcAttribute.setJavaType(jdbcAttribute.getJavaType());</span>
+<span class="fc" id="L65">      ctJdbcAttribute.setDataName(jdbcAttribute.getDataName());</span>
+<span class="fc" id="L66">      ctJdbcAttribute.setDataType(jdbcAttribute.getDataType());</span>
+
+<span class="pc bpc" id="L68" title="1 of 4 branches missed.">      if (jdbcAttribute.getTransformClassName() != null &amp;&amp; jdbcAttribute.getTransformClassName().length() &gt; 0) {</span>
+<span class="fc" id="L69">        ctJdbcAttribute.setTransformClass(jdbcAttribute.getTransformClassName());</span>
+      }
+
+<span class="pc bpc" id="L72" title="3 of 4 branches missed.">      if (jdbcAttribute.getDescription() != null &amp;&amp; jdbcAttribute.getDescription().length() &gt; 0) {</span>
+<span class="nc" id="L73">        ctJdbcAttribute.setDescription(jdbcAttribute.getDescription());</span>
+      }
+
+<span class="pc bpc" id="L76" title="1 of 4 branches missed.">      if (jdbcAttribute.getDbTable() != null &amp;&amp; jdbcAttribute.getDbTable().length() &gt; 0) {</span>
+<span class="fc" id="L77">        ctJdbcAttribute.setDbTable(jdbcAttribute.getDbTable());</span>
+      }
+
+<span class="pc bpc" id="L80" title="1 of 4 branches missed.">      if (jdbcAttribute.getDbColumn() != null &amp;&amp; jdbcAttribute.getDbColumn().length() &gt; 0) {</span>
+<span class="fc" id="L81">        ctJdbcAttribute.setDbColumn(jdbcAttribute.getDbColumn());</span>
+      }
+
+      // add it to the class
+<span class="fc" id="L85">      CtAttribute ctAttribute = currentCtClass.addNewCpoAttribute();</span>
+<span class="fc" id="L86">      ctAttribute.set(ctJdbcAttribute);</span>
+    }
+<span class="fc" id="L88">  }</span>
+
+  @Override
+  public void visit(CpoArgument cpoArgument) {
+
+    // shouldn't happen, but if what we got wasn't a JdbcArgument...
+<span class="pc bpc" id="L94" title="1 of 2 branches missed.">    if (!(cpoArgument instanceof JdbcCpoArgument)) {</span>
+<span class="nc" id="L95">      super.visit(cpoArgument);</span>
+<span class="nc" id="L96">      return;</span>
+    }
+
+<span class="fc" id="L99">    JdbcCpoArgument jdbcArgument = (JdbcCpoArgument) cpoArgument;</span>
+
+<span class="pc bpc" id="L101" title="1 of 2 branches missed.">    if (currentCtFunction != null) {</span>
+
+      // CtFunction.addNewCpoArgument() can't be used here because it returns a CtArgument, not a CtJdbcArgument
+<span class="fc" id="L104">      CtJdbcArgument ctJdbcArgument = CtJdbcArgument.Factory.newInstance();</span>
+
+<span class="fc" id="L106">      ctJdbcArgument.setAttributeName(jdbcArgument.getAttributeName());</span>
+
+<span class="pc bpc" id="L108" title="3 of 4 branches missed.">      if (jdbcArgument.getDescription() != null &amp;&amp; jdbcArgument.getDescription().length() &gt; 0) {</span>
+<span class="nc" id="L109">        ctJdbcArgument.setDescription(jdbcArgument.getDescription());</span>
+      }
+
+<span class="pc bpc" id="L112" title="1 of 4 branches missed.">      if (jdbcArgument.isInParameter() &amp;&amp; jdbcArgument.isOutParameter()) {</span>
+<span class="nc" id="L113">        ctJdbcArgument.setScope(CtJdbcArgument.Scope.BOTH);</span>
+<span class="fc bfc" id="L114" title="All 2 branches covered.">      } else if (jdbcArgument.isInParameter()) {</span>
+<span class="fc" id="L115">        ctJdbcArgument.setScope(CtJdbcArgument.Scope.IN);</span>
+<span class="pc bpc" id="L116" title="1 of 2 branches missed.">      } else if (jdbcArgument.isOutParameter()) {</span>
+<span class="fc" id="L117">        ctJdbcArgument.setScope(CtJdbcArgument.Scope.OUT);</span>
+      }
+
+<span class="pc bpc" id="L120" title="3 of 4 branches missed.">      if (jdbcArgument.getTypeInfo() != null &amp;&amp; !jdbcArgument.getTypeInfo().isEmpty()) {</span>
+<span class="nc" id="L121">        ctJdbcArgument.setTypeInfo(jdbcArgument.getTypeInfo());</span>
+      }
+
+<span class="fc" id="L124">      CtArgument ctArgument = currentCtFunction.addNewCpoArgument();</span>
+<span class="fc" id="L125">      ctArgument.set(ctJdbcArgument);</span>
+    }
+<span class="fc" id="L127">  }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.2.201409121644</span></div></body></html>

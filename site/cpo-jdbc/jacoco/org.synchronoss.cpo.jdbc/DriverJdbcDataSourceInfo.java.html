@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>DriverJdbcDataSourceInfo.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">cpo-jdbc</a> &gt; <a href="index.source.html" class="el_package">org.synchronoss.cpo.jdbc</a> &gt; <span class="el_source">DriverJdbcDataSourceInfo.java</span></div><h1>DriverJdbcDataSourceInfo.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2003-2012 David E. Berry
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ *
+ * A copy of the GNU Lesser General Public License may also be found at
+ * http://www.gnu.org/licenses/lgpl.txt
+ */
+package org.synchronoss.cpo.jdbc;
+
+import org.synchronoss.cpo.CpoException;
+import org.synchronoss.cpo.helper.CpoClassLoader;
+
+import javax.sql.DataSource;
+import java.sql.*;
+import java.util.Properties;
+
+/**
+ * Collects the info required to instantiate a DataSource from a JDBC Driver
+ *
+ * Provides the DataSourceInfo factory method getDataSource which instantiates the DataSource
+ *
+ * @author dberry
+ */
+public class DriverJdbcDataSourceInfo extends AbstractJdbcDataSource {
+
+  private static final int URL_CONNECTION = 1;
+  private static final int URL_PROPS_CONNECTION = 2;
+  private static final int URL_USER_PASSWORD_CONNECTION = 3;
+<span class="fc" id="L42">  private int connectionType = 0;</span>
+<span class="fc" id="L43">  private String url = null;</span>
+<span class="fc" id="L44">  private String username = null;</span>
+<span class="fc" id="L45">  private String password = null;</span>
+<span class="fc" id="L46">  private Properties properties = null;</span>
+
+  /**
+   * Creates a DriverJdbcDataSourceInfo from a Jdbc Driver
+   *
+   * @param driver The text name of the driver
+   * @param url - The url that points to the database.
+   */
+  public DriverJdbcDataSourceInfo(String driver, String url) throws CpoException {
+<span class="fc" id="L55">    super(url);</span>
+<span class="fc" id="L56">    loadDriver(driver);</span>
+<span class="fc" id="L57">    connectionType = URL_CONNECTION;</span>
+<span class="fc" id="L58">    this.url = url;</span>
+<span class="fc" id="L59">  }</span>
+
+  /**
+   * Creates a DriverJdbcDataSourceInfo from a Jdbc Driver
+   *
+   * @param driver The text name of the driver
+   * @param url - The url that points to the database.
+   * @param properties - The connection properties for connecting to the database
+   */
+  public DriverJdbcDataSourceInfo(String driver, String url, Properties properties) throws CpoException {
+<span class="fc" id="L69">    super(url, properties);</span>
+<span class="fc" id="L70">    loadDriver(driver);</span>
+<span class="fc" id="L71">    connectionType = URL_PROPS_CONNECTION;</span>
+<span class="fc" id="L72">    this.url = url;</span>
+<span class="fc" id="L73">    this.properties = properties;</span>
+<span class="fc" id="L74">  }</span>
+
+  /**
+   * Creates a DriverJdbcDataSourceInfo from a Jdbc Driver
+   *
+   * @param driver The text name of the driver
+   * @param url - The url that points to the database.
+   * @param username - The username for connecting to the database
+   * @param password - The password for connectinf to the database
+   */
+  public DriverJdbcDataSourceInfo(String driver, String url, String username, String password) throws CpoException {
+<span class="fc" id="L85">    super(url + username);</span>
+<span class="fc" id="L86">    loadDriver(driver);</span>
+<span class="fc" id="L87">    connectionType = URL_USER_PASSWORD_CONNECTION;</span>
+<span class="fc" id="L88">    this.url = url;</span>
+<span class="fc" id="L89">    this.username = username;</span>
+<span class="fc" id="L90">    this.password = password;</span>
+<span class="fc" id="L91">  }</span>
+
+  @Override
+  protected DataSource createDataSource() throws CpoException {
+<span class="fc" id="L95">    return this;</span>
+  }
+
+  @Override
+  public Connection getConnection() throws SQLException {
+<span class="fc" id="L100">    return makeNewConnection();</span>
+  }
+
+  private Connection makeNewConnection() throws SQLException {
+<span class="fc" id="L104">    Connection connection = null;</span>
+<span class="pc bpc" id="L105" title="1 of 4 branches missed.">    switch (connectionType) {</span>
+      case DriverJdbcDataSourceInfo.URL_CONNECTION:
+<span class="fc" id="L107">        connection = DriverManager.getConnection(url);</span>
+<span class="fc" id="L108">        break;</span>
+      case DriverJdbcDataSourceInfo.URL_PROPS_CONNECTION:
+<span class="fc" id="L110">        connection = DriverManager.getConnection(url, properties);</span>
+<span class="fc" id="L111">        break;</span>
+      case DriverJdbcDataSourceInfo.URL_USER_PASSWORD_CONNECTION:
+<span class="fc" id="L113">        connection = DriverManager.getConnection(url, username, password);</span>
+<span class="fc" id="L114">        break;</span>
+      default:
+<span class="nc" id="L116">        throw new SQLException(&quot;Invalid Connection Type&quot;);</span>
+    }
+<span class="fc" id="L118">    return connection;</span>
+  }
+
+  @Override
+  public synchronized String toString() {
+<span class="fc" id="L123">    StringBuilder info = new StringBuilder();</span>
+<span class="fc" id="L124">    info.append(&quot;JdbcDataSource(&quot;);</span>
+<span class="fc" id="L125">    info.append(getDataSourceName());</span>
+<span class="fc" id="L126">    info.append(&quot;)&quot;);</span>
+<span class="fc" id="L127">    return (info.toString());</span>
+  }
+
+  private void loadDriver(String driver) throws CpoException {
+    try {
+<span class="fc" id="L132">      CpoClassLoader.forName(driver);</span>
+<span class="nc" id="L133">    } catch (ClassNotFoundException cnfe) {</span>
+<span class="nc" id="L134">      throw new CpoException(&quot;Could Not Load Driver&quot; + driver);</span>
+<span class="fc" id="L135">    }</span>
+<span class="fc" id="L136">  }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.2.201409121644</span></div></body></html>

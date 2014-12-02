@@ -1,0 +1,629 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>CtJdbcConfigImpl.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">cpo-jdbc</a> &gt; <a href="index.source.html" class="el_package">org.synchronoss.cpo.jdbc.cpoJdbcConfig.impl</a> &gt; <span class="el_source">CtJdbcConfigImpl.java</span></div><h1>CtJdbcConfigImpl.java</h1><pre class="source lang-java linenums">/*
+ * XML Type:  ctJdbcConfig
+ * Namespace: http://www.synchronoss.org/cpo/jdbc/CpoJdbcConfig.xsd
+ * Java type: org.synchronoss.cpo.jdbc.cpoJdbcConfig.CtJdbcConfig
+ *
+ * Automatically generated - do not modify.
+ */
+package org.synchronoss.cpo.jdbc.cpoJdbcConfig.impl;
+/**
+ * An XML ctJdbcConfig(@http://www.synchronoss.org/cpo/jdbc/CpoJdbcConfig.xsd).
+ *
+ * This is a complex type.
+ */
+public class CtJdbcConfigImpl extends org.synchronoss.cpo.core.cpoCoreConfig.impl.CtDataSourceConfigImpl implements org.synchronoss.cpo.jdbc.cpoJdbcConfig.CtJdbcConfig
+{
+    private static final long serialVersionUID = 1L;
+    
+    public CtJdbcConfigImpl(org.apache.xmlbeans.SchemaType sType)
+    {
+<span class="fc" id="L20">        super(sType);</span>
+<span class="fc" id="L21">    }</span>
+    
+<span class="fc" id="L23">    private static final javax.xml.namespace.QName READWRITECONFIG$0 = </span>
+        new javax.xml.namespace.QName(&quot;http://www.synchronoss.org/cpo/jdbc/CpoJdbcConfig.xsd&quot;, &quot;readWriteConfig&quot;);
+<span class="fc" id="L25">    private static final javax.xml.namespace.QName READCONFIG$2 = </span>
+        new javax.xml.namespace.QName(&quot;http://www.synchronoss.org/cpo/jdbc/CpoJdbcConfig.xsd&quot;, &quot;readConfig&quot;);
+<span class="fc" id="L27">    private static final javax.xml.namespace.QName WRITECONFIG$4 = </span>
+        new javax.xml.namespace.QName(&quot;http://www.synchronoss.org/cpo/jdbc/CpoJdbcConfig.xsd&quot;, &quot;writeConfig&quot;);
+<span class="fc" id="L29">    private static final javax.xml.namespace.QName SUPPORTSBLOBS$6 = </span>
+        new javax.xml.namespace.QName(&quot;&quot;, &quot;supportsBlobs&quot;);
+<span class="fc" id="L31">    private static final javax.xml.namespace.QName SUPPORTSCALLS$8 = </span>
+        new javax.xml.namespace.QName(&quot;&quot;, &quot;supportsCalls&quot;);
+<span class="fc" id="L33">    private static final javax.xml.namespace.QName SUPPORTSMILLIS$10 = </span>
+        new javax.xml.namespace.QName(&quot;&quot;, &quot;supportsMillis&quot;);
+<span class="fc" id="L35">    private static final javax.xml.namespace.QName SUPPORTSSELECT4UPDATE$12 = </span>
+        new javax.xml.namespace.QName(&quot;&quot;, &quot;supportsSelect4Update&quot;);
+    
+    
+    /**
+     * Gets the &quot;readWriteConfig&quot; element
+     */
+    public org.synchronoss.cpo.jdbc.cpoJdbcConfig.CtJdbcReadWriteConfig getReadWriteConfig()
+    {
+<span class="fc" id="L44">        synchronized (monitor())</span>
+        {
+<span class="fc" id="L46">            check_orphaned();</span>
+<span class="fc" id="L47">            org.synchronoss.cpo.jdbc.cpoJdbcConfig.CtJdbcReadWriteConfig target = null;</span>
+<span class="fc" id="L48">            target = (org.synchronoss.cpo.jdbc.cpoJdbcConfig.CtJdbcReadWriteConfig)get_store().find_element_user(READWRITECONFIG$0, 0);</span>
+<span class="pc bpc" id="L49" title="1 of 2 branches missed.">            if (target == null)</span>
+            {
+<span class="nc" id="L51">                return null;</span>
+            }
+<span class="fc" id="L53">            return target;</span>
+<span class="nc" id="L54">        }</span>
+    }
+    
+    /**
+     * True if has &quot;readWriteConfig&quot; element
+     */
+    public boolean isSetReadWriteConfig()
+    {
+<span class="fc" id="L62">        synchronized (monitor())</span>
+        {
+<span class="fc" id="L64">            check_orphaned();</span>
+<span class="fc bfc" id="L65" title="All 2 branches covered.">            return get_store().count_elements(READWRITECONFIG$0) != 0;</span>
+<span class="nc" id="L66">        }</span>
+    }
+    
+    /**
+     * Sets the &quot;readWriteConfig&quot; element
+     */
+    public void setReadWriteConfig(org.synchronoss.cpo.jdbc.cpoJdbcConfig.CtJdbcReadWriteConfig readWriteConfig)
+    {
+<span class="nc" id="L74">        synchronized (monitor())</span>
+        {
+<span class="nc" id="L76">            check_orphaned();</span>
+<span class="nc" id="L77">            org.synchronoss.cpo.jdbc.cpoJdbcConfig.CtJdbcReadWriteConfig target = null;</span>
+<span class="nc" id="L78">            target = (org.synchronoss.cpo.jdbc.cpoJdbcConfig.CtJdbcReadWriteConfig)get_store().find_element_user(READWRITECONFIG$0, 0);</span>
+<span class="nc bnc" id="L79" title="All 2 branches missed.">            if (target == null)</span>
+            {
+<span class="nc" id="L81">                target = (org.synchronoss.cpo.jdbc.cpoJdbcConfig.CtJdbcReadWriteConfig)get_store().add_element_user(READWRITECONFIG$0);</span>
+            }
+<span class="nc" id="L83">            target.set(readWriteConfig);</span>
+<span class="nc" id="L84">        }</span>
+<span class="nc" id="L85">    }</span>
+    
+    /**
+     * Appends and returns a new empty &quot;readWriteConfig&quot; element
+     */
+    public org.synchronoss.cpo.jdbc.cpoJdbcConfig.CtJdbcReadWriteConfig addNewReadWriteConfig()
+    {
+<span class="nc" id="L92">        synchronized (monitor())</span>
+        {
+<span class="nc" id="L94">            check_orphaned();</span>
+<span class="nc" id="L95">            org.synchronoss.cpo.jdbc.cpoJdbcConfig.CtJdbcReadWriteConfig target = null;</span>
+<span class="nc" id="L96">            target = (org.synchronoss.cpo.jdbc.cpoJdbcConfig.CtJdbcReadWriteConfig)get_store().add_element_user(READWRITECONFIG$0);</span>
+<span class="nc" id="L97">            return target;</span>
+<span class="nc" id="L98">        }</span>
+    }
+    
+    /**
+     * Unsets the &quot;readWriteConfig&quot; element
+     */
+    public void unsetReadWriteConfig()
+    {
+<span class="nc" id="L106">        synchronized (monitor())</span>
+        {
+<span class="nc" id="L108">            check_orphaned();</span>
+<span class="nc" id="L109">            get_store().remove_element(READWRITECONFIG$0, 0);</span>
+<span class="nc" id="L110">        }</span>
+<span class="nc" id="L111">    }</span>
+    
+    /**
+     * Gets the &quot;readConfig&quot; element
+     */
+    public org.synchronoss.cpo.jdbc.cpoJdbcConfig.CtJdbcReadWriteConfig getReadConfig()
+    {
+<span class="fc" id="L118">        synchronized (monitor())</span>
+        {
+<span class="fc" id="L120">            check_orphaned();</span>
+<span class="fc" id="L121">            org.synchronoss.cpo.jdbc.cpoJdbcConfig.CtJdbcReadWriteConfig target = null;</span>
+<span class="fc" id="L122">            target = (org.synchronoss.cpo.jdbc.cpoJdbcConfig.CtJdbcReadWriteConfig)get_store().find_element_user(READCONFIG$2, 0);</span>
+<span class="pc bpc" id="L123" title="1 of 2 branches missed.">            if (target == null)</span>
+            {
+<span class="nc" id="L125">                return null;</span>
+            }
+<span class="fc" id="L127">            return target;</span>
+<span class="nc" id="L128">        }</span>
+    }
+    
+    /**
+     * True if has &quot;readConfig&quot; element
+     */
+    public boolean isSetReadConfig()
+    {
+<span class="nc" id="L136">        synchronized (monitor())</span>
+        {
+<span class="nc" id="L138">            check_orphaned();</span>
+<span class="nc bnc" id="L139" title="All 2 branches missed.">            return get_store().count_elements(READCONFIG$2) != 0;</span>
+<span class="nc" id="L140">        }</span>
+    }
+    
+    /**
+     * Sets the &quot;readConfig&quot; element
+     */
+    public void setReadConfig(org.synchronoss.cpo.jdbc.cpoJdbcConfig.CtJdbcReadWriteConfig readConfig)
+    {
+<span class="nc" id="L148">        synchronized (monitor())</span>
+        {
+<span class="nc" id="L150">            check_orphaned();</span>
+<span class="nc" id="L151">            org.synchronoss.cpo.jdbc.cpoJdbcConfig.CtJdbcReadWriteConfig target = null;</span>
+<span class="nc" id="L152">            target = (org.synchronoss.cpo.jdbc.cpoJdbcConfig.CtJdbcReadWriteConfig)get_store().find_element_user(READCONFIG$2, 0);</span>
+<span class="nc bnc" id="L153" title="All 2 branches missed.">            if (target == null)</span>
+            {
+<span class="nc" id="L155">                target = (org.synchronoss.cpo.jdbc.cpoJdbcConfig.CtJdbcReadWriteConfig)get_store().add_element_user(READCONFIG$2);</span>
+            }
+<span class="nc" id="L157">            target.set(readConfig);</span>
+<span class="nc" id="L158">        }</span>
+<span class="nc" id="L159">    }</span>
+    
+    /**
+     * Appends and returns a new empty &quot;readConfig&quot; element
+     */
+    public org.synchronoss.cpo.jdbc.cpoJdbcConfig.CtJdbcReadWriteConfig addNewReadConfig()
+    {
+<span class="nc" id="L166">        synchronized (monitor())</span>
+        {
+<span class="nc" id="L168">            check_orphaned();</span>
+<span class="nc" id="L169">            org.synchronoss.cpo.jdbc.cpoJdbcConfig.CtJdbcReadWriteConfig target = null;</span>
+<span class="nc" id="L170">            target = (org.synchronoss.cpo.jdbc.cpoJdbcConfig.CtJdbcReadWriteConfig)get_store().add_element_user(READCONFIG$2);</span>
+<span class="nc" id="L171">            return target;</span>
+<span class="nc" id="L172">        }</span>
+    }
+    
+    /**
+     * Unsets the &quot;readConfig&quot; element
+     */
+    public void unsetReadConfig()
+    {
+<span class="nc" id="L180">        synchronized (monitor())</span>
+        {
+<span class="nc" id="L182">            check_orphaned();</span>
+<span class="nc" id="L183">            get_store().remove_element(READCONFIG$2, 0);</span>
+<span class="nc" id="L184">        }</span>
+<span class="nc" id="L185">    }</span>
+    
+    /**
+     * Gets the &quot;writeConfig&quot; element
+     */
+    public org.synchronoss.cpo.jdbc.cpoJdbcConfig.CtJdbcReadWriteConfig getWriteConfig()
+    {
+<span class="fc" id="L192">        synchronized (monitor())</span>
+        {
+<span class="fc" id="L194">            check_orphaned();</span>
+<span class="fc" id="L195">            org.synchronoss.cpo.jdbc.cpoJdbcConfig.CtJdbcReadWriteConfig target = null;</span>
+<span class="fc" id="L196">            target = (org.synchronoss.cpo.jdbc.cpoJdbcConfig.CtJdbcReadWriteConfig)get_store().find_element_user(WRITECONFIG$4, 0);</span>
+<span class="pc bpc" id="L197" title="1 of 2 branches missed.">            if (target == null)</span>
+            {
+<span class="nc" id="L199">                return null;</span>
+            }
+<span class="fc" id="L201">            return target;</span>
+<span class="nc" id="L202">        }</span>
+    }
+    
+    /**
+     * True if has &quot;writeConfig&quot; element
+     */
+    public boolean isSetWriteConfig()
+    {
+<span class="nc" id="L210">        synchronized (monitor())</span>
+        {
+<span class="nc" id="L212">            check_orphaned();</span>
+<span class="nc bnc" id="L213" title="All 2 branches missed.">            return get_store().count_elements(WRITECONFIG$4) != 0;</span>
+<span class="nc" id="L214">        }</span>
+    }
+    
+    /**
+     * Sets the &quot;writeConfig&quot; element
+     */
+    public void setWriteConfig(org.synchronoss.cpo.jdbc.cpoJdbcConfig.CtJdbcReadWriteConfig writeConfig)
+    {
+<span class="nc" id="L222">        synchronized (monitor())</span>
+        {
+<span class="nc" id="L224">            check_orphaned();</span>
+<span class="nc" id="L225">            org.synchronoss.cpo.jdbc.cpoJdbcConfig.CtJdbcReadWriteConfig target = null;</span>
+<span class="nc" id="L226">            target = (org.synchronoss.cpo.jdbc.cpoJdbcConfig.CtJdbcReadWriteConfig)get_store().find_element_user(WRITECONFIG$4, 0);</span>
+<span class="nc bnc" id="L227" title="All 2 branches missed.">            if (target == null)</span>
+            {
+<span class="nc" id="L229">                target = (org.synchronoss.cpo.jdbc.cpoJdbcConfig.CtJdbcReadWriteConfig)get_store().add_element_user(WRITECONFIG$4);</span>
+            }
+<span class="nc" id="L231">            target.set(writeConfig);</span>
+<span class="nc" id="L232">        }</span>
+<span class="nc" id="L233">    }</span>
+    
+    /**
+     * Appends and returns a new empty &quot;writeConfig&quot; element
+     */
+    public org.synchronoss.cpo.jdbc.cpoJdbcConfig.CtJdbcReadWriteConfig addNewWriteConfig()
+    {
+<span class="nc" id="L240">        synchronized (monitor())</span>
+        {
+<span class="nc" id="L242">            check_orphaned();</span>
+<span class="nc" id="L243">            org.synchronoss.cpo.jdbc.cpoJdbcConfig.CtJdbcReadWriteConfig target = null;</span>
+<span class="nc" id="L244">            target = (org.synchronoss.cpo.jdbc.cpoJdbcConfig.CtJdbcReadWriteConfig)get_store().add_element_user(WRITECONFIG$4);</span>
+<span class="nc" id="L245">            return target;</span>
+<span class="nc" id="L246">        }</span>
+    }
+    
+    /**
+     * Unsets the &quot;writeConfig&quot; element
+     */
+    public void unsetWriteConfig()
+    {
+<span class="nc" id="L254">        synchronized (monitor())</span>
+        {
+<span class="nc" id="L256">            check_orphaned();</span>
+<span class="nc" id="L257">            get_store().remove_element(WRITECONFIG$4, 0);</span>
+<span class="nc" id="L258">        }</span>
+<span class="nc" id="L259">    }</span>
+    
+    /**
+     * Gets the &quot;supportsBlobs&quot; attribute
+     */
+    public boolean getSupportsBlobs()
+    {
+<span class="fc" id="L266">        synchronized (monitor())</span>
+        {
+<span class="fc" id="L268">            check_orphaned();</span>
+<span class="fc" id="L269">            org.apache.xmlbeans.SimpleValue target = null;</span>
+<span class="fc" id="L270">            target = (org.apache.xmlbeans.SimpleValue)get_store().find_attribute_user(SUPPORTSBLOBS$6);</span>
+<span class="pc bpc" id="L271" title="1 of 2 branches missed.">            if (target == null)</span>
+            {
+<span class="nc" id="L273">                return false;</span>
+            }
+<span class="fc" id="L275">            return target.getBooleanValue();</span>
+<span class="nc" id="L276">        }</span>
+    }
+    
+    /**
+     * Gets (as xml) the &quot;supportsBlobs&quot; attribute
+     */
+    public org.apache.xmlbeans.XmlBoolean xgetSupportsBlobs()
+    {
+<span class="nc" id="L284">        synchronized (monitor())</span>
+        {
+<span class="nc" id="L286">            check_orphaned();</span>
+<span class="nc" id="L287">            org.apache.xmlbeans.XmlBoolean target = null;</span>
+<span class="nc" id="L288">            target = (org.apache.xmlbeans.XmlBoolean)get_store().find_attribute_user(SUPPORTSBLOBS$6);</span>
+<span class="nc" id="L289">            return target;</span>
+<span class="nc" id="L290">        }</span>
+    }
+    
+    /**
+     * True if has &quot;supportsBlobs&quot; attribute
+     */
+    public boolean isSetSupportsBlobs()
+    {
+<span class="fc" id="L298">        synchronized (monitor())</span>
+        {
+<span class="fc" id="L300">            check_orphaned();</span>
+<span class="fc bfc" id="L301" title="All 2 branches covered.">            return get_store().find_attribute_user(SUPPORTSBLOBS$6) != null;</span>
+<span class="nc" id="L302">        }</span>
+    }
+    
+    /**
+     * Sets the &quot;supportsBlobs&quot; attribute
+     */
+    public void setSupportsBlobs(boolean supportsBlobs)
+    {
+<span class="nc" id="L310">        synchronized (monitor())</span>
+        {
+<span class="nc" id="L312">            check_orphaned();</span>
+<span class="nc" id="L313">            org.apache.xmlbeans.SimpleValue target = null;</span>
+<span class="nc" id="L314">            target = (org.apache.xmlbeans.SimpleValue)get_store().find_attribute_user(SUPPORTSBLOBS$6);</span>
+<span class="nc bnc" id="L315" title="All 2 branches missed.">            if (target == null)</span>
+            {
+<span class="nc" id="L317">                target = (org.apache.xmlbeans.SimpleValue)get_store().add_attribute_user(SUPPORTSBLOBS$6);</span>
+            }
+<span class="nc" id="L319">            target.setBooleanValue(supportsBlobs);</span>
+<span class="nc" id="L320">        }</span>
+<span class="nc" id="L321">    }</span>
+    
+    /**
+     * Sets (as xml) the &quot;supportsBlobs&quot; attribute
+     */
+    public void xsetSupportsBlobs(org.apache.xmlbeans.XmlBoolean supportsBlobs)
+    {
+<span class="nc" id="L328">        synchronized (monitor())</span>
+        {
+<span class="nc" id="L330">            check_orphaned();</span>
+<span class="nc" id="L331">            org.apache.xmlbeans.XmlBoolean target = null;</span>
+<span class="nc" id="L332">            target = (org.apache.xmlbeans.XmlBoolean)get_store().find_attribute_user(SUPPORTSBLOBS$6);</span>
+<span class="nc bnc" id="L333" title="All 2 branches missed.">            if (target == null)</span>
+            {
+<span class="nc" id="L335">                target = (org.apache.xmlbeans.XmlBoolean)get_store().add_attribute_user(SUPPORTSBLOBS$6);</span>
+            }
+<span class="nc" id="L337">            target.set(supportsBlobs);</span>
+<span class="nc" id="L338">        }</span>
+<span class="nc" id="L339">    }</span>
+    
+    /**
+     * Unsets the &quot;supportsBlobs&quot; attribute
+     */
+    public void unsetSupportsBlobs()
+    {
+<span class="nc" id="L346">        synchronized (monitor())</span>
+        {
+<span class="nc" id="L348">            check_orphaned();</span>
+<span class="nc" id="L349">            get_store().remove_attribute(SUPPORTSBLOBS$6);</span>
+<span class="nc" id="L350">        }</span>
+<span class="nc" id="L351">    }</span>
+    
+    /**
+     * Gets the &quot;supportsCalls&quot; attribute
+     */
+    public boolean getSupportsCalls()
+    {
+<span class="fc" id="L358">        synchronized (monitor())</span>
+        {
+<span class="fc" id="L360">            check_orphaned();</span>
+<span class="fc" id="L361">            org.apache.xmlbeans.SimpleValue target = null;</span>
+<span class="fc" id="L362">            target = (org.apache.xmlbeans.SimpleValue)get_store().find_attribute_user(SUPPORTSCALLS$8);</span>
+<span class="pc bpc" id="L363" title="1 of 2 branches missed.">            if (target == null)</span>
+            {
+<span class="nc" id="L365">                return false;</span>
+            }
+<span class="fc" id="L367">            return target.getBooleanValue();</span>
+<span class="nc" id="L368">        }</span>
+    }
+    
+    /**
+     * Gets (as xml) the &quot;supportsCalls&quot; attribute
+     */
+    public org.apache.xmlbeans.XmlBoolean xgetSupportsCalls()
+    {
+<span class="nc" id="L376">        synchronized (monitor())</span>
+        {
+<span class="nc" id="L378">            check_orphaned();</span>
+<span class="nc" id="L379">            org.apache.xmlbeans.XmlBoolean target = null;</span>
+<span class="nc" id="L380">            target = (org.apache.xmlbeans.XmlBoolean)get_store().find_attribute_user(SUPPORTSCALLS$8);</span>
+<span class="nc" id="L381">            return target;</span>
+<span class="nc" id="L382">        }</span>
+    }
+    
+    /**
+     * True if has &quot;supportsCalls&quot; attribute
+     */
+    public boolean isSetSupportsCalls()
+    {
+<span class="fc" id="L390">        synchronized (monitor())</span>
+        {
+<span class="fc" id="L392">            check_orphaned();</span>
+<span class="fc bfc" id="L393" title="All 2 branches covered.">            return get_store().find_attribute_user(SUPPORTSCALLS$8) != null;</span>
+<span class="nc" id="L394">        }</span>
+    }
+    
+    /**
+     * Sets the &quot;supportsCalls&quot; attribute
+     */
+    public void setSupportsCalls(boolean supportsCalls)
+    {
+<span class="nc" id="L402">        synchronized (monitor())</span>
+        {
+<span class="nc" id="L404">            check_orphaned();</span>
+<span class="nc" id="L405">            org.apache.xmlbeans.SimpleValue target = null;</span>
+<span class="nc" id="L406">            target = (org.apache.xmlbeans.SimpleValue)get_store().find_attribute_user(SUPPORTSCALLS$8);</span>
+<span class="nc bnc" id="L407" title="All 2 branches missed.">            if (target == null)</span>
+            {
+<span class="nc" id="L409">                target = (org.apache.xmlbeans.SimpleValue)get_store().add_attribute_user(SUPPORTSCALLS$8);</span>
+            }
+<span class="nc" id="L411">            target.setBooleanValue(supportsCalls);</span>
+<span class="nc" id="L412">        }</span>
+<span class="nc" id="L413">    }</span>
+    
+    /**
+     * Sets (as xml) the &quot;supportsCalls&quot; attribute
+     */
+    public void xsetSupportsCalls(org.apache.xmlbeans.XmlBoolean supportsCalls)
+    {
+<span class="nc" id="L420">        synchronized (monitor())</span>
+        {
+<span class="nc" id="L422">            check_orphaned();</span>
+<span class="nc" id="L423">            org.apache.xmlbeans.XmlBoolean target = null;</span>
+<span class="nc" id="L424">            target = (org.apache.xmlbeans.XmlBoolean)get_store().find_attribute_user(SUPPORTSCALLS$8);</span>
+<span class="nc bnc" id="L425" title="All 2 branches missed.">            if (target == null)</span>
+            {
+<span class="nc" id="L427">                target = (org.apache.xmlbeans.XmlBoolean)get_store().add_attribute_user(SUPPORTSCALLS$8);</span>
+            }
+<span class="nc" id="L429">            target.set(supportsCalls);</span>
+<span class="nc" id="L430">        }</span>
+<span class="nc" id="L431">    }</span>
+    
+    /**
+     * Unsets the &quot;supportsCalls&quot; attribute
+     */
+    public void unsetSupportsCalls()
+    {
+<span class="nc" id="L438">        synchronized (monitor())</span>
+        {
+<span class="nc" id="L440">            check_orphaned();</span>
+<span class="nc" id="L441">            get_store().remove_attribute(SUPPORTSCALLS$8);</span>
+<span class="nc" id="L442">        }</span>
+<span class="nc" id="L443">    }</span>
+    
+    /**
+     * Gets the &quot;supportsMillis&quot; attribute
+     */
+    public boolean getSupportsMillis()
+    {
+<span class="fc" id="L450">        synchronized (monitor())</span>
+        {
+<span class="fc" id="L452">            check_orphaned();</span>
+<span class="fc" id="L453">            org.apache.xmlbeans.SimpleValue target = null;</span>
+<span class="fc" id="L454">            target = (org.apache.xmlbeans.SimpleValue)get_store().find_attribute_user(SUPPORTSMILLIS$10);</span>
+<span class="pc bpc" id="L455" title="1 of 2 branches missed.">            if (target == null)</span>
+            {
+<span class="nc" id="L457">                return false;</span>
+            }
+<span class="fc" id="L459">            return target.getBooleanValue();</span>
+<span class="nc" id="L460">        }</span>
+    }
+    
+    /**
+     * Gets (as xml) the &quot;supportsMillis&quot; attribute
+     */
+    public org.apache.xmlbeans.XmlBoolean xgetSupportsMillis()
+    {
+<span class="nc" id="L468">        synchronized (monitor())</span>
+        {
+<span class="nc" id="L470">            check_orphaned();</span>
+<span class="nc" id="L471">            org.apache.xmlbeans.XmlBoolean target = null;</span>
+<span class="nc" id="L472">            target = (org.apache.xmlbeans.XmlBoolean)get_store().find_attribute_user(SUPPORTSMILLIS$10);</span>
+<span class="nc" id="L473">            return target;</span>
+<span class="nc" id="L474">        }</span>
+    }
+    
+    /**
+     * True if has &quot;supportsMillis&quot; attribute
+     */
+    public boolean isSetSupportsMillis()
+    {
+<span class="fc" id="L482">        synchronized (monitor())</span>
+        {
+<span class="fc" id="L484">            check_orphaned();</span>
+<span class="fc bfc" id="L485" title="All 2 branches covered.">            return get_store().find_attribute_user(SUPPORTSMILLIS$10) != null;</span>
+<span class="nc" id="L486">        }</span>
+    }
+    
+    /**
+     * Sets the &quot;supportsMillis&quot; attribute
+     */
+    public void setSupportsMillis(boolean supportsMillis)
+    {
+<span class="nc" id="L494">        synchronized (monitor())</span>
+        {
+<span class="nc" id="L496">            check_orphaned();</span>
+<span class="nc" id="L497">            org.apache.xmlbeans.SimpleValue target = null;</span>
+<span class="nc" id="L498">            target = (org.apache.xmlbeans.SimpleValue)get_store().find_attribute_user(SUPPORTSMILLIS$10);</span>
+<span class="nc bnc" id="L499" title="All 2 branches missed.">            if (target == null)</span>
+            {
+<span class="nc" id="L501">                target = (org.apache.xmlbeans.SimpleValue)get_store().add_attribute_user(SUPPORTSMILLIS$10);</span>
+            }
+<span class="nc" id="L503">            target.setBooleanValue(supportsMillis);</span>
+<span class="nc" id="L504">        }</span>
+<span class="nc" id="L505">    }</span>
+    
+    /**
+     * Sets (as xml) the &quot;supportsMillis&quot; attribute
+     */
+    public void xsetSupportsMillis(org.apache.xmlbeans.XmlBoolean supportsMillis)
+    {
+<span class="nc" id="L512">        synchronized (monitor())</span>
+        {
+<span class="nc" id="L514">            check_orphaned();</span>
+<span class="nc" id="L515">            org.apache.xmlbeans.XmlBoolean target = null;</span>
+<span class="nc" id="L516">            target = (org.apache.xmlbeans.XmlBoolean)get_store().find_attribute_user(SUPPORTSMILLIS$10);</span>
+<span class="nc bnc" id="L517" title="All 2 branches missed.">            if (target == null)</span>
+            {
+<span class="nc" id="L519">                target = (org.apache.xmlbeans.XmlBoolean)get_store().add_attribute_user(SUPPORTSMILLIS$10);</span>
+            }
+<span class="nc" id="L521">            target.set(supportsMillis);</span>
+<span class="nc" id="L522">        }</span>
+<span class="nc" id="L523">    }</span>
+    
+    /**
+     * Unsets the &quot;supportsMillis&quot; attribute
+     */
+    public void unsetSupportsMillis()
+    {
+<span class="nc" id="L530">        synchronized (monitor())</span>
+        {
+<span class="nc" id="L532">            check_orphaned();</span>
+<span class="nc" id="L533">            get_store().remove_attribute(SUPPORTSMILLIS$10);</span>
+<span class="nc" id="L534">        }</span>
+<span class="nc" id="L535">    }</span>
+    
+    /**
+     * Gets the &quot;supportsSelect4Update&quot; attribute
+     */
+    public boolean getSupportsSelect4Update()
+    {
+<span class="fc" id="L542">        synchronized (monitor())</span>
+        {
+<span class="fc" id="L544">            check_orphaned();</span>
+<span class="fc" id="L545">            org.apache.xmlbeans.SimpleValue target = null;</span>
+<span class="fc" id="L546">            target = (org.apache.xmlbeans.SimpleValue)get_store().find_attribute_user(SUPPORTSSELECT4UPDATE$12);</span>
+<span class="pc bpc" id="L547" title="1 of 2 branches missed.">            if (target == null)</span>
+            {
+<span class="nc" id="L549">                return false;</span>
+            }
+<span class="fc" id="L551">            return target.getBooleanValue();</span>
+<span class="nc" id="L552">        }</span>
+    }
+    
+    /**
+     * Gets (as xml) the &quot;supportsSelect4Update&quot; attribute
+     */
+    public org.apache.xmlbeans.XmlBoolean xgetSupportsSelect4Update()
+    {
+<span class="nc" id="L560">        synchronized (monitor())</span>
+        {
+<span class="nc" id="L562">            check_orphaned();</span>
+<span class="nc" id="L563">            org.apache.xmlbeans.XmlBoolean target = null;</span>
+<span class="nc" id="L564">            target = (org.apache.xmlbeans.XmlBoolean)get_store().find_attribute_user(SUPPORTSSELECT4UPDATE$12);</span>
+<span class="nc" id="L565">            return target;</span>
+<span class="nc" id="L566">        }</span>
+    }
+    
+    /**
+     * True if has &quot;supportsSelect4Update&quot; attribute
+     */
+    public boolean isSetSupportsSelect4Update()
+    {
+<span class="fc" id="L574">        synchronized (monitor())</span>
+        {
+<span class="fc" id="L576">            check_orphaned();</span>
+<span class="fc bfc" id="L577" title="All 2 branches covered.">            return get_store().find_attribute_user(SUPPORTSSELECT4UPDATE$12) != null;</span>
+<span class="nc" id="L578">        }</span>
+    }
+    
+    /**
+     * Sets the &quot;supportsSelect4Update&quot; attribute
+     */
+    public void setSupportsSelect4Update(boolean supportsSelect4Update)
+    {
+<span class="nc" id="L586">        synchronized (monitor())</span>
+        {
+<span class="nc" id="L588">            check_orphaned();</span>
+<span class="nc" id="L589">            org.apache.xmlbeans.SimpleValue target = null;</span>
+<span class="nc" id="L590">            target = (org.apache.xmlbeans.SimpleValue)get_store().find_attribute_user(SUPPORTSSELECT4UPDATE$12);</span>
+<span class="nc bnc" id="L591" title="All 2 branches missed.">            if (target == null)</span>
+            {
+<span class="nc" id="L593">                target = (org.apache.xmlbeans.SimpleValue)get_store().add_attribute_user(SUPPORTSSELECT4UPDATE$12);</span>
+            }
+<span class="nc" id="L595">            target.setBooleanValue(supportsSelect4Update);</span>
+<span class="nc" id="L596">        }</span>
+<span class="nc" id="L597">    }</span>
+    
+    /**
+     * Sets (as xml) the &quot;supportsSelect4Update&quot; attribute
+     */
+    public void xsetSupportsSelect4Update(org.apache.xmlbeans.XmlBoolean supportsSelect4Update)
+    {
+<span class="nc" id="L604">        synchronized (monitor())</span>
+        {
+<span class="nc" id="L606">            check_orphaned();</span>
+<span class="nc" id="L607">            org.apache.xmlbeans.XmlBoolean target = null;</span>
+<span class="nc" id="L608">            target = (org.apache.xmlbeans.XmlBoolean)get_store().find_attribute_user(SUPPORTSSELECT4UPDATE$12);</span>
+<span class="nc bnc" id="L609" title="All 2 branches missed.">            if (target == null)</span>
+            {
+<span class="nc" id="L611">                target = (org.apache.xmlbeans.XmlBoolean)get_store().add_attribute_user(SUPPORTSSELECT4UPDATE$12);</span>
+            }
+<span class="nc" id="L613">            target.set(supportsSelect4Update);</span>
+<span class="nc" id="L614">        }</span>
+<span class="nc" id="L615">    }</span>
+    
+    /**
+     * Unsets the &quot;supportsSelect4Update&quot; attribute
+     */
+    public void unsetSupportsSelect4Update()
+    {
+<span class="nc" id="L622">        synchronized (monitor())</span>
+        {
+<span class="nc" id="L624">            check_orphaned();</span>
+<span class="nc" id="L625">            get_store().remove_attribute(SUPPORTSSELECT4UPDATE$12);</span>
+<span class="nc" id="L626">        }</span>
+<span class="nc" id="L627">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.2.201409121644</span></div></body></html>

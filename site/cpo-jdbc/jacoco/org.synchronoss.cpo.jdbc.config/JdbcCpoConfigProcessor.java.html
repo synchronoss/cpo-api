@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>JdbcCpoConfigProcessor.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">cpo-jdbc</a> &gt; <a href="index.source.html" class="el_package">org.synchronoss.cpo.jdbc.config</a> &gt; <span class="el_source">JdbcCpoConfigProcessor.java</span></div><h1>JdbcCpoConfigProcessor.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2003-2012 David E. Berry
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ *
+ * A copy of the GNU Lesser General Public License may also be found at
+ * http://www.gnu.org/licenses/lgpl.txt
+ */
+package org.synchronoss.cpo.jdbc.config;
+
+import org.slf4j.*;
+import org.synchronoss.cpo.*;
+import org.synchronoss.cpo.config.CpoConfigProcessor;
+import org.synchronoss.cpo.core.cpoCoreConfig.CtDataSourceConfig;
+import org.synchronoss.cpo.jdbc.*;
+import org.synchronoss.cpo.jdbc.cpoJdbcConfig.*;
+import org.synchronoss.cpo.jdbc.meta.JdbcCpoMetaDescriptor;
+import org.synchronoss.cpo.meta.CpoMetaDescriptor;
+
+import java.util.*;
+
+/**
+ *
+ * @author dberry
+ */
+public class JdbcCpoConfigProcessor implements CpoConfigProcessor {
+
+<span class="fc" id="L40">  private static final Logger logger = LoggerFactory.getLogger(JdbcCpoConfigProcessor.class);</span>
+  private static final String PROP_URL1 = &quot;url&quot;;
+  private static final String PROP_URL2 = &quot;URL&quot;;
+  private static final String PROP_USER = &quot;user&quot;;
+  private static final String PROP_PASSWORD = &quot;password&quot;;
+
+<span class="fc" id="L46">  public JdbcCpoConfigProcessor() {</span>
+<span class="fc" id="L47">  }</span>
+
+  @Override
+  public CpoAdapter processCpoConfig(CtDataSourceConfig cpoConfig) throws CpoException {
+
+<span class="fc" id="L52">    CpoAdapter cpoAdapter = null;</span>
+
+<span class="pc bpc" id="L54" title="2 of 4 branches missed.">    if (cpoConfig == null || !(cpoConfig instanceof CtJdbcConfig)) {</span>
+<span class="nc" id="L55">      throw new CpoException(&quot;Invalid Jdbc Configuration Information&quot;);</span>
+    }
+
+<span class="fc" id="L58">    CtJdbcConfig jdbcConfig = (CtJdbcConfig) cpoConfig;</span>
+
+<span class="fc" id="L60">    JdbcCpoMetaDescriptor metaDescriptor = (JdbcCpoMetaDescriptor)CpoMetaDescriptor.getInstance(jdbcConfig.getMetaDescriptorName());</span>
+
+<span class="fc bfc" id="L62" title="All 2 branches covered.">    if (jdbcConfig.isSetSupportsBlobs())</span>
+<span class="fc" id="L63">      metaDescriptor.setSupportsBlobs(jdbcConfig.getSupportsBlobs());</span>
+
+<span class="fc bfc" id="L65" title="All 2 branches covered.">    if (jdbcConfig.isSetSupportsCalls())</span>
+<span class="fc" id="L66">      metaDescriptor.setSupportsCalls(jdbcConfig.getSupportsCalls());</span>
+
+<span class="fc bfc" id="L68" title="All 2 branches covered.">    if (jdbcConfig.isSetSupportsMillis())</span>
+<span class="fc" id="L69">      metaDescriptor.setSupportsMillis(jdbcConfig.getSupportsMillis());</span>
+
+<span class="fc bfc" id="L71" title="All 2 branches covered.">    if (jdbcConfig.isSetSupportsSelect4Update())</span>
+<span class="fc" id="L72">      metaDescriptor.setSupportsSelect4Update(jdbcConfig.getSupportsSelect4Update());</span>
+
+    // build a datasource info
+<span class="fc bfc" id="L75" title="All 2 branches covered.">    if (jdbcConfig.isSetReadWriteConfig()) {</span>
+<span class="fc" id="L76">      DataSourceInfo dataSourceInfo = buildDataSourceInfo(jdbcConfig.getReadWriteConfig());</span>
+<span class="fc" id="L77">      cpoAdapter = JdbcCpoAdapter.getInstance(metaDescriptor, dataSourceInfo);</span>
+<span class="fc" id="L78">    } else {</span>
+<span class="fc" id="L79">      DataSourceInfo readDataSourceInfo = buildDataSourceInfo(jdbcConfig.getReadConfig());</span>
+<span class="fc" id="L80">      DataSourceInfo writeDataSourceInfo = buildDataSourceInfo(jdbcConfig.getWriteConfig());</span>
+<span class="fc" id="L81">      cpoAdapter = JdbcCpoAdapter.getInstance(metaDescriptor, writeDataSourceInfo, readDataSourceInfo);</span>
+    }
+
+<span class="fc" id="L84">    return cpoAdapter;</span>
+  }
+
+  private DataSourceInfo buildDataSourceInfo(CtJdbcReadWriteConfig readWriteConfig) throws CpoException {
+<span class="fc" id="L88">    DataSourceInfo dataSourceInfo = null;</span>
+
+<span class="pc bpc" id="L90" title="1 of 2 branches missed.">    if (readWriteConfig.isSetJndiName()) {</span>
+<span class="nc" id="L91">      dataSourceInfo = new JndiJdbcDataSourceInfo(readWriteConfig.getJndiName());</span>
+<span class="fc bfc" id="L92" title="All 2 branches covered.">    } else if (readWriteConfig.isSetDataSourceClassName()) {</span>
+<span class="fc" id="L93">      SortedMap&lt;String, String&gt; props = new TreeMap&lt;&gt;();</span>
+
+<span class="pc bpc" id="L95" title="1 of 2 branches missed.">      if (readWriteConfig.isSetUrl()) {</span>
+<span class="fc" id="L96">        props.put(PROP_URL1, readWriteConfig.getUrl());</span>
+<span class="fc" id="L97">        props.put(PROP_URL2, readWriteConfig.getUrl());</span>
+      }
+
+<span class="pc bpc" id="L100" title="1 of 2 branches missed.">      if (readWriteConfig.isSetUser()) {</span>
+<span class="nc" id="L101">        props.put(PROP_USER, readWriteConfig.getUser());</span>
+      }
+
+<span class="pc bpc" id="L104" title="1 of 2 branches missed.">      if (readWriteConfig.isSetPassword()) {</span>
+<span class="nc" id="L105">        props.put(PROP_PASSWORD, readWriteConfig.getPassword());</span>
+      }
+
+<span class="fc bfc" id="L108" title="All 2 branches covered.">      for (CtProperty property : readWriteConfig.getPropertyArray()){</span>
+<span class="fc" id="L109">        props.put(property.getName(), property.getValue());</span>
+<span class="fc" id="L110">        logger.debug(&quot;Adding property &quot;+property.getName()+&quot;=&quot;+property.getValue());</span>
+      }
+
+<span class="fc" id="L113">      dataSourceInfo = new ClassJdbcDataSourceInfo(readWriteConfig.getDataSourceClassName(), props);</span>
+<span class="pc bpc" id="L114" title="1 of 2 branches missed.">    } else if (readWriteConfig.isSetDriverClassName()) {</span>
+<span class="fc bfc" id="L115" title="All 2 branches covered.">      if (readWriteConfig.isSetUser()) {</span>
+<span class="fc" id="L116">        dataSourceInfo = new DriverJdbcDataSourceInfo(readWriteConfig.getDriverClassName(), readWriteConfig.getUrl(), readWriteConfig.getUser(), readWriteConfig.getPassword());</span>
+<span class="fc bfc" id="L117" title="All 2 branches covered.">      } else if (readWriteConfig.getPropertyArray().length&gt;0) {</span>
+<span class="fc" id="L118">        Properties props = new Properties();</span>
+<span class="fc bfc" id="L119" title="All 2 branches covered.">        for (CtProperty property : readWriteConfig.getPropertyArray()){</span>
+<span class="fc" id="L120">          props.put(property.getName(), property.getValue());</span>
+        }
+<span class="fc" id="L122">        dataSourceInfo = new DriverJdbcDataSourceInfo(readWriteConfig.getDriverClassName(), readWriteConfig.getUrl(), props);</span>
+<span class="fc" id="L123">      } else {</span>
+<span class="fc" id="L124">        dataSourceInfo = new DriverJdbcDataSourceInfo(readWriteConfig.getDriverClassName(), readWriteConfig.getUrl());</span>
+      }
+    }
+
+<span class="fc" id="L128">    logger.debug(&quot;Created DataSourceInfo: &quot;+dataSourceInfo);</span>
+<span class="fc" id="L129">    return dataSourceInfo;</span>
+  }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.2.201409121644</span></div></body></html>

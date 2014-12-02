@@ -1,0 +1,707 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>CtJdbcReadWriteConfigImpl.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">cpo-jdbc</a> &gt; <a href="index.source.html" class="el_package">org.synchronoss.cpo.jdbc.cpoJdbcConfig.impl</a> &gt; <span class="el_source">CtJdbcReadWriteConfigImpl.java</span></div><h1>CtJdbcReadWriteConfigImpl.java</h1><pre class="source lang-java linenums">/*
+ * XML Type:  ctJdbcReadWriteConfig
+ * Namespace: http://www.synchronoss.org/cpo/jdbc/CpoJdbcConfig.xsd
+ * Java type: org.synchronoss.cpo.jdbc.cpoJdbcConfig.CtJdbcReadWriteConfig
+ *
+ * Automatically generated - do not modify.
+ */
+package org.synchronoss.cpo.jdbc.cpoJdbcConfig.impl;
+/**
+ * An XML ctJdbcReadWriteConfig(@http://www.synchronoss.org/cpo/jdbc/CpoJdbcConfig.xsd).
+ *
+ * This is a complex type.
+ */
+public class CtJdbcReadWriteConfigImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentImpl implements org.synchronoss.cpo.jdbc.cpoJdbcConfig.CtJdbcReadWriteConfig
+{
+    private static final long serialVersionUID = 1L;
+    
+    public CtJdbcReadWriteConfigImpl(org.apache.xmlbeans.SchemaType sType)
+    {
+<span class="fc" id="L20">        super(sType);</span>
+<span class="fc" id="L21">    }</span>
+    
+<span class="fc" id="L23">    private static final javax.xml.namespace.QName JNDINAME$0 = </span>
+        new javax.xml.namespace.QName(&quot;http://www.synchronoss.org/cpo/jdbc/CpoJdbcConfig.xsd&quot;, &quot;jndiName&quot;);
+<span class="fc" id="L25">    private static final javax.xml.namespace.QName DATASOURCECLASSNAME$2 = </span>
+        new javax.xml.namespace.QName(&quot;http://www.synchronoss.org/cpo/jdbc/CpoJdbcConfig.xsd&quot;, &quot;dataSourceClassName&quot;);
+<span class="fc" id="L27">    private static final javax.xml.namespace.QName DRIVERCLASSNAME$4 = </span>
+        new javax.xml.namespace.QName(&quot;http://www.synchronoss.org/cpo/jdbc/CpoJdbcConfig.xsd&quot;, &quot;driverClassName&quot;);
+<span class="fc" id="L29">    private static final javax.xml.namespace.QName URL$6 = </span>
+        new javax.xml.namespace.QName(&quot;http://www.synchronoss.org/cpo/jdbc/CpoJdbcConfig.xsd&quot;, &quot;url&quot;);
+<span class="fc" id="L31">    private static final javax.xml.namespace.QName USER$8 = </span>
+        new javax.xml.namespace.QName(&quot;http://www.synchronoss.org/cpo/jdbc/CpoJdbcConfig.xsd&quot;, &quot;user&quot;);
+<span class="fc" id="L33">    private static final javax.xml.namespace.QName PASSWORD$10 = </span>
+        new javax.xml.namespace.QName(&quot;http://www.synchronoss.org/cpo/jdbc/CpoJdbcConfig.xsd&quot;, &quot;password&quot;);
+<span class="fc" id="L35">    private static final javax.xml.namespace.QName PROPERTY$12 = </span>
+        new javax.xml.namespace.QName(&quot;http://www.synchronoss.org/cpo/jdbc/CpoJdbcConfig.xsd&quot;, &quot;property&quot;);
+    
+    
+    /**
+     * Gets the &quot;jndiName&quot; element
+     */
+    public java.lang.String getJndiName()
+    {
+<span class="nc" id="L44">        synchronized (monitor())</span>
+        {
+<span class="nc" id="L46">            check_orphaned();</span>
+<span class="nc" id="L47">            org.apache.xmlbeans.SimpleValue target = null;</span>
+<span class="nc" id="L48">            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(JNDINAME$0, 0);</span>
+<span class="nc bnc" id="L49" title="All 2 branches missed.">            if (target == null)</span>
+            {
+<span class="nc" id="L51">                return null;</span>
+            }
+<span class="nc" id="L53">            return target.getStringValue();</span>
+<span class="nc" id="L54">        }</span>
+    }
+    
+    /**
+     * Gets (as xml) the &quot;jndiName&quot; element
+     */
+    public org.apache.xmlbeans.XmlString xgetJndiName()
+    {
+<span class="nc" id="L62">        synchronized (monitor())</span>
+        {
+<span class="nc" id="L64">            check_orphaned();</span>
+<span class="nc" id="L65">            org.apache.xmlbeans.XmlString target = null;</span>
+<span class="nc" id="L66">            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(JNDINAME$0, 0);</span>
+<span class="nc" id="L67">            return target;</span>
+<span class="nc" id="L68">        }</span>
+    }
+    
+    /**
+     * True if has &quot;jndiName&quot; element
+     */
+    public boolean isSetJndiName()
+    {
+<span class="fc" id="L76">        synchronized (monitor())</span>
+        {
+<span class="fc" id="L78">            check_orphaned();</span>
+<span class="pc bpc" id="L79" title="1 of 2 branches missed.">            return get_store().count_elements(JNDINAME$0) != 0;</span>
+<span class="nc" id="L80">        }</span>
+    }
+    
+    /**
+     * Sets the &quot;jndiName&quot; element
+     */
+    public void setJndiName(java.lang.String jndiName)
+    {
+<span class="nc" id="L88">        synchronized (monitor())</span>
+        {
+<span class="nc" id="L90">            check_orphaned();</span>
+<span class="nc" id="L91">            org.apache.xmlbeans.SimpleValue target = null;</span>
+<span class="nc" id="L92">            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(JNDINAME$0, 0);</span>
+<span class="nc bnc" id="L93" title="All 2 branches missed.">            if (target == null)</span>
+            {
+<span class="nc" id="L95">                target = (org.apache.xmlbeans.SimpleValue)get_store().add_element_user(JNDINAME$0);</span>
+            }
+<span class="nc" id="L97">            target.setStringValue(jndiName);</span>
+<span class="nc" id="L98">        }</span>
+<span class="nc" id="L99">    }</span>
+    
+    /**
+     * Sets (as xml) the &quot;jndiName&quot; element
+     */
+    public void xsetJndiName(org.apache.xmlbeans.XmlString jndiName)
+    {
+<span class="nc" id="L106">        synchronized (monitor())</span>
+        {
+<span class="nc" id="L108">            check_orphaned();</span>
+<span class="nc" id="L109">            org.apache.xmlbeans.XmlString target = null;</span>
+<span class="nc" id="L110">            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(JNDINAME$0, 0);</span>
+<span class="nc bnc" id="L111" title="All 2 branches missed.">            if (target == null)</span>
+            {
+<span class="nc" id="L113">                target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(JNDINAME$0);</span>
+            }
+<span class="nc" id="L115">            target.set(jndiName);</span>
+<span class="nc" id="L116">        }</span>
+<span class="nc" id="L117">    }</span>
+    
+    /**
+     * Unsets the &quot;jndiName&quot; element
+     */
+    public void unsetJndiName()
+    {
+<span class="nc" id="L124">        synchronized (monitor())</span>
+        {
+<span class="nc" id="L126">            check_orphaned();</span>
+<span class="nc" id="L127">            get_store().remove_element(JNDINAME$0, 0);</span>
+<span class="nc" id="L128">        }</span>
+<span class="nc" id="L129">    }</span>
+    
+    /**
+     * Gets the &quot;dataSourceClassName&quot; element
+     */
+    public java.lang.String getDataSourceClassName()
+    {
+<span class="fc" id="L136">        synchronized (monitor())</span>
+        {
+<span class="fc" id="L138">            check_orphaned();</span>
+<span class="fc" id="L139">            org.apache.xmlbeans.SimpleValue target = null;</span>
+<span class="fc" id="L140">            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(DATASOURCECLASSNAME$2, 0);</span>
+<span class="pc bpc" id="L141" title="1 of 2 branches missed.">            if (target == null)</span>
+            {
+<span class="nc" id="L143">                return null;</span>
+            }
+<span class="fc" id="L145">            return target.getStringValue();</span>
+<span class="nc" id="L146">        }</span>
+    }
+    
+    /**
+     * Gets (as xml) the &quot;dataSourceClassName&quot; element
+     */
+    public org.apache.xmlbeans.XmlString xgetDataSourceClassName()
+    {
+<span class="nc" id="L154">        synchronized (monitor())</span>
+        {
+<span class="nc" id="L156">            check_orphaned();</span>
+<span class="nc" id="L157">            org.apache.xmlbeans.XmlString target = null;</span>
+<span class="nc" id="L158">            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(DATASOURCECLASSNAME$2, 0);</span>
+<span class="nc" id="L159">            return target;</span>
+<span class="nc" id="L160">        }</span>
+    }
+    
+    /**
+     * True if has &quot;dataSourceClassName&quot; element
+     */
+    public boolean isSetDataSourceClassName()
+    {
+<span class="fc" id="L168">        synchronized (monitor())</span>
+        {
+<span class="fc" id="L170">            check_orphaned();</span>
+<span class="fc bfc" id="L171" title="All 2 branches covered.">            return get_store().count_elements(DATASOURCECLASSNAME$2) != 0;</span>
+<span class="nc" id="L172">        }</span>
+    }
+    
+    /**
+     * Sets the &quot;dataSourceClassName&quot; element
+     */
+    public void setDataSourceClassName(java.lang.String dataSourceClassName)
+    {
+<span class="nc" id="L180">        synchronized (monitor())</span>
+        {
+<span class="nc" id="L182">            check_orphaned();</span>
+<span class="nc" id="L183">            org.apache.xmlbeans.SimpleValue target = null;</span>
+<span class="nc" id="L184">            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(DATASOURCECLASSNAME$2, 0);</span>
+<span class="nc bnc" id="L185" title="All 2 branches missed.">            if (target == null)</span>
+            {
+<span class="nc" id="L187">                target = (org.apache.xmlbeans.SimpleValue)get_store().add_element_user(DATASOURCECLASSNAME$2);</span>
+            }
+<span class="nc" id="L189">            target.setStringValue(dataSourceClassName);</span>
+<span class="nc" id="L190">        }</span>
+<span class="nc" id="L191">    }</span>
+    
+    /**
+     * Sets (as xml) the &quot;dataSourceClassName&quot; element
+     */
+    public void xsetDataSourceClassName(org.apache.xmlbeans.XmlString dataSourceClassName)
+    {
+<span class="nc" id="L198">        synchronized (monitor())</span>
+        {
+<span class="nc" id="L200">            check_orphaned();</span>
+<span class="nc" id="L201">            org.apache.xmlbeans.XmlString target = null;</span>
+<span class="nc" id="L202">            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(DATASOURCECLASSNAME$2, 0);</span>
+<span class="nc bnc" id="L203" title="All 2 branches missed.">            if (target == null)</span>
+            {
+<span class="nc" id="L205">                target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(DATASOURCECLASSNAME$2);</span>
+            }
+<span class="nc" id="L207">            target.set(dataSourceClassName);</span>
+<span class="nc" id="L208">        }</span>
+<span class="nc" id="L209">    }</span>
+    
+    /**
+     * Unsets the &quot;dataSourceClassName&quot; element
+     */
+    public void unsetDataSourceClassName()
+    {
+<span class="nc" id="L216">        synchronized (monitor())</span>
+        {
+<span class="nc" id="L218">            check_orphaned();</span>
+<span class="nc" id="L219">            get_store().remove_element(DATASOURCECLASSNAME$2, 0);</span>
+<span class="nc" id="L220">        }</span>
+<span class="nc" id="L221">    }</span>
+    
+    /**
+     * Gets the &quot;driverClassName&quot; element
+     */
+    public java.lang.String getDriverClassName()
+    {
+<span class="fc" id="L228">        synchronized (monitor())</span>
+        {
+<span class="fc" id="L230">            check_orphaned();</span>
+<span class="fc" id="L231">            org.apache.xmlbeans.SimpleValue target = null;</span>
+<span class="fc" id="L232">            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(DRIVERCLASSNAME$4, 0);</span>
+<span class="pc bpc" id="L233" title="1 of 2 branches missed.">            if (target == null)</span>
+            {
+<span class="nc" id="L235">                return null;</span>
+            }
+<span class="fc" id="L237">            return target.getStringValue();</span>
+<span class="nc" id="L238">        }</span>
+    }
+    
+    /**
+     * Gets (as xml) the &quot;driverClassName&quot; element
+     */
+    public org.apache.xmlbeans.XmlString xgetDriverClassName()
+    {
+<span class="nc" id="L246">        synchronized (monitor())</span>
+        {
+<span class="nc" id="L248">            check_orphaned();</span>
+<span class="nc" id="L249">            org.apache.xmlbeans.XmlString target = null;</span>
+<span class="nc" id="L250">            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(DRIVERCLASSNAME$4, 0);</span>
+<span class="nc" id="L251">            return target;</span>
+<span class="nc" id="L252">        }</span>
+    }
+    
+    /**
+     * True if has &quot;driverClassName&quot; element
+     */
+    public boolean isSetDriverClassName()
+    {
+<span class="fc" id="L260">        synchronized (monitor())</span>
+        {
+<span class="fc" id="L262">            check_orphaned();</span>
+<span class="pc bpc" id="L263" title="1 of 2 branches missed.">            return get_store().count_elements(DRIVERCLASSNAME$4) != 0;</span>
+<span class="nc" id="L264">        }</span>
+    }
+    
+    /**
+     * Sets the &quot;driverClassName&quot; element
+     */
+    public void setDriverClassName(java.lang.String driverClassName)
+    {
+<span class="nc" id="L272">        synchronized (monitor())</span>
+        {
+<span class="nc" id="L274">            check_orphaned();</span>
+<span class="nc" id="L275">            org.apache.xmlbeans.SimpleValue target = null;</span>
+<span class="nc" id="L276">            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(DRIVERCLASSNAME$4, 0);</span>
+<span class="nc bnc" id="L277" title="All 2 branches missed.">            if (target == null)</span>
+            {
+<span class="nc" id="L279">                target = (org.apache.xmlbeans.SimpleValue)get_store().add_element_user(DRIVERCLASSNAME$4);</span>
+            }
+<span class="nc" id="L281">            target.setStringValue(driverClassName);</span>
+<span class="nc" id="L282">        }</span>
+<span class="nc" id="L283">    }</span>
+    
+    /**
+     * Sets (as xml) the &quot;driverClassName&quot; element
+     */
+    public void xsetDriverClassName(org.apache.xmlbeans.XmlString driverClassName)
+    {
+<span class="nc" id="L290">        synchronized (monitor())</span>
+        {
+<span class="nc" id="L292">            check_orphaned();</span>
+<span class="nc" id="L293">            org.apache.xmlbeans.XmlString target = null;</span>
+<span class="nc" id="L294">            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(DRIVERCLASSNAME$4, 0);</span>
+<span class="nc bnc" id="L295" title="All 2 branches missed.">            if (target == null)</span>
+            {
+<span class="nc" id="L297">                target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(DRIVERCLASSNAME$4);</span>
+            }
+<span class="nc" id="L299">            target.set(driverClassName);</span>
+<span class="nc" id="L300">        }</span>
+<span class="nc" id="L301">    }</span>
+    
+    /**
+     * Unsets the &quot;driverClassName&quot; element
+     */
+    public void unsetDriverClassName()
+    {
+<span class="nc" id="L308">        synchronized (monitor())</span>
+        {
+<span class="nc" id="L310">            check_orphaned();</span>
+<span class="nc" id="L311">            get_store().remove_element(DRIVERCLASSNAME$4, 0);</span>
+<span class="nc" id="L312">        }</span>
+<span class="nc" id="L313">    }</span>
+    
+    /**
+     * Gets the &quot;url&quot; element
+     */
+    public java.lang.String getUrl()
+    {
+<span class="fc" id="L320">        synchronized (monitor())</span>
+        {
+<span class="fc" id="L322">            check_orphaned();</span>
+<span class="fc" id="L323">            org.apache.xmlbeans.SimpleValue target = null;</span>
+<span class="fc" id="L324">            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(URL$6, 0);</span>
+<span class="pc bpc" id="L325" title="1 of 2 branches missed.">            if (target == null)</span>
+            {
+<span class="nc" id="L327">                return null;</span>
+            }
+<span class="fc" id="L329">            return target.getStringValue();</span>
+<span class="nc" id="L330">        }</span>
+    }
+    
+    /**
+     * Gets (as xml) the &quot;url&quot; element
+     */
+    public org.apache.xmlbeans.XmlString xgetUrl()
+    {
+<span class="nc" id="L338">        synchronized (monitor())</span>
+        {
+<span class="nc" id="L340">            check_orphaned();</span>
+<span class="nc" id="L341">            org.apache.xmlbeans.XmlString target = null;</span>
+<span class="nc" id="L342">            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(URL$6, 0);</span>
+<span class="nc" id="L343">            return target;</span>
+<span class="nc" id="L344">        }</span>
+    }
+    
+    /**
+     * True if has &quot;url&quot; element
+     */
+    public boolean isSetUrl()
+    {
+<span class="fc" id="L352">        synchronized (monitor())</span>
+        {
+<span class="fc" id="L354">            check_orphaned();</span>
+<span class="pc bpc" id="L355" title="1 of 2 branches missed.">            return get_store().count_elements(URL$6) != 0;</span>
+<span class="nc" id="L356">        }</span>
+    }
+    
+    /**
+     * Sets the &quot;url&quot; element
+     */
+    public void setUrl(java.lang.String url)
+    {
+<span class="nc" id="L364">        synchronized (monitor())</span>
+        {
+<span class="nc" id="L366">            check_orphaned();</span>
+<span class="nc" id="L367">            org.apache.xmlbeans.SimpleValue target = null;</span>
+<span class="nc" id="L368">            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(URL$6, 0);</span>
+<span class="nc bnc" id="L369" title="All 2 branches missed.">            if (target == null)</span>
+            {
+<span class="nc" id="L371">                target = (org.apache.xmlbeans.SimpleValue)get_store().add_element_user(URL$6);</span>
+            }
+<span class="nc" id="L373">            target.setStringValue(url);</span>
+<span class="nc" id="L374">        }</span>
+<span class="nc" id="L375">    }</span>
+    
+    /**
+     * Sets (as xml) the &quot;url&quot; element
+     */
+    public void xsetUrl(org.apache.xmlbeans.XmlString url)
+    {
+<span class="nc" id="L382">        synchronized (monitor())</span>
+        {
+<span class="nc" id="L384">            check_orphaned();</span>
+<span class="nc" id="L385">            org.apache.xmlbeans.XmlString target = null;</span>
+<span class="nc" id="L386">            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(URL$6, 0);</span>
+<span class="nc bnc" id="L387" title="All 2 branches missed.">            if (target == null)</span>
+            {
+<span class="nc" id="L389">                target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(URL$6);</span>
+            }
+<span class="nc" id="L391">            target.set(url);</span>
+<span class="nc" id="L392">        }</span>
+<span class="nc" id="L393">    }</span>
+    
+    /**
+     * Unsets the &quot;url&quot; element
+     */
+    public void unsetUrl()
+    {
+<span class="nc" id="L400">        synchronized (monitor())</span>
+        {
+<span class="nc" id="L402">            check_orphaned();</span>
+<span class="nc" id="L403">            get_store().remove_element(URL$6, 0);</span>
+<span class="nc" id="L404">        }</span>
+<span class="nc" id="L405">    }</span>
+    
+    /**
+     * Gets the &quot;user&quot; element
+     */
+    public java.lang.String getUser()
+    {
+<span class="fc" id="L412">        synchronized (monitor())</span>
+        {
+<span class="fc" id="L414">            check_orphaned();</span>
+<span class="fc" id="L415">            org.apache.xmlbeans.SimpleValue target = null;</span>
+<span class="fc" id="L416">            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(USER$8, 0);</span>
+<span class="pc bpc" id="L417" title="1 of 2 branches missed.">            if (target == null)</span>
+            {
+<span class="nc" id="L419">                return null;</span>
+            }
+<span class="fc" id="L421">            return target.getStringValue();</span>
+<span class="nc" id="L422">        }</span>
+    }
+    
+    /**
+     * Gets (as xml) the &quot;user&quot; element
+     */
+    public org.apache.xmlbeans.XmlString xgetUser()
+    {
+<span class="nc" id="L430">        synchronized (monitor())</span>
+        {
+<span class="nc" id="L432">            check_orphaned();</span>
+<span class="nc" id="L433">            org.apache.xmlbeans.XmlString target = null;</span>
+<span class="nc" id="L434">            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(USER$8, 0);</span>
+<span class="nc" id="L435">            return target;</span>
+<span class="nc" id="L436">        }</span>
+    }
+    
+    /**
+     * True if has &quot;user&quot; element
+     */
+    public boolean isSetUser()
+    {
+<span class="fc" id="L444">        synchronized (monitor())</span>
+        {
+<span class="fc" id="L446">            check_orphaned();</span>
+<span class="fc bfc" id="L447" title="All 2 branches covered.">            return get_store().count_elements(USER$8) != 0;</span>
+<span class="nc" id="L448">        }</span>
+    }
+    
+    /**
+     * Sets the &quot;user&quot; element
+     */
+    public void setUser(java.lang.String user)
+    {
+<span class="nc" id="L456">        synchronized (monitor())</span>
+        {
+<span class="nc" id="L458">            check_orphaned();</span>
+<span class="nc" id="L459">            org.apache.xmlbeans.SimpleValue target = null;</span>
+<span class="nc" id="L460">            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(USER$8, 0);</span>
+<span class="nc bnc" id="L461" title="All 2 branches missed.">            if (target == null)</span>
+            {
+<span class="nc" id="L463">                target = (org.apache.xmlbeans.SimpleValue)get_store().add_element_user(USER$8);</span>
+            }
+<span class="nc" id="L465">            target.setStringValue(user);</span>
+<span class="nc" id="L466">        }</span>
+<span class="nc" id="L467">    }</span>
+    
+    /**
+     * Sets (as xml) the &quot;user&quot; element
+     */
+    public void xsetUser(org.apache.xmlbeans.XmlString user)
+    {
+<span class="nc" id="L474">        synchronized (monitor())</span>
+        {
+<span class="nc" id="L476">            check_orphaned();</span>
+<span class="nc" id="L477">            org.apache.xmlbeans.XmlString target = null;</span>
+<span class="nc" id="L478">            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(USER$8, 0);</span>
+<span class="nc bnc" id="L479" title="All 2 branches missed.">            if (target == null)</span>
+            {
+<span class="nc" id="L481">                target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(USER$8);</span>
+            }
+<span class="nc" id="L483">            target.set(user);</span>
+<span class="nc" id="L484">        }</span>
+<span class="nc" id="L485">    }</span>
+    
+    /**
+     * Unsets the &quot;user&quot; element
+     */
+    public void unsetUser()
+    {
+<span class="nc" id="L492">        synchronized (monitor())</span>
+        {
+<span class="nc" id="L494">            check_orphaned();</span>
+<span class="nc" id="L495">            get_store().remove_element(USER$8, 0);</span>
+<span class="nc" id="L496">        }</span>
+<span class="nc" id="L497">    }</span>
+    
+    /**
+     * Gets the &quot;password&quot; element
+     */
+    public java.lang.String getPassword()
+    {
+<span class="fc" id="L504">        synchronized (monitor())</span>
+        {
+<span class="fc" id="L506">            check_orphaned();</span>
+<span class="fc" id="L507">            org.apache.xmlbeans.SimpleValue target = null;</span>
+<span class="fc" id="L508">            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(PASSWORD$10, 0);</span>
+<span class="pc bpc" id="L509" title="1 of 2 branches missed.">            if (target == null)</span>
+            {
+<span class="nc" id="L511">                return null;</span>
+            }
+<span class="fc" id="L513">            return target.getStringValue();</span>
+<span class="nc" id="L514">        }</span>
+    }
+    
+    /**
+     * Gets (as xml) the &quot;password&quot; element
+     */
+    public org.apache.xmlbeans.XmlString xgetPassword()
+    {
+<span class="nc" id="L522">        synchronized (monitor())</span>
+        {
+<span class="nc" id="L524">            check_orphaned();</span>
+<span class="nc" id="L525">            org.apache.xmlbeans.XmlString target = null;</span>
+<span class="nc" id="L526">            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(PASSWORD$10, 0);</span>
+<span class="nc" id="L527">            return target;</span>
+<span class="nc" id="L528">        }</span>
+    }
+    
+    /**
+     * True if has &quot;password&quot; element
+     */
+    public boolean isSetPassword()
+    {
+<span class="fc" id="L536">        synchronized (monitor())</span>
+        {
+<span class="fc" id="L538">            check_orphaned();</span>
+<span class="pc bpc" id="L539" title="1 of 2 branches missed.">            return get_store().count_elements(PASSWORD$10) != 0;</span>
+<span class="nc" id="L540">        }</span>
+    }
+    
+    /**
+     * Sets the &quot;password&quot; element
+     */
+    public void setPassword(java.lang.String password)
+    {
+<span class="nc" id="L548">        synchronized (monitor())</span>
+        {
+<span class="nc" id="L550">            check_orphaned();</span>
+<span class="nc" id="L551">            org.apache.xmlbeans.SimpleValue target = null;</span>
+<span class="nc" id="L552">            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(PASSWORD$10, 0);</span>
+<span class="nc bnc" id="L553" title="All 2 branches missed.">            if (target == null)</span>
+            {
+<span class="nc" id="L555">                target = (org.apache.xmlbeans.SimpleValue)get_store().add_element_user(PASSWORD$10);</span>
+            }
+<span class="nc" id="L557">            target.setStringValue(password);</span>
+<span class="nc" id="L558">        }</span>
+<span class="nc" id="L559">    }</span>
+    
+    /**
+     * Sets (as xml) the &quot;password&quot; element
+     */
+    public void xsetPassword(org.apache.xmlbeans.XmlString password)
+    {
+<span class="nc" id="L566">        synchronized (monitor())</span>
+        {
+<span class="nc" id="L568">            check_orphaned();</span>
+<span class="nc" id="L569">            org.apache.xmlbeans.XmlString target = null;</span>
+<span class="nc" id="L570">            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(PASSWORD$10, 0);</span>
+<span class="nc bnc" id="L571" title="All 2 branches missed.">            if (target == null)</span>
+            {
+<span class="nc" id="L573">                target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(PASSWORD$10);</span>
+            }
+<span class="nc" id="L575">            target.set(password);</span>
+<span class="nc" id="L576">        }</span>
+<span class="nc" id="L577">    }</span>
+    
+    /**
+     * Unsets the &quot;password&quot; element
+     */
+    public void unsetPassword()
+    {
+<span class="nc" id="L584">        synchronized (monitor())</span>
+        {
+<span class="nc" id="L586">            check_orphaned();</span>
+<span class="nc" id="L587">            get_store().remove_element(PASSWORD$10, 0);</span>
+<span class="nc" id="L588">        }</span>
+<span class="nc" id="L589">    }</span>
+    
+    /**
+     * Gets array of all &quot;property&quot; elements
+     */
+    public org.synchronoss.cpo.jdbc.cpoJdbcConfig.CtProperty[] getPropertyArray()
+    {
+<span class="fc" id="L596">        synchronized (monitor())</span>
+        {
+<span class="fc" id="L598">            check_orphaned();</span>
+<span class="fc" id="L599">            java.util.List targetList = new java.util.ArrayList();</span>
+<span class="fc" id="L600">            get_store().find_all_element_users(PROPERTY$12, targetList);</span>
+<span class="fc" id="L601">            org.synchronoss.cpo.jdbc.cpoJdbcConfig.CtProperty[] result = new org.synchronoss.cpo.jdbc.cpoJdbcConfig.CtProperty[targetList.size()];</span>
+<span class="fc" id="L602">            targetList.toArray(result);</span>
+<span class="fc" id="L603">            return result;</span>
+<span class="nc" id="L604">        }</span>
+    }
+    
+    /**
+     * Gets ith &quot;property&quot; element
+     */
+    public org.synchronoss.cpo.jdbc.cpoJdbcConfig.CtProperty getPropertyArray(int i)
+    {
+<span class="nc" id="L612">        synchronized (monitor())</span>
+        {
+<span class="nc" id="L614">            check_orphaned();</span>
+<span class="nc" id="L615">            org.synchronoss.cpo.jdbc.cpoJdbcConfig.CtProperty target = null;</span>
+<span class="nc" id="L616">            target = (org.synchronoss.cpo.jdbc.cpoJdbcConfig.CtProperty)get_store().find_element_user(PROPERTY$12, i);</span>
+<span class="nc bnc" id="L617" title="All 2 branches missed.">            if (target == null)</span>
+            {
+<span class="nc" id="L619">                throw new IndexOutOfBoundsException();</span>
+            }
+<span class="nc" id="L621">            return target;</span>
+<span class="nc" id="L622">        }</span>
+    }
+    
+    /**
+     * Returns number of &quot;property&quot; element
+     */
+    public int sizeOfPropertyArray()
+    {
+<span class="nc" id="L630">        synchronized (monitor())</span>
+        {
+<span class="nc" id="L632">            check_orphaned();</span>
+<span class="nc" id="L633">            return get_store().count_elements(PROPERTY$12);</span>
+<span class="nc" id="L634">        }</span>
+    }
+    
+    /**
+     * Sets array of all &quot;property&quot; element
+     */
+    public void setPropertyArray(org.synchronoss.cpo.jdbc.cpoJdbcConfig.CtProperty[] propertyArray)
+    {
+<span class="nc" id="L642">        synchronized (monitor())</span>
+        {
+<span class="nc" id="L644">            check_orphaned();</span>
+<span class="nc" id="L645">            arraySetterHelper(propertyArray, PROPERTY$12);</span>
+<span class="nc" id="L646">        }</span>
+<span class="nc" id="L647">    }</span>
+    
+    /**
+     * Sets ith &quot;property&quot; element
+     */
+    public void setPropertyArray(int i, org.synchronoss.cpo.jdbc.cpoJdbcConfig.CtProperty property)
+    {
+<span class="nc" id="L654">        synchronized (monitor())</span>
+        {
+<span class="nc" id="L656">            check_orphaned();</span>
+<span class="nc" id="L657">            org.synchronoss.cpo.jdbc.cpoJdbcConfig.CtProperty target = null;</span>
+<span class="nc" id="L658">            target = (org.synchronoss.cpo.jdbc.cpoJdbcConfig.CtProperty)get_store().find_element_user(PROPERTY$12, i);</span>
+<span class="nc bnc" id="L659" title="All 2 branches missed.">            if (target == null)</span>
+            {
+<span class="nc" id="L661">                throw new IndexOutOfBoundsException();</span>
+            }
+<span class="nc" id="L663">            target.set(property);</span>
+<span class="nc" id="L664">        }</span>
+<span class="nc" id="L665">    }</span>
+    
+    /**
+     * Inserts and returns a new empty value (as xml) as the ith &quot;property&quot; element
+     */
+    public org.synchronoss.cpo.jdbc.cpoJdbcConfig.CtProperty insertNewProperty(int i)
+    {
+<span class="nc" id="L672">        synchronized (monitor())</span>
+        {
+<span class="nc" id="L674">            check_orphaned();</span>
+<span class="nc" id="L675">            org.synchronoss.cpo.jdbc.cpoJdbcConfig.CtProperty target = null;</span>
+<span class="nc" id="L676">            target = (org.synchronoss.cpo.jdbc.cpoJdbcConfig.CtProperty)get_store().insert_element_user(PROPERTY$12, i);</span>
+<span class="nc" id="L677">            return target;</span>
+<span class="nc" id="L678">        }</span>
+    }
+    
+    /**
+     * Appends and returns a new empty value (as xml) as the last &quot;property&quot; element
+     */
+    public org.synchronoss.cpo.jdbc.cpoJdbcConfig.CtProperty addNewProperty()
+    {
+<span class="nc" id="L686">        synchronized (monitor())</span>
+        {
+<span class="nc" id="L688">            check_orphaned();</span>
+<span class="nc" id="L689">            org.synchronoss.cpo.jdbc.cpoJdbcConfig.CtProperty target = null;</span>
+<span class="nc" id="L690">            target = (org.synchronoss.cpo.jdbc.cpoJdbcConfig.CtProperty)get_store().add_element_user(PROPERTY$12);</span>
+<span class="nc" id="L691">            return target;</span>
+<span class="nc" id="L692">        }</span>
+    }
+    
+    /**
+     * Removes the ith &quot;property&quot; element
+     */
+    public void removeProperty(int i)
+    {
+<span class="nc" id="L700">        synchronized (monitor())</span>
+        {
+<span class="nc" id="L702">            check_orphaned();</span>
+<span class="nc" id="L703">            get_store().remove_element(PROPERTY$12, i);</span>
+<span class="nc" id="L704">        }</span>
+<span class="nc" id="L705">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.2.201409121644</span></div></body></html>

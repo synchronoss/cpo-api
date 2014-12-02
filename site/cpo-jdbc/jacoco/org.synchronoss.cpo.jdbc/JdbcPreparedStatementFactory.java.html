@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>JdbcPreparedStatementFactory.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">cpo-jdbc</a> &gt; <a href="index.source.html" class="el_package">org.synchronoss.cpo.jdbc</a> &gt; <span class="el_source">JdbcPreparedStatementFactory.java</span></div><h1>JdbcPreparedStatementFactory.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2003-2012 David E. Berry
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ *
+ * A copy of the GNU Lesser General Public License may also be found at
+ * http://www.gnu.org/licenses/lgpl.txt
+ */
+package org.synchronoss.cpo.jdbc;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.util.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.synchronoss.cpo.*;
+import org.synchronoss.cpo.helper.ExceptionHelper;
+import org.synchronoss.cpo.jdbc.meta.JdbcMethodMapper;
+import org.synchronoss.cpo.meta.MethodMapper;
+import org.synchronoss.cpo.meta.domain.CpoAttribute;
+import org.synchronoss.cpo.meta.domain.CpoClass;
+import org.synchronoss.cpo.meta.domain.CpoFunction;
+
+/**
+ * JdbcPreparedStatementFactory is the object that encapsulates the creation of the actual PreparedStatement for the
+ * JDBC driver.
+ *
+ * @author david berry
+ */
+public class JdbcPreparedStatementFactory extends CpoStatementFactory implements CpoReleasible {
+
+  /**
+   * Version Id for this class.
+   */
+  private static final long serialVersionUID = 1L;
+  /**
+   * DOCUMENT ME!
+   */
+<span class="fc" id="L52">  private static final Logger logger = LoggerFactory.getLogger(JdbcPreparedStatementFactory.class);</span>
+<span class="fc" id="L53">  private PreparedStatement ps_ = null;</span>
+
+<span class="fc" id="L55">  private List&lt;CpoReleasible&gt; releasibles = new ArrayList&lt;&gt;();</span>
+  private static final String WHERE_MARKER = &quot;__CPO_WHERE__&quot;;
+  private static final String ORDERBY_MARKER = &quot;__CPO_ORDERBY__&quot;;
+
+  /**
+   * Used to build the PreparedStatement that is used by CPO to create the actual JDBC PreparedStatement.
+   *
+   * The constructor is called by the internal CPO framework. This is not to be used by users of CPO. Programmers that
+   * build Transforms may need to use this object to get access to the actual connection.
+   *
+   * @param conn The actual jdbc connection that will be used to create the callable statement.
+   * @param jca The JdbcCpoAdapter that is controlling this transaction
+   * @param criteria The object that will be used to look up the cpo meta data
+   * @param function The CpoFunction that is being executed
+   * @param obj The pojo that is being acted upon
+   * @param wheres DOCUMENT ME!
+   * @param orderBy DOCUMENT ME!
+   * @param nativeQueries Additional sql to be embedded into the CpoFunction sql that is used to create the actual JDBC
+   * PreparedStatement
+   *
+   * @throws CpoException if a CPO error occurs
+   * @throws SQLException if a JDBC error occurs
+   */
+  public &lt;T&gt; JdbcPreparedStatementFactory(Connection conn, JdbcCpoAdapter jca, CpoClass criteria,
+          CpoFunction function, T obj, Collection&lt;CpoWhere&gt; wheres, Collection&lt;CpoOrderBy&gt; orderBy,
+          Collection&lt;CpoNativeFunction&gt; nativeQueries) throws CpoException {
+<span class="pc bpc" id="L81" title="1 of 2 branches missed.">    super(obj == null ? logger : LoggerFactory.getLogger(obj.getClass()));</span>
+    // get the list of bindValues from the function parameters
+<span class="fc" id="L83">    List&lt;BindAttribute&gt; bindValues = getBindValues(function, obj);</span>
+
+<span class="fc" id="L85">    String sql = buildSql(criteria, function.getExpression(), wheres, orderBy, nativeQueries, bindValues);</span>
+
+<span class="fc" id="L87">    getLocalLogger().debug(&quot;CpoFunction SQL = &lt;&quot; + sql + &quot;&gt;&quot;);</span>
+
+<span class="fc" id="L89">    PreparedStatement pstmt = null;</span>
+
+    try {
+<span class="fc" id="L92">      pstmt = conn.prepareStatement(sql);</span>
+<span class="nc" id="L93">    } catch (SQLException se) {</span>
+<span class="nc" id="L94">      getLocalLogger().error(&quot;Error Instantiating JdbcPreparedStatementFactory SQL=&lt;&quot; + sql + &quot;&gt;&quot; + ExceptionHelper.getLocalizedMessage(se));</span>
+<span class="nc" id="L95">      throw new CpoException(se);</span>
+<span class="fc" id="L96">    }</span>
+<span class="fc" id="L97">    setPreparedStatement(pstmt);</span>
+
+<span class="fc" id="L99">    setBindValues(bindValues);</span>
+
+<span class="fc" id="L101">  }</span>
+
+  @Override
+  protected MethodMapper getMethodMapper() {
+<span class="fc" id="L105">    return JdbcMethodMapper.getMethodMapper();  //To change body of implemented methods use File | Settings | File Templates.</span>
+  }
+
+  @Override
+  protected CpoData getCpoData(CpoAttribute cpoAttribute, int index) {
+<span class="fc" id="L110">    return new JdbcPreparedStatementCpoData(this, cpoAttribute, index);  //To change body of implemented methods use File | Settings | File Templates.</span>
+  }
+
+  @Override
+  protected Object getBindableStatement() {
+<span class="fc" id="L115">    return getPreparedStatement();</span>
+  }
+
+  @Override
+  protected int getStartingIndex() {
+<span class="fc" id="L120">    return 1;</span>
+  }
+
+  /**
+    * Returns the jdbc prepared statment associated with this object
+    */
+   public PreparedStatement getPreparedStatement() {
+<span class="fc" id="L127">     return ps_;</span>
+   }
+
+   protected void setPreparedStatement(PreparedStatement ps) {
+<span class="fc" id="L131">     ps_ = ps;</span>
+<span class="fc" id="L132">   }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.2.201409121644</span></div></body></html>

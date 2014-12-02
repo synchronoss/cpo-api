@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>TransformNoOp.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">cpo-jdbc</a> &gt; <a href="index.source.html" class="el_package">org.synchronoss.cpo.transform.jdbc</a> &gt; <span class="el_source">TransformNoOp.java</span></div><h1>TransformNoOp.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2003-2012 David E. Berry
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ *
+ * A copy of the GNU Lesser General Public License may also be found at
+ * http://www.gnu.org/licenses/lgpl.txt
+ */
+package org.synchronoss.cpo.transform.jdbc;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.synchronoss.cpo.CpoException;
+import org.synchronoss.cpo.jdbc.JdbcCallableStatementFactory;
+import org.synchronoss.cpo.jdbc.JdbcPreparedStatementFactory;
+
+/**
+ * This is an example of a transform that does nothing. It is used to test the mechanics of the transform logic within
+ * CPO.
+ *
+ * @author david berry
+ */
+public class TransformNoOp implements JdbcCpoTransform&lt;Integer, Integer&gt; {
+
+<span class="fc" id="L37">  private static final Logger logger = LoggerFactory.getLogger(TransformNoOp.class);</span>
+
+<span class="fc" id="L39">  public TransformNoOp() {</span>
+<span class="fc" id="L40">  }</span>
+
+  /**
+   * Transforms the datasource object into an object required by the class. The type of the dbIn parameter and the type
+   * of the return value must change to match the types being converted. Reflection is used to true everything up at
+   * runtime.
+   *
+   * e.g public byte[] transformIn(Blob dbIn) would be the signature for converting a Blob to a byte[] to be stored in
+   * the pojo.
+   *
+   * @param dbIn The value from the datasource that will be transformed into the format that is required by the pojo.
+   * @return The object to be stored in the attribute
+   * @throws CpoException
+   */
+  @Override
+  public Integer transformIn(Integer dbIn) throws CpoException {
+<span class="fc" id="L56">    logger.debug(&quot;Inside TransformNoOp::transformIn(&quot; + dbIn + &quot;);&quot;);</span>
+<span class="fc" id="L57">    return dbIn;</span>
+  }
+
+  /**
+   * Transforms the data from the class attribute to the object required by the datasource. The type of the attrOut
+   * parameter and the type of the return value must change to match the types being converted. Reflection is used to
+   * true everything up at runtime.
+   *
+   * e.g public Blob transformOut(JdbcCallableStatementFactory jcsf, byte[] attrOut) would be the signature for
+   * converting a byte[] stored in the pojo into a Blob object for the datasource.
+   *
+   * @param jcsf a reference to the JdbcCallableStatementFactory. This is necessary as some DBMSs (ORACLE !#$%^&amp;!) that
+   * require access to the connection to deal with certain datatypes.
+   * @param attrOut The attribute object that needs to get transformed into the db representation
+   * @return The object to be stored in the datasource
+   * @throws CpoException
+   */
+  @Override
+  public Integer transformOut(JdbcCallableStatementFactory jcsf, Integer attrOut) throws CpoException {
+<span class="nc" id="L76">    logger.debug(&quot;Inside TransformNoOp::transformOut(JdbcCallableStatementFactory, &quot; + attrOut + &quot;);&quot;);</span>
+<span class="nc" id="L77">    return attrOut;</span>
+  }
+
+  /**
+   * Transforms the data from the class attribute to the object required by the datasource. The type of the attrOut
+   * parameter and the type of the return value must change to match the types being converted. Reflection is used to
+   * true everything up at runtime.
+   *
+   * e.g public Blob transformOut(JdbcPreparedStatementFactory jpsf, byte[] attrOut) would be the signature for
+   * converting a byte[] stored in the pojo into a Blob object for the datasource.
+   *
+   * @param jpsf a reference to the JdbcPreparedStatementFactory. This is necessary as some DBMSs (ORACLE !#$%^&amp;!) that
+   * require access to the connection to deal with certain datatypes.
+   * @param attrOut The attribute object that needs to get transformed into the db representation
+   * @return The object to be stored in the datasource
+   * @throws CpoException
+   */
+  @Override
+  public Integer transformOut(JdbcPreparedStatementFactory jpsf, Integer attrOut) throws CpoException {
+<span class="fc" id="L96">    logger.debug(&quot;Inside TransformNoOp::transformOut(JdbcPreparedStatementFactory, &quot; + attrOut + &quot;);&quot;);</span>
+<span class="fc" id="L97">    return attrOut;</span>
+  }
+
+  @Override
+  public Integer transformOut(Integer j) throws CpoException, UnsupportedOperationException {
+<span class="nc" id="L102">    throw new UnsupportedOperationException(&quot;Not supported yet.&quot;);</span>
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.2.201409121644</span></div></body></html>

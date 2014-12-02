@@ -1,0 +1,2950 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>JdbcCpoAdapter.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">cpo-jdbc</a> &gt; <a href="index.source.html" class="el_package">org.synchronoss.cpo.jdbc</a> &gt; <span class="el_source">JdbcCpoAdapter.java</span></div><h1>JdbcCpoAdapter.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2003-2012 David E. Berry
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ *
+ * A copy of the GNU Lesser General Public License may also be found at
+ * http://www.gnu.org/licenses/lgpl.txt
+ */
+package org.synchronoss.cpo.jdbc;
+
+import org.slf4j.*;
+import org.synchronoss.cpo.*;
+import org.synchronoss.cpo.helper.ExceptionHelper;
+import org.synchronoss.cpo.jdbc.meta.JdbcCpoMetaDescriptor;
+import org.synchronoss.cpo.jdbc.meta.JdbcMethodMapper;
+import org.synchronoss.cpo.meta.CpoMetaDescriptor;
+import org.synchronoss.cpo.meta.DataTypeMapEntry;
+import org.synchronoss.cpo.meta.ResultSetCpoData;
+import org.synchronoss.cpo.meta.domain.*;
+
+import javax.naming.*;
+import javax.sql.DataSource;
+import java.sql.*;
+import java.util.*;
+
+/**
+ * JdbcCpoAdapter is an interface for a set of routines that are responsible for managing value objects from a
+ * datasource.
+ *
+ * @author david berry
+ */
+public class JdbcCpoAdapter extends CpoBaseAdapter&lt;DataSource&gt; {
+
+  /**
+   * Version Id for this class.
+   */
+  private static final long serialVersionUID = 1L;
+  /**
+   * DOCUMENT ME!
+   */
+<span class="fc" id="L53">  private static final Logger logger = LoggerFactory.getLogger(JdbcCpoAdapter.class);</span>
+
+  /**
+   * DOCUMENT ME!
+   */
+<span class="pc" id="L58">  private Context context_ = null;</span>
+
+  /**
+   * DOCUMENT ME!
+   */
+<span class="pc" id="L63">  private boolean invalidReadConnection_ = false;</span>
+<span class="pc" id="L64">  private boolean batchUpdatesSupported_ = false;</span>
+  /**
+   * CpoMetaDescriptor allows you to get the meta data for a class.
+   */
+<span class="pc" id="L68">  private JdbcCpoMetaDescriptor metaDescriptor = null;</span>
+
+<span class="nc" id="L70">  protected JdbcCpoAdapter() {</span>
+<span class="nc" id="L71">  }</span>
+
+  /**
+   * Creates a JdbcCpoAdapter.
+   *
+   * @param metaDescriptor This datasource that identifies the cpo metadata datasource
+   * @param jdsiTrx        The datasoruce that identifies the transaction database.
+   * @throws org.synchronoss.cpo.CpoException
+   *          exception
+   */
+<span class="fc" id="L81">  protected JdbcCpoAdapter(JdbcCpoMetaDescriptor metaDescriptor, DataSourceInfo&lt;DataSource&gt; jdsiTrx) throws CpoException {</span>
+
+<span class="fc" id="L83">    this.metaDescriptor = metaDescriptor;</span>
+<span class="fc" id="L84">    setWriteDataSource(jdsiTrx.getDataSource());</span>
+<span class="fc" id="L85">    setReadDataSource(jdsiTrx.getDataSource());</span>
+<span class="fc" id="L86">    setDataSourceName(jdsiTrx.getDataSourceName());</span>
+<span class="fc" id="L87">    processDatabaseMetaData();</span>
+<span class="fc" id="L88">  }</span>
+
+  /**
+   * Creates a JdbcCpoAdapter.
+   *
+   * @param metaDescriptor This datasource that identifies the cpo metadata datasource
+   * @param jdsiWrite      The datasource that identifies the transaction database for write transactions.
+   * @param jdsiRead       The datasource that identifies the transaction database for read-only transactions.
+   * @throws org.synchronoss.cpo.CpoException
+   *          exception
+   */
+<span class="fc" id="L99">  protected JdbcCpoAdapter(JdbcCpoMetaDescriptor metaDescriptor, DataSourceInfo&lt;DataSource&gt; jdsiWrite, DataSourceInfo&lt;DataSource&gt; jdsiRead) throws CpoException {</span>
+<span class="fc" id="L100">    this.metaDescriptor = metaDescriptor;</span>
+<span class="fc" id="L101">    setWriteDataSource(jdsiWrite.getDataSource());</span>
+<span class="fc" id="L102">    setReadDataSource(jdsiRead.getDataSource());</span>
+<span class="fc" id="L103">    setDataSourceName(jdsiWrite.getDataSourceName());</span>
+<span class="fc" id="L104">    processDatabaseMetaData();</span>
+<span class="fc" id="L105">  }</span>
+
+  /**
+   * This constructor is used specifically to create a JdbcCpoTrxAdapter.
+   *
+   * @param metaDescriptor
+   * @param batchSupported
+   * @param dataSourceName
+   * @throws CpoException
+   */
+<span class="fc" id="L115">  protected JdbcCpoAdapter(JdbcCpoMetaDescriptor metaDescriptor, boolean batchSupported, String dataSourceName) throws CpoException {</span>
+<span class="fc" id="L116">    this.metaDescriptor = metaDescriptor;</span>
+<span class="fc" id="L117">    batchUpdatesSupported_ = batchSupported;</span>
+<span class="fc" id="L118">    setDataSourceName(dataSourceName);</span>
+<span class="fc" id="L119">  }</span>
+
+  private void processDatabaseMetaData() throws CpoException {
+<span class="fc" id="L122">    Connection c = null;</span>
+    try {
+<span class="fc" id="L124">      c = getWriteConnection();</span>
+<span class="fc" id="L125">      DatabaseMetaData dmd = c.getMetaData();</span>
+
+      // do all the tests here
+<span class="fc" id="L128">      batchUpdatesSupported_ = dmd.supportsBatchUpdates();</span>
+
+<span class="fc" id="L130">      this.closeConnection(c);</span>
+<span class="nc" id="L131">    } catch (Throwable t) {</span>
+<span class="nc" id="L132">      logger.error(ExceptionHelper.getLocalizedMessage(t), t);</span>
+<span class="nc" id="L133">      throw new CpoException(&quot;Could Not Retrieve Database Meta Data&quot;, t);</span>
+    } finally {
+<span class="pc" id="L135">      closeConnection(c);</span>
+<span class="fc" id="L136">    }</span>
+<span class="fc" id="L137">  }</span>
+
+  public static JdbcCpoAdapter getInstance(JdbcCpoMetaDescriptor metaDescriptor, DataSourceInfo&lt;DataSource&gt; jdsiTrx) throws CpoException {
+<span class="fc" id="L140">    String adapterKey = metaDescriptor + &quot;:&quot; + jdsiTrx.getDataSourceName();</span>
+<span class="fc" id="L141">    JdbcCpoAdapter adapter = (JdbcCpoAdapter) findCpoAdapter(adapterKey);</span>
+<span class="fc bfc" id="L142" title="All 2 branches covered.">    if (adapter == null) {</span>
+<span class="fc" id="L143">      adapter = new JdbcCpoAdapter(metaDescriptor, jdsiTrx);</span>
+<span class="fc" id="L144">      addCpoAdapter(adapterKey, adapter);</span>
+    }
+<span class="fc" id="L146">    return adapter;</span>
+  }
+
+  /**
+   * Creates a JdbcCpoAdapter.
+   *
+   * @param metaDescriptor This datasource that identifies the cpo metadata datasource
+   * @param jdsiWrite      The datasource that identifies the transaction database for write transactions.
+   * @param jdsiRead       The datasource that identifies the transaction database for read-only transactions.
+   * @throws org.synchronoss.cpo.CpoException
+   *          exception
+   */
+  public static JdbcCpoAdapter getInstance(JdbcCpoMetaDescriptor metaDescriptor, DataSourceInfo&lt;DataSource&gt; jdsiWrite, DataSourceInfo&lt;DataSource&gt; jdsiRead) throws CpoException {
+<span class="fc" id="L159">    String adapterKey = metaDescriptor + &quot;:&quot; + jdsiWrite.getDataSourceName() + &quot;:&quot; + jdsiRead.getDataSourceName();</span>
+<span class="fc" id="L160">    JdbcCpoAdapter adapter = (JdbcCpoAdapter) findCpoAdapter(adapterKey);</span>
+<span class="pc bpc" id="L161" title="1 of 2 branches missed.">    if (adapter == null) {</span>
+<span class="fc" id="L162">      adapter = new JdbcCpoAdapter(metaDescriptor, jdsiWrite, jdsiRead);</span>
+<span class="fc" id="L163">      addCpoAdapter(adapterKey, adapter);</span>
+    }
+<span class="fc" id="L165">    return adapter;</span>
+  }
+
+  /**
+   * Creates the Object in the datasource. The assumption is that the object does not exist in the datasource. This
+   * method creates and stores the object in the datasource.
+   * &lt;p/&gt;
+   * &lt;pre&gt;Example:
+   * &lt;code&gt;
+   * &lt;p/&gt;
+   * class SomeObject so = new SomeObject();
+   * class CpoAdapter cpo = null;
+   * &lt;p/&gt;
+   * try {
+   * 	cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));
+   * } catch (CpoException ce) {
+   * 	// Handle the error
+   * 	cpo = null;
+   * }
+   * &lt;p/&gt;
+   * if (cpo!=null) {
+   * 	so.setId(1);
+   * 	so.setName(&quot;SomeName&quot;);
+   * 	try{
+   * 		cpo.insertObject(so);
+   *  } catch (CpoException ce) {
+   * 		// Handle the error
+   * &lt;p/&gt;
+   *  }
+   * }
+   * &lt;/code&gt;
+   * &lt;/pre&gt;
+   *
+   * @param obj This is an object that has been defined within the metadata of the datasource. If the class is not
+   *            defined an exception will be thrown.
+   * @return The number of objects created in the datasource
+   * @throws CpoException Thrown if there are errors accessing the datasource
+   */
+  @Override
+  public &lt;T&gt; long insertObject(T obj) throws CpoException {
+<span class="fc" id="L205">    return processUpdateGroup(obj, JdbcCpoAdapter.CREATE_GROUP, null, null, null, null);</span>
+  }
+
+  /**
+   * Creates the Object in the datasource. The assumption is that the object does not exist in the datasource. This
+   * method creates and stores the object in the datasource
+   * &lt;p/&gt;
+   * &lt;pre&gt;Example:
+   * &lt;code&gt;
+   * &lt;p/&gt;
+   * class SomeObject so = new SomeObject();
+   * class CpoAdapter cpo = null;
+   * &lt;p/&gt;
+   * try {
+   * 	cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));
+   * } catch (CpoException ce) {
+   * 	// Handle the error
+   * 	cpo = null;
+   * }
+   * &lt;p/&gt;
+   * if (cpo!=null) {
+   * 	so.setId(1);
+   * 	so.setName(&quot;SomeName&quot;);
+   * 	try{
+   * 		cpo.insertObject(&quot;IDNameInsert&quot;,so);
+   *  } catch (CpoException ce) {
+   * 		// Handle the error
+   *  }
+   * }
+   * &lt;/code&gt;
+   * &lt;/pre&gt;
+   *
+   * @param name The String name of the CREATE Function Group that will be used to create the object in the datasource.
+   *             null signifies that the default rules will be used which is equivalent to insertObject(Object obj);
+   * @param obj  This is an object that has been defined within the metadata of the datasource. If the class is not
+   *             defined an exception will be thrown.
+   * @return The number of objects created in the datasource
+   * @throws CpoException Thrown if there are errors accessing the datasource
+   */
+  @Override
+  public &lt;T&gt; long insertObject(String name, T obj) throws CpoException {
+<span class="fc" id="L246">    return processUpdateGroup(obj, JdbcCpoAdapter.CREATE_GROUP, name, null, null, null);</span>
+  }
+
+  /**
+   * Creates the Object in the datasource. The assumption is that the object does not exist in the datasource. This
+   * method creates and stores the object in the datasource
+   * &lt;p/&gt;
+   * &lt;pre&gt;Example:
+   * &lt;code&gt;
+   * &lt;p/&gt;
+   * class SomeObject so = new SomeObject();
+   * class CpoAdapter cpo = null;
+   * &lt;p/&gt;
+   * try {
+   * 	cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));
+   * } catch (CpoException ce) {
+   * 	// Handle the error
+   * 	cpo = null;
+   * }
+   * &lt;p/&gt;
+   * if (cpo!=null) {
+   * 	so.setId(1);
+   * 	so.setName(&quot;SomeName&quot;);
+   * 	try{
+   * 		cpo.insertObject(&quot;IDNameInsert&quot;,so);
+   *  } catch (CpoException ce) {
+   * 		// Handle the error
+   *  }
+   * }
+   * &lt;/code&gt;
+   * &lt;/pre&gt;
+   *
+   * @param name              The String name of the CREATE Function Group that will be used to create the object in the datasource.
+   *                          null signifies that the default rules will be used which is equivalent to insertObject(Object obj);
+   * @param obj               This is an object that has been defined within the metadata of the datasource. If the class is not
+   *                          defined an exception will be thrown.
+   * @param wheres            A collection of CpoWhere beans that define the constraints that should be used when retrieving beans
+   * @param orderBy           The CpoOrderBy bean that defines the order in which beans should be returned
+   * @param nativeExpressions Native expression that will be used to augment the expression stored in the meta data. This
+   *                          text will be embedded at run-time
+   * @return The number of objects created in the datasource
+   * @throws CpoException Thrown if there are errors accessing the datasource
+   */
+  @Override
+  public &lt;T&gt; long insertObject(String name, T obj, Collection&lt;CpoWhere&gt; wheres, Collection&lt;CpoOrderBy&gt; orderBy, Collection&lt;CpoNativeFunction&gt; nativeExpressions) throws CpoException {
+<span class="nc" id="L291">    return processUpdateGroup(obj, JdbcCpoAdapter.CREATE_GROUP, name, wheres, orderBy, nativeExpressions);</span>
+  }
+
+  /**
+   * Iterates through a collection of Objects, creates and stores them in the datasource. The assumption is that the
+   * objects contained in the collection do not exist in the datasource.
+   * &lt;p/&gt;
+   * This method creates and stores the objects in the datasource. The objects in the collection will be treated as one
+   * transaction, assuming the datasource supports transactions.
+   * &lt;p/&gt;
+   * This means that if one of the objects fail being created in the datasource then the CpoAdapter will stop processing
+   * the remainder of the collection and rollback all the objects created thus far. Rollback is on the underlying
+   * datasource's support of rollback.
+   * &lt;p/&gt;
+   * &lt;pre&gt;Example:
+   * &lt;code&gt;
+   * &lt;p/&gt;
+   * class SomeObject so = null;
+   * class CpoAdapter cpo = null;
+   * &lt;p/&gt;
+   * try {
+   * 	cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));
+   * } catch (CpoException ce) {
+   * 	// Handle the error
+   * 	cpo = null;
+   * }
+   * &lt;p/&gt;
+   * if (cpo!=null) {
+   * 	ArrayList al = new ArrayList();
+   * 	for (int i=0; i&lt;3; i++){
+   * 		so = new SomeObject();
+   * 		so.setId(1);
+   * 		so.setName(&quot;SomeName&quot;);
+   * 		al.add(so);
+   *  }
+   * 	try{
+   * 		cpo.insertObjects(al);
+   *  } catch (CpoException ce) {
+   * 		// Handle the error
+   *  }
+   * }
+   * &lt;/code&gt;
+   * &lt;/pre&gt;
+   *
+   * @param coll This is a collection of objects that have been defined within the metadata of the datasource. If the
+   *             class is not defined an exception will be thrown.
+   * @return The number of objects created in the datasource
+   * @throws CpoException Thrown if there are errors accessing the datasource
+   */
+  @Override
+  public &lt;T&gt; long insertObjects(Collection&lt;T&gt; coll) throws CpoException {
+<span class="fc" id="L342">    return processUpdateGroup(coll, JdbcCpoAdapter.CREATE_GROUP, null, null, null, null);</span>
+  }
+
+  /**
+   * Iterates through a collection of Objects, creates and stores them in the datasource. The assumption is that the
+   * objects contained in the collection do not exist in the datasource.
+   * &lt;p/&gt;
+   * This method creates and stores the objects in the datasource. The objects in the collection will be treated as one
+   * transaction, assuming the datasource supports transactions.
+   * &lt;p/&gt;
+   * This means that if one of the objects fail being created in the datasource then the CpoAdapter should stop
+   * processing the remainder of the collection, and if supported, rollback all the objects created thus far.
+   * &lt;p/&gt;
+   * &lt;pre&gt;Example:
+   * &lt;code&gt;
+   * &lt;p/&gt;
+   * class SomeObject so = null;
+   * class CpoAdapter cpo = null;
+   * &lt;p/&gt;
+   * try {
+   * 	cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));
+   * } catch (CpoException ce) {
+   * 	// Handle the error
+   * 	cpo = null;
+   * }
+   * if (cpo!=null) {
+   * 	ArrayList al = new ArrayList();
+   * 	for (int i=0; i&lt;3; i++){
+   * 		so = new SomeObject();
+   * 		so.setId(1);
+   * 		so.setName(&quot;SomeName&quot;);
+   * 		al.add(so);
+   *  }
+   * 	try{
+   * 		cpo.insertObjects(&quot;IdNameInsert&quot;,al);
+   *  } catch (CpoException ce) {
+   * 		// Handle the error
+   *  }
+   * }
+   * &lt;/code&gt;
+   * &lt;/pre&gt;
+   *
+   * @param name The String name of the CREATE Function Group that will be used to create the object in the datasource.
+   *             null signifies that the default rules will be used.
+   * @param coll This is a collection of objects that have been defined within the metadata of the datasource. If the
+   *             class is not defined an exception will be thrown.
+   * @return The number of objects created in the datasource
+   * @throws CpoException Thrown if there are errors accessing the datasource
+   */
+  @Override
+  public &lt;T&gt; long insertObjects(String name, Collection&lt;T&gt; coll) throws CpoException {
+<span class="fc" id="L393">    return processUpdateGroup(coll, JdbcCpoAdapter.CREATE_GROUP, name, null, null, null);</span>
+  }
+
+  /**
+   * Iterates through a collection of Objects, creates and stores them in the datasource. The assumption is that the
+   * objects contained in the collection do not exist in the datasource.
+   * &lt;p/&gt;
+   * This method creates and stores the objects in the datasource. The objects in the collection will be treated as one
+   * transaction, assuming the datasource supports transactions.
+   * &lt;p/&gt;
+   * This means that if one of the objects fail being created in the datasource then the CpoAdapter should stop
+   * processing the remainder of the collection, and if supported, rollback all the objects created thus far.
+   * &lt;p/&gt;
+   * &lt;pre&gt;Example:
+   * &lt;code&gt;
+   * &lt;p/&gt;
+   * class SomeObject so = null;
+   * class CpoAdapter cpo = null;
+   * &lt;p/&gt;
+   * try {
+   * 	cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));
+   * } catch (CpoException ce) {
+   * 	// Handle the error
+   * 	cpo = null;
+   * }
+   * if (cpo!=null) {
+   * 	ArrayList al = new ArrayList();
+   * 	for (int i=0; i&lt;3; i++){
+   * 		so = new SomeObject();
+   * 		so.setId(1);
+   * 		so.setName(&quot;SomeName&quot;);
+   * 		al.add(so);
+   *  }
+   * 	try{
+   * 		cpo.insertObjects(&quot;IdNameInsert&quot;,al);
+   *  } catch (CpoException ce) {
+   * 		// Handle the error
+   *  }
+   * }
+   * &lt;/code&gt;
+   * &lt;/pre&gt;
+   *
+   * @param name              The String name of the CREATE Function Group that will be used to create the object in the datasource.
+   *                          null signifies that the default rules will be used.
+   * @param coll              This is a collection of objects that have been defined within the metadata of the datasource. If the
+   *                          class is not defined an exception will be thrown.
+   * @param wheres            A collection of CpoWhere beans that define the constraints that should be used when retrieving beans
+   * @param orderBy           The CpoOrderBy bean that defines the order in which beans should be returned
+   * @param nativeExpressions Native expression that will be used to augment the expression stored in the meta data. This
+   *                          text will be embedded at run-time
+   * @return The number of objects created in the datasource
+   * @throws CpoException Thrown if there are errors accessing the datasource
+   */
+  @Override
+  public &lt;T&gt; long insertObjects(String name, Collection&lt;T&gt; coll, Collection&lt;CpoWhere&gt; wheres, Collection&lt;CpoOrderBy&gt; orderBy, Collection&lt;CpoNativeFunction&gt; nativeExpressions) throws CpoException {
+<span class="nc" id="L448">    return processUpdateGroup(coll, JdbcCpoAdapter.CREATE_GROUP, name, wheres, orderBy, nativeExpressions);</span>
+  }
+
+  /**
+   * Removes the Object from the datasource. The assumption is that the object exists in the datasource. This method
+   * stores the object in the datasource
+   * &lt;p/&gt;
+   * &lt;pre&gt;Example:
+   * &lt;code&gt;
+   * &lt;p/&gt;
+   * class SomeObject so = new SomeObject();
+   * class CpoAdapter cpo = null;
+   * &lt;p/&gt;
+   * try {
+   * 	cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));
+   * } catch (CpoException ce) {
+   * 	// Handle the error
+   * 	cpo = null;
+   * }
+   * &lt;p/&gt;
+   * if (cpo!=null) {
+   * 	so.setId(1);
+   * 	so.setName(&quot;SomeName&quot;);
+   * 	try{
+   * 		cpo.deleteObject(so);
+   *  } catch (CpoException ce) {
+   * 		// Handle the error
+   *  }
+   * }
+   * &lt;/code&gt;
+   * &lt;/pre&gt;
+   *
+   * @param obj This is an object that has been defined within the metadata of the datasource. If the class is not
+   *            defined an exception will be thrown. If the object does not exist in the datasource an exception will be thrown.
+   * @return The number of objects deleted from the datasource
+   * @throws CpoException Thrown if there are errors accessing the datasource
+   */
+  @Override
+  public &lt;T&gt; long deleteObject(T obj) throws CpoException {
+<span class="fc" id="L487">    return processUpdateGroup(obj, JdbcCpoAdapter.DELETE_GROUP, null, null, null, null);</span>
+  }
+
+  /**
+   * Removes the Object from the datasource. The assumption is that the object exists in the datasource. This method
+   * stores the object in the datasource
+   * &lt;p/&gt;
+   * &lt;pre&gt;Example:
+   * &lt;code&gt;
+   * &lt;p/&gt;
+   * class SomeObject so = new SomeObject();
+   * class CpoAdapter cpo = null;
+   * &lt;p/&gt;
+   * try {
+   * 	cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));
+   * } catch (CpoException ce) {
+   * 	// Handle the error
+   * 	cpo = null;
+   * }
+   * &lt;p/&gt;
+   * if (cpo!=null) {
+   * 	so.setId(1);
+   * 	so.setName(&quot;SomeName&quot;);
+   * 	try{
+   * 		cpo.deleteObject(&quot;DeleteById&quot;,so);
+   *  } catch (CpoException ce) {
+   * 	// Handle the error
+   *  }
+   * }
+   * &lt;/code&gt;
+   * &lt;/pre&gt;
+   *
+   * @param name The String name of the DELETE Function Group that will be used to create the object in the datasource.
+   *             null signifies that the default rules will be used.
+   * @param obj  This is an object that has been defined within the metadata of the datasource. If the class is not
+   *             defined an exception will be thrown. If the object does not exist in the datasource an exception will be thrown.
+   * @return The number of objects deleted from the datasource
+   * @throws CpoException Thrown if there are errors accessing the datasource
+   */
+  @Override
+  public &lt;T&gt; long deleteObject(String name, T obj) throws CpoException {
+<span class="fc" id="L528">    return processUpdateGroup(obj, JdbcCpoAdapter.DELETE_GROUP, name, null, null, null);</span>
+  }
+
+  /**
+   * Removes the Object from the datasource. The assumption is that the object exists in the datasource. This method
+   * stores the object in the datasource
+   * &lt;p/&gt;
+   * &lt;pre&gt;Example:
+   * &lt;code&gt;
+   * &lt;p/&gt;
+   * class SomeObject so = new SomeObject();
+   * class CpoAdapter cpo = null;
+   * &lt;p/&gt;
+   * try {
+   * 	cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));
+   * } catch (CpoException ce) {
+   * 	// Handle the error
+   * 	cpo = null;
+   * }
+   * &lt;p/&gt;
+   * if (cpo!=null) {
+   * 	so.setId(1);
+   * 	so.setName(&quot;SomeName&quot;);
+   * 	try{
+   * 		cpo.deleteObject(&quot;DeleteById&quot;,so);
+   *  } catch (CpoException ce) {
+   * 	// Handle the error
+   *  }
+   * }
+   * &lt;/code&gt;
+   * &lt;/pre&gt;
+   *
+   * @param name              The String name of the DELETE Function Group that will be used to create the object in the datasource.
+   *                          null signifies that the default rules will be used.
+   * @param obj               This is an object that has been defined within the metadata of the datasource. If the class is not
+   *                          defined an exception will be thrown. If the object does not exist in the datasource an exception will be thrown.
+   * @param wheres            A collection of CpoWhere beans that define the constraints that should be used when retrieving beans
+   * @param orderBy           The CpoOrderBy bean that defines the order in which beans should be returned
+   * @param nativeExpressions Native expression that will be used to augment the expression stored in the meta data. This
+   *                          text will be embedded at run-time
+   * @return The number of objects deleted from the datasource
+   * @throws CpoException Thrown if there are errors accessing the datasource
+   */
+  @Override
+  public &lt;T&gt; long deleteObject(String name, T obj, Collection&lt;CpoWhere&gt; wheres, Collection&lt;CpoOrderBy&gt; orderBy, Collection&lt;CpoNativeFunction&gt; nativeExpressions) throws CpoException {
+<span class="fc" id="L573">    return processUpdateGroup(obj, JdbcCpoAdapter.DELETE_GROUP, name, wheres, orderBy, nativeExpressions);</span>
+  }
+
+  /**
+   * Removes the Objects contained in the collection from the datasource. The assumption is that the object exists in
+   * the datasource. This method stores the objects contained in the collection in the datasource. The objects in the
+   * collection will be treated as one transaction, assuming the datasource supports transactions.
+   * &lt;p/&gt;
+   * This means that if one of the objects fail being deleted in the datasource then the CpoAdapter should stop
+   * processing the remainder of the collection, and if supported, rollback all the objects deleted thus far.
+   * &lt;p/&gt;
+   * &lt;pre&gt;Example:
+   * &lt;code&gt;
+   * &lt;p/&gt;
+   * class SomeObject so = null;
+   * class CpoAdapter cpo = null;
+   * &lt;p/&gt;
+   * try {
+   * 	cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));
+   * } catch (CpoException ce) {
+   * 	// Handle the error
+   * 	cpo = null;
+   * }
+   * &lt;p/&gt;
+   * if (cpo!=null) {
+   * 	ArrayList al = new ArrayList();
+   * 	for (int i=0; i&lt;3; i++){
+   * 		so = new SomeObject();
+   * 		so.setId(1);
+   * 		so.setName(&quot;SomeName&quot;);
+   * 		al.add(so);
+   *  }
+   * 	try{
+   * 		cpo.deleteObjects(al);
+   *  } catch (CpoException ce) {
+   * 		// Handle the error
+   *  }
+   * }
+   * &lt;/code&gt;
+   * &lt;/pre&gt;
+   *
+   * @param coll This is a collection of objects that have been defined within the metadata of the datasource. If the
+   *             class is not defined an exception will be thrown.
+   * @return The number of objects deleted from the datasource
+   * @throws CpoException Thrown if there are errors accessing the datasource
+   */
+  @Override
+  public &lt;T&gt; long deleteObjects(Collection&lt;T&gt; coll) throws CpoException {
+<span class="fc" id="L621">    return processUpdateGroup(coll, JdbcCpoAdapter.DELETE_GROUP, null, null, null, null);</span>
+  }
+
+  /**
+   * Removes the Objects contained in the collection from the datasource. The assumption is that the object exists in
+   * the datasource. This method stores the objects contained in the collection in the datasource. The objects in the
+   * collection will be treated as one transaction, assuming the datasource supports transactions.
+   * &lt;p/&gt;
+   * This means that if one of the objects fail being deleted in the datasource then the CpoAdapter should stop
+   * processing the remainder of the collection, and if supported, rollback all the objects deleted thus far.
+   * &lt;p/&gt;
+   * &lt;pre&gt;Example:
+   * &lt;code&gt;
+   * &lt;p/&gt;
+   * class SomeObject so = null;
+   * class CpoAdapter cpo = null;
+   * &lt;p/&gt;
+   * try {
+   * 	cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));
+   * } catch (CpoException ce) {
+   * 	// Handle the error
+   * 	cpo = null;
+   * }
+   * &lt;p/&gt;
+   * if (cpo!=null) {
+   * 	ArrayList al = new ArrayList();
+   * 	for (int i=0; i&lt;3; i++){
+   * 		so = new SomeObject();
+   * 		so.setId(1);
+   * 		so.setName(&quot;SomeName&quot;);
+   * 		al.add(so);
+   *  }
+   * &lt;p/&gt;
+   * 	try{
+   * 		cpo.deleteObjects(&quot;IdNameDelete&quot;,al);
+   *  } catch (CpoException ce) {
+   * 		// Handle the error
+   *  }
+   * }
+   * &lt;/code&gt;
+   * &lt;/pre&gt;
+   *
+   * @param name The String name of the DELETE Function Group that will be used to create the object in the datasource.
+   *             null signifies that the default rules will be used.
+   * @param coll This is a collection of objects that have been defined within the metadata of the datasource. If the
+   *             class is not defined an exception will be thrown.
+   * @return The number of objects deleted from the datasource
+   * @throws CpoException Thrown if there are errors accessing the datasource
+   */
+  @Override
+  public &lt;T&gt; long deleteObjects(String name, Collection&lt;T&gt; coll) throws CpoException {
+<span class="fc" id="L672">    return processUpdateGroup(coll, JdbcCpoAdapter.DELETE_GROUP, name, null, null, null);</span>
+  }
+
+  /**
+   * Removes the Objects contained in the collection from the datasource. The assumption is that the object exists in
+   * the datasource. This method stores the objects contained in the collection in the datasource. The objects in the
+   * collection will be treated as one transaction, assuming the datasource supports transactions.
+   * &lt;p/&gt;
+   * This means that if one of the objects fail being deleted in the datasource then the CpoAdapter should stop
+   * processing the remainder of the collection, and if supported, rollback all the objects deleted thus far.
+   * &lt;p/&gt;
+   * &lt;pre&gt;Example:
+   * &lt;code&gt;
+   * &lt;p/&gt;
+   * class SomeObject so = null;
+   * class CpoAdapter cpo = null;
+   * &lt;p/&gt;
+   * try {
+   * 	cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));
+   * } catch (CpoException ce) {
+   * 	// Handle the error
+   * 	cpo = null;
+   * }
+   * &lt;p/&gt;
+   * if (cpo!=null) {
+   * 	ArrayList al = new ArrayList();
+   * 	for (int i=0; i&lt;3; i++){
+   * 		so = new SomeObject();
+   * 		so.setId(1);
+   * 		so.setName(&quot;SomeName&quot;);
+   * 		al.add(so);
+   *  }
+   * &lt;p/&gt;
+   * 	try{
+   * 		cpo.deleteObjects(&quot;IdNameDelete&quot;,al);
+   *  } catch (CpoException ce) {
+   * 		// Handle the error
+   *  }
+   * }
+   * &lt;/code&gt;
+   * &lt;/pre&gt;
+   *
+   * @param name              The String name of the DELETE Function Group that will be used to create the object in the datasource.
+   *                          null signifies that the default rules will be used.
+   * @param coll              This is a collection of objects that have been defined within the metadata of the datasource. If the
+   *                          class is not defined an exception will be thrown.
+   * @param wheres            A collection of CpoWhere beans that define the constraints that should be used when retrieving beans
+   * @param orderBy           The CpoOrderBy bean that defines the order in which beans should be returned
+   * @param nativeExpressions Native expression that will be used to augment the expression stored in the meta data. This
+   *                          text will be embedded at run-time
+   * @return The number of objects deleted from the datasource
+   * @throws CpoException Thrown if there are errors accessing the datasource
+   */
+  @Override
+  public &lt;T&gt; long deleteObjects(String name, Collection&lt;T&gt; coll, Collection&lt;CpoWhere&gt; wheres, Collection&lt;CpoOrderBy&gt; orderBy, Collection&lt;CpoNativeFunction&gt; nativeExpressions) throws CpoException {
+<span class="nc" id="L727">    return processUpdateGroup(coll, JdbcCpoAdapter.DELETE_GROUP, name, wheres, orderBy, nativeExpressions);</span>
+  }
+
+  /**
+   * Executes an Object whose metadata will call an executable within the datasource. It is assumed that the executable
+   * object exists in the metadatasource. If the executable does not exist, an exception will be thrown.
+   * &lt;p/&gt;
+   * &lt;pre&gt;Example:
+   * &lt;code&gt;
+   * &lt;p/&gt;
+   * class SomeObject so = new SomeObject();
+   * class CpoAdapter cpo = null;
+   * &lt;p/&gt;
+   * try {
+   * 	cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));
+   * } catch (CpoException ce) {
+   * 	// Handle the error
+   * 	cpo = null;
+   * }
+   * &lt;p/&gt;
+   * if (cpo!=null) {
+   * 	so.setId(1);
+   * 	so.setName(&quot;SomeName&quot;);
+   * 	try{
+   * 		cpo.executeObject(so);
+   *  } catch (CpoException ce) {
+   * 		// Handle the error
+   *  }
+   * }
+   * &lt;/code&gt;
+   * &lt;/pre&gt;
+   *
+   * @param object This is an Object that has been defined within the metadata of the datasource. If the class is not
+   *               defined an exception will be thrown. If the object does not exist in the datasource, an exception will be thrown.
+   *               This object is used to populate the IN arguments used to executed the datasource object.
+   *               &lt;p/&gt;
+   *               An object of this type will be created and filled with the returned data from the value_object. This newly created
+   *               object will be returned from this method.
+   * @return An object populated with the OUT arguments returned from the executable object
+   * @throws CpoException Thrown if there are errors accessing the datasource
+   */
+  @Override
+  public &lt;T&gt; T executeObject(T object) throws CpoException {
+<span class="nc" id="L770">    return processExecuteGroup(null, object, object);</span>
+  }
+
+  /**
+   * Executes an Object whose metadata will call an executable within the datasource. It is assumed that the executable
+   * object exists in the metadatasource. If the executable does not exist, an exception will be thrown.
+   * &lt;p/&gt;
+   * &lt;pre&gt;Example:
+   * &lt;code&gt;
+   * &lt;p/&gt;
+   * class SomeObject so = new SomeObject();
+   * class CpoAdapter cpo = null;
+   * &lt;p/&gt;
+   * try {
+   * 	cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));
+   * } catch (CpoException ce) {
+   * 	// Handle the error
+   * 	cpo = null;
+   * }
+   * &lt;p/&gt;
+   * if (cpo!=null) {
+   * 	so.setId(1);
+   * 	so.setName(&quot;SomeName&quot;);
+   * 	try{
+   * 		cpo.executeObject(&quot;execNotifyProc&quot;,so);
+   *  } catch (CpoException ce) {
+   * 	// Handle the error
+   *  }
+   * }
+   * &lt;/code&gt;
+   * &lt;/pre&gt;
+   *
+   * @param name   The filter name which tells the datasource which objects should be returned. The name also signifies
+   *               what data in the object will be populated.
+   * @param object This is an object that has been defined within the metadata of the datasource. If the class is not
+   *               defined an exception will be thrown. If the object does not exist in the datasource, an exception will be thrown.
+   *               This object is used to populate the IN arguments used to retrieve the collection of objects. This object defines
+   *               the object type that will be returned in the collection and contain the result set data or the OUT Parameters.
+   * @return A result object populate with the OUT arguments
+   * @throws CpoException if there are errors accessing the datasource
+   */
+  @Override
+  public &lt;T&gt; T executeObject(String name, T object) throws CpoException {
+<span class="nc" id="L813">    return processExecuteGroup(name, object, object);</span>
+  }
+
+  /**
+   * Executes an Object that represents an executable object within the datasource. It is assumed that the object exists
+   * in the datasource. If the object does not exist, an exception will be thrown
+   * &lt;p/&gt;
+   * &lt;pre&gt;Example:
+   * &lt;code&gt;
+   * &lt;p/&gt;
+   * class SomeObject so = new SomeObject();
+   * class SomeResult sr = new SomeResult();
+   * class CpoAdapter cpo = null;
+   * &lt;p/&gt;
+   * try {
+   * 	cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));
+   * } catch (CpoException ce) {
+   * 	// Handle the error
+   * 	cpo = null;
+   * }
+   * &lt;p/&gt;
+   * if (cpo!=null) {
+   * 	so.setId(1);
+   * 	so.setName(&quot;SomeName&quot;);
+   * 	try{
+   * 		sr = (SomeResult)cpo.executeObject(&quot;execNotifyProc&quot;,so, sr);
+   *  } catch (CpoException ce) {
+   * 		// Handle the error
+   *  }
+   * }
+   * &lt;/code&gt;
+   * &lt;/pre&gt;
+   *
+   * @param name     The String name of the EXECUTE Function Group that will be used to create the object in the datasource.
+   *                 null signifies that the default rules will be used.
+   * @param criteria This is an object that has been defined within the metadata of the datasource. If the class is not
+   *                 defined an exception will be thrown. If the object does not exist in the datasource, an exception will be thrown.
+   *                 This object is used to populate the IN arguments used to retrieve the collection of objects.
+   * @param result   This is an object that has been defined within the metadata of the datasource. If the class is not
+   *                 defined an exception will be thrown. If the object does not exist in the datasource, an exception will be thrown.
+   *                 This object defines the object type that will be created, filled with the return data and returned from this
+   *                 method.
+   * @return An object populated with the out arguments
+   * @throws CpoException Thrown if there are errors accessing the datasource
+   */
+  @Override
+  public &lt;T, C&gt; T executeObject(String name, C criteria, T result) throws CpoException {
+<span class="nc" id="L860">    return processExecuteGroup(name, criteria, result);</span>
+  }
+
+  /**
+   * The CpoAdapter will check to see if this object exists in the datasource.
+   * &lt;p/&gt;
+   * &lt;pre&gt;Example:
+   * &lt;code&gt;
+   * &lt;p/&gt;
+   * class SomeObject so = new SomeObject();
+   * long count = 0;
+   * class CpoAdapter cpo = null;
+   * &lt;p/&gt;
+   * try {
+   * 	cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));
+   * } catch (CpoException ce) {
+   * 	// Handle the error
+   * 	cpo = null;
+   * }
+   * &lt;p/&gt;
+   * if (cpo!=null) {
+   * 	so.setId(1);
+   * 	so.setName(&quot;SomeName&quot;);
+   * 	try{
+   * 		count = cpo.existsObject(so);
+   * 		if (count&gt;0) {
+   * 			// object exists
+   *    } else {
+   * 			// object does not exist
+   *    }
+   *  } catch (CpoException ce) {
+   * 		// Handle the error
+   *  }
+   * }
+   * &lt;/code&gt;
+   * &lt;/pre&gt;
+   *
+   * @param obj This is an object that has been defined within the metadata of the datasource. If the class is not
+   *            defined an exception will be thrown. This object will be searched for inside the datasource.
+   * @return The number of objects that exist in the datasource that match the specified object
+   * @throws CpoException Thrown if there are errors accessing the datasource
+   */
+  @Override
+  public &lt;T&gt; long existsObject(T obj) throws CpoException {
+<span class="fc" id="L904">    return this.existsObject(null, obj);</span>
+  }
+
+  /**
+   * The CpoAdapter will check to see if this object exists in the datasource.
+   * &lt;p/&gt;
+   * &lt;pre&gt;Example:
+   * &lt;code&gt;
+   * &lt;p/&gt;
+   * class SomeObject so = new SomeObject();
+   * long count = 0;
+   * class CpoAdapter cpo = null;
+   * &lt;p/&gt;
+   * try {
+   * 	cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));
+   * } catch (CpoException ce) {
+   * 	// Handle the error
+   * 	cpo = null;
+   * }
+   * &lt;p/&gt;
+   * if (cpo!=null) {
+   * 	so.setId(1);
+   * 	so.setName(&quot;SomeName&quot;);
+   * 	try{
+   * 		count = cpo.existsObject(&quot;SomeExistCheck&quot;,so);
+   * 		if (count&gt;0) {
+   * 			// object exists
+   *    } else {
+   * 			// object does not exist
+   *    }
+   *  } catch (CpoException ce) {
+   * 		// Handle the error
+   *  }
+   * }
+   * &lt;/code&gt;
+   * &lt;/pre&gt;
+   *
+   * @param name The String name of the EXISTS Function Group that will be used to create the object in the datasource.
+   *             null signifies that the default rules will be used.
+   * @param obj  This is an object that has been defined within the metadata of the datasource. If the class is not
+   *             defined an exception will be thrown. This object will be searched for inside the datasource.
+   * @return The number of objects that exist in the datasource that match the specified object
+   * @throws CpoException Thrown if there are errors accessing the datasource
+   */
+  @Override
+  public &lt;T&gt; long existsObject(String name, T obj) throws CpoException {
+<span class="fc" id="L950">    return this.existsObject(name, obj, null);</span>
+  }
+
+  /**
+   * The CpoAdapter will check to see if this object exists in the datasource.
+   * &lt;p/&gt;
+   * &lt;pre&gt;Example:
+   * &lt;code&gt;
+   * &lt;p/&gt;
+   * class SomeObject so = new SomeObject();
+   * long count = 0;
+   * class CpoAdapter cpo = null;
+   * &lt;p/&gt;
+   * &lt;p/&gt;
+   *  try {
+   *    cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));
+   *  } catch (CpoException ce) {
+   *    // Handle the error
+   *    cpo = null;
+   *  }
+   * &lt;p/&gt;
+   *  if (cpo!=null) {
+   *    so.setId(1);
+   *    so.setName(&quot;SomeName&quot;);
+   *    try{
+   *      CpoWhere where = cpo.newCpoWhere(CpoWhere.LOGIC_NONE, id, CpoWhere.COMP_EQ);
+   *      count = cpo.existsObject(&quot;SomeExistCheck&quot;,so, where);
+   *      if (count&gt;0) {
+   *        // object exists
+   *      } else {
+   *        // object does not exist
+   *      }
+   *    } catch (CpoException ce) {
+   *      // Handle the error
+   *    }
+   *  }
+   * &lt;/code&gt;
+   * &lt;/pre&gt;
+   *
+   * @param name   The String name of the EXISTS Function Group that will be used to create the object in the datasource.
+   *               null signifies that the default rules will be used.
+   * @param obj    This is an object that has been defined within the metadata of the datasource. If the class is not
+   *               defined an exception will be thrown. This object will be searched for inside the datasource.
+   * @param wheres A CpoWhere object that passes in run-time constraints to the function that performs the the exist
+   * @return The number of objects that exist in the datasource that match the specified object
+   * @throws CpoException Thrown if there are errors accessing the datasource
+   */
+  @Override
+  public &lt;T&gt; long existsObject(String name, T obj, Collection&lt;CpoWhere&gt; wheres) throws CpoException {
+<span class="fc" id="L999">    Connection c = null;</span>
+<span class="fc" id="L1000">    long objCount = -1;</span>
+
+    try {
+<span class="fc" id="L1003">      c = getReadConnection();</span>
+
+<span class="fc" id="L1005">      objCount = existsObject(name, obj, c, wheres);</span>
+<span class="nc" id="L1006">    } catch (Exception e) {</span>
+<span class="nc" id="L1007">      throw new CpoException(&quot;existsObjects(String, Object) failed&quot;, e);</span>
+    } finally {
+<span class="pc" id="L1009">      closeConnection(c);</span>
+<span class="fc" id="L1010">    }</span>
+
+<span class="fc" id="L1012">    return objCount;</span>
+  }
+
+  /**
+   * The CpoAdapter will check to see if this object exists in the datasource.
+   *
+   * @param name The name which identifies which EXISTS, INSERT, and UPDATE Function Groups to execute to persist the
+   *             object.
+   * @param obj  This is an object that has been defined within the metadata of the datasource. If the class is not
+   *             defined an exception will be thrown.
+   * @param con  The datasource Connection with which to check if the object exists
+   * @return The int value of the first column returned in the record set
+   * @throws CpoException exception will be thrown if the Function Group has a function count != 1
+   */
+  protected &lt;T&gt; long existsObject(String name, T obj, Connection con, Collection&lt;CpoWhere&gt; wheres) throws CpoException {
+<span class="fc" id="L1027">    PreparedStatement ps = null;</span>
+<span class="fc" id="L1028">    ResultSet rs = null;</span>
+    ResultSetMetaData rsmd;
+    CpoClass cpoClass;
+<span class="fc" id="L1031">    long objCount = 0;</span>
+<span class="fc" id="L1032">    Logger localLogger = logger;</span>
+
+<span class="pc bpc" id="L1034" title="1 of 2 branches missed.">    if (obj == null) {</span>
+<span class="nc" id="L1035">      throw new CpoException(&quot;NULL Object passed into existsObject&quot;);</span>
+    }
+
+    try {
+<span class="fc" id="L1039">      cpoClass = metaDescriptor.getMetaClass(obj);</span>
+<span class="fc" id="L1040">      List&lt;CpoFunction&gt; cpoFunctions = cpoClass.getFunctionGroup(JdbcCpoAdapter.EXIST_GROUP, name).getFunctions();</span>
+<span class="fc" id="L1041">      localLogger = LoggerFactory.getLogger(cpoClass.getMetaClass());</span>
+
+<span class="fc bfc" id="L1043" title="All 2 branches covered.">      for (CpoFunction cpoFunction : cpoFunctions) {</span>
+<span class="fc" id="L1044">        localLogger.info(cpoFunction.getExpression());</span>
+<span class="fc" id="L1045">        JdbcPreparedStatementFactory jpsf = new JdbcPreparedStatementFactory(con, this, cpoClass, cpoFunction, obj, wheres, null, null);</span>
+<span class="fc" id="L1046">        ps = jpsf.getPreparedStatement();</span>
+
+<span class="fc" id="L1048">        long qCount = 0; // set the results for this function to 0</span>
+
+<span class="fc" id="L1050">        rs = ps.executeQuery();</span>
+<span class="fc" id="L1051">        jpsf.release();</span>
+<span class="fc" id="L1052">        rsmd = rs.getMetaData();</span>
+
+        // see if they are using the count(*) logic
+<span class="pc bpc" id="L1055" title="1 of 2 branches missed.">        if (rsmd.getColumnCount() == 1) {</span>
+<span class="pc bpc" id="L1056" title="1 of 2 branches missed.">          if (rs.next()) {</span>
+            try {
+<span class="fc" id="L1058">              qCount = rs.getLong(1); // get the number of objects</span>
+              // that exist
+<span class="nc" id="L1060">            } catch (Exception e) {</span>
+              // Exists result not an int so bail to record counter
+<span class="nc" id="L1062">              qCount = 1;</span>
+<span class="fc" id="L1063">            }</span>
+<span class="pc bpc" id="L1064" title="1 of 2 branches missed.">            if (rs.next()) {</span>
+              // EXIST function has more than one record so not a count(*)
+<span class="nc" id="L1066">              qCount = 2;</span>
+            }
+          }
+        }
+
+<span class="pc bpc" id="L1071" title="1 of 2 branches missed.">        while (rs.next()) {</span>
+<span class="nc" id="L1072">          qCount++;</span>
+        }
+
+<span class="fc" id="L1075">        objCount += qCount;</span>
+
+<span class="fc" id="L1077">        rs.close();</span>
+<span class="fc" id="L1078">        ps.close();</span>
+<span class="fc" id="L1079">        rs = null;</span>
+<span class="fc" id="L1080">        ps = null;</span>
+<span class="fc" id="L1081">      }</span>
+<span class="nc" id="L1082">    } catch (SQLException e) {</span>
+<span class="nc" id="L1083">      String msg = &quot;existsObject(name, obj, con) failed:&quot;;</span>
+<span class="nc" id="L1084">      localLogger.error(msg, e);</span>
+<span class="nc" id="L1085">      throw new CpoException(msg, e);</span>
+    } finally {
+<span class="pc" id="L1087">      resultSetClose(rs);</span>
+<span class="pc" id="L1088">      statementClose(ps);</span>
+<span class="fc" id="L1089">    }</span>
+
+<span class="fc" id="L1091">    return objCount;</span>
+  }
+
+  /**
+   * newOrderBy allows you to dynamically change the order of the objects in the resulting collection. This allows you
+   * to apply user input in determining the order of the collection
+   *
+   * @param attribute The name of the attribute from the pojo that will be sorted.
+   * @param ascending If true, sort ascending. If false sort descending.
+   * @return A CpoOrderBy object to be passed into retrieveBeans.
+   * @throws CpoException Thrown if there are errors accessing the datasource
+   */
+  @Override
+  public CpoOrderBy newOrderBy(String attribute, boolean ascending) throws CpoException {
+<span class="fc" id="L1105">    return new BindableCpoOrderBy(attribute, ascending);</span>
+  }
+
+  /**
+   * newOrderBy allows you to dynamically change the order of the objects in the resulting collection. This allows you
+   * to apply user input in determining the order of the collection
+   *
+   * @param marker    the marker that will be replaced in the expression with the string representation of this orderBy
+   * @param attribute The name of the attribute from the pojo that will be sorted.
+   * @param ascending If true, sort ascending. If false sort descending.
+   * @return A CpoOrderBy object to be passed into retrieveBeans.
+   * @throws CpoException Thrown if there are errors accessing the datasource
+   */
+  @Override
+  public CpoOrderBy newOrderBy(String marker, String attribute, boolean ascending) throws CpoException {
+<span class="fc" id="L1120">    return new BindableCpoOrderBy(marker, attribute, ascending);</span>
+  }
+
+  /**
+   * newOrderBy allows you to dynamically change the order of the objects in the resulting collection. This allows you
+   * to apply user input in determining the order of the collection
+   *
+   * @param attribute The name of the attribute from the pojo that will be sorted.
+   * @param ascending If true, sort ascending. If false sort descending.
+   * @param function  A string which represents a datasource function that will be called on the attribute. must be
+   *                  contained in the function string. The attribute name will be replaced at run-time with its datasource counterpart
+   * @return A CpoOrderBy object to be passed into retrieveBeans.
+   * @throws CpoException Thrown if there are errors accessing the datasource
+   */
+  @Override
+  public CpoOrderBy newOrderBy(String attribute, boolean ascending, String function) throws CpoException {
+<span class="fc" id="L1136">    return new BindableCpoOrderBy(attribute, ascending, function);</span>
+  }
+
+  /**
+   * newOrderBy allows you to dynamically change the order of the objects in the resulting collection. This allows you
+   * to apply user input in determining the order of the collection
+   *
+   * @param marker    the marker that will be replaced in the expression with the string representation of this orderBy
+   * @param attribute The name of the attribute from the pojo that will be sorted.
+   * @param ascending If true, sort ascending. If false sort descending.
+   * @param function  A string which represents a datasource function that will be called on the attribute. must be
+   *                  contained in the function string. The attribute name will be replaced at run-time with its datasource counterpart
+   * @return A CpoOrderBy object to be passed into retrieveBeans.
+   * @throws CpoException Thrown if there are errors accessing the datasource
+   */
+  @Override
+  public CpoOrderBy newOrderBy(String marker, String attribute, boolean ascending, String function) throws CpoException {
+<span class="fc" id="L1153">    return new BindableCpoOrderBy(marker, attribute, ascending, function);</span>
+  }
+
+  /**
+   * DOCUMENT ME!
+   *
+   * @return DOCUMENT ME!
+   * @throws CpoException DOCUMENT ME!
+   */
+  @Override
+  public CpoWhere newWhere() throws CpoException {
+<span class="fc" id="L1164">    return new JdbcCpoWhere();</span>
+  }
+
+  /**
+   * DOCUMENT ME!
+   *
+   * @param logical DOCUMENT ME!
+   * @param attr    DOCUMENT ME!
+   * @param comp    DOCUMENT ME!
+   * @param value   DOCUMENT ME!
+   * @return DOCUMENT ME!
+   * @throws CpoException DOCUMENT ME!
+   */
+  @Override
+  public &lt;T&gt; CpoWhere newWhere(int logical, String attr, int comp, T value) throws CpoException {
+<span class="fc" id="L1179">    return new JdbcCpoWhere(logical, attr, comp, value);</span>
+  }
+
+  /**
+   * DOCUMENT ME!
+   *
+   * @param logical DOCUMENT ME!
+   * @param attr    DOCUMENT ME!
+   * @param comp    DOCUMENT ME!
+   * @param value   DOCUMENT ME!
+   * @param not     DOCUMENT ME!
+   * @return DOCUMENT ME!
+   * @throws CpoException DOCUMENT ME!
+   */
+  @Override
+  public &lt;T&gt; CpoWhere newWhere(int logical, String attr, int comp, T value, boolean not) throws CpoException {
+<span class="fc" id="L1195">    return new JdbcCpoWhere(logical, attr, comp, value, not);</span>
+  }
+
+  /**
+   * Persists the Object into the datasource. The CpoAdapter will check to see if this object exists in the datasource.
+   * If it exists, the object is updated in the datasource If the object does not exist, then it is created in the
+   * datasource. This method stores the object in the datasource. This method uses the default EXISTS, CREATE, and
+   * UPDATE Function Groups specified for this object.
+   * &lt;p/&gt;
+   * &lt;pre&gt;Example:
+   * &lt;code&gt;
+   * &lt;p/&gt;
+   * class SomeObject so = new SomeObject();
+   * class CpoAdapter cpo = null;
+   * &lt;p/&gt;
+   * try {
+   * 	cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));
+   * } catch (CpoException ce) {
+   * 	// Handle the error
+   * 	cpo = null;
+   * }
+   * &lt;p/&gt;
+   * if (cpo!=null) {
+   * 	so.setId(1);
+   * 	so.setName(&quot;SomeName&quot;);
+   * 	try{
+   * 		cpo.persistObject(so);
+   *  } catch (CpoException ce) {
+   * 		// Handle the error
+   *  }
+   * }
+   * &lt;/code&gt;
+   * &lt;/pre&gt;
+   *
+   * @param obj This is an object that has been defined within the metadata of the datasource. If the class is not
+   *            defined an exception will be thrown.
+   * @return A count of the number of objects persisted
+   * @throws CpoException Thrown if there are errors accessing the datasource
+   * @see #existsObject
+   * @see #insertObject
+   * @see #updateObject
+   */
+  @Override
+  public &lt;T&gt; long persistObject(T obj) throws CpoException {
+<span class="nc" id="L1239">    return processUpdateGroup(obj, JdbcCpoAdapter.PERSIST_GROUP, null, null, null, null);</span>
+  }
+
+  /**
+   * Persists the Object into the datasource. The CpoAdapter will check to see if this object exists in the datasource.
+   * If it exists, the object is updated in the datasource If the object does not exist, then it is created in the
+   * datasource. This method stores the object in the datasource.
+   * &lt;p/&gt;
+   * &lt;pre&gt;Example:
+   * &lt;code&gt;
+   * &lt;p/&gt;
+   * class SomeObject so = new SomeObject();
+   * class CpoAdapter cpo = null;
+   * &lt;p/&gt;
+   * try {
+   * 	cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));
+   * } catch (CpoException ce) {
+   * 	// Handle the error
+   * 	cpo = null;
+   * }
+   * &lt;p/&gt;
+   * if (cpo!=null) {
+   * 	so.setId(1);
+   * 	so.setName(&quot;SomeName&quot;);
+   * 	try{
+   * 		cpo.persistObject(&quot;persistSomeObject&quot;,so);
+   *  } catch (CpoException ce) {
+   * 		// Handle the error
+   *  }
+   * }
+   * &lt;/code&gt;
+   * &lt;/pre&gt;
+   *
+   * @param name The name which identifies which EXISTS, INSERT, and UPDATE Function Groups to execute to persist the
+   *             object.
+   * @param obj  This is an object that has been defined within the metadata of the datasource. If the class is not
+   *             defined an exception will be thrown.
+   * @return A count of the number of objects persisted
+   * @throws CpoException Thrown if there are errors accessing the datasource
+   * @see #existsObject
+   * @see #insertObject
+   * @see #updateObject
+   */
+  @Override
+  public &lt;T&gt; long persistObject(String name, T obj) throws CpoException {
+<span class="nc" id="L1284">    return processUpdateGroup(obj, JdbcCpoAdapter.PERSIST_GROUP, name, null, null, null);</span>
+  }
+
+  /**
+   * Persists a collection of Objects into the datasource. The CpoAdapter will check to see if this object exists in the
+   * datasource. If it exists, the object is updated in the datasource If the object does not exist, then it is created
+   * in the datasource. This method stores the object in the datasource. The objects in the collection will be treated
+   * as one transaction, meaning that if one of the objects fail being inserted or updated in the datasource then the
+   * entire collection will be rolled back.
+   * &lt;p/&gt;
+   * &lt;pre&gt;Example:
+   * &lt;code&gt;
+   * &lt;p/&gt;
+   * class SomeObject so = null;
+   * class CpoAdapter cpo = null;
+   * &lt;p/&gt;
+   * try {
+   * 	cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));
+   * } catch (CpoException ce) {
+   * 	// Handle the error
+   * 	cpo = null;
+   * }
+   * &lt;p/&gt;
+   * if (cpo!=null) {
+   * 	ArrayList al = new ArrayList();
+   * 	for (int i=0; i&lt;3; i++){
+   * 		so = new SomeObject();
+   * 		so.setId(1);
+   * 		so.setName(&quot;SomeName&quot;);
+   * 		al.add(so);
+   *  }
+   * 	try{
+   * 		cpo.persistObjects(al);
+   *  } catch (CpoException ce) {
+   * 		// Handle the error
+   *  }
+   * }
+   * &lt;/code&gt;
+   * &lt;/pre&gt;
+   *
+   * @param coll This is a collection of objects that have been defined within the metadata of the datasource. If the
+   *             class is not defined an exception will be thrown.
+   * @return DOCUMENT ME!
+   * @throws CpoException Thrown if there are errors accessing the datasource
+   * @see #existsObject
+   * @see #insertObject
+   * @see #updateObject
+   */
+  @Override
+  public &lt;T&gt; long persistObjects(Collection&lt;T&gt; coll) throws CpoException {
+<span class="nc" id="L1334">    return processUpdateGroup(coll, JdbcCpoAdapter.PERSIST_GROUP, null, null, null, null);</span>
+  }
+
+  /**
+   * Persists a collection of Objects into the datasource. The CpoAdapter will check to see if this object exists in the
+   * datasource. If it exists, the object is updated in the datasource If the object does not exist, then it is created
+   * in the datasource. This method stores the object in the datasource. The objects in the collection will be treated
+   * as one transaction, meaning that if one of the objects fail being inserted or updated in the datasource then the
+   * entire collection will be rolled back.
+   * &lt;p/&gt;
+   * &lt;pre&gt;Example:
+   * &lt;code&gt;
+   * &lt;p/&gt;
+   * class SomeObject so = null;
+   * class CpoAdapter cpo = null;
+   * &lt;p/&gt;
+   * try {
+   * 	cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));
+   * } catch (CpoException ce) {
+   * 	// Handle the error
+   * 	cpo = null;
+   * }
+   * &lt;p/&gt;
+   * if (cpo!=null) {
+   * 	ArrayList al = new ArrayList();
+   * 	for (int i=0; i&lt;3; i++){
+   * 		so = new SomeObject();
+   * 		so.setId(1);
+   * 		so.setName(&quot;SomeName&quot;);
+   * 		al.add(so);
+   *  }
+   * 	try{
+   * 		cpo.persistObjects(&quot;myPersist&quot;,al);
+   *  } catch (CpoException ce) {
+   * 		// Handle the error
+   *  }
+   * }
+   * &lt;/code&gt;
+   * &lt;/pre&gt;
+   *
+   * @param name The name which identifies which EXISTS, INSERT, and UPDATE Function Groups to execute to persist the
+   *             object.
+   * @param coll This is a collection of objects that have been defined within the metadata of the datasource. If the
+   *             class is not defined an exception will be thrown.
+   * @return DOCUMENT ME!
+   * @throws CpoException Thrown if there are errors accessing the datasource
+   * @see #existsObject
+   * @see #insertObject
+   * @see #updateObject
+   */
+  @Override
+  public &lt;T&gt; long persistObjects(String name, Collection&lt;T&gt; coll) throws CpoException {
+<span class="nc" id="L1386">    return processUpdateGroup(coll, JdbcCpoAdapter.PERSIST_GROUP, name, null, null, null);</span>
+  }
+
+  /**
+   * Retrieves the bean from the datasource. The assumption is that the bean exists in the datasource. If the retrieve
+   * function defined for this beans returns more than one row, an exception will be thrown.
+   *
+   * @param bean This is an bean that has been defined within the metadata of the datasource. If the class is not
+   *             defined an exception will be thrown. If the bean does not exist in the datasource, an exception will be thrown. The
+   *             input bean is used to specify the search criteria, the output bean is populated with the results of the function.
+   * @return An bean of the same type as the result argument that is filled in as specified the metadata for the
+   *         retireve.
+   * @throws CpoException Thrown if there are errors accessing the datasource
+   */
+  @Override
+  public &lt;T&gt; T retrieveBean(T bean) throws CpoException {
+<span class="fc" id="L1402">    return processSelectGroup(bean, null, null, null, null);</span>
+  }
+
+  /**
+   * Retrieves the bean from the datasource. The assumption is that the bean exists in the datasource. If the retrieve
+   * function defined for this beans returns more than one row, an exception will be thrown.
+   *
+   * @param name DOCUMENT ME!
+   * @param bean This is an bean that has been defined within the metadata of the datasource. If the class is not
+   *             defined an exception will be thrown. If the bean does not exist in the datasource, an exception will be thrown. The
+   *             input bean is used to specify the search criteria, the output bean is populated with the results of the function.
+   * @return An bean of the same type as the result argument that is filled in as specified the metadata for the
+   *         retireve.
+   * @throws CpoException Thrown if there are errors accessing the datasource
+   */
+  @Override
+  public &lt;T&gt; T retrieveBean(String name, T bean) throws CpoException {
+<span class="nc" id="L1419">    return processSelectGroup(bean, name, null, null, null);</span>
+  }
+
+  /**
+   * Retrieves the bean from the datasource. The assumption is that the bean exists in the datasource. If the retrieve
+   * function defined for this beans returns more than one row, an exception will be thrown.
+   *
+   * @param name              DOCUMENT ME!
+   * @param bean              This is an bean that has been defined within the metadata of the datasource. If the class is not
+   *                          defined an exception will be thrown. If the bean does not exist in the datasource, an exception will be thrown. The
+   *                          input bean is used to specify the search criteria, the output bean is populated with the results of the function.
+   * @param wheres            A collection of CpoWhere beans that define the constraints that should be used when retrieving beans
+   * @param orderBy           The CpoOrderBy bean that defines the order in which beans should be returned
+   * @param nativeExpressions Native expression that will be used to augment the expression stored in the meta data. This
+   *                          text will be embedded at run-time
+   * @return An bean of the same type as the result argument that is filled in as specified the metadata for the
+   *         retireve.
+   * @throws CpoException Thrown if there are errors accessing the datasource
+   */
+  @Override
+  public &lt;T&gt; T retrieveBean(String name, T bean, Collection&lt;CpoWhere&gt; wheres, Collection&lt;CpoOrderBy&gt; orderBy, Collection&lt;CpoNativeFunction&gt; nativeExpressions) throws CpoException {
+<span class="fc" id="L1440">    return processSelectGroup(bean, name, wheres, orderBy, nativeExpressions);</span>
+  }
+
+  /**
+   * Retrieves the bean from the datasource. The assumption is that the bean exists in the datasource. If the retrieve
+   * function defined for this beans returns more than one row, an exception will be thrown.
+   *
+   * @param name     The filter name which tells the datasource which beans should be returned. The name also signifies what
+   *                 data in the bean will be populated.
+   * @param criteria This is an bean that has been defined within the metadata of the datasource. If the class is not
+   *                 defined an exception will be thrown. If the bean does not exist in the datasource, an exception will be thrown.
+   *                 This bean is used to specify the arguments used to retrieve the collection of beans.
+   * @param result   This is an bean that has been defined within the metadata of the datasource. If the class is not
+   *                 defined an exception will be thrown. If the bean does not exist in the datasource, an exception will be thrown.
+   *                 This bean is used to specify the bean type that will be returned in the collection.
+   * @param wheres   A collection of CpoWhere beans that define the constraints that should be used when retrieving beans
+   * @param orderBy  The CpoOrderBy bean that defines the order in which beans should be returned
+   * @return An bean of the same type as the result argument that is filled in as specified the metadata for the
+   *         retireve.
+   * @throws CpoException Thrown if there are errors accessing the datasource
+   */
+  @Override
+  public &lt;T, C&gt; T retrieveBean(String name, C criteria, T result, Collection&lt;CpoWhere&gt; wheres, Collection&lt;CpoOrderBy&gt; orderBy) throws CpoException {
+<span class="fc" id="L1463">    return retrieveBean(name, criteria, result, wheres, orderBy, null);</span>
+  }
+
+  /**
+   * Retrieves the bean from the datasource. The assumption is that the bean exists in the datasource. If the retrieve
+   * function defined for this beans returns more than one row, an exception will be thrown.
+   *
+   * @param name              The filter name which tells the datasource which beans should be returned. The name also signifies what
+   *                          data in the bean will be populated.
+   * @param criteria          This is an bean that has been defined within the metadata of the datasource. If the class is not
+   *                          defined an exception will be thrown. If the bean does not exist in the datasource, an exception will be thrown.
+   *                          This bean is used to specify the arguments used to retrieve the collection of beans.
+   * @param result            This is an bean that has been defined within the metadata of the datasource. If the class is not
+   *                          defined an exception will be thrown. If the bean does not exist in the datasource, an exception will be thrown.
+   *                          This bean is used to specify the bean type that will be returned in the collection.
+   * @param wheres            A collection of CpoWhere beans that define the constraints that should be used when retrieving beans
+   * @param orderBy           The CpoOrderBy bean that defines the order in which beans should be returned
+   * @param nativeExpressions Native expression that will be used to augment the expression stored in the meta data. This
+   *                          text will be embedded at run-time
+   * @return An bean of the same type as the result argument that is filled in as specified the metadata for the
+   *         retireve.
+   * @throws CpoException Thrown if there are errors accessing the datasource
+   */
+  @Override
+  public &lt;T, C&gt; T retrieveBean(String name, C criteria, T result, Collection&lt;CpoWhere&gt; wheres, Collection&lt;CpoOrderBy&gt; orderBy, Collection&lt;CpoNativeFunction&gt; nativeExpressions) throws CpoException {
+<span class="fc" id="L1488">    Iterator&lt;T&gt; it = processSelectGroup(name, criteria, result, wheres, orderBy, nativeExpressions, true).iterator();</span>
+<span class="pc bpc" id="L1489" title="1 of 2 branches missed.">    if (it.hasNext()) {</span>
+<span class="fc" id="L1490">      return it.next();</span>
+    } else {
+<span class="nc" id="L1492">      return null;</span>
+    }
+  }
+
+  /**
+   * Retrieves the bean from the datasource. The assumption is that the bean exists in the datasource.
+   *
+   * @param name     The filter name which tells the datasource which beans should be returned. The name also signifies what
+   *                 data in the bean will be populated.
+   * @param criteria This is an bean that has been defined within the metadata of the datasource. If the class is not
+   *                 defined an exception will be thrown. If the bean does not exist in the datasource, an exception will be thrown.
+   *                 This bean is used to specify the arguments used to retrieve the collection of beans.
+   * @return A collection of beans will be returned that meet the criteria specified by obj. The beans will be of the
+   *         same type as the bean that was passed in. If no beans match the criteria, an empty collection will be returned
+   * @throws CpoException Thrown if there are errors accessing the datasource
+   */
+  @Override
+  public &lt;C&gt; List&lt;C&gt; retrieveBeans(String name, C criteria) throws CpoException {
+<span class="fc" id="L1510">    return processSelectGroup(name, criteria, criteria, null, null, null, false);</span>
+  }
+
+  /**
+   * Retrieves the bean from the datasource. The assumption is that the bean exists in the datasource.
+   *
+   * @param name     The filter name which tells the datasource which beans should be returned. The name also signifies what
+   *                 data in the bean will be populated.
+   * @param criteria This is an bean that has been defined within the metadata of the datasource. If the class is not
+   *                 defined an exception will be thrown. If the bean does not exist in the datasource, an exception will be thrown.
+   *                 This bean is used to specify the arguments used to retrieve the collection of beans.
+   * @param where    A CpoWhere bean that defines the constraints that should be used when retrieving beans
+   * @param orderBy  The CpoOrderBy bean that defines the order in which beans should be returned
+   * @return A collection of beans will be returned that meet the criteria specified by obj. The beans will be of the
+   *         same type as the bean that was passed in. If no beans match the criteria, an empty collection will be returned
+   * @throws CpoException Thrown if there are errors accessing the datasource
+   */
+  @Override
+  public &lt;C&gt; List&lt;C&gt; retrieveBeans(String name, C criteria, CpoWhere where, Collection&lt;CpoOrderBy&gt; orderBy) throws CpoException {
+<span class="nc" id="L1529">    ArrayList&lt;CpoWhere&gt; wheres = null;</span>
+<span class="nc bnc" id="L1530" title="All 2 branches missed.">    if (where != null) {</span>
+<span class="nc" id="L1531">      wheres = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L1532">      wheres.add(where);</span>
+    }
+<span class="nc" id="L1534">    return processSelectGroup(name, criteria, criteria, wheres, orderBy, null, false);</span>
+  }
+
+  /**
+   * Retrieves the bean from the datasource. The assumption is that the bean exists in the datasource.
+   *
+   * @param name     The filter name which tells the datasource which beans should be returned. The name also signifies what
+   *                 data in the bean will be populated.
+   * @param criteria This is an bean that has been defined within the metadata of the datasource. If the class is not
+   *                 defined an exception will be thrown. If the bean does not exist in the datasource, an exception will be thrown.
+   *                 This bean is used to specify the arguments used to retrieve the collection of beans.
+   * @param wheres   A collection of CpoWhere beans that define the constraints that should be used when retrieving beans
+   * @param orderBy  The CpoOrderBy bean that defines the order in which beans should be returned
+   * @return A collection of beans will be returned that meet the criteria specified by obj. The beans will be of the
+   *         same type as the bean that was passed in. If no beans match the criteria, an empty collection will be returned
+   * @throws CpoException Thrown if there are errors accessing the datasource
+   */
+  @Override
+  public &lt;C&gt; List&lt;C&gt; retrieveBeans(String name, C criteria, Collection&lt;CpoWhere&gt; wheres, Collection&lt;CpoOrderBy&gt; orderBy) throws CpoException {
+<span class="fc" id="L1553">    return processSelectGroup(name, criteria, criteria, wheres, orderBy, null, false);</span>
+  }
+
+  /**
+   * Retrieves the bean from the datasource. The assumption is that the bean exists in the datasource.
+   *
+   * @param name     The filter name which tells the datasource which beans should be returned. The name also signifies what
+   *                 data in the bean will be populated.
+   * @param criteria This is an bean that has been defined within the metadata of the datasource. If the class is not
+   *                 defined an exception will be thrown. If the bean does not exist in the datasource, an exception will be thrown.
+   *                 This bean is used to specify the arguments used to retrieve the collection of beans.
+   * @param orderBy  The CpoOrderBy bean that defines the order in which beans should be returned
+   * @return A collection of beans will be returned that meet the criteria specified by obj. The beans will be of the
+   *         same type as the bean that was passed in. If no beans match the criteria, an empty collection will be returned
+   * @throws CpoException Thrown if there are errors accessing the datasource
+   */
+  @Override
+  public &lt;C&gt; List&lt;C&gt; retrieveBeans(String name, C criteria, Collection&lt;CpoOrderBy&gt; orderBy) throws CpoException {
+<span class="fc" id="L1571">    return processSelectGroup(name, criteria, criteria, null, orderBy, null, false);</span>
+  }
+
+  /**
+   * Retrieves the bean from the datasource. The assumption is that the bean exists in the datasource.
+   *
+   * @param name     The filter name which tells the datasource which beans should be returned. The name also signifies what
+   *                 data in the bean will be populated.
+   * @param criteria This is an bean that has been defined within the metadata of the datasource. If the class is not
+   *                 defined an exception will be thrown. If the bean does not exist in the datasource, an exception will be thrown.
+   *                 This bean is used to specify the arguments used to retrieve the collection of beans.
+   * @param result   This is an bean that has been defined within the metadata of the datasource. If the class is not
+   *                 defined an exception will be thrown. If the bean does not exist in the datasource, an exception will be thrown.
+   *                 This bean is used to specify the bean type that will be returned in the collection.
+   * @return A collection of beans will be returned that meet the criteria specified by obj. The beans will be of the
+   *         same type as the bean that was passed in. If no beans match the criteria, an empty collection will be returned
+   * @throws CpoException Thrown if there are errors accessing the datasource
+   */
+  @Override
+  public &lt;T, C&gt; List&lt;T&gt; retrieveBeans(String name, C criteria, T result) throws CpoException {
+<span class="fc" id="L1591">    return processSelectGroup(name, criteria, result, null, null, null, false);</span>
+  }
+
+  /**
+   * Retrieves the bean from the datasource. The assumption is that the bean exists in the datasource.
+   *
+   * @param name     The filter name which tells the datasource which beans should be returned. The name also signifies what
+   *                 data in the bean will be populated.
+   * @param criteria This is an bean that has been defined within the metadata of the datasource. If the class is not
+   *                 defined an exception will be thrown. If the bean does not exist in the datasource, an exception will be thrown.
+   *                 This bean is used to specify the arguments used to retrieve the collection of beans.
+   * @param result   This is an bean that has been defined within the metadata of the datasource. If the class is not
+   *                 defined an exception will be thrown. If the bean does not exist in the datasource, an exception will be thrown.
+   *                 This bean is used to specify the bean type that will be returned in the collection.
+   * @param where    A CpoWhere bean that defines the constraints that should be used when retrieving beans
+   * @param orderBy  The CpoOrderBy bean that defines the order in which beans should be returned
+   * @return A collection of beans will be returned that meet the criteria specified by obj. The beans will be of the
+   *         same type as the bean that was passed in. If no beans match the criteria, an empty collection will be returned
+   * @throws CpoException Thrown if there are errors accessing the datasource
+   */
+  @Override
+  public &lt;T, C&gt; List&lt;T&gt; retrieveBeans(String name, C criteria, T result, CpoWhere where, Collection&lt;CpoOrderBy&gt; orderBy) throws CpoException {
+<span class="fc" id="L1613">    ArrayList&lt;CpoWhere&gt; wheres = null;</span>
+<span class="pc bpc" id="L1614" title="1 of 2 branches missed.">    if (where != null) {</span>
+<span class="fc" id="L1615">      wheres = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L1616">      wheres.add(where);</span>
+    }
+<span class="fc" id="L1618">    return processSelectGroup(name, criteria, result, wheres, orderBy, null, false);</span>
+  }
+
+  /**
+   * Retrieves the bean from the datasource. The assumption is that the bean exists in the datasource.
+   *
+   * @param name     The filter name which tells the datasource which beans should be returned. The name also signifies what
+   *                 data in the bean will be populated.
+   * @param criteria This is an bean that has been defined within the metadata of the datasource. If the class is not
+   *                 defined an exception will be thrown. If the bean does not exist in the datasource, an exception will be thrown.
+   *                 This bean is used to specify the arguments used to retrieve the collection of beans.
+   * @param result   This is an bean that has been defined within the metadata of the datasource. If the class is not
+   *                 defined an exception will be thrown. If the bean does not exist in the datasource, an exception will be thrown.
+   *                 This bean is used to specify the bean type that will be returned in the collection.
+   * @param wheres   A collection of CpoWhere beans that define the constraints that should be used when retrieving beans
+   * @param orderBy  The CpoOrderBy bean that defines the order in which beans should be returned
+   * @return A collection of beans will be returned that meet the criteria specified by obj. The beans will be of the
+   *         same type as the bean that was passed in. If no beans match the criteria, an empty collection will be returned
+   * @throws CpoException Thrown if there are errors accessing the datasource
+   */
+  @Override
+  public &lt;T, C&gt; List&lt;T&gt; retrieveBeans(String name, C criteria, T result, Collection&lt;CpoWhere&gt; wheres, Collection&lt;CpoOrderBy&gt; orderBy) throws CpoException {
+<span class="nc" id="L1640">    return processSelectGroup(name, criteria, result, wheres, orderBy, null, false);</span>
+  }
+
+  /**
+   * Retrieves the bean from the datasource. The assumption is that the bean exists in the datasource.
+   *
+   * @param name              The filter name which tells the datasource which beans should be returned. The name also signifies what
+   *                          data in the bean will be populated.
+   * @param criteria          This is an bean that has been defined within the metadata of the datasource. If the class is not
+   *                          defined an exception will be thrown. If the bean does not exist in the datasource, an exception will be thrown.
+   *                          This bean is used to specify the arguments used to retrieve the collection of beans.
+   * @param result            This is an bean that has been defined within the metadata of the datasource. If the class is not
+   *                          defined an exception will be thrown. If the bean does not exist in the datasource, an exception will be thrown.
+   *                          This bean is used to specify the bean type that will be returned in the collection.
+   * @param wheres            A collection of CpoWhere beans that define the constraints that should be used when retrieving beans
+   * @param orderBy           The CpoOrderBy bean that defines the order in which beans should be returned
+   * @param nativeExpressions Native expression that will be used to augment the expression stored in the meta data. This
+   *                          text will be embedded at run-time
+   * @return A collection of beans will be returned that meet the criteria specified by obj. The beans will be of the
+   *         same type as the bean that was passed in. If no beans match the criteria, an empty collection will be returned
+   * @throws CpoException Thrown if there are errors accessing the datasource
+   */
+  @Override
+  public &lt;T, C&gt; List&lt;T&gt; retrieveBeans(String name, C criteria, T result, Collection&lt;CpoWhere&gt; wheres, Collection&lt;CpoOrderBy&gt; orderBy, Collection&lt;CpoNativeFunction&gt; nativeExpressions) throws CpoException {
+<span class="fc" id="L1664">    return processSelectGroup(name, criteria, result, wheres, orderBy, nativeExpressions, false);</span>
+  }
+
+  /**
+   * Retrieves the bean from the datasource. This method returns an Iterator immediately. The iterator will get filled
+   * asynchronously by the cpo framework. The framework will stop supplying the iterator with beans if the
+   * beanBufferSize is reached.
+   * &lt;p/&gt;
+   * If the consumer of the iterator is processing records faster than the framework is filling it, then the iterator
+   * will wait until it has data to provide.
+   *
+   * @param name              The filter name which tells the datasource which beans should be returned. The name also signifies what
+   *                          data in the bean will be populated.
+   * @param criteria          This is an bean that has been defined within the metadata of the datasource. If the class is not
+   *                          defined an exception will be thrown. If the bean does not exist in the datasource, an exception will be thrown.
+   *                          This bean is used to specify the arguments used to retrieve the collection of beans.
+   * @param result            This is an bean that has been defined within the metadata of the datasource. If the class is not
+   *                          defined an exception will be thrown. If the bean does not exist in the datasource, an exception will be thrown.
+   *                          This bean is used to specify the bean type that will be returned in the collection.
+   * @param wheres            A collection of CpoWhere beans that define the constraints that should be used when retrieving beans
+   * @param orderBy           The CpoOrderBy bean that defines the order in which beans should be returned
+   * @param nativeExpressions Native expression that will be used to augment the expression stored in the meta data. This
+   *                          text will be embedded at run-time
+   * @param queueSize         the maximum number of beans that the Iterator is allowed to cache. Once reached, the CPO
+   *                          framework will halt processing records from the datasource.
+   * @return An iterator that will be fed beans from the CPO framework.
+   * @throws CpoException Thrown if there are errors accessing the datasource
+   */
+  @Override
+  public &lt;T, C&gt; CpoResultSet&lt;T&gt; retrieveBeans(String name, C criteria, T result, Collection&lt;CpoWhere&gt; wheres, Collection&lt;CpoOrderBy&gt; orderBy, Collection&lt;CpoNativeFunction&gt; nativeExpressions, int queueSize) throws CpoException {
+<span class="fc" id="L1694">    CpoBlockingResultSet&lt;T&gt; resultSet = new CpoBlockingResultSet&lt;&gt;(queueSize);</span>
+<span class="fc" id="L1695">    RetrieverThread&lt;T, C&gt; retrieverThread = new RetrieverThread&lt;&gt;(name, criteria, result, wheres, orderBy, nativeExpressions, false, resultSet);</span>
+
+<span class="fc" id="L1697">    retrieverThread.start();</span>
+<span class="fc" id="L1698">    return resultSet;</span>
+  }
+
+  /**
+   * Update the Object in the datasource. The CpoAdapter will check to see if the object exists in the datasource. If it
+   * exists then the object will be updated. If it does not exist, an exception will be thrown
+   * &lt;p/&gt;
+   * &lt;pre&gt;Example:
+   * &lt;code&gt;
+   * &lt;p/&gt;
+   * class SomeObject so = new SomeObject();
+   * class CpoAdapter cpo = null;
+   * &lt;p/&gt;
+   * try {
+   * 	cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));
+   * } catch (CpoException ce) {
+   * 	// Handle the error
+   * 	cpo = null;
+   * }
+   * &lt;p/&gt;
+   * if (cpo!=null) {
+   * 	so.setId(1);
+   * 	so.setName(&quot;SomeName&quot;);
+   * 	try{
+   * 		cpo.updateObject(so);
+   *  } catch (CpoException ce) {
+   * 		// Handle the error
+   *  }
+   * }
+   * &lt;/code&gt;
+   * &lt;/pre&gt;
+   *
+   * @param obj This is an object that has been defined within the metadata of the datasource. If the class is not
+   *            defined an exception will be thrown.
+   * @return The number of objects updated in the datasource
+   * @throws CpoException Thrown if there are errors accessing the datasource
+   */
+  @Override
+  public &lt;T&gt; long updateObject(T obj) throws CpoException {
+<span class="nc" id="L1737">    return processUpdateGroup(obj, JdbcCpoAdapter.UPDATE_GROUP, null, null, null, null);</span>
+  }
+
+  /**
+   * Update the Object in the datasource. The CpoAdapter will check to see if the object exists in the datasource. If it
+   * exists then the object will be updated. If it does not exist, an exception will be thrown
+   * &lt;p/&gt;
+   * &lt;pre&gt;Example:
+   * &lt;code&gt;
+   * &lt;p/&gt;
+   * class SomeObject so = new SomeObject();
+   * class CpoAdapter cpo = null;
+   * &lt;p/&gt;
+   * try {
+   * 	cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));
+   * } catch (CpoException ce) {
+   * 	// Handle the error
+   * 	cpo = null;
+   * }
+   * &lt;p/&gt;
+   * if (cpo!=null) {
+   * 	so.setId(1);
+   * 	so.setName(&quot;SomeName&quot;);
+   * 	try{
+   * 		cpo.updateObject(&quot;updateSomeObject&quot;,so);
+   *  } catch (CpoException ce) {
+   * 		// Handle the error
+   *  }
+   * }
+   * &lt;/code&gt;
+   * &lt;/pre&gt;
+   *
+   * @param name The String name of the UPDATE Function Group that will be used to create the object in the datasource.
+   *             null signifies that the default rules will be used.
+   * @param obj  This is an object that has been defined within the metadata of the datasource. If the class is not
+   *             defined an exception will be thrown.
+   * @return The number of objects updated in the datasource
+   * @throws CpoException Thrown if there are errors accessing the datasource
+   */
+  @Override
+  public &lt;T&gt; long updateObject(String name, T obj) throws CpoException {
+<span class="nc" id="L1778">    return processUpdateGroup(obj, JdbcCpoAdapter.UPDATE_GROUP, name, null, null, null);</span>
+  }
+
+  /**
+   * Update the Object in the datasource. The CpoAdapter will check to see if the object exists in the datasource. If it
+   * exists then the object will be updated. If it does not exist, an exception will be thrown
+   * &lt;p/&gt;
+   * &lt;pre&gt;Example:
+   * &lt;code&gt;
+   * &lt;p/&gt;
+   * class SomeObject so = new SomeObject();
+   * class CpoAdapter cpo = null;
+   * &lt;p/&gt;
+   * try {
+   * 	cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));
+   * } catch (CpoException ce) {
+   * 	// Handle the error
+   * 	cpo = null;
+   * }
+   * &lt;p/&gt;
+   * if (cpo!=null) {
+   * 	so.setId(1);
+   * 	so.setName(&quot;SomeName&quot;);
+   * 	try{
+   * 		cpo.updateObject(&quot;updateSomeObject&quot;,so);
+   *  } catch (CpoException ce) {
+   * 		// Handle the error
+   *  }
+   * }
+   * &lt;/code&gt;
+   * &lt;/pre&gt;
+   *
+   * @param name              The String name of the UPDATE Function Group that will be used to create the object in the datasource.
+   *                          null signifies that the default rules will be used.
+   * @param obj               This is an object that has been defined within the metadata of the datasource. If the class is not
+   *                          defined an exception will be thrown.
+   * @param wheres            A collection of CpoWhere objects to be used by the function
+   * @param orderBy           A collection of CpoOrderBy objects to be used by the function
+   * @param nativeExpressions A collection of CpoNativeFunction objects to be used by the function
+   * @return The number of objects updated in the datasource
+   * @throws CpoException Thrown if there are errors accessing the datasource
+   */
+  @Override
+  public &lt;T&gt; long updateObject(String name, T obj, Collection&lt;CpoWhere&gt; wheres, Collection&lt;CpoOrderBy&gt; orderBy, Collection&lt;CpoNativeFunction&gt; nativeExpressions) throws CpoException {
+<span class="fc" id="L1822">    return processUpdateGroup(obj, JdbcCpoAdapter.UPDATE_GROUP, name, wheres, orderBy, nativeExpressions);</span>
+  }
+
+  /**
+   * Updates a collection of Objects in the datasource. The assumption is that the objects contained in the collection
+   * exist in the datasource. This method stores the object in the datasource. The objects in the collection will be
+   * treated as one transaction, meaning that if one of the objects fail being updated in the datasource then the entire
+   * collection will be rolled back, if supported by the datasource.
+   * &lt;p/&gt;
+   * &lt;pre&gt;Example:
+   * &lt;code&gt;
+   * &lt;p/&gt;
+   * class SomeObject so = null;
+   * class CpoAdapter cpo = null;
+   * &lt;p/&gt;
+   * try {
+   * 	cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));
+   * } catch (CpoException ce) {
+   * 	// Handle the error
+   * 	cpo = null;
+   * }
+   * &lt;p/&gt;
+   * if (cpo!=null) {
+   * 	ArrayList al = new ArrayList();
+   * 	for (int i=0; i&lt;3; i++){
+   * 		so = new SomeObject();
+   * 		so.setId(1);
+   * 		so.setName(&quot;SomeName&quot;);
+   * 		al.add(so);
+   *  }
+   * 	try{
+   * 		cpo.updateObjects(al);
+   *  } catch (CpoException ce) {
+   * 		// Handle the error
+   *  }
+   * }
+   * &lt;/code&gt;
+   * &lt;/pre&gt;
+   *
+   * @param coll This is a collection of objects that have been defined within the metadata of the datasource. If the
+   *             class is not defined an exception will be thrown.
+   * @return The number of objects updated in the datasource
+   * @throws CpoException Thrown if there are errors accessing the datasource
+   */
+  @Override
+  public &lt;T&gt; long updateObjects(Collection&lt;T&gt; coll) throws CpoException {
+<span class="nc" id="L1868">    return processUpdateGroup(coll, JdbcCpoAdapter.UPDATE_GROUP, null, null, null, null);</span>
+  }
+
+  /**
+   * Updates a collection of Objects in the datasource. The assumption is that the objects contained in the collection
+   * exist in the datasource. This method stores the object in the datasource. The objects in the collection will be
+   * treated as one transaction, meaning that if one of the objects fail being updated in the datasource then the entire
+   * collection will be rolled back, if supported by the datasource.
+   * &lt;p/&gt;
+   * &lt;pre&gt;Example:
+   * &lt;code&gt;
+   * &lt;p/&gt;
+   * class SomeObject so = null;
+   * class CpoAdapter cpo = null;
+   * &lt;p/&gt;
+   * try {
+   * 	cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));
+   * } catch (CpoException ce) {
+   * 	// Handle the error
+   * 	cpo = null;
+   * }
+   * &lt;p/&gt;
+   * if (cpo!=null) {
+   * 	ArrayList al = new ArrayList();
+   * 	for (int i=0; i&lt;3; i++){
+   * 		so = new SomeObject();
+   * 		so.setId(1);
+   * 		so.setName(&quot;SomeName&quot;);
+   * 		al.add(so);
+   *  }
+   * 	try{
+   * 		cpo.updateObjects(&quot;myUpdate&quot;,al);
+   *  } catch (CpoException ce) {
+   * 		// Handle the error
+   *  }
+   * }
+   * &lt;/code&gt;
+   * &lt;/pre&gt;
+   *
+   * @param name The String name of the UPDATE Function Group that will be used to create the object in the datasource.
+   *             null signifies that the default rules will be used.
+   * @param coll This is a collection of objects that have been defined within the metadata of the datasource. If the
+   *             class is not defined an exception will be thrown.
+   * @return The number of objects updated in the datasource
+   * @throws CpoException Thrown if there are errors accessing the datasource
+   */
+  @Override
+  public &lt;T&gt; long updateObjects(String name, Collection&lt;T&gt; coll) throws CpoException {
+<span class="nc" id="L1916">    return processUpdateGroup(coll, JdbcCpoAdapter.UPDATE_GROUP, name, null, null, null);</span>
+  }
+
+  /**
+   * Updates a collection of Objects in the datasource. The assumption is that the objects contained in the collection
+   * exist in the datasource. This method stores the object in the datasource. The objects in the collection will be
+   * treated as one transaction, meaning that if one of the objects fail being updated in the datasource then the entire
+   * collection will be rolled back, if supported by the datasource.
+   * &lt;p/&gt;
+   * &lt;pre&gt;Example:
+   * &lt;code&gt;
+   * &lt;p/&gt;
+   * class SomeObject so = null;
+   * class CpoAdapter cpo = null;
+   * &lt;p/&gt;
+   * try {
+   * 	cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));
+   * } catch (CpoException ce) {
+   * 	// Handle the error
+   * 	cpo = null;
+   * }
+   * &lt;p/&gt;
+   * if (cpo!=null) {
+   * 	ArrayList al = new ArrayList();
+   * 	for (int i=0; i&lt;3; i++){
+   * 		so = new SomeObject();
+   * 		so.setId(1);
+   * 		so.setName(&quot;SomeName&quot;);
+   * 		al.add(so);
+   *  }
+   * 	try{
+   * 		cpo.updateObjects(&quot;myUpdate&quot;,al);
+   *  } catch (CpoException ce) {
+   * 		// Handle the error
+   *  }
+   * }
+   * &lt;/code&gt;
+   * &lt;/pre&gt;
+   *
+   * @param name              The String name of the UPDATE Function Group that will be used to create the object in the datasource.
+   *                          null signifies that the default rules will be used.
+   * @param coll              This is a collection of objects that have been defined within the metadata of the datasource. If the
+   *                          class is not defined an exception will be thrown.
+   * @param wheres            A collection of CpoWhere objects to be used by the function
+   * @param orderBy           A collection of CpoOrderBy objects to be used by the function
+   * @param nativeExpressions A collection of CpoNativeFunction objects to be used by the function
+   * @return The number of objects updated in the datasource
+   * @throws CpoException Thrown if there are errors accessing the datasource
+   */
+  @Override
+  public &lt;T&gt; long updateObjects(String name, Collection&lt;T&gt; coll, Collection&lt;CpoWhere&gt; wheres, Collection&lt;CpoOrderBy&gt; orderBy, Collection&lt;CpoNativeFunction&gt; nativeExpressions) throws CpoException {
+<span class="nc" id="L1967">    return processUpdateGroup(coll, JdbcCpoAdapter.UPDATE_GROUP, name, wheres, orderBy, nativeExpressions);</span>
+  }
+
+  /**
+   * DOCUMENT ME!
+   *
+   * @param context DOCUMENT ME!
+   * @throws CpoException DOCUMENT ME!
+   */
+  protected void setContext(Context context) throws CpoException {
+    try {
+<span class="nc bnc" id="L1978" title="All 2 branches missed.">      if (context == null) {</span>
+<span class="nc" id="L1979">        context_ = new InitialContext();</span>
+      } else {
+<span class="nc" id="L1981">        context_ = context;</span>
+      }
+<span class="nc" id="L1983">    } catch (NamingException e) {</span>
+<span class="nc" id="L1984">      throw new CpoException(&quot;Error setting Context&quot;, e);</span>
+<span class="nc" id="L1985">    }</span>
+<span class="nc" id="L1986">  }</span>
+
+  /**
+   * DOCUMENT ME!
+   *
+   * @return DOCUMENT ME!
+   */
+  protected Context getContext() {
+<span class="nc" id="L1994">    return context_;</span>
+  }
+
+  /**
+   * DOCUMENT ME!
+   *
+   * @param obj  DOCUMENT ME!
+   * @param type DOCUMENT ME!
+   * @param name DOCUMENT ME!
+   * @param c    DOCUMENT ME!
+   * @return DOCUMENT ME!
+   * @throws CpoException DOCUMENT ME!
+   */
+  protected &lt;T&gt; String getGroupType(T obj, String type, String name, Connection c) throws CpoException {
+<span class="fc" id="L2008">    String retType = type;</span>
+    long objCount;
+
+<span class="pc bpc" id="L2011" title="1 of 2 branches missed.">    if (JdbcCpoAdapter.PERSIST_GROUP.equals(retType)) {</span>
+<span class="nc" id="L2012">      objCount = existsObject(name, obj, c, null);</span>
+
+<span class="nc bnc" id="L2014" title="All 2 branches missed.">      if (objCount == 0) {</span>
+<span class="nc" id="L2015">        retType = JdbcCpoAdapter.CREATE_GROUP;</span>
+<span class="nc bnc" id="L2016" title="All 2 branches missed.">      } else if (objCount == 1) {</span>
+<span class="nc" id="L2017">        retType = JdbcCpoAdapter.UPDATE_GROUP;</span>
+      } else {
+<span class="nc" id="L2019">        throw new CpoException(&quot;Persist can only UPDATE one record. Your EXISTS function returned 2 or more.&quot;);</span>
+      }
+    }
+
+<span class="fc" id="L2023">    return retType;</span>
+  }
+
+  /**
+   * DOCUMENT ME!
+   *
+   * @return DOCUMENT ME!
+   * @throws CpoException DOCUMENT ME!
+   */
+  protected Connection getReadConnection() throws CpoException {
+<span class="fc" id="L2033">    Connection connection = getStaticConnection();</span>
+
+<span class="fc bfc" id="L2035" title="All 2 branches covered.">    if (connection == null) {</span>
+      try {
+<span class="pc bpc" id="L2037" title="1 of 2 branches missed.">        if (!(invalidReadConnection_)) {</span>
+<span class="fc" id="L2038">          connection = getReadDataSource().getConnection();</span>
+        } else {
+<span class="nc" id="L2040">          connection = getWriteDataSource().getConnection();</span>
+        }
+<span class="fc" id="L2042">        connection.setAutoCommit(false);</span>
+<span class="nc" id="L2043">      } catch (Exception e) {</span>
+<span class="nc" id="L2044">        invalidReadConnection_ = true;</span>
+
+<span class="nc" id="L2046">        String msg = &quot;getReadConnection(): failed&quot;;</span>
+<span class="nc" id="L2047">        logger.error(msg, e);</span>
+
+        try {
+<span class="nc" id="L2050">          connection = getWriteDataSource().getConnection();</span>
+<span class="nc" id="L2051">          connection.setAutoCommit(false);</span>
+<span class="nc" id="L2052">        } catch (SQLException e2) {</span>
+<span class="nc" id="L2053">          msg = &quot;getWriteConnection(): failed&quot;;</span>
+<span class="nc" id="L2054">          logger.error(msg, e2);</span>
+<span class="nc" id="L2055">          throw new CpoException(msg, e2);</span>
+<span class="nc" id="L2056">        }</span>
+<span class="fc" id="L2057">      }</span>
+    }
+
+<span class="fc" id="L2060">    return connection;</span>
+  }
+
+  /**
+   * DOCUMENT ME!
+   *
+   * @return DOCUMENT ME!
+   * @throws CpoException DOCUMENT ME!
+   */
+  protected Connection getWriteConnection() throws CpoException {
+<span class="fc" id="L2070">    Connection connection = getStaticConnection();</span>
+
+<span class="fc bfc" id="L2072" title="All 2 branches covered.">    if (connection == null) {</span>
+      try {
+<span class="fc" id="L2074">        connection = getWriteDataSource().getConnection();</span>
+<span class="fc" id="L2075">        connection.setAutoCommit(false);</span>
+<span class="nc" id="L2076">      } catch (SQLException e) {</span>
+<span class="nc" id="L2077">        String msg = &quot;getWriteConnection(): failed&quot;;</span>
+<span class="nc" id="L2078">        logger.error(msg, e);</span>
+<span class="nc" id="L2079">        throw new CpoException(msg, e);</span>
+<span class="fc" id="L2080">      }</span>
+    }
+
+<span class="fc" id="L2083">    return connection;</span>
+  }
+
+  protected Connection getStaticConnection() throws CpoException {
+    // do nothing for JdbcCpoAdapter
+    // overridden by JdbcTrxAdapter
+<span class="fc" id="L2089">    return null;</span>
+  }
+
+  protected boolean isStaticConnection(Connection c) {
+    // do nothing for JdbcCpoAdapter
+    // overridden by JdbcTrxAdapter
+<span class="fc" id="L2095">    return false;</span>
+  }
+
+  protected void setStaticConnection(Connection c) {
+    // do nothing for JdbcCpoAdapter
+    // overridden by JdbcTrxAdapter
+<span class="nc" id="L2101">  }</span>
+
+  /**
+   * DOCUMENT ME!
+   *
+   * @param connection DOCUMENT ME!
+   */
+  protected void closeConnection(Connection connection) {
+    try {
+<span class="fc" id="L2110">      clearConnectionBusy(connection);</span>
+<span class="fc bfc" id="L2111" title="All 6 branches covered.">      if (connection != null &amp;&amp; !isStaticConnection(connection) &amp;&amp; !connection.isClosed()) {</span>
+<span class="fc" id="L2112">        connection.close();</span>
+      }
+<span class="nc" id="L2114">    } catch (SQLException e) {</span>
+<span class="nc bnc" id="L2115" title="All 2 branches missed.">      if (logger.isTraceEnabled()) {</span>
+<span class="nc" id="L2116">        logger.trace(e.getMessage());</span>
+      }
+<span class="fc" id="L2118">    }</span>
+<span class="fc" id="L2119">  }</span>
+
+  /**
+   * DOCUMENT ME!
+   *
+   * @param connection DOCUMENT ME!
+   */
+  protected void commitConnection(Connection connection) {
+    try {
+<span class="pc bpc" id="L2128" title="1 of 4 branches missed.">      if (connection != null &amp;&amp; !isStaticConnection(connection)) {</span>
+<span class="fc" id="L2129">        connection.commit();</span>
+      }
+<span class="nc" id="L2131">    } catch (SQLException e) {</span>
+<span class="nc bnc" id="L2132" title="All 2 branches missed.">      if (logger.isTraceEnabled()) {</span>
+<span class="nc" id="L2133">        logger.trace(e.getMessage());</span>
+      }
+<span class="fc" id="L2135">    }</span>
+<span class="fc" id="L2136">  }</span>
+
+  /**
+   * DOCUMENT ME!
+   *
+   * @param connection DOCUMENT ME!
+   */
+  protected void rollbackConnection(Connection connection) {
+    try {
+<span class="fc bfc" id="L2145" title="All 4 branches covered.">      if (connection != null &amp;&amp; !isStaticConnection(connection)) {</span>
+<span class="fc" id="L2146">        connection.rollback();</span>
+      }
+<span class="nc" id="L2148">    } catch (Exception e) {</span>
+<span class="nc bnc" id="L2149" title="All 2 branches missed.">      if (logger.isTraceEnabled()) {</span>
+<span class="nc" id="L2150">        logger.trace(e.getMessage());</span>
+      }
+<span class="fc" id="L2152">    }</span>
+<span class="fc" id="L2153">  }</span>
+
+  /**
+   * Executes an Object whose MetaData contains a stored procedure. An assumption is that the object exists in the
+   * datasource.
+   *
+   * @param name     The filter name which tells the datasource which objects should be returned. The name also signifies
+   *                 what data in the object will be populated.
+   * @param criteria This is an object that has been defined within the metadata of the datasource. If the class is not
+   *                 defined an exception will be thrown. If the object does not exist in the datasource, an exception will be thrown.
+   *                 This object is used to populate the IN arguments used to retrieve the collection of objects.
+   * @param result   This is an object that has been defined within the metadata of the datasource. If the class is not
+   *                 defined an exception will be thrown. If the object does not exist in the datasource, an exception will be thrown.
+   *                 This object defines the object type that will be returned in the
+   * @return A result object populate with the OUT arguments
+   * @throws CpoException DOCUMENT ME!
+   */
+  protected &lt;T, C&gt; T processExecuteGroup(String name, C criteria, T result) throws CpoException {
+<span class="nc" id="L2171">    Connection c = null;</span>
+<span class="nc" id="L2172">    T obj = null;</span>
+
+    try {
+<span class="nc" id="L2175">      c = getWriteConnection();</span>
+<span class="nc" id="L2176">      obj = processExecuteGroup(name, criteria, result, c);</span>
+<span class="nc" id="L2177">      commitConnection(c);</span>
+<span class="nc" id="L2178">    } catch (Exception e) {</span>
+      // Any exception has to try to rollback the work;
+<span class="nc" id="L2180">      rollbackConnection(c);</span>
+<span class="nc" id="L2181">      ExceptionHelper.reThrowCpoException(e, &quot;processExecuteGroup(String name, Object criteria, Object result) failed&quot;);</span>
+    } finally {
+<span class="nc" id="L2183">      closeConnection(c);</span>
+<span class="nc" id="L2184">    }</span>
+
+<span class="nc" id="L2186">    return obj;</span>
+  }
+
+  /**
+   * DOCUMENT ME!
+   *
+   * @param name     DOCUMENT ME!
+   * @param criteria DOCUMENT ME!
+   * @param result   DOCUMENT ME!
+   * @param conn     DOCUMENT ME!
+   * @return DOCUMENT ME!
+   * @throws CpoException DOCUMENT ME!
+   */
+  protected &lt;T, C&gt; T processExecuteGroup(String name, C criteria, T result, Connection conn) throws CpoException {
+<span class="nc" id="L2200">    CallableStatement cstmt = null;</span>
+    CpoClass criteriaClass;
+<span class="nc" id="L2202">    T returnObject = null;</span>
+<span class="nc bnc" id="L2203" title="All 2 branches missed.">    Logger localLogger = criteria == null ? logger : LoggerFactory.getLogger(criteria.getClass());</span>
+
+<span class="nc" id="L2205">    JdbcCallableStatementFactory jcsf = null;</span>
+
+<span class="nc bnc" id="L2207" title="All 4 branches missed.">    if (criteria == null || result == null) {</span>
+<span class="nc" id="L2208">      throw new CpoException(&quot;NULL Object passed into executeObject&quot;);</span>
+    }
+
+    try {
+<span class="nc" id="L2212">      criteriaClass = metaDescriptor.getMetaClass(criteria);</span>
+<span class="nc" id="L2213">      List&lt;CpoFunction&gt; functions = criteriaClass.getFunctionGroup(JdbcCpoAdapter.EXECUTE_GROUP, name).getFunctions();</span>
+<span class="nc" id="L2214">      localLogger.info(&quot;===================processExecuteGroup (&quot; + name + &quot;) Count&lt;&quot; + functions.size() + &quot;&gt;=========================&quot;);</span>
+
+      try {
+<span class="nc" id="L2217">        returnObject = (T) result.getClass().newInstance();</span>
+<span class="nc" id="L2218">      } catch (IllegalAccessException iae) {</span>
+<span class="nc" id="L2219">        throw new CpoException(&quot;Unable to access the constructor of the Return Object&quot;, iae);</span>
+<span class="nc" id="L2220">      } catch (InstantiationException iae) {</span>
+<span class="nc" id="L2221">        throw new CpoException(&quot;Unable to instantiate Return Object&quot;, iae);</span>
+<span class="nc" id="L2222">      }</span>
+
+      // Loop through the queries and process each one
+<span class="nc bnc" id="L2225" title="All 2 branches missed.">      for (CpoFunction function : functions) {</span>
+
+<span class="nc" id="L2227">        localLogger.debug(&quot;Executing Call:&quot; + criteriaClass.getName() + &quot;:&quot; + name);</span>
+
+<span class="nc" id="L2229">        jcsf = new JdbcCallableStatementFactory(conn, this, function, criteria);</span>
+<span class="nc" id="L2230">        cstmt = jcsf.getCallableStatement();</span>
+<span class="nc" id="L2231">        cstmt.execute();</span>
+<span class="nc" id="L2232">        jcsf.release();</span>
+
+<span class="nc" id="L2234">        localLogger.debug(&quot;Processing Call:&quot; + criteriaClass.getName() + &quot;:&quot; + name);</span>
+
+        // Add Code here to go through the arguments, find record sets,
+        // and process them
+        // Process the non-record set out params and make it the first
+        // object in the collection
+
+        // Loop through the OUT Parameters and set them in the result
+        // object
+<span class="nc" id="L2243">        int j = 1;</span>
+<span class="nc bnc" id="L2244" title="All 2 branches missed.">        for (CpoArgument cpoArgument : jcsf.getOutArguments()) {</span>
+<span class="nc" id="L2245">          JdbcCpoArgument jdbcArgument = (JdbcCpoArgument) cpoArgument;</span>
+<span class="nc bnc" id="L2246" title="All 2 branches missed.">          if (jdbcArgument.isOutParameter()) {</span>
+<span class="nc" id="L2247">            JdbcCpoAttribute jdbcAttribute = jdbcArgument.getAttribute();</span>
+<span class="nc" id="L2248">            jdbcAttribute.invokeSetter(returnObject, new CallableStatementCpoData(cstmt, jdbcAttribute, j));</span>
+          }
+<span class="nc" id="L2250">          j++;</span>
+<span class="nc" id="L2251">        }</span>
+
+<span class="nc" id="L2253">        cstmt.close();</span>
+<span class="nc" id="L2254">      }</span>
+<span class="nc" id="L2255">    } catch (Throwable t) {</span>
+<span class="nc" id="L2256">      String msg = &quot;ProcessExecuteGroup(String name, Object criteria, Object result, Connection conn) failed. SQL=&quot;;</span>
+<span class="nc" id="L2257">      localLogger.error(msg, t);</span>
+<span class="nc" id="L2258">      throw new CpoException(msg, t);</span>
+    } finally {
+<span class="nc" id="L2260">      statementClose(cstmt);</span>
+<span class="nc bnc" id="L2261" title="All 4 branches missed.">      if (jcsf != null) {</span>
+<span class="nc" id="L2262">        jcsf.release();</span>
+      }
+    }
+
+<span class="nc" id="L2266">    return returnObject;</span>
+  }
+
+  /**
+   * Retrieves the Object from the datasource.
+   *
+   * @param obj               This is an object that has been defined within the metadata of the datasource. If the class is not
+   *                          defined an exception will be thrown. The input object is used to specify the search criteria.
+   * @param groupName         The name which identifies which RETRIEVE Function Group to execute to retrieve the object.
+   * @param wheres            A collection of CpoWhere objects to be used by the function
+   * @param orderBy           A collection of CpoOrderBy objects to be used by the function
+   * @param nativeExpressions A collection of CpoNativeFunction objects to be used by the function
+   * @return A populated object of the same type as the Object passed in as a argument. If no objects match the criteria
+   *         a NULL will be returned.
+   * @throws CpoException the retrieve function defined for this objects returns more than one row, an exception will be
+   *                      thrown.
+   */
+  protected &lt;T&gt; T processSelectGroup(T obj, String groupName, Collection&lt;CpoWhere&gt; wheres, Collection&lt;CpoOrderBy&gt; orderBy, Collection&lt;CpoNativeFunction&gt; nativeExpressions) throws CpoException {
+<span class="fc" id="L2284">    Connection c = null;</span>
+<span class="fc" id="L2285">    T result = null;</span>
+
+    try {
+<span class="fc" id="L2288">      c = getReadConnection();</span>
+<span class="fc" id="L2289">      result = processSelectGroup(obj, groupName, wheres, orderBy, nativeExpressions, c);</span>
+
+      // The select may have a for update clause on it
+      // Since the connection is cached we need to get rid of this
+<span class="fc" id="L2293">      commitConnection(c);</span>
+<span class="nc" id="L2294">    } catch (Exception e) {</span>
+      // Any exception has to try to rollback the work;
+<span class="nc" id="L2296">      rollbackConnection(c);</span>
+<span class="nc" id="L2297">      ExceptionHelper.reThrowCpoException(e, &quot;processSelectGroup(Object obj, String groupName) failed&quot;);</span>
+    } finally {
+<span class="pc" id="L2299">      closeConnection(c);</span>
+<span class="pc" id="L2300">    }</span>
+
+<span class="fc" id="L2302">    return result;</span>
+  }
+
+  /**
+   * DOCUMENT ME!
+   *
+   * @param obj       DOCUMENT ME!
+   * @param groupName DOCUMENT ME!
+   * @param con       DOCUMENT ME!
+   * @return DOCUMENT ME!
+   * @throws CpoException DOCUMENT ME!
+   */
+  protected &lt;T&gt; T processSelectGroup(T obj, String groupName, Collection&lt;CpoWhere&gt; wheres, Collection&lt;CpoOrderBy&gt; orderBy, Collection&lt;CpoNativeFunction&gt; nativeExpressions, Connection con) throws CpoException {
+<span class="fc" id="L2315">    PreparedStatement ps = null;</span>
+<span class="fc" id="L2316">    ResultSet rs = null;</span>
+    ResultSetMetaData rsmd;
+    CpoClass cpoClass;
+    JdbcCpoAttribute attribute;
+<span class="fc" id="L2320">    T criteriaObj = obj;</span>
+<span class="fc" id="L2321">    boolean recordsExist = false;</span>
+<span class="fc bfc" id="L2322" title="All 2 branches covered.">    Logger localLogger = obj == null ? logger : LoggerFactory.getLogger(obj.getClass());</span>
+
+<span class="fc" id="L2324">    int recordCount = 0;</span>
+<span class="fc" id="L2325">    int attributesSet = 0;</span>
+
+    int k;
+<span class="fc" id="L2328">    T rObj = null;</span>
+
+<span class="fc bfc" id="L2330" title="All 2 branches covered.">    if (obj == null) {</span>
+<span class="fc" id="L2331">      throw new CpoException(&quot;NULL Object passed into retrieveBean&quot;);</span>
+    }
+
+    try {
+<span class="fc" id="L2335">      cpoClass = metaDescriptor.getMetaClass(criteriaObj);</span>
+<span class="fc" id="L2336">      List&lt;CpoFunction&gt; functions = cpoClass.getFunctionGroup(JdbcCpoAdapter.RETRIEVE_GROUP, groupName).getFunctions();</span>
+
+<span class="fc" id="L2338">      localLogger.info(&quot;=================== Class=&lt;&quot; + criteriaObj.getClass() + &quot;&gt; Type=&lt;&quot; + JdbcCpoAdapter.RETRIEVE_GROUP + &quot;&gt; Name=&lt;&quot; + groupName + &quot;&gt; =========================&quot;);</span>
+
+      try {
+<span class="fc" id="L2341">        rObj = (T) obj.getClass().newInstance();</span>
+<span class="nc" id="L2342">      } catch (IllegalAccessException iae) {</span>
+<span class="nc" id="L2343">        localLogger.error(&quot;=================== Could not access default constructor for Class=&lt;&quot; + obj.getClass() + &quot;&gt; ==================&quot;);</span>
+<span class="nc" id="L2344">        throw new CpoException(&quot;Unable to access the constructor of the Return Object&quot;, iae);</span>
+<span class="nc" id="L2345">      } catch (InstantiationException iae) {</span>
+<span class="nc" id="L2346">        throw new CpoException(&quot;Unable to instantiate Return Object&quot;, iae);</span>
+<span class="fc" id="L2347">      }</span>
+
+<span class="fc bfc" id="L2349" title="All 2 branches covered.">      for (CpoFunction cpoFunction : functions) {</span>
+
+<span class="fc" id="L2351">        JdbcPreparedStatementFactory jpsf = new JdbcPreparedStatementFactory(con, this, cpoClass, cpoFunction, criteriaObj, wheres, orderBy, nativeExpressions);</span>
+<span class="fc" id="L2352">        ps = jpsf.getPreparedStatement();</span>
+
+        // insertions on
+        // selectgroup
+<span class="fc" id="L2356">        rs = ps.executeQuery();</span>
+<span class="fc" id="L2357">        jpsf.release();</span>
+
+<span class="fc bfc" id="L2359" title="All 2 branches covered.">        if (rs.isBeforeFirst()) {</span>
+<span class="fc" id="L2360">          rsmd = rs.getMetaData();</span>
+
+<span class="pc bpc" id="L2362" title="5 of 6 branches missed.">          if ((rsmd.getColumnCount() == 2) &amp;&amp; &quot;CPO_ATTRIBUTE&quot;.equalsIgnoreCase(rsmd.getColumnLabel(1)) &amp;&amp; &quot;CPO_VALUE&quot;.equalsIgnoreCase(rsmd.getColumnLabel(2))) {</span>
+<span class="nc bnc" id="L2363" title="All 2 branches missed.">            while (rs.next()) {</span>
+<span class="nc" id="L2364">              recordsExist = true;</span>
+<span class="nc" id="L2365">              recordCount++;</span>
+<span class="nc" id="L2366">              attribute = (JdbcCpoAttribute) cpoClass.getAttributeData(rs.getString(1));</span>
+
+<span class="nc bnc" id="L2368" title="All 2 branches missed.">              if (attribute != null) {</span>
+<span class="nc" id="L2369">                attribute.invokeSetter(rObj, new ResultSetCpoData(JdbcMethodMapper.getMethodMapper(), rs, attribute, 2));</span>
+<span class="nc" id="L2370">                attributesSet++;</span>
+              }
+            }
+<span class="pc bpc" id="L2373" title="1 of 2 branches missed.">          } else if (rs.next()) {</span>
+<span class="fc" id="L2374">            recordsExist = true;</span>
+<span class="fc" id="L2375">            recordCount++;</span>
+<span class="fc bfc" id="L2376" title="All 2 branches covered.">            for (k = 1; k &lt;= rsmd.getColumnCount(); k++) {</span>
+<span class="fc" id="L2377">              attribute = (JdbcCpoAttribute) cpoClass.getAttributeData(rsmd.getColumnLabel(k));</span>
+
+<span class="fc bfc" id="L2379" title="All 2 branches covered.">              if (attribute != null) {</span>
+<span class="fc" id="L2380">                attribute.invokeSetter(rObj, new ResultSetCpoData(JdbcMethodMapper.getMethodMapper(), rs, attribute, k));</span>
+<span class="fc" id="L2381">                attributesSet++;</span>
+              }
+            }
+
+<span class="pc bpc" id="L2385" title="1 of 2 branches missed.">            if (rs.next()) {</span>
+<span class="nc" id="L2386">              String msg = &quot;ProcessSelectGroup(Object, String) failed: Multiple Records Returned&quot;;</span>
+<span class="nc" id="L2387">              localLogger.error(msg);</span>
+<span class="nc" id="L2388">              throw new CpoException(msg);</span>
+            }
+          }
+<span class="fc" id="L2391">          criteriaObj = rObj;</span>
+        }
+
+<span class="fc" id="L2394">        rs.close();</span>
+<span class="fc" id="L2395">        rs = null;</span>
+<span class="fc" id="L2396">        ps.close();</span>
+<span class="fc" id="L2397">        ps = null;</span>
+<span class="fc" id="L2398">      }</span>
+
+<span class="fc bfc" id="L2400" title="All 2 branches covered.">      if (!recordsExist) {</span>
+<span class="fc" id="L2401">        rObj = null;</span>
+<span class="fc" id="L2402">        localLogger.info(&quot;=================== 0 Records - 0 Attributes - Class=&lt;&quot; + criteriaObj.getClass() + &quot;&gt; Type=&lt;&quot; + JdbcCpoAdapter.RETRIEVE_GROUP + &quot;&gt; Name=&lt;&quot; + groupName + &quot;&gt; =========================&quot;);</span>
+      } else {
+<span class="fc" id="L2404">        localLogger.info(&quot;=================== &quot; + recordCount + &quot; Records - &quot; + attributesSet + &quot; Attributes - Class=&lt;&quot; + criteriaObj.getClass() + &quot;&gt;  Type=&lt;&quot; + JdbcCpoAdapter.RETRIEVE_GROUP + &quot;&gt; Name=&lt;&quot; + groupName + &quot;&gt; =========================&quot;);</span>
+      }
+<span class="nc" id="L2406">    } catch (Throwable t) {</span>
+<span class="nc" id="L2407">      String msg = &quot;ProcessSeclectGroup(Object) failed: &quot; + ExceptionHelper.getLocalizedMessage(t);</span>
+<span class="nc" id="L2408">      localLogger.error(msg, t);</span>
+<span class="nc" id="L2409">      rObj = null;</span>
+<span class="nc" id="L2410">      throw new CpoException(msg, t);</span>
+    } finally {
+<span class="pc" id="L2412">      resultSetClose(rs);</span>
+<span class="pc" id="L2413">      statementClose(ps);</span>
+<span class="fc" id="L2414">    }</span>
+
+<span class="fc" id="L2416">    return rObj;</span>
+  }
+
+  /**
+   * DOCUMENT ME!
+   *
+   * @param name        DOCUMENT ME!
+   * @param criteria    DOCUMENT ME!
+   * @param result      DOCUMENT ME!
+   * @param wheres      DOCUMENT ME!
+   * @param orderBy     DOCUMENT ME!
+   * @param useRetrieve DOCUMENT ME!
+   * @return DOCUMENT ME!
+   * @throws CpoException DOCUMENT ME!
+   */
+  protected &lt;T, C&gt; List&lt;T&gt; processSelectGroup(String name, C criteria, T result, Collection&lt;CpoWhere&gt; wheres, Collection&lt;CpoOrderBy&gt; orderBy, Collection&lt;CpoNativeFunction&gt; nativeExpressions,
+                                              boolean useRetrieve) throws CpoException {
+<span class="fc" id="L2433">    Connection con = null;</span>
+<span class="fc" id="L2434">    CpoArrayResultSet&lt;T&gt; resultSet = new CpoArrayResultSet&lt;&gt;();</span>
+
+    try {
+<span class="fc" id="L2437">      con = getReadConnection();</span>
+<span class="fc" id="L2438">      processSelectGroup(name, criteria, result, wheres, orderBy, nativeExpressions, con, useRetrieve, resultSet);</span>
+      // The select may have a for update clause on it
+      // Since the connection is cached we need to get rid of this
+<span class="fc" id="L2441">      commitConnection(con);</span>
+<span class="nc" id="L2442">    } catch (Exception e) {</span>
+      // Any exception has to try to rollback the work;
+<span class="nc" id="L2444">      rollbackConnection(con);</span>
+<span class="nc" id="L2445">      ExceptionHelper.reThrowCpoException(e, &quot;processSelectGroup(String name, Object criteria, Object result,CpoWhere where, Collection orderBy, boolean useRetrieve) failed&quot;);</span>
+    } finally {
+<span class="pc" id="L2447">      closeConnection(con);</span>
+<span class="pc" id="L2448">    }</span>
+
+<span class="fc" id="L2450">    return resultSet;</span>
+  }
+
+  protected &lt;T, C&gt; void processSelectGroup(String name, C criteria, T result, Collection&lt;CpoWhere&gt; wheres, Collection&lt;CpoOrderBy&gt; orderBy, Collection&lt;CpoNativeFunction&gt; nativeExpressions,
+                                           boolean useRetrieve, CpoResultSet&lt;T&gt; resultSet) throws CpoException {
+<span class="fc" id="L2455">    Connection con = null;</span>
+
+    try {
+<span class="fc" id="L2458">      con = getReadConnection();</span>
+<span class="fc" id="L2459">      processSelectGroup(name, criteria, result, wheres, orderBy, nativeExpressions, con, useRetrieve, resultSet);</span>
+      // The select may have a for update clause on it
+      // Since the connection is cached we need to get rid of this
+<span class="fc" id="L2462">      commitConnection(con);</span>
+<span class="nc" id="L2463">    } catch (Exception e) {</span>
+      // Any exception has to try to rollback the work;
+<span class="nc" id="L2465">      rollbackConnection(con);</span>
+<span class="nc" id="L2466">      ExceptionHelper.reThrowCpoException(e, &quot;processSelectGroup(String name, Object criteria, Object result,CpoWhere where, Collection orderBy, boolean useRetrieve) failed&quot;);</span>
+    } finally {
+<span class="pc" id="L2468">      closeConnection(con);</span>
+<span class="pc" id="L2469">    }</span>
+<span class="fc" id="L2470">  }</span>
+
+  /**
+   * DOCUMENT ME!
+   *
+   * @param name        DOCUMENT ME!
+   * @param criteria    DOCUMENT ME!
+   * @param result      DOCUMENT ME!
+   * @param wheres      DOCUMENT ME!
+   * @param orderBy     DOCUMENT ME!
+   * @param con         DOCUMENT ME!
+   * @param useRetrieve DOCUMENT ME!
+   * @throws CpoException DOCUMENT ME!
+   */
+  protected &lt;T, C&gt; void processSelectGroup(String name, C criteria, T result, Collection&lt;CpoWhere&gt; wheres, Collection&lt;CpoOrderBy&gt; orderBy, Collection&lt;CpoNativeFunction&gt; nativeExpressions, Connection con, boolean useRetrieve, CpoResultSet&lt;T&gt; resultSet) throws CpoException {
+<span class="fc bfc" id="L2485" title="All 2 branches covered.">    Logger localLogger = criteria == null ? logger : LoggerFactory.getLogger(criteria.getClass());</span>
+<span class="fc" id="L2486">    PreparedStatement ps = null;</span>
+    List&lt;CpoFunction&gt; cpoFunctions;
+    CpoClass criteriaClass;
+    CpoClass resultClass;
+<span class="fc" id="L2490">    ResultSet rs = null;</span>
+    ResultSetMetaData rsmd;
+    int columnCount;
+    int k;
+    T obj;
+    JdbcCpoAttribute[] attributes;
+    JdbcPreparedStatementFactory jpsf;
+    int i;
+
+<span class="pc bpc" id="L2499" title="1 of 4 branches missed.">    if (criteria == null || result == null) {</span>
+<span class="fc" id="L2500">      throw new CpoException(&quot;NULL Object passed into retrieveBean or retrieveBeans&quot;);</span>
+    }
+
+    try {
+<span class="fc" id="L2504">      criteriaClass = metaDescriptor.getMetaClass(criteria);</span>
+<span class="fc" id="L2505">      resultClass = metaDescriptor.getMetaClass(result);</span>
+<span class="fc bfc" id="L2506" title="All 2 branches covered.">      if (useRetrieve) {</span>
+<span class="fc" id="L2507">        localLogger.info(&quot;=================== Class=&lt;&quot; + criteria.getClass() + &quot;&gt; Type=&lt;&quot; + JdbcCpoAdapter.RETRIEVE_GROUP + &quot;&gt; Name=&lt;&quot; + name + &quot;&gt; =========================&quot;);</span>
+<span class="fc" id="L2508">        cpoFunctions = criteriaClass.getFunctionGroup(JdbcCpoAdapter.RETRIEVE_GROUP, name).getFunctions();</span>
+      } else {
+<span class="fc" id="L2510">        localLogger.info(&quot;=================== Class=&lt;&quot; + criteria.getClass() + &quot;&gt; Type=&lt;&quot; + JdbcCpoAdapter.LIST_GROUP + &quot;&gt; Name=&lt;&quot; + name + &quot;&gt; =========================&quot;);</span>
+<span class="fc" id="L2511">        cpoFunctions = criteriaClass.getFunctionGroup(JdbcCpoAdapter.LIST_GROUP, name).getFunctions();</span>
+      }
+
+<span class="fc bfc" id="L2514" title="All 2 branches covered.">      for (CpoFunction cpoFunction : cpoFunctions) {</span>
+<span class="fc" id="L2515">        jpsf = new JdbcPreparedStatementFactory(con, this, criteriaClass, cpoFunction, criteria, wheres, orderBy, nativeExpressions);</span>
+<span class="fc" id="L2516">        ps = jpsf.getPreparedStatement();</span>
+<span class="fc bfc" id="L2517" title="All 2 branches covered.">        if (resultSet.getFetchSize() != -1) {</span>
+<span class="fc" id="L2518">          ps.setFetchSize(resultSet.getFetchSize());</span>
+        }
+
+<span class="fc" id="L2521">        localLogger.debug(&quot;Retrieving Records&quot;);</span>
+
+<span class="fc" id="L2523">        rs = ps.executeQuery();</span>
+<span class="fc" id="L2524">        jpsf.release();</span>
+
+<span class="fc" id="L2526">        localLogger.debug(&quot;Processing Records&quot;);</span>
+
+<span class="fc" id="L2528">        rsmd = rs.getMetaData();</span>
+
+<span class="fc" id="L2530">        columnCount = rsmd.getColumnCount();</span>
+
+<span class="fc" id="L2532">        attributes = new JdbcCpoAttribute[columnCount + 1];</span>
+
+<span class="fc bfc" id="L2534" title="All 2 branches covered.">        for (k = 1; k &lt;= columnCount; k++) {</span>
+<span class="fc" id="L2535">          attributes[k] = (JdbcCpoAttribute) resultClass.getAttributeData(rsmd.getColumnLabel(k));</span>
+        }
+
+<span class="fc bfc" id="L2538" title="All 2 branches covered.">        while (rs.next()) {</span>
+          try {
+<span class="fc" id="L2540">            obj = (T) result.getClass().newInstance();</span>
+<span class="nc" id="L2541">          } catch (IllegalAccessException iae) {</span>
+<span class="nc" id="L2542">            localLogger.error(&quot;=================== Could not access default constructor for Class=&lt;&quot; + result.getClass() + &quot;&gt; ==================&quot;);</span>
+<span class="nc" id="L2543">            throw new CpoException(&quot;Unable to access the constructor of the Return Object&quot;, iae);</span>
+<span class="nc" id="L2544">          } catch (InstantiationException iae) {</span>
+<span class="nc" id="L2545">            throw new CpoException(&quot;Unable to instantiate Return Object&quot;, iae);</span>
+<span class="fc" id="L2546">          }</span>
+
+<span class="fc bfc" id="L2548" title="All 2 branches covered.">          for (k = 1; k &lt;= columnCount; k++) {</span>
+<span class="fc bfc" id="L2549" title="All 2 branches covered.">            if (attributes[k] != null) {</span>
+<span class="fc" id="L2550">              attributes[k].invokeSetter(obj, new ResultSetCpoData(JdbcMethodMapper.getMethodMapper(), rs, attributes[k], k));</span>
+            }
+          }
+
+          try {
+<span class="fc" id="L2555">            resultSet.put(obj);</span>
+<span class="nc" id="L2556">          } catch (InterruptedException e) {</span>
+<span class="nc" id="L2557">            localLogger.error(&quot;Retriever Thread was interrupted&quot;, e);</span>
+<span class="nc" id="L2558">            break;</span>
+<span class="fc" id="L2559">          }</span>
+        }
+
+<span class="fc" id="L2562">        resultSetClose(rs);</span>
+<span class="fc" id="L2563">        statementClose(ps);</span>
+
+<span class="fc" id="L2565">        localLogger.info(&quot;=================== &quot; + resultSet.size() + &quot; Records - Class=&lt;&quot; + criteria.getClass() + &quot;&gt; Type=&lt;&quot; + JdbcCpoAdapter.LIST_GROUP + &quot;&gt; Name=&lt;&quot; + name + &quot;&gt; Result=&lt;&quot; + result.getClass() + &quot;&gt; ====================&quot;);</span>
+<span class="fc" id="L2566">      }</span>
+<span class="fc" id="L2567">    } catch (Throwable t) {</span>
+<span class="fc" id="L2568">      String msg = &quot;ProcessSelectGroup(String name, Object criteria, Object result, CpoWhere where, Collection orderBy, Connection con) failed. Error:&quot;;</span>
+<span class="fc" id="L2569">      localLogger.error(msg, t);</span>
+<span class="fc" id="L2570">      throw new CpoException(msg, t);</span>
+    } finally {
+<span class="fc" id="L2572">      resultSetClose(rs);</span>
+<span class="fc" id="L2573">      statementClose(ps);</span>
+<span class="fc" id="L2574">    }</span>
+<span class="fc" id="L2575">  }</span>
+
+  /**
+   * DOCUMENT ME!
+   *
+   * @param obj       DOCUMENT ME!
+   * @param groupType DOCUMENT ME!
+   * @param groupName DOCUMENT ME!
+   * @return DOCUMENT ME!
+   * @throws CpoException DOCUMENT ME!
+   */
+  protected &lt;T&gt; long processUpdateGroup(T obj, String groupType, String groupName, Collection&lt;CpoWhere&gt; wheres, Collection&lt;CpoOrderBy&gt; orderBy, Collection&lt;CpoNativeFunction&gt; nativeExpressions) throws CpoException {
+<span class="fc" id="L2587">    Connection c = null;</span>
+<span class="fc" id="L2588">    long updateCount = 0;</span>
+
+    try {
+<span class="fc" id="L2591">      c = getWriteConnection();</span>
+<span class="fc" id="L2592">      updateCount = processUpdateGroup(obj, groupType, groupName, wheres, orderBy, nativeExpressions, c);</span>
+<span class="fc" id="L2593">      commitConnection(c);</span>
+<span class="nc" id="L2594">    } catch (Exception e) {</span>
+      // Any exception has to try to rollback the work;
+<span class="nc" id="L2596">      rollbackConnection(c);</span>
+<span class="nc" id="L2597">      ExceptionHelper.reThrowCpoException(e, &quot;processUdateGroup(Object obj, String groupType, String groupName) failed&quot;);</span>
+    } finally {
+<span class="pc" id="L2599">      closeConnection(c);</span>
+<span class="pc" id="L2600">    }</span>
+
+<span class="fc" id="L2602">    return updateCount;</span>
+  }
+
+  /**
+   * DOCUMENT ME!
+   *
+   * @param obj       DOCUMENT ME!
+   * @param groupType DOCUMENT ME!
+   * @param groupName DOCUMENT ME!
+   * @param con       DOCUMENT ME!
+   * @return DOCUMENT ME!
+   * @throws CpoException DOCUMENT ME!
+   */
+  protected &lt;T&gt; long processUpdateGroup(T obj, String groupType, String groupName, Collection&lt;CpoWhere&gt; wheres, Collection&lt;CpoOrderBy&gt; orderBy, Collection&lt;CpoNativeFunction&gt; nativeExpressions, Connection con) throws CpoException {
+<span class="fc bfc" id="L2616" title="All 2 branches covered.">    Logger localLogger = obj == null ? logger : LoggerFactory.getLogger(obj.getClass());</span>
+    CpoClass cpoClass;
+<span class="fc" id="L2618">    PreparedStatement ps = null;</span>
+
+<span class="fc" id="L2620">    JdbcPreparedStatementFactory jpsf = null;</span>
+<span class="fc" id="L2621">    long updateCount = 0;</span>
+
+<span class="fc bfc" id="L2623" title="All 2 branches covered.">    if (obj == null) {</span>
+<span class="fc" id="L2624">      throw new CpoException(&quot;NULL Object passed into insertObject, deleteObject, updateObject, or persistObject&quot;);</span>
+    }
+
+    try {
+<span class="fc" id="L2628">      cpoClass = metaDescriptor.getMetaClass(obj);</span>
+<span class="fc" id="L2629">      List&lt;CpoFunction&gt; cpoFunctions = cpoClass.getFunctionGroup(getGroupType(obj, groupType, groupName, con), groupName).getFunctions();</span>
+<span class="fc" id="L2630">      localLogger.info(&quot;=================== Class=&lt;&quot; + obj.getClass() + &quot;&gt; Type=&lt;&quot; + groupType + &quot;&gt; Name=&lt;&quot; + groupName + &quot;&gt; =========================&quot;);</span>
+
+<span class="fc" id="L2632">      int numRows = 0;</span>
+
+<span class="fc bfc" id="L2634" title="All 2 branches covered.">      for (CpoFunction cpoFunction : cpoFunctions) {</span>
+<span class="fc" id="L2635">        jpsf = new JdbcPreparedStatementFactory(con, this, cpoClass, cpoFunction, obj, wheres, orderBy, nativeExpressions);</span>
+<span class="fc" id="L2636">        ps = jpsf.getPreparedStatement();</span>
+<span class="fc" id="L2637">        numRows += ps.executeUpdate();</span>
+<span class="fc" id="L2638">        jpsf.release();</span>
+<span class="fc" id="L2639">        ps.close();</span>
+<span class="fc" id="L2640">      }</span>
+<span class="fc" id="L2641">      localLogger.info(&quot;=================== &quot; + numRows + &quot; Updates - Class=&lt;&quot; + obj.getClass() + &quot;&gt; Type=&lt;&quot; + groupType + &quot;&gt; Name=&lt;&quot; + groupName + &quot;&gt; =========================&quot;);</span>
+
+<span class="fc bfc" id="L2643" title="All 2 branches covered.">      if (numRows &gt; 0) {</span>
+<span class="fc" id="L2644">        updateCount++;</span>
+      }
+<span class="fc" id="L2646">    } catch (Throwable t) {</span>
+<span class="fc" id="L2647">      String msg = &quot;ProcessUpdateGroup failed:&quot; + groupType + &quot;,&quot; + groupName + &quot;,&quot; + obj.getClass().getName();</span>
+      // TODO FIX THIS
+      // localLogger.error(&quot;bound values:&quot; + this.parameterToString(jq));
+<span class="fc" id="L2650">      localLogger.error(msg, t);</span>
+<span class="fc" id="L2651">      throw new CpoException(msg, t);</span>
+    } finally {
+<span class="fc" id="L2653">      statementClose(ps);</span>
+<span class="pc bpc" id="L2654" title="2 of 4 branches missed.">      if (jpsf != null) {</span>
+<span class="fc" id="L2655">        jpsf.release();</span>
+      }
+    }
+
+<span class="fc" id="L2659">    return updateCount;</span>
+  }
+
+  /**
+   * DOCUMENT ME!
+   *
+   * @param arr       DOCUMENT ME!
+   * @param groupType DOCUMENT ME!
+   * @param groupName DOCUMENT ME!
+   * @param con       DOCUMENT ME!
+   * @return DOCUMENT ME!
+   * @throws CpoException DOCUMENT ME!
+   */
+  protected &lt;T&gt; long processBatchUpdateGroup(T[] arr, String groupType, String groupName, Collection&lt;CpoWhere&gt; wheres, Collection&lt;CpoOrderBy&gt; orderBy, Collection&lt;CpoNativeFunction&gt; nativeExpressions, Connection con) throws CpoException {
+    CpoClass jmc;
+    List&lt;CpoFunction&gt; cpoFunctions;
+<span class="fc" id="L2675">    PreparedStatement ps = null;</span>
+    CpoFunction cpoFunction;
+<span class="fc" id="L2677">    JdbcPreparedStatementFactory jpsf = null;</span>
+<span class="fc" id="L2678">    long updateCount = 0;</span>
+    int[] updates;
+<span class="fc" id="L2680">    Logger localLogger = logger;</span>
+
+    try {
+<span class="fc" id="L2683">      jmc = metaDescriptor.getMetaClass(arr[0]);</span>
+<span class="fc" id="L2684">      cpoFunctions = jmc.getFunctionGroup(getGroupType(arr[0], groupType, groupName, con), groupName).getFunctions();</span>
+<span class="fc" id="L2685">      localLogger = LoggerFactory.getLogger(jmc.getMetaClass());</span>
+
+<span class="fc" id="L2687">      int numRows = 0;</span>
+
+      // Only Batch if there is only one function
+<span class="pc bpc" id="L2690" title="1 of 2 branches missed.">      if (cpoFunctions.size() == 1) {</span>
+<span class="fc" id="L2691">        localLogger.info(&quot;=================== BATCH - Class=&lt;&quot; + arr[0].getClass() + &quot;&gt; Type=&lt;&quot; + groupType + &quot;&gt; Name=&lt;&quot; + groupName + &quot;&gt; =========================&quot;);</span>
+<span class="fc" id="L2692">        cpoFunction = cpoFunctions.get(0);</span>
+<span class="fc" id="L2693">        jpsf = new JdbcPreparedStatementFactory(con, this, jmc, cpoFunction, arr[0], wheres, orderBy, nativeExpressions);</span>
+<span class="fc" id="L2694">        ps = jpsf.getPreparedStatement();</span>
+<span class="fc" id="L2695">        ps.addBatch();</span>
+<span class="fc bfc" id="L2696" title="All 2 branches covered.">        for (int j = 1; j &lt; arr.length; j++) {</span>
+//          jpsf.bindParameters(arr[j]);
+<span class="fc" id="L2698">          jpsf.setBindValues(jpsf.getBindValues(cpoFunction, arr[j]));</span>
+<span class="fc" id="L2699">          ps.addBatch();</span>
+        }
+<span class="fc" id="L2701">        updates = ps.executeBatch();</span>
+<span class="fc" id="L2702">        jpsf.release();</span>
+<span class="fc" id="L2703">        ps.close();</span>
+<span class="fc bfc" id="L2704" title="All 2 branches covered.">        for (int update : updates) {</span>
+<span class="pc bpc" id="L2705" title="3 of 4 branches missed.">          if (update &lt; 0 &amp;&amp; update == PreparedStatement.SUCCESS_NO_INFO) {</span>
+            // something updated but we do not know what or how many so default to one.
+<span class="nc" id="L2707">            numRows++;</span>
+          } else {
+<span class="fc" id="L2709">            numRows += update;</span>
+          }
+        }
+<span class="fc" id="L2712">        localLogger.info(&quot;=================== BATCH - &quot; + numRows + &quot; Updates - Class=&lt;&quot; + arr[0].getClass() + &quot;&gt; Type=&lt;&quot; + groupType + &quot;&gt; Name=&lt;&quot; + groupName + &quot;&gt; =========================&quot;);</span>
+      } else {
+<span class="nc" id="L2714">        localLogger.info(&quot;=================== Class=&lt;&quot; + arr[0].getClass() + &quot;&gt; Type=&lt;&quot; + groupType + &quot;&gt; Name=&lt;&quot; + groupName + &quot;&gt; =========================&quot;);</span>
+<span class="nc bnc" id="L2715" title="All 2 branches missed.">        for (T obj : arr) {</span>
+<span class="nc bnc" id="L2716" title="All 2 branches missed.">          for (CpoFunction function : cpoFunctions) {</span>
+<span class="nc" id="L2717">            jpsf = new JdbcPreparedStatementFactory(con, this, jmc, function, obj, wheres, orderBy, nativeExpressions);</span>
+<span class="nc" id="L2718">            ps = jpsf.getPreparedStatement();</span>
+<span class="nc" id="L2719">            numRows += ps.executeUpdate();</span>
+<span class="nc" id="L2720">            jpsf.release();</span>
+<span class="nc" id="L2721">            ps.close();</span>
+<span class="nc" id="L2722">          }</span>
+        }
+<span class="nc" id="L2724">        localLogger.info(&quot;=================== &quot; + numRows + &quot; Updates - Class=&lt;&quot; + arr[0].getClass() + &quot;&gt; Type=&lt;&quot; + groupType + &quot;&gt; Name=&lt;&quot; + groupName + &quot;&gt; =========================&quot;);</span>
+      }
+
+<span class="fc bfc" id="L2727" title="All 2 branches covered.">      if (numRows &gt; 0) {</span>
+<span class="fc" id="L2728">        updateCount = numRows;</span>
+      }
+<span class="fc" id="L2730">    } catch (Throwable t) {</span>
+<span class="fc" id="L2731">      String msg = &quot;ProcessUpdateGroup failed:&quot; + groupType + &quot;,&quot; + groupName + &quot;,&quot; + arr[0].getClass().getName();</span>
+      // TODO FIX This
+      // localLogger.error(&quot;bound values:&quot; + this.parameterToString(jq));
+<span class="fc" id="L2734">      localLogger.error(msg, t);</span>
+<span class="fc" id="L2735">      throw new CpoException(msg, t);</span>
+    } finally {
+<span class="fc" id="L2737">      statementClose(ps);</span>
+<span class="pc bpc" id="L2738" title="2 of 4 branches missed.">      if (jpsf != null) {</span>
+<span class="fc" id="L2739">        jpsf.release();</span>
+      }
+    }
+
+<span class="fc" id="L2743">    return updateCount;</span>
+  }
+
+  /**
+   * DOCUMENT ME!
+   *
+   * @param coll      DOCUMENT ME!
+   * @param groupType DOCUMENT ME!
+   * @param groupName DOCUMENT ME!
+   * @return DOCUMENT ME!
+   * @throws CpoException DOCUMENT ME!
+   */
+  protected &lt;T&gt; long processUpdateGroup(Collection&lt;T&gt; coll, String groupType, String groupName, Collection&lt;CpoWhere&gt; wheres, Collection&lt;CpoOrderBy&gt; orderBy, Collection&lt;CpoNativeFunction&gt; nativeExpressions) throws CpoException {
+<span class="fc" id="L2756">    Connection c = null;</span>
+<span class="fc" id="L2757">    long updateCount = 0;</span>
+
+    try {
+<span class="fc" id="L2760">      c = getWriteConnection();</span>
+
+<span class="fc" id="L2762">      updateCount = processUpdateGroup(coll, groupType, groupName, wheres, orderBy, nativeExpressions, c);</span>
+<span class="fc" id="L2763">      commitConnection(c);</span>
+<span class="nc" id="L2764">    } catch (Exception e) {</span>
+      // Any exception has to try to rollback the work;
+<span class="nc" id="L2766">      rollbackConnection(c);</span>
+<span class="nc" id="L2767">      ExceptionHelper.reThrowCpoException(e, &quot;processUpdateGroup(Collection coll, String groupType, String groupName) failed&quot;);</span>
+    } finally {
+<span class="pc" id="L2769">      closeConnection(c);</span>
+<span class="pc" id="L2770">    }</span>
+
+<span class="fc" id="L2772">    return updateCount;</span>
+  }
+
+  /**
+   * DOCUMENT ME!
+   *
+   * @param coll              DOCUMENT ME!
+   * @param groupType         DOCUMENT ME!
+   * @param groupName         DOCUMENT ME!
+   * @param wheres            DOCUMENT ME!
+   * @param orderBy           DOCUMENT ME!
+   * @param nativeExpressions DOCUMENT ME!
+   * @param con               DOCUMENT ME!
+   * @return DOCUMENT ME!
+   * @throws CpoException DOCUMENT ME!
+   */
+  protected &lt;T&gt; long processUpdateGroup(Collection&lt;T&gt; coll, String groupType, String groupName, Collection&lt;CpoWhere&gt; wheres, Collection&lt;CpoOrderBy&gt; orderBy, Collection&lt;CpoNativeFunction&gt; nativeExpressions, Connection con) throws CpoException {
+<span class="fc" id="L2789">    long updateCount = 0;</span>
+
+<span class="pc bpc" id="L2791" title="1 of 2 branches missed.">    if (!coll.isEmpty()) {</span>
+<span class="fc" id="L2792">      T[] arr = (T[]) coll.toArray();</span>
+
+<span class="fc" id="L2794">      T obj1 = arr[0];</span>
+<span class="fc" id="L2795">      boolean allEqual = true;</span>
+<span class="fc bfc" id="L2796" title="All 2 branches covered.">      for (int i = 1; i &lt; arr.length; i++) {</span>
+<span class="pc bpc" id="L2797" title="1 of 2 branches missed.">        if (!obj1.getClass().getName().equals(arr[i].getClass().getName())) {</span>
+<span class="nc" id="L2798">          allEqual = false;</span>
+<span class="nc" id="L2799">          break;</span>
+        }
+      }
+
+<span class="pc bpc" id="L2803" title="3 of 6 branches missed.">      if (allEqual &amp;&amp; batchUpdatesSupported_ &amp;&amp; !JdbcCpoAdapter.PERSIST_GROUP.equals(groupType)) {</span>
+<span class="fc" id="L2804">        updateCount = processBatchUpdateGroup(arr, groupType, groupName, wheres, orderBy, nativeExpressions, con);</span>
+      } else {
+<span class="nc bnc" id="L2806" title="All 2 branches missed.">        for (T obj : arr) {</span>
+<span class="nc" id="L2807">          updateCount += processUpdateGroup(obj, groupType, groupName, wheres, orderBy, nativeExpressions, con);</span>
+        }
+      }
+    }
+
+<span class="fc" id="L2812">    return updateCount;</span>
+  }
+
+  /**
+   * Provides a mechanism for the user to obtain a CpoTrxAdapter object. This object allows the to control when commits
+   * and rollbacks occur on CPO.
+   * &lt;p/&gt;
+   * &lt;p/&gt;
+   * &lt;pre&gt;Example:
+   * &lt;code&gt;
+   * &lt;p/&gt;
+   * class SomeObject so = null;
+   * class CpoAdapter cpo = null;
+   * class CpoTrxAdapter cpoTrx = null;
+   * &lt;p/&gt;
+   * try {
+   * 	cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));
+   * 	cpoTrx = cpo.getCpoTrxAdapter();
+   * } catch (CpoException ce) {
+   * 	// Handle the error
+   * 	cpo = null;
+   * }
+   * &lt;p/&gt;
+   * if (cpo!=null) {
+   * 	try{
+   * 		for (int i=0; i&lt;3; i++){
+   * 			so = new SomeObject();
+   * 			so.setId(1);
+   * 			so.setName(&quot;SomeName&quot;);
+   * 			cpo.updateObject(&quot;myUpdate&quot;,so);
+   *    }
+   * 		cpoTrx.commit();
+   *  } catch (CpoException ce) {
+   * 		// Handle the error
+   * 		cpoTrx.rollback();
+   *  }
+   * }
+   * &lt;/code&gt;
+   * &lt;/pre&gt;
+   *
+   * @return A CpoTrxAdapter to manage the transactionality of CPO
+   * @throws CpoException Thrown if there are errors accessing the datasource
+   * @see CpoTrxAdapter
+   */
+  @Override
+  public CpoTrxAdapter getCpoTrxAdapter() throws CpoException {
+<span class="fc" id="L2858">    return new JdbcCpoTrxAdapter(metaDescriptor, getWriteConnection(), batchUpdatesSupported_, getDataSourceName());</span>
+  }
+
+  protected boolean isConnectionBusy(Connection c) {
+    // do nothing for JdbcCpoAdapter
+    // overridden by JdbcTrxAdapter
+<span class="nc" id="L2864">    return false;</span>
+  }
+
+  protected void setConnectionBusy(Connection c) {
+    // do nothing for JdbcCpoAdapter
+    // overridden by JdbcTrxAdapter
+<span class="nc" id="L2870">  }</span>
+
+  protected void clearConnectionBusy(Connection c) {
+    // do nothing for JdbcCpoAdapter
+    // overridden by JdbcTrxAdapter
+<span class="fc" id="L2875">  }</span>
+
+  private void statementClose(Statement s) {
+<span class="fc bfc" id="L2878" title="All 2 branches covered.">    if (s != null) {</span>
+      try {
+<span class="fc" id="L2880">        s.close();</span>
+<span class="nc" id="L2881">      } catch (Exception e) {</span>
+<span class="nc bnc" id="L2882" title="All 2 branches missed.">        if (logger.isTraceEnabled()) {</span>
+<span class="nc" id="L2883">          logger.trace(e.getMessage());</span>
+        }
+<span class="fc" id="L2885">      }</span>
+    }
+<span class="fc" id="L2887">  }</span>
+
+  private void resultSetClose(ResultSet rs) {
+<span class="fc bfc" id="L2890" title="All 2 branches covered.">    if (rs != null) {</span>
+      try {
+<span class="fc" id="L2892">        rs.close();</span>
+<span class="nc" id="L2893">      } catch (Exception e) {</span>
+<span class="nc bnc" id="L2894" title="All 2 branches missed.">        if (logger.isTraceEnabled()) {</span>
+<span class="nc" id="L2895">          logger.trace(e.getMessage());</span>
+        }
+<span class="fc" id="L2897">      }</span>
+    }
+<span class="fc" id="L2899">  }</span>
+
+  @Override
+  public CpoMetaDescriptor getCpoMetaDescriptor() {
+<span class="fc" id="L2903">    return metaDescriptor;</span>
+  }
+
+  @Override
+  public List&lt;CpoAttribute&gt; getCpoAttributes(String expression) throws CpoException {
+<span class="fc" id="L2908">    List&lt;CpoAttribute&gt; attributes = new ArrayList&lt;&gt;();</span>
+
+<span class="pc bpc" id="L2910" title="2 of 4 branches missed.">    if (expression != null &amp;&amp; !expression.isEmpty()) {</span>
+<span class="fc" id="L2911">      Connection c = null;</span>
+<span class="fc" id="L2912">      PreparedStatement ps = null;</span>
+<span class="fc" id="L2913">      ResultSet rs = null;</span>
+      try {
+<span class="fc" id="L2915">        c = getWriteConnection();</span>
+<span class="fc" id="L2916">        ps = c.prepareStatement(expression);</span>
+<span class="fc" id="L2917">        rs = ps.executeQuery();</span>
+<span class="fc" id="L2918">        ResultSetMetaData rsmd = rs.getMetaData();</span>
+<span class="fc bfc" id="L2919" title="All 2 branches covered.">        for (int i = 1; i &lt;= rsmd.getColumnCount(); i++) {</span>
+<span class="fc" id="L2920">          JdbcCpoAttribute attribute = new JdbcCpoAttribute();</span>
+<span class="fc" id="L2921">          attribute.setDataName(rsmd.getColumnLabel(i));</span>
+<span class="fc" id="L2922">          attribute.setDbColumn(rsmd.getColumnName(i));</span>
+          try {
+<span class="fc" id="L2924">            attribute.setDbTable(rsmd.getTableName(i));</span>
+<span class="nc" id="L2925">          } catch (Exception e) {</span>
+            // do nothing if this call is not supported
+<span class="fc" id="L2927">          }</span>
+
+<span class="fc" id="L2929">          DataTypeMapEntry&lt;?&gt; dataTypeMapEntry = metaDescriptor.getDataTypeMapEntry(rsmd.getColumnType(i));</span>
+<span class="fc" id="L2930">          attribute.setDataType(dataTypeMapEntry.getDataTypeName());</span>
+<span class="fc" id="L2931">          attribute.setDataTypeInt(dataTypeMapEntry.getDataTypeInt());</span>
+<span class="fc" id="L2932">          attribute.setJavaType(dataTypeMapEntry.getJavaClass().getName());</span>
+<span class="fc" id="L2933">          attribute.setJavaName(dataTypeMapEntry.makeJavaName(rsmd.getColumnLabel(i)));</span>
+
+<span class="fc" id="L2935">          attributes.add(attribute);</span>
+        }
+<span class="nc" id="L2937">      } catch (Throwable t) {</span>
+<span class="nc" id="L2938">        logger.error(ExceptionHelper.getLocalizedMessage(t), t);</span>
+<span class="nc" id="L2939">        throw new CpoException(&quot;Error Generating Attributes&quot;, t);</span>
+      } finally {
+<span class="pc" id="L2941">        resultSetClose(rs);</span>
+<span class="pc" id="L2942">        statementClose(ps);</span>
+<span class="pc" id="L2943">        closeConnection(c);</span>
+<span class="fc" id="L2944">      }</span>
+    }
+<span class="fc" id="L2946">    return attributes;</span>
+  }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.2.201409121644</span></div></body></html>

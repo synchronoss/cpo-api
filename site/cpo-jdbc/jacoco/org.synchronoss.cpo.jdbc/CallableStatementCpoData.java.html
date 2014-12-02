@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>CallableStatementCpoData.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">cpo-jdbc</a> &gt; <a href="index.source.html" class="el_package">org.synchronoss.cpo.jdbc</a> &gt; <span class="el_source">CallableStatementCpoData.java</span></div><h1>CallableStatementCpoData.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2003-2012 David E. Berry
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ *
+ * A copy of the GNU Lesser General Public License may also be found at
+ * http://www.gnu.org/licenses/lgpl.txt
+ */
+package org.synchronoss.cpo.jdbc;
+
+import org.slf4j.*;
+import org.synchronoss.cpo.*;
+import org.synchronoss.cpo.helper.ExceptionHelper;
+import org.synchronoss.cpo.jdbc.meta.JdbcMethodMapEntry;
+import org.synchronoss.cpo.jdbc.meta.JdbcMethodMapper;
+import org.synchronoss.cpo.meta.AbstractBindableCpoData;
+import org.synchronoss.cpo.meta.domain.CpoAttribute;
+import org.synchronoss.cpo.transform.CpoTransform;
+import org.synchronoss.cpo.transform.jdbc.JdbcCpoTransform;
+
+import java.io.*;
+import java.lang.reflect.InvocationTargetException;
+import java.sql.CallableStatement;
+
+/**
+ *
+ * @author dberry
+ */
+public class CallableStatementCpoData extends AbstractBindableCpoData {
+
+<span class="nc" id="L43">  private static final Logger logger = LoggerFactory.getLogger(CallableStatementCpoData.class);</span>
+<span class="nc" id="L44">  private CallableStatement cs = null;</span>
+<span class="nc" id="L45">  JdbcCallableStatementFactory jcsf = null;</span>
+
+  public CallableStatementCpoData(CallableStatement cs, CpoAttribute cpoAttribute, int index) {
+<span class="nc" id="L48">    super(cpoAttribute, index);</span>
+<span class="nc" id="L49">    this.cs = cs;</span>
+<span class="nc" id="L50">  }</span>
+
+  public CallableStatementCpoData(JdbcCallableStatementFactory jcsf, CpoAttribute cpoAttribute, int index) {
+<span class="nc" id="L53">    super(cpoAttribute, index);</span>
+<span class="nc" id="L54">    this.jcsf = jcsf;</span>
+<span class="nc" id="L55">  }</span>
+
+  @Override
+  public Object invokeGetter() throws CpoException {
+    Object javaObject;
+<span class="nc" id="L60">    JdbcMethodMapEntry&lt;?,?&gt; jdbcMethodMapEntry = JdbcMethodMapper.getJavaSqlMethod(getDataGetterReturnType());</span>
+<span class="nc bnc" id="L61" title="All 2 branches missed.">    if (jdbcMethodMapEntry == null) {</span>
+<span class="nc" id="L62">      throw new CpoException(&quot;Error Retrieveing Jdbc Method for type: &quot; + getDataGetterReturnType().getName());</span>
+    }
+
+    try {
+      // Get the getter for the Callable Statement
+<span class="nc" id="L67">      javaObject = transformIn(jdbcMethodMapEntry.getCsGetter().invoke(cs, getIndex()));</span>
+<span class="nc" id="L68">    } catch (IllegalAccessException iae) {</span>
+<span class="nc" id="L69">      logger.debug(&quot;Error Invoking CallableStatement Method: &quot; + ExceptionHelper.getLocalizedMessage(iae));</span>
+<span class="nc" id="L70">      throw new CpoException(iae);</span>
+<span class="nc" id="L71">    } catch (InvocationTargetException ite) {</span>
+<span class="nc" id="L72">      logger.debug(&quot;Error Invoking CallableStatement Method: &quot; + ExceptionHelper.getLocalizedMessage(ite));</span>
+<span class="nc" id="L73">      throw new CpoException(ite.getCause());</span>
+<span class="nc" id="L74">    }</span>
+
+<span class="nc" id="L76">    return javaObject;</span>
+  }
+
+  @Override
+  public void invokeSetter(Object instanceObject) throws CpoException {
+<span class="nc bnc" id="L81" title="All 2 branches missed.">    Logger localLogger = instanceObject == null ? logger : LoggerFactory.getLogger(instanceObject.getClass());</span>
+<span class="nc" id="L82">    CpoAttribute cpoAttribute = getCpoAttribute();</span>
+<span class="nc" id="L83">    Object param = transformOut(cpoAttribute.invokeGetter(instanceObject));</span>
+<span class="nc" id="L84">    JdbcMethodMapEntry&lt;?,?&gt; jdbcMethodMapEntry = JdbcMethodMapper.getJavaSqlMethod(getDataSetterParamType());</span>
+<span class="nc bnc" id="L85" title="All 2 branches missed.">    if (jdbcMethodMapEntry == null) {</span>
+<span class="nc" id="L86">      throw new CpoException(&quot;Error Retrieveing Jdbc Method for type: &quot; + getDataSetterParamType().getName());</span>
+    }
+<span class="nc" id="L88">    localLogger.info(cpoAttribute.getDataName() + &quot;=&quot; + param);</span>
+    try {
+<span class="nc bnc" id="L90" title="All 4 branches missed.">      switch (jdbcMethodMapEntry.getMethodType()) {</span>
+        case JdbcMethodMapEntry.METHOD_TYPE_BASIC:
+<span class="nc" id="L92">          jdbcMethodMapEntry.getCsSetter().invoke(jcsf.getCallableStatement(), getIndex(), param);</span>
+<span class="nc" id="L93">          break;</span>
+        case JdbcMethodMapEntry.METHOD_TYPE_STREAM:
+<span class="nc" id="L95">          CpoByteArrayInputStream cbais = CpoByteArrayInputStream.getCpoStream((InputStream) param);</span>
+          // Get the length of the InputStream in param
+<span class="nc" id="L97">          jdbcMethodMapEntry.getCsSetter().invoke(jcsf.getCallableStatement(), getIndex(), cbais, cbais.getLength());</span>
+<span class="nc" id="L98">          break;</span>
+        case JdbcMethodMapEntry.METHOD_TYPE_READER:
+<span class="nc" id="L100">          CpoCharArrayReader ccar = CpoCharArrayReader.getCpoReader((Reader) param);</span>
+          // Get the length of the Reader in param
+<span class="nc" id="L102">          jdbcMethodMapEntry.getCsSetter().invoke(jcsf.getCallableStatement(), getIndex(), ccar, ccar.getLength());</span>
+          break;
+      }
+<span class="nc" id="L105">    } catch (Exception e) {</span>
+<span class="nc" id="L106">      throw new CpoException(&quot;Error Invoking Jdbc Method: &quot; + jdbcMethodMapEntry.getBsSetter().getName() + &quot;:&quot; + ExceptionHelper.getLocalizedMessage(e));</span>
+<span class="nc" id="L107">    }</span>
+<span class="nc" id="L108">  }</span>
+
+  @Override
+  public Object transformOut(Object attributeObject) throws CpoException {
+<span class="nc" id="L112">    Object retObj = attributeObject;</span>
+<span class="nc" id="L113">    CpoTransform cpoTransform = getCpoAttribute().getCpoTransform();</span>
+
+<span class="nc bnc" id="L115" title="All 2 branches missed.">    if (cpoTransform != null) {</span>
+<span class="nc bnc" id="L116" title="All 2 branches missed.">      if (cpoTransform instanceof JdbcCpoTransform) {</span>
+<span class="nc" id="L117">        retObj = ((JdbcCpoTransform)cpoTransform).transformOut(jcsf, attributeObject);</span>
+      } else {
+<span class="nc" id="L119">        retObj = cpoTransform.transformOut(attributeObject);</span>
+      }
+    }
+<span class="nc" id="L122">    return retObj;</span>
+  }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.2.201409121644</span></div></body></html>

@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>TransformGZipBytes.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">cpo-jdbc</a> &gt; <a href="index.source.html" class="el_package">org.synchronoss.cpo.transform.jdbc</a> &gt; <span class="el_source">TransformGZipBytes.java</span></div><h1>TransformGZipBytes.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2003-2012 David E. Berry
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ *
+ * A copy of the GNU Lesser General Public License may also be found at
+ * http://www.gnu.org/licenses/lgpl.txt
+ */
+package org.synchronoss.cpo.transform.jdbc;
+
+import org.slf4j.*;
+import org.synchronoss.cpo.CpoException;
+import org.synchronoss.cpo.jdbc.*;
+
+import java.io.*;
+import java.util.zip.*;
+
+/**
+ * Converts a compressed byte[] from a jdbc datasource to an uncompressed byte[] and from a byte[] to a compressed
+ * byte[] in a datasource
+ *
+ * @author david berry
+ */
+public class TransformGZipBytes implements JdbcCpoTransform&lt;byte[], byte[]&gt; {
+
+<span class="fc" id="L38">  private static final Logger logger = LoggerFactory.getLogger(TransformGZipBytes.class);</span>
+
+<span class="fc" id="L40">  public TransformGZipBytes() {</span>
+<span class="fc" id="L41">  }</span>
+
+  /**
+   * Transforms the datasource object into an object required by the class
+   *
+   * @param cpoAdapter The CpoAdapter for the datasource where the attribute is being retrieved
+   * @param parentObject The object that contains the attribute being retrieved.
+   * @param The object that represents the datasource object being retrieved
+   * @return The object to be stored in the attribute
+   * @throws CpoException
+   */
+  @Override
+  public byte[] transformIn(byte[] inBytes) throws CpoException {
+
+<span class="nc" id="L55">    byte[] buffBytes = new byte[1024];</span>
+<span class="nc" id="L56">    byte[] retBytes = null;</span>
+    int length;
+<span class="nc" id="L58">    ByteArrayOutputStream bos = new ByteArrayOutputStream();</span>
+
+<span class="nc bnc" id="L60" title="All 2 branches missed.">    if (inBytes != null) {</span>
+
+<span class="nc bnc" id="L62" title="All 2 branches missed.">      if (inBytes.length &gt; 0) {</span>
+        try {
+<span class="nc" id="L64">          InputStream bis = new ByteArrayInputStream(inBytes);</span>
+<span class="nc" id="L65">          GZIPInputStream gzis = new GZIPInputStream(bis);</span>
+
+<span class="nc bnc" id="L67" title="All 2 branches missed.">          while ((length = gzis.read(buffBytes)) != -1) {</span>
+<span class="nc" id="L68">            bos.write(buffBytes, 0, length);</span>
+          }
+<span class="nc" id="L70">          bos.flush();</span>
+<span class="nc" id="L71">          bos.close();</span>
+<span class="nc" id="L72">          gzis.close();</span>
+<span class="nc" id="L73">          bis.close();</span>
+<span class="nc" id="L74">          retBytes = bos.toByteArray();</span>
+<span class="nc" id="L75">        } catch (Exception e) {</span>
+<span class="nc" id="L76">          logger.error(&quot;Error in transform GZipBytes&quot;, e);</span>
+<span class="nc" id="L77">          throw new CpoException(e);</span>
+<span class="nc" id="L78">        }</span>
+      } else {
+<span class="nc" id="L80">        retBytes = new byte[0];</span>
+      }
+    }
+<span class="nc" id="L83">    return retBytes;</span>
+  }
+
+  /**
+   * Transforms the data from the class attribute to the object required by the datasource
+   *
+   * @param cpoAdapter The CpoAdapter for the datasource where the attribute is being persisted
+   * @param parentObject The object that contains the attribute being persisted.
+   * @param attributeObject The object that represents the attribute being persisted.
+   * @return The object to be stored in the datasource
+   * @throws CpoException
+   */
+  @Override
+  public byte[] transformOut(JdbcPreparedStatementFactory jpsf, byte[] attributeObject) throws CpoException {
+
+<span class="nc" id="L98">    byte[] retBytes = null;</span>
+
+<span class="nc" id="L100">    ByteArrayOutputStream baos = new ByteArrayOutputStream();</span>
+
+    try {
+<span class="nc bnc" id="L103" title="All 2 branches missed.">      if (attributeObject != null) {</span>
+<span class="nc bnc" id="L104" title="All 2 branches missed.">        if (attributeObject.length &gt; 0) {</span>
+<span class="nc" id="L105">          GZIPOutputStream os = new GZIPOutputStream(baos);</span>
+
+<span class="nc" id="L107">          os.write(attributeObject);</span>
+<span class="nc" id="L108">          os.flush();</span>
+<span class="nc" id="L109">          os.close();</span>
+
+<span class="nc" id="L111">          baos.flush();</span>
+<span class="nc" id="L112">          baos.close();</span>
+<span class="nc" id="L113">          retBytes = baos.toByteArray();</span>
+<span class="nc" id="L114">        } else {</span>
+<span class="nc" id="L115">          retBytes = new byte[0];</span>
+        }
+      }
+<span class="nc" id="L118">    } catch (Exception e) {</span>
+<span class="nc" id="L119">      String msg = &quot;Error GZipping Byte Array&quot;;</span>
+<span class="nc" id="L120">      logger.error(msg, e);</span>
+<span class="nc" id="L121">      throw new CpoException(msg, e);</span>
+<span class="nc" id="L122">    }</span>
+<span class="nc" id="L123">    return retBytes;</span>
+  }
+
+  @Override
+  public byte[] transformOut(JdbcCallableStatementFactory jpsf, byte[] attributeObject) throws CpoException, UnsupportedOperationException {
+<span class="nc" id="L128">    throw new UnsupportedOperationException(&quot;Not supported yet.&quot;);</span>
+  }
+
+  @Override
+  public byte[] transformOut(byte[] j) throws CpoException, UnsupportedOperationException {
+<span class="nc" id="L133">    throw new UnsupportedOperationException(&quot;Not supported yet.&quot;);</span>
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.2.201409121644</span></div></body></html>

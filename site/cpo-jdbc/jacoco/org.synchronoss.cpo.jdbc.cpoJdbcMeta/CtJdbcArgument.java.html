@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>CtJdbcArgument.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">cpo-jdbc</a> &gt; <a href="index.source.html" class="el_package">org.synchronoss.cpo.jdbc.cpoJdbcMeta</a> &gt; <span class="el_source">CtJdbcArgument.java</span></div><h1>CtJdbcArgument.java</h1><pre class="source lang-java linenums">/*
+ * XML Type:  ctJdbcArgument
+ * Namespace: http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd
+ * Java type: org.synchronoss.cpo.jdbc.cpoJdbcMeta.CtJdbcArgument
+ *
+ * Automatically generated - do not modify.
+ */
+package org.synchronoss.cpo.jdbc.cpoJdbcMeta;
+
+
+/**
+ * An XML ctJdbcArgument(@http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd).
+ *
+ * This is a complex type.
+ */
+public interface CtJdbcArgument extends org.synchronoss.cpo.core.cpoCoreMeta.CtArgument
+{
+<span class="fc" id="L18">    public static final org.apache.xmlbeans.SchemaType type = (org.apache.xmlbeans.SchemaType)</span>
+<span class="fc" id="L19">        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(CtJdbcArgument.class.getClassLoader(), &quot;schemaorg_apache_xmlbeans.system.s2C714F9B900B06A19BC3F6E85277495E&quot;).resolveHandle(&quot;ctjdbcargumentc4fftype&quot;);</span>
+    
+    /**
+     * Gets the &quot;scope&quot; element
+     */
+    org.synchronoss.cpo.jdbc.cpoJdbcMeta.CtJdbcArgument.Scope.Enum getScope();
+    
+    /**
+     * Gets (as xml) the &quot;scope&quot; element
+     */
+    org.synchronoss.cpo.jdbc.cpoJdbcMeta.CtJdbcArgument.Scope xgetScope();
+    
+    /**
+     * True if has &quot;scope&quot; element
+     */
+    boolean isSetScope();
+    
+    /**
+     * Sets the &quot;scope&quot; element
+     */
+    void setScope(org.synchronoss.cpo.jdbc.cpoJdbcMeta.CtJdbcArgument.Scope.Enum scope);
+    
+    /**
+     * Sets (as xml) the &quot;scope&quot; element
+     */
+    void xsetScope(org.synchronoss.cpo.jdbc.cpoJdbcMeta.CtJdbcArgument.Scope scope);
+    
+    /**
+     * Unsets the &quot;scope&quot; element
+     */
+    void unsetScope();
+    
+    /**
+     * Gets the &quot;typeInfo&quot; element
+     */
+    java.lang.String getTypeInfo();
+    
+    /**
+     * Gets (as xml) the &quot;typeInfo&quot; element
+     */
+    org.apache.xmlbeans.XmlString xgetTypeInfo();
+    
+    /**
+     * True if has &quot;typeInfo&quot; element
+     */
+    boolean isSetTypeInfo();
+    
+    /**
+     * Sets the &quot;typeInfo&quot; element
+     */
+    void setTypeInfo(java.lang.String typeInfo);
+    
+    /**
+     * Sets (as xml) the &quot;typeInfo&quot; element
+     */
+    void xsetTypeInfo(org.apache.xmlbeans.XmlString typeInfo);
+    
+    /**
+     * Unsets the &quot;typeInfo&quot; element
+     */
+    void unsetTypeInfo();
+    
+    /**
+     * An XML scope(@http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd).
+     *
+     * This is an atomic type that is a restriction of org.synchronoss.cpo.jdbc.cpoJdbcMeta.CtJdbcArgument$Scope.
+     */
+    public interface Scope extends org.apache.xmlbeans.XmlString
+    {
+<span class="fc" id="L88">        public static final org.apache.xmlbeans.SchemaType type = (org.apache.xmlbeans.SchemaType)</span>
+<span class="fc" id="L89">            org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(Scope.class.getClassLoader(), &quot;schemaorg_apache_xmlbeans.system.s2C714F9B900B06A19BC3F6E85277495E&quot;).resolveHandle(&quot;scopee83felemtype&quot;);</span>
+        
+        org.apache.xmlbeans.StringEnumAbstractBase enumValue();
+        void set(org.apache.xmlbeans.StringEnumAbstractBase e);
+        
+<span class="fc" id="L94">        static final Enum IN = Enum.forString(&quot;IN&quot;);</span>
+<span class="fc" id="L95">        static final Enum OUT = Enum.forString(&quot;OUT&quot;);</span>
+<span class="fc" id="L96">        static final Enum BOTH = Enum.forString(&quot;BOTH&quot;);</span>
+        
+        static final int INT_IN = Enum.INT_IN;
+        static final int INT_OUT = Enum.INT_OUT;
+        static final int INT_BOTH = Enum.INT_BOTH;
+        
+        /**
+         * Enumeration value class for org.synchronoss.cpo.jdbc.cpoJdbcMeta.CtJdbcArgument$Scope.
+         * These enum values can be used as follows:
+         * &lt;pre&gt;
+         * enum.toString(); // returns the string value of the enum
+         * enum.intValue(); // returns an int value, useful for switches
+         * // e.g., case Enum.INT_IN
+         * Enum.forString(s); // returns the enum value for a string
+         * Enum.forInt(i); // returns the enum value for an int
+         * &lt;/pre&gt;
+         * Enumeration objects are immutable singleton objects that
+         * can be compared using == object equality. They have no
+         * public constructor. See the constants defined within this
+         * class for all the valid values.
+         */
+        static final class Enum extends org.apache.xmlbeans.StringEnumAbstractBase
+        {
+            /**
+             * Returns the enum value for a string, or null if none.
+             */
+            public static Enum forString(java.lang.String s)
+<span class="fc" id="L123">                { return (Enum)table.forString(s); }</span>
+            /**
+             * Returns the enum value corresponding to an int, or null if none.
+             */
+            public static Enum forInt(int i)
+<span class="nc" id="L128">                { return (Enum)table.forInt(i); }</span>
+            
+            private Enum(java.lang.String s, int i)
+<span class="fc" id="L131">                { super(s, i); }</span>
+            
+            static final int INT_IN = 1;
+            static final int INT_OUT = 2;
+            static final int INT_BOTH = 3;
+            
+<span class="fc" id="L137">            public static final org.apache.xmlbeans.StringEnumAbstractBase.Table table =</span>
+                new org.apache.xmlbeans.StringEnumAbstractBase.Table
+            (
+                new Enum[]
+                {
+                    new Enum(&quot;IN&quot;, INT_IN),
+                    new Enum(&quot;OUT&quot;, INT_OUT),
+                    new Enum(&quot;BOTH&quot;, INT_BOTH),
+                }
+            );
+            private static final long serialVersionUID = 1L;
+<span class="nc" id="L148">            private java.lang.Object readResolve() { return forInt(intValue()); } </span>
+        }
+        
+        /**
+         * A factory class with static methods for creating instances
+         * of this type.
+         */
+        
+        public static final class Factory
+        {
+            public static org.synchronoss.cpo.jdbc.cpoJdbcMeta.CtJdbcArgument.Scope newValue(java.lang.Object obj) {
+<span class="nc" id="L159">              return (org.synchronoss.cpo.jdbc.cpoJdbcMeta.CtJdbcArgument.Scope) type.newValue( obj ); }</span>
+            
+            public static org.synchronoss.cpo.jdbc.cpoJdbcMeta.CtJdbcArgument.Scope newInstance() {
+<span class="nc" id="L162">              return (org.synchronoss.cpo.jdbc.cpoJdbcMeta.CtJdbcArgument.Scope) org.apache.xmlbeans.XmlBeans.getContextTypeLoader().newInstance( type, null ); }</span>
+            
+            public static org.synchronoss.cpo.jdbc.cpoJdbcMeta.CtJdbcArgument.Scope newInstance(org.apache.xmlbeans.XmlOptions options) {
+<span class="nc" id="L165">              return (org.synchronoss.cpo.jdbc.cpoJdbcMeta.CtJdbcArgument.Scope) org.apache.xmlbeans.XmlBeans.getContextTypeLoader().newInstance( type, options ); }</span>
+            
+<span class="nc" id="L167">            private Factory() { } // No instance of this class allowed</span>
+        }
+    }
+    
+    /**
+     * A factory class with static methods for creating instances
+     * of this type.
+     */
+    
+    public static final class Factory
+    {
+        public static org.synchronoss.cpo.jdbc.cpoJdbcMeta.CtJdbcArgument newInstance() {
+<span class="fc" id="L179">          return (org.synchronoss.cpo.jdbc.cpoJdbcMeta.CtJdbcArgument) org.apache.xmlbeans.XmlBeans.getContextTypeLoader().newInstance( type, null ); }</span>
+        
+        public static org.synchronoss.cpo.jdbc.cpoJdbcMeta.CtJdbcArgument newInstance(org.apache.xmlbeans.XmlOptions options) {
+<span class="nc" id="L182">          return (org.synchronoss.cpo.jdbc.cpoJdbcMeta.CtJdbcArgument) org.apache.xmlbeans.XmlBeans.getContextTypeLoader().newInstance( type, options ); }</span>
+        
+        /** @param xmlAsString the string value to parse */
+        public static org.synchronoss.cpo.jdbc.cpoJdbcMeta.CtJdbcArgument parse(java.lang.String xmlAsString) throws org.apache.xmlbeans.XmlException {
+<span class="nc" id="L186">          return (org.synchronoss.cpo.jdbc.cpoJdbcMeta.CtJdbcArgument) org.apache.xmlbeans.XmlBeans.getContextTypeLoader().parse( xmlAsString, type, null ); }</span>
+        
+        public static org.synchronoss.cpo.jdbc.cpoJdbcMeta.CtJdbcArgument parse(java.lang.String xmlAsString, org.apache.xmlbeans.XmlOptions options) throws org.apache.xmlbeans.XmlException {
+<span class="nc" id="L189">          return (org.synchronoss.cpo.jdbc.cpoJdbcMeta.CtJdbcArgument) org.apache.xmlbeans.XmlBeans.getContextTypeLoader().parse( xmlAsString, type, options ); }</span>
+        
+        /** @param file the file from which to load an xml document */
+        public static org.synchronoss.cpo.jdbc.cpoJdbcMeta.CtJdbcArgument parse(java.io.File file) throws org.apache.xmlbeans.XmlException, java.io.IOException {
+<span class="nc" id="L193">          return (org.synchronoss.cpo.jdbc.cpoJdbcMeta.CtJdbcArgument) org.apache.xmlbeans.XmlBeans.getContextTypeLoader().parse( file, type, null ); }</span>
+        
+        public static org.synchronoss.cpo.jdbc.cpoJdbcMeta.CtJdbcArgument parse(java.io.File file, org.apache.xmlbeans.XmlOptions options) throws org.apache.xmlbeans.XmlException, java.io.IOException {
+<span class="nc" id="L196">          return (org.synchronoss.cpo.jdbc.cpoJdbcMeta.CtJdbcArgument) org.apache.xmlbeans.XmlBeans.getContextTypeLoader().parse( file, type, options ); }</span>
+        
+        public static org.synchronoss.cpo.jdbc.cpoJdbcMeta.CtJdbcArgument parse(java.net.URL u) throws org.apache.xmlbeans.XmlException, java.io.IOException {
+<span class="nc" id="L199">          return (org.synchronoss.cpo.jdbc.cpoJdbcMeta.CtJdbcArgument) org.apache.xmlbeans.XmlBeans.getContextTypeLoader().parse( u, type, null ); }</span>
+        
+        public static org.synchronoss.cpo.jdbc.cpoJdbcMeta.CtJdbcArgument parse(java.net.URL u, org.apache.xmlbeans.XmlOptions options) throws org.apache.xmlbeans.XmlException, java.io.IOException {
+<span class="nc" id="L202">          return (org.synchronoss.cpo.jdbc.cpoJdbcMeta.CtJdbcArgument) org.apache.xmlbeans.XmlBeans.getContextTypeLoader().parse( u, type, options ); }</span>
+        
+        public static org.synchronoss.cpo.jdbc.cpoJdbcMeta.CtJdbcArgument parse(java.io.InputStream is) throws org.apache.xmlbeans.XmlException, java.io.IOException {
+<span class="nc" id="L205">          return (org.synchronoss.cpo.jdbc.cpoJdbcMeta.CtJdbcArgument) org.apache.xmlbeans.XmlBeans.getContextTypeLoader().parse( is, type, null ); }</span>
+        
+        public static org.synchronoss.cpo.jdbc.cpoJdbcMeta.CtJdbcArgument parse(java.io.InputStream is, org.apache.xmlbeans.XmlOptions options) throws org.apache.xmlbeans.XmlException, java.io.IOException {
+<span class="nc" id="L208">          return (org.synchronoss.cpo.jdbc.cpoJdbcMeta.CtJdbcArgument) org.apache.xmlbeans.XmlBeans.getContextTypeLoader().parse( is, type, options ); }</span>
+        
+        public static org.synchronoss.cpo.jdbc.cpoJdbcMeta.CtJdbcArgument parse(java.io.Reader r) throws org.apache.xmlbeans.XmlException, java.io.IOException {
+<span class="nc" id="L211">          return (org.synchronoss.cpo.jdbc.cpoJdbcMeta.CtJdbcArgument) org.apache.xmlbeans.XmlBeans.getContextTypeLoader().parse( r, type, null ); }</span>
+        
+        public static org.synchronoss.cpo.jdbc.cpoJdbcMeta.CtJdbcArgument parse(java.io.Reader r, org.apache.xmlbeans.XmlOptions options) throws org.apache.xmlbeans.XmlException, java.io.IOException {
+<span class="nc" id="L214">          return (org.synchronoss.cpo.jdbc.cpoJdbcMeta.CtJdbcArgument) org.apache.xmlbeans.XmlBeans.getContextTypeLoader().parse( r, type, options ); }</span>
+        
+        public static org.synchronoss.cpo.jdbc.cpoJdbcMeta.CtJdbcArgument parse(javax.xml.stream.XMLStreamReader sr) throws org.apache.xmlbeans.XmlException {
+<span class="nc" id="L217">          return (org.synchronoss.cpo.jdbc.cpoJdbcMeta.CtJdbcArgument) org.apache.xmlbeans.XmlBeans.getContextTypeLoader().parse( sr, type, null ); }</span>
+        
+        public static org.synchronoss.cpo.jdbc.cpoJdbcMeta.CtJdbcArgument parse(javax.xml.stream.XMLStreamReader sr, org.apache.xmlbeans.XmlOptions options) throws org.apache.xmlbeans.XmlException {
+<span class="nc" id="L220">          return (org.synchronoss.cpo.jdbc.cpoJdbcMeta.CtJdbcArgument) org.apache.xmlbeans.XmlBeans.getContextTypeLoader().parse( sr, type, options ); }</span>
+        
+        public static org.synchronoss.cpo.jdbc.cpoJdbcMeta.CtJdbcArgument parse(org.w3c.dom.Node node) throws org.apache.xmlbeans.XmlException {
+<span class="nc" id="L223">          return (org.synchronoss.cpo.jdbc.cpoJdbcMeta.CtJdbcArgument) org.apache.xmlbeans.XmlBeans.getContextTypeLoader().parse( node, type, null ); }</span>
+        
+        public static org.synchronoss.cpo.jdbc.cpoJdbcMeta.CtJdbcArgument parse(org.w3c.dom.Node node, org.apache.xmlbeans.XmlOptions options) throws org.apache.xmlbeans.XmlException {
+<span class="nc" id="L226">          return (org.synchronoss.cpo.jdbc.cpoJdbcMeta.CtJdbcArgument) org.apache.xmlbeans.XmlBeans.getContextTypeLoader().parse( node, type, options ); }</span>
+        
+        /** @deprecated {@link org.apache.xmlbeans.xml.stream.XMLInputStream} */
+        public static org.synchronoss.cpo.jdbc.cpoJdbcMeta.CtJdbcArgument parse(org.apache.xmlbeans.xml.stream.XMLInputStream xis) throws org.apache.xmlbeans.XmlException, org.apache.xmlbeans.xml.stream.XMLStreamException {
+<span class="nc" id="L230">          return (org.synchronoss.cpo.jdbc.cpoJdbcMeta.CtJdbcArgument) org.apache.xmlbeans.XmlBeans.getContextTypeLoader().parse( xis, type, null ); }</span>
+        
+        /** @deprecated {@link org.apache.xmlbeans.xml.stream.XMLInputStream} */
+        public static org.synchronoss.cpo.jdbc.cpoJdbcMeta.CtJdbcArgument parse(org.apache.xmlbeans.xml.stream.XMLInputStream xis, org.apache.xmlbeans.XmlOptions options) throws org.apache.xmlbeans.XmlException, org.apache.xmlbeans.xml.stream.XMLStreamException {
+<span class="nc" id="L234">          return (org.synchronoss.cpo.jdbc.cpoJdbcMeta.CtJdbcArgument) org.apache.xmlbeans.XmlBeans.getContextTypeLoader().parse( xis, type, options ); }</span>
+        
+        /** @deprecated {@link org.apache.xmlbeans.xml.stream.XMLInputStream} */
+        public static org.apache.xmlbeans.xml.stream.XMLInputStream newValidatingXMLInputStream(org.apache.xmlbeans.xml.stream.XMLInputStream xis) throws org.apache.xmlbeans.XmlException, org.apache.xmlbeans.xml.stream.XMLStreamException {
+<span class="nc" id="L238">          return org.apache.xmlbeans.XmlBeans.getContextTypeLoader().newValidatingXMLInputStream( xis, type, null ); }</span>
+        
+        /** @deprecated {@link org.apache.xmlbeans.xml.stream.XMLInputStream} */
+        public static org.apache.xmlbeans.xml.stream.XMLInputStream newValidatingXMLInputStream(org.apache.xmlbeans.xml.stream.XMLInputStream xis, org.apache.xmlbeans.XmlOptions options) throws org.apache.xmlbeans.XmlException, org.apache.xmlbeans.xml.stream.XMLStreamException {
+<span class="nc" id="L242">          return org.apache.xmlbeans.XmlBeans.getContextTypeLoader().newValidatingXMLInputStream( xis, type, options ); }</span>
+        
+<span class="nc" id="L244">        private Factory() { } // No instance of this class allowed</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.2.201409121644</span></div></body></html>

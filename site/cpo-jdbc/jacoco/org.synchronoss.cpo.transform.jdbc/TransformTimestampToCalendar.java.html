@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>TransformTimestampToCalendar.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">cpo-jdbc</a> &gt; <a href="index.source.html" class="el_package">org.synchronoss.cpo.transform.jdbc</a> &gt; <span class="el_source">TransformTimestampToCalendar.java</span></div><h1>TransformTimestampToCalendar.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2003-2012 David E. Berry
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ *
+ * A copy of the GNU Lesser General Public License may also be found at
+ * http://www.gnu.org/licenses/lgpl.txt
+ */
+package org.synchronoss.cpo.transform.jdbc;
+
+import org.synchronoss.cpo.CpoException;
+import org.synchronoss.cpo.jdbc.*;
+
+import java.sql.Timestamp;
+import java.util.Calendar;
+
+/**
+ * This is an example of a transform that does nothing. It is used to test the mechanics of the transform logic within
+ * CPO.
+ *
+ * @author david berry
+ */
+public class TransformTimestampToCalendar implements JdbcCpoTransform&lt;Timestamp, Calendar&gt; {
+
+<span class="nc" id="L37">  public TransformTimestampToCalendar() {</span>
+<span class="nc" id="L38">  }</span>
+
+  /**
+   * Transforms the
+   * &lt;code&gt;java.sql.Timestamp&lt;/code&gt; returned from JDBC into a
+   * &lt;code&gt;java.util.Calendar&lt;/code&gt; to be used by the class.
+   *
+   * @param ts The Timestamp from JDBC.
+   * @return A Calendar Object
+   * @throws CpoException
+   */
+  @Override
+  public Calendar transformIn(Timestamp ts) throws CpoException {
+<span class="nc" id="L51">    Calendar cal = null;</span>
+<span class="nc bnc" id="L52" title="All 2 branches missed.">    if (ts != null) {</span>
+<span class="nc" id="L53">      cal = Calendar.getInstance();</span>
+<span class="nc" id="L54">      cal.setTimeInMillis(ts.getTime());</span>
+    }
+<span class="nc" id="L56">    return cal;</span>
+  }
+
+  /**
+   * Transforms a
+   * &lt;code&gt;java.util.Calendar&lt;/code&gt; from the CPO Bean into a
+   * &lt;code&gt;java.sql.Timestamp&lt;/code&gt; to be stored by JDBC
+   *
+   * @param jcsf a reference to the JdbcCallableStatementFactory. This is necessary as some DBMSs (ORACLE !#$%^&amp;!) that
+   * require access to the connection to deal with certain datatypes.
+   * @param A Calendar instance
+   * @return A Timestamp object to be stored in the database.
+   * @throws CpoException
+   */
+  @Override
+  public Timestamp transformOut(JdbcCallableStatementFactory jcsf, Calendar cal) throws CpoException {
+<span class="nc" id="L72">    Timestamp ts = null;</span>
+<span class="nc bnc" id="L73" title="All 2 branches missed.">    if (cal != null) {</span>
+<span class="nc" id="L74">      ts = new Timestamp(cal.getTimeInMillis());</span>
+    }
+<span class="nc" id="L76">    return ts;</span>
+  }
+
+  /**
+   * Transforms a
+   * &lt;code&gt;java.util.Calendar&lt;/code&gt; from the CPO Bean into a
+   * &lt;code&gt;java.sql.Timestamp&lt;/code&gt; to be stored by JDBC
+   *
+   * @param jpsf a reference to the JdbcPreparedStatementFactory. This is necessary as some DBMSs (ORACLE !#$%^&amp;!) that
+   * require access to the connection to deal with certain datatypes.
+   * @param A Calendar instance
+   * @return A Timestamp object to be stored in the database.
+   * @throws CpoException
+   */
+  @Override
+  public Timestamp transformOut(JdbcPreparedStatementFactory jpsf, Calendar cal) throws CpoException {
+<span class="nc" id="L92">    Timestamp ts = null;</span>
+<span class="nc bnc" id="L93" title="All 2 branches missed.">    if (cal != null) {</span>
+<span class="nc" id="L94">      ts = new Timestamp(cal.getTimeInMillis());</span>
+    }
+<span class="nc" id="L96">    return ts;</span>
+  }
+
+  @Override
+  public Timestamp transformOut(Calendar j) throws CpoException, UnsupportedOperationException {
+<span class="nc" id="L101">    throw new UnsupportedOperationException(&quot;Not supported yet.&quot;);</span>
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.2.201409121644</span></div></body></html>

@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>CassandraMetaXmlObjectExporter.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">cpo-cassandra</a> &gt; <a href="index.source.html" class="el_package">org.synchronoss.cpo.cassandra.exporter</a> &gt; <span class="el_source">CassandraMetaXmlObjectExporter.java</span></div><h1>CassandraMetaXmlObjectExporter.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2003-2012 David E. Berry
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ *
+ * A copy of the GNU Lesser General Public License may also be found at
+ * http://www.gnu.org/licenses/lgpl.txt
+ */
+package org.synchronoss.cpo.cassandra.exporter;
+
+import org.synchronoss.cpo.cassandra.cpoCassandraMeta.CtCassandraArgument;
+import org.synchronoss.cpo.cassandra.cpoCassandraMeta.CtCassandraAttribute;
+import org.synchronoss.cpo.cassandra.meta.CassandraCpoAttribute;
+import org.synchronoss.cpo.core.cpoCoreMeta.CtArgument;
+import org.synchronoss.cpo.core.cpoCoreMeta.CtAttribute;
+import org.synchronoss.cpo.exporter.CoreMetaXmlObjectExporter;
+import org.synchronoss.cpo.exporter.MetaXmlObjectExporter;
+import org.synchronoss.cpo.meta.CpoMetaDescriptor;
+import org.synchronoss.cpo.meta.domain.CpoArgument;
+import org.synchronoss.cpo.meta.domain.CpoAttribute;
+
+/**
+ * Created with IntelliJ IDEA.
+ * User: dberry
+ * Date: 9/10/13
+ * Time: 08:13 AM
+ * To change this template use File | Settings | File Templates.
+ */
+public class CassandraMetaXmlObjectExporter extends CoreMetaXmlObjectExporter implements MetaXmlObjectExporter {
+  public CassandraMetaXmlObjectExporter(CpoMetaDescriptor metaDescriptor) {
+<span class="fc" id="L43">    super(metaDescriptor);</span>
+<span class="fc" id="L44">  }</span>
+
+  @Override
+  public void visit(CpoAttribute cpoAttribute) {
+
+    // shouldn't happen, but if what we got wasn't a JdbcAttribute...
+<span class="pc bpc" id="L50" title="1 of 2 branches missed.">    if (!(cpoAttribute instanceof CassandraCpoAttribute)) {</span>
+<span class="nc" id="L51">      super.visit(cpoAttribute);</span>
+<span class="nc" id="L52">      return;</span>
+    }
+
+<span class="fc" id="L55">    CassandraCpoAttribute cassAttribute = (CassandraCpoAttribute) cpoAttribute;</span>
+
+<span class="pc bpc" id="L57" title="1 of 2 branches missed.">    if (currentCtClass != null) {</span>
+
+      // CtClass.addNewCpoAttribute() can't be used here because it returns a CtAttribute, not a CtJdbcAttribute
+<span class="fc" id="L60">      CtCassandraAttribute ctCassandraAttribute = CtCassandraAttribute.Factory.newInstance();</span>
+
+<span class="fc" id="L62">      ctCassandraAttribute.setJavaName(cassAttribute.getJavaName());</span>
+<span class="fc" id="L63">      ctCassandraAttribute.setJavaType(cassAttribute.getJavaType());</span>
+<span class="fc" id="L64">      ctCassandraAttribute.setDataName(cassAttribute.getDataName());</span>
+<span class="fc" id="L65">      ctCassandraAttribute.setDataType(cassAttribute.getDataType());</span>
+
+<span class="pc bpc" id="L67" title="1 of 4 branches missed.">      if (cassAttribute.getTransformClassName() != null &amp;&amp; cassAttribute.getTransformClassName().length() &gt; 0) {</span>
+<span class="fc" id="L68">        ctCassandraAttribute.setTransformClass(cassAttribute.getTransformClassName());</span>
+      }
+
+<span class="pc bpc" id="L71" title="3 of 4 branches missed.">      if (cassAttribute.getDescription() != null &amp;&amp; cassAttribute.getDescription().length() &gt; 0) {</span>
+<span class="nc" id="L72">        ctCassandraAttribute.setDescription(cassAttribute.getDescription());</span>
+      }
+
+      // add it to the class
+<span class="fc" id="L76">      CtAttribute ctAttribute = currentCtClass.addNewCpoAttribute();</span>
+<span class="fc" id="L77">      ctAttribute.set(ctCassandraAttribute);</span>
+    }
+<span class="fc" id="L79">  }</span>
+
+  @Override
+  public void visit(CpoArgument cpoArgument) {
+
+<span class="pc bpc" id="L84" title="1 of 2 branches missed.">    if (currentCtFunction != null) {</span>
+
+      // CtFunction.addNewCpoArgument() can't be used here because it returns a CtArgument, not a CtJdbcArgument
+<span class="fc" id="L87">      CtCassandraArgument ctCassandraArgument = CtCassandraArgument.Factory.newInstance();</span>
+
+<span class="fc" id="L89">      ctCassandraArgument.setAttributeName(cpoArgument.getAttributeName());</span>
+
+<span class="pc bpc" id="L91" title="3 of 4 branches missed.">      if (cpoArgument.getDescription() != null &amp;&amp; cpoArgument.getDescription().length() &gt; 0) {</span>
+<span class="nc" id="L92">        ctCassandraArgument.setDescription(cpoArgument.getDescription());</span>
+      }
+
+<span class="fc" id="L95">      CtArgument ctArgument = currentCtFunction.addNewCpoArgument();</span>
+<span class="fc" id="L96">      ctArgument.set(ctCassandraArgument);</span>
+    }
+<span class="fc" id="L98">  }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.2.201409121644</span></div></body></html>

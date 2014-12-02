@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>CtCassandraConfig.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">cpo-cassandra</a> &gt; <a href="index.source.html" class="el_package">org.synchronoss.cpo.cassandra.cpoCassandraConfig</a> &gt; <span class="el_source">CtCassandraConfig.java</span></div><h1>CtCassandraConfig.java</h1><pre class="source lang-java linenums">/*
+ * XML Type:  ctCassandraConfig
+ * Namespace: http://www.synchronoss.org/cpo/cassandra/CpoCassandraConfig.xsd
+ * Java type: org.synchronoss.cpo.cassandra.cpoCassandraConfig.CtCassandraConfig
+ *
+ * Automatically generated - do not modify.
+ */
+package org.synchronoss.cpo.cassandra.cpoCassandraConfig;
+
+
+/**
+ * An XML ctCassandraConfig(@http://www.synchronoss.org/cpo/cassandra/CpoCassandraConfig.xsd).
+ *
+ * This is a complex type.
+ */
+public interface CtCassandraConfig extends org.synchronoss.cpo.core.cpoCoreConfig.CtDataSourceConfig
+{
+<span class="nc" id="L18">    public static final org.apache.xmlbeans.SchemaType type = (org.apache.xmlbeans.SchemaType)</span>
+<span class="nc" id="L19">        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(CtCassandraConfig.class.getClassLoader(), &quot;schemaorg_apache_xmlbeans.system.s6042BBE1928BE6D5F8DECE07FC8683DE&quot;).resolveHandle(&quot;ctcassandraconfig74detype&quot;);</span>
+    
+    /**
+     * Gets the &quot;readWriteConfig&quot; element
+     */
+    org.synchronoss.cpo.cassandra.cpoCassandraConfig.CtCassandraReadWriteConfig getReadWriteConfig();
+    
+    /**
+     * True if has &quot;readWriteConfig&quot; element
+     */
+    boolean isSetReadWriteConfig();
+    
+    /**
+     * Sets the &quot;readWriteConfig&quot; element
+     */
+    void setReadWriteConfig(org.synchronoss.cpo.cassandra.cpoCassandraConfig.CtCassandraReadWriteConfig readWriteConfig);
+    
+    /**
+     * Appends and returns a new empty &quot;readWriteConfig&quot; element
+     */
+    org.synchronoss.cpo.cassandra.cpoCassandraConfig.CtCassandraReadWriteConfig addNewReadWriteConfig();
+    
+    /**
+     * Unsets the &quot;readWriteConfig&quot; element
+     */
+    void unsetReadWriteConfig();
+    
+    /**
+     * Gets the &quot;readConfig&quot; element
+     */
+    org.synchronoss.cpo.cassandra.cpoCassandraConfig.CtCassandraReadWriteConfig getReadConfig();
+    
+    /**
+     * True if has &quot;readConfig&quot; element
+     */
+    boolean isSetReadConfig();
+    
+    /**
+     * Sets the &quot;readConfig&quot; element
+     */
+    void setReadConfig(org.synchronoss.cpo.cassandra.cpoCassandraConfig.CtCassandraReadWriteConfig readConfig);
+    
+    /**
+     * Appends and returns a new empty &quot;readConfig&quot; element
+     */
+    org.synchronoss.cpo.cassandra.cpoCassandraConfig.CtCassandraReadWriteConfig addNewReadConfig();
+    
+    /**
+     * Unsets the &quot;readConfig&quot; element
+     */
+    void unsetReadConfig();
+    
+    /**
+     * Gets the &quot;writeConfig&quot; element
+     */
+    org.synchronoss.cpo.cassandra.cpoCassandraConfig.CtCassandraReadWriteConfig getWriteConfig();
+    
+    /**
+     * True if has &quot;writeConfig&quot; element
+     */
+    boolean isSetWriteConfig();
+    
+    /**
+     * Sets the &quot;writeConfig&quot; element
+     */
+    void setWriteConfig(org.synchronoss.cpo.cassandra.cpoCassandraConfig.CtCassandraReadWriteConfig writeConfig);
+    
+    /**
+     * Appends and returns a new empty &quot;writeConfig&quot; element
+     */
+    org.synchronoss.cpo.cassandra.cpoCassandraConfig.CtCassandraReadWriteConfig addNewWriteConfig();
+    
+    /**
+     * Unsets the &quot;writeConfig&quot; element
+     */
+    void unsetWriteConfig();
+    
+    /**
+     * A factory class with static methods for creating instances
+     * of this type.
+     */
+    
+    public static final class Factory
+    {
+        public static org.synchronoss.cpo.cassandra.cpoCassandraConfig.CtCassandraConfig newInstance() {
+<span class="nc" id="L104">          return (org.synchronoss.cpo.cassandra.cpoCassandraConfig.CtCassandraConfig) org.apache.xmlbeans.XmlBeans.getContextTypeLoader().newInstance( type, null ); }</span>
+        
+        public static org.synchronoss.cpo.cassandra.cpoCassandraConfig.CtCassandraConfig newInstance(org.apache.xmlbeans.XmlOptions options) {
+<span class="nc" id="L107">          return (org.synchronoss.cpo.cassandra.cpoCassandraConfig.CtCassandraConfig) org.apache.xmlbeans.XmlBeans.getContextTypeLoader().newInstance( type, options ); }</span>
+        
+        /** @param xmlAsString the string value to parse */
+        public static org.synchronoss.cpo.cassandra.cpoCassandraConfig.CtCassandraConfig parse(java.lang.String xmlAsString) throws org.apache.xmlbeans.XmlException {
+<span class="nc" id="L111">          return (org.synchronoss.cpo.cassandra.cpoCassandraConfig.CtCassandraConfig) org.apache.xmlbeans.XmlBeans.getContextTypeLoader().parse( xmlAsString, type, null ); }</span>
+        
+        public static org.synchronoss.cpo.cassandra.cpoCassandraConfig.CtCassandraConfig parse(java.lang.String xmlAsString, org.apache.xmlbeans.XmlOptions options) throws org.apache.xmlbeans.XmlException {
+<span class="nc" id="L114">          return (org.synchronoss.cpo.cassandra.cpoCassandraConfig.CtCassandraConfig) org.apache.xmlbeans.XmlBeans.getContextTypeLoader().parse( xmlAsString, type, options ); }</span>
+        
+        /** @param file the file from which to load an xml document */
+        public static org.synchronoss.cpo.cassandra.cpoCassandraConfig.CtCassandraConfig parse(java.io.File file) throws org.apache.xmlbeans.XmlException, java.io.IOException {
+<span class="nc" id="L118">          return (org.synchronoss.cpo.cassandra.cpoCassandraConfig.CtCassandraConfig) org.apache.xmlbeans.XmlBeans.getContextTypeLoader().parse( file, type, null ); }</span>
+        
+        public static org.synchronoss.cpo.cassandra.cpoCassandraConfig.CtCassandraConfig parse(java.io.File file, org.apache.xmlbeans.XmlOptions options) throws org.apache.xmlbeans.XmlException, java.io.IOException {
+<span class="nc" id="L121">          return (org.synchronoss.cpo.cassandra.cpoCassandraConfig.CtCassandraConfig) org.apache.xmlbeans.XmlBeans.getContextTypeLoader().parse( file, type, options ); }</span>
+        
+        public static org.synchronoss.cpo.cassandra.cpoCassandraConfig.CtCassandraConfig parse(java.net.URL u) throws org.apache.xmlbeans.XmlException, java.io.IOException {
+<span class="nc" id="L124">          return (org.synchronoss.cpo.cassandra.cpoCassandraConfig.CtCassandraConfig) org.apache.xmlbeans.XmlBeans.getContextTypeLoader().parse( u, type, null ); }</span>
+        
+        public static org.synchronoss.cpo.cassandra.cpoCassandraConfig.CtCassandraConfig parse(java.net.URL u, org.apache.xmlbeans.XmlOptions options) throws org.apache.xmlbeans.XmlException, java.io.IOException {
+<span class="nc" id="L127">          return (org.synchronoss.cpo.cassandra.cpoCassandraConfig.CtCassandraConfig) org.apache.xmlbeans.XmlBeans.getContextTypeLoader().parse( u, type, options ); }</span>
+        
+        public static org.synchronoss.cpo.cassandra.cpoCassandraConfig.CtCassandraConfig parse(java.io.InputStream is) throws org.apache.xmlbeans.XmlException, java.io.IOException {
+<span class="nc" id="L130">          return (org.synchronoss.cpo.cassandra.cpoCassandraConfig.CtCassandraConfig) org.apache.xmlbeans.XmlBeans.getContextTypeLoader().parse( is, type, null ); }</span>
+        
+        public static org.synchronoss.cpo.cassandra.cpoCassandraConfig.CtCassandraConfig parse(java.io.InputStream is, org.apache.xmlbeans.XmlOptions options) throws org.apache.xmlbeans.XmlException, java.io.IOException {
+<span class="nc" id="L133">          return (org.synchronoss.cpo.cassandra.cpoCassandraConfig.CtCassandraConfig) org.apache.xmlbeans.XmlBeans.getContextTypeLoader().parse( is, type, options ); }</span>
+        
+        public static org.synchronoss.cpo.cassandra.cpoCassandraConfig.CtCassandraConfig parse(java.io.Reader r) throws org.apache.xmlbeans.XmlException, java.io.IOException {
+<span class="nc" id="L136">          return (org.synchronoss.cpo.cassandra.cpoCassandraConfig.CtCassandraConfig) org.apache.xmlbeans.XmlBeans.getContextTypeLoader().parse( r, type, null ); }</span>
+        
+        public static org.synchronoss.cpo.cassandra.cpoCassandraConfig.CtCassandraConfig parse(java.io.Reader r, org.apache.xmlbeans.XmlOptions options) throws org.apache.xmlbeans.XmlException, java.io.IOException {
+<span class="nc" id="L139">          return (org.synchronoss.cpo.cassandra.cpoCassandraConfig.CtCassandraConfig) org.apache.xmlbeans.XmlBeans.getContextTypeLoader().parse( r, type, options ); }</span>
+        
+        public static org.synchronoss.cpo.cassandra.cpoCassandraConfig.CtCassandraConfig parse(javax.xml.stream.XMLStreamReader sr) throws org.apache.xmlbeans.XmlException {
+<span class="nc" id="L142">          return (org.synchronoss.cpo.cassandra.cpoCassandraConfig.CtCassandraConfig) org.apache.xmlbeans.XmlBeans.getContextTypeLoader().parse( sr, type, null ); }</span>
+        
+        public static org.synchronoss.cpo.cassandra.cpoCassandraConfig.CtCassandraConfig parse(javax.xml.stream.XMLStreamReader sr, org.apache.xmlbeans.XmlOptions options) throws org.apache.xmlbeans.XmlException {
+<span class="nc" id="L145">          return (org.synchronoss.cpo.cassandra.cpoCassandraConfig.CtCassandraConfig) org.apache.xmlbeans.XmlBeans.getContextTypeLoader().parse( sr, type, options ); }</span>
+        
+        public static org.synchronoss.cpo.cassandra.cpoCassandraConfig.CtCassandraConfig parse(org.w3c.dom.Node node) throws org.apache.xmlbeans.XmlException {
+<span class="nc" id="L148">          return (org.synchronoss.cpo.cassandra.cpoCassandraConfig.CtCassandraConfig) org.apache.xmlbeans.XmlBeans.getContextTypeLoader().parse( node, type, null ); }</span>
+        
+        public static org.synchronoss.cpo.cassandra.cpoCassandraConfig.CtCassandraConfig parse(org.w3c.dom.Node node, org.apache.xmlbeans.XmlOptions options) throws org.apache.xmlbeans.XmlException {
+<span class="nc" id="L151">          return (org.synchronoss.cpo.cassandra.cpoCassandraConfig.CtCassandraConfig) org.apache.xmlbeans.XmlBeans.getContextTypeLoader().parse( node, type, options ); }</span>
+        
+        /** @deprecated {@link org.apache.xmlbeans.xml.stream.XMLInputStream} */
+        public static org.synchronoss.cpo.cassandra.cpoCassandraConfig.CtCassandraConfig parse(org.apache.xmlbeans.xml.stream.XMLInputStream xis) throws org.apache.xmlbeans.XmlException, org.apache.xmlbeans.xml.stream.XMLStreamException {
+<span class="nc" id="L155">          return (org.synchronoss.cpo.cassandra.cpoCassandraConfig.CtCassandraConfig) org.apache.xmlbeans.XmlBeans.getContextTypeLoader().parse( xis, type, null ); }</span>
+        
+        /** @deprecated {@link org.apache.xmlbeans.xml.stream.XMLInputStream} */
+        public static org.synchronoss.cpo.cassandra.cpoCassandraConfig.CtCassandraConfig parse(org.apache.xmlbeans.xml.stream.XMLInputStream xis, org.apache.xmlbeans.XmlOptions options) throws org.apache.xmlbeans.XmlException, org.apache.xmlbeans.xml.stream.XMLStreamException {
+<span class="nc" id="L159">          return (org.synchronoss.cpo.cassandra.cpoCassandraConfig.CtCassandraConfig) org.apache.xmlbeans.XmlBeans.getContextTypeLoader().parse( xis, type, options ); }</span>
+        
+        /** @deprecated {@link org.apache.xmlbeans.xml.stream.XMLInputStream} */
+        public static org.apache.xmlbeans.xml.stream.XMLInputStream newValidatingXMLInputStream(org.apache.xmlbeans.xml.stream.XMLInputStream xis) throws org.apache.xmlbeans.XmlException, org.apache.xmlbeans.xml.stream.XMLStreamException {
+<span class="nc" id="L163">          return org.apache.xmlbeans.XmlBeans.getContextTypeLoader().newValidatingXMLInputStream( xis, type, null ); }</span>
+        
+        /** @deprecated {@link org.apache.xmlbeans.xml.stream.XMLInputStream} */
+        public static org.apache.xmlbeans.xml.stream.XMLInputStream newValidatingXMLInputStream(org.apache.xmlbeans.xml.stream.XMLInputStream xis, org.apache.xmlbeans.XmlOptions options) throws org.apache.xmlbeans.XmlException, org.apache.xmlbeans.xml.stream.XMLStreamException {
+<span class="nc" id="L167">          return org.apache.xmlbeans.XmlBeans.getContextTypeLoader().newValidatingXMLInputStream( xis, type, options ); }</span>
+        
+<span class="nc" id="L169">        private Factory() { } // No instance of this class allowed</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.2.201409121644</span></div></body></html>

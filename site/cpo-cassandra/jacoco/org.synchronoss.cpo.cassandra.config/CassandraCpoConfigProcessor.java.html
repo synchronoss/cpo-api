@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>CassandraCpoConfigProcessor.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">cpo-cassandra</a> &gt; <a href="index.source.html" class="el_package">org.synchronoss.cpo.cassandra.config</a> &gt; <span class="el_source">CassandraCpoConfigProcessor.java</span></div><h1>CassandraCpoConfigProcessor.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2003-2012 David E. Berry
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ *
+ * A copy of the GNU Lesser General Public License may also be found at
+ * http://www.gnu.org/licenses/lgpl.txt
+ */
+package org.synchronoss.cpo.cassandra.config;
+
+import com.datastax.driver.core.*;
+import com.datastax.driver.core.policies.LoadBalancingPolicy;
+import com.datastax.driver.core.policies.ReconnectionPolicy;
+import com.datastax.driver.core.policies.RetryPolicy;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.synchronoss.cpo.CpoAdapter;
+import org.synchronoss.cpo.CpoException;
+import org.synchronoss.cpo.cassandra.CassandraCpoAdapter;
+import org.synchronoss.cpo.cassandra.ClusterDataSourceInfo;
+import org.synchronoss.cpo.cassandra.cpoCassandraConfig.CtCassandraConfig;
+import org.synchronoss.cpo.cassandra.cpoCassandraConfig.CtCassandraReadWriteConfig;
+import org.synchronoss.cpo.cassandra.meta.CassandraCpoMetaDescriptor;
+import org.synchronoss.cpo.config.CpoConfigProcessor;
+import org.synchronoss.cpo.core.cpoCoreConfig.CtDataSourceConfig;
+import org.synchronoss.cpo.meta.CpoMetaDescriptor;
+
+import java.util.ArrayList;
+
+/**
+ * CassandraCpoConfigProcessor processes the datasource configuration file for cassandra. It pulls out all the information needed to configure a cluster for use
+ * within the application.
+ *
+ * User: dberry
+ * Date: 9/10/13
+ * Time: 08:20 AM
+ * To change this template use File | Settings | File Templates.
+ */
+<span class="fc" id="L51">public class CassandraCpoConfigProcessor implements CpoConfigProcessor {</span>
+<span class="fc" id="L52">  private static final Logger logger = LoggerFactory.getLogger(CassandraCpoConfigProcessor.class);</span>
+
+  @Override
+  public CpoAdapter processCpoConfig(CtDataSourceConfig cpoConfig) throws CpoException {
+<span class="fc" id="L56">    CpoAdapter cpoAdapter = null;</span>
+
+<span class="pc bpc" id="L58" title="2 of 4 branches missed.">    if (cpoConfig == null || !(cpoConfig instanceof CtCassandraConfig)) {</span>
+<span class="nc" id="L59">      throw new CpoException(&quot;Invalid Jdbc Configuration Information&quot;);</span>
+    }
+
+<span class="fc" id="L62">    CtCassandraConfig cassandraConfig = (CtCassandraConfig) cpoConfig;</span>
+
+<span class="fc" id="L64">    CassandraCpoMetaDescriptor metaDescriptor = (CassandraCpoMetaDescriptor) CpoMetaDescriptor.getInstance(cassandraConfig.getMetaDescriptorName());</span>
+
+    // build the cluster information
+<span class="pc bpc" id="L67" title="1 of 2 branches missed.">    if (cassandraConfig.isSetReadWriteConfig()) {</span>
+<span class="fc" id="L68">      ClusterDataSourceInfo clusterInfo = buildDataSourceInfo(cassandraConfig.getName(), cassandraConfig.getReadWriteConfig());</span>
+<span class="fc" id="L69">      cpoAdapter = CassandraCpoAdapter.getInstance(metaDescriptor, clusterInfo);</span>
+<span class="fc" id="L70">    } else {</span>
+<span class="nc" id="L71">      ClusterDataSourceInfo readClusterInfo = buildDataSourceInfo(cassandraConfig.getName(), cassandraConfig.getReadConfig());</span>
+<span class="nc" id="L72">      ClusterDataSourceInfo writeClusterInfo = buildDataSourceInfo(cassandraConfig.getName(), cassandraConfig.getWriteConfig());</span>
+<span class="nc" id="L73">      cpoAdapter = CassandraCpoAdapter.getInstance(metaDescriptor, writeClusterInfo, readClusterInfo);</span>
+    }
+<span class="fc" id="L75">    logger.debug(&quot;Adapter Datasourcename =&quot;+cpoAdapter.getDataSourceName());</span>
+
+<span class="fc" id="L77">    return cpoAdapter;</span>
+
+  }
+
+  private ClusterDataSourceInfo buildDataSourceInfo(String dataConfigName, CtCassandraReadWriteConfig readWriteConfig) throws CpoException {
+<span class="fc" id="L82">    ClusterDataSourceInfo clusterInfo = new ClusterDataSourceInfo(dataConfigName, readWriteConfig.getKeySpace(), readWriteConfig.getContactPointArray());</span>
+
+    // add clusterName
+<span class="pc bpc" id="L85" title="1 of 2 branches missed.">    if(readWriteConfig.isSetClusterName())</span>
+<span class="nc" id="L86">      clusterInfo.setClusterName(readWriteConfig.getClusterName());</span>
+
+    // add port
+<span class="pc bpc" id="L89" title="1 of 2 branches missed.">    if (readWriteConfig.isSetPort())</span>
+<span class="fc" id="L90">      clusterInfo.setPort(readWriteConfig.getPort());</span>
+
+    // add loadBalancing
+<span class="pc bpc" id="L93" title="1 of 2 branches missed.">    if (readWriteConfig.isSetLoadBalancingPolicy()) {</span>
+<span class="nc" id="L94">      clusterInfo.setLoadBalancingPolicy(new ConfigInstantiator&lt;LoadBalancingPolicy&gt;().instantiate(readWriteConfig.getLoadBalancingPolicy()));</span>
+    }
+
+    // add reconnectionPolicy
+<span class="pc bpc" id="L98" title="1 of 2 branches missed.">    if (readWriteConfig.isSetReconnectionPolicy())</span>
+<span class="nc" id="L99">      clusterInfo.setReconnectionPolicy(new ConfigInstantiator&lt;ReconnectionPolicy&gt;().instantiate(readWriteConfig.getReconnectionPolicy()));</span>
+
+    // add retryPolicy
+<span class="pc bpc" id="L102" title="1 of 2 branches missed.">    if (readWriteConfig.isSetRetryPolicy())</span>
+<span class="nc" id="L103">      clusterInfo.setRetryPolicy(new ConfigInstantiator&lt;RetryPolicy&gt;().instantiate(readWriteConfig.getRetryPolicy()));</span>
+
+    // add credentials
+<span class="pc bpc" id="L106" title="1 of 2 branches missed.">    if (readWriteConfig.isSetCredentials()) {</span>
+<span class="nc" id="L107">      clusterInfo.setHasCredentials(true);</span>
+<span class="nc" id="L108">      clusterInfo.setUserName(readWriteConfig.getCredentials().getUser());</span>
+<span class="nc" id="L109">      clusterInfo.setPassword(readWriteConfig.getCredentials().getUser());</span>
+    }
+
+    // add AuthProvider
+//    if (readWriteConfig.isSetAuthProvider())
+//      clusterInfo.setAuthProvider(new ConfigInstantiator&lt;AuthProvider&gt;().instantiate(readWriteConfig.getAuthProvider()));
+
+    // add Compression
+<span class="pc bpc" id="L117" title="1 of 2 branches missed.">    if (readWriteConfig.isSetCompression())</span>
+<span class="nc" id="L118">      clusterInfo.setCompressionType(ProtocolOptions.Compression.valueOf(readWriteConfig.getCompression().toString()));</span>
+
+    // add Metrics
+<span class="pc bpc" id="L121" title="1 of 2 branches missed.">    if (readWriteConfig.isSetMetrics())</span>
+<span class="nc" id="L122">      clusterInfo.setUseMetrics(readWriteConfig.getMetrics());</span>
+
+    // add SSL
+<span class="pc bpc" id="L125" title="1 of 2 branches missed.">    if (readWriteConfig.isSetSslOptions())</span>
+<span class="nc" id="L126">      clusterInfo.setSslOptions(new ConfigInstantiator&lt;SSLOptions&gt;().instantiate(readWriteConfig.getSslOptions()));</span>
+
+    // add Listeners
+<span class="pc bpc" id="L129" title="1 of 2 branches missed.">    if (readWriteConfig.getInitialListenersArray().length&gt;0){</span>
+<span class="nc" id="L130">      ArrayList&lt;Host.StateListener&gt; listeners = new ArrayList&lt;&gt;();</span>
+<span class="nc bnc" id="L131" title="All 2 branches missed.">      for (String s : readWriteConfig.getInitialListenersArray()) {</span>
+<span class="nc" id="L132">        listeners.add(new ConfigInstantiator&lt;Host.StateListener&gt;().instantiate(s));</span>
+      }
+<span class="nc" id="L134">      clusterInfo.setListeners(listeners);</span>
+    }
+
+    // add JMX Reporting
+<span class="pc bpc" id="L138" title="1 of 2 branches missed.">    if (readWriteConfig.isSetJmxReporting())</span>
+<span class="nc" id="L139">      clusterInfo.setUseJmxReporting(readWriteConfig.getJmxReporting());</span>
+
+    // add pooling options
+<span class="pc bpc" id="L142" title="1 of 2 branches missed.">    if (readWriteConfig.isSetPoolingOptions())</span>
+<span class="nc" id="L143">      clusterInfo.setPoolingOptions(new ConfigInstantiator&lt;PoolingOptions&gt;().instantiate(readWriteConfig.getPoolingOptions()));</span>
+
+    // add socket options
+<span class="pc bpc" id="L146" title="1 of 2 branches missed.">    if (readWriteConfig.isSetSocketOptions())</span>
+<span class="nc" id="L147">      clusterInfo.setSocketOptions(new ConfigInstantiator&lt;SocketOptions&gt;().instantiate(readWriteConfig.getSocketOptions()));</span>
+
+    // TODO: Add back in when add query options
+//    if (readWriteConfig.isSetQueryOptions())
+//      clusterInfo.setQueryOptions(new ConfigInstantiator&lt;QueryOptions&gt;().instantiate(readWriteConfig.getQueryOptions()));
+
+
+<span class="fc" id="L154">    logger.debug(&quot;Created DataSourceInfo: &quot; + clusterInfo);</span>
+<span class="fc" id="L155">    return clusterInfo;</span>
+  }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.2.201409121644</span></div></body></html>

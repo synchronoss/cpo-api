@@ -1,0 +1,682 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>CtCassandraReadWriteConfig.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">cpo-cassandra</a> &gt; <a href="index.source.html" class="el_package">org.synchronoss.cpo.cassandra.cpoCassandraConfig</a> &gt; <span class="el_source">CtCassandraReadWriteConfig.java</span></div><h1>CtCassandraReadWriteConfig.java</h1><pre class="source lang-java linenums">/*
+ * XML Type:  ctCassandraReadWriteConfig
+ * Namespace: http://www.synchronoss.org/cpo/cassandra/CpoCassandraConfig.xsd
+ * Java type: org.synchronoss.cpo.cassandra.cpoCassandraConfig.CtCassandraReadWriteConfig
+ *
+ * Automatically generated - do not modify.
+ */
+package org.synchronoss.cpo.cassandra.cpoCassandraConfig;
+
+
+/**
+ * An XML ctCassandraReadWriteConfig(@http://www.synchronoss.org/cpo/cassandra/CpoCassandraConfig.xsd).
+ *
+ * This is a complex type.
+ */
+public interface CtCassandraReadWriteConfig extends org.apache.xmlbeans.XmlObject
+{
+<span class="nc" id="L18">    public static final org.apache.xmlbeans.SchemaType type = (org.apache.xmlbeans.SchemaType)</span>
+<span class="nc" id="L19">        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(CtCassandraReadWriteConfig.class.getClassLoader(), &quot;schemaorg_apache_xmlbeans.system.s6042BBE1928BE6D5F8DECE07FC8683DE&quot;).resolveHandle(&quot;ctcassandrareadwriteconfig2e0btype&quot;);</span>
+    
+    /**
+     * Gets the &quot;keySpace&quot; element
+     */
+    java.lang.String getKeySpace();
+    
+    /**
+     * Gets (as xml) the &quot;keySpace&quot; element
+     */
+    org.apache.xmlbeans.XmlString xgetKeySpace();
+    
+    /**
+     * Sets the &quot;keySpace&quot; element
+     */
+    void setKeySpace(java.lang.String keySpace);
+    
+    /**
+     * Sets (as xml) the &quot;keySpace&quot; element
+     */
+    void xsetKeySpace(org.apache.xmlbeans.XmlString keySpace);
+    
+    /**
+     * Gets array of all &quot;contactPoint&quot; elements
+     */
+    java.lang.String[] getContactPointArray();
+    
+    /**
+     * Gets ith &quot;contactPoint&quot; element
+     */
+    java.lang.String getContactPointArray(int i);
+    
+    /**
+     * Gets (as xml) array of all &quot;contactPoint&quot; elements
+     */
+    org.apache.xmlbeans.XmlString[] xgetContactPointArray();
+    
+    /**
+     * Gets (as xml) ith &quot;contactPoint&quot; element
+     */
+    org.apache.xmlbeans.XmlString xgetContactPointArray(int i);
+    
+    /**
+     * Returns number of &quot;contactPoint&quot; element
+     */
+    int sizeOfContactPointArray();
+    
+    /**
+     * Sets array of all &quot;contactPoint&quot; element
+     */
+    void setContactPointArray(java.lang.String[] contactPointArray);
+    
+    /**
+     * Sets ith &quot;contactPoint&quot; element
+     */
+    void setContactPointArray(int i, java.lang.String contactPoint);
+    
+    /**
+     * Sets (as xml) array of all &quot;contactPoint&quot; element
+     */
+    void xsetContactPointArray(org.apache.xmlbeans.XmlString[] contactPointArray);
+    
+    /**
+     * Sets (as xml) ith &quot;contactPoint&quot; element
+     */
+    void xsetContactPointArray(int i, org.apache.xmlbeans.XmlString contactPoint);
+    
+    /**
+     * Inserts the value as the ith &quot;contactPoint&quot; element
+     */
+    void insertContactPoint(int i, java.lang.String contactPoint);
+    
+    /**
+     * Appends the value as the last &quot;contactPoint&quot; element
+     */
+    void addContactPoint(java.lang.String contactPoint);
+    
+    /**
+     * Inserts and returns a new empty value (as xml) as the ith &quot;contactPoint&quot; element
+     */
+    org.apache.xmlbeans.XmlString insertNewContactPoint(int i);
+    
+    /**
+     * Appends and returns a new empty value (as xml) as the last &quot;contactPoint&quot; element
+     */
+    org.apache.xmlbeans.XmlString addNewContactPoint();
+    
+    /**
+     * Removes the ith &quot;contactPoint&quot; element
+     */
+    void removeContactPoint(int i);
+    
+    /**
+     * Gets the &quot;clusterName&quot; element
+     */
+    java.lang.String getClusterName();
+    
+    /**
+     * Gets (as xml) the &quot;clusterName&quot; element
+     */
+    org.apache.xmlbeans.XmlString xgetClusterName();
+    
+    /**
+     * True if has &quot;clusterName&quot; element
+     */
+    boolean isSetClusterName();
+    
+    /**
+     * Sets the &quot;clusterName&quot; element
+     */
+    void setClusterName(java.lang.String clusterName);
+    
+    /**
+     * Sets (as xml) the &quot;clusterName&quot; element
+     */
+    void xsetClusterName(org.apache.xmlbeans.XmlString clusterName);
+    
+    /**
+     * Unsets the &quot;clusterName&quot; element
+     */
+    void unsetClusterName();
+    
+    /**
+     * Gets the &quot;port&quot; element
+     */
+    int getPort();
+    
+    /**
+     * Gets (as xml) the &quot;port&quot; element
+     */
+    org.apache.xmlbeans.XmlInt xgetPort();
+    
+    /**
+     * True if has &quot;port&quot; element
+     */
+    boolean isSetPort();
+    
+    /**
+     * Sets the &quot;port&quot; element
+     */
+    void setPort(int port);
+    
+    /**
+     * Sets (as xml) the &quot;port&quot; element
+     */
+    void xsetPort(org.apache.xmlbeans.XmlInt port);
+    
+    /**
+     * Unsets the &quot;port&quot; element
+     */
+    void unsetPort();
+    
+    /**
+     * Gets the &quot;loadBalancingPolicy&quot; element
+     */
+    java.lang.String getLoadBalancingPolicy();
+    
+    /**
+     * Gets (as xml) the &quot;loadBalancingPolicy&quot; element
+     */
+    org.apache.xmlbeans.XmlString xgetLoadBalancingPolicy();
+    
+    /**
+     * True if has &quot;loadBalancingPolicy&quot; element
+     */
+    boolean isSetLoadBalancingPolicy();
+    
+    /**
+     * Sets the &quot;loadBalancingPolicy&quot; element
+     */
+    void setLoadBalancingPolicy(java.lang.String loadBalancingPolicy);
+    
+    /**
+     * Sets (as xml) the &quot;loadBalancingPolicy&quot; element
+     */
+    void xsetLoadBalancingPolicy(org.apache.xmlbeans.XmlString loadBalancingPolicy);
+    
+    /**
+     * Unsets the &quot;loadBalancingPolicy&quot; element
+     */
+    void unsetLoadBalancingPolicy();
+    
+    /**
+     * Gets the &quot;reconnectionPolicy&quot; element
+     */
+    java.lang.String getReconnectionPolicy();
+    
+    /**
+     * Gets (as xml) the &quot;reconnectionPolicy&quot; element
+     */
+    org.apache.xmlbeans.XmlString xgetReconnectionPolicy();
+    
+    /**
+     * True if has &quot;reconnectionPolicy&quot; element
+     */
+    boolean isSetReconnectionPolicy();
+    
+    /**
+     * Sets the &quot;reconnectionPolicy&quot; element
+     */
+    void setReconnectionPolicy(java.lang.String reconnectionPolicy);
+    
+    /**
+     * Sets (as xml) the &quot;reconnectionPolicy&quot; element
+     */
+    void xsetReconnectionPolicy(org.apache.xmlbeans.XmlString reconnectionPolicy);
+    
+    /**
+     * Unsets the &quot;reconnectionPolicy&quot; element
+     */
+    void unsetReconnectionPolicy();
+    
+    /**
+     * Gets the &quot;retryPolicy&quot; element
+     */
+    java.lang.String getRetryPolicy();
+    
+    /**
+     * Gets (as xml) the &quot;retryPolicy&quot; element
+     */
+    org.apache.xmlbeans.XmlString xgetRetryPolicy();
+    
+    /**
+     * True if has &quot;retryPolicy&quot; element
+     */
+    boolean isSetRetryPolicy();
+    
+    /**
+     * Sets the &quot;retryPolicy&quot; element
+     */
+    void setRetryPolicy(java.lang.String retryPolicy);
+    
+    /**
+     * Sets (as xml) the &quot;retryPolicy&quot; element
+     */
+    void xsetRetryPolicy(org.apache.xmlbeans.XmlString retryPolicy);
+    
+    /**
+     * Unsets the &quot;retryPolicy&quot; element
+     */
+    void unsetRetryPolicy();
+    
+    /**
+     * Gets the &quot;credentials&quot; element
+     */
+    org.synchronoss.cpo.cassandra.cpoCassandraConfig.CtCredentials getCredentials();
+    
+    /**
+     * True if has &quot;credentials&quot; element
+     */
+    boolean isSetCredentials();
+    
+    /**
+     * Sets the &quot;credentials&quot; element
+     */
+    void setCredentials(org.synchronoss.cpo.cassandra.cpoCassandraConfig.CtCredentials credentials);
+    
+    /**
+     * Appends and returns a new empty &quot;credentials&quot; element
+     */
+    org.synchronoss.cpo.cassandra.cpoCassandraConfig.CtCredentials addNewCredentials();
+    
+    /**
+     * Unsets the &quot;credentials&quot; element
+     */
+    void unsetCredentials();
+    
+    /**
+     * Gets the &quot;authProvider&quot; element
+     */
+    java.lang.String getAuthProvider();
+    
+    /**
+     * Gets (as xml) the &quot;authProvider&quot; element
+     */
+    org.apache.xmlbeans.XmlString xgetAuthProvider();
+    
+    /**
+     * True if has &quot;authProvider&quot; element
+     */
+    boolean isSetAuthProvider();
+    
+    /**
+     * Sets the &quot;authProvider&quot; element
+     */
+    void setAuthProvider(java.lang.String authProvider);
+    
+    /**
+     * Sets (as xml) the &quot;authProvider&quot; element
+     */
+    void xsetAuthProvider(org.apache.xmlbeans.XmlString authProvider);
+    
+    /**
+     * Unsets the &quot;authProvider&quot; element
+     */
+    void unsetAuthProvider();
+    
+    /**
+     * Gets the &quot;compression&quot; element
+     */
+    org.synchronoss.cpo.cassandra.cpoCassandraConfig.StCompression.Enum getCompression();
+    
+    /**
+     * Gets (as xml) the &quot;compression&quot; element
+     */
+    org.synchronoss.cpo.cassandra.cpoCassandraConfig.StCompression xgetCompression();
+    
+    /**
+     * True if has &quot;compression&quot; element
+     */
+    boolean isSetCompression();
+    
+    /**
+     * Sets the &quot;compression&quot; element
+     */
+    void setCompression(org.synchronoss.cpo.cassandra.cpoCassandraConfig.StCompression.Enum compression);
+    
+    /**
+     * Sets (as xml) the &quot;compression&quot; element
+     */
+    void xsetCompression(org.synchronoss.cpo.cassandra.cpoCassandraConfig.StCompression compression);
+    
+    /**
+     * Unsets the &quot;compression&quot; element
+     */
+    void unsetCompression();
+    
+    /**
+     * Gets the &quot;metrics&quot; element
+     */
+    boolean getMetrics();
+    
+    /**
+     * Gets (as xml) the &quot;metrics&quot; element
+     */
+    org.apache.xmlbeans.XmlBoolean xgetMetrics();
+    
+    /**
+     * True if has &quot;metrics&quot; element
+     */
+    boolean isSetMetrics();
+    
+    /**
+     * Sets the &quot;metrics&quot; element
+     */
+    void setMetrics(boolean metrics);
+    
+    /**
+     * Sets (as xml) the &quot;metrics&quot; element
+     */
+    void xsetMetrics(org.apache.xmlbeans.XmlBoolean metrics);
+    
+    /**
+     * Unsets the &quot;metrics&quot; element
+     */
+    void unsetMetrics();
+    
+    /**
+     * Gets the &quot;sslOptions&quot; element
+     */
+    java.lang.String getSslOptions();
+    
+    /**
+     * Gets (as xml) the &quot;sslOptions&quot; element
+     */
+    org.apache.xmlbeans.XmlString xgetSslOptions();
+    
+    /**
+     * Tests for nil &quot;sslOptions&quot; element
+     */
+    boolean isNilSslOptions();
+    
+    /**
+     * True if has &quot;sslOptions&quot; element
+     */
+    boolean isSetSslOptions();
+    
+    /**
+     * Sets the &quot;sslOptions&quot; element
+     */
+    void setSslOptions(java.lang.String sslOptions);
+    
+    /**
+     * Sets (as xml) the &quot;sslOptions&quot; element
+     */
+    void xsetSslOptions(org.apache.xmlbeans.XmlString sslOptions);
+    
+    /**
+     * Nils the &quot;sslOptions&quot; element
+     */
+    void setNilSslOptions();
+    
+    /**
+     * Unsets the &quot;sslOptions&quot; element
+     */
+    void unsetSslOptions();
+    
+    /**
+     * Gets array of all &quot;initialListeners&quot; elements
+     */
+    java.lang.String[] getInitialListenersArray();
+    
+    /**
+     * Gets ith &quot;initialListeners&quot; element
+     */
+    java.lang.String getInitialListenersArray(int i);
+    
+    /**
+     * Gets (as xml) array of all &quot;initialListeners&quot; elements
+     */
+    org.apache.xmlbeans.XmlString[] xgetInitialListenersArray();
+    
+    /**
+     * Gets (as xml) ith &quot;initialListeners&quot; element
+     */
+    org.apache.xmlbeans.XmlString xgetInitialListenersArray(int i);
+    
+    /**
+     * Returns number of &quot;initialListeners&quot; element
+     */
+    int sizeOfInitialListenersArray();
+    
+    /**
+     * Sets array of all &quot;initialListeners&quot; element
+     */
+    void setInitialListenersArray(java.lang.String[] initialListenersArray);
+    
+    /**
+     * Sets ith &quot;initialListeners&quot; element
+     */
+    void setInitialListenersArray(int i, java.lang.String initialListeners);
+    
+    /**
+     * Sets (as xml) array of all &quot;initialListeners&quot; element
+     */
+    void xsetInitialListenersArray(org.apache.xmlbeans.XmlString[] initialListenersArray);
+    
+    /**
+     * Sets (as xml) ith &quot;initialListeners&quot; element
+     */
+    void xsetInitialListenersArray(int i, org.apache.xmlbeans.XmlString initialListeners);
+    
+    /**
+     * Inserts the value as the ith &quot;initialListeners&quot; element
+     */
+    void insertInitialListeners(int i, java.lang.String initialListeners);
+    
+    /**
+     * Appends the value as the last &quot;initialListeners&quot; element
+     */
+    void addInitialListeners(java.lang.String initialListeners);
+    
+    /**
+     * Inserts and returns a new empty value (as xml) as the ith &quot;initialListeners&quot; element
+     */
+    org.apache.xmlbeans.XmlString insertNewInitialListeners(int i);
+    
+    /**
+     * Appends and returns a new empty value (as xml) as the last &quot;initialListeners&quot; element
+     */
+    org.apache.xmlbeans.XmlString addNewInitialListeners();
+    
+    /**
+     * Removes the ith &quot;initialListeners&quot; element
+     */
+    void removeInitialListeners(int i);
+    
+    /**
+     * Gets the &quot;jmxReporting&quot; element
+     */
+    boolean getJmxReporting();
+    
+    /**
+     * Gets (as xml) the &quot;jmxReporting&quot; element
+     */
+    org.apache.xmlbeans.XmlBoolean xgetJmxReporting();
+    
+    /**
+     * True if has &quot;jmxReporting&quot; element
+     */
+    boolean isSetJmxReporting();
+    
+    /**
+     * Sets the &quot;jmxReporting&quot; element
+     */
+    void setJmxReporting(boolean jmxReporting);
+    
+    /**
+     * Sets (as xml) the &quot;jmxReporting&quot; element
+     */
+    void xsetJmxReporting(org.apache.xmlbeans.XmlBoolean jmxReporting);
+    
+    /**
+     * Unsets the &quot;jmxReporting&quot; element
+     */
+    void unsetJmxReporting();
+    
+    /**
+     * Gets the &quot;poolingOptions&quot; element
+     */
+    java.lang.String getPoolingOptions();
+    
+    /**
+     * Gets (as xml) the &quot;poolingOptions&quot; element
+     */
+    org.apache.xmlbeans.XmlString xgetPoolingOptions();
+    
+    /**
+     * True if has &quot;poolingOptions&quot; element
+     */
+    boolean isSetPoolingOptions();
+    
+    /**
+     * Sets the &quot;poolingOptions&quot; element
+     */
+    void setPoolingOptions(java.lang.String poolingOptions);
+    
+    /**
+     * Sets (as xml) the &quot;poolingOptions&quot; element
+     */
+    void xsetPoolingOptions(org.apache.xmlbeans.XmlString poolingOptions);
+    
+    /**
+     * Unsets the &quot;poolingOptions&quot; element
+     */
+    void unsetPoolingOptions();
+    
+    /**
+     * Gets the &quot;socketOptions&quot; element
+     */
+    java.lang.String getSocketOptions();
+    
+    /**
+     * Gets (as xml) the &quot;socketOptions&quot; element
+     */
+    org.apache.xmlbeans.XmlString xgetSocketOptions();
+    
+    /**
+     * True if has &quot;socketOptions&quot; element
+     */
+    boolean isSetSocketOptions();
+    
+    /**
+     * Sets the &quot;socketOptions&quot; element
+     */
+    void setSocketOptions(java.lang.String socketOptions);
+    
+    /**
+     * Sets (as xml) the &quot;socketOptions&quot; element
+     */
+    void xsetSocketOptions(org.apache.xmlbeans.XmlString socketOptions);
+    
+    /**
+     * Unsets the &quot;socketOptions&quot; element
+     */
+    void unsetSocketOptions();
+    
+    /**
+     * Gets the &quot;queryOptions&quot; element
+     */
+    java.lang.String getQueryOptions();
+    
+    /**
+     * Gets (as xml) the &quot;queryOptions&quot; element
+     */
+    org.apache.xmlbeans.XmlString xgetQueryOptions();
+    
+    /**
+     * True if has &quot;queryOptions&quot; element
+     */
+    boolean isSetQueryOptions();
+    
+    /**
+     * Sets the &quot;queryOptions&quot; element
+     */
+    void setQueryOptions(java.lang.String queryOptions);
+    
+    /**
+     * Sets (as xml) the &quot;queryOptions&quot; element
+     */
+    void xsetQueryOptions(org.apache.xmlbeans.XmlString queryOptions);
+    
+    /**
+     * Unsets the &quot;queryOptions&quot; element
+     */
+    void unsetQueryOptions();
+    
+    /**
+     * A factory class with static methods for creating instances
+     * of this type.
+     */
+    
+    public static final class Factory
+    {
+        public static org.synchronoss.cpo.cassandra.cpoCassandraConfig.CtCassandraReadWriteConfig newInstance() {
+<span class="nc" id="L614">          return (org.synchronoss.cpo.cassandra.cpoCassandraConfig.CtCassandraReadWriteConfig) org.apache.xmlbeans.XmlBeans.getContextTypeLoader().newInstance( type, null ); }</span>
+        
+        public static org.synchronoss.cpo.cassandra.cpoCassandraConfig.CtCassandraReadWriteConfig newInstance(org.apache.xmlbeans.XmlOptions options) {
+<span class="nc" id="L617">          return (org.synchronoss.cpo.cassandra.cpoCassandraConfig.CtCassandraReadWriteConfig) org.apache.xmlbeans.XmlBeans.getContextTypeLoader().newInstance( type, options ); }</span>
+        
+        /** @param xmlAsString the string value to parse */
+        public static org.synchronoss.cpo.cassandra.cpoCassandraConfig.CtCassandraReadWriteConfig parse(java.lang.String xmlAsString) throws org.apache.xmlbeans.XmlException {
+<span class="nc" id="L621">          return (org.synchronoss.cpo.cassandra.cpoCassandraConfig.CtCassandraReadWriteConfig) org.apache.xmlbeans.XmlBeans.getContextTypeLoader().parse( xmlAsString, type, null ); }</span>
+        
+        public static org.synchronoss.cpo.cassandra.cpoCassandraConfig.CtCassandraReadWriteConfig parse(java.lang.String xmlAsString, org.apache.xmlbeans.XmlOptions options) throws org.apache.xmlbeans.XmlException {
+<span class="nc" id="L624">          return (org.synchronoss.cpo.cassandra.cpoCassandraConfig.CtCassandraReadWriteConfig) org.apache.xmlbeans.XmlBeans.getContextTypeLoader().parse( xmlAsString, type, options ); }</span>
+        
+        /** @param file the file from which to load an xml document */
+        public static org.synchronoss.cpo.cassandra.cpoCassandraConfig.CtCassandraReadWriteConfig parse(java.io.File file) throws org.apache.xmlbeans.XmlException, java.io.IOException {
+<span class="nc" id="L628">          return (org.synchronoss.cpo.cassandra.cpoCassandraConfig.CtCassandraReadWriteConfig) org.apache.xmlbeans.XmlBeans.getContextTypeLoader().parse( file, type, null ); }</span>
+        
+        public static org.synchronoss.cpo.cassandra.cpoCassandraConfig.CtCassandraReadWriteConfig parse(java.io.File file, org.apache.xmlbeans.XmlOptions options) throws org.apache.xmlbeans.XmlException, java.io.IOException {
+<span class="nc" id="L631">          return (org.synchronoss.cpo.cassandra.cpoCassandraConfig.CtCassandraReadWriteConfig) org.apache.xmlbeans.XmlBeans.getContextTypeLoader().parse( file, type, options ); }</span>
+        
+        public static org.synchronoss.cpo.cassandra.cpoCassandraConfig.CtCassandraReadWriteConfig parse(java.net.URL u) throws org.apache.xmlbeans.XmlException, java.io.IOException {
+<span class="nc" id="L634">          return (org.synchronoss.cpo.cassandra.cpoCassandraConfig.CtCassandraReadWriteConfig) org.apache.xmlbeans.XmlBeans.getContextTypeLoader().parse( u, type, null ); }</span>
+        
+        public static org.synchronoss.cpo.cassandra.cpoCassandraConfig.CtCassandraReadWriteConfig parse(java.net.URL u, org.apache.xmlbeans.XmlOptions options) throws org.apache.xmlbeans.XmlException, java.io.IOException {
+<span class="nc" id="L637">          return (org.synchronoss.cpo.cassandra.cpoCassandraConfig.CtCassandraReadWriteConfig) org.apache.xmlbeans.XmlBeans.getContextTypeLoader().parse( u, type, options ); }</span>
+        
+        public static org.synchronoss.cpo.cassandra.cpoCassandraConfig.CtCassandraReadWriteConfig parse(java.io.InputStream is) throws org.apache.xmlbeans.XmlException, java.io.IOException {
+<span class="nc" id="L640">          return (org.synchronoss.cpo.cassandra.cpoCassandraConfig.CtCassandraReadWriteConfig) org.apache.xmlbeans.XmlBeans.getContextTypeLoader().parse( is, type, null ); }</span>
+        
+        public static org.synchronoss.cpo.cassandra.cpoCassandraConfig.CtCassandraReadWriteConfig parse(java.io.InputStream is, org.apache.xmlbeans.XmlOptions options) throws org.apache.xmlbeans.XmlException, java.io.IOException {
+<span class="nc" id="L643">          return (org.synchronoss.cpo.cassandra.cpoCassandraConfig.CtCassandraReadWriteConfig) org.apache.xmlbeans.XmlBeans.getContextTypeLoader().parse( is, type, options ); }</span>
+        
+        public static org.synchronoss.cpo.cassandra.cpoCassandraConfig.CtCassandraReadWriteConfig parse(java.io.Reader r) throws org.apache.xmlbeans.XmlException, java.io.IOException {
+<span class="nc" id="L646">          return (org.synchronoss.cpo.cassandra.cpoCassandraConfig.CtCassandraReadWriteConfig) org.apache.xmlbeans.XmlBeans.getContextTypeLoader().parse( r, type, null ); }</span>
+        
+        public static org.synchronoss.cpo.cassandra.cpoCassandraConfig.CtCassandraReadWriteConfig parse(java.io.Reader r, org.apache.xmlbeans.XmlOptions options) throws org.apache.xmlbeans.XmlException, java.io.IOException {
+<span class="nc" id="L649">          return (org.synchronoss.cpo.cassandra.cpoCassandraConfig.CtCassandraReadWriteConfig) org.apache.xmlbeans.XmlBeans.getContextTypeLoader().parse( r, type, options ); }</span>
+        
+        public static org.synchronoss.cpo.cassandra.cpoCassandraConfig.CtCassandraReadWriteConfig parse(javax.xml.stream.XMLStreamReader sr) throws org.apache.xmlbeans.XmlException {
+<span class="nc" id="L652">          return (org.synchronoss.cpo.cassandra.cpoCassandraConfig.CtCassandraReadWriteConfig) org.apache.xmlbeans.XmlBeans.getContextTypeLoader().parse( sr, type, null ); }</span>
+        
+        public static org.synchronoss.cpo.cassandra.cpoCassandraConfig.CtCassandraReadWriteConfig parse(javax.xml.stream.XMLStreamReader sr, org.apache.xmlbeans.XmlOptions options) throws org.apache.xmlbeans.XmlException {
+<span class="nc" id="L655">          return (org.synchronoss.cpo.cassandra.cpoCassandraConfig.CtCassandraReadWriteConfig) org.apache.xmlbeans.XmlBeans.getContextTypeLoader().parse( sr, type, options ); }</span>
+        
+        public static org.synchronoss.cpo.cassandra.cpoCassandraConfig.CtCassandraReadWriteConfig parse(org.w3c.dom.Node node) throws org.apache.xmlbeans.XmlException {
+<span class="nc" id="L658">          return (org.synchronoss.cpo.cassandra.cpoCassandraConfig.CtCassandraReadWriteConfig) org.apache.xmlbeans.XmlBeans.getContextTypeLoader().parse( node, type, null ); }</span>
+        
+        public static org.synchronoss.cpo.cassandra.cpoCassandraConfig.CtCassandraReadWriteConfig parse(org.w3c.dom.Node node, org.apache.xmlbeans.XmlOptions options) throws org.apache.xmlbeans.XmlException {
+<span class="nc" id="L661">          return (org.synchronoss.cpo.cassandra.cpoCassandraConfig.CtCassandraReadWriteConfig) org.apache.xmlbeans.XmlBeans.getContextTypeLoader().parse( node, type, options ); }</span>
+        
+        /** @deprecated {@link org.apache.xmlbeans.xml.stream.XMLInputStream} */
+        public static org.synchronoss.cpo.cassandra.cpoCassandraConfig.CtCassandraReadWriteConfig parse(org.apache.xmlbeans.xml.stream.XMLInputStream xis) throws org.apache.xmlbeans.XmlException, org.apache.xmlbeans.xml.stream.XMLStreamException {
+<span class="nc" id="L665">          return (org.synchronoss.cpo.cassandra.cpoCassandraConfig.CtCassandraReadWriteConfig) org.apache.xmlbeans.XmlBeans.getContextTypeLoader().parse( xis, type, null ); }</span>
+        
+        /** @deprecated {@link org.apache.xmlbeans.xml.stream.XMLInputStream} */
+        public static org.synchronoss.cpo.cassandra.cpoCassandraConfig.CtCassandraReadWriteConfig parse(org.apache.xmlbeans.xml.stream.XMLInputStream xis, org.apache.xmlbeans.XmlOptions options) throws org.apache.xmlbeans.XmlException, org.apache.xmlbeans.xml.stream.XMLStreamException {
+<span class="nc" id="L669">          return (org.synchronoss.cpo.cassandra.cpoCassandraConfig.CtCassandraReadWriteConfig) org.apache.xmlbeans.XmlBeans.getContextTypeLoader().parse( xis, type, options ); }</span>
+        
+        /** @deprecated {@link org.apache.xmlbeans.xml.stream.XMLInputStream} */
+        public static org.apache.xmlbeans.xml.stream.XMLInputStream newValidatingXMLInputStream(org.apache.xmlbeans.xml.stream.XMLInputStream xis) throws org.apache.xmlbeans.XmlException, org.apache.xmlbeans.xml.stream.XMLStreamException {
+<span class="nc" id="L673">          return org.apache.xmlbeans.XmlBeans.getContextTypeLoader().newValidatingXMLInputStream( xis, type, null ); }</span>
+        
+        /** @deprecated {@link org.apache.xmlbeans.xml.stream.XMLInputStream} */
+        public static org.apache.xmlbeans.xml.stream.XMLInputStream newValidatingXMLInputStream(org.apache.xmlbeans.xml.stream.XMLInputStream xis, org.apache.xmlbeans.XmlOptions options) throws org.apache.xmlbeans.XmlException, org.apache.xmlbeans.xml.stream.XMLStreamException {
+<span class="nc" id="L677">          return org.apache.xmlbeans.XmlBeans.getContextTypeLoader().newValidatingXMLInputStream( xis, type, options ); }</span>
+        
+<span class="nc" id="L679">        private Factory() { } // No instance of this class allowed</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.2.201409121644</span></div></body></html>

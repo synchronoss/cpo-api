@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>CassandraCpoMetaAdapter.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">cpo-cassandra</a> &gt; <a href="index.source.html" class="el_package">org.synchronoss.cpo.cassandra.meta</a> &gt; <span class="el_source">CassandraCpoMetaAdapter.java</span></div><h1>CassandraCpoMetaAdapter.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2003-2012 David E. Berry
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ *
+ * A copy of the GNU Lesser General Public License may also be found at
+ * http://www.gnu.org/licenses/lgpl.txt
+ */
+package org.synchronoss.cpo.cassandra.meta;
+
+import com.datastax.driver.core.DataType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.synchronoss.cpo.CpoException;
+import org.synchronoss.cpo.meta.AbstractCpoMetaAdapter;
+import org.synchronoss.cpo.meta.DataTypeMapEntry;
+import org.synchronoss.cpo.meta.DataTypeMapper;
+import org.synchronoss.cpo.meta.domain.CpoAttribute;
+import org.synchronoss.cpo.parser.BoundExpressionParser;
+import org.synchronoss.cpo.parser.ExpressionParser;
+
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.net.InetAddress;
+import java.nio.ByteBuffer;
+import java.util.*;
+
+/**
+ * Created with IntelliJ IDEA.
+ * User: dberry
+ * Date: 9/10/13
+ * Time: 08:14 AM
+ * To change this template use File | Settings | File Templates.
+ */
+<span class="fc" id="L47">public class CassandraCpoMetaAdapter extends AbstractCpoMetaAdapter {</span>
+<span class="fc" id="L48">  private static final Logger logger = LoggerFactory.getLogger(CassandraCpoMetaAdapter.class);</span>
+<span class="fc" id="L49">  private static final DataTypeMapEntry&lt;String&gt; defaultDataTypeMapEntry = new DataTypeMapEntry&lt;&gt;(DataType.Name.VARCHAR.ordinal(), DataType.Name.VARCHAR.toString(), String.class);</span>
+<span class="fc" id="L50">  private static final DataTypeMapper dataTypeMapper = initDataTypeMapper();</span>
+
+  @Override
+  protected DataTypeMapper getDataTypeMapper() {
+<span class="fc" id="L54">    return dataTypeMapper;</span>
+  }
+
+  @Override
+  public ExpressionParser getExpressionParser() throws CpoException {
+<span class="nc" id="L59">    return new BoundExpressionParser();</span>
+  }
+
+  private static DataTypeMapper initDataTypeMapper() {
+<span class="fc" id="L63">    logger.debug(&quot;Initializing the DataMapper&quot;);</span>
+<span class="fc" id="L64">    DataTypeMapper dataTypeMapper = new DataTypeMapper(defaultDataTypeMapEntry);</span>
+
+    // CQL DataTypes
+<span class="fc" id="L67">    dataTypeMapper.addDataTypeEntry(new DataTypeMapEntry&lt;&gt;(DataType.Name.ASCII.ordinal(), DataType.Name.ASCII.name(), String.class));</span>
+<span class="fc" id="L68">    dataTypeMapper.addDataTypeEntry(new DataTypeMapEntry&lt;&gt;(DataType.Name.BIGINT.ordinal(), DataType.Name.BIGINT.name(), long.class));</span>
+<span class="fc" id="L69">    dataTypeMapper.addDataTypeEntry(new DataTypeMapEntry&lt;&gt;(DataType.Name.BLOB.ordinal(), DataType.Name.BLOB.name(), ByteBuffer.class));</span>
+<span class="fc" id="L70">    dataTypeMapper.addDataTypeEntry(new DataTypeMapEntry&lt;&gt;(DataType.Name.BOOLEAN.ordinal(), DataType.Name.BOOLEAN.name(), boolean.class));</span>
+<span class="fc" id="L71">    dataTypeMapper.addDataTypeEntry(new DataTypeMapEntry&lt;&gt;(DataType.Name.COUNTER.ordinal(), DataType.Name.COUNTER.name(), long.class));</span>
+//    dataTypeMapper.addDataTypeEntry(new DataTypeMapEntry&lt;Object&gt;(DataType.Name.CUSTOM.ordinal(), DataType.Name.CUSTOM.toString(), Object.class));
+<span class="fc" id="L73">    dataTypeMapper.addDataTypeEntry(new DataTypeMapEntry&lt;&gt;(DataType.Name.DECIMAL.ordinal(), DataType.Name.DECIMAL.name(), BigDecimal.class));</span>
+<span class="fc" id="L74">    dataTypeMapper.addDataTypeEntry(new DataTypeMapEntry&lt;&gt;(DataType.Name.DOUBLE.ordinal(), DataType.Name.DOUBLE.name(), double.class));</span>
+<span class="fc" id="L75">    dataTypeMapper.addDataTypeEntry(new DataTypeMapEntry&lt;&gt;(DataType.Name.FLOAT.ordinal(), DataType.Name.FLOAT.name(), float.class));</span>
+<span class="fc" id="L76">    dataTypeMapper.addDataTypeEntry(new DataTypeMapEntry&lt;&gt;(DataType.Name.INET.ordinal(), DataType.Name.INET.name(), InetAddress.class));</span>
+<span class="fc" id="L77">    dataTypeMapper.addDataTypeEntry(new DataTypeMapEntry&lt;&gt;(DataType.Name.INT.ordinal(), DataType.Name.INT.name(), int.class));</span>
+<span class="fc" id="L78">    dataTypeMapper.addDataTypeEntry(new DataTypeMapEntry&lt;&gt;(DataType.Name.LIST.ordinal(), DataType.Name.LIST.name(), List.class));</span>
+<span class="fc" id="L79">    dataTypeMapper.addDataTypeEntry(new DataTypeMapEntry&lt;&gt;(DataType.Name.MAP.ordinal(), DataType.Name.MAP.name(), Map.class));</span>
+<span class="fc" id="L80">    dataTypeMapper.addDataTypeEntry(new DataTypeMapEntry&lt;&gt;(DataType.Name.SET.ordinal(), DataType.Name.SET.name(), Set.class));</span>
+<span class="fc" id="L81">    dataTypeMapper.addDataTypeEntry(new DataTypeMapEntry&lt;&gt;(DataType.Name.TEXT.ordinal(), DataType.Name.TEXT.name(), String.class));</span>
+<span class="fc" id="L82">    dataTypeMapper.addDataTypeEntry(new DataTypeMapEntry&lt;&gt;(DataType.Name.TIMESTAMP.ordinal(), DataType.Name.TIMESTAMP.name(), Date.class));</span>
+<span class="fc" id="L83">    dataTypeMapper.addDataTypeEntry(new DataTypeMapEntry&lt;&gt;(DataType.Name.TIMEUUID.ordinal(), DataType.Name.TIMEUUID.name(), UUID.class));</span>
+<span class="fc" id="L84">    dataTypeMapper.addDataTypeEntry(new DataTypeMapEntry&lt;&gt;(DataType.Name.UUID.ordinal(), DataType.Name.UUID.name(), UUID.class));</span>
+<span class="fc" id="L85">    dataTypeMapper.addDataTypeEntry(defaultDataTypeMapEntry);</span>
+<span class="fc" id="L86">    dataTypeMapper.addDataTypeEntry(new DataTypeMapEntry&lt;&gt;(DataType.Name.VARINT.ordinal(), DataType.Name.VARINT.toString(), BigInteger.class));</span>
+
+<span class="fc" id="L88">    logger.debug(&quot;Returning the DataMapper&quot;);</span>
+<span class="fc" id="L89">    return dataTypeMapper;</span>
+  }
+
+  @Override
+  protected CpoAttribute createCpoAttribute() {
+<span class="fc" id="L94">    return new CassandraCpoAttribute();</span>
+  }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.2.201409121644</span></div></body></html>

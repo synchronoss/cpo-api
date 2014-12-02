@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>ConfigInstantiator.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">cpo-cassandra</a> &gt; <a href="index.source.html" class="el_package">org.synchronoss.cpo.cassandra.config</a> &gt; <span class="el_source">ConfigInstantiator.java</span></div><h1>ConfigInstantiator.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2003-2012 David E. Berry
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ *
+ * A copy of the GNU Lesser General Public License may also be found at
+ * http://www.gnu.org/licenses/lgpl.txt
+ */
+package org.synchronoss.cpo.cassandra.config;
+
+import org.slf4j.*;
+import org.synchronoss.cpo.CpoException;
+import org.synchronoss.cpo.helper.ExceptionHelper;
+
+import java.lang.reflect.*;
+
+/**
+ * Created with IntelliJ IDEA.
+ * User: dberry
+ * Date: 10/10/13
+ * Time: 08:36 AM
+ * To change this template use File | Settings | File Templates.
+ */
+<span class="nc" id="L36">public class ConfigInstantiator&lt;T&gt; {</span>
+<span class="nc" id="L37">  private static final Logger logger = LoggerFactory.getLogger(ConfigInstantiator.class);</span>
+  public T instantiate(String className) throws CpoException {
+<span class="nc" id="L39">    FactoryMethodName factoryMethodName=null;</span>
+
+    // Lets create the Factory
+    try {
+<span class="nc" id="L43">      Class factoryClass = Class.forName(className);</span>
+<span class="nc" id="L44">      factoryMethodName = (FactoryMethodName)factoryClass.newInstance();</span>
+<span class="nc" id="L45">      logger.debug(&quot;Created factory: &quot; + className);</span>
+<span class="nc" id="L46">      Method factoryMethod = factoryClass.getMethod(factoryMethodName.getFactoryMethodName());</span>
+<span class="nc" id="L47">      return (T) factoryMethod.invoke(factoryMethodName);</span>
+<span class="nc" id="L48">    } catch (InstantiationException ie) {</span>
+<span class="nc" id="L49">      throw new CpoException(&quot;Could not instantiate Factory Class: &quot; + className + &quot;:&quot; + ExceptionHelper.getLocalizedMessage(ie));</span>
+<span class="nc" id="L50">    } catch (IllegalAccessException iae) {</span>
+<span class="nc" id="L51">      throw new CpoException(&quot;Could not access Factory Class: &quot; + className + &quot;:&quot; + ExceptionHelper.getLocalizedMessage(iae));</span>
+<span class="nc" id="L52">    } catch (ClassCastException | NoSuchMethodException cce) {</span>
+<span class="nc" id="L53">      throw new CpoException(&quot;Factory class must implement FactoryMethodName: &quot; + className + &quot;:&quot; + ExceptionHelper.getLocalizedMessage(cce));</span>
+<span class="nc" id="L54">    } catch (ClassNotFoundException cnfe) {</span>
+<span class="nc" id="L55">      throw new CpoException(&quot;Could not find Factory Class: &quot; + className + &quot;:&quot; + ExceptionHelper.getLocalizedMessage(cnfe));</span>
+<span class="nc" id="L56">    } catch (InvocationTargetException ite) {</span>
+<span class="nc" id="L57">      throw new CpoException(&quot;Factory class method threw an exception: &quot; + className + &quot;:&quot; + ExceptionHelper.getLocalizedMessage(ite));</span>
+    }
+
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.2.201409121644</span></div></body></html>

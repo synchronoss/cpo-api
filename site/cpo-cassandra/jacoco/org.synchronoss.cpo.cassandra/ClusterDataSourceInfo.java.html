@@ -1,0 +1,291 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>ClusterDataSourceInfo.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">cpo-cassandra</a> &gt; <a href="index.source.html" class="el_package">org.synchronoss.cpo.cassandra</a> &gt; <span class="el_source">ClusterDataSourceInfo.java</span></div><h1>ClusterDataSourceInfo.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2003-2012 David E. Berry
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ *
+ * A copy of the GNU Lesser General Public License may also be found at
+ * http://www.gnu.org/licenses/lgpl.txt
+ */
+package org.synchronoss.cpo.cassandra;
+
+import com.datastax.driver.core.*;
+import com.datastax.driver.core.policies.LoadBalancingPolicy;
+import com.datastax.driver.core.policies.ReconnectionPolicy;
+import com.datastax.driver.core.policies.RetryPolicy;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.synchronoss.cpo.AbstractDataSourceInfo;
+import org.synchronoss.cpo.CpoException;
+
+import java.util.Collection;
+
+/**
+ * Created with IntelliJ IDEA.
+ * User: dberry
+ * Date: 9/10/13
+ * Time: 12:44 PM
+ * To change this template use File | Settings | File Templates.
+ */
+public class ClusterDataSourceInfo extends AbstractDataSourceInfo&lt;ClusterDataSource&gt;{
+<span class="fc" id="L42">  private static final Logger logger = LoggerFactory.getLogger(ClusterDataSourceInfo.class);</span>
+  private String[] contactPoints;
+  private String keySpace;
+  private String clusterName;
+  private Integer port;
+  private LoadBalancingPolicy loadBalancingPolicy;
+  private ReconnectionPolicy reconnectionPolicy;
+  private RetryPolicy retryPolicy;
+  private boolean credentials;
+  private String userName;
+  private String password;
+//  private AuthProvider authProvider;
+  private ProtocolOptions.Compression compressionType;
+  private Boolean useMetrics;
+  private SSLOptions sslOptions;
+  private Collection&lt;Host.StateListener&gt; listeners;
+  private Boolean useJmxReporting;
+  private PoolingOptions poolingOptions;
+  private SocketOptions socketOptions;
+//  private QueryOptions queryOptions;
+
+  public ClusterDataSourceInfo(String clusterName, String keySpace, String[] contactPoints) {
+<span class="fc" id="L64">    super(buildDataSourceName(clusterName, keySpace, contactPoints));</span>
+<span class="fc" id="L65">    this.keySpace=keySpace;</span>
+<span class="fc" id="L66">    this.clusterName=clusterName;</span>
+<span class="fc" id="L67">    this.contactPoints=contactPoints;</span>
+<span class="fc" id="L68">  }</span>
+
+  public String getClusterName() {
+<span class="nc" id="L71">    return clusterName;</span>
+  }
+
+  public void setClusterName(String clusterName) {
+<span class="nc" id="L75">    this.clusterName = clusterName;</span>
+<span class="nc" id="L76">  }</span>
+
+  public String getKeySpace() {
+<span class="nc" id="L79">    return keySpace;</span>
+  }
+
+  public int getPort() {
+<span class="nc" id="L83">    return port;</span>
+  }
+
+  public void setPort(int port) {
+<span class="fc" id="L87">    this.port = port;</span>
+<span class="fc" id="L88">  }</span>
+
+  public LoadBalancingPolicy getLoadBalancingPolicy() {
+<span class="nc" id="L91">    return loadBalancingPolicy;</span>
+  }
+
+  public void setLoadBalancingPolicy(LoadBalancingPolicy loadBalancingPolicy) {
+<span class="nc" id="L95">    this.loadBalancingPolicy = loadBalancingPolicy;</span>
+<span class="nc" id="L96">  }</span>
+
+  public ReconnectionPolicy getReconnectionPolicy() {
+<span class="nc" id="L99">    return reconnectionPolicy;</span>
+  }
+
+  public void setReconnectionPolicy(ReconnectionPolicy reconnectionPolicy) {
+<span class="nc" id="L103">    this.reconnectionPolicy = reconnectionPolicy;</span>
+<span class="nc" id="L104">  }</span>
+
+  public RetryPolicy getRetryPolicy() {
+<span class="nc" id="L107">    return retryPolicy;</span>
+  }
+
+  public void setRetryPolicy(RetryPolicy retryPolicy) {
+<span class="nc" id="L111">    this.retryPolicy = retryPolicy;</span>
+<span class="nc" id="L112">  }</span>
+
+  public boolean hasCredentials() {
+<span class="fc" id="L115">    return credentials;</span>
+  }
+
+  public void setHasCredentials(boolean credentials) {
+<span class="nc" id="L119">    this.credentials = credentials;</span>
+<span class="nc" id="L120">  }</span>
+
+  public String getUserName() {
+<span class="nc" id="L123">    return userName;</span>
+  }
+
+  public void setUserName(String userName) {
+<span class="nc" id="L127">    this.userName = userName;</span>
+<span class="nc" id="L128">  }</span>
+
+  public String getPassword() {
+<span class="nc" id="L131">    return password;</span>
+  }
+
+  public void setPassword(String password) {
+<span class="nc" id="L135">    this.password = password;</span>
+<span class="nc" id="L136">  }</span>
+
+//  public AuthProvider getAuthProvider() {
+//    return authProvider;
+//  }
+//
+//  public void setAuthProvider(AuthProvider authProvider) {
+//    this.authProvider = authProvider;
+//  }
+
+  public ProtocolOptions.Compression getCompressionType() {
+<span class="nc" id="L147">    return compressionType;</span>
+  }
+
+  public void setCompressionType(ProtocolOptions.Compression compressionType) {
+<span class="nc" id="L151">    this.compressionType = compressionType;</span>
+<span class="nc" id="L152">  }</span>
+
+  public Boolean getUseMetrics() {
+<span class="nc" id="L155">    return useMetrics;</span>
+  }
+
+  public void setUseMetrics(Boolean useMetrics) {
+<span class="nc" id="L159">    this.useMetrics = useMetrics;</span>
+<span class="nc" id="L160">  }</span>
+
+  public SSLOptions getSslOptions() {
+<span class="nc" id="L163">    return sslOptions;</span>
+  }
+
+  public void setSslOptions(SSLOptions sslOptions) {
+<span class="nc" id="L167">    this.sslOptions = sslOptions;</span>
+<span class="nc" id="L168">  }</span>
+
+  public Collection&lt;Host.StateListener&gt; getListeners() {
+<span class="nc" id="L171">    return listeners;</span>
+  }
+
+  public void setListeners(Collection&lt;Host.StateListener&gt; listeners) {
+<span class="nc" id="L175">    this.listeners = listeners;</span>
+<span class="nc" id="L176">  }</span>
+
+  public Boolean getUseJmxReporting() {
+<span class="nc" id="L179">    return useJmxReporting;</span>
+  }
+
+  public void setUseJmxReporting(Boolean useJmxReporting) {
+<span class="nc" id="L183">    this.useJmxReporting = useJmxReporting;</span>
+<span class="nc" id="L184">  }</span>
+
+  public PoolingOptions getPoolingOptions() {
+<span class="nc" id="L187">    return poolingOptions;</span>
+  }
+
+  public void setPoolingOptions(PoolingOptions poolingOptions) {
+<span class="nc" id="L191">    this.poolingOptions = poolingOptions;</span>
+<span class="nc" id="L192">  }</span>
+
+  public SocketOptions getSocketOptions() {
+<span class="nc" id="L195">    return socketOptions;</span>
+  }
+
+  public void setSocketOptions(SocketOptions socketOptions) {
+<span class="nc" id="L199">    this.socketOptions = socketOptions;</span>
+<span class="nc" id="L200">  }</span>
+
+//  public QueryOptions getQueryOptions() {
+//    return queryOptions;
+//  }
+//
+//  public void setQueryOptions(QueryOptions queryOptions) {
+//    this.queryOptions = queryOptions;
+//  }
+
+  @Override
+  protected ClusterDataSource createDataSource() throws CpoException {
+<span class="fc" id="L212">    Cluster.Builder clusterBuilder = Cluster.builder();</span>
+
+    // add the contact points
+<span class="fc bfc" id="L215" title="All 2 branches covered.">    for(String s : contactPoints)</span>
+<span class="fc" id="L216">      clusterBuilder.addContactPoint(s);</span>
+
+    // add clusterName
+//      clusterBuilder.withClusterName(clusterName);
+
+    // add port
+<span class="pc bpc" id="L222" title="1 of 2 branches missed.">    if (port != null)</span>
+<span class="fc" id="L223">      clusterBuilder.withPort(port);</span>
+
+    // add loadBalancing
+<span class="pc bpc" id="L226" title="1 of 2 branches missed.">    if (loadBalancingPolicy != null)</span>
+<span class="nc" id="L227">      clusterBuilder.withLoadBalancingPolicy(loadBalancingPolicy);</span>
+
+    // add reconnectionPolicy
+<span class="pc bpc" id="L230" title="1 of 2 branches missed.">    if (reconnectionPolicy != null)</span>
+<span class="nc" id="L231">      clusterBuilder.withReconnectionPolicy(reconnectionPolicy);</span>
+
+    // add retryPolicy
+<span class="pc bpc" id="L234" title="1 of 2 branches missed.">    if (retryPolicy != null)</span>
+<span class="nc" id="L235">      clusterBuilder.withRetryPolicy(retryPolicy);</span>
+
+    // add credentials
+<span class="pc bpc" id="L238" title="1 of 2 branches missed.">    if (hasCredentials())</span>
+<span class="nc" id="L239">      clusterBuilder.withCredentials(userName, password);</span>
+
+    // add AuthProvider
+//    if (authProvider != null)
+//      clusterBuilder.withAuthProvider(authProvider);
+
+    // add Compression
+<span class="pc bpc" id="L246" title="1 of 2 branches missed.">    if (compressionType != null)</span>
+<span class="nc" id="L247">      clusterBuilder.withCompression(compressionType);</span>
+
+    // add Metrics
+<span class="pc bpc" id="L250" title="3 of 4 branches missed.">    if (useMetrics != null &amp;&amp; !useMetrics)</span>
+<span class="nc" id="L251">      clusterBuilder.withoutMetrics();</span>
+
+    // add SSL
+<span class="pc bpc" id="L254" title="1 of 2 branches missed.">    if (sslOptions != null)</span>
+<span class="nc" id="L255">      clusterBuilder.withSSL(sslOptions);</span>
+
+    // add Listeners
+//    if (listeners!=null &amp;&amp; !listeners.isEmpty() &amp;&amp; listeners.size()&gt;0)
+//      clusterBuilder.withInitialListeners(listeners);
+
+    // add JMX Reporting
+<span class="pc bpc" id="L262" title="3 of 4 branches missed.">    if (useJmxReporting != null &amp;&amp; !useJmxReporting)</span>
+<span class="nc" id="L263">      clusterBuilder.withoutJMXReporting();</span>
+
+    // add pooling options
+//    if (poolingOptions != null)
+//      clusterBuilder.withPoolingOptions(poolingOptions);
+
+    // add socket options
+//    if (socketOptions != null)
+//      clusterBuilder.withSocketOptions(socketOptions);
+
+    // add query options
+//    if (queryOptions != null)
+//      clusterBuilder.withQueryOptions(queryOptions);
+
+<span class="fc" id="L277">    return new ClusterDataSource(clusterBuilder.build(), keySpace);</span>
+  }
+
+  private static String buildDataSourceName(String clusterName, String keySpace, String[] contactPoints) {
+<span class="fc" id="L281">    StringBuilder sb = new StringBuilder();</span>
+<span class="fc" id="L282">    sb.append(clusterName);</span>
+<span class="fc" id="L283">    sb.append(keySpace);</span>
+<span class="fc bfc" id="L284" title="All 2 branches covered.">    for (String s : contactPoints)</span>
+<span class="fc" id="L285">      sb.append(s);</span>
+<span class="fc" id="L286">    logger.debug(&quot;DatasourceName=&quot;+sb.toString());</span>
+<span class="fc" id="L287">    return sb.toString();</span>
+  }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.2.201409121644</span></div></body></html>

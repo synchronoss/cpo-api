@@ -8,7 +8,7 @@ digraph G {
 	edge [fontname="Helvetica",fontsize=10,labelfontname="Helvetica",labelfontsize=10];
 	node [fontname="Helvetica",fontsize=10,shape=plaintext];
 	// org.synchronoss.cpo.CpoReleasible
-	c33222 [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="../../CpoReleasible.html">
+	c39995 [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="../../CpoReleasible.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 			<tr><td> &laquo;interface&raquo; </td></tr>
 			<tr><td> CpoReleasible </td></tr>
@@ -16,17 +16,17 @@ digraph G {
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=9.0];
 	// org.synchronoss.cpo.transform.jdbc.OracleTemporaryClob
-	c33313 [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./OracleTemporaryClob.html">
+	c40132 [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./OracleTemporaryClob.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 			<tr><td> OracleTemporaryClob </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=9.0];
 	//org.synchronoss.cpo.transform.jdbc.OracleTemporaryClob implements org.synchronoss.cpo.CpoReleasible
-	c33222:p -> c33313:p [dir=back,arrowtail=empty,style=dashed];
+	c39995:p -> c40132:p [dir=back,arrowtail=empty,style=dashed];
 	// org.synchronoss.cpo.transform.jdbc.OracleTemporaryClob NAVASSOC oracle.sql.CLOB
-	c33313:p -> c33410:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
+	c40132:p -> c40201:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
 	// oracle.sql.CLOB
-	c33410 [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="http://java.sun.com/j2se/1.4.2/docs/api/oracle/sql/CLOB.html">
+	c40201 [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="http://java.sun.com/j2se/1.4.2/docs/api/oracle/sql/CLOB.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 			<tr><td> CLOB </td></tr>
 			<tr><td><font point-size="7.0"> oracle.sql </font></td></tr>

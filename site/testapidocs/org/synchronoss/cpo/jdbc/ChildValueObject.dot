@@ -7,27 +7,27 @@
 digraph G {
 	edge [fontname="Helvetica",fontsize=10,labelfontname="Helvetica",labelfontsize=10];
 	node [fontname="Helvetica",fontsize=10,shape=plaintext];
-	// org.synchronoss.cpo.jdbc.ChildValueObject
-	c513 [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./ChildValueObject.html">
+	// org.synchronoss.cpo.jdbc.ValueObjectBean
+	c1793 [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ValueObjectBean.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-			<tr><td> ChildValueObject </td></tr>
+			<tr><td> ValueObjectBean </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=9.0];
 	// org.synchronoss.cpo.jdbc.InheritanceTest
-	c516 [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./InheritanceTest.html">
+	c1808 [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./InheritanceTest.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 			<tr><td> InheritanceTest </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=9.0];
-	// org.synchronoss.cpo.jdbc.ValueObject
-	c532 [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ValueObject.html">
+	// org.synchronoss.cpo.jdbc.ChildValueObject
+	c1815 [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./ChildValueObject.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-			<tr><td> ValueObject </td></tr>
+			<tr><td> ChildValueObject </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=9.0];
-	//org.synchronoss.cpo.jdbc.ChildValueObject extends org.synchronoss.cpo.jdbc.ValueObject
-	c532:p -> c513:p [dir=back,arrowtail=empty];
+	//org.synchronoss.cpo.jdbc.ChildValueObject extends org.synchronoss.cpo.jdbc.ValueObjectBean
+	c1793:p -> c1815:p [dir=back,arrowtail=empty];
 	// org.synchronoss.cpo.jdbc.InheritanceTest NAVASSOC org.synchronoss.cpo.jdbc.ChildValueObject
-	c516:p -> c513:p [taillabel="", label="", headlabel="*", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
+	c1808:p -> c1815:p [taillabel="", label="", headlabel="*", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
 }
 

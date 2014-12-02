@@ -1,6 +1,6 @@
 <map id="G" name="G">
-<area shape="rect" id="c40789" href="../../core/cpoCoreConfig/CtDataSourceConfig.html" title="&lt;TABLE&gt;" alt="" coords="101,11,293,61"/>
-<area shape="rect" id="c40851" href="./CtJdbcConfig.html" title="&lt;TABLE&gt;" alt="" coords="151,121,244,159"/>
-<area shape="rect" id="c40854" href="./impl/CtJdbcConfigImpl.html" title="&lt;TABLE&gt;" alt="" coords="16,219,227,255"/>
-<area shape="rect" id="c40913" href="http://java.sun.com/j2se/1.4.2/docs/api/org/apache/xmlbeans/XmlBoolean.html" title="&lt;TABLE&gt;" alt="" coords="143,315,251,365"/>
+<area shape="rect" id="node1_0" href="../../core/cpoCoreConfig/CtDataSourceConfig.html" title="&lt;TABLE&gt;" alt="" coords="100,11,287,60"/>
+<area shape="rect" id="node2_1" href="./CtJdbcConfig.html" title="&lt;TABLE&gt;" alt="" coords="149,119,238,156"/>
+<area shape="rect" id="node3_2" href="./impl/CtJdbcConfigImpl.html" title="&lt;TABLE&gt;" alt="" coords="16,216,221,251"/>
+<area shape="rect" id="node4_3" href="http://java.sun.com/j2se/1.4.2/docs/api/org/apache/xmlbeans/XmlBoolean.html" title="&lt;TABLE&gt;" alt="" coords="141,311,245,360"/>
 </map>

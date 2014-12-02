@@ -1,6 +1,6 @@
 <map id="G" name="G">
-<area shape="rect" id="c9307" href="./AbstractCpoData.html" title="&lt;TABLE&gt;" alt="" coords="247,17,359,41"/>
-<area shape="rect" id="c9343" href="./meta/AbstractBindableCpoData.html" title="&lt;TABLE&gt;" alt="" coords="15,107,177,143"/>
-<area shape="rect" id="c9351" href="./meta/domain/CpoAttribute.html" title="&lt;TABLE&gt;" alt="" coords="221,107,384,143"/>
-<area shape="rect" id="c9324" href="./CpoData.html" title="&lt;TABLE&gt;" alt="" coords="327,203,407,242"/>
+<area shape="rect" id="node1_0" href="./CpoData.html" title="&lt;TABLE&gt;" alt="" coords="255,11,331,48"/>
+<area shape="rect" id="node2_1" href="./AbstractCpoData.html" title="&lt;TABLE&gt;" alt="" coords="189,114,297,137"/>
+<area shape="rect" id="node3_2" href="./meta/AbstractBindableCpoData.html" title="&lt;TABLE&gt;" alt="" coords="16,204,171,239"/>
+<area shape="rect" id="node4_3" href="./meta/domain/CpoAttribute.html" title="&lt;TABLE&gt;" alt="" coords="216,204,373,239"/>
 </map>

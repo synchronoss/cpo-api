@@ -1,6 +1,6 @@
 <map id="G" name="G">
-<area shape="rect" id="c2880" href="./CpoConfigDocumentImpl.html" title="&lt;TABLE&gt;" alt="" coords="16,17,173,41"/>
-<area shape="rect" id="c2881" href="./CtMetaDescriptorImpl.html" title="&lt;TABLE&gt;" alt="" coords="218,17,355,41"/>
-<area shape="rect" id="c2882" href="./CtDataSourceConfigImpl.html" title="&lt;TABLE&gt;" alt="" coords="400,17,555,41"/>
-<area shape="rect" id="c2883" href="./CtCpoConfigImpl.html" title="&lt;TABLE&gt;" alt="" coords="599,17,713,41"/>
+<area shape="rect" id="node1_0" href="./CtMetaDescriptorImpl.html" title="&lt;TABLE&gt;" alt="" coords="16,18,149,41"/>
+<area shape="rect" id="node2_1" href="./CtDataSourceConfigImpl.html" title="&lt;TABLE&gt;" alt="" coords="195,18,344,41"/>
+<area shape="rect" id="node3_2" href="./CtCpoConfigImpl.html" title="&lt;TABLE&gt;" alt="" coords="390,18,498,41"/>
+<area shape="rect" id="node4_3" href="./CpoConfigDocumentImpl.html" title="&lt;TABLE&gt;" alt="" coords="543,18,694,41"/>
 </map>

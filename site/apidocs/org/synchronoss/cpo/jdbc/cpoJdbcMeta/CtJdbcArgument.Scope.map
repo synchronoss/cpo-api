@@ -1,7 +1,7 @@
 <map id="G" name="G">
-<area shape="rect" id="c42585" href="./CtJdbcArgument.Scope.html" title="&lt;TABLE&gt;" alt="" coords="259,217,339,255"/>
-<area shape="rect" id="c42591" href="./impl/CtJdbcArgumentImpl.ScopeImpl.html" title="&lt;TABLE&gt;" alt="" coords="16,315,312,351"/>
-<area shape="rect" id="c42640" href="http://java.sun.com/j2se/1.4.2/docs/api/org/apache/xmlbeans/StringEnumAbstractBase.html" title="&lt;TABLE&gt;" alt="" coords="357,315,512,351"/>
-<area shape="rect" id="c42590" href="./impl/CtJdbcArgumentImpl.html" title="&lt;TABLE&gt;" alt="" coords="196,11,401,47"/>
-<area shape="rect" id="c42639" href="http://java.sun.com/j2se/1.4.2/docs/api/org/apache/xmlbeans/XmlString.html" title="&lt;TABLE&gt;" alt="" coords="295,107,403,157"/>
+<area shape="rect" id="node1_0" href="./CtJdbcArgument.Scope.html" title="&lt;TABLE&gt;" alt="" coords="254,215,330,252"/>
+<area shape="rect" id="node3_1" href="./impl/CtJdbcArgumentImpl.ScopeImpl.html" title="&lt;TABLE&gt;" alt="" coords="16,312,304,347"/>
+<area shape="rect" id="node5_2" href="http://java.sun.com/j2se/1.4.2/docs/api/org/apache/xmlbeans/StringEnumAbstractBase.html" title="&lt;TABLE&gt;" alt="" coords="350,312,501,347"/>
+<area shape="rect" id="node2_3" href="./impl/CtJdbcArgumentImpl.html" title="&lt;TABLE&gt;" alt="" coords="193,12,391,47"/>
+<area shape="rect" id="node4_4" href="http://java.sun.com/j2se/1.4.2/docs/api/org/apache/xmlbeans/XmlString.html" title="&lt;TABLE&gt;" alt="" coords="291,107,395,156"/>
 </map>

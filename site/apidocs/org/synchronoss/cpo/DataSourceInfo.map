@@ -1,7 +1,7 @@
 <map id="G" name="G">
-<area shape="rect" id="c11016" href="./AbstractDataSourceInfo.html" title="&lt;TABLE&gt;" alt="" coords="181,212,350,236"/>
-<area shape="rect" id="c11030" href="./DataSourceInfo.html" title="&lt;TABLE&gt;" alt="" coords="203,107,328,146"/>
-<area shape="rect" id="c11152" href="./jdbc/JdbcCpoAdapter.html" title="&lt;TABLE&gt;" alt="" coords="16,11,141,47"/>
-<area shape="rect" id="c11158" href="./jdbc/config/JdbcCpoConfigProcessor.html" title="&lt;TABLE&gt;" alt="" coords="186,11,345,47"/>
-<area shape="rect" id="c11183" href="./cassandra/CassandraCpoAdapter.html" title="&lt;TABLE&gt;" alt="" coords="389,11,541,47"/>
+<area shape="rect" id="node1_0" href="./DataSourceInfo.html" title="&lt;TABLE&gt;" alt="" coords="199,107,320,144"/>
+<area shape="rect" id="node2_1" href="./AbstractDataSourceInfo.html" title="&lt;TABLE&gt;" alt="" coords="177,210,342,233"/>
+<area shape="rect" id="node3_2" href="./jdbc/JdbcCpoAdapter.html" title="&lt;TABLE&gt;" alt="" coords="16,12,137,47"/>
+<area shape="rect" id="node4_3" href="./jdbc/config/JdbcCpoConfigProcessor.html" title="&lt;TABLE&gt;" alt="" coords="183,12,336,47"/>
+<area shape="rect" id="node5_4" href="./cassandra/CassandraCpoAdapter.html" title="&lt;TABLE&gt;" alt="" coords="382,12,529,47"/>
 </map>

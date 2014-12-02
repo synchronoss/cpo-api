@@ -1,6 +1,8 @@
 <map id="G" name="G">
-<area shape="rect" id="c243" href="./CpoClassSourceGenerator.html" title="&lt;TABLE&gt;" alt="" coords="15,19,182,43"/>
-<area shape="rect" id="c244" href="./XmlExporterServlet.html" title="&lt;TABLE&gt;" alt="" coords="226,19,350,43"/>
-<area shape="rect" id="c245" href="./CoreMetaXmlObjectExporter.html" title="&lt;TABLE&gt;" alt="" coords="381,116,555,140"/>
-<area shape="rect" id="c246" href="./MetaXmlObjectExporter.html" title="&lt;TABLE&gt;" alt="" coords="394,11,542,50"/>
+<area shape="rect" id="node1_0" href="./XmlExporterServlet.html" title="&lt;TABLE&gt;" alt="" coords="16,18,136,41"/>
+<area shape="rect" id="node2_1" href="./MetaXmlObjectExporter.html" title="&lt;TABLE&gt;" alt="" coords="181,11,325,48"/>
+<area shape="rect" id="node6_2" href="./CoreMetaXmlObjectExporter.html" title="&lt;TABLE&gt;" alt="" coords="168,114,339,137"/>
+<area shape="rect" id="node3_3" href="./CpoLegacyClassSourceGenerator.html" title="&lt;TABLE&gt;" alt="" coords="384,114,584,137"/>
+<area shape="rect" id="node4_4" href="./CpoInterfaceSourceGenerator.html" title="&lt;TABLE&gt;" alt="" coords="610,18,787,41"/>
+<area shape="rect" id="node5_5" href="./CpoClassSourceGenerator.html" title="&lt;TABLE&gt;" alt="" coords="403,18,565,41"/>
 </map>

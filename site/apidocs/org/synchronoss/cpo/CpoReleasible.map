@@ -1,9 +1,9 @@
 <map id="G" name="G">
-<area shape="rect" id="c13617" href="./CpoReleasible.html" title="&lt;TABLE&gt;" alt="" coords="615,11,716,50"/>
-<area shape="rect" id="c13619" href="./CpoStatementFactory.html" title="&lt;TABLE&gt;" alt="" coords="597,116,734,140"/>
-<area shape="rect" id="c13708" href="./transform/jdbc/OracleTemporaryClob.html" title="&lt;TABLE&gt;" alt="" coords="170,110,339,146"/>
-<area shape="rect" id="c13709" href="./transform/jdbc/OracleTemporaryBlob.html" title="&lt;TABLE&gt;" alt="" coords="383,110,553,146"/>
-<area shape="rect" id="c13725" href="./jdbc/JdbcPreparedStatementFactory.html" title="&lt;TABLE&gt;" alt="" coords="15,206,206,242"/>
-<area shape="rect" id="c13731" href="./jdbc/JdbcCallableStatementFactory.html" title="&lt;TABLE&gt;" alt="" coords="778,110,963,146"/>
-<area shape="rect" id="c13763" href="./cassandra/CassandraBoundStatementFactory.html" title="&lt;TABLE&gt;" alt="" coords="918,206,1127,242"/>
+<area shape="rect" id="node1_0" href="./CpoStatementFactory.html" title="&lt;TABLE&gt;" alt="" coords="272,18,405,41"/>
+<area shape="rect" id="node2_1" href="./CpoReleasible.html" title="&lt;TABLE&gt;" alt="" coords="291,107,386,144"/>
+<area shape="rect" id="node3_2" href="./jdbc/JdbcPreparedStatementFactory.html" title="&lt;TABLE&gt;" alt="" coords="16,204,203,239"/>
+<area shape="rect" id="node7_3" href="./cassandra/CassandraBoundStatementFactory.html" title="&lt;TABLE&gt;" alt="" coords="891,204,1095,239"/>
+<area shape="rect" id="node4_4" href="./jdbc/JdbcCallableStatementFactory.html" title="&lt;TABLE&gt;" alt="" coords="249,204,429,239"/>
+<area shape="rect" id="node5_5" href="./transform/jdbc/OracleTemporaryClob.html" title="&lt;TABLE&gt;" alt="" coords="475,204,637,239"/>
+<area shape="rect" id="node6_6" href="./transform/jdbc/OracleTemporaryBlob.html" title="&lt;TABLE&gt;" alt="" coords="683,204,845,239"/>
 </map>

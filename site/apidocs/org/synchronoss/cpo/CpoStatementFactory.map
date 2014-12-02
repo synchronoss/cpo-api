@@ -1,11 +1,11 @@
 <map id="G" name="G">
-<area shape="rect" id="c14049" href="./CpoReleasible.html" title="&lt;TABLE&gt;" alt="" coords="609,11,711,50"/>
-<area shape="rect" id="c14051" href="./CpoStatementFactory.html" title="&lt;TABLE&gt;" alt="" coords="591,116,729,140"/>
-<area shape="rect" id="c14157" href="./jdbc/JdbcPreparedStatementFactory.html" title="&lt;TABLE&gt;" alt="" coords="15,213,206,249"/>
-<area shape="rect" id="c14195" href="./cassandra/CassandraBoundStatementFactory.html" title="&lt;TABLE&gt;" alt="" coords="893,213,1102,249"/>
-<area shape="rect" id="c14068" href="./meta/MethodMapper.html" title="&lt;TABLE&gt;" alt="" coords="623,315,1068,351"/>
-<area shape="rect" id="c14074" href="./meta/domain/CpoAttribute.html" title="&lt;TABLE&gt;" alt="" coords="251,315,413,351"/>
-<area shape="rect" id="c14078" href="./meta/domain/CpoClass.html" title="&lt;TABLE&gt;" alt="" coords="251,213,413,249"/>
-<area shape="rect" id="c14080" href="./meta/domain/CpoFunction.html" title="&lt;TABLE&gt;" alt="" coords="509,213,672,249"/>
-<area shape="rect" id="c14237" href="http://java.sun.com/j2se/1.4.2/docs/api/org/slf4j/Logger.html" title="&lt;TABLE&gt;" alt="" coords="717,205,797,256"/>
+<area shape="rect" id="node1_0" href="./CpoStatementFactory.html" title="&lt;TABLE&gt;" alt="" coords="565,18,699,41"/>
+<area shape="rect" id="node2_1" href="./CpoReleasible.html" title="&lt;TABLE&gt;" alt="" coords="429,113,523,150"/>
+<area shape="rect" id="node3_2" href="./meta/MethodMapper.html" title="&lt;TABLE&gt;" alt="" coords="16,312,453,347"/>
+<area shape="rect" id="node4_3" href="./meta/domain/CpoFunction.html" title="&lt;TABLE&gt;" alt="" coords="829,114,987,149"/>
+<area shape="rect" id="node5_4" href="./meta/domain/CpoClass.html" title="&lt;TABLE&gt;" alt="" coords="615,216,772,251"/>
+<area shape="rect" id="node6_5" href="./meta/domain/CpoAttribute.html" title="&lt;TABLE&gt;" alt="" coords="615,312,772,347"/>
+<area shape="rect" id="node7_6" href="./jdbc/JdbcPreparedStatementFactory.html" title="&lt;TABLE&gt;" alt="" coords="383,216,569,251"/>
+<area shape="rect" id="node8_7" href="./cassandra/CassandraBoundStatementFactory.html" title="&lt;TABLE&gt;" alt="" coords="133,216,337,251"/>
+<area shape="rect" id="node9_8" href="http://java.sun.com/j2se/1.4.2/docs/api/org/slf4j/Logger.html" title="&lt;TABLE&gt;" alt="" coords="1033,107,1109,156"/>
 </map>

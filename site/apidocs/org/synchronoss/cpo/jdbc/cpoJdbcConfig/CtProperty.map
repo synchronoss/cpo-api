@@ -1,7 +1,7 @@
 <map id="G" name="G">
-<area shape="rect" id="c40416" href="./CtProperty.html" title="&lt;TABLE&gt;" alt="" coords="233,121,313,159"/>
-<area shape="rect" id="c40420" href="./impl/CtPropertyImpl.html" title="&lt;TABLE&gt;" alt="" coords="52,219,263,255"/>
-<area shape="rect" id="c40481" href="http://java.sun.com/j2se/1.4.2/docs/api/org/apache/xmlbeans/XmlString.html" title="&lt;TABLE&gt;" alt="" coords="257,315,365,365"/>
-<area shape="rect" id="c40422" href="./impl/CtJdbcReadWriteConfigImpl.html" title="&lt;TABLE&gt;" alt="" coords="168,18,379,54"/>
-<area shape="rect" id="c40480" href="http://java.sun.com/j2se/1.4.2/docs/api/org/apache/xmlbeans/XmlObject.html" title="&lt;TABLE&gt;" alt="" coords="15,11,123,61"/>
+<area shape="rect" id="node1_0" href="./CtProperty.html" title="&lt;TABLE&gt;" alt="" coords="230,119,306,156"/>
+<area shape="rect" id="node2_1" href="./impl/CtPropertyImpl.html" title="&lt;TABLE&gt;" alt="" coords="51,216,256,251"/>
+<area shape="rect" id="node5_2" href="http://java.sun.com/j2se/1.4.2/docs/api/org/apache/xmlbeans/XmlString.html" title="&lt;TABLE&gt;" alt="" coords="252,311,356,360"/>
+<area shape="rect" id="node3_3" href="./impl/CtJdbcReadWriteConfigImpl.html" title="&lt;TABLE&gt;" alt="" coords="165,18,371,53"/>
+<area shape="rect" id="node4_4" href="http://java.sun.com/j2se/1.4.2/docs/api/org/apache/xmlbeans/XmlObject.html" title="&lt;TABLE&gt;" alt="" coords="16,11,120,60"/>
 </map>

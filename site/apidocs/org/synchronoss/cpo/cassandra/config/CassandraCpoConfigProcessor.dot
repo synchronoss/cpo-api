@@ -8,7 +8,7 @@ digraph G {
 	edge [fontname="Helvetica",fontsize=10,labelfontname="Helvetica",labelfontsize=10];
 	node [fontname="Helvetica",fontsize=10,shape=plaintext];
 	// org.synchronoss.cpo.CpoAdapter
-	c46949 [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="../../CpoAdapter.html">
+	c48057 [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="../../CpoAdapter.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 			<tr><td> &laquo;interface&raquo; </td></tr>
 			<tr><td> CpoAdapter </td></tr>
@@ -16,7 +16,7 @@ digraph G {
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=9.0];
 	// org.synchronoss.cpo.config.CpoConfigProcessor
-	c46984 [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="../../config/CpoConfigProcessor.html">
+	c48067 [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="../../config/CpoConfigProcessor.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 			<tr><td> &laquo;interface&raquo; </td></tr>
 			<tr><td> CpoConfigProcessor </td></tr>
@@ -24,7 +24,7 @@ digraph G {
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=9.0];
 	// org.synchronoss.cpo.core.cpoCoreConfig.CtDataSourceConfig
-	c47039 [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="../../core/cpoCoreConfig/CtDataSourceConfig.html">
+	c48105 [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="../../core/cpoCoreConfig/CtDataSourceConfig.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 			<tr><td> &laquo;interface&raquo; </td></tr>
 			<tr><td> CtDataSourceConfig </td></tr>
@@ -32,20 +32,20 @@ digraph G {
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=9.0];
 	// org.synchronoss.cpo.cassandra.ClusterDataSourceInfo
-	c47119 [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="../ClusterDataSourceInfo.html">
+	c48205 [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="../ClusterDataSourceInfo.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 			<tr><td> ClusterDataSourceInfo </td></tr>
 			<tr><td><font point-size="7.0"> org.synchronoss.cpo.cassandra </font></td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=9.0];
 	// org.synchronoss.cpo.cassandra.config.CassandraCpoConfigProcessor
-	c47130 [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./CassandraCpoConfigProcessor.html">
+	c48220 [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./CassandraCpoConfigProcessor.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 			<tr><td> CassandraCpoConfigProcessor </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=9.0];
 	// org.synchronoss.cpo.cassandra.cpoCassandraConfig.CtCassandraReadWriteConfig
-	c47149 [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="../cpoCassandraConfig/CtCassandraReadWriteConfig.html">
+	c48235 [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="../cpoCassandraConfig/CtCassandraReadWriteConfig.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 			<tr><td> &laquo;interface&raquo; </td></tr>
 			<tr><td> CtCassandraReadWriteConfig </td></tr>
@@ -53,18 +53,18 @@ digraph G {
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=9.0];
 	//org.synchronoss.cpo.cassandra.config.CassandraCpoConfigProcessor implements org.synchronoss.cpo.config.CpoConfigProcessor
-	c46984:p -> c47130:p [dir=back,arrowtail=empty,style=dashed];
-	// org.synchronoss.cpo.config.CpoConfigProcessor DEPEND org.synchronoss.cpo.core.cpoCoreConfig.CtDataSourceConfig
-	c46984:p -> c47039:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
+	c48067:p -> c48220:p [dir=back,arrowtail=empty,style=dashed];
 	// org.synchronoss.cpo.config.CpoConfigProcessor DEPEND org.synchronoss.cpo.CpoAdapter
-	c46984:p -> c46949:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
-	// org.synchronoss.cpo.cassandra.config.CassandraCpoConfigProcessor DEPEND org.synchronoss.cpo.core.cpoCoreConfig.CtDataSourceConfig
-	c47130:p -> c47039:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
-	// org.synchronoss.cpo.cassandra.config.CassandraCpoConfigProcessor DEPEND org.synchronoss.cpo.CpoAdapter
-	c47130:p -> c46949:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
+	c48067:p -> c48057:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
+	// org.synchronoss.cpo.config.CpoConfigProcessor DEPEND org.synchronoss.cpo.core.cpoCoreConfig.CtDataSourceConfig
+	c48067:p -> c48105:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
 	// org.synchronoss.cpo.cassandra.config.CassandraCpoConfigProcessor DEPEND org.synchronoss.cpo.cassandra.cpoCassandraConfig.CtCassandraReadWriteConfig
-	c47130:p -> c47149:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
+	c48220:p -> c48235:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
 	// org.synchronoss.cpo.cassandra.config.CassandraCpoConfigProcessor DEPEND org.synchronoss.cpo.cassandra.ClusterDataSourceInfo
-	c47130:p -> c47119:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
+	c48220:p -> c48205:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
+	// org.synchronoss.cpo.cassandra.config.CassandraCpoConfigProcessor DEPEND org.synchronoss.cpo.CpoAdapter
+	c48220:p -> c48057:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
+	// org.synchronoss.cpo.cassandra.config.CassandraCpoConfigProcessor DEPEND org.synchronoss.cpo.core.cpoCoreConfig.CtDataSourceConfig
+	c48220:p -> c48105:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
 }
 

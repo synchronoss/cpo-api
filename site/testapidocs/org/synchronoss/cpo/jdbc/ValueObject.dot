@@ -7,123 +7,124 @@
 digraph G {
 	edge [fontname="Helvetica",fontsize=10,labelfontname="Helvetica",labelfontsize=10];
 	node [fontname="Helvetica",fontsize=10,shape=plaintext];
-	// org.synchronoss.cpo.jdbc.UpdateObjectTest
-	c1537 [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./UpdateObjectTest.html">
-		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-			<tr><td> UpdateObjectTest </td></tr>
-		</table></td></tr>
-		</table>>, fontname="Helvetica", fontcolor="black", fontsize=9.0];
-	// org.synchronoss.cpo.jdbc.DeleteObjectTest
-	c1539 [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./DeleteObjectTest.html">
-		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-			<tr><td> DeleteObjectTest </td></tr>
-		</table></td></tr>
-		</table>>, fontname="Helvetica", fontcolor="black", fontsize=9.0];
-	// org.synchronoss.cpo.jdbc.ChildValueObject
-	c1540 [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ChildValueObject.html">
-		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-			<tr><td> ChildValueObject </td></tr>
-		</table></td></tr>
-		</table>>, fontname="Helvetica", fontcolor="black", fontsize=9.0];
-	// org.synchronoss.cpo.jdbc.InterleavedWhereTest
-	c1547 [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./InterleavedWhereTest.html">
-		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-			<tr><td> InterleavedWhereTest </td></tr>
-		</table></td></tr>
-		</table>>, fontname="Helvetica", fontcolor="black", fontsize=9.0];
-	// org.synchronoss.cpo.jdbc.NativeExpressionTest
-	c1549 [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./NativeExpressionTest.html">
-		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-			<tr><td> NativeExpressionTest </td></tr>
-		</table></td></tr>
-		</table>>, fontname="Helvetica", fontcolor="black", fontsize=9.0];
-	// org.synchronoss.cpo.jdbc.InsertObjectTest
-	c1550 [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./InsertObjectTest.html">
-		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-			<tr><td> InsertObjectTest </td></tr>
-		</table></td></tr>
-		</table>>, fontname="Helvetica", fontcolor="black", fontsize=9.0];
-	// org.synchronoss.cpo.jdbc.BigBatchTest
-	c1552 [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./BigBatchTest.html">
-		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-			<tr><td> BigBatchTest </td></tr>
-		</table></td></tr>
-		</table>>, fontname="Helvetica", fontcolor="black", fontsize=9.0];
-	// org.synchronoss.cpo.jdbc.WhereTest
-	c1553 [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./WhereTest.html">
-		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-			<tr><td> WhereTest </td></tr>
-		</table></td></tr>
-		</table>>, fontname="Helvetica", fontcolor="black", fontsize=9.0];
-	// org.synchronoss.cpo.jdbc.RetrieveBeanTest
-	c1557 [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./RetrieveBeanTest.html">
-		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-			<tr><td> RetrieveBeanTest </td></tr>
-		</table></td></tr>
-		</table>>, fontname="Helvetica", fontcolor="black", fontsize=9.0];
-	// org.synchronoss.cpo.jdbc.CaseInsensitiveTest
-	c1558 [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./CaseInsensitiveTest.html">
-		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-			<tr><td> CaseInsensitiveTest </td></tr>
-		</table></td></tr>
-		</table>>, fontname="Helvetica", fontcolor="black", fontsize=9.0];
-	// org.synchronoss.cpo.jdbc.ValueObject
-	c1559 [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./ValueObject.html">
-		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-			<tr><td> ValueObject </td></tr>
-		</table></td></tr>
-		</table>>, fontname="Helvetica", fontcolor="black", fontsize=9.0];
-	// org.synchronoss.cpo.jdbc.BigRetrieveTest
-	c1561 [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./BigRetrieveTest.html">
-		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-			<tr><td> BigRetrieveTest </td></tr>
-		</table></td></tr>
-		</table>>, fontname="Helvetica", fontcolor="black", fontsize=9.0];
-	// org.synchronoss.cpo.jdbc.OrderByTest
-	c1564 [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./OrderByTest.html">
-		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-			<tr><td> OrderByTest </td></tr>
-		</table></td></tr>
-		</table>>, fontname="Helvetica", fontcolor="black", fontsize=9.0];
 	// org.synchronoss.cpo.jdbc.ZZHotDeployTest
-	c1565 [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ZZHotDeployTest.html">
+	c587 [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ZZHotDeployTest.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 			<tr><td> ZZHotDeployTest </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=9.0];
+	// org.synchronoss.cpo.jdbc.WhereTest
+	c589 [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./WhereTest.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+			<tr><td> WhereTest </td></tr>
+		</table></td></tr>
+		</table>>, fontname="Helvetica", fontcolor="black", fontsize=9.0];
+	// org.synchronoss.cpo.jdbc.ValueObjectBean
+	c590 [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ValueObjectBean.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+			<tr><td> ValueObjectBean </td></tr>
+		</table></td></tr>
+		</table>>, fontname="Helvetica", fontcolor="black", fontsize=9.0];
+	// org.synchronoss.cpo.jdbc.ValueObject
+	c591 [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./ValueObject.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+			<tr><td> &laquo;interface&raquo; </td></tr>
+			<tr><td> ValueObject </td></tr>
+		</table></td></tr>
+		</table>>, fontname="Helvetica", fontcolor="black", fontsize=9.0];
+	// org.synchronoss.cpo.jdbc.UpdateObjectTest
+	c592 [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./UpdateObjectTest.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+			<tr><td> UpdateObjectTest </td></tr>
+		</table></td></tr>
+		</table>>, fontname="Helvetica", fontcolor="black", fontsize=9.0];
+	// org.synchronoss.cpo.jdbc.RetrieveBeanTest
+	c596 [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./RetrieveBeanTest.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+			<tr><td> RetrieveBeanTest </td></tr>
+		</table></td></tr>
+		</table>>, fontname="Helvetica", fontcolor="black", fontsize=9.0];
+	// org.synchronoss.cpo.jdbc.OrderByTest
+	c597 [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./OrderByTest.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+			<tr><td> OrderByTest </td></tr>
+		</table></td></tr>
+		</table>>, fontname="Helvetica", fontcolor="black", fontsize=9.0];
+	// org.synchronoss.cpo.jdbc.NativeExpressionTest
+	c598 [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./NativeExpressionTest.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+			<tr><td> NativeExpressionTest </td></tr>
+		</table></td></tr>
+		</table>>, fontname="Helvetica", fontcolor="black", fontsize=9.0];
+	// org.synchronoss.cpo.jdbc.InterleavedWhereTest
+	c603 [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./InterleavedWhereTest.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+			<tr><td> InterleavedWhereTest </td></tr>
+		</table></td></tr>
+		</table>>, fontname="Helvetica", fontcolor="black", fontsize=9.0];
+	// org.synchronoss.cpo.jdbc.InsertObjectTest
+	c604 [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./InsertObjectTest.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+			<tr><td> InsertObjectTest </td></tr>
+		</table></td></tr>
+		</table>>, fontname="Helvetica", fontcolor="black", fontsize=9.0];
+	// org.synchronoss.cpo.jdbc.DeleteObjectTest
+	c610 [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./DeleteObjectTest.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+			<tr><td> DeleteObjectTest </td></tr>
+		</table></td></tr>
+		</table>>, fontname="Helvetica", fontcolor="black", fontsize=9.0];
 	// org.synchronoss.cpo.jdbc.CaseSensitiveTest
-	c1566 [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./CaseSensitiveTest.html">
+	c613 [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./CaseSensitiveTest.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 			<tr><td> CaseSensitiveTest </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=9.0];
-	//org.synchronoss.cpo.jdbc.ChildValueObject extends org.synchronoss.cpo.jdbc.ValueObject
-	c1559:p -> c1540:p [dir=back,arrowtail=empty];
-	// org.synchronoss.cpo.jdbc.UpdateObjectTest NAVASSOC org.synchronoss.cpo.jdbc.ValueObject
-	c1537:p -> c1559:p [taillabel="", label="", headlabel="*", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
-	// org.synchronoss.cpo.jdbc.DeleteObjectTest NAVASSOC org.synchronoss.cpo.jdbc.ValueObject
-	c1539:p -> c1559:p [taillabel="", label="", headlabel="*", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
-	// org.synchronoss.cpo.jdbc.InterleavedWhereTest NAVASSOC org.synchronoss.cpo.jdbc.ValueObject
-	c1547:p -> c1559:p [taillabel="", label="", headlabel="*", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
-	// org.synchronoss.cpo.jdbc.NativeExpressionTest NAVASSOC org.synchronoss.cpo.jdbc.ValueObject
-	c1549:p -> c1559:p [taillabel="", label="", headlabel="*", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
-	// org.synchronoss.cpo.jdbc.InsertObjectTest NAVASSOC org.synchronoss.cpo.jdbc.ValueObject
-	c1550:p -> c1559:p [taillabel="", label="", headlabel="*", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
-	// org.synchronoss.cpo.jdbc.BigBatchTest NAVASSOC org.synchronoss.cpo.jdbc.ValueObject
-	c1552:p -> c1559:p [taillabel="", label="", headlabel="*", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
-	// org.synchronoss.cpo.jdbc.WhereTest NAVASSOC org.synchronoss.cpo.jdbc.ValueObject
-	c1553:p -> c1559:p [taillabel="", label="", headlabel="*", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
-	// org.synchronoss.cpo.jdbc.RetrieveBeanTest NAVASSOC org.synchronoss.cpo.jdbc.ValueObject
-	c1557:p -> c1559:p [taillabel="", label="", headlabel="*", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
-	// org.synchronoss.cpo.jdbc.CaseInsensitiveTest NAVASSOC org.synchronoss.cpo.jdbc.ValueObject
-	c1558:p -> c1559:p [taillabel="", label="", headlabel="*", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
-	// org.synchronoss.cpo.jdbc.BigRetrieveTest NAVASSOC org.synchronoss.cpo.jdbc.ValueObject
-	c1561:p -> c1559:p [taillabel="", label="", headlabel="*", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
-	// org.synchronoss.cpo.jdbc.OrderByTest NAVASSOC org.synchronoss.cpo.jdbc.ValueObject
-	c1564:p -> c1559:p [taillabel="", label="", headlabel="*", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
+	// org.synchronoss.cpo.jdbc.CaseInsensitiveTest
+	c614 [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./CaseInsensitiveTest.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+			<tr><td> CaseInsensitiveTest </td></tr>
+		</table></td></tr>
+		</table>>, fontname="Helvetica", fontcolor="black", fontsize=9.0];
+	// org.synchronoss.cpo.jdbc.BigRetrieveTest
+	c617 [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./BigRetrieveTest.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+			<tr><td> BigRetrieveTest </td></tr>
+		</table></td></tr>
+		</table>>, fontname="Helvetica", fontcolor="black", fontsize=9.0];
+	// org.synchronoss.cpo.jdbc.BigBatchTest
+	c618 [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./BigBatchTest.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+			<tr><td> BigBatchTest </td></tr>
+		</table></td></tr>
+		</table>>, fontname="Helvetica", fontcolor="black", fontsize=9.0];
+	//org.synchronoss.cpo.jdbc.ValueObjectBean implements org.synchronoss.cpo.jdbc.ValueObject
+	c591:p -> c590:p [dir=back,arrowtail=empty,style=dashed];
 	// org.synchronoss.cpo.jdbc.ZZHotDeployTest NAVASSOC org.synchronoss.cpo.jdbc.ValueObject
-	c1565:p -> c1559:p [taillabel="", label="", headlabel="*", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
+	c587:p -> c591:p [taillabel="", label="", headlabel="*", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
+	// org.synchronoss.cpo.jdbc.WhereTest NAVASSOC org.synchronoss.cpo.jdbc.ValueObject
+	c589:p -> c591:p [taillabel="", label="", headlabel="*", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
+	// org.synchronoss.cpo.jdbc.UpdateObjectTest NAVASSOC org.synchronoss.cpo.jdbc.ValueObject
+	c592:p -> c591:p [taillabel="", label="", headlabel="*", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
+	// org.synchronoss.cpo.jdbc.RetrieveBeanTest NAVASSOC org.synchronoss.cpo.jdbc.ValueObject
+	c596:p -> c591:p [taillabel="", label="", headlabel="*", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
+	// org.synchronoss.cpo.jdbc.OrderByTest NAVASSOC org.synchronoss.cpo.jdbc.ValueObject
+	c597:p -> c591:p [taillabel="", label="", headlabel="*", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
+	// org.synchronoss.cpo.jdbc.NativeExpressionTest NAVASSOC org.synchronoss.cpo.jdbc.ValueObject
+	c598:p -> c591:p [taillabel="", label="", headlabel="*", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
+	// org.synchronoss.cpo.jdbc.InterleavedWhereTest NAVASSOC org.synchronoss.cpo.jdbc.ValueObject
+	c603:p -> c591:p [taillabel="", label="", headlabel="*", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
+	// org.synchronoss.cpo.jdbc.InsertObjectTest NAVASSOC org.synchronoss.cpo.jdbc.ValueObject
+	c604:p -> c591:p [taillabel="", label="", headlabel="*", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
+	// org.synchronoss.cpo.jdbc.DeleteObjectTest NAVASSOC org.synchronoss.cpo.jdbc.ValueObject
+	c610:p -> c591:p [taillabel="", label="", headlabel="*", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
 	// org.synchronoss.cpo.jdbc.CaseSensitiveTest NAVASSOC org.synchronoss.cpo.jdbc.ValueObject
-	c1566:p -> c1559:p [taillabel="", label="", headlabel="*", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
+	c613:p -> c591:p [taillabel="", label="", headlabel="*", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
+	// org.synchronoss.cpo.jdbc.CaseInsensitiveTest NAVASSOC org.synchronoss.cpo.jdbc.ValueObject
+	c614:p -> c591:p [taillabel="", label="", headlabel="*", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
+	// org.synchronoss.cpo.jdbc.BigRetrieveTest NAVASSOC org.synchronoss.cpo.jdbc.ValueObject
+	c617:p -> c591:p [taillabel="", label="", headlabel="*", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
+	// org.synchronoss.cpo.jdbc.BigBatchTest NAVASSOC org.synchronoss.cpo.jdbc.ValueObject
+	c618:p -> c591:p [taillabel="", label="", headlabel="*", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
 }
 

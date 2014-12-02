@@ -8,7 +8,7 @@ digraph G {
 	edge [fontname="Helvetica",fontsize=10,labelfontname="Helvetica",labelfontsize=10];
 	node [fontname="Helvetica",fontsize=10,shape=plaintext];
 	// org.synchronoss.cpo.cassandra.config.ConfigInstantiator<T>
-	c46268 [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./ConfigInstantiator.html">
+	c48003 [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./ConfigInstantiator.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 			<tr><td> ConfigInstantiator&lt;T&gt; </td></tr>
 		</table></td></tr>

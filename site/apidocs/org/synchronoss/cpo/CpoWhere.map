@@ -1,6 +1,6 @@
 <map id="G" name="G">
-<area shape="rect" id="c8447" href="./CpoWhere.html" title="&lt;TABLE&gt;" alt="" coords="223,107,303,146"/>
-<area shape="rect" id="c8462" href="./BindableCpoWhere.html" title="&lt;TABLE&gt;" alt="" coords="199,212,326,236"/>
-<area shape="rect" id="c8581" href="./jdbc/JdbcCpoAdapter.html" title="&lt;TABLE&gt;" alt="" coords="16,11,141,47"/>
-<area shape="rect" id="c8612" href="./cassandra/CassandraCpoAdapter.html" title="&lt;TABLE&gt;" alt="" coords="187,11,339,47"/>
+<area shape="rect" id="node1_0" href="./CpoWhere.html" title="&lt;TABLE&gt;" alt="" coords="219,107,295,144"/>
+<area shape="rect" id="node2_1" href="./BindableCpoWhere.html" title="&lt;TABLE&gt;" alt="" coords="196,210,317,233"/>
+<area shape="rect" id="node3_2" href="./jdbc/JdbcCpoAdapter.html" title="&lt;TABLE&gt;" alt="" coords="16,12,137,47"/>
+<area shape="rect" id="node4_3" href="./cassandra/CassandraCpoAdapter.html" title="&lt;TABLE&gt;" alt="" coords="183,12,330,47"/>
 </map>

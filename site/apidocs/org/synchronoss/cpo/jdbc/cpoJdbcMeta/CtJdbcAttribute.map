@@ -1,6 +1,6 @@
 <map id="G" name="G">
-<area shape="rect" id="c41843" href="../../core/cpoCoreMeta/CtAttribute.html" title="&lt;TABLE&gt;" alt="" coords="178,11,363,61"/>
-<area shape="rect" id="c41935" href="./CtJdbcAttribute.html" title="&lt;TABLE&gt;" alt="" coords="171,121,272,159"/>
-<area shape="rect" id="c41992" href="http://java.sun.com/j2se/1.4.2/docs/api/org/apache/xmlbeans/XmlString.html" title="&lt;TABLE&gt;" alt="" coords="215,315,323,365"/>
-<area shape="rect" id="c41942" href="./impl/CtJdbcAttributeImpl.html" title="&lt;TABLE&gt;" alt="" coords="16,219,221,255"/>
+<area shape="rect" id="node1_0" href="../../core/cpoCoreMeta/CtAttribute.html" title="&lt;TABLE&gt;" alt="" coords="174,11,355,60"/>
+<area shape="rect" id="node2_1" href="./CtJdbcAttribute.html" title="&lt;TABLE&gt;" alt="" coords="167,119,266,156"/>
+<area shape="rect" id="node4_2" href="http://java.sun.com/j2se/1.4.2/docs/api/org/apache/xmlbeans/XmlString.html" title="&lt;TABLE&gt;" alt="" coords="211,311,315,360"/>
+<area shape="rect" id="node3_3" href="./impl/CtJdbcAttributeImpl.html" title="&lt;TABLE&gt;" alt="" coords="16,216,215,251"/>
 </map>

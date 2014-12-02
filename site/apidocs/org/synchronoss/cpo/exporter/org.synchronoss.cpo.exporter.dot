@@ -7,32 +7,46 @@
 digraph G {
 	edge [fontname="Helvetica",fontsize=10,labelfontname="Helvetica",labelfontsize=10];
 	node [fontname="Helvetica",fontsize=10,shape=plaintext];
-	// org.synchronoss.cpo.exporter.CpoClassSourceGenerator
-	c243 [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./CpoClassSourceGenerator.html">
-		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-			<tr><td> CpoClassSourceGenerator </td></tr>
-		</table></td></tr>
-		</table>>, fontname="Helvetica", fontcolor="black", fontsize=9.0];
 	// org.synchronoss.cpo.exporter.XmlExporterServlet
-	c244 [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./XmlExporterServlet.html">
+	c680 [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./XmlExporterServlet.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 			<tr><td> XmlExporterServlet </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=9.0];
-	// org.synchronoss.cpo.exporter.CoreMetaXmlObjectExporter
-	c245 [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./CoreMetaXmlObjectExporter.html">
-		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-			<tr><td> CoreMetaXmlObjectExporter </td></tr>
-		</table></td></tr>
-		</table>>, fontname="Helvetica", fontcolor="black", fontsize=9.0];
 	// org.synchronoss.cpo.exporter.MetaXmlObjectExporter
-	c246 [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./MetaXmlObjectExporter.html">
+	c681 [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./MetaXmlObjectExporter.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 			<tr><td> &laquo;interface&raquo; </td></tr>
 			<tr><td> MetaXmlObjectExporter </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=9.0];
+	// org.synchronoss.cpo.exporter.CpoLegacyClassSourceGenerator
+	c682 [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./CpoLegacyClassSourceGenerator.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+			<tr><td> CpoLegacyClassSourceGenerator </td></tr>
+		</table></td></tr>
+		</table>>, fontname="Helvetica", fontcolor="black", fontsize=9.0];
+	// org.synchronoss.cpo.exporter.CpoInterfaceSourceGenerator
+	c683 [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./CpoInterfaceSourceGenerator.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+			<tr><td> CpoInterfaceSourceGenerator </td></tr>
+		</table></td></tr>
+		</table>>, fontname="Helvetica", fontcolor="black", fontsize=9.0];
+	// org.synchronoss.cpo.exporter.CpoClassSourceGenerator
+	c684 [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./CpoClassSourceGenerator.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+			<tr><td> CpoClassSourceGenerator </td></tr>
+		</table></td></tr>
+		</table>>, fontname="Helvetica", fontcolor="black", fontsize=9.0];
+	// org.synchronoss.cpo.exporter.CoreMetaXmlObjectExporter
+	c685 [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./CoreMetaXmlObjectExporter.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+			<tr><td> CoreMetaXmlObjectExporter </td></tr>
+		</table></td></tr>
+		</table>>, fontname="Helvetica", fontcolor="black", fontsize=9.0];
+	//org.synchronoss.cpo.exporter.CpoLegacyClassSourceGenerator extends org.synchronoss.cpo.exporter.CpoClassSourceGenerator
+	c684:p -> c682:p [dir=back,arrowtail=empty];
 	//org.synchronoss.cpo.exporter.CoreMetaXmlObjectExporter implements org.synchronoss.cpo.exporter.MetaXmlObjectExporter
-	c246:p -> c245:p [dir=back,arrowtail=empty,style=dashed];
+	c681:p -> c685:p [dir=back,arrowtail=empty,style=dashed];
 }
 

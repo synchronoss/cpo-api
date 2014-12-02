@@ -8,14 +8,14 @@ digraph G {
 	edge [fontname="Helvetica",fontsize=10,labelfontname="Helvetica",labelfontsize=10];
 	node [fontname="Helvetica",fontsize=10,shape=plaintext];
 	// org.synchronoss.cpo.core.cpoCoreConfig.impl.CtDataSourceConfigImpl
-	c52862 [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="../../../core/cpoCoreConfig/impl/CtDataSourceConfigImpl.html">
+	c52893 [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="../../../core/cpoCoreConfig/impl/CtDataSourceConfigImpl.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 			<tr><td> CtDataSourceConfigImpl </td></tr>
 			<tr><td><font point-size="7.0"> org.synchronoss.cpo.core.cpoCoreConfig.impl </font></td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=9.0];
 	// org.synchronoss.cpo.cassandra.cpoCassandraConfig.CtCassandraReadWriteConfig
-	c52962 [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="../CtCassandraReadWriteConfig.html">
+	c53016 [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="../CtCassandraReadWriteConfig.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 			<tr><td> &laquo;interface&raquo; </td></tr>
 			<tr><td> CtCassandraReadWriteConfig </td></tr>
@@ -23,7 +23,7 @@ digraph G {
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=9.0];
 	// org.synchronoss.cpo.cassandra.cpoCassandraConfig.CtCassandraConfig
-	c52964 [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="../CtCassandraConfig.html">
+	c53018 [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="../CtCassandraConfig.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 			<tr><td> &laquo;interface&raquo; </td></tr>
 			<tr><td> CtCassandraConfig </td></tr>
@@ -31,16 +31,16 @@ digraph G {
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=9.0];
 	// org.synchronoss.cpo.cassandra.cpoCassandraConfig.impl.CtCassandraConfigImpl
-	c52970 [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./CtCassandraConfigImpl.html">
+	c53023 [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./CtCassandraConfigImpl.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 			<tr><td> CtCassandraConfigImpl </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=9.0];
 	//org.synchronoss.cpo.cassandra.cpoCassandraConfig.impl.CtCassandraConfigImpl extends org.synchronoss.cpo.core.cpoCoreConfig.impl.CtDataSourceConfigImpl
-	c52862:p -> c52970:p [dir=back,arrowtail=empty];
+	c52893:p -> c53023:p [dir=back,arrowtail=empty];
 	//org.synchronoss.cpo.cassandra.cpoCassandraConfig.impl.CtCassandraConfigImpl implements org.synchronoss.cpo.cassandra.cpoCassandraConfig.CtCassandraConfig
-	c52964:p -> c52970:p [dir=back,arrowtail=empty,style=dashed];
+	c53018:p -> c53023:p [dir=back,arrowtail=empty,style=dashed];
 	// org.synchronoss.cpo.cassandra.cpoCassandraConfig.impl.CtCassandraConfigImpl DEPEND org.synchronoss.cpo.cassandra.cpoCassandraConfig.CtCassandraReadWriteConfig
-	c52970:p -> c52962:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
+	c53023:p -> c53016:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
 }
 

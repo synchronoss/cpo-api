@@ -1,7 +1,7 @@
 <map id="G" name="G">
-<area shape="rect" id="c6177" href="./CassandraMethodMapEntry.html" title="&lt;TABLE&gt;" alt="" coords="15,17,222,41"/>
-<area shape="rect" id="c6178" href="./CassandraCpoMetaAdapter.html" title="&lt;TABLE&gt;" alt="" coords="266,17,438,41"/>
-<area shape="rect" id="c6179" href="./CassandraCpoMetaDescriptor.html" title="&lt;TABLE&gt;" alt="" coords="482,17,667,41"/>
-<area shape="rect" id="c6180" href="./CassandraMethodMapper.html" title="&lt;TABLE&gt;" alt="" coords="711,17,873,41"/>
-<area shape="rect" id="c6181" href="./CassandraCpoAttribute.html" title="&lt;TABLE&gt;" alt="" coords="917,17,1064,41"/>
+<area shape="rect" id="node1_0" href="./CassandraMethodMapper.html" title="&lt;TABLE&gt;" alt="" coords="16,18,172,41"/>
+<area shape="rect" id="node2_1" href="./CassandraMethodMapEntry.html" title="&lt;TABLE&gt;" alt="" coords="217,18,419,41"/>
+<area shape="rect" id="node3_2" href="./CassandraCpoMetaDescriptor.html" title="&lt;TABLE&gt;" alt="" coords="465,18,643,41"/>
+<area shape="rect" id="node4_3" href="./CassandraCpoMetaAdapter.html" title="&lt;TABLE&gt;" alt="" coords="689,18,854,41"/>
+<area shape="rect" id="node5_4" href="./CassandraCpoAttribute.html" title="&lt;TABLE&gt;" alt="" coords="899,18,1041,41"/>
 </map>

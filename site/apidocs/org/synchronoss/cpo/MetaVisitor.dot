@@ -8,118 +8,137 @@ digraph G {
 	edge [fontname="Helvetica",fontsize=10,labelfontname="Helvetica",labelfontsize=10];
 	node [fontname="Helvetica",fontsize=10,shape=plaintext];
 	// org.synchronoss.cpo.MetaVisitor
-	c12750 [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./MetaVisitor.html">
+	c8298 [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./MetaVisitor.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 			<tr><td> &laquo;interface&raquo; </td></tr>
 			<tr><td> MetaVisitor </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=9.0];
-	// org.synchronoss.cpo.exporter.CpoClassSourceGenerator
-	c12756 [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./exporter/CpoClassSourceGenerator.html">
-		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-			<tr><td> CpoClassSourceGenerator </td></tr>
-			<tr><td><font point-size="7.0"> org.synchronoss.cpo.exporter </font></td></tr>
-		</table></td></tr>
-		</table>>, fontname="Helvetica", fontcolor="black", fontsize=9.0];
-	// org.synchronoss.cpo.exporter.CoreMetaXmlObjectExporter
-	c12758 [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./exporter/CoreMetaXmlObjectExporter.html">
-		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-			<tr><td> CoreMetaXmlObjectExporter </td></tr>
-			<tr><td><font point-size="7.0"> org.synchronoss.cpo.exporter </font></td></tr>
-		</table></td></tr>
-		</table>>, fontname="Helvetica", fontcolor="black", fontsize=9.0];
 	// org.synchronoss.cpo.exporter.MetaXmlObjectExporter
-	c12759 [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./exporter/MetaXmlObjectExporter.html">
+	c8329 [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./exporter/MetaXmlObjectExporter.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 			<tr><td> &laquo;interface&raquo; </td></tr>
 			<tr><td> MetaXmlObjectExporter </td></tr>
 			<tr><td><font point-size="7.0"> org.synchronoss.cpo.exporter </font></td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=9.0];
+	// org.synchronoss.cpo.exporter.CpoInterfaceSourceGenerator
+	c8331 [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./exporter/CpoInterfaceSourceGenerator.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+			<tr><td> CpoInterfaceSourceGenerator </td></tr>
+			<tr><td><font point-size="7.0"> org.synchronoss.cpo.exporter </font></td></tr>
+		</table></td></tr>
+		</table>>, fontname="Helvetica", fontcolor="black", fontsize=9.0];
+	// org.synchronoss.cpo.exporter.CpoClassSourceGenerator
+	c8332 [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./exporter/CpoClassSourceGenerator.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+			<tr><td> CpoClassSourceGenerator </td></tr>
+			<tr><td><font point-size="7.0"> org.synchronoss.cpo.exporter </font></td></tr>
+		</table></td></tr>
+		</table>>, fontname="Helvetica", fontcolor="black", fontsize=9.0];
+	// org.synchronoss.cpo.exporter.CoreMetaXmlObjectExporter
+	c8333 [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./exporter/CoreMetaXmlObjectExporter.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+			<tr><td> CoreMetaXmlObjectExporter </td></tr>
+			<tr><td><font point-size="7.0"> org.synchronoss.cpo.exporter </font></td></tr>
+		</table></td></tr>
+		</table>>, fontname="Helvetica", fontcolor="black", fontsize=9.0];
+	// org.synchronoss.cpo.meta.domain.CpoFunctionGroup
+	c8352 [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./meta/domain/CpoFunctionGroup.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+			<tr><td> CpoFunctionGroup </td></tr>
+			<tr><td><font point-size="7.0"> org.synchronoss.cpo.meta.domain </font></td></tr>
+		</table></td></tr>
+		</table>>, fontname="Helvetica", fontcolor="black", fontsize=9.0];
+	// org.synchronoss.cpo.meta.domain.CpoFunction
+	c8353 [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./meta/domain/CpoFunction.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+			<tr><td> CpoFunction </td></tr>
+			<tr><td><font point-size="7.0"> org.synchronoss.cpo.meta.domain </font></td></tr>
+		</table></td></tr>
+		</table>>, fontname="Helvetica", fontcolor="black", fontsize=9.0];
+	// org.synchronoss.cpo.meta.domain.CpoClass
+	c8356 [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./meta/domain/CpoClass.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+			<tr><td><font face="Helvetica-Oblique"> CpoClass </font></td></tr>
+			<tr><td><font point-size="7.0"> org.synchronoss.cpo.meta.domain </font></td></tr>
+		</table></td></tr>
+		</table>>, fontname="Helvetica", fontcolor="black", fontsize=9.0];
 	// org.synchronoss.cpo.meta.domain.CpoAttribute
-	c12778 [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./meta/domain/CpoAttribute.html">
+	c8357 [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./meta/domain/CpoAttribute.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 			<tr><td> CpoAttribute </td></tr>
 			<tr><td><font point-size="7.0"> org.synchronoss.cpo.meta.domain </font></td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=9.0];
 	// org.synchronoss.cpo.meta.domain.CpoArgument
-	c12779 [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./meta/domain/CpoArgument.html">
+	c8358 [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./meta/domain/CpoArgument.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 			<tr><td> CpoArgument </td></tr>
 			<tr><td><font point-size="7.0"> org.synchronoss.cpo.meta.domain </font></td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=9.0];
-	// org.synchronoss.cpo.meta.domain.CpoFunctionGroup
-	c12781 [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./meta/domain/CpoFunctionGroup.html">
-		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-			<tr><td> CpoFunctionGroup </td></tr>
-			<tr><td><font point-size="7.0"> org.synchronoss.cpo.meta.domain </font></td></tr>
-		</table></td></tr>
-		</table>>, fontname="Helvetica", fontcolor="black", fontsize=9.0];
-	// org.synchronoss.cpo.meta.domain.CpoClass
-	c12782 [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./meta/domain/CpoClass.html">
-		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-			<tr><td><font face="Helvetica-Oblique"> CpoClass </font></td></tr>
-			<tr><td><font point-size="7.0"> org.synchronoss.cpo.meta.domain </font></td></tr>
-		</table></td></tr>
-		</table>>, fontname="Helvetica", fontcolor="black", fontsize=9.0];
-	// org.synchronoss.cpo.meta.domain.CpoFunction
-	c12784 [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./meta/domain/CpoFunction.html">
-		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-			<tr><td> CpoFunction </td></tr>
-			<tr><td><font point-size="7.0"> org.synchronoss.cpo.meta.domain </font></td></tr>
-		</table></td></tr>
-		</table>>, fontname="Helvetica", fontcolor="black", fontsize=9.0];
-	//org.synchronoss.cpo.exporter.CpoClassSourceGenerator implements org.synchronoss.cpo.MetaVisitor
-	c12750:p -> c12756:p [dir=back,arrowtail=empty,style=dashed];
-	//org.synchronoss.cpo.exporter.CoreMetaXmlObjectExporter implements org.synchronoss.cpo.exporter.MetaXmlObjectExporter
-	c12759:p -> c12758:p [dir=back,arrowtail=empty,style=dashed];
-	//org.synchronoss.cpo.exporter.CoreMetaXmlObjectExporter implements org.synchronoss.cpo.MetaVisitor
-	c12750:p -> c12758:p [dir=back,arrowtail=empty,style=dashed];
 	//org.synchronoss.cpo.exporter.MetaXmlObjectExporter implements org.synchronoss.cpo.MetaVisitor
-	c12750:p -> c12759:p [dir=back,arrowtail=empty,style=dashed];
-	// org.synchronoss.cpo.meta.domain.CpoArgument NAVASSOC org.synchronoss.cpo.meta.domain.CpoAttribute
-	c12779:p -> c12778:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
+	c8298:p -> c8329:p [dir=back,arrowtail=empty,style=dashed];
+	//org.synchronoss.cpo.exporter.CpoInterfaceSourceGenerator implements org.synchronoss.cpo.MetaVisitor
+	c8298:p -> c8331:p [dir=back,arrowtail=empty,style=dashed];
+	//org.synchronoss.cpo.exporter.CpoClassSourceGenerator implements org.synchronoss.cpo.MetaVisitor
+	c8298:p -> c8332:p [dir=back,arrowtail=empty,style=dashed];
+	//org.synchronoss.cpo.exporter.CoreMetaXmlObjectExporter implements org.synchronoss.cpo.exporter.MetaXmlObjectExporter
+	c8329:p -> c8333:p [dir=back,arrowtail=empty,style=dashed];
+	//org.synchronoss.cpo.exporter.CoreMetaXmlObjectExporter implements org.synchronoss.cpo.MetaVisitor
+	c8298:p -> c8333:p [dir=back,arrowtail=empty,style=dashed];
 	// org.synchronoss.cpo.meta.domain.CpoFunctionGroup NAVASSOC org.synchronoss.cpo.meta.domain.CpoFunction
-	c12781:p -> c12784:p [taillabel="", label="", headlabel="*", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
-	// org.synchronoss.cpo.meta.domain.CpoClass NAVASSOC org.synchronoss.cpo.meta.domain.CpoAttribute
-	c12782:p -> c12778:p [taillabel="", label="", headlabel="*", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
-	// org.synchronoss.cpo.meta.domain.CpoClass NAVASSOC org.synchronoss.cpo.meta.domain.CpoAttribute
-	c12782:p -> c12778:p [taillabel="", label="", headlabel="*", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
-	// org.synchronoss.cpo.meta.domain.CpoClass NAVASSOC org.synchronoss.cpo.meta.domain.CpoFunctionGroup
-	c12782:p -> c12781:p [taillabel="", label="", headlabel="*", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
+	c8352:p -> c8353:p [taillabel="", label="", headlabel="*", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
 	// org.synchronoss.cpo.meta.domain.CpoFunction NAVASSOC org.synchronoss.cpo.meta.domain.CpoArgument
-	c12784:p -> c12779:p [taillabel="", label="", headlabel="*", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
-	// org.synchronoss.cpo.MetaVisitor DEPEND org.synchronoss.cpo.meta.domain.CpoFunction
-	c12750:p -> c12784:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
-	// org.synchronoss.cpo.MetaVisitor DEPEND org.synchronoss.cpo.meta.domain.CpoFunctionGroup
-	c12750:p -> c12781:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
-	// org.synchronoss.cpo.MetaVisitor DEPEND org.synchronoss.cpo.meta.domain.CpoArgument
-	c12750:p -> c12779:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
+	c8353:p -> c8358:p [taillabel="", label="", headlabel="*", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
+	// org.synchronoss.cpo.meta.domain.CpoClass NAVASSOC org.synchronoss.cpo.meta.domain.CpoAttribute
+	c8356:p -> c8357:p [taillabel="", label="", headlabel="*", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
+	// org.synchronoss.cpo.meta.domain.CpoClass NAVASSOC org.synchronoss.cpo.meta.domain.CpoAttribute
+	c8356:p -> c8357:p [taillabel="", label="", headlabel="*", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
+	// org.synchronoss.cpo.meta.domain.CpoClass NAVASSOC org.synchronoss.cpo.meta.domain.CpoFunctionGroup
+	c8356:p -> c8352:p [taillabel="", label="", headlabel="*", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
+	// org.synchronoss.cpo.meta.domain.CpoArgument NAVASSOC org.synchronoss.cpo.meta.domain.CpoAttribute
+	c8358:p -> c8357:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
 	// org.synchronoss.cpo.MetaVisitor DEPEND org.synchronoss.cpo.meta.domain.CpoAttribute
-	c12750:p -> c12778:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
+	c8298:p -> c8357:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
+	// org.synchronoss.cpo.MetaVisitor DEPEND org.synchronoss.cpo.meta.domain.CpoFunction
+	c8298:p -> c8353:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
+	// org.synchronoss.cpo.MetaVisitor DEPEND org.synchronoss.cpo.meta.domain.CpoArgument
+	c8298:p -> c8358:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
+	// org.synchronoss.cpo.MetaVisitor DEPEND org.synchronoss.cpo.meta.domain.CpoFunctionGroup
+	c8298:p -> c8352:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
 	// org.synchronoss.cpo.MetaVisitor DEPEND org.synchronoss.cpo.meta.domain.CpoClass
-	c12750:p -> c12782:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
-	// org.synchronoss.cpo.exporter.CpoClassSourceGenerator DEPEND org.synchronoss.cpo.meta.domain.CpoFunction
-	c12756:p -> c12784:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
-	// org.synchronoss.cpo.exporter.CpoClassSourceGenerator DEPEND org.synchronoss.cpo.meta.domain.CpoFunctionGroup
-	c12756:p -> c12781:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
-	// org.synchronoss.cpo.exporter.CpoClassSourceGenerator DEPEND org.synchronoss.cpo.meta.domain.CpoArgument
-	c12756:p -> c12779:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
+	c8298:p -> c8356:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
+	// org.synchronoss.cpo.exporter.CpoInterfaceSourceGenerator DEPEND org.synchronoss.cpo.meta.domain.CpoAttribute
+	c8331:p -> c8357:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
+	// org.synchronoss.cpo.exporter.CpoInterfaceSourceGenerator DEPEND org.synchronoss.cpo.meta.domain.CpoFunction
+	c8331:p -> c8353:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
+	// org.synchronoss.cpo.exporter.CpoInterfaceSourceGenerator DEPEND org.synchronoss.cpo.meta.domain.CpoArgument
+	c8331:p -> c8358:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
+	// org.synchronoss.cpo.exporter.CpoInterfaceSourceGenerator DEPEND org.synchronoss.cpo.meta.domain.CpoFunctionGroup
+	c8331:p -> c8352:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
+	// org.synchronoss.cpo.exporter.CpoInterfaceSourceGenerator DEPEND org.synchronoss.cpo.meta.domain.CpoClass
+	c8331:p -> c8356:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
 	// org.synchronoss.cpo.exporter.CpoClassSourceGenerator DEPEND org.synchronoss.cpo.meta.domain.CpoAttribute
-	c12756:p -> c12778:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
+	c8332:p -> c8357:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
+	// org.synchronoss.cpo.exporter.CpoClassSourceGenerator DEPEND org.synchronoss.cpo.meta.domain.CpoFunction
+	c8332:p -> c8353:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
+	// org.synchronoss.cpo.exporter.CpoClassSourceGenerator DEPEND org.synchronoss.cpo.meta.domain.CpoArgument
+	c8332:p -> c8358:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
+	// org.synchronoss.cpo.exporter.CpoClassSourceGenerator DEPEND org.synchronoss.cpo.meta.domain.CpoFunctionGroup
+	c8332:p -> c8352:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
 	// org.synchronoss.cpo.exporter.CpoClassSourceGenerator DEPEND org.synchronoss.cpo.meta.domain.CpoClass
-	c12756:p -> c12782:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
-	// org.synchronoss.cpo.exporter.CoreMetaXmlObjectExporter DEPEND org.synchronoss.cpo.meta.domain.CpoFunction
-	c12758:p -> c12784:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
-	// org.synchronoss.cpo.exporter.CoreMetaXmlObjectExporter DEPEND org.synchronoss.cpo.meta.domain.CpoFunctionGroup
-	c12758:p -> c12781:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
-	// org.synchronoss.cpo.exporter.CoreMetaXmlObjectExporter DEPEND org.synchronoss.cpo.meta.domain.CpoArgument
-	c12758:p -> c12779:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
+	c8332:p -> c8356:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
 	// org.synchronoss.cpo.exporter.CoreMetaXmlObjectExporter DEPEND org.synchronoss.cpo.meta.domain.CpoAttribute
-	c12758:p -> c12778:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
+	c8333:p -> c8357:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
+	// org.synchronoss.cpo.exporter.CoreMetaXmlObjectExporter DEPEND org.synchronoss.cpo.meta.domain.CpoFunction
+	c8333:p -> c8353:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
+	// org.synchronoss.cpo.exporter.CoreMetaXmlObjectExporter DEPEND org.synchronoss.cpo.meta.domain.CpoArgument
+	c8333:p -> c8358:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
+	// org.synchronoss.cpo.exporter.CoreMetaXmlObjectExporter DEPEND org.synchronoss.cpo.meta.domain.CpoFunctionGroup
+	c8333:p -> c8352:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
 	// org.synchronoss.cpo.exporter.CoreMetaXmlObjectExporter DEPEND org.synchronoss.cpo.meta.domain.CpoClass
-	c12758:p -> c12782:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
+	c8333:p -> c8356:p [taillabel="", label="", headlabel="", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open, style=dashed];
 }
 

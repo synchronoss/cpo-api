@@ -1,7 +1,7 @@
 <map id="G" name="G">
-<area shape="rect" id="c52100" href="./StCompression.html" title="&lt;TABLE&gt;" alt="" coords="222,217,325,255"/>
-<area shape="rect" id="c52105" href="./impl/StCompressionImpl.html" title="&lt;TABLE&gt;" alt="" coords="16,315,277,351"/>
-<area shape="rect" id="c52111" href="http://java.sun.com/j2se/1.4.2/docs/api/org/apache/xmlbeans/StringEnumAbstractBase.html" title="&lt;TABLE&gt;" alt="" coords="323,315,477,351"/>
-<area shape="rect" id="c52103" href="./impl/CtCassandraReadWriteConfigImpl.html" title="&lt;TABLE&gt;" alt="" coords="193,11,455,47"/>
-<area shape="rect" id="c52110" href="http://java.sun.com/j2se/1.4.2/docs/api/org/apache/xmlbeans/XmlString.html" title="&lt;TABLE&gt;" alt="" coords="270,107,378,157"/>
+<area shape="rect" id="node1_0" href="./StCompression.html" title="&lt;TABLE&gt;" alt="" coords="219,215,317,252"/>
+<area shape="rect" id="node2_1" href="./impl/StCompressionImpl.html" title="&lt;TABLE&gt;" alt="" coords="16,312,272,347"/>
+<area shape="rect" id="node5_2" href="http://java.sun.com/j2se/1.4.2/docs/api/org/apache/xmlbeans/StringEnumAbstractBase.html" title="&lt;TABLE&gt;" alt="" coords="318,312,469,347"/>
+<area shape="rect" id="node3_3" href="./impl/CtCassandraReadWriteConfigImpl.html" title="&lt;TABLE&gt;" alt="" coords="191,12,447,47"/>
+<area shape="rect" id="node4_4" href="http://java.sun.com/j2se/1.4.2/docs/api/org/apache/xmlbeans/XmlString.html" title="&lt;TABLE&gt;" alt="" coords="267,107,371,156"/>
 </map>

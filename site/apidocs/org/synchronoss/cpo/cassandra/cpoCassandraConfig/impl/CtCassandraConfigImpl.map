@@ -1,6 +1,6 @@
 <map id="G" name="G">
-<area shape="rect" id="c52862" href="../../../core/cpoCoreConfig/impl/CtDataSourceConfigImpl.html" title="&lt;TABLE&gt;" alt="" coords="15,18,227,54"/>
-<area shape="rect" id="c52970" href="./CtCassandraConfigImpl.html" title="&lt;TABLE&gt;" alt="" coords="181,127,331,151"/>
-<area shape="rect" id="c52962" href="../CtCassandraReadWriteConfig.html" title="&lt;TABLE&gt;" alt="" coords="135,216,377,267"/>
-<area shape="rect" id="c52964" href="../CtCassandraConfig.html" title="&lt;TABLE&gt;" alt="" coords="271,11,513,61"/>
+<area shape="rect" id="node1_0" href="../../../core/cpoCoreConfig/impl/CtDataSourceConfigImpl.html" title="&lt;TABLE&gt;" alt="" coords="16,18,223,53"/>
+<area shape="rect" id="node4_1" href="./CtCassandraConfigImpl.html" title="&lt;TABLE&gt;" alt="" coords="181,126,325,149"/>
+<area shape="rect" id="node2_2" href="../CtCassandraReadWriteConfig.html" title="&lt;TABLE&gt;" alt="" coords="134,215,371,264"/>
+<area shape="rect" id="node3_3" href="../CtCassandraConfig.html" title="&lt;TABLE&gt;" alt="" coords="269,11,506,60"/>
 </map>

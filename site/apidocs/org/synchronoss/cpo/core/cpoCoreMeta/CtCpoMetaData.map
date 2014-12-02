@@ -1,7 +1,7 @@
 <map id="G" name="G">
-<area shape="rect" id="c23542" href="./CtCpoMetaData.html" title="&lt;TABLE&gt;" alt="" coords="165,121,272,159"/>
-<area shape="rect" id="c23556" href="./impl/CtCpoMetaDataImpl.html" title="&lt;TABLE&gt;" alt="" coords="41,219,247,255"/>
-<area shape="rect" id="c23685" href="http://java.sun.com/j2se/1.4.2/docs/api/org/apache/xmlbeans/XmlString.html" title="&lt;TABLE&gt;" alt="" coords="165,315,273,365"/>
-<area shape="rect" id="c23554" href="./impl/CpoMetaDataDocumentImpl.html" title="&lt;TABLE&gt;" alt="" coords="16,18,221,54"/>
-<area shape="rect" id="c23684" href="http://java.sun.com/j2se/1.4.2/docs/api/org/apache/xmlbeans/XmlObject.html" title="&lt;TABLE&gt;" alt="" coords="266,11,374,61"/>
+<area shape="rect" id="node1_0" href="./CtCpoMetaData.html" title="&lt;TABLE&gt;" alt="" coords="163,119,266,156"/>
+<area shape="rect" id="node2_1" href="./impl/CtCpoMetaDataImpl.html" title="&lt;TABLE&gt;" alt="" coords="41,216,241,251"/>
+<area shape="rect" id="node5_2" href="http://java.sun.com/j2se/1.4.2/docs/api/org/apache/xmlbeans/XmlString.html" title="&lt;TABLE&gt;" alt="" coords="163,311,267,360"/>
+<area shape="rect" id="node3_3" href="./impl/CpoMetaDataDocumentImpl.html" title="&lt;TABLE&gt;" alt="" coords="16,18,216,53"/>
+<area shape="rect" id="node4_4" href="http://java.sun.com/j2se/1.4.2/docs/api/org/apache/xmlbeans/XmlObject.html" title="&lt;TABLE&gt;" alt="" coords="261,11,365,60"/>
 </map>

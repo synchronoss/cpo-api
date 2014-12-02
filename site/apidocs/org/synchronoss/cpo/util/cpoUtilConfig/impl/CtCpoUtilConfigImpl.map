@@ -1,8 +1,8 @@
 <map id="G" name="G">
-<area shape="rect" id="c33083" href="../CtDataConfig.html" title="&lt;TABLE&gt;" alt="" coords="15,216,195,267"/>
-<area shape="rect" id="c33087" href="../CtCustomClasspath.html" title="&lt;TABLE&gt;" alt="" coords="239,216,419,267"/>
-<area shape="rect" id="c33089" href="../CtCpoUtilConfig.html" title="&lt;TABLE&gt;" alt="" coords="133,11,313,61"/>
-<area shape="rect" id="c33097" href="./CtCpoUtilConfigImpl.html" title="&lt;TABLE&gt;" alt="" coords="264,127,395,151"/>
-<area shape="rect" id="c33091" href="../CtProtectedClasses.html" title="&lt;TABLE&gt;" alt="" coords="463,216,643,267"/>
-<area shape="rect" id="c33195" href="http://java.sun.com/j2se/1.4.2/docs/api/org/apache/xmlbeans/impl/values/XmlComplexContentImpl.html" title="&lt;TABLE&gt;" alt="" coords="357,18,515,54"/>
+<area shape="rect" id="node1_0" href="../CtProtectedClasses.html" title="&lt;TABLE&gt;" alt="" coords="16,215,189,264"/>
+<area shape="rect" id="node2_1" href="../CtDataConfig.html" title="&lt;TABLE&gt;" alt="" coords="235,215,408,264"/>
+<area shape="rect" id="node3_2" href="../CtCustomClasspath.html" title="&lt;TABLE&gt;" alt="" coords="453,215,627,264"/>
+<area shape="rect" id="node4_3" href="../CtCpoUtilConfig.html" title="&lt;TABLE&gt;" alt="" coords="131,11,304,60"/>
+<area shape="rect" id="node5_4" href="./CtCpoUtilConfigImpl.html" title="&lt;TABLE&gt;" alt="" coords="259,126,384,149"/>
+<area shape="rect" id="node6_5" href="http://java.sun.com/j2se/1.4.2/docs/api/org/apache/xmlbeans/impl/values/XmlComplexContentImpl.html" title="&lt;TABLE&gt;" alt="" coords="350,18,503,53"/>
 </map>

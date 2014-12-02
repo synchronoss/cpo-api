@@ -7,83 +7,84 @@
 digraph G {
 	edge [fontname="Helvetica",fontsize=10,labelfontname="Helvetica",labelfontsize=10];
 	node [fontname="Helvetica",fontsize=10,shape=plaintext];
+	// org.synchronoss.cpo.cassandra.ZZHotDeployTest
+	c2638 [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ZZHotDeployTest.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+			<tr><td> ZZHotDeployTest </td></tr>
+		</table></td></tr>
+		</table>>, fontname="Helvetica", fontcolor="black", fontsize=9.0];
+	// org.synchronoss.cpo.cassandra.WhereTest
+	c2640 [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./WhereTest.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+			<tr><td> WhereTest </td></tr>
+		</table></td></tr>
+		</table>>, fontname="Helvetica", fontcolor="black", fontsize=9.0];
+	// org.synchronoss.cpo.cassandra.ValueObjectBean
+	c2641 [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ValueObjectBean.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+			<tr><td> ValueObjectBean </td></tr>
+		</table></td></tr>
+		</table>>, fontname="Helvetica", fontcolor="black", fontsize=9.0];
+	// org.synchronoss.cpo.cassandra.ValueObject
+	c2642 [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./ValueObject.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+			<tr><td> &laquo;interface&raquo; </td></tr>
+			<tr><td> ValueObject </td></tr>
+		</table></td></tr>
+		</table>>, fontname="Helvetica", fontcolor="black", fontsize=9.0];
 	// org.synchronoss.cpo.cassandra.UpdateObjectTest
-	c2928 [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./UpdateObjectTest.html">
+	c2643 [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./UpdateObjectTest.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 			<tr><td> UpdateObjectTest </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=9.0];
-	// org.synchronoss.cpo.cassandra.DeleteObjectTest
-	c2930 [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./DeleteObjectTest.html">
+	// org.synchronoss.cpo.cassandra.RetrieveBeanTest
+	c2644 [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./RetrieveBeanTest.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-			<tr><td> DeleteObjectTest </td></tr>
+			<tr><td> RetrieveBeanTest </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=9.0];
-	// org.synchronoss.cpo.cassandra.ChildValueObject
-	c2932 [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ChildValueObject.html">
+	// org.synchronoss.cpo.cassandra.OrderByTest
+	c2645 [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./OrderByTest.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-			<tr><td> ChildValueObject </td></tr>
+			<tr><td> OrderByTest </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=9.0];
 	// org.synchronoss.cpo.cassandra.NativeExpressionTest
-	c2936 [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./NativeExpressionTest.html">
+	c2646 [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./NativeExpressionTest.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 			<tr><td> NativeExpressionTest </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=9.0];
 	// org.synchronoss.cpo.cassandra.InsertObjectTest
-	c2937 [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./InsertObjectTest.html">
+	c2648 [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./InsertObjectTest.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
 			<tr><td> InsertObjectTest </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=9.0];
-	// org.synchronoss.cpo.cassandra.WhereTest
-	c2938 [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./WhereTest.html">
+	// org.synchronoss.cpo.cassandra.DeleteObjectTest
+	c2652 [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./DeleteObjectTest.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-			<tr><td> WhereTest </td></tr>
+			<tr><td> DeleteObjectTest </td></tr>
 		</table></td></tr>
 		</table>>, fontname="Helvetica", fontcolor="black", fontsize=9.0];
-	// org.synchronoss.cpo.cassandra.RetrieveBeanTest
-	c2941 [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./RetrieveBeanTest.html">
-		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-			<tr><td> RetrieveBeanTest </td></tr>
-		</table></td></tr>
-		</table>>, fontname="Helvetica", fontcolor="black", fontsize=9.0];
-	// org.synchronoss.cpo.cassandra.ValueObject
-	c2942 [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" bgcolor="lemonChiffon" href="./ValueObject.html">
-		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-			<tr><td> ValueObject </td></tr>
-		</table></td></tr>
-		</table>>, fontname="Helvetica", fontcolor="black", fontsize=9.0];
-	// org.synchronoss.cpo.cassandra.OrderByTest
-	c2945 [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./OrderByTest.html">
-		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-			<tr><td> OrderByTest </td></tr>
-		</table></td></tr>
-		</table>>, fontname="Helvetica", fontcolor="black", fontsize=9.0];
-	// org.synchronoss.cpo.cassandra.ZZHotDeployTest
-	c2946 [label=<<table border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./ZZHotDeployTest.html">
-		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-			<tr><td> ZZHotDeployTest </td></tr>
-		</table></td></tr>
-		</table>>, fontname="Helvetica", fontcolor="black", fontsize=9.0];
-	//org.synchronoss.cpo.cassandra.ChildValueObject extends org.synchronoss.cpo.cassandra.ValueObject
-	c2942:p -> c2932:p [dir=back,arrowtail=empty];
-	// org.synchronoss.cpo.cassandra.UpdateObjectTest NAVASSOC org.synchronoss.cpo.cassandra.ValueObject
-	c2928:p -> c2942:p [taillabel="", label="", headlabel="*", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
-	// org.synchronoss.cpo.cassandra.DeleteObjectTest NAVASSOC org.synchronoss.cpo.cassandra.ValueObject
-	c2930:p -> c2942:p [taillabel="", label="", headlabel="*", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
-	// org.synchronoss.cpo.cassandra.NativeExpressionTest NAVASSOC org.synchronoss.cpo.cassandra.ValueObject
-	c2936:p -> c2942:p [taillabel="", label="", headlabel="*", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
-	// org.synchronoss.cpo.cassandra.InsertObjectTest NAVASSOC org.synchronoss.cpo.cassandra.ValueObject
-	c2937:p -> c2942:p [taillabel="", label="", headlabel="*", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
-	// org.synchronoss.cpo.cassandra.WhereTest NAVASSOC org.synchronoss.cpo.cassandra.ValueObject
-	c2938:p -> c2942:p [taillabel="", label="", headlabel="*", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
-	// org.synchronoss.cpo.cassandra.RetrieveBeanTest NAVASSOC org.synchronoss.cpo.cassandra.ValueObject
-	c2941:p -> c2942:p [taillabel="", label="", headlabel="*", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
-	// org.synchronoss.cpo.cassandra.OrderByTest NAVASSOC org.synchronoss.cpo.cassandra.ValueObject
-	c2945:p -> c2942:p [taillabel="", label="", headlabel="*", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
+	//org.synchronoss.cpo.cassandra.ValueObjectBean implements org.synchronoss.cpo.cassandra.ValueObject
+	c2642:p -> c2641:p [dir=back,arrowtail=empty,style=dashed];
 	// org.synchronoss.cpo.cassandra.ZZHotDeployTest NAVASSOC org.synchronoss.cpo.cassandra.ValueObject
-	c2946:p -> c2942:p [taillabel="", label="", headlabel="*", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
+	c2638:p -> c2642:p [taillabel="", label="", headlabel="*", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
+	// org.synchronoss.cpo.cassandra.WhereTest NAVASSOC org.synchronoss.cpo.cassandra.ValueObject
+	c2640:p -> c2642:p [taillabel="", label="", headlabel="*", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
+	// org.synchronoss.cpo.cassandra.UpdateObjectTest NAVASSOC org.synchronoss.cpo.cassandra.ValueObject
+	c2643:p -> c2642:p [taillabel="", label="", headlabel="*", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
+	// org.synchronoss.cpo.cassandra.RetrieveBeanTest NAVASSOC org.synchronoss.cpo.cassandra.ValueObject
+	c2644:p -> c2642:p [taillabel="", label="", headlabel="*", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
+	// org.synchronoss.cpo.cassandra.OrderByTest NAVASSOC org.synchronoss.cpo.cassandra.ValueObject
+	c2645:p -> c2642:p [taillabel="", label="", headlabel="*", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
+	// org.synchronoss.cpo.cassandra.NativeExpressionTest NAVASSOC org.synchronoss.cpo.cassandra.ValueObject
+	c2646:p -> c2642:p [taillabel="", label="", headlabel="*", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
+	// org.synchronoss.cpo.cassandra.InsertObjectTest NAVASSOC org.synchronoss.cpo.cassandra.ValueObject
+	c2648:p -> c2642:p [taillabel="", label="", headlabel="*", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
+	// org.synchronoss.cpo.cassandra.DeleteObjectTest NAVASSOC org.synchronoss.cpo.cassandra.ValueObject
+	c2652:p -> c2642:p [taillabel="", label="", headlabel="*", fontname="Helvetica", fontcolor="black", fontsize=10.0, color="black", arrowhead=open];
 }
 

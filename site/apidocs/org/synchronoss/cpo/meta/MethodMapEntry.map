@@ -1,6 +1,6 @@
 <map id="G" name="G">
-<area shape="rect" id="c16417" href="./MethodMapEntry.html" title="&lt;TABLE&gt;" alt="" coords="147,113,293,137"/>
-<area shape="rect" id="c16523" href="../jdbc/meta/JdbcMethodMapEntry.html" title="&lt;TABLE&gt;" alt="" coords="16,203,189,239"/>
-<area shape="rect" id="c16563" href="../cassandra/meta/CassandraMethodMapEntry.html" title="&lt;TABLE&gt;" alt="" coords="234,203,441,239"/>
-<area shape="rect" id="c16423" href="./MethodMapper.html" title="&lt;TABLE&gt;" alt="" coords="71,17,369,41"/>
+<area shape="rect" id="node1_0" href="./MethodMapper.html" title="&lt;TABLE&gt;" alt="" coords="69,18,361,41"/>
+<area shape="rect" id="node2_1" href="./MethodMapEntry.html" title="&lt;TABLE&gt;" alt="" coords="143,114,287,137"/>
+<area shape="rect" id="node3_2" href="../jdbc/meta/JdbcMethodMapEntry.html" title="&lt;TABLE&gt;" alt="" coords="16,204,185,239"/>
+<area shape="rect" id="node4_3" href="../cassandra/meta/CassandraMethodMapEntry.html" title="&lt;TABLE&gt;" alt="" coords="231,204,432,239"/>
 </map>

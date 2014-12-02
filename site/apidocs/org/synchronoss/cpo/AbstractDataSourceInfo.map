@@ -1,6 +1,6 @@
 <map id="G" name="G">
-<area shape="rect" id="c8007" href="./AbstractDataSourceInfo.html" title="&lt;TABLE&gt;" alt="" coords="122,116,291,140"/>
-<area shape="rect" id="c8135" href="./jdbc/AbstractJdbcDataSourceInfo.html" title="&lt;TABLE&gt;" alt="" coords="16,206,189,242"/>
-<area shape="rect" id="c8176" href="./cassandra/ClusterDataSourceInfo.html" title="&lt;TABLE&gt;" alt="" coords="235,206,387,242"/>
-<area shape="rect" id="c8021" href="./DataSourceInfo.html" title="&lt;TABLE&gt;" alt="" coords="144,11,269,50"/>
+<area shape="rect" id="node1_0" href="./DataSourceInfo.html" title="&lt;TABLE&gt;" alt="" coords="141,11,263,48"/>
+<area shape="rect" id="node2_1" href="./AbstractDataSourceInfo.html" title="&lt;TABLE&gt;" alt="" coords="119,114,285,137"/>
+<area shape="rect" id="node3_2" href="./jdbc/AbstractJdbcDataSourceInfo.html" title="&lt;TABLE&gt;" alt="" coords="16,204,185,239"/>
+<area shape="rect" id="node4_3" href="./cassandra/ClusterDataSourceInfo.html" title="&lt;TABLE&gt;" alt="" coords="231,204,378,239"/>
 </map>

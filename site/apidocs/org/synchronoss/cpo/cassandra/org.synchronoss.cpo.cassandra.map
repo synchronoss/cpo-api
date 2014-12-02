@@ -1,7 +1,7 @@
 <map id="G" name="G">
-<area shape="rect" id="c5732" href="./CassandraCpoAdapter.html" title="&lt;TABLE&gt;" alt="" coords="15,17,161,41"/>
-<area shape="rect" id="c5733" href="./ClusterDataSource.html" title="&lt;TABLE&gt;" alt="" coords="205,17,328,41"/>
-<area shape="rect" id="c5734" href="./ClusterDataSourceInfo.html" title="&lt;TABLE&gt;" alt="" coords="373,17,515,41"/>
-<area shape="rect" id="c5735" href="./CassandraBoundStatementCpoData.html" title="&lt;TABLE&gt;" alt="" coords="560,17,779,41"/>
-<area shape="rect" id="c5736" href="./CassandraBoundStatementFactory.html" title="&lt;TABLE&gt;" alt="" coords="565,113,774,137"/>
+<area shape="rect" id="node1_0" href="./ClusterDataSourceInfo.html" title="&lt;TABLE&gt;" alt="" coords="16,18,155,41"/>
+<area shape="rect" id="node2_1" href="./ClusterDataSource.html" title="&lt;TABLE&gt;" alt="" coords="201,18,319,41"/>
+<area shape="rect" id="node3_2" href="./CassandraCpoAdapter.html" title="&lt;TABLE&gt;" alt="" coords="365,18,504,41"/>
+<area shape="rect" id="node4_3" href="./CassandraBoundStatementFactory.html" title="&lt;TABLE&gt;" alt="" coords="554,114,758,137"/>
+<area shape="rect" id="node5_4" href="./CassandraBoundStatementCpoData.html" title="&lt;TABLE&gt;" alt="" coords="550,18,762,41"/>
 </map>

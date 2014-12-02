@@ -1,6 +1,6 @@
 <map id="G" name="G">
-<area shape="rect" id="c35245" href="./JdbcCpoTransform.html" title="&lt;TABLE&gt;" alt="" coords="147,11,304,50"/>
-<area shape="rect" id="c35250" href="./TransformGZipBlob.html" title="&lt;TABLE&gt;" alt="" coords="163,116,288,140"/>
-<area shape="rect" id="c35258" href="../../jdbc/JdbcPreparedStatementFactory.html" title="&lt;TABLE&gt;" alt="" coords="15,206,206,242"/>
-<area shape="rect" id="c35264" href="../../jdbc/JdbcCallableStatementFactory.html" title="&lt;TABLE&gt;" alt="" coords="250,206,435,242"/>
+<area shape="rect" id="node1_0" href="../../jdbc/JdbcPreparedStatementFactory.html" title="&lt;TABLE&gt;" alt="" coords="16,204,203,239"/>
+<area shape="rect" id="node2_1" href="../../jdbc/JdbcCallableStatementFactory.html" title="&lt;TABLE&gt;" alt="" coords="249,204,429,239"/>
+<area shape="rect" id="node3_2" href="./TransformGZipBlob.html" title="&lt;TABLE&gt;" alt="" coords="166,114,287,137"/>
+<area shape="rect" id="node4_3" href="./JdbcCpoTransform.html" title="&lt;TABLE&gt;" alt="" coords="150,11,303,48"/>
 </map>

@@ -29,7 +29,7 @@ import java.io.*;
 import java.sql.Clob;
 
 /**
- * Converts a java.sql.Blob from a jdbc datasource to a byte[] and from a byte[] to a java.sql.Blob
+ * Converts a java.sql.Clob from a jdbc datasource to a byte[] and from a byte[] to a java.sql.clob
  *
  * @author david berry
  */
@@ -67,7 +67,7 @@ public class TransformClob implements JdbcCpoTransform<Clob, char[]> {
         is.close();
         retChars = caw.toCharArray();
       } catch (Exception e) {
-        logger.debug("Error in transform blob", e);
+        logger.debug("Error in transform clob", e);
         throw new CpoException(e);
       }
     }

@@ -31,213 +31,89 @@ import java.util.*;
  *
  * @author david berry
  */
-public class ValueObject implements java.io.Serializable, Cloneable {
+public interface ValueObject {
 
-  /**
-   * Version Id for this class.
-   */
-  private static final long serialVersionUID = 1L;
+  public int getId();
 
-  private int id;
-  private String attrAscii;
-  private long attrBigInt;
-  private ByteBuffer attrBlob;
-  private ByteBuffer attrBlob2;
-  private boolean attrBool;
-  private long attrCounter;
-  private BigDecimal attrDecimal;
-  private double attrDouble;
-  private float attrFloat;
-  private InetAddress attrInet;
-  private int attrInt;
-  private List<String> attrList;
-  private Map<String, String> attrMap;
-  private Set<String> attrSet;
-  private String attrText;
-  private Date attrTimestamp;
-  private UUID attrTimeUUID;
-  private UUID attrUUID;
-  private String attrVarChar;
-  private BigInteger attrVarInt;
+  public void setId(int id);
 
-  public ValueObject() {
-    // public default constructor as required by cpo
-  }
+  public String getAttrAscii();
 
-  public ValueObject(int id) {
-    this.id = id;
-  }
+  public void setAttrAscii(String attrAscii);
 
-  public ValueObject(int id, ByteBuffer attrBlob) {
-    this.id = id;
-    this.attrBlob = attrBlob;
-  }
+  public long getAttrBigInt();
 
-  public int getId() {
-    return id;
-  }
+  public void setAttrBigInt(long attrBigInt);
 
-  public void setId(int id) {
-    this.id = id;
-  }
+  public ByteBuffer getAttrBlob();
 
-  public String getAttrAscii() {
-    return attrAscii;
-  }
+  public void setAttrBlob(ByteBuffer attrBlob);
 
-  public void setAttrAscii(String attrAscii) {
-    this.attrAscii = attrAscii;
-  }
+  public ByteBuffer getAttrBlob2();
 
-  public long getAttrBigInt() {
-    return attrBigInt;
-  }
+  public void setAttrBlob2(ByteBuffer attrBlob2);
 
-  public void setAttrBigInt(long attrBigInt) {
-    this.attrBigInt = attrBigInt;
-  }
+  public boolean getAttrBool();
 
-  public ByteBuffer getAttrBlob() {
-    return attrBlob;
-  }
+  public void setAttrBool(boolean attrBool);
 
-  public void setAttrBlob(ByteBuffer attrBlob) {
-    this.attrBlob = attrBlob;
-  }
+  public long getAttrCounter();
 
-  public ByteBuffer getAttrBlob2() {
-    return attrBlob2;
-  }
+  public void setAttrCounter(long attrCounter);
 
-  public void setAttrBlob2(ByteBuffer attrBlob2) {
-    this.attrBlob2 = attrBlob2;
-  }
+  public BigDecimal getAttrDecimal();
 
-  public boolean getAttrBool() {
-    return attrBool;
-  }
+  public void setAttrDecimal(BigDecimal attrDecimal);
 
-  public void setAttrBool(boolean attrBool) {
-    this.attrBool = attrBool;
-  }
+  public double getAttrDouble();
 
-  public long getAttrCounter() {
-    return attrCounter;
-  }
+  public void setAttrDouble(double attrDouble);
 
-  public void setAttrCounter(long attrCounter) {
-    this.attrCounter = attrCounter;
-  }
+  public float getAttrFloat();
 
-  public BigDecimal getAttrDecimal() {
-    return attrDecimal;
-  }
+  public void setAttrFloat(float attrFloat);
 
-  public void setAttrDecimal(BigDecimal attrDecimal) {
-    this.attrDecimal = attrDecimal;
-  }
+  public InetAddress getAttrInet();
 
-  public double getAttrDouble() {
-    return attrDouble;
-  }
+  public void setAttrInet(InetAddress attrInet);
 
-  public void setAttrDouble(double attrDouble) {
-    this.attrDouble = attrDouble;
-  }
+  public int getAttrInt();
 
-  public float getAttrFloat() {
-    return attrFloat;
-  }
+  public void setAttrInt(int attrInt);
 
-  public void setAttrFloat(float attrFloat) {
-    this.attrFloat = attrFloat;
-  }
+  public List<String> getAttrList();
 
-  public InetAddress getAttrInet() {
-    return attrInet;
-  }
+  public void setAttrList(List<String> attrList);
 
-  public void setAttrInet(InetAddress attrInet) {
-    this.attrInet = attrInet;
-  }
+  public Map<String, String> getAttrMap();
 
-  public int getAttrInt() {
-    return attrInt;
-  }
+  public void setAttrMap(Map<String, String> attrMap);
 
-  public void setAttrInt(int attrInt) {
-    this.attrInt = attrInt;
-  }
+  public Set<String> getAttrSet();
 
-  public List<String> getAttrList() {
-    return attrList;
-  }
+  public void setAttrSet(Set<String> attrSet);
 
-  public void setAttrList(List<String> attrList) {
-    this.attrList = attrList;
-  }
+  public String getAttrText();
 
-  public Map<String, String> getAttrMap() {
-    return attrMap;
-  }
+  public void setAttrText(String attrText);
 
-  public void setAttrMap(Map<String, String> attrMap) {
-    this.attrMap = attrMap;
-  }
+  public Date getAttrTimestamp();
 
-  public Set<String> getAttrSet() {
-    return attrSet;
-  }
+  public void setAttrTimestamp(Date attrTimestamp);
 
-  public void setAttrSet(Set<String> attrSet) {
-    this.attrSet = attrSet;
-  }
+  public UUID getAttrTimeUUID();
 
-  public String getAttrText() {
-    return attrText;
-  }
+  public void setAttrTimeUUID(UUID attrTimeUUID);
 
-  public void setAttrText(String attrText) {
-    this.attrText = attrText;
-  }
+  public UUID getAttrUUID();
 
-  public Date getAttrTimestamp() {
-    return attrTimestamp;
-  }
+  public void setAttrUUID(UUID attrUUID);
 
-  public void setAttrTimestamp(Date attrTimestamp) {
-    this.attrTimestamp = attrTimestamp;
-  }
+  public String getAttrVarChar();
 
-  public UUID getAttrTimeUUID() {
-    return attrTimeUUID;
-  }
+  public void setAttrVarChar(String attrVarChar);
 
-  public void setAttrTimeUUID(UUID attrTimeUUID) {
-    this.attrTimeUUID = attrTimeUUID;
-  }
+  public BigInteger getAttrVarInt();
 
-  public UUID getAttrUUID() {
-    return attrUUID;
-  }
-
-  public void setAttrUUID(UUID attrUUID) {
-    this.attrUUID = attrUUID;
-  }
-
-  public String getAttrVarChar() {
-    return attrVarChar;
-  }
-
-  public void setAttrVarChar(String attrVarChar) {
-    this.attrVarChar = attrVarChar;
-  }
-
-  public BigInteger getAttrVarInt() {
-    return attrVarInt;
-  }
-
-  public void setAttrVarInt(BigInteger attrVarInt) {
-    this.attrVarInt = attrVarInt;
-  }
+  public void setAttrVarInt(BigInteger attrVarInt);
 }

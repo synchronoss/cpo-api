@@ -57,18 +57,18 @@ public class RetrieveBeanTest extends TestCase {
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
-    ValueObject vo = new ValueObject(1);
+    ValueObject vo = new ValueObjectBean(1);
     vo.setAttrVarChar("Test");
     al.add(vo);
-    al.add(new ValueObject(2));
-    al.add(new ValueObject(3));
-    al.add(new ValueObject(4));
-    al.add(new ValueObject(5));
-    al.add(new ValueObject(6));
-    al.add(new ValueObject(7));
-    al.add(new ValueObject(8));
-    al.add(new ValueObject(9));
-    al.add(new ValueObject(10));
+    al.add(new ValueObjectBean(2));
+    al.add(new ValueObjectBean(3));
+    al.add(new ValueObjectBean(4));
+    al.add(new ValueObjectBean(5));
+    al.add(new ValueObjectBean(6));
+    al.add(new ValueObjectBean(7));
+    al.add(new ValueObjectBean(8));
+    al.add(new ValueObjectBean(9));
+    al.add(new ValueObjectBean(10));
     try {
       cpoAdapter.insertObjects("TestOrderByInsert", al);
     } catch (Exception e) {
@@ -94,7 +94,7 @@ public class RetrieveBeanTest extends TestCase {
 
 
     try {
-      ValueObject valObj = new ValueObject();
+      ValueObject valObj = new ValueObjectBean();
       col = cpoAdapter.retrieveBeans(null, valObj);
       assertTrue("Col size is " + col.size(), col.size() == al.size());
 
@@ -104,12 +104,12 @@ public class RetrieveBeanTest extends TestCase {
   }
 
   public void testRetrieveBeans2() {
-    String method = "testRetrieveBeans:";
+    String method = "testRetrieveBeans2:";
     Collection<ValueObject> col;
 
 
     try {
-      ValueObject valObj = new ValueObject();
+      ValueObject valObj = new ValueObjectBean();
       col = cpoAdapter.retrieveBeans(null, valObj, valObj);
       assertTrue("Col size is " + col.size(), col.size() == al.size());
 
@@ -124,7 +124,7 @@ public class RetrieveBeanTest extends TestCase {
 
     try (CpoTrxAdapter trx = cpoAdapter.getCpoTrxAdapter()) {
       trx.isClosed();
-      ValueObject valObj = new ValueObject();
+      ValueObject valObj = new ValueObjectBean();
       col = trx.retrieveBeans(null, valObj);
       assertTrue("Col size is " + col.size(), col.size() == al.size());
       trx.commit();
@@ -139,7 +139,7 @@ public class RetrieveBeanTest extends TestCase {
     int count = 0;
 
     try {
-      ValueObject valObj = new ValueObject();
+      ValueObject valObj = new ValueObjectBean();
       crs = cpoAdapter.retrieveBeans(null, valObj, valObj, null, null, null, 2);
       logger.debug("Returned from retrieveBeans");
       for (ValueObject vo : crs) {
@@ -161,7 +161,7 @@ public class RetrieveBeanTest extends TestCase {
     int count = 0;
 
     try {
-      ValueObject valObj = new ValueObject();
+      ValueObject valObj = new ValueObjectBean();
       crs = cpoAdapter.retrieveBeans(null, valObj, valObj, null, null, null, 9);
       for (ValueObject vo : crs) {
         if (vo != null) {
@@ -181,7 +181,7 @@ public class RetrieveBeanTest extends TestCase {
     int count = 0;
 
     try {
-      ValueObject valObj = new ValueObject();
+      ValueObject valObj = new ValueObjectBean();
       crs = cpoAdapter.retrieveBeans(null, valObj, valObj, null, null, null, 10);
       for (ValueObject vo : crs) {
         if (vo != null) {
@@ -201,7 +201,7 @@ public class RetrieveBeanTest extends TestCase {
     int count = 0;
 
     try {
-      ValueObject valObj = new ValueObject();
+      ValueObject valObj = new ValueObjectBean();
       crs = cpoAdapter.retrieveBeans(null, valObj, valObj, null, null, null, 11);
       for (ValueObject vo : crs) {
         if (vo != null) {
@@ -222,7 +222,7 @@ public class RetrieveBeanTest extends TestCase {
 
     try (CpoTrxAdapter trx = cpoAdapter.getCpoTrxAdapter()) {
 
-      ValueObject valObj = new ValueObject();
+      ValueObject valObj = new ValueObjectBean();
       crs = trx.retrieveBeans(null, valObj, valObj, null, null, null, 2);
 
       //start this trx
@@ -261,7 +261,7 @@ public class RetrieveBeanTest extends TestCase {
     int count = 0;
 
     try {
-      ValueObject valObj = new ValueObject();
+      ValueObject valObj = new ValueObjectBean();
       crs = cpoAdapter.retrieveBeans(null, valObj, valObj, null, null, null, 20);
       logger.debug("Returned from retrieveBeans");
       for (ValueObject vo : crs) {
@@ -280,7 +280,7 @@ public class RetrieveBeanTest extends TestCase {
   public void testRetrieveBean() {
 
     String method = "testRetrieveBean:";
-    ValueObject vo = new ValueObject(1);
+    ValueObject vo = new ValueObjectBean(1);
     ValueObject rvo;
 
     try {
@@ -299,7 +299,7 @@ public class RetrieveBeanTest extends TestCase {
   public void testNullRetrieveBean() {
 
     String method = "testNullRetrieveBean:";
-    ValueObject vo = new ValueObject(100);
+    ValueObject vo = new ValueObjectBean(100);
     ValueObject rvo;
 
     try {

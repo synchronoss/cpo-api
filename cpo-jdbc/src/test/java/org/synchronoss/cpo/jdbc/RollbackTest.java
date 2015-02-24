@@ -55,7 +55,7 @@ public class RollbackTest extends TestCase {
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
-    ValueObject vo = new ValueObject(1);
+    ValueObject vo = new ValueObjectBean(1);
     try {
       cpoAdapter.insertObject(vo);
     } catch (Exception e) {
@@ -69,7 +69,7 @@ public class RollbackTest extends TestCase {
    */
   @Override
   public void tearDown() {
-    ValueObject vo = new ValueObject(1);
+    ValueObject vo = new ValueObjectBean(1);
     try {
       cpoAdapter.deleteObject(vo);
     } catch (Exception e) {
@@ -82,8 +82,8 @@ public class RollbackTest extends TestCase {
    */
   public void testRollbackProcessUpdateCollection() {
     String method = "testRollbackProcessUpdateCollection:";
-    ValueObject vo = new ValueObject(2);
-    ValueObject vo2 = new ValueObject(1);
+    ValueObject vo = new ValueObjectBean(2);
+    ValueObject vo2 = new ValueObjectBean(1);
     ArrayList<ValueObject> al = new ArrayList<>();
 
     al.add(vo);
@@ -107,7 +107,7 @@ public class RollbackTest extends TestCase {
    */
   public void testSingleRollback() {
     String method = "testSingleRollback:";
-    ValueObject vo = new ValueObject(2);
+    ValueObject vo = new ValueObjectBean(2);
     try {
       cpoAdapter.insertObject("TestSingleRollback", vo);
       fail(method + "Insert should have thrown an exception");

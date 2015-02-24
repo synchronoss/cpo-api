@@ -59,15 +59,15 @@ public class NativeExpressionTest extends TestCase {
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
-    ValueObject vo = new ValueObject(1);
+    ValueObject vo = new ValueObjectBean(1);
     vo.setAttrVarChar("Test");
     vo.setAttrSmallInt(1);
     al.add(vo);
-    al.add(new ValueObject(2));
-    al.add(new ValueObject(3));
-    al.add(new ValueObject(4));
-    al.add(new ValueObject(5));
-    al.add(new ValueObject(-6));
+    al.add(new ValueObjectBean(2));
+    al.add(new ValueObjectBean(3));
+    al.add(new ValueObjectBean(4));
+    al.add(new ValueObjectBean(5));
+    al.add(new ValueObjectBean(-6));
     try {
       cpoAdapter.insertObjects("TestOrderByInsert", al);
     } catch (Exception e) {
@@ -107,7 +107,7 @@ public class NativeExpressionTest extends TestCase {
 
       cnqAl.add(new CpoNativeFunction("__CPO_WHERE__", "WHERE ID = 2 OR ID = 3"));
 
-      ValueObject valObj = new ValueObject(3);
+      ValueObject valObj = new ValueObjectBean(3);
       col = cpoAdapter.retrieveBeans("TestWhereRetrieve", valObj, valObj, null, null, cnqAl);
 
       assertTrue("Col size is " + col.size(), col.size() == 2);
@@ -118,7 +118,7 @@ public class NativeExpressionTest extends TestCase {
   }
 
   public void testNullNative() {
-    String method = "testNativeOrWhere:";
+    String method = "testNullNative:";
     Collection<ValueObject> col;
     CpoWhere cw = null;
     CpoWhere cw1 = null;
@@ -132,7 +132,7 @@ public class NativeExpressionTest extends TestCase {
 
       cnqAl.add(new CpoNativeFunction("__CPO_WHERE__", null));
 
-      ValueObject valObj = new ValueObject(3);
+      ValueObject valObj = new ValueObjectBean(3);
       col = cpoAdapter.retrieveBeans("TestWhereRetrieve", valObj, valObj, null, null, cnqAl);
 
       assertTrue("Col size is " + col.size(), col.size() == 6);

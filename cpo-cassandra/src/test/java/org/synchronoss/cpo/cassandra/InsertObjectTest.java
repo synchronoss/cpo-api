@@ -69,7 +69,7 @@ public class InsertObjectTest {
   @Test
   public void testInsertObject() {
     String method = "testInsertObject:";
-    ValueObject valObj = new ValueObject(5);
+    ValueObject valObj = new ValueObjectBean(5);
 
     valObj.setAttrVarChar("testInsert");
     valObj.setAttrInt(3);
@@ -105,13 +105,13 @@ public class InsertObjectTest {
   public void testInsertObjects() {
 
     String method = "testInsertObjects:";
-    ValueObject vo = new ValueObject(1);
+    ValueObject vo = new ValueObjectBean(1);
     vo.setAttrVarChar("Test");
 
     al.add(vo);
-    al.add(new ValueObject(2));
-    al.add(new ValueObject(3));
-    al.add(new ValueObject(4));
+    al.add(new ValueObjectBean(2));
+    al.add(new ValueObjectBean(3));
+    al.add(new ValueObjectBean(4));
     try {
       cpoAdapter.insertObjects(al);
     } catch (Exception e) {

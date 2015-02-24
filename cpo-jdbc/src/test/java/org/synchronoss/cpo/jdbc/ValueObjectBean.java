@@ -21,16 +21,14 @@
 package org.synchronoss.cpo.jdbc;
 
 import java.math.BigDecimal;
-import java.sql.Date;
-import java.sql.Time;
-import java.sql.Timestamp;
+import java.sql.*;
 
 /**
  * ValueObject - a cpo bean used to test the cpo apis
  *
  * @author david berry
  */
-public class ValueObject implements java.io.Serializable, java.lang.Cloneable {
+public class ValueObjectBean implements ValueObject, java.io.Serializable, Cloneable {
 
   /**
    * Version Id for this class.
@@ -63,11 +61,11 @@ public class ValueObject implements java.io.Serializable, java.lang.Cloneable {
   private Object attrOther_ = null;
   private Object attrObject_ = null;
 
-  public ValueObject() {
+  public ValueObjectBean() {
     // public default constructor as required by cpo
   }
 
-  public ValueObject(int id) {
+  public ValueObjectBean(int id) {
     id_ = id;
   }
 

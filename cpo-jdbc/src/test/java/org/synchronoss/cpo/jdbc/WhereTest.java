@@ -58,16 +58,16 @@ public class WhereTest extends TestCase {
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
-    ValueObject vo = new ValueObject(1);
+    ValueObject vo = new ValueObjectBean(1);
     vo.setAttrVarChar("Test");
     vo.setAttrSmallInt(1);
     vo.setAttrInteger(1);
     al.add(vo);
-    al.add(new ValueObject(2));
-    al.add(new ValueObject(3));
-    al.add(new ValueObject(4));
-    al.add(new ValueObject(5));
-    al.add(new ValueObject(-6));
+    al.add(new ValueObjectBean(2));
+    al.add(new ValueObjectBean(3));
+    al.add(new ValueObjectBean(4));
+    al.add(new ValueObjectBean(5));
+    al.add(new ValueObjectBean(-6));
     try {
       cpoAdapter.insertObjects("TestOrderByInsert", al);
     } catch (Exception e) {
@@ -100,7 +100,7 @@ public class WhereTest extends TestCase {
 
 
     try {
-      ValueObject valObj = new ValueObject();
+      ValueObject valObj = new ValueObjectBean();
       cw = cpoAdapter.newWhere(CpoWhere.LOGIC_NONE, "id", CpoWhere.COMP_GT, null);
       cw.setStaticValue("3");
       ArrayList<CpoWhere> wheres = new ArrayList<>();
@@ -120,7 +120,7 @@ public class WhereTest extends TestCase {
 
 
     try {
-      ValueObject valObj = new ValueObject(3);
+      ValueObject valObj = new ValueObjectBean(3);
       cw = cpoAdapter.newWhere(CpoWhere.LOGIC_NONE, "id", CpoWhere.COMP_GT, valObj);
 
       ArrayList<CpoWhere> wheres = new ArrayList<>();
@@ -134,13 +134,13 @@ public class WhereTest extends TestCase {
   }
 
   public void testNoMarkerWhere() {
-    String method = "testValueWhere:";
+    String method = "testNoMarkerWhere:";
     Collection<ValueObject> col;
     CpoWhere cw;
 
 
     try {
-      ValueObject valObj = new ValueObject(3);
+      ValueObject valObj = new ValueObjectBean(3);
       cw = cpoAdapter.newWhere(CpoWhere.LOGIC_NONE, "id", CpoWhere.COMP_GT, valObj);
 
       ArrayList<CpoWhere> wheres = new ArrayList<>();
@@ -162,7 +162,7 @@ public class WhereTest extends TestCase {
     Collection<ValueObject> col = null;
 
     try {
-      ValueObject valObj = new ValueObject(3);
+      ValueObject valObj = new ValueObjectBean(3);
 
       col = cpoAdapter.retrieveBeans("TestWhereRetrieve", valObj);
 
@@ -172,21 +172,21 @@ public class WhereTest extends TestCase {
   }
 
   public void testNestedWhere() {
-    String method = "testValueWhere:";
+    String method = "testNestedWhere:";
     Collection<ValueObject> col;
     CpoWhere cw;
     ArrayList<CpoWhere> wheres = new ArrayList<>();
 
     try {
-      ValueObject valObj = new ValueObject(-6);
+      ValueObject valObj = new ValueObjectBean(-6);
       cw = cpoAdapter.newWhere();
       cw.addWhere(cpoAdapter.newWhere(CpoWhere.LOGIC_NONE, "id", CpoWhere.COMP_EQ, valObj));
 
       CpoWhere cwAnd = cpoAdapter.newWhere();
       cwAnd.setLogical(CpoWhere.LOGIC_OR);
-      valObj = new ValueObject(2);
+      valObj = new ValueObjectBean(2);
       cwAnd.addWhere(cpoAdapter.newWhere(CpoWhere.LOGIC_NONE, "id", CpoWhere.COMP_EQ, valObj));
-      valObj = new ValueObject(3);
+      valObj = new ValueObjectBean(3);
       cwAnd.addWhere(cpoAdapter.newWhere(CpoWhere.LOGIC_OR, "id", CpoWhere.COMP_EQ, valObj));
 
       cw.addWhere(cwAnd);
@@ -206,7 +206,7 @@ public class WhereTest extends TestCase {
 
 
     try {
-      ValueObject valObj = new ValueObject(3);
+      ValueObject valObj = new ValueObjectBean(3);
       cw = cpoAdapter.newWhere(CpoWhere.LOGIC_NONE, "attrChar", CpoWhere.COMP_ISNULL, null);
 
       ArrayList<CpoWhere> wheres = new ArrayList<>();
@@ -226,7 +226,7 @@ public class WhereTest extends TestCase {
 
 
     try {
-      ValueObject valObj = new ValueObject(6);
+      ValueObject valObj = new ValueObjectBean(6);
       cw = cpoAdapter.newWhere(CpoWhere.LOGIC_NONE, "id", CpoWhere.COMP_EQ, valObj);
       cw.setAttributeFunction("ABS(id)");
 
@@ -249,7 +249,7 @@ public class WhereTest extends TestCase {
 
 
     try {
-      ValueObject valObj = new ValueObject(-1);
+      ValueObject valObj = new ValueObjectBean(-1);
       cw = cpoAdapter.newWhere(CpoWhere.LOGIC_NONE, "id", CpoWhere.COMP_EQ, valObj, false);
       cw.setValueFunction("abs(id)");
 
@@ -269,7 +269,7 @@ public class WhereTest extends TestCase {
     String method = "testAndWhere:";
 
     try {
-      ValueObject valObj = new ValueObject(3);
+      ValueObject valObj = new ValueObjectBean(3);
       CpoWhere cw = cpoAdapter.newWhere();
       CpoWhere cw1 = cpoAdapter.newWhere(CpoWhere.LOGIC_NONE, "attrChar", CpoWhere.COMP_ISNULL, null);
       CpoWhere cw2 = cpoAdapter.newWhere(CpoWhere.LOGIC_AND, "attrChar", CpoWhere.COMP_ISNULL, null, true);
@@ -306,7 +306,7 @@ public class WhereTest extends TestCase {
     String method = "testOrWhere:";
 
     try {
-      ValueObject valObj = new ValueObject(3);
+      ValueObject valObj = new ValueObjectBean(3);
       CpoWhere cw = cpoAdapter.newWhere();
       CpoWhere cw1 = cpoAdapter.newWhere(CpoWhere.LOGIC_NONE, "id", CpoWhere.COMP_EQ, null);
       CpoWhere cw2 = cpoAdapter.newWhere(CpoWhere.LOGIC_OR, "id", CpoWhere.COMP_EQ, valObj);
@@ -345,7 +345,7 @@ public class WhereTest extends TestCase {
     String method = "testRightAttributeFunction:";
 
     try {
-      ValueObject valObj = new ValueObject(-1);
+      ValueObject valObj = new ValueObjectBean(-1);
       CpoWhere cw = cpoAdapter.newWhere();
       cw.setAttribute("id");
       cw.setRightAttribute("attrSmallInt");
@@ -370,7 +370,7 @@ public class WhereTest extends TestCase {
     String method = "testRightAttribute:";
 
     try {
-      ValueObject valObj = new ValueObject(-1);
+      ValueObject valObj = new ValueObjectBean(-1);
       CpoWhere cw = cpoAdapter.newWhere();
       cw.setAttribute("id");
       cw.setRightAttribute("attrSmallInt");
@@ -391,7 +391,7 @@ public class WhereTest extends TestCase {
     String method = "testMultipleBindWhere:";
 
     try {
-      ValueObject valObj = new ValueObject(1);
+      ValueObject valObj = new ValueObjectBean(1);
       valObj.setAttrVarChar("Test");
 
       CpoWhere cw = cpoAdapter.newWhere();
@@ -417,7 +417,7 @@ public class WhereTest extends TestCase {
     String method = "testLikeWhere:";
 
     try {
-      ValueObject valObj = new ValueObject(1);
+      ValueObject valObj = new ValueObjectBean(1);
       valObj.setAttrVarChar("T%");
 
       CpoWhere cw = cpoAdapter.newWhere();
@@ -443,7 +443,7 @@ public class WhereTest extends TestCase {
     String method = "testLikeWhereStrings:";
 
     try {
-      ValueObject valObj = new ValueObject(1);
+      ValueObject valObj = new ValueObjectBean(1);
       valObj.setAttrVarChar("T%");
 
       CpoWhere cw = cpoAdapter.newWhere();
@@ -469,7 +469,7 @@ public class WhereTest extends TestCase {
     String method = "testNonAttributeWhere:";
 
     try {
-      ValueObject valObj = new ValueObject(1);
+      ValueObject valObj = new ValueObjectBean(1);
 
       CpoWhere cw = cpoAdapter.newWhere();
       CpoWhere cw1 = cpoAdapter.newWhere(CpoWhere.LOGIC_NONE, "value_object.id", CpoWhere.COMP_LT, 1);
@@ -490,10 +490,10 @@ public class WhereTest extends TestCase {
   }
 
   public void testInWhereStaticValue() {
-    String method = "testNonAttributeWhere:";
+    String method = "testInWhereStaticValue:";
 
     try {
-      ValueObject valObj = new ValueObject(1);
+      ValueObject valObj = new ValueObjectBean(1);
 
       CpoWhere cw = cpoAdapter.newWhere();
       CpoWhere cw1 = cpoAdapter.newWhere(CpoWhere.LOGIC_NONE, "id", CpoWhere.COMP_IN, null);
@@ -515,10 +515,10 @@ public class WhereTest extends TestCase {
   }
 
   public void testInWhereCollection() {
-    String method = "testNonAttributeWhere:";
+    String method = "testInWhereCollection:";
 
     try {
-      ValueObject valObj = new ValueObject(1);
+      ValueObject valObj = new ValueObjectBean(1);
       Collection<Integer> inColl = new ArrayList<>();
       inColl.add(1);
       inColl.add(3);
@@ -543,18 +543,18 @@ public class WhereTest extends TestCase {
   }
 
   public void testMultiInWhereCollection() {
-    String method = "testNonAttributeWhere:";
+    String method = "testMultiInWhereCollection:";
 
     try {
-      ValueObject valObj = new ValueObject(1);
+      ValueObject valObj = new ValueObjectBean(1);
       Collection<Integer> inColl1 = new ArrayList<>();
       inColl1.add(1);
       inColl1.add(2);
-      
+
       Collection<Integer> inColl2 = new ArrayList<>();
       inColl2.add(3);
       inColl2.add(4);
-      
+
       Collection<Integer> inColl3 = new ArrayList<>();
       inColl3.add(5);
       inColl3.add(-6);
@@ -581,10 +581,10 @@ public class WhereTest extends TestCase {
   }
 
   public void testNonAttributeInWhereCollection() {
-    String method = "testNonAttributeWhere:";
+    String method = "testNonAttributeInWhereCollection:";
 
     try {
-      ValueObject valObj = new ValueObject(1);
+      ValueObject valObj = new ValueObjectBean(1);
       Collection<Integer> inColl = new ArrayList<>();
       inColl.add(1);
       inColl.add(3);
@@ -609,13 +609,13 @@ public class WhereTest extends TestCase {
   }
 
   public void testWhereParens() {
-    String method = "testStaticWhere:";
+    String method = "testWhereParens:";
     Collection<ValueObject> col = null;
 
     try {
-      ValueObject valObj = new ValueObject(1);
+      ValueObject valObj = new ValueObjectBean(1);
 
-      // Without the correct parens, this will return multiple rows for a retrieveBean which is a 
+      // Without the correct parens, this will return multiple rows for a retrieveBean which is a
       // failure
       CpoWhere cw1 = cpoAdapter.newWhere();
       cw1.setLogical(CpoWhere.LOGIC_AND);
@@ -634,15 +634,15 @@ public class WhereTest extends TestCase {
       fail(method + e.getMessage());
     }
   }
-  
+
   public void testWhereOrderBy() {
-    String method = "testStaticWhere:";
+    String method = "testWhereOrderBy:";
     Collection<ValueObject> col = null;
 
     try {
-      ValueObject valObj = new ValueObject(1);
+      ValueObject valObj = new ValueObjectBean(1);
 
-      // Without the correct parens, this will return multiple rows for a retrieveBean which is a 
+      // Without the correct parens, this will return multiple rows for a retrieveBean which is a
       // failure
       CpoWhere cw1 = cpoAdapter.newWhere();
       cw1.setLogical(CpoWhere.LOGIC_AND);

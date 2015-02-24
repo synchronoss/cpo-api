@@ -58,17 +58,17 @@ public class InterleavedWhereTest extends TestCase {
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
-    ValueObject vo1 = new ValueObject(1);
+    ValueObject vo1 = new ValueObjectBean(1);
     vo1.setAttrVarChar("Test");
     vo1.setAttrBit(true);
     al.add(vo1);
 
-    ValueObject vo3 = new ValueObject(3);
+    ValueObject vo3 = new ValueObjectBean(3);
     vo3.setAttrVarChar("Test");
     vo3.setAttrBit(true);
     al.add(vo3);
 
-    ValueObject vo5 = new ValueObject(5);
+    ValueObject vo5 = new ValueObjectBean(5);
     vo5.setAttrVarChar("Test");
     vo5.setAttrBit(true);
     al.add(vo5);
@@ -104,7 +104,7 @@ public class InterleavedWhereTest extends TestCase {
     CpoWhere cw1 = null;
 
     try {
-      ValueObject valObj = new ValueObject(1);
+      ValueObject valObj = new ValueObjectBean(1);
       valObj.setAttrBit(true);
       valObj.setAttrVarChar("Test");
       Collection<Integer> inColl = new ArrayList<>();

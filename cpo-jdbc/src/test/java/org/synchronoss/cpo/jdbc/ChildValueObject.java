@@ -25,7 +25,7 @@ package org.synchronoss.cpo.jdbc;
  *
  * @author david berry
  */
-public class ChildValueObject extends ValueObject implements java.io.Serializable, java.lang.Cloneable {
+public class ChildValueObject extends ValueObjectBean implements java.io.Serializable, java.lang.Cloneable {
 
   /**
    *

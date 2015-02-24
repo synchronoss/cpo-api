@@ -72,7 +72,7 @@ public class BigBatchTest extends TestCase {
     int numInserts = 100000;
 
     for (int i = 0; i < numInserts; i++) {
-      al.add(new ValueObject(i));
+      al.add(new ValueObjectBean(i));
     }
 
     try {

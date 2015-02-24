@@ -55,21 +55,23 @@ public abstract class AbstractCpoMetaAdapter implements CpoMetaAdapter {
     CpoClass cpoClass = null;
     String className;
     String requestedName;
-    Class<?> classObj;
+    List<Class<?>> classList = new ArrayList<>();
     Class<?> requestedClass;
 
     if (obj != null) {
       requestedClass = obj.getClass();
-      classObj = requestedClass;
+      classList.add(requestedClass);
       requestedName = requestedClass.getName();
       className = requestedName;
       cpoClass = classMap.get(className);
 
-      while (cpoClass == null && classObj != null) {
-        classObj = classObj.getSuperclass();
-        className = classObj == null ? null : classObj.getName();
-        if (className != null) {
+      while (cpoClass == null && !classList.isEmpty()) {
+        classList = getSuperClasses(classList);
+        for (Class<?> clazz : classList) {
+          className = clazz.getName();
           cpoClass = classMap.get(className);
+          if (cpoClass != null)
+            break;
         }
       }
       if (cpoClass == null) {
@@ -79,6 +81,20 @@ public abstract class AbstractCpoMetaAdapter implements CpoMetaAdapter {
 
     return cpoClass;
   }
+
+  private List<Class<?>> getSuperClasses(List<Class<?>> classList) {
+    List<Class<?>> superClassList = new ArrayList<>();
+
+    for (Class<?> clazz : classList) {
+      Class<?> superClass = clazz.getSuperclass();
+      if (superClass != null) {
+        superClassList.add(superClass);
+      }
+      superClassList.addAll(Arrays.asList(clazz.getInterfaces()));
+    }
+    return superClassList;
+  }
+
 
   @Override
   public List<CpoClass> getCpoClasses() {

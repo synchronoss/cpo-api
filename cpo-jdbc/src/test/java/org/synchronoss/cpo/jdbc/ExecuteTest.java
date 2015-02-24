@@ -76,8 +76,8 @@ public class ExecuteTest extends TestCase {
    */
   public void testExecute() {
     if (metaDescriptor.isSupportsCalls()) {
-      String method = "testExecuteObject:";
-      ValueObject vo = new ValueObject(1);
+      String method = "testExecute:";
+      ValueObject vo = new ValueObjectBean(1);
       vo.setAttrInteger(3);
       ValueObject rvo;
 
@@ -92,7 +92,7 @@ public class ExecuteTest extends TestCase {
 
 
       try {
-        vo = new ValueObject(1);
+        vo = new ValueObjectBean(1);
         vo.setAttrSmallInt(3);
         rvo = cpoAdapter.executeObject("TestExecuteObjectNoTransform", vo);
         assertNotNull(method + "Returned Value object is null");
@@ -105,11 +105,11 @@ public class ExecuteTest extends TestCase {
       logger.error(cpoAdapter.getDataSourceName() + " does not support CallableStatements");
     }
   }
-  
+
   public void testExecute2() {
     if (metaDescriptor.isSupportsCalls()) {
       String method = "testExecuteObject:";
-      ValueObject vo = new ValueObject(1);
+      ValueObject vo = new ValueObjectBean(1);
       vo.setAttrInteger(3);
       ValueObject rvo;
 

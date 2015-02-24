@@ -59,7 +59,7 @@ public class ConstructorTest extends TestCase {
       // make sure the password is not in the name
       assertTrue("password is in datasource name", !cpoAdapter.getDataSourceName().contains(PASSWORDSTRING));
       
-      ValueObject valObj = new ValueObject();
+      ValueObject valObj = new ValueObjectBean();
       List<ValueObject> objs = cpoAdapter.retrieveBeans(null, valObj);
       assertTrue("List size is " + objs.size(), objs.size() == 0);
     } catch (Exception e) {
@@ -76,7 +76,7 @@ public class ConstructorTest extends TestCase {
       // make sure the password is not in the name
       assertTrue("password is in datasource name:", !cpoAdapter.getDataSourceName().contains(PASSWORDSTRING));
       
-      ValueObject valObj = new ValueObject();
+      ValueObject valObj = new ValueObjectBean();
       List<ValueObject> objs = cpoAdapter.retrieveBeans(null, valObj);
       assertTrue("List size is " + objs.size(), objs.size() == 0);
     } catch (Exception e) {
@@ -93,7 +93,7 @@ public class ConstructorTest extends TestCase {
       // make sure the password is not in the name
       assertTrue("password is in datasource name", !cpoAdapter.getDataSourceName().contains(PASSWORDSTRING));
       
-      ValueObject valObj = new ValueObject();
+      ValueObject valObj = new ValueObjectBean();
       List<ValueObject> objs = cpoAdapter.retrieveBeans(null, valObj);
       assertTrue("List size is " + objs.size(), objs.size() == 0);
     } catch (Exception e) {
@@ -111,7 +111,7 @@ public class ConstructorTest extends TestCase {
       // The password is in the url as this is url only so it may hve the password string in it.
       //assertTrue("password is in datasource name"+cpoAdapter.getDataSourceName(),cpoAdapter.getDataSourceName().indexOf(PASSWORDSTRING)==-1);
       
-     ValueObject valObj = new ValueObject();
+     ValueObject valObj = new ValueObjectBean();
       List<ValueObject> objs = cpoAdapter.retrieveBeans(null, valObj);
       assertTrue("List size is " + objs.size(), objs.size() == 0);
     } catch (Exception e) {
@@ -128,7 +128,7 @@ public class ConstructorTest extends TestCase {
       // make sure the password is not in the name
       assertTrue("password is in datasource name", !cpoAdapter.getDataSourceName().contains(PASSWORDSTRING));
       
-      ValueObject valObj = new ValueObject();
+      ValueObject valObj = new ValueObjectBean();
       List<ValueObject> objs = cpoAdapter.retrieveBeans(null, valObj);
       assertTrue("List size is " + objs.size(), objs.size() == 0);
     } catch (Exception e) {
@@ -145,7 +145,7 @@ public class ConstructorTest extends TestCase {
       // make sure the password is not in the name
       assertTrue("password is in datasource name", !cpoAdapter.getDataSourceName().contains(PASSWORDSTRING));
       
-      ValueObject valObj = new ValueObject();
+      ValueObject valObj = new ValueObjectBean();
       List<ValueObject> objs = cpoAdapter.retrieveBeans(null, valObj);
       assertTrue("List size is " + objs.size(), objs.size() == 0);
     } catch (Exception e) {
@@ -162,7 +162,7 @@ public class ConstructorTest extends TestCase {
       // make sure the password is not in the name
       assertTrue("password is in datasource name", !cpoAdapter.getDataSourceName().contains(PASSWORDSTRING));
       
-      ValueObject valObj = new ValueObject();
+      ValueObject valObj = new ValueObjectBean();
       List<ValueObject> objs = cpoAdapter.retrieveBeans(null, valObj);
       assertTrue("List size is " + objs.size(), objs.size() == 0);
     } catch (Exception e) {
@@ -179,7 +179,7 @@ public class ConstructorTest extends TestCase {
       // make sure the password is not in the name
       assertTrue("password is in datasource name", !cpoAdapter.getDataSourceName().contains(PASSWORDSTRING));
       
-      ValueObject valObj = new ValueObject();
+      ValueObject valObj = new ValueObjectBean();
       List<ValueObject> objs = cpoAdapter.retrieveBeans(null, valObj);
       assertTrue("List size is " + objs.size(), objs.size() == 0);
     } catch (Exception e) {
@@ -196,7 +196,7 @@ public class ConstructorTest extends TestCase {
       // make sure the password is not in the name
       assertTrue("password is in datasource name", !cpoAdapter.getDataSourceName().contains(PASSWORDSTRING));
       
-      ValueObject valObj = new ValueObject();
+      ValueObject valObj = new ValueObjectBean();
       List<ValueObject> objs = cpoAdapter.retrieveBeans(null, valObj);
       assertTrue("List size is " + objs.size(), objs.size() == 0);
     } catch (Exception e) {

@@ -57,7 +57,7 @@ public class ExistObjectTest extends TestCase {
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
-    ValueObject vo = new ValueObject(1);
+    ValueObject vo = new ValueObjectBean(1);
     vo.setAttrVarChar("WHERE");
 
     try {
@@ -73,7 +73,7 @@ public class ExistObjectTest extends TestCase {
 
 
     try {
-      ValueObject valObj = new ValueObject(1);
+      ValueObject valObj = new ValueObjectBean(1);
       long count = cpoAdapter.existsObject(valObj);
       assertTrue("Object not Found", count == 1);
     } catch (Exception e) {
@@ -81,7 +81,7 @@ public class ExistObjectTest extends TestCase {
     }
 
     try {
-      ValueObject valObj = new ValueObject(5);
+      ValueObject valObj = new ValueObjectBean(5);
       long count = cpoAdapter.existsObject(valObj);
       assertTrue("Object Found", count == 0);
     } catch (Exception e) {
@@ -91,11 +91,11 @@ public class ExistObjectTest extends TestCase {
   }
 
   public void testExistObjectWhere() {
-    String method = "testExistObject:";
+    String method = "testExistObjectWhere:";
 
 
     try {
-      ValueObject valObj = new ValueObject(1);
+      ValueObject valObj = new ValueObjectBean(1);
       CpoWhere where = cpoAdapter.newWhere(CpoWhere.LOGIC_AND, "attrVarChar", CpoWhere.COMP_EQ, "WHERE");
       ArrayList<CpoWhere> wheres = new ArrayList<>();
       wheres.add(where);
@@ -106,7 +106,7 @@ public class ExistObjectTest extends TestCase {
     }
 
     try {
-      ValueObject valObj = new ValueObject(1);
+      ValueObject valObj = new ValueObjectBean(1);
       CpoWhere where = cpoAdapter.newWhere(CpoWhere.LOGIC_AND, "attrVarChar", CpoWhere.COMP_EQ, "NOWHERE");
       ArrayList<CpoWhere> wheres = new ArrayList<>();
       wheres.add(where);
@@ -120,7 +120,7 @@ public class ExistObjectTest extends TestCase {
 
   @Override
   public void tearDown() {
-    ValueObject vo = new ValueObject(1);
+    ValueObject vo = new ValueObjectBean(1);
     try {
       cpoAdapter.deleteObject(vo);
     } catch (Exception e) {

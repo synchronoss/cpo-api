@@ -24,7 +24,7 @@ import org.apache.maven.plugin.*;
 import org.apache.maven.plugins.annotations.*;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.project.MavenProject;
-import org.synchronoss.cpo.exporter.CpoClassSourceGenerator;
+import org.synchronoss.cpo.exporter.*;
 import org.synchronoss.cpo.meta.CpoMetaDescriptor;
 import org.synchronoss.cpo.meta.domain.CpoClass;
 
@@ -65,6 +65,12 @@ public class GenerateJavaSources extends AbstractMojo {
   @Parameter (property = "filter", defaultValue = ".*")
   private String filter;
 
+  @Parameter (property = "generateInterface", defaultValue = "false")
+  private boolean generateInterface = false;
+
+  @Parameter (property = "generateClass", defaultValue = "true")
+  private boolean generateClass = true;
+
   /**
    * A reference to the Maven Project metadata.
    */
@@ -76,6 +82,10 @@ public class GenerateJavaSources extends AbstractMojo {
 
   public void execute() throws MojoExecutionException {
     getLog().info("Cpo config: " + cpoConfig);
+
+    if (!generateInterface && !generateClass) {
+      throw new MojoExecutionException("You must generate interfaces, classes or both");
+    }
 
     File srcDir;
 
@@ -117,7 +127,6 @@ public class GenerateJavaSources extends AbstractMojo {
               String dirName = tok.nextToken();
               classDir = new File(classDir, dirName);
             }
-            className = className.substring(className.lastIndexOf(".") + 1);
           }
 
           if (!classDir.exists()) {
@@ -125,17 +134,37 @@ public class GenerateJavaSources extends AbstractMojo {
               throw new MojoExecutionException("Unable to create class directories: " + classDir.getAbsolutePath());
             }
           }
-          File javaFile = new File(classDir, className + JAVA_EXT);
 
-          getLog().info("cpo-plugin generated " + javaFile.getAbsolutePath());
+          if (generateInterface) {
+            CpoInterfaceSourceGenerator interfaceSourceGenerator = new CpoInterfaceSourceGenerator(metaDescriptor);
+            cpoClass.acceptMetaDFVisitor(interfaceSourceGenerator);
 
-          CpoClassSourceGenerator classSourceGenerator = new CpoClassSourceGenerator(metaDescriptor);
-          cpoClass.acceptMetaDFVisitor(classSourceGenerator);
+            File interfaceFile = new File(classDir, interfaceSourceGenerator.getInterfaceName() + JAVA_EXT);
+            getLog().info("cpo-plugin generated " + interfaceFile.getAbsolutePath());
 
-          FileWriter cw = new FileWriter(javaFile);
-          cw.write(classSourceGenerator.getSourceCode());
-          cw.flush();
-          cw.close();
+            FileWriter iw = new FileWriter(interfaceFile);
+            iw.write(interfaceSourceGenerator.getSourceCode());
+            iw.flush();
+            iw.close();
+          }
+
+          if (generateClass) {
+            CpoClassSourceGenerator classSourceGenerator;
+            if (generateInterface) {
+              classSourceGenerator = new CpoClassSourceGenerator(metaDescriptor);
+            } else {
+              classSourceGenerator = new CpoLegacyClassSourceGenerator(metaDescriptor);
+            }
+            cpoClass.acceptMetaDFVisitor(classSourceGenerator);
+
+            File javaFile = new File(classDir, classSourceGenerator.getClassName() + JAVA_EXT);
+            getLog().info("cpo-plugin generated " + javaFile.getAbsolutePath());
+
+            FileWriter cw = new FileWriter(javaFile);
+            cw.write(classSourceGenerator.getSourceCode());
+            cw.flush();
+            cw.close();
+          }
         }
       }
     } catch (Exception ex) {

@@ -24,6 +24,7 @@ import org.slf4j.*;
 import org.synchronoss.cpo.*;
 import org.synchronoss.cpo.jdbc.meta.JdbcCpoMetaDescriptor;
 
+import javax.sql.DataSource;
 import java.sql.*;
 import java.util.HashMap;
 
@@ -49,10 +50,9 @@ public class JdbcCpoTrxAdapter extends JdbcCpoAdapter implements CpoTrxAdapter {
   private JdbcCpoTrxAdapter() {
   }
 
-  protected JdbcCpoTrxAdapter(JdbcCpoMetaDescriptor metaDescriptor, Connection c,
-          boolean batchSupported, String dataSourceName) throws CpoException {
-    super(metaDescriptor, batchSupported, dataSourceName);
-    setStaticConnection(c);
+  protected JdbcCpoTrxAdapter(JdbcCpoMetaDescriptor metaDescriptor, boolean batchSupported, String dataSourceName, DataSource readDataSource, DataSource writeDataSource) throws CpoException {
+    super(metaDescriptor, batchSupported, dataSourceName, readDataSource, writeDataSource);
+    setStaticConnection(super.getWriteConnection());
   }
 
   @Override

@@ -113,9 +113,11 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
    * @param dataSourceName
    * @throws CpoException
    */
-  protected JdbcCpoAdapter(JdbcCpoMetaDescriptor metaDescriptor, boolean batchSupported, String dataSourceName) throws CpoException {
+  protected JdbcCpoAdapter(JdbcCpoMetaDescriptor metaDescriptor, boolean batchSupported, String dataSourceName, DataSource readDataSource, DataSource writeDataSource) throws CpoException {
     this.metaDescriptor = metaDescriptor;
     batchUpdatesSupported_ = batchSupported;
+    setWriteDataSource(writeDataSource);
+    setReadDataSource(readDataSource);
     setDataSourceName(dataSourceName);
   }
 
@@ -2834,7 +2836,7 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
    */
   @Override
   public CpoTrxAdapter getCpoTrxAdapter() throws CpoException {
-    return new JdbcCpoTrxAdapter(metaDescriptor, getWriteConnection(), batchUpdatesSupported_, getDataSourceName());
+    return new JdbcCpoTrxAdapter(metaDescriptor, batchUpdatesSupported_, getDataSourceName(), getReadDataSource(), getWriteDataSource());
   }
 
   private void statementClose(Statement s) {

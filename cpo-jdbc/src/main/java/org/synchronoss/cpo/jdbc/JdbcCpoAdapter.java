@@ -62,6 +62,7 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
    */
   private boolean invalidReadConnection_ = false;
   private boolean batchUpdatesSupported_ = false;
+
   /**
    * CpoMetaDescriptor allows you to get the meta data for a class.
    */
@@ -127,12 +128,12 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
       // do all the tests here
       batchUpdatesSupported_ = dmd.supportsBatchUpdates();
 
-      this.closeConnection(c);
+      this.closeLocalConnection(c);
     } catch (Throwable t) {
       logger.error(ExceptionHelper.getLocalizedMessage(t), t);
       throw new CpoException("Could Not Retrieve Database Meta Data", t);
     } finally {
-      closeConnection(c);
+      closeLocalConnection(c);
     }
   }
 
@@ -1006,7 +1007,7 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
     } catch (Exception e) {
       throw new CpoException("existsObjects(String, Object) failed", e);
     } finally {
-      closeConnection(c);
+      closeLocalConnection(c);
     }
 
     return objCount;
@@ -2030,30 +2031,28 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
    * @throws CpoException DOCUMENT ME!
    */
   protected Connection getReadConnection() throws CpoException {
-    Connection connection = getStaticConnection();
+    Connection connection;
 
-    if (connection == null) {
+    try {
+      if (!(invalidReadConnection_)) {
+        connection = getReadDataSource().getConnection();
+      } else {
+        connection = getWriteDataSource().getConnection();
+      }
+      connection.setAutoCommit(false);
+    } catch (Exception e) {
+      invalidReadConnection_ = true;
+
+      String msg = "getReadConnection(): failed";
+      logger.error(msg, e);
+
       try {
-        if (!(invalidReadConnection_)) {
-          connection = getReadDataSource().getConnection();
-        } else {
-          connection = getWriteDataSource().getConnection();
-        }
+        connection = getWriteDataSource().getConnection();
         connection.setAutoCommit(false);
-      } catch (Exception e) {
-        invalidReadConnection_ = true;
-
-        String msg = "getReadConnection(): failed";
-        logger.error(msg, e);
-
-        try {
-          connection = getWriteDataSource().getConnection();
-          connection.setAutoCommit(false);
-        } catch (SQLException e2) {
-          msg = "getWriteConnection(): failed";
-          logger.error(msg, e2);
-          throw new CpoException(msg, e2);
-        }
+      } catch (SQLException e2) {
+        msg = "getWriteConnection(): failed";
+        logger.error(msg, e2);
+        throw new CpoException(msg, e2);
       }
     }
 
@@ -2067,37 +2066,18 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
    * @throws CpoException DOCUMENT ME!
    */
   protected Connection getWriteConnection() throws CpoException {
-    Connection connection = getStaticConnection();
+    Connection connection;
 
-    if (connection == null) {
-      try {
-        connection = getWriteDataSource().getConnection();
-        connection.setAutoCommit(false);
-      } catch (SQLException e) {
-        String msg = "getWriteConnection(): failed";
-        logger.error(msg, e);
-        throw new CpoException(msg, e);
-      }
+    try {
+      connection = getWriteDataSource().getConnection();
+      connection.setAutoCommit(false);
+    } catch (SQLException e) {
+      String msg = "getWriteConnection(): failed";
+      logger.error(msg, e);
+      throw new CpoException(msg, e);
     }
 
     return connection;
-  }
-
-  protected Connection getStaticConnection() throws CpoException {
-    // do nothing for JdbcCpoAdapter
-    // overridden by JdbcTrxAdapter
-    return null;
-  }
-
-  protected boolean isStaticConnection(Connection c) {
-    // do nothing for JdbcCpoAdapter
-    // overridden by JdbcTrxAdapter
-    return false;
-  }
-
-  protected void setStaticConnection(Connection c) {
-    // do nothing for JdbcCpoAdapter
-    // overridden by JdbcTrxAdapter
   }
 
   /**
@@ -2105,10 +2085,9 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
    *
    * @param connection DOCUMENT ME!
    */
-  protected void closeConnection(Connection connection) {
+  protected void closeLocalConnection(Connection connection) {
     try {
-      clearConnectionBusy(connection);
-      if (connection != null && !isStaticConnection(connection) && !connection.isClosed()) {
+      if (connection != null && !connection.isClosed()) {
         connection.close();
       }
     } catch (SQLException e) {
@@ -2123,9 +2102,9 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
    *
    * @param connection DOCUMENT ME!
    */
-  protected void commitConnection(Connection connection) {
+  protected void commitLocalConnection(Connection connection) {
     try {
-      if (connection != null && !isStaticConnection(connection)) {
+      if (connection != null ) {
         connection.commit();
       }
     } catch (SQLException e) {
@@ -2140,9 +2119,9 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
    *
    * @param connection DOCUMENT ME!
    */
-  protected void rollbackConnection(Connection connection) {
+  protected void rollbackLocalConnection(Connection connection) {
     try {
-      if (connection != null && !isStaticConnection(connection)) {
+      if (connection != null) {
         connection.rollback();
       }
     } catch (Exception e) {
@@ -2174,13 +2153,13 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
     try {
       c = getWriteConnection();
       obj = processExecuteGroup(name, criteria, result, c);
-      commitConnection(c);
+      commitLocalConnection(c);
     } catch (Exception e) {
       // Any exception has to try to rollback the work;
-      rollbackConnection(c);
+      rollbackLocalConnection(c);
       ExceptionHelper.reThrowCpoException(e, "processExecuteGroup(String name, Object criteria, Object result) failed");
     } finally {
-      closeConnection(c);
+      closeLocalConnection(c);
     }
 
     return obj;
@@ -2290,13 +2269,13 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
 
       // The select may have a for update clause on it
       // Since the connection is cached we need to get rid of this
-      commitConnection(c);
+      commitLocalConnection(c);
     } catch (Exception e) {
       // Any exception has to try to rollback the work;
-      rollbackConnection(c);
+      rollbackLocalConnection(c);
       ExceptionHelper.reThrowCpoException(e, "processSelectGroup(Object obj, String groupName) failed");
     } finally {
-      closeConnection(c);
+      closeLocalConnection(c);
     }
 
     return result;
@@ -2438,13 +2417,13 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
       processSelectGroup(name, criteria, result, wheres, orderBy, nativeExpressions, con, useRetrieve, resultSet);
       // The select may have a for update clause on it
       // Since the connection is cached we need to get rid of this
-      commitConnection(con);
+      commitLocalConnection(con);
     } catch (Exception e) {
       // Any exception has to try to rollback the work;
-      rollbackConnection(con);
+      rollbackLocalConnection(con);
       ExceptionHelper.reThrowCpoException(e, "processSelectGroup(String name, Object criteria, Object result,CpoWhere where, Collection orderBy, boolean useRetrieve) failed");
     } finally {
-      closeConnection(con);
+      closeLocalConnection(con);
     }
 
     return resultSet;
@@ -2459,13 +2438,13 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
       processSelectGroup(name, criteria, result, wheres, orderBy, nativeExpressions, con, useRetrieve, resultSet);
       // The select may have a for update clause on it
       // Since the connection is cached we need to get rid of this
-      commitConnection(con);
+      commitLocalConnection(con);
     } catch (Exception e) {
       // Any exception has to try to rollback the work;
-      rollbackConnection(con);
+      rollbackLocalConnection(con);
       ExceptionHelper.reThrowCpoException(e, "processSelectGroup(String name, Object criteria, Object result,CpoWhere where, Collection orderBy, boolean useRetrieve) failed");
     } finally {
-      closeConnection(con);
+      closeLocalConnection(con);
     }
   }
 
@@ -2590,13 +2569,13 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
     try {
       c = getWriteConnection();
       updateCount = processUpdateGroup(obj, groupType, groupName, wheres, orderBy, nativeExpressions, c);
-      commitConnection(c);
+      commitLocalConnection(c);
     } catch (Exception e) {
       // Any exception has to try to rollback the work;
-      rollbackConnection(c);
+      rollbackLocalConnection(c);
       ExceptionHelper.reThrowCpoException(e, "processUdateGroup(Object obj, String groupType, String groupName) failed");
     } finally {
-      closeConnection(c);
+      closeLocalConnection(c);
     }
 
     return updateCount;
@@ -2760,13 +2739,13 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
       c = getWriteConnection();
 
       updateCount = processUpdateGroup(coll, groupType, groupName, wheres, orderBy, nativeExpressions, c);
-      commitConnection(c);
+      commitLocalConnection(c);
     } catch (Exception e) {
       // Any exception has to try to rollback the work;
-      rollbackConnection(c);
+      rollbackLocalConnection(c);
       ExceptionHelper.reThrowCpoException(e, "processUpdateGroup(Collection coll, String groupType, String groupName) failed");
     } finally {
-      closeConnection(c);
+      closeLocalConnection(c);
     }
 
     return updateCount;
@@ -2858,22 +2837,6 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
     return new JdbcCpoTrxAdapter(metaDescriptor, getWriteConnection(), batchUpdatesSupported_, getDataSourceName());
   }
 
-  protected boolean isConnectionBusy(Connection c) {
-    // do nothing for JdbcCpoAdapter
-    // overridden by JdbcTrxAdapter
-    return false;
-  }
-
-  protected void setConnectionBusy(Connection c) {
-    // do nothing for JdbcCpoAdapter
-    // overridden by JdbcTrxAdapter
-  }
-
-  protected void clearConnectionBusy(Connection c) {
-    // do nothing for JdbcCpoAdapter
-    // overridden by JdbcTrxAdapter
-  }
-
   private void statementClose(Statement s) {
     if (s != null) {
       try {
@@ -2940,7 +2903,7 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
       } finally {
         resultSetClose(rs);
         statementClose(ps);
-        closeConnection(c);
+        closeLocalConnection(c);
       }
     }
     return attributes;

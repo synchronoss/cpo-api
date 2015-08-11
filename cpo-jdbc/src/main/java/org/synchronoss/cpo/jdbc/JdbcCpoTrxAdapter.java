@@ -41,6 +41,7 @@ public class JdbcCpoTrxAdapter extends JdbcCpoAdapter implements CpoTrxAdapter {
    */
   // Default Connection. Only used JdbcCpoTrxAdapter
   private Connection writeConnection_ = null;
+
   // map to keep track of busy connections
   private static final HashMap<Connection, Connection> busyMap_ = new HashMap<>();
 
@@ -139,29 +140,6 @@ public class JdbcCpoTrxAdapter extends JdbcCpoAdapter implements CpoTrxAdapter {
     }
   }
 
-  @Override
-  protected Connection getStaticConnection() throws CpoException {
-    if (writeConnection_ != null) {
-      if (isConnectionBusy(writeConnection_)) {
-        throw new CpoException("Error Connection Busy");
-      } else {
-        setConnectionBusy(writeConnection_);
-      }
-    }
-    return writeConnection_;
-  }
-
-  @Override
-  protected boolean isStaticConnection(Connection c) {
-    return (writeConnection_ == c);
-  }
-
-  @Override
-  protected void setStaticConnection(Connection c) {
-    writeConnection_ = c;
-  }
-
-  @Override
   protected boolean isConnectionBusy(Connection c) {
     synchronized (busyMap_) {
       Connection test = busyMap_.get(c);
@@ -169,17 +147,95 @@ public class JdbcCpoTrxAdapter extends JdbcCpoAdapter implements CpoTrxAdapter {
     }
   }
 
-  @Override
   protected void setConnectionBusy(Connection c) {
     synchronized (busyMap_) {
       busyMap_.put(c, c);
     }
   }
 
-  @Override
   protected void clearConnectionBusy(Connection c) {
     synchronized (busyMap_) {
       busyMap_.remove(c);
     }
   }
+
+  protected Connection getStaticConnection() throws CpoException {
+    if (writeConnection_ != null) {
+      if (isConnectionBusy(writeConnection_)) {
+        throw new CpoException("Error Connection Busy");
+      }
+    }
+    return writeConnection_;
+  }
+
+  private void setStaticConnection(Connection c) {
+    writeConnection_ = c;
+  }
+
+  /**
+   * DOCUMENT ME!
+   *
+   * @return DOCUMENT ME!
+   * @throws CpoException DOCUMENT ME!
+   */
+  @Override
+  protected Connection getReadConnection() throws CpoException {
+    Connection connection = getStaticConnection();
+
+    setConnectionBusy(connection);
+
+    return connection;
+  }
+
+  /**
+   * DOCUMENT ME!
+   *
+   * @return DOCUMENT ME!
+   * @throws CpoException DOCUMENT ME!
+   */
+  @Override
+  protected Connection getWriteConnection() throws CpoException {
+    Connection connection = getStaticConnection();
+
+    setConnectionBusy(connection);
+
+    return connection;
+  }
+
+
+  /**
+   *
+   * Closes a local connection. A CpoTrxAdapter allows the user to manage the transaction so <code>closeLocalConnection</code>
+   * does nothing
+   *
+   * @param connection The connection to be closed
+   */
+  @Override
+  protected void closeLocalConnection(Connection connection) {
+    clearConnectionBusy(connection);
+  }
+
+  /**
+   *
+   * Commits a local connection. A CpoTrxAdapter allows the user to manage the transaction so <code>commitLocalConnection</code>
+   * does nothing
+   *
+   * @param connection The connection to be committed
+   */
+  @Override
+  protected void commitLocalConnection(Connection connection) {
+  }
+
+  /**
+   *
+   * Rollbacks a local connection. A CpoTrxAdapter allows the user to manage the transaction so <code>rollbackLocalConnection</code>
+   * does nothing
+   *
+   * @param connection The connection to be rolled back
+   */
+  @Override
+  protected void rollbackLocalConnection(Connection connection) {
+  }
+
+
 }

@@ -18,17 +18,12 @@
  * A copy of the GNU Lesser General Public License may also be found at
  * http://www.gnu.org/licenses/lgpl.txt
  */
-package org.synchronoss.cpo.config;
+package org.synchronoss.cpo;
 
-import org.synchronoss.cpo.CpoAdapter;
-import org.synchronoss.cpo.CpoAdapterFactory;
-import org.synchronoss.cpo.CpoException;
-import org.synchronoss.cpo.core.cpoCoreConfig.CtDataSourceConfig;
+import javax.transaction.xa.XAResource;
 
 /**
- * @author dberry
+ * Created by dberry on 11/8/15.
  */
-public interface CpoConfigProcessor {
-
-  public CpoAdapterFactory processCpoConfig(CtDataSourceConfig cpoConfig) throws CpoException;
+public interface CpoXaAdapter extends CpoAdapter, XAResource {
 }

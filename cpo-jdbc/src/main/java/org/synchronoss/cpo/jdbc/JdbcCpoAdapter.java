@@ -106,21 +106,30 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
   }
 
   /**
-   * This constructor is used specifically to create a JdbcCpoTrxAdapter.
+   * This constructor is used specifically to clone a JdbcCpoAdapter.
    *
-   * @param metaDescriptor
-   * @param batchSupported
-   * @param dataSourceName
+   * @param jdbcCpoAdapter - the JdbcCpoAdapter to clone
    * @throws CpoException
    */
-  protected JdbcCpoAdapter(JdbcCpoMetaDescriptor metaDescriptor, boolean batchSupported, String dataSourceName, DataSource readDataSource, DataSource writeDataSource) throws CpoException {
-    this.metaDescriptor = metaDescriptor;
-    batchUpdatesSupported_ = batchSupported;
-    setWriteDataSource(writeDataSource);
-    setReadDataSource(readDataSource);
-    setDataSourceName(dataSourceName);
+  protected JdbcCpoAdapter(JdbcCpoAdapter jdbcCpoAdapter) throws CpoException {
+    this.metaDescriptor = (JdbcCpoMetaDescriptor) jdbcCpoAdapter.getCpoMetaDescriptor();
+    batchUpdatesSupported_ = jdbcCpoAdapter.isBatchUpdatesSupported();
+    setWriteDataSource(jdbcCpoAdapter.getWriteDataSource());
+    setReadDataSource(jdbcCpoAdapter.getReadDataSource());
+    setDataSourceName(jdbcCpoAdapter.getDataSourceName());
   }
 
+  protected DataSource getReadDataSource() {
+    return super.getReadDataSource();
+  }
+
+  protected DataSource getWriteDataSource() {
+    return super.getWriteDataSource();
+  }
+
+  protected boolean isBatchUpdatesSupported() {
+    return batchUpdatesSupported_;
+  }
   private void processDatabaseMetaData() throws CpoException {
     Connection c = null;
     try {
@@ -2793,51 +2802,6 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
     return updateCount;
   }
 
-  /**
-   * Provides a mechanism for the user to obtain a CpoTrxAdapter object. This object allows the to control when commits
-   * and rollbacks occur on CPO.
-   * <p/>
-   * <p/>
-   * <pre>Example:
-   * <code>
-   * <p/>
-   * class SomeObject so = null;
-   * class CpoAdapter cpo = null;
-   * class CpoTrxAdapter cpoTrx = null;
-   * <p/>
-   * try {
-   * 	cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));
-   * 	cpoTrx = cpo.getCpoTrxAdapter();
-   * } catch (CpoException ce) {
-   * 	// Handle the error
-   * 	cpo = null;
-   * }
-   * <p/>
-   * if (cpo!=null) {
-   * 	try{
-   * 		for (int i=0; i<3; i++){
-   * 			so = new SomeObject();
-   * 			so.setId(1);
-   * 			so.setName("SomeName");
-   * 			cpo.updateObject("myUpdate",so);
-   *    }
-   * 		cpoTrx.commit();
-   *  } catch (CpoException ce) {
-   * 		// Handle the error
-   * 		cpoTrx.rollback();
-   *  }
-   * }
-   * </code>
-   * </pre>
-   *
-   * @return A CpoTrxAdapter to manage the transactionality of CPO
-   * @throws CpoException Thrown if there are errors accessing the datasource
-   * @see CpoTrxAdapter
-   */
-  @Override
-  public CpoTrxAdapter getCpoTrxAdapter() throws CpoException {
-    return new JdbcCpoTrxAdapter(metaDescriptor, batchUpdatesSupported_, getDataSourceName(), getReadDataSource(), getWriteDataSource());
-  }
 
   private void statementClose(Statement s) {
     if (s != null) {

@@ -1689,49 +1689,6 @@ public interface CpoAdapter extends java.io.Serializable {
    */
   public <T> long updateObjects(String name, Collection<T> coll, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeFunction> nativeExpressions) throws CpoException;
 
-  /**
-   * Provides a mechanism for the user to obtain a CpoTrxAdapter object. This object allows the to control when commits
-   * and rollbacks occur on CPO.
-   * <p/>
-   * <p/>
-   * <pre>Example:
-   * <code>
-   * <p/>
-   * class SomeObject so = null;
-   * class CpoAdapter cpo = null;
-   * class CpoTrxAdapter cpoTrx = null;
-   * <p/>
-   *  try {
-   *    cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));
-   *    cpoTrx = cpo.getCpoTrxAdapter();
-   *  } catch (CpoException ce) {
-   *    // Handle the error
-   *    cpo = null;
-   *  }
-   * <p/>
-   *  if (cpo!=null) {
-   *    try{
-   *      for (int i=0; i<3; i++){
-   *        so = new SomeObject();
-   *        so.setId(1);
-   *        so.setName("SomeName");
-   *        cpo.updateObject("myUpdate",so);
-   *      }
-   *      cpoTrx.commit();
-   *    } catch (CpoException ce) {
-   *       // Handle the error
-   *       cpoTrx.rollback();
-   *    }
-   *  }
-   * </code>
-   * </pre>
-   *
-   * @return A CpoTrxAdapter to manage the transactionality of CPO
-   * @throws CpoException Thrown if there are errors accessing the datasource
-   * @see CpoTrxAdapter
-   */
-  public CpoTrxAdapter getCpoTrxAdapter() throws CpoException;
-
   public CpoMetaDescriptor getCpoMetaDescriptor();
 
   public String getDataSourceName();

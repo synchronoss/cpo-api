@@ -53,7 +53,7 @@ public class EntityTest extends TestCase {
   public void testGetDataSourceEntities() {
     String method = "testGetDataSourceEntities:";
     try {
-      CpoAdapter cpoAdapter = CpoAdapterFactory.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_CLASS);
+      CpoAdapter cpoAdapter = CpoAdapterFactoryManager.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_CLASS);
       assertNotNull(method + "cpoAdapter is null", cpoAdapter);
 
       List<CpoAttribute> attributes = cpoAdapter.getCpoAttributes("select * from lob_test");

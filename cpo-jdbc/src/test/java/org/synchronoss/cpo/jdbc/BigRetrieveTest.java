@@ -53,7 +53,7 @@ public class BigRetrieveTest extends TestCase {
     String method = "setUp:";
 
     try {
-      cpoAdapter = CpoAdapterFactory.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_JDBC);
+      cpoAdapter = CpoAdapterFactoryManager.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_JDBC);
       assertNotNull(method + "IdoAdapter is null", cpoAdapter);
     } catch (Exception e) {
       fail(method + e.getMessage());
@@ -89,7 +89,7 @@ public class BigRetrieveTest extends TestCase {
     }
 
     Collection<ValueObject> col;
-    
+
     try {
       ValueObject valObj = new ValueObjectBean();
       col = cpoAdapter.retrieveBeans(null, valObj);

@@ -39,7 +39,7 @@ public class ConstructorTest {
   public void testConstructorClass() {
     String method = "testConstructorClass:";
     try {
-      CpoAdapter cpoAdapter = CpoAdapterFactory.getCpoAdapter(CassandraStatics.ADAPTER_CONTEXT_DEFAULT);
+      CpoAdapter cpoAdapter = CpoAdapterFactoryManager.getCpoAdapter(CassandraStatics.ADAPTER_CONTEXT_DEFAULT);
       assertNotNull(method + "cpoAdapter is null", cpoAdapter);
       assertNotNull("DataSourceName is null", cpoAdapter.getDataSourceName());
 

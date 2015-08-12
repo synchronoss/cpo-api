@@ -54,14 +54,14 @@ public class CaseInsensitiveTest extends TestCase {
     String method = "setUp:";
 
     try {
-      cpoAdapter = CpoAdapterFactory.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_CASEINSENSITIVE);
+      cpoAdapter = CpoAdapterFactoryManager.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_CASEINSENSITIVE);
       assertNotNull(method + "IdoAdapter is null", cpoAdapter);
       metaDescriptor = (JdbcCpoMetaDescriptor) cpoAdapter.getCpoMetaDescriptor();
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
     try {
-      readAdapter = CpoAdapterFactory.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_CASEINSENSITIVE);
+      readAdapter = CpoAdapterFactoryManager.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_CASEINSENSITIVE);
       assertNotNull(method + "IdoAdapter is null", readAdapter);
     } catch (Exception e) {
       fail(method + e.getMessage());
@@ -70,7 +70,7 @@ public class CaseInsensitiveTest extends TestCase {
 
   public void testCaseInsensitiveObject() {
     String method = "testCaseInsensitiveObject:";
-  
+
     ValueObject valObj = new ValueObjectBean(5);
 
     valObj.setAttrVarChar("testCaseInsensitiveObject");

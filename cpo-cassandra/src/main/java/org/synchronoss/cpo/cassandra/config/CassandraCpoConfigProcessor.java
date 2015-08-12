@@ -26,9 +26,10 @@ import com.datastax.driver.core.policies.ReconnectionPolicy;
 import com.datastax.driver.core.policies.RetryPolicy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.synchronoss.cpo.CpoAdapter;
+import org.synchronoss.cpo.CpoAdapterFactory;
 import org.synchronoss.cpo.CpoException;
 import org.synchronoss.cpo.cassandra.CassandraCpoAdapter;
+import org.synchronoss.cpo.cassandra.CassandraCpoAdapterFactory;
 import org.synchronoss.cpo.cassandra.ClusterDataSourceInfo;
 import org.synchronoss.cpo.cassandra.cpoCassandraConfig.CtCassandraConfig;
 import org.synchronoss.cpo.cassandra.cpoCassandraConfig.CtCassandraReadWriteConfig;
@@ -52,8 +53,8 @@ public class CassandraCpoConfigProcessor implements CpoConfigProcessor {
   private static final Logger logger = LoggerFactory.getLogger(CassandraCpoConfigProcessor.class);
 
   @Override
-  public CpoAdapter processCpoConfig(CtDataSourceConfig cpoConfig) throws CpoException {
-    CpoAdapter cpoAdapter = null;
+  public CpoAdapterFactory processCpoConfig(CtDataSourceConfig cpoConfig) throws CpoException {
+    CpoAdapterFactory cpoAdapterFactory = null;
 
     if (cpoConfig == null || !(cpoConfig instanceof CtCassandraConfig)) {
       throw new CpoException("Invalid Jdbc Configuration Information");
@@ -66,18 +67,26 @@ public class CassandraCpoConfigProcessor implements CpoConfigProcessor {
     // build the cluster information
     if (cassandraConfig.isSetReadWriteConfig()) {
       ClusterDataSourceInfo clusterInfo = buildDataSourceInfo(cassandraConfig.getName(), cassandraConfig.getReadWriteConfig());
-      cpoAdapter = CassandraCpoAdapter.getInstance(metaDescriptor, clusterInfo);
+      cpoAdapterFactory = new CassandraCpoAdapterFactory(CassandraCpoAdapter.getInstance(metaDescriptor, clusterInfo));
     } else {
       ClusterDataSourceInfo readClusterInfo = buildDataSourceInfo(cassandraConfig.getName(), cassandraConfig.getReadConfig());
       ClusterDataSourceInfo writeClusterInfo = buildDataSourceInfo(cassandraConfig.getName(), cassandraConfig.getWriteConfig());
-      cpoAdapter = CassandraCpoAdapter.getInstance(metaDescriptor, writeClusterInfo, readClusterInfo);
+      cpoAdapterFactory = new CassandraCpoAdapterFactory(CassandraCpoAdapter.getInstance(metaDescriptor, writeClusterInfo, readClusterInfo));
     }
-    logger.debug("Adapter Datasourcename ="+cpoAdapter.getDataSourceName());
+    logger.debug("Adapter Datasourcename =" + cpoAdapterFactory.getCpoAdapter().getDataSourceName());
 
-    return cpoAdapter;
+    return cpoAdapterFactory;
 
   }
 
+  /**
+   * buildDataSourceInfo takes the config information from cpoconfig.xml and insantiates a CLusterDataSourceInfo object
+   *
+   * @param dataConfigName - The name of the data config
+   * @param readWriteConfig - The configuration information
+   * @return A ClusterDataSourceInfo Object
+   * @throws CpoException
+   */
   private ClusterDataSourceInfo buildDataSourceInfo(String dataConfigName, CtCassandraReadWriteConfig readWriteConfig) throws CpoException {
     ClusterDataSourceInfo clusterInfo = new ClusterDataSourceInfo(dataConfigName, readWriteConfig.getKeySpace(), readWriteConfig.getContactPointArray());
 

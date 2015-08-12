@@ -52,13 +52,13 @@ public class ConstructorTest extends TestCase {
   public void testConstructorClass() {
     String method = "testConstructorClass:";
     try {
-      CpoAdapter cpoAdapter = CpoAdapterFactory.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_CLASS);
+      CpoAdapter cpoAdapter = CpoAdapterFactoryManager.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_CLASS);
       assertNotNull(method + "cpoAdapter is null", cpoAdapter);
-      
+
       logger.debug("=====> DatasourceName: "+cpoAdapter.getDataSourceName());
       // make sure the password is not in the name
       assertTrue("password is in datasource name", !cpoAdapter.getDataSourceName().contains(PASSWORDSTRING));
-      
+
       ValueObject valObj = new ValueObjectBean();
       List<ValueObject> objs = cpoAdapter.retrieveBeans(null, valObj);
       assertTrue("List size is " + objs.size(), objs.size() == 0);
@@ -70,12 +70,12 @@ public class ConstructorTest extends TestCase {
   public void testConstructorClassProp() {
     String method = "testConstructorClassProp:";
     try {
-      CpoAdapter cpoAdapter = CpoAdapterFactory.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_CLASSPROP);
+      CpoAdapter cpoAdapter = CpoAdapterFactoryManager.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_CLASSPROP);
       assertNotNull(method + "cpoAdapter is null", cpoAdapter);
-      
+
       // make sure the password is not in the name
       assertTrue("password is in datasource name:", !cpoAdapter.getDataSourceName().contains(PASSWORDSTRING));
-      
+
       ValueObject valObj = new ValueObjectBean();
       List<ValueObject> objs = cpoAdapter.retrieveBeans(null, valObj);
       assertTrue("List size is " + objs.size(), objs.size() == 0);
@@ -87,12 +87,12 @@ public class ConstructorTest extends TestCase {
   public void testConstructorDriver() {
     String method = "testConstructorDriver:";
     try {
-      CpoAdapter cpoAdapter = CpoAdapterFactory.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_DRIVER);
+      CpoAdapter cpoAdapter = CpoAdapterFactoryManager.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_DRIVER);
       assertNotNull(method + "cpoAdapter is null", cpoAdapter);
-      
+
       // make sure the password is not in the name
       assertTrue("password is in datasource name", !cpoAdapter.getDataSourceName().contains(PASSWORDSTRING));
-      
+
       ValueObject valObj = new ValueObjectBean();
       List<ValueObject> objs = cpoAdapter.retrieveBeans(null, valObj);
       assertTrue("List size is " + objs.size(), objs.size() == 0);
@@ -104,13 +104,13 @@ public class ConstructorTest extends TestCase {
   public void testConstructorDriverUrlOnly() {
     String method = "testConstructorDriverUrlOnly:";
     try {
-      CpoAdapter cpoAdapter = CpoAdapterFactory.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_DRIVER_URLONLY);
+      CpoAdapter cpoAdapter = CpoAdapterFactoryManager.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_DRIVER_URLONLY);
       assertNotNull(method + "cpoAdapter is null", cpoAdapter);
-       
+
       // make sure the password is not in the name
       // The password is in the url as this is url only so it may hve the password string in it.
       //assertTrue("password is in datasource name"+cpoAdapter.getDataSourceName(),cpoAdapter.getDataSourceName().indexOf(PASSWORDSTRING)==-1);
-      
+
      ValueObject valObj = new ValueObjectBean();
       List<ValueObject> objs = cpoAdapter.retrieveBeans(null, valObj);
       assertTrue("List size is " + objs.size(), objs.size() == 0);
@@ -122,12 +122,12 @@ public class ConstructorTest extends TestCase {
   public void testConstructorDriverProp() {
     String method = "testConstructorDriverProp:";
     try {
-      CpoAdapter cpoAdapter = CpoAdapterFactory.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_DRIVERPROP);
+      CpoAdapter cpoAdapter = CpoAdapterFactoryManager.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_DRIVERPROP);
       assertNotNull(method + "cpoAdapter is null", cpoAdapter);
-      
+
       // make sure the password is not in the name
       assertTrue("password is in datasource name", !cpoAdapter.getDataSourceName().contains(PASSWORDSTRING));
-      
+
       ValueObject valObj = new ValueObjectBean();
       List<ValueObject> objs = cpoAdapter.retrieveBeans(null, valObj);
       assertTrue("List size is " + objs.size(), objs.size() == 0);
@@ -139,12 +139,12 @@ public class ConstructorTest extends TestCase {
   public void testConstructorClassClass() {
     String method = "testConstructorClassClass:";
     try {
-      CpoAdapter cpoAdapter = CpoAdapterFactory.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_CLASSCLASS);
+      CpoAdapter cpoAdapter = CpoAdapterFactoryManager.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_CLASSCLASS);
       assertNotNull(method + "cpoAdapter is null", cpoAdapter);
-      
+
       // make sure the password is not in the name
       assertTrue("password is in datasource name", !cpoAdapter.getDataSourceName().contains(PASSWORDSTRING));
-      
+
       ValueObject valObj = new ValueObjectBean();
       List<ValueObject> objs = cpoAdapter.retrieveBeans(null, valObj);
       assertTrue("List size is " + objs.size(), objs.size() == 0);
@@ -156,12 +156,12 @@ public class ConstructorTest extends TestCase {
   public void testConstructorDriverDriver() {
     String method = "testConstructorDriverDriver:";
     try {
-      CpoAdapter cpoAdapter = CpoAdapterFactory.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_DRIVERDRIVER);
+      CpoAdapter cpoAdapter = CpoAdapterFactoryManager.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_DRIVERDRIVER);
       assertNotNull(method + "cpoAdapter is null", cpoAdapter);
-      
+
       // make sure the password is not in the name
       assertTrue("password is in datasource name", !cpoAdapter.getDataSourceName().contains(PASSWORDSTRING));
-      
+
       ValueObject valObj = new ValueObjectBean();
       List<ValueObject> objs = cpoAdapter.retrieveBeans(null, valObj);
       assertTrue("List size is " + objs.size(), objs.size() == 0);
@@ -173,12 +173,12 @@ public class ConstructorTest extends TestCase {
   public void testConstructorClassDriver() {
     String method = "testConstructorClassDriver:";
     try {
-      CpoAdapter cpoAdapter = CpoAdapterFactory.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_CLASSDRIVER);
+      CpoAdapter cpoAdapter = CpoAdapterFactoryManager.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_CLASSDRIVER);
       assertNotNull(method + "cpoAdapter is null", cpoAdapter);
-      
+
       // make sure the password is not in the name
       assertTrue("password is in datasource name", !cpoAdapter.getDataSourceName().contains(PASSWORDSTRING));
-      
+
       ValueObject valObj = new ValueObjectBean();
       List<ValueObject> objs = cpoAdapter.retrieveBeans(null, valObj);
       assertTrue("List size is " + objs.size(), objs.size() == 0);
@@ -190,12 +190,12 @@ public class ConstructorTest extends TestCase {
   public void testConstructorDriverClass() {
     String method = "testConstructorDriverClass:";
     try {
-      CpoAdapter cpoAdapter = CpoAdapterFactory.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_DRIVERCLASS);
+      CpoAdapter cpoAdapter = CpoAdapterFactoryManager.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_DRIVERCLASS);
       assertNotNull(method + "cpoAdapter is null", cpoAdapter);
-      
+
       // make sure the password is not in the name
       assertTrue("password is in datasource name", !cpoAdapter.getDataSourceName().contains(PASSWORDSTRING));
-      
+
       ValueObject valObj = new ValueObjectBean();
       List<ValueObject> objs = cpoAdapter.retrieveBeans(null, valObj);
       assertTrue("List size is " + objs.size(), objs.size() == 0);

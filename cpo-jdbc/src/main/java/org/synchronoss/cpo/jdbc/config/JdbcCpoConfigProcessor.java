@@ -47,9 +47,9 @@ public class JdbcCpoConfigProcessor implements CpoConfigProcessor {
   }
 
   @Override
-  public CpoAdapter processCpoConfig(CtDataSourceConfig cpoConfig) throws CpoException {
+  public CpoAdapterFactory processCpoConfig(CtDataSourceConfig cpoConfig) throws CpoException {
 
-    CpoAdapter cpoAdapter = null;
+    CpoAdapterFactory cpoAdapterFactory = null;
 
     if (cpoConfig == null || !(cpoConfig instanceof CtJdbcConfig)) {
       throw new CpoException("Invalid Jdbc Configuration Information");
@@ -74,14 +74,14 @@ public class JdbcCpoConfigProcessor implements CpoConfigProcessor {
     // build a datasource info
     if (jdbcConfig.isSetReadWriteConfig()) {
       DataSourceInfo dataSourceInfo = buildDataSourceInfo(jdbcConfig.getReadWriteConfig());
-      cpoAdapter = JdbcCpoAdapter.getInstance(metaDescriptor, dataSourceInfo);
+      cpoAdapterFactory = new JdbcCpoAdapterFactory(JdbcCpoAdapter.getInstance(metaDescriptor, dataSourceInfo));
     } else {
       DataSourceInfo readDataSourceInfo = buildDataSourceInfo(jdbcConfig.getReadConfig());
       DataSourceInfo writeDataSourceInfo = buildDataSourceInfo(jdbcConfig.getWriteConfig());
-      cpoAdapter = JdbcCpoAdapter.getInstance(metaDescriptor, writeDataSourceInfo, readDataSourceInfo);
+      cpoAdapterFactory = new JdbcCpoAdapterFactory(JdbcCpoAdapter.getInstance(metaDescriptor, writeDataSourceInfo, readDataSourceInfo));
     }
 
-    return cpoAdapter;
+    return cpoAdapterFactory;
   }
 
   private DataSourceInfo buildDataSourceInfo(CtJdbcReadWriteConfig readWriteConfig) throws CpoException {

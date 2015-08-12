@@ -52,7 +52,7 @@ public class RetrieveBeanTest extends TestCase {
     String method = "setUp:";
 
     try {
-      cpoAdapter = CpoAdapterFactory.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_JDBC);
+      cpoAdapter = CpoAdapterFactoryManager.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_JDBC);
       assertNotNull(method + "IdoAdapter is null", cpoAdapter);
     } catch (Exception e) {
       fail(method + e.getMessage());
@@ -79,7 +79,7 @@ public class RetrieveBeanTest extends TestCase {
   public void testAutoCloseable() throws CpoException {
     String method = "testAutoCloseable:";
     CpoTrxAdapter cpoAdapter1 = null;
-    try (CpoTrxAdapter cpoAdapter2 = CpoAdapterFactory.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_JDBC).getCpoTrxAdapter()) {
+    try (CpoTrxAdapter cpoAdapter2 = CpoAdapterFactoryManager.getCpoTrxAdapter(JdbcStatics.ADAPTER_CONTEXT_JDBC)) {
       cpoAdapter1 = cpoAdapter2;
       assertFalse(cpoAdapter1.isClosed());
     } catch (Exception e) {
@@ -122,7 +122,7 @@ public class RetrieveBeanTest extends TestCase {
     String method = "testIsClosed:";
     Collection<ValueObject> col;
 
-    try (CpoTrxAdapter trx = cpoAdapter.getCpoTrxAdapter()) {
+    try (CpoTrxAdapter trx = CpoAdapterFactoryManager.getCpoTrxAdapter(JdbcStatics.ADAPTER_CONTEXT_JDBC)) {
       trx.isClosed();
       ValueObject valObj = new ValueObjectBean();
       col = trx.retrieveBeans(null, valObj);
@@ -220,7 +220,7 @@ public class RetrieveBeanTest extends TestCase {
     CpoResultSet<ValueObject> crs;
     int count = 0;
 
-    try (CpoTrxAdapter trx = cpoAdapter.getCpoTrxAdapter()) {
+    try (CpoTrxAdapter trx = CpoAdapterFactoryManager.getCpoTrxAdapter(JdbcStatics.ADAPTER_CONTEXT_JDBC)) {
 
       ValueObject valObj = new ValueObjectBean();
       crs = trx.retrieveBeans(null, valObj, valObj, null, null, null, 2);

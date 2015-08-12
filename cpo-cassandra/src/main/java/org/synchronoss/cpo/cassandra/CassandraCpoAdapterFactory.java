@@ -18,17 +18,34 @@
  * A copy of the GNU Lesser General Public License may also be found at
  * http://www.gnu.org/licenses/lgpl.txt
  */
-package org.synchronoss.cpo.config;
+package org.synchronoss.cpo.cassandra;
 
-import org.synchronoss.cpo.CpoAdapter;
-import org.synchronoss.cpo.CpoAdapterFactory;
-import org.synchronoss.cpo.CpoException;
-import org.synchronoss.cpo.core.cpoCoreConfig.CtDataSourceConfig;
+import org.synchronoss.cpo.*;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 /**
- * @author dberry
+ * Created by dberry on 11/8/15.
  */
-public interface CpoConfigProcessor {
+public class CassandraCpoAdapterFactory implements CpoAdapterFactory {
 
-  public CpoAdapterFactory processCpoConfig(CtDataSourceConfig cpoConfig) throws CpoException;
+  private CassandraCpoAdapter cassandraCpoAdapter = null;
+
+  public CassandraCpoAdapterFactory(CassandraCpoAdapter cassandraCpoAdapter) {
+    this.cassandraCpoAdapter = cassandraCpoAdapter;
+  }
+
+  @Override
+  public CpoAdapter getCpoAdapter() throws CpoException {
+    return cassandraCpoAdapter;
+  }
+
+  @Override
+  public CpoTrxAdapter getCpoTrxAdapter() throws CpoException {
+    throw new UnsupportedOperationException();
+  }
+
+  @Override
+  public CpoXaAdapter getCpoXaAdapter() throws CpoException {
+    throw new UnsupportedOperationException();
+  }
 }

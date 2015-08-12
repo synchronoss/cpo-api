@@ -50,8 +50,8 @@ public class JdbcCpoTrxAdapter extends JdbcCpoAdapter implements CpoTrxAdapter {
   private JdbcCpoTrxAdapter() {
   }
 
-  protected JdbcCpoTrxAdapter(JdbcCpoMetaDescriptor metaDescriptor, boolean batchSupported, String dataSourceName, DataSource readDataSource, DataSource writeDataSource) throws CpoException {
-    super(metaDescriptor, batchSupported, dataSourceName, readDataSource, writeDataSource);
+  protected JdbcCpoTrxAdapter(JdbcCpoAdapter jdbcCpoAdapter) throws CpoException {
+    super(jdbcCpoAdapter);
     setStaticConnection(super.getWriteConnection());
   }
 

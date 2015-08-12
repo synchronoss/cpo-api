@@ -55,7 +55,7 @@ public class ZZHotDeployTest {
     String method = "setUp:";
 
     try {
-      cpoAdapter = CpoAdapterFactory.getCpoAdapter(CassandraStatics.ADAPTER_CONTEXT_DEFAULT);
+      cpoAdapter = CpoAdapterFactoryManager.getCpoAdapter(CassandraStatics.ADAPTER_CONTEXT_DEFAULT);
       assertNotNull(method + "CpoAdapter is null", cpoAdapter);
       // lets save the existing config before we monkey with it
       cpoAdapter.getCpoMetaDescriptor().export(metaFile);

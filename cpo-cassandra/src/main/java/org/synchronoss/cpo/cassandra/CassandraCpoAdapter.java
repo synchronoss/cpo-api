@@ -1908,63 +1908,21 @@ public class CassandraCpoAdapter extends CpoBaseAdapter<ClusterDataSource> {
   public <T> long updateObjects(String name, Collection<T> coll, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeFunction> nativeExpressions) throws CpoException {
     return processUpdateGroup(coll, CpoAdapter.UPDATE_GROUP, name, wheres, orderBy, nativeExpressions);
   }
-  /**
-   * Provides a mechanism for the user to obtain a CpoTrxAdapter object. This object allows the to control when commits
-   * and rollbacks occur on CPO.
-   * <p/>
-   * <p/>
-   * <pre>Example:
-   * <code>
-   * <p/>
-   * class SomeObject so = null;
-   * class CpoAdapter cpo = null;
-   * class CpoTrxAdapter cpoTrx = null;
-   * <p/>
-   *  try {
-   *    cpo = new CpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));
-   *    cpoTrx = cpo.getCpoTrxAdapter();
-   *  } catch (CpoException ce) {
-   *    // Handle the error
-   *    cpo = null;
-   *  }
-   * <p/>
-   *  if (cpo!=null) {
-   *    try{
-   *      for (int i=0; i<3; i++){
-   *        so = new SomeObject();
-   *        so.setId(1);
-   *        so.setName("SomeName");
-   *        cpo.updateObject("myUpdate",so);
-   *      }
-   *      cpoTrx.commit();
-   *    } catch (CpoException ce) {
-   *       // Handle the error
-   *       cpoTrx.rollback();
-   *    }
-   *  }
-   * </code>
-   * </pre>
-   *
-   * @return A CpoTrxAdapter to manage the transactionality of CPO
-   * @throws org.synchronoss.cpo.CpoException
-   *          Thrown if there are errors accessing the datasource
-   * @see org.synchronoss.cpo.CpoTrxAdapter
-   */
-  @Override
-  public CpoTrxAdapter getCpoTrxAdapter() throws CpoException {
-    throw new UnsupportedOperationException();
-  }
 
+  /**
+   * getCpoMetaDescriptor returns the CpoMetaDescriptor associated with this CpoAdapter
+   * @return
+   */
   @Override
   public CpoMetaDescriptor getCpoMetaDescriptor() {
     return metaDescriptor;
   }
 
   /**
-   * DOCUMENT ME!
+   * getReadSession returns the read session for Cassandra
    *
-   * @return DOCUMENT ME!
-   * @throws CpoException DOCUMENT ME!
+   * @return A Session object for reading
+   * @throws CpoException
    */
   protected Session getReadSession() throws CpoException {
     Session session;
@@ -1988,10 +1946,10 @@ public class CassandraCpoAdapter extends CpoBaseAdapter<ClusterDataSource> {
   }
 
   /**
-   * DOCUMENT ME!
+   * getWriteSession returns the write session for Cassandra
    *
-   * @return DOCUMENT ME!
-   * @throws CpoException DOCUMENT ME!
+   * @return A Session object for writing
+   * @throws CpoException
    */
   protected Session getWriteSession() throws CpoException {
     Session session;
@@ -2006,6 +1964,14 @@ public class CassandraCpoAdapter extends CpoBaseAdapter<ClusterDataSource> {
 
     return session;
   }
+
+  /**
+   * Get the cpo attributes for this expression
+   *
+   * @param expression - A string expression
+   * @return A List of CpoAttribute
+   * @throws CpoException
+   */
   @Override
   public List<CpoAttribute> getCpoAttributes(String expression) throws CpoException {
     List<CpoAttribute> attributes = new ArrayList<>();

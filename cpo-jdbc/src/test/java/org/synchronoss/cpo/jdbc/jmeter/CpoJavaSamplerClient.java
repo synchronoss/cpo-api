@@ -25,6 +25,7 @@ import org.apache.jmeter.protocol.java.sampler.*;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.log.Logger;
 import org.synchronoss.cpo.*;
+import org.synchronoss.cpo.core.cpoCoreConfig.CtDataSourceConfig;
 import org.synchronoss.cpo.jdbc.*;
 import org.synchronoss.cpo.jdbc.cpoJdbcConfig.*;
 import org.synchronoss.cpo.jdbc.meta.JdbcCpoMetaDescriptor;
@@ -70,7 +71,7 @@ public class CpoJavaSamplerClient extends AbstractJavaSamplerClient {
       rwc.setUrl(javaSamplerContext.getParameter(URL));
       rwc.setDataSourceClassName(javaSamplerContext.getParameter(DRIVER));
 
-      cpoAdapter = CpoAdapterFactory.makeCpoAdapter(jdbcConfig);
+      cpoAdapter = CpoAdapterFactoryManager.makeCpoAdapterFactory(jdbcConfig).getCpoAdapter();
     } catch (Exception e) {
       logger.error(e.getMessage());
     }

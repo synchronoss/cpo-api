@@ -58,7 +58,7 @@ public class ZZHotDeployTest extends TestCase {
     String method = "setUp:";
 
     try {
-      cpoAdapter = CpoAdapterFactory.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_JDBC);
+      cpoAdapter = CpoAdapterFactoryManager.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_JDBC);
       assertNotNull(method + "CpoAdapter is null", cpoAdapter);
       // lets save the existing config before we monkey with it
       cpoAdapter.getCpoMetaDescriptor().export(metaFile);
@@ -89,40 +89,40 @@ public class ZZHotDeployTest extends TestCase {
 
     try {
       ValueObject valObj = new ValueObjectBean();
-      
+
       // make sure the default retrieve works
       col = cpoAdapter.retrieveBeans(null, valObj);
       assertTrue("Col size is " + col.size(), col!=null);
-      
+
       col = cpoAdapter.retrieveBeans("HotDeploySelect", valObj);
       fail("Should not have gotten here:");
     } catch (Exception e) {
       logger.debug("Received an expected Exception: "+e.getLocalizedMessage());
     }
-    
+
     try {
       List<String> metaFiles = new ArrayList<>();
       metaFiles.add("/hotDeployMetaData.xml");
       cpoAdapter.getCpoMetaDescriptor().refreshDescriptorMeta(metaFiles);
 
       ValueObject valObj = new ValueObjectBean(2);
-      
+
       // make sure the default retrieve still works
       col = cpoAdapter.retrieveBeans(null, valObj);
       assertTrue("Col size is " + col.size(), col.size()==6);
-      
+
       List<ValueObject> col2 = cpoAdapter.retrieveBeans("HotDeploySelect", valObj);
       assertTrue("Col size is " + col2.size(), col2.size()==6);
 
       for (int i=0; i<col.size(); i++) {
         assertTrue("IDs must be equal", col.get(i).getId() == col2.get(i).getId());
       }
-      
+
       // make sure the first objects are the same
-      
+
     } catch (Exception e) {
       String msg = ExceptionHelper.getLocalizedMessage(e);
-      
+
       fail("Received an unexpected exception: "+msg);
     }
   }
@@ -134,24 +134,24 @@ public class ZZHotDeployTest extends TestCase {
 
     try {
       ValueObject valObj = new ValueObjectBean();
-      
+
       // make sure the default retrieve works
       col = cpoAdapter.retrieveBeans(null, valObj);
       assertTrue("Col size is " + col.size(), col!=null);
-      
+
       col = cpoAdapter.retrieveBeans("HotDeploySelect", valObj);
       fail("Should not have gotten here:");
     } catch (Exception e) {
       logger.debug("Received an expected Exception: "+e.getLocalizedMessage());
     }
-    
+
     try {
       List<String> metaFiles = new ArrayList<>();
       metaFiles.add("/hotDeployMetaData.xml");
       cpoAdapter.getCpoMetaDescriptor().refreshDescriptorMeta(metaFiles, true);
 
       ValueObject valObj = new ValueObjectBean(2);
-      
+
       // the old retrieve should no longer be there
       try {
         col = cpoAdapter.retrieveBeans(null, valObj);
@@ -159,17 +159,17 @@ public class ZZHotDeployTest extends TestCase {
       } catch (CpoException ce) {
         // do nothing, this is expected
       }
-      
+
       List<ValueObject> col2 = cpoAdapter.retrieveBeans("HotDeploySelect", valObj);
       assertTrue("Col size is " + col2.size(), col2.size()==6);
 
     } catch (Exception e) {
       String msg = ExceptionHelper.getLocalizedMessage(e);
-      
+
       fail("Received an unexpected exception: "+msg);
     }
   }
- 
+
   @Override
   public void tearDown() {
     String method = "tearDown:";

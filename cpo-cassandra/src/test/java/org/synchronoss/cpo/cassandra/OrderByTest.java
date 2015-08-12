@@ -48,7 +48,7 @@ public class OrderByTest {
     String method = "setUp:";
 
     try {
-      cpoAdapter = CpoAdapterFactory.getCpoAdapter(CassandraStatics.ADAPTER_CONTEXT_DEFAULT);
+      cpoAdapter = CpoAdapterFactoryManager.getCpoAdapter(CassandraStatics.ADAPTER_CONTEXT_DEFAULT);
       assertNotNull(method + "CpoAdapter is null", cpoAdapter);
       // Add the test valueObjects
     } catch (Exception e) {

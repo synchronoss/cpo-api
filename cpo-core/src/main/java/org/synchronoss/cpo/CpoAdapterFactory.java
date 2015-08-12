@@ -20,130 +20,13 @@
  */
 package org.synchronoss.cpo;
 
-import org.apache.xmlbeans.XmlException;
-import org.slf4j.*;
-import org.synchronoss.cpo.config.CpoConfigProcessor;
-import org.synchronoss.cpo.core.cpoCoreConfig.*;
-import org.synchronoss.cpo.helper.*;
-import org.synchronoss.cpo.meta.CpoMetaDescriptor;
-
-import java.io.*;
-import java.util.*;
-
 /**
- * @author dberry
+ * Created by dberry on 11/8/15.
  */
-public final class CpoAdapterFactory {
+public interface CpoAdapterFactory {
+  CpoAdapter getCpoAdapter() throws CpoException ;
 
-  private static final Logger logger = LoggerFactory.getLogger(CpoAdapterFactory.class);
-  private static final String CPO_CONFIG_XML = "/cpoConfig.xml";
-  private static volatile Map<String, CpoAdapter> adapterMap = new HashMap<>();
-  private static String defaultContext = null;
+  CpoTrxAdapter getCpoTrxAdapter() throws CpoException ;
 
-  static {
-    loadAdapters(CPO_CONFIG_XML);
-  }
-
-  public static CpoAdapter getCpoAdapter() throws CpoException {
-    return getCpoAdapter(defaultContext);
-  }
-
-  public static CpoAdapter getCpoAdapter(String context) throws CpoException {
-    return adapterMap.get(context);
-  }
-
-  public static void loadAdapters(String configFile) {
-
-    
-    InputStream is = CpoClassLoader.getResourceAsStream(configFile);
-    if (is == null) {
-      logger.info("Resource Not Found: " + configFile);
-      try {
-        is = new FileInputStream(configFile);
-      } catch (FileNotFoundException fnfe) {
-        logger.info("File Not Found: " + configFile);
-        is = null;
-      }
-    }
-
-    try {
-      // We are doing a load clear all the caches first, in case the load gets called more than once.
-      CpoMetaDescriptor.clearAllInstances();
-      adapterMap.clear();
-      
-      CpoConfigDocument configDoc;
-      if (is == null) {
-        configDoc = CpoConfigDocument.Factory.parse(configFile);
-      } else {
-        configDoc = CpoConfigDocument.Factory.parse(is);
-      }
-
-      String errMsg = XmlBeansHelper.validateXml(configDoc);
-      if (errMsg != null) {
-        logger.error("Invalid CPO Config file: " + configFile + ":" + errMsg);
-      } else {
-        CtCpoConfig cpoConfig = configDoc.getCpoConfig();
-
-        // Set the default context.
-        if (cpoConfig.isSetDefaultConfig()) {
-          defaultContext = cpoConfig.getDefaultConfig();
-        } else {
-          // make the first listed config the default.
-          defaultContext = cpoConfig.getDataConfigArray(0).getName();
-        }
-
-        for (CtMetaDescriptor metaDescriptor : cpoConfig.getMetaConfigArray()) {
-          boolean caseSensitive = true;
-          if (metaDescriptor.isSetCaseSensitive()) {
-            caseSensitive = metaDescriptor.getCaseSensitive();
-          }
-
-          // this will create and cache, so we don't need the return
-          CpoMetaDescriptor.getInstance(metaDescriptor.getName(), metaDescriptor.getMetaXmlArray(), caseSensitive);
-        }
-
-        // now lets loop through all the adapters and get them cached.
-        for (CtDataSourceConfig dataSourceConfig : cpoConfig.getDataConfigArray()) {
-          CpoAdapter cpoAdapter = makeCpoAdapter(dataSourceConfig);
-          if (cpoAdapter != null) {
-            adapterMap.put(dataSourceConfig.getName(), cpoAdapter);
-          }
-        }
-      }
-    } catch (IOException ioe) {
-      logger.error("Error reading " + configFile + ": ", ioe);
-    } catch (XmlException xe) {
-      logger.error("Error processing " + configFile + ": Invalid XML");
-    } catch (CpoException ce) {
-      logger.error("Error processing " + configFile + ": ", ce);
-    }
-  }
-
-  public static CpoAdapter makeCpoAdapter(CtDataSourceConfig dataSourceConfig) throws CpoException {
-    CpoAdapter cpoAdapter;
-
-    // make the CpoAdapter
-    try {
-      CpoConfigProcessor configProcessor = (CpoConfigProcessor)CpoClassLoader.forName(dataSourceConfig.getCpoConfigProcessor()).newInstance();
-      cpoAdapter = configProcessor.processCpoConfig(dataSourceConfig);
-    } catch (ClassNotFoundException cnfe) {
-      String msg = "CpoConfigProcessor not found: " + dataSourceConfig.getCpoConfigProcessor();
-      logger.error(msg);
-      throw new CpoException(msg);
-    } catch (IllegalAccessException iae) {
-      String msg = "Could not access CpoConfigProcessor: " + dataSourceConfig.getCpoConfigProcessor();
-      logger.error(msg);
-      throw new CpoException(msg);
-    } catch (InstantiationException ie) {
-      String msg = "Could not instantiate CpoConfigProcessor: " + dataSourceConfig.getCpoConfigProcessor() + ": " + ExceptionHelper.getLocalizedMessage(ie);
-      logger.error(msg);
-      throw new CpoException(msg);
-    } catch (ClassCastException cce) {
-      String msg = "Class is not instance of CpoConfigProcessor: " + dataSourceConfig.getCpoConfigProcessor();
-      logger.error(msg);
-      throw new CpoException(msg);
-    }
-
-    return cpoAdapter;
-  }
+  CpoXaAdapter getCpoXaAdapter() throws CpoException ;
 }

@@ -43,7 +43,7 @@ public class EntityTest {
   public void testGetDataSourceEntities() {
     String method = "testGetDataSourceEntities:";
     try {
-      CpoAdapter cpoAdapter = CpoAdapterFactory.getCpoAdapter(CassandraStatics.ADAPTER_CONTEXT_DEFAULT);
+      CpoAdapter cpoAdapter = CpoAdapterFactoryManager.getCpoAdapter(CassandraStatics.ADAPTER_CONTEXT_DEFAULT);
       assertNotNull(method + "cpoAdapter is null", cpoAdapter);
 
       List<CpoAttribute> attributes = cpoAdapter.getCpoAttributes("select * from value_object");

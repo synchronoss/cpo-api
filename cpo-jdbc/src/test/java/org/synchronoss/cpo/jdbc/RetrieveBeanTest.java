@@ -76,16 +76,48 @@ public class RetrieveBeanTest extends TestCase {
     }
   }
 
-  public void testAutoCloseable() throws CpoException {
-    String method = "testAutoCloseable:";
+  public void testLazyOpenAutoCloseLazyOpen() throws CpoException {
+    String method = "testLazyOpenAutoCloseLazyOpen:";
+    Collection<ValueObject> col;
     CpoTrxAdapter cpoAdapter1 = null;
     try (CpoTrxAdapter cpoAdapter2 = CpoAdapterFactoryManager.getCpoTrxAdapter(JdbcStatics.ADAPTER_CONTEXT_JDBC)) {
       cpoAdapter1 = cpoAdapter2;
+
+      // The adapter is closed until used
+      assertTrue(cpoAdapter1.isClosed());
+
+      ValueObject valObj = new ValueObjectBean();
+      col = cpoAdapter1.retrieveBeans(null, valObj);
+      assertTrue("Col size is " + col.size(), col.size() == al.size());
+
+      // The adapter is now open
       assertFalse(cpoAdapter1.isClosed());
+
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
+    // The adapter should auto close
     assertTrue(cpoAdapter1.isClosed());
+
+    // repeat the same sequence to show that the adapter can be re-used after close
+    try (CpoTrxAdapter cpoAdapter2 = cpoAdapter1) {
+
+      // The adapter should still be closed
+      assertTrue(cpoAdapter1.isClosed());
+
+      ValueObject valObj = new ValueObjectBean();
+      col = cpoAdapter1.retrieveBeans(null, valObj);
+      assertTrue("Col size is " + col.size(), col.size() == al.size());
+
+      // The adapter is now open
+      assertFalse(cpoAdapter1.isClosed());
+
+    } catch (Exception e) {
+      fail(method + e.getMessage());
+    }
+    // The adapter should auto close
+    assertTrue(cpoAdapter1.isClosed());
+
   }
 
   public void testRetrieveBeans() {

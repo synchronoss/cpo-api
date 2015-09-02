@@ -35,7 +35,7 @@ public class JdbcCpoTrxAdapter extends JdbcCpoAdapter implements CpoTrxAdapter {
    */
   private static final long serialVersionUID = 1L;
 
-  private static final Logger logger = LoggerFactory.getLogger(JdbcCpoAdapter.class);
+  private static final Logger logger = LoggerFactory.getLogger(JdbcCpoTrxAdapter.class);
 
   /**
    * DOCUMENT ME!
@@ -52,14 +52,15 @@ public class JdbcCpoTrxAdapter extends JdbcCpoAdapter implements CpoTrxAdapter {
 
   protected JdbcCpoTrxAdapter(JdbcCpoAdapter jdbcCpoAdapter) throws CpoException {
     super(jdbcCpoAdapter);
-    setStaticConnection(super.getWriteConnection());
   }
 
   @Override
   public void commit() throws CpoException {
-    if (writeConnection_ != null) {
+    Connection conn = getStaticConnection();
+
+    if (conn != null) {
       try {
-        writeConnection_.commit();
+        conn.commit();
       } catch (SQLException se) {
         throw new CpoException(se.getMessage());
       }
@@ -70,9 +71,11 @@ public class JdbcCpoTrxAdapter extends JdbcCpoAdapter implements CpoTrxAdapter {
 
   @Override
   public void rollback() throws CpoException {
-    if (writeConnection_ != null) {
+    Connection conn = getStaticConnection();
+
+    if (conn != null) {
       try {
-        writeConnection_.rollback();
+        conn.rollback();
       } catch (Exception e) {
         throw new CpoException(e.getMessage());
       }
@@ -95,26 +98,32 @@ public class JdbcCpoTrxAdapter extends JdbcCpoAdapter implements CpoTrxAdapter {
 
   @Override
   public void close() throws CpoException {
-    if (writeConnection_ != null) {
+    Connection conn = getStaticConnection();
+
       try {
-        try {
-          writeConnection_.rollback();
-        } catch (Exception e) {
-          if (logger.isTraceEnabled()) {
-            logger.trace(e.getLocalizedMessage());
+        if (conn != null && !conn.isClosed()) {
+          try {
+            conn.rollback();
+          } catch (Exception e) {
+            if (logger.isTraceEnabled()) {
+              logger.trace(e.getLocalizedMessage());
+            }
+          }
+          try {
+            conn.close();
+          } catch (Exception e) {
+            if (logger.isTraceEnabled()) {
+              logger.trace(e.getLocalizedMessage());
+            }
           }
         }
-        try {
-          writeConnection_.close();
-        } catch (Exception e) {
-          if (logger.isTraceEnabled()) {
-            logger.trace(e.getLocalizedMessage());
-          }
+      } catch (Exception e) {
+        if (logger.isTraceEnabled()) {
+          logger.trace(e.getLocalizedMessage());
         }
       } finally {
         setStaticConnection(null);
       }
-    }
   }
 
   /**
@@ -130,9 +139,7 @@ public class JdbcCpoTrxAdapter extends JdbcCpoAdapter implements CpoTrxAdapter {
       }
     }
     try {
-      if (writeConnection_ != null && !writeConnection_.isClosed()) {
         this.close();
-      }
     } catch (Exception e) {
       if (logger.isTraceEnabled()) {
         logger.trace(e.getLocalizedMessage());
@@ -164,6 +171,9 @@ public class JdbcCpoTrxAdapter extends JdbcCpoAdapter implements CpoTrxAdapter {
       if (isConnectionBusy(writeConnection_)) {
         throw new CpoException("Error Connection Busy");
       }
+    } else {
+      // enable lazy loading and automatic connection creating for re-using and adapter after closing it
+      writeConnection_ = super.getWriteConnection();
     }
     return writeConnection_;
   }

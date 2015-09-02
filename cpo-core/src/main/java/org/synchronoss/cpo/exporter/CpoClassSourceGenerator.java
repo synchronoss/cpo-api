@@ -181,7 +181,7 @@ public class CpoClassSourceGenerator implements MetaVisitor {
       try {
         cpoAttribute.loadRunTimeInfo(metaDescriptor, null);
       } catch (Exception e) {
-
+        // ignore
       }
     }
 
@@ -205,7 +205,7 @@ public class CpoClassSourceGenerator implements MetaVisitor {
       attributeStatics.append("  public final static String " + staticName + " = \"" + attName + "\";\n");
 
       // generate property declarations
-      properties.append("  private " + attClassName + " " + VAR_PREFIX + attName + ";\n");
+      properties.append("  protected " + attClassName + " " + VAR_PREFIX + attName + ";\n");
 
       // generate getter
       gettersSetters.append("  public " + attClassName + " " + getterName + " {\n");
@@ -244,7 +244,7 @@ public class CpoClassSourceGenerator implements MetaVisitor {
       // toString()
       toString.append("    str.append(\"" + attName + " = \" + " + getterName + " + \"\\n\");\n");
     } catch(CpoException ce) {
-
+      // ignore
     }
   }
 

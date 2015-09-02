@@ -25,5 +25,5 @@ import javax.transaction.xa.XAResource;
 /**
  * Created by dberry on 11/8/15.
  */
-public interface CpoXaAdapter extends CpoAdapter, XAResource {
+public interface CpoXaAdapter extends CpoAdapter, XAResource, AutoCloseable {
 }

@@ -85,7 +85,7 @@ public abstract class CpoBaseXaResource<T> implements CpoXaResource {
       } else {
         // unassociate
         cpoXaStateMap.getXaResourceMap().remove(cpoXaState.getAssignedResourceManager());
-        cpoXaState.update(CpoXaState.XA_UNASSIGNED, null, false);
+        cpoXaState.update(CpoXaState.XA_UNASSOCIATED, null, false);
         // close the resource
         closeResource(cpoXaState.getResource());
         // TODO: Heuristically rollback.
@@ -114,10 +114,10 @@ public abstract class CpoBaseXaResource<T> implements CpoXaResource {
         throw new XAException(XAException.XAER_NOTA);
       } else {
         switch (cpoXaState.getState()) {
-          case CpoXaState.XA_UNASSIGNED:
+          case CpoXaState.XA_UNASSOCIATED:
             commitResource(cpoXaState.getResource());
             break;
-          case CpoXaState.XA_ASSIGNED:
+          case CpoXaState.XA_ASSOCIATED:
           case CpoXaState.XA_SUSPENDED:
             throw new XAException(XAException.XAER_PROTO);
           default:
@@ -152,14 +152,14 @@ public abstract class CpoBaseXaResource<T> implements CpoXaResource {
       }
 
       // has this already been ended
-      if (cpoXaState.getState()==CpoXaState.XA_UNASSIGNED){
+      if (cpoXaState.getState()==CpoXaState.XA_UNASSOCIATED){
         throw new XAException(XAException.XAER_PROTO);
       }
 
       switch(flags) {
         case TMSUSPEND:
           // You can only suspend an associated transaction
-          if (cpoXaState.getState()==CpoXaState.XA_ASSIGNED) {
+          if (cpoXaState.getState()==CpoXaState.XA_ASSOCIATED) {
             cpoXaStateMap.getXaResourceMap().remove(cpoXaState.getAssignedResourceManager());
             cpoXaState.update(CpoXaState.XA_SUSPENDED, null, true);
           } else {
@@ -171,13 +171,13 @@ public abstract class CpoBaseXaResource<T> implements CpoXaResource {
         case TMFAIL:
           // mark transaction as failed
           cpoXaStateMap.getXaResourceMap().remove(cpoXaState.getAssignedResourceManager());
-          cpoXaState.update(CpoXaState.XA_UNASSIGNED, null, false);
+          cpoXaState.update(CpoXaState.XA_UNASSOCIATED, null, false);
          break;
 
         case TMSUCCESS:
           // mark transaction as success
           cpoXaStateMap.getXaResourceMap().remove(cpoXaState.getAssignedResourceManager());
-          cpoXaState.update(CpoXaState.XA_UNASSIGNED, null, true);
+          cpoXaState.update(CpoXaState.XA_UNASSOCIATED, null, true);
          break;
 
         default:
@@ -230,7 +230,7 @@ public abstract class CpoBaseXaResource<T> implements CpoXaResource {
       if (!cpoXaState.isSuccess())
         throw new XAException(XAException.XA_RBROLLBACK);
 
-      if (cpoXaState.getState()==CpoXaState.XA_UNASSIGNED){
+      if (cpoXaState.getState()==CpoXaState.XA_UNASSOCIATED){
         prepareResource(cpoXaState.getResource());
       } else {
           throw new XAException(XAException.XAER_PROTO);
@@ -274,10 +274,10 @@ public abstract class CpoBaseXaResource<T> implements CpoXaResource {
         throw new XAException(XAException.XAER_NOTA);
       } else {
         switch (cpoXaState.getState()) {
-          case CpoXaState.XA_UNASSIGNED:
+          case CpoXaState.XA_UNASSOCIATED:
             rollbackResource(cpoXaState.getResource());
             break;
-          case CpoXaState.XA_ASSIGNED:
+          case CpoXaState.XA_ASSOCIATED:
           case CpoXaState.XA_SUSPENDED:
             throw new XAException(XAException.XAER_PROTO);
           default:
@@ -334,7 +334,7 @@ public abstract class CpoBaseXaResource<T> implements CpoXaResource {
           if (cpoXaState != null)
             throw new XAException(XAException.XAER_DUPID);
 
-          cpoXaState = new CpoXaState<>(xid, createNewResource(), CpoXaState.XA_ASSIGNED, this, true);
+          cpoXaState = new CpoXaState<>(xid, createNewResource(), CpoXaState.XA_ASSOCIATED, this, true);
           cpoXaStateMap.getXidStateMap().put(xid, cpoXaState);
           cpoXaStateMap.getXaResourceMap().put(this, xid);
           break;
@@ -343,8 +343,8 @@ public abstract class CpoBaseXaResource<T> implements CpoXaResource {
           if (cpoXaState == null)
             throw new XAException(XAException.XAER_NOTA);
 
-          if (cpoXaState.getState()==CpoXaState.XA_UNASSIGNED) {
-            cpoXaState.update(CpoXaState.XA_ASSIGNED, this, true);
+          if (cpoXaState.getState()==CpoXaState.XA_UNASSOCIATED) {
+            cpoXaState.update(CpoXaState.XA_ASSOCIATED, this, true);
             cpoXaStateMap.getXaResourceMap().put(this, xid);
           } else {
             throw new XAException(XAException.XAER_PROTO);
@@ -357,7 +357,7 @@ public abstract class CpoBaseXaResource<T> implements CpoXaResource {
 
           // you can only join a suspended transaction
           if (cpoXaState.getState() == CpoXaState.XA_SUSPENDED) {
-            cpoXaState.update(CpoXaState.XA_ASSIGNED, this, true);
+            cpoXaState.update(CpoXaState.XA_ASSOCIATED, this, true);
             cpoXaStateMap.getXaResourceMap().put(this, xid);
           } else {
             throw new XAException(XAException.XAER_PROTO);

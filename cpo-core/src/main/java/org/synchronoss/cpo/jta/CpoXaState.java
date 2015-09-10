@@ -27,8 +27,8 @@ import javax.transaction.xa.Xid;
  */
 public class CpoXaState<T> {
 
-  public static final int XA_UNASSIGNED = 0;
-  public static final int XA_ASSIGNED = 1;
+  public static final int XA_UNASSOCIATED = 0;
+  public static final int XA_ASSOCIATED = 1;
   public static final int XA_SUSPENDED = 2;
 
 

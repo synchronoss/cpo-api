@@ -31,21 +31,27 @@ public interface CpoTrxAdapter extends CpoAdapter, AutoCloseable {
   /**
    * Commits the current transaction behind the CpoTrxAdapter
    */
-  public void commit() throws CpoException;
+  void commit() throws CpoException;
 
   /**
    * Rollback the current transaction behind the CpoTrxAdapter
    */
-  public void rollback() throws CpoException;
+  void rollback() throws CpoException;
 
   /**
    * Closes the current transaction behind the CpoTrxAdapter. All subsequent calls to the CpoTrxAdapter will throw an
    * exception.
    */
-  public void close() throws CpoException;
+  void close() throws CpoException;
 
   /**
    * Returns true if the TrxAdapter has been closed, false if it is still active
    */
-  public boolean isClosed() throws CpoException;
+  boolean isClosed() throws CpoException;
+
+  /**
+   * Returns true if the TrxAdapter is processing a request, false if it is not
+   */
+  boolean isBusy() throws CpoException;
+
 }

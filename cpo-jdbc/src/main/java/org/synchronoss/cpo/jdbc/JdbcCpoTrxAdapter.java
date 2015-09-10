@@ -96,6 +96,14 @@ public class JdbcCpoTrxAdapter extends JdbcCpoAdapter implements CpoTrxAdapter {
     return closed;
   }
 
+  /**
+   * Returns true if the TrxAdapter is processing a request, false if it is not
+   */
+  @Override
+  public boolean isBusy() throws CpoException {
+    return isConnectionBusy(writeConnection_);
+  }
+
   @Override
   public void close() throws CpoException {
     Connection conn = getStaticConnection();
@@ -149,8 +157,7 @@ public class JdbcCpoTrxAdapter extends JdbcCpoAdapter implements CpoTrxAdapter {
 
   protected boolean isConnectionBusy(Connection c) {
     synchronized (busyMap_) {
-      Connection test = busyMap_.get(c);
-      return test != null;
+      return c!=null && busyMap_.containsKey(c);
     }
   }
 

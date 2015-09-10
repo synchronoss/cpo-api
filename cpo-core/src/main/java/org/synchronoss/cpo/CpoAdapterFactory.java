@@ -20,6 +20,8 @@
  */
 package org.synchronoss.cpo;
 
+import org.synchronoss.cpo.jta.CpoXaResource;
+
 /**
  * Created by dberry on 11/8/15.
  */
@@ -28,5 +30,5 @@ public interface CpoAdapterFactory {
 
   CpoTrxAdapter getCpoTrxAdapter() throws CpoException ;
 
-  CpoXaAdapter getCpoXaAdapter() throws CpoException ;
+  CpoXaResource getCpoXaAdapter() throws CpoException ;
 }

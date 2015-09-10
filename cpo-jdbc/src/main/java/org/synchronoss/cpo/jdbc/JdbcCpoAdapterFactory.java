@@ -21,8 +21,8 @@
 package org.synchronoss.cpo.jdbc;
 
 import org.synchronoss.cpo.*;
-import org.synchronoss.cpo.jdbc.JdbcCpoAdapter;
-import org.synchronoss.cpo.jdbc.JdbcCpoTrxAdapter;
+import org.synchronoss.cpo.jdbc.jta.JdbcCpoXaAdapter;
+import org.synchronoss.cpo.jta.CpoXaResource;
 
 /**
  * Created by dberry on 11/8/15.
@@ -86,7 +86,7 @@ public class JdbcCpoAdapterFactory implements CpoAdapterFactory {
   }
 
   @Override
-  public CpoXaAdapter getCpoXaAdapter()  throws CpoException {
-    return new JdbcCpoXaAdapter(jdbcCpoAdapter);
+  public CpoXaResource getCpoXaAdapter()  throws CpoException {
+    return new JdbcCpoXaAdapter(this);
   }
 }

@@ -25,6 +25,7 @@ import org.slf4j.*;
 import org.synchronoss.cpo.config.CpoConfigProcessor;
 import org.synchronoss.cpo.core.cpoCoreConfig.*;
 import org.synchronoss.cpo.helper.*;
+import org.synchronoss.cpo.jta.CpoXaResource;
 import org.synchronoss.cpo.meta.CpoMetaDescriptor;
 
 import java.io.*;
@@ -70,17 +71,17 @@ public final class CpoAdapterFactoryManager {
     return cpoTrxAdapter;
   }
 
-  public static CpoXaAdapter getCpoXaAdapter() throws CpoException {
+  public static CpoXaResource getCpoXaAdapter() throws CpoException {
     return getCpoXaAdapter(defaultContext);
   }
 
-  public static CpoXaAdapter getCpoXaAdapter(String context) throws CpoException {
-    CpoXaAdapter cpoXaAdapter=null;
+  public static CpoXaResource getCpoXaAdapter(String context) throws CpoException {
+    CpoXaResource cpoXaResource =null;
     CpoAdapterFactory cpoAdapterFactory = adapterMap.get(context);
     if (cpoAdapterFactory != null) {
-      cpoXaAdapter = cpoAdapterFactory.getCpoXaAdapter();
+      cpoXaResource = cpoAdapterFactory.getCpoXaAdapter();
     }
-    return cpoXaAdapter;
+    return cpoXaResource;
   }
 
 

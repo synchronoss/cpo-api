@@ -20,10 +20,27 @@
  */
 package org.synchronoss.cpo;
 
+import javax.transaction.xa.XAException;
 import javax.transaction.xa.XAResource;
 
 /**
- * Created by dberry on 11/8/15.
+ * Created by dberry on 8/9/15.
  */
-public interface CpoXaAdapter extends CpoAdapter, XAResource, AutoCloseable {
+public class EnhancedStringBuilderXaResource extends StringBuilderXaResource {
+  /**
+    * This method is called to determine if the resource manager instance represented by the target object is the same as the resouce manager
+    * instance represented by the parameter xares.
+    *
+    * @param xaResource - An XAResource object whose resource manager instance is to be compared with the resource manager instance of the target object.
+    * @return - true if it's the same RM instance; otherwise false.
+    * @throws XAException - An error has occurred. Possible exception values are XAER_RMERR and XAER_RMFAIL.
+    */
+   @Override
+   public boolean isSameRM(XAResource xaResource) throws XAException {
+     if (xaResource == null)
+       throw new XAException(XAException.XAER_INVAL);
+
+     return xaResource instanceof EnhancedStringBuilderXaResource;
+   }
+
 }

@@ -18,34 +18,20 @@
  * A copy of the GNU Lesser General Public License may also be found at
  * http://www.gnu.org/licenses/lgpl.txt
  */
-package org.synchronoss.cpo.cassandra;
+package org.synchronoss.cpo.jta;
 
-import org.synchronoss.cpo.*;
-import org.synchronoss.cpo.jta.CpoXaResource;
+import org.synchronoss.cpo.helper.ExceptionHelper;
+
+import javax.transaction.xa.XAException;
+import javax.transaction.xa.XAResource;
+import javax.transaction.xa.Xid;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.HashMap;
 
 /**
  * Created by dberry on 11/8/15.
  */
-public class CassandraCpoAdapterFactory implements CpoAdapterFactory {
-
-  private CassandraCpoAdapter cassandraCpoAdapter = null;
-
-  public CassandraCpoAdapterFactory(CassandraCpoAdapter cassandraCpoAdapter) {
-    this.cassandraCpoAdapter = cassandraCpoAdapter;
-  }
-
-  @Override
-  public CpoAdapter getCpoAdapter() throws CpoException {
-    return cassandraCpoAdapter;
-  }
-
-  @Override
-  public CpoTrxAdapter getCpoTrxAdapter() throws CpoException {
-    throw new UnsupportedOperationException();
-  }
-
-  @Override
-  public CpoXaResource getCpoXaAdapter() throws CpoException {
-    throw new UnsupportedOperationException();
-  }
+public interface CpoXaResource<T> extends XAResource {
+ void close(Xid xid) throws XAException;
 }

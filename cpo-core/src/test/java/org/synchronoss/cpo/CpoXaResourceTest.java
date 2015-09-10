@@ -95,7 +95,7 @@ public class CpoXaResourceTest extends TestCase {
       fail("Start not allowed when local is busy");
     } catch (XAException xae) {
       // exception expected
-      assertEquals(xae.errorCode,XAException.XAER_DUPID);
+      assertEquals(xae.errorCode, XAException.XAER_DUPID);
     }
 
     try {
@@ -104,7 +104,7 @@ public class CpoXaResourceTest extends TestCase {
       fail("Start resume not allowed for an unassigned xid");
     } catch (XAException xae) {
       // exception expected
-      assertEquals(xae.errorCode,XAException.XAER_PROTO);
+      assertEquals(xae.errorCode, XAException.XAER_PROTO);
     }
 
     try {
@@ -127,7 +127,7 @@ public class CpoXaResourceTest extends TestCase {
       fail("Start NO flags not allowed on a suspended xid");
     } catch (XAException xae) {
       // exception expected
-      assertEquals(xae.errorCode,XAException.XAER_DUPID);
+      assertEquals(xae.errorCode, XAException.XAER_DUPID);
     }
 
     try {
@@ -136,7 +136,7 @@ public class CpoXaResourceTest extends TestCase {
       fail("Start join not allowed on a suspended xid");
     } catch (XAException xae) {
       // exception expected
-      assertEquals(xae.errorCode,XAException.XAER_PROTO);
+      assertEquals(xae.errorCode, XAException.XAER_PROTO);
     }
 
     try {
@@ -150,7 +150,11 @@ public class CpoXaResourceTest extends TestCase {
       fail("Start resume should be allowed for a suspended xid");
     }
 
-
+    try {
+      xaResource.close(xid1);
+    }  catch (XAException xae) {
+      fail("Close should not have thrown an exception");
+    }
   }
 
   public void testEnd(){
@@ -271,6 +275,12 @@ public class CpoXaResourceTest extends TestCase {
     } catch (XAException xae) {
       fail("End should not have thrown an exception");
     }
+
+    try {
+      xaResource.close(xid1);
+    }  catch (XAException xae) {
+      fail("Close should not have thrown an exception");
+    }
   }
 
   public void testOutsideEnd() {
@@ -307,6 +317,17 @@ public class CpoXaResourceTest extends TestCase {
       fail("testOutsideEnd should not have thrown an exception");
     }
 
+    try {
+      xaResource1.close(xid1);
+    }  catch (XAException xae) {
+      fail("Close should not have thrown an exception");
+    }
+
+    try {
+      xaResource1.close(xid2);
+    }  catch (XAException xae) {
+      fail("Close should not have thrown an exception");
+    }
   }
 
   public void testMultiResourcesEnd() {
@@ -330,7 +351,7 @@ public class CpoXaResourceTest extends TestCase {
       // set the global values
       sbxa.append(GLOBAL_RESOURCE1);
 
-      // make sure x2 is local now
+      // make sure x2 is global now
       assertEquals(sbxa.toString(),GLOBAL_RESOURCE1);
       assertEquals(esbxa.toString(), LOCAL_RESOURCE2);
 
@@ -349,7 +370,7 @@ public class CpoXaResourceTest extends TestCase {
       // set the global values
       esbxa.append(GLOBAL_RESOURCE2);
 
-      // make sure x2 is local now
+      // make sure x2 is global now
       assertEquals(sbxa.toString(), LOCAL_RESOURCE1);
       assertEquals(esbxa.toString(), GLOBAL_RESOURCE2);
 
@@ -361,34 +382,177 @@ public class CpoXaResourceTest extends TestCase {
     assertEquals(sbxa.toString(), LOCAL_RESOURCE1);
     assertEquals(esbxa.toString(), LOCAL_RESOURCE2);
 
+    try {
+      sbxa.close(xid1);
+    }  catch (XAException xae) {
+      fail("Close should not have thrown an exception");
+    }
   }
 
+  public void testRecoverAndForget() {
+    StringBuilderXaResource sbxa = new StringBuilderXaResource();
+    Xid xid1 = new MyXid(100, new byte[]{0x01}, new byte[]{0x02});
 
-  public class MyXid implements Xid
- 	{
- 	 protected int formatId;
- 	 protected byte gtrid[];
- 	 protected byte bqual[];
- 	 public MyXid()
- 	 {
- 	 }
- 	 public MyXid(int formatId, byte gtrid[], byte bqual[])
- 	 {
- 	 this.formatId = formatId;
- 	 this.gtrid = gtrid;
- 	 this.bqual = bqual;
- 	 }
- 	 public int getFormatId()
- 	 {
- 	 return formatId;
- 	 }
- 	 public byte[] getBranchQualifier()
- 	 {
- 	 return bqual;
- 	 }
- 	 public byte[] getGlobalTransactionId()
- 	 {
- 	 return gtrid;
- 	 }
- 	}
+    // Setup the local values
+    sbxa.append(LOCAL_RESOURCE1);
+
+    assertEquals(sbxa.toString(), LOCAL_RESOURCE1);
+
+    // have sbxa go global and test
+    try {
+      sbxa.start(xid1, XAResource.TMNOFLAGS);
+      // set the global values
+      sbxa.append(GLOBAL_RESOURCE1);
+
+      // make sure x2 is global now
+      assertEquals(sbxa.toString(),GLOBAL_RESOURCE1);
+      sbxa.end(xid1, XAResource.TMSUCCESS);
+    } catch (XAException xae) {
+      fail("Start End should not have thrown an exception");
+    }
+
+    assertEquals(sbxa.toString(), LOCAL_RESOURCE1);
+
+    try {
+      sbxa.prepare(xid1);
+    } catch (XAException xae) {
+      fail("prepare should not have thrown an exception");
+    }
+
+    try {
+      Xid[] xids = sbxa.recover(XAResource.TMNOFLAGS);
+      assertEquals(1, xids.length);
+      assertEquals(xid1, xids[0]);
+
+      sbxa.forget(xids[0]);
+    } catch (XAException xae) {
+      fail("recover and forget should not have thrown an exception");
+    }
+
+    // start no flags should work again
+    try {
+      sbxa.start(xid1, XAResource.TMNOFLAGS);
+      // set the global values
+      sbxa.append(GLOBAL_RESOURCE1);
+
+      // make sure x2 is global now
+      assertEquals(sbxa.toString(),GLOBAL_RESOURCE1);
+      sbxa.end(xid1, XAResource.TMSUCCESS);
+    } catch (XAException xae) {
+      fail("Start End should not have thrown an exception");
+    }
+
+    try {
+      sbxa.close(xid1);
+    }  catch (XAException xae) {
+      fail("Close should not have thrown an exception");
+    }
+  }
+
+  public void testFail() {
+    // We need to make sure that different Resource types that share CpoBaseXaResource do not interfere with each other
+    // So two different XAs sharing CpoBaseXaResource should be able to take part of the same transaction and work independently
+
+    StringBuilderXaResource sbxa = new StringBuilderXaResource();
+    Xid xid1 = new MyXid(100, new byte[]{0x01}, new byte[]{0x02});
+
+    // Setup the local values
+    sbxa.append(LOCAL_RESOURCE1);
+
+    assertEquals(sbxa.toString(), LOCAL_RESOURCE1);
+
+    // Do a fail
+    try {
+      sbxa.start(xid1, XAResource.TMNOFLAGS);
+      // set the global values
+      sbxa.append(GLOBAL_RESOURCE1);
+
+      // make sure x2 is global now
+      assertEquals(sbxa.toString(), GLOBAL_RESOURCE1);
+      sbxa.end(xid1, XAResource.TMFAIL);
+      sbxa.prepare(xid1);
+      fail("prepare should have thrown an exception");
+    } catch (XAException xae) {
+      // should be a rollback
+      assertEquals(XAException.XA_RBROLLBACK, xae.errorCode);
+    }
+
+    try {
+      Xid[] xids = sbxa.recover(XAResource.TMNOFLAGS);
+      assertEquals(0, xids.length);
+    } catch (XAException xae) {
+      fail("recover should not have thrown an exception");
+    }
+
+    // Do a rollback now to clean up transaction
+    try {
+      sbxa.rollback(xid1);
+    } catch (XAException xae) {
+      fail("Rollback should not have thrown an exception");
+    }
+
+        // Do a fail
+    try {
+      sbxa.start(xid1, XAResource.TMJOIN);
+      // make sure x2 is global now
+      assertEquals(sbxa.toString(), GLOBAL_RESOURCE1);
+      sbxa.end(xid1, XAResource.TMFAIL);
+    } catch (XAException xae) {
+      fail("Start End should not have thrown an exception");
+    }
+
+        // Do a Success
+    try {
+      sbxa.start(xid1, XAResource.TMJOIN);
+      // make sure x2 is global now
+      assertEquals(sbxa.toString(), GLOBAL_RESOURCE1);
+      sbxa.end(xid1, XAResource.TMSUCCESS);
+      sbxa.prepare(xid1);
+      fail("prepare should have thrown an exception");
+    } catch (XAException xae) {
+      // should be a rollback
+      assertEquals(XAException.XA_RBROLLBACK, xae.errorCode);
+    }
+
+    try {
+      Xid[] xids = sbxa.recover(XAResource.TMNOFLAGS);
+      assertEquals(0, xids.length);
+    } catch (XAException xae) {
+      fail("recover should not have thrown an exception");
+    }
+
+    try {
+      sbxa.close(xid1);
+    }  catch (XAException xae) {
+      fail("Close should not have thrown an exception");
+    }
+
+  }
+
+  public class MyXid implements Xid {
+    protected int formatId;
+    protected byte gtrid[];
+    protected byte bqual[];
+
+    public MyXid() {
+    }
+
+    public MyXid(int formatId, byte gtrid[], byte bqual[]) {
+      this.formatId = formatId;
+      this.gtrid = gtrid;
+      this.bqual = bqual;
+    }
+
+    public int getFormatId() {
+      return formatId;
+    }
+
+    public byte[] getBranchQualifier() {
+      return bqual;
+    }
+
+    public byte[] getGlobalTransactionId() {
+      return gtrid;
+    }
+  }
 }

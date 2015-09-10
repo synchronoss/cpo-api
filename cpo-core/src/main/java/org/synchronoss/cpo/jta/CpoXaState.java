@@ -33,9 +33,10 @@ public class CpoXaState<T> {
 
 
   private Xid xid;
-  private T resource;
-  private int state;
-  private boolean success;
+  private T resource=null;
+  private int association=XA_UNASSOCIATED;
+  private boolean success=true;
+  private boolean prepared=false;
   private CpoBaseXaResource<T> assignedResourceManager;
 
   private CpoXaState(){
@@ -45,13 +46,7 @@ public class CpoXaState<T> {
   public CpoXaState(Xid xid, T resource, int state, CpoBaseXaResource<T> assignedResourceManager, boolean success) {
     this.xid = xid;
     this.resource = resource;
-    this.state = state;
-    this.assignedResourceManager = assignedResourceManager;
-    this.success = success;
-  }
-
-  public void update(int state, CpoBaseXaResource<T> assignedResourceManager, boolean success) {
-    this.state = state;
+    this.association = state;
     this.assignedResourceManager = assignedResourceManager;
     this.success = success;
   }
@@ -64,15 +59,32 @@ public class CpoXaState<T> {
     return resource;
   }
 
-  public int getState() {
-    return state;
+  public void setAssociation(int association) {
+    this.association = association;
+  }
+  public int getAssociation() {
+    return association;
   }
 
+  public void setSuccess(boolean success) {
+     this.success = success;
+   }
   public boolean isSuccess() {
     return success;
   }
 
+  public void setPrepared(boolean prepared) {
+    this.prepared = prepared;
+  }
+  public boolean isPrepared() {
+    return prepared;
+  }
+
   public CpoBaseXaResource<T> getAssignedResourceManager() {
     return assignedResourceManager;
+  }
+
+  public void setAssignedResourceManager(CpoBaseXaResource<T> assignedResourceManager) {
+    this.assignedResourceManager = assignedResourceManager;
   }
 }

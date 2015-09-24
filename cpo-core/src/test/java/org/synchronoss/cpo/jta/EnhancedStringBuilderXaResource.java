@@ -18,7 +18,7 @@
  * A copy of the GNU Lesser General Public License may also be found at
  * http://www.gnu.org/licenses/lgpl.txt
  */
-package org.synchronoss.cpo;
+package org.synchronoss.cpo.jta;
 
 import javax.transaction.xa.XAException;
 import javax.transaction.xa.XAResource;

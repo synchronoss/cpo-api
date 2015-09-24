@@ -35,7 +35,7 @@ import javax.transaction.xa.Xid;
 /**
  * Created by dberry on 12/8/15.
  */
-public class XaResourceTest extends TestCase {
+public class JdbcXaResourceTest extends TestCase {
   private static final Logger logger = LoggerFactory.getLogger(ExecuteTrxTest.class);
   private CpoAdapter cpoAdapter = null;
   private CpoXaResource cpoXaResource1 = null;
@@ -45,7 +45,7 @@ public class XaResourceTest extends TestCase {
    * Creates a new XaResourceTest object.
    *
    */
-  public XaResourceTest() {
+  public JdbcXaResourceTest() {
   }
 
   /**

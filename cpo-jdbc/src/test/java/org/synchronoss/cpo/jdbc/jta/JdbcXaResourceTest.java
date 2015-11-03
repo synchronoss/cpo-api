@@ -27,10 +27,15 @@ import org.synchronoss.cpo.CpoAdapter;
 import org.synchronoss.cpo.CpoAdapterFactoryManager;
 import org.synchronoss.cpo.jdbc.ExecuteTrxTest;
 import org.synchronoss.cpo.jdbc.JdbcStatics;
-import org.synchronoss.cpo.jta.CpoXaResource;
+import org.synchronoss.cpo.jdbc.ValueObject;
+import org.synchronoss.cpo.jdbc.ValueObjectBean;
 import org.synchronoss.cpo.helper.ExceptionHelper;
 
+import javax.transaction.xa.XAException;
+import javax.transaction.xa.XAResource;
 import javax.transaction.xa.Xid;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by dberry on 12/8/15.
@@ -38,8 +43,8 @@ import javax.transaction.xa.Xid;
 public class JdbcXaResourceTest extends TestCase {
   private static final Logger logger = LoggerFactory.getLogger(ExecuteTrxTest.class);
   private CpoAdapter cpoAdapter = null;
-  private CpoXaResource cpoXaResource1 = null;
-  private CpoXaResource cpoXaResource2 = null;
+  private JdbcCpoXaAdapter cpoXaAdapter1 = null;
+  private JdbcCpoXaAdapter cpoXaAdapter2 = null;
 
   /**
    * Creates a new XaResourceTest object.
@@ -57,10 +62,10 @@ public class JdbcXaResourceTest extends TestCase {
 
     try {
       cpoAdapter = CpoAdapterFactoryManager.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_JDBC);
-      cpoXaResource1 = CpoAdapterFactoryManager.getCpoXaAdapter(JdbcStatics.ADAPTER_CONTEXT_JDBC);
-      cpoXaResource2 = CpoAdapterFactoryManager.getCpoXaAdapter(JdbcStatics.ADAPTER_CONTEXT_JDBC);
-      assertNotNull(method + "CpoXaAdapter1 is null", cpoXaResource1);
-      assertNotNull(method + "CpoXaAdapter2 is null", cpoXaResource2);
+      cpoXaAdapter1 = (JdbcCpoXaAdapter) CpoAdapterFactoryManager.getCpoXaAdapter(JdbcStatics.ADAPTER_CONTEXT_JDBC);
+      cpoXaAdapter2 = (JdbcCpoXaAdapter) CpoAdapterFactoryManager.getCpoXaAdapter(JdbcStatics.ADAPTER_CONTEXT_JDBC);
+      assertNotNull(method + "CpoXaAdapter1 is null", cpoXaAdapter1);
+      assertNotNull(method + "CpoXaAdapter2 is null", cpoXaAdapter2);
     } catch (Exception e) {
       fail(method + ExceptionHelper.getLocalizedMessage(e));
     }
@@ -72,8 +77,8 @@ public class JdbcXaResourceTest extends TestCase {
   @Override
   public void tearDown() {
     cpoAdapter = null;
-    cpoXaResource1 = null;
-    cpoXaResource2 = null;
+    cpoXaAdapter1 = null;
+    cpoXaAdapter2 = null;
   }
 
   /**
@@ -82,50 +87,50 @@ public class JdbcXaResourceTest extends TestCase {
  	 * @throws Exception
  	 *             if the test fails.
  	 */
-// 	public void testCoordination() {
-//    String method = "testCoordination:";
-//    ArrayList<ValueObject> al = new ArrayList<>();
-//    ValueObject valObj1 = new ValueObjectBean(1);
-//    ValueObject valObj2 = new ValueObjectBean(2);
-//    al.add(valObj1);
-//    al.add(valObj2);
-//
-//    try {
-//      Xid xid1 = new MyXid(100, new byte[]{0x01}, new byte[]{0x02});
-//      Xid xid2 = new MyXid(100, new byte[]{0x11}, new byte[]{0x22});
-//
-//      cpoXaResource1.start(xid1, XAResource.TMNOFLAGS);
-//			cpoXaResource2.start(xid2, XAResource.TMNOFLAGS);
-//			cpoXaResource1.insertObject(valObj1);
-//      cpoXaResource2.insertObject(valObj2);
-//			cpoXaResource1.end(xid1, XAResource.TMSUCCESS);
-//      cpoXaResource2.end(xid2, XAResource.TMSUCCESS);
-//
-//      cpoXaResource1.prepare(xid1);
-//      cpoXaResource2.prepare(xid2);
-//
-//      cpoXaResource1.commit(xid1, false);
-//      cpoXaResource2.commit(xid2, false);
-//
-//      ValueObject valObj = new ValueObjectBean();
-//      List<ValueObject> list = cpoAdapter.retrieveBeans(null, valObj);
-//			assertTrue("list size is " + list.size(), list.size() == 2);
-//			assertTrue("ValuObject(1) is missing", list.get(0).getId() == 1);
-//			assertTrue("ValuObject(2) is missing", list.get(1).getId() == 2);
-//
-//
-//      assertEquals(2, cpoAdapter.deleteObjects(al));
-//    } catch (Exception e) {
-//      fail(method + ExceptionHelper.getLocalizedMessage(e));
-//    }
-//  }
+ 	public void testCoordination() {
+    String method = "testCoordination:";
+    ArrayList<ValueObject> al = new ArrayList<>();
+    ValueObject valObj1 = new ValueObjectBean(1);
+    ValueObject valObj2 = new ValueObjectBean(2);
+    al.add(valObj1);
+    al.add(valObj2);
 
-  /**
- 	 * Tests that simple distributed transaction processing works as expected.
- 	 *
- 	 * @throws Exception
- 	 *             if the test fails.
- 	 */
+    try {
+      Xid xid1 = new MyXid(100, new byte[]{0x01}, new byte[]{0x02});
+      Xid xid2 = new MyXid(100, new byte[]{0x11}, new byte[]{0x22});
+
+      cpoXaAdapter1.start(xid1, XAResource.TMNOFLAGS);
+			cpoXaAdapter2.start(xid2, XAResource.TMNOFLAGS);
+			cpoXaAdapter1.insertObject(valObj1);
+      cpoXaAdapter2.insertObject(valObj2);
+			cpoXaAdapter1.end(xid1, XAResource.TMSUCCESS);
+      cpoXaAdapter2.end(xid2, XAResource.TMSUCCESS);
+
+      cpoXaAdapter1.prepare(xid1);
+      cpoXaAdapter2.prepare(xid2);
+
+      cpoXaAdapter1.commit(xid1, false);
+      cpoXaAdapter2.commit(xid2, false);
+
+      ValueObject valObj = new ValueObjectBean();
+      List<ValueObject> list = cpoAdapter.retrieveBeans(null, valObj);
+			assertTrue("list size is " + list.size(), list.size() == 2);
+			assertTrue("ValuObject(1) is missing", list.get(0).getId() == 1);
+			assertTrue("ValuObject(2) is missing", list.get(1).getId() == 2);
+
+
+      assertEquals(2, cpoAdapter.deleteObjects(al));
+    } catch (Exception e) {
+      fail(method + ExceptionHelper.getLocalizedMessage(e));
+    }
+  }
+
+//  /**
+// 	 * Tests that simple distributed transaction processing works as expected.
+// 	 *
+// 	 * @throws Exception
+// 	 *             if the test fails.
+// 	 */
 // 	public void testRollback()  {
 //    String method = "testRollback:";
 //    ValueObject valObj1 = new ValueObjectBean(1);
@@ -135,19 +140,19 @@ public class JdbcXaResourceTest extends TestCase {
 //			Xid xid1 = new MyXid(100, new byte[]{0x01}, new byte[]{0x02});
 //      Xid xid2 = new MyXid(100, new byte[]{0x11}, new byte[]{0x22});
 //
-//      cpoXaResource1.start(xid1, XAResource.TMNOFLAGS);
-//      cpoXaResource2.start(xid2, XAResource.TMNOFLAGS);
-//      cpoXaResource1.insertObject(valObj1);
-//      cpoXaResource2.insertObject(valObj2);
-//      cpoXaResource1.end(xid1, XAResource.TMSUCCESS);
-//      cpoXaResource2.end(xid2, XAResource.TMSUCCESS);
+//      cpoXaAdapter1.start(xid1, XAResource.TMNOFLAGS);
+//      cpoXaAdapter2.start(xid2, XAResource.TMNOFLAGS);
+//      cpoXaAdapter1.insertObject(valObj1);
+//      cpoXaAdapter2.insertObject(valObj2);
+//      cpoXaAdapter1.end(xid1, XAResource.TMSUCCESS);
+//      cpoXaAdapter2.end(xid2, XAResource.TMSUCCESS);
 //
-//      cpoXaResource1.prepare(xid1);
-//      cpoXaResource2.prepare(xid2);
+//      cpoXaAdapter1.prepare(xid1);
+//      cpoXaAdapter2.prepare(xid2);
 //
 //
-//      cpoXaResource1.rollback(xid1);
-//      cpoXaResource2.rollback(xid2);
+//      cpoXaAdapter1.rollback(xid1);
+//      cpoXaAdapter2.rollback(xid2);
 //
 //      ValueObject valObj = new ValueObjectBean();
 //      List<ValueObject> list = cpoAdapter.retrieveBeans(null, valObj);
@@ -156,13 +161,13 @@ public class JdbcXaResourceTest extends TestCase {
 //     fail(method + ExceptionHelper.getLocalizedMessage(e));
 //    }
 // 	}
-
- 	/**
- 	 * Tests that XA RECOVER works as expected.
- 	 *
- 	 * @throws Exception
- 	 *             if test fails
- 	 */
+//
+// 	/**
+// 	 * Tests that XA RECOVER works as expected.
+// 	 *
+// 	 * @throws Exception
+// 	 *             if test fails
+// 	 */
 // 	public void testRecover() {
 //    String method = "testRecover:";
 //    ValueObject valObj = new ValueObjectBean(1);
@@ -170,14 +175,14 @@ public class JdbcXaResourceTest extends TestCase {
 // 		try {
 //			Xid xid = new MyXid(100, new byte[]{0x01}, new byte[]{0x02});
 //
-//      cpoXaResource1.start(xid, XAResource.TMNOFLAGS);
-//      cpoXaResource1.insertObject(valObj);
-//      cpoXaResource1.end(xid, XAResource.TMSUCCESS);
-//      cpoXaResource1.prepare(xid);
+//      cpoXaAdapter1.start(xid, XAResource.TMNOFLAGS);
+//      cpoXaAdapter1.insertObject(valObj);
+//      cpoXaAdapter1.end(xid, XAResource.TMSUCCESS);
+//      cpoXaAdapter1.prepare(xid);
 //
 // 			// Now try and recover
 //
-// 			Xid[] recoveredXids = cpoXaResource2.recover(XAResource.TMSTARTRSCAN | XAResource.TMENDRSCAN);
+// 			Xid[] recoveredXids = cpoXaAdapter2.recover(XAResource.TMSTARTRSCAN | XAResource.TMENDRSCAN);
 //
 // 			assertTrue(recoveredXids != null);
 // 			assertTrue(recoveredXids.length > 0);
@@ -195,7 +200,7 @@ public class JdbcXaResourceTest extends TestCase {
 //
 // 			assertTrue(xidFound);
 //
-// 			recoveredXids = cpoXaResource1.recover(XAResource.TMSTARTRSCAN);
+// 			recoveredXids = cpoXaAdapter1.recover(XAResource.TMSTARTRSCAN);
 //
 // 			assertTrue(recoveredXids != null);
 // 			assertTrue(recoveredXids.length > 0);
@@ -214,13 +219,13 @@ public class JdbcXaResourceTest extends TestCase {
 // 			assertTrue(xidFound);
 //
 // 			// Test flags
-//      cpoXaResource1.recover(XAResource.TMSTARTRSCAN);
-//      cpoXaResource1.recover(XAResource.TMENDRSCAN);
-//      cpoXaResource1.recover(XAResource.TMSTARTRSCAN | XAResource.TMENDRSCAN);
+//      cpoXaAdapter1.recover(XAResource.TMSTARTRSCAN);
+//      cpoXaAdapter1.recover(XAResource.TMENDRSCAN);
+//      cpoXaAdapter1.recover(XAResource.TMSTARTRSCAN | XAResource.TMENDRSCAN);
 //
 // 			// This should fail
 // 			try {
-//        cpoXaResource1.recover(XAResource.TMSUCCESS);
+//        cpoXaAdapter1.recover(XAResource.TMSUCCESS);
 // 				fail("XAException should have been thrown");
 // 			} catch (XAException xaEx) {
 // 				assertEquals(XAException.XAER_INVAL, xaEx.errorCode);
@@ -229,8 +234,8 @@ public class JdbcXaResourceTest extends TestCase {
 //     fail(method + ExceptionHelper.getLocalizedMessage(e));
 //    }
 // 	}
-
-
+//
+//
 // 	public void testSuspendableTx() throws Exception {
 //		String method = "testSuspendableTx:";
 //  	ValueObject valObj = new ValueObjectBean(1);
@@ -238,27 +243,27 @@ public class JdbcXaResourceTest extends TestCase {
 //		Xid xid = new MyXid(100, new byte[]{0x01}, new byte[]{0x02});
 //
 // 		try {
-//			cpoXaResource1.start(xid, XAResource.TMNOFLAGS);
-//			cpoXaResource1.retrieveBean(valObj);
-//			cpoXaResource1.end(xid, XAResource.TMSUCCESS);
-//			cpoXaResource1.start(xid, XAResource.TMRESUME);
-//			cpoXaResource1.retrieveBean(valObj);
-//			cpoXaResource1.end(xid, XAResource.TMSUCCESS);
-//			cpoXaResource1.commit(xid, true);
+//			cpoXaAdapter1.start(xid, XAResource.TMNOFLAGS);
+//			cpoXaAdapter1.retrieveBean(valObj);
+//			cpoXaAdapter1.end(xid, XAResource.TMSUCCESS);
+//			cpoXaAdapter1.start(xid, XAResource.TMRESUME);
+//			cpoXaAdapter1.retrieveBean(valObj);
+//			cpoXaAdapter1.end(xid, XAResource.TMSUCCESS);
+//			cpoXaAdapter1.commit(xid, true);
 //
 //
-//			cpoXaResource1.start(xid, XAResource.TMNOFLAGS);
-//			cpoXaResource1.retrieveBean(valObj);
-//			cpoXaResource1.end(xid, XAResource.TMSUCCESS);
-//			cpoXaResource1.start(xid, XAResource.TMJOIN);
-//			cpoXaResource1.retrieveBean(valObj);
-//			cpoXaResource1.end(xid, XAResource.TMSUCCESS);
-//			cpoXaResource1.commit(xid, true);
+//			cpoXaAdapter1.start(xid, XAResource.TMNOFLAGS);
+//			cpoXaAdapter1.retrieveBean(valObj);
+//			cpoXaAdapter1.end(xid, XAResource.TMSUCCESS);
+//			cpoXaAdapter1.start(xid, XAResource.TMJOIN);
+//			cpoXaAdapter1.retrieveBean(valObj);
+//			cpoXaAdapter1.end(xid, XAResource.TMSUCCESS);
+//			cpoXaAdapter1.commit(xid, true);
 //		} catch (Exception e) {
 //		 fail(method + ExceptionHelper.getLocalizedMessage(e));
 //		}
 // 	}
-
+//
 //	public void testCommit() {
 //		String method = "testCommit:";
 //  	ValueObject valObj = new ValueObjectBean(1);
@@ -267,15 +272,15 @@ public class JdbcXaResourceTest extends TestCase {
 //		try {
 //      Xid xid1 = new MyXid(100, new byte[]{0x01}, new byte[]{0x02});
 //
-//			cpoXaResource1.start(xid1, XAResource.TMNOFLAGS);
-//      cpoXaResource1.insertObject(valObj);
-//			cpoXaResource1.end(xid1, XAResource.TMSUCCESS);
+//			cpoXaAdapter1.start(xid1, XAResource.TMNOFLAGS);
+//      cpoXaAdapter1.insertObject(valObj);
+//			cpoXaAdapter1.end(xid1, XAResource.TMSUCCESS);
 //
 //      // make sure a cpoAdapter can now see the insert
 //      assertTrue(cpoAdapter.retrieveBean(valObj)==null);
-//      ret = cpoXaResource1.prepare(xid1);
+//      ret = cpoXaAdapter1.prepare(xid1);
 //      if (ret == XAResource.XA_OK) {
-//       cpoXaResource1.commit(xid1, false);
+//       cpoXaAdapter1.commit(xid1, false);
 //      }
 //
 //      // make sure a cpoAdapter can now see the insert
@@ -285,7 +290,7 @@ public class JdbcXaResourceTest extends TestCase {
 //		 	fail(method + ExceptionHelper.getLocalizedMessage(e));
 //		}
 //	}
-
+//
 //	public void testRollback2() {
 //		String method = "testRollback2:";
 //  	ValueObject valObj = new ValueObjectBean(1);
@@ -295,16 +300,16 @@ public class JdbcXaResourceTest extends TestCase {
 //      Xid xid1 = new MyXid(100, new byte[]{0x01}, new byte[]{0x02});
 //      Xid xid2 = new MyXid(100, new byte[]{0x11}, new byte[]{0x22});
 //
-//			cpoXaResource1.start(xid1, XAResource.TMNOFLAGS);
-//      cpoXaResource1.insertObject(valObj);
-//			cpoXaResource1.end(xid1, XAResource.TMSUCCESS);
+//			cpoXaAdapter1.start(xid1, XAResource.TMNOFLAGS);
+//      cpoXaAdapter1.insertObject(valObj);
+//			cpoXaAdapter1.end(xid1, XAResource.TMSUCCESS);
 //
 //      // make sure a cpoAdapter cannot see the insert
 //      assertTrue(cpoAdapter.retrieveBean(valObj)==null);
 //
-//			ret = cpoXaResource1.prepare(xid1);
+//			ret = cpoXaAdapter1.prepare(xid1);
 //			if (ret == XAResource.XA_OK) {
-//				cpoXaResource1.rollback(xid1);
+//				cpoXaAdapter1.rollback(xid1);
 //			}
 //
 //      // make sure a cpoAdapter still cannot see the insert
@@ -314,7 +319,7 @@ public class JdbcXaResourceTest extends TestCase {
 //		}
 //
 //	}
-
+//
 //	public void testSuspend() {
 //    String method = "testSuspend:";
 //    ValueObject valObj1 = new ValueObjectBean(1);
@@ -325,21 +330,21 @@ public class JdbcXaResourceTest extends TestCase {
 //    try {
 //      Xid xid1 = new MyXid(100, new byte[]{0x01}, new byte[]{0x02});
 //
-//      cpoXaResource1.start(xid1, XAResource.TMNOFLAGS);
-//      cpoXaResource1.insertObject(valObj1);
-//      cpoXaResource1.end(xid1, XAResource.TMSUSPEND);
+//      cpoXaAdapter1.start(xid1, XAResource.TMNOFLAGS);
+//      cpoXaAdapter1.insertObject(valObj1);
+//      cpoXaAdapter1.end(xid1, XAResource.TMSUSPEND);
 //
 //      // This update is done outside of transaction scope, so it
 //      // is not affected by the XA rollback.
-//      cpoXaResource1.insertObject(valObj2);
+//      cpoXaAdapter1.insertObject(valObj2);
 //
-//      cpoXaResource1.start(xid1, XAResource.TMRESUME);
-//      cpoXaResource1.insertObject(valObj3);
-//      cpoXaResource1.end(xid1, XAResource.TMSUCCESS);
+//      cpoXaAdapter1.start(xid1, XAResource.TMRESUME);
+//      cpoXaAdapter1.insertObject(valObj3);
+//      cpoXaAdapter1.end(xid1, XAResource.TMSUCCESS);
 //
-//      ret = cpoXaResource1.prepare(xid1);
+//      ret = cpoXaAdapter1.prepare(xid1);
 //      if (ret == XAResource.XA_OK) {
-//        cpoXaResource1.rollback(xid1);
+//        cpoXaAdapter1.rollback(xid1);
 //      }
 //      // make sure that only valobj2 is in the database
 //      ValueObject valObj = new ValueObjectBean();
@@ -351,7 +356,7 @@ public class JdbcXaResourceTest extends TestCase {
 //      fail(method + ExceptionHelper.getLocalizedMessage(e));
 //    }
 //	}
-
+//
 //	public void testMultiTrx() {
 //    String method = "testMultiTrx:";
 //    ValueObject valObj1 = new ValueObjectBean(1);
@@ -362,25 +367,25 @@ public class JdbcXaResourceTest extends TestCase {
 //      Xid xid1 = new MyXid(100, new byte[]{0x01}, new byte[]{0x02});
 //      Xid xid2 = new MyXid(100, new byte[]{0x11}, new byte[]{0x22});
 //
-//      cpoXaResource1.start(xid1, XAResource.TMNOFLAGS);
-//      cpoXaResource1.insertObject(valObj1);
-//      cpoXaResource1.end(xid1, XAResource.TMSUCCESS);
+//      cpoXaAdapter1.start(xid1, XAResource.TMNOFLAGS);
+//      cpoXaAdapter1.insertObject(valObj1);
+//      cpoXaAdapter1.end(xid1, XAResource.TMSUCCESS);
 //
-//      cpoXaResource1.start(xid2, XAResource.TMNOFLAGS);
+//      cpoXaAdapter1.start(xid2, XAResource.TMNOFLAGS);
 //
 //      // Should allow XA resource to do two-phase commit on
 //      // transaction 1 while associated to transaction 2
-//      ret = cpoXaResource1.prepare(xid1);
+//      ret = cpoXaAdapter1.prepare(xid1);
 //      if (ret == XAResource.XA_OK) {
-//        cpoXaResource1.commit(xid1, false);
+//        cpoXaAdapter1.commit(xid1, false);
 //      }
 //
-//      cpoXaResource1.insertObject(valObj2);
-//      cpoXaResource1.end(xid2, XAResource.TMSUCCESS);
+//      cpoXaAdapter1.insertObject(valObj2);
+//      cpoXaAdapter1.end(xid2, XAResource.TMSUCCESS);
 //
-//      ret = cpoXaResource1.prepare(xid2);
+//      ret = cpoXaAdapter1.prepare(xid2);
 //      if (ret == XAResource.XA_OK) {
-//        cpoXaResource1.rollback(xid2);
+//        cpoXaAdapter1.rollback(xid2);
 //      }
 //      // make sure the xid1 insert can be seen
 //      // make sure the xid2 insert cannot be seen
@@ -392,7 +397,7 @@ public class JdbcXaResourceTest extends TestCase {
 //      fail(method + ExceptionHelper.getLocalizedMessage(e));
 //    }
 //	}
-
+//
 //	public void testJoin() {
 //    String method = "testJoin:";
 //    ValueObject valObj1 = new ValueObjectBean(1);
@@ -403,22 +408,22 @@ public class JdbcXaResourceTest extends TestCase {
 //      Xid xid1 = new MyXid(100, new byte[]{0x01}, new byte[]{0x02});
 //      Xid xid2 = new MyXid(100, new byte[]{0x11}, new byte[]{0x22});
 //
-//      cpoXaResource1.start(xid1, XAResource.TMNOFLAGS);
-//      cpoXaResource1.insertObject(valObj1);
-//      cpoXaResource1.end(xid1, XAResource.TMSUCCESS);
+//      cpoXaAdapter1.start(xid1, XAResource.TMNOFLAGS);
+//      cpoXaAdapter1.insertObject(valObj1);
+//      cpoXaAdapter1.end(xid1, XAResource.TMSUCCESS);
 //
-//      if (cpoXaResource2.isSameRM(cpoXaResource1)) {
-//        cpoXaResource2.start(xid1, XAResource.TMJOIN);
-//        cpoXaResource2.insertObject(valObj2);
-//        cpoXaResource2.end(xid1, XAResource.TMSUCCESS);
+//      if (cpoXaAdapter2.isSameRM(cpoXaAdapter1)) {
+//        cpoXaAdapter2.start(xid1, XAResource.TMJOIN);
+//        cpoXaAdapter2.insertObject(valObj2);
+//        cpoXaAdapter2.end(xid1, XAResource.TMSUCCESS);
 //      }
 //      else {
 //        fail("Unable to join XAResources with the same resource manager");
 //      }
 //
-//      ret = cpoXaResource1.prepare(xid1);
+//      ret = cpoXaAdapter1.prepare(xid1);
 //      if (ret == XAResource.XA_OK) {
-//        cpoXaResource1.commit(xid1, false);
+//        cpoXaAdapter1.commit(xid1, false);
 //      }
 //
 //      // make sure both records exist
@@ -430,21 +435,21 @@ public class JdbcXaResourceTest extends TestCase {
 //    }
 //
 //	}
-
+//
 //  public void testRecover2() {
 //    String method = "testRecover2:";
 //    Xid[] xids;
 //
 //    // TODO - need to create some unfinished transactions
 //    try {
-//      xids = cpoXaResource1.recover(XAResource.TMSTARTRSCAN | XAResource.TMENDRSCAN);
+//      xids = cpoXaAdapter1.recover(XAResource.TMSTARTRSCAN | XAResource.TMENDRSCAN);
 //      assertTrue("In progress resources must be created",xids.length>0);
 //      for (int i = 0; xids != null && i < xids.length; i++) {
 //        try {
-//          cpoXaResource1.rollback(xids[i]);
+//          cpoXaAdapter1.rollback(xids[i]);
 //        } catch (XAException ex) {
 //          try {
-//            cpoXaResource1.forget(xids[i]);
+//            cpoXaAdapter1.forget(xids[i]);
 //          } catch (XAException ex1) {
 //            fail("rollback/forget failed: " + ex1.getMessage());
 //          }
@@ -455,10 +460,10 @@ public class JdbcXaResourceTest extends TestCase {
 //    }
 //
 //  }
-
-    public void testNothing() {
-
-    }
+//
+//    public void testNothing() {
+//
+//    }
 
 	public class MyXid implements Xid
 	{

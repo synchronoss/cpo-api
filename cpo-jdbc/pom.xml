@@ -39,7 +39,7 @@
   <properties>
     <oracleVersion>11.2.0.2.0</oracleVersion>
     <mysqlVersion>5.1.16</mysqlVersion>
-    <hsqldbVersion>2.2.8</hsqldbVersion>
+    <hsqldbVersion>2.3.3</hsqldbVersion>
     <cassandraVersion>1.1.0</cassandraVersion>
     <postgresVersion>9.0-801.jdbc4</postgresVersion>
   </properties>
@@ -162,7 +162,7 @@
       <artifactId>xmlbeans</artifactId>
     </dependency>
 
-    
+
     <!-- Oracle is provided because of the oracle transforms -->
     <dependency>
       <groupId>com.oracle</groupId>
@@ -170,7 +170,7 @@
       <version>${oracleVersion}</version>
       <scope>provided</scope>
     </dependency>
-    
+
     <!-- database drivers for testing -->
     <dependency>
       <groupId>postgresql</groupId>
@@ -272,8 +272,8 @@
         <cpo.db.callssupported>true</cpo.db.callssupported>
         <cpo.db.select4update>true</cpo.db.select4update>
         <cpo.db.millisupport>false</cpo.db.millisupport>
-        <cpo.db.jndi>java:/comp/env/jdbc/cpodatasource</cpo.db.jndi>        
-        <cpo.db.class>com.mysql.jdbc.jdbc2.optional.MysqlConnectionPoolDataSource</cpo.db.class>        
+        <cpo.db.jndi>java:/comp/env/jdbc/cpodatasource</cpo.db.jndi>
+        <cpo.db.class>com.mysql.jdbc.jdbc2.optional.MysqlConnectionPoolDataSource</cpo.db.class>
         <cpo.valueMeta.xml>/mysql/mysqlValueMetaData.xml</cpo.valueMeta.xml>
         <cpo.valueCaseMeta.xml>/mysql/mysqlValueCaseMetaData.xml</cpo.valueCaseMeta.xml>
         <cpo.lobMeta.xml>/mysql/mysqlLobMetaData.xml</cpo.lobMeta.xml>
@@ -303,8 +303,8 @@
         <cpo.db.callssupported>true</cpo.db.callssupported>
         <cpo.db.select4update>true</cpo.db.select4update>
         <cpo.db.millisupport>true</cpo.db.millisupport>
-        <cpo.db.jndi>cpodatasource</cpo.db.jndi>        
-        <cpo.db.class>oracle.jdbc.pool.OracleConnectionPoolDataSource</cpo.db.class>        
+        <cpo.db.jndi>cpodatasource</cpo.db.jndi>
+        <cpo.db.class>oracle.jdbc.pool.OracleConnectionPoolDataSource</cpo.db.class>
         <cpo.valueMeta.xml>/oracle/oracleValueMetaData.xml</cpo.valueMeta.xml>
         <cpo.valueCaseMeta.xml>/oracle/oracleValueCaseMetaData.xml</cpo.valueCaseMeta.xml>
         <cpo.lobMeta.xml>/oracle/oracleLobMetaData.xml</cpo.lobMeta.xml>
@@ -334,8 +334,8 @@
         <cpo.db.callssupported>true</cpo.db.callssupported>
         <cpo.db.select4update>true</cpo.db.select4update>
         <cpo.db.millisupport>true</cpo.db.millisupport>
-        <cpo.db.jndi>cpodatasource</cpo.db.jndi>        
-        <cpo.db.class>oracle.jdbc.pool.OracleConnectionPoolDataSource</cpo.db.class>        
+        <cpo.db.jndi>cpodatasource</cpo.db.jndi>
+        <cpo.db.class>oracle.jdbc.pool.OracleConnectionPoolDataSource</cpo.db.class>
         <cpo.valueMeta.xml>/oracle/oracleValueMetaData.xml</cpo.valueMeta.xml>
         <cpo.valueCaseMeta.xml>/oracle/oracleValueCaseMetaData.xml</cpo.valueCaseMeta.xml>
         <cpo.lobMeta.xml>/oracle/oracleLobMetaData.xml</cpo.lobMeta.xml>
@@ -366,7 +366,7 @@
         <cpo.db.callssupported>false</cpo.db.callssupported>
         <cpo.db.select4update>false</cpo.db.select4update>
         <cpo.db.millisupport>true</cpo.db.millisupport>
-        <cpo.db.jndi>java:/comp/env/jdbc/cpodatasource</cpo.db.jndi>        
+        <cpo.db.jndi>java:/comp/env/jdbc/cpodatasource</cpo.db.jndi>
         <cpo.db.class>org.hsqldb.jdbc.pool.JDBCPooledDataSource</cpo.db.class>
         <cpo.valueMeta.xml>/hsqldb/hsqldbValueMetaData.xml</cpo.valueMeta.xml>
         <cpo.valueCaseMeta.xml>/hsqldb/hsqldbValueCaseMetaData.xml</cpo.valueCaseMeta.xml>
@@ -404,7 +404,7 @@
         <cpo.db.callssupported>false</cpo.db.callssupported>
         <cpo.db.select4update>false</cpo.db.select4update>
         <cpo.db.millisupport>true</cpo.db.millisupport>
-        <cpo.db.jndi>java:/comp/env/jdbc/cpodatasource</cpo.db.jndi>        
+        <cpo.db.jndi>java:/comp/env/jdbc/cpodatasource</cpo.db.jndi>
         <cpo.db.class>org.hsqldb.jdbc.pool.JDBCPooledDataSource</cpo.db.class>
         <cpo.valueMeta.xml>/hsqldb/hsqldbValueMetaData.xml</cpo.valueMeta.xml>
         <cpo.valueCaseMeta.xml>/hsqldb/hsqldbValueCaseMetaData.xml</cpo.valueCaseMeta.xml>
@@ -436,7 +436,7 @@
         <cpo.db.callssupported>true</cpo.db.callssupported>
         <cpo.db.select4update>true</cpo.db.select4update>
         <cpo.db.millisupport>true</cpo.db.millisupport>
-        <cpo.db.jndi>java:/comp/env/jdbc/cpodatasource</cpo.db.jndi>        
+        <cpo.db.jndi>java:/comp/env/jdbc/cpodatasource</cpo.db.jndi>
         <cpo.valueCaseMeta.xml>/postgres/postgresValueCaseMetaData.xml</cpo.valueCaseMeta.xml>
         <cpo.lobMeta.xml>/postgres/postgresLobMetaData.xml</cpo.lobMeta.xml>
       </properties>

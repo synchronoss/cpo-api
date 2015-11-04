@@ -134,7 +134,7 @@
                 <srcFile>${cpo.test.sqldir}/dropTestTables.sql</srcFile>
                 <srcFile>${cpo.test.sqldir}/LvoTableDDL.sql</srcFile>
                 <srcFile>${cpo.test.sqldir}/ValueObjectDDL.sql</srcFile>
-                <srcFile>${cpo.test.sqldir}/shutdown.sql</srcFile>
+                <!--<srcFile>${cpo.test.sqldir}/shutdown.sql</srcFile>-->
               </srcFiles>
             </configuration>
           </execution>
@@ -162,7 +162,7 @@
       <artifactId>xmlbeans</artifactId>
     </dependency>
 
-    
+
     <!-- Oracle is provided because of the oracle transforms -->
     <dependency>
       <groupId>com.oracle</groupId>
@@ -170,7 +170,7 @@
       <version>${oracleVersion}</version>
       <scope>provided</scope>
     </dependency>
-    
+
     <!-- database drivers for testing -->
     <dependency>
       <groupId>postgresql</groupId>
@@ -272,8 +272,8 @@
         <cpo.db.callssupported>true</cpo.db.callssupported>
         <cpo.db.select4update>true</cpo.db.select4update>
         <cpo.db.millisupport>false</cpo.db.millisupport>
-        <cpo.db.jndi>java:/comp/env/jdbc/cpodatasource</cpo.db.jndi>        
-        <cpo.db.class>com.mysql.jdbc.jdbc2.optional.MysqlConnectionPoolDataSource</cpo.db.class>        
+        <cpo.db.jndi>java:/comp/env/jdbc/cpodatasource</cpo.db.jndi>
+        <cpo.db.class>com.mysql.jdbc.jdbc2.optional.MysqlConnectionPoolDataSource</cpo.db.class>
         <cpo.valueMeta.xml>/mysql/mysqlValueMetaData.xml</cpo.valueMeta.xml>
         <cpo.valueCaseMeta.xml>/mysql/mysqlValueCaseMetaData.xml</cpo.valueCaseMeta.xml>
         <cpo.lobMeta.xml>/mysql/mysqlLobMetaData.xml</cpo.lobMeta.xml>
@@ -303,8 +303,8 @@
         <cpo.db.callssupported>true</cpo.db.callssupported>
         <cpo.db.select4update>true</cpo.db.select4update>
         <cpo.db.millisupport>true</cpo.db.millisupport>
-        <cpo.db.jndi>cpodatasource</cpo.db.jndi>        
-        <cpo.db.class>oracle.jdbc.pool.OracleConnectionPoolDataSource</cpo.db.class>        
+        <cpo.db.jndi>cpodatasource</cpo.db.jndi>
+        <cpo.db.class>oracle.jdbc.pool.OracleConnectionPoolDataSource</cpo.db.class>
         <cpo.valueMeta.xml>/oracle/oracleValueMetaData.xml</cpo.valueMeta.xml>
         <cpo.valueCaseMeta.xml>/oracle/oracleValueCaseMetaData.xml</cpo.valueCaseMeta.xml>
         <cpo.lobMeta.xml>/oracle/oracleLobMetaData.xml</cpo.lobMeta.xml>
@@ -334,47 +334,15 @@
         <cpo.db.callssupported>true</cpo.db.callssupported>
         <cpo.db.select4update>true</cpo.db.select4update>
         <cpo.db.millisupport>true</cpo.db.millisupport>
-        <cpo.db.jndi>cpodatasource</cpo.db.jndi>        
-        <cpo.db.class>oracle.jdbc.pool.OracleConnectionPoolDataSource</cpo.db.class>        
+        <cpo.db.jndi>cpodatasource</cpo.db.jndi>
+        <cpo.db.class>oracle.jdbc.pool.OracleConnectionPoolDataSource</cpo.db.class>
         <cpo.valueMeta.xml>/oracle/oracleValueMetaData.xml</cpo.valueMeta.xml>
         <cpo.valueCaseMeta.xml>/oracle/oracleValueCaseMetaData.xml</cpo.valueCaseMeta.xml>
         <cpo.lobMeta.xml>/oracle/oracleLobMetaData.xml</cpo.lobMeta.xml>
       </properties>
     </profile>
     <profile>
-      <id>hsqldbmem</id>
-      <activation>
-        <activeByDefault>false</activeByDefault>
-        <property>
-          <name>cpo.db</name>
-          <value>hsqldbmem</value>
-        </property>
-      </activation>
-      <properties>
-        <release.arguments>-Dcpo.db=${cpo.db}</release.arguments>
-        <cpo.skip.sql.plugin>false</cpo.skip.sql.plugin>
-        <cpo.test.sqldir>src/test/sql/hsqldbmem</cpo.test.sqldir>
-        <cpo.db.user>cpo</cpo.db.user>
-        <cpo.db.pswd>cpo</cpo.db.pswd>
-        <cpo.db.host />
-        <cpo.db.port />
-        <cpo.db.database>cpoMemDB</cpo.db.database>
-        <cpo.db.url>jdbc:hsqldb:mem:${cpo.db.database}</cpo.db.url>
-        <cpo.db.userurl>jdbc:hsqldb:mem:${cpo.db.database};user=${cpo.db.user};password=${cpo.db.pswd}</cpo.db.userurl>
-        <cpo.db.driver>org.hsqldb.jdbc.JDBCDriver</cpo.db.driver>
-        <cpo.db.blobssupported>false</cpo.db.blobssupported>
-        <cpo.db.callssupported>false</cpo.db.callssupported>
-        <cpo.db.select4update>false</cpo.db.select4update>
-        <cpo.db.millisupport>true</cpo.db.millisupport>
-        <cpo.db.jndi>java:/comp/env/jdbc/cpodatasource</cpo.db.jndi>        
-        <cpo.db.class>org.hsqldb.jdbc.pool.JDBCPooledDataSource</cpo.db.class>
-        <cpo.valueMeta.xml>/hsqldb/hsqldbValueMetaData.xml</cpo.valueMeta.xml>
-        <cpo.valueCaseMeta.xml>/hsqldb/hsqldbValueCaseMetaData.xml</cpo.valueCaseMeta.xml>
-        <cpo.lobMeta.xml>/hsqldb/hsqldbLobMetaData.xml</cpo.lobMeta.xml>
-      </properties>
-    </profile>
-    <profile>
-      <id>hsqldbfile</id>
+      <id>hsqldb</id>
       <activation>
         <activeByDefault>false</activeByDefault>
         <property>
@@ -396,20 +364,92 @@
         <cpo.db.pswd />
         <cpo.db.host />
         <cpo.db.port />
-        <cpo.db.database>${project.basedir}/src/test/sql/hsqldb/db/cpo</cpo.db.database>
-        <cpo.db.url>jdbc:hsqldb:file:${cpo.db.database}</cpo.db.url>
-        <cpo.db.userurl>jdbc:hsqldb:file:${cpo.db.database};shutdown=true;user=${cpo.db.user};password=${cpo.db.pswd}</cpo.db.userurl>
+        <cpo.db.database>//localhost/cpo</cpo.db.database>
+        <cpo.db.url>jdbc:hsqldb:hsql:${cpo.db.database}</cpo.db.url>
+        <cpo.db.userurl>jdbc:hsqldb:hsql:${cpo.db.database};user=${cpo.db.user};password=${cpo.db.pswd}</cpo.db.userurl>
         <cpo.db.driver>org.hsqldb.jdbc.JDBCDriver</cpo.db.driver>
         <cpo.db.blobssupported>false</cpo.db.blobssupported>
         <cpo.db.callssupported>false</cpo.db.callssupported>
         <cpo.db.select4update>false</cpo.db.select4update>
         <cpo.db.millisupport>true</cpo.db.millisupport>
-        <cpo.db.jndi>java:/comp/env/jdbc/cpodatasource</cpo.db.jndi>        
+        <cpo.db.jndi>java:/comp/env/jdbc/cpodatasource</cpo.db.jndi>
         <cpo.db.class>org.hsqldb.jdbc.pool.JDBCPooledDataSource</cpo.db.class>
         <cpo.valueMeta.xml>/hsqldb/hsqldbValueMetaData.xml</cpo.valueMeta.xml>
         <cpo.valueCaseMeta.xml>/hsqldb/hsqldbValueCaseMetaData.xml</cpo.valueCaseMeta.xml>
         <cpo.lobMeta.xml>/hsqldb/hsqldbLobMetaData.xml</cpo.lobMeta.xml>
       </properties>
+      <build>
+        <!--<pluginManagement>-->
+          <!--<plugins>-->
+            <!--<plugin>-->
+              <!--<groupId>org.codehaus.mojo</groupId>-->
+              <!--<artifactId>maven-antrun-plugin</artifactId>-->
+              <!--<version>1.4.0</version>-->
+              <!--<dependencies>-->
+                <!--<dependency>-->
+                  <!--<groupId>org.hsqldb</groupId>-->
+                  <!--<artifactId>hsqldb</artifactId>-->
+                  <!--<version>${hsqldbVersion}</version>-->
+                <!--</dependency>-->
+              <!--</dependencies>-->
+            <!--</plugin>-->
+          <!--</plugins>-->
+        <!--</pluginManagement>-->
+         <plugins>
+           <plugin>
+             <groupId>org.apache.maven.plugins</groupId>
+             <artifactId>maven-antrun-plugin</artifactId>
+             <version>1.8</version>
+             <executions>
+               <execution>
+                 <phase>generate-test-resources</phase>
+                 <configuration>
+                   <target>
+                     <property name="test_classpath" refid="maven.test.classpath" />
+                     <java classname="org.hsqldb.server.Server"
+                       fork="yes" spawn="yes">
+                       <arg
+                         line="--database.0 file:cpo --dbname.0 cpo" />
+                       <classpath>
+                         <pathelement path="${test_classpath}" />
+                       </classpath>
+                     </java>
+                     <sleep seconds="1"/>
+                   </target>
+                 </configuration>
+                 <goals>
+                   <goal>run</goal>
+                 </goals>
+               </execution>
+             </executions>
+           </plugin>
+          <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>sql-maven-plugin</artifactId>
+            <version>1.5</version>
+            <executions>
+              <execution>
+                <id>shutdown-db</id>
+                <phase>post-integration-test</phase>
+                <goals>
+                  <goal>execute</goal>
+                </goals>
+                <configuration>
+                  <username>${cpo.db.user}</username>
+                  <password>${cpo.db.pswd}</password>
+                  <driver>${cpo.db.driver}</driver>
+                  <url>${cpo.db.url}</url>
+                  <skip>${cpo.skip.sql.plugin}</skip>
+                  <onError>continue</onError>
+                  <srcFiles>
+                    <srcFile>${cpo.test.sqldir}/shutdown.sql</srcFile>
+                  </srcFiles>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
     </profile>
     <profile>
       <id>postgres</id>
@@ -436,7 +476,7 @@
         <cpo.db.callssupported>true</cpo.db.callssupported>
         <cpo.db.select4update>true</cpo.db.select4update>
         <cpo.db.millisupport>true</cpo.db.millisupport>
-        <cpo.db.jndi>java:/comp/env/jdbc/cpodatasource</cpo.db.jndi>        
+        <cpo.db.jndi>java:/comp/env/jdbc/cpodatasource</cpo.db.jndi>
         <cpo.valueCaseMeta.xml>/postgres/postgresValueCaseMetaData.xml</cpo.valueCaseMeta.xml>
         <cpo.lobMeta.xml>/postgres/postgresLobMetaData.xml</cpo.lobMeta.xml>
       </properties>

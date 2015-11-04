@@ -364,7 +364,7 @@
         <cpo.db.pswd />
         <cpo.db.host />
         <cpo.db.port />
-        <cpo.db.database>//localhost/cpo</cpo.db.database>
+        <cpo.db.database>//localhost/cpotest</cpo.db.database>
         <cpo.db.url>jdbc:hsqldb:hsql:${cpo.db.database}</cpo.db.url>
         <cpo.db.userurl>jdbc:hsqldb:hsql:${cpo.db.database};user=${cpo.db.user};password=${cpo.db.pswd}</cpo.db.userurl>
         <cpo.db.driver>org.hsqldb.jdbc.JDBCDriver</cpo.db.driver>
@@ -409,7 +409,7 @@
                      <java classname="org.hsqldb.server.Server"
                        fork="yes" spawn="yes">
                        <arg
-                         line="--database.0 file:cpo --dbname.0 cpo" />
+                         line="--database.0 file:target/hsqldb/cpotest --dbname.0 cpotest" />
                        <classpath>
                          <pathelement path="${test_classpath}" />
                        </classpath>

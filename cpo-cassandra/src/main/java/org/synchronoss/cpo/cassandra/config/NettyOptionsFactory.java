@@ -20,22 +20,22 @@
  */
 package org.synchronoss.cpo.cassandra.config;
 
-//import com.datastax.driver.core.QueryOptions;
 
-import com.datastax.driver.core.QueryOptions;
+import com.datastax.driver.core.NettyOptions;
 
 /**
  * Created with IntelliJ IDEA.
  * User: dberry
  * Date: 10/10/13
- * Time: 07:59 AM
+ * Time: 07:57 AM
  * To change this template use File | Settings | File Templates.
  */
-public abstract class QueryOptionsFactory implements FactoryMethodName {
+public abstract class NettyOptionsFactory implements FactoryMethodName {
 
   public String getFactoryMethodName() {
-    return "createQueryOptions";
+    return "createNettyOptions";
   }
 
-  public abstract QueryOptions createQueryOptions();
+  public abstract NettyOptions createNettyOptions();
+
 }

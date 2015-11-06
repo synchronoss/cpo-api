@@ -73,6 +73,13 @@
           </xs:documentation>
         </xs:annotation>
       </xs:element>
+      <xs:element name="maxSchemaAgreementWaitSeconds" type="xs:int" minOccurs="0">
+        <xs:annotation>
+          <xs:documentation>
+            Sets the maximum time to wait for schema agreement before returning from a DDL query.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
       <xs:element name="port" type="xs:int" minOccurs="0">
         <xs:annotation>
           <xs:documentation>
@@ -152,7 +159,7 @@
           </xs:documentation>
         </xs:annotation>
       </xs:element>
-      <xs:element name="initialListeners" type="xs:string" minOccurs="0" maxOccurs="unbounded">
+      <xs:element name="initialListeners" type="xs:string" minOccurs="0">
         <xs:annotation>
           <xs:documentation>
             Register the provided listeners in the newly created cluster.
@@ -193,6 +200,38 @@
             Sets the QueryOptions to use for the newly created Cluster.
             The string is full class path of a QueryOptionsFactory.
             If no query options are set through this method, default query options will be used.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="addressTranslater" type="xs:string" minOccurs="0">
+        <xs:annotation>
+          <xs:documentation>
+            Configures the address translater to use for the new cluster.
+            The string is full class path of a AddressTranslaterFactory.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="nettyOptions" type="xs:string" minOccurs="0">
+        <xs:annotation>
+          <xs:documentation>
+            Set the NettyOptions to use for the newly created Cluster.
+            The string is full class path of a NettyOptionsFactory.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="speculativeExecutionPolicy" type="xs:string" minOccurs="0">
+        <xs:annotation>
+          <xs:documentation>
+            Configures the speculative execution policy to use for the new cluster.
+            The string is full class path of a SpeculativeExecutionPolicyFactory.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="timestampGenerator" type="xs:string" minOccurs="0">
+        <xs:annotation>
+          <xs:documentation>
+            Configures the generator that will produce the client-side timestamp sent with each query.
+            The string is full class path of a TimestampGeneratorFactory.
           </xs:documentation>
         </xs:annotation>
       </xs:element>

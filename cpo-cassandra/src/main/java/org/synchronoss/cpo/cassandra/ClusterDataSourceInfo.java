@@ -21,9 +21,7 @@
 package org.synchronoss.cpo.cassandra;
 
 import com.datastax.driver.core.*;
-import com.datastax.driver.core.policies.LoadBalancingPolicy;
-import com.datastax.driver.core.policies.ReconnectionPolicy;
-import com.datastax.driver.core.policies.RetryPolicy;
+import com.datastax.driver.core.policies.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.AbstractDataSourceInfo;
@@ -43,14 +41,17 @@ public class ClusterDataSourceInfo extends AbstractDataSourceInfo<ClusterDataSou
   private String[] contactPoints;
   private String keySpace;
   private String clusterName;
+  private Integer maxSchemaAgreementWaitSeconds;
+  private NettyOptions nettyOptions;
   private Integer port;
+  private AddressTranslater addressTranslater;
   private LoadBalancingPolicy loadBalancingPolicy;
   private ReconnectionPolicy reconnectionPolicy;
   private RetryPolicy retryPolicy;
   private boolean credentials;
   private String userName;
   private String password;
-//  private AuthProvider authProvider;
+  private AuthProvider authProvider;
   private ProtocolOptions.Compression compressionType;
   private Boolean useMetrics;
   private SSLOptions sslOptions;
@@ -58,13 +59,39 @@ public class ClusterDataSourceInfo extends AbstractDataSourceInfo<ClusterDataSou
   private Boolean useJmxReporting;
   private PoolingOptions poolingOptions;
   private SocketOptions socketOptions;
-//  private QueryOptions queryOptions;
+  private QueryOptions queryOptions;
+  private SpeculativeExecutionPolicy speculativeExecutionPolicy;
+  private TimestampGenerator timestampGenerator;
 
   public ClusterDataSourceInfo(String clusterName, String keySpace, String[] contactPoints) {
     super(buildDataSourceName(clusterName, keySpace, contactPoints));
     this.keySpace=keySpace;
     this.clusterName=clusterName;
     this.contactPoints=contactPoints;
+  }
+
+  public Integer getMaxSchemaAgreementWaitSeconds() {
+    return maxSchemaAgreementWaitSeconds;
+  }
+
+  public void setMaxSchemaAgreementWaitSeconds(Integer maxSchemaAgreementWaitSeconds) {
+    this.maxSchemaAgreementWaitSeconds = maxSchemaAgreementWaitSeconds;
+  }
+
+  public NettyOptions getNettyOptions() {
+    return nettyOptions;
+  }
+
+  public void setNettyOptions(NettyOptions nettyOptions) {
+    this.nettyOptions = nettyOptions;
+  }
+
+  public AddressTranslater getAddressTranslater() {
+    return addressTranslater;
+  }
+
+  public void setAddressTranslater(AddressTranslater addressTranslater) {
+    this.addressTranslater = addressTranslater;
   }
 
   public String getClusterName() {
@@ -135,13 +162,13 @@ public class ClusterDataSourceInfo extends AbstractDataSourceInfo<ClusterDataSou
     this.password = password;
   }
 
-//  public AuthProvider getAuthProvider() {
-//    return authProvider;
-//  }
-//
-//  public void setAuthProvider(AuthProvider authProvider) {
-//    this.authProvider = authProvider;
-//  }
+  public AuthProvider getAuthProvider() {
+    return authProvider;
+  }
+
+  public void setAuthProvider(AuthProvider authProvider) {
+    this.authProvider = authProvider;
+  }
 
   public ProtocolOptions.Compression getCompressionType() {
     return compressionType;
@@ -199,13 +226,29 @@ public class ClusterDataSourceInfo extends AbstractDataSourceInfo<ClusterDataSou
     this.socketOptions = socketOptions;
   }
 
-//  public QueryOptions getQueryOptions() {
-//    return queryOptions;
-//  }
-//
-//  public void setQueryOptions(QueryOptions queryOptions) {
-//    this.queryOptions = queryOptions;
-//  }
+  public QueryOptions getQueryOptions() {
+    return queryOptions;
+  }
+
+  public void setQueryOptions(QueryOptions queryOptions) {
+    this.queryOptions = queryOptions;
+  }
+
+  public SpeculativeExecutionPolicy getSpeculativeExecutionPolicy() {
+    return speculativeExecutionPolicy;
+  }
+
+  public void setSpeculativeExecutionPolicy(SpeculativeExecutionPolicy speculativeExecutionPolicy) {
+    this.speculativeExecutionPolicy = speculativeExecutionPolicy;
+  }
+
+  public TimestampGenerator getTimestampGenerator() {
+    return timestampGenerator;
+  }
+
+  public void setTimestampGenerator(TimestampGenerator timestampGenerator) {
+    this.timestampGenerator = timestampGenerator;
+  }
 
   @Override
   protected ClusterDataSource createDataSource() throws CpoException {
@@ -215,16 +258,61 @@ public class ClusterDataSourceInfo extends AbstractDataSourceInfo<ClusterDataSou
     for(String s : contactPoints)
       clusterBuilder.addContactPoint(s);
 
+    // add addressTranslater
+    if (addressTranslater != null)
+      clusterBuilder.withAddressTranslater(addressTranslater);
+
+    // add AuthProvider
+    if (authProvider != null)
+      clusterBuilder.withAuthProvider(authProvider);
+
     // add clusterName
-//      clusterBuilder.withClusterName(clusterName);
+    if (clusterName != null)
+      clusterBuilder.withClusterName(clusterName);
+
+    // add Compression
+    if (compressionType != null)
+      clusterBuilder.withCompression(compressionType);
+
+    // add credentials
+    if (hasCredentials())
+      clusterBuilder.withCredentials(userName, password);
+
+    // add Listeners
+    if (listeners!=null && !listeners.isEmpty() && listeners.size()>0)
+      clusterBuilder.withInitialListeners(listeners);
+
+    // add loadBalancing
+    if (loadBalancingPolicy != null)
+      clusterBuilder.withLoadBalancingPolicy(loadBalancingPolicy);
+
+    // add maxSchemaAgreementWaitSeconds
+    if (maxSchemaAgreementWaitSeconds != null)
+      clusterBuilder.withMaxSchemaAgreementWaitSeconds(maxSchemaAgreementWaitSeconds);
+
+    // add NettyOptions
+    if (nettyOptions != null)
+      clusterBuilder.withNettyOptions(nettyOptions);
+
+    // add JMX Reporting
+    if (useJmxReporting != null && !useJmxReporting)
+      clusterBuilder.withoutJMXReporting();
+
+    // add Metrics
+    if (useMetrics != null && !useMetrics)
+      clusterBuilder.withoutMetrics();
+
+    // add pooling options
+    if (poolingOptions != null)
+      clusterBuilder.withPoolingOptions(poolingOptions);
 
     // add port
     if (port != null)
       clusterBuilder.withPort(port);
 
-    // add loadBalancing
-    if (loadBalancingPolicy != null)
-      clusterBuilder.withLoadBalancingPolicy(loadBalancingPolicy);
+    // add query options
+    if (queryOptions != null)
+      clusterBuilder.withQueryOptions(queryOptions);
 
     // add reconnectionPolicy
     if (reconnectionPolicy != null)
@@ -234,45 +322,21 @@ public class ClusterDataSourceInfo extends AbstractDataSourceInfo<ClusterDataSou
     if (retryPolicy != null)
       clusterBuilder.withRetryPolicy(retryPolicy);
 
-    // add credentials
-    if (hasCredentials())
-      clusterBuilder.withCredentials(userName, password);
+    // add socket options
+    if (socketOptions != null)
+      clusterBuilder.withSocketOptions(socketOptions);
 
-    // add AuthProvider
-//    if (authProvider != null)
-//      clusterBuilder.withAuthProvider(authProvider);
-
-    // add Compression
-    if (compressionType != null)
-      clusterBuilder.withCompression(compressionType);
-
-    // add Metrics
-    if (useMetrics != null && !useMetrics)
-      clusterBuilder.withoutMetrics();
+    // add SpeculativeExecutionPolicy
+    if (speculativeExecutionPolicy == null)
+      clusterBuilder.withSpeculativeExecutionPolicy(speculativeExecutionPolicy);
 
     // add SSL
     if (sslOptions != null)
       clusterBuilder.withSSL(sslOptions);
 
-    // add Listeners
-//    if (listeners!=null && !listeners.isEmpty() && listeners.size()>0)
-//      clusterBuilder.withInitialListeners(listeners);
-
-    // add JMX Reporting
-    if (useJmxReporting != null && !useJmxReporting)
-      clusterBuilder.withoutJMXReporting();
-
-    // add pooling options
-//    if (poolingOptions != null)
-//      clusterBuilder.withPoolingOptions(poolingOptions);
-
-    // add socket options
-//    if (socketOptions != null)
-//      clusterBuilder.withSocketOptions(socketOptions);
-
-    // add query options
-//    if (queryOptions != null)
-//      clusterBuilder.withQueryOptions(queryOptions);
+    // add TimestampGenerator
+    if (timestampGenerator == null)
+      clusterBuilder.withTimestampGenerator(timestampGenerator);
 
     return new ClusterDataSource(clusterBuilder.build(), keySpace);
   }

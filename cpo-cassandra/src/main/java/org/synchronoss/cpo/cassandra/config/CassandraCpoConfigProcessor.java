@@ -21,9 +21,7 @@
 package org.synchronoss.cpo.cassandra.config;
 
 import com.datastax.driver.core.*;
-import com.datastax.driver.core.policies.LoadBalancingPolicy;
-import com.datastax.driver.core.policies.ReconnectionPolicy;
-import com.datastax.driver.core.policies.RetryPolicy;
+import com.datastax.driver.core.policies.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.CpoAdapterFactory;
@@ -39,6 +37,7 @@ import org.synchronoss.cpo.core.cpoCoreConfig.CtDataSourceConfig;
 import org.synchronoss.cpo.meta.CpoMetaDescriptor;
 
 import java.util.ArrayList;
+import java.util.Collection;
 
 /**
  * CassandraCpoConfigProcessor processes the datasource configuration file for cassandra. It pulls out all the information needed to configure a cluster for use
@@ -94,6 +93,10 @@ public class CassandraCpoConfigProcessor implements CpoConfigProcessor {
     if(readWriteConfig.isSetClusterName())
       clusterInfo.setClusterName(readWriteConfig.getClusterName());
 
+    // add maxSchemaAgreementWaitSeconds
+    if (readWriteConfig.isSetMaxSchemaAgreementWaitSeconds())
+      clusterInfo.setMaxSchemaAgreementWaitSeconds(readWriteConfig.getMaxSchemaAgreementWaitSeconds());
+
     // add port
     if (readWriteConfig.isSetPort())
       clusterInfo.setPort(readWriteConfig.getPort());
@@ -118,13 +121,21 @@ public class CassandraCpoConfigProcessor implements CpoConfigProcessor {
       clusterInfo.setPassword(readWriteConfig.getCredentials().getUser());
     }
 
+    // add addressTranslater
+    if (readWriteConfig.isSetAddressTranslater())
+      clusterInfo.setAddressTranslater(new ConfigInstantiator<AddressTranslater>().instantiate(readWriteConfig.getAddressTranslater()));
+
     // add AuthProvider
-//    if (readWriteConfig.isSetAuthProvider())
-//      clusterInfo.setAuthProvider(new ConfigInstantiator<AuthProvider>().instantiate(readWriteConfig.getAuthProvider()));
+    if (readWriteConfig.isSetAuthProvider())
+      clusterInfo.setAuthProvider(new ConfigInstantiator<AuthProvider>().instantiate(readWriteConfig.getAuthProvider()));
 
     // add Compression
     if (readWriteConfig.isSetCompression())
       clusterInfo.setCompressionType(ProtocolOptions.Compression.valueOf(readWriteConfig.getCompression().toString()));
+
+    // add NettyOptions
+    if (readWriteConfig.isSetNettyOptions())
+      clusterInfo.setNettyOptions(new ConfigInstantiator<NettyOptions>().instantiate(readWriteConfig.getNettyOptions()));
 
     // add Metrics
     if (readWriteConfig.isSetMetrics())
@@ -135,12 +146,8 @@ public class CassandraCpoConfigProcessor implements CpoConfigProcessor {
       clusterInfo.setSslOptions(new ConfigInstantiator<SSLOptions>().instantiate(readWriteConfig.getSslOptions()));
 
     // add Listeners
-    if (readWriteConfig.getInitialListenersArray().length>0){
-      ArrayList<Host.StateListener> listeners = new ArrayList<>();
-      for (String s : readWriteConfig.getInitialListenersArray()) {
-        listeners.add(new ConfigInstantiator<Host.StateListener>().instantiate(s));
-      }
-      clusterInfo.setListeners(listeners);
+    if (readWriteConfig.isSetInitialListeners()){
+      clusterInfo.setListeners(new ConfigInstantiator<Collection<Host.StateListener>>().instantiate(readWriteConfig.getInitialListeners()));
     }
 
     // add JMX Reporting
@@ -155,10 +162,17 @@ public class CassandraCpoConfigProcessor implements CpoConfigProcessor {
     if (readWriteConfig.isSetSocketOptions())
       clusterInfo.setSocketOptions(new ConfigInstantiator<SocketOptions>().instantiate(readWriteConfig.getSocketOptions()));
 
-    // TODO: Add back in when add query options
-//    if (readWriteConfig.isSetQueryOptions())
-//      clusterInfo.setQueryOptions(new ConfigInstantiator<QueryOptions>().instantiate(readWriteConfig.getQueryOptions()));
+    // add query Options
+    if (readWriteConfig.isSetQueryOptions())
+      clusterInfo.setQueryOptions(new ConfigInstantiator<QueryOptions>().instantiate(readWriteConfig.getQueryOptions()));
 
+    // add speculativeExecutionPolicy
+    if (readWriteConfig.isSetSpeculativeExecutionPolicy())
+      clusterInfo.setSpeculativeExecutionPolicy(new ConfigInstantiator<SpeculativeExecutionPolicy>().instantiate(readWriteConfig.getSpeculativeExecutionPolicy()));
+
+    // add TimestampGenerator
+    if (readWriteConfig.isSetTimestampGenerator())
+      clusterInfo.setTimestampGenerator(new ConfigInstantiator<TimestampGenerator>().instantiate(readWriteConfig.getTimestampGenerator()));
 
     logger.debug("Created DataSourceInfo: " + clusterInfo);
     return clusterInfo;

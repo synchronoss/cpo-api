@@ -40,7 +40,6 @@
     <oracleVersion>11.2.0.2.0</oracleVersion>
     <mysqlVersion>5.1.16</mysqlVersion>
     <h2Version>1.4.190</h2Version>
-    <cassandraVersion>1.1.0</cassandraVersion>
     <postgresVersion>9.0-801.jdbc4</postgresVersion>
   </properties>
   <build>
@@ -65,11 +64,6 @@
               <groupId>mysql</groupId>
               <artifactId>mysql-connector-java</artifactId>
               <version>${mysqlVersion}</version>
-            </dependency>
-            <dependency>
-              <groupId>org.apache-extras.cassandra-jdbc</groupId>
-              <artifactId>cassandra-jdbc</artifactId>
-              <version>${cassandraVersion}</version>
             </dependency>
             <dependency>
                 <groupId>com.h2database</groupId>
@@ -190,12 +184,6 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>org.apache-extras.cassandra-jdbc</groupId>
-      <artifactId>cassandra-jdbc</artifactId>
-      <version>${cassandraVersion}</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
       <groupId>org.apache.jmeter</groupId>
       <artifactId>ApacheJMeter_java</artifactId>
       <version>2.6</version>
@@ -214,38 +202,6 @@
     </dependency>
     </dependencies>
   <profiles>
-    <profile>
-      <id>cassandra</id>
-      <activation>
-        <activeByDefault>false</activeByDefault>
-        <property>
-          <name>cpo.db</name>
-          <value>cassandra</value>
-        </property>
-      </activation>
-      <properties>
-        <release.arguments>-Dcpo.db=${cpo.db}</release.arguments>
-        <cpo.test.sqldir>src/test/sql/cassandra</cpo.test.sqldir>
-        <cpo.skip.sql.plugin>false</cpo.skip.sql.plugin>
-        <cpo.db.user>cpo_user</cpo.db.user>
-        <cpo.db.pswd>cpo_pwd</cpo.db.pswd>
-        <cpo.db.host>23.23.184.138</cpo.db.host>
-        <cpo.db.port>9160</cpo.db.port>
-        <cpo.db.database>cpo</cpo.db.database>
-        <cpo.db.url>jdbc:cassandra://${cpo.db.host}:${cpo.db.port}/${cpo.db.database}</cpo.db.url>
-        <cpo.db.userurl>jdbc:cassandra://${cpo.db.user}:${cpo.db.pswd}@${cpo.db.host}:${cpo.db.port}/${cpo.db.database}</cpo.db.userurl>
-        <cpo.db.driver>org.apache.cassandra.cql.jdbc.CassandraDriver</cpo.db.driver>
-        <cpo.db.blobssupported>true</cpo.db.blobssupported>
-        <cpo.db.callssupported>false</cpo.db.callssupported>
-        <cpo.db.select4update>false</cpo.db.select4update>
-        <cpo.db.millisupport>true</cpo.db.millisupport>
-        <cpo.db.jndi>java:/comp/env/jdbc/cpodatasource</cpo.db.jndi>
-        <cpo.db.class>org.apache.cassandra.cql.jdbc.CassandraDataSource</cpo.db.class>
-        <cpo.valueMeta.xml>/cassandra/cassandraValueMetaData.xml</cpo.valueMeta.xml>
-        <cpo.valueCaseMeta.xml>/cassandra/cassandraValueCaseMetaData.xml</cpo.valueCaseMeta.xml>
-        <cpo.lobMeta.xml>/cassandra/cassandraLobMetaData.xml</cpo.lobMeta.xml>
-      </properties>
-    </profile>
     <profile>
       <id>mysql</id>
       <activation>

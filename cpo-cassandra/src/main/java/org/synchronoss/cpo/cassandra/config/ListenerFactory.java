@@ -22,6 +22,8 @@ package org.synchronoss.cpo.cassandra.config;
 
 import com.datastax.driver.core.Host;
 
+import java.util.Collection;
+
 /**
  * Created with IntelliJ IDEA.
  * User: dberry
@@ -35,5 +37,5 @@ public abstract class ListenerFactory implements FactoryMethodName {
     return "createListeners";
   }
 
-  public abstract Host.StateListener createListeners();
+  public abstract Collection<Host.StateListener> createListeners();
 }

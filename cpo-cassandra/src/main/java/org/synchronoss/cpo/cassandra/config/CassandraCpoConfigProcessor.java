@@ -29,8 +29,7 @@ import org.synchronoss.cpo.CpoException;
 import org.synchronoss.cpo.cassandra.CassandraCpoAdapter;
 import org.synchronoss.cpo.cassandra.CassandraCpoAdapterFactory;
 import org.synchronoss.cpo.cassandra.ClusterDataSourceInfo;
-import org.synchronoss.cpo.cassandra.cpoCassandraConfig.CtCassandraConfig;
-import org.synchronoss.cpo.cassandra.cpoCassandraConfig.CtCassandraReadWriteConfig;
+import org.synchronoss.cpo.cassandra.cpoCassandraConfig.*;
 import org.synchronoss.cpo.cassandra.meta.CassandraCpoMetaDescriptor;
 import org.synchronoss.cpo.config.CpoConfigProcessor;
 import org.synchronoss.cpo.core.cpoCoreConfig.CtDataSourceConfig;
@@ -142,8 +141,12 @@ public class CassandraCpoConfigProcessor implements CpoConfigProcessor {
       clusterInfo.setUseMetrics(readWriteConfig.getMetrics());
 
     // add SSL
-    if (readWriteConfig.isSetSslOptions())
-      clusterInfo.setSslOptions(new ConfigInstantiator<SSLOptions>().instantiate(readWriteConfig.getSslOptions()));
+    if (readWriteConfig.isSetSslOptions()) {
+      if (readWriteConfig.isNilSslOptions())
+        clusterInfo.setSslOptions(new SSLOptions());
+      else
+        clusterInfo.setSslOptions(new ConfigInstantiator<SSLOptions>().instantiate(readWriteConfig.getSslOptions()));
+    }
 
     // add Listeners
     if (readWriteConfig.isSetInitialListeners()){
@@ -154,17 +157,21 @@ public class CassandraCpoConfigProcessor implements CpoConfigProcessor {
     if (readWriteConfig.isSetJmxReporting())
       clusterInfo.setUseJmxReporting(readWriteConfig.getJmxReporting());
 
+    // add protocolVersion
+    if (readWriteConfig.isSetProtocolVersion())
+      clusterInfo.setProtocolVersion(ProtocolVersion.valueOf(readWriteConfig.getProtocolVersion().toString()));
+
     // add pooling options
     if (readWriteConfig.isSetPoolingOptions())
-      clusterInfo.setPoolingOptions(new ConfigInstantiator<PoolingOptions>().instantiate(readWriteConfig.getPoolingOptions()));
+      clusterInfo.setPoolingOptions(buildPoolingOptions(readWriteConfig.getPoolingOptions()));
 
     // add socket options
     if (readWriteConfig.isSetSocketOptions())
-      clusterInfo.setSocketOptions(new ConfigInstantiator<SocketOptions>().instantiate(readWriteConfig.getSocketOptions()));
+      clusterInfo.setSocketOptions(buildSocketOptions(readWriteConfig.getSocketOptions()));
 
     // add query Options
     if (readWriteConfig.isSetQueryOptions())
-      clusterInfo.setQueryOptions(new ConfigInstantiator<QueryOptions>().instantiate(readWriteConfig.getQueryOptions()));
+      clusterInfo.setQueryOptions(buildQueryOptions(readWriteConfig.getQueryOptions()));
 
     // add speculativeExecutionPolicy
     if (readWriteConfig.isSetSpeculativeExecutionPolicy())
@@ -176,6 +183,98 @@ public class CassandraCpoConfigProcessor implements CpoConfigProcessor {
 
     logger.debug("Created DataSourceInfo: " + clusterInfo);
     return clusterInfo;
+  }
+
+  private PoolingOptions buildPoolingOptions(CtPoolingOptions ctPoolingOptions) {
+    PoolingOptions poolingOptions = new PoolingOptions();
+
+    if (ctPoolingOptions.isSetConnectionsPerHost()) {
+      CtConnectionsPerHost cph = ctPoolingOptions.getConnectionsPerHost();
+      poolingOptions.setConnectionsPerHost(HostDistance.valueOf(cph.getDistance().toString()), cph.getCore(), cph.getMax());
+    }
+
+    if (ctPoolingOptions.isSetCoreConnectionsPerHost()) {
+      CtHostDistanceAndThreshold hdt = ctPoolingOptions.getCoreConnectionsPerHost();
+      poolingOptions.setCoreConnectionsPerHost(HostDistance.valueOf(hdt.getDistance().toString()), hdt.getThreshold());
+    }
+
+    if (ctPoolingOptions.isSetHeartbeatIntervalSeconds()) {
+      poolingOptions.setHeartbeatIntervalSeconds(ctPoolingOptions.getHeartbeatIntervalSeconds());
+    }
+
+    if (ctPoolingOptions.isSetIdleTimeoutSeconds()) {
+      poolingOptions.setIdleTimeoutSeconds(ctPoolingOptions.getIdleTimeoutSeconds());
+    }
+
+    if (ctPoolingOptions.isSetMaxConnectionsPerHost()) {
+      CtHostDistanceAndThreshold hdt = ctPoolingOptions.getMaxConnectionsPerHost();
+      poolingOptions.setMaxConnectionsPerHost(HostDistance.valueOf(hdt.getDistance().toString()), hdt.getThreshold());
+    }
+
+    if (ctPoolingOptions.isSetMaxRequestsPerConnection()) {
+      CtHostDistanceAndThreshold hdt = ctPoolingOptions.getMaxRequestsPerConnection();
+      poolingOptions.setMaxRequestsPerConnection(HostDistance.valueOf(hdt.getDistance().toString()), hdt.getThreshold());
+    }
+
+    if (ctPoolingOptions.isSetNewConnectionThreshold()) {
+      CtHostDistanceAndThreshold hdt = ctPoolingOptions.getNewConnectionThreshold();
+      poolingOptions.setNewConnectionThreshold(HostDistance.valueOf(hdt.getDistance().toString()), hdt.getThreshold());
+    }
+
+    if (ctPoolingOptions.isSetPoolTimeoutMillis()) {
+      poolingOptions.setPoolTimeoutMillis(ctPoolingOptions.getPoolTimeoutMillis());
+    }
+
+
+    return poolingOptions;
+  }
+
+  private QueryOptions buildQueryOptions(CtQueryOptions ctQueryOptions) {
+    QueryOptions queryOptions = new QueryOptions();
+
+    if (ctQueryOptions.isSetConsistencyLevel())
+      queryOptions.setConsistencyLevel(ConsistencyLevel.valueOf(ctQueryOptions.getConsistencyLevel().toString()));
+
+    if (ctQueryOptions.isSetDefaultIdempotence())
+      queryOptions.setDefaultIdempotence(ctQueryOptions.getDefaultIdempotence());
+
+    if (ctQueryOptions.isSetFetchSize())
+      queryOptions.setFetchSize(ctQueryOptions.getFetchSize());
+
+    if (ctQueryOptions.isSetSerialConsistencyLevel())
+      queryOptions.setSerialConsistencyLevel(ConsistencyLevel.valueOf(ctQueryOptions.getSerialConsistencyLevel().toString()));
+
+    return queryOptions;
+  }
+
+  private SocketOptions buildSocketOptions(CtSocketOptions ctSocketOptions) {
+    SocketOptions socketOptions = new SocketOptions();
+
+    if (ctSocketOptions.isSetConnectionTimeoutMillis())
+      socketOptions.setConnectTimeoutMillis(ctSocketOptions.getConnectionTimeoutMillis());
+
+    if (ctSocketOptions.isSetKeepAlive())
+      socketOptions.setKeepAlive(ctSocketOptions.getKeepAlive());
+
+    if (ctSocketOptions.isSetReadTimeoutMillis())
+      socketOptions.setReadTimeoutMillis(ctSocketOptions.getReadTimeoutMillis());
+
+    if (ctSocketOptions.isSetReceiveBufferSize())
+      socketOptions.setReceiveBufferSize(ctSocketOptions.getReceiveBufferSize());
+
+    if (ctSocketOptions.isSetReuseAddress())
+      socketOptions.setReuseAddress(ctSocketOptions.getReuseAddress());
+
+    if (ctSocketOptions.isSetSendBufferSize())
+      socketOptions.setSendBufferSize(ctSocketOptions.getSendBufferSize());
+
+    if (ctSocketOptions.isSetSoLinger())
+      socketOptions.setSoLinger(ctSocketOptions.getSoLinger());
+
+    if (ctSocketOptions.isSetTcpNoDelay())
+      socketOptions.setTcpNoDelay(ctSocketOptions.getTcpNoDelay());
+
+    return socketOptions;
   }
 
 }

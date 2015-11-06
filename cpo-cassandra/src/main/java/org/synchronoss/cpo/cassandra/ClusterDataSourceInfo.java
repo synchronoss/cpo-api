@@ -44,6 +44,7 @@ public class ClusterDataSourceInfo extends AbstractDataSourceInfo<ClusterDataSou
   private Integer maxSchemaAgreementWaitSeconds;
   private NettyOptions nettyOptions;
   private Integer port;
+  private ProtocolVersion protocolVersion;
   private AddressTranslater addressTranslater;
   private LoadBalancingPolicy loadBalancingPolicy;
   private ReconnectionPolicy reconnectionPolicy;
@@ -250,6 +251,14 @@ public class ClusterDataSourceInfo extends AbstractDataSourceInfo<ClusterDataSou
     this.timestampGenerator = timestampGenerator;
   }
 
+  public ProtocolVersion getProtocolVersion() {
+    return protocolVersion;
+  }
+
+  public void setProtocolVersion(ProtocolVersion protocolVersion) {
+    this.protocolVersion = protocolVersion;
+  }
+
   @Override
   protected ClusterDataSource createDataSource() throws CpoException {
     Cluster.Builder clusterBuilder = Cluster.builder();
@@ -309,6 +318,9 @@ public class ClusterDataSourceInfo extends AbstractDataSourceInfo<ClusterDataSou
     // add port
     if (port != null)
       clusterBuilder.withPort(port);
+
+    if (protocolVersion != null)
+      clusterBuilder.withProtocolVersion(protocolVersion);
 
     // add query options
     if (queryOptions != null)

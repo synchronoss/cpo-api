@@ -142,6 +142,13 @@
           </xs:documentation>
         </xs:annotation>
       </xs:element>
+      <xs:element name="protocolVersion" type="stProtocolVersion" minOccurs="0">
+        <xs:annotation>
+          <xs:documentation>
+            The native protocol version to use.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
       <xs:element name="metrics" type="xs:boolean" default="true" minOccurs="0">
         <xs:annotation>
           <xs:documentation>
@@ -176,29 +183,38 @@
           </xs:documentation>
         </xs:annotation>
       </xs:element>
-      <xs:element name="poolingOptions" type="xs:string" minOccurs="0">
+      <xs:element name="poolingOptions" type="ctPoolingOptions" minOccurs="0">
         <xs:annotation>
           <xs:documentation>
-            Sets the PoolingOptions to use for the newly created Cluster.
-            The string is full class path of a PoolingOptionsFactory.
-            If no pooling options are set through this method, default pooling options will be used.
+            Options related to connection pooling.
+            The driver uses connections in an asynchronous manner, meaning that multiple requests can be submitted
+            on the same connection at the same time. Therefore only a relatively small number of connections is needed.
+            For each host, the driver uses a connection pool that may have a variable size (it will automatically adjust to the current load).
+
+            With ProtocolVersion#V2 or below, there are at most 128 simultaneous requests per connection, so the pool defaults to a variable size.
+            You will typically raise the maximum capacity by adding more connections with setMaxRequestsPerConnection(HostDistance, int).
+
+            With ProtocolVersion#V3 or above, there are up to 32768 requests per connection, and the pool defaults to a fixed size of 1.
+            You will typically raise the maximum capacity by allowing more simultaneous requests per connection
+            (setMaxRequestsPerConnection(HostDistance, int)).
+
+            All parameters can be separately set for LOCAL and REMOTE hosts (HostDistance). For IGNORED hosts, no connections are created so
+            these settings cannot be changed.
           </xs:documentation>
         </xs:annotation>
       </xs:element>
-      <xs:element name="socketOptions" type="xs:string" minOccurs="0">
+      <xs:element name="socketOptions" type="ctSocketOptions" minOccurs="0">
         <xs:annotation>
           <xs:documentation>
             Sets the SocketOptions to use for the newly created Cluster.
-            The string is full class path of a SocketOptionsFactory.
             If no socket options are set through this method, default socket options will be used.
           </xs:documentation>
         </xs:annotation>
       </xs:element>
-      <xs:element name="queryOptions" type="xs:string" minOccurs="0">
+      <xs:element name="queryOptions" type="ctQueryOptions" minOccurs="0">
         <xs:annotation>
           <xs:documentation>
             Sets the QueryOptions to use for the newly created Cluster.
-            The string is full class path of a QueryOptionsFactory.
             If no query options are set through this method, default query options will be used.
           </xs:documentation>
         </xs:annotation>
@@ -260,6 +276,193 @@
       <xs:enumeration value="SNAPPY"/>
     </xs:restriction>
   </xs:simpleType>
+
+  <!-- Protocol Version -->
+  <xs:simpleType name="stProtocolVersion">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="V1"/>
+      <xs:enumeration value="V2"/>
+      <xs:enumeration value="V3"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <!-- Pooling Options -->
+  <xs:complexType name="ctPoolingOptions">
+    <xs:sequence>
+      <xs:element name="connectionsPerHost" type="ctConnectionsPerHost" minOccurs="0">
+          <xs:annotation>
+              <xs:documentation>Sets the core and maximum number of connections per host in one call.</xs:documentation>
+          </xs:annotation>
+      </xs:element>
+      <xs:element name="coreConnectionsPerHost" type="ctHostDistanceAndThreshold" minOccurs="0">
+          <xs:annotation>
+              <xs:documentation>Sets the core number of connections per host.</xs:documentation>
+          </xs:annotation>
+      </xs:element>
+      <xs:element name="heartbeatIntervalSeconds" type="xs:int" minOccurs="0">
+          <xs:annotation>
+              <xs:documentation>Sets the heart beat interval, after which a message is sent on an idle connection to make sure it's still alive.</xs:documentation>
+          </xs:annotation>
+      </xs:element>
+      <xs:element name="idleTimeoutSeconds" type="xs:int" minOccurs="0">
+          <xs:annotation>
+              <xs:documentation>Sets the timeout before an idle connection is removed.</xs:documentation>
+          </xs:annotation>
+      </xs:element>
+      <xs:element name="maxConnectionsPerHost" type="ctHostDistanceAndThreshold" minOccurs="0">
+          <xs:annotation>
+              <xs:documentation>Sets the maximum number of connections per host.</xs:documentation>
+          </xs:annotation>
+      </xs:element>
+      <xs:element name="maxRequestsPerConnection" type="ctHostDistanceAndThreshold" minOccurs="0">
+          <xs:annotation>
+              <xs:documentation>Sets the maximum number of requests per connection.</xs:documentation>
+          </xs:annotation>
+      </xs:element>
+      <xs:element name="newConnectionThreshold" type="ctHostDistanceAndThreshold" minOccurs="0">
+          <xs:annotation>
+              <xs:documentation>Sets the threshold that triggers the creation of a new connection to a host.</xs:documentation>
+          </xs:annotation>
+      </xs:element>
+      <xs:element name="poolTimeoutMillis" type="xs:int" minOccurs="0">
+          <xs:annotation>
+              <xs:documentation>Sets the timeout when trying to acquire a connection from a host's pool.</xs:documentation>
+          </xs:annotation>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="ctConnectionsPerHost">
+    <xs:sequence>
+      <xs:element name="distance" type="stHostDistance">
+          <xs:annotation>
+              <xs:documentation>The HostDistance for which to set these threshold.</xs:documentation>
+          </xs:annotation>
+      </xs:element>
+      <xs:element name="core" type="xs:int">
+          <xs:annotation>
+              <xs:documentation>the core number of connections.</xs:documentation>
+          </xs:annotation>
+      </xs:element>
+      <xs:element name="max" type="xs:int">
+          <xs:annotation>
+              <xs:documentation>the max number of connections.</xs:documentation>
+          </xs:annotation>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="ctHostDistanceAndThreshold">
+    <xs:sequence>
+      <xs:element name="distance" type="stHostDistance">
+          <xs:annotation>
+              <xs:documentation>The HostDistance for which to set these threshold.</xs:documentation>
+          </xs:annotation>
+      </xs:element>
+      <xs:element name="threshold" type="xs:int">
+          <xs:annotation>
+              <xs:documentation>the new threshold.</xs:documentation>
+          </xs:annotation>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:simpleType name="stHostDistance">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="IGNORED"/>
+      <xs:enumeration value="LOCAL"/>
+      <xs:enumeration value="REMOTE"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <!-- Query Options -->
+  <xs:complexType name="ctQueryOptions">
+    <xs:sequence>
+      <xs:element name="consistencyLevel" type="stConsistencyLevel" minOccurs="0">
+          <xs:annotation>
+              <xs:documentation>Sets the default consistency level to use for queries.</xs:documentation>
+          </xs:annotation>
+      </xs:element>
+      <xs:element name="defaultIdempotence" type="xs:boolean" minOccurs="0">
+          <xs:annotation>
+              <xs:documentation>Sets the default idempotence for queries.</xs:documentation>
+          </xs:annotation>
+      </xs:element>
+      <xs:element name="fetchSize" type="xs:int" minOccurs="0">
+          <xs:annotation>
+              <xs:documentation>Sets the default fetch size to use for SELECT queries.</xs:documentation>
+          </xs:annotation>
+      </xs:element>
+      <xs:element name="serialConsistencyLevel" type="stConsistencyLevel" minOccurs="0">
+          <xs:annotation>
+              <xs:documentation>Sets the default serial consistency level to use for queries.</xs:documentation>
+          </xs:annotation>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:simpleType name="stConsistencyLevel">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="ALL"/>
+      <xs:enumeration value="ANY"/>
+      <xs:enumeration value="EACH_QUORUM"/>
+      <xs:enumeration value="LOCAL_ONE"/>
+      <xs:enumeration value="LOCAL_QUORUM"/>
+      <xs:enumeration value="LOCAL_SERIAL"/>
+      <xs:enumeration value="ONE"/>
+      <xs:enumeration value="QUORUM"/>
+      <xs:enumeration value="SERIAL"/>
+      <xs:enumeration value="THREE"/>
+      <xs:enumeration value="TWO"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+<!-- Socket Options -->
+  <xs:complexType name="ctSocketOptions">
+    <xs:sequence>
+      <xs:element name="connectionTimeoutMillis" type="xs:int" minOccurs="0">
+          <xs:annotation>
+              <xs:documentation>Sets the connection timeout in milliseconds.</xs:documentation>
+          </xs:annotation>
+      </xs:element>
+      <xs:element name="keepAlive" type="xs:boolean" minOccurs="0">
+          <xs:annotation>
+              <xs:documentation>Sets whether to enable TCP keepalive.</xs:documentation>
+          </xs:annotation>
+      </xs:element>
+      <xs:element name="readTimeoutMillis" type="xs:int" minOccurs="0">
+          <xs:annotation>
+              <xs:documentation>Sets the per-host read timeout in milliseconds.</xs:documentation>
+          </xs:annotation>
+      </xs:element>
+      <xs:element name="receiveBufferSize" type="xs:int" minOccurs="0">
+          <xs:annotation>
+              <xs:documentation>Sets a hint to the size of the underlying buffers for incoming network I/O.</xs:documentation>
+          </xs:annotation>
+      </xs:element>
+      <xs:element name="reuseAddress" type="xs:boolean" minOccurs="0">
+          <xs:annotation>
+              <xs:documentation>Sets whether to enable reuse-address.</xs:documentation>
+          </xs:annotation>
+      </xs:element>
+      <xs:element name="sendBufferSize" type="xs:int" minOccurs="0">
+          <xs:annotation>
+              <xs:documentation>Sets a hint to the size of the underlying buffers for outgoing network I/O.</xs:documentation>
+          </xs:annotation>
+      </xs:element>
+      <xs:element name="soLinger" type="xs:int" minOccurs="0">
+          <xs:annotation>
+              <xs:documentation>Sets the linger-on-close timeout.</xs:documentation>
+          </xs:annotation>
+      </xs:element>
+      <xs:element name="tcpNoDelay" type="xs:boolean" minOccurs="0">
+          <xs:annotation>
+              <xs:documentation>Sets whether to disable Nagle's algorithm.</xs:documentation>
+          </xs:annotation>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+
 
 
 </xs:schema>

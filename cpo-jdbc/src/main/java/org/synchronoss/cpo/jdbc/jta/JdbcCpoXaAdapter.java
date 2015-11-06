@@ -21,6 +21,7 @@
 package org.synchronoss.cpo.jdbc.jta;
 
 import org.synchronoss.cpo.*;
+import org.synchronoss.cpo.jdbc.JdbcCpoAdapter;
 import org.synchronoss.cpo.jdbc.JdbcCpoAdapterFactory;
 import org.synchronoss.cpo.jdbc.JdbcCpoTrxAdapter;
 import org.synchronoss.cpo.jta.CpoBaseXaResource;
@@ -54,12 +55,12 @@ import java.util.List;
  * At transaction commit time, the resource managers are informed by the transaction manager to prepare, commit, or rollback a transaction according to the
  * two-phase commit protocol.
  */
-public class JdbcCpoXaAdapter extends CpoBaseXaResource<JdbcCpoTrxAdapter> implements CpoTrxAdapter {
+public class JdbcCpoXaAdapter extends CpoBaseXaResource<JdbcCpoAdapter> implements CpoTrxAdapter {
 
   private JdbcCpoAdapterFactory jdbcCpoAdapterFactory;
 
   public JdbcCpoXaAdapter(JdbcCpoAdapterFactory jdbcCpoAdapterFactory) throws CpoException {
-    super((JdbcCpoTrxAdapter) jdbcCpoAdapterFactory.getCpoTrxAdapter());
+    super((JdbcCpoAdapter) jdbcCpoAdapterFactory.getCpoAdapter());
     this.jdbcCpoAdapterFactory = jdbcCpoAdapterFactory;
   }
 
@@ -68,7 +69,9 @@ public class JdbcCpoXaAdapter extends CpoBaseXaResource<JdbcCpoTrxAdapter> imple
    */
   @Override
   public void commit() throws CpoException {
-    getCurrentResource().commit();
+    JdbcCpoAdapter currentResource = getCurrentResource();
+    if (currentResource != getLocalResource())
+      ((JdbcCpoTrxAdapter)currentResource).commit();
   }
 
   /**
@@ -76,7 +79,9 @@ public class JdbcCpoXaAdapter extends CpoBaseXaResource<JdbcCpoTrxAdapter> imple
    */
   @Override
   public void rollback() throws CpoException {
-    getCurrentResource().rollback();
+    JdbcCpoAdapter currentResource = getCurrentResource();
+    if (currentResource != getLocalResource())
+      ((JdbcCpoTrxAdapter)currentResource).rollback();
   }
 
   /**
@@ -85,7 +90,11 @@ public class JdbcCpoXaAdapter extends CpoBaseXaResource<JdbcCpoTrxAdapter> imple
    */
   @Override
   public void close() throws CpoException {
-    getCurrentResource().close();
+    try {
+      super.closeAssociated();
+    } catch (XAException xae) {
+      throw new CpoException(xae);
+    }
   }
 
   /**
@@ -93,7 +102,11 @@ public class JdbcCpoXaAdapter extends CpoBaseXaResource<JdbcCpoTrxAdapter> imple
    */
   @Override
   public boolean isClosed() throws CpoException {
-    return getCurrentResource().isClosed();
+    JdbcCpoAdapter currentResource = getCurrentResource();
+    if (currentResource != getLocalResource())
+      return ((JdbcCpoTrxAdapter)currentResource).isClosed();
+    else
+      return true;
   }
 
   /**
@@ -101,7 +114,11 @@ public class JdbcCpoXaAdapter extends CpoBaseXaResource<JdbcCpoTrxAdapter> imple
    */
   @Override
   public boolean isBusy() throws CpoException {
-    return getCurrentResource().isBusy();
+    JdbcCpoAdapter currentResource = getCurrentResource();
+    if (currentResource != getLocalResource())
+      return ((JdbcCpoTrxAdapter)currentResource).isBusy();
+    else
+      return false;
   }
 
   /**
@@ -1839,38 +1856,39 @@ public class JdbcCpoXaAdapter extends CpoBaseXaResource<JdbcCpoTrxAdapter> imple
      if (xaResource == null)
        throw new XAException(XAException.XAER_INVAL);
 
-     return xaResource instanceof JdbcCpoTrxAdapter;
+     return xaResource instanceof JdbcCpoXaAdapter;
    }
 
   @Override
   public boolean isLocalResourceBusy() throws XAException {
-    boolean busy;
+    return false;
+//    boolean busy;
+//    try {
+//      busy = getLocalResource().isBusy();
+//    } catch (CpoException ce) {
+//      throw new XAException(XAException.XAER_RMERR);
+//    }
+//    return busy;
+  }
+
+  @Override
+  protected void prepareResource(JdbcCpoAdapter jdbcCpoAdapter) throws XAException {
+
+  }
+
+  @Override
+  public void commitResource(JdbcCpoAdapter jdbcCpoAdapter) throws XAException {
     try {
-      busy = getLocalResource().isBusy();
+      ((JdbcCpoTrxAdapter)jdbcCpoAdapter).commit();
     } catch (CpoException ce) {
       throw new XAException(XAException.XAER_RMERR);
     }
-    return busy;
   }
 
   @Override
-  protected void prepareResource(JdbcCpoTrxAdapter jdbcCpoTrxAdapter) throws XAException {
-
-  }
-
-  @Override
-  public void commitResource(JdbcCpoTrxAdapter jdbcCpoTrxAdapter) throws XAException {
+  public void rollbackResource(JdbcCpoAdapter jdbcCpoAdapter) throws XAException {
     try {
-      jdbcCpoTrxAdapter.commit();
-    } catch (CpoException ce) {
-      throw new XAException(XAException.XAER_RMERR);
-    }
-  }
-
-  @Override
-  public void rollbackResource(JdbcCpoTrxAdapter jdbcCpoTrxAdapter) throws XAException {
-    try {
-      jdbcCpoTrxAdapter.rollback();
+      ((JdbcCpoTrxAdapter)jdbcCpoAdapter).rollback();
     } catch (CpoException ce) {
       throw new XAException(XAException.XAER_RMERR);
     }
@@ -1886,9 +1904,9 @@ public class JdbcCpoXaAdapter extends CpoBaseXaResource<JdbcCpoTrxAdapter> imple
   }
 
   @Override
-  public void closeResource(JdbcCpoTrxAdapter jdbcCpoTrxAdapter) throws XAException {
+  public void closeResource(JdbcCpoAdapter jdbcCpoAdapter) throws XAException {
     try {
-      jdbcCpoTrxAdapter.close();
+      ((JdbcCpoTrxAdapter)jdbcCpoAdapter).close();
     } catch (CpoException ce) {
       throw new XAException(XAException.XAER_RMERR);
     }

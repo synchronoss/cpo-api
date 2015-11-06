@@ -72,6 +72,18 @@ public abstract class CpoBaseXaResource<T> implements CpoXaResource {
   }
 
   /**
+   * Closes the resource associated with this instance
+   *
+   * @throws XAException
+   */
+  public void closeAssociated() throws XAException {
+    Xid associatedXid = cpoXaStateMap.getXaResourceMap().get(this);
+    if ( associatedXid != null) {
+      close(associatedXid);
+    }
+  }
+
+  /**
    * Closes the resource for the specified xid
    *
    * @param xid of the global transaction
@@ -264,13 +276,21 @@ public abstract class CpoBaseXaResource<T> implements CpoXaResource {
   @Override
   public Xid[] recover(int flags) throws XAException {
     synchronized (cpoXaStateMap) {
-      ArrayList<Xid> xids = new ArrayList<>();
+      switch (flags) {
+        case TMSTARTRSCAN:
+        case TMENDRSCAN:
+        case TMSTARTRSCAN | TMENDRSCAN:
+        case TMNOFLAGS:
+          ArrayList<Xid> xids = new ArrayList<>();
 
-      for (CpoXaState<T> cpoXaState : cpoXaStateMap.getXidStateMap().values()) {
-        if (cpoXaState.isPrepared())
-          xids.add(cpoXaState.getXid());
+          for (CpoXaState<T> cpoXaState : cpoXaStateMap.getXidStateMap().values()) {
+            if (cpoXaState.isPrepared())
+              xids.add(cpoXaState.getXid());
+          }
+          return xids.toArray(new Xid[0]);
+        default:
+          throw new XAException(XAException.XAER_INVAL);
       }
-      return xids.toArray(new Xid[0]);
     }
   }
 
@@ -369,7 +389,7 @@ public abstract class CpoBaseXaResource<T> implements CpoXaResource {
           if (cpoXaState == null)
             throw new XAException(XAException.XAER_NOTA);
 
-          // you can only join a suspended transaction
+          // you can only resume a suspended transaction
           if (cpoXaState.getAssociation() == CpoXaState.XA_SUSPENDED) {
             cpoXaState.setAssociation(CpoXaState.XA_ASSOCIATED);
             cpoXaState.setAssignedResourceManager(this);

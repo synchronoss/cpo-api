@@ -24,6 +24,60 @@
 <cpoMetaData xmlns="http://www.synchronoss.org/cpo/core/CpoCoreMeta.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" metaDescriptor="org.synchronoss.cpo.jdbc.meta.JdbcCpoMetaDescriptor" defaultPackageName="">
   <cpoClass name="org.synchronoss.cpo.jdbc.ValueObject">
     <cpoAttribute xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xsi:type="cpoj:ctJdbcAttribute">
+      <javaName>attrNumeric</javaName>
+      <javaType>java.math.BigDecimal</javaType>
+      <dataName>ATTR_NUMERIC</dataName>
+      <dataType>NUMERIC</dataType>
+    </cpoAttribute>
+    <cpoAttribute xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xsi:type="cpoj:ctJdbcAttribute">
+      <javaName>attrDate</javaName>
+      <javaType>java.sql.Date</javaType>
+      <dataName>ATTR_DATE</dataName>
+      <dataType>DATE</dataType>
+    </cpoAttribute>
+    <cpoAttribute xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xsi:type="cpoj:ctJdbcAttribute">
+      <javaName>attrVarChar</javaName>
+      <javaType>java.lang.String</javaType>
+      <dataName>ATTR_VARCHAR</dataName>
+      <dataType>VARCHAR</dataType>
+      <cpoj:dbTable>value_object</cpoj:dbTable>
+      <cpoj:dbColumn>attr_varchar</cpoj:dbColumn>
+    </cpoAttribute>
+    <cpoAttribute xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xsi:type="cpoj:ctJdbcAttribute">
+      <javaName>attrDatetime</javaName>
+      <javaType>java.sql.Timestamp</javaType>
+      <dataName>ATTR_DATETIME</dataName>
+      <dataType>TIMESTAMP</dataType>
+    </cpoAttribute>
+    <cpoAttribute xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xsi:type="cpoj:ctJdbcAttribute">
+      <javaName>attrTimestamp</javaName>
+      <javaType>java.sql.Timestamp</javaType>
+      <dataName>ATTR_TIMESTAMP</dataName>
+      <dataType>TIMESTAMP</dataType>
+    </cpoAttribute>
+    <cpoAttribute xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xsi:type="cpoj:ctJdbcAttribute">
+      <javaName>attrSmallInt</javaName>
+      <javaType>short</javaType>
+      <dataName>ATTR_SMALLINT</dataName>
+      <dataType>SMALLINT</dataType>
+      <cpoj:dbTable>value_object</cpoj:dbTable>
+      <cpoj:dbColumn>attr_smallint</cpoj:dbColumn>
+    </cpoAttribute>
+    <cpoAttribute xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xsi:type="cpoj:ctJdbcAttribute">
+      <javaName>id</javaName>
+      <javaType>java.math.BigDecimal</javaType>
+      <dataName>ID</dataName>
+      <dataType>NUMERIC</dataType>
+      <cpoj:dbTable>value_object</cpoj:dbTable>
+      <cpoj:dbColumn>id</cpoj:dbColumn>
+    </cpoAttribute>
+    <cpoAttribute xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xsi:type="cpoj:ctJdbcAttribute">
+      <javaName>attrDouble</javaName>
+      <javaType>double</javaType>
+      <dataName>ATTR_DOUBLE</dataName>
+      <dataType>DOUBLE</dataType>
+    </cpoAttribute>
+    <cpoAttribute xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xsi:type="cpoj:ctJdbcAttribute">
       <javaName>attrBit</javaName>
       <javaType>boolean</javaType>
       <dataName>ATTR_BOOL</dataName>
@@ -36,24 +90,6 @@
       <dataType>CHAR</dataType>
       <cpoj:dbTable>value_object</cpoj:dbTable>
       <cpoj:dbColumn>attr_char</cpoj:dbColumn>
-    </cpoAttribute>
-    <cpoAttribute xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xsi:type="cpoj:ctJdbcAttribute">
-      <javaName>attrCharacter</javaName>
-      <javaType>java.lang.String</javaType>
-      <dataName>ATTR_CHARACTER</dataName>
-      <dataType>CHAR</dataType>
-    </cpoAttribute>
-    <cpoAttribute xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xsi:type="cpoj:ctJdbcAttribute">
-      <javaName>attrDate</javaName>
-      <javaType>java.sql.Date</javaType>
-      <dataName>ATTR_DATE</dataName>
-      <dataType>DATE</dataType>
-    </cpoAttribute>
-    <cpoAttribute xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xsi:type="cpoj:ctJdbcAttribute">
-      <javaName>attrDatetime</javaName>
-      <javaType>java.sql.Timestamp</javaType>
-      <dataName>ATTR_DATETIME</dataName>
-      <dataType>TIMESTAMP</dataType>
     </cpoAttribute>
     <cpoAttribute xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xsi:type="cpoj:ctJdbcAttribute">
       <javaName>attrDecimal</javaName>
@@ -69,44 +105,14 @@
       <transformClass>org.synchronoss.cpo.transform.jdbc.TransformNoOp</transformClass>
     </cpoAttribute>
     <cpoAttribute xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xsi:type="cpoj:ctJdbcAttribute">
-      <javaName>attrNumeric</javaName>
-      <javaType>java.math.BigDecimal</javaType>
-      <dataName>ATTR_NUMERIC</dataName>
-      <dataType>NUMERIC</dataType>
-    </cpoAttribute>
-    <cpoAttribute xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xsi:type="cpoj:ctJdbcAttribute">
-      <javaName>attrSmallInt</javaName>
-      <javaType>short</javaType>
-      <dataName>ATTR_SMALLINT</dataName>
-      <dataType>SMALLINT</dataType>
-      <cpoj:dbTable>value_object</cpoj:dbTable>
-      <cpoj:dbColumn>attr_smallint</cpoj:dbColumn>
-    </cpoAttribute>
-    <cpoAttribute xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xsi:type="cpoj:ctJdbcAttribute">
-      <javaName>attrTimestamp</javaName>
-      <javaType>java.sql.Timestamp</javaType>
-      <dataName>ATTR_TIMESTAMP</dataName>
-      <dataType>TIMESTAMP</dataType>
-    </cpoAttribute>
-    <cpoAttribute xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xsi:type="cpoj:ctJdbcAttribute">
-      <javaName>attrVarChar</javaName>
+      <javaName>attrCharacter</javaName>
       <javaType>java.lang.String</javaType>
-      <dataName>ATTR_VARCHAR</dataName>
-      <dataType>VARCHAR</dataType>
-      <cpoj:dbTable>value_object</cpoj:dbTable>
-      <cpoj:dbColumn>attr_varchar</cpoj:dbColumn>
-    </cpoAttribute>
-    <cpoAttribute xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xsi:type="cpoj:ctJdbcAttribute">
-      <javaName>id</javaName>
-      <javaType>java.math.BigDecimal</javaType>
-      <dataName>ID</dataName>
-      <dataType>NUMERIC</dataType>
-      <cpoj:dbTable>value_object</cpoj:dbTable>
-      <cpoj:dbColumn>id</cpoj:dbColumn>
+      <dataName>ATTR_CHARACTER</dataName>
+      <dataType>CHAR</dataType>
     </cpoAttribute>
     <cpoFunctionGroup type="CREATE">
       <cpoFunction name="ValueObject - Create">
-        <expression>insert into value_object(id, attr_char, attr_character, attr_date, ATTR_DECIMAL, ATTR_INTEGER, ATTR_NUMERIC, ATTR_SMALLINT, ATTR_TIMESTAMP, ATTR_VARCHAR, ATTR_BOOL, ATTR_DATETIME) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)</expression>
+        <expression>insert into value_object(id, attr_char, attr_character, attr_date, attr_decimal, attr_integer, attr_numeric, attr_smallint, attr_timestamp, attr_varchar, attr_bool, attr_datetime) values (?,?,?,?,?,?,?,?,?,?,?,?)</expression>
         <cpoArgument xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xsi:type="cpoj:ctJdbcArgument">
           <attributeName>id</attributeName>
           <cpoj:scope>IN</cpoj:scope>
@@ -157,6 +163,95 @@
         </cpoArgument>
       </cpoFunction>
     </cpoFunctionGroup>
+    <cpoFunctionGroup name="TestRollback" type="CREATE">
+      <cpoFunction name="ValueObject - TestRollback">
+        <expression>insert into value_object (id, attr_varchar) values (?,?)</expression>
+        <cpoArgument xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xsi:type="cpoj:ctJdbcArgument">
+          <attributeName>id</attributeName>
+          <cpoj:scope>IN</cpoj:scope>
+        </cpoArgument>
+        <cpoArgument xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xsi:type="cpoj:ctJdbcArgument">
+          <attributeName>attrVarChar</attributeName>
+          <cpoj:scope>IN</cpoj:scope>
+        </cpoArgument>
+      </cpoFunction>
+    </cpoFunctionGroup>
+    <cpoFunctionGroup name="TestOrderByDelete" type="DELETE">
+      <cpoFunction name="TestOrderByDelete">
+        <expression>delete from value_object where id = ?</expression>
+        <cpoArgument xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xsi:type="cpoj:ctJdbcArgument">
+          <attributeName>id</attributeName>
+          <cpoj:scope>IN</cpoj:scope>
+        </cpoArgument>
+      </cpoFunction>
+    </cpoFunctionGroup>
+    <cpoFunctionGroup type="EXIST">
+      <cpoFunction name="ValueObject - Exists">
+        <expression>select count(0) from value_object where id = ?</expression>
+        <cpoArgument xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xsi:type="cpoj:ctJdbcArgument">
+          <attributeName>id</attributeName>
+          <cpoj:scope>IN</cpoj:scope>
+        </cpoArgument>
+      </cpoFunction>
+    </cpoFunctionGroup>
+    <cpoFunctionGroup name="SelectForUpdateExistSingle" type="EXIST">
+      <cpoFunction name="ValueObject - SelectForUpdateExistSingle">
+        <expression>select * from value_object where id = ? for update</expression>
+        <cpoArgument xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xsi:type="cpoj:ctJdbcArgument">
+          <attributeName>id</attributeName>
+          <cpoj:scope>IN</cpoj:scope>
+        </cpoArgument>
+      </cpoFunction>
+    </cpoFunctionGroup>
+    <cpoFunctionGroup name="SelectForUpdate" type="RETRIEVE">
+      <cpoFunction name="ValueObject - SelectForUpdate">
+        <expression>select * from value_object where id = ? for update</expression>
+        <cpoArgument xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xsi:type="cpoj:ctJdbcArgument">
+          <attributeName>id</attributeName>
+          <cpoj:scope>IN</cpoj:scope>
+        </cpoArgument>
+      </cpoFunction>
+    </cpoFunctionGroup>
+    <cpoFunctionGroup name="InterleavedWhere" type="LIST">
+      <cpoFunction name="ValueObject - InterleavedWhere">
+        <expression>select * from value_object where attr_varchar=? __CPO_WHERE__ and attr_varchar=?</expression>
+        <cpoArgument xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xsi:type="cpoj:ctJdbcArgument">
+          <attributeName>attrVarChar</attributeName>
+          <cpoj:scope>IN</cpoj:scope>
+        </cpoArgument>
+        <cpoArgument xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xsi:type="cpoj:ctJdbcArgument">
+          <attributeName>attrVarChar</attributeName>
+          <cpoj:scope>IN</cpoj:scope>
+        </cpoArgument>
+      </cpoFunction>
+    </cpoFunctionGroup>
+    <cpoFunctionGroup name="SelectForUpdateExistAll" type="EXIST">
+      <cpoFunction name="ValueObject - SelectForUpdateExistAll">
+        <expression>select * from value_object for update</expression>
+      </cpoFunction>
+    </cpoFunctionGroup>
+    <cpoFunctionGroup name="TestOrderByRetrieve" type="LIST">
+      <cpoFunction name="TestOrderByRetrieve">
+        <expression>select * from value_object __CPO_ORDERBY__</expression>
+      </cpoFunction>
+    </cpoFunctionGroup>
+    <cpoFunctionGroup name="TestExecuteObjectNoTransform" type="EXECUTE">
+      <cpoFunction name="ValueObject - Function test">
+        <expression>{? = call power(?,?)}</expression>
+        <cpoArgument xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xsi:type="cpoj:ctJdbcArgument">
+          <attributeName>attrDouble</attributeName>
+          <cpoj:scope>OUT</cpoj:scope>
+        </cpoArgument>
+        <cpoArgument xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xsi:type="cpoj:ctJdbcArgument">
+          <attributeName>attrSmallInt</attributeName>
+          <cpoj:scope>IN</cpoj:scope>
+        </cpoArgument>
+        <cpoArgument xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xsi:type="cpoj:ctJdbcArgument">
+          <attributeName>attrSmallInt</attributeName>
+          <cpoj:scope>IN</cpoj:scope>
+        </cpoArgument>
+      </cpoFunction>
+    </cpoFunctionGroup>
     <cpoFunctionGroup name="TestOrderByInsert" type="CREATE">
       <cpoFunction name="TestOrderByInsert">
         <expression>insert into value_object (id,attr_varchar,attr_smallint) values (?,?,?)</expression>
@@ -174,25 +269,9 @@
         </cpoArgument>
       </cpoFunction>
     </cpoFunctionGroup>
-    <cpoFunctionGroup name="TestRollback" type="CREATE">
-      <cpoFunction name="ValueObject - TestRollback">
-        <expression>insert into value_object (id, attr_varchar) values (?,?)</expression>
-        <cpoArgument xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xsi:type="cpoj:ctJdbcArgument">
-          <attributeName>id</attributeName>
-          <cpoj:scope>IN</cpoj:scope>
-        </cpoArgument>
-        <cpoArgument xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xsi:type="cpoj:ctJdbcArgument">
-          <attributeName>attrVarChar</attributeName>
-          <cpoj:scope>IN</cpoj:scope>
-        </cpoArgument>
-      </cpoFunction>
-    </cpoFunctionGroup>
-    <cpoFunctionGroup name="TestSingleRollback" type="CREATE">
-      <cpoFunction name="TestSingleRollback1">
-        <expression>insert into value_object (id, attr_varchar) values (2,'Test')</expression>
-      </cpoFunction>
-      <cpoFunction name="TestSingleRollback2">
-        <expression>insert into value_object (id, attr_varchar) values (1,'Test')</expression>
+    <cpoFunctionGroup type="LIST">
+      <cpoFunction name="ValueObject - list">
+        <expression>select * from value_object</expression>
       </cpoFunction>
     </cpoFunctionGroup>
     <cpoFunctionGroup type="DELETE">
@@ -204,20 +283,19 @@
         </cpoArgument>
       </cpoFunction>
     </cpoFunctionGroup>
-    <cpoFunctionGroup name="TestOrderByDelete" type="DELETE">
-      <cpoFunction name="TestOrderByDelete">
-        <expression>delete from value_object where id = ?</expression>
-        <cpoArgument xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xsi:type="cpoj:ctJdbcArgument">
-          <attributeName>id</attributeName>
-          <cpoj:scope>IN</cpoj:scope>
-        </cpoArgument>
+    <cpoFunctionGroup name="TestSingleRollback" type="CREATE">
+      <cpoFunction name="TestSingleRollback1">
+        <expression>insert into value_object (id, attr_varchar) values (2,'test')</expression>
+      </cpoFunction>
+      <cpoFunction name="TestSingleRollback2">
+        <expression>insert into value_object (id, attr_varchar) values (1,'test')</expression>
       </cpoFunction>
     </cpoFunctionGroup>
     <cpoFunctionGroup name="TestExecuteObject" type="EXECUTE">
       <cpoFunction name="ValueObject - Function test">
-        <expression>{?= call power(?, ?)}</expression>
+        <expression>{? = call power(?,?)}</expression>
         <cpoArgument xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xsi:type="cpoj:ctJdbcArgument">
-          <attributeName>attrInteger</attributeName>
+          <attributeName>attrDouble</attributeName>
           <cpoj:scope>OUT</cpoj:scope>
         </cpoArgument>
         <cpoArgument xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xsi:type="cpoj:ctJdbcArgument">
@@ -230,39 +308,26 @@
         </cpoArgument>
       </cpoFunction>
     </cpoFunctionGroup>
-    <cpoFunctionGroup name="TestExecuteObjectNoTransform" type="EXECUTE">
-      <cpoFunction name="ValueObject - Function test">
-        <expression>{?= call power(?, ?)}</expression>
-        <cpoArgument xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xsi:type="cpoj:ctJdbcArgument">
-          <attributeName>attrSmallInt</attributeName>
-          <cpoj:scope>OUT</cpoj:scope>
-        </cpoArgument>
-        <cpoArgument xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xsi:type="cpoj:ctJdbcArgument">
-          <attributeName>attrSmallInt</attributeName>
-          <cpoj:scope>IN</cpoj:scope>
-        </cpoArgument>
-        <cpoArgument xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xsi:type="cpoj:ctJdbcArgument">
-          <attributeName>attrSmallInt</attributeName>
-          <cpoj:scope>IN</cpoj:scope>
-        </cpoArgument>
-      </cpoFunction>
-    </cpoFunctionGroup>
-    <cpoFunctionGroup type="EXIST">
-      <cpoFunction name="ValueObject - Exists">
-        <expression>select count(0) from value_object where id = ?</expression>
+    <cpoFunctionGroup type="RETRIEVE">
+      <cpoFunction name="ValueObject - Retrieve">
+        <expression>select * from value_object where id = ?</expression>
         <cpoArgument xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xsi:type="cpoj:ctJdbcArgument">
           <attributeName>id</attributeName>
           <cpoj:scope>IN</cpoj:scope>
         </cpoArgument>
       </cpoFunction>
     </cpoFunctionGroup>
-    <cpoFunctionGroup name="SelectForUpdateExistAll" type="EXIST">
-      <cpoFunction name="ValueObject - SelectForUpdateExistAll">
-        <expression>select * from value_object for update</expression>
+    <cpoFunctionGroup name="TestRetrieveObject" type="RETRIEVE">
+      <cpoFunction name="ValueObject - TestRetrieveObject">
+        <expression>select * from value_object where id = ?</expression>
+        <cpoArgument xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xsi:type="cpoj:ctJdbcArgument">
+          <attributeName>id</attributeName>
+          <cpoj:scope>IN</cpoj:scope>
+        </cpoArgument>
       </cpoFunction>
     </cpoFunctionGroup>
-    <cpoFunctionGroup name="SelectForUpdateExistSingle" type="EXIST">
-      <cpoFunction name="ValueObject - SelectForUpdateExistSingle">
+    <cpoFunctionGroup name="Select4UpdateNoWait" type="RETRIEVE">
+      <cpoFunction name="ValueObject - SelectForUpdateNoWait">
         <expression>select * from value_object where id = ? for update</expression>
         <cpoArgument xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xsi:type="cpoj:ctJdbcArgument">
           <attributeName>id</attributeName>
@@ -275,86 +340,18 @@
         <expression>select * from value_object where id is null for update</expression>
       </cpoFunction>
     </cpoFunctionGroup>
-    <cpoFunctionGroup type="LIST">
-      <cpoFunction name="ValueObject - list">
-        <expression>select * from value_object</expression>
-      </cpoFunction>
-    </cpoFunctionGroup>
-    <cpoFunctionGroup name="InterleavedWhere" type="LIST">
-      <cpoFunction name="ValueObject - InterleavedWhere">
-        <expression>select * from value_object where attr_varchar=? __CPO_WHERE__ and attr_varchar=?</expression>
+    <cpoFunctionGroup type="UPDATE">
+      <cpoFunction name="ValueObject - Default Update">
+        <expression>update value_object set attr_varchar=?</expression>
         <cpoArgument xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xsi:type="cpoj:ctJdbcArgument">
           <attributeName>attrVarChar</attributeName>
           <cpoj:scope>IN</cpoj:scope>
         </cpoArgument>
-        <cpoArgument xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xsi:type="cpoj:ctJdbcArgument">
-          <attributeName>attrVarChar</attributeName>
-          <cpoj:scope>IN</cpoj:scope>
-        </cpoArgument>
-      </cpoFunction>
-    </cpoFunctionGroup>
-    <cpoFunctionGroup name="TestOrderByRetrieve" type="LIST">
-      <cpoFunction name="TestOrderByRetrieve">
-        <expression>select * from value_object</expression>
       </cpoFunction>
     </cpoFunctionGroup>
     <cpoFunctionGroup name="TestWhereRetrieve" type="LIST">
       <cpoFunction name="Value Object - TestWhereRetrieve">
         <expression>select * from value_object __CPO_WHERE__ order by id</expression>
-      </cpoFunction>
-    </cpoFunctionGroup>
-    <cpoFunctionGroup type="RETRIEVE">
-      <cpoFunction name="ValueObject - Retrieve">
-        <expression>select * from value_object where id = ?</expression>
-        <cpoArgument xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xsi:type="cpoj:ctJdbcArgument">
-          <attributeName>id</attributeName>
-          <cpoj:scope>IN</cpoj:scope>
-        </cpoArgument>
-      </cpoFunction>
-    </cpoFunctionGroup>
-    <cpoFunctionGroup name="Select4UpdateNoWait" type="RETRIEVE">
-      <cpoFunction name="ValueObject - SelectForUpdateNoWait">
-        <expression>select * from value_object where id = ? for update of id NOWAIT</expression>
-        <cpoArgument xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xsi:type="cpoj:ctJdbcArgument">
-          <attributeName>id</attributeName>
-          <cpoj:scope>IN</cpoj:scope>
-        </cpoArgument>
-      </cpoFunction>
-    </cpoFunctionGroup>
-    <cpoFunctionGroup name="SelectForUpdate" type="RETRIEVE">
-      <cpoFunction name="ValueObject - SelectForUpdate">
-        <expression>select * from value_object where id = ? for update of id</expression>
-        <cpoArgument xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xsi:type="cpoj:ctJdbcArgument">
-          <attributeName>id</attributeName>
-          <cpoj:scope>IN</cpoj:scope>
-        </cpoArgument>
-      </cpoFunction>
-    </cpoFunctionGroup>
-    <cpoFunctionGroup name="TestRetrieveObject" type="RETRIEVE">
-      <cpoFunction name="ValueObject - TestRetrieveObject">
-        <expression>Select * from value_object where id = ?</expression>
-        <cpoArgument xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xsi:type="cpoj:ctJdbcArgument">
-          <attributeName>id</attributeName>
-          <cpoj:scope>IN</cpoj:scope>
-        </cpoArgument>
-      </cpoFunction>
-    </cpoFunctionGroup>
-    <cpoFunctionGroup name="TestRetrieveObject with spaces" type="RETRIEVE">
-      <cpoFunction name="ValueObject - TestRetrieveObject with spaces">
-        <expression>Select * from value_object where id = ?</expression>
-        <cpoArgument xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xsi:type="cpoj:ctJdbcArgument">
-          <attributeName>id</attributeName>
-          <cpoj:scope>IN</cpoj:scope>
-        </cpoArgument>
-      </cpoFunction>
-    </cpoFunctionGroup>
-    <cpoFunctionGroup type="UPDATE">
-      <cpoFunction name="ValueObject - Default Update">
-        <expression>update value_object set ATTR_VARCHAR=?</expression>
-        <cpoArgument xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xsi:type="cpoj:ctJdbcArgument">
-          <attributeName>attrVarChar</attributeName>
-          <cpoj:scope>IN</cpoj:scope>
-        </cpoArgument>
       </cpoFunction>
     </cpoFunctionGroup>
   </cpoClass>

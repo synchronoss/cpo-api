@@ -25,24 +25,16 @@
   <cpoClass name="org.synchronoss.cpo.jdbc.LobValueObject">
     <cpoAttribute xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xsi:type="cpoj:ctJdbcAttribute">
       <javaName>bLob</javaName>
-      <javaType>java.sql.Blob</javaType>
+      <javaType>byte[]</javaType>
       <dataName>B_LOB</dataName>
-      <dataType>BLOB</dataType>
+      <dataType>LONGVARBINARY</dataType>
       <transformClass>org.synchronoss.cpo.transform.jdbc.TransformGZipBytes</transformClass>
     </cpoAttribute>
     <cpoAttribute xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xsi:type="cpoj:ctJdbcAttribute">
       <javaName>bLob2</javaName>
-      <javaType>java.sql.Blob</javaType>
+      <javaType>byte[]</javaType>
       <dataName>B_LOB2</dataName>
-      <dataType>BLOB</dataType>
-      <transformClass>org.synchronoss.cpo.transform.jdbc.TransformGZipBytes</transformClass>
-    </cpoAttribute>
-    <cpoAttribute xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xsi:type="cpoj:ctJdbcAttribute">
-      <javaName>cLob</javaName>
-      <javaType>java.sql.Clob</javaType>
-      <dataName>C_LOB</dataName>
-      <dataType>CLOB</dataType>
-      <transformClass>org.synchronoss.cpo.transform.jdbc.TransformStringChar</transformClass>
+      <dataType>LONGVARBINARY</dataType>
     </cpoAttribute>
     <cpoAttribute xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xsi:type="cpoj:ctJdbcAttribute">
       <javaName>lobId</javaName>
@@ -50,6 +42,22 @@
       <dataName>LOB_ID</dataName>
       <dataType>NUMERIC</dataType>
     </cpoAttribute>
+    <cpoAttribute xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xsi:type="cpoj:ctJdbcAttribute">
+      <javaName>cLob</javaName>
+      <javaType>java.lang.String</javaType>
+      <dataName>C_LOB</dataName>
+      <dataType>LONGVARCHAR</dataType>
+      <transformClass>org.synchronoss.cpo.transform.jdbc.TransformStringChar</transformClass>
+    </cpoAttribute>
+    <cpoFunctionGroup name="deleteLVO" type="DELETE">
+      <cpoFunction name="deleteLVO">
+        <expression>delete from lob_test where lob_id = ?</expression>
+        <cpoArgument xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xsi:type="cpoj:ctJdbcArgument">
+          <attributeName>lobId</attributeName>
+          <cpoj:scope>IN</cpoj:scope>
+        </cpoArgument>
+      </cpoFunction>
+    </cpoFunctionGroup>
     <cpoFunctionGroup name="createLVO" type="CREATE">
       <cpoFunction name="createLVO">
         <expression>insert into lob_test (lob_id, b_lob, c_lob, b_lob2) values (?,?,?,?)</expression>
@@ -71,24 +79,6 @@
         </cpoArgument>
       </cpoFunction>
     </cpoFunctionGroup>
-    <cpoFunctionGroup name="deleteLVO" type="DELETE">
-      <cpoFunction name="deleteLVO">
-        <expression>delete from lob_test where lob_id = ?</expression>
-        <cpoArgument xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xsi:type="cpoj:ctJdbcArgument">
-          <attributeName>lobId</attributeName>
-          <cpoj:scope>IN</cpoj:scope>
-        </cpoArgument>
-      </cpoFunction>
-    </cpoFunctionGroup>
-    <cpoFunctionGroup name="retrieveLVO" type="RETRIEVE">
-      <cpoFunction name="retrieveLVO">
-        <expression>select * from lob_test where lob_id = ?</expression>
-        <cpoArgument xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xsi:type="cpoj:ctJdbcArgument">
-          <attributeName>lobId</attributeName>
-          <cpoj:scope>IN</cpoj:scope>
-        </cpoArgument>
-      </cpoFunction>
-    </cpoFunctionGroup>
     <cpoFunctionGroup name="updateLVO" type="UPDATE">
       <cpoFunction name="updateLVO">
         <expression>update lob_test set b_lob=?, c_lob=?, b_lob2=? where lob_id = ?</expression>
@@ -104,6 +94,15 @@
           <attributeName>bLob2</attributeName>
           <cpoj:scope>IN</cpoj:scope>
         </cpoArgument>
+        <cpoArgument xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xsi:type="cpoj:ctJdbcArgument">
+          <attributeName>lobId</attributeName>
+          <cpoj:scope>IN</cpoj:scope>
+        </cpoArgument>
+      </cpoFunction>
+    </cpoFunctionGroup>
+    <cpoFunctionGroup name="retrieveLVO" type="RETRIEVE">
+      <cpoFunction name="retrieveLVO">
+        <expression>select * from lob_test where lob_id = ?</expression>
         <cpoArgument xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xsi:type="cpoj:ctJdbcArgument">
           <attributeName>lobId</attributeName>
           <cpoj:scope>IN</cpoj:scope>

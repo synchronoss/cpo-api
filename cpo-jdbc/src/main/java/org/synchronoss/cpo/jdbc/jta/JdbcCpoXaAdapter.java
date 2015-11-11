@@ -21,6 +21,7 @@
 package org.synchronoss.cpo.jdbc.jta;
 
 import org.synchronoss.cpo.*;
+import org.synchronoss.cpo.helper.ExceptionHelper;
 import org.synchronoss.cpo.jdbc.JdbcCpoAdapter;
 import org.synchronoss.cpo.jdbc.JdbcCpoAdapterFactory;
 import org.synchronoss.cpo.jdbc.JdbcCpoTrxAdapter;
@@ -1854,7 +1855,7 @@ public class JdbcCpoXaAdapter extends CpoBaseXaResource<JdbcCpoAdapter> implemen
    @Override
    public boolean isSameRM(XAResource xaResource) throws XAException {
      if (xaResource == null)
-       throw new XAException(XAException.XAER_INVAL);
+       throw CpoXaError.createXAException(CpoXaError.XAER_INVAL, "Invalid parameter. xaResource cannot be null.");
 
      return xaResource instanceof JdbcCpoXaAdapter;
    }
@@ -1881,7 +1882,7 @@ public class JdbcCpoXaAdapter extends CpoBaseXaResource<JdbcCpoAdapter> implemen
     try {
       ((JdbcCpoTrxAdapter)jdbcCpoAdapter).commit();
     } catch (CpoException ce) {
-      throw new XAException(XAException.XAER_RMERR);
+      throw CpoXaError.createXAException(CpoXaError.XAER_RMERR, ExceptionHelper.getLocalizedMessage(ce));
     }
   }
 
@@ -1890,7 +1891,7 @@ public class JdbcCpoXaAdapter extends CpoBaseXaResource<JdbcCpoAdapter> implemen
     try {
       ((JdbcCpoTrxAdapter)jdbcCpoAdapter).rollback();
     } catch (CpoException ce) {
-      throw new XAException(XAException.XAER_RMERR);
+      throw CpoXaError.createXAException(CpoXaError.XAER_RMERR, ExceptionHelper.getLocalizedMessage(ce));
     }
   }
 
@@ -1899,7 +1900,7 @@ public class JdbcCpoXaAdapter extends CpoBaseXaResource<JdbcCpoAdapter> implemen
     try {
       return (JdbcCpoTrxAdapter)jdbcCpoAdapterFactory.getCpoTrxAdapter();
     } catch (CpoException ce) {
-      throw new XAException(XAException.XAER_RMFAIL);
+      throw CpoXaError.createXAException(CpoXaError.XAER_RMFAIL, ExceptionHelper.getLocalizedMessage(ce));
     }
   }
 
@@ -1908,7 +1909,7 @@ public class JdbcCpoXaAdapter extends CpoBaseXaResource<JdbcCpoAdapter> implemen
     try {
       ((JdbcCpoTrxAdapter)jdbcCpoAdapter).close();
     } catch (CpoException ce) {
-      throw new XAException(XAException.XAER_RMERR);
+      throw CpoXaError.createXAException(CpoXaError.XAER_RMERR, ExceptionHelper.getLocalizedMessage(ce));
     }
   }
 

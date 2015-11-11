@@ -31,6 +31,7 @@ import org.synchronoss.cpo.jdbc.JdbcStatics;
 import org.synchronoss.cpo.jdbc.ValueObject;
 import org.synchronoss.cpo.jdbc.ValueObjectBean;
 import org.synchronoss.cpo.helper.ExceptionHelper;
+import org.synchronoss.cpo.jta.CpoXaResource;
 
 import javax.transaction.xa.XAException;
 import javax.transaction.xa.XAResource;
@@ -251,8 +252,8 @@ public class JdbcXaResourceTest extends TestCase {
  			try {
         cpoXaAdapter1.recover(XAResource.TMSUCCESS);
  				fail("XAException should have been thrown");
- 			} catch (XAException xaEx) {
- 				assertEquals(XAException.XAER_INVAL, xaEx.errorCode);
+ 			} catch (XAException xae) {
+        assertTrue(xae.getLocalizedMessage().startsWith(CpoXaResource.CpoXaError.XAER_INVAL.toString()));
  			}
     } catch (Exception e) {
      fail(method + ExceptionHelper.getLocalizedMessage(e));

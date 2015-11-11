@@ -94,7 +94,7 @@ public abstract class CpoBaseXaResource<T> implements CpoXaResource {
       CpoXaState<T> cpoXaState = cpoXaStateMap.getXidStateMap().get(xid);
 
       if (cpoXaState == null)
-        throw new XAException(XAException.XAER_NOTA);
+        throw CpoXaError.createXAException(CpoXaError.XAER_NOTA, "Unknown XID");
 
       // close the resource
       closeResource(cpoXaState.getResource());
@@ -124,21 +124,21 @@ public abstract class CpoBaseXaResource<T> implements CpoXaResource {
       CpoXaState<T> cpoXaState = cpoXaStateMap.getXidStateMap().get(xid);
 
       if (cpoXaState == null)
-        throw new XAException(XAException.XAER_NOTA);
+        throw CpoXaError.createXAException(CpoXaError.XAER_NOTA, "Unknown XID");
 
       if (cpoXaState.getAssociation()==CpoXaState.XA_UNASSOCIATED) {
         if (onePhase) {
           if (!cpoXaState.isSuccess()) {
             rollbackResource(cpoXaState.getResource());
             cpoXaState.setSuccess(true);
-            throw new XAException(XAException.XA_RBROLLBACK);
+            throw CpoXaError.createXAException(CpoXaError.XA_RBROLLBACK, "Trying to commit an unsuccessful transaction. Transaction Rolled Back");
           }
           prepareResource(cpoXaState.getResource());
         }
         commitResource(cpoXaState.getResource());
         cpoXaState.setPrepared(false);
       } else {
-        throw new XAException(XAException.XAER_PROTO);
+        throw CpoXaError.createXAException(CpoXaError.XAER_PROTO, "Commit can only be called on an unassociated XID");
       }
     }
   }
@@ -164,11 +164,11 @@ public abstract class CpoBaseXaResource<T> implements CpoXaResource {
       CpoXaState<T> cpoXaState = cpoXaStateMap.getXidStateMap().get(xid);
 
       if (cpoXaState == null)
-        throw new XAException(XAException.XAER_NOTA);
+        throw CpoXaError.createXAException(CpoXaError.XAER_NOTA, "Unknown XID");
 
       // has this already been ended
       if (cpoXaState.getAssociation()==CpoXaState.XA_UNASSOCIATED)
-        throw new XAException(XAException.XAER_PROTO);
+        throw CpoXaError.createXAException(CpoXaError.XAER_PROTO, "Cannot End an Unassociated XID");
 
       switch(flags) {
         case TMSUSPEND:
@@ -178,7 +178,7 @@ public abstract class CpoBaseXaResource<T> implements CpoXaResource {
             cpoXaState.setAssociation(CpoXaState.XA_SUSPENDED);
             cpoXaState.setAssignedResourceManager(null);
           } else {
-            throw new XAException(XAException.XAER_PROTO);
+            throw CpoXaError.createXAException(CpoXaError.XAER_PROTO, "You can only suspend an associated XID");
           }
           break;
 
@@ -200,7 +200,7 @@ public abstract class CpoBaseXaResource<T> implements CpoXaResource {
           break;
 
         default:
-          throw new XAException(XAException.XAER_INVAL);
+          throw CpoXaError.createXAException(CpoXaError.XAER_INVAL, "Invalid flag for end()");
       }
 
     }
@@ -244,20 +244,20 @@ public abstract class CpoBaseXaResource<T> implements CpoXaResource {
       CpoXaState<T> cpoXaState = cpoXaStateMap.getXidStateMap().get(xid);
 
       if (cpoXaState == null)
-        throw new XAException(XAException.XAER_NOTA);
+        throw CpoXaError.createXAException(CpoXaError.XAER_NOTA, "Unknown XID");
 
       if (!cpoXaState.isSuccess()) {
         rollbackResource(cpoXaState.getResource());
         cpoXaState.setPrepared(false);
         cpoXaState.setSuccess(true);
-        throw new XAException(XAException.XA_RBROLLBACK);
+        throw CpoXaError.createXAException(CpoXaError.XA_RBROLLBACK, "Trying to prepare an unsuccessfull transaction. Rollback performed");
       }
 
       if (cpoXaState.getAssociation()==CpoXaState.XA_UNASSOCIATED){
         prepareResource(cpoXaState.getResource());
         cpoXaState.setPrepared(true);
       } else {
-          throw new XAException(XAException.XAER_PROTO);
+          throw CpoXaError.createXAException(CpoXaError.XAER_PROTO, "Prepare can only be called on an associated XID");
       }
 
       return XA_OK;
@@ -289,7 +289,7 @@ public abstract class CpoBaseXaResource<T> implements CpoXaResource {
           }
           return xids.toArray(new Xid[0]);
         default:
-          throw new XAException(XAException.XAER_INVAL);
+          throw CpoXaError.createXAException(CpoXaError.XAER_INVAL, "Invalid flag for recover()");
       }
     }
   }
@@ -310,14 +310,14 @@ public abstract class CpoBaseXaResource<T> implements CpoXaResource {
       CpoXaState<T> cpoXaState = cpoXaStateMap.getXidStateMap().get(xid);
 
       if (cpoXaState == null)
-        throw new XAException(XAException.XAER_NOTA);
+        throw CpoXaError.createXAException(CpoXaError.XAER_NOTA, "Unknown XID");
 
       if (cpoXaState.getAssociation()==CpoXaState.XA_UNASSOCIATED) {
         rollbackResource(cpoXaState.getResource());
         cpoXaState.setPrepared(false);
         cpoXaState.setSuccess(true);
       } else {
-        throw new XAException(XAException.XAER_PROTO);
+        throw CpoXaError.createXAException(CpoXaError.XAER_PROTO, "Rollback can only be called on an unassociated XID");
       }
     }
   }
@@ -353,11 +353,11 @@ public abstract class CpoBaseXaResource<T> implements CpoXaResource {
     synchronized (cpoXaStateMap) {
       // see if we are already associated with a global transaction
       if (cpoXaStateMap.getXaResourceMap().get(this) != null)
-        throw new XAException(XAException.XAER_PROTO);
+        throw CpoXaError.createXAException(CpoXaError.XAER_PROTO, "Start can not be called on an associated XID");
 
       // see if we are not in the middle of doing something on the local transaction
       if (isLocalResourceBusy())
-        throw new XAException(XAException.XAER_OUTSIDE);
+        throw CpoXaError.createXAException(CpoXaError.XAER_OUTSIDE, "Local Transaction is busy");
 
       CpoXaState<T> cpoXaState = cpoXaStateMap.getXidStateMap().get(xid);
 
@@ -365,7 +365,7 @@ public abstract class CpoBaseXaResource<T> implements CpoXaResource {
         case TMNOFLAGS: // Starting a new transaction ID
           // if it is already in use then throw a dupe id error
           if (cpoXaState != null)
-            throw new XAException(XAException.XAER_DUPID);
+            throw CpoXaError.createXAException(CpoXaError.XAER_DUPID, "Duplicate XID");
 
           cpoXaState = new CpoXaState<>(xid, createNewResource(), CpoXaState.XA_ASSOCIATED, this, true);
           cpoXaStateMap.getXidStateMap().put(xid, cpoXaState);
@@ -374,20 +374,20 @@ public abstract class CpoBaseXaResource<T> implements CpoXaResource {
 
         case TMJOIN:
           if (cpoXaState == null)
-            throw new XAException(XAException.XAER_NOTA);
+            throw CpoXaError.createXAException(CpoXaError.XAER_NOTA, "Unknown XID");
 
           if (cpoXaState.getAssociation()==CpoXaState.XA_UNASSOCIATED) {
             cpoXaState.setAssociation(CpoXaState.XA_ASSOCIATED);
             cpoXaState.setAssignedResourceManager(this);
             cpoXaStateMap.getXaResourceMap().put(this, xid);
           } else {
-            throw new XAException(XAException.XAER_PROTO);
+            throw CpoXaError.createXAException(CpoXaError.XAER_PROTO, "TMJOIN can only be used with an unassociated XID");
           }
           break;
 
         case TMRESUME:
           if (cpoXaState == null)
-            throw new XAException(XAException.XAER_NOTA);
+            throw CpoXaError.createXAException(CpoXaError.XAER_NOTA, "Unknown XID");
 
           // you can only resume a suspended transaction
           if (cpoXaState.getAssociation() == CpoXaState.XA_SUSPENDED) {
@@ -395,12 +395,12 @@ public abstract class CpoBaseXaResource<T> implements CpoXaResource {
             cpoXaState.setAssignedResourceManager(this);
             cpoXaStateMap.getXaResourceMap().put(this, xid);
           } else {
-            throw new XAException(XAException.XAER_PROTO);
+            throw CpoXaError.createXAException(CpoXaError.XAER_PROTO, "TMRESUME can only be used with a suspended XID");
           }
           break;
 
         default: // invalid arguments
-          throw new XAException(XAException.XAER_INVAL);
+          throw CpoXaError.createXAException(CpoXaError.XAER_INVAL, "Invalid start() flag");
       }
     }
   }

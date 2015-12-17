@@ -261,6 +261,11 @@
             <outputDirectory>${project.reporting.outputDirectory}/jacoco</outputDirectory>
           </configuration>
         </plugin>
+        <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>sonar-maven-plugin</artifactId>
+          <version>2.6</version>
+        </plugin>
       </plugins>
     </pluginManagement>
     <plugins>

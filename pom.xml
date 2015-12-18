@@ -34,7 +34,7 @@
     <version>9</version>
   </parent>
   <description>CPO is a persistence layer that is thin wrapper around JDBC that consumes and produces POJOs</description>
-  <url>http://cpo-org.github.io/cpo-api/</url>
+  <url>http://synchronoss.github.io/cpo-api/</url>
   <licenses>
     <license>
       <name>GNU Lesser General Public License</name>
@@ -65,7 +65,7 @@
   </distributionManagement>
   <issueManagement>
     <system>GitHub</system>
-    <url>https://github.com/cpo-org/cpo-api/issues</url>
+    <url>https://github.com/synchronoss/cpo-api/issues</url>
   </issueManagement>
   <developers>
     <developer>
@@ -86,9 +86,9 @@
     </developer>
   </developers>
   <scm>
-    <connection>scm:git:git@github.com:cpo-org/cpo-api.git</connection>
-    <developerConnection>scm:git:git@github.com:cpo-org/cpo-api.git</developerConnection>
-    <url>https://github.com/cpo-org/cpo-api</url>
+    <connection>scm:git:git@github.com:synchronoss/cpo-api.git</connection>
+    <developerConnection>scm:git:git@github.com:synchronoss/cpo-api.git</developerConnection>
+    <url>https://github.com/synchronoss/cpo-api</url>
     <tag>HEAD</tag>
   </scm>
   <build>

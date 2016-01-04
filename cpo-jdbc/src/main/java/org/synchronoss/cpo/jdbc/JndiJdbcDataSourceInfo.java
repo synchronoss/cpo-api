@@ -66,7 +66,15 @@ public class JndiJdbcDataSourceInfo extends AbstractJdbcDataSourceInfo {
       if (jndiCtx == null) {
         jndiCtx = new InitialContext();
       }
-      datasource = (DataSource)jndiCtx.lookup(jndiName);
+      try {
+        datasource = (DataSource) jndiCtx.lookup(jndiName);
+      } catch (NamingException e) {
+
+        Context initCtx = (Context)
+            jndiCtx.lookup("java:/comp/env");
+        datasource = (DataSource)
+            initCtx.lookup(jndiName);
+      }
     } catch (Exception e) {
       throw new CpoException("Error instantiating DataSource", e);
     }

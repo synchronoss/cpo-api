@@ -39,6 +39,7 @@
   <properties>
     <oracleVersion>11.2.0.2.0</oracleVersion>
     <mysqlVersion>5.1.16</mysqlVersion>
+    <mariadbVersion>1.3.5</mariadbVersion>
     <h2Version>1.4.190</h2Version>
     <postgresVersion>9.0-801.jdbc4</postgresVersion>
   </properties>
@@ -64,6 +65,11 @@
               <groupId>mysql</groupId>
               <artifactId>mysql-connector-java</artifactId>
               <version>${mysqlVersion}</version>
+            </dependency>
+            <dependency>
+              <groupId>org.mariadb.jdbc</groupId>
+              <artifactId>mariadb-java-client</artifactId>
+              <version>${mariadbVersion}</version>
             </dependency>
             <dependency>
                 <groupId>com.h2database</groupId>
@@ -184,6 +190,12 @@
       <scope>test</scope>
     </dependency>
     <dependency>
+      <groupId>org.mariadb.jdbc</groupId>
+      <artifactId>mariadb-java-client</artifactId>
+      <version>${mariadbVersion}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
       <groupId>org.apache.jmeter</groupId>
       <artifactId>ApacheJMeter_java</artifactId>
       <version>2.6</version>
@@ -234,6 +246,38 @@
         <cpo.lobMeta.xml>/mysql/mysqlLobMetaData.xml</cpo.lobMeta.xml>
       </properties>
     </profile>
+    <profile>
+       <id>mariadb</id>
+       <activation>
+         <activeByDefault>false</activeByDefault>
+         <property>
+           <name>cpo.db</name>
+           <value>mariadb</value>
+         </property>
+       </activation>
+       <properties>
+         <release.arguments>-Dcpo.db=${cpo.db}</release.arguments>
+         <cpo.skip.sql.plugin>false</cpo.skip.sql.plugin>
+         <cpo.test.sqldir>src/test/sql/mariadb</cpo.test.sqldir>
+         <cpo.db.user>cpo</cpo.db.user>
+         <cpo.db.pswd>cpo</cpo.db.pswd>
+         <cpo.db.host>localhost</cpo.db.host>
+         <cpo.db.port>3306</cpo.db.port>
+         <cpo.db.database>cpo</cpo.db.database>
+         <cpo.db.url>jdbc:mariadb://${cpo.db.host}:${cpo.db.port}/${cpo.db.database}</cpo.db.url>
+         <cpo.db.userurl>jdbc:mariadb://${cpo.db.host}:${cpo.db.port}/${cpo.db.database}?user=${cpo.db.user}&amp;amp;password=${cpo.db.pswd}</cpo.db.userurl>
+         <cpo.db.driver>org.mariadb.jdbc.Driver</cpo.db.driver>
+         <cpo.db.blobssupported>true</cpo.db.blobssupported>
+         <cpo.db.callssupported>true</cpo.db.callssupported>
+         <cpo.db.select4update>true</cpo.db.select4update>
+         <cpo.db.millisupport>true</cpo.db.millisupport>
+         <cpo.db.jndi>java:/comp/env/jdbc/cpodatasource</cpo.db.jndi>
+         <cpo.db.class>org.mariadb.jdbc.MariaDbDataSource</cpo.db.class>
+         <cpo.valueMeta.xml>/mariadb/mariadbValueMetaData.xml</cpo.valueMeta.xml>
+         <cpo.valueCaseMeta.xml>/mariadb/mariadbValueCaseMetaData.xml</cpo.valueCaseMeta.xml>
+         <cpo.lobMeta.xml>/mariadb/mariadbLobMetaData.xml</cpo.lobMeta.xml>
+       </properties>
+     </profile>
     <profile>
       <id>oracle</id>
       <activation>

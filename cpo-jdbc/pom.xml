@@ -270,7 +270,7 @@
          <cpo.db.blobssupported>true</cpo.db.blobssupported>
          <cpo.db.callssupported>true</cpo.db.callssupported>
          <cpo.db.select4update>true</cpo.db.select4update>
-         <cpo.db.millisupport>true</cpo.db.millisupport>
+         <cpo.db.millisupport>false</cpo.db.millisupport>
          <cpo.db.jndi>java:/comp/env/jdbc/cpodatasource</cpo.db.jndi>
          <cpo.db.class>org.mariadb.jdbc.MariaDbDataSource</cpo.db.class>
          <cpo.valueMeta.xml>/mariadb/mariadbValueMetaData.xml</cpo.valueMeta.xml>

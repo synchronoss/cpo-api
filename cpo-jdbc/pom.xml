@@ -261,7 +261,7 @@
          <cpo.test.sqldir>src/test/sql/mariadb</cpo.test.sqldir>
          <cpo.db.user>cpo</cpo.db.user>
          <cpo.db.pswd>cpo</cpo.db.pswd>
-         <cpo.db.host>localhost</cpo.db.host>
+         <cpo.db.host>pabetdd05p1.sncrcorp.net</cpo.db.host>
          <cpo.db.port>3306</cpo.db.port>
          <cpo.db.database>cpo</cpo.db.database>
          <cpo.db.url>jdbc:mariadb://${cpo.db.host}:${cpo.db.port}/${cpo.db.database}</cpo.db.url>

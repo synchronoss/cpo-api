@@ -35,7 +35,6 @@ public class CpoClassSourceGenerator implements MetaVisitor {
 
   private static final String ATTR_PREFIX = "ATTR_";
   private static final String FG_PREFIX = "FG_";
-  private static final String VAR_PREFIX = "_";
   private static final String CLASS_SUFFIX = "Bean";
 
   protected CpoMetaDescriptor metaDescriptor;
@@ -205,16 +204,16 @@ public class CpoClassSourceGenerator implements MetaVisitor {
       attributeStatics.append("  public final static String " + staticName + " = \"" + attName + "\";\n");
 
       // generate property declarations
-      properties.append("  protected " + attClassName + " " + VAR_PREFIX + attName + ";\n");
+      properties.append("  protected " + attClassName + " " + attName + ";\n");
 
       // generate getter
       gettersSetters.append("  public " + attClassName + " " + getterName + " {\n");
-      gettersSetters.append("    return " + VAR_PREFIX + attName + ";\n");
+      gettersSetters.append("    return " + attName + ";\n");
       gettersSetters.append("  }\n\n");
 
       // generate setter
       gettersSetters.append("  public void " + setterName + "(" + attClassName + " " + attName + ") {\n");
-      gettersSetters.append("    " + VAR_PREFIX + attName + " = " + attName + ";\n");
+      gettersSetters.append("    " + attName + " = " + attName + ";\n");
       gettersSetters.append("  }\n\n");
 
       // equals()

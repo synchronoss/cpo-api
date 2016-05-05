@@ -22,6 +22,7 @@ package org.synchronoss.cpo;
 
 import org.apache.xmlbeans.XmlException;
 import org.slf4j.*;
+import org.synchronoss.cpo.cache.CpoAdapterFactoryCache;
 import org.synchronoss.cpo.config.CpoConfigProcessor;
 import org.synchronoss.cpo.core.cpoCoreConfig.*;
 import org.synchronoss.cpo.helper.*;
@@ -34,11 +35,10 @@ import java.util.*;
 /**
  * @author dberry
  */
-public final class CpoAdapterFactoryManager {
+public final class CpoAdapterFactoryManager extends CpoAdapterFactoryCache {
 
   private static final Logger logger = LoggerFactory.getLogger(CpoAdapterFactoryManager.class);
   private static final String CPO_CONFIG_XML = "/cpoConfig.xml";
-  private static volatile Map<String, CpoAdapterFactory> adapterMap = new HashMap<>();
   private static String defaultContext = null;
 
   static {
@@ -51,7 +51,7 @@ public final class CpoAdapterFactoryManager {
 
   public static CpoAdapter getCpoAdapter(String context) throws CpoException {
     CpoAdapter cpoAdapter=null;
-    CpoAdapterFactory cpoAdapterFactory = adapterMap.get(context);
+    CpoAdapterFactory cpoAdapterFactory = findCpoAdapterFactory(context);
     if (cpoAdapterFactory != null) {
       cpoAdapter = cpoAdapterFactory.getCpoAdapter();
     }
@@ -64,7 +64,7 @@ public final class CpoAdapterFactoryManager {
 
   public static CpoTrxAdapter getCpoTrxAdapter(String context) throws CpoException {
     CpoTrxAdapter cpoTrxAdapter=null;
-    CpoAdapterFactory cpoAdapterFactory = adapterMap.get(context);
+    CpoAdapterFactory cpoAdapterFactory = findCpoAdapterFactory(context);
     if (cpoAdapterFactory != null) {
       cpoTrxAdapter = cpoAdapterFactory.getCpoTrxAdapter();
     }
@@ -77,7 +77,7 @@ public final class CpoAdapterFactoryManager {
 
   public static CpoXaResource getCpoXaAdapter(String context) throws CpoException {
     CpoXaResource cpoXaResource =null;
-    CpoAdapterFactory cpoAdapterFactory = adapterMap.get(context);
+    CpoAdapterFactory cpoAdapterFactory = findCpoAdapterFactory(context);
     if (cpoAdapterFactory != null) {
       cpoXaResource = cpoAdapterFactory.getCpoXaAdapter();
     }
@@ -102,7 +102,7 @@ public final class CpoAdapterFactoryManager {
     try {
       // We are doing a load clear all the caches first, in case the load gets called more than once.
       CpoMetaDescriptor.clearAllInstances();
-      adapterMap.clear();
+      clearCpoAdapterFactoryCache();
 
       CpoConfigDocument configDoc;
       if (is == null) {
@@ -139,7 +139,7 @@ public final class CpoAdapterFactoryManager {
         for (CtDataSourceConfig dataSourceConfig : cpoConfig.getDataConfigArray()) {
           CpoAdapterFactory cpoAdapterFactory = makeCpoAdapterFactory(dataSourceConfig);
           if (cpoAdapterFactory != null) {
-            adapterMap.put(dataSourceConfig.getName(), cpoAdapterFactory);
+            addCpoAdapterFactory(dataSourceConfig.getName(), cpoAdapterFactory);
           }
         }
       }

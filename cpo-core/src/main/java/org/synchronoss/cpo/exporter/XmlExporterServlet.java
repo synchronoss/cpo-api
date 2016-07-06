@@ -21,6 +21,7 @@
 package org.synchronoss.cpo.exporter;
 
 import org.synchronoss.cpo.CpoException;
+import org.synchronoss.cpo.helper.ExceptionHelper;
 import org.synchronoss.cpo.meta.CpoMetaDescriptor;
 
 import javax.servlet.*;
@@ -50,16 +51,22 @@ public class XmlExporterServlet extends HttpServlet {
     PrintWriter pw = response.getWriter();
     try {
       String metaDescriptorName = request.getParameter(PARAM_META_DESCRIPTOR_NAME);
+
+      if (metaDescriptorName==null) {
+        throw new CpoException("Missing MetaDescriptor name");
+      }
+
       CpoMetaDescriptor metaDescriptor = CpoMetaDescriptor.getInstance(metaDescriptorName);
       if (metaDescriptor == null) {
         throw new CpoException("No meta descriptor found: " + metaDescriptorName);
       }
+
       response.setContentType(XML_CONTENT_TYPE);
       metaDescriptor.export(pw);
-    } catch (Exception e) {
+    } catch (CpoException e) {
       response.setContentType(HTML_CONTENT_TYPE);
       pw.println("<html><head><title>ERROR</title></head><p>Error generating xml: <pre>");
-      e.printStackTrace(pw);
+      ExceptionHelper.getLocalizedMessage(e);
       pw.println("</pre></p></html>");
     } finally {
       pw.flush();

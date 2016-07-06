@@ -208,7 +208,7 @@ public class CpoClassSourceGenerator implements MetaVisitor {
 
       // generate getter
       gettersSetters.append("  public " + attClassName + " " + getterName + " {\n");
-      gettersSetters.append("    return " + attName + ";\n");
+      gettersSetters.append("    return this." + attName + ";\n");
       gettersSetters.append("  }\n\n");
 
       // generate setter

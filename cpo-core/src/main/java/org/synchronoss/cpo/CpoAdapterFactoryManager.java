@@ -85,8 +85,12 @@ public final class CpoAdapterFactoryManager extends CpoAdapterFactoryCache {
   }
 
 
-  public static void loadAdapters(String configFile) {
-
+  /**
+   * LoadAdapters is responsible for loading the config file and then subsequently loading all the metadata.
+   *
+   * @param configFile
+   */
+  synchronized public static void loadAdapters(String configFile) {
 
     InputStream is = CpoClassLoader.getResourceAsStream(configFile);
     if (is == null) {
@@ -100,10 +104,6 @@ public final class CpoAdapterFactoryManager extends CpoAdapterFactoryCache {
     }
 
     try {
-      // We are doing a load clear all the caches first, in case the load gets called more than once.
-      CpoMetaDescriptor.clearAllInstances();
-      clearCpoAdapterFactoryCache();
-
       CpoConfigDocument configDoc;
       if (is == null) {
         configDoc = CpoConfigDocument.Factory.parse(configFile);
@@ -115,6 +115,12 @@ public final class CpoAdapterFactoryManager extends CpoAdapterFactoryCache {
       if (errMsg != null) {
         logger.error("Invalid CPO Config file: " + configFile + ":" + errMsg);
       } else {
+        logger.info("Processing Config File: " + configFile);
+        // Moving the clear to here to make sure we get a good file before we just blow away all the adapters.
+        // We are doing a load clear all the caches first, in case the load gets called more than once.
+        CpoMetaDescriptor.clearAllInstances();
+        clearCpoAdapterFactoryCache();
+
         CtCpoConfig cpoConfig = configDoc.getCpoConfig();
 
         // Set the default context.

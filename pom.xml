@@ -27,7 +27,7 @@
   <artifactId>cpo</artifactId>
   <name>cpo</name>
   <packaging>pom</packaging>
-  <version>5.2.1</version>
+  <version>5.2.2-SNAPSHOT</version>
   <parent>
     <groupId>org.sonatype.oss</groupId>
     <artifactId>oss-parent</artifactId>
@@ -89,7 +89,7 @@
     <connection>scm:git:git@github.com:synchronoss/cpo-api.git</connection>
     <developerConnection>scm:git:git@github.com:synchronoss/cpo-api.git</developerConnection>
     <url>https://github.com/synchronoss/cpo-api</url>
-    <tag>cpo-5.2.1</tag>
+    <tag>HEAD</tag>
   </scm>
   <build>
     <resources>

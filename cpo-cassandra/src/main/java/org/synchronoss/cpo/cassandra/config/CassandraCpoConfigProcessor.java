@@ -35,7 +35,6 @@ import org.synchronoss.cpo.config.CpoConfigProcessor;
 import org.synchronoss.cpo.core.cpoCoreConfig.CtDataSourceConfig;
 import org.synchronoss.cpo.meta.CpoMetaDescriptor;
 
-import java.util.ArrayList;
 import java.util.Collection;
 
 /**
@@ -122,7 +121,7 @@ public class CassandraCpoConfigProcessor implements CpoConfigProcessor {
 
     // add addressTranslater
     if (readWriteConfig.isSetAddressTranslater())
-      clusterInfo.setAddressTranslater(new ConfigInstantiator<AddressTranslater>().instantiate(readWriteConfig.getAddressTranslater()));
+      clusterInfo.setAddressTranslater(new ConfigInstantiator<AddressTranslator>().instantiate(readWriteConfig.getAddressTranslater()));
 
     // add AuthProvider
     if (readWriteConfig.isSetAuthProvider())
@@ -141,10 +140,7 @@ public class CassandraCpoConfigProcessor implements CpoConfigProcessor {
       clusterInfo.setUseMetrics(readWriteConfig.getMetrics());
 
     // add SSL
-    if (readWriteConfig.isSetSslOptions()) {
-      if (readWriteConfig.isNilSslOptions())
-        clusterInfo.setSslOptions(new SSLOptions());
-      else
+    if (readWriteConfig.isSetSslOptions() && !readWriteConfig.isNilSslOptions()) {
         clusterInfo.setSslOptions(new ConfigInstantiator<SSLOptions>().instantiate(readWriteConfig.getSslOptions()));
     }
 

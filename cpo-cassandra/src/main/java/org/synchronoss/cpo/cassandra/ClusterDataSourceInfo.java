@@ -45,7 +45,7 @@ public class ClusterDataSourceInfo extends AbstractDataSourceInfo<ClusterDataSou
   private NettyOptions nettyOptions;
   private Integer port;
   private ProtocolVersion protocolVersion;
-  private AddressTranslater addressTranslater;
+  private AddressTranslator addressTranslator;
   private LoadBalancingPolicy loadBalancingPolicy;
   private ReconnectionPolicy reconnectionPolicy;
   private RetryPolicy retryPolicy;
@@ -87,12 +87,12 @@ public class ClusterDataSourceInfo extends AbstractDataSourceInfo<ClusterDataSou
     this.nettyOptions = nettyOptions;
   }
 
-  public AddressTranslater getAddressTranslater() {
-    return addressTranslater;
+  public AddressTranslator getAddressTranslator() {
+    return addressTranslator;
   }
 
-  public void setAddressTranslater(AddressTranslater addressTranslater) {
-    this.addressTranslater = addressTranslater;
+  public void setAddressTranslater(AddressTranslator addressTranslator) {
+    this.addressTranslator = addressTranslator;
   }
 
   public String getClusterName() {
@@ -268,8 +268,8 @@ public class ClusterDataSourceInfo extends AbstractDataSourceInfo<ClusterDataSou
       clusterBuilder.addContactPoint(s);
 
     // add addressTranslater
-    if (addressTranslater != null)
-      clusterBuilder.withAddressTranslater(addressTranslater);
+    if (addressTranslator != null)
+      clusterBuilder.withAddressTranslator(addressTranslator);
 
     // add AuthProvider
     if (authProvider != null)

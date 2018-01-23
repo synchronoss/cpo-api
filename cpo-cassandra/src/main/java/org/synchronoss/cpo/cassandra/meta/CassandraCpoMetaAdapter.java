@@ -21,6 +21,9 @@
 package org.synchronoss.cpo.cassandra.meta;
 
 import com.datastax.driver.core.DataType;
+import com.datastax.driver.core.LocalDate;
+import com.datastax.driver.core.TupleValue;
+import com.datastax.driver.core.UDTValue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.CpoException;
@@ -69,18 +72,25 @@ public class CassandraCpoMetaAdapter extends AbstractCpoMetaAdapter {
     dataTypeMapper.addDataTypeEntry(new DataTypeMapEntry<>(DataType.Name.BLOB.ordinal(), DataType.Name.BLOB.name(), ByteBuffer.class));
     dataTypeMapper.addDataTypeEntry(new DataTypeMapEntry<>(DataType.Name.BOOLEAN.ordinal(), DataType.Name.BOOLEAN.name(), boolean.class));
     dataTypeMapper.addDataTypeEntry(new DataTypeMapEntry<>(DataType.Name.COUNTER.ordinal(), DataType.Name.COUNTER.name(), long.class));
-//    dataTypeMapper.addDataTypeEntry(new DataTypeMapEntry<Object>(DataType.Name.CUSTOM.ordinal(), DataType.Name.CUSTOM.toString(), Object.class));
+    dataTypeMapper.addDataTypeEntry(new DataTypeMapEntry<>(DataType.Name.CUSTOM.ordinal(), DataType.Name.CUSTOM.toString(), Object.class));
+    dataTypeMapper.addDataTypeEntry(new DataTypeMapEntry<>(DataType.Name.DATE.ordinal(), DataType.Name.DATE.name(), LocalDate.class));
     dataTypeMapper.addDataTypeEntry(new DataTypeMapEntry<>(DataType.Name.DECIMAL.ordinal(), DataType.Name.DECIMAL.name(), BigDecimal.class));
     dataTypeMapper.addDataTypeEntry(new DataTypeMapEntry<>(DataType.Name.DOUBLE.ordinal(), DataType.Name.DOUBLE.name(), double.class));
+    dataTypeMapper.addDataTypeEntry(new DataTypeMapEntry<>(DataType.Name.DURATION.ordinal(), DataType.Name.DURATION.name(), long.class));
     dataTypeMapper.addDataTypeEntry(new DataTypeMapEntry<>(DataType.Name.FLOAT.ordinal(), DataType.Name.FLOAT.name(), float.class));
     dataTypeMapper.addDataTypeEntry(new DataTypeMapEntry<>(DataType.Name.INET.ordinal(), DataType.Name.INET.name(), InetAddress.class));
     dataTypeMapper.addDataTypeEntry(new DataTypeMapEntry<>(DataType.Name.INT.ordinal(), DataType.Name.INT.name(), int.class));
     dataTypeMapper.addDataTypeEntry(new DataTypeMapEntry<>(DataType.Name.LIST.ordinal(), DataType.Name.LIST.name(), List.class));
     dataTypeMapper.addDataTypeEntry(new DataTypeMapEntry<>(DataType.Name.MAP.ordinal(), DataType.Name.MAP.name(), Map.class));
     dataTypeMapper.addDataTypeEntry(new DataTypeMapEntry<>(DataType.Name.SET.ordinal(), DataType.Name.SET.name(), Set.class));
+    dataTypeMapper.addDataTypeEntry(new DataTypeMapEntry<>(DataType.Name.SMALLINT.ordinal(), DataType.Name.SMALLINT.name(), short.class));
     dataTypeMapper.addDataTypeEntry(new DataTypeMapEntry<>(DataType.Name.TEXT.ordinal(), DataType.Name.TEXT.name(), String.class));
+    dataTypeMapper.addDataTypeEntry(new DataTypeMapEntry<>(DataType.Name.TIME.ordinal(), DataType.Name.TIME.name(), long.class));
     dataTypeMapper.addDataTypeEntry(new DataTypeMapEntry<>(DataType.Name.TIMESTAMP.ordinal(), DataType.Name.TIMESTAMP.name(), Date.class));
     dataTypeMapper.addDataTypeEntry(new DataTypeMapEntry<>(DataType.Name.TIMEUUID.ordinal(), DataType.Name.TIMEUUID.name(), UUID.class));
+    dataTypeMapper.addDataTypeEntry(new DataTypeMapEntry<>(DataType.Name.TINYINT.ordinal(), DataType.Name.TINYINT.name(), byte.class));
+    dataTypeMapper.addDataTypeEntry(new DataTypeMapEntry<>(DataType.Name.TUPLE.ordinal(), DataType.Name.TUPLE.name(), TupleValue.class));
+    dataTypeMapper.addDataTypeEntry(new DataTypeMapEntry<>(DataType.Name.UDT.ordinal(), DataType.Name.UDT.name(), UDTValue.class));
     dataTypeMapper.addDataTypeEntry(new DataTypeMapEntry<>(DataType.Name.UUID.ordinal(), DataType.Name.UUID.name(), UUID.class));
     dataTypeMapper.addDataTypeEntry(defaultDataTypeMapEntry);
     dataTypeMapper.addDataTypeEntry(new DataTypeMapEntry<>(DataType.Name.VARINT.ordinal(), DataType.Name.VARINT.toString(), BigInteger.class));

@@ -20,7 +20,7 @@
  */
 package org.synchronoss.cpo.cassandra.config;
 
-import com.datastax.driver.core.policies.AddressTranslater;
+import com.datastax.driver.core.policies.AddressTranslator;
 
 /**
  * Created with IntelliJ IDEA.
@@ -29,12 +29,12 @@ import com.datastax.driver.core.policies.AddressTranslater;
  * Time: 07:57 AM
  * To change this template use File | Settings | File Templates.
  */
-public abstract class AddressTranslaterFactory implements FactoryMethodName {
+public abstract class AddressTranslatorFactory implements FactoryMethodName {
 
   public String getFactoryMethodName() {
-    return "createAddressTranslater";
+    return "createAddressTranslator";
   }
 
-  public abstract AddressTranslater createAddressTranslater();
+  public abstract AddressTranslator createAddressTranslator();
 
 }

@@ -37,11 +37,11 @@
     produces POJOs
   </description>
   <properties>
-    <oracleVersion>11.2.0.2.0</oracleVersion>
-    <mysqlVersion>5.1.16</mysqlVersion>
-    <mariadbVersion>1.3.5</mariadbVersion>
-    <h2Version>1.4.190</h2Version>
-    <postgresVersion>9.0-801.jdbc4</postgresVersion>
+    <oracleVersion>19.3.0.0</oracleVersion>
+    <mysqlVersion>8.0.20</mysqlVersion>
+    <mariadbVersion>2.6.0</mariadbVersion>
+    <h2Version>1.4.200</h2Version>
+    <postgresVersion>42.2.14</postgresVersion>
   </properties>
   <build>
     <pluginManagement>
@@ -52,12 +52,12 @@
           <version>1.5</version>
           <dependencies>
             <dependency>
-              <groupId>com.oracle</groupId>
-              <artifactId>ojdbc6</artifactId>
+              <groupId>com.oracle.ojdbc</groupId>
+              <artifactId>ojdbc8</artifactId>
               <version>${oracleVersion}</version>
             </dependency>
             <dependency>
-              <groupId>postgresql</groupId>
+              <groupId>org.postgresql</groupId>
               <artifactId>postgresql</artifactId>
               <version>${postgresVersion}</version>
             </dependency>
@@ -164,15 +164,15 @@
 
     <!-- Oracle is provided because of the oracle transforms -->
     <dependency>
-      <groupId>com.oracle</groupId>
-      <artifactId>ojdbc6</artifactId>
+      <groupId>com.oracle.ojdbc</groupId>
+      <artifactId>ojdbc8</artifactId>
       <version>${oracleVersion}</version>
       <scope>provided</scope>
     </dependency>
 
     <!-- database drivers for testing -->
     <dependency>
-      <groupId>postgresql</groupId>
+      <groupId>org.postgresql</groupId>
       <artifactId>postgresql</artifactId>
       <version>${postgresVersion}</version>
       <scope>test</scope>

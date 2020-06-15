@@ -49,7 +49,10 @@
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <currentVersion>${project.version}</currentVersion>
+<<<<<<< HEAD
     <testContainersVersion>1.14.3</testContainersVersion>
+=======
+>>>>>>> develop
     <slf4jVersion>1.7.30</slf4jVersion>
     <github.global.server>cpo-github</github.global.server>
   </properties>
@@ -427,12 +430,15 @@
         <groupId>org.apache.xmlbeans</groupId>
         <artifactId>xmlbeans</artifactId>
         <version>3.1.0</version>
+<<<<<<< HEAD
       </dependency>
       <dependency>
           <groupId>org.testcontainers</groupId>
           <artifactId>testcontainers</artifactId>
           <version>${testContainersVersion}</version>
           <scope>test</scope>
+=======
+>>>>>>> develop
       </dependency>
     </dependencies>
   </dependencyManagement>

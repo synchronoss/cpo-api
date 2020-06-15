@@ -51,12 +51,12 @@
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
     </dependency>
-    <!-- log4j implementation for test logging -->
-    <!--<dependency>-->
-      <!--<groupId>org.slf4j</groupId>-->
-      <!--<artifactId>slf4j-log4j12</artifactId>-->
-      <!--<scope>test</scope>-->
-    <!--</dependency>-->
+<!--     log4j implementation for test logging-->
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-log4j12</artifactId>
+      <scope>test</scope>
+    </dependency>
     <dependency>
       <groupId>log4j</groupId>
       <artifactId>log4j</artifactId>
@@ -72,10 +72,15 @@
       <version>3.9.0</version>
     </dependency>
     <dependency>
-        <groupId>org.cassandraunit</groupId>
-        <artifactId>cassandra-unit</artifactId>
-        <version>3.11.2.0</version>
-        <scope>test</scope>
+      <groupId>org.testcontainers</groupId>
+      <artifactId>cassandra</artifactId>
+      <version>${testContainersVersion}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.github.terma</groupId>
+      <artifactId>javaniotcpproxy</artifactId>
+      <version>1.6</version>
     </dependency>
   </dependencies>
   <build>

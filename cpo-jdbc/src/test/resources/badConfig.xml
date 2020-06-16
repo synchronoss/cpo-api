@@ -34,7 +34,7 @@
     <metaXml>/emptyMetaData.xml</metaXml>
   </metaConfig>
 
-   <dataConfig xsi:type="jdbc:ctJdbcConfig" name="jdbc" supportsBlobs="${cpo.db.blobssupported}" supportsCalls="${cpo.db.callssupported}" supportsMillis="${cpo.db.millisupport}" supportsSelect4Update="${cpo.db.select4update}">
+   <dataConfig xsi:type="jdbc:ctJdbcConfig" name="jdbc">
       <metaDescriptorName>jdbcMeta</metaDescriptorName>
       <cpoConfigProcessor>org.synchronoss.cpo.jdbc.config.JdbcCpoConfigProcessor</cpoConfigProcessor>
     <jdbc:readWriteConfig>

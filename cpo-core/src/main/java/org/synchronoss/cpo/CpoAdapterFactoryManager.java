@@ -152,7 +152,7 @@ public final class CpoAdapterFactoryManager extends CpoAdapterFactoryCache {
     } catch (IOException ioe) {
       logger.error("Error reading " + configFile + ": ", ioe);
     } catch (XmlException xe) {
-      logger.error("Error processing " + configFile + ": Invalid XML");
+      logger.error("Error processing " + configFile + ": Invalid XML", xe);
     } catch (CpoException ce) {
       logger.error("Error processing " + configFile + ": ", ce);
     }

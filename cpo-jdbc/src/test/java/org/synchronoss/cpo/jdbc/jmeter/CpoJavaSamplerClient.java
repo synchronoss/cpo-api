@@ -52,6 +52,7 @@ public class CpoJavaSamplerClient extends AbstractJavaSamplerClient {
   private static final String URL = "url";
   private static final String DRIVER = "driver";
   private static final String CONFIG_PROCESSOR = "org.synchronoss.cpo.jdbc.config.JdbcCpoConfigProcessor";
+  private static boolean isSupportsMillis = Boolean.valueOf(JdbcJUnitProperty.getProperty(JdbcJUnitProperty.PROP_MILLIS_SUPPORTED));
 
   @Override
   public void setupTest(JavaSamplerContext javaSamplerContext) {
@@ -98,7 +99,7 @@ public class CpoJavaSamplerClient extends AbstractJavaSamplerClient {
     valueObject.setAttrInteger(3);
     Timestamp ts = new Timestamp(System.currentTimeMillis());
 
-    if (!metaDescriptor.isSupportsMillis()) {
+    if (!isSupportsMillis) {
       ts.setNanos(0);
     }
 

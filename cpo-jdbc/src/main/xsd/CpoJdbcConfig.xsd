@@ -21,14 +21,14 @@
     http://www.gnu.org/licenses/lgpl.txt
 
 -->
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" 
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
     xmlns:cpo="http://www.synchronoss.org/cpo/core/CpoCoreConfig.xsd"
     xmlns="http://www.synchronoss.org/cpo/jdbc/CpoJdbcConfig.xsd"
     targetNamespace="http://www.synchronoss.org/cpo/jdbc/CpoJdbcConfig.xsd"
     elementFormDefault="qualified">
 
     <xs:import namespace="http://www.synchronoss.org/cpo/core/CpoCoreConfig.xsd" schemaLocation="../../../../cpo-core/src/main/xsd/CpoCoreConfig.xsd"/>
-    
+
     <xs:complexType name="ctJdbcConfig">
         <xs:complexContent>
             <xs:extension base="cpo:ctDataSourceConfig">
@@ -39,14 +39,14 @@
                         <xs:element name="writeConfig" type="ctJdbcReadWriteConfig"/>
                     </xs:sequence>
                 </xs:choice>
-               <xs:attribute name="supportsBlobs" type="xs:boolean" use="optional"/>
-               <xs:attribute name="supportsCalls" type="xs:boolean" use="optional"/>
-               <xs:attribute name="supportsMillis" type="xs:boolean" use="optional"/>
-               <xs:attribute name="supportsSelect4Update" type="xs:boolean" use="optional"/>
+<!--               <xs:attribute name="supportsBlobs" type="xs:boolean" use="optional"/>-->
+<!--               <xs:attribute name="supportsCalls" type="xs:boolean" use="optional"/>-->
+<!--               <xs:attribute name="supportsMillis" type="xs:boolean" use="optional"/>-->
+<!--               <xs:attribute name="supportsSelect4Update" type="xs:boolean" use="optional"/>-->
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
-    
+
     <xs:complexType name="ctJdbcReadWriteConfig">
         <xs:choice>
             <xs:element name="jndiName" type="xs:string">
@@ -58,7 +58,7 @@
                 <xs:choice>
                     <xs:element name="dataSourceClassName" type="xs:string">
                         <xs:annotation>
-                            <xs:documentation>The classname for the DataSource provided by the database vendor. 
+                            <xs:documentation>The classname for the DataSource provided by the database vendor.
                                 Use a ConnectionPoolDataSource class if available or a DataSource class if not use a DataSource class.
                                 ie: com.mysql.jdbc.jdbc2.optional.MysqlConnectionPoolDataSource
                                 oracle.jdbc.pool.OracleConnectionPoolDataSource
@@ -68,7 +68,7 @@
                     </xs:element>
                     <xs:element name="driverClassName" type="xs:string">
                         <xs:annotation>
-                            <xs:documentation>Deprecated. Use dataSourceClassName. The classname for the jdbc driver provided by the database vendor. 
+                            <xs:documentation>Deprecated. Use dataSourceClassName. The classname for the jdbc driver provided by the database vendor.
                                 ie: oracle.jdbc.driver.OracleDriver
                                 com.mysql.jdbc.Driver
                                 org.hsqldb.jdbcDriver
@@ -99,10 +99,10 @@
             </xs:sequence>
         </xs:choice>
     </xs:complexType>
-    
+
     <xs:complexType name="ctProperty">
         <xs:attribute name="name" type="xs:string" use="required"/>
         <xs:attribute name="value" type="xs:string" use="required"/>
     </xs:complexType>
-    
+
 </xs:schema>

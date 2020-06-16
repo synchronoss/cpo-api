@@ -19,25 +19,34 @@
 -- http://www.gnu.org/licenses/lgpl.txt
 --
 
+DROP TABLE  IF EXISTS VALUE_OBJECT;
+DROP TABLE  IF EXISTS LOB_TEST;
+
 CREATE TABLE value_object (
-ID                      int primary key
-,ATTR_BOOL            	 char(1)  NULL
-,ATTR_INTEGER            int      NULL
-,ATTR_INT                integer      NULL
+ID                      integer primary key
+,ATTR_BOOL            	 boolean  NULL
+,ATTR_INTEGER            integer      NULL
+,ATTR_INT                int      NULL
 ,ATTR_DOUBLE             double precision       NULL
-,ATTR_FLOAT              float        NULL
+,ATTR_FLOAT              real        NULL
 ,ATTR_VARCHAR            varchar(255) NULL
 ,ATTR_VARCHAR_IGNORECASE varchar(255) NULL
 ,ATTR_CHAR               varchar(255) NULL
 ,ATTR_CHARACTER          varchar(255) NULL
 ,ATTR_DATE               date         NULL
 ,ATTR_DATETIME			 timestamp	  NULL
---,ATTR_TIME               time         NULL
+,ATTR_TIME               time         NULL
 ,ATTR_TIMESTAMP          timestamp    NULL
 ,ATTR_DECIMAL            decimal(10,0) NULL
 ,ATTR_NUMERIC            decimal(10,0) NULL
 ,ATTR_SMALLINT           smallint  NULL
 ,ATTR_REAL               double precision     NULL
-,ATTR_BLOB               blob         NULL
-,ATTR_LONGTEXT           long     NULL
+,ATTR_LONGTEXT           text     NULL
+);
+
+CREATE TABLE LOB_TEST (
+  LOB_ID               INT NOT NULL
+  ,B_LOB                BLOB NULL
+  ,B_LOB2               BLOB NULL
+  ,C_LOB                CLOB NULL
 );

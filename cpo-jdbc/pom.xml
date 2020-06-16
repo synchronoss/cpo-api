@@ -131,9 +131,7 @@
               <skip>${cpo.skip.sql.plugin}</skip>
               <onError>continue</onError>
               <srcFiles>
-                <srcFile>${cpo.test.sqldir}/dropTestTables.sql</srcFile>
-                <srcFile>${cpo.test.sqldir}/LvoTableDDL.sql</srcFile>
-                <srcFile>${cpo.test.sqldir}/ValueObjectDDL.sql</srcFile>
+                <srcFile>${cpo.test.sqldir}/initDB.sql</srcFile>
               </srcFiles>
             </configuration>
           </execution>
@@ -199,6 +197,24 @@
       <groupId>org.apache.jmeter</groupId>
       <artifactId>ApacheJMeter_java</artifactId>
       <version>5.3</version>
+      <exclusions>
+        <exclusion>
+          <groupId>org.apache.logging.log4j</groupId>
+          <artifactId>log4j-1.2-api</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.apache.logging.log4j</groupId>
+          <artifactId>log4j-api</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.apache.logging.log4j</groupId>
+          <artifactId>log4j-core</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.apache.logging.log4j</groupId>
+          <artifactId>log4j-slf4j-impl</artifactId>
+        </exclusion>
+      </exclusions>
       <scope>test</scope>
     </dependency>
     <!-- log4j implementation for test logging -->
@@ -225,7 +241,7 @@
       </activation>
       <properties>
         <release.arguments>-Dcpo.db=${cpo.db}</release.arguments>
-        <cpo.skip.sql.plugin>false</cpo.skip.sql.plugin>
+        <cpo.skip.sql.plugin>true</cpo.skip.sql.plugin>
         <cpo.test.sqldir>src/test/sql/mysql</cpo.test.sqldir>
         <cpo.db.user>cpo</cpo.db.user>
         <cpo.db.pswd>cpo</cpo.db.pswd>
@@ -234,13 +250,14 @@
         <cpo.db.database>cpo</cpo.db.database>
         <cpo.db.url>jdbc:mysql://${cpo.db.host}:${cpo.db.port}/${cpo.db.database}?noAccessToProcedureBodies=true&amp;amp;useCursorFetch=true&amp;amp;defaultFetchSize=0</cpo.db.url>
         <cpo.db.userurl>jdbc:mysql://${cpo.db.host}:${cpo.db.port}/${cpo.db.database}?user=${cpo.db.user}&amp;amp;password=${cpo.db.pswd}&amp;amp;noAccessToProcedureBodies=true&amp;amp;useCursorFetch=true&amp;amp;defaultFetchSize=0</cpo.db.userurl>
-        <cpo.db.driver>com.mysql.jdbc.Driver</cpo.db.driver>
+        <cpo.db.driver>com.mysql.cj.jdbc.Driver</cpo.db.driver>
         <cpo.db.blobssupported>true</cpo.db.blobssupported>
         <cpo.db.callssupported>true</cpo.db.callssupported>
         <cpo.db.select4update>true</cpo.db.select4update>
         <cpo.db.millisupport>false</cpo.db.millisupport>
+        <cpo.db.testContainer></cpo.db.testContainer>
         <cpo.db.jndi>java:/comp/env/jdbc/cpodatasource</cpo.db.jndi>
-        <cpo.db.class>com.mysql.jdbc.jdbc2.optional.MysqlConnectionPoolDataSource</cpo.db.class>
+        <cpo.db.class>com.mysql.cj.jdbc.MysqlConnectionPoolDataSource</cpo.db.class>
         <cpo.valueMeta.xml>/mysql/mysqlValueMetaData.xml</cpo.valueMeta.xml>
         <cpo.valueCaseMeta.xml>/mysql/mysqlValueCaseMetaData.xml</cpo.valueCaseMeta.xml>
         <cpo.lobMeta.xml>/mysql/mysqlLobMetaData.xml</cpo.lobMeta.xml>
@@ -257,7 +274,7 @@
        </activation>
        <properties>
          <release.arguments>-Dcpo.db=${cpo.db}</release.arguments>
-         <cpo.skip.sql.plugin>false</cpo.skip.sql.plugin>
+         <cpo.skip.sql.plugin>true</cpo.skip.sql.plugin>
          <cpo.test.sqldir>src/test/sql/mariadb</cpo.test.sqldir>
          <cpo.db.user>cpo</cpo.db.user>
          <cpo.db.pswd>cpo</cpo.db.pswd>
@@ -271,6 +288,7 @@
          <cpo.db.callssupported>true</cpo.db.callssupported>
          <cpo.db.select4update>true</cpo.db.select4update>
          <cpo.db.millisupport>false</cpo.db.millisupport>
+         <cpo.db.testContainer></cpo.db.testContainer>
          <cpo.db.jndi>java:/comp/env/jdbc/cpodatasource</cpo.db.jndi>
          <cpo.db.class>org.mariadb.jdbc.MariaDbDataSource</cpo.db.class>
          <cpo.valueMeta.xml>/mariadb/mariadbValueMetaData.xml</cpo.valueMeta.xml>
@@ -287,8 +305,8 @@
           <value>oracle</value>
         </property>
       </activation>
-       <properties>
-         <release.arguments>-Dcpo.db=${cpo.db}</release.arguments>
+      <properties>
+        <release.arguments>-Dcpo.db=${cpo.db}</release.arguments>
         <cpo.skip.sql.plugin>false</cpo.skip.sql.plugin>
         <cpo.test.sqldir>src/test/sql/oracle</cpo.test.sqldir>
         <cpo.db.user>cpo</cpo.db.user>
@@ -303,6 +321,7 @@
         <cpo.db.callssupported>true</cpo.db.callssupported>
         <cpo.db.select4update>true</cpo.db.select4update>
         <cpo.db.millisupport>true</cpo.db.millisupport>
+        <cpo.db.testContainer></cpo.db.testContainer>
         <cpo.db.jndi>cpodatasource</cpo.db.jndi>
         <cpo.db.class>oracle.jdbc.pool.OracleConnectionPoolDataSource</cpo.db.class>
         <cpo.valueMeta.xml>/oracle/oracleValueMetaData.xml</cpo.valueMeta.xml>
@@ -319,8 +338,8 @@
           <value>oracle11g</value>
         </property>
       </activation>
-       <properties>
-         <release.arguments>-Dcpo.db=${cpo.db}</release.arguments>
+      <properties>
+        <release.arguments>-Dcpo.db=${cpo.db}</release.arguments>
         <cpo.skip.sql.plugin>false</cpo.skip.sql.plugin>
         <cpo.test.sqldir>src/test/sql/oracle</cpo.test.sqldir>
         <cpo.db.user>cpo</cpo.db.user>
@@ -335,6 +354,7 @@
         <cpo.db.callssupported>true</cpo.db.callssupported>
         <cpo.db.select4update>true</cpo.db.select4update>
         <cpo.db.millisupport>true</cpo.db.millisupport>
+        <cpo.db.testContainer></cpo.db.testContainer>
         <cpo.db.jndi>cpodatasource</cpo.db.jndi>
         <cpo.db.class>oracle.jdbc.pool.OracleConnectionPoolDataSource</cpo.db.class>
         <cpo.valueMeta.xml>/oracle/oracleValueMetaData.xml</cpo.valueMeta.xml>
@@ -350,15 +370,8 @@
           <name>!cpo.db</name>
         </property>
       </activation>
-      <!--<activation>-->
-        <!--<activeByDefault>false</activeByDefault>-->
-        <!--<property>-->
-          <!--<name>cpo.db</name>-->
-          <!--<value>h2</value>-->
-        <!--</property>-->
-      <!--</activation>-->
-       <properties>
-         <release.arguments>-Dcpo.db=h2</release.arguments>
+      <properties>
+        <release.arguments>-Dcpo.db=h2</release.arguments>
         <cpo.skip.sql.plugin>false</cpo.skip.sql.plugin>
         <cpo.test.sqldir>src/test/sql/h2</cpo.test.sqldir>
         <cpo.db.user>sa</cpo.db.user>
@@ -373,6 +386,7 @@
         <cpo.db.callssupported>true</cpo.db.callssupported>
         <cpo.db.select4update>false</cpo.db.select4update>
         <cpo.db.millisupport>true</cpo.db.millisupport>
+        <cpo.db.testContainer></cpo.db.testContainer>
         <cpo.db.jndi>cpodatasource</cpo.db.jndi>
         <cpo.db.class>org.h2.jdbcx.JdbcDataSource</cpo.db.class>
         <cpo.valueMeta.xml>/h2/h2ValueMetaData.xml</cpo.valueMeta.xml>
@@ -391,7 +405,7 @@
       </activation>
       <properties>
         <release.arguments>-Dcpo.db=${cpo.db}</release.arguments>
-        <cpo.skip.sql.plugin>false</cpo.skip.sql.plugin>
+        <cpo.skip.sql.plugin>true</cpo.skip.sql.plugin>
         <cpo.test.sqldir>src/test/sql/postgres</cpo.test.sqldir>
         <cpo.db.user>cpo</cpo.db.user>
         <cpo.db.pswd>cpo</cpo.db.pswd>
@@ -401,11 +415,14 @@
         <cpo.db.url>jdbc:postgresql://${cpo.db.host}:${cpo.db.port}/${cpo.db.database}</cpo.db.url>
         <cpo.db.userurl>jdbc:postgresql://${cpo.db.host}:${cpo.db.port}/${cpo.db.database}?user=${cpo.db.user}&amp;password=${cpo.db.pswd}&amp;stringtype=unspecified</cpo.db.userurl>
         <cpo.db.driver>org.postgresql.Driver</cpo.db.driver>
-        <cpo.db.blobssupported>false</cpo.db.blobssupported>
+        <cpo.db.blobssupported>true</cpo.db.blobssupported>
         <cpo.db.callssupported>true</cpo.db.callssupported>
         <cpo.db.select4update>true</cpo.db.select4update>
         <cpo.db.millisupport>true</cpo.db.millisupport>
+        <cpo.db.testContainer></cpo.db.testContainer>
         <cpo.db.jndi>java:/comp/env/jdbc/cpodatasource</cpo.db.jndi>
+        <cpo.db.class>FIXME</cpo.db.class>
+        <cpo.valueMeta.xml>/postgres/postgresValueMetaData.xml</cpo.valueMeta.xml>
         <cpo.valueCaseMeta.xml>/postgres/postgresValueCaseMetaData.xml</cpo.valueCaseMeta.xml>
         <cpo.lobMeta.xml>/postgres/postgresLobMetaData.xml</cpo.lobMeta.xml>
       </properties>

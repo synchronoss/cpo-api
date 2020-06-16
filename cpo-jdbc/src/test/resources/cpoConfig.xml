@@ -49,7 +49,7 @@
   </core:metaConfig>
 
 
-   <core:dataConfig xsi:type="jdbc:ctJdbcConfig" name="jdbc" supportsBlobs="${cpo.db.blobssupported}" supportsCalls="${cpo.db.callssupported}" supportsMillis="${cpo.db.millisupport}" supportsSelect4Update="${cpo.db.select4update}">
+   <core:dataConfig xsi:type="jdbc:ctJdbcConfig" name="jdbc">
     <core:metaDescriptorName>jdbcMeta</core:metaDescriptorName>
     <core:cpoConfigProcessor>org.synchronoss.cpo.jdbc.config.JdbcCpoConfigProcessor</core:cpoConfigProcessor>
     <jdbc:readWriteConfig>
@@ -57,14 +57,9 @@
       <jdbc:url>${cpo.db.url}</jdbc:url>
       <jdbc:property name="user" value="${cpo.db.user}"/>
       <jdbc:property name="password" value="${cpo.db.pswd}"/>
-      <!-- CQL properties -->
-      <jdbc:property name="serverName" value="${cpo.db.host}"/>
-      <jdbc:property name="portNumber" value="${cpo.db.port}"/>
-      <jdbc:property name="databaseName" value="${cpo.db.database}"/>
-      <!-- CQL properties -->
     </jdbc:readWriteConfig>
   </core:dataConfig>
-     <core:dataConfig xsi:type="jdbc:ctJdbcConfig" name="caseSensitive" supportsBlobs="${cpo.db.blobssupported}" supportsCalls="${cpo.db.callssupported}" supportsMillis="${cpo.db.millisupport}" supportsSelect4Update="${cpo.db.select4update}">
+     <core:dataConfig xsi:type="jdbc:ctJdbcConfig" name="caseSensitive">
     <core:metaDescriptorName>caseSensitive</core:metaDescriptorName>
     <core:cpoConfigProcessor>org.synchronoss.cpo.jdbc.config.JdbcCpoConfigProcessor</core:cpoConfigProcessor>
     <jdbc:readWriteConfig>
@@ -72,14 +67,9 @@
       <jdbc:url>${cpo.db.url}</jdbc:url>
       <jdbc:property name="user" value="${cpo.db.user}"/>
       <jdbc:property name="password" value="${cpo.db.pswd}"/>
-      <!-- CQL properties -->
-      <jdbc:property name="serverName" value="${cpo.db.host}"/>
-      <jdbc:property name="portNumber" value="${cpo.db.port}"/>
-      <jdbc:property name="databaseName" value="${cpo.db.database}"/>
-      <!-- CQL properties -->
     </jdbc:readWriteConfig>
   </core:dataConfig>
-   <core:dataConfig xsi:type="jdbc:ctJdbcConfig" name="caseInsensitive" supportsBlobs="${cpo.db.blobssupported}" supportsCalls="${cpo.db.callssupported}" supportsMillis="${cpo.db.millisupport}" supportsSelect4Update="${cpo.db.select4update}">
+   <core:dataConfig xsi:type="jdbc:ctJdbcConfig" name="caseInsensitive">
     <core:metaDescriptorName>caseInsensitive</core:metaDescriptorName>
     <core:cpoConfigProcessor>org.synchronoss.cpo.jdbc.config.JdbcCpoConfigProcessor</core:cpoConfigProcessor>
     <jdbc:readWriteConfig>
@@ -87,11 +77,6 @@
       <jdbc:url>${cpo.db.url}</jdbc:url>
       <jdbc:property name="user" value="${cpo.db.user}"/>
       <jdbc:property name="password" value="${cpo.db.pswd}"/>
-      <!-- CQL properties -->
-      <jdbc:property name="serverName" value="${cpo.db.host}"/>
-      <jdbc:property name="portNumber" value="${cpo.db.port}"/>
-      <jdbc:property name="databaseName" value="${cpo.db.database}"/>
-      <!-- CQL properties -->
     </jdbc:readWriteConfig>
   </core:dataConfig>
 
@@ -127,30 +112,20 @@
   <core:metaDescriptorName>jdbcMeta</core:metaDescriptorName>
   <core:cpoConfigProcessor>org.synchronoss.cpo.jdbc.config.JdbcCpoConfigProcessor</core:cpoConfigProcessor>
   <jdbc:readWriteConfig>
-   <jdbc:dataSourceClassName>${cpo.db.class}</jdbc:dataSourceClassName>
-   <jdbc:url>${cpo.db.url}</jdbc:url>
-      <jdbc:property name="user" value="${cpo.db.user}"/>
-      <jdbc:property name="password" value="${cpo.db.pswd}"/>
-      <!-- CQL properties -->
-      <jdbc:property name="serverName" value="${cpo.db.host}"/>
-      <jdbc:property name="portNumber" value="${cpo.db.port}"/>
-      <jdbc:property name="databaseName" value="${cpo.db.database}"/>
-      <!-- CQL properties -->
+    <jdbc:dataSourceClassName>${cpo.db.class}</jdbc:dataSourceClassName>
+    <jdbc:url>${cpo.db.url}</jdbc:url>
+    <jdbc:property name="user" value="${cpo.db.user}"/>
+    <jdbc:property name="password" value="${cpo.db.pswd}"/>
   </jdbc:readWriteConfig>
  </core:dataConfig>
  <core:dataConfig xsi:type="jdbc:ctJdbcConfig" name="classProp">
   <core:metaDescriptorName>jdbcMeta</core:metaDescriptorName>
   <core:cpoConfigProcessor>org.synchronoss.cpo.jdbc.config.JdbcCpoConfigProcessor</core:cpoConfigProcessor>
   <jdbc:readWriteConfig>
-   <jdbc:dataSourceClassName>${cpo.db.class}</jdbc:dataSourceClassName>
-   <jdbc:url>${cpo.db.url}</jdbc:url>
-      <jdbc:property name="user" value="${cpo.db.user}"/>
-      <jdbc:property name="password" value="${cpo.db.pswd}"/>
-      <!-- CQL properties -->
-      <jdbc:property name="serverName" value="${cpo.db.host}"/>
-      <jdbc:property name="portNumber" value="${cpo.db.port}"/>
-      <jdbc:property name="databaseName" value="${cpo.db.database}"/>
-      <!-- CQL properties -->
+    <jdbc:dataSourceClassName>${cpo.db.class}</jdbc:dataSourceClassName>
+    <jdbc:url>${cpo.db.url}</jdbc:url>
+    <jdbc:property name="user" value="${cpo.db.user}"/>
+    <jdbc:property name="password" value="${cpo.db.pswd}"/>
   </jdbc:readWriteConfig>
  </core:dataConfig>
 <!-- <dataConfig xsi:type="jdbc:ctJdbcConfig" name="jndi">
@@ -182,24 +157,14 @@
   <jdbc:readConfig>
    <jdbc:dataSourceClassName>${cpo.db.class}</jdbc:dataSourceClassName>
    <jdbc:url>${cpo.db.url}</jdbc:url>
-      <jdbc:property name="user" value="${cpo.db.user}"/>
-      <jdbc:property name="password" value="${cpo.db.pswd}"/>
-      <!-- CQL properties -->
-      <jdbc:property name="serverName" value="${cpo.db.host}"/>
-      <jdbc:property name="portNumber" value="${cpo.db.port}"/>
-      <jdbc:property name="databaseName" value="${cpo.db.database}"/>
-      <!-- CQL properties -->
+   <jdbc:property name="user" value="${cpo.db.user}"/>
+   <jdbc:property name="password" value="${cpo.db.pswd}"/>
   </jdbc:readConfig>
   <jdbc:writeConfig>
    <jdbc:dataSourceClassName>${cpo.db.class}</jdbc:dataSourceClassName>
    <jdbc:url>${cpo.db.url}</jdbc:url>
-      <jdbc:property name="user" value="${cpo.db.user}"/>
-      <jdbc:property name="password" value="${cpo.db.pswd}"/>
-      <!-- CQL properties -->
-      <jdbc:property name="serverName" value="${cpo.db.host}"/>
-      <jdbc:property name="portNumber" value="${cpo.db.port}"/>
-      <jdbc:property name="databaseName" value="${cpo.db.database}"/>
-      <!-- CQL properties -->
+   <jdbc:property name="user" value="${cpo.db.user}"/>
+   <jdbc:property name="password" value="${cpo.db.pswd}"/>
   </jdbc:writeConfig>
  </core:dataConfig>
  <core:dataConfig xsi:type="jdbc:ctJdbcConfig" name="driverclass">
@@ -213,14 +178,8 @@
   </jdbc:readConfig>
   <jdbc:writeConfig>
    <jdbc:dataSourceClassName>${cpo.db.class}</jdbc:dataSourceClassName>
-   <jdbc:url>${cpo.db.url}</jdbc:url>
-      <jdbc:property name="user" value="${cpo.db.user}"/>
-      <jdbc:property name="password" value="${cpo.db.pswd}"/>
-      <!-- CQL properties -->
-      <jdbc:property name="serverName" value="${cpo.db.host}"/>
-      <jdbc:property name="portNumber" value="${cpo.db.port}"/>
-      <jdbc:property name="databaseName" value="${cpo.db.database}"/>
-      <!-- CQL properties -->
+   <jdbc:url>${cpo.db.url}</jdbc:url><jdbc:property name="user" value="${cpo.db.user}"/>
+   <jdbc:property name="password" value="${cpo.db.pswd}"/>
   </jdbc:writeConfig>
  </core:dataConfig>
  <core:dataConfig xsi:type="jdbc:ctJdbcConfig" name="classdriver">
@@ -229,13 +188,8 @@
   <jdbc:readConfig>
    <jdbc:dataSourceClassName>${cpo.db.class}</jdbc:dataSourceClassName>
    <jdbc:url>${cpo.db.url}</jdbc:url>
-      <jdbc:property name="user" value="${cpo.db.user}"/>
-      <jdbc:property name="password" value="${cpo.db.pswd}"/>
-      <!-- CQL properties -->
-      <jdbc:property name="serverName" value="${cpo.db.host}"/>
-      <jdbc:property name="portNumber" value="${cpo.db.port}"/>
-      <jdbc:property name="databaseName" value="${cpo.db.database}"/>
-      <!-- CQL properties -->
+    <jdbc:property name="user" value="${cpo.db.user}"/>
+    <jdbc:property name="password" value="${cpo.db.pswd}"/>
   </jdbc:readConfig>
   <jdbc:writeConfig>
    <jdbc:driverClassName>${cpo.db.driver}</jdbc:driverClassName>

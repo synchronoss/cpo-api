@@ -59,18 +59,6 @@ public class JdbcCpoConfigProcessor implements CpoConfigProcessor {
 
     JdbcCpoMetaDescriptor metaDescriptor = (JdbcCpoMetaDescriptor)CpoMetaDescriptor.getInstance(jdbcConfig.getMetaDescriptorName());
 
-    if (jdbcConfig.isSetSupportsBlobs())
-      metaDescriptor.setSupportsBlobs(jdbcConfig.getSupportsBlobs());
-
-    if (jdbcConfig.isSetSupportsCalls())
-      metaDescriptor.setSupportsCalls(jdbcConfig.getSupportsCalls());
-
-    if (jdbcConfig.isSetSupportsMillis())
-      metaDescriptor.setSupportsMillis(jdbcConfig.getSupportsMillis());
-
-    if (jdbcConfig.isSetSupportsSelect4Update())
-      metaDescriptor.setSupportsSelect4Update(jdbcConfig.getSupportsSelect4Update());
-
     // build a datasource info
     if (jdbcConfig.isSetReadWriteConfig()) {
       DataSourceInfo dataSourceInfo = buildDataSourceInfo(jdbcConfig.getReadWriteConfig());

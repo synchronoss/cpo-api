@@ -40,6 +40,7 @@ public class DeleteObjectTest extends TestCase {
   private ArrayList<ValueObject> al = new ArrayList<>();
   private CpoAdapter cpoAdapter = null;
   private JdbcCpoMetaDescriptor metaDescriptor = null;
+  private boolean isSupportsMillis = Boolean.valueOf(JdbcJUnitProperty.getProperty(JdbcJUnitProperty.PROP_MILLIS_SUPPORTED));
 
   public DeleteObjectTest(String name) {
     super(name);
@@ -72,7 +73,7 @@ public class DeleteObjectTest extends TestCase {
     valObj.setAttrInteger(3);
     Timestamp ts = new Timestamp(System.currentTimeMillis());
 
-    if (!metaDescriptor.isSupportsMillis()) {
+    if (!isSupportsMillis) {
       ts.setNanos(0);
     }
 

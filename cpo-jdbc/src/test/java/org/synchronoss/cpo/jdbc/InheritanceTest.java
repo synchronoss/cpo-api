@@ -37,6 +37,7 @@ public class InheritanceTest extends TestCase {
   private ArrayList<ChildValueObject> al = new ArrayList<>();
   private CpoAdapter cpoAdapter = null;
   private JdbcCpoMetaDescriptor metaDescriptor = null;
+  private boolean isSupportsMillis = Boolean.valueOf(JdbcJUnitProperty.getProperty(JdbcJUnitProperty.PROP_MILLIS_SUPPORTED));
 
   public InheritanceTest(String name) {
     super(name);
@@ -70,7 +71,7 @@ public class InheritanceTest extends TestCase {
     valObj.setAttrInteger(3);
     Timestamp ts = new Timestamp(System.currentTimeMillis());
 
-    if (!metaDescriptor.isSupportsMillis()) {
+    if (!isSupportsMillis) {
       ts.setNanos(0);
     }
 

@@ -38,11 +38,10 @@ public class ExecuteTest extends TestCase {
   private static final Logger logger = LoggerFactory.getLogger(ExecuteTest.class);
   private CpoAdapter cpoAdapter = null;
   private JdbcCpoMetaDescriptor metaDescriptor = null;
+  private boolean isSupportsCalls = Boolean.valueOf(JdbcJUnitProperty.getProperty(JdbcJUnitProperty.PROP_CALLS_SUPPORTED));
 
   /**
    * Creates a new RollbackTest object.
-   *
-   * @param name DOCUMENT ME!
    */
   public ExecuteTest() {
   }
@@ -75,7 +74,7 @@ public class ExecuteTest extends TestCase {
    * DOCUMENT ME!
    */
   public void testExecute() {
-    if (metaDescriptor.isSupportsCalls()) {
+    if (isSupportsCalls) {
       String method = "testExecute:";
       ValueObject vo = new ValueObjectBean(1);
       vo.setAttrInteger(3);
@@ -107,7 +106,7 @@ public class ExecuteTest extends TestCase {
   }
 
   public void testExecute2() {
-    if (metaDescriptor.isSupportsCalls()) {
+    if (isSupportsCalls) {
       String method = "testExecuteObject:";
       ValueObject vo = new ValueObjectBean(1);
       vo.setAttrInteger(3);

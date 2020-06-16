@@ -41,6 +41,7 @@ public class BlobTest extends TestCase {
   private char[] testClob = "This is a test Clob used for testing clobs".toCharArray();
   private byte[] testBlob2 = null;
   private char[] testClob2 = "This is a second test Clob used for testing clobs".toCharArray();
+  private boolean isSupportsBlobs = Boolean.valueOf(JdbcJUnitProperty.getProperty(JdbcJUnitProperty.PROP_BLOBS_SUPPORTED));
 
   public BlobTest(String name) {
     super(name);
@@ -68,7 +69,7 @@ public class BlobTest extends TestCase {
 
   public void testTrxGZipBlobInsertandDelete() {
 
-    if (metaDescriptor.isSupportsBlobs()) {
+    if (isSupportsBlobs) {
 
       testBlob = new byte[JdbcStatics.BLOB_SIZE];
       for (int i = 0; i < JdbcStatics.BLOB_SIZE; i++) {
@@ -143,7 +144,7 @@ public class BlobTest extends TestCase {
 
   public void testTrxBlobInsertandDelete() {
 
-    if (metaDescriptor.isSupportsBlobs()) {
+    if (isSupportsBlobs) {
 
       testBlob = new byte[JdbcStatics.BLOB_SIZE];
       for (int i = 0; i < JdbcStatics.BLOB_SIZE; i++) {
@@ -230,7 +231,7 @@ public class BlobTest extends TestCase {
    */
   public void testTrxEmptyGZipBlobInsertandDelete() {
 
-    if (metaDescriptor.isSupportsBlobs()) {
+    if (isSupportsBlobs) {
 
       testBlob = new byte[0];
       testBlob2 = new byte[0];
@@ -296,7 +297,7 @@ public class BlobTest extends TestCase {
 
   public void testTrxNullGZipBlobInsertandDelete() {
 
-    if (metaDescriptor.isSupportsBlobs()) {
+    if (isSupportsBlobs) {
 
       LobValueObject lvo = new LobValueObjectBean(1, null, null);
       LobValueObject lvo2 = null;

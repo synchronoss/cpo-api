@@ -38,6 +38,7 @@ public class InsertObjectTest extends TestCase {
   private CpoAdapter cpoAdapter = null;
   private CpoAdapter readAdapter = null;
   private JdbcCpoMetaDescriptor metaDescriptor = null;
+  private boolean isSupportsMillis = Boolean.valueOf(JdbcJUnitProperty.getProperty(JdbcJUnitProperty.PROP_MILLIS_SUPPORTED));
 
   public InsertObjectTest(String name) {
     super(name);
@@ -76,7 +77,7 @@ public class InsertObjectTest extends TestCase {
     valObj.setAttrInteger(3);
     Timestamp ts = new Timestamp(System.currentTimeMillis());
 
-    if (!metaDescriptor.isSupportsMillis()) {
+    if (!isSupportsMillis) {
       ts.setNanos(0);
     }
 

@@ -41,6 +41,7 @@ public class SelectForUpdateTest extends TestCase {
   private CpoAdapter cpoAdapter = null;
   private CpoTrxAdapter trxAdapter = null;
   private JdbcCpoMetaDescriptor metaDescriptor = null;
+  private boolean isSupportsSelect4Update = Boolean.valueOf(JdbcJUnitProperty.getProperty(JdbcJUnitProperty.PROP_SELECT4UPDATE));
 
   /**
    * Creates a new RollbackTest object.
@@ -111,7 +112,7 @@ public class SelectForUpdateTest extends TestCase {
    * DOCUMENT ME!
    */
   public void testSelect4UpdateSingleObject() {
-    if (metaDescriptor.isSupportsSelect4Update()) {
+    if (isSupportsSelect4Update) {
       String method = "testSelect4UpdateSingleObject:";
       ValueObject vo2 = new ValueObjectBean(1);
 
@@ -156,7 +157,7 @@ public class SelectForUpdateTest extends TestCase {
   }
 
   public void testSelect4UpdateExists() {
-    if (metaDescriptor.isSupportsSelect4Update()) {
+    if (isSupportsSelect4Update) {
       String method = "testSelect4UpdateExists:";
       ValueObject vo2 = new ValueObjectBean(1);
 

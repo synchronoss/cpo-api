@@ -20,7 +20,10 @@
  */
 package org.synchronoss.cpo.jdbc;
 
-import junit.framework.TestCase;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import static org.junit.Assert.*;
 import org.synchronoss.cpo.*;
 import org.synchronoss.cpo.jdbc.meta.JdbcCpoMetaDescriptor;
 
@@ -32,7 +35,7 @@ import java.util.ArrayList;
  *
  * @author david berry
  */
-public class CaseInsensitiveTest extends TestCase {
+public class CaseInsensitiveTest {
 
   private ArrayList<ValueObject> al = new ArrayList<>();
   private CpoAdapter cpoAdapter = null;
@@ -40,8 +43,7 @@ public class CaseInsensitiveTest extends TestCase {
   private JdbcCpoMetaDescriptor metaDescriptor = null;
   private boolean isSupportsMillis = Boolean.valueOf(JdbcJUnitProperty.getProperty(JdbcJUnitProperty.PROP_MILLIS_SUPPORTED));
 
-  public CaseInsensitiveTest(String name) {
-    super(name);
+  public CaseInsensitiveTest(){
   }
 
   /**
@@ -50,7 +52,7 @@ public class CaseInsensitiveTest extends TestCase {
    * @author david berry
    * @version '$Id: InsertObjectTest.java,v 1.3 2006/01/30 19:09:23 dberry Exp $'
    */
-  @Override
+  @Before
   public void setUp() {
     String method = "setUp:";
 
@@ -69,6 +71,7 @@ public class CaseInsensitiveTest extends TestCase {
     }
   }
 
+  @Test
   public void testCaseInsensitiveObject() {
     String method = "testCaseInsensitiveObject:";
 
@@ -109,7 +112,7 @@ public class CaseInsensitiveTest extends TestCase {
 
   }
 
-  @Override
+  @After
   public void tearDown() {
     String method = "tearDown:";
     try {

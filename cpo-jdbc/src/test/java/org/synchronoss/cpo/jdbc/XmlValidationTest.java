@@ -20,7 +20,10 @@
  */
 package org.synchronoss.cpo.jdbc;
 
-import junit.framework.TestCase;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import static org.junit.Assert.*;
 import org.apache.xmlbeans.XmlException;
 import org.slf4j.*;
 import org.synchronoss.cpo.core.cpoCoreConfig.CpoConfigDocument;
@@ -32,16 +35,16 @@ import java.io.*;
  *
  * @author dberry
  */
-public class XmlValidationTest extends TestCase {
+public class XmlValidationTest {
 
   private static final Logger logger = LoggerFactory.getLogger(XmlValidationTest.class);
   static final String CPO_CONFIG_XML = "/cpoConfig.xml";
   static final String BAD_CPO_CONFIG_XML = "/badConfig.xml";
-  
-  public XmlValidationTest(String testName) {
-    super(testName);
+
+  public XmlValidationTest() {
   }
-  
+
+  @Test
   public void testBadXml(){
     InputStream is = CpoClassLoader.getResourceAsStream(BAD_CPO_CONFIG_XML);
 
@@ -59,7 +62,8 @@ public class XmlValidationTest extends TestCase {
         fail("Config xml was not well formed");
     }
   }
-  
+
+  @Test
   public void testGoodXml(){
     InputStream is = CpoClassLoader.getResourceAsStream(CPO_CONFIG_XML);
 

@@ -20,7 +20,10 @@
  */
 package org.synchronoss.cpo.jdbc;
 
-import junit.framework.TestCase;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import static org.junit.Assert.*;
 import org.slf4j.*;
 import org.synchronoss.cpo.*;
 import org.synchronoss.cpo.meta.domain.CpoAttribute;
@@ -32,12 +35,11 @@ import java.util.List;
  *
  * @author david berry
  */
-public class EntityTest extends TestCase {
+public class EntityTest {
 
   private static final Logger logger = LoggerFactory.getLogger(EntityTest.class);
 
-  public EntityTest(String name) {
-    super(name);
+  public EntityTest() {
   }
 
   /**
@@ -46,10 +48,11 @@ public class EntityTest extends TestCase {
    * @author david berry
    * @version '$Id: ConstructorTest.java,v 1.7 2006/01/31 22:55:03 dberry Exp $'
    */
-  @Override
+  @Before
   public void setUp() {
   }
 
+  @Test
   public void testGetDataSourceEntities() {
     String method = "testGetDataSourceEntities:";
     try {
@@ -78,7 +81,7 @@ public class EntityTest extends TestCase {
     logger.debug("DataTypeMapEntry: "+attribute.getDataTypeInt());
   }
 
-  @Override
+  @After
   public void tearDown() {
   }
 }

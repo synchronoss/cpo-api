@@ -21,14 +21,14 @@
 package org.synchronoss.cpo.jdbc;
 
 import java.io.File;
-import junit.framework.TestCase;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import static org.junit.Assert.*;
 import org.slf4j.*;
 import org.synchronoss.cpo.*;
 
 import java.util.*;
-import static junit.framework.Assert.assertNotNull;
-import static junit.framework.Assert.assertTrue;
-import static junit.framework.Assert.fail;
 import org.synchronoss.cpo.helper.ExceptionHelper;
 
 /**
@@ -36,15 +36,14 @@ import org.synchronoss.cpo.helper.ExceptionHelper;
  *
  * @author david berry
  */
-public class ZZHotDeployTest extends TestCase {
+public class ZZHotDeployTest {
 
   private static final Logger logger = LoggerFactory.getLogger(ZZHotDeployTest.class);
   private CpoAdapter cpoAdapter = null;
   private ArrayList<ValueObject> al = new ArrayList<>();
   private File metaFile = new File("metaData.xml");
 
-  public ZZHotDeployTest(String name) {
-    super(name);
+  public ZZHotDeployTest() {
   }
 
   /**
@@ -53,7 +52,7 @@ public class ZZHotDeployTest extends TestCase {
    * @author david berry
    * @version '$Id: RetrieveBeanTest.java,v 1.6 2006/01/30 19:09:23 dberry Exp $'
    */
-  @Override
+  @Before
   public void setUp() {
     String method = "setUp:";
 
@@ -82,10 +81,10 @@ public class ZZHotDeployTest extends TestCase {
     }
   }
 
+  @Test
   public void testRefresh() {
     String method = "testRetrieveBeans:";
     List<ValueObject> col;
-
 
     try {
       ValueObject valObj = new ValueObjectBean();
@@ -119,18 +118,16 @@ public class ZZHotDeployTest extends TestCase {
       }
 
       // make sure the first objects are the same
-
     } catch (Exception e) {
       String msg = ExceptionHelper.getLocalizedMessage(e);
-
       fail("Received an unexpected exception: "+msg);
     }
   }
 
+  @Test
   public void testRefreshOverwrite() {
     String method = "testRetrieveBeans:";
     List<ValueObject> col;
-
 
     try {
       ValueObject valObj = new ValueObjectBean();
@@ -165,12 +162,11 @@ public class ZZHotDeployTest extends TestCase {
 
     } catch (Exception e) {
       String msg = ExceptionHelper.getLocalizedMessage(e);
-
       fail("Received an unexpected exception: "+msg);
     }
   }
 
-  @Override
+  @After
   public void tearDown() {
     String method = "tearDown:";
     try {

@@ -36,7 +36,12 @@ public class JdbcJUnitProperty {
   public static final String PROP_CALLS_SUPPORTED = "cpo.db.callssupported";
   public static final String PROP_SELECT4UPDATE = "cpo.db.select4update";
   public static final String PROP_MILLIS_SUPPORTED = "cpo.db.millisupport";
-  public static final String PROP_TEST_CONTAINER = "cpo.db.testContainer";
+  public static final String PROP_INIT_SCRIPT = "cpo.db.initScript";
+  public static final String PROP_DB_TYPE = "cpo.db";
+  public static final String PROP_DB_PORT = "cpo.db.port";
+  public static final String PROP_DB_USER = "cpo.db.user";
+  public static final String PROP_DB_PSWD = "cpo.db.pswd";
+  public static final String PROP_DB_NAME = "cpo.db.database";
 
   static {
     InputStream inputStream = null;

@@ -22,9 +22,10 @@ package org.synchronoss.cpo.jdbc;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import static junit.framework.Assert.assertTrue;
-import static junit.framework.Assert.fail;
-import junit.framework.TestCase;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import static org.junit.Assert.*;
 import org.synchronoss.cpo.*;
 
 /**
@@ -32,23 +33,18 @@ import org.synchronoss.cpo.*;
  *
  * @author david berry
  */
-public class WhereTest extends TestCase {
+public class WhereTest {
 
   private CpoAdapter cpoAdapter = null;
   private ArrayList<ValueObject> al = new ArrayList<>();
 
-  /**
-   * Creates a new RollbackTest object.
-   *
-   * @param name DOCUMENT ME!
-   */
   public WhereTest() {
   }
 
   /**
    * <code>setUp</code> Load the datasource from the properties in the property file jdbc_en_US.properties
    */
-  @Override
+  @Before
   public void setUp() {
     String method = "setUp:";
 
@@ -78,7 +74,7 @@ public class WhereTest extends TestCase {
   /**
    * DOCUMENT ME!
    */
-  @Override
+  @After
   public void tearDown() {
     String method = "tearDown:";
     try {
@@ -93,11 +89,11 @@ public class WhereTest extends TestCase {
   /**
    * DOCUMENT ME!
    */
+  @Test
   public void testStaticWhere() {
     String method = "testStaticWhere:";
     Collection<ValueObject> col;
     CpoWhere cw;
-
 
     try {
       ValueObject valObj = new ValueObjectBean();
@@ -113,11 +109,11 @@ public class WhereTest extends TestCase {
     }
   }
 
+  @Test
   public void testValueWhere() {
     String method = "testValueWhere:";
     Collection<ValueObject> col;
     CpoWhere cw;
-
 
     try {
       ValueObject valObj = new ValueObjectBean(3);
@@ -133,11 +129,11 @@ public class WhereTest extends TestCase {
     }
   }
 
+  @Test
   public void testNoMarkerWhere() {
     String method = "testNoMarkerWhere:";
     Collection<ValueObject> col;
     CpoWhere cw;
-
 
     try {
       ValueObject valObj = new ValueObjectBean(3);
@@ -157,6 +153,7 @@ public class WhereTest extends TestCase {
    * This test is because retrieveBeans was not honoring the old functionality of passing null for cpo_where should
    * ignore the where clause.
    */
+  @Test
   public void testNoWhere() {
     String method = "testNoWhere:";
     Collection<ValueObject> col = null;
@@ -171,6 +168,7 @@ public class WhereTest extends TestCase {
     }
   }
 
+  @Test
   public void testNestedWhere() {
     String method = "testNestedWhere:";
     Collection<ValueObject> col;
@@ -199,11 +197,11 @@ public class WhereTest extends TestCase {
     }
   }
 
+  @Test
   public void testIsNullWhere() {
     String method = "testIsNullWhere:";
     Collection<ValueObject> col;
     CpoWhere cw;
-
 
     try {
       ValueObject valObj = new ValueObjectBean(3);
@@ -219,11 +217,11 @@ public class WhereTest extends TestCase {
     }
   }
 
+  @Test
   public void testAttributeFunction() {
     String method = "testAttributeFunction:";
     Collection<ValueObject> col;
     CpoWhere cw;
-
 
     try {
       ValueObject valObj = new ValueObjectBean(6);
@@ -242,11 +240,11 @@ public class WhereTest extends TestCase {
     }
   }
 
+  @Test
   public void testValueFunction() {
     String method = "testValueFunction:";
     Collection<ValueObject> col;
     CpoWhere cw;
-
 
     try {
       ValueObject valObj = new ValueObjectBean(-1);
@@ -265,6 +263,7 @@ public class WhereTest extends TestCase {
     }
   }
 
+  @Test
   public void testAndWhere() {
     String method = "testAndWhere:";
 
@@ -295,13 +294,12 @@ public class WhereTest extends TestCase {
       col = cpoAdapter.retrieveBeans("TestWhereRetrieve", valObj, wheres, null);
 
       assertTrue("Col size is " + col.size(), col.size() == 1);
-
-
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
   }
 
+  @Test
   public void testOrWhere() {
     String method = "testOrWhere:";
 
@@ -334,13 +332,12 @@ public class WhereTest extends TestCase {
       col = cpoAdapter.retrieveBeans("TestWhereRetrieve", valObj, wheres, null);
 
       assertTrue("Col size is " + col.size(), col.size() == 6);
-
-
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
   }
 
+  @Test
   public void testRightAttributeFunction() {
     String method = "testRightAttributeFunction:";
 
@@ -366,6 +363,7 @@ public class WhereTest extends TestCase {
     }
   }
 
+  @Test
   public void testRightAttribute() {
     String method = "testRightAttribute:";
 
@@ -387,6 +385,7 @@ public class WhereTest extends TestCase {
     }
   }
 
+  @Test
   public void testMultipleBindWhere() {
     String method = "testMultipleBindWhere:";
 
@@ -406,13 +405,12 @@ public class WhereTest extends TestCase {
       Collection<ValueObject> col = cpoAdapter.retrieveBeans("TestWhereRetrieve", valObj, wheres, null);
 
       assertTrue("Col size is " + col.size(), col.size() == 1);
-
-
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
   }
 
+  @Test
   public void testLikeWhere() {
     String method = "testLikeWhere:";
 
@@ -432,13 +430,12 @@ public class WhereTest extends TestCase {
       Collection<ValueObject> col = cpoAdapter.retrieveBeans("TestWhereRetrieve", valObj, wheres, null);
 
       assertTrue("Col size is " + col.size(), col.size() == 1);
-
-
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
   }
 
+  @Test
   public void testLikeWhereStrings() {
     String method = "testLikeWhereStrings:";
 
@@ -458,13 +455,12 @@ public class WhereTest extends TestCase {
       Collection<ValueObject> col = cpoAdapter.retrieveBeans("TestWhereRetrieve", valObj, wheres, null);
 
       assertTrue("Col size is " + col.size(), col.size() == 1);
-
-
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
   }
 
+  @Test
   public void testNonAttributeWhere() {
     String method = "testNonAttributeWhere:";
 
@@ -481,14 +477,12 @@ public class WhereTest extends TestCase {
       Collection<ValueObject> col = cpoAdapter.retrieveBeans("TestWhereRetrieve", valObj, wheres, null);
 
       assertTrue("Col size is " + col.size(), col.size() == 1);
-
-
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
-
   }
 
+  @Test
   public void testInWhereStaticValue() {
     String method = "testInWhereStaticValue:";
 
@@ -506,14 +500,12 @@ public class WhereTest extends TestCase {
       Collection<ValueObject> coll = cpoAdapter.retrieveBeans("TestWhereRetrieve", valObj, wheres, null);
 
       assertTrue("Collection size is " + coll.size(), coll.size() == 3);
-
-
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
-
   }
 
+  @Test
   public void testInWhereCollection() {
     String method = "testInWhereCollection:";
 
@@ -534,14 +526,12 @@ public class WhereTest extends TestCase {
       Collection<ValueObject> coll = cpoAdapter.retrieveBeans("TestWhereRetrieve", valObj, wheres, null);
 
       assertTrue("Collection size is " + coll.size(), coll.size() == 3);
-
-
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
-
   }
 
+  @Test
   public void testMultiInWhereCollection() {
     String method = "testMultiInWhereCollection:";
 
@@ -564,7 +554,6 @@ public class WhereTest extends TestCase {
       CpoWhere cw2 = cpoAdapter.newWhere(CpoWhere.LOGIC_OR, "id", CpoWhere.COMP_IN, inColl2);
       CpoWhere cw3 = cpoAdapter.newWhere(CpoWhere.LOGIC_OR, "id", CpoWhere.COMP_IN, inColl3);
 
-
       ArrayList<CpoWhere> wheres = new ArrayList<>();
       wheres.add(cw1);
       wheres.add(cw2);
@@ -572,14 +561,12 @@ public class WhereTest extends TestCase {
       Collection<ValueObject> coll = cpoAdapter.retrieveBeans("TestOrderByRetrieve", valObj, wheres, null);
 
       assertTrue("Collection size is " + coll.size(), coll.size() == 6);
-
-
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
-
   }
 
+  @Test
   public void testNonAttributeInWhereCollection() {
     String method = "testNonAttributeInWhereCollection:";
 
@@ -600,14 +587,12 @@ public class WhereTest extends TestCase {
       Collection<ValueObject> coll = cpoAdapter.retrieveBeans("TestWhereRetrieve", valObj, wheres, null);
 
       assertTrue("Collection size is " + coll.size(), coll.size() == 3);
-
-
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
-
   }
 
+  @Test
   public void testWhereParens() {
     String method = "testWhereParens:";
     Collection<ValueObject> col = null;
@@ -635,6 +620,7 @@ public class WhereTest extends TestCase {
     }
   }
 
+  @Test
   public void testWhereOrderBy() {
     String method = "testWhereOrderBy:";
     Collection<ValueObject> col = null;

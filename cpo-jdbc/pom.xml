@@ -103,6 +103,10 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
         <configuration>
+          <includes>
+            <!-- all tests should be in the suite -->
+            <include>org/synchronoss/cpo/jdbc/JdbcTestSuite.java</include>
+          </includes>
           <excludes>
             <exclude>org/synchronoss/cpo/jdbc/BigBatchTest.java</exclude>
           </excludes>
@@ -228,6 +232,42 @@
       <artifactId>log4j</artifactId>
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <groupId>com.github.terma</groupId>
+      <artifactId>javaniotcpproxy</artifactId>
+      <version>1.6</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.testcontainers</groupId>
+      <artifactId>testcontainers</artifactId>
+      <version>${testContainersVersion}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.testcontainers</groupId>
+      <artifactId>mysql</artifactId>
+      <version>${testContainersVersion}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.testcontainers</groupId>
+      <artifactId>mariadb</artifactId>
+      <version>${testContainersVersion}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.testcontainers</groupId>
+      <artifactId>postgresql</artifactId>
+      <version>${testContainersVersion}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.testcontainers</groupId>
+      <artifactId>oracle-xe</artifactId>
+      <version>${testContainersVersion}</version>
+      <scope>test</scope>
+    </dependency>
   </dependencies>
   <profiles>
     <profile>
@@ -242,7 +282,7 @@
       <properties>
         <release.arguments>-Dcpo.db=${cpo.db}</release.arguments>
         <cpo.skip.sql.plugin>true</cpo.skip.sql.plugin>
-        <cpo.test.sqldir>src/test/sql/mysql</cpo.test.sqldir>
+        <cpo.test.sqldir>src/test/resources/mysql</cpo.test.sqldir>
         <cpo.db.user>cpo</cpo.db.user>
         <cpo.db.pswd>cpo</cpo.db.pswd>
         <cpo.db.host>localhost</cpo.db.host>
@@ -255,7 +295,7 @@
         <cpo.db.callssupported>true</cpo.db.callssupported>
         <cpo.db.select4update>true</cpo.db.select4update>
         <cpo.db.millisupport>false</cpo.db.millisupport>
-        <cpo.db.testContainer></cpo.db.testContainer>
+        <cpo.db.initScript>mysql/initDB.sql</cpo.db.initScript>
         <cpo.db.jndi>java:/comp/env/jdbc/cpodatasource</cpo.db.jndi>
         <cpo.db.class>com.mysql.cj.jdbc.MysqlConnectionPoolDataSource</cpo.db.class>
         <cpo.valueMeta.xml>/mysql/mysqlValueMetaData.xml</cpo.valueMeta.xml>
@@ -275,10 +315,10 @@
        <properties>
          <release.arguments>-Dcpo.db=${cpo.db}</release.arguments>
          <cpo.skip.sql.plugin>true</cpo.skip.sql.plugin>
-         <cpo.test.sqldir>src/test/sql/mariadb</cpo.test.sqldir>
+         <cpo.test.sqldir>src/test/resources/mariadb</cpo.test.sqldir>
          <cpo.db.user>cpo</cpo.db.user>
          <cpo.db.pswd>cpo</cpo.db.pswd>
-         <cpo.db.host>pabetdd05p1.sncrcorp.net</cpo.db.host>
+         <cpo.db.host>localhost</cpo.db.host>
          <cpo.db.port>3306</cpo.db.port>
          <cpo.db.database>cpo</cpo.db.database>
          <cpo.db.url>jdbc:mariadb://${cpo.db.host}:${cpo.db.port}/${cpo.db.database}</cpo.db.url>
@@ -288,7 +328,7 @@
          <cpo.db.callssupported>true</cpo.db.callssupported>
          <cpo.db.select4update>true</cpo.db.select4update>
          <cpo.db.millisupport>false</cpo.db.millisupport>
-         <cpo.db.testContainer></cpo.db.testContainer>
+         <cpo.db.initScript>mariadb/initDB.sql</cpo.db.initScript>
          <cpo.db.jndi>java:/comp/env/jdbc/cpodatasource</cpo.db.jndi>
          <cpo.db.class>org.mariadb.jdbc.MariaDbDataSource</cpo.db.class>
          <cpo.valueMeta.xml>/mariadb/mariadbValueMetaData.xml</cpo.valueMeta.xml>
@@ -308,7 +348,7 @@
       <properties>
         <release.arguments>-Dcpo.db=${cpo.db}</release.arguments>
         <cpo.skip.sql.plugin>false</cpo.skip.sql.plugin>
-        <cpo.test.sqldir>src/test/sql/oracle</cpo.test.sqldir>
+        <cpo.test.sqldir>src/test/resources/oracle</cpo.test.sqldir>
         <cpo.db.user>cpo</cpo.db.user>
         <cpo.db.pswd>cpo</cpo.db.pswd>
         <cpo.db.host>pabetdd01v1.sncrcorp.net</cpo.db.host>
@@ -321,7 +361,7 @@
         <cpo.db.callssupported>true</cpo.db.callssupported>
         <cpo.db.select4update>true</cpo.db.select4update>
         <cpo.db.millisupport>true</cpo.db.millisupport>
-        <cpo.db.testContainer></cpo.db.testContainer>
+        <cpo.db.initScript>oracle/initDB.sql</cpo.db.initScript>
         <cpo.db.jndi>cpodatasource</cpo.db.jndi>
         <cpo.db.class>oracle.jdbc.pool.OracleConnectionPoolDataSource</cpo.db.class>
         <cpo.valueMeta.xml>/oracle/oracleValueMetaData.xml</cpo.valueMeta.xml>
@@ -341,7 +381,7 @@
       <properties>
         <release.arguments>-Dcpo.db=${cpo.db}</release.arguments>
         <cpo.skip.sql.plugin>false</cpo.skip.sql.plugin>
-        <cpo.test.sqldir>src/test/sql/oracle</cpo.test.sqldir>
+        <cpo.test.sqldir>src/test/resources/oracle</cpo.test.sqldir>
         <cpo.db.user>cpo</cpo.db.user>
         <cpo.db.pswd>cpo</cpo.db.pswd>
         <cpo.db.host>pabetdd07cs.sncrcorp.net</cpo.db.host>
@@ -354,7 +394,7 @@
         <cpo.db.callssupported>true</cpo.db.callssupported>
         <cpo.db.select4update>true</cpo.db.select4update>
         <cpo.db.millisupport>true</cpo.db.millisupport>
-        <cpo.db.testContainer></cpo.db.testContainer>
+        <cpo.db.initScript>oracle/initDB.sql</cpo.db.initScript>
         <cpo.db.jndi>cpodatasource</cpo.db.jndi>
         <cpo.db.class>oracle.jdbc.pool.OracleConnectionPoolDataSource</cpo.db.class>
         <cpo.valueMeta.xml>/oracle/oracleValueMetaData.xml</cpo.valueMeta.xml>
@@ -373,7 +413,7 @@
       <properties>
         <release.arguments>-Dcpo.db=h2</release.arguments>
         <cpo.skip.sql.plugin>false</cpo.skip.sql.plugin>
-        <cpo.test.sqldir>src/test/sql/h2</cpo.test.sqldir>
+        <cpo.test.sqldir>src/test/resources/h2</cpo.test.sqldir>
         <cpo.db.user>sa</cpo.db.user>
         <cpo.db.pswd />
         <cpo.db.host />
@@ -386,7 +426,7 @@
         <cpo.db.callssupported>true</cpo.db.callssupported>
         <cpo.db.select4update>false</cpo.db.select4update>
         <cpo.db.millisupport>true</cpo.db.millisupport>
-        <cpo.db.testContainer></cpo.db.testContainer>
+        <cpo.db.initScript>h2/initDB.sql</cpo.db.initScript>
         <cpo.db.jndi>cpodatasource</cpo.db.jndi>
         <cpo.db.class>org.h2.jdbcx.JdbcDataSource</cpo.db.class>
         <cpo.valueMeta.xml>/h2/h2ValueMetaData.xml</cpo.valueMeta.xml>
@@ -406,7 +446,7 @@
       <properties>
         <release.arguments>-Dcpo.db=${cpo.db}</release.arguments>
         <cpo.skip.sql.plugin>true</cpo.skip.sql.plugin>
-        <cpo.test.sqldir>src/test/sql/postgres</cpo.test.sqldir>
+        <cpo.test.sqldir>src/test/resources/postgres</cpo.test.sqldir>
         <cpo.db.user>cpo</cpo.db.user>
         <cpo.db.pswd>cpo</cpo.db.pswd>
         <cpo.db.host>localhost</cpo.db.host>
@@ -419,7 +459,7 @@
         <cpo.db.callssupported>true</cpo.db.callssupported>
         <cpo.db.select4update>true</cpo.db.select4update>
         <cpo.db.millisupport>true</cpo.db.millisupport>
-        <cpo.db.testContainer></cpo.db.testContainer>
+        <cpo.db.initScript>postgres/initDB.sql</cpo.db.initScript>
         <cpo.db.jndi>java:/comp/env/jdbc/cpodatasource</cpo.db.jndi>
         <cpo.db.class>FIXME</cpo.db.class>
         <cpo.valueMeta.xml>/postgres/postgresValueMetaData.xml</cpo.valueMeta.xml>

@@ -20,20 +20,23 @@
  */
 package org.synchronoss.cpo.jdbc;
 
-import junit.framework.TestCase;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import static org.junit.Assert.*;
 import org.slf4j.*;
 import org.synchronoss.cpo.*;
 import org.synchronoss.cpo.helper.ExceptionHelper;
 
 import java.util.Collection;
 
-public class InvalidParameterTest extends TestCase {
+public class InvalidParameterTest {
 
   private static final Logger logger = LoggerFactory.getLogger(InvalidParameterTest.class);
   private CpoAdapter cpoAdapter = null;
 
-  public InvalidParameterTest(String name) {
-    super(name);
+  public InvalidParameterTest() {
+
   }
 
   /**
@@ -41,7 +44,7 @@ public class InvalidParameterTest extends TestCase {
    *
    * @author david berry
    */
-  @Override
+  @Before
   public void setUp() {
     String method = "setUp:";
 
@@ -53,10 +56,10 @@ public class InvalidParameterTest extends TestCase {
     }
   }
 
+  @Test
   public void testRetrieveBeanBadContext() {
     String method = "testRetrieveBeanBadContext:";
     Collection<ValueObject> col = null;
-
 
     try {
       ValueObject valObj = new ValueObjectBean();
@@ -70,10 +73,10 @@ public class InvalidParameterTest extends TestCase {
     }
   }
 
+  @Test
   public void testRetrieveBeansNullBean() {
     String method = "testRetrieveBeansNullBean:";
     Collection<ValueObject> col = null;
-
 
     try {
       ValueObject valObj = null;
@@ -87,10 +90,10 @@ public class InvalidParameterTest extends TestCase {
     }
   }
 
+  @Test
   public void testRetrieveBeanNullBean() {
     String method = "testRetrieveBeanNullBean:";
     Collection<ValueObject> col = null;
-
 
     try {
       ValueObject valObj = cpoAdapter.retrieveBean(null, null);
@@ -103,10 +106,10 @@ public class InvalidParameterTest extends TestCase {
     }
   }
 
+  @Test
   public void testInsertObjectNullBean() {
     String method = "testInsertObjectNullBean:";
     Collection<ValueObject> col = null;
-
 
     try {
       ValueObject valObj = null;
@@ -120,10 +123,10 @@ public class InvalidParameterTest extends TestCase {
     }
   }
 
+  @Test
   public void testRetrieveBeanNullContext() {
     String method = "testRetrieveBeanNullContext:";
     Collection<LobValueObject> lvos = null;
-
 
     try {
       LobValueObject lvo = new LobValueObjectBean();

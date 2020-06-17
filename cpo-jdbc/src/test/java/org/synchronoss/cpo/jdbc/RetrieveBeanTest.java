@@ -20,7 +20,10 @@
  */
 package org.synchronoss.cpo.jdbc;
 
-import junit.framework.TestCase;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import static org.junit.Assert.*;
 import org.slf4j.*;
 import org.synchronoss.cpo.*;
 
@@ -31,14 +34,13 @@ import java.util.*;
  *
  * @author david berry
  */
-public class RetrieveBeanTest extends TestCase {
+public class RetrieveBeanTest {
 
   private static final Logger logger = LoggerFactory.getLogger(RetrieveBeanTest.class);
   private CpoAdapter cpoAdapter = null;
   private ArrayList<ValueObject> al = new ArrayList<>();
 
-  public RetrieveBeanTest(String name) {
-    super(name);
+  public RetrieveBeanTest() {
   }
 
   /**
@@ -47,7 +49,7 @@ public class RetrieveBeanTest extends TestCase {
    * @author david berry
    * @version '$Id: RetrieveBeanTest.java,v 1.6 2006/01/30 19:09:23 dberry Exp $'
    */
-  @Override
+  @Before
   public void setUp() {
     String method = "setUp:";
 
@@ -76,6 +78,7 @@ public class RetrieveBeanTest extends TestCase {
     }
   }
 
+  @Test
   public void testLazyOpenAutoCloseLazyOpen() throws CpoException {
     String method = "testLazyOpenAutoCloseLazyOpen:";
     Collection<ValueObject> col;
@@ -120,10 +123,10 @@ public class RetrieveBeanTest extends TestCase {
 
   }
 
+  @Test
   public void testRetrieveBeans() {
     String method = "testRetrieveBeans:";
     Collection<ValueObject> col;
-
 
     try {
       ValueObject valObj = new ValueObjectBean();
@@ -135,10 +138,10 @@ public class RetrieveBeanTest extends TestCase {
     }
   }
 
+  @Test
   public void testRetrieveBeans2() {
     String method = "testRetrieveBeans2:";
     Collection<ValueObject> col;
-
 
     try {
       ValueObject valObj = new ValueObjectBean();
@@ -150,6 +153,7 @@ public class RetrieveBeanTest extends TestCase {
     }
   }
 
+  @Test
   public void testIsClosed() {
     String method = "testIsClosed:";
     Collection<ValueObject> col;
@@ -165,6 +169,7 @@ public class RetrieveBeanTest extends TestCase {
     }
   }
 
+  @Test
   public void testRetrieveBeansNoWaitSize2() {
     String method = "testRetrieveBeansNoWaitSize2:";
     CpoResultSet<ValueObject> crs;
@@ -187,6 +192,7 @@ public class RetrieveBeanTest extends TestCase {
     }
   }
 
+  @Test
   public void testRetrieveBeansNoWaitSize9() {
     String method = "testRetrieveBeansNoWaitSize9:";
     CpoResultSet<ValueObject> crs;
@@ -207,6 +213,7 @@ public class RetrieveBeanTest extends TestCase {
     }
   }
 
+  @Test
   public void testRetrieveBeansNoWaitSize10() {
     String method = "testRetrieveBeansNoWaitSize10:";
     CpoResultSet<ValueObject> crs;
@@ -227,6 +234,7 @@ public class RetrieveBeanTest extends TestCase {
     }
   }
 
+  @Test
   public void testRetrieveBeansNoWaitSize11() {
     String method = "testRetrieveBeansNoWaitSize11:";
     CpoResultSet<ValueObject> crs;
@@ -247,6 +255,7 @@ public class RetrieveBeanTest extends TestCase {
     }
   }
 
+  @Test
   public void testConnectionBusy() {
     String method = "testConnectionBusy:";
     CpoResultSet<ValueObject> crs;
@@ -287,6 +296,7 @@ public class RetrieveBeanTest extends TestCase {
     }
   }
 
+  @Test
   public void testRetrieveBeansNoWaitSize20() {
     String method = "testRetrieveBeansNoWaitSize20:";
     CpoResultSet<ValueObject> crs;
@@ -309,8 +319,8 @@ public class RetrieveBeanTest extends TestCase {
     }
   }
 
+  @Test
   public void testRetrieveBean() {
-
     String method = "testRetrieveBean:";
     ValueObject vo = new ValueObjectBean(1);
     ValueObject rvo;
@@ -328,8 +338,8 @@ public class RetrieveBeanTest extends TestCase {
     }
   }
 
+  @Test
   public void testNullRetrieveBean() {
-
     String method = "testNullRetrieveBean:";
     ValueObject vo = new ValueObjectBean(100);
     ValueObject rvo;
@@ -342,7 +352,7 @@ public class RetrieveBeanTest extends TestCase {
     }
   }
 
-  @Override
+  @After
   public void tearDown() {
     String method = "tearDown:";
     try {

@@ -20,7 +20,10 @@
  */
 package org.synchronoss.cpo.jdbc;
 
-import junit.framework.TestCase;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import static org.junit.Assert.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.CpoAdapter;
@@ -32,7 +35,7 @@ import org.synchronoss.cpo.jdbc.meta.JdbcCpoMetaDescriptor;
  *
  * @author david berry
  */
-public class BlobTest extends TestCase {
+public class BlobTest {
 
   private static final Logger logger = LoggerFactory.getLogger(BlobTest.class);
   private JdbcCpoMetaDescriptor metaDescriptor = null;
@@ -43,8 +46,8 @@ public class BlobTest extends TestCase {
   private char[] testClob2 = "This is a second test Clob used for testing clobs".toCharArray();
   private boolean isSupportsBlobs = Boolean.valueOf(JdbcJUnitProperty.getProperty(JdbcJUnitProperty.PROP_BLOBS_SUPPORTED));
 
-  public BlobTest(String name) {
-    super(name);
+  public BlobTest() {
+
   }
 
   /**
@@ -53,7 +56,7 @@ public class BlobTest extends TestCase {
    * @author david berry
    * @version '$Id: BlobTest.java,v 1.15 2006/02/15 18:34:19 dberry Exp $'
    */
-  @Override
+  @Before
   public void setUp() {
 
     String method = "setUp:";
@@ -67,6 +70,7 @@ public class BlobTest extends TestCase {
     }
   }
 
+  @Test
   public void testTrxGZipBlobInsertandDelete() {
 
     if (isSupportsBlobs) {
@@ -142,6 +146,7 @@ public class BlobTest extends TestCase {
 
   }
 
+  @Test
   public void testTrxBlobInsertandDelete() {
 
     if (isSupportsBlobs) {
@@ -229,6 +234,7 @@ public class BlobTest extends TestCase {
    *
    * }
    */
+  @Test
   public void testTrxEmptyGZipBlobInsertandDelete() {
 
     if (isSupportsBlobs) {
@@ -295,6 +301,7 @@ public class BlobTest extends TestCase {
 
   }
 
+  @Test
   public void testTrxNullGZipBlobInsertandDelete() {
 
     if (isSupportsBlobs) {
@@ -350,7 +357,7 @@ public class BlobTest extends TestCase {
 
   }
 
-  @Override
+  @After
   public void tearDown() {
 
     cpoAdapter = null;

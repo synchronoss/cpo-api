@@ -24,11 +24,11 @@ function test_db() {
   mvn -pl cpo-jdbc -am test -Dcpo.db=$1
 
   if [ $? -ne 0 ]; then
-    echo '$1 did not pass the unit tests'
+    echo "$1 did not pass the unit tests\n"
     exit 1
   fi
 
-  echo '$1 passed the unit tests'
+  echo "$1 passed the unit tests\n"
 }
 
 # Do a clean build
@@ -54,6 +54,6 @@ test_db 'mariadb'
 
 test_db 'postgres'
 
-test_db 'oracle_xe'
+#test_db 'oracle-xe'
 
 echo 'All DBs passed the unit tests'

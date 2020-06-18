@@ -403,6 +403,39 @@
       </properties>
     </profile>
     <profile>
+      <id>oracle-xe</id>
+      <activation>
+        <activeByDefault>false</activeByDefault>
+        <property>
+          <name>cpo.db</name>
+          <value>oracle-xe</value>
+        </property>
+      </activation>
+      <properties>
+        <release.arguments>-Dcpo.db=${cpo.db}</release.arguments>
+        <cpo.skip.sql.plugin>true</cpo.skip.sql.plugin>
+        <cpo.test.sqldir>src/test/resources/oracle</cpo.test.sqldir>
+        <cpo.db.user>cpo</cpo.db.user>
+        <cpo.db.pswd>cpo</cpo.db.pswd>
+        <cpo.db.host>localhost</cpo.db.host>
+        <cpo.db.port>1521</cpo.db.port>
+        <cpo.db.database>DSAG_APP.sncrcorp.net</cpo.db.database>
+        <cpo.db.url>jdbc:oracle:thin:@${cpo.db.host}:${cpo.db.port}/${cpo.db.database}</cpo.db.url>
+        <cpo.db.userurl>jdbc:oracle:thin:${cpo.db.user}/${cpo.db.pswd}@${cpo.db.host}:${cpo.db.port}/${cpo.db.database}</cpo.db.userurl>
+        <cpo.db.driver>oracle.jdbc.OracleDriver</cpo.db.driver>
+        <cpo.db.blobssupported>true</cpo.db.blobssupported>
+        <cpo.db.callssupported>true</cpo.db.callssupported>
+        <cpo.db.select4update>true</cpo.db.select4update>
+        <cpo.db.millisupport>true</cpo.db.millisupport>
+        <cpo.db.initScript>oracle/initDB.sql</cpo.db.initScript>
+        <cpo.db.jndi>cpodatasource</cpo.db.jndi>
+        <cpo.db.class>oracle.jdbc.pool.OracleConnectionPoolDataSource</cpo.db.class>
+        <cpo.valueMeta.xml>/oracle/oracleValueMetaData.xml</cpo.valueMeta.xml>
+        <cpo.valueCaseMeta.xml>/oracle/oracleValueCaseMetaData.xml</cpo.valueCaseMeta.xml>
+        <cpo.lobMeta.xml>/oracle/oracleLobMetaData.xml</cpo.lobMeta.xml>
+      </properties>
+    </profile>
+    <profile>
       <id>h2</id>
       <activation>
         <activeByDefault>false</activeByDefault>
@@ -453,15 +486,15 @@
         <cpo.db.port>5432</cpo.db.port>
         <cpo.db.database>cpo</cpo.db.database>
         <cpo.db.url>jdbc:postgresql://${cpo.db.host}:${cpo.db.port}/${cpo.db.database}</cpo.db.url>
-        <cpo.db.userurl>jdbc:postgresql://${cpo.db.host}:${cpo.db.port}/${cpo.db.database}?user=${cpo.db.user}&amp;password=${cpo.db.pswd}&amp;stringtype=unspecified</cpo.db.userurl>
+        <cpo.db.userurl>jdbc:postgresql://${cpo.db.host}:${cpo.db.port}/${cpo.db.database}?user=${cpo.db.user}&amp;amp;password=${cpo.db.pswd}&amp;amp;stringtype=unspecified</cpo.db.userurl>
         <cpo.db.driver>org.postgresql.Driver</cpo.db.driver>
         <cpo.db.blobssupported>true</cpo.db.blobssupported>
         <cpo.db.callssupported>true</cpo.db.callssupported>
-        <cpo.db.select4update>true</cpo.db.select4update>
+        <cpo.db.select4update>false</cpo.db.select4update>
         <cpo.db.millisupport>true</cpo.db.millisupport>
         <cpo.db.initScript>postgres/initDB.sql</cpo.db.initScript>
         <cpo.db.jndi>java:/comp/env/jdbc/cpodatasource</cpo.db.jndi>
-        <cpo.db.class>FIXME</cpo.db.class>
+        <cpo.db.class>org.postgresql.ds.PGConnectionPoolDataSource</cpo.db.class>
         <cpo.valueMeta.xml>/postgres/postgresValueMetaData.xml</cpo.valueMeta.xml>
         <cpo.valueCaseMeta.xml>/postgres/postgresValueCaseMetaData.xml</cpo.valueCaseMeta.xml>
         <cpo.lobMeta.xml>/postgres/postgresLobMetaData.xml</cpo.lobMeta.xml>

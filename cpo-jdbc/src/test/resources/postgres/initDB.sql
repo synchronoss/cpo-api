@@ -46,7 +46,7 @@ ID                      integer primary key
 
 CREATE TABLE LOB_TEST (
   LOB_ID               INT NOT NULL
-  ,B_LOB                BLOB NULL
-  ,B_LOB2               BLOB NULL
-  ,C_LOB                CLOB NULL
+  ,B_LOB                BYTEA NULL
+  ,B_LOB2               BYTEA NULL
+  ,C_LOB                text NULL
 );

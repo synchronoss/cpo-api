@@ -445,7 +445,7 @@ public class WhereTest {
 
       CpoWhere cw = cpoAdapter.newWhere();
       CpoWhere cw1 = cpoAdapter.newWhere(CpoWhere.LOGIC_NONE, "attrVarChar", CpoWhere.COMP_LIKE, "T%");
-      CpoWhere cw2 = cpoAdapter.newWhere(CpoWhere.LOGIC_AND, "id", CpoWhere.COMP_EQ, "1");
+      CpoWhere cw2 = cpoAdapter.newWhere(CpoWhere.LOGIC_AND, "id", CpoWhere.COMP_EQ, 1);
 
       cw.addWhere(cw1);
       cw.addWhere(cw2);

@@ -20,7 +20,10 @@
  */
 package org.synchronoss.cpo.jdbc;
 
-import junit.framework.TestCase;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import static org.junit.Assert.*;
 import org.slf4j.*;
 import org.synchronoss.cpo.*;
 import org.synchronoss.cpo.helper.ExceptionHelper;
@@ -32,14 +35,14 @@ import java.util.*;
  *
  * @author david berry
  */
-public class BigRetrieveTest extends TestCase {
+public class BigRetrieveTest {
 
   private static final Logger logger = LoggerFactory.getLogger(BigRetrieveTest.class);
   private ArrayList<ValueObject> al = new ArrayList<>();
   private CpoAdapter cpoAdapter = null;
 
-  public BigRetrieveTest(String name) {
-    super(name);
+  public BigRetrieveTest() {
+
   }
 
   /**
@@ -48,7 +51,7 @@ public class BigRetrieveTest extends TestCase {
    * @author david berry
    * @version '$Id: InsertObjectTest.java,v 1.3 2006/01/30 19:09:23 dberry Exp $'
    */
-  @Override
+  @Before
   public void setUp() {
     String method = "setUp:";
 
@@ -66,6 +69,7 @@ public class BigRetrieveTest extends TestCase {
    * lets try to break it to fix it to return a good message.
    *
    */
+  @Test
   public void testBigRetrieve() {
 
     String method = "testBigRetrieve:";
@@ -100,7 +104,7 @@ public class BigRetrieveTest extends TestCase {
     }
   }
 
-  @Override
+  @After
   public void tearDown() {
     String method = "tearDown:";
     try {

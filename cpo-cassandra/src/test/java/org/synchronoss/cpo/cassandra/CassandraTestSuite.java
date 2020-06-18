@@ -21,10 +21,13 @@
 package org.synchronoss.cpo.cassandra;
 
 import com.datastax.driver.core.*;
-import org.cassandraunit.*;
-import org.cassandraunit.dataset.cql.ClassPathCQLDataSet;
-import org.cassandraunit.utils.EmbeddedCassandraServerHelper;
+import com.github.terma.javaniotcpproxy.StaticTcpProxyConfig;
+import com.github.terma.javaniotcpproxy.TcpProxy;
+import com.github.terma.javaniotcpproxy.TcpProxyConfig;
 import org.junit.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.testcontainers.containers.CassandraContainer;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
@@ -55,40 +58,42 @@ import static org.junit.Assert.fail;
   ZZHotDeployTest.class
 })
 public class CassandraTestSuite {
+  private static final Logger logger = LoggerFactory.getLogger(CassandraTestSuite.class);
 
-  private static final String keyspace = "cpokeyspace";
-  private static final String cqlDataSet = "test.cql";
-  private static final String hostIp = "127.0.0.1";
-  private static final int port = 9142;
-  public static Session session;
-  public static Cluster cluster;
+  @ClassRule
+  public static final CassandraContainer cassandraContainer = new CassandraContainer().withInitScript("test.cql");
+  private static TcpProxy proxy;
 
   @BeforeClass
   public static void startCassandra() {
-    System.out.println("===== start setting up =====");
+    logger.debug("===== start setting up =====");
     try {
-      EmbeddedCassandraServerHelper.startEmbeddedCassandra();
-      cluster = new Cluster.Builder().addContactPoints(hostIp).withPort(port).build();
-      session = cluster.connect();
-      CQLDataLoader dataLoader = new CQLDataLoader(session);
-      dataLoader.load(new ClassPathCQLDataSet(cqlDataSet, keyspace));
-      session = dataLoader.getSession();
+      cassandraContainer.start();
+
+      // Now map the random port to something we can use in the config file
+      TcpProxyConfig config = new StaticTcpProxyConfig(9142, cassandraContainer.getHost(), cassandraContainer.getFirstMappedPort());
+      config.setWorkerCount(1);
+
+      // init proxy
+      TcpProxy proxy = new TcpProxy(config);
+
+      // start proxy
+      proxy.start();
+
+      logger.debug("Cassandra Host:"+ cassandraContainer.getHost());
     } catch (Exception ex) {
-      fail("Failed to start Cassandra");
+      fail("Failed to start Cassandra: "+ex.getMessage());
     }
-    System.out.println("===== end setting up =====");
+    logger.debug("===== end setting up =====");
   }
 
   @AfterClass
   public static void stopCassandra() {
-    System.out.println("===== start tearing down =====");
-    if (session != null && !session.isClosed()) {
-      session.close();
-    }
-    if (cluster != null && !cluster.isClosed()) {
-      cluster.close();
-    }
-    System.out.println("===== end tearing down =====");
+    logger.debug("===== start tearing down =====");
+    if (proxy!=null)
+      proxy.shutdown();
+    cassandraContainer.stop();
+    logger.debug("===== end tearing down =====");
   }
 }
 

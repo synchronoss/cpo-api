@@ -20,15 +20,17 @@
  */
 package org.synchronoss.cpo.jdbc.parser;
 
-import junit.framework.TestCase;
+import org.junit.Test;
+import static org.junit.Assert.*;
 import org.synchronoss.cpo.parser.BoundExpressionParser;
 
 import java.text.ParseException;
 import java.util.List;
 
 // TODO - add more junits for single quotes, double quotes, inner selects, etc
-public class BoundExpressionParserTest extends TestCase {
+public class BoundExpressionParserTest {
 
+  @Test
   public void testSelect() {
     try {
       String query = "select * from table where a = ? and b = ? and c = ? and d = '0'";
@@ -46,6 +48,7 @@ public class BoundExpressionParserTest extends TestCase {
     }
   }
 
+  @Test
   public void testSelectWithFunction() {
     try {
       String query = "select * from table where a = ? and UPPER(b) = ? and c = ? and d = '0'";
@@ -63,6 +66,7 @@ public class BoundExpressionParserTest extends TestCase {
     }
   }
 
+  @Test
   public void testInsert() {
     try {
       String query = "insert into table(a, b, c, d) values(?, ?, ?, SYSDATE)";

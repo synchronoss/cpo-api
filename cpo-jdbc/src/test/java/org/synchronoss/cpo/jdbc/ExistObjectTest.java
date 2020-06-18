@@ -20,7 +20,10 @@
  */
 package org.synchronoss.cpo.jdbc;
 
-import junit.framework.TestCase;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import static org.junit.Assert.*;
 import org.slf4j.*;
 import org.synchronoss.cpo.*;
 import org.synchronoss.cpo.helper.ExceptionHelper;
@@ -32,13 +35,12 @@ import java.util.ArrayList;
  *
  * @author david berry
  */
-public class ExistObjectTest extends TestCase {
+public class ExistObjectTest {
 
   private static final Logger logger = LoggerFactory.getLogger(ExistObjectTest.class);
   private CpoAdapter cpoAdapter = null;
 
-  public ExistObjectTest(String name) {
-    super(name);
+  public ExistObjectTest() {
   }
 
   /**
@@ -47,7 +49,7 @@ public class ExistObjectTest extends TestCase {
    * @author david berry
    * @version '$Id: ExistObjectTest.java,v 1.2 2006/01/30 19:09:23 dberry Exp $'
    */
-  @Override
+  @Before
   public void setUp() {
     String method = "setUp:";
 
@@ -68,9 +70,9 @@ public class ExistObjectTest extends TestCase {
     }
   }
 
+  @Test
   public void testExistObject() {
     String method = "testExistObject:";
-
 
     try {
       ValueObject valObj = new ValueObjectBean(1);
@@ -90,9 +92,9 @@ public class ExistObjectTest extends TestCase {
 
   }
 
+  @Test
   public void testExistObjectWhere() {
     String method = "testExistObjectWhere:";
-
 
     try {
       ValueObject valObj = new ValueObjectBean(1);
@@ -118,7 +120,7 @@ public class ExistObjectTest extends TestCase {
 
   }
 
-  @Override
+  @After
   public void tearDown() {
     ValueObject vo = new ValueObjectBean(1);
     try {

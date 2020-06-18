@@ -20,7 +20,10 @@
  */
 package org.synchronoss.cpo.jdbc;
 
-import junit.framework.TestCase;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import static org.junit.Assert.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.CpoAdapter;
@@ -33,7 +36,7 @@ import org.synchronoss.cpo.jdbc.meta.JdbcCpoMetaDescriptor;
  *
  * @author david berry
  */
-public class BlobTrxTest extends TestCase {
+public class BlobTrxTest {
 
   private static final Logger logger = LoggerFactory.getLogger(BlobTrxTest.class);
   private static int BLOB_SIZE = 64999;
@@ -44,9 +47,10 @@ public class BlobTrxTest extends TestCase {
   private char[] testClob = "This is a test Clob used for testing clobs".toCharArray();
   private byte[] testBlob2 = null;
   private char[] testClob2 = "This is a second test Clob used for testing clobs".toCharArray();
+  private boolean isSupportsBlobs = Boolean.valueOf(JdbcJUnitProperty.getProperty(JdbcJUnitProperty.PROP_BLOBS_SUPPORTED));
 
-  public BlobTrxTest(String name) {
-    super(name);
+  public BlobTrxTest() {
+
   }
 
   /**
@@ -55,7 +59,7 @@ public class BlobTrxTest extends TestCase {
    * @author david berry
    * @version '$Id: BlobTestTrx.java,v 1.2 2006/01/31 22:31:06 dberry Exp $'
    */
-  @Override
+  @Before
   public void setUp() {
 
     String method = "setUp:";
@@ -70,9 +74,10 @@ public class BlobTrxTest extends TestCase {
     }
   }
 
+  @Test
   public void testGZipBlobInsertandDeleteTrx() {
 
-    if (metaDescriptor.isSupportsBlobs()) {
+    if (isSupportsBlobs) {
 
       testBlob = new byte[BLOB_SIZE];
       for (int i = 0; i < BLOB_SIZE; i++) {
@@ -151,9 +156,10 @@ public class BlobTrxTest extends TestCase {
 
   }
 
+  @Test
   public void testBlobInsertandDeleteTrx() {
 
-    if (metaDescriptor.isSupportsBlobs()) {
+    if (isSupportsBlobs) {
 
       testBlob = new byte[BLOB_SIZE];
       for (int i = 0; i < BLOB_SIZE; i++) {
@@ -253,9 +259,10 @@ public class BlobTrxTest extends TestCase {
    *
    * }
    */
+  @Test
   public void testEmptyGZipBlobInsertandDeleteTrx() {
 
-    if (metaDescriptor.isSupportsBlobs()) {
+    if (isSupportsBlobs) {
 
       testBlob = new byte[0];
       testBlob2 = new byte[0];
@@ -334,9 +341,10 @@ public class BlobTrxTest extends TestCase {
 
   }
 
+  @Test
   public void testNullGZipBlobInsertandDeleteTrx() {
 
-    if (metaDescriptor.isSupportsBlobs()) {
+    if (isSupportsBlobs) {
 
       LobValueObject lvo = new LobValueObjectBean(1, null, null);
       LobValueObject lvo2 = null;
@@ -404,7 +412,7 @@ public class BlobTrxTest extends TestCase {
 
   }
 
-  @Override
+  @After
   public void tearDown() {
     try {
       trxAdapter.close();

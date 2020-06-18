@@ -20,7 +20,10 @@
  */
 package org.synchronoss.cpo.jdbc;
 
-import junit.framework.TestCase;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import static org.junit.Assert.*;
 import org.slf4j.*;
 import org.synchronoss.cpo.*;
 
@@ -31,12 +34,11 @@ import java.util.List;
  *
  * @author david berry
  */
-public class ConstructorTest extends TestCase {
+public class ConstructorTest {
   private static final Logger logger = LoggerFactory.getLogger(ConstructorTest.class);
   private static final String PASSWORDSTRING = "password=";
 
-  public ConstructorTest(String name) {
-    super(name);
+  public ConstructorTest() {
   }
 
   /**
@@ -45,10 +47,11 @@ public class ConstructorTest extends TestCase {
    * @author david berry
    * @version '$Id: ConstructorTest.java,v 1.7 2006/01/31 22:55:03 dberry Exp $'
    */
-  @Override
+  @Before
   public void setUp() {
   }
 
+  @Test
   public void testConstructorClass() {
     String method = "testConstructorClass:";
     try {
@@ -67,6 +70,7 @@ public class ConstructorTest extends TestCase {
     }
   }
 
+  @Test
   public void testConstructorClassProp() {
     String method = "testConstructorClassProp:";
     try {
@@ -84,6 +88,7 @@ public class ConstructorTest extends TestCase {
     }
   }
 
+  @Test
   public void testConstructorDriver() {
     String method = "testConstructorDriver:";
     try {
@@ -101,6 +106,7 @@ public class ConstructorTest extends TestCase {
     }
   }
 
+  @Test
   public void testConstructorDriverUrlOnly() {
     String method = "testConstructorDriverUrlOnly:";
     try {
@@ -119,6 +125,7 @@ public class ConstructorTest extends TestCase {
     }
   }
 
+  @Test
   public void testConstructorDriverProp() {
     String method = "testConstructorDriverProp:";
     try {
@@ -136,6 +143,7 @@ public class ConstructorTest extends TestCase {
     }
   }
 
+  @Test
   public void testConstructorClassClass() {
     String method = "testConstructorClassClass:";
     try {
@@ -153,6 +161,7 @@ public class ConstructorTest extends TestCase {
     }
   }
 
+  @Test
   public void testConstructorDriverDriver() {
     String method = "testConstructorDriverDriver:";
     try {
@@ -170,6 +179,7 @@ public class ConstructorTest extends TestCase {
     }
   }
 
+  @Test
   public void testConstructorClassDriver() {
     String method = "testConstructorClassDriver:";
     try {
@@ -187,6 +197,7 @@ public class ConstructorTest extends TestCase {
     }
   }
 
+  @Test
   public void testConstructorDriverClass() {
     String method = "testConstructorDriverClass:";
     try {
@@ -204,7 +215,7 @@ public class ConstructorTest extends TestCase {
     }
   }
 
-  @Override
+  @After
   public void tearDown() {
   }
 }

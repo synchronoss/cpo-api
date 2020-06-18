@@ -20,7 +20,10 @@
  */
 package org.synchronoss.cpo.jdbc;
 
-import junit.framework.TestCase;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import static org.junit.Assert.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.CpoAdapter;
@@ -33,16 +36,16 @@ import org.synchronoss.cpo.jdbc.meta.JdbcCpoMetaDescriptor;
  *
  * @author david berry
  */
-public class ExecuteTrxTest extends TestCase {
+public class ExecuteTrxTest {
 
   private static final Logger logger = LoggerFactory.getLogger(ExecuteTrxTest.class);
   private CpoAdapter cpoAdapter = null;
   private JdbcCpoMetaDescriptor metaDescriptor = null;
+  private boolean isSupportsCalls = Boolean.valueOf(JdbcJUnitProperty.getProperty(JdbcJUnitProperty.PROP_CALLS_SUPPORTED));
 
   /**
    * Creates a new RollbackTest object.
    *
-   * @param name DOCUMENT ME!
    */
   public ExecuteTrxTest() {
   }
@@ -50,7 +53,7 @@ public class ExecuteTrxTest extends TestCase {
   /**
    * <code>setUp</code> Load the datasource from the properties in the property file jdbc_en_US.properties
    */
-  @Override
+  @Before
   public void setUp() {
     String method = "setUp:";
 
@@ -66,7 +69,7 @@ public class ExecuteTrxTest extends TestCase {
   /**
    * DOCUMENT ME!
    */
-  @Override
+  @After
   public void tearDown() {
     cpoAdapter = null;
   }
@@ -74,8 +77,9 @@ public class ExecuteTrxTest extends TestCase {
   /**
    * DOCUMENT ME!
    */
+  @Test
   public void testExecuteTrx() {
-    if (metaDescriptor.isSupportsCalls()) {
+    if (isSupportsCalls) {
       String method = "testExecuteTrx:";
       ValueObject vo = new ValueObjectBean(1);
       vo.setAttrInteger(3);

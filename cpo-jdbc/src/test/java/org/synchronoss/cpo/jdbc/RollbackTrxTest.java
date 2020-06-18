@@ -21,7 +21,10 @@
 package org.synchronoss.cpo.jdbc;
 
 import java.util.ArrayList;
-import junit.framework.TestCase;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import static org.junit.Assert.*;
 import org.synchronoss.cpo.CpoAdapter;
 import org.synchronoss.cpo.CpoAdapterFactoryManager;
 import org.synchronoss.cpo.CpoException;
@@ -33,7 +36,7 @@ import org.synchronoss.cpo.helper.ExceptionHelper;
  *
  * @author david berry
  */
-public class RollbackTrxTest extends TestCase {
+public class RollbackTrxTest {
 
   private CpoAdapter cpoAdapter = null;
   private CpoTrxAdapter trxAdapter = null;
@@ -48,7 +51,7 @@ public class RollbackTrxTest extends TestCase {
   /**
    * <code>setUp</code> Load the datasource from the properties in the property file jdbc_en_US.properties
    */
-  @Override
+  @Before
   public void setUp() {
     String method = "setUp:";
 
@@ -76,7 +79,7 @@ public class RollbackTrxTest extends TestCase {
   /**
    * DOCUMENT ME!
    */
-  @Override
+  @After
   public void tearDown() {
     ValueObject vo = new ValueObjectBean(1);
     try {
@@ -99,6 +102,7 @@ public class RollbackTrxTest extends TestCase {
   /**
    * DOCUMENT ME!
    */
+  @Test
   public void testTrxRollbackProcessUpdateCollection() {
     String method = "testTrxRollbackProcessUpdateCollection:";
     ValueObject vo = new ValueObjectBean(2);
@@ -131,6 +135,7 @@ public class RollbackTrxTest extends TestCase {
   /**
    * DOCUMENT ME!
    */
+  @Test
   public void testTrxSingleRollback() {
     String method = "testTrxSingleRollback:";
     ValueObject vo = new ValueObjectBean(2);

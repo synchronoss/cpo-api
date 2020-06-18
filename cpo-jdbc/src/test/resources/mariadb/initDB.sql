@@ -19,8 +19,11 @@
 -- http://www.gnu.org/licenses/lgpl.txt
 --
 
+DROP TABLE  IF EXISTS value_object;
+DROP TABLE  IF EXISTS lob_test;
+
 CREATE TABLE IF NOT EXISTS value_object (
-id                      int(11) primary key, 
+id                      int(11) primary key,
 attr_integer            int(11)      NULL,
 attr_int                int(11)      NULL,
 attr_double             double       NULL,
@@ -50,6 +53,17 @@ attr_longblob           longblob     NULL,
 attr_text               text         NULL,
 attr_tinytext           tinytext     NULL,
 attr_mediumtext         mediumtext   NULL,
-attr_longtext           longtext     NULL)
+attr_longtext           longtext     NULL
+)
 ENGINE = 'InnoDB';
 
+CREATE TABLE IF NOT EXISTS lob_test (
+       lob_id               INT NOT NULL,
+       b_lob                MEDIUMBLOB NULL,
+       b_lob2                MEDIUMBLOB NULL,
+       c_lob                MEDIUMTEXT NULL
+)
+ENGINE = 'InnoDB';
+
+
+COMMIT;

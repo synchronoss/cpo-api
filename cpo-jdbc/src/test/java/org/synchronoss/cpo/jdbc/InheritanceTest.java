@@ -20,7 +20,10 @@
  */
 package org.synchronoss.cpo.jdbc;
 
-import junit.framework.TestCase;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import static org.junit.Assert.*;
 import org.synchronoss.cpo.*;
 import org.synchronoss.cpo.jdbc.meta.JdbcCpoMetaDescriptor;
 
@@ -32,14 +35,15 @@ import java.util.ArrayList;
  *
  * @author david berry
  */
-public class InheritanceTest extends TestCase {
+public class InheritanceTest {
 
   private ArrayList<ChildValueObject> al = new ArrayList<>();
   private CpoAdapter cpoAdapter = null;
   private JdbcCpoMetaDescriptor metaDescriptor = null;
+  private boolean isSupportsMillis = Boolean.valueOf(JdbcJUnitProperty.getProperty(JdbcJUnitProperty.PROP_MILLIS_SUPPORTED));
 
-  public InheritanceTest(String name) {
-    super(name);
+  public InheritanceTest() {
+
   }
 
   /**
@@ -48,7 +52,7 @@ public class InheritanceTest extends TestCase {
    * @author david berry
    * @version '$Id: InsertObjectTest.java,v 1.3 2006/01/30 19:09:23 dberry Exp $'
    */
-  @Override
+  @Before
   public void setUp() {
     String method = "setUp:";
 
@@ -61,6 +65,7 @@ public class InheritanceTest extends TestCase {
     }
   }
 
+  @Test
   public void testInsertObject() {
     String method = "testInsertObject:";
     ChildValueObject valObj = new ChildValueObject();
@@ -70,7 +75,7 @@ public class InheritanceTest extends TestCase {
     valObj.setAttrInteger(3);
     Timestamp ts = new Timestamp(System.currentTimeMillis());
 
-    if (!metaDescriptor.isSupportsMillis()) {
+    if (!isSupportsMillis) {
       ts.setNanos(0);
     }
 
@@ -101,7 +106,7 @@ public class InheritanceTest extends TestCase {
 
   }
 
-  @Override
+  @After
   public void tearDown() {
     String method = "tearDown:";
     try {

@@ -19,6 +19,9 @@
 -- http://www.gnu.org/licenses/lgpl.txt
 --
 
+DROP TABLE value_object IF EXISTS ;
+DROP TABLE lob_test IF EXISTS ;
+
 CREATE TABLE IF NOT EXISTS value_object (
 id                      int primary key,
 attr_integer            int      NULL,
@@ -53,3 +56,9 @@ attr_mediumtext         mediumtext   NULL,
 attr_longtext           longtext     NULL
 );
 
+CREATE TABLE IF NOT EXISTS lob_test (
+       LOB_ID               INT NOT NULL
+       ,B_LOB                BLOB NULL
+       ,B_LOB2               BLOB NULL
+       ,C_LOB                CLOB NULL
+);

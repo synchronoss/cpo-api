@@ -22,7 +22,10 @@ package org.synchronoss.cpo.jdbc;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import junit.framework.TestCase;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import static org.junit.Assert.*;
 import org.synchronoss.cpo.CpoAdapter;
 import org.synchronoss.cpo.CpoAdapterFactoryManager;
 import org.synchronoss.cpo.CpoNativeFunction;
@@ -33,23 +36,18 @@ import org.synchronoss.cpo.CpoWhere;
  *
  * @author david berry
  */
-public class NativeExpressionTest extends TestCase {
+public class NativeExpressionTest {
 
   private CpoAdapter cpoAdapter = null;
   private ArrayList<ValueObject> al = new ArrayList<>();
 
-  /**
-   * Creates a new RollbackTest object.
-   *
-   * @param name DOCUMENT ME!
-   */
   public NativeExpressionTest() {
   }
 
   /**
    * <code>setUp</code> Load the datasource from the properties in the property file jdbc_en_US.properties
    */
-  @Override
+  @Before
   public void setUp() {
     String method = "setUp:";
 
@@ -78,7 +76,7 @@ public class NativeExpressionTest extends TestCase {
   /**
    * DOCUMENT ME!
    */
-  @Override
+  @After
   public void tearDown() {
     String method = "tearDown:";
     try {
@@ -93,6 +91,7 @@ public class NativeExpressionTest extends TestCase {
   /**
    * DOCUMENT ME!
    */
+  @Test
   public void testNativeOrWhere() {
     String method = "testNativeOrWhere:";
     Collection<ValueObject> col;
@@ -100,10 +99,8 @@ public class NativeExpressionTest extends TestCase {
     CpoWhere cw1 = null;
     CpoWhere cw2 = null;
 
-
     try {
       ArrayList<CpoNativeFunction> cnqAl = new ArrayList<>();
-
 
       cnqAl.add(new CpoNativeFunction("__CPO_WHERE__", "WHERE ID = 2 OR ID = 3"));
 
@@ -117,6 +114,7 @@ public class NativeExpressionTest extends TestCase {
     }
   }
 
+  @Test
   public void testNullNative() {
     String method = "testNullNative:";
     Collection<ValueObject> col;
@@ -124,11 +122,8 @@ public class NativeExpressionTest extends TestCase {
     CpoWhere cw1 = null;
     CpoWhere cw2 = null;
 
-
     try {
       ArrayList<CpoNativeFunction> cnqAl = new ArrayList<>();
-
-
 
       cnqAl.add(new CpoNativeFunction("__CPO_WHERE__", null));
 

@@ -40,6 +40,8 @@
       <javaType>java.lang.String</javaType>
       <dataName>attr_varchar</dataName>
       <dataType>VARCHAR</dataType>
+      <cpoj:dbTable>value_object</cpoj:dbTable>
+      <cpoj:dbColumn>attr_varchar</cpoj:dbColumn>
     </cpoAttribute>
     <cpoAttribute xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xsi:type="cpoj:ctJdbcAttribute">
       <javaName>attrDatetime</javaName>
@@ -58,12 +60,16 @@
       <javaType>short</javaType>
       <dataName>attr_smallint</dataName>
       <dataType>SMALLINT</dataType>
+      <cpoj:dbTable>value_object</cpoj:dbTable>
+      <cpoj:dbColumn>attr_smallint</cpoj:dbColumn>
     </cpoAttribute>
     <cpoAttribute xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xsi:type="cpoj:ctJdbcAttribute">
       <javaName>id</javaName>
       <javaType>java.math.BigDecimal</javaType>
       <dataName>id</dataName>
       <dataType>NUMERIC</dataType>
+      <cpoj:dbTable>value_object</cpoj:dbTable>
+      <cpoj:dbColumn>id</cpoj:dbColumn>
     </cpoAttribute>
     <cpoAttribute xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xsi:type="cpoj:ctJdbcAttribute">
       <javaName>attrDouble</javaName>
@@ -82,6 +88,8 @@
       <javaType>java.lang.String</javaType>
       <dataName>attr_char</dataName>
       <dataType>CHAR</dataType>
+      <cpoj:dbTable>value_object</cpoj:dbTable>
+      <cpoj:dbColumn>attr_char</cpoj:dbColumn>
     </cpoAttribute>
     <cpoAttribute xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xsi:type="cpoj:ctJdbcAttribute">
       <javaName>attrDecimal</javaName>
@@ -179,7 +187,7 @@
     </cpoFunctionGroup>
     <cpoFunctionGroup type="EXIST">
       <cpoFunction name="ValueObject - Exists">
-        <expression>select count(1) from value_object where id = ?</expression>
+        <expression>select count(0) from value_object where id = ?</expression>
         <cpoArgument xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xsi:type="cpoj:ctJdbcArgument">
           <attributeName>id</attributeName>
           <cpoj:scope>IN</cpoj:scope>

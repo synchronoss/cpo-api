@@ -21,6 +21,10 @@
 package org.synchronoss.cpo.jdbc.exporter;
 
 import junit.framework.TestCase;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import static org.junit.Assert.*;
 import org.slf4j.*;
 import org.synchronoss.cpo.*;
 import org.synchronoss.cpo.core.cpoCoreMeta.*;
@@ -38,7 +42,7 @@ import java.util.Arrays;
  *
  * @author Michael Bellomo
  */
-public class ExporterTest extends TestCase {
+public class ExporterTest {
 
   private static final Logger logger = LoggerFactory.getLogger(ExporterTest.class);
 
@@ -48,7 +52,7 @@ public class ExporterTest extends TestCase {
   public ExporterTest() {
   }
 
-  @Override
+  @Before
   public void setUp() {
     String method = "setUp:";
 
@@ -61,11 +65,12 @@ public class ExporterTest extends TestCase {
     }
   }
 
-  @Override
+  @After
   public void tearDown() {
     cpoAdapter = null;
   }
 
+  @Test
   public void testXmlExport() {
     logger.debug("testXmlExport");
     try {
@@ -98,6 +103,7 @@ public class ExporterTest extends TestCase {
     logger.debug("testXmlExport complete");
   }
 
+  @Test
   public void testLegacyClassSourceExport() {
     logger.debug("testLegacyClassSourceExport");
     try {
@@ -136,6 +142,7 @@ public class ExporterTest extends TestCase {
     logger.debug("testClassSourceExport complete");
   }
 
+  @Test
   public void testInterfaceSourceExport() {
     logger.debug("testInterfaceSourceExport");
     try {
@@ -174,6 +181,7 @@ public class ExporterTest extends TestCase {
     logger.debug("testClassSourceExport complete");
   }
 
+  @Test
   public void testClassSourceExport() {
     logger.debug("testClassSourceExport");
     try {

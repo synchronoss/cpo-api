@@ -1,3 +1,8 @@
+CREATE KEYSPACE cpokeyspace
+WITH replication = {'class':'SimpleStrategy', 'replication_factor' : 3};
+
+USE cpokeyspace;
+
 CREATE TABLE value_object (
   id int PRIMARY KEY,
   attr_ascii ascii,

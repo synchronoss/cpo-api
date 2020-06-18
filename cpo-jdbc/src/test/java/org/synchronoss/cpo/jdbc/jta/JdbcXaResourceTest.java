@@ -20,7 +20,10 @@
  */
 package org.synchronoss.cpo.jdbc.jta;
 
-import junit.framework.TestCase;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import static org.junit.Assert.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.CpoAdapter;
@@ -43,7 +46,7 @@ import java.util.List;
 /**
  * Created by dberry on 12/8/15.
  */
-public class JdbcXaResourceTest extends TestCase {
+public class JdbcXaResourceTest {
   private static final Logger logger = LoggerFactory.getLogger(ExecuteTrxTest.class);
   private CpoAdapter cpoAdapter = null;
   private JdbcCpoXaAdapter cpoXaAdapter1 = null;
@@ -60,7 +63,7 @@ public class JdbcXaResourceTest extends TestCase {
   /**
    * <code>setUp</code> Load the datasource from the properties in the property file jdbc_en_US.properties
    */
-  @Override
+  @Before
   public void setUp() {
     String method = "setUp:";
 
@@ -78,7 +81,7 @@ public class JdbcXaResourceTest extends TestCase {
   /**
    * DOCUMENT ME!
    */
-  @Override
+  @After
   public void tearDown() {
 		String method = "tearDown:";
   try {
@@ -100,6 +103,7 @@ public class JdbcXaResourceTest extends TestCase {
  	 * @throws Exception
  	 *             if the test fails.
  	 */
+  @Test
  	public void testCoordination() {
     String method = "testCoordination:";
     ValueObject valObj1 = new ValueObjectBean(1);
@@ -150,6 +154,7 @@ public class JdbcXaResourceTest extends TestCase {
  	 * @throws Exception
  	 *             if the test fails.
  	 */
+  @Test
  	public void testRollback()  {
     String method = "testRollback:";
     ValueObject valObj1 = new ValueObjectBean(1);
@@ -192,6 +197,7 @@ public class JdbcXaResourceTest extends TestCase {
  	 * @throws Exception
  	 *             if test fails
  	 */
+  @Test
  	public void testRecover() {
     String method = "testRecover:";
     ValueObject valObj = new ValueObjectBean(1);
@@ -263,6 +269,7 @@ public class JdbcXaResourceTest extends TestCase {
  	}
 
 
+  @Test
  	public void testSuspendableTx() throws Exception {
 		String method = "testSuspendableTx:";
   	ValueObject valObj = new ValueObjectBean(1);
@@ -295,6 +302,7 @@ public class JdbcXaResourceTest extends TestCase {
 		}
  	}
 
+  @Test
 	public void testCommit() {
 		String method = "testCommit:";
   	ValueObject valObj = new ValueObjectBean(1);
@@ -325,6 +333,7 @@ public class JdbcXaResourceTest extends TestCase {
 		}
 	}
 
+  @Test
 	public void testRollback2() {
 		String method = "testRollback2:";
   	ValueObject valObj = new ValueObjectBean(1);
@@ -356,6 +365,7 @@ public class JdbcXaResourceTest extends TestCase {
 
 	}
 
+  @Test
 	public void testSuspend() {
     String method = "testSuspend:";
     ValueObject valObj1 = new ValueObjectBean(1);
@@ -398,6 +408,7 @@ public class JdbcXaResourceTest extends TestCase {
 		}
 	}
 
+  @Test
 	public void testMultiTrx() {
     String method = "testMultiTrx:";
     ValueObject valObj1 = new ValueObjectBean(1);
@@ -444,6 +455,7 @@ public class JdbcXaResourceTest extends TestCase {
 		}
 	}
 
+  @Test
 	public void testJoin() {
     String method = "testJoin:";
     ValueObject valObj1 = new ValueObjectBean(1);
@@ -486,6 +498,7 @@ public class JdbcXaResourceTest extends TestCase {
 
 	}
 
+  @Test
   public void testRecover2() {
     String method = "testRecover2:";
     ValueObject valObj1 = new ValueObjectBean(1);
@@ -541,9 +554,10 @@ public class JdbcXaResourceTest extends TestCase {
 
   }
 
-    public void testNothing() {
+  @Test
+  public void testNothing() {
 
-    }
+  }
 
 	public class MyXid implements Xid
 	{

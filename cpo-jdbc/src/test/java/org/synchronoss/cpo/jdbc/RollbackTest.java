@@ -21,7 +21,10 @@
 package org.synchronoss.cpo.jdbc;
 
 import java.util.ArrayList;
-import junit.framework.TestCase;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import static org.junit.Assert.*;
 import org.synchronoss.cpo.CpoAdapter;
 import org.synchronoss.cpo.CpoAdapterFactoryManager;
 
@@ -30,22 +33,17 @@ import org.synchronoss.cpo.CpoAdapterFactoryManager;
  *
  * @author david berry
  */
-public class RollbackTest extends TestCase {
+public class RollbackTest {
 
   private CpoAdapter cpoAdapter = null;
 
-  /**
-   * Creates a new RollbackTest object.
-   *
-   * @param name DOCUMENT ME!
-   */
   public RollbackTest() {
   }
 
   /**
    * <code>setUp</code> Load the datasource from the properties in the property file jdbc_en_US.properties
    */
-  @Override
+  @Before
   public void setUp() {
     String method = "setUp:";
 
@@ -67,7 +65,7 @@ public class RollbackTest extends TestCase {
   /**
    * DOCUMENT ME!
    */
-  @Override
+  @After
   public void tearDown() {
     ValueObject vo = new ValueObjectBean(1);
     try {
@@ -80,6 +78,7 @@ public class RollbackTest extends TestCase {
   /**
    * DOCUMENT ME!
    */
+  @Test
   public void testRollbackProcessUpdateCollection() {
     String method = "testRollbackProcessUpdateCollection:";
     ValueObject vo = new ValueObjectBean(2);
@@ -105,6 +104,7 @@ public class RollbackTest extends TestCase {
   /**
    * DOCUMENT ME!
    */
+  @Test
   public void testSingleRollback() {
     String method = "testSingleRollback:";
     ValueObject vo = new ValueObjectBean(2);

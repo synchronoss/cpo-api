@@ -20,7 +20,10 @@
  */
 package org.synchronoss.cpo.jdbc;
 
-import junit.framework.TestCase;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import static org.junit.Assert.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.CpoAdapter;
@@ -35,24 +38,21 @@ import org.synchronoss.cpo.jdbc.meta.JdbcCpoMetaDescriptor;
  *
  * @author david berry
  */
-public class SelectForUpdateTest extends TestCase {
+public class SelectForUpdateTest {
 
   private static final Logger logger = LoggerFactory.getLogger(SelectForUpdateTest.class);
   private CpoAdapter cpoAdapter = null;
   private CpoTrxAdapter trxAdapter = null;
   private JdbcCpoMetaDescriptor metaDescriptor = null;
+  private boolean isSupportsSelect4Update = Boolean.valueOf(JdbcJUnitProperty.getProperty(JdbcJUnitProperty.PROP_SELECT4UPDATE));
 
-  /**
-   * Creates a new RollbackTest object.
-   *
-   */
   public SelectForUpdateTest() {
   }
 
   /**
    * <code>setUp</code> Load the datasource from the properties in the property file jdbc_en_US.properties
    */
-  @Override
+  @Before
   public void setUp() {
     String method = "setUp:";
 
@@ -83,7 +83,7 @@ public class SelectForUpdateTest extends TestCase {
   /**
    * DOCUMENT ME!
    */
-  @Override
+  @After
   public void tearDown() {
    String method = "tearDown:";
    ValueObject vo = new ValueObjectBean(1);
@@ -110,8 +110,9 @@ public class SelectForUpdateTest extends TestCase {
   /**
    * DOCUMENT ME!
    */
+  @Test
   public void testSelect4UpdateSingleObject() {
-    if (metaDescriptor.isSupportsSelect4Update()) {
+    if (isSupportsSelect4Update) {
       String method = "testSelect4UpdateSingleObject:";
       ValueObject vo2 = new ValueObjectBean(1);
 
@@ -155,8 +156,9 @@ public class SelectForUpdateTest extends TestCase {
     }
   }
 
+  @Test
   public void testSelect4UpdateExists() {
-    if (metaDescriptor.isSupportsSelect4Update()) {
+    if (isSupportsSelect4Update) {
       String method = "testSelect4UpdateExists:";
       ValueObject vo2 = new ValueObjectBean(1);
 

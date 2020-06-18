@@ -49,6 +49,7 @@
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <currentVersion>${project.version}</currentVersion>
+    <testContainersVersion>1.14.3</testContainersVersion>
     <slf4jVersion>1.7.30</slf4jVersion>
     <github.global.server>cpo-github</github.global.server>
   </properties>

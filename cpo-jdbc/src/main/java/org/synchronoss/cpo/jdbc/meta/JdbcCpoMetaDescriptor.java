@@ -30,11 +30,6 @@ import org.synchronoss.cpo.meta.CpoMetaDescriptor;
  * @author dberry
  */
 public class JdbcCpoMetaDescriptor extends CpoMetaDescriptor {
-  private boolean supportsBlobs = false;
-  private boolean supportsCalls = false;
-  private boolean supportsMillis = false;
-  private boolean supportsSelect4Update = false;
-
 
   public JdbcCpoMetaDescriptor(String name, boolean caseSensitive) throws CpoException {
     super(name, caseSensitive);
@@ -50,35 +45,4 @@ public class JdbcCpoMetaDescriptor extends CpoMetaDescriptor {
     return new JdbcMetaXmlObjectExporter(this);
   }
 
-  public boolean isSupportsBlobs() {
-    return supportsBlobs;
-  }
-
-  public void setSupportsBlobs(boolean supportsBlobs) {
-    this.supportsBlobs = supportsBlobs;
-  }
-
-  public boolean isSupportsCalls() {
-    return supportsCalls;
-  }
-
-  public void setSupportsCalls(boolean supportsCalls) {
-    this.supportsCalls = supportsCalls;
-  }
-
-  public boolean isSupportsMillis() {
-    return supportsMillis;
-  }
-
-  public void setSupportsMillis(boolean supportsMillis) {
-    this.supportsMillis = supportsMillis;
-  }
-
-  public boolean isSupportsSelect4Update() {
-    return supportsSelect4Update;
-  }
-
-  public void setSupportsSelect4Update(boolean supportsSelect4Update) {
-    this.supportsSelect4Update = supportsSelect4Update;
-  }
 }

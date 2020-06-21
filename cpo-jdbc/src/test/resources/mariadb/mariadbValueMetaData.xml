@@ -105,6 +105,12 @@
       <transformClass>org.synchronoss.cpo.transform.jdbc.TransformNoOp</transformClass>
     </cpoAttribute>
     <cpoAttribute xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xsi:type="cpoj:ctJdbcAttribute">
+      <javaName>attrBigInt</javaName>
+      <javaType>java.math.BigInteger</javaType>
+      <dataName>attr_bigint</dataName>
+      <dataType>BIGINT</dataType>
+    </cpoAttribute>
+    <cpoAttribute xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xsi:type="cpoj:ctJdbcAttribute">
       <javaName>attrCharacter</javaName>
       <javaType>java.lang.String</javaType>
       <dataName>attr_character</dataName>
@@ -112,7 +118,7 @@
     </cpoAttribute>
     <cpoFunctionGroup type="CREATE">
       <cpoFunction name="ValueObject - Create">
-        <expression>insert into value_object(id, attr_char, attr_character, attr_date, attr_decimal, attr_integer, attr_numeric, attr_smallint, attr_timestamp, attr_varchar, attr_bool, attr_datetime) values (?,?,?,?,?,?,?,?,?,?,?,?)</expression>
+        <expression>insert into value_object(id, attr_char, attr_character, attr_date, attr_decimal, attr_integer, attr_numeric, attr_smallint, attr_timestamp, attr_varchar, attr_bool, attr_datetime, attr_bigint) values (?,?,?,?,?,?,?,?,?,?,?,?,?)</expression>
         <cpoArgument xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xsi:type="cpoj:ctJdbcArgument">
           <attributeName>id</attributeName>
           <cpoj:scope>IN</cpoj:scope>
@@ -161,6 +167,10 @@
           <attributeName>attrDatetime</attributeName>
           <cpoj:scope>IN</cpoj:scope>
         </cpoArgument>
+      <cpoArgument xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xsi:type="cpoj:ctJdbcArgument">
+        <attributeName>attrBigInt</attributeName>
+        <cpoj:scope>IN</cpoj:scope>
+      </cpoArgument>
       </cpoFunction>
     </cpoFunctionGroup>
     <cpoFunctionGroup name="TestRollback" type="CREATE">
@@ -254,7 +264,7 @@
     </cpoFunctionGroup>
     <cpoFunctionGroup name="TestOrderByInsert" type="CREATE">
       <cpoFunction name="TestOrderByInsert">
-        <expression>insert into value_object (id,attr_varchar,attr_smallint) values (?,?,?)</expression>
+        <expression>insert into value_object (id,attr_varchar,attr_smallint, attr_bigint) values (?,?,?,?)</expression>
         <cpoArgument xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xsi:type="cpoj:ctJdbcArgument">
           <attributeName>id</attributeName>
           <cpoj:scope>IN</cpoj:scope>
@@ -265,6 +275,10 @@
         </cpoArgument>
         <cpoArgument xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xsi:type="cpoj:ctJdbcArgument">
           <attributeName>attrSmallInt</attributeName>
+          <cpoj:scope>IN</cpoj:scope>
+        </cpoArgument>
+        <cpoArgument xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xsi:type="cpoj:ctJdbcArgument">
+          <attributeName>attrBigInt</attributeName>
           <cpoj:scope>IN</cpoj:scope>
         </cpoArgument>
       </cpoFunction>

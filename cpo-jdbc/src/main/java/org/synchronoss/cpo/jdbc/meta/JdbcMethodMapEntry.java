@@ -39,6 +39,7 @@ public class JdbcMethodMapEntry<J,D> extends MethodMapEntry<J,D> implements java
   private static final long serialVersionUID = 1L;
   public static final int METHOD_TYPE_STREAM = 1;
   public static final int METHOD_TYPE_READER = 2;
+  public static final int METHOD_TYPE_OBJECT = 3;
   private Method csGetter = null;
   private Method csSetter = null;
 

@@ -30,7 +30,7 @@ import java.lang.reflect.InvocationTargetException;
 /**
  * @author dberry
  */
-public class ResultSetCpoData extends AbstractBindableCpoData {
+public abstract class ResultSetCpoData extends AbstractBindableCpoData {
 
   private static final Logger logger = LoggerFactory.getLogger(ResultSetCpoData.class);
   private Object rs = null;
@@ -42,6 +42,12 @@ public class ResultSetCpoData extends AbstractBindableCpoData {
     this.rs = rs;
   }
 
+  public Object getRs() {
+    return rs;
+  }
+
+  protected abstract Object invokeGetterImpl(MethodMapEntry<?, ?> methodMapEntry) throws IllegalAccessException, InvocationTargetException;
+
   @Override
   public Object invokeGetter() throws CpoException {
     Object javaObject;
@@ -52,7 +58,7 @@ public class ResultSetCpoData extends AbstractBindableCpoData {
 
     try {
       // Get the getter for the Callable Statement
-      javaObject = transformIn(methodMapEntry.getRsGetter().invoke(rs, getIndex()));
+      javaObject = transformIn(invokeGetterImpl(methodMapEntry));
     } catch (IllegalAccessException iae) {
       logger.debug("Error Invoking ResultSet Method: " + ExceptionHelper.getLocalizedMessage(iae));
       throw new CpoException(iae);

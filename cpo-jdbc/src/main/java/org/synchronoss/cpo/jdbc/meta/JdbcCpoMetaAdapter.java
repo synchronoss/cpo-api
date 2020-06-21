@@ -100,7 +100,7 @@ public class JdbcCpoMetaAdapter extends AbstractCpoMetaAdapter {
     // JDK 1.4.2 Values
     dataTypeMapper.addDataTypeEntry(new DataTypeMapEntry<>(java.sql.Types.CHAR, "CHAR", String.class)); // 1
     dataTypeMapper.addDataTypeEntry(new DataTypeMapEntry<>(java.sql.Types.LONGVARCHAR, "LONGVARCHAR", String.class)); // -1
-    dataTypeMapper.addDataTypeEntry(defaultDataTypeMapEntry); // 12
+    dataTypeMapper.addDataTypeEntry(new DataTypeMapEntry<>(java.sql.Types.VARCHAR, "VARCHAR", String.class)); // 12
     dataTypeMapper.addDataTypeEntry(new DataTypeMapEntry<>(java.sql.Types.DECIMAL, "DECIMAL", BigDecimal.class)); // 3
     dataTypeMapper.addDataTypeEntry(new DataTypeMapEntry<>(java.sql.Types.NUMERIC, "NUMERIC", BigDecimal.class)); // 2
     dataTypeMapper.addDataTypeEntry(new DataTypeMapEntry<>(java.sql.Types.TINYINT, "TINYINT", byte.class)); // -6
@@ -122,11 +122,28 @@ public class JdbcCpoMetaAdapter extends AbstractCpoMetaAdapter {
     dataTypeMapper.addDataTypeEntry(new DataTypeMapEntry<>(java.sql.Types.REF, "REF", java.sql.Ref.class)); // 2006
     dataTypeMapper.addDataTypeEntry(new DataTypeMapEntry<>(java.sql.Types.DISTINCT, "DISTINCT", Object.class)); // 2001
     dataTypeMapper.addDataTypeEntry(new DataTypeMapEntry<>(java.sql.Types.STRUCT, "STRUCT", Object.class)); // 2002
+//    dataTypeMapper.addDataTypeEntry(new DataTypeMapEntry<>(java.sql.Types.NULL, "NULL", Object.class)); // 0
     dataTypeMapper.addDataTypeEntry(new DataTypeMapEntry<>(java.sql.Types.OTHER, "OTHER", Object.class)); // 1111
     dataTypeMapper.addDataTypeEntry(new DataTypeMapEntry<>(java.sql.Types.JAVA_OBJECT, "JAVA_OBJECT", Object.class)); // 2000
     dataTypeMapper.addDataTypeEntry(new DataTypeMapEntry<>(java.sql.Types.DATALINK, "DATALINK", java.net.URL.class)); // 70
     dataTypeMapper.addDataTypeEntry(new DataTypeMapEntry<>(java.sql.Types.BIT, "BIT", boolean.class)); // -7
     dataTypeMapper.addDataTypeEntry(new DataTypeMapEntry<>(java.sql.Types.BOOLEAN, "BOOLEAN", boolean.class)); //16
+
+    //------------------------- JDBC 4.0 -----------------------------------
+
+     dataTypeMapper.addDataTypeEntry(new DataTypeMapEntry<>(java.sql.Types.ROWID, "ROWID", java.sql.RowId.class)); //-8
+     dataTypeMapper.addDataTypeEntry(new DataTypeMapEntry<>(java.sql.Types.NCHAR, "NCHAR", String.class)); //-15
+     dataTypeMapper.addDataTypeEntry(new DataTypeMapEntry<>(java.sql.Types.NVARCHAR, "NVARCHAR", String.class)); //-9
+     dataTypeMapper.addDataTypeEntry(new DataTypeMapEntry<>(java.sql.Types.LONGNVARCHAR, "LONGNVARCHAR", String.class)); //-16
+     dataTypeMapper.addDataTypeEntry(new DataTypeMapEntry<>(java.sql.Types.NCLOB, "NCLOB", java.sql.NClob.class)); //2011
+     dataTypeMapper.addDataTypeEntry(new DataTypeMapEntry<>(java.sql.Types.SQLXML, "SQLXML", java.sql.SQLXML.class)); //2009
+
+     //--------------------------JDBC 4.2 -----------------------------
+
+     dataTypeMapper.addDataTypeEntry(new DataTypeMapEntry<>(java.sql.Types.REF_CURSOR, "REF_CURSOR", java.sql.ResultSet.class)); //2012
+     dataTypeMapper.addDataTypeEntry(new DataTypeMapEntry<>(java.sql.Types.TIME_WITH_TIMEZONE, "TIME_WITH_TIMEZONE", java.time.OffsetTime.class)); //2013;
+     dataTypeMapper.addDataTypeEntry(new DataTypeMapEntry<>(java.sql.Types.TIMESTAMP_WITH_TIMEZONE, "TIMESTAMP_WITH_TIMEZONE", java.time.OffsetDateTime.class)); //2014
+
 
     // dbspecific types needed to generate the class from a function.
     dataTypeMapper.addDataTypeEntry(new DataTypeMapEntry<>(100, "VARCHAR_IGNORECASE", java.lang.String.class)); // HSQLDB TYPE for VARCHAR_IGNORE_CASE

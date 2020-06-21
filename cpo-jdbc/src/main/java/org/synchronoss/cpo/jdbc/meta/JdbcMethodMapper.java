@@ -58,6 +58,10 @@ public class JdbcMethodMapper implements java.io.Serializable, java.lang.Cloneab
 
   static private MethodMapper<JdbcMethodMapEntry<?,?>> initMethodMapper() throws IllegalArgumentException {
     MethodMapper<JdbcMethodMapEntry<?,?>> mapper = new MethodMapper<>();
+    /*
+     * There is no way to call getNString and setNString as they are coming from a String which will use getString and setString. Docs say: "The JDBC specification uses Strings
+     * to represent NCHAR, NVARCHAR, and LONGNVARCHAR data, automatically converting between the Java character set and the national character set. "  So this should work as is.
+     */
     mapper.addMethodMapEntry(makeJdbcMethodMapEntry(JdbcMethodMapEntry.METHOD_TYPE_BASIC, String.class, String.class, "getString", "setString"));
     mapper.addMethodMapEntry(makeJdbcMethodMapEntry(JdbcMethodMapEntry.METHOD_TYPE_BASIC, BigDecimal.class, BigDecimal.class, "getBigDecimal", "setBigDecimal"));
     mapper.addMethodMapEntry(makeJdbcMethodMapEntry(JdbcMethodMapEntry.METHOD_TYPE_BASIC, byte.class, byte.class, "getByte", "setByte"));
@@ -87,6 +91,28 @@ public class JdbcMethodMapper implements java.io.Serializable, java.lang.Cloneab
     mapper.addMethodMapEntry(makeJdbcMethodMapEntry(JdbcMethodMapEntry.METHOD_TYPE_STREAM, InputStream.class, InputStream.class, "getBlob", "setBinaryStream"));
     mapper.addMethodMapEntry(makeJdbcMethodMapEntry(JdbcMethodMapEntry.METHOD_TYPE_READER, Reader.class, Reader.class, "getClob", "setCharacterStream"));
 
+    //------------------------- JDBC 4.0 -----------------------------------
+
+    mapper.addMethodMapEntry(makeJdbcMethodMapEntry(JdbcMethodMapEntry.METHOD_TYPE_BASIC, RowId.class, RowId.class, "getRowId", "setRowId"));
+    mapper.addMethodMapEntry(makeJdbcMethodMapEntry(JdbcMethodMapEntry.METHOD_TYPE_BASIC, NClob.class, NClob.class, "getNClob", "setNClob"));
+    mapper.addMethodMapEntry(makeJdbcMethodMapEntry(JdbcMethodMapEntry.METHOD_TYPE_BASIC, SQLXML.class, SQLXML.class, "getSQLXML", "setSQLXML"));
+
+    //--------------------------JDBC 4.2 -----------------------------
+
+    mapper.addMethodMapEntry(makeJdbcMethodMapEntry(JdbcMethodMapEntry.METHOD_TYPE_OBJECT, java.sql.ResultSet.class, Object.class, "getObject", "setObject"));
+    mapper.addMethodMapEntry(makeJdbcMethodMapEntry(JdbcMethodMapEntry.METHOD_TYPE_OBJECT, java.math.BigInteger.class, Object.class, "getObject", "setObject"));
+    mapper.addMethodMapEntry(makeJdbcMethodMapEntry(JdbcMethodMapEntry.METHOD_TYPE_OBJECT, java.sql.Struct.class, Object.class, "getObject", "setObject"));
+
+    // additonal java classes that jdbc will convert using Object(index, Class<T>)
+    mapper.addMethodMapEntry(makeJdbcMethodMapEntry(JdbcMethodMapEntry.METHOD_TYPE_OBJECT, java.util.Calendar.class, Object.class, "getObject", "setObject"));
+    mapper.addMethodMapEntry(makeJdbcMethodMapEntry(JdbcMethodMapEntry.METHOD_TYPE_OBJECT, java.util.Date.class, Object.class, "getObject", "setObject"));
+    mapper.addMethodMapEntry(makeJdbcMethodMapEntry(JdbcMethodMapEntry.METHOD_TYPE_OBJECT, java.time.LocalDate.class, Object.class, "getObject", "setObject"));
+    mapper.addMethodMapEntry(makeJdbcMethodMapEntry(JdbcMethodMapEntry.METHOD_TYPE_OBJECT, java.time.LocalTime.class, Object.class, "getObject", "setObject"));
+    mapper.addMethodMapEntry(makeJdbcMethodMapEntry(JdbcMethodMapEntry.METHOD_TYPE_OBJECT, java.time.LocalDateTime.class, Object.class, "getObject", "setObject"));
+    mapper.addMethodMapEntry(makeJdbcMethodMapEntry(JdbcMethodMapEntry.METHOD_TYPE_OBJECT, java.time.OffsetTime.class, Object.class, "getObject", "setObject"));
+    mapper.addMethodMapEntry(makeJdbcMethodMapEntry(JdbcMethodMapEntry.METHOD_TYPE_OBJECT, java.time.OffsetDateTime.class, Object.class, "getObject", "setObject"));
+
+
     return mapper;
   }
 
@@ -94,10 +120,10 @@ public class JdbcMethodMapper implements java.io.Serializable, java.lang.Cloneab
     return methodMapper;
   }
 
-  private static <T> JdbcMethodMapEntry<?,?> makeJdbcMethodMapEntry(int methodType, Class<T> javaClass, Class<T> datasourceMethodClass, String getterName, String setterName) throws IllegalArgumentException {
-    Method rsGetter=loadGetter(methodType, rsc, getterName);
+  private static <J,D> JdbcMethodMapEntry<?,?> makeJdbcMethodMapEntry(int methodType, Class<J> javaClass, Class<D> datasourceMethodClass, String getterName, String setterName) throws IllegalArgumentException {
+    Method rsGetter=loadGetter(methodType, rsc, getterName, javaClass);
     Method bsSetter=loadSetter(methodType, psc, datasourceMethodClass, setterName);
-    Method csGetter=loadGetter(methodType, csc, getterName);
+    Method csGetter=loadGetter(methodType, csc, getterName, javaClass);
     Method csSetter=loadSetter(methodType, csc, datasourceMethodClass, setterName);
 
     return new JdbcMethodMapEntry<>(methodType, javaClass, datasourceMethodClass, rsGetter, bsSetter, csGetter, csSetter);
@@ -106,7 +132,7 @@ public class JdbcMethodMapper implements java.io.Serializable, java.lang.Cloneab
   private static <M,D> Method loadSetter(int methodType, Class<M> methodClass, Class<D> datasourceClass, String setterName) throws IllegalArgumentException {
     Method setter;
     try {
-      if (methodType == JdbcMethodMapEntry.METHOD_TYPE_BASIC) {
+      if (methodType == JdbcMethodMapEntry.METHOD_TYPE_BASIC || methodType == JdbcMethodMapEntry.METHOD_TYPE_OBJECT) {
         setter = methodClass.getMethod(setterName, new Class[]{int.class, datasourceClass});
       } else {
         setter = methodClass.getMethod(setterName, new Class[]{int.class, datasourceClass, int.class});
@@ -119,10 +145,14 @@ public class JdbcMethodMapper implements java.io.Serializable, java.lang.Cloneab
     return setter;
   }
 
-  private static <M> Method loadGetter(int methodType, Class<M> methodClass, String getterName) throws IllegalArgumentException {
+  private static <M,J> Method loadGetter(int methodType, Class<M> methodClass, String getterName, Class<J> javaClass) throws IllegalArgumentException {
     Method getter;
     try {
-      getter = methodClass.getMethod(getterName, new Class[]{int.class});
+      if (methodType == JdbcMethodMapEntry.METHOD_TYPE_OBJECT) {
+        getter = methodClass.getMethod(getterName, new Class[]{int.class, Class.class});
+      } else {
+        getter = methodClass.getMethod(getterName, new Class[]{int.class});
+      }
     } catch (NoSuchMethodException nsme) {
       logger.error("Error loading Getter" + getterName, nsme);
       throw new IllegalArgumentException(nsme);

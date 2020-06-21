@@ -20,6 +20,7 @@
  */
 package org.synchronoss.cpo.jdbc;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Collection;
 import org.junit.After;
@@ -58,6 +59,8 @@ public class WhereTest {
     vo.setAttrVarChar("Test");
     vo.setAttrSmallInt(1);
     vo.setAttrInteger(1);
+    vo.setAttrBigInt(BigInteger.valueOf(2075L));
+    vo.setAttrDate(new java.sql.Date(new java.util.Date().getTime()));
     al.add(vo);
     al.add(new ValueObjectBean(2));
     al.add(new ValueObjectBean(3));
@@ -104,6 +107,26 @@ public class WhereTest {
       col = cpoAdapter.retrieveBeans("TestWhereRetrieve", valObj, wheres, null);
 
       assertTrue("Col size is " + col.size(), col.size() == 2);
+    } catch (Exception e) {
+      fail(method + e.getMessage());
+    }
+  }
+
+  @Test
+  public void testSetObjectWhere() {
+    String method = "testSetObjectWhere:";
+    Collection<ValueObject> col;
+    CpoWhere cw;
+
+    try {
+      BigInteger bigInt = BigInteger.valueOf(2075L);
+      cw = cpoAdapter.newWhere(CpoWhere.LOGIC_NONE, "attrBigInt", CpoWhere.COMP_EQ, bigInt);
+
+      ArrayList<CpoWhere> wheres = new ArrayList<>();
+      wheres.add(cw);
+      col = cpoAdapter.retrieveBeans("TestWhereRetrieve", new ValueObjectBean(), wheres, null);
+
+      assertTrue("Col size is " + col.size(), col.size() == 1);
     } catch (Exception e) {
       fail(method + e.getMessage());
     }

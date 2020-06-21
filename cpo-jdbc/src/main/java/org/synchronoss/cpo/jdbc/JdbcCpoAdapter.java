@@ -25,9 +25,9 @@ import org.synchronoss.cpo.*;
 import org.synchronoss.cpo.helper.ExceptionHelper;
 import org.synchronoss.cpo.jdbc.meta.JdbcCpoMetaDescriptor;
 import org.synchronoss.cpo.jdbc.meta.JdbcMethodMapper;
+import org.synchronoss.cpo.jdbc.meta.JdbcResultSetCpoData;
 import org.synchronoss.cpo.meta.CpoMetaDescriptor;
 import org.synchronoss.cpo.meta.DataTypeMapEntry;
-import org.synchronoss.cpo.meta.ResultSetCpoData;
 import org.synchronoss.cpo.meta.domain.*;
 
 import javax.naming.*;
@@ -1702,9 +1702,9 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
   @Override
-  public <T, C> CpoResultSet<T> retrieveBeans(String name, C criteria, T result, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeFunction> nativeExpressions, int queueSize) throws CpoException {
+  public <T, C> CpoResultSet<T> retrieveBeans(String name, C criteria, T result, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeFunction> nativeExpressions, int queueSize) {
     CpoBlockingResultSet<T> resultSet = new CpoBlockingResultSet<>(queueSize);
-    RetrieverThread<T, C> retrieverThread = new RetrieverThread<>(name, criteria, result, wheres, orderBy, nativeExpressions, false, resultSet);
+    RetrieverThread<T, C> retrieverThread = new RetrieverThread<T,C>(name, criteria, result, wheres, orderBy, nativeExpressions, false, resultSet);
 
     retrieverThread.start();
     return resultSet;
@@ -2356,7 +2356,7 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
               attribute = (JdbcCpoAttribute) cpoClass.getAttributeData(rs.getString(1));
 
               if (attribute != null) {
-                attribute.invokeSetter(rObj, new ResultSetCpoData(JdbcMethodMapper.getMethodMapper(), rs, attribute, 2));
+                attribute.invokeSetter(rObj, new JdbcResultSetCpoData(JdbcMethodMapper.getMethodMapper(), rs, attribute, 2));
                 attributesSet++;
               }
             }
@@ -2367,7 +2367,7 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
               attribute = (JdbcCpoAttribute) cpoClass.getAttributeData(rsmd.getColumnLabel(k));
 
               if (attribute != null) {
-                attribute.invokeSetter(rObj, new ResultSetCpoData(JdbcMethodMapper.getMethodMapper(), rs, attribute, k));
+                attribute.invokeSetter(rObj, new JdbcResultSetCpoData(JdbcMethodMapper.getMethodMapper(), rs, attribute, k));
                 attributesSet++;
               }
             }
@@ -2537,7 +2537,7 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
 
           for (k = 1; k <= columnCount; k++) {
             if (attributes[k] != null) {
-              attributes[k].invokeSetter(obj, new ResultSetCpoData(JdbcMethodMapper.getMethodMapper(), rs, attributes[k], k));
+              attributes[k].invokeSetter(obj, new JdbcResultSetCpoData(JdbcMethodMapper.getMethodMapper(), rs, attributes[k], k));
             }
           }
 

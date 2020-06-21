@@ -31,17 +31,23 @@ ID                      integer primary key
 ,ATTR_FLOAT              real        NULL
 ,ATTR_VARCHAR            varchar(255) NULL
 ,ATTR_VARCHAR_IGNORECASE varchar(255) NULL
-,ATTR_CHAR               varchar(255) NULL
-,ATTR_CHARACTER          varchar(255) NULL
+,ATTR_CHAR               char(255) NULL
+,ATTR_CHARACTER          character(255) NULL
 ,ATTR_DATE               date         NULL
-,ATTR_DATETIME			 timestamp	  NULL
+,ATTR_DATETIME			     timestamp	  NULL
 ,ATTR_TIME               time         NULL
+,ATTR_TIME_ZONE          time with time zone  NULL
 ,ATTR_TIMESTAMP          timestamp    NULL
+,ATTR_TIMESTAMP_ZONE     timestamp  with time zone  NULL
 ,ATTR_DECIMAL            decimal(10,0) NULL
-,ATTR_NUMERIC            decimal(10,0) NULL
-,ATTR_SMALLINT           smallint  NULL
+,ATTR_NUMERIC            numeric(10) NULL
+,ATTR_SMALLINT           smallint NULL
+,ATTR_BIGINT             bigint NULL
 ,ATTR_REAL               double precision     NULL
 ,ATTR_LONGTEXT           text     NULL
+--,ATTR_SMALLSERIAL        smallserial
+--,ATTR_SERIAL             serial
+--,ATTR_BIGSERIAL          bigserial
 );
 
 CREATE TABLE LOB_TEST (

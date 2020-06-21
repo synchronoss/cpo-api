@@ -56,7 +56,7 @@ public class CallableStatementCpoData extends AbstractBindableCpoData {
 
   @Override
   public Object invokeGetter() throws CpoException {
-    Object javaObject;
+    Object javaObject=null;
     JdbcMethodMapEntry<?,?> jdbcMethodMapEntry = JdbcMethodMapper.getJavaSqlMethod(getDataGetterReturnType());
     if (jdbcMethodMapEntry == null) {
       throw new CpoException("Error Retrieveing Jdbc Method for type: " + getDataGetterReturnType().getName());
@@ -64,7 +64,17 @@ public class CallableStatementCpoData extends AbstractBindableCpoData {
 
     try {
       // Get the getter for the Callable Statement
-      javaObject = transformIn(jdbcMethodMapEntry.getCsGetter().invoke(cs, getIndex()));
+      switch (jdbcMethodMapEntry.getMethodType()) {
+        case JdbcMethodMapEntry.METHOD_TYPE_BASIC:
+        case JdbcMethodMapEntry.METHOD_TYPE_STREAM:
+        case JdbcMethodMapEntry.METHOD_TYPE_READER:
+          javaObject = jdbcMethodMapEntry.getCsGetter().invoke(cs, getIndex());
+          break;
+        case JdbcMethodMapEntry.METHOD_TYPE_OBJECT:
+          javaObject = jdbcMethodMapEntry.getCsGetter().invoke(cs, getIndex(), jdbcMethodMapEntry.getJavaClass());
+          break;
+      }
+      javaObject = transformIn(javaObject);
     } catch (IllegalAccessException iae) {
       logger.debug("Error Invoking CallableStatement Method: " + ExceptionHelper.getLocalizedMessage(iae));
       throw new CpoException(iae);
@@ -89,6 +99,7 @@ public class CallableStatementCpoData extends AbstractBindableCpoData {
     try {
       switch (jdbcMethodMapEntry.getMethodType()) {
         case JdbcMethodMapEntry.METHOD_TYPE_BASIC:
+        case JdbcMethodMapEntry.METHOD_TYPE_OBJECT:
           jdbcMethodMapEntry.getCsSetter().invoke(jcsf.getCallableStatement(), getIndex(), param);
           break;
         case JdbcMethodMapEntry.METHOD_TYPE_STREAM:

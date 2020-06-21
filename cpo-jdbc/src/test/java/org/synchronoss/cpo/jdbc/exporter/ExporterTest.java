@@ -98,6 +98,7 @@ public class ExporterTest {
       }
       assertTrue(found);
     } catch (CpoException e) {
+      e.printStackTrace();
       fail(e.getMessage());
     }
     logger.debug("testXmlExport complete");
@@ -137,6 +138,7 @@ public class ExporterTest {
       assertTrue(result);
 
     } catch (Exception e) {
+      e.printStackTrace();
       fail(e.getMessage());
     }
     logger.debug("testClassSourceExport complete");
@@ -176,6 +178,7 @@ public class ExporterTest {
       assertTrue(result);
 
     } catch (Exception e) {
+      e.printStackTrace();
       fail(e.getMessage());
     }
     logger.debug("testClassSourceExport complete");
@@ -233,6 +236,7 @@ public class ExporterTest {
       assertTrue(result);
 
     } catch (Exception e) {
+      e.printStackTrace();
       fail(e.getMessage());
     }
     logger.debug("testClassSourceExport complete");

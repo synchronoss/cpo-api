@@ -21,6 +21,7 @@
 package org.synchronoss.cpo.jdbc;
 
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.sql.*;
 
 /**
@@ -53,7 +54,7 @@ public class ValueObjectBean implements ValueObject, java.io.Serializable, Clone
   private boolean attrBit_ = false;
   private BigDecimal attrTinyInt_ = null;
   private int attrSmallInt_ = 0;
-  private BigDecimal attrBigInt_ = null;
+  private BigInteger attrBigInt_ = null;
   private BigDecimal attrReal_ = null;
   private byte[] attrBinary_ = null;
   private byte[] attrVarBinary_ = null;
@@ -149,7 +150,7 @@ public class ValueObjectBean implements ValueObject, java.io.Serializable, Clone
     return attrSmallInt_;
   }
 
-  public BigDecimal getAttrBigInt() {
+  public BigInteger getAttrBigInt() {
     return attrBigInt_;
   }
 
@@ -249,7 +250,7 @@ public class ValueObjectBean implements ValueObject, java.io.Serializable, Clone
     attrSmallInt_ = attrSmallInt;
   }
 
-  public void setAttrBigInt(BigDecimal attrBigInt) {
+  public void setAttrBigInt(BigInteger attrBigInt) {
     attrBigInt_ = attrBigInt;
   }
 

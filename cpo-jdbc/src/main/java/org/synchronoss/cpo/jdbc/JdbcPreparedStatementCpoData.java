@@ -53,12 +53,13 @@ public class JdbcPreparedStatementCpoData extends AbstractBindableCpoData {
     Object param = transformOut(cpoAttribute.invokeGetter(instanceObject));
     JdbcMethodMapEntry<?,?> methodMapEntry = JdbcMethodMapper.getJavaSqlMethod(getDataSetterParamType());
     if (methodMapEntry == null) {
-      throw new CpoException("Error Retrieveing Jdbc Method for type: " + getDataSetterParamType().getName());
+      throw new CpoException("Error Retrieving Jdbc Method for type: " + getDataSetterParamType().getName());
     }
-    localLogger.info(cpoAttribute.getDataName() + "=" + param);
+    localLogger.debug(cpoAttribute.getDataName() + "=" + param);
     try {
       switch (methodMapEntry.getMethodType()) {
         case JdbcMethodMapEntry.METHOD_TYPE_BASIC:
+        case JdbcMethodMapEntry.METHOD_TYPE_OBJECT:
           methodMapEntry.getBsSetter().invoke(cpoStatementFactory.getPreparedStatement(), getIndex(), param);
           break;
         case JdbcMethodMapEntry.METHOD_TYPE_STREAM:
@@ -73,7 +74,7 @@ public class JdbcPreparedStatementCpoData extends AbstractBindableCpoData {
           break;
       }
     } catch (Exception e) {
-      throw new CpoException("Error Invoking Jdbc Method: " + methodMapEntry.getBsSetter().getName() + ":" + ExceptionHelper.getLocalizedMessage(e));
+      throw new CpoException("Error Invoking Jdbc Method: " + cpoAttribute.getDataName() + ":"+cpoAttribute.getJavaName()+":"+methodMapEntry.getBsSetter().getName() + ":" + ExceptionHelper.getLocalizedMessage(e));
     }
   }
 

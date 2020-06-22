@@ -101,6 +101,12 @@
       <cpoj:dbTable>value_object</cpoj:dbTable>
       <cpoj:dbColumn>attr_varchar</cpoj:dbColumn>
     </cpoAttribute>
+    <cpoAttribute xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xsi:type="cpoj:ctJdbcAttribute">
+      <javaName>attrBigInt</javaName>
+      <javaType>java.math.BigInteger</javaType>
+      <dataName>attr_bigint</dataName>
+      <dataType>BIGINT</dataType>
+    </cpoAttribute>
     <cpoAttribute xsi:type="cpoj:ctJdbcAttribute" xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
       <javaName>id</javaName>
       <javaType>java.math.BigDecimal</javaType>
@@ -111,7 +117,7 @@
     </cpoAttribute>
     <cpoFunctionGroup type="CREATE">
       <cpoFunction name="ValueObject - Create">
-        <expression>insert into value_object(id, attr_char, attr_character, attr_date, ATTR_DECIMAL, ATTR_INTEGER, ATTR_NUMERIC, ATTR_SMALLINT, ATTR_TIMESTAMP, ATTR_VARCHAR, ATTR_BOOL, ATTR_DATETIME) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)</expression>
+        <expression>insert into value_object(id, attr_char, attr_character, attr_date, ATTR_DECIMAL, ATTR_INTEGER, ATTR_NUMERIC, ATTR_SMALLINT, ATTR_TIMESTAMP, ATTR_VARCHAR, ATTR_BOOL, ATTR_DATETIME, ATTR_BIGINT) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)</expression>
         <cpoArgument xsi:type="cpoj:ctJdbcArgument" xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
           <attributeName>id</attributeName>
           <cpoj:scope>IN</cpoj:scope>
@@ -158,6 +164,10 @@
         </cpoArgument>
         <cpoArgument xsi:type="cpoj:ctJdbcArgument" xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
           <attributeName>attrDatetime</attributeName>
+          <cpoj:scope>IN</cpoj:scope>
+        </cpoArgument>
+        <cpoArgument xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd"  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="cpoj:ctJdbcArgument">
+          <attributeName>attrBigInt</attributeName>
           <cpoj:scope>IN</cpoj:scope>
         </cpoArgument>
       </cpoFunction>

@@ -167,10 +167,10 @@
           <attributeName>attrDatetime</attributeName>
           <cpoj:scope>IN</cpoj:scope>
         </cpoArgument>
-      <cpoArgument xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xsi:type="cpoj:ctJdbcArgument">
-        <attributeName>attrBigInt</attributeName>
-        <cpoj:scope>IN</cpoj:scope>
-      </cpoArgument>
+        <cpoArgument xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xsi:type="cpoj:ctJdbcArgument">
+          <attributeName>attrBigInt</attributeName>
+          <cpoj:scope>IN</cpoj:scope>
+        </cpoArgument>
       </cpoFunction>
     </cpoFunctionGroup>
     <cpoFunctionGroup name="TestRollback" type="CREATE">

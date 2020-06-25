@@ -101,7 +101,7 @@
       <cpoj:dbTable>value_object</cpoj:dbTable>
       <cpoj:dbColumn>attr_varchar</cpoj:dbColumn>
     </cpoAttribute>
-    <cpoAttribute xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xsi:type="cpoj:ctJdbcAttribute">
+    <cpoAttribute xsi:type="cpoj:ctJdbcAttribute" xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
       <javaName>attrBigInt</javaName>
       <javaType>java.math.BigInteger</javaType>
       <dataName>attr_bigint</dataName>
@@ -166,7 +166,7 @@
           <attributeName>attrDatetime</attributeName>
           <cpoj:scope>IN</cpoj:scope>
         </cpoArgument>
-        <cpoArgument xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd"  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="cpoj:ctJdbcArgument">
+        <cpoArgument xsi:type="cpoj:ctJdbcArgument" xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd"  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
           <attributeName>attrBigInt</attributeName>
           <cpoj:scope>IN</cpoj:scope>
         </cpoArgument>
@@ -185,6 +185,10 @@
         </cpoArgument>
         <cpoArgument xsi:type="cpoj:ctJdbcArgument" xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
           <attributeName>attrSmallInt</attributeName>
+          <cpoj:scope>IN</cpoj:scope>
+        </cpoArgument>
+        <cpoArgument  xsi:type="cpoj:ctJdbcArgument" xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+          <attributeName>attrBigInt</attributeName>
           <cpoj:scope>IN</cpoj:scope>
         </cpoArgument>
       </cpoFunction>

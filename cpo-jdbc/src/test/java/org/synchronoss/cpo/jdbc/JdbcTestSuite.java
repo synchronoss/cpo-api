@@ -138,7 +138,6 @@ public class JdbcTestSuite {
       case MYSQL: return new MySQLContainer().withInitScript(initScript).withUsername(dbUser).withPassword(dbPswd).withDatabaseName(dbName);
       case MARIADB: return new MariaDBContainer().withInitScript(initScript).withUsername(dbUser).withPassword(dbPswd).withDatabaseName(dbName);
       case POSTGRES: return new PostgreSQLContainer().withInitScript(initScript).withUsername(dbUser).withPassword(dbPswd).withDatabaseName(dbName);
-      case ORACLE_XE: return new OracleContainer().withInitScript(initScript).withUsername(dbUser).withPassword(dbPswd).withDatabaseName(dbName);
       default: logger.debug("No Container to start, unknown dbType:"+dbType);
     }
     return null;

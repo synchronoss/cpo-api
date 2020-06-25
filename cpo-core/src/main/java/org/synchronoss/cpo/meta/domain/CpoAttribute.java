@@ -147,8 +147,8 @@ public class CpoAttribute extends CpoAttributeBean {
 
     try {
       setter_.invoke(instanceObject, cpoData.invokeGetter());
-    } catch (IllegalAccessException | InvocationTargetException e) {
-      localLogger.debug("Error Invoking Setter Method: " + ExceptionHelper.getLocalizedMessage(e));
+    } catch (IllegalAccessException | InvocationTargetException | IllegalArgumentException e) {
+      localLogger.debug("Error Invoking Setter Method: " + getDataName()+ ":" +getJavaName()+":"+setterName_ + ExceptionHelper.getLocalizedMessage(e));
     }
   }
 
@@ -165,13 +165,13 @@ public class CpoAttribute extends CpoAttributeBean {
   }
 
   private void dumpMethod(Method m) {
-    logger.debug("========================");
-    logger.debug("===> Declaring Class: " + m.getDeclaringClass().getName());
-    logger.debug("===> Method Signature: " + m.toString());
-    logger.debug("===> Generic Signature: " + m.toGenericString());
-    logger.debug("===> Method isBridge: " + m.isBridge());
-    logger.debug("===> Method isSynthetic: " + m.isSynthetic());
-    logger.debug("========================");
+    logger.trace("========================");
+    logger.trace("===> Declaring Class: " + m.getDeclaringClass().getName());
+    logger.trace("===> Method Signature: " + m.toString());
+    logger.trace("===> Generic Signature: " + m.toGenericString());
+    logger.trace("===> Method isBridge: " + m.isBridge());
+    logger.trace("===> Method isSynthetic: " + m.isSynthetic());
+    logger.trace("========================");
   }
 
   static public boolean isPrimitiveAssignableFrom(Class<?> clazz, Class<?> paramClass) {
@@ -223,6 +223,7 @@ public class CpoAttribute extends CpoAttributeBean {
           failedMessage.append("loadRunTimeInfo: Could not find a Getter:" + getGetterName() + "(" + metaClass.getName() + ")");
         } else {
           setGetter(methods.get(0));
+          dumpMethod(getGetter());
         }
       } catch (CpoException ce1) {
         failedMessage.append(ce1.getMessage());
@@ -233,6 +234,7 @@ public class CpoAttribute extends CpoAttributeBean {
         for (Method setter : findMethods(metaClass, getSetterName(), 1, false)) {
           if (setter.getParameterTypes()[0].isAssignableFrom(actualClass) || isPrimitiveAssignableFrom(setter.getParameterTypes()[0], actualClass)) {
             setSetter(setter);
+            dumpMethod(getSetter());
           }
         }
         if (getSetter() == null) {

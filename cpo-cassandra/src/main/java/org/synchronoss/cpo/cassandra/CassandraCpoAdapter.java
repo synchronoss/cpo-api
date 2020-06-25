@@ -1634,7 +1634,7 @@ public class CassandraCpoAdapter extends CpoBaseAdapter<ClusterDataSource> {
   @Override
   public <T, C> CpoResultSet<T> retrieveBeans(String name, C criteria, T result, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeFunction> nativeExpressions, int queueSize) throws CpoException {
     CpoBlockingResultSet<T> resultSet = new CpoBlockingResultSet<>(queueSize);
-    RetrieverThread<T, C> retrieverThread = new RetrieverThread<>(name, criteria, result, wheres, orderBy, nativeExpressions, false, resultSet);
+    RetrieverThread<T, C> retrieverThread = new RetrieverThread<T, C>(name, criteria, result, wheres, orderBy, nativeExpressions, false, resultSet);
 
     retrieverThread.start();
     return resultSet;
@@ -2281,7 +2281,7 @@ public class CassandraCpoAdapter extends CpoBaseAdapter<ClusterDataSource> {
             CpoAttribute attribute = cpoClass.getAttributeData(row.getString(0));
 
             if (attribute != null) {
-              attribute.invokeSetter(rObj, new ResultSetCpoData(CassandraMethodMapper.getMethodMapper(), row, attribute, 1));
+              attribute.invokeSetter(rObj, new CassandraResultSetCpoData(CassandraMethodMapper.getMethodMapper(), row, attribute, 1));
               attributesSet++;
             }
           }
@@ -2293,7 +2293,7 @@ public class CassandraCpoAdapter extends CpoBaseAdapter<ClusterDataSource> {
             CpoAttribute attribute = cpoClass.getAttributeData(columnDefs.getName(k));
 
             if (attribute != null) {
-              attribute.invokeSetter(rObj, new ResultSetCpoData(CassandraMethodMapper.getMethodMapper(), row, attribute, k));
+              attribute.invokeSetter(rObj, new CassandraResultSetCpoData(CassandraMethodMapper.getMethodMapper(), row, attribute, k));
               attributesSet++;
             }
           }
@@ -2436,7 +2436,7 @@ public class CassandraCpoAdapter extends CpoBaseAdapter<ClusterDataSource> {
 
            for (int k = 0; k < columnCount; k++) {
              if (attributes[k] != null) {
-               attributes[k].invokeSetter(obj, new ResultSetCpoData(CassandraMethodMapper.getMethodMapper(), row, attributes[k], k));
+               attributes[k].invokeSetter(obj, new CassandraResultSetCpoData(CassandraMethodMapper.getMethodMapper(), row, attributes[k], k));
              }
            }
 

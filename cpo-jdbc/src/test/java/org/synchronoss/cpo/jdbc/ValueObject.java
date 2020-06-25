@@ -21,6 +21,7 @@
 package org.synchronoss.cpo.jdbc;
 
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.sql.Date;
 import java.sql.Time;
 import java.sql.Timestamp;
@@ -72,7 +73,7 @@ public interface ValueObject {
 
   public int getAttrSmallInt();
 
-  public BigDecimal getAttrBigInt();
+  public BigInteger getAttrBigInt();
 
   public BigDecimal getAttrReal();
 
@@ -122,7 +123,7 @@ public interface ValueObject {
 
   public void setAttrSmallInt(int attrSmallInt);
 
-  public void setAttrBigInt(BigDecimal attrBigInt);
+  public void setAttrBigInt(BigInteger attrBigInt);
 
   public void setAttrReal(BigDecimal attrReal);
 

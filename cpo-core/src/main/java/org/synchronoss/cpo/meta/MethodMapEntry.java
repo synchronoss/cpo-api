@@ -56,24 +56,6 @@ public class MethodMapEntry<J,D> implements java.io.Serializable, Cloneable {
       this.rsGetter = rsGetter;
   }
 
-//  public void setBsSetter(String setterName) throws CpoException {
-//    try {
-//        bsSetter = B.class.getMethod(setterName, new Class[]{int.class, getJavaSqlMethodClass()});
-//    } catch (NoSuchMethodException nsme) {
-//      logger.error("Error loading Setter" + setterName, nsme);
-//      throw new CpoException(nsme);
-//    }
-//  }
-//
-//  public void setRsGetter(String getterName) throws CpoException {
-//    try {
-//      rsGetter = R.class.getMethod(getterName, new Class[]{int.class});
-//    } catch (NoSuchMethodException nsme) {
-//      logger.error("Error loading Getter" + getterName, nsme);
-//      throw new CpoException(nsme);
-//    }
-//  }
-//
   public Class<J> getJavaClass() {
     return javaClass_;
   }

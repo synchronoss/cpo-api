@@ -264,8 +264,8 @@ public class BlobTrxTest {
 
     if (isSupportsBlobs) {
 
-      testBlob = new byte[0];
-      testBlob2 = new byte[0];
+      testBlob = new byte[1];
+      testBlob2 = new byte[1];
 
       LobValueObject lvo = new LobValueObjectBean(1, testBlob, testClob);
       LobValueObject lvo2 = null;

@@ -40,6 +40,7 @@ ID                      int primary key
 ,ATTR_DECIMAL            decimal(10,0) NULL
 ,ATTR_NUMERIC            decimal(10,0) NULL
 ,ATTR_SMALLINT           smallint  NULL
+,ATTR_BIGINT             numeric NULL
 ,ATTR_REAL               double precision     NULL
 ,ATTR_BLOB               blob         NULL
 ,ATTR_LONGTEXT           long     NULL

@@ -174,7 +174,7 @@
     </cpoFunctionGroup>
     <cpoFunctionGroup name="TestOrderByInsert" type="CREATE">
       <cpoFunction name="TestOrderByInsert">
-        <expression>insert into value_object (id,attr_varchar,attr_smallint) values (?,?,?)</expression>
+        <expression>insert into value_object (id,attr_varchar,attr_smallint,attr_bigint) values (?,?,?,?)</expression>
         <cpoArgument xsi:type="cpoj:ctJdbcArgument" xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
           <attributeName>id</attributeName>
           <cpoj:scope>IN</cpoj:scope>

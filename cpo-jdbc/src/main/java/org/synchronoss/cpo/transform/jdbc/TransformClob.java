@@ -20,11 +20,11 @@
  */
 package org.synchronoss.cpo.transform.jdbc;
 
-import oracle.sql.CLOB;
 import org.slf4j.*;
 import org.synchronoss.cpo.CpoException;
 import org.synchronoss.cpo.jdbc.*;
 
+import javax.sql.rowset.serial.SerialClob;
 import java.io.*;
 import java.sql.Clob;
 
@@ -43,9 +43,7 @@ public class TransformClob implements JdbcCpoTransform<Clob, char[]> {
   /**
    * Transforms the datasource object into an object required by the class
    *
-   * @param cpoAdapter The CpoAdapter for the datasource where the attribute is being retrieved
-   * @param parentObject The object that contains the attribute being retrieved.
-   * @param The object that represents the datasource object being retrieved
+   * @param clob The Clob from the database to be transformed into a byte array
    * @return The object to be stored in the attribute
    * @throws CpoException
    */
@@ -77,24 +75,18 @@ public class TransformClob implements JdbcCpoTransform<Clob, char[]> {
   /**
    * Transforms the data from the class attribute to the object required by the datasource
    *
-   * @param cpoAdapter The CpoAdapter for the datasource where the attribute is being persisted
-   * @param parentObject The object that contains the attribute being persisted.
+   * @param jpsf The JdbcPreparedStatementFactory to have access to the actual connection and be able to work with closeable items
    * @param attributeObject The object that represents the attribute being persisted.
    * @return The object to be stored in the datasource
    * @throws CpoException
    */
   @Override
   public Clob transformOut(JdbcPreparedStatementFactory jpsf, char[] attributeObject) throws CpoException {
-    CLOB newClob = null;
+    Clob newClob = null;
 
     try {
       if (attributeObject != null) {
-        newClob = CLOB.createTemporary(jpsf.getPreparedStatement().getConnection(), false, CLOB.DURATION_SESSION);
-        jpsf.AddReleasible(new OracleTemporaryClob(newClob));
-
-        Writer cos = newClob.setCharacterStream(0);
-        cos.write(attributeObject);
-        cos.close();
+        newClob = new SerialClob(attributeObject);
       }
     } catch (Exception e) {
       String msg = "Error CLOBing Char Array";

@@ -42,9 +42,7 @@ public class TransformBlob implements JdbcCpoTransform<Blob, byte[]> {
   /**
    * Transforms the datasource object into an object required by the class
    *
-   * @param cpoAdapter The CpoAdapter for the datasource where the attribute is being retrieved
-   * @param parentObject The object that contains the attribute being retrieved.
-   * @param The object that represents the datasource object being retrieved
+   * @param blob The Blob from the database to be transformed into a byte array
    * @return The object to be stored in the attribute
    * @throws CpoException
    */
@@ -78,8 +76,7 @@ public class TransformBlob implements JdbcCpoTransform<Blob, byte[]> {
   /**
    * Transforms the data from the class attribute to the object required by the datasource
    *
-   * @param cpoAdapter The CpoAdapter for the datasource where the attribute is being persisted
-   * @param parentObject The object that contains the attribute being persisted.
+   * @param jpsf The JdbcPreparedStatementFactory to have access to the actual connection and be able to work with closeable items
    * @param attributeObject The object that represents the attribute being persisted.
    * @return The object to be stored in the datasource
    * @throws CpoException

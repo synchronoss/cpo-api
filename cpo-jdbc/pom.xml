@@ -413,13 +413,13 @@
       </activation>
       <properties>
         <release.arguments>-Dcpo.db=${cpo.db}</release.arguments>
-        <cpo.skip.sql.plugin>true</cpo.skip.sql.plugin>
+        <cpo.skip.sql.plugin>false</cpo.skip.sql.plugin>
         <cpo.test.sqldir>src/test/resources/oracle</cpo.test.sqldir>
         <cpo.db.user>cpo</cpo.db.user>
         <cpo.db.pswd>cpo</cpo.db.pswd>
         <cpo.db.host>localhost</cpo.db.host>
-        <cpo.db.port>1521</cpo.db.port>
-        <cpo.db.database>DSAG_APP.sncrcorp.net</cpo.db.database>
+        <cpo.db.port>32118</cpo.db.port>
+        <cpo.db.database>XEPDB1</cpo.db.database>
         <cpo.db.url>jdbc:oracle:thin:@${cpo.db.host}:${cpo.db.port}/${cpo.db.database}</cpo.db.url>
         <cpo.db.userurl>jdbc:oracle:thin:${cpo.db.user}/${cpo.db.pswd}@${cpo.db.host}:${cpo.db.port}/${cpo.db.database}</cpo.db.userurl>
         <cpo.db.driver>oracle.jdbc.OracleDriver</cpo.db.driver>

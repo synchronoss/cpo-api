@@ -106,7 +106,6 @@ public class InsertObjectTest {
       ValueObject vo = readAdapter.retrieveBean(null, valObj, valObj, null, null);
       assertTrue("Ids do not match", vo.getId() == valObj.getId());
       assertTrue("Integers do not match", vo.getAttrInteger() == valObj.getAttrInteger());
-      assertEquals("BigIntegers do not match", bigInteger, vo.getAttrBigInt());
       assertEquals("Strings do not match", vo.getAttrVarChar(), valObj.getAttrVarChar());
       assertEquals("Timestamps do not match", vo.getAttrDatetime(), valObj.getAttrDatetime());
       assertTrue("boolean not stored correctly", vo.getAttrBit());

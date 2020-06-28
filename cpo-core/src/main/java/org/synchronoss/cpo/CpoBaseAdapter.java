@@ -773,6 +773,391 @@ public abstract class CpoBaseAdapter<T> extends CpoAdapterCache implements CpoAd
   }
 
   /**
+   * The CpoAdapter will check to see if this object exists in the datasource.
+   * <p/>
+   * <pre>Example:
+   * <code>
+   * <p/>
+   * class SomeObject so = new SomeObject();
+   * long count = 0;
+   * class CpoAdapter cpo = null;
+   * <p/>
+   * try {
+   * 	cpo = new CpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));
+   * } catch (CpoException ce) {
+   * 	// Handle the error
+   * 	cpo = null;
+   * }
+   * <p/>
+   * if (cpo!=null) {
+   * 	so.setId(1);
+   * 	so.setName("SomeName");
+   * 	try{
+   * 		count = cpo.existsObject(so);
+   * 		if (count>0) {
+   * 			// object exists
+   *    } else {
+   * 			// object does not exist
+   *    }
+   *  } catch (CpoException ce) {
+   * 		// Handle the error
+   *  }
+   * }
+   * </code>
+   * </pre>
+   *
+   * @param obj This is an object that has been defined within the metadata of the datasource. If the class is not
+   *            defined an exception will be thrown. This object will be searched for inside the datasource.
+   * @return The number of objects that exist in the datasource that match the specified object
+   * @throws CpoException Thrown if there are errors accessing the datasource
+   */
+  @Override
+  public <T> long existsObject(T obj) throws CpoException {
+    return this.existsObject(null, obj);
+  }
+
+  /**
+   * The CpoAdapter will check to see if this object exists in the datasource.
+   * <p/>
+   * <pre>Example:
+   * <code>
+   * <p/>
+   * class SomeObject so = new SomeObject();
+   * long count = 0;
+   * class CpoAdapter cpo = null;
+   * <p/>
+   * try {
+   * 	cpo = new CpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));
+   * } catch (CpoException ce) {
+   * 	// Handle the error
+   * 	cpo = null;
+   * }
+   * <p/>
+   * if (cpo!=null) {
+   * 	so.setId(1);
+   * 	so.setName("SomeName");
+   * 	try{
+   * 		count = cpo.existsObject("SomeExistCheck",so);
+   * 		if (count>0) {
+   * 			// object exists
+   *    } else {
+   * 			// object does not exist
+   *    }
+   *  } catch (CpoException ce) {
+   * 		// Handle the error
+   *  }
+   * }
+   * </code>
+   * </pre>
+   *
+   * @param name The String name of the EXISTS Function Group that will be used to create the object in the datasource.
+   *             null signifies that the default rules will be used.
+   * @param obj  This is an object that has been defined within the metadata of the datasource. If the class is not
+   *             defined an exception will be thrown. This object will be searched for inside the datasource.
+   * @return The number of objects that exist in the datasource that match the specified object
+   * @throws CpoException Thrown if there are errors accessing the datasource
+   */
+  @Override
+  public <T> long existsObject(String name, T obj) throws CpoException {
+    return this.existsObject(name, obj, null);
+  }
+
+  /**
+   * newOrderBy allows you to dynamically change the order of the objects in the resulting collection. This allows you
+   * to apply user input in determining the order of the collection
+   *
+   * @param attribute The name of the attribute from the pojo that will be sorted.
+   * @param ascending If true, sort ascending. If false sort descending.
+   * @return A CpoOrderBy object to be passed into retrieveBeans.
+   * @throws CpoException Thrown if there are errors accessing the datasource
+   */
+  @Override
+  public CpoOrderBy newOrderBy(String attribute, boolean ascending) throws CpoException {
+    return new BindableCpoOrderBy(attribute, ascending);
+  }
+
+  /**
+   * newOrderBy allows you to dynamically change the order of the objects in the resulting collection. This allows you
+   * to apply user input in determining the order of the collection
+   *
+   * @param marker    the marker that will be replaced in the expression with the string representation of this orderBy
+   * @param attribute The name of the attribute from the pojo that will be sorted.
+   * @param ascending If true, sort ascending. If false sort descending.
+   * @return A CpoOrderBy object to be passed into retrieveBeans.
+   * @throws CpoException Thrown if there are errors accessing the datasource
+   */
+  @Override
+  public CpoOrderBy newOrderBy(String marker, String attribute, boolean ascending) throws CpoException {
+    return new BindableCpoOrderBy(marker, attribute, ascending);
+  }
+
+  /**
+   * newOrderBy allows you to dynamically change the order of the objects in the resulting collection. This allows you
+   * to apply user input in determining the order of the collection
+   *
+   * @param attribute The name of the attribute from the pojo that will be sorted.
+   * @param ascending If true, sort ascending. If false sort descending.
+   * @param function  A string which represents a datasource function that will be called on the attribute. must be
+   *                  contained in the function string. The attribute name will be replaced at run-time with its datasource counterpart
+   * @return A CpoOrderBy object to be passed into retrieveBeans.
+   * @throws CpoException Thrown if there are errors accessing the datasource
+   */
+  @Override
+  public CpoOrderBy newOrderBy(String attribute, boolean ascending, String function) throws CpoException {
+    return new BindableCpoOrderBy(attribute, ascending, function);
+  }
+
+  /**
+   * newOrderBy allows you to dynamically change the order of the objects in the resulting collection. This allows you
+   * to apply user input in determining the order of the collection
+   *
+   * @param marker    the marker that will be replaced in the expression with the string representation of this orderBy
+   * @param attribute The name of the attribute from the pojo that will be sorted.
+   * @param ascending If true, sort ascending. If false sort descending.
+   * @param function  A string which represents a datasource function that will be called on the attribute. must be
+   *                  contained in the function string. The attribute name will be replaced at run-time with its datasource counterpart
+   * @return A CpoOrderBy object to be passed into retrieveBeans.
+   * @throws CpoException Thrown if there are errors accessing the datasource
+   */
+  @Override
+  public CpoOrderBy newOrderBy(String marker, String attribute, boolean ascending, String function) throws CpoException {
+    return new BindableCpoOrderBy(marker, attribute, ascending, function);
+  }
+
+  /**
+   * DOCUMENT ME!
+   *
+   * @return DOCUMENT ME!
+   * @throws CpoException DOCUMENT ME!
+   */
+  @Override
+  public CpoWhere newWhere() throws CpoException {
+    return new BindableCpoWhere();
+  }
+
+  /**
+   * DOCUMENT ME!
+   *
+   * @param logical DOCUMENT ME!
+   * @param attr    DOCUMENT ME!
+   * @param comp    DOCUMENT ME!
+   * @param value   DOCUMENT ME!
+   * @return DOCUMENT ME!
+   * @throws CpoException DOCUMENT ME!
+   */
+  @Override
+  public <T> CpoWhere newWhere(int logical, String attr, int comp, T value) throws CpoException {
+    return new BindableCpoWhere(logical, attr, comp, value);
+  }
+
+  /**
+   * DOCUMENT ME!
+   *
+   * @param logical DOCUMENT ME!
+   * @param attr    DOCUMENT ME!
+   * @param comp    DOCUMENT ME!
+   * @param value   DOCUMENT ME!
+   * @param not     DOCUMENT ME!
+   * @return DOCUMENT ME!
+   * @throws CpoException DOCUMENT ME!
+   */
+  @Override
+  public <T> CpoWhere newWhere(int logical, String attr, int comp, T value, boolean not) throws CpoException {
+    return new BindableCpoWhere(logical, attr, comp, value, not);
+  }
+
+  /**
+   * Persists the Object into the datasource. The CpoAdapter will check to see if this object exists in the datasource.
+   * If it exists, the object is updated in the datasource If the object does not exist, then it is created in the
+   * datasource. This method stores the object in the datasource. This method uses the default EXISTS, CREATE, and
+   * UPDATE Function Groups specified for this object.
+   * <p/>
+   * <pre>Example:
+   * <code>
+   * <p/>
+   * class SomeObject so = new SomeObject();
+   * class CpoAdapter cpo = null;
+   * <p/>
+   * try {
+   * 	cpo = new CpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));
+   * } catch (CpoException ce) {
+   * 	// Handle the error
+   * 	cpo = null;
+   * }
+   * <p/>
+   * if (cpo!=null) {
+   * 	so.setId(1);
+   * 	so.setName("SomeName");
+   * 	try{
+   * 		cpo.persistObject(so);
+   *  } catch (CpoException ce) {
+   * 		// Handle the error
+   *  }
+   * }
+   * </code>
+   * </pre>
+   *
+   * @param obj This is an object that has been defined within the metadata of the datasource. If the class is not
+   *            defined an exception will be thrown.
+   * @return A count of the number of objects persisted
+   * @throws CpoException Thrown if there are errors accessing the datasource
+   * @see #existsObject
+   * @see #insertObject
+   * @see #updateObject
+   */
+  @Override
+  public <T> long persistObject(T obj) throws CpoException {
+    return processUpdateGroup(obj, CpoAdapter.PERSIST_GROUP, null, null, null, null);
+  }
+
+  /**
+   * Persists the Object into the datasource. The CpoAdapter will check to see if this object exists in the datasource.
+   * If it exists, the object is updated in the datasource If the object does not exist, then it is created in the
+   * datasource. This method stores the object in the datasource.
+   * <p/>
+   * <pre>Example:
+   * <code>
+   * <p/>
+   * class SomeObject so = new SomeObject();
+   * class CpoAdapter cpo = null;
+   * <p/>
+   * try {
+   * 	cpo = new CpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));
+   * } catch (CpoException ce) {
+   * 	// Handle the error
+   * 	cpo = null;
+   * }
+   * <p/>
+   * if (cpo!=null) {
+   * 	so.setId(1);
+   * 	so.setName("SomeName");
+   * 	try{
+   * 		cpo.persistObject("persistSomeObject",so);
+   *  } catch (CpoException ce) {
+   * 		// Handle the error
+   *  }
+   * }
+   * </code>
+   * </pre>
+   *
+   * @param name The name which identifies which EXISTS, INSERT, and UPDATE Function Groups to execute to persist the
+   *             object.
+   * @param obj  This is an object that has been defined within the metadata of the datasource. If the class is not
+   *             defined an exception will be thrown.
+   * @return A count of the number of objects persisted
+   * @throws CpoException Thrown if there are errors accessing the datasource
+   * @see #existsObject
+   * @see #insertObject
+   * @see #updateObject
+   */
+  @Override
+  public <T> long persistObject(String name, T obj) throws CpoException {
+    return processUpdateGroup(obj, CpoAdapter.PERSIST_GROUP, name, null, null, null);
+  }
+
+  /**
+   * Persists a collection of Objects into the datasource. The CpoAdapter will check to see if this object exists in the
+   * datasource. If it exists, the object is updated in the datasource If the object does not exist, then it is created
+   * in the datasource. This method stores the object in the datasource. The objects in the collection will be treated
+   * as one transaction, meaning that if one of the objects fail being inserted or updated in the datasource then the
+   * entire collection will be rolled back.
+   * <p/>
+   * <pre>Example:
+   * <code>
+   * <p/>
+   * class SomeObject so = null;
+   * class CpoAdapter cpo = null;
+   * <p/>
+   * try {
+   * 	cpo = new CpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));
+   * } catch (CpoException ce) {
+   * 	// Handle the error
+   * 	cpo = null;
+   * }
+   * <p/>
+   * if (cpo!=null) {
+   * 	ArrayList al = new ArrayList();
+   * 	for (int i=0; i<3; i++){
+   * 		so = new SomeObject();
+   * 		so.setId(1);
+   * 		so.setName("SomeName");
+   * 		al.add(so);
+   *  }
+   * 	try{
+   * 		cpo.persistObjects(al);
+   *  } catch (CpoException ce) {
+   * 		// Handle the error
+   *  }
+   * }
+   * </code>
+   * </pre>
+   *
+   * @param coll This is a collection of objects that have been defined within the metadata of the datasource. If the
+   *             class is not defined an exception will be thrown.
+   * @return DOCUMENT ME!
+   * @throws CpoException Thrown if there are errors accessing the datasource
+   * @see #existsObject
+   * @see #insertObject
+   * @see #updateObject
+   */
+  @Override
+  public <T> long persistObjects(Collection<T> coll) throws CpoException {
+    return processUpdateGroup(coll, CpoAdapter.PERSIST_GROUP, null, null, null, null);
+  }
+
+  /**
+   * Persists a collection of Objects into the datasource. The CpoAdapter will check to see if this object exists in the
+   * datasource. If it exists, the object is updated in the datasource If the object does not exist, then it is created
+   * in the datasource. This method stores the object in the datasource. The objects in the collection will be treated
+   * as one transaction, meaning that if one of the objects fail being inserted or updated in the datasource then the
+   * entire collection will be rolled back.
+   * <p/>
+   * <pre>Example:
+   * <code>
+   * <p/>
+   * class SomeObject so = null;
+   * class CpoAdapter cpo = null;
+   * <p/>
+   * try {
+   * 	cpo = new CpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));
+   * } catch (CpoException ce) {
+   * 	// Handle the error
+   * 	cpo = null;
+   * }
+   * <p/>
+   * if (cpo!=null) {
+   * 	ArrayList al = new ArrayList();
+   * 	for (int i=0; i<3; i++){
+   * 		so = new SomeObject();
+   * 		so.setId(1);
+   * 		so.setName("SomeName");
+   * 		al.add(so);
+   *  }
+   * 	try{
+   * 		cpo.persistObjects("myPersist",al);
+   *  } catch (CpoException ce) {
+   * 		// Handle the error
+   *  }
+   * }
+   * </code>
+   * </pre>
+   *
+   * @param name The name which identifies which EXISTS, INSERT, and UPDATE Function Groups to execute to persist the
+   *             object.
+   * @param coll This is a collection of objects that have been defined within the metadata of the datasource. If the
+   *             class is not defined an exception will be thrown.
+   * @return DOCUMENT ME!
+   * @throws CpoException Thrown if there are errors accessing the datasource
+   * @see #existsObject
+   * @see #insertObject
+   * @see #updateObject
+   */
+  @Override
+  public <T> long persistObjects(String name, Collection<T> coll) throws CpoException {
+    return processUpdateGroup(coll, CpoAdapter.PERSIST_GROUP, name, null, null, null);
+  }
+
+  /**
    * DOCUMENT ME!
    *
    * @param obj       DOCUMENT ME!
@@ -810,6 +1195,8 @@ public abstract class CpoBaseAdapter<T> extends CpoAdapterCache implements CpoAd
    * @throws CpoException DOCUMENT ME!
    */
   protected abstract <T, C> T processExecuteGroup(String name, C criteria, T result) throws CpoException;
+
+  public abstract <T> long existsObject(String name, T obj, Collection<CpoWhere> wheres) throws CpoException;
 
   protected abstract <T, C> void processSelectGroup(String name, C criteria, T result, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeFunction> nativeExpressions,
                                              boolean useRetrieve, CpoResultSet<T> resultSet) throws CpoException;

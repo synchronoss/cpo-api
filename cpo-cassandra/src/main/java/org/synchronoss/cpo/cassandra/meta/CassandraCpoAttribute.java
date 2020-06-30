@@ -24,6 +24,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.CpoException;
 import org.synchronoss.cpo.cassandra.transform.CassandraCpoTransform;
+import org.synchronoss.cpo.helper.CpoClassLoader;
+import org.synchronoss.cpo.helper.ExceptionHelper;
 import org.synchronoss.cpo.meta.CpoMetaDescriptor;
 import org.synchronoss.cpo.meta.domain.CpoAttribute;
 
@@ -41,6 +43,11 @@ public class CassandraCpoAttribute extends CpoAttribute implements java.io.Seria
    * Version Id for this class.
    */
   private static final long serialVersionUID = 1L;
+  private String keyType_ = null;
+  private String valueType_ = null;
+  private Class<?> keyTypeClass = null;
+  private Class<?> valueTypeClass = null;
+
   //Transform attributes
   private CassandraCpoTransform cassandraTransform = null;
   private Method transformPSOutMethod = null;
@@ -48,8 +55,39 @@ public class CassandraCpoAttribute extends CpoAttribute implements java.io.Seria
   public CassandraCpoAttribute() {
   }
 
+  public String getKeyType() {
+    return keyType_;
+  }
 
-//  private void dumpMethod(Method m) {
+  public void setKeyType(String keyType) {
+    this.keyType_ = keyType;
+  }
+
+  public String getValueType() {
+    return valueType_;
+  }
+
+  public void setValueType(String valueType) {
+    this.valueType_ = valueType;
+  }
+
+  public Class<?> getKeyTypeClass() {
+    return keyTypeClass;
+  }
+
+  public void setKeyTypeClass(Class<?> keyTypeClass) {
+    this.keyTypeClass = keyTypeClass;
+  }
+
+  public Class<?> getValueTypeClass() {
+    return valueTypeClass;
+  }
+
+  public void setValueTypeClass(Class<?> valueTypeClass) {
+    this.valueTypeClass = valueTypeClass;
+  }
+
+  //  private void dumpMethod(Method m) {
 //    logger.debug("========================");
 //    logger.debug("===> Declaring Class: " + m.getDeclaringClass().getName());
 //    logger.debug("===> Method Signature: " + m.toString());
@@ -58,7 +96,26 @@ public class CassandraCpoAttribute extends CpoAttribute implements java.io.Seria
 //    logger.debug("===> Method isSynthetic: " + m.isSynthetic());
 //    logger.debug("========================");
 //  }
+  @Override
+  public void loadRunTimeInfo(CpoMetaDescriptor metaDescriptor, Class<?> metaClass) throws CpoException {
+    super.loadRunTimeInfo(metaDescriptor, metaClass);
 
+    setKeyTypeClass(getTypeClass(metaClass.getName(), getJavaName(), getKeyType(), "KeyType"));
+    setValueTypeClass(getTypeClass(metaClass.getName(), getJavaName(), getValueType(), "ValueType"));
+  }
+
+  protected Class getTypeClass(String className, String attributeName, String contextName, String contextType) throws CpoException {
+    Class contextClass=null;
+    try {
+      if (contextName!=null) {
+        logger.debug("Loading loading the "+contextType+" Class for " + className + "." + attributeName);
+        contextClass=CpoClassLoader.forName(contextName);
+      }
+    } catch (ClassNotFoundException cnfe) {
+      throw new CpoException(contextType + " class not found: " + contextName + ": " + ExceptionHelper.getLocalizedMessage(cnfe));
+    }
+    return contextClass;
+  }
   @Override
   protected void initTransformClass(CpoMetaDescriptor metaDescriptor) throws CpoException {
     super.initTransformClass(metaDescriptor);

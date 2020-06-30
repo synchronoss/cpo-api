@@ -63,18 +63,11 @@ public class CassandraBoundStatementCpoData extends AbstractBindableCpoData {
     try {
       switch (methodMapEntry.getMethodType()) {
         case CassandraMethodMapEntry.METHOD_TYPE_BASIC:
+        case CassandraMethodMapEntry.METHOD_TYPE_ONE:
+        case CassandraMethodMapEntry.METHOD_TYPE_TWO:
           methodMapEntry.getBsSetter().invoke(cpoStatementFactory.getBoundStatement(), getIndex(), param);
           break;
-        case CassandraMethodMapEntry.METHOD_TYPE_ONE:
-          CpoByteArrayInputStream cbais = CpoByteArrayInputStream.getCpoStream((InputStream) param);
-          // Get the length of the InputStream in param
-          methodMapEntry.getBsSetter().invoke(cpoStatementFactory.getBoundStatement(), getIndex(), cbais, cbais.getLength());
-          break;
-        case CassandraMethodMapEntry.METHOD_TYPE_TWO:
-          CpoCharArrayReader ccar = CpoCharArrayReader.getCpoReader((Reader) param);
-          // Get the length of the Reader in param
-          methodMapEntry.getBsSetter().invoke(cpoStatementFactory.getBoundStatement(), getIndex(), ccar, ccar.getLength());
-          break;
+        default: throw new CpoException("Invalid CassandraMethodMapEntry MetthodType: "+methodMapEntry.getMethodType());
       }
     } catch (Exception e) {
       throw new CpoException("Error Invoking Cassandra Method: " + methodMapEntry.getBsSetter().getName() + ":" + ExceptionHelper.getLocalizedMessage(e));

@@ -609,7 +609,7 @@ public class CassandraCpoAdapter extends CpoBaseAdapter<ClusterDataSource> {
           for(Row row : rs) {
             recordsExist = true;
             recordCount++;
-            CpoAttribute attribute = cpoClass.getAttributeData(row.getString(0));
+            CassandraCpoAttribute attribute = (CassandraCpoAttribute) cpoClass.getAttributeData(row.getString(0));
 
             if (attribute != null) {
               attribute.invokeSetter(rObj, new CassandraResultSetCpoData(CassandraMethodMapper.getMethodMapper(), row, attribute, 1));
@@ -621,7 +621,7 @@ public class CassandraCpoAdapter extends CpoBaseAdapter<ClusterDataSource> {
           recordCount++;
           Row row = rs.one();
           for (int k = 0; k < columnDefs.size(); k++) {
-            CpoAttribute attribute = cpoClass.getAttributeData(columnDefs.getName(k));
+            CassandraCpoAttribute attribute = (CassandraCpoAttribute) cpoClass.getAttributeData(columnDefs.getName(k));
 
             if (attribute != null) {
               attribute.invokeSetter(rObj, new CassandraResultSetCpoData(CassandraMethodMapper.getMethodMapper(), row, attribute, k));

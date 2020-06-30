@@ -20,7 +20,6 @@
  */
 package org.synchronoss.cpo.cassandra;
 
-import com.datastax.driver.core.*;
 import com.github.terma.javaniotcpproxy.StaticTcpProxyConfig;
 import com.github.terma.javaniotcpproxy.TcpProxy;
 import com.github.terma.javaniotcpproxy.TcpProxyConfig;
@@ -42,6 +41,7 @@ import static org.junit.Assert.fail;
 @RunWith (Suite.class)
 @Suite.SuiteClasses ({
   BlobTest.class,
+  CollectionsTest.class,
   ConstructorTest.class,
   DeleteObjectTest.class,
   EntityTest.class,
@@ -61,7 +61,7 @@ public class CassandraTestSuite {
   private static final Logger logger = LoggerFactory.getLogger(CassandraTestSuite.class);
 
   @ClassRule
-  public static final CassandraContainer cassandraContainer = new CassandraContainer().withInitScript("test.cql");
+  public static final CassandraContainer cassandraContainer = new CassandraContainer().withInitScript("initDB.cql");
   private static TcpProxy proxy;
 
   @BeforeClass

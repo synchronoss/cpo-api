@@ -105,18 +105,22 @@
       <javaType>java.util.List</javaType>
       <dataName>attr_list</dataName>
       <dataType>LIST</dataType>
+      <cpoc:valueType>java.lang.String</cpoc:valueType>
     </cpoAttribute>
     <cpoAttribute xmlns:cpoc="http://www.synchronoss.org/cpo/cassandra/CpoCassandraMeta.xsd" xsi:type="cpoc:ctCassandraAttribute">
       <javaName>attrMap</javaName>
       <javaType>java.util.Map</javaType>
       <dataName>attr_map</dataName>
       <dataType>MAP</dataType>
+      <cpoc:keyType>java.lang.String</cpoc:keyType>
+      <cpoc:valueType>java.lang.String</cpoc:valueType>
     </cpoAttribute>
     <cpoAttribute xmlns:cpoc="http://www.synchronoss.org/cpo/cassandra/CpoCassandraMeta.xsd" xsi:type="cpoc:ctCassandraAttribute">
       <javaName>attrSet</javaName>
       <javaType>java.util.Set</javaType>
       <dataName>attr_set</dataName>
       <dataType>SET</dataType>
+      <cpoc:valueType>java.lang.String</cpoc:valueType>
     </cpoAttribute>
     <cpoAttribute xmlns:cpoc="http://www.synchronoss.org/cpo/cassandra/CpoCassandraMeta.xsd" xsi:type="cpoc:ctCassandraAttribute">
       <javaName>attrText</javaName>
@@ -156,7 +160,7 @@
     </cpoAttribute>
     <cpoFunctionGroup type="CREATE">
       <cpoFunction name="ValueObject - Create">
-        <expression>insert into value_object(id, attr_ascii, attr_bigint, attr_blob, attr_bool, attr_decimal, attr_double, attr_float, attr_inet, attr_int, attr_text, attr_timestamp, attr_timeuuid, attr_uuid, attr_varchar, attr_varint) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)</expression>
+        <expression>insert into value_object(id, attr_ascii, attr_bigint, attr_blob, attr_bool, attr_decimal, attr_double, attr_float, attr_inet, attr_int, attr_text, attr_timestamp, attr_timeuuid, attr_uuid, attr_varchar, attr_varint, attr_list, attr_set, attr_map) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)</expression>
         <cpoArgument xmlns:cpoc="http://www.synchronoss.org/cpo/cassandra/CpoCassandraMeta.xsd" xsi:type="cpoc:ctCassandraArgument">
           <attributeName>id</attributeName>
         </cpoArgument>
@@ -204,6 +208,15 @@
         </cpoArgument>
         <cpoArgument xmlns:cpoc="http://www.synchronoss.org/cpo/cassandra/CpoCassandraMeta.xsd" xsi:type="cpoc:ctCassandraArgument">
           <attributeName>attrVarInt</attributeName>
+        </cpoArgument>
+        <cpoArgument xmlns:cpoc="http://www.synchronoss.org/cpo/cassandra/CpoCassandraMeta.xsd" xsi:type="cpoc:ctCassandraArgument">
+          <attributeName>attrList</attributeName>
+        </cpoArgument>
+        <cpoArgument xmlns:cpoc="http://www.synchronoss.org/cpo/cassandra/CpoCassandraMeta.xsd" xsi:type="cpoc:ctCassandraArgument">
+          <attributeName>attrSet</attributeName>
+        </cpoArgument>
+        <cpoArgument xmlns:cpoc="http://www.synchronoss.org/cpo/cassandra/CpoCassandraMeta.xsd" xsi:type="cpoc:ctCassandraArgument">
+          <attributeName>attrMap</attributeName>
         </cpoArgument>
       </cpoFunction>
     </cpoFunctionGroup>

@@ -19,8 +19,11 @@ CREATE TABLE value_object (
   attr_timestamp timestamp,
   attr_timeuuid timeuuid,
   attr_uuid uuid,
-  attr_varchar text,
-  attr_varint varint
+  attr_varchar varchar,
+  attr_varint varint,
+  attr_list list<varchar>,
+  attr_set set<varchar>,
+  attr_map map<text,varchar>
 );
 
 CREATE INDEX idx_attr_int on value_object (attr_int);

@@ -46,7 +46,7 @@ public abstract class ResultSetCpoData extends AbstractBindableCpoData {
     return rs;
   }
 
-  protected abstract Object invokeGetterImpl(MethodMapEntry<?, ?> methodMapEntry) throws IllegalAccessException, InvocationTargetException;
+  protected abstract Object invokeGetterImpl(CpoAttribute cpoAttribute, MethodMapEntry<?, ?> methodMapEntry) throws IllegalAccessException, InvocationTargetException;
 
   @Override
   public Object invokeGetter() throws CpoException {
@@ -58,7 +58,7 @@ public abstract class ResultSetCpoData extends AbstractBindableCpoData {
 
     try {
       // Get the getter for the Callable Statement
-      javaObject = transformIn(invokeGetterImpl(methodMapEntry));
+      javaObject = transformIn(invokeGetterImpl(getCpoAttribute(), methodMapEntry));
     } catch (IllegalAccessException iae) {
       logger.debug("Error Invoking ResultSet Method: " + ExceptionHelper.getLocalizedMessage(iae));
       throw new CpoException(iae);

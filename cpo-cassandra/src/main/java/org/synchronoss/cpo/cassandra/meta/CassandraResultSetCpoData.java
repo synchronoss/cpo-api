@@ -20,6 +20,7 @@
  */
 package org.synchronoss.cpo.cassandra.meta;
 
+import com.google.common.reflect.TypeToken;
 import org.synchronoss.cpo.meta.MethodMapEntry;
 import org.synchronoss.cpo.meta.MethodMapper;
 import org.synchronoss.cpo.meta.ResultSetCpoData;
@@ -33,8 +34,21 @@ public class CassandraResultSetCpoData extends ResultSetCpoData {
     super(methodMapper, rs, cpoAttribute, index);
   }
 
-  protected Object invokeGetterImpl(MethodMapEntry<?, ?> methodMapEntry) throws IllegalAccessException, InvocationTargetException {
-    return methodMapEntry.getRsGetter().invoke(getRs(), getIndex());
-  }
+  protected Object invokeGetterImpl(CpoAttribute cpoAttribute, MethodMapEntry<?, ?> methodMapEntry) throws IllegalAccessException, InvocationTargetException {
+    CassandraCpoAttribute cassandraCpoAttribute = (CassandraCpoAttribute) cpoAttribute;
 
+    Object javaObject=null;
+    switch (methodMapEntry.getMethodType()) {
+      case CassandraMethodMapEntry.METHOD_TYPE_BASIC:
+        javaObject = methodMapEntry.getRsGetter().invoke(getRs(), getIndex());
+        break;
+      case CassandraMethodMapEntry.METHOD_TYPE_ONE:
+        javaObject = methodMapEntry.getRsGetter().invoke(getRs(), getIndex(), TypeToken.of(cassandraCpoAttribute.getValueTypeClass()));
+        break;
+      case CassandraMethodMapEntry.METHOD_TYPE_TWO:
+        javaObject = methodMapEntry.getRsGetter().invoke(getRs(), getIndex(), TypeToken.of(cassandraCpoAttribute.getKeyTypeClass()), TypeToken.of(cassandraCpoAttribute.getValueTypeClass()));
+        break;
+    }
+    return javaObject;
+  }
 }

@@ -27,6 +27,8 @@ import com.datastax.driver.core.UDTValue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.CpoException;
+import org.synchronoss.cpo.cassandra.cpoCassandraMeta.CtCassandraAttribute;
+import org.synchronoss.cpo.core.cpoCoreMeta.CtAttribute;
 import org.synchronoss.cpo.meta.AbstractCpoMetaAdapter;
 import org.synchronoss.cpo.meta.DataTypeMapEntry;
 import org.synchronoss.cpo.meta.DataTypeMapper;
@@ -60,6 +62,18 @@ public class CassandraCpoMetaAdapter extends AbstractCpoMetaAdapter {
   @Override
   public ExpressionParser getExpressionParser() throws CpoException {
     return new BoundExpressionParser();
+  }
+
+  @Override
+  protected void loadCpoAttribute(CpoAttribute cpoAttribute, CtAttribute ctAttribute) {
+    super.loadCpoAttribute(cpoAttribute, ctAttribute);
+
+    // cast to the expected subclasses
+    CassandraCpoAttribute cassandraAttribute = (CassandraCpoAttribute)cpoAttribute;
+    CtCassandraAttribute ctCassandraAttribute = (CtCassandraAttribute)ctAttribute;
+
+    cassandraAttribute.setKeyType(ctCassandraAttribute.getKeyType());
+    cassandraAttribute.setValueType(ctCassandraAttribute.getValueType());
   }
 
   private static DataTypeMapper initDataTypeMapper() {

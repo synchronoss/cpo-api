@@ -52,7 +52,7 @@ public class EntityTest {
           fail(attribute.toString()+" Attribute is not a CassandraCpoAttribute");
         dumpAttribute((CassandraCpoAttribute)attribute);
       }
-      assertTrue("List size is " + attributes.size(), attributes.size() == 17);
+      assertTrue("List size is " + attributes.size(), attributes.size() == 20);
     } catch (Exception e) {
       fail(method + e.getMessage());
     }

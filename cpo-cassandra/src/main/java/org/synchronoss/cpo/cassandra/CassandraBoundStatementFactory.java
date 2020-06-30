@@ -55,8 +55,6 @@ public class CassandraBoundStatementFactory extends CpoStatementFactory implemen
   private BoundStatement boundStatement;
 
   private List<CpoReleasible> releasibles = new ArrayList<>();
-  private static final String WHERE_MARKER = "__CPO_WHERE__";
-  private static final String ORDERBY_MARKER = "__CPO_ORDERBY__";
 
   /**
    * Used to build the PreparedStatement that is used by CPO to create the actual JDBC PreparedStatement.
@@ -75,7 +73,6 @@ public class CassandraBoundStatementFactory extends CpoStatementFactory implemen
    * PreparedStatement
    *
    * @throws org.synchronoss.cpo.CpoException if a CPO error occurs
-   * @throws java.sql.SQLException if a JDBC error occurs
    */
   public <T> CassandraBoundStatementFactory(Session sess, CassandraCpoAdapter cassandraCpoAdapter, CpoClass criteria,
                                             CpoFunction function, T obj, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy,

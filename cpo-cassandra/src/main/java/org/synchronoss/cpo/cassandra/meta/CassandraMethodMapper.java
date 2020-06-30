@@ -22,9 +22,11 @@ package org.synchronoss.cpo.cassandra.meta;
 
 import com.datastax.driver.core.BoundStatement;
 import com.datastax.driver.core.Row;
+import com.google.common.reflect.TypeToken;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.CpoException;
+import org.synchronoss.cpo.meta.MethodMapEntry;
 import org.synchronoss.cpo.meta.MethodMapper;
 
 import java.io.Serializable;
@@ -33,6 +35,9 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.net.InetAddress;
 import java.nio.ByteBuffer;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 /**
@@ -76,11 +81,11 @@ public class CassandraMethodMapper implements Serializable, Cloneable {
     mapper.addMethodMapEntry(makeCassandraMethodMapEntry(CassandraMethodMapEntry.METHOD_TYPE_BASIC, InetAddress.class, InetAddress.class, "getInet", "setInet"));
     mapper.addMethodMapEntry(makeCassandraMethodMapEntry(CassandraMethodMapEntry.METHOD_TYPE_BASIC, int.class, int.class, "getInt", "setInt"));
     mapper.addMethodMapEntry(makeCassandraMethodMapEntry(CassandraMethodMapEntry.METHOD_TYPE_BASIC, Integer.class, int.class, "getInt", "setInt"));
-//    mapper.addMethodMapEntry(makeCassandraMethodMapEntry(CassandraMethodMapEntry.METHOD_TYPE_ONE, List.class, List.class, "getList", "setList"));
+    mapper.addMethodMapEntry(makeCassandraMethodMapEntry(CassandraMethodMapEntry.METHOD_TYPE_ONE, List.class, List.class, "getList", "setList"));
     mapper.addMethodMapEntry(makeCassandraMethodMapEntry(CassandraMethodMapEntry.METHOD_TYPE_BASIC, long.class, long.class, "getLong", "setLong"));
     mapper.addMethodMapEntry(makeCassandraMethodMapEntry(CassandraMethodMapEntry.METHOD_TYPE_BASIC, Long.class, long.class, "getLong", "setLong"));
-//    mapper.addMethodMapEntry(makeCassandraMethodMapEntry(CassandraMethodMapEntry.METHOD_TYPE_TWO, Map.class, Map.class, "getMap", "setMap"));
-//    mapper.addMethodMapEntry(makeCassandraMethodMapEntry(CassandraMethodMapEntry.METHOD_TYPE_TWO, Set.class, Set.class, "getSet", "setSet"));
+    mapper.addMethodMapEntry(makeCassandraMethodMapEntry(CassandraMethodMapEntry.METHOD_TYPE_TWO, Map.class, Map.class, "getMap", "setMap"));
+    mapper.addMethodMapEntry(makeCassandraMethodMapEntry(CassandraMethodMapEntry.METHOD_TYPE_ONE, Set.class, Set.class, "getSet", "setSet"));
     mapper.addMethodMapEntry(makeCassandraMethodMapEntry(CassandraMethodMapEntry.METHOD_TYPE_BASIC, short.class, short.class, "getShort", "setShort"));
     mapper.addMethodMapEntry(makeCassandraMethodMapEntry(CassandraMethodMapEntry.METHOD_TYPE_BASIC, Short.class, short.class, "getShort", "setShort"));
     mapper.addMethodMapEntry(makeCassandraMethodMapEntry(CassandraMethodMapEntry.METHOD_TYPE_BASIC, String.class, String.class, "getString", "setString"));
@@ -116,14 +121,25 @@ public class CassandraMethodMapper implements Serializable, Cloneable {
   }
 
   public static <M> Method loadGetter(int methodType, Class<M> methodClass, String getterName) throws IllegalArgumentException {
-    Method getter;
+    Method getter=null;
     try {
-      getter = methodClass.getMethod(getterName, new Class[]{int.class});
+      switch (methodType) {
+        case CassandraMethodMapEntry.METHOD_TYPE_BASIC:
+          getter = methodClass.getMethod(getterName, new Class[]{int.class});
+          break;
+        case CassandraMethodMapEntry.METHOD_TYPE_ONE:
+          getter = methodClass.getMethod(getterName, new Class[]{int.class, TypeToken.class});
+          break;
+        case CassandraMethodMapEntry.METHOD_TYPE_TWO:
+          getter = methodClass.getMethod(getterName, new Class[]{int.class, TypeToken.class, TypeToken.class});
+          break;
+        default:
+          throw new IllegalArgumentException("Illegal Method Type:"+methodType);
+      }
     } catch (NoSuchMethodException nsme) {
       logger.error("Error loading Getter" + getterName, nsme);
       throw new IllegalArgumentException(nsme);
     }
     return getter;
   }
-
 }

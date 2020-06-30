@@ -22,11 +22,9 @@ package org.synchronoss.cpo.cassandra.meta;
 
 import com.datastax.driver.core.BoundStatement;
 import com.datastax.driver.core.Row;
-import com.google.common.reflect.TypeToken;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.CpoException;
-import org.synchronoss.cpo.meta.MethodMapEntry;
 import org.synchronoss.cpo.meta.MethodMapper;
 
 import java.io.Serializable;
@@ -128,10 +126,10 @@ public class CassandraMethodMapper implements Serializable, Cloneable {
           getter = methodClass.getMethod(getterName, new Class[]{int.class});
           break;
         case CassandraMethodMapEntry.METHOD_TYPE_ONE:
-          getter = methodClass.getMethod(getterName, new Class[]{int.class, TypeToken.class});
+          getter = methodClass.getMethod(getterName, new Class[]{int.class, Class.class});
           break;
         case CassandraMethodMapEntry.METHOD_TYPE_TWO:
-          getter = methodClass.getMethod(getterName, new Class[]{int.class, TypeToken.class, TypeToken.class});
+          getter = methodClass.getMethod(getterName, new Class[]{int.class, Class.class, Class.class});
           break;
         default:
           throw new IllegalArgumentException("Illegal Method Type:"+methodType);

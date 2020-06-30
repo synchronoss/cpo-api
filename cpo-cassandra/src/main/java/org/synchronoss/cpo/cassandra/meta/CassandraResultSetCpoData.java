@@ -20,7 +20,6 @@
  */
 package org.synchronoss.cpo.cassandra.meta;
 
-import com.google.common.reflect.TypeToken;
 import org.synchronoss.cpo.meta.MethodMapEntry;
 import org.synchronoss.cpo.meta.MethodMapper;
 import org.synchronoss.cpo.meta.ResultSetCpoData;
@@ -43,10 +42,10 @@ public class CassandraResultSetCpoData extends ResultSetCpoData {
         javaObject = methodMapEntry.getRsGetter().invoke(getRs(), getIndex());
         break;
       case CassandraMethodMapEntry.METHOD_TYPE_ONE:
-        javaObject = methodMapEntry.getRsGetter().invoke(getRs(), getIndex(), TypeToken.of(cassandraCpoAttribute.getValueTypeClass()));
+        javaObject = methodMapEntry.getRsGetter().invoke(getRs(), getIndex(), cassandraCpoAttribute.getValueTypeClass());
         break;
       case CassandraMethodMapEntry.METHOD_TYPE_TWO:
-        javaObject = methodMapEntry.getRsGetter().invoke(getRs(), getIndex(), TypeToken.of(cassandraCpoAttribute.getKeyTypeClass()), TypeToken.of(cassandraCpoAttribute.getValueTypeClass()));
+        javaObject = methodMapEntry.getRsGetter().invoke(getRs(), getIndex(), cassandraCpoAttribute.getKeyTypeClass(), cassandraCpoAttribute.getValueTypeClass());
         break;
     }
     return javaObject;

@@ -33,7 +33,7 @@ public class JdbcResultSetCpoData extends ResultSetCpoData {
     super(methodMapper, rs, cpoAttribute, index);
   }
 
-  protected Object invokeGetterImpl(MethodMapEntry<?, ?> methodMapEntry) throws IllegalAccessException, InvocationTargetException {
+  protected Object invokeGetterImpl(CpoAttribute cpoAttribute, MethodMapEntry<?, ?> methodMapEntry) throws IllegalAccessException, InvocationTargetException {
     Object javaObject=null;
     switch (methodMapEntry.getMethodType()) {
       case JdbcMethodMapEntry.METHOD_TYPE_BASIC:

@@ -30,6 +30,10 @@ import org.synchronoss.cpo.jta.CpoXaResource;
 import org.synchronoss.cpo.meta.CpoMetaDescriptor;
 
 import java.io.*;
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.*;
 
 /**
@@ -38,11 +42,16 @@ import java.util.*;
 public final class CpoAdapterFactoryManager extends CpoAdapterFactoryCache {
 
   private static final Logger logger = LoggerFactory.getLogger(CpoAdapterFactoryManager.class);
+  private static final String CPO_CONFIG = "CPO_CONFIG";
   private static final String CPO_CONFIG_XML = "/cpoConfig.xml";
   private static String defaultContext = null;
 
   static {
-    loadAdapters(CPO_CONFIG_XML);
+    String cpoConfig = System.getenv(CPO_CONFIG);
+    if (cpoConfig==null)
+      cpoConfig=CPO_CONFIG_XML;
+
+    loadAdapters(cpoConfig);
   }
 
   public static CpoAdapter getCpoAdapter() throws CpoException {
@@ -88,17 +97,30 @@ public final class CpoAdapterFactoryManager extends CpoAdapterFactoryCache {
   /**
    * LoadAdapters is responsible for loading the config file and then subsequently loading all the metadata.
    *
-   * @param configFile
+   * @param cpoConfig
    */
-  synchronized public static void loadAdapters(String configFile) {
+  synchronized public static void loadAdapters(String cpoConfig) {
+    InputStream is = null;
 
-    InputStream is = CpoClassLoader.getResourceAsStream(configFile);
+    // See if the file is a uri
+    try {
+      URL cpoConfigUrl = new URL(cpoConfig);
+      is = cpoConfigUrl.openStream();
+    } catch (IOException e) {
+      logger.info("Uri Not Found: " + cpoConfig);
+    }
+
+    // See if the file is a resource in the jar
+    if (is == null)
+      is = CpoClassLoader.getResourceAsStream(cpoConfig);
+
     if (is == null) {
-      logger.info("Resource Not Found: " + configFile);
+      logger.info("Resource Not Found: " + cpoConfig);
       try {
-        is = new FileInputStream(configFile);
+        //See if the file is a local file on the server
+        is = new FileInputStream(cpoConfig);
       } catch (FileNotFoundException fnfe) {
-        logger.info("File Not Found: " + configFile);
+        logger.info("File Not Found: " + cpoConfig);
         is = null;
       }
     }
@@ -106,32 +128,33 @@ public final class CpoAdapterFactoryManager extends CpoAdapterFactoryCache {
     try {
       CpoConfigDocument configDoc;
       if (is == null) {
-        configDoc = CpoConfigDocument.Factory.parse(configFile);
+        //See if the config is sent in as a string
+        configDoc = CpoConfigDocument.Factory.parse(cpoConfig);
       } else {
         configDoc = CpoConfigDocument.Factory.parse(is);
       }
 
       String errMsg = XmlBeansHelper.validateXml(configDoc);
       if (errMsg != null) {
-        logger.error("Invalid CPO Config file: " + configFile + ":" + errMsg);
+        logger.error("Invalid CPO Config file: " + cpoConfig + ":" + errMsg);
       } else {
-        logger.info("Processing Config File: " + configFile);
+        logger.info("Processing Config File: " + cpoConfig);
         // Moving the clear to here to make sure we get a good file before we just blow away all the adapters.
         // We are doing a load clear all the caches first, in case the load gets called more than once.
         CpoMetaDescriptor.clearAllInstances();
         clearCpoAdapterFactoryCache();
 
-        CtCpoConfig cpoConfig = configDoc.getCpoConfig();
+        CtCpoConfig ctCpoConfig = configDoc.getCpoConfig();
 
         // Set the default context.
-        if (cpoConfig.isSetDefaultConfig()) {
-          defaultContext = cpoConfig.getDefaultConfig();
+        if (ctCpoConfig.isSetDefaultConfig()) {
+          defaultContext = ctCpoConfig.getDefaultConfig();
         } else {
           // make the first listed config the default.
-          defaultContext = cpoConfig.getDataConfigArray(0).getName();
+          defaultContext = ctCpoConfig.getDataConfigArray(0).getName();
         }
 
-        for (CtMetaDescriptor metaDescriptor : cpoConfig.getMetaConfigArray()) {
+        for (CtMetaDescriptor metaDescriptor : ctCpoConfig.getMetaConfigArray()) {
           boolean caseSensitive = true;
           if (metaDescriptor.isSetCaseSensitive()) {
             caseSensitive = metaDescriptor.getCaseSensitive();
@@ -142,7 +165,7 @@ public final class CpoAdapterFactoryManager extends CpoAdapterFactoryCache {
         }
 
         // now lets loop through all the adapters and get them cached.
-        for (CtDataSourceConfig dataSourceConfig : cpoConfig.getDataConfigArray()) {
+        for (CtDataSourceConfig dataSourceConfig : ctCpoConfig.getDataConfigArray()) {
           CpoAdapterFactory cpoAdapterFactory = makeCpoAdapterFactory(dataSourceConfig);
           if (cpoAdapterFactory != null) {
             addCpoAdapterFactory(dataSourceConfig.getName(), cpoAdapterFactory);
@@ -150,11 +173,14 @@ public final class CpoAdapterFactoryManager extends CpoAdapterFactoryCache {
         }
       }
     } catch (IOException ioe) {
-      logger.error("Error reading " + configFile + ": ", ioe);
+      logger.error("Error reading " + cpoConfig + ": ", ioe);
     } catch (XmlException xe) {
-      logger.error("Error processing " + configFile + ": Invalid XML", xe);
+      logger.error("Error processing " + cpoConfig + ": Invalid XML", xe);
     } catch (CpoException ce) {
-      logger.error("Error processing " + configFile + ": ", ce);
+      logger.error("Error processing " + cpoConfig + ": ", ce);
+    } finally {
+      if (is != null)
+        try { is.close(); } catch (Exception e) {}
     }
   }
 

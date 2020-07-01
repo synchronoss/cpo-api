@@ -32,6 +32,7 @@ import org.synchronoss.cpo.parser.ExpressionParser;
 
 import java.io.*;
 import java.lang.reflect.*;
+import java.net.URL;
 import java.util.*;
 
 /**
@@ -140,10 +141,24 @@ public class CpoMetaDescriptor extends CpoMetaDescriptorCache implements CpoMeta
     String metaDescriptorClassName = null;
 
     for (String metaXml : metaXmls) {
-      InputStream is = CpoClassLoader.getResourceAsStream(metaXml);
+      InputStream is = null;
+
+      // See if the file is a uri
+      try {
+        URL cpoConfigUrl = new URL(metaXml);
+        is = cpoConfigUrl.openStream();
+      } catch (IOException e) {
+        logger.info("Uri Not Found: " + metaXml);
+      }
+
+      // See if the file is a resource in the jar
+      if (is == null)
+        is = CpoClassLoader.getResourceAsStream(metaXml);
+
       if (is == null) {
         logger.info("Resource Not Found: " + metaXml);
         try {
+          //See if the file is a local file on the server
           is = new FileInputStream(metaXml);
         } catch (FileNotFoundException fnfe) {
           logger.info("File Not Found: " + metaXml);
@@ -153,6 +168,7 @@ public class CpoMetaDescriptor extends CpoMetaDescriptorCache implements CpoMeta
       try {
         CpoMetaDataDocument metaDataDoc;
         if (is == null) {
+          //See if the config is sent in as a string
           metaDataDoc = CpoMetaDataDocument.Factory.parse(metaXml);
         } else {
           metaDataDoc = CpoMetaDataDocument.Factory.parse(is);

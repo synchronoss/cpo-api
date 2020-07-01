@@ -97,6 +97,9 @@
             <!-- all tests should be in the suite -->
             <include>org/synchronoss/cpo/cassandra/CassandraTestSuite.java</include>
           </includes>
+          <environmentVariables>
+            <CPO_CONFIG>${project.baseUri}target/test-classes/cpoConfig.xml</CPO_CONFIG>
+          </environmentVariables>
         </configuration>
       </plugin>
     </plugins>
@@ -110,7 +113,7 @@
       <properties>
         <cpo.cassandra.contactPoint>127.0.0.1</cpo.cassandra.contactPoint>
         <cpo.cassandra.keyspace>cpokeyspace</cpo.cassandra.keyspace>
-        <cpo.cassandra.metaXml>/cassandraMetaData.xml</cpo.cassandra.metaXml>
+        <cpo.cassandra.metaXml>${project.baseUri}target/test-classes/cassandraMetaData.xml</cpo.cassandra.metaXml>
         <cpo.cassandra.nativeport>9142</cpo.cassandra.nativeport>
         <cpo.cassandra.storageport>7010</cpo.cassandra.storageport>
         <cpo.cassandra.sslstorageport>7011</cpo.cassandra.sslstorageport>

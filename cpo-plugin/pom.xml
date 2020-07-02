@@ -37,11 +37,6 @@
   <description>CPO Maven Plugin</description>
   <properties>
     <maven.version>3.0.5</maven.version>
-    <oracleVersion>19.3.0.0</oracleVersion>
-    <mysqlVersion>8.0.20</mysqlVersion>
-    <mariadbVersion>2.6.0</mariadbVersion>
-    <h2Version>1.4.200</h2Version>
-    <postgresVersion>42.2.14</postgresVersion>
   </properties>
   <dependencies>
     <dependency>
@@ -54,22 +49,9 @@
       <artifactId>slf4j-api</artifactId>
       <scope>compile</scope>
     </dependency>
-    <!-- for the plugin, have it log to standard out -->
-<!--    <dependency>-->
-<!--      <groupId>org.slf4j</groupId>-->
-<!--      <artifactId>slf4j-simple</artifactId>-->
-<!--      <version>${slf4jVersion}</version>-->
-<!--      <scope>compile</scope>-->
-<!--    </dependency>-->
     <dependency>
       <groupId>org.synchronoss.cpo</groupId>
       <artifactId>cpo-core</artifactId>
-      <version>5.2.2-SNAPSHOT</version>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.synchronoss.cpo</groupId>
-      <artifactId>cpo-jdbc</artifactId>
       <version>5.2.2-SNAPSHOT</version>
       <scope>compile</scope>
     </dependency>
@@ -135,31 +117,6 @@
       <artifactId>log4j</artifactId>
       <scope>test</scope>
     </dependency>
-    <!-- JDBC Drivers -->
-    <dependency>
-      <groupId>com.oracle.ojdbc</groupId>
-      <artifactId>ojdbc8</artifactId>
-      <version>${oracleVersion}</version>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
-      <groupId>mysql</groupId>
-      <artifactId>mysql-connector-java</artifactId>
-      <version>${mysqlVersion}</version>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
-        <groupId>com.h2database</groupId>
-        <artifactId>h2</artifactId>
-        <version>${h2Version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.postgresql</groupId>
-      <artifactId>postgresql</artifactId>
-      <version>${postgresVersion}</version>
-      <scope>compile</scope>
-    </dependency>
-    <!-- JDBC Drivers -->
   </dependencies>
   <build>
     <plugins>

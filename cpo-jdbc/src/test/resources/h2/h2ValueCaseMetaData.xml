@@ -22,7 +22,7 @@
 
 -->
 <cpoMetaData xmlns="http://www.synchronoss.org/cpo/core/CpoCoreMeta.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" metaDescriptor="org.synchronoss.cpo.jdbc.meta.JdbcCpoMetaDescriptor" defaultPackageName="">
-  <cpoClass name="org.synchronoss.cpo.jdbc.ValueObject">
+  <cpoClass name="org.synchronoss.cpo.jdbc.CaseValueObject">
     <cpoAttribute xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xsi:type="cpoj:ctJdbcAttribute">
       <javaName>attrNumeric</javaName>
       <javaType>java.math.BigDecimal</javaType>
@@ -65,9 +65,9 @@
     </cpoAttribute>
     <cpoAttribute xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xsi:type="cpoj:ctJdbcAttribute">
       <javaName>id</javaName>
-      <javaType>java.math.BigDecimal</javaType>
+      <javaType>int</javaType>
       <dataName>iD</dataName>
-      <dataType>NUMERIC</dataType>
+      <dataType>INTEGER</dataType>
       <cpoj:dbTable>value_object</cpoj:dbTable>
       <cpoj:dbColumn>id</cpoj:dbColumn>
     </cpoAttribute>

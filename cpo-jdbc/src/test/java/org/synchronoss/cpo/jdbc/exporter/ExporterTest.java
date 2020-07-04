@@ -111,7 +111,7 @@ public class ExporterTest {
       CpoLegacyClassSourceGenerator classSourceGenerator = new CpoLegacyClassSourceGenerator(metaDescriptor);
 
       logger.debug("Generating java source");
-      CpoClass cpoClass = metaDescriptor.getMetaClass(new ValueObjectBean());
+      CpoClass cpoClass = metaDescriptor.getMetaClass(ValueObjectFactory.createValueObject());
       cpoClass.acceptMetaDFVisitor(classSourceGenerator);
       String classSource = classSourceGenerator.getSourceCode();
 
@@ -151,7 +151,7 @@ public class ExporterTest {
       CpoInterfaceSourceGenerator interfaceSourceGenerator = new CpoInterfaceSourceGenerator(metaDescriptor);
 
       logger.debug("Generating interface source");
-      CpoClass cpoClass = metaDescriptor.getMetaClass(new ValueObjectBean());
+      CpoClass cpoClass = metaDescriptor.getMetaClass(ValueObjectFactory.createValueObject());
       cpoClass.acceptMetaDFVisitor(interfaceSourceGenerator);
       String interfaceSource = interfaceSourceGenerator.getSourceCode();
 
@@ -191,7 +191,7 @@ public class ExporterTest {
       CpoInterfaceSourceGenerator interfaceSourceGenerator = new CpoInterfaceSourceGenerator(metaDescriptor);
 
       logger.debug("Generating interface source");
-      CpoClass cpoClass = metaDescriptor.getMetaClass(new ValueObjectBean());
+      CpoClass cpoClass = metaDescriptor.getMetaClass(ValueObjectFactory.createValueObject());
       cpoClass.acceptMetaDFVisitor(interfaceSourceGenerator);
       String interfaceSource = interfaceSourceGenerator.getSourceCode();
 

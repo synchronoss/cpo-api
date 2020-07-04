@@ -176,14 +176,6 @@ public class CpoClassSourceGenerator implements MetaVisitor {
 
     String attName = scrubName(cpoAttribute.getJavaName());
 
-    if (cpoAttribute.getTransformClassName()!=null && cpoAttribute.getTransformInMethod()==null) {
-      try {
-        cpoAttribute.loadRunTimeInfo(metaDescriptor, null);
-      } catch (Exception e) {
-        // ignore
-      }
-    }
-
     // the getter name is get concatenated with the camel case of the attribute name
     String getterName;
     String setterName;
@@ -195,56 +187,52 @@ public class CpoClassSourceGenerator implements MetaVisitor {
       setterName = ("set" + attName.toUpperCase());
     }
 
-    try {
-      Class<?> attClass = metaDescriptor.getDataTypeJavaClass(cpoAttribute);
-      String attClassName = metaDescriptor.getDataTypeName(cpoAttribute);
+    String attClassName = cpoAttribute.getJavaType();
+    Class<?> attClass = getAttributeClass(attClassName);
 
-      // generate attribute statics
-      String staticName = ATTR_PREFIX + attName.toUpperCase();
-      attributeStatics.append("  public final static String " + staticName + " = \"" + attName + "\";\n");
+    // generate attribute statics
+    String staticName = ATTR_PREFIX + attName.toUpperCase();
+    attributeStatics.append("  public final static String " + staticName + " = \"" + attName + "\";\n");
 
-      // generate property declarations
-      properties.append("  protected " + attClassName + " " + attName + ";\n");
+    // generate property declarations
+    properties.append("  protected " + attClassName + " " + attName + ";\n");
 
-      // generate getter
-      gettersSetters.append("  public " + attClassName + " " + getterName + " {\n");
-      gettersSetters.append("    return this." + attName + ";\n");
-      gettersSetters.append("  }\n\n");
+    // generate getter
+    gettersSetters.append("  public " + attClassName + " " + getterName + " {\n");
+    gettersSetters.append("    return this." + attName + ";\n");
+    gettersSetters.append("  }\n\n");
 
-      // generate setter
-      gettersSetters.append("  public void " + setterName + "(" + attClassName + " " + attName + ") {\n");
-      gettersSetters.append("    this." + attName + " = " + attName + ";\n");
-      gettersSetters.append("  }\n\n");
+    // generate setter
+    gettersSetters.append("  public void " + setterName + "(" + attClassName + " " + attName + ") {\n");
+    gettersSetters.append("    this." + attName + " = " + attName + ";\n");
+    gettersSetters.append("  }\n\n");
 
-      // equals()
-      if (attClass.isPrimitive()) {
-        // primitive type, use ==
-        equals.append("    if (" + getterName + " != that." + getterName + ")\n");
-      } else if (attClass.isArray()) {
-        // array type, use Array.equals()
-        equals.append("    if (!java.util.Arrays.equals(" + getterName + ", that." + getterName + "))\n");
-      } else {
-        // object, use .equals
-        equals.append("    if (" + getterName + " != null ? !" + getterName + ".equals(that." + getterName + ") : that." + getterName + " != null)\n");
-      }
-      equals.append("      return false;\n");
-
-      // hashCode()
-      if (attClass.isPrimitive()) {
-        // primitive type, need some magic
-        hashCode.append("    result = 31 * result + (String.valueOf(" + getterName + ").hashCode());\n");
-      } else if (attClass.isArray()) {
-        // array type, use Array.hashCode()
-        hashCode.append("    result = 31 * result + (" + getterName + "!= null ? java.util.Arrays.hashCode(" + getterName + ") : 0);\n");
-      } else {
-        hashCode.append("    result = 31 * result + (" + getterName + " != null ? " + getterName + ".hashCode() : 0);\n");
-      }
-
-      // toString()
-      toString.append("    str.append(\"" + attName + " = \" + " + getterName + " + \"\\n\");\n");
-    } catch(CpoException ce) {
-      // ignore
+    // equals()
+    if (attClass.isPrimitive()) {
+      // primitive type, use ==
+      equals.append("    if (" + getterName + " != that." + getterName + ")\n");
+    } else if (attClass.isArray()) {
+      // array type, use Array.equals()
+      equals.append("    if (!java.util.Arrays.equals(" + getterName + ", that." + getterName + "))\n");
+    } else {
+      // object, use .equals
+      equals.append("    if (" + getterName + " != null ? !" + getterName + ".equals(that." + getterName + ") : that." + getterName + " != null)\n");
     }
+    equals.append("      return false;\n");
+
+    // hashCode()
+    if (attClass.isPrimitive()) {
+      // primitive type, need some magic
+      hashCode.append("    result = 31 * result + (String.valueOf(" + getterName + ").hashCode());\n");
+    } else if (attClass.isArray()) {
+      // array type, use Array.hashCode()
+      hashCode.append("    result = 31 * result + (" + getterName + "!= null ? java.util.Arrays.hashCode(" + getterName + ") : 0);\n");
+    } else {
+      hashCode.append("    result = 31 * result + (" + getterName + " != null ? " + getterName + ".hashCode() : 0);\n");
+    }
+
+    // toString()
+    toString.append("    str.append(\"" + attName + " = \" + " + getterName + " + \"\\n\");\n");
   }
 
   @Override
@@ -278,5 +266,65 @@ public class CpoClassSourceGenerator implements MetaVisitor {
 
   protected String scrubName(String name) {
     return name.replaceAll("[^0-9a-zA-Z_]", "_");
+  }
+
+  private Class getAttributeClass(String className) {
+    Class clazz = String.class;
+
+    try {
+      switch(className){
+        case "boolean":
+          clazz = boolean.class;
+          break;
+        case "byte":
+          clazz = byte.class;
+          break;
+        case "byte[]":
+          clazz = byte[].class;
+          break;
+        case "short":
+          clazz = short.class;
+          break;
+        case "short[]":
+          clazz = short[].class;
+          break;
+        case "int":
+          clazz = int.class;
+          break;
+        case "int[]":
+          clazz = int[].class;
+          break;
+        case "long":
+          clazz = long.class;
+          break;
+        case "long[]":
+          clazz = long[].class;
+          break;
+        case "char":
+          clazz = char.class;
+          break;
+        case "char[]":
+          clazz = char[].class;
+          break;
+        case "float":
+          clazz = float.class;
+          break;
+        case "float[]":
+          clazz = float[].class;
+          break;
+        case "double":
+          clazz = double.class;
+          break;
+        case "double[]":
+          clazz = double[].class;
+          break;
+        default:
+          clazz = Class.forName(className);
+          break;
+      }
+    } catch(ClassNotFoundException cnfe) {
+      System.err.println("Could not find class:"+className+"!");
+    }
+    return clazz;
   }
 }

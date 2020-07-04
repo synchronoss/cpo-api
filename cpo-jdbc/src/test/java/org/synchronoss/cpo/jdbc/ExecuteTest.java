@@ -80,7 +80,7 @@ public class ExecuteTest {
   public void testExecute() {
     if (isSupportsCalls) {
       String method = "testExecute:";
-      ValueObject vo = new ValueObjectBean(1);
+      ValueObject vo = ValueObjectFactory.createValueObject(1);
       vo.setAttrInteger(3);
       ValueObject rvo;
 
@@ -95,8 +95,8 @@ public class ExecuteTest {
 
 
       try {
-        vo = new ValueObjectBean(1);
-        vo.setAttrSmallInt(3);
+        vo = ValueObjectFactory.createValueObject(1);
+        vo.setAttrSmallInt((short)3);
         rvo = cpoAdapter.executeObject("TestExecuteObjectNoTransform", vo);
         assertNotNull(method + "Returned Value object is null");
         assertTrue("power(3,3)=" + rvo.getAttrDouble(), rvo.getAttrDouble() == 27);
@@ -113,7 +113,7 @@ public class ExecuteTest {
   public void testExecute2() {
     if (isSupportsCalls) {
       String method = "testExecuteObject:";
-      ValueObject vo = new ValueObjectBean(1);
+      ValueObject vo = ValueObjectFactory.createValueObject(1);
       vo.setAttrInteger(3);
       ValueObject rvo;
 

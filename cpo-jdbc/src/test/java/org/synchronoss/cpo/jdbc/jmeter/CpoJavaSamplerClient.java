@@ -92,7 +92,7 @@ public class CpoJavaSamplerClient extends AbstractJavaSamplerClient {
 
     int id = Integer.parseInt(javaSamplerContext.getParameter(START_ID));
 
-    ValueObject valueObject = new ValueObjectBean(id);
+    ValueObject valueObject = ValueObjectFactory.createValueObject(id);
     result.setSampleLabel(Thread.currentThread().getName());
 
     valueObject.setAttrVarChar("testInsert");

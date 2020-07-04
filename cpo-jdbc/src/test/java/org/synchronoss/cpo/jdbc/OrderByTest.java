@@ -59,11 +59,11 @@ public class OrderByTest {
       fail(method + e.getMessage());
     }
 
-    al.add(new ValueObjectBean(1));
-    al.add(new ValueObjectBean(2));
-    al.add(new ValueObjectBean(3));
-    al.add(new ValueObjectBean(4));
-    al.add(new ValueObjectBean(5));
+    al.add(ValueObjectFactory.createValueObject(1));
+    al.add(ValueObjectFactory.createValueObject(2));
+    al.add(ValueObjectFactory.createValueObject(3));
+    al.add(ValueObjectFactory.createValueObject(4));
+    al.add(ValueObjectFactory.createValueObject(5));
     try {
       cpoAdapter.insertObjects("TestOrderByInsert", al);
     } catch (Exception e) {
@@ -125,7 +125,7 @@ public class OrderByTest {
       Collection<CpoOrderBy> colCob = new ArrayList<>();
       colCob.add(cob);
       colCob.add(cob1);
-      ValueObject valObj = new ValueObjectBean();
+      ValueObject valObj = ValueObjectFactory.createValueObject();
       col = cpoAdapter.retrieveBeans("TestOrderByRetrieve", valObj, colCob);
 
       int id = 1;
@@ -152,7 +152,7 @@ public class OrderByTest {
       Collection<CpoOrderBy> colCob = new ArrayList<>();
       colCob.add(cob);
       colCob.add(cob2);
-      ValueObject valObj = new ValueObjectBean();
+      ValueObject valObj = ValueObjectFactory.createValueObject();
       col = cpoAdapter.retrieveBeans("TestOrderByRetrieve", valObj, colCob);
       int id = 5;
       for (ValueObject vo : col) {
@@ -169,7 +169,7 @@ public class OrderByTest {
     String method = "testOrderByFunction:";
     Collection<ValueObject> col;
 
-    ValueObject vobj = new ValueObjectBean(-6);
+    ValueObject vobj = ValueObjectFactory.createValueObject(-6);
     try {
       cpoAdapter.insertObject("TestOrderByInsert", vobj);
     } catch (Exception e) {
@@ -179,7 +179,7 @@ public class OrderByTest {
       CpoOrderBy cob = cpoAdapter.newOrderBy("id", true, "ABS(id)");
       Collection<CpoOrderBy> colCob = new ArrayList<>();
       colCob.add(cob);
-      ValueObject valObj = new ValueObjectBean();
+      ValueObject valObj = ValueObjectFactory.createValueObject();
       col = cpoAdapter.retrieveBeans("TestOrderByRetrieve", valObj, colCob);
 
       int id = 1;

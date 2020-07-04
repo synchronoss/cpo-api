@@ -20,21 +20,13 @@
  */
 package org.synchronoss.cpo.jdbc;
 
-public interface LobValueObject {
-
-  public void setLobId(int lobId);
-
-  public int getLobId();
-
-  public void setBLob(byte[] bLob);
-
-  public byte[] getBLob();
-
-  public void setBLob2(byte[] bLob);
-
-  public byte[] getBLob2();
-
-  public void setCLob(char[] cLob);
-
-  public char[] getCLob();
+public class ValueObjectFactory {
+  public static ValueObject createValueObject() {
+    return new ValueObjectBean();
+  }
+  public static ValueObject createValueObject(int id) {
+    ValueObjectBean valueObjectBean = new ValueObjectBean();
+    valueObjectBean.setId(id);
+    return valueObjectBean;
+  }
 }

@@ -89,7 +89,7 @@ public class BlobTrxTest {
         testBlob2[i] = (byte) (((int) 'z') - (i % 26));
       }
 
-      LobValueObject lvo = new LobValueObjectBean(1, testBlob, testClob);
+      LobValueObject lvo = LobValueObjectFactory.createLobValueObject(1, testBlob, testClob);
       LobValueObject lvo2 = null;
 
       lvo.setBLob2(testBlob2);
@@ -171,7 +171,7 @@ public class BlobTrxTest {
         testBlob2[i] = (byte) (((int) 'z') - (i % 26));
       }
 
-      LobValueObject lvo = new LobValueObjectBean(1, testBlob, testClob);
+      LobValueObject lvo = LobValueObjectFactory.createLobValueObject(1, testBlob, testClob);
       LobValueObject lvo2 = null;
 
       lvo.setBLob2(testBlob2);
@@ -267,7 +267,7 @@ public class BlobTrxTest {
       testBlob = new byte[1];
       testBlob2 = new byte[1];
 
-      LobValueObject lvo = new LobValueObjectBean(1, testBlob, testClob);
+      LobValueObject lvo = LobValueObjectFactory.createLobValueObject(1, testBlob, testClob);
       LobValueObject lvo2 = null;
 
       lvo.setBLob2(testBlob2);
@@ -346,7 +346,7 @@ public class BlobTrxTest {
 
     if (isSupportsBlobs) {
 
-      LobValueObject lvo = new LobValueObjectBean(1, null, null);
+      LobValueObject lvo = LobValueObjectFactory.createLobValueObject(1, null, null);
       LobValueObject lvo2 = null;
 
       lvo.setBLob2(null);

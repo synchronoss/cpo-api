@@ -65,17 +65,9 @@
     </cpoAttribute>
     <cpoAttribute xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xsi:type="cpoj:ctJdbcAttribute">
       <javaName>id</javaName>
-      <javaType>java.math.BigDecimal</javaType>
+      <javaType>int</javaType>
       <dataName>ID</dataName>
-      <dataType>NUMERIC</dataType>
-      <cpoj:dbTable>value_object</cpoj:dbTable>
-      <cpoj:dbColumn>id</cpoj:dbColumn>
-    </cpoAttribute>
-    <cpoAttribute xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xsi:type="cpoj:ctJdbcAttribute">
-      <javaName>id</javaName>
-      <javaType>java.math.BigDecimal</javaType>
-      <dataName>ID</dataName>
-      <dataType>NUMERIC</dataType>
+      <dataType>INTEGER</dataType>
       <cpoj:dbTable>value_object</cpoj:dbTable>
       <cpoj:dbColumn>id</cpoj:dbColumn>
     </cpoAttribute>

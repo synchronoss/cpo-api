@@ -21,7 +21,7 @@
 #
 
 function test_db() {
-  mvn -pl cpo-jdbc -am test -Dcpo.db=$1
+  mvn -pl cpo-jdbc -am clean test -Dcpo.db=$1
 
   if [ $? -ne 0 ]; then
     echo "$1 did not pass the unit tests\n"

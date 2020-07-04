@@ -34,6 +34,7 @@ import org.synchronoss.cpo.jdbc.JdbcStatics;
 import org.synchronoss.cpo.jdbc.ValueObject;
 import org.synchronoss.cpo.jdbc.ValueObjectBean;
 import org.synchronoss.cpo.helper.ExceptionHelper;
+import org.synchronoss.cpo.jdbc.ValueObjectFactory;
 import org.synchronoss.cpo.jta.CpoXaResource;
 
 import javax.transaction.xa.XAException;
@@ -106,8 +107,8 @@ public class JdbcXaResourceTest {
   @Test
  	public void testCoordination() {
     String method = "testCoordination:";
-    ValueObject valObj1 = new ValueObjectBean(1);
-    ValueObject valObj2 = new ValueObjectBean(2);
+    ValueObject valObj1 = ValueObjectFactory.createValueObject(1);
+    ValueObject valObj2 = ValueObjectFactory.createValueObject(2);
     al.add(valObj1);
     al.add(valObj2);
 
@@ -132,7 +133,7 @@ public class JdbcXaResourceTest {
 			Collection<CpoOrderBy> colCob = new ArrayList<>();
 			colCob.add(cob);
 
-      ValueObject valObj = new ValueObjectBean();
+      ValueObject valObj = ValueObjectFactory.createValueObject();
       List<ValueObject> list = cpoXaAdapter1.retrieveBeans(null, valObj, colCob);
 			assertTrue("list size is " + list.size(), list.size() == 2);
 			assertTrue("ValuObject(1) is missing", list.get(0).getId() == 1);
@@ -157,8 +158,8 @@ public class JdbcXaResourceTest {
   @Test
  	public void testRollback()  {
     String method = "testRollback:";
-    ValueObject valObj1 = new ValueObjectBean(1);
-    ValueObject valObj2 = new ValueObjectBean(2);
+    ValueObject valObj1 = ValueObjectFactory.createValueObject(1);
+    ValueObject valObj2 = ValueObjectFactory.createValueObject(2);
 		al.add(valObj1);
   	al.add(valObj2);
 
@@ -180,7 +181,7 @@ public class JdbcXaResourceTest {
       cpoXaAdapter1.rollback(xid1);
       cpoXaAdapter2.rollback(xid2);
 
-      ValueObject valObj = new ValueObjectBean();
+      ValueObject valObj = ValueObjectFactory.createValueObject();
       List<ValueObject> list = cpoAdapter.retrieveBeans(null, valObj);
       assertTrue("list SHOULD BE EMPTY", list.isEmpty());
     } catch (Exception e) {
@@ -200,7 +201,7 @@ public class JdbcXaResourceTest {
   @Test
  	public void testRecover() {
     String method = "testRecover:";
-    ValueObject valObj = new ValueObjectBean(1);
+    ValueObject valObj = ValueObjectFactory.createValueObject(1);
 		al.add(valObj);
 
     Xid xid = new MyXid(100, new byte[]{0x01}, new byte[]{0x02});
@@ -272,7 +273,7 @@ public class JdbcXaResourceTest {
   @Test
  	public void testSuspendableTx() throws Exception {
 		String method = "testSuspendableTx:";
-  	ValueObject valObj = new ValueObjectBean(1);
+  	ValueObject valObj = ValueObjectFactory.createValueObject(1);
 		al.add(valObj);
 
 		Xid xid = new MyXid(100, new byte[]{0x01}, new byte[]{0x02});
@@ -305,7 +306,7 @@ public class JdbcXaResourceTest {
   @Test
 	public void testCommit() {
 		String method = "testCommit:";
-  	ValueObject valObj = new ValueObjectBean(1);
+  	ValueObject valObj = ValueObjectFactory.createValueObject(1);
 		al.add(valObj);
     int ret;
 
@@ -336,7 +337,7 @@ public class JdbcXaResourceTest {
   @Test
 	public void testRollback2() {
 		String method = "testRollback2:";
-  	ValueObject valObj = new ValueObjectBean(1);
+  	ValueObject valObj = ValueObjectFactory.createValueObject(1);
 		al.add(valObj);
     int ret;
 
@@ -368,9 +369,9 @@ public class JdbcXaResourceTest {
   @Test
 	public void testSuspend() {
     String method = "testSuspend:";
-    ValueObject valObj1 = new ValueObjectBean(1);
-    ValueObject valObj2 = new ValueObjectBean(2);
-    ValueObject valObj3 = new ValueObjectBean(3);
+    ValueObject valObj1 = ValueObjectFactory.createValueObject(1);
+    ValueObject valObj2 = ValueObjectFactory.createValueObject(2);
+    ValueObject valObj3 = ValueObjectFactory.createValueObject(3);
 		al.add(valObj1);
   	al.add(valObj2);
 		al.add(valObj3);
@@ -396,7 +397,7 @@ public class JdbcXaResourceTest {
         cpoXaAdapter1.rollback(xid1);
       }
       // make sure that only valobj2 is in the database
-      ValueObject valObj = new ValueObjectBean();
+      ValueObject valObj = ValueObjectFactory.createValueObject();
       List<ValueObject> list = cpoAdapter.retrieveBeans(null, valObj);
 			assertTrue("list size is " + list.size(), list.size() == 1);
 			assertTrue("valObj2 is missing", list.get(0).getId() == valObj2.getId());
@@ -411,8 +412,8 @@ public class JdbcXaResourceTest {
   @Test
 	public void testMultiTrx() {
     String method = "testMultiTrx:";
-    ValueObject valObj1 = new ValueObjectBean(1);
-    ValueObject valObj2 = new ValueObjectBean(2);
+    ValueObject valObj1 = ValueObjectFactory.createValueObject(1);
+    ValueObject valObj2 = ValueObjectFactory.createValueObject(2);
 		al.add(valObj1);
   	al.add(valObj2);
     int ret;
@@ -443,7 +444,7 @@ public class JdbcXaResourceTest {
       }
       // make sure the xid1 insert can be seen
       // make sure the xid2 insert cannot be seen
-      ValueObject valObj = new ValueObjectBean();
+      ValueObject valObj = ValueObjectFactory.createValueObject();
       List<ValueObject> list = cpoAdapter.retrieveBeans(null, valObj);
 			assertTrue("list size is " + list.size(), list.size() == 1);
 			assertTrue("valObj1 is missing", list.get(0).getId() == valObj1.getId());
@@ -458,8 +459,8 @@ public class JdbcXaResourceTest {
   @Test
 	public void testJoin() {
     String method = "testJoin:";
-    ValueObject valObj1 = new ValueObjectBean(1);
-    ValueObject valObj2 = new ValueObjectBean(2);
+    ValueObject valObj1 = ValueObjectFactory.createValueObject(1);
+    ValueObject valObj2 = ValueObjectFactory.createValueObject(2);
 		al.add(valObj1);
   	al.add(valObj2);
     int ret;
@@ -486,7 +487,7 @@ public class JdbcXaResourceTest {
       }
 
       // make sure both records exist
-      ValueObject valObj = new ValueObjectBean();
+      ValueObject valObj = ValueObjectFactory.createValueObject();
       List<ValueObject> list = cpoAdapter.retrieveBeans(null, valObj);
 			assertTrue("list size is " + list.size(), list.size() == 2);
     } catch (Exception e) {
@@ -501,9 +502,9 @@ public class JdbcXaResourceTest {
   @Test
   public void testRecover2() {
     String method = "testRecover2:";
-    ValueObject valObj1 = new ValueObjectBean(1);
-    ValueObject valObj2 = new ValueObjectBean(2);
-    ValueObject valObj3 = new ValueObjectBean(3);
+    ValueObject valObj1 = ValueObjectFactory.createValueObject(1);
+    ValueObject valObj2 = ValueObjectFactory.createValueObject(2);
+    ValueObject valObj3 = ValueObjectFactory.createValueObject(3);
 		al.add(valObj1);
   	al.add(valObj2);
 		al.add(valObj3);

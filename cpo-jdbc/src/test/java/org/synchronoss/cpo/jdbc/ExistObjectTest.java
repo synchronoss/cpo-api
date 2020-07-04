@@ -59,7 +59,7 @@ public class ExistObjectTest {
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
-    ValueObject vo = new ValueObjectBean(1);
+    ValueObject vo = ValueObjectFactory.createValueObject(1);
     vo.setAttrVarChar("WHERE");
 
     try {
@@ -75,7 +75,7 @@ public class ExistObjectTest {
     String method = "testExistObject:";
 
     try {
-      ValueObject valObj = new ValueObjectBean(1);
+      ValueObject valObj = ValueObjectFactory.createValueObject(1);
       long count = cpoAdapter.existsObject(valObj);
       assertTrue("Object not Found", count == 1);
     } catch (Exception e) {
@@ -83,7 +83,7 @@ public class ExistObjectTest {
     }
 
     try {
-      ValueObject valObj = new ValueObjectBean(5);
+      ValueObject valObj = ValueObjectFactory.createValueObject(5);
       long count = cpoAdapter.existsObject(valObj);
       assertTrue("Object Found", count == 0);
     } catch (Exception e) {
@@ -97,7 +97,7 @@ public class ExistObjectTest {
     String method = "testExistObjectWhere:";
 
     try {
-      ValueObject valObj = new ValueObjectBean(1);
+      ValueObject valObj = ValueObjectFactory.createValueObject(1);
       CpoWhere where = cpoAdapter.newWhere(CpoWhere.LOGIC_AND, "attrVarChar", CpoWhere.COMP_EQ, "WHERE");
       ArrayList<CpoWhere> wheres = new ArrayList<>();
       wheres.add(where);
@@ -108,7 +108,7 @@ public class ExistObjectTest {
     }
 
     try {
-      ValueObject valObj = new ValueObjectBean(1);
+      ValueObject valObj = ValueObjectFactory.createValueObject(1);
       CpoWhere where = cpoAdapter.newWhere(CpoWhere.LOGIC_AND, "attrVarChar", CpoWhere.COMP_EQ, "NOWHERE");
       ArrayList<CpoWhere> wheres = new ArrayList<>();
       wheres.add(where);
@@ -122,7 +122,7 @@ public class ExistObjectTest {
 
   @After
   public void tearDown() {
-    ValueObject vo = new ValueObjectBean(1);
+    ValueObject vo = ValueObjectFactory.createValueObject(1);
     try {
       cpoAdapter.deleteObject(vo);
     } catch (Exception e) {

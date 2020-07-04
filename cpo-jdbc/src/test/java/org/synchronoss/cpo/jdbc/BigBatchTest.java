@@ -76,7 +76,7 @@ public class BigBatchTest {
     int numInserts = 100000;
 
     for (int i = 0; i < numInserts; i++) {
-      al.add(new ValueObjectBean(i));
+      al.add(ValueObjectFactory.createValueObject(i));
     }
 
     try {

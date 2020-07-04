@@ -38,13 +38,13 @@
     </cpoAttribute>
     <cpoAttribute xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xsi:type="cpoj:ctJdbcAttribute">
       <javaName>lobId</javaName>
-      <javaType>java.math.BigDecimal</javaType>
+      <javaType>int</javaType>
       <dataName>lob_id</dataName>
-      <dataType>NUMERIC</dataType>
+      <dataType>INTEGER</dataType>
     </cpoAttribute>
     <cpoAttribute xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xsi:type="cpoj:ctJdbcAttribute">
       <javaName>cLob</javaName>
-      <javaType>java.lang.String</javaType>
+      <javaType>char[]</javaType>
       <dataName>c_lob</dataName>
       <dataType>LONGVARCHAR</dataType>
       <transformClass>org.synchronoss.cpo.transform.jdbc.TransformStringChar</transformClass>

@@ -20,7 +20,6 @@
  */
 package org.synchronoss.cpo.jdbc;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -62,7 +61,7 @@ public class InvalidParameterTest {
     Collection<ValueObject> col = null;
 
     try {
-      ValueObject valObj = new ValueObjectBean();
+      ValueObject valObj = ValueObjectFactory.createValueObject();
       col = cpoAdapter.retrieveBeans("BadContext", valObj);
       fail(method + "Test got to unreachable code");
     } catch (CpoException ce) {

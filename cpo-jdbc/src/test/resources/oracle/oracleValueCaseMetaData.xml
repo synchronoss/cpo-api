@@ -21,7 +21,7 @@
 
 -->
 <cpoMetaData metaDescriptor="org.synchronoss.cpo.jdbc.meta.JdbcCpoMetaDescriptor" xmlns="http://www.synchronoss.org/cpo/core/CpoCoreMeta.xsd">
-  <cpoClass name="org.synchronoss.cpo.jdbc.ValueObject">
+  <cpoClass name="org.synchronoss.cpo.jdbc.CaseValueObject">
     <cpoAttribute xsi:type="cpoj:ctJdbcAttribute" xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
       <javaName>attrBit</javaName>
       <javaType>boolean</javaType>
@@ -103,9 +103,9 @@
     </cpoAttribute>
     <cpoAttribute xsi:type="cpoj:ctJdbcAttribute" xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
       <javaName>id</javaName>
-      <javaType>java.math.BigDecimal</javaType>
+      <javaType>int</javaType>
       <dataName>Id</dataName>
-      <dataType>NUMERIC</dataType>
+      <dataType>INTEGER</dataType>
       <cpoj:dbTable>value_object</cpoj:dbTable>
       <cpoj:dbColumn>id</cpoj:dbColumn>
     </cpoAttribute>

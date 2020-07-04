@@ -24,29 +24,29 @@
   <cpoClass name="org.synchronoss.cpo.jdbc.LobValueObject">
     <cpoAttribute xsi:type="cpoj:ctJdbcAttribute" xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
       <javaName>bLob</javaName>
-      <javaType>java.sql.Blob</javaType>
+      <javaType>byte[]</javaType>
       <dataName>B_LOB</dataName>
       <dataType>BLOB</dataType>
       <transformClass>org.synchronoss.cpo.transform.jdbc.TransformGZipBytes</transformClass>
     </cpoAttribute>
     <cpoAttribute xsi:type="cpoj:ctJdbcAttribute" xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
       <javaName>bLob2</javaName>
-      <javaType>java.sql.Blob</javaType>
+      <javaType>byte[]</javaType>
       <dataName>B_LOB2</dataName>
       <dataType>BLOB</dataType>
     </cpoAttribute>
     <cpoAttribute xsi:type="cpoj:ctJdbcAttribute" xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
       <javaName>cLob</javaName>
-      <javaType>java.sql.Clob</javaType>
+      <javaType>char[]</javaType>
       <dataName>C_LOB</dataName>
       <dataType>CLOB</dataType>
       <transformClass>org.synchronoss.cpo.transform.jdbc.TransformCharArray</transformClass>
     </cpoAttribute>
     <cpoAttribute xsi:type="cpoj:ctJdbcAttribute" xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
       <javaName>lobId</javaName>
-      <javaType>java.math.BigDecimal</javaType>
+      <javaType>int</javaType>
       <dataName>LOB_ID</dataName>
-      <dataType>NUMERIC</dataType>
+      <dataType>INTEGER</dataType>
     </cpoAttribute>
     <cpoFunctionGroup name="createLVO" type="CREATE">
       <cpoFunction name="createLVO">

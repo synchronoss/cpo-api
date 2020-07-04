@@ -37,7 +37,7 @@ import java.util.*;
  */
 public class CaseSensitiveTest {
 
-  private ArrayList<ValueObject> al = new ArrayList<>();
+  private ArrayList<CaseValueObject> al = new ArrayList<>();
   private CpoAdapter cpoAdapter = null;
   private CpoAdapter readAdapter = null;
   private JdbcCpoMetaDescriptor metaDescriptor = null;
@@ -74,7 +74,8 @@ public class CaseSensitiveTest {
   @Test
   public void testCaseSensitiveObject() {
     String method = "testCaseSensitiveObject:";
-    ValueObject valObj = new ValueObjectBean(5);
+    CaseValueObject valObj = new CaseValueObjectBean();
+    valObj.setId(5);
 
     valObj.setAttrVarChar("testCaseSensitiveObject");
     valObj.setAttrInteger(3);
@@ -97,7 +98,7 @@ public class CaseSensitiveTest {
     }
 
     try {
-      ValueObject vo = readAdapter.retrieveBean(null, valObj, valObj, null, null);
+      CaseValueObject vo = readAdapter.retrieveBean(null, valObj, valObj, null, null);
       assertFalse("Ids should not match", vo.getId() == valObj.getId());
       assertFalse("Integers should not match", vo.getAttrInteger() == valObj.getAttrInteger());
       assertFalse("Strings should not match", valObj.getAttrVarChar().equals(vo.getAttrVarChar()));

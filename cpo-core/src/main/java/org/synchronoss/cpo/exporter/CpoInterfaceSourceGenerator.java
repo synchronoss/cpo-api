@@ -20,6 +20,8 @@
  */
 package org.synchronoss.cpo.exporter;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.*;
 import org.synchronoss.cpo.meta.CpoMetaDescriptor;
 import org.synchronoss.cpo.meta.domain.*;
@@ -32,6 +34,7 @@ import org.synchronoss.cpo.meta.domain.*;
  */
 public class CpoInterfaceSourceGenerator implements MetaVisitor {
 
+  private static final Logger logger = LoggerFactory.getLogger(CpoInterfaceSourceGenerator.class);
   private static final String ATTR_PREFIX = "ATTR_";
   private static final String FG_PREFIX = "FG_";
 
@@ -124,14 +127,6 @@ public class CpoInterfaceSourceGenerator implements MetaVisitor {
 
     String attName = scrubName(cpoAttribute.getJavaName());
 
-    if (cpoAttribute.getTransformClassName()!=null && cpoAttribute.getTransformInMethod()==null) {
-      try {
-        cpoAttribute.loadRunTimeInfo(metaDescriptor, null);
-      } catch (Exception e) {
-
-      }
-    }
-
     // the getter name is get concatenated with the camel case of the attribute name
     String getterName;
     String setterName;
@@ -143,22 +138,17 @@ public class CpoInterfaceSourceGenerator implements MetaVisitor {
       setterName = ("set" + attName.toUpperCase());
     }
 
-    try {
-      Class<?> attClass = metaDescriptor.getDataTypeJavaClass(cpoAttribute);
-      String attClassName = metaDescriptor.getDataTypeName(cpoAttribute);
+    String attClassName = cpoAttribute.getJavaType();
 
-      // generate attribute statics
-      attributeStatics.append("  public final static String " + ATTR_PREFIX + attName.toUpperCase() + " = \"" + attName + "\";\n");
+    // generate attribute statics
+    attributeStatics.append("  public final static String " + ATTR_PREFIX + attName.toUpperCase() + " = \"" + attName + "\";\n");
 
-      // generate getter
-      gettersSetters.append("  public " + attClassName + " " + getterName + ";\n");
+    // generate getter
+    gettersSetters.append("  public " + attClassName + " " + getterName + ";\n");
 
-      // generate setter
-      gettersSetters.append("  public void " + setterName + "(" + attClassName + " " + attName + ");\n");
-      gettersSetters.append("\n");
-    } catch(CpoException ce) {
-
-    }
+    // generate setter
+    gettersSetters.append("  public void " + setterName + "(" + attClassName + " " + attName + ");\n");
+    gettersSetters.append("\n");
   }
 
   @Override

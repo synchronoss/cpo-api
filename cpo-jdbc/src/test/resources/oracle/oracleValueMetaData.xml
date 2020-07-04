@@ -109,9 +109,9 @@
     </cpoAttribute>
     <cpoAttribute xsi:type="cpoj:ctJdbcAttribute" xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
       <javaName>id</javaName>
-      <javaType>java.math.BigDecimal</javaType>
+      <javaType>int</javaType>
       <dataName>ID</dataName>
-      <dataType>NUMERIC</dataType>
+      <dataType>INTEGER</dataType>
       <cpoj:dbTable>value_object</cpoj:dbTable>
       <cpoj:dbColumn>id</cpoj:dbColumn>
     </cpoAttribute>

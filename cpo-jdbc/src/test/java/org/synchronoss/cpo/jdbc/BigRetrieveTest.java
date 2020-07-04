@@ -76,7 +76,7 @@ public class BigRetrieveTest {
     int numInserts = 10000;
 
     for (int i = 0; i < numInserts; i++) {
-      al.add(new ValueObjectBean(i));
+      al.add(ValueObjectFactory.createValueObject(i));
     }
 
     try {
@@ -95,7 +95,7 @@ public class BigRetrieveTest {
     Collection<ValueObject> col;
 
     try {
-      ValueObject valObj = new ValueObjectBean();
+      ValueObject valObj = ValueObjectFactory.createValueObject();
       col = cpoAdapter.retrieveBeans(null, valObj);
       assertTrue("Col size is " + col.size(), col.size() == al.size());
 

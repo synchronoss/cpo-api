@@ -29,7 +29,6 @@ import org.synchronoss.cpo.jdbc.meta.JdbcCpoMetaDescriptor;
 
 import java.math.BigInteger;
 import java.sql.Timestamp;
-import java.time.LocalDateTime;
 import java.util.*;
 
 /**
@@ -76,7 +75,7 @@ public class InsertObjectTest {
   @Test
   public void testInsertObject() {
     String method = "testInsertObject:";
-    ValueObject valObj = new ValueObjectBean(5);
+    ValueObject valObj = ValueObjectFactory.createValueObject(5);
 
     valObj.setAttrVarChar("testInsert");
     valObj.setAttrInteger(3);
@@ -121,13 +120,13 @@ public class InsertObjectTest {
   public void testInsertObjects() {
 
     String method = "testInsertObjects:";
-    ValueObject vo = new ValueObjectBean(1);
+    ValueObject vo = ValueObjectFactory.createValueObject(1);
     vo.setAttrVarChar("Test");
 
     al.add(vo);
-    al.add(new ValueObjectBean(2));
-    al.add(new ValueObjectBean(3));
-    al.add(new ValueObjectBean(4));
+    al.add(ValueObjectFactory.createValueObject(2));
+    al.add(ValueObjectFactory.createValueObject(3));
+    al.add(ValueObjectFactory.createValueObject(4));
     try {
       long inserts = cpoAdapter.insertObjects(al);
       assertEquals("inserts performed do not equal inserts requested", inserts, 4);

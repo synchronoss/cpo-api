@@ -37,7 +37,7 @@ import java.util.ArrayList;
  */
 public class CaseInsensitiveTest {
 
-  private ArrayList<ValueObject> al = new ArrayList<>();
+  private ArrayList<CaseValueObject> al = new ArrayList<>();
   private CpoAdapter cpoAdapter = null;
   private CpoAdapter readAdapter = null;
   private JdbcCpoMetaDescriptor metaDescriptor = null;
@@ -75,7 +75,8 @@ public class CaseInsensitiveTest {
   public void testCaseInsensitiveObject() {
     String method = "testCaseInsensitiveObject:";
 
-    ValueObject valObj = new ValueObjectBean(5);
+    CaseValueObject valObj = new CaseValueObjectBean();
+    valObj.setId(5);
 
     valObj.setAttrVarChar("testCaseInsensitiveObject");
     valObj.setAttrInteger(3);
@@ -98,7 +99,7 @@ public class CaseInsensitiveTest {
     }
 
     try {
-      ValueObject vo = readAdapter.retrieveBean(null, valObj, valObj, null, null);
+      CaseValueObject vo = readAdapter.retrieveBean(null, valObj, valObj, null, null);
       assertTrue("Ids do not match", vo.getId() == valObj.getId());
       assertTrue("Integers do not match", vo.getAttrInteger() == valObj.getAttrInteger());
       assertEquals("Strings do not match", vo.getAttrVarChar(), valObj.getAttrVarChar());

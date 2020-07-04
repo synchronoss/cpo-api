@@ -62,7 +62,7 @@ public class UpdateObjectTest {
   @Test
   public void testUpdateObject() {
     String method = "testUpdateObject:";
-    ValueObject valObj = new ValueObjectBean(5);
+    ValueObject valObj = ValueObjectFactory.createValueObject(5);
 
     valObj.setAttrVarChar("testUpdate");
     valObj.setAttrInt(3);

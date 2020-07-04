@@ -65,7 +65,7 @@ public class DeleteObjectTest {
   @Test
   public void testDeleteObject() {
     String method = "testDeleteObject:";
-    ValueObject valObj = new ValueObjectBean(5);
+    ValueObject valObj = ValueObjectFactory.createValueObject(5);
 
     valObj.setAttrVarChar("testDelete");
     valObj.setAttrInt(3);

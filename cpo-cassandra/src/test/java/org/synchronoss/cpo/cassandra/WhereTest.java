@@ -53,16 +53,16 @@ public class WhereTest {
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
-    ValueObject vo = new ValueObjectBean(1);
+    ValueObject vo = ValueObjectFactory.createValueObject(1);
     vo.setAttrVarChar("Test");
     vo.setAttrInt(1);
     vo.setAttrBigInt(1);
     al.add(vo);
-    al.add(new ValueObjectBean(2));
-    al.add(new ValueObjectBean(3));
-    al.add(new ValueObjectBean(4));
-    al.add(new ValueObjectBean(5));
-    al.add(new ValueObjectBean(-6));
+    al.add(ValueObjectFactory.createValueObject(2));
+    al.add(ValueObjectFactory.createValueObject(3));
+    al.add(ValueObjectFactory.createValueObject(4));
+    al.add(ValueObjectFactory.createValueObject(5));
+    al.add(ValueObjectFactory.createValueObject(-6));
     try {
       cpoAdapter.insertObjects("TestOrderByInsert", al);
     } catch (Exception e) {
@@ -91,7 +91,7 @@ public class WhereTest {
     CpoWhere cw;
 
     try {
-      ValueObject valObj = new ValueObjectBean();
+      ValueObject valObj = ValueObjectFactory.createValueObject();
       cw = cpoAdapter.newWhere(CpoWhere.LOGIC_NONE, "id", CpoWhere.COMP_EQ, null);
       cw.setStaticValue("3");
       ArrayList<CpoWhere> wheres = new ArrayList<>();
@@ -111,7 +111,7 @@ public class WhereTest {
     CpoWhere cw;
 
     try {
-      ValueObject valObj = new ValueObjectBean(3);
+      ValueObject valObj = ValueObjectFactory.createValueObject(3);
       cw = cpoAdapter.newWhere(CpoWhere.LOGIC_NONE, "id", CpoWhere.COMP_EQ, valObj);
 
       ArrayList<CpoWhere> wheres = new ArrayList<>();
@@ -131,7 +131,7 @@ public class WhereTest {
     CpoWhere cw;
 
     try {
-      ValueObject valObj = new ValueObjectBean(3);
+      ValueObject valObj = ValueObjectFactory.createValueObject(3);
       cw = cpoAdapter.newWhere(CpoWhere.LOGIC_NONE, "id", CpoWhere.COMP_EQ, valObj);
 
       ArrayList<CpoWhere> wheres = new ArrayList<>();
@@ -154,7 +154,7 @@ public class WhereTest {
     Collection<ValueObject> col = null;
 
     try {
-      ValueObject valObj = new ValueObjectBean(3);
+      ValueObject valObj = ValueObjectFactory.createValueObject(3);
 
       col = cpoAdapter.retrieveBeans("TestWhereRetrieve", valObj);
     } catch (Exception e) {
@@ -167,7 +167,7 @@ public class WhereTest {
     String method = "testAndWhere:";
 
     try {
-      ValueObject valObj = new ValueObjectBean(1);
+      ValueObject valObj = ValueObjectFactory.createValueObject(1);
       CpoWhere cw = cpoAdapter.newWhere();
       CpoWhere cw1 = cpoAdapter.newWhere(CpoWhere.LOGIC_NONE, "id", CpoWhere.COMP_EQ, 1);
       CpoWhere cw2 = cpoAdapter.newWhere(CpoWhere.LOGIC_AND, "attrInt", CpoWhere.COMP_EQ, 1);
@@ -190,7 +190,7 @@ public class WhereTest {
     String method = "testMultipleBindWhere:";
 
     try {
-      ValueObject valObj = new ValueObjectBean(1);
+      ValueObject valObj = ValueObjectFactory.createValueObject(1);
       valObj.setAttrInt(1);
 
       CpoWhere cw = cpoAdapter.newWhere();
@@ -215,7 +215,7 @@ public class WhereTest {
     String method = "testNonAttributeWhere:";
 
     try {
-      ValueObject valObj = new ValueObjectBean(1);
+      ValueObject valObj = ValueObjectFactory.createValueObject(1);
 
       CpoWhere cw = cpoAdapter.newWhere();
       CpoWhere cw1 = cpoAdapter.newWhere(CpoWhere.LOGIC_NONE, "id", CpoWhere.COMP_EQ, 1);
@@ -237,7 +237,7 @@ public class WhereTest {
     String method = "testNonAttributeWhere:";
 
     try {
-      ValueObject valObj = new ValueObjectBean(1);
+      ValueObject valObj = ValueObjectFactory.createValueObject(1);
 
       CpoWhere cw = cpoAdapter.newWhere();
       CpoWhere cw1 = cpoAdapter.newWhere(CpoWhere.LOGIC_NONE, "id", CpoWhere.COMP_IN, null);
@@ -260,7 +260,7 @@ public class WhereTest {
     String method = "testNonAttributeWhere:";
 
     try {
-      ValueObject valObj = new ValueObjectBean(1);
+      ValueObject valObj = ValueObjectFactory.createValueObject(1);
       Collection<Integer> inColl = new ArrayList<>();
       inColl.add(1);
       inColl.add(3);
@@ -286,7 +286,7 @@ public class WhereTest {
     String method = "testNonAttributeWhere:";
 
     try {
-      ValueObject valObj = new ValueObjectBean(1);
+      ValueObject valObj = ValueObjectFactory.createValueObject(1);
       Collection<Integer> inColl = new ArrayList<>();
       inColl.add(1);
       inColl.add(3);

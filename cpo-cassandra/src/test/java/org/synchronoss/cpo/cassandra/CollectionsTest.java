@@ -73,7 +73,7 @@ public class CollectionsTest {
   public void testList() {
     String method = "testList";
     String testString = "Test String!!!";
-    ValueObject valObj = new ValueObjectBean(0);
+    ValueObject valObj = ValueObjectFactory.createValueObject(0);
     List<String> testList = new ArrayList<String>();
     testList.add(testString);
 
@@ -98,7 +98,7 @@ public class CollectionsTest {
   public void testSet() {
     String method = "testList";
     String testString = "One,Two,Three";
-    ValueObject valObj = new ValueObjectBean(1);
+    ValueObject valObj = ValueObjectFactory.createValueObject(1);
     Set<String> testSet = new TreeSet<String>();
     testSet.add(testString);
 
@@ -124,7 +124,7 @@ public class CollectionsTest {
     String method = "testList";
     String testKey = "CT";
     String testValue = "Hartford";
-    ValueObject valObj = new ValueObjectBean(2);
+    ValueObject valObj = ValueObjectFactory.createValueObject(2);
     Map<String,String> testMap = new HashMap<>();
     testMap.put(testKey, testValue);
 

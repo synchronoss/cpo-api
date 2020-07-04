@@ -113,11 +113,21 @@ public class GenerateJavaSources extends AbstractMojo {
 
     try {
       int filenameStart = cpoConfig.lastIndexOf(File.separator);
-      File dir = new File(cpoConfig.substring(0, filenameStart));
+      String directory = cpoConfig.substring(0, filenameStart);
+      getLog().info("Directory name: " + directory);
+      File dir = new File(directory);
+      if (!dir.exists()) {
+        throw new MojoExecutionException("Could not find directory: " + directory);
+      }
       String fileName = cpoConfig.substring(filenameStart+1);
+      getLog().info("Filename: " + fileName);
 
       FileFilter fileFilter = new WildcardFileFilter(fileName);
-      for (File file : dir.listFiles(fileFilter)) {
+      File foundFiles[] = dir.listFiles(fileFilter);
+      if (foundFiles==null || foundFiles.length==0) {
+        throw new MojoExecutionException("Could not find file: " + cpoConfig);
+      }
+      for (File file : foundFiles) {
 
         CpoMetaDescriptor metaDescriptor = CpoMetaDescriptor.getInstance(META_DESCRIPTOR_NAME, file.getAbsolutePath(), true);
 

@@ -62,16 +62,16 @@ public class ZZHotDeployTest {
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
-    ValueObject vo = new ValueObjectBean(1);
+    ValueObject vo = ValueObjectFactory.createValueObject(1);
     vo.setAttrVarChar("Test");
     vo.setAttrInt(1);
     vo.setAttrBigInt(1);
     al.add(vo);
-    al.add(new ValueObjectBean(2));
-    al.add(new ValueObjectBean(3));
-    al.add(new ValueObjectBean(4));
-    al.add(new ValueObjectBean(5));
-    al.add(new ValueObjectBean(-6));
+    al.add(ValueObjectFactory.createValueObject(2));
+    al.add(ValueObjectFactory.createValueObject(3));
+    al.add(ValueObjectFactory.createValueObject(4));
+    al.add(ValueObjectFactory.createValueObject(5));
+    al.add(ValueObjectFactory.createValueObject(-6));
     try {
       cpoAdapter.insertObjects("TestOrderByInsert", al);
     } catch (Exception e) {
@@ -86,7 +86,7 @@ public class ZZHotDeployTest {
 
 
     try {
-      ValueObject valObj = new ValueObjectBean();
+      ValueObject valObj = ValueObjectFactory.createValueObject();
 
       // make sure the default retrieve works
       col = cpoAdapter.retrieveBeans(null, valObj);
@@ -103,7 +103,7 @@ public class ZZHotDeployTest {
       metaFiles.add("/hotDeployMetaData.xml");
       cpoAdapter.getCpoMetaDescriptor().refreshDescriptorMeta(metaFiles);
 
-      ValueObject valObj = new ValueObjectBean(2);
+      ValueObject valObj = ValueObjectFactory.createValueObject(2);
 
       // make sure the default retrieve still works
       col = cpoAdapter.retrieveBeans(null, valObj);
@@ -132,7 +132,7 @@ public class ZZHotDeployTest {
 
 
     try {
-      ValueObject valObj = new ValueObjectBean();
+      ValueObject valObj = ValueObjectFactory.createValueObject();
 
       // make sure the default retrieve works
       col = cpoAdapter.retrieveBeans(null, valObj);
@@ -149,7 +149,7 @@ public class ZZHotDeployTest {
       metaFiles.add("/hotDeployMetaData.xml");
       cpoAdapter.getCpoMetaDescriptor().refreshDescriptorMeta(metaFiles, true);
 
-      ValueObject valObj = new ValueObjectBean(2);
+      ValueObject valObj = ValueObjectFactory.createValueObject(2);
 
       // the old retrieve should no longer be there
       try {

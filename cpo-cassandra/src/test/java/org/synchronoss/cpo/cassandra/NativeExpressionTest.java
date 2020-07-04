@@ -53,15 +53,15 @@ public class NativeExpressionTest {
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
-    ValueObject vo = new ValueObjectBean(1);
+    ValueObject vo = ValueObjectFactory.createValueObject(1);
     vo.setAttrVarChar("Test");
     vo.setAttrInt(1);
     al.add(vo);
-    al.add(new ValueObjectBean(2));
-    al.add(new ValueObjectBean(3));
-    al.add(new ValueObjectBean(4));
-    al.add(new ValueObjectBean(5));
-    al.add(new ValueObjectBean(-6));
+    al.add(ValueObjectFactory.createValueObject(2));
+    al.add(ValueObjectFactory.createValueObject(3));
+    al.add(ValueObjectFactory.createValueObject(4));
+    al.add(ValueObjectFactory.createValueObject(5));
+    al.add(ValueObjectFactory.createValueObject(-6));
     try {
       cpoAdapter.insertObjects("TestOrderByInsert", al);
     } catch (Exception e) {
@@ -93,7 +93,7 @@ public class NativeExpressionTest {
 
       cnqAl.add(new CpoNativeFunction("__CPO_WHERE__", "WHERE id IN (2,3)"));
 
-      ValueObject valObj = new ValueObjectBean(3);
+      ValueObject valObj = ValueObjectFactory.createValueObject(3);
       col = cpoAdapter.retrieveBeans("TestWhereRetrieve", valObj, valObj, null, null, cnqAl);
 
       assertTrue("Col size is " + col.size(), col.size() == 2);

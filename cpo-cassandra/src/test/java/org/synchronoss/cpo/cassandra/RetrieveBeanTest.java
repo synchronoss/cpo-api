@@ -55,18 +55,18 @@ public class RetrieveBeanTest {
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
-    ValueObject vo = new ValueObjectBean(1);
+    ValueObject vo = ValueObjectFactory.createValueObject(1);
     vo.setAttrVarChar("Test");
     al.add(vo);
-    al.add(new ValueObjectBean(2));
-    al.add(new ValueObjectBean(3));
-    al.add(new ValueObjectBean(4));
-    al.add(new ValueObjectBean(5));
-    al.add(new ValueObjectBean(6));
-    al.add(new ValueObjectBean(7));
-    al.add(new ValueObjectBean(8));
-    al.add(new ValueObjectBean(9));
-    al.add(new ValueObjectBean(10));
+    al.add(ValueObjectFactory.createValueObject(2));
+    al.add(ValueObjectFactory.createValueObject(3));
+    al.add(ValueObjectFactory.createValueObject(4));
+    al.add(ValueObjectFactory.createValueObject(5));
+    al.add(ValueObjectFactory.createValueObject(6));
+    al.add(ValueObjectFactory.createValueObject(7));
+    al.add(ValueObjectFactory.createValueObject(8));
+    al.add(ValueObjectFactory.createValueObject(9));
+    al.add(ValueObjectFactory.createValueObject(10));
     try {
       cpoAdapter.insertObjects("TestOrderByInsert", al);
     } catch (Exception e) {
@@ -81,7 +81,7 @@ public class RetrieveBeanTest {
 
 
     try {
-      ValueObject valObj = new ValueObjectBean();
+      ValueObject valObj = ValueObjectFactory.createValueObject();
       col = cpoAdapter.retrieveBeans(null, valObj);
       assertTrue("Col size is " + col.size(), col.size() == al.size());
 
@@ -97,7 +97,7 @@ public class RetrieveBeanTest {
 
 
     try {
-      ValueObject valObj = new ValueObjectBean();
+      ValueObject valObj = ValueObjectFactory.createValueObject();
       col = cpoAdapter.retrieveBeans(null, valObj, valObj);
       assertTrue("Col size is " + col.size(), col.size() == al.size());
 
@@ -113,7 +113,7 @@ public class RetrieveBeanTest {
     int count = 0;
 
     try {
-      ValueObject valObj = new ValueObjectBean();
+      ValueObject valObj = ValueObjectFactory.createValueObject();
       crs = cpoAdapter.retrieveBeans(null, valObj, valObj, null, null, null, 2);
       logger.debug("Returned from retrieveBeans");
       for (ValueObject vo : crs) {
@@ -136,7 +136,7 @@ public class RetrieveBeanTest {
     int count = 0;
 
     try {
-      ValueObject valObj = new ValueObjectBean();
+      ValueObject valObj = ValueObjectFactory.createValueObject();
       crs = cpoAdapter.retrieveBeans(null, valObj, valObj, null, null, null, 9);
       for (ValueObject vo : crs) {
         if (vo != null) {
@@ -157,7 +157,7 @@ public class RetrieveBeanTest {
     int count = 0;
 
     try {
-      ValueObject valObj = new ValueObjectBean();
+      ValueObject valObj = ValueObjectFactory.createValueObject();
       crs = cpoAdapter.retrieveBeans(null, valObj, valObj, null, null, null, 10);
       for (ValueObject vo : crs) {
         if (vo != null) {
@@ -178,7 +178,7 @@ public class RetrieveBeanTest {
     int count = 0;
 
     try {
-      ValueObject valObj = new ValueObjectBean();
+      ValueObject valObj = ValueObjectFactory.createValueObject();
       crs = cpoAdapter.retrieveBeans(null, valObj, valObj, null, null, null, 11);
       for (ValueObject vo : crs) {
         if (vo != null) {
@@ -199,7 +199,7 @@ public class RetrieveBeanTest {
     int count = 0;
 
     try {
-      ValueObject valObj = new ValueObjectBean();
+      ValueObject valObj = ValueObjectFactory.createValueObject();
       crs = cpoAdapter.retrieveBeans(null, valObj, valObj, null, null, null, 20);
       logger.debug("Returned from retrieveBeans");
       for (ValueObject vo : crs) {
@@ -219,7 +219,7 @@ public class RetrieveBeanTest {
   public void testRetrieveBean() {
 
     String method = "testRetrieveBean:";
-    ValueObject vo = new ValueObjectBean(1);
+    ValueObject vo = ValueObjectFactory.createValueObject(1);
     ValueObject rvo;
 
     try {
@@ -239,7 +239,7 @@ public class RetrieveBeanTest {
   public void testNullRetrieveBean() {
 
     String method = "testNullRetrieveBean:";
-    ValueObject vo = new ValueObjectBean(100);
+    ValueObject vo = ValueObjectFactory.createValueObject(100);
     ValueObject rvo;
 
     try {

@@ -30,6 +30,7 @@ import org.synchronoss.cpo.meta.domain.CpoClass;
 
 import java.io.*;
 import java.util.StringTokenizer;
+import org.apache.commons.io.filefilter.WildcardFileFilter;
 
 /**
  * Plugin goal that will generate the cpo classes based on the xml configuration file
@@ -111,63 +112,72 @@ public class GenerateJavaSources extends AbstractMojo {
     }
 
     try {
-      CpoMetaDescriptor metaDescriptor = CpoMetaDescriptor.getInstance(META_DESCRIPTOR_NAME, cpoConfig, true);
+      int filenameStart = cpoConfig.lastIndexOf(File.separator);
+      File dir = new File(cpoConfig.substring(0, filenameStart));
+      String fileName = cpoConfig.substring(filenameStart+1);
 
-      for (CpoClass cpoClass : metaDescriptor.getCpoClasses()) {
+      FileFilter fileFilter = new WildcardFileFilter(fileName);
+      for (File file : dir.listFiles(fileFilter)) {
 
-        String className = cpoClass.getName();
+        CpoMetaDescriptor metaDescriptor = CpoMetaDescriptor.getInstance(META_DESCRIPTOR_NAME, file.getAbsolutePath(), true);
 
-        // check the filter
-        if (filter != null && className.matches(filter)) {
-          File classDir = srcDir;
-          if (className.lastIndexOf(".") != -1) {
-            String packageName = className.substring(0, className.lastIndexOf("."));
-            StringTokenizer tok = new StringTokenizer(packageName, ".");
-            while (tok.hasMoreTokens()) {
-              String dirName = tok.nextToken();
-              classDir = new File(classDir, dirName);
+        for (CpoClass cpoClass : metaDescriptor.getCpoClasses()) {
+
+          String className = cpoClass.getName();
+
+          // check the filter
+          if (filter != null && className.matches(filter)) {
+            File classDir = srcDir;
+            if (className.lastIndexOf(".") != -1) {
+              String packageName = className.substring(0, className.lastIndexOf("."));
+              StringTokenizer tok = new StringTokenizer(packageName, ".");
+              while (tok.hasMoreTokens()) {
+                String dirName = tok.nextToken();
+                classDir = new File(classDir, dirName);
+              }
             }
-          }
 
-          if (!classDir.exists()) {
-            if (!classDir.mkdirs()) {
-              throw new MojoExecutionException("Unable to create class directories: " + classDir.getAbsolutePath());
+            if (!classDir.exists()) {
+              if (!classDir.mkdirs()) {
+                throw new MojoExecutionException("Unable to create class directories: " + classDir.getAbsolutePath());
+              }
             }
-          }
 
-          if (generateInterface) {
-            CpoInterfaceSourceGenerator interfaceSourceGenerator = new CpoInterfaceSourceGenerator(metaDescriptor);
-            cpoClass.acceptMetaDFVisitor(interfaceSourceGenerator);
-
-            File interfaceFile = new File(classDir, interfaceSourceGenerator.getInterfaceName() + JAVA_EXT);
-            getLog().info("cpo-plugin generated " + interfaceFile.getAbsolutePath());
-
-            FileWriter iw = new FileWriter(interfaceFile);
-            iw.write(interfaceSourceGenerator.getSourceCode());
-            iw.flush();
-            iw.close();
-          }
-
-          if (generateClass) {
-            CpoClassSourceGenerator classSourceGenerator;
             if (generateInterface) {
-              classSourceGenerator = new CpoClassSourceGenerator(metaDescriptor);
-            } else {
-              classSourceGenerator = new CpoLegacyClassSourceGenerator(metaDescriptor);
+              CpoInterfaceSourceGenerator interfaceSourceGenerator = new CpoInterfaceSourceGenerator(metaDescriptor);
+              cpoClass.acceptMetaDFVisitor(interfaceSourceGenerator);
+
+              File interfaceFile = new File(classDir, interfaceSourceGenerator.getInterfaceName() + JAVA_EXT);
+              getLog().info("cpo-plugin generated " + interfaceFile.getAbsolutePath());
+
+              FileWriter iw = new FileWriter(interfaceFile);
+              iw.write(interfaceSourceGenerator.getSourceCode());
+              iw.flush();
+              iw.close();
             }
-            cpoClass.acceptMetaDFVisitor(classSourceGenerator);
 
-            File javaFile = new File(classDir, classSourceGenerator.getClassName() + JAVA_EXT);
-            getLog().info("cpo-plugin generated " + javaFile.getAbsolutePath());
+            if (generateClass) {
+              CpoClassSourceGenerator classSourceGenerator;
+              if (generateInterface) {
+                classSourceGenerator = new CpoClassSourceGenerator(metaDescriptor);
+              } else {
+                classSourceGenerator = new CpoLegacyClassSourceGenerator(metaDescriptor);
+              }
+              cpoClass.acceptMetaDFVisitor(classSourceGenerator);
 
-            FileWriter cw = new FileWriter(javaFile);
-            cw.write(classSourceGenerator.getSourceCode());
-            cw.flush();
-            cw.close();
+              File javaFile = new File(classDir, classSourceGenerator.getClassName() + JAVA_EXT);
+              getLog().info("cpo-plugin generated " + javaFile.getAbsolutePath());
+
+              FileWriter cw = new FileWriter(javaFile);
+              cw.write(classSourceGenerator.getSourceCode());
+              cw.flush();
+              cw.close();
+            }
           }
         }
       }
     } catch (Exception ex) {
+      ex.printStackTrace();
       throw new MojoExecutionException("Exception caught", ex);
     }
   }

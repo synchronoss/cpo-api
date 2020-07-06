@@ -38,7 +38,6 @@ import org.synchronoss.cpo.helper.ExceptionHelper;
  */
 public class RollbackTrxTest {
 
-  private CpoAdapter cpoAdapter = null;
   private CpoTrxAdapter trxAdapter = null;
 
   /**
@@ -56,9 +55,8 @@ public class RollbackTrxTest {
     String method = "setUp:";
 
     try {
-      cpoAdapter = CpoAdapterFactoryManager.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_JDBC);
       trxAdapter = CpoAdapterFactoryManager.getCpoTrxAdapter(JdbcStatics.ADAPTER_CONTEXT_JDBC);
-      assertNotNull(method + "CpoAdapter is null", trxAdapter);
+      assertNotNull(method + "trxAdapter is null", trxAdapter);
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -113,7 +111,7 @@ public class RollbackTrxTest {
     al.add(vo2);
 
     try {
-      trxAdapter.insertObjects("TestRollback", al);
+      trxAdapter.insertObjects(ValueObject.FG_CREATE_TESTROLLBACK, al);
       trxAdapter.commit();
       fail(method + "Insert should have thrown an exception");
     } catch (Exception e) {
@@ -140,7 +138,7 @@ public class RollbackTrxTest {
     String method = "testTrxSingleRollback:";
     ValueObject vo = ValueObjectFactory.createValueObject(2);
     try {
-      trxAdapter.insertObject("TestSingleRollback", vo);
+      trxAdapter.insertObject(ValueObject.FG_CREATE_TESTSINGLEROLLBACK, vo);
       trxAdapter.commit();
       fail(method + "Insert should have thrown an exception");
     } catch (Exception e) {

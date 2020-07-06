@@ -58,9 +58,9 @@ public class SelectForUpdateTest {
 
     try {
       cpoAdapter = CpoAdapterFactoryManager.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_JDBC);
-      assertNotNull(method + "CpoAdapter is null", cpoAdapter);
+      assertNotNull(method + "cpoAdapter is null", cpoAdapter);
       trxAdapter = CpoAdapterFactoryManager.getCpoTrxAdapter(JdbcStatics.ADAPTER_CONTEXT_JDBC);
-      assertNotNull(method + "CpoTrxAdapter is null", trxAdapter);
+      assertNotNull(method + "trxAdapter is null", trxAdapter);
       metaDescriptor = (JdbcCpoMetaDescriptor) cpoAdapter.getCpoMetaDescriptor();
     } catch (Exception e) {
       logger.debug(ExceptionHelper.getLocalizedMessage(e));
@@ -117,19 +117,19 @@ public class SelectForUpdateTest {
       ValueObject vo2 = ValueObjectFactory.createValueObject(1);
 
       try {
-        trxAdapter.retrieveBean("SelectForUpdate", vo2);
+        trxAdapter.retrieveBean(ValueObject.FG_RETRIEVE_SELECTFORUPDATE, vo2);
       } catch (Exception e) {
         fail(method + "Select For Update should work:" + ExceptionHelper.getLocalizedMessage(e));
       }
 
       try {
-        trxAdapter.retrieveBean("SelectForUpdate", vo2);
+        trxAdapter.retrieveBean(ValueObject.FG_RETRIEVE_SELECTFORUPDATE, vo2);
       } catch (Exception e) {
         fail(method + "Select For Update should work:" + ExceptionHelper.getLocalizedMessage(e));
       }
 
       try {
-        cpoAdapter.retrieveBean("Select4UpdateNoWait", vo2);
+        cpoAdapter.retrieveBean(ValueObject.FG_RETRIEVE_SELECT4UPDATENOWAIT, vo2);
         fail(method + "SelectForUpdateNoWait should fail:");
       } catch (Exception e) {
         logger.debug(ExceptionHelper.getLocalizedMessage(e));
@@ -147,7 +147,7 @@ public class SelectForUpdateTest {
         fail(method + "Commit should have worked.");
       }
       try {
-        cpoAdapter.retrieveBean("Select4UpdateNoWait", vo2);
+        cpoAdapter.retrieveBean(ValueObject.FG_RETRIEVE_SELECT4UPDATENOWAIT, vo2);
       } catch (Exception e) {
         fail(method + "SelectForUpdateNoWait should success:" + ExceptionHelper.getLocalizedMessage(e));
       }
@@ -163,21 +163,21 @@ public class SelectForUpdateTest {
       ValueObject vo2 = ValueObjectFactory.createValueObject(1);
 
       try {
-        long count = trxAdapter.existsObject("SelectForUpdateExistZero", vo2);
+        long count = trxAdapter.existsObject(ValueObject.FG_EXIST_SELECTFORUPDATEEXISTZERO, vo2);
         assertTrue("Zero objects should have been returned", count == 0);
       } catch (Exception e) {
         fail(method + "Select For Update should work:" + ExceptionHelper.getLocalizedMessage(e));
       }
 
       try {
-        long count = trxAdapter.existsObject("SelectForUpdateExistSingle", vo2);
+        long count = trxAdapter.existsObject(ValueObject.FG_EXIST_SELECTFORUPDATEEXISTSINGLE, vo2);
         assertTrue("One object should have been returned, got " + count, count == 1);
       } catch (Exception e) {
         fail(method + "Select For Update should work:" + ExceptionHelper.getLocalizedMessage(e));
       }
 
       try {
-        long count = trxAdapter.existsObject("SelectForUpdateExistAll", vo2);
+        long count = trxAdapter.existsObject(ValueObject.FG_EXIST_SELECTFORUPDATEEXISTALL, vo2);
         assertTrue("Two objects should have been returned, got " + count, count == 2);
       } catch (Exception e) {
         fail(method + "Select For Update should work:" + ExceptionHelper.getLocalizedMessage(e));

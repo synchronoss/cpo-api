@@ -58,7 +58,7 @@ public class ExecuteTest {
 
     try {
       cpoAdapter = CpoAdapterFactoryManager.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_JDBC);
-      assertNotNull(method + "CpoAdapter is null", cpoAdapter);
+      assertNotNull(method + "cpoAdapter is null", cpoAdapter);
       metaDescriptor = (JdbcCpoMetaDescriptor) cpoAdapter.getCpoMetaDescriptor();
     } catch (Exception e) {
       fail(method + e.getMessage());
@@ -85,7 +85,7 @@ public class ExecuteTest {
       ValueObject rvo;
 
       try {
-        rvo = cpoAdapter.executeObject("TestExecuteObject", vo);
+        rvo = cpoAdapter.executeObject(ValueObject.FG_EXECUTE_TESTEXECUTEOBJECT, vo);
         assertNotNull(method + "Returned Value object is null");
         assertTrue("power(3,3)=" + rvo.getAttrDouble(), rvo.getAttrDouble() == 27);
       } catch (Exception e) {
@@ -97,7 +97,7 @@ public class ExecuteTest {
       try {
         vo = ValueObjectFactory.createValueObject(1);
         vo.setAttrSmallInt((short)3);
-        rvo = cpoAdapter.executeObject("TestExecuteObjectNoTransform", vo);
+        rvo = cpoAdapter.executeObject(ValueObject.FG_EXECUTE_TESTEXECUTEOBJECTNOTRANSFORM, vo);
         assertNotNull(method + "Returned Value object is null");
         assertTrue("power(3,3)=" + rvo.getAttrDouble(), rvo.getAttrDouble() == 27);
       } catch (Exception e) {
@@ -118,7 +118,7 @@ public class ExecuteTest {
       ValueObject rvo;
 
       try {
-        rvo = cpoAdapter.executeObject("TestExecuteObject", vo, vo);
+        rvo = cpoAdapter.executeObject(ValueObject.FG_EXECUTE_TESTEXECUTEOBJECT, vo, vo);
         assertNotNull(method + "Returned Value object is null");
         assertTrue("power(3,3)=" + rvo.getAttrDouble(), rvo.getAttrDouble() == 27);
       } catch (Exception e) {

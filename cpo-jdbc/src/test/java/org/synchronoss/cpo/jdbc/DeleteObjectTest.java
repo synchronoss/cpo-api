@@ -60,7 +60,7 @@ public class DeleteObjectTest {
 
     try {
       cpoAdapter = CpoAdapterFactoryManager.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_JDBC);
-      assertNotNull(method + "IdoAdapter is null", cpoAdapter);
+      assertNotNull(method + "cpoAdapter is null", cpoAdapter);
       metaDescriptor = (JdbcCpoMetaDescriptor) cpoAdapter.getCpoMetaDescriptor();
     } catch (Exception e) {
       fail(method + e.getMessage());
@@ -96,8 +96,8 @@ public class DeleteObjectTest {
     // try the where on the delete, should delete 0
     try {
       List<CpoWhere> cws = new ArrayList<>();
-      cws.add(cpoAdapter.newWhere(CpoWhere.LOGIC_AND, "id", CpoWhere.COMP_EQ, 2));
-      long deleted = cpoAdapter.deleteObject(null, valObj, cws, null, null);
+      cws.add(cpoAdapter.newWhere(CpoWhere.LOGIC_AND, ValueObject.ATTR_ID, CpoWhere.COMP_EQ, 2));
+      long deleted = cpoAdapter.deleteObject(ValueObject.FG_DELETE_NULL, valObj, cws, null, null);
       assertEquals("Should not have deleted anything", 0, deleted);
     } catch (Exception e) {
       logger.error(ExceptionHelper.getLocalizedMessage(e));
@@ -107,8 +107,8 @@ public class DeleteObjectTest {
     // try the where on the delete, should delete 1
     try {
       List<CpoWhere> cws = new ArrayList<>();
-      cws.add(cpoAdapter.newWhere(CpoWhere.LOGIC_OR, "id", CpoWhere.COMP_EQ, 2));
-      long deleted = cpoAdapter.deleteObject(null, valObj, cws, null, null);
+      cws.add(cpoAdapter.newWhere(CpoWhere.LOGIC_OR, ValueObject.ATTR_ID, CpoWhere.COMP_EQ, 2));
+      long deleted = cpoAdapter.deleteObject(ValueObject.FG_DELETE_NULL, valObj, cws, null, null);
       assertEquals("Should have deleted 1", 1, deleted);
     } catch (Exception e) {
       logger.error(ExceptionHelper.getLocalizedMessage(e));

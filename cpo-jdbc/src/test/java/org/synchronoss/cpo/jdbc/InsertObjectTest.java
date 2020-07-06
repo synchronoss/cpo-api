@@ -59,14 +59,14 @@ public class InsertObjectTest {
 
     try {
       cpoAdapter = CpoAdapterFactoryManager.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_JDBC);
-      assertNotNull(method + "IdoAdapter is null", cpoAdapter);
+      assertNotNull(method + "cpoAdapter is null", cpoAdapter);
       metaDescriptor = (JdbcCpoMetaDescriptor) cpoAdapter.getCpoMetaDescriptor();
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
     try {
       readAdapter = CpoAdapterFactoryManager.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_JDBC);
-      assertNotNull(method + "IdoAdapter is null", readAdapter);
+      assertNotNull(method + "readAdapter is null", readAdapter);
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -102,7 +102,7 @@ public class InsertObjectTest {
     }
 
     try {
-      ValueObject vo = readAdapter.retrieveBean(null, valObj, valObj, null, null);
+      ValueObject vo = readAdapter.retrieveBean(ValueObject.FG_RETRIEVE_NULL, valObj, valObj, null, null);
       assertTrue("Ids do not match", vo.getId() == valObj.getId());
       assertTrue("Integers do not match", vo.getAttrInteger() == valObj.getAttrInteger());
       assertEquals("Strings do not match", vo.getAttrVarChar(), valObj.getAttrVarChar());
@@ -135,7 +135,7 @@ public class InsertObjectTest {
     }
 
     try {
-      Collection<ValueObject> col = readAdapter.retrieveBeans(null, vo);
+      Collection<ValueObject> col = readAdapter.retrieveBeans(ValueObject.FG_LIST_NULL, vo);
 
       assertTrue(method + "Invalid number of objects returned", col.size() == al.size());
     } catch (Exception e) {

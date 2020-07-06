@@ -55,7 +55,7 @@ public class InterleavedWhereTest {
 
     try {
       cpoAdapter = CpoAdapterFactoryManager.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_JDBC);
-      assertNotNull(method + "CpoAdapter is null", cpoAdapter);
+      assertNotNull(method + "cpoAdapter is null", cpoAdapter);
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -74,7 +74,7 @@ public class InterleavedWhereTest {
     vo5.setAttrBit(true);
     al.add(vo5);
     try {
-      cpoAdapter.insertObjects("TestOrderByInsert", al);
+      cpoAdapter.insertObjects(ValueObject.FG_CREATE_TESTORDERBYINSERT, al);
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -87,7 +87,7 @@ public class InterleavedWhereTest {
   public void tearDown() {
     String method = "tearDown:";
     try {
-      cpoAdapter.deleteObjects("TestOrderByDelete", al);
+      cpoAdapter.deleteObjects(ValueObject.FG_DELETE_TESTORDERBYDELETE, al);
 
     } catch (Exception e) {
       fail(method + e.getMessage());
@@ -114,11 +114,11 @@ public class InterleavedWhereTest {
       inColl.add(3);
       inColl.add(5);
 
-      cw = cpoAdapter.newWhere(CpoWhere.LOGIC_AND, "id", CpoWhere.COMP_IN, inColl);
+      cw = cpoAdapter.newWhere(CpoWhere.LOGIC_AND, ValueObject.ATTR_ID, CpoWhere.COMP_IN, inColl);
 
       ArrayList<CpoWhere> wheres = new ArrayList<>();
       wheres.add(cw);
-      coll = cpoAdapter.retrieveBeans("InterleavedWhere", valObj, wheres, null);
+      coll = cpoAdapter.retrieveBeans(ValueObject.FG_LIST_INTERLEAVEDWHERE, valObj, wheres, null);
 
       assertTrue("Collection size is " + coll.size(), coll.size() == 3);
 

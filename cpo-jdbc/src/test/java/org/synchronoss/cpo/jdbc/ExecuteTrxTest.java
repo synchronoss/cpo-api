@@ -28,6 +28,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.CpoAdapter;
 import org.synchronoss.cpo.CpoAdapterFactoryManager;
+import org.synchronoss.cpo.CpoTrxAdapter;
 import org.synchronoss.cpo.helper.ExceptionHelper;
 import org.synchronoss.cpo.jdbc.meta.JdbcCpoMetaDescriptor;
 
@@ -39,7 +40,8 @@ import org.synchronoss.cpo.jdbc.meta.JdbcCpoMetaDescriptor;
 public class ExecuteTrxTest {
 
   private static final Logger logger = LoggerFactory.getLogger(ExecuteTrxTest.class);
-  private CpoAdapter cpoAdapter = null;
+//  private CpoAdapter cpoAdapter = null;
+  private CpoTrxAdapter trxAdapter = null;
   private JdbcCpoMetaDescriptor metaDescriptor = null;
   private boolean isSupportsCalls = Boolean.valueOf(JdbcJUnitProperty.getProperty(JdbcJUnitProperty.PROP_CALLS_SUPPORTED));
 
@@ -58,9 +60,11 @@ public class ExecuteTrxTest {
     String method = "setUp:";
 
     try {
-      cpoAdapter = CpoAdapterFactoryManager.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_JDBC);
-      assertNotNull(method + "CpoAdapter is null", cpoAdapter);
-      metaDescriptor = (JdbcCpoMetaDescriptor) cpoAdapter.getCpoMetaDescriptor();
+//      cpoAdapter = CpoAdapterFactoryManager.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_JDBC);
+      trxAdapter = CpoAdapterFactoryManager.getCpoTrxAdapter(JdbcStatics.ADAPTER_CONTEXT_JDBC);
+//      assertNotNull(method + "CpoAdapter is null", cpoAdapter);
+      assertNotNull(method + "trxAdapter is null", trxAdapter);
+      metaDescriptor = (JdbcCpoMetaDescriptor) trxAdapter.getCpoMetaDescriptor();
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -71,7 +75,8 @@ public class ExecuteTrxTest {
    */
   @After
   public void tearDown() {
-    cpoAdapter = null;
+    try{trxAdapter.close();} catch (Exception e) {}
+    trxAdapter = null;
   }
 
   /**
@@ -86,10 +91,12 @@ public class ExecuteTrxTest {
       ValueObject rvo;
 
       try {
-        rvo = cpoAdapter.executeObject("TestExecuteObject", vo);
+        rvo = trxAdapter.executeObject(ValueObject.FG_EXECUTE_TESTEXECUTEOBJECT, vo);
+        trxAdapter.commit();
         assertNotNull(method + "Returned Value object is null");
         assertTrue("power(3,3)=" + rvo.getAttrDouble(), rvo.getAttrDouble() == 27);
       } catch (Exception e) {
+        try { trxAdapter.rollback();} catch (Exception ex) {}
         logger.error(ExceptionHelper.getLocalizedMessage(e));
         fail(method + e.getMessage());
       }
@@ -98,15 +105,39 @@ public class ExecuteTrxTest {
       try {
         vo = ValueObjectFactory.createValueObject(1);
         vo.setAttrSmallInt((short)3);
-        rvo = cpoAdapter.executeObject("TestExecuteObjectNoTransform", vo);
+        rvo = trxAdapter.executeObject(ValueObject.FG_EXECUTE_TESTEXECUTEOBJECTNOTRANSFORM, vo);
+        trxAdapter.commit();
         assertNotNull(method + "Returned Value object is null");
         assertTrue("power(3,3)=" + rvo.getAttrDouble(), rvo.getAttrDouble() == 27);
       } catch (Exception e) {
+        try { trxAdapter.rollback();} catch (Exception ex) {}
         logger.error(ExceptionHelper.getLocalizedMessage(e));
         fail(method + e.getMessage());
       }
     } else {
-      logger.error(cpoAdapter.getDataSourceName() + " does not support CallableStatements");
+      logger.error(trxAdapter.getDataSourceName() + " does not support CallableStatements");
     }
   }
+
+  @Test
+  public void testExecute2() {
+    if (isSupportsCalls) {
+      String method = "testExecuteObject:";
+      ValueObject vo = ValueObjectFactory.createValueObject(1);
+      vo.setAttrInteger(3);
+      ValueObject rvo;
+
+      try {
+        rvo = trxAdapter.executeObject(ValueObject.FG_EXECUTE_TESTEXECUTEOBJECT, vo, vo);
+        trxAdapter.commit();
+        assertNotNull(method + "Returned Value object is null");
+        assertTrue("power(3,3)=" + rvo.getAttrDouble(), rvo.getAttrDouble() == 27);
+      } catch (Exception e) {
+        try { trxAdapter.rollback();} catch (Exception ex) {}
+        logger.error(ExceptionHelper.getLocalizedMessage(e));
+        fail(method + e.getMessage());
+      }
+    }
+  }
+
 }

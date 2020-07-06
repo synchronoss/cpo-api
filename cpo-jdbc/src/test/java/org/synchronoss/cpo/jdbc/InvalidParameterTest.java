@@ -49,7 +49,7 @@ public class InvalidParameterTest {
 
     try {
       cpoAdapter = CpoAdapterFactoryManager.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_JDBC);
-      assertNotNull(method + "IdoAdapter is null", cpoAdapter);
+      assertNotNull(method + "cpoAdapter is null", cpoAdapter);
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -79,7 +79,7 @@ public class InvalidParameterTest {
 
     try {
       ValueObject valObj = null;
-      col = cpoAdapter.retrieveBeans(null, valObj);
+      col = cpoAdapter.retrieveBeans(ValueObject.FG_LIST_NULL, valObj);
       fail(method + "Test got to unreachable code");
     } catch (CpoException ce) {
       //This is what I am expecting so let it go
@@ -95,7 +95,7 @@ public class InvalidParameterTest {
     Collection<ValueObject> col = null;
 
     try {
-      ValueObject valObj = cpoAdapter.retrieveBean(null, null);
+      ValueObject valObj = cpoAdapter.retrieveBean(ValueObject.FG_RETRIEVE_NULL, null);
       fail(method + "Test got to unreachable code");
     } catch (CpoException ce) {
       //This is what I am expecting so let it go
@@ -112,7 +112,7 @@ public class InvalidParameterTest {
 
     try {
       ValueObject valObj = null;
-      cpoAdapter.insertObject(null, valObj);
+      cpoAdapter.insertObject(ValueObject.FG_CREATE_NULL, valObj);
       fail(method + "Test got to unreachable code");
     } catch (CpoException ce) {
       //This is what I am expecting so let it go
@@ -130,7 +130,7 @@ public class InvalidParameterTest {
     try {
       LobValueObject lvo = new LobValueObjectBean();
       logger.debug("Calling the NULL List");
-      lvos = cpoAdapter.retrieveBeans(null, lvo);
+      lvos = cpoAdapter.retrieveBeans(ValueObject.FG_LIST_NULL, lvo);
       logger.debug("Called the NULL List");
       fail(method + "Test got to unreachable code");
     } catch (CpoException ce) {

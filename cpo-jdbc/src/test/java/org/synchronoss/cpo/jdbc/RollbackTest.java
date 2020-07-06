@@ -49,7 +49,7 @@ public class RollbackTest {
 
     try {
       cpoAdapter = CpoAdapterFactoryManager.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_JDBC);
-      assertNotNull(method + "CpoAdapter is null", cpoAdapter);
+      assertNotNull(method + "cpoAdapter is null", cpoAdapter);
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -89,7 +89,7 @@ public class RollbackTest {
     al.add(vo2);
 
     try {
-      cpoAdapter.insertObjects("TestRollback", al);
+      cpoAdapter.insertObjects(ValueObject.FG_CREATE_TESTROLLBACK, al);
       fail(method + "Insert should have thrown an exception");
     } catch (Exception e) {
       try {
@@ -109,7 +109,7 @@ public class RollbackTest {
     String method = "testSingleRollback:";
     ValueObject vo = ValueObjectFactory.createValueObject(2);
     try {
-      cpoAdapter.insertObject("TestSingleRollback", vo);
+      cpoAdapter.insertObject(ValueObject.FG_CREATE_TESTSINGLEROLLBACK, vo);
       fail(method + "Insert should have thrown an exception");
     } catch (Exception e) {
       try {

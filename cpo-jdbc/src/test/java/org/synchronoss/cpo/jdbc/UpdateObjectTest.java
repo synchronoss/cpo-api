@@ -57,7 +57,7 @@ public class UpdateObjectTest {
 
     try {
       cpoAdapter = CpoAdapterFactoryManager.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_JDBC);
-      assertNotNull(method + "IdoAdapter is null", cpoAdapter);
+      assertNotNull(method + "cpoAdapter is null", cpoAdapter);
       metaDescriptor = (JdbcCpoMetaDescriptor) cpoAdapter.getCpoMetaDescriptor();
     } catch (Exception e) {
       fail(method + e.getMessage());
@@ -92,8 +92,8 @@ public class UpdateObjectTest {
     // try the where on the update, should update 0
     try {
       List<CpoWhere> cws = new ArrayList<>();
-      cws.add(cpoAdapter.newWhere(CpoWhere.LOGIC_NONE, "id", CpoWhere.COMP_EQ, 2));
-      long updated = cpoAdapter.updateObject(null, valObj, cws, null, null);
+      cws.add(cpoAdapter.newWhere(CpoWhere.LOGIC_NONE, ValueObject.ATTR_ID, CpoWhere.COMP_EQ, 2));
+      long updated = cpoAdapter.updateObject(ValueObject.FG_UPDATE_NULL, valObj, cws, null, null);
       assertEquals("Should not have updated anything", 0, updated);
     } catch (Exception e) {
       fail(method + e.getMessage());
@@ -102,8 +102,8 @@ public class UpdateObjectTest {
     // try the where on the update, should update 1
     try {
       List<CpoWhere> cws = new ArrayList<>();
-      cws.add(cpoAdapter.newWhere(CpoWhere.LOGIC_NONE, "id", CpoWhere.COMP_EQ, 5));
-      long updated = cpoAdapter.updateObject(null, valObj, cws, null, null);
+      cws.add(cpoAdapter.newWhere(CpoWhere.LOGIC_NONE, ValueObject.ATTR_ID, CpoWhere.COMP_EQ, 5));
+      long updated = cpoAdapter.updateObject(ValueObject.FG_UPDATE_NULL, valObj, cws, null, null);
       assertEquals("Should have updated 1", 1, updated);
     } catch (Exception e) {
       fail(method + e.getMessage());

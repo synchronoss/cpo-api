@@ -58,14 +58,14 @@ public class CaseSensitiveTest {
 
     try {
       cpoAdapter = CpoAdapterFactoryManager.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_CASESENSITIVE);
-      assertNotNull(method + "IdoAdapter is null", cpoAdapter);
+      assertNotNull(method + "cpoAdapter is null", cpoAdapter);
       metaDescriptor = (JdbcCpoMetaDescriptor) cpoAdapter.getCpoMetaDescriptor();
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
     try {
       readAdapter = CpoAdapterFactoryManager.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_CASESENSITIVE);
-      assertNotNull(method + "IdoAdapter is null", readAdapter);
+      assertNotNull(method + "readAdapter is null", readAdapter);
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -98,7 +98,7 @@ public class CaseSensitiveTest {
     }
 
     try {
-      CaseValueObject vo = readAdapter.retrieveBean(null, valObj, valObj, null, null);
+      CaseValueObject vo = readAdapter.retrieveBean(CaseValueObject.FG_RETRIEVE_NULL, valObj, valObj, null, null);
       assertFalse("Ids should not match", vo.getId() == valObj.getId());
       assertFalse("Integers should not match", vo.getAttrInteger() == valObj.getAttrInteger());
       assertFalse("Strings should not match", valObj.getAttrVarChar().equals(vo.getAttrVarChar()));

@@ -61,15 +61,15 @@ public class JdbcCallableStatementFactory implements CpoReleasible {
    * @param conn The actual jdbc connection that will be used to create the callable statement.
    * @param jca The JdbcCpoAdapter that is controlling this transaction
    * @param function The CpoFunction that is being executed
-   * @param obj The pojo that is being acted upon
+   * @param criteria The pojo that is being acted upon
    *
    * @throws CpoException if a CPO error occurs
    * @throws SQLException if a JDBC error occurs
    */
-  public JdbcCallableStatementFactory(Connection conn, JdbcCpoAdapter jca, CpoFunction function, Object obj) throws CpoException {
+  public JdbcCallableStatementFactory(Connection conn, JdbcCpoAdapter jca, CpoFunction function, Object criteria, CpoClass resultClass) throws CpoException {
     CallableStatement cstmt;
     JdbcCpoAttribute attribute;
-    Logger localLogger = obj == null ? logger : LoggerFactory.getLogger(obj.getClass());
+    Logger localLogger = criteria == null ? logger : LoggerFactory.getLogger(criteria.getClass());
 
     try {
       outArguments = function.getArguments();
@@ -87,10 +87,17 @@ public class JdbcCallableStatementFactory implements CpoReleasible {
 
         if (jdbcArgument.isInParameter()) {
           CpoData cpoData = new CallableStatementCpoData(this, attribute, j);
-          cpoData.invokeSetter(obj);
+          cpoData.invokeSetter(criteria);
         }
 
         if (jdbcArgument.isOutParameter()) {
+          // The function will not know the type of the attribute on the result object, so look it up now
+          if (attribute==null) {
+            attribute = (JdbcCpoAttribute) resultClass.getAttributeJava(argument.getAttributeName());
+            if (attribute==null) {
+              throw new CpoException("Attribute <"+argument.getAttributeName()+"> does not exist on class <"+resultClass.getName()+">");
+            }
+          }
           localLogger.debug("Setting OUT parameter " + j + " as Type " + attribute.getDataTypeInt());
           if (jdbcArgument.getTypeInfo()!=null)
             cstmt.registerOutParameter(j, attribute.getDataTypeInt(), jdbcArgument.getTypeInfo());

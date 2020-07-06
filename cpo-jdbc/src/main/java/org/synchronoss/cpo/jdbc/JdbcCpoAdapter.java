@@ -563,6 +563,7 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
   protected <T, C> T processExecuteGroup(String name, C criteria, T result, Connection conn) throws CpoException {
     CallableStatement cstmt = null;
     CpoClass criteriaClass;
+    CpoClass resultClass;
     T returnObject = null;
     Logger localLogger = criteria == null ? logger : LoggerFactory.getLogger(criteria.getClass());
 
@@ -574,6 +575,8 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
 
     try {
       criteriaClass = metaDescriptor.getMetaClass(criteria);
+      resultClass = metaDescriptor.getMetaClass(result);
+
       List<CpoFunction> functions = criteriaClass.getFunctionGroup(JdbcCpoAdapter.EXECUTE_GROUP, name).getFunctions();
       localLogger.info("===================processExecuteGroup (" + name + ") Count<" + functions.size() + ">=========================");
 
@@ -590,14 +593,14 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
 
         localLogger.debug("Executing Call:" + criteriaClass.getName() + ":" + name);
 
-        jcsf = new JdbcCallableStatementFactory(conn, this, function, criteria);
+        jcsf = new JdbcCallableStatementFactory(conn, this, function, criteria, resultClass);
         cstmt = jcsf.getCallableStatement();
         cstmt.execute();
         jcsf.release();
 
         localLogger.debug("Processing Call:" + criteriaClass.getName() + ":" + name);
 
-        // Add Code here to go through the arguments, find record sets,
+        // Todo: Add Code here to go through the arguments, find record sets,
         // and process them
         // Process the non-record set out params and make it the first
         // object in the collection
@@ -609,6 +612,12 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
           JdbcCpoArgument jdbcArgument = (JdbcCpoArgument) cpoArgument;
           if (jdbcArgument.isOutParameter()) {
             JdbcCpoAttribute jdbcAttribute = jdbcArgument.getAttribute();
+            if (jdbcAttribute==null) {
+              jdbcAttribute = (JdbcCpoAttribute) resultClass.getAttributeJava(jdbcArgument.getAttributeName());
+              if (jdbcAttribute==null) {
+                throw new CpoException("Attribute <"+jdbcArgument.getAttributeName()+"> does not exist on class <"+resultClass.getName()+">");
+              }
+            }
             jdbcAttribute.invokeSetter(returnObject, new CallableStatementCpoData(cstmt, jdbcAttribute, j));
           }
           j++;

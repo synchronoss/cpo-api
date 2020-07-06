@@ -58,7 +58,7 @@ public class ZZHotDeployTest {
 
     try {
       cpoAdapter = CpoAdapterFactoryManager.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_JDBC);
-      assertNotNull(method + "CpoAdapter is null", cpoAdapter);
+      assertNotNull(method + "cpoAdapter is null", cpoAdapter);
       // lets save the existing config before we monkey with it
       cpoAdapter.getCpoMetaDescriptor().export(metaFile);
     } catch (Exception e) {
@@ -75,7 +75,7 @@ public class ZZHotDeployTest {
     al.add(ValueObjectFactory.createValueObject(5));
     al.add(ValueObjectFactory.createValueObject(-6));
     try {
-      cpoAdapter.insertObjects("TestOrderByInsert", al);
+      cpoAdapter.insertObjects(ValueObject.FG_CREATE_TESTORDERBYINSERT, al);
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -90,7 +90,7 @@ public class ZZHotDeployTest {
       ValueObject valObj = ValueObjectFactory.createValueObject();
 
       // make sure the default retrieve works
-      col = cpoAdapter.retrieveBeans(null, valObj);
+      col = cpoAdapter.retrieveBeans(ValueObject.FG_LIST_NULL, valObj);
       assertTrue("Col size is " + col.size(), col!=null);
 
       col = cpoAdapter.retrieveBeans("HotDeploySelect", valObj);
@@ -107,7 +107,7 @@ public class ZZHotDeployTest {
       ValueObject valObj = ValueObjectFactory.createValueObject(2);
 
       // make sure the default retrieve still works
-      col = cpoAdapter.retrieveBeans(null, valObj);
+      col = cpoAdapter.retrieveBeans(ValueObject.FG_LIST_NULL, valObj);
       assertTrue("Col size is " + col.size(), col.size()==6);
 
       List<ValueObject> col2 = cpoAdapter.retrieveBeans("HotDeploySelect", valObj);
@@ -133,7 +133,7 @@ public class ZZHotDeployTest {
       ValueObject valObj = ValueObjectFactory.createValueObject();
 
       // make sure the default retrieve works
-      col = cpoAdapter.retrieveBeans(null, valObj);
+      col = cpoAdapter.retrieveBeans(ValueObject.FG_LIST_NULL, valObj);
       assertTrue("Col size is " + col.size(), col!=null);
 
       col = cpoAdapter.retrieveBeans("HotDeploySelect", valObj);
@@ -151,7 +151,7 @@ public class ZZHotDeployTest {
 
       // the old retrieve should no longer be there
       try {
-        col = cpoAdapter.retrieveBeans(null, valObj);
+        col = cpoAdapter.retrieveBeans(ValueObject.FG_LIST_NULL, valObj);
         fail("should have thrown a cpo exception");
       } catch (CpoException ce) {
         // do nothing, this is expected
@@ -176,7 +176,7 @@ public class ZZHotDeployTest {
       cpoAdapter.getCpoMetaDescriptor().refreshDescriptorMeta(metaFiles, true);
       metaFile.delete();
 
-      cpoAdapter.deleteObjects("TestOrderByDelete", al);
+      cpoAdapter.deleteObjects(ValueObject.FG_DELETE_TESTORDERBYDELETE, al);
     } catch (Exception e) {
       fail(method + e.getMessage());
     }

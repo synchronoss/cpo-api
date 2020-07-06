@@ -108,7 +108,7 @@ public class CpoJavaSamplerClient extends AbstractJavaSamplerClient {
 
     try {
       cpoAdapter.insertObject(valueObject);
-      ValueObject vo = cpoAdapter.retrieveBean(null, valueObject, valueObject, null, null);
+      ValueObject vo = cpoAdapter.retrieveBean(ValueObject.FG_RETRIEVE_NULL, valueObject, valueObject, null, null);
       if (vo != null && vo.getId() == valueObject.getId()) {
         result.setSuccessful(true);
       } else {

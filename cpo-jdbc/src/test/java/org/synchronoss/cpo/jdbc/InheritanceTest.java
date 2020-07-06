@@ -58,7 +58,7 @@ public class InheritanceTest {
 
     try {
       cpoAdapter = CpoAdapterFactoryManager.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_JDBC);
-      assertNotNull(method + "IdoAdapter is null", cpoAdapter);
+      assertNotNull(method + "cpoAdapter is null", cpoAdapter);
       metaDescriptor = (JdbcCpoMetaDescriptor) cpoAdapter.getCpoMetaDescriptor();
     } catch (Exception e) {
       fail(method + e.getMessage());
@@ -92,7 +92,7 @@ public class InheritanceTest {
     }
 
     try {
-      ChildValueObject vo = cpoAdapter.retrieveBean(null, valObj, valObj, null, null);
+      ChildValueObject vo = cpoAdapter.retrieveBean(ValueObject.FG_RETRIEVE_NULL, valObj, valObj, null, null);
       assertEquals("Ids do not match", vo.getId(), valObj.getId());
       assertEquals("Integers do not match", vo.getAttrInteger(), valObj.getAttrInteger());
       assertEquals("Strings do not match", vo.getAttrVarChar(), valObj.getAttrVarChar());

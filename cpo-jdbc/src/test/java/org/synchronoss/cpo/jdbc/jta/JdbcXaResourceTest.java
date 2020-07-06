@@ -129,12 +129,12 @@ public class JdbcXaResourceTest {
       cpoXaAdapter1.commit(xid1, false);
       cpoXaAdapter2.commit(xid2, false);
 
-			CpoOrderBy cob = cpoXaAdapter1.newOrderBy("id", true);
+			CpoOrderBy cob = cpoXaAdapter1.newOrderBy(ValueObject.ATTR_ID, true);
 			Collection<CpoOrderBy> colCob = new ArrayList<>();
 			colCob.add(cob);
 
       ValueObject valObj = ValueObjectFactory.createValueObject();
-      List<ValueObject> list = cpoXaAdapter1.retrieveBeans(null, valObj, colCob);
+      List<ValueObject> list = cpoXaAdapter1.retrieveBeans(ValueObject.FG_LIST_NULL, valObj, colCob);
 			assertTrue("list size is " + list.size(), list.size() == 2);
 			assertTrue("ValuObject(1) is missing", list.get(0).getId() == 1);
 			assertTrue("ValuObject(2) is missing", list.get(1).getId() == 2);
@@ -182,7 +182,7 @@ public class JdbcXaResourceTest {
       cpoXaAdapter2.rollback(xid2);
 
       ValueObject valObj = ValueObjectFactory.createValueObject();
-      List<ValueObject> list = cpoAdapter.retrieveBeans(null, valObj);
+      List<ValueObject> list = cpoAdapter.retrieveBeans(ValueObject.FG_LIST_NULL, valObj);
       assertTrue("list SHOULD BE EMPTY", list.isEmpty());
     } catch (Exception e) {
      fail(method + ExceptionHelper.getLocalizedMessage(e));
@@ -398,7 +398,7 @@ public class JdbcXaResourceTest {
       }
       // make sure that only valobj2 is in the database
       ValueObject valObj = ValueObjectFactory.createValueObject();
-      List<ValueObject> list = cpoAdapter.retrieveBeans(null, valObj);
+      List<ValueObject> list = cpoAdapter.retrieveBeans(ValueObject.FG_LIST_NULL, valObj);
 			assertTrue("list size is " + list.size(), list.size() == 1);
 			assertTrue("valObj2 is missing", list.get(0).getId() == valObj2.getId());
 
@@ -445,7 +445,7 @@ public class JdbcXaResourceTest {
       // make sure the xid1 insert can be seen
       // make sure the xid2 insert cannot be seen
       ValueObject valObj = ValueObjectFactory.createValueObject();
-      List<ValueObject> list = cpoAdapter.retrieveBeans(null, valObj);
+      List<ValueObject> list = cpoAdapter.retrieveBeans(ValueObject.FG_LIST_NULL, valObj);
 			assertTrue("list size is " + list.size(), list.size() == 1);
 			assertTrue("valObj1 is missing", list.get(0).getId() == valObj1.getId());
     } catch (Exception e) {
@@ -488,7 +488,7 @@ public class JdbcXaResourceTest {
 
       // make sure both records exist
       ValueObject valObj = ValueObjectFactory.createValueObject();
-      List<ValueObject> list = cpoAdapter.retrieveBeans(null, valObj);
+      List<ValueObject> list = cpoAdapter.retrieveBeans(ValueObject.FG_LIST_NULL, valObj);
 			assertTrue("list size is " + list.size(), list.size() == 2);
     } catch (Exception e) {
       fail(method + ExceptionHelper.getLocalizedMessage(e));

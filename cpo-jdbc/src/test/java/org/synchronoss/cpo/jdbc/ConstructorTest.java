@@ -63,7 +63,7 @@ public class ConstructorTest {
       assertTrue("password is in datasource name", !cpoAdapter.getDataSourceName().contains(PASSWORDSTRING));
 
       ValueObject valObj = ValueObjectFactory.createValueObject();
-      List<ValueObject> objs = cpoAdapter.retrieveBeans(null, valObj);
+      List<ValueObject> objs = cpoAdapter.retrieveBeans(ValueObject.FG_LIST_NULL, valObj);
       assertTrue("List size is " + objs.size(), objs.size() == 0);
     } catch (Exception e) {
       fail(method + e.getMessage());
@@ -81,7 +81,7 @@ public class ConstructorTest {
       assertTrue("password is in datasource name:", !cpoAdapter.getDataSourceName().contains(PASSWORDSTRING));
 
       ValueObject valObj = ValueObjectFactory.createValueObject();
-      List<ValueObject> objs = cpoAdapter.retrieveBeans(null, valObj);
+      List<ValueObject> objs = cpoAdapter.retrieveBeans(ValueObject.FG_LIST_NULL, valObj);
       assertTrue("List size is " + objs.size(), objs.size() == 0);
     } catch (Exception e) {
       fail(method + e.getMessage());
@@ -99,7 +99,7 @@ public class ConstructorTest {
       assertTrue("password is in datasource name", !cpoAdapter.getDataSourceName().contains(PASSWORDSTRING));
 
       ValueObject valObj = ValueObjectFactory.createValueObject();
-      List<ValueObject> objs = cpoAdapter.retrieveBeans(null, valObj);
+      List<ValueObject> objs = cpoAdapter.retrieveBeans(ValueObject.FG_LIST_NULL, valObj);
       assertTrue("List size is " + objs.size(), objs.size() == 0);
     } catch (Exception e) {
       fail(method + e.getMessage());
@@ -118,7 +118,7 @@ public class ConstructorTest {
       //assertTrue("password is in datasource name"+cpoAdapter.getDataSourceName(),cpoAdapter.getDataSourceName().indexOf(PASSWORDSTRING)==-1);
 
      ValueObject valObj = ValueObjectFactory.createValueObject();
-      List<ValueObject> objs = cpoAdapter.retrieveBeans(null, valObj);
+      List<ValueObject> objs = cpoAdapter.retrieveBeans(ValueObject.FG_LIST_NULL, valObj);
       assertTrue("List size is " + objs.size(), objs.size() == 0);
     } catch (Exception e) {
       fail(method + e.getMessage());
@@ -136,7 +136,7 @@ public class ConstructorTest {
       assertTrue("password is in datasource name", !cpoAdapter.getDataSourceName().contains(PASSWORDSTRING));
 
       ValueObject valObj = ValueObjectFactory.createValueObject();
-      List<ValueObject> objs = cpoAdapter.retrieveBeans(null, valObj);
+      List<ValueObject> objs = cpoAdapter.retrieveBeans(ValueObject.FG_LIST_NULL, valObj);
       assertTrue("List size is " + objs.size(), objs.size() == 0);
     } catch (Exception e) {
       fail(method + e.getMessage());
@@ -154,7 +154,7 @@ public class ConstructorTest {
       assertTrue("password is in datasource name", !cpoAdapter.getDataSourceName().contains(PASSWORDSTRING));
 
       ValueObject valObj = ValueObjectFactory.createValueObject();
-      List<ValueObject> objs = cpoAdapter.retrieveBeans(null, valObj);
+      List<ValueObject> objs = cpoAdapter.retrieveBeans(ValueObject.FG_LIST_NULL, valObj);
       assertTrue("List size is " + objs.size(), objs.size() == 0);
     } catch (Exception e) {
       fail(method + e.getMessage());
@@ -172,7 +172,7 @@ public class ConstructorTest {
       assertTrue("password is in datasource name", !cpoAdapter.getDataSourceName().contains(PASSWORDSTRING));
 
       ValueObject valObj = ValueObjectFactory.createValueObject();
-      List<ValueObject> objs = cpoAdapter.retrieveBeans(null, valObj);
+      List<ValueObject> objs = cpoAdapter.retrieveBeans(ValueObject.FG_LIST_NULL, valObj);
       assertTrue("List size is " + objs.size(), objs.size() == 0);
     } catch (Exception e) {
       fail(method + e.getMessage());
@@ -190,7 +190,7 @@ public class ConstructorTest {
       assertTrue("password is in datasource name", !cpoAdapter.getDataSourceName().contains(PASSWORDSTRING));
 
       ValueObject valObj = ValueObjectFactory.createValueObject();
-      List<ValueObject> objs = cpoAdapter.retrieveBeans(null, valObj);
+      List<ValueObject> objs = cpoAdapter.retrieveBeans(ValueObject.FG_LIST_NULL, valObj);
       assertTrue("List size is " + objs.size(), objs.size() == 0);
     } catch (Exception e) {
       fail(method + e.getMessage());
@@ -208,7 +208,7 @@ public class ConstructorTest {
       assertTrue("password is in datasource name", !cpoAdapter.getDataSourceName().contains(PASSWORDSTRING));
 
       ValueObject valObj = ValueObjectFactory.createValueObject();
-      List<ValueObject> objs = cpoAdapter.retrieveBeans(null, valObj);
+      List<ValueObject> objs = cpoAdapter.retrieveBeans(ValueObject.FG_LIST_NULL, valObj);
       assertTrue("List size is " + objs.size(), objs.size() == 0);
     } catch (Exception e) {
       fail(method + e.getMessage());

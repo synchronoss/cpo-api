@@ -53,7 +53,7 @@ public class OrderByTest {
 
     try {
       cpoAdapter = CpoAdapterFactoryManager.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_JDBC);
-      assertNotNull(method + "CpoAdapter is null", cpoAdapter);
+      assertNotNull(method + "cpoAdapter is null", cpoAdapter);
       // Add the test valueObjects
     } catch (Exception e) {
       fail(method + e.getMessage());
@@ -65,7 +65,7 @@ public class OrderByTest {
     al.add(ValueObjectFactory.createValueObject(4));
     al.add(ValueObjectFactory.createValueObject(5));
     try {
-      cpoAdapter.insertObjects("TestOrderByInsert", al);
+      cpoAdapter.insertObjects(ValueObject.FG_CREATE_TESTORDERBYINSERT, al);
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -80,7 +80,7 @@ public class OrderByTest {
   public void tearDown() {
     String method = "tearDown:";
     try {
-      cpoAdapter.deleteObjects("TestOrderByDelete", al);
+      cpoAdapter.deleteObjects(ValueObject.FG_DELETE_TESTORDERBYDELETE, al);
 
     } catch (Exception e) {
       fail(method + e.getMessage());
@@ -120,13 +120,13 @@ public class OrderByTest {
     Collection<ValueObject> col;
 
     try {
-      CpoOrderBy cob = cpoAdapter.newOrderBy("id", true);
-      CpoOrderBy cob1 = cpoAdapter.newOrderBy(CpoOrderBy.DEFAULT_MARKER, "attrVarChar", true);
+      CpoOrderBy cob = cpoAdapter.newOrderBy(ValueObject.ATTR_ID, true);
+      CpoOrderBy cob1 = cpoAdapter.newOrderBy(CpoOrderBy.DEFAULT_MARKER, ValueObject.ATTR_ATTRVARCHAR, true);
       Collection<CpoOrderBy> colCob = new ArrayList<>();
       colCob.add(cob);
       colCob.add(cob1);
       ValueObject valObj = ValueObjectFactory.createValueObject();
-      col = cpoAdapter.retrieveBeans("TestOrderByRetrieve", valObj, colCob);
+      col = cpoAdapter.retrieveBeans(ValueObject.FG_LIST_TESTORDERBYRETRIEVE, valObj, colCob);
 
       int id = 1;
       for (ValueObject vo : col) {
@@ -147,13 +147,13 @@ public class OrderByTest {
     List<ValueObject> col;
 
     try {
-      CpoOrderBy cob = cpoAdapter.newOrderBy("id", false, null);
-      CpoOrderBy cob2 = cpoAdapter.newOrderBy(CpoOrderBy.DEFAULT_MARKER, "attrVarChar", false, null);
+      CpoOrderBy cob = cpoAdapter.newOrderBy(ValueObject.ATTR_ID, false, null);
+      CpoOrderBy cob2 = cpoAdapter.newOrderBy(CpoOrderBy.DEFAULT_MARKER, ValueObject.ATTR_ATTRVARCHAR, false, null);
       Collection<CpoOrderBy> colCob = new ArrayList<>();
       colCob.add(cob);
       colCob.add(cob2);
       ValueObject valObj = ValueObjectFactory.createValueObject();
-      col = cpoAdapter.retrieveBeans("TestOrderByRetrieve", valObj, colCob);
+      col = cpoAdapter.retrieveBeans(ValueObject.FG_LIST_TESTORDERBYRETRIEVE, valObj, colCob);
       int id = 5;
       for (ValueObject vo : col) {
         assertEquals(id, vo.getId());
@@ -171,16 +171,16 @@ public class OrderByTest {
 
     ValueObject vobj = ValueObjectFactory.createValueObject(-6);
     try {
-      cpoAdapter.insertObject("TestOrderByInsert", vobj);
+      cpoAdapter.insertObject(ValueObject.FG_CREATE_TESTORDERBYINSERT, vobj);
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
     try {
-      CpoOrderBy cob = cpoAdapter.newOrderBy("id", true, "ABS(id)");
+      CpoOrderBy cob = cpoAdapter.newOrderBy(ValueObject.ATTR_ID, true, "ABS(id)");
       Collection<CpoOrderBy> colCob = new ArrayList<>();
       colCob.add(cob);
       ValueObject valObj = ValueObjectFactory.createValueObject();
-      col = cpoAdapter.retrieveBeans("TestOrderByRetrieve", valObj, colCob);
+      col = cpoAdapter.retrieveBeans(ValueObject.FG_LIST_TESTORDERBYRETRIEVE, valObj, colCob);
 
       int id = 1;
       for (ValueObject vo : col) {
@@ -196,7 +196,7 @@ public class OrderByTest {
     }
 
     try {
-      cpoAdapter.deleteObject("TestOrderByDelete", vobj);
+      cpoAdapter.deleteObject(ValueObject.FG_DELETE_TESTORDERBYDELETE, vobj);
 
     } catch (Exception e) {
       fail(method + e.getMessage());

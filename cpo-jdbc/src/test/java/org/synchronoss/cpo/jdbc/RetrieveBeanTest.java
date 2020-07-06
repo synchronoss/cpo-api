@@ -55,7 +55,7 @@ public class RetrieveBeanTest {
 
     try {
       cpoAdapter = CpoAdapterFactoryManager.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_JDBC);
-      assertNotNull(method + "IdoAdapter is null", cpoAdapter);
+      assertNotNull(method + "cpoAdapter is null", cpoAdapter);
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -72,7 +72,7 @@ public class RetrieveBeanTest {
     al.add(ValueObjectFactory.createValueObject(9));
     al.add(ValueObjectFactory.createValueObject(10));
     try {
-      cpoAdapter.insertObjects("TestOrderByInsert", al);
+      cpoAdapter.insertObjects(ValueObject.FG_CREATE_TESTORDERBYINSERT, al);
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -90,7 +90,7 @@ public class RetrieveBeanTest {
       assertTrue(cpoAdapter1.isClosed());
 
       ValueObject valObj = ValueObjectFactory.createValueObject();
-      col = cpoAdapter1.retrieveBeans(null, valObj);
+      col = cpoAdapter1.retrieveBeans(ValueObject.FG_LIST_NULL, valObj);
       assertTrue("Col size is " + col.size(), col.size() == al.size());
 
       // The adapter is now open
@@ -109,7 +109,7 @@ public class RetrieveBeanTest {
       assertTrue(cpoAdapter1.isClosed());
 
       ValueObject valObj = ValueObjectFactory.createValueObject();
-      col = cpoAdapter1.retrieveBeans(null, valObj);
+      col = cpoAdapter1.retrieveBeans(ValueObject.FG_LIST_NULL, valObj);
       assertTrue("Col size is " + col.size(), col.size() == al.size());
 
       // The adapter is now open
@@ -130,7 +130,7 @@ public class RetrieveBeanTest {
 
     try {
       ValueObject valObj = ValueObjectFactory.createValueObject();
-      col = cpoAdapter.retrieveBeans(null, valObj);
+      col = cpoAdapter.retrieveBeans(ValueObject.FG_LIST_NULL, valObj);
       assertTrue("Col size is " + col.size(), col.size() == al.size());
 
     } catch (Exception e) {
@@ -145,7 +145,7 @@ public class RetrieveBeanTest {
 
     try {
       ValueObject valObj = ValueObjectFactory.createValueObject();
-      col = cpoAdapter.retrieveBeans(null, valObj, valObj);
+      col = cpoAdapter.retrieveBeans(ValueObject.FG_LIST_NULL, valObj, valObj);
       assertTrue("Col size is " + col.size(), col.size() == al.size());
 
     } catch (Exception e) {
@@ -161,7 +161,7 @@ public class RetrieveBeanTest {
     try (CpoTrxAdapter trx = CpoAdapterFactoryManager.getCpoTrxAdapter(JdbcStatics.ADAPTER_CONTEXT_JDBC)) {
       trx.isClosed();
       ValueObject valObj = ValueObjectFactory.createValueObject();
-      col = trx.retrieveBeans(null, valObj);
+      col = trx.retrieveBeans(ValueObject.FG_LIST_NULL, valObj);
       assertTrue("Col size is " + col.size(), col.size() == al.size());
       trx.commit();
     } catch (Exception e) {
@@ -177,7 +177,7 @@ public class RetrieveBeanTest {
 
     try {
       ValueObject valObj = ValueObjectFactory.createValueObject();
-      crs = cpoAdapter.retrieveBeans(null, valObj, valObj, null, null, null, 2);
+      crs = cpoAdapter.retrieveBeans(ValueObject.FG_LIST_NULL, valObj, valObj, null, null, null, 2);
       logger.debug("Returned from retrieveBeans");
       for (ValueObject vo : crs) {
         if (vo != null) {
@@ -200,7 +200,7 @@ public class RetrieveBeanTest {
 
     try {
       ValueObject valObj = ValueObjectFactory.createValueObject();
-      crs = cpoAdapter.retrieveBeans(null, valObj, valObj, null, null, null, 9);
+      crs = cpoAdapter.retrieveBeans(ValueObject.FG_LIST_NULL, valObj, valObj, null, null, null, 9);
       for (ValueObject vo : crs) {
         if (vo != null) {
           count++;
@@ -221,7 +221,7 @@ public class RetrieveBeanTest {
 
     try {
       ValueObject valObj = ValueObjectFactory.createValueObject();
-      crs = cpoAdapter.retrieveBeans(null, valObj, valObj, null, null, null, 10);
+      crs = cpoAdapter.retrieveBeans(ValueObject.FG_LIST_NULL, valObj, valObj, null, null, null, 10);
       for (ValueObject vo : crs) {
         if (vo != null) {
           count++;
@@ -242,7 +242,7 @@ public class RetrieveBeanTest {
 
     try {
       ValueObject valObj = ValueObjectFactory.createValueObject();
-      crs = cpoAdapter.retrieveBeans(null, valObj, valObj, null, null, null, 11);
+      crs = cpoAdapter.retrieveBeans(ValueObject.FG_LIST_NULL, valObj, valObj, null, null, null, 11);
       for (ValueObject vo : crs) {
         if (vo != null) {
           count++;
@@ -264,7 +264,7 @@ public class RetrieveBeanTest {
     try (CpoTrxAdapter trx = CpoAdapterFactoryManager.getCpoTrxAdapter(JdbcStatics.ADAPTER_CONTEXT_JDBC)) {
 
       ValueObject valObj = ValueObjectFactory.createValueObject();
-      crs = trx.retrieveBeans(null, valObj, valObj, null, null, null, 2);
+      crs = trx.retrieveBeans(ValueObject.FG_LIST_NULL, valObj, valObj, null, null, null, 2);
 
       //start this trx
       for (ValueObject vo : crs) {
@@ -276,7 +276,7 @@ public class RetrieveBeanTest {
 
       // Let's see if it lets me do two trxs at once
       try {
-        trx.retrieveBeans(null, valObj);
+        trx.retrieveBeans(ValueObject.FG_LIST_NULL, valObj);
         fail(method + "Cpo allowed me to reuse a busy connection");
       } catch (Exception busy) {
         // THis should happen
@@ -304,7 +304,7 @@ public class RetrieveBeanTest {
 
     try {
       ValueObject valObj = ValueObjectFactory.createValueObject();
-      crs = cpoAdapter.retrieveBeans(null, valObj, valObj, null, null, null, 20);
+      crs = cpoAdapter.retrieveBeans(ValueObject.FG_LIST_NULL, valObj, valObj, null, null, null, 20);
       logger.debug("Returned from retrieveBeans");
       for (ValueObject vo : crs) {
         if (vo != null) {
@@ -356,7 +356,7 @@ public class RetrieveBeanTest {
   public void tearDown() {
     String method = "tearDown:";
     try {
-      cpoAdapter.deleteObjects("TestOrderByDelete", al);
+      cpoAdapter.deleteObjects(ValueObject.FG_DELETE_TESTORDERBYDELETE, al);
 
     } catch (Exception e) {
       fail(method + e.getMessage());

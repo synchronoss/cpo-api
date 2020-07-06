@@ -48,6 +48,7 @@ import org.testcontainers.containers.*;
   CaseInsensitiveTest.class,
   CaseSensitiveTest.class,
   ConstructorTest.class,
+  CriteriaObjectTest.class,
   DeleteObjectTest.class,
   EntityTest.class,
   ExecuteTest.class,

@@ -57,7 +57,7 @@ public class BigRetrieveTest {
 
     try {
       cpoAdapter = CpoAdapterFactoryManager.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_JDBC);
-      assertNotNull(method + "IdoAdapter is null", cpoAdapter);
+      assertNotNull(method + "cpoAdapter is null", cpoAdapter);
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -96,7 +96,7 @@ public class BigRetrieveTest {
 
     try {
       ValueObject valObj = ValueObjectFactory.createValueObject();
-      col = cpoAdapter.retrieveBeans(null, valObj);
+      col = cpoAdapter.retrieveBeans(ValueObject.FG_LIST_NULL, valObj);
       assertTrue("Col size is " + col.size(), col.size() == al.size());
 
     } catch (Exception e) {

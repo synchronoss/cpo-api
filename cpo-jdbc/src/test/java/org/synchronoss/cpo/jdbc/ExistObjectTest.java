@@ -55,7 +55,7 @@ public class ExistObjectTest {
 
     try {
       cpoAdapter = CpoAdapterFactoryManager.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_JDBC);
-      assertNotNull(method + "IdoAdapter is null", cpoAdapter);
+      assertNotNull(method + "cpoAdapter is null", cpoAdapter);
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -98,10 +98,10 @@ public class ExistObjectTest {
 
     try {
       ValueObject valObj = ValueObjectFactory.createValueObject(1);
-      CpoWhere where = cpoAdapter.newWhere(CpoWhere.LOGIC_AND, "attrVarChar", CpoWhere.COMP_EQ, "WHERE");
+      CpoWhere where = cpoAdapter.newWhere(CpoWhere.LOGIC_AND, ValueObject.ATTR_ATTRVARCHAR, CpoWhere.COMP_EQ, "WHERE");
       ArrayList<CpoWhere> wheres = new ArrayList<>();
       wheres.add(where);
-      long count = cpoAdapter.existsObject(null, valObj, wheres);
+      long count = cpoAdapter.existsObject(ValueObject.FG_EXIST_NULL, valObj, wheres);
       assertTrue("Object not Found", count == 1);
     } catch (Exception e) {
       fail(method + e.getMessage());
@@ -109,10 +109,10 @@ public class ExistObjectTest {
 
     try {
       ValueObject valObj = ValueObjectFactory.createValueObject(1);
-      CpoWhere where = cpoAdapter.newWhere(CpoWhere.LOGIC_AND, "attrVarChar", CpoWhere.COMP_EQ, "NOWHERE");
+      CpoWhere where = cpoAdapter.newWhere(CpoWhere.LOGIC_AND, ValueObject.ATTR_ATTRVARCHAR, CpoWhere.COMP_EQ, "NOWHERE");
       ArrayList<CpoWhere> wheres = new ArrayList<>();
       wheres.add(where);
-      long count = cpoAdapter.existsObject(null, valObj, wheres);
+      long count = cpoAdapter.existsObject(ValueObject.FG_EXIST_NULL, valObj, wheres);
       assertTrue("Object Found", count == 0);
     } catch (Exception e) {
       fail(method + e.getMessage());

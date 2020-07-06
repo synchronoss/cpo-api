@@ -86,8 +86,8 @@ public class ExporterTest {
 
       // make sure it saved the data right
 
-      // should be 2 classes in here
-      assertEquals(2, doc.getCpoMetaData().getCpoClassArray().length);
+      // should be 3 classes in here
+      assertEquals(3, doc.getCpoMetaData().getCpoClassArray().length);
 
       boolean found = false;
       for (CtClass ctClass : doc.getCpoMetaData().getCpoClassArray()) {

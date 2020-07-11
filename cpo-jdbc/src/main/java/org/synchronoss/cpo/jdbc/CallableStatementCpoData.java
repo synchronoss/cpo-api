@@ -59,7 +59,12 @@ public class CallableStatementCpoData extends AbstractBindableCpoData {
     Object javaObject=null;
     JdbcMethodMapEntry<?,?> jdbcMethodMapEntry = JdbcMethodMapper.getJavaSqlMethod(getDataGetterReturnType());
     if (jdbcMethodMapEntry == null) {
-      throw new CpoException("Error Retrieveing Jdbc Method for type: " + getDataGetterReturnType().getName());
+      if (Object.class.isAssignableFrom(getDataGetterReturnType())) {
+        jdbcMethodMapEntry = JdbcMethodMapper.getJavaSqlMethod(Object.class);
+      }
+      if (jdbcMethodMapEntry==null) {
+        throw new CpoException("Error Retrieving Jdbc Method for type: " + getDataGetterReturnType().getName());
+      }
     }
 
     try {
@@ -71,6 +76,7 @@ public class CallableStatementCpoData extends AbstractBindableCpoData {
           javaObject = jdbcMethodMapEntry.getCsGetter().invoke(cs, getIndex());
           break;
         case JdbcMethodMapEntry.METHOD_TYPE_OBJECT:
+        default:
           javaObject = jdbcMethodMapEntry.getCsGetter().invoke(cs, getIndex(), jdbcMethodMapEntry.getJavaClass());
           break;
       }
@@ -93,13 +99,19 @@ public class CallableStatementCpoData extends AbstractBindableCpoData {
     Object param = transformOut(cpoAttribute.invokeGetter(instanceObject));
     JdbcMethodMapEntry<?,?> jdbcMethodMapEntry = JdbcMethodMapper.getJavaSqlMethod(getDataSetterParamType());
     if (jdbcMethodMapEntry == null) {
-      throw new CpoException("Error Retrieveing Jdbc Method for type: " + getDataSetterParamType().getName());
+      if (Object.class.isAssignableFrom(getDataSetterParamType())) {
+        jdbcMethodMapEntry = JdbcMethodMapper.getJavaSqlMethod(Object.class);
+      }
+      if (jdbcMethodMapEntry==null) {
+        throw new CpoException("Error Retrieving Jdbc Method for type: " + getDataSetterParamType().getName());
+      }
     }
     localLogger.info(cpoAttribute.getDataName() + "=" + param);
     try {
       switch (jdbcMethodMapEntry.getMethodType()) {
         case JdbcMethodMapEntry.METHOD_TYPE_BASIC:
         case JdbcMethodMapEntry.METHOD_TYPE_OBJECT:
+        default:
           jdbcMethodMapEntry.getCsSetter().invoke(jcsf.getCallableStatement(), getIndex(), param);
           break;
         case JdbcMethodMapEntry.METHOD_TYPE_STREAM:

@@ -53,7 +53,12 @@ public abstract class ResultSetCpoData extends AbstractBindableCpoData {
     Object javaObject;
     MethodMapEntry<?, ?> methodMapEntry = methodMapper.getDataMethodMapEntry(getDataGetterReturnType());
     if (methodMapEntry == null) {
-      throw new CpoException("Error Retrieveing Jdbc Method for type: " + getDataGetterReturnType().getName());
+      if (Object.class.isAssignableFrom(getDataGetterReturnType())) {
+        methodMapEntry = methodMapper.getDataMethodMapEntry(Object.class);
+      }
+      if (methodMapEntry==null) {
+        throw new CpoException("Error Retrieving Jdbc Method for type: " + getDataGetterReturnType().getName());
+      }
     }
 
     try {

@@ -53,13 +53,19 @@ public class JdbcPreparedStatementCpoData extends AbstractBindableCpoData {
     Object param = transformOut(cpoAttribute.invokeGetter(instanceObject));
     JdbcMethodMapEntry<?,?> methodMapEntry = JdbcMethodMapper.getJavaSqlMethod(getDataSetterParamType());
     if (methodMapEntry == null) {
-      throw new CpoException("Error Retrieving Jdbc Method for type: " + getDataSetterParamType().getName());
+      if (Object.class.isAssignableFrom(getDataSetterParamType())) {
+        methodMapEntry = JdbcMethodMapper.getJavaSqlMethod(Object.class);
+      }
+      if (methodMapEntry==null) {
+        throw new CpoException("Error Retrieving Jdbc Method for type: " + getDataSetterParamType().getName());
+      }
     }
     localLogger.debug(cpoAttribute.getDataName() + "=" + param);
     try {
       switch (methodMapEntry.getMethodType()) {
         case JdbcMethodMapEntry.METHOD_TYPE_BASIC:
         case JdbcMethodMapEntry.METHOD_TYPE_OBJECT:
+        default:
           methodMapEntry.getBsSetter().invoke(cpoStatementFactory.getPreparedStatement(), getIndex(), param);
           break;
         case JdbcMethodMapEntry.METHOD_TYPE_STREAM:

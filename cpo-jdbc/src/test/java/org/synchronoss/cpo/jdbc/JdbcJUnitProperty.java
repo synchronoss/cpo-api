@@ -22,6 +22,7 @@ package org.synchronoss.cpo.jdbc;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.synchronoss.cpo.helper.CpoClassLoader;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -47,8 +48,7 @@ public class JdbcJUnitProperty {
     InputStream inputStream = null;
     try {
       Properties properties = new Properties();
-      ClassLoader loader = Thread.currentThread().getContextClassLoader();
-      inputStream = loader.getResourceAsStream("cpoJdbcJUnit.properties");
+      inputStream = CpoClassLoader.getResourceAsStream("cpoJdbcJUnit.properties");
       properties.load(inputStream);
 
       properties.forEach(

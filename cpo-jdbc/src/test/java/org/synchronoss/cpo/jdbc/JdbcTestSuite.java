@@ -116,7 +116,7 @@ public class JdbcTestSuite {
 
         logger.debug("Jdbc Host:" + jdbcContainer.getHost());
       } catch (Exception ex) {
-        fail("Failed to start Cassandra: " + ex.getMessage());
+        fail("Failed to start Container: " + ex.getMessage());
       }
     }
     logger.debug("===== end setting up =====");

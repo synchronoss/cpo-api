@@ -25,6 +25,7 @@ jobs:
         with:
           java-version: '11'
           distribution: 'zulu'
+          cache: maven
       - name: Build with Maven
         id: build
         run: mvn test

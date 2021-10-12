@@ -106,7 +106,7 @@
             <exclude>org/synchronoss/cpo/cassandra/DeleteObjectTest.java</exclude>
             <exclude>org/synchronoss/cpo/cassandra/EntityTest.java</exclude>
             <exclude>org/synchronoss/cpo/cassandra/ExistObjectTest.java</exclude>
-            <exclude>org/synchronoss/cpo/cassandra/InheritanceTest.java</exclude>
+<!--            <exclude>org/synchronoss/cpo/cassandra/InheritanceTest.java</exclude>-->
             <exclude>org/synchronoss/cpo/cassandra/InsertObjectTest.java</exclude>
             <exclude>org/synchronoss/cpo/cassandra/InvalidParameterTest.java</exclude>
             <exclude>org/synchronoss/cpo/cassandra/NativeExpressionTest.java</exclude>

@@ -99,7 +99,24 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
         <configuration>
-         <environmentVariables>
+          <excludes>
+            <exclude>org/synchronoss/cpo/cassandra/BlobTest.java</exclude>
+            <exclude>org/synchronoss/cpo/cassandra/CollectionsTest.java</exclude>
+            <exclude>org/synchronoss/cpo/cassandra/DeleteObjectTest.java</exclude>
+            <exclude>org/synchronoss/cpo/cassandra/EntityTest.java</exclude>
+            <exclude>org/synchronoss/cpo/cassandra/ExistObjectTest.java</exclude>
+            <exclude>org/synchronoss/cpo/cassandra/InheritanceTest.java</exclude>
+            <exclude>org/synchronoss/cpo/cassandra/InsertObjectTest.java</exclude>
+            <exclude>org/synchronoss/cpo/cassandra/InvalidParameterTest.java</exclude>
+            <exclude>org/synchronoss/cpo/cassandra/NativeExpressionTest.java</exclude>
+            <exclude>org/synchronoss/cpo/cassandra/OrderByTest.java</exclude>
+            <exclude>org/synchronoss/cpo/cassandra/RetrieveBeanTest.java</exclude>
+            <exclude>org/synchronoss/cpo/cassandra/UpdateObjectTest.java</exclude>
+            <exclude>org/synchronoss/cpo/cassandra/WhereTest.java</exclude>
+            <exclude>org/synchronoss/cpo/cassandra/XmlValidationTest.java</exclude>
+            <exclude>org/synchronoss/cpo/cassandra/ZZHotDeployTest.java</exclude>
+          </excludes>
+          <environmentVariables>
             <CPO_CONFIG>${project.baseUri}target/test-classes/cpoConfig.xml</CPO_CONFIG>
           </environmentVariables>
         </configuration>

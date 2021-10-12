@@ -52,7 +52,8 @@ public abstract class JdbcDbContainerBase {
     initScript = JdbcJUnitProperty.getProperty(JdbcJUnitProperty.PROP_INIT_SCRIPT);
     logger = LoggerFactory.getLogger(JdbcDatabaseContainer.class);
     jdbcContainer = createJdbcContainer(dbType, initScript, dbUser, dbPswd, dbName);
-    jdbcContainer.start();
+    if (jdbcContainer!=null)
+      jdbcContainer.start();
   }
 
   private static JdbcDatabaseContainer createJdbcContainer(String dbType, String initScript, String dbUser, String dbPswd, String dbName) {

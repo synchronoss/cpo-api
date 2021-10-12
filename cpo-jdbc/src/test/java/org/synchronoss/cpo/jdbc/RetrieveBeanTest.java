@@ -329,7 +329,7 @@ public class RetrieveBeanTest extends JdbcDbContainerBase {
       rvo = cpoAdapter.retrieveBean(vo);
       assertNotNull(method + "Returned Value object is null");
       assertNotSame(vo, rvo, method + "ValueObjects are the same");
-      assertEquals(method + "Strings are not the same", rvo.getAttrVarChar(), "Test");
+      assertEquals(rvo.getAttrVarChar(), "Test", method + "Strings are not the same");
       if (rvo.getAttrVarChar().equals(vo.getAttrVarChar())) {
         fail(method + "ValueObjects are the same");
       }

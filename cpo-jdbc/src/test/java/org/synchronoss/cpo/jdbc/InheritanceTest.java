@@ -95,7 +95,7 @@ public class InheritanceTest extends JdbcDbContainerBase {
       ChildValueObject vo = cpoAdapter.retrieveBean(ValueObject.FG_RETRIEVE_NULL, valObj, valObj, null, null);
       assertEquals(vo.getId(), valObj.getId(),"Ids do not match");
       assertEquals(vo.getAttrInteger(), valObj.getAttrInteger(),"Integers do not match");
-      assertEquals("Strings do not match", vo.getAttrVarChar(), valObj.getAttrVarChar());
+      assertEquals(vo.getAttrVarChar(), valObj.getAttrVarChar(), "Strings do not match");
       assertEquals(vo.getAttrDatetime(), valObj.getAttrDatetime(),"Timestamps do not match");
       assertTrue(vo.getAttrBit(),"boolean not stored correctly");
 

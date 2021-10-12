@@ -20,7 +20,6 @@
  */
 package org.synchronoss.cpo.cassandra;
 
-import org.junit.*;
 import org.slf4j.*;
 import org.synchronoss.cpo.*;
 import org.synchronoss.cpo.cassandra.meta.CassandraCpoMetaDescriptor;
@@ -29,14 +28,17 @@ import org.synchronoss.cpo.helper.ExceptionHelper;
 import java.sql.Timestamp;
 import java.util.*;
 
-import static org.junit.Assert.*;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * DeleteObjectTest is a JUnit test class for testing the JdbcAdapter deleteObject method
  *
  * @author david berry
  */
-public class DeleteObjectTest {
+public class DeleteObjectTest extends CassandraContainerBase {
 
   private static final Logger logger = LoggerFactory.getLogger(DeleteObjectTest.class);
   private ArrayList<ValueObject> al = new ArrayList<>();
@@ -49,13 +51,13 @@ public class DeleteObjectTest {
    * @author david berry
    * @version '$Id: InsertObjectTest.java,v 1.3 2006/01/30 19:09:23 dberry Exp $'
    */
-  @Before
+  @BeforeEach
   public void setUp() {
     String method = "setUp:";
 
     try {
       cpoAdapter = CpoAdapterFactoryManager.getCpoAdapter(CassandraStatics.ADAPTER_CONTEXT_DEFAULT);
-      assertNotNull(method + "IdoAdapter is null", cpoAdapter);
+      assertNotNull(cpoAdapter, method + "IdoAdapter is null");
       metaDescriptor = (CassandraCpoMetaDescriptor)cpoAdapter.getCpoMetaDescriptor();
     } catch (Exception e) {
       fail(method + e.getMessage());
@@ -95,7 +97,7 @@ public class DeleteObjectTest {
     }
   }
 
-  @After
+  @AfterEach
   public void tearDown() {
     String method = "tearDown:";
     try {

@@ -20,9 +20,6 @@
  */
 package org.synchronoss.cpo.cassandra;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
 import org.synchronoss.cpo.CpoAdapter;
 import org.synchronoss.cpo.CpoAdapterFactoryManager;
 import org.synchronoss.cpo.cassandra.meta.CassandraCpoMetaDescriptor;
@@ -30,15 +27,17 @@ import org.synchronoss.cpo.cassandra.meta.CassandraCpoMetaDescriptor;
 import java.sql.Timestamp;
 import java.util.*;
 
-import static org.junit.Assert.*;
-import static org.junit.Assert.fail;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * CollectionsTest is a JUnit test class for testing the List, Set, and Map attributes
  *
  * @author david berry
  */
-public class CollectionsTest {
+public class CollectionsTest extends CassandraContainerBase {
   private CpoAdapter cpoAdapter = null;
   private CpoAdapter readAdapter = null;
   private CassandraCpoMetaDescriptor metaDescriptor = null;
@@ -50,20 +49,20 @@ public class CollectionsTest {
    * @author david berry
    * @version '$Id: InsertObjectTest.java,v 1.3 2006/01/30 19:09:23 dberry Exp $'
    */
-  @Before
+  @BeforeEach
   public void setUp() {
     String method = "setUp:";
 
     try {
       cpoAdapter = CpoAdapterFactoryManager.getCpoAdapter(CassandraStatics.ADAPTER_CONTEXT_DEFAULT);
-      assertNotNull(method + "IdoAdapter is null", cpoAdapter);
+      assertNotNull(cpoAdapter, method + "IdoAdapter is null");
       metaDescriptor = (CassandraCpoMetaDescriptor)cpoAdapter.getCpoMetaDescriptor();
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
     try {
       readAdapter = CpoAdapterFactoryManager.getCpoAdapter(CassandraStatics.ADAPTER_CONTEXT_DEFAULT);
-      assertNotNull(method + "IdoAdapter is null", readAdapter);
+      assertNotNull(readAdapter, method + "IdoAdapter is null");
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -88,7 +87,7 @@ public class CollectionsTest {
 
     try {
       ValueObject vo = readAdapter.retrieveBean(null, valObj, valObj, null, null);
-      assertEquals("Strings do not match", testString, vo.getAttrList().get(0));
+      assertEquals(testString, vo.getAttrList().get(0),"Strings do not match");
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -113,7 +112,7 @@ public class CollectionsTest {
 
     try {
       ValueObject vo = readAdapter.retrieveBean(null, valObj, valObj, null, null);
-      assertTrue("Set does not contain the teststring", vo.getAttrSet().contains(testString));
+      assertTrue(vo.getAttrSet().contains(testString), "Set does not contain the teststring");
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -139,13 +138,13 @@ public class CollectionsTest {
 
     try {
       ValueObject vo = readAdapter.retrieveBean(null, valObj, valObj, null, null);
-      assertEquals("Strings do not match", testValue, vo.getAttrMap().get(testKey));
+      assertEquals(testValue, vo.getAttrMap().get(testKey), "Strings do not match");
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
   }
 
-  @After
+  @AfterEach
   public void tearDown() {
     String method = "tearDown:";
     try {

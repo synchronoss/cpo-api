@@ -20,7 +20,6 @@
  */
 package org.synchronoss.cpo.cassandra;
 
-import org.junit.*;
 import org.slf4j.*;
 import org.synchronoss.cpo.*;
 import org.synchronoss.cpo.helper.ExceptionHelper;
@@ -28,16 +27,17 @@ import org.synchronoss.cpo.helper.ExceptionHelper;
 import java.io.File;
 import java.util.*;
 
-import static junit.framework.TestCase.assertTrue;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.fail;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * RetrieveBeanTest is a JUnit test class for testing the JdbcAdapter class Constructors
  *
  * @author david berry
  */
-public class ZZHotDeployTest {
+public class ZZHotDeployTest extends CassandraContainerBase {
 
   private static final Logger logger = LoggerFactory.getLogger(ZZHotDeployTest.class);
   private CpoAdapter cpoAdapter = null;
@@ -50,13 +50,13 @@ public class ZZHotDeployTest {
    * @author david berry
    * @version '$Id: RetrieveBeanTest.java,v 1.6 2006/01/30 19:09:23 dberry Exp $'
    */
-  @Before
+  @BeforeEach
   public void setUp() {
     String method = "setUp:";
 
     try {
       cpoAdapter = CpoAdapterFactoryManager.getCpoAdapter(CassandraStatics.ADAPTER_CONTEXT_DEFAULT);
-      assertNotNull(method + "CpoAdapter is null", cpoAdapter);
+      assertNotNull(cpoAdapter, method + "CpoAdapter is null");
       // lets save the existing config before we monkey with it
       cpoAdapter.getCpoMetaDescriptor().export(metaFile);
     } catch (Exception e) {
@@ -90,7 +90,7 @@ public class ZZHotDeployTest {
 
       // make sure the default retrieve works
       col = cpoAdapter.retrieveBeans(null, valObj);
-      assertTrue("Col size is " + col.size(), col!=null);
+      assertTrue(col!=null, "Col size is " + col.size());
 
       col = cpoAdapter.retrieveBeans("HotDeploySelect", valObj);
       fail("Should not have gotten here:");
@@ -107,13 +107,13 @@ public class ZZHotDeployTest {
 
       // make sure the default retrieve still works
       col = cpoAdapter.retrieveBeans(null, valObj);
-      assertTrue("Col size is " + col.size(), col.size()==6);
+      assertTrue(col.size()==6, "Col size is " + col.size());
 
       List<ValueObject> col2 = cpoAdapter.retrieveBeans("HotDeploySelect", valObj);
-      assertTrue("Col size is " + col2.size(), col2.size()==6);
+      assertTrue(col2.size()==6, "Col size is " + col2.size());
 
       for (int i=0; i<col.size(); i++) {
-        assertTrue("IDs must be equal", col.get(i).getId() == col2.get(i).getId());
+        assertTrue(col.get(i).getId() == col2.get(i).getId(), "IDs must be equal");
       }
 
       // make sure the first objects are the same
@@ -136,7 +136,7 @@ public class ZZHotDeployTest {
 
       // make sure the default retrieve works
       col = cpoAdapter.retrieveBeans(null, valObj);
-      assertTrue("Col size is " + col.size(), col!=null);
+      assertTrue(col!=null, "Col size is " + col.size());
 
       col = cpoAdapter.retrieveBeans("HotDeploySelect", valObj);
       fail("Should not have gotten here:");
@@ -160,7 +160,7 @@ public class ZZHotDeployTest {
       }
 
       List<ValueObject> col2 = cpoAdapter.retrieveBeans("HotDeploySelect", valObj);
-      assertTrue("Col size is " + col2.size(), col2.size()==6);
+      assertTrue(col2.size()==6, "Col size is " + col2.size());
 
     } catch (Exception e) {
       String msg = ExceptionHelper.getLocalizedMessage(e);
@@ -169,7 +169,7 @@ public class ZZHotDeployTest {
     }
   }
 
-  @After
+  @AfterEach
   public void tearDown() {
     String method = "tearDown:";
     try {

@@ -20,19 +20,21 @@
  */
 package org.synchronoss.cpo.cassandra;
 
-import org.junit.*;
 import org.synchronoss.cpo.*;
 
 import java.util.*;
 
-import static org.junit.Assert.*;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * BlobTest is a JUnit test class for testing the JdbcAdapter class Constructors
  *
  * @author david berry
  */
-public class WhereTest {
+public class WhereTest extends CassandraContainerBase {
 
   private CpoAdapter cpoAdapter = null;
   private ArrayList<ValueObject> al = new ArrayList<>();
@@ -43,13 +45,13 @@ public class WhereTest {
   /**
    * <code>setUp</code> Load the datasource from the properties in the property file jdbc_en_US.properties
    */
-  @Before
+  @BeforeEach
   public void setUp() {
     String method = "setUp:";
 
     try {
       cpoAdapter = CpoAdapterFactoryManager.getCpoAdapter(CassandraStatics.ADAPTER_CONTEXT_DEFAULT);
-      assertNotNull(method + "CpoAdapter is null", cpoAdapter);
+      assertNotNull(cpoAdapter, method + "CpoAdapter is null");
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -73,7 +75,7 @@ public class WhereTest {
   /**
    * DOCUMENT ME!
    */
-  @After
+  @AfterEach
   public void tearDown() {
     String method = "tearDown:";
     try {
@@ -98,7 +100,7 @@ public class WhereTest {
       wheres.add(cw);
       col = cpoAdapter.retrieveBeans("TestWhereRetrieve", valObj, wheres, null);
 
-      assertTrue("Col size is " + col.size(), col.size() == 1);
+      assertTrue(col.size() == 1, "Col size is " + col.size());
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -118,7 +120,7 @@ public class WhereTest {
       wheres.add(cw);
       col = cpoAdapter.retrieveBeans("TestWhereRetrieve", valObj, wheres, null);
 
-      assertTrue("Col size is " + col.size(), col.size() == 1);
+      assertTrue(col.size() == 1, "Col size is " + col.size());
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -138,7 +140,7 @@ public class WhereTest {
       wheres.add(cw);
       col = cpoAdapter.retrieveBeans(null, valObj, wheres, null);
 
-      assertTrue("Col size is " + col.size(), col.size() == 1);
+      assertTrue(col.size() == 1, "Col size is " + col.size());
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -179,7 +181,7 @@ public class WhereTest {
       wheres.add(cw);
       Collection<ValueObject> col = cpoAdapter.retrieveBeans("TestWhereRetrieve", valObj, wheres, null);
 
-      assertTrue("Col size is " + col.size(), col.size() == 1);
+      assertTrue(col.size() == 1, "Col size is " + col.size());
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -204,7 +206,7 @@ public class WhereTest {
       wheres.add(cw);
       Collection<ValueObject> col = cpoAdapter.retrieveBeans("TestWhereRetrieve", valObj, wheres, null);
 
-      assertTrue("Col size is " + col.size(), col.size() == 1);
+      assertTrue(col.size() == 1, "Col size is " + col.size());
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -226,7 +228,7 @@ public class WhereTest {
       wheres.add(cw);
       Collection<ValueObject> col = cpoAdapter.retrieveBeans("TestWhereRetrieve", valObj, wheres, null);
 
-      assertTrue("Col size is " + col.size(), col.size() == 1);
+      assertTrue(col.size() == 1, "Col size is " + col.size());
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -249,7 +251,7 @@ public class WhereTest {
       wheres.add(cw);
       Collection<ValueObject> coll = cpoAdapter.retrieveBeans("TestWhereRetrieve", valObj, wheres, null);
 
-      assertTrue("Collection size is " + coll.size(), coll.size() == 3);
+      assertTrue(coll.size() == 3, "Collection size is " + coll.size());
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -275,7 +277,7 @@ public class WhereTest {
       wheres.add(cw);
       Collection<ValueObject> coll = cpoAdapter.retrieveBeans("TestWhereRetrieve", valObj, wheres, null);
 
-      assertTrue("Collection size is " + coll.size(), coll.size() == 3);
+      assertTrue(coll.size() == 3, "Collection size is " + coll.size());
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -301,7 +303,7 @@ public class WhereTest {
       wheres.add(cw);
       Collection<ValueObject> coll = cpoAdapter.retrieveBeans("TestWhereRetrieve", valObj, wheres, null);
 
-      assertTrue("Collection size is " + coll.size(), coll.size() == 3);
+      assertTrue(coll.size() == 3, "Collection size is " + coll.size());
     } catch (Exception e) {
       fail(method + e.getMessage());
     }

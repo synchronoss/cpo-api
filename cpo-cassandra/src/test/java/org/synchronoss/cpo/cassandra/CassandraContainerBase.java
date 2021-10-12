@@ -28,11 +28,13 @@ import org.slf4j.LoggerFactory;
 import org.testcontainers.containers.CassandraContainer;
 
 public abstract class CassandraContainerBase {
-  private static final Logger logger = LoggerFactory.getLogger(CassandraContainerBase.class);
-  public static final CassandraContainer cassandraContainer = new CassandraContainer().withInitScript("initDB.cql");
-  private static TcpProxy proxy;
+  private static final Logger logger;
+  private static final CassandraContainer cassandraContainer;
+  private static final TcpProxy proxy;
 
   static {
+    logger = LoggerFactory.getLogger(CassandraContainerBase.class);
+    cassandraContainer = new CassandraContainer().withInitScript("initDB.cql");
     cassandraContainer.start();
 
     // Now map the random port to something we can use in the config file
@@ -40,7 +42,7 @@ public abstract class CassandraContainerBase {
     config.setWorkerCount(1);
 
     // init proxy
-    TcpProxy proxy = new TcpProxy(config);
+    proxy = new TcpProxy(config);
 
     // start proxy
     proxy.start();

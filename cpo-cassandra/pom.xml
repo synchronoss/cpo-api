@@ -101,6 +101,7 @@
         <configuration>
           <excludes>
             <exclude>org/synchronoss/cpo/cassandra/BlobTest.java</exclude>
+            <exclude>org/synchronoss/cpo/cassandra/ConstructorTest.java</exclude>
             <exclude>org/synchronoss/cpo/cassandra/CollectionsTest.java</exclude>
             <exclude>org/synchronoss/cpo/cassandra/DeleteObjectTest.java</exclude>
             <exclude>org/synchronoss/cpo/cassandra/EntityTest.java</exclude>
@@ -114,7 +115,7 @@
             <exclude>org/synchronoss/cpo/cassandra/UpdateObjectTest.java</exclude>
             <exclude>org/synchronoss/cpo/cassandra/WhereTest.java</exclude>
             <exclude>org/synchronoss/cpo/cassandra/XmlValidationTest.java</exclude>
-            <exclude>org/synchronoss/cpo/cassandra/ZZHotDeployTest.java</exclude>
+<!--            <exclude>org/synchronoss/cpo/cassandra/ZZHotDeployTest.java</exclude>-->
           </excludes>
           <environmentVariables>
             <CPO_CONFIG>${project.baseUri}target/test-classes/cpoConfig.xml</CPO_CONFIG>

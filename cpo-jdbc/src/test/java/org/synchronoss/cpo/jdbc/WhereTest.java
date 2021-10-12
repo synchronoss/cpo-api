@@ -23,10 +23,10 @@ package org.synchronoss.cpo.jdbc;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Collection;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import static org.junit.Assert.*;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 import org.synchronoss.cpo.*;
 
 /**
@@ -34,7 +34,7 @@ import org.synchronoss.cpo.*;
  *
  * @author david berry
  */
-public class WhereTest {
+public class WhereTest extends JdbcDbContainerBase {
 
   private CpoAdapter cpoAdapter = null;
   private ArrayList<ValueObject> al = new ArrayList<>();
@@ -45,13 +45,13 @@ public class WhereTest {
   /**
    * <code>setUp</code> Load the datasource from the properties in the property file jdbc_en_US.properties
    */
-  @Before
+  @BeforeEach
   public void setUp() {
     String method = "setUp:";
 
     try {
       cpoAdapter = CpoAdapterFactoryManager.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_JDBC);
-      assertNotNull(method + "cpoAdapter is null", cpoAdapter);
+      assertNotNull(cpoAdapter, method + "cpoAdapter is null");
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -77,7 +77,7 @@ public class WhereTest {
   /**
    * DOCUMENT ME!
    */
-  @After
+  @AfterEach
   public void tearDown() {
     String method = "tearDown:";
     try {
@@ -106,7 +106,7 @@ public class WhereTest {
       wheres.add(cw);
       col = cpoAdapter.retrieveBeans(ValueObject.FG_LIST_TESTWHERERETRIEVE, valObj, wheres, null);
 
-      assertTrue("Col size is " + col.size(), col.size() == 2);
+      assertTrue(col.size() == 2, "Col size is " + col.size());
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -126,7 +126,7 @@ public class WhereTest {
       wheres.add(cw);
       col = cpoAdapter.retrieveBeans(ValueObject.FG_LIST_TESTWHERERETRIEVE, ValueObjectFactory.createValueObject(), wheres, null);
 
-      assertTrue("Col size is " + col.size(), col.size() == 1);
+      assertTrue(col.size() == 1, "Col size is " + col.size());
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -146,7 +146,7 @@ public class WhereTest {
       wheres.add(cw);
       col = cpoAdapter.retrieveBeans(ValueObject.FG_LIST_TESTWHERERETRIEVE, valObj, wheres, null);
 
-      assertTrue("Col size is " + col.size(), col.size() == 2);
+      assertTrue(col.size() == 2, "Col size is " + col.size());
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -166,7 +166,7 @@ public class WhereTest {
       wheres.add(cw);
       col = cpoAdapter.retrieveBeans(ValueObject.FG_LIST_NULL, valObj, wheres, null);
 
-      assertTrue("Col size is " + col.size(), col.size() == 2);
+      assertTrue(col.size() == 2, "Col size is " + col.size());
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -214,7 +214,7 @@ public class WhereTest {
       wheres.add(cw);
       col = cpoAdapter.retrieveBeans(ValueObject.FG_LIST_TESTWHERERETRIEVE, valObj, wheres, null);
 
-      assertTrue("Col size is " + col.size(), col.size() == 3);
+      assertTrue(col.size() == 3, "Col size is " + col.size());
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -234,7 +234,7 @@ public class WhereTest {
       wheres.add(cw);
       col = cpoAdapter.retrieveBeans(ValueObject.FG_LIST_TESTWHERERETRIEVE, valObj, wheres, null);
 
-      assertTrue("Col size is " + col.size(), col.size() == 6);
+      assertTrue(col.size() == 6, "Col size is " + col.size());
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -255,9 +255,9 @@ public class WhereTest {
       wheres.add(cw);
       col = cpoAdapter.retrieveBeans(ValueObject.FG_LIST_TESTWHERERETRIEVE, valObj, wheres, null);
 
-      assertTrue("Col size is " + col.size(), col.size() == 1);
+      assertTrue(col.size() == 1, "Col size is " + col.size());
       ValueObject rvo = col.iterator().next();
-      assertTrue("-6 != " + rvo.getId(), rvo.getId() == -6);
+      assertTrue(rvo.getId() == -6, "-6 != " + rvo.getId());
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -278,9 +278,9 @@ public class WhereTest {
       wheres.add(cw);
       col = cpoAdapter.retrieveBeans(ValueObject.FG_LIST_TESTWHERERETRIEVE, valObj, wheres, null);
 
-      assertTrue("Col size is " + col.size(), col.size() == 1);
+      assertTrue(col.size() == 1, "Col size is " + col.size());
       ValueObject rvo = col.iterator().next();
-      assertTrue("1 != " + rvo.getId(), rvo.getId() == 1);
+      assertTrue(rvo.getId() == 1, "1 != " + rvo.getId());
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -303,7 +303,7 @@ public class WhereTest {
       wheres.add(cw);
       Collection<ValueObject> col = cpoAdapter.retrieveBeans(ValueObject.FG_LIST_TESTWHERERETRIEVE, valObj, wheres, null);
 
-      assertTrue("Col size is " + col.size(), col.isEmpty());
+      assertTrue(col.isEmpty(), "Col size is " + col.size());
 
       cw = cpoAdapter.newWhere();
       cw1 = cpoAdapter.newWhere(CpoWhere.LOGIC_NONE, ValueObject.ATTR_ATTRCHAR, CpoWhere.COMP_ISNULL, null);
@@ -316,7 +316,7 @@ public class WhereTest {
       wheres.add(cw);
       col = cpoAdapter.retrieveBeans(ValueObject.FG_LIST_TESTWHERERETRIEVE, valObj, wheres, null);
 
-      assertTrue("Col size is " + col.size(), col.size() == 1);
+      assertTrue(col.size() == 1, "Col size is " + col.size());
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -340,7 +340,7 @@ public class WhereTest {
       wheres.add(cw);
       Collection<ValueObject> col = cpoAdapter.retrieveBeans(ValueObject.FG_LIST_TESTWHERERETRIEVE, valObj, wheres, null);
 
-      assertTrue("Col size is " + col.size(), col.size() == 2);
+      assertTrue(col.size() == 2, "Col size is " + col.size());
 
       cw = cpoAdapter.newWhere();
       cw1 = cpoAdapter.newWhere(CpoWhere.LOGIC_NONE, ValueObject.ATTR_ID, CpoWhere.COMP_EQ, null);
@@ -354,7 +354,7 @@ public class WhereTest {
       wheres.add(cw);
       col = cpoAdapter.retrieveBeans(ValueObject.FG_LIST_TESTWHERERETRIEVE, valObj, wheres, null);
 
-      assertTrue("Col size is " + col.size(), col.size() == 6);
+      assertTrue(col.size() == 6, "Col size is " + col.size());
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -378,9 +378,9 @@ public class WhereTest {
       wheres.add(cw);
       Collection<ValueObject> col = cpoAdapter.retrieveBeans(ValueObject.FG_LIST_TESTWHERERETRIEVE, valObj, wheres, null);
 
-      assertTrue("Col size is " + col.size(), col.size() == 1);
+      assertTrue(col.size() == 1, "Col size is " + col.size());
       ValueObject rvo = col.iterator().next();
-      assertTrue("1 != " + rvo.getId(), rvo.getId() == 1);
+      assertTrue(rvo.getId() == 1, "1 != " + rvo.getId());
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -400,9 +400,9 @@ public class WhereTest {
 
       Collection<ValueObject> col = cpoAdapter.retrieveBeans(ValueObject.FG_LIST_TESTWHERERETRIEVE, valObj, valObj, cw, null);
 
-      assertTrue("Col size is " + col.size(), col.size() == 1);
+      assertTrue(col.size() == 1, "Col size is " + col.size());
       ValueObject rvo = col.iterator().next();
-      assertTrue("1 != " + rvo.getId(), rvo.getId() == 1);
+      assertTrue(rvo.getId() == 1, "1 != " + rvo.getId());
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -427,7 +427,7 @@ public class WhereTest {
       wheres.add(cw);
       Collection<ValueObject> col = cpoAdapter.retrieveBeans(ValueObject.FG_LIST_TESTWHERERETRIEVE, valObj, wheres, null);
 
-      assertTrue("Col size is " + col.size(), col.size() == 1);
+      assertTrue(col.size() == 1, "Col size is " + col.size());
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -452,7 +452,7 @@ public class WhereTest {
       wheres.add(cw);
       Collection<ValueObject> col = cpoAdapter.retrieveBeans(ValueObject.FG_LIST_TESTWHERERETRIEVE, valObj, wheres, null);
 
-      assertTrue("Col size is " + col.size(), col.size() == 1);
+      assertTrue(col.size() == 1, "Col size is " + col.size());
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -477,7 +477,7 @@ public class WhereTest {
       wheres.add(cw);
       Collection<ValueObject> col = cpoAdapter.retrieveBeans(ValueObject.FG_LIST_TESTWHERERETRIEVE, valObj, wheres, null);
 
-      assertTrue("Col size is " + col.size(), col.size() == 1);
+      assertTrue(col.size() == 1, "Col size is " + col.size());
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -499,7 +499,7 @@ public class WhereTest {
       wheres.add(cw);
       Collection<ValueObject> col = cpoAdapter.retrieveBeans(ValueObject.FG_LIST_TESTWHERERETRIEVE, valObj, wheres, null);
 
-      assertTrue("Col size is " + col.size(), col.size() == 1);
+      assertTrue(col.size() == 1, "Col size is " + col.size());
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -522,7 +522,7 @@ public class WhereTest {
       wheres.add(cw);
       Collection<ValueObject> coll = cpoAdapter.retrieveBeans(ValueObject.FG_LIST_TESTWHERERETRIEVE, valObj, wheres, null);
 
-      assertTrue("Collection size is " + coll.size(), coll.size() == 3);
+      assertTrue(coll.size() == 3, "Collection size is " + coll.size());
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -548,7 +548,7 @@ public class WhereTest {
       wheres.add(cw);
       Collection<ValueObject> coll = cpoAdapter.retrieveBeans(ValueObject.FG_LIST_TESTWHERERETRIEVE, valObj, wheres, null);
 
-      assertTrue("Collection size is " + coll.size(), coll.size() == 3);
+      assertTrue(coll.size() == 3, "Collection size is " + coll.size());
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -583,7 +583,7 @@ public class WhereTest {
       wheres.add(cw3);
       Collection<ValueObject> coll = cpoAdapter.retrieveBeans(ValueObject.FG_LIST_TESTORDERBYRETRIEVE, valObj, wheres, null);
 
-      assertTrue("Collection size is " + coll.size(), coll.size() == 6);
+      assertTrue(coll.size() == 6, "Collection size is " + coll.size());
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -609,7 +609,7 @@ public class WhereTest {
       wheres.add(cw);
       Collection<ValueObject> coll = cpoAdapter.retrieveBeans(ValueObject.FG_LIST_TESTWHERERETRIEVE, valObj, wheres, null);
 
-      assertTrue("Collection size is " + coll.size(), coll.size() == 3);
+      assertTrue(coll.size() == 3, "Collection size is " + coll.size());
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -636,8 +636,8 @@ public class WhereTest {
 
       valObj = cpoAdapter.retrieveBean(ValueObject.FG_RETRIEVE_NULL, valObj, wheres, orderBys, null);
 
-      assertNotNull("Value Object should not be null", valObj);
-      assertTrue("Id should equal 1", valObj.getId() == 1);
+      assertNotNull(valObj,"Value Object should not be null");
+      assertTrue(valObj.getId() == 1, "Id should equal 1");
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -664,8 +664,8 @@ public class WhereTest {
 
       valObj = cpoAdapter.retrieveBean(ValueObject.FG_RETRIEVE_NULL, valObj, valObj, wheres, orderBys);
 
-      assertNotNull("Value Object should not be null", valObj);
-      assertTrue("Id should equal 1", valObj.getId() == 1);
+      assertNotNull(valObj, "Value Object should not be null");
+      assertTrue(valObj.getId() == 1, "Id should equal 1");
     } catch (Exception e) {
       fail(method + e.getMessage());
     }

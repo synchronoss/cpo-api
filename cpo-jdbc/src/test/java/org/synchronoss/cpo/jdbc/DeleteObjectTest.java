@@ -20,10 +20,10 @@
  */
 package org.synchronoss.cpo.jdbc;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import static org.junit.Assert.*;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 import org.slf4j.*;
 import org.synchronoss.cpo.*;
 import org.synchronoss.cpo.helper.ExceptionHelper;
@@ -37,7 +37,7 @@ import java.util.*;
  *
  * @author david berry
  */
-public class DeleteObjectTest {
+public class DeleteObjectTest extends JdbcDbContainerBase {
 
   private static final Logger logger = LoggerFactory.getLogger(DeleteObjectTest.class);
   private ArrayList<ValueObject> al = new ArrayList<>();
@@ -54,13 +54,13 @@ public class DeleteObjectTest {
    * @author david berry
    * @version '$Id: InsertObjectTest.java,v 1.3 2006/01/30 19:09:23 dberry Exp $'
    */
-  @Before
+  @BeforeEach
   public void setUp() {
     String method = "setUp:";
 
     try {
       cpoAdapter = CpoAdapterFactoryManager.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_JDBC);
-      assertNotNull(method + "cpoAdapter is null", cpoAdapter);
+      assertNotNull(cpoAdapter, method + "cpoAdapter is null");
       metaDescriptor = (JdbcCpoMetaDescriptor) cpoAdapter.getCpoMetaDescriptor();
     } catch (Exception e) {
       fail(method + e.getMessage());
@@ -98,7 +98,7 @@ public class DeleteObjectTest {
       List<CpoWhere> cws = new ArrayList<>();
       cws.add(cpoAdapter.newWhere(CpoWhere.LOGIC_AND, ValueObject.ATTR_ID, CpoWhere.COMP_EQ, 2));
       long deleted = cpoAdapter.deleteObject(ValueObject.FG_DELETE_NULL, valObj, cws, null, null);
-      assertEquals("Should not have deleted anything", 0, deleted);
+      assertEquals(0, deleted, "Should not have deleted anything");
     } catch (Exception e) {
       logger.error(ExceptionHelper.getLocalizedMessage(e));
       fail(method + e.getMessage());
@@ -109,7 +109,7 @@ public class DeleteObjectTest {
       List<CpoWhere> cws = new ArrayList<>();
       cws.add(cpoAdapter.newWhere(CpoWhere.LOGIC_OR, ValueObject.ATTR_ID, CpoWhere.COMP_EQ, 2));
       long deleted = cpoAdapter.deleteObject(ValueObject.FG_DELETE_NULL, valObj, cws, null, null);
-      assertEquals("Should have deleted 1", 1, deleted);
+      assertEquals(1, deleted,"Should have deleted 1");
     } catch (Exception e) {
       logger.error(ExceptionHelper.getLocalizedMessage(e));
       fail(method + e.getMessage());
@@ -119,7 +119,7 @@ public class DeleteObjectTest {
 
   }
 
-  @After
+  @AfterEach
   public void tearDown() {
     String method = "tearDown:";
     try {

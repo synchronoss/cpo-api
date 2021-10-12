@@ -20,10 +20,10 @@
  */
 package org.synchronoss.cpo.jdbc;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import static org.junit.Assert.*;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 import org.synchronoss.cpo.*;
 import org.synchronoss.cpo.jdbc.meta.JdbcCpoMetaDescriptor;
 
@@ -35,7 +35,7 @@ import java.util.*;
  *
  * @author david berry
  */
-public class CaseSensitiveTest {
+public class CaseSensitiveTest extends JdbcDbContainerBase {
 
   private ArrayList<CaseValueObject> al = new ArrayList<>();
   private CpoAdapter cpoAdapter = null;
@@ -52,20 +52,20 @@ public class CaseSensitiveTest {
    * @author david berry
    * @version '$Id: InsertObjectTest.java,v 1.3 2006/01/30 19:09:23 dberry Exp $'
    */
-  @Before
+  @BeforeEach
   public void setUp() {
     String method = "setUp:";
 
     try {
       cpoAdapter = CpoAdapterFactoryManager.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_CASESENSITIVE);
-      assertNotNull(method + "cpoAdapter is null", cpoAdapter);
+      assertNotNull(cpoAdapter, method + "cpoAdapter is null");
       metaDescriptor = (JdbcCpoMetaDescriptor) cpoAdapter.getCpoMetaDescriptor();
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
     try {
       readAdapter = CpoAdapterFactoryManager.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_CASESENSITIVE);
-      assertNotNull(method + "readAdapter is null", readAdapter);
+      assertNotNull(readAdapter,method + "readAdapter is null");
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -99,11 +99,11 @@ public class CaseSensitiveTest {
 
     try {
       CaseValueObject vo = readAdapter.retrieveBean(CaseValueObject.FG_RETRIEVE_NULL, valObj, valObj, null, null);
-      assertFalse("Ids should not match", vo.getId() == valObj.getId());
-      assertFalse("Integers should not match", vo.getAttrInteger() == valObj.getAttrInteger());
-      assertFalse("Strings should not match", valObj.getAttrVarChar().equals(vo.getAttrVarChar()));
-      assertFalse("Timestamps should not match", valObj.getAttrDatetime().equals(vo.getAttrDatetime()));
-      assertFalse("boolean not stored correctly", vo.getAttrBit());
+      assertFalse(vo.getId() == valObj.getId(), "Ids should not match");
+      assertFalse(vo.getAttrInteger() == valObj.getAttrInteger(), "Integers should not match");
+      assertFalse(valObj.getAttrVarChar().equals(vo.getAttrVarChar()), "Strings should not match");
+      assertFalse(valObj.getAttrDatetime().equals(vo.getAttrDatetime()), "Timestamps should not match");
+      assertFalse(vo.getAttrBit(), "boolean not stored correctly");
 
     } catch (Exception e) {
       fail(method + e.getMessage());
@@ -111,7 +111,7 @@ public class CaseSensitiveTest {
 
   }
 
-  @After
+  @AfterEach
   public void tearDown() {
     String method = "tearDown:";
     try {

@@ -20,10 +20,10 @@
  */
 package org.synchronoss.cpo.jdbc;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import static org.junit.Assert.*;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 import org.slf4j.*;
 import org.synchronoss.cpo.*;
 
@@ -34,7 +34,7 @@ import java.util.*;
  *
  * @author david berry
  */
-public class RetrieveBeanTest {
+public class RetrieveBeanTest extends JdbcDbContainerBase {
 
   private static final Logger logger = LoggerFactory.getLogger(RetrieveBeanTest.class);
   private CpoAdapter cpoAdapter = null;
@@ -49,13 +49,13 @@ public class RetrieveBeanTest {
    * @author david berry
    * @version '$Id: RetrieveBeanTest.java,v 1.6 2006/01/30 19:09:23 dberry Exp $'
    */
-  @Before
+  @BeforeEach
   public void setUp() {
     String method = "setUp:";
 
     try {
       cpoAdapter = CpoAdapterFactoryManager.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_JDBC);
-      assertNotNull(method + "cpoAdapter is null", cpoAdapter);
+      assertNotNull(cpoAdapter, method + "cpoAdapter is null");
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -91,7 +91,7 @@ public class RetrieveBeanTest {
 
       ValueObject valObj = ValueObjectFactory.createValueObject();
       col = cpoAdapter1.retrieveBeans(ValueObject.FG_LIST_NULL, valObj);
-      assertTrue("Col size is " + col.size(), col.size() == al.size());
+      assertTrue(col.size() == al.size(), "Col size is " + col.size());
 
       // The adapter is now open
       assertFalse(cpoAdapter1.isClosed());
@@ -110,7 +110,7 @@ public class RetrieveBeanTest {
 
       ValueObject valObj = ValueObjectFactory.createValueObject();
       col = cpoAdapter1.retrieveBeans(ValueObject.FG_LIST_NULL, valObj);
-      assertTrue("Col size is " + col.size(), col.size() == al.size());
+      assertTrue(col.size() == al.size(), "Col size is " + col.size());
 
       // The adapter is now open
       assertFalse(cpoAdapter1.isClosed());
@@ -131,7 +131,7 @@ public class RetrieveBeanTest {
     try {
       ValueObject valObj = ValueObjectFactory.createValueObject();
       col = cpoAdapter.retrieveBeans(ValueObject.FG_LIST_NULL, valObj);
-      assertTrue("Col size is " + col.size(), col.size() == al.size());
+      assertTrue(col.size() == al.size(), "Col size is " + col.size());
 
     } catch (Exception e) {
       fail(method + e.getMessage());
@@ -146,7 +146,7 @@ public class RetrieveBeanTest {
     try {
       ValueObject valObj = ValueObjectFactory.createValueObject();
       col = cpoAdapter.retrieveBeans(ValueObject.FG_LIST_NULL, valObj, valObj);
-      assertTrue("Col size is " + col.size(), col.size() == al.size());
+      assertTrue(col.size() == al.size(), "Col size is " + col.size());
 
     } catch (Exception e) {
       fail(method + e.getMessage());
@@ -162,7 +162,7 @@ public class RetrieveBeanTest {
       trx.isClosed();
       ValueObject valObj = ValueObjectFactory.createValueObject();
       col = trx.retrieveBeans(ValueObject.FG_LIST_NULL, valObj);
-      assertTrue("Col size is " + col.size(), col.size() == al.size());
+      assertTrue(col.size() == al.size(), "Col size is " + col.size());
       trx.commit();
     } catch (Exception e) {
       fail(method + e.getMessage());
@@ -185,7 +185,7 @@ public class RetrieveBeanTest {
         }
         logger.debug("Retrieved Object #" + count);
       }
-      assertTrue("Result size is " + count, count == al.size());
+      assertTrue(count == al.size(), "Result size is " + count);
 
     } catch (Exception e) {
       fail(method + e.getMessage());
@@ -206,7 +206,7 @@ public class RetrieveBeanTest {
           count++;
         }
       }
-      assertTrue("Result size is " + count, count == al.size());
+      assertTrue(count == al.size(), "Result size is " + count);
 
     } catch (Exception e) {
       fail(method + e.getMessage());
@@ -227,7 +227,7 @@ public class RetrieveBeanTest {
           count++;
         }
       }
-      assertTrue("Result size is " + count, count == al.size());
+      assertTrue(count == al.size(), "Result size is " + count);
 
     } catch (Exception e) {
       fail(method + e.getMessage());
@@ -248,7 +248,7 @@ public class RetrieveBeanTest {
           count++;
         }
       }
-      assertTrue("Result size is " + count, count == al.size());
+      assertTrue(count == al.size(), "Result size is " + count);
 
     } catch (Exception e) {
       fail(method + e.getMessage());
@@ -289,7 +289,7 @@ public class RetrieveBeanTest {
           count++;
         }
       }
-      assertTrue("Result size is " + count, count == al.size());
+      assertTrue(count == al.size(), "Result size is " + count);
 
     } catch (Exception e) {
       fail(method + e.getMessage());
@@ -312,7 +312,7 @@ public class RetrieveBeanTest {
         }
         logger.debug("Retrieved Object #" + count);
       }
-      assertTrue("Result size is " + count, count == al.size());
+      assertTrue(count == al.size(), "Result size is " + count);
 
     } catch (Exception e) {
       fail(method + e.getMessage());
@@ -328,7 +328,7 @@ public class RetrieveBeanTest {
     try {
       rvo = cpoAdapter.retrieveBean(vo);
       assertNotNull(method + "Returned Value object is null");
-      assertNotSame(method + "ValueObjects are the same", vo, rvo);
+      assertNotSame(vo, rvo, method + "ValueObjects are the same");
       assertEquals(method + "Strings are not the same", rvo.getAttrVarChar(), "Test");
       if (rvo.getAttrVarChar().equals(vo.getAttrVarChar())) {
         fail(method + "ValueObjects are the same");
@@ -346,13 +346,13 @@ public class RetrieveBeanTest {
 
     try {
       rvo = cpoAdapter.retrieveBean(vo);
-      assertNull(method + "Returned Value object is Not Null", rvo);
+      assertNull(rvo, method + "Returned Value object is Not Null");
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
   }
 
-  @After
+  @AfterEach
   public void tearDown() {
     String method = "tearDown:";
     try {

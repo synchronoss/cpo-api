@@ -20,10 +20,10 @@
  */
 package org.synchronoss.cpo.jdbc;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import static org.junit.Assert.*;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 import org.synchronoss.cpo.*;
 import org.synchronoss.cpo.jdbc.meta.JdbcCpoMetaDescriptor;
 
@@ -35,7 +35,7 @@ import java.util.ArrayList;
  *
  * @author david berry
  */
-public class InheritanceTest {
+public class InheritanceTest extends JdbcDbContainerBase {
 
   private ArrayList<ChildValueObject> al = new ArrayList<>();
   private CpoAdapter cpoAdapter = null;
@@ -52,13 +52,13 @@ public class InheritanceTest {
    * @author david berry
    * @version '$Id: InsertObjectTest.java,v 1.3 2006/01/30 19:09:23 dberry Exp $'
    */
-  @Before
+  @BeforeEach
   public void setUp() {
     String method = "setUp:";
 
     try {
       cpoAdapter = CpoAdapterFactoryManager.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_JDBC);
-      assertNotNull(method + "cpoAdapter is null", cpoAdapter);
+      assertNotNull(cpoAdapter,method + "cpoAdapter is null");
       metaDescriptor = (JdbcCpoMetaDescriptor) cpoAdapter.getCpoMetaDescriptor();
     } catch (Exception e) {
       fail(method + e.getMessage());
@@ -93,11 +93,11 @@ public class InheritanceTest {
 
     try {
       ChildValueObject vo = cpoAdapter.retrieveBean(ValueObject.FG_RETRIEVE_NULL, valObj, valObj, null, null);
-      assertEquals("Ids do not match", vo.getId(), valObj.getId());
-      assertEquals("Integers do not match", vo.getAttrInteger(), valObj.getAttrInteger());
+      assertEquals(vo.getId(), valObj.getId(),"Ids do not match");
+      assertEquals(vo.getAttrInteger(), valObj.getAttrInteger(),"Integers do not match");
       assertEquals("Strings do not match", vo.getAttrVarChar(), valObj.getAttrVarChar());
-      assertEquals("Timestamps do not match", vo.getAttrDatetime(), valObj.getAttrDatetime());
-      assertTrue("boolean not stored correctly", vo.getAttrBit());
+      assertEquals(vo.getAttrDatetime(), valObj.getAttrDatetime(),"Timestamps do not match");
+      assertTrue(vo.getAttrBit(),"boolean not stored correctly");
 
     } catch (Exception e) {
       fail(method + e.getMessage());
@@ -106,7 +106,7 @@ public class InheritanceTest {
 
   }
 
-  @After
+  @AfterEach
   public void tearDown() {
     String method = "tearDown:";
     try {

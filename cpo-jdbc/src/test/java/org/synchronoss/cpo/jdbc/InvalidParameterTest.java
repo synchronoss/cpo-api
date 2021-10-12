@@ -20,16 +20,17 @@
  */
 package org.synchronoss.cpo.jdbc;
 
-import org.junit.Before;
-import org.junit.Test;
-import static org.junit.Assert.*;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 import org.slf4j.*;
 import org.synchronoss.cpo.*;
 import org.synchronoss.cpo.helper.ExceptionHelper;
 
 import java.util.Collection;
 
-public class InvalidParameterTest {
+public class InvalidParameterTest extends JdbcDbContainerBase {
 
   private static final Logger logger = LoggerFactory.getLogger(InvalidParameterTest.class);
   private CpoAdapter cpoAdapter = null;
@@ -43,13 +44,13 @@ public class InvalidParameterTest {
    *
    * @author david berry
    */
-  @Before
+  @BeforeEach
   public void setUp() {
     String method = "setUp:";
 
     try {
       cpoAdapter = CpoAdapterFactoryManager.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_JDBC);
-      assertNotNull(method + "cpoAdapter is null", cpoAdapter);
+      assertNotNull(cpoAdapter,method + "cpoAdapter is null");
     } catch (Exception e) {
       fail(method + e.getMessage());
     }

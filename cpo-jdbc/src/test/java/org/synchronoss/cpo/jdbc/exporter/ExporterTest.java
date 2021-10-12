@@ -20,11 +20,10 @@
  */
 package org.synchronoss.cpo.jdbc.exporter;
 
-import junit.framework.TestCase;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import static org.junit.Assert.*;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 import org.slf4j.*;
 import org.synchronoss.cpo.*;
 import org.synchronoss.cpo.core.cpoCoreMeta.*;
@@ -42,7 +41,7 @@ import java.util.Arrays;
  *
  * @author Michael Bellomo
  */
-public class ExporterTest {
+public class ExporterTest extends JdbcDbContainerBase {
 
   private static final Logger logger = LoggerFactory.getLogger(ExporterTest.class);
 
@@ -52,20 +51,20 @@ public class ExporterTest {
   public ExporterTest() {
   }
 
-  @Before
+  @BeforeEach
   public void setUp() {
     String method = "setUp:";
 
     try {
       cpoAdapter = CpoAdapterFactoryManager.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_JDBC);
-      assertNotNull(method + "CpoAdapter is null", cpoAdapter);
+      assertNotNull(cpoAdapter,method + "CpoAdapter is null");
       metaDescriptor = (JdbcCpoMetaDescriptor) cpoAdapter.getCpoMetaDescriptor();
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
   }
 
-  @After
+  @AfterEach
   public void tearDown() {
     cpoAdapter = null;
   }

@@ -20,8 +20,8 @@
  */
 package org.synchronoss.cpo.jdbc.parser;
 
-import org.junit.Test;
-import static org.junit.Assert.*;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 import org.synchronoss.cpo.parser.BoundExpressionParser;
 
 import java.text.ParseException;

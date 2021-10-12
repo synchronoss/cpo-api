@@ -20,10 +20,10 @@
  */
 package org.synchronoss.cpo.jdbc;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import static org.junit.Assert.*;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 import org.slf4j.*;
 import org.synchronoss.cpo.*;
 import org.synchronoss.cpo.helper.ExceptionHelper;
@@ -35,7 +35,7 @@ import java.util.ArrayList;
  *
  * @author david berry
  */
-public class ExistObjectTest {
+public class ExistObjectTest extends JdbcDbContainerBase {
 
   private static final Logger logger = LoggerFactory.getLogger(ExistObjectTest.class);
   private CpoAdapter cpoAdapter = null;
@@ -49,13 +49,13 @@ public class ExistObjectTest {
    * @author david berry
    * @version '$Id: ExistObjectTest.java,v 1.2 2006/01/30 19:09:23 dberry Exp $'
    */
-  @Before
+  @BeforeEach
   public void setUp() {
     String method = "setUp:";
 
     try {
       cpoAdapter = CpoAdapterFactoryManager.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_JDBC);
-      assertNotNull(method + "cpoAdapter is null", cpoAdapter);
+      assertNotNull(cpoAdapter, method + "cpoAdapter is null");
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -77,7 +77,7 @@ public class ExistObjectTest {
     try {
       ValueObject valObj = ValueObjectFactory.createValueObject(1);
       long count = cpoAdapter.existsObject(valObj);
-      assertTrue("Object not Found", count == 1);
+      assertTrue(count == 1, "Object not Found");
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -85,7 +85,7 @@ public class ExistObjectTest {
     try {
       ValueObject valObj = ValueObjectFactory.createValueObject(5);
       long count = cpoAdapter.existsObject(valObj);
-      assertTrue("Object Found", count == 0);
+      assertTrue(count == 0, "Object Found");
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -102,7 +102,7 @@ public class ExistObjectTest {
       ArrayList<CpoWhere> wheres = new ArrayList<>();
       wheres.add(where);
       long count = cpoAdapter.existsObject(ValueObject.FG_EXIST_NULL, valObj, wheres);
-      assertTrue("Object not Found", count == 1);
+      assertTrue(count == 1, "Object not Found");
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -113,14 +113,14 @@ public class ExistObjectTest {
       ArrayList<CpoWhere> wheres = new ArrayList<>();
       wheres.add(where);
       long count = cpoAdapter.existsObject(ValueObject.FG_EXIST_NULL, valObj, wheres);
-      assertTrue("Object Found", count == 0);
+      assertTrue(count == 0, "Object Found");
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
 
   }
 
-  @After
+  @AfterEach
   public void tearDown() {
     ValueObject vo = ValueObjectFactory.createValueObject(1);
     try {

@@ -20,56 +20,15 @@
  */
 package org.synchronoss.cpo.jdbc;
 
-import com.github.terma.javaniotcpproxy.StaticTcpProxyConfig;
 import com.github.terma.javaniotcpproxy.TcpProxy;
-import com.github.terma.javaniotcpproxy.TcpProxyConfig;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.ClassRule;
-import org.junit.runner.RunWith;
-import org.junit.runners.Suite;
-import static org.junit.Assert.fail;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.synchronoss.cpo.jdbc.exporter.ExporterTest;
-import org.synchronoss.cpo.jdbc.jta.JdbcXaResourceTest;
-import org.synchronoss.cpo.jdbc.parser.BoundExpressionParserTest;
-import org.testcontainers.containers.*;
+import org.testcontainers.containers.JdbcDatabaseContainer;
+import org.testcontainers.containers.MariaDBContainer;
+import org.testcontainers.containers.MySQLContainer;
+import org.testcontainers.containers.PostgreSQLContainer;
 
-@RunWith(Suite.class)
-@Suite.SuiteClasses ({
-  ExporterTest.class,
-  JdbcXaResourceTest.class,
-  BoundExpressionParserTest.class,
-  BigBatchTest.class,
-  BigRetrieveTest.class,
-  BlobTest.class,
-  BlobTrxTest.class,
-  CaseInsensitiveTest.class,
-  CaseSensitiveTest.class,
-  ConstructorTest.class,
-  CriteriaObjectTest.class,
-  DeleteObjectTest.class,
-  EntityTest.class,
-  ExecuteTest.class,
-  ExecuteTrxTest.class,
-  ExistObjectTest.class,
-  InheritanceTest.class,
-  InsertObjectTest.class,
-  InterleavedWhereTest.class,
-  InvalidParameterTest.class,
-  NativeExpressionTest.class,
-  OrderByTest.class,
-  RetrieveBeanTest.class,
-  RollbackTest.class,
-  RollbackTrxTest.class,
-  SelectForUpdateTest.class,
-  UpdateObjectTest.class,
-  WhereTest.class,
-  XmlValidationTest.class,
-  ZZHotDeployTest.class
-})
-public class JdbcTestSuite {
+public abstract class JdbcDbContainerBase {
   private static final String MYSQL = "mysql";
   private static final String MARIADB = "mariadb";
   private static final String POSTGRES = "postgres";
@@ -83,7 +42,6 @@ public class JdbcTestSuite {
   private static Logger logger;
   private static TcpProxy proxy=null;
 
-  @ClassRule
   public static JdbcDatabaseContainer jdbcContainer;
 
   static {
@@ -92,45 +50,9 @@ public class JdbcTestSuite {
     dbPswd = JdbcJUnitProperty.getProperty(JdbcJUnitProperty.PROP_DB_PSWD);
     dbName = JdbcJUnitProperty.getProperty(JdbcJUnitProperty.PROP_DB_NAME);
     initScript = JdbcJUnitProperty.getProperty(JdbcJUnitProperty.PROP_INIT_SCRIPT);
-    logger = LoggerFactory.getLogger(JdbcTestSuite.class);
+    logger = LoggerFactory.getLogger(JdbcDatabaseContainer.class);
     jdbcContainer = createJdbcContainer(dbType, initScript, dbUser, dbPswd, dbName);
-  }
-
-  @BeforeClass
-  public static void startContainer() {
-    logger.debug("===== start setting up =====");
-    if (jdbcContainer!=null) {
-      try {
-        jdbcContainer.start();
-
-        int dbPort = Integer.valueOf(JdbcJUnitProperty.getProperty(JdbcJUnitProperty.PROP_DB_PORT));
-        // Now map the random port to something we can use in the config file
-        TcpProxyConfig config = new StaticTcpProxyConfig(dbPort, jdbcContainer.getHost(), jdbcContainer.getFirstMappedPort());
-        config.setWorkerCount(1);
-
-        // init proxy
-        TcpProxy proxy = new TcpProxy(config);
-
-        // start proxy
-        proxy.start();
-
-        logger.debug("Jdbc Host:" + jdbcContainer.getHost());
-      } catch (Exception ex) {
-        fail("Failed to start Container: " + ex.getMessage());
-      }
-    }
-    logger.debug("===== end setting up =====");
-  }
-
-  @AfterClass
-  public static void stopContainer() {
-    logger.debug("===== start tearing down =====");
-    if (jdbcContainer!=null) {
-      if (proxy != null)
-        proxy.shutdown();
-      jdbcContainer.stop();
-    }
-    logger.debug("===== end tearing down =====");
+    jdbcContainer.start();
   }
 
   private static JdbcDatabaseContainer createJdbcContainer(String dbType, String initScript, String dbUser, String dbPswd, String dbName) {

@@ -20,13 +20,12 @@
  */
 package org.synchronoss.cpo.jdbc;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import static org.junit.Assert.*;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.synchronoss.cpo.CpoAdapter;
 import org.synchronoss.cpo.CpoAdapterFactoryManager;
 import org.synchronoss.cpo.CpoTrxAdapter;
 import org.synchronoss.cpo.helper.ExceptionHelper;
@@ -37,7 +36,7 @@ import org.synchronoss.cpo.jdbc.meta.JdbcCpoMetaDescriptor;
  *
  * @author david berry
  */
-public class ExecuteTrxTest {
+public class ExecuteTrxTest extends JdbcDbContainerBase {
 
   private static final Logger logger = LoggerFactory.getLogger(ExecuteTrxTest.class);
 //  private CpoAdapter cpoAdapter = null;
@@ -55,7 +54,7 @@ public class ExecuteTrxTest {
   /**
    * <code>setUp</code> Load the datasource from the properties in the property file jdbc_en_US.properties
    */
-  @Before
+  @BeforeEach
   public void setUp() {
     String method = "setUp:";
 
@@ -63,7 +62,7 @@ public class ExecuteTrxTest {
 //      cpoAdapter = CpoAdapterFactoryManager.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_JDBC);
       trxAdapter = CpoAdapterFactoryManager.getCpoTrxAdapter(JdbcStatics.ADAPTER_CONTEXT_JDBC);
 //      assertNotNull(method + "CpoAdapter is null", cpoAdapter);
-      assertNotNull(method + "trxAdapter is null", trxAdapter);
+      assertNotNull(trxAdapter,method + "trxAdapter is null");
       metaDescriptor = (JdbcCpoMetaDescriptor) trxAdapter.getCpoMetaDescriptor();
     } catch (Exception e) {
       fail(method + e.getMessage());
@@ -73,7 +72,7 @@ public class ExecuteTrxTest {
   /**
    * DOCUMENT ME!
    */
-  @After
+  @AfterEach
   public void tearDown() {
     try{trxAdapter.close();} catch (Exception e) {}
     trxAdapter = null;
@@ -94,7 +93,7 @@ public class ExecuteTrxTest {
         rvo = trxAdapter.executeObject(ValueObject.FG_EXECUTE_TESTEXECUTEOBJECT, vo);
         trxAdapter.commit();
         assertNotNull(method + "Returned Value object is null");
-        assertTrue("power(3,3)=" + rvo.getAttrDouble(), rvo.getAttrDouble() == 27);
+        assertTrue(rvo.getAttrDouble() == 27, "power(3,3)=" + rvo.getAttrDouble());
       } catch (Exception e) {
         try { trxAdapter.rollback();} catch (Exception ex) {}
         logger.error(ExceptionHelper.getLocalizedMessage(e));
@@ -108,7 +107,7 @@ public class ExecuteTrxTest {
         rvo = trxAdapter.executeObject(ValueObject.FG_EXECUTE_TESTEXECUTEOBJECTNOTRANSFORM, vo);
         trxAdapter.commit();
         assertNotNull(method + "Returned Value object is null");
-        assertTrue("power(3,3)=" + rvo.getAttrDouble(), rvo.getAttrDouble() == 27);
+        assertTrue(rvo.getAttrDouble() == 27, "power(3,3)=" + rvo.getAttrDouble());
       } catch (Exception e) {
         try { trxAdapter.rollback();} catch (Exception ex) {}
         logger.error(ExceptionHelper.getLocalizedMessage(e));
@@ -131,7 +130,7 @@ public class ExecuteTrxTest {
         rvo = trxAdapter.executeObject(ValueObject.FG_EXECUTE_TESTEXECUTEOBJECT, vo, vo);
         trxAdapter.commit();
         assertNotNull(method + "Returned Value object is null");
-        assertTrue("power(3,3)=" + rvo.getAttrDouble(), rvo.getAttrDouble() == 27);
+        assertTrue(rvo.getAttrDouble() == 27, "power(3,3)=" + rvo.getAttrDouble());
       } catch (Exception e) {
         try { trxAdapter.rollback();} catch (Exception ex) {}
         logger.error(ExceptionHelper.getLocalizedMessage(e));

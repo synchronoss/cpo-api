@@ -20,10 +20,10 @@
  */
 package org.synchronoss.cpo.jdbc;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import static org.junit.Assert.*;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.CpoAdapter;
@@ -38,7 +38,7 @@ import org.synchronoss.cpo.jdbc.meta.JdbcCpoMetaDescriptor;
  *
  * @author david berry
  */
-public class SelectForUpdateTest {
+public class SelectForUpdateTest extends JdbcDbContainerBase {
 
   private static final Logger logger = LoggerFactory.getLogger(SelectForUpdateTest.class);
   private CpoAdapter cpoAdapter = null;
@@ -52,15 +52,15 @@ public class SelectForUpdateTest {
   /**
    * <code>setUp</code> Load the datasource from the properties in the property file jdbc_en_US.properties
    */
-  @Before
+  @BeforeEach
   public void setUp() {
     String method = "setUp:";
 
     try {
       cpoAdapter = CpoAdapterFactoryManager.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_JDBC);
-      assertNotNull(method + "cpoAdapter is null", cpoAdapter);
+      assertNotNull(cpoAdapter, method + "cpoAdapter is null");
       trxAdapter = CpoAdapterFactoryManager.getCpoTrxAdapter(JdbcStatics.ADAPTER_CONTEXT_JDBC);
-      assertNotNull(method + "trxAdapter is null", trxAdapter);
+      assertNotNull(trxAdapter, method + "trxAdapter is null");
       metaDescriptor = (JdbcCpoMetaDescriptor) cpoAdapter.getCpoMetaDescriptor();
     } catch (Exception e) {
       logger.debug(ExceptionHelper.getLocalizedMessage(e));
@@ -83,7 +83,7 @@ public class SelectForUpdateTest {
   /**
    * DOCUMENT ME!
    */
-  @After
+  @AfterEach
   public void tearDown() {
    String method = "tearDown:";
    ValueObject vo = ValueObjectFactory.createValueObject(1);
@@ -164,21 +164,21 @@ public class SelectForUpdateTest {
 
       try {
         long count = trxAdapter.existsObject(ValueObject.FG_EXIST_SELECTFORUPDATEEXISTZERO, vo2);
-        assertTrue("Zero objects should have been returned", count == 0);
+        assertTrue(count == 0, "Zero objects should have been returned");
       } catch (Exception e) {
         fail(method + "Select For Update should work:" + ExceptionHelper.getLocalizedMessage(e));
       }
 
       try {
         long count = trxAdapter.existsObject(ValueObject.FG_EXIST_SELECTFORUPDATEEXISTSINGLE, vo2);
-        assertTrue("One object should have been returned, got " + count, count == 1);
+        assertTrue(count == 1, "One object should have been returned, got " + count);
       } catch (Exception e) {
         fail(method + "Select For Update should work:" + ExceptionHelper.getLocalizedMessage(e));
       }
 
       try {
         long count = trxAdapter.existsObject(ValueObject.FG_EXIST_SELECTFORUPDATEEXISTALL, vo2);
-        assertTrue("Two objects should have been returned, got " + count, count == 2);
+        assertTrue(count == 2, "Two objects should have been returned, got " + count);
       } catch (Exception e) {
         fail(method + "Select For Update should work:" + ExceptionHelper.getLocalizedMessage(e));
       }

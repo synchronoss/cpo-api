@@ -20,16 +20,18 @@
  */
 package org.synchronoss.cpo.jta;
 
-import junit.framework.TestCase;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 
 import javax.transaction.xa.XAException;
 import javax.transaction.xa.XAResource;
 import javax.transaction.xa.Xid;
 
+
 /**
  * Created by dberry on 8/9/15.
  */
-public class CpoXaResourceTest extends TestCase {
+public class CpoXaResourceTest {
   private static final String LOCAL_RESOURCE = "LocalResource";
   private static final String GLOBAL_RESOURCE = "GlobalResource";
   private static final String LOCAL_RESOURCE1 = "LocalResource1";
@@ -37,6 +39,7 @@ public class CpoXaResourceTest extends TestCase {
   private static final String LOCAL_RESOURCE2 = "LocalResource2";
   private static final String GLOBAL_RESOURCE2 = "GlobalResource2";
 
+  @Test
   public void testStart(){
     StringBuilderXaResource xaResource = new StringBuilderXaResource();
     Xid xid1 = new MyXid(100, new byte[]{0x01}, new byte[]{0x02});

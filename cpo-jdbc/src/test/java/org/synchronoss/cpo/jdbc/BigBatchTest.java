@@ -20,10 +20,10 @@
  */
 package org.synchronoss.cpo.jdbc;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import static org.junit.Assert.*;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 import org.slf4j.*;
 import org.synchronoss.cpo.*;
 import org.synchronoss.cpo.helper.ExceptionHelper;
@@ -35,7 +35,7 @@ import java.util.ArrayList;
  *
  * @author david berry
  */
-public class BigBatchTest {
+public class BigBatchTest extends JdbcDbContainerBase {
 
   private static final Logger logger = LoggerFactory.getLogger(BigBatchTest.class);
   private ArrayList<ValueObject> al = new ArrayList<>();
@@ -51,13 +51,13 @@ public class BigBatchTest {
    * @author david berry
    * @version '$Id: InsertObjectTest.java,v 1.3 2006/01/30 19:09:23 dberry Exp $'
    */
-  @Before
+  @BeforeEach
   public void setUp() {
     String method = "setUp:";
 
     try {
       cpoAdapter = CpoAdapterFactoryManager.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_JDBC);
-      assertNotNull(method + "cpoAdapter is null", cpoAdapter);
+      assertNotNull(cpoAdapter, method + "cpoAdapter is null");
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -81,7 +81,7 @@ public class BigBatchTest {
 
     try {
       long inserts = cpoAdapter.insertObjects(al);
-      assertEquals("inserts performed do not equal inserts requested: ", inserts, numInserts);
+      assertEquals(inserts, numInserts,"inserts performed do not equal inserts requested: ");
     } catch (CpoException ce) {
       logger.debug("Received a CpoException:" + ExceptionHelper.getLocalizedMessage(ce));
     } catch (Exception e) {
@@ -94,7 +94,7 @@ public class BigBatchTest {
 
   }
 
-  @After
+  @AfterEach
   public void tearDown() {
     String method = "tearDown:";
     try {

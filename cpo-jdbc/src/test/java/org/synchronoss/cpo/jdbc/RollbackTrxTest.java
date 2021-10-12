@@ -21,11 +21,10 @@
 package org.synchronoss.cpo.jdbc;
 
 import java.util.ArrayList;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import static org.junit.Assert.*;
-import org.synchronoss.cpo.CpoAdapter;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 import org.synchronoss.cpo.CpoAdapterFactoryManager;
 import org.synchronoss.cpo.CpoException;
 import org.synchronoss.cpo.CpoTrxAdapter;
@@ -36,7 +35,7 @@ import org.synchronoss.cpo.helper.ExceptionHelper;
  *
  * @author david berry
  */
-public class RollbackTrxTest {
+public class RollbackTrxTest extends JdbcDbContainerBase {
 
   private CpoTrxAdapter trxAdapter = null;
 
@@ -50,13 +49,13 @@ public class RollbackTrxTest {
   /**
    * <code>setUp</code> Load the datasource from the properties in the property file jdbc_en_US.properties
    */
-  @Before
+  @BeforeEach
   public void setUp() {
     String method = "setUp:";
 
     try {
       trxAdapter = CpoAdapterFactoryManager.getCpoTrxAdapter(JdbcStatics.ADAPTER_CONTEXT_JDBC);
-      assertNotNull(method + "trxAdapter is null", trxAdapter);
+      assertNotNull(trxAdapter, method + "trxAdapter is null");
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -77,7 +76,7 @@ public class RollbackTrxTest {
   /**
    * DOCUMENT ME!
    */
-  @After
+  @AfterEach
   public void tearDown() {
     ValueObject vo = ValueObjectFactory.createValueObject(1);
     try {
@@ -123,7 +122,7 @@ public class RollbackTrxTest {
       }
       try {
         ValueObject rvo = trxAdapter.retrieveBean(vo);
-        assertNull(method + "Value Object did not rollback", rvo);
+        assertNull(rvo, method + "Value Object did not rollback");
       } catch (Exception e2) {
         fail(method + e.getMessage());
       }
@@ -149,7 +148,7 @@ public class RollbackTrxTest {
       }
       try {
         ValueObject rvo = trxAdapter.retrieveBean(vo);
-        assertNull(method + "Value Object did not rollback", rvo);
+        assertNull(rvo, method + "Value Object did not rollback");
       } catch (Exception e2) {
         fail(method + e.getMessage());
       }

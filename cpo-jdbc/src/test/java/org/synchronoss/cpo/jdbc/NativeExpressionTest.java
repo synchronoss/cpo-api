@@ -22,10 +22,10 @@ package org.synchronoss.cpo.jdbc;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import static org.junit.Assert.*;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 import org.synchronoss.cpo.CpoAdapter;
 import org.synchronoss.cpo.CpoAdapterFactoryManager;
 import org.synchronoss.cpo.CpoNativeFunction;
@@ -36,7 +36,7 @@ import org.synchronoss.cpo.CpoWhere;
  *
  * @author david berry
  */
-public class NativeExpressionTest {
+public class NativeExpressionTest extends JdbcDbContainerBase {
 
   private CpoAdapter cpoAdapter = null;
   private ArrayList<ValueObject> al = new ArrayList<>();
@@ -47,13 +47,13 @@ public class NativeExpressionTest {
   /**
    * <code>setUp</code> Load the datasource from the properties in the property file jdbc_en_US.properties
    */
-  @Before
+  @BeforeEach
   public void setUp() {
     String method = "setUp:";
 
     try {
       cpoAdapter = CpoAdapterFactoryManager.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_JDBC);
-      assertNotNull(method + "cpoAdapter is null", cpoAdapter);
+      assertNotNull(cpoAdapter, method + "cpoAdapter is null");
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -76,7 +76,7 @@ public class NativeExpressionTest {
   /**
    * DOCUMENT ME!
    */
-  @After
+  @AfterEach
   public void tearDown() {
     String method = "tearDown:";
     try {
@@ -107,7 +107,7 @@ public class NativeExpressionTest {
       ValueObject valObj = ValueObjectFactory.createValueObject(3);
       col = cpoAdapter.retrieveBeans(ValueObject.FG_LIST_TESTWHERERETRIEVE, valObj, valObj, null, null, cnqAl);
 
-      assertTrue("Col size is " + col.size(), col.size() == 2);
+      assertTrue(col.size() == 2, "Col size is " + col.size());
 
     } catch (Exception e) {
       fail(method + e.getMessage());
@@ -130,7 +130,7 @@ public class NativeExpressionTest {
       ValueObject valObj = ValueObjectFactory.createValueObject(3);
       col = cpoAdapter.retrieveBeans(ValueObject.FG_LIST_TESTWHERERETRIEVE, valObj, valObj, null, null, cnqAl);
 
-      assertTrue("Col size is " + col.size(), col.size() == 6);
+      assertTrue(col.size() == 6, "Col size is " + col.size());
 
     } catch (Exception e) {
       fail(method + e.getMessage());

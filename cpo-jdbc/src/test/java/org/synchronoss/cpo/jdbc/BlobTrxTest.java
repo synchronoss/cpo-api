@@ -20,10 +20,10 @@
  */
 package org.synchronoss.cpo.jdbc;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import static org.junit.Assert.*;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.CpoAdapter;
@@ -36,7 +36,7 @@ import org.synchronoss.cpo.jdbc.meta.JdbcCpoMetaDescriptor;
  *
  * @author david berry
  */
-public class BlobTrxTest {
+public class BlobTrxTest extends JdbcDbContainerBase {
 
   private static final Logger logger = LoggerFactory.getLogger(BlobTrxTest.class);
   private static int BLOB_SIZE = 64999;
@@ -59,7 +59,7 @@ public class BlobTrxTest {
    * @author david berry
    * @version '$Id: BlobTestTrx.java,v 1.2 2006/01/31 22:31:06 dberry Exp $'
    */
-  @Before
+  @BeforeEach
   public void setUp() {
 
     String method = "setUp:";
@@ -67,7 +67,7 @@ public class BlobTrxTest {
     try {
       cpoAdapter = CpoAdapterFactoryManager.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_JDBC);
       trxAdapter = CpoAdapterFactoryManager.getCpoTrxAdapter(JdbcStatics.ADAPTER_CONTEXT_JDBC);
-      assertNotNull(method + "trxAdapter is null", trxAdapter);
+      assertNotNull(trxAdapter, method + "trxAdapter is null");
       metaDescriptor = (JdbcCpoMetaDescriptor) cpoAdapter.getCpoMetaDescriptor();
     } catch (Exception e) {
       fail(method + e.getMessage());
@@ -412,7 +412,7 @@ public class BlobTrxTest {
 
   }
 
-  @After
+  @AfterEach
   public void tearDown() {
     try {
       trxAdapter.close();

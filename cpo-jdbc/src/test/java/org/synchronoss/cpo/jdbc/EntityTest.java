@@ -20,10 +20,10 @@
  */
 package org.synchronoss.cpo.jdbc;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import static org.junit.Assert.*;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 import org.slf4j.*;
 import org.synchronoss.cpo.*;
 import org.synchronoss.cpo.meta.domain.CpoAttribute;
@@ -35,7 +35,7 @@ import java.util.List;
  *
  * @author david berry
  */
-public class EntityTest {
+public class EntityTest extends JdbcDbContainerBase {
 
   private static final Logger logger = LoggerFactory.getLogger(EntityTest.class);
 
@@ -48,7 +48,7 @@ public class EntityTest {
    * @author david berry
    * @version '$Id: ConstructorTest.java,v 1.7 2006/01/31 22:55:03 dberry Exp $'
    */
-  @Before
+  @BeforeEach
   public void setUp() {
   }
 
@@ -57,7 +57,7 @@ public class EntityTest {
     String method = "testGetDataSourceEntities:";
     try {
       CpoAdapter cpoAdapter = CpoAdapterFactoryManager.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_CLASS);
-      assertNotNull(method + "cpoAdapter is null", cpoAdapter);
+      assertNotNull(cpoAdapter, method + "cpoAdapter is null");
 
       List<CpoAttribute> attributes = cpoAdapter.getCpoAttributes("select * from lob_test");
       for (CpoAttribute attribute : attributes) {
@@ -65,7 +65,7 @@ public class EntityTest {
           fail("Attribute is not a JdbcCpoAttribute");
         dumpAttribute((JdbcCpoAttribute)attribute);
       }
-      assertTrue("List size is " + attributes, attributes.size() == 4);
+      assertTrue(attributes.size() == 4, "List size is " + attributes);
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -81,7 +81,7 @@ public class EntityTest {
     logger.debug("DataTypeMapEntry: "+attribute.getDataTypeInt());
   }
 
-  @After
+  @AfterEach
   public void tearDown() {
   }
 }

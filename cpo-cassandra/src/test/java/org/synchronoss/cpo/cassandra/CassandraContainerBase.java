@@ -50,11 +50,4 @@ public abstract class CassandraContainerBase {
     logger.debug("Cassandra Host:"+ cassandraContainer.getHost());
   }
 
-//  @Override
-//  protected void finalize() throws Throwable
-//  {
-//    if (proxy!=null)
-//      proxy.shutdown();
-//    cassandraContainer.stop();
-//  }
 }

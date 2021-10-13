@@ -38,7 +38,6 @@ import static org.junit.jupiter.api.Assertions.*;
  * @author david berry
  */
 public class HotDeployTest extends CassandraContainerBase {
-
   private static final Logger logger = LoggerFactory.getLogger(HotDeployTest.class);
   private CpoAdapter cpoAdapter = null;
   private ArrayList<ValueObject> al = new ArrayList<>();
@@ -177,7 +176,7 @@ public class HotDeployTest extends CassandraContainerBase {
       List<String> metaFiles = new ArrayList<>();
       metaFiles.add(metaFile.getName());
       cpoAdapter.getCpoMetaDescriptor().refreshDescriptorMeta(metaFiles, true);
-//      metaFile.delete();
+      metaFile.delete();
 
       cpoAdapter.deleteObjects("TestOrderByDelete", al);
     } catch (Exception e) {

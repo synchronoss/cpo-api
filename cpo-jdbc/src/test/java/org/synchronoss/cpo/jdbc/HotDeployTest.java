@@ -37,7 +37,6 @@ import org.synchronoss.cpo.helper.ExceptionHelper;
  * @author david berry
  */
 public class HotDeployTest extends JdbcDbContainerBase {
-
   private static final Logger logger = LoggerFactory.getLogger(HotDeployTest.class);
   private CpoAdapter cpoAdapter = null;
   private ArrayList<ValueObject> al = new ArrayList<>();

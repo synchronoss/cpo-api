@@ -20,38 +20,43 @@
  */
 package org.synchronoss.cpo.parser;
 
-import junit.framework.TestCase;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.text.ParseException;
 import java.util.Arrays;
 import java.util.List;
 
-public class ParserTest extends TestCase {
+public class ParserTest {
+
+  @Test
   public void testNullExpression() {
     ExpressionParser parser = new BoundExpressionParser();
-    assertEquals("Expression should be null before setting", null, parser.getExpression());
-    assertEquals("There should be no arguments for a null expression", 0, parser.countArguments());
+    assertEquals(null, parser.getExpression(),"Expression should be null before setting");
+    assertEquals(0, parser.countArguments(), "There should be no arguments for a null expression");
     boolean raisedException = false;
     try {
-      assertEquals("There should be no columns for a null expression", 0, parser.parse().size());
+      assertEquals(0, parser.parse().size(),"There should be no columns for a null expression");
     } catch (ParseException ex) {
       raisedException=true;
     }
-    assertTrue("Expected an exception to be raised", raisedException);
+    assertTrue(raisedException,"Expected an exception to be raised");
   }
 
+  @Test
   public void testEmptyExpression() {
     ExpressionParser parser = new BoundExpressionParser();
     parser.setExpression("");
-    assertEquals("Expression should be empty", "", parser.getExpression());
-    assertEquals("There should be no arguments for an empty expression", 0, parser.countArguments());
+    assertEquals("", parser.getExpression(), "Expression should be empty");
+    assertEquals(0, parser.countArguments(), "There should be no arguments for an empty expression");
     try {
-      assertEquals("There should be no columns for an empty expression", null, parser.parse());
+      assertEquals(null, parser.parse(), "There should be no columns for an empty expression");
     } catch (ParseException ex) {
       fail("ExpressionParser.parse threw an exception:"+ex.getLocalizedMessage());
     }
   }
 
+  @Test
   public void testExpressionParse(){
     validateParseExpression("insert into user (firstname,lastname) values (?,?);", 2, Arrays.asList("FIRSTNAME", "LASTNAME"));
     validateParseExpression("update user set firstname=?,lastname=? where ssn=?;", 3, Arrays.asList("FIRSTNAME", "LASTNAME", "SSN"));
@@ -61,13 +66,13 @@ public class ParserTest extends TestCase {
   public void validateParseExpression(String expression, int arguments, List<String> columns) {
     ExpressionParser parser = new BoundExpressionParser();
     parser.setExpression(expression);
-    assertEquals("getExpression did not return the set Expression", expression, parser.getExpression());
-    assertEquals("the number of aguments is not correct", arguments, parser.countArguments());
+    assertEquals(expression, parser.getExpression(), "getExpression did not return the set Expression");
+    assertEquals(arguments, parser.countArguments(), "the number of aguments is not correct");
     try {
       List<String> parsedColumns = parser.parse();
-      assertEquals("Number of columns did not match", columns.size(), parsedColumns.size());
+      assertEquals(columns.size(), parsedColumns.size(), "Number of columns did not match");
       for (int i = 0; i < columns.size(); i++) {
-        assertEquals("Columns do not match", columns.get(i), parsedColumns.get(i));
+        assertEquals(columns.get(i), parsedColumns.get(i), "Columns do not match");
       }
     } catch (ParseException ex) {
       fail("ExpressionParser.parse threw an exception:"+ex.getLocalizedMessage());

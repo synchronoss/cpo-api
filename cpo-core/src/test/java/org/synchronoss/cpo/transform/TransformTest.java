@@ -20,11 +20,13 @@
  */
 package org.synchronoss.cpo.transform;
 
-import junit.framework.TestCase;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 import org.synchronoss.cpo.CpoException;
 
-public class TransformTest extends TestCase {
+public class TransformTest {
 
+  @Test
   public void testString2Byte() {
     String testString="This is a test string";
     byte[] bytes=null;
@@ -34,13 +36,13 @@ public class TransformTest extends TestCase {
     try {
       bytes = transform.transformOut(testString);
     }catch (CpoException ex) {
-      fail("transformOut through an exception"+ex.getMessage());
+      fail("transformOut threw an exception"+ex.getMessage());
     }
 
     try {
       transformedString = transform.transformIn(bytes);
     }catch (CpoException ex) {
-      fail("transformIn through an exception"+ex.getMessage());
+      fail("transformIn threw an exception"+ex.getMessage());
     }
 
     assertEquals(testString, transformedString);

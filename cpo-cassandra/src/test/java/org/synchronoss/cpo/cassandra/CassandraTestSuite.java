@@ -40,6 +40,7 @@ import static org.junit.Assert.fail;
  */
 @RunWith (Suite.class)
 @Suite.SuiteClasses ({
+  HotDeployTest.class,
   BlobTest.class,
   CollectionsTest.class,
   ConstructorTest.class,
@@ -54,8 +55,7 @@ import static org.junit.Assert.fail;
   RetrieveBeanTest.class,
   UpdateObjectTest.class,
   WhereTest.class,
-  XmlValidationTest.class,
-  ZZHotDeployTest.class
+  XmlValidationTest.class
 })
 public class CassandraTestSuite {
   private static final Logger logger = LoggerFactory.getLogger(CassandraTestSuite.class);

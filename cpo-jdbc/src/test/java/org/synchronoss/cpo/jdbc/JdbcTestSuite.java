@@ -38,6 +38,7 @@ import org.testcontainers.containers.*;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses ({
+  HotDeployTest.class,
   ExporterTest.class,
   JdbcXaResourceTest.class,
   BoundExpressionParserTest.class,
@@ -66,8 +67,7 @@ import org.testcontainers.containers.*;
   SelectForUpdateTest.class,
   UpdateObjectTest.class,
   WhereTest.class,
-  XmlValidationTest.class,
-  ZZHotDeployTest.class
+  XmlValidationTest.class
 })
 public class JdbcTestSuite {
   private static final String MYSQL = "mysql";

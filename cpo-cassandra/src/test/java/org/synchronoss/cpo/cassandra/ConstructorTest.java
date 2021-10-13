@@ -20,19 +20,18 @@
  */
 package org.synchronoss.cpo.cassandra;
 
-import org.junit.Test;
 import org.slf4j.*;
 import org.synchronoss.cpo.*;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.fail;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * ConstructorTest is a JUnit test class for testing the JdbcAdapter class Constructors
  *
  * @author david berry
  */
-public class ConstructorTest {
+public class ConstructorTest extends CassandraContainerBase {
   private static final Logger logger = LoggerFactory.getLogger(ConstructorTest.class);
 
   @Test
@@ -40,7 +39,7 @@ public class ConstructorTest {
     String method = "testConstructorClass:";
     try {
       CpoAdapter cpoAdapter = CpoAdapterFactoryManager.getCpoAdapter(CassandraStatics.ADAPTER_CONTEXT_DEFAULT);
-      assertNotNull(method + "cpoAdapter is null", cpoAdapter);
+      assertNotNull(cpoAdapter,method + "cpoAdapter is null");
       assertNotNull("DataSourceName is null", cpoAdapter.getDataSourceName());
 
       logger.debug("=====> DatasourceName: "+cpoAdapter.getDataSourceName());

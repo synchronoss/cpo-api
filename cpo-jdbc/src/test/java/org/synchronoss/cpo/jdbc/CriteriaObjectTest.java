@@ -20,9 +20,10 @@
  */
 package org.synchronoss.cpo.jdbc;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.*;
@@ -31,14 +32,12 @@ import org.synchronoss.cpo.helper.ExceptionHelper;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import static org.junit.Assert.*;
-
 /**
  * RetrieveBeanTest is a JUnit test class for testing the JdbcAdapter class Constructors
  *
  * @author david berry
  */
-public class CriteriaObjectTest {
+public class CriteriaObjectTest extends JdbcDbContainerBase {
 
   private static final Logger logger = LoggerFactory.getLogger(CriteriaObjectTest.class);
   private CpoAdapter cpoAdapter = null;
@@ -54,13 +53,13 @@ public class CriteriaObjectTest {
    * @author david berry
    * @version '$Id: RetrieveBeanTest.java,v 1.6 2006/01/30 19:09:23 dberry Exp $'
    */
-  @Before
+  @BeforeEach
   public void setUp() {
     String method = "setUp:";
 
     try {
       cpoAdapter = CpoAdapterFactoryManager.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_JDBC);
-      assertNotNull(method + "cpoAdapter is null", cpoAdapter);
+      assertNotNull(cpoAdapter, method + "cpoAdapter is null");
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -93,7 +92,7 @@ public class CriteriaObjectTest {
       critObject.setMinId(3);
       critObject.setMaxId(7);
       col = cpoAdapter.retrieveBeans(CriteriaObject.FG_LIST_SELECTBETWEEN, critObject, new ValueObjectBean());
-      assertTrue("Col size is " + col.size(), col.size() == 5);
+      assertTrue(col.size() == 5, "Col size is " + col.size());
 
     } catch (Exception e) {
       fail(method + e.getMessage());
@@ -119,7 +118,7 @@ public class CriteriaObjectTest {
       wheres.add(cw);
       Collection<ValueObject> col = cpoAdapter.retrieveBeans(CriteriaObject.FG_LIST_SELECTALL, critObject, new ValueObjectBean(), wheres, null);
 
-      assertTrue("Col size is " + col.size(), col.size() == 3);
+      assertTrue(col.size() == 3, "Col size is " + col.size());
 
     } catch (Exception e) {
       fail(method + e.getMessage());
@@ -138,7 +137,7 @@ public class CriteriaObjectTest {
       try {
         rvo = cpoAdapter.executeObject(CriteriaObject.FG_EXECUTE_EXECUTECRITERIA, critObject, new ValueObjectBean());
         assertNotNull(method + "Returned Value object is null");
-        assertTrue("power(3,3)=" + rvo.getAttrDouble(), rvo.getAttrDouble() == 27);
+        assertTrue(rvo.getAttrDouble() == 27, "power(3,3)=" + rvo.getAttrDouble());
       } catch (Exception e) {
         logger.error(ExceptionHelper.getLocalizedMessage(e));
         fail(method + e.getMessage());
@@ -146,7 +145,7 @@ public class CriteriaObjectTest {
     }
   }
 
-  @After
+  @AfterEach
   public void tearDown() {
     String method = "tearDown:";
     try {

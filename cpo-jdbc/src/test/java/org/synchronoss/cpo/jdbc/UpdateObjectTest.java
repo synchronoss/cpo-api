@@ -20,10 +20,10 @@
  */
 package org.synchronoss.cpo.jdbc;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import static org.junit.Assert.*;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 import org.synchronoss.cpo.*;
 import org.synchronoss.cpo.jdbc.meta.JdbcCpoMetaDescriptor;
 
@@ -35,7 +35,7 @@ import java.util.*;
  *
  * @author david berry
  */
-public class UpdateObjectTest {
+public class UpdateObjectTest extends JdbcDbContainerBase {
 
   private ArrayList<ValueObject> al = new ArrayList<>();
   private CpoAdapter cpoAdapter = null;
@@ -51,13 +51,13 @@ public class UpdateObjectTest {
    * @author david berry
    * @version '$Id: InsertObjectTest.java,v 1.3 2006/01/30 19:09:23 dberry Exp $'
    */
-  @Before
+  @BeforeEach
   public void setUp() {
     String method = "setUp:";
 
     try {
       cpoAdapter = CpoAdapterFactoryManager.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_JDBC);
-      assertNotNull(method + "cpoAdapter is null", cpoAdapter);
+      assertNotNull(cpoAdapter, method + "cpoAdapter is null");
       metaDescriptor = (JdbcCpoMetaDescriptor) cpoAdapter.getCpoMetaDescriptor();
     } catch (Exception e) {
       fail(method + e.getMessage());
@@ -94,7 +94,7 @@ public class UpdateObjectTest {
       List<CpoWhere> cws = new ArrayList<>();
       cws.add(cpoAdapter.newWhere(CpoWhere.LOGIC_NONE, ValueObject.ATTR_ID, CpoWhere.COMP_EQ, 2));
       long updated = cpoAdapter.updateObject(ValueObject.FG_UPDATE_NULL, valObj, cws, null, null);
-      assertEquals("Should not have updated anything", 0, updated);
+      assertEquals(0, updated, "Should not have updated anything");
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -104,13 +104,13 @@ public class UpdateObjectTest {
       List<CpoWhere> cws = new ArrayList<>();
       cws.add(cpoAdapter.newWhere(CpoWhere.LOGIC_NONE, ValueObject.ATTR_ID, CpoWhere.COMP_EQ, 5));
       long updated = cpoAdapter.updateObject(ValueObject.FG_UPDATE_NULL, valObj, cws, null, null);
-      assertEquals("Should have updated 1", 1, updated);
+      assertEquals(1, updated, "Should have updated 1");
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
   }
 
-  @After
+  @AfterEach
   public void tearDown() {
     String method = "tearDown:";
     try {

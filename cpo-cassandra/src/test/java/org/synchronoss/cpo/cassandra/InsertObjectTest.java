@@ -20,21 +20,23 @@
  */
 package org.synchronoss.cpo.cassandra;
 
-import org.junit.*;
 import org.synchronoss.cpo.*;
 import org.synchronoss.cpo.cassandra.meta.CassandraCpoMetaDescriptor;
 
 import java.sql.Timestamp;
 import java.util.*;
 
-import static org.junit.Assert.*;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * InsertObjectTest is a JUnit test class for testing the insert api calls of cpo
  *
  * @author david berry
  */
-public class InsertObjectTest {
+public class InsertObjectTest extends CassandraContainerBase {
 
   private ArrayList<ValueObject> al = new ArrayList<>();
   private CpoAdapter cpoAdapter = null;
@@ -47,20 +49,20 @@ public class InsertObjectTest {
    * @author david berry
    * @version '$Id: InsertObjectTest.java,v 1.3 2006/01/30 19:09:23 dberry Exp $'
    */
-  @Before
+  @BeforeEach
   public void setUp() {
     String method = "setUp:";
 
     try {
       cpoAdapter = CpoAdapterFactoryManager.getCpoAdapter(CassandraStatics.ADAPTER_CONTEXT_DEFAULT);
-      assertNotNull(method + "IdoAdapter is null", cpoAdapter);
+      assertNotNull(cpoAdapter, method + "cpoAdapter is null");
       metaDescriptor = (CassandraCpoMetaDescriptor)cpoAdapter.getCpoMetaDescriptor();
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
     try {
       readAdapter = CpoAdapterFactoryManager.getCpoAdapter(CassandraStatics.ADAPTER_CONTEXT_DEFAULT);
-      assertNotNull(method + "IdoAdapter is null", readAdapter);
+      assertNotNull(readAdapter,method + "readAdapter is null");
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -91,11 +93,11 @@ public class InsertObjectTest {
 
     try {
       ValueObject vo = readAdapter.retrieveBean(null, valObj, valObj, null, null);
-      assertTrue("Ids do not match", vo.getId() == valObj.getId());
-      assertTrue("Integers do not match", vo.getAttrInt() == valObj.getAttrInt());
-      assertEquals("Strings do not match", vo.getAttrVarChar(), valObj.getAttrVarChar());
-      assertEquals("Timestamps do not match", vo.getAttrTimestamp(), valObj.getAttrTimestamp());
-      assertTrue("boolean not stored correctly", vo.getAttrBool());
+      assertTrue(vo.getId() == valObj.getId(), "Ids do not match");
+      assertTrue(vo.getAttrInt() == valObj.getAttrInt(), "Integers do not match");
+      assertEquals(vo.getAttrVarChar(), valObj.getAttrVarChar(), "Strings do not match");
+      assertEquals(vo.getAttrTimestamp(), valObj.getAttrTimestamp(), "Timestamps do not match");
+      assertTrue(vo.getAttrBool(), "boolean not stored correctly");
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -121,13 +123,13 @@ public class InsertObjectTest {
     try {
       Collection<ValueObject> col = readAdapter.retrieveBeans(null, vo);
 
-      assertEquals(method + "Invalid number of objects returned", col.size(), al.size());
+      assertEquals(col.size(), al.size(), method + "Invalid number of objects returned");
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
   }
 
-  @After
+  @AfterEach
   public void tearDown() {
     String method = "tearDown:";
     try {

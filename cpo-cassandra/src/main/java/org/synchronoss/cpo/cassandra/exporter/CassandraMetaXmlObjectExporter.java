@@ -46,7 +46,7 @@ public class CassandraMetaXmlObjectExporter extends CoreMetaXmlObjectExporter im
   @Override
   public void visit(CpoAttribute cpoAttribute) {
 
-    // shouldn't happen, but if what we got wasn't a JdbcAttribute...
+    // shouldn't happen, but if what we got wasn't a CassandraCpoAttribute...
     if (!(cpoAttribute instanceof CassandraCpoAttribute)) {
       super.visit(cpoAttribute);
       return;
@@ -72,6 +72,14 @@ public class CassandraMetaXmlObjectExporter extends CoreMetaXmlObjectExporter im
         ctCassandraAttribute.setDescription(cassAttribute.getDescription());
       }
 
+      if (cassAttribute.getKeyType() != null && !cassAttribute.getKeyType().isEmpty()) {
+        ctCassandraAttribute.setKeyType(cassAttribute.getKeyType());
+      }
+
+      if (cassAttribute.getValueType() != null && !cassAttribute.getValueType().isEmpty()){
+        ctCassandraAttribute.setValueType(cassAttribute.getValueType());
+      }
+
       // add it to the class
       CtAttribute ctAttribute = currentCtClass.addNewCpoAttribute();
       ctAttribute.set(ctCassandraAttribute);
@@ -83,7 +91,7 @@ public class CassandraMetaXmlObjectExporter extends CoreMetaXmlObjectExporter im
 
     if (currentCtFunction != null) {
 
-      // CtFunction.addNewCpoArgument() can't be used here because it returns a CtArgument, not a CtJdbcArgument
+      // CtFunction.addNewCpoArgument() can't be used here because it returns a CtArgument, not a ctCassandraArgument
       CtCassandraArgument ctCassandraArgument = CtCassandraArgument.Factory.newInstance();
 
       ctCassandraArgument.setAttributeName(cpoArgument.getAttributeName());

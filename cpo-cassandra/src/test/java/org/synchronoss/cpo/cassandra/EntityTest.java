@@ -20,7 +20,6 @@
  */
 package org.synchronoss.cpo.cassandra;
 
-import org.junit.Test;
 import org.slf4j.*;
 import org.synchronoss.cpo.*;
 import org.synchronoss.cpo.cassandra.meta.CassandraCpoAttribute;
@@ -28,14 +27,15 @@ import org.synchronoss.cpo.meta.domain.CpoAttribute;
 
 import java.util.List;
 
-import static org.junit.Assert.*;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * ConstructorTest is a JUnit test class for testing the JdbcAdapter class Constructors
  *
  * @author david berry
  */
-public class EntityTest {
+public class EntityTest extends CassandraContainerBase {
 
   private static final Logger logger = LoggerFactory.getLogger(EntityTest.class);
 
@@ -44,7 +44,7 @@ public class EntityTest {
     String method = "testGetDataSourceEntities:";
     try {
       CpoAdapter cpoAdapter = CpoAdapterFactoryManager.getCpoAdapter(CassandraStatics.ADAPTER_CONTEXT_DEFAULT);
-      assertNotNull(method + "cpoAdapter is null", cpoAdapter);
+      assertNotNull(cpoAdapter, method + "cpoAdapter is null");
 
       List<CpoAttribute> attributes = cpoAdapter.getCpoAttributes("select * from value_object");
       for (CpoAttribute attribute : attributes) {
@@ -52,7 +52,7 @@ public class EntityTest {
           fail(attribute.toString()+" Attribute is not a CassandraCpoAttribute");
         dumpAttribute((CassandraCpoAttribute)attribute);
       }
-      assertTrue("List size is " + attributes.size(), attributes.size() == 20);
+      assertTrue(attributes.size() == 20, "List size is " + attributes.size());
     } catch (Exception e) {
       fail(method + e.getMessage());
     }

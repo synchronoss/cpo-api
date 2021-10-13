@@ -21,20 +21,20 @@
 package org.synchronoss.cpo.cassandra;
 
 import org.apache.xmlbeans.XmlException;
-import org.junit.Test;
 import org.slf4j.*;
 import org.synchronoss.cpo.core.cpoCoreConfig.CpoConfigDocument;
 import org.synchronoss.cpo.helper.*;
 
 import java.io.*;
 
-import static org.junit.Assert.fail;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  *
  * @author dberry
  */
-public class XmlValidationTest {
+public class XmlValidationTest extends CassandraContainerBase {
 
   private static final Logger logger = LoggerFactory.getLogger(XmlValidationTest.class);
   static final String CPO_CONFIG_XML = "/cpoConfig.xml";

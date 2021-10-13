@@ -23,10 +23,10 @@ package org.synchronoss.cpo.jdbc;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import static org.junit.Assert.*;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 import org.synchronoss.cpo.CpoAdapter;
 import org.synchronoss.cpo.CpoAdapterFactoryManager;
 import org.synchronoss.cpo.CpoOrderBy;
@@ -36,7 +36,7 @@ import org.synchronoss.cpo.CpoOrderBy;
  *
  * @author david berry
  */
-public class OrderByTest {
+public class OrderByTest extends JdbcDbContainerBase {
 
   private CpoAdapter cpoAdapter = null;
   private ArrayList<ValueObject> al = new ArrayList<>();
@@ -47,13 +47,13 @@ public class OrderByTest {
   /**
    * <code>setUp</code> Load the datasource from the properties in the property file jdbc_en_US.properties
    */
-  @Before
+  @BeforeEach
   public void setUp() {
     String method = "setUp:";
 
     try {
       cpoAdapter = CpoAdapterFactoryManager.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_JDBC);
-      assertNotNull(method + "cpoAdapter is null", cpoAdapter);
+      assertNotNull(cpoAdapter, method + "cpoAdapter is null");
       // Add the test valueObjects
     } catch (Exception e) {
       fail(method + e.getMessage());
@@ -76,7 +76,7 @@ public class OrderByTest {
   /**
    * DOCUMENT ME!
    */
-  @After
+  @AfterEach
   public void tearDown() {
     String method = "tearDown:";
     try {

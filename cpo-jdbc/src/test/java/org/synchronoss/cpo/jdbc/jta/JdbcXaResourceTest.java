@@ -20,21 +20,17 @@
  */
 package org.synchronoss.cpo.jdbc.jta;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import static org.junit.Assert.*;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.CpoAdapter;
 import org.synchronoss.cpo.CpoAdapterFactoryManager;
 import org.synchronoss.cpo.CpoOrderBy;
-import org.synchronoss.cpo.jdbc.ExecuteTrxTest;
-import org.synchronoss.cpo.jdbc.JdbcStatics;
-import org.synchronoss.cpo.jdbc.ValueObject;
-import org.synchronoss.cpo.jdbc.ValueObjectBean;
+import org.synchronoss.cpo.jdbc.*;
 import org.synchronoss.cpo.helper.ExceptionHelper;
-import org.synchronoss.cpo.jdbc.ValueObjectFactory;
 import org.synchronoss.cpo.jta.CpoXaResource;
 
 import javax.transaction.xa.XAException;
@@ -47,7 +43,7 @@ import java.util.List;
 /**
  * Created by dberry on 12/8/15.
  */
-public class JdbcXaResourceTest {
+public class JdbcXaResourceTest extends JdbcDbContainerBase {
   private static final Logger logger = LoggerFactory.getLogger(ExecuteTrxTest.class);
   private CpoAdapter cpoAdapter = null;
   private JdbcCpoXaAdapter cpoXaAdapter1 = null;
@@ -64,7 +60,7 @@ public class JdbcXaResourceTest {
   /**
    * <code>setUp</code> Load the datasource from the properties in the property file jdbc_en_US.properties
    */
-  @Before
+  @BeforeEach
   public void setUp() {
     String method = "setUp:";
 
@@ -72,8 +68,8 @@ public class JdbcXaResourceTest {
       cpoAdapter = CpoAdapterFactoryManager.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_JDBC);
       cpoXaAdapter1 = (JdbcCpoXaAdapter) CpoAdapterFactoryManager.getCpoXaAdapter(JdbcStatics.ADAPTER_CONTEXT_JDBC);
       cpoXaAdapter2 = (JdbcCpoXaAdapter) CpoAdapterFactoryManager.getCpoXaAdapter(JdbcStatics.ADAPTER_CONTEXT_JDBC);
-      assertNotNull(method + "CpoXaAdapter1 is null", cpoXaAdapter1);
-      assertNotNull(method + "CpoXaAdapter2 is null", cpoXaAdapter2);
+      assertNotNull(cpoXaAdapter1,method + "CpoXaAdapter1 is null");
+      assertNotNull(cpoXaAdapter2,method + "CpoXaAdapter2 is null");
     } catch (Exception e) {
       fail(method + ExceptionHelper.getLocalizedMessage(e));
     }
@@ -82,7 +78,7 @@ public class JdbcXaResourceTest {
   /**
    * DOCUMENT ME!
    */
-  @After
+  @AfterEach
   public void tearDown() {
 		String method = "tearDown:";
   try {
@@ -135,9 +131,9 @@ public class JdbcXaResourceTest {
 
       ValueObject valObj = ValueObjectFactory.createValueObject();
       List<ValueObject> list = cpoXaAdapter1.retrieveBeans(ValueObject.FG_LIST_NULL, valObj, colCob);
-			assertTrue("list size is " + list.size(), list.size() == 2);
-			assertTrue("ValuObject(1) is missing", list.get(0).getId() == 1);
-			assertTrue("ValuObject(2) is missing", list.get(1).getId() == 2);
+			assertTrue(list.size() == 2, "list size is " + list.size());
+			assertTrue(list.get(0).getId() == 1,"ValuObject(1) is missing");
+			assertTrue(list.get(1).getId() == 2, "ValuObject(2) is missing");
 
 
       assertEquals(2, cpoXaAdapter1.deleteObjects(al));
@@ -183,7 +179,7 @@ public class JdbcXaResourceTest {
 
       ValueObject valObj = ValueObjectFactory.createValueObject();
       List<ValueObject> list = cpoAdapter.retrieveBeans(ValueObject.FG_LIST_NULL, valObj);
-      assertTrue("list SHOULD BE EMPTY", list.isEmpty());
+      assertTrue(list.isEmpty(),"list SHOULD BE EMPTY");
     } catch (Exception e) {
      fail(method + ExceptionHelper.getLocalizedMessage(e));
     } finally {
@@ -399,8 +395,8 @@ public class JdbcXaResourceTest {
       // make sure that only valobj2 is in the database
       ValueObject valObj = ValueObjectFactory.createValueObject();
       List<ValueObject> list = cpoAdapter.retrieveBeans(ValueObject.FG_LIST_NULL, valObj);
-			assertTrue("list size is " + list.size(), list.size() == 1);
-			assertTrue("valObj2 is missing", list.get(0).getId() == valObj2.getId());
+			assertTrue(list.size() == 1,"list size is " + list.size());
+			assertTrue(list.get(0).getId() == valObj2.getId(), "valObj2 is missing");
 
     } catch (Exception e) {
       fail(method + ExceptionHelper.getLocalizedMessage(e));
@@ -446,8 +442,8 @@ public class JdbcXaResourceTest {
       // make sure the xid2 insert cannot be seen
       ValueObject valObj = ValueObjectFactory.createValueObject();
       List<ValueObject> list = cpoAdapter.retrieveBeans(ValueObject.FG_LIST_NULL, valObj);
-			assertTrue("list size is " + list.size(), list.size() == 1);
-			assertTrue("valObj1 is missing", list.get(0).getId() == valObj1.getId());
+			assertTrue(list.size() == 1,"list size is " + list.size());
+			assertTrue(list.get(0).getId() == valObj1.getId(),"valObj1 is missing");
     } catch (Exception e) {
       fail(method + ExceptionHelper.getLocalizedMessage(e));
 		} finally {
@@ -489,7 +485,7 @@ public class JdbcXaResourceTest {
       // make sure both records exist
       ValueObject valObj = ValueObjectFactory.createValueObject();
       List<ValueObject> list = cpoAdapter.retrieveBeans(ValueObject.FG_LIST_NULL, valObj);
-			assertTrue("list size is " + list.size(), list.size() == 2);
+			assertTrue(list.size() == 2, "list size is " + list.size());
     } catch (Exception e) {
       fail(method + ExceptionHelper.getLocalizedMessage(e));
     } finally {
@@ -532,8 +528,8 @@ public class JdbcXaResourceTest {
       cpoXaAdapter1.end(xid3, XAResource.TMFAIL);
 
       xids = cpoXaAdapter1.recover(XAResource.TMSTARTRSCAN | XAResource.TMENDRSCAN);
-      assertTrue("In progress resources must be created",xids.length>0);
-      assertEquals("There should be 1 in progress transaction",1,xids.length);
+      assertTrue(xids.length>0, "In progress resources must be created");
+      assertEquals(1,xids.length, "There should be 1 in progress transaction");
       for (int i = 0; xids != null && i < xids.length; i++) {
         try {
           cpoXaAdapter1.rollback(xids[i]);

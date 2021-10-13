@@ -20,16 +20,17 @@
  */
 package org.synchronoss.cpo.cassandra;
 
-import org.junit.*;
 import org.slf4j.*;
 import org.synchronoss.cpo.*;
 import org.synchronoss.cpo.helper.ExceptionHelper;
 
 import java.util.Collection;
 
-import static org.junit.Assert.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 
-public class InvalidParameterTest {
+public class InvalidParameterTest extends CassandraContainerBase {
 
   private static final Logger logger = LoggerFactory.getLogger(InvalidParameterTest.class);
   private CpoAdapter cpoAdapter = null;
@@ -39,13 +40,13 @@ public class InvalidParameterTest {
    *
    * @author david berry
    */
-  @Before
+  @BeforeEach
   public void setUp() {
     String method = "setUp:";
 
     try {
       cpoAdapter = CpoAdapterFactoryManager.getCpoAdapter(CassandraStatics.ADAPTER_CONTEXT_DEFAULT);
-      assertNotNull(method + "IdoAdapter is null", cpoAdapter);
+      assertNotNull(cpoAdapter, method + "IdoAdapter is null");
     } catch (Exception e) {
       fail(method + e.getMessage());
     }

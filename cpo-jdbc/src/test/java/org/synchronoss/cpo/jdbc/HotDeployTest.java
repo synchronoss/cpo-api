@@ -18,31 +18,32 @@
  * A copy of the GNU Lesser General Public License may also be found at
  * http://www.gnu.org/licenses/lgpl.txt
  */
-package org.synchronoss.cpo.cassandra;
-
-import org.junit.*;
-import org.slf4j.*;
-import org.synchronoss.cpo.*;
-import org.synchronoss.cpo.helper.ExceptionHelper;
+package org.synchronoss.cpo.jdbc;
 
 import java.io.File;
-import java.util.*;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+import org.slf4j.*;
+import org.synchronoss.cpo.*;
 
-import static junit.framework.TestCase.assertTrue;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.fail;
+import java.util.*;
+import org.synchronoss.cpo.helper.ExceptionHelper;
 
 /**
  * RetrieveBeanTest is a JUnit test class for testing the JdbcAdapter class Constructors
  *
  * @author david berry
  */
-public class ZZHotDeployTest {
-
-  private static final Logger logger = LoggerFactory.getLogger(ZZHotDeployTest.class);
+public class HotDeployTest extends JdbcDbContainerBase {
+  private static final Logger logger = LoggerFactory.getLogger(HotDeployTest.class);
   private CpoAdapter cpoAdapter = null;
   private ArrayList<ValueObject> al = new ArrayList<>();
   private File metaFile = new File("metaData.xml");
+
+  public HotDeployTest() {
+  }
 
   /**
    * <code>setUp</code> Load the datasource from the properties in the property file jdbc_en_US.properties
@@ -50,13 +51,13 @@ public class ZZHotDeployTest {
    * @author david berry
    * @version '$Id: RetrieveBeanTest.java,v 1.6 2006/01/30 19:09:23 dberry Exp $'
    */
-  @Before
+  @BeforeEach
   public void setUp() {
     String method = "setUp:";
 
     try {
-      cpoAdapter = CpoAdapterFactoryManager.getCpoAdapter(CassandraStatics.ADAPTER_CONTEXT_DEFAULT);
-      assertNotNull(method + "CpoAdapter is null", cpoAdapter);
+      cpoAdapter = CpoAdapterFactoryManager.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_JDBC);
+      assertNotNull(cpoAdapter, method + "cpoAdapter is null");
       // lets save the existing config before we monkey with it
       cpoAdapter.getCpoMetaDescriptor().export(metaFile);
     } catch (Exception e) {
@@ -64,8 +65,8 @@ public class ZZHotDeployTest {
     }
     ValueObject vo = ValueObjectFactory.createValueObject(1);
     vo.setAttrVarChar("Test");
-    vo.setAttrInt(1);
-    vo.setAttrBigInt(1);
+    vo.setAttrSmallInt((short)1);
+    vo.setAttrInteger(1);
     al.add(vo);
     al.add(ValueObjectFactory.createValueObject(2));
     al.add(ValueObjectFactory.createValueObject(3));
@@ -73,7 +74,7 @@ public class ZZHotDeployTest {
     al.add(ValueObjectFactory.createValueObject(5));
     al.add(ValueObjectFactory.createValueObject(-6));
     try {
-      cpoAdapter.insertObjects("TestOrderByInsert", al);
+      cpoAdapter.insertObjects(ValueObject.FG_CREATE_TESTORDERBYINSERT, al);
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -84,13 +85,12 @@ public class ZZHotDeployTest {
     String method = "testRetrieveBeans:";
     List<ValueObject> col;
 
-
     try {
       ValueObject valObj = ValueObjectFactory.createValueObject();
 
       // make sure the default retrieve works
-      col = cpoAdapter.retrieveBeans(null, valObj);
-      assertTrue("Col size is " + col.size(), col!=null);
+      col = cpoAdapter.retrieveBeans(ValueObject.FG_LIST_NULL, valObj);
+      assertTrue(col!=null, "Col size is " + col.size());
 
       col = cpoAdapter.retrieveBeans("HotDeploySelect", valObj);
       fail("Should not have gotten here:");
@@ -106,21 +106,19 @@ public class ZZHotDeployTest {
       ValueObject valObj = ValueObjectFactory.createValueObject(2);
 
       // make sure the default retrieve still works
-      col = cpoAdapter.retrieveBeans(null, valObj);
-      assertTrue("Col size is " + col.size(), col.size()==6);
+      col = cpoAdapter.retrieveBeans(ValueObject.FG_LIST_NULL, valObj);
+      assertTrue(col.size()==6, "Col size is " + col.size());
 
       List<ValueObject> col2 = cpoAdapter.retrieveBeans("HotDeploySelect", valObj);
-      assertTrue("Col size is " + col2.size(), col2.size()==6);
+      assertTrue(col2.size()==6, "Col size is " + col2.size());
 
       for (int i=0; i<col.size(); i++) {
-        assertTrue("IDs must be equal", col.get(i).getId() == col2.get(i).getId());
+        assertTrue(col.get(i).getId() == col2.get(i).getId(), "IDs must be equal");
       }
 
       // make sure the first objects are the same
-
     } catch (Exception e) {
       String msg = ExceptionHelper.getLocalizedMessage(e);
-
       fail("Received an unexpected exception: "+msg);
     }
   }
@@ -130,13 +128,12 @@ public class ZZHotDeployTest {
     String method = "testRetrieveBeans:";
     List<ValueObject> col;
 
-
     try {
       ValueObject valObj = ValueObjectFactory.createValueObject();
 
       // make sure the default retrieve works
-      col = cpoAdapter.retrieveBeans(null, valObj);
-      assertTrue("Col size is " + col.size(), col!=null);
+      col = cpoAdapter.retrieveBeans(ValueObject.FG_LIST_NULL, valObj);
+      assertTrue(col!=null, "Col size is " + col.size());
 
       col = cpoAdapter.retrieveBeans("HotDeploySelect", valObj);
       fail("Should not have gotten here:");
@@ -153,23 +150,22 @@ public class ZZHotDeployTest {
 
       // the old retrieve should no longer be there
       try {
-        col = cpoAdapter.retrieveBeans(null, valObj);
+        col = cpoAdapter.retrieveBeans(ValueObject.FG_LIST_NULL, valObj);
         fail("should have thrown a cpo exception");
       } catch (CpoException ce) {
         // do nothing, this is expected
       }
 
       List<ValueObject> col2 = cpoAdapter.retrieveBeans("HotDeploySelect", valObj);
-      assertTrue("Col size is " + col2.size(), col2.size()==6);
+      assertTrue(col2.size()==6, "Col size is " + col2.size());
 
     } catch (Exception e) {
       String msg = ExceptionHelper.getLocalizedMessage(e);
-
       fail("Received an unexpected exception: "+msg);
     }
   }
 
-  @After
+  @AfterEach
   public void tearDown() {
     String method = "tearDown:";
     try {
@@ -179,7 +175,7 @@ public class ZZHotDeployTest {
       cpoAdapter.getCpoMetaDescriptor().refreshDescriptorMeta(metaFiles, true);
       metaFile.delete();
 
-      cpoAdapter.deleteObjects("TestOrderByDelete", al);
+      cpoAdapter.deleteObjects(ValueObject.FG_DELETE_TESTORDERBYDELETE, al);
     } catch (Exception e) {
       fail(method + e.getMessage());
     }

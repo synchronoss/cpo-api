@@ -20,21 +20,23 @@
  */
 package org.synchronoss.cpo.cassandra;
 
-import org.junit.*;
 import org.slf4j.*;
 import org.synchronoss.cpo.*;
 import org.synchronoss.cpo.cassandra.meta.CassandraCpoMetaDescriptor;
 
 import java.nio.ByteBuffer;
 
-import static org.junit.Assert.*;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * BlobTest is a JUnit test class for testing the JdbcAdapter class Constructors
  *
  * @author david berry
  */
-public class BlobTest {
+public class BlobTest extends CassandraContainerBase {
 
   private static final Logger logger = LoggerFactory.getLogger(BlobTest.class);
   private CassandraCpoMetaDescriptor metaDescriptor = null;
@@ -48,14 +50,14 @@ public class BlobTest {
    * @author david berry
    * @version '$Id: BlobTest.java,v 1.15 2006/02/15 18:34:19 dberry Exp $'
    */
-  @Before
+  @BeforeEach
   public void setUp() {
 
     String method = "setUp:";
 
     try {
       cpoAdapter = CpoAdapterFactoryManager.getCpoAdapter(CassandraStatics.ADAPTER_CONTEXT_DEFAULT);
-      assertNotNull(method + "IdoAdapter is null", cpoAdapter);
+      assertNotNull(cpoAdapter, method + "IdoAdapter is null");
       metaDescriptor = (CassandraCpoMetaDescriptor)cpoAdapter.getCpoMetaDescriptor();
     } catch (Exception e) {
       fail(method + e.getMessage());
@@ -300,7 +302,7 @@ public class BlobTest {
     }
   }
 
-  @After
+  @AfterEach
   public void tearDown() {
     cpoAdapter = null;
   }

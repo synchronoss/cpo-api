@@ -20,10 +20,10 @@
  */
 package org.synchronoss.cpo.jdbc;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import static org.junit.Assert.*;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.CpoAdapter;
@@ -36,7 +36,7 @@ import org.synchronoss.cpo.jdbc.meta.JdbcCpoMetaDescriptor;
  *
  * @author david berry
  */
-public class ExecuteTest {
+public class ExecuteTest extends JdbcDbContainerBase {
 
   private static final Logger logger = LoggerFactory.getLogger(ExecuteTest.class);
   private CpoAdapter cpoAdapter = null;
@@ -52,13 +52,13 @@ public class ExecuteTest {
   /**
    * <code>setUp</code> Load the datasource from the properties in the property file jdbc_en_US.properties
    */
-  @Before
+  @BeforeEach
   public void setUp() {
     String method = "setUp:";
 
     try {
       cpoAdapter = CpoAdapterFactoryManager.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_JDBC);
-      assertNotNull(method + "cpoAdapter is null", cpoAdapter);
+      assertNotNull(cpoAdapter, method + "cpoAdapter is null");
       metaDescriptor = (JdbcCpoMetaDescriptor) cpoAdapter.getCpoMetaDescriptor();
     } catch (Exception e) {
       fail(method + e.getMessage());
@@ -68,7 +68,7 @@ public class ExecuteTest {
   /**
    * DOCUMENT ME!
    */
-  @After
+  @AfterEach
   public void tearDown() {
     cpoAdapter = null;
   }
@@ -87,7 +87,7 @@ public class ExecuteTest {
       try {
         rvo = cpoAdapter.executeObject(ValueObject.FG_EXECUTE_TESTEXECUTEOBJECT, vo);
         assertNotNull(method + "Returned Value object is null");
-        assertTrue("power(3,3)=" + rvo.getAttrDouble(), rvo.getAttrDouble() == 27);
+        assertTrue(rvo.getAttrDouble() == 27, "power(3,3)=" + rvo.getAttrDouble());
       } catch (Exception e) {
         logger.error(ExceptionHelper.getLocalizedMessage(e));
         fail(method + e.getMessage());
@@ -99,7 +99,7 @@ public class ExecuteTest {
         vo.setAttrSmallInt((short)3);
         rvo = cpoAdapter.executeObject(ValueObject.FG_EXECUTE_TESTEXECUTEOBJECTNOTRANSFORM, vo);
         assertNotNull(method + "Returned Value object is null");
-        assertTrue("power(3,3)=" + rvo.getAttrDouble(), rvo.getAttrDouble() == 27);
+        assertTrue(rvo.getAttrDouble() == 27, "power(3,3)=" + rvo.getAttrDouble());
       } catch (Exception e) {
         logger.error(ExceptionHelper.getLocalizedMessage(e));
         fail(method + e.getMessage());
@@ -120,7 +120,7 @@ public class ExecuteTest {
       try {
         rvo = cpoAdapter.executeObject(ValueObject.FG_EXECUTE_TESTEXECUTEOBJECT, vo, vo);
         assertNotNull(method + "Returned Value object is null");
-        assertTrue("power(3,3)=" + rvo.getAttrDouble(), rvo.getAttrDouble() == 27);
+        assertTrue(rvo.getAttrDouble() == 27, "power(3,3)=" + rvo.getAttrDouble());
       } catch (Exception e) {
         logger.error(ExceptionHelper.getLocalizedMessage(e));
         fail(method + e.getMessage());

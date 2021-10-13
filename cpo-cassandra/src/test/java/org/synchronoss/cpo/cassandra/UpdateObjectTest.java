@@ -20,21 +20,23 @@
  */
 package org.synchronoss.cpo.cassandra;
 
-import org.junit.*;
 import org.synchronoss.cpo.*;
 import org.synchronoss.cpo.cassandra.meta.CassandraCpoMetaDescriptor;
 
 import java.sql.Timestamp;
 import java.util.*;
 
-import static org.junit.Assert.*;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * DeleteObjectTest is a JUnit test class for testing the JdbcAdapter deleteObject method
  *
  * @author david berry
  */
-public class UpdateObjectTest {
+public class UpdateObjectTest extends CassandraContainerBase {
 
   private ArrayList<ValueObject> al = new ArrayList<>();
   private CpoAdapter cpoAdapter = null;
@@ -46,13 +48,13 @@ public class UpdateObjectTest {
    * @author david berry
    * @version '$Id: InsertObjectTest.java,v 1.3 2006/01/30 19:09:23 dberry Exp $'
    */
-  @Before
+  @BeforeEach
   public void setUp() {
     String method = "setUp:";
 
     try {
       cpoAdapter = CpoAdapterFactoryManager.getCpoAdapter(CassandraStatics.ADAPTER_CONTEXT_DEFAULT);
-      assertNotNull(method + "IdoAdapter is null", cpoAdapter);
+      assertNotNull(cpoAdapter, method + "IdoAdapter is null");
       metaDescriptor = (CassandraCpoMetaDescriptor) cpoAdapter.getCpoMetaDescriptor();
     } catch (Exception e) {
       fail(method + e.getMessage());
@@ -91,7 +93,7 @@ public class UpdateObjectTest {
       valObj.setAttrInt(4);
       cpoAdapter.updateObject(null, valObj, cws, null, null);
       ValueObject rObj = cpoAdapter.retrieveBean(valObj);
-      assertTrue("It should not be equal since it did not update",rObj.getAttrInt()!=valObj.getAttrInt());
+      assertTrue(rObj.getAttrInt()!=valObj.getAttrInt(), "It should not be equal since it did not update");
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -102,13 +104,13 @@ public class UpdateObjectTest {
       cws.add(cpoAdapter.newWhere(CpoWhere.LOGIC_NONE, "id", CpoWhere.COMP_EQ, 5));
       cpoAdapter.updateObject(null, valObj, cws, null, null);
       ValueObject rObj = cpoAdapter.retrieveBean(valObj);
-      assertEquals("It should be equal since it updated",rObj.getAttrInt(), valObj.getAttrInt());
+      assertEquals(rObj.getAttrInt(), valObj.getAttrInt(), "It should be equal since it updated");
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
   }
 
-  @After
+  @AfterEach
   public void tearDown() {
     String method = "tearDown:";
     try {

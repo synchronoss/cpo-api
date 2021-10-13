@@ -20,19 +20,21 @@
  */
 package org.synchronoss.cpo.cassandra;
 
-import org.junit.*;
 import org.synchronoss.cpo.*;
 
 import java.util.*;
 
-import static org.junit.Assert.*;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * BlobTest is a JUnit test class for testing the JdbcAdapter class Constructors
  *
  * @author david berry
  */
-public class NativeExpressionTest {
+public class NativeExpressionTest extends CassandraContainerBase {
 
   private CpoAdapter cpoAdapter = null;
   private ArrayList<ValueObject> al = new ArrayList<>();
@@ -43,13 +45,13 @@ public class NativeExpressionTest {
   /**
    * <code>setUp</code> Load the datasource from the properties in the property file jdbc_en_US.properties
    */
-  @Before
+  @BeforeEach
   public void setUp() {
     String method = "setUp:";
 
     try {
       cpoAdapter = CpoAdapterFactoryManager.getCpoAdapter(CassandraStatics.ADAPTER_CONTEXT_DEFAULT);
-      assertNotNull(method + "CpoAdapter is null", cpoAdapter);
+      assertNotNull(cpoAdapter, method + "CpoAdapter is null");
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -69,7 +71,7 @@ public class NativeExpressionTest {
     }
   }
 
-  @After
+  @AfterEach
   public void tearDown() {
     String method = "tearDown:";
     try {
@@ -96,7 +98,7 @@ public class NativeExpressionTest {
       ValueObject valObj = ValueObjectFactory.createValueObject(3);
       col = cpoAdapter.retrieveBeans("TestWhereRetrieve", valObj, valObj, null, null, cnqAl);
 
-      assertTrue("Col size is " + col.size(), col.size() == 2);
+      assertTrue(col.size() == 2, "Col size is " + col.size());
     } catch (Exception e) {
       fail(method + e.getMessage());
     }

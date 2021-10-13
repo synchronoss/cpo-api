@@ -103,13 +103,9 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
         <configuration>
-          <includes>
-            <!-- all tests should be in the suite -->
-            <include>org/synchronoss/cpo/jdbc/JdbcTestSuite.java</include>
-          </includes>
-          <excludes>
-            <exclude>org/synchronoss/cpo/jdbc/BigBatchTest.java</exclude>
-          </excludes>
+<!--          <excludes>-->
+<!--            <exclude>org/synchronoss/cpo/jdbc/BigBatchTest.java</exclude>-->
+<!--          </excludes>-->
         </configuration>
       </plugin>
        <plugin>
@@ -171,8 +167,8 @@
       <scope>compile</scope>
     </dependency>
     <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter</artifactId>
     </dependency>
     <dependency>
       <groupId>org.slf4j</groupId>

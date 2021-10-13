@@ -22,10 +22,10 @@ package org.synchronoss.cpo.jdbc;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import static org.junit.Assert.*;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 import org.synchronoss.cpo.CpoAdapter;
 import org.synchronoss.cpo.CpoAdapterFactoryManager;
 import org.synchronoss.cpo.CpoWhere;
@@ -35,7 +35,7 @@ import org.synchronoss.cpo.CpoWhere;
  *
  * @author david berry
  */
-public class InterleavedWhereTest {
+public class InterleavedWhereTest extends JdbcDbContainerBase {
 
   private CpoAdapter cpoAdapter = null;
   private ArrayList<ValueObject> al = new ArrayList<>();
@@ -49,13 +49,13 @@ public class InterleavedWhereTest {
   /**
    * <code>setUp</code> Load the datasource from the properties in the property file jdbc_en_US.properties
    */
-  @Before
+  @BeforeEach
   public void setUp() {
     String method = "setUp:";
 
     try {
       cpoAdapter = CpoAdapterFactoryManager.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_JDBC);
-      assertNotNull(method + "cpoAdapter is null", cpoAdapter);
+      assertNotNull(cpoAdapter,method + "cpoAdapter is null");
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -83,7 +83,7 @@ public class InterleavedWhereTest {
   /**
    * DOCUMENT ME!
    */
-  @After
+  @AfterEach
   public void tearDown() {
     String method = "tearDown:";
     try {
@@ -120,7 +120,7 @@ public class InterleavedWhereTest {
       wheres.add(cw);
       coll = cpoAdapter.retrieveBeans(ValueObject.FG_LIST_INTERLEAVEDWHERE, valObj, wheres, null);
 
-      assertTrue("Collection size is " + coll.size(), coll.size() == 3);
+      assertTrue(coll.size() == 3, "Collection size is " + coll.size());
 
 
     } catch (Exception e) {

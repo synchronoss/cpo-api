@@ -20,20 +20,22 @@
  */
 package org.synchronoss.cpo.cassandra;
 
-import org.junit.*;
 import org.slf4j.*;
 import org.synchronoss.cpo.*;
 
 import java.util.*;
 
-import static org.junit.Assert.*;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * RetrieveBeanTest is a JUnit test class for testing the JdbcAdapter class Constructors
  *
  * @author david berry
  */
-public class RetrieveBeanTest {
+public class RetrieveBeanTest extends CassandraContainerBase {
 
   private static final Logger logger = LoggerFactory.getLogger(RetrieveBeanTest.class);
   private CpoAdapter cpoAdapter = null;
@@ -45,13 +47,13 @@ public class RetrieveBeanTest {
    * @author david berry
    * @version '$Id: RetrieveBeanTest.java,v 1.6 2006/01/30 19:09:23 dberry Exp $'
    */
-  @Before
+  @BeforeEach
   public void setUp() {
     String method = "setUp:";
 
     try {
       cpoAdapter = CpoAdapterFactoryManager.getCpoAdapter(CassandraStatics.ADAPTER_CONTEXT_DEFAULT);
-      assertNotNull(method + "IdoAdapter is null", cpoAdapter);
+      assertNotNull(cpoAdapter, method + "IdoAdapter is null");
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -83,7 +85,7 @@ public class RetrieveBeanTest {
     try {
       ValueObject valObj = ValueObjectFactory.createValueObject();
       col = cpoAdapter.retrieveBeans(null, valObj);
-      assertTrue("Col size is " + col.size(), col.size() == al.size());
+      assertTrue(col.size() == al.size(), "Col size is " + col.size());
 
     } catch (Exception e) {
       fail(method + e.getMessage());
@@ -99,7 +101,7 @@ public class RetrieveBeanTest {
     try {
       ValueObject valObj = ValueObjectFactory.createValueObject();
       col = cpoAdapter.retrieveBeans(null, valObj, valObj);
-      assertTrue("Col size is " + col.size(), col.size() == al.size());
+      assertTrue(col.size() == al.size(), "Col size is " + col.size());
 
     } catch (Exception e) {
       fail(method + e.getMessage());
@@ -122,7 +124,7 @@ public class RetrieveBeanTest {
         }
         logger.debug("Retrieved Object #" + count);
       }
-      assertTrue("Result size is " + count, count == al.size());
+      assertTrue(count == al.size(), "Result size is " + count);
 
     } catch (Exception e) {
       fail(method + e.getMessage());
@@ -143,7 +145,7 @@ public class RetrieveBeanTest {
           count++;
         }
       }
-      assertTrue("Result size is " + count, count == al.size());
+      assertTrue(count == al.size(), "Result size is " + count);
 
     } catch (Exception e) {
       fail(method + e.getMessage());
@@ -164,7 +166,7 @@ public class RetrieveBeanTest {
           count++;
         }
       }
-      assertTrue("Result size is " + count, count == al.size());
+      assertTrue(count == al.size(), "Result size is " + count);
 
     } catch (Exception e) {
       fail(method + e.getMessage());
@@ -185,7 +187,7 @@ public class RetrieveBeanTest {
           count++;
         }
       }
-      assertTrue("Result size is " + count, count == al.size());
+      assertTrue(count == al.size(), "Result size is " + count);
 
     } catch (Exception e) {
       fail(method + e.getMessage());
@@ -208,7 +210,7 @@ public class RetrieveBeanTest {
         }
         logger.debug("Retrieved Object #" + count);
       }
-      assertTrue("Result size is " + count, count == al.size());
+      assertTrue(count == al.size(), "Result size is " + count);
 
     } catch (Exception e) {
       fail(method + e.getMessage());
@@ -224,9 +226,9 @@ public class RetrieveBeanTest {
 
     try {
       rvo = cpoAdapter.retrieveBean(vo);
-      assertNotNull(method + "Returned Value object is null");
-      assertNotSame(method + "ValueObjects are the same", vo, rvo);
-      assertEquals(method + "Strings are not the same", rvo.getAttrVarChar(), "Test");
+      assertNotNull(rvo, method + "Returned Value object is null");
+      assertNotSame(vo, rvo, method + "ValueObjects are the same");
+      assertEquals(rvo.getAttrVarChar(), "Test",method + "Strings are not the same");
       if (rvo.getAttrVarChar().equals(vo.getAttrVarChar())) {
         fail(method + "ValueObjects are the same");
       }
@@ -244,13 +246,13 @@ public class RetrieveBeanTest {
 
     try {
       rvo = cpoAdapter.retrieveBean(vo);
-      assertNull(method + "Returned Value object is Not Null", rvo);
+      assertNull(rvo,method + "Returned Value object is Not Null");
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
   }
 
-  @After
+  @AfterEach
   public void tearDown() {
     String method = "tearDown:";
     try {

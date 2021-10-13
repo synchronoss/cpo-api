@@ -44,8 +44,8 @@
       <scope>compile</scope>
     </dependency>
     <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter</artifactId>
     </dependency>
     <dependency>
       <groupId>org.slf4j</groupId>
@@ -99,10 +99,6 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
         <configuration>
-          <includes>
-            <!-- all tests should be in the suite -->
-            <include>org/synchronoss/cpo/cassandra/CassandraTestSuite.java</include>
-          </includes>
           <environmentVariables>
             <CPO_CONFIG>${project.baseUri}target/test-classes/cpoConfig.xml</CPO_CONFIG>
           </environmentVariables>

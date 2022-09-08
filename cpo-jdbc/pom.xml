@@ -41,7 +41,7 @@
     <mysqlVersion>8.0.20</mysqlVersion>
     <mariadbVersion>2.6.0</mariadbVersion>
     <h2Version>1.4.200</h2Version>
-    <postgresVersion>42.2.14</postgresVersion>
+    <postgresVersion>42.4.1</postgresVersion>
   </properties>
   <build>
     <pluginManagement>

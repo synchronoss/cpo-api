@@ -21,42 +21,42 @@
     http://www.gnu.org/licenses/lgpl.txt
 
 -->
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" 
-    xmlns:cpo="http://www.synchronoss.org/cpo/core/CpoCoreMeta.xsd"
-    xmlns="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd"
-    targetNamespace="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd"
-    elementFormDefault="qualified">
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:cpo="http://www.synchronoss.org/cpo/core/CpoCoreMeta.xsd"
+           xmlns="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd"
+           targetNamespace="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd"
+           elementFormDefault="qualified">
 
-    <xs:import namespace="http://www.synchronoss.org/cpo/core/CpoCoreMeta.xsd" schemaLocation="../../../../cpo-core/src/main/xsd/CpoCoreMeta.xsd"/>
-    
-    <xs:complexType name="ctJdbcAttribute" >
-        <xs:complexContent>
-            <xs:extension base="cpo:ctAttribute">
-                <xs:sequence>
-                    <xs:element name="dbTable" type="xs:string" minOccurs="0"/>
-                    <xs:element name="dbColumn" type="xs:string" minOccurs="0"/>
-                </xs:sequence>
-            </xs:extension>
-        </xs:complexContent>
-    </xs:complexType>
+  <xs:import namespace="http://www.synchronoss.org/cpo/core/CpoCoreMeta.xsd" schemaLocation="../../../../cpo-core/src/main/xsd/CpoCoreMeta.xsd"/>
 
-    <xs:complexType name="ctJdbcArgument">
-        <xs:complexContent>
-            <xs:extension base="cpo:ctArgument">
-                <xs:sequence minOccurs="0">
-                    <xs:element name="scope" default="IN">
-                        <xs:simpleType>
-                            <xs:restriction base="xs:string">
-                                <xs:enumeration value="IN"/>   
-                                <xs:enumeration value="OUT"/>   
-                                <xs:enumeration value="BOTH"/>   
-                            </xs:restriction>
-                        </xs:simpleType>
-                    </xs:element>
-                    <xs:element name="typeInfo" type="xs:string" minOccurs="0" />
-                </xs:sequence>
-            </xs:extension>
-        </xs:complexContent>
-    </xs:complexType>
-    
+  <xs:complexType name="ctJdbcAttribute" >
+    <xs:complexContent>
+      <xs:extension base="cpo:ctAttribute">
+        <xs:sequence>
+          <xs:element name="dbTable" type="xs:string" minOccurs="0"/>
+          <xs:element name="dbColumn" type="xs:string" minOccurs="0"/>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="ctJdbcArgument">
+    <xs:complexContent>
+      <xs:extension base="cpo:ctArgument">
+        <xs:sequence minOccurs="0">
+          <xs:element name="scope" default="IN">
+            <xs:simpleType>
+              <xs:restriction base="xs:string">
+                <xs:enumeration value="IN"/>
+                <xs:enumeration value="OUT"/>
+                <xs:enumeration value="BOTH"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:element>
+          <xs:element name="typeInfo" type="xs:string" minOccurs="0" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
 </xs:schema>

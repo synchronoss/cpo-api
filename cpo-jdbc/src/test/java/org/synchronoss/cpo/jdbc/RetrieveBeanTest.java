@@ -20,17 +20,15 @@
  */
 package org.synchronoss.cpo.jdbc;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
 import org.slf4j.*;
 import org.synchronoss.cpo.*;
 
 import java.util.*;
+import org.testng.annotations.*;
+import static org.testng.Assert.*;
 
 /**
- * RetrieveBeanTest is a JUnit test class for testing the JdbcAdapter class Constructors
+ * RetrieveBeanTest is a test class for testing the JdbcAdapter class Constructors
  *
  * @author david berry
  */
@@ -49,7 +47,7 @@ public class RetrieveBeanTest extends JdbcDbContainerBase {
    * @author david berry
    * @version '$Id: RetrieveBeanTest.java,v 1.6 2006/01/30 19:09:23 dberry Exp $'
    */
-  @BeforeEach
+  @BeforeClass
   public void setUp() {
     String method = "setUp:";
 
@@ -352,7 +350,7 @@ public class RetrieveBeanTest extends JdbcDbContainerBase {
     }
   }
 
-  @AfterEach
+  @AfterClass
   public void tearDown() {
     String method = "tearDown:";
     try {

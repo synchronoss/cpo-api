@@ -23,16 +23,13 @@ package org.synchronoss.cpo.cassandra;
 import org.slf4j.*;
 import org.synchronoss.cpo.*;
 import org.synchronoss.cpo.cassandra.meta.CassandraCpoMetaDescriptor;
+import org.testng.annotations.Test;
+import static org.testng.Assert.*;
 
 import java.nio.ByteBuffer;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
-
 /**
- * BlobTest is a JUnit test class for testing the JdbcAdapter class Constructors
+ * BlobTest is a test class for testing the JdbcAdapter class Constructors
  *
  * @author david berry
  */
@@ -50,7 +47,7 @@ public class BlobTest extends CassandraContainerBase {
    * @author david berry
    * @version '$Id: BlobTest.java,v 1.15 2006/02/15 18:34:19 dberry Exp $'
    */
-  @BeforeEach
+  @BeforeClass
   public void setUp() {
 
     String method = "setUp:";
@@ -302,7 +299,7 @@ public class BlobTest extends CassandraContainerBase {
     }
   }
 
-  @AfterEach
+  @AfterClass
   public void tearDown() {
     cpoAdapter = null;
   }

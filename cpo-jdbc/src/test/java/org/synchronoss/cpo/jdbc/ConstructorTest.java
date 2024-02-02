@@ -20,17 +20,16 @@
  */
 package org.synchronoss.cpo.jdbc;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
 import org.slf4j.*;
 import org.synchronoss.cpo.*;
+import org.testng.annotations.*;
+import static org.testng.Assert.*;
 
 import java.util.List;
 
+
 /**
- * ConstructorTest is a JUnit test class for testing the JdbcAdapter class Constructors
+ * ConstructorTest is a test class for testing the JdbcAdapter class Constructors
  *
  * @author david berry
  */
@@ -47,7 +46,7 @@ public class ConstructorTest extends JdbcDbContainerBase {
    * @author david berry
    * @version '$Id: ConstructorTest.java,v 1.7 2006/01/31 22:55:03 dberry Exp $'
    */
-  @BeforeEach
+  @BeforeClass
   public void setUp() {
   }
 
@@ -215,7 +214,7 @@ public class ConstructorTest extends JdbcDbContainerBase {
     }
   }
 
-  @AfterEach
+  @AfterClass
   public void tearDown() {
   }
 }

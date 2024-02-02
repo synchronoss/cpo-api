@@ -20,18 +20,16 @@
  */
 package org.synchronoss.cpo.jdbc;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
 import org.slf4j.*;
 import org.synchronoss.cpo.*;
 import org.synchronoss.cpo.helper.ExceptionHelper;
 
 import java.util.*;
+import org.testng.annotations.*;
+import static org.testng.Assert.*;
 
 /**
- * BigBatchTest is a JUnit test class for testing big batches
+ * BigBatchTest is a test class for testing big batches
  *
  * @author david berry
  */
@@ -51,7 +49,7 @@ public class BigRetrieveTest extends JdbcDbContainerBase {
    * @author david berry
    * @version '$Id: InsertObjectTest.java,v 1.3 2006/01/30 19:09:23 dberry Exp $'
    */
-  @BeforeEach
+  @BeforeClass
   public void setUp() {
     String method = "setUp:";
 
@@ -104,7 +102,7 @@ public class BigRetrieveTest extends JdbcDbContainerBase {
     }
   }
 
-  @AfterEach
+  @AfterClass
   public void tearDown() {
     String method = "tearDown:";
     try {

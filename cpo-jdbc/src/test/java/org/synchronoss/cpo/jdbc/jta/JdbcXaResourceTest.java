@@ -20,10 +20,6 @@
  */
 package org.synchronoss.cpo.jdbc.jta;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.CpoAdapter;
@@ -39,6 +35,8 @@ import javax.transaction.xa.Xid;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import org.testng.annotations.*;
+import static org.testng.Assert.*;
 
 /**
  * Created by dberry on 12/8/15.
@@ -60,7 +58,7 @@ public class JdbcXaResourceTest extends JdbcDbContainerBase {
   /**
    * <code>setUp</code> Load the datasource from the properties in the property file jdbc_en_US.properties
    */
-  @BeforeEach
+  @BeforeClass
   public void setUp() {
     String method = "setUp:";
 
@@ -78,7 +76,7 @@ public class JdbcXaResourceTest extends JdbcDbContainerBase {
   /**
    * DOCUMENT ME!
    */
-  @AfterEach
+  @AfterClass
   public void tearDown() {
 		String method = "tearDown:";
   try {

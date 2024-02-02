@@ -20,8 +20,8 @@
  */
 package org.synchronoss.cpo.parser;
 
-import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
+import org.testng.annotations.Test;
+import static org.testng.Assert.*;
 
 import java.text.ParseException;
 import java.util.Arrays;

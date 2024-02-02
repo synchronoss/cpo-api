@@ -20,10 +20,6 @@
  */
 package org.synchronoss.cpo.jdbc.exporter;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
 import org.slf4j.*;
 import org.synchronoss.cpo.*;
 import org.synchronoss.cpo.core.cpoCoreMeta.*;
@@ -35,9 +31,11 @@ import org.synchronoss.cpo.meta.domain.CpoClass;
 import javax.tools.*;
 import java.io.*;
 import java.util.Arrays;
+import org.testng.annotations.*;
+import static org.testng.Assert.*;
 
 /**
- * JUnit test class for testing the ExporterTest
+ * A test class for testing the ExporterTest
  *
  * @author Michael Bellomo
  */
@@ -51,7 +49,7 @@ public class ExporterTest extends JdbcDbContainerBase {
   public ExporterTest() {
   }
 
-  @BeforeEach
+  @BeforeClass
   public void setUp() {
     String method = "setUp:";
 
@@ -64,7 +62,7 @@ public class ExporterTest extends JdbcDbContainerBase {
     }
   }
 
-  @AfterEach
+  @AfterClass
   public void tearDown() {
     cpoAdapter = null;
   }

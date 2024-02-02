@@ -20,19 +20,17 @@
  */
 package org.synchronoss.cpo.jdbc;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.CpoAdapter;
 import org.synchronoss.cpo.CpoAdapterFactoryManager;
 import org.synchronoss.cpo.helper.ExceptionHelper;
 import org.synchronoss.cpo.jdbc.meta.JdbcCpoMetaDescriptor;
+import org.testng.annotations.*;
+import static org.testng.Assert.*;
 
 /**
- * BlobTest is a JUnit test class for testing the JdbcAdapter class Constructors
+ * BlobTest is a test class for testing the JdbcAdapter class Constructors
  *
  * @author david berry
  */
@@ -41,7 +39,7 @@ public class ExecuteTest extends JdbcDbContainerBase {
   private static final Logger logger = LoggerFactory.getLogger(ExecuteTest.class);
   private CpoAdapter cpoAdapter = null;
   private JdbcCpoMetaDescriptor metaDescriptor = null;
-  private boolean isSupportsCalls = Boolean.valueOf(JdbcJUnitProperty.getProperty(JdbcJUnitProperty.PROP_CALLS_SUPPORTED));
+  private boolean isSupportsCalls = Boolean.valueOf(JdbcTestProperty.getProperty(JdbcTestProperty.PROP_CALLS_SUPPORTED));
 
   /**
    * Creates a new RollbackTest object.
@@ -52,7 +50,7 @@ public class ExecuteTest extends JdbcDbContainerBase {
   /**
    * <code>setUp</code> Load the datasource from the properties in the property file jdbc_en_US.properties
    */
-  @BeforeEach
+  @BeforeClass
   public void setUp() {
     String method = "setUp:";
 
@@ -68,7 +66,7 @@ public class ExecuteTest extends JdbcDbContainerBase {
   /**
    * DOCUMENT ME!
    */
-  @AfterEach
+  @AfterClass
   public void tearDown() {
     cpoAdapter = null;
   }

@@ -29,7 +29,7 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Properties;
 
-public class JdbcJUnitProperty {
+public class JdbcTestProperty {
   private static final Logger logger = LoggerFactory.getLogger(JdbcCpoAttribute.class);
   private static HashMap<String, String> propMap = new HashMap<String, String>();
 
@@ -48,7 +48,7 @@ public class JdbcJUnitProperty {
     InputStream inputStream = null;
     try {
       Properties properties = new Properties();
-      inputStream = CpoClassLoader.getResourceAsStream("cpoJdbcJUnit.properties");
+      inputStream = CpoClassLoader.getResourceAsStream("cpoJdbcTest.properties");
       properties.load(inputStream);
 
       properties.forEach(

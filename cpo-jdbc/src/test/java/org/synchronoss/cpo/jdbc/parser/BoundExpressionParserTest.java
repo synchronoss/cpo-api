@@ -20,14 +20,14 @@
  */
 package org.synchronoss.cpo.jdbc.parser;
 
-import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
 import org.synchronoss.cpo.parser.BoundExpressionParser;
 
 import java.text.ParseException;
 import java.util.List;
+import org.testng.annotations.*;
+import static org.testng.Assert.*;
 
-// TODO - add more junits for single quotes, double quotes, inner selects, etc
+// TODO - add more tests for single quotes, double quotes, inner selects, etc
 public class BoundExpressionParserTest {
 
   @Test

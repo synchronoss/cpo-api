@@ -20,10 +20,6 @@
  */
 package org.synchronoss.cpo.jdbc;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.CpoAdapter;
@@ -32,9 +28,11 @@ import org.synchronoss.cpo.CpoException;
 import org.synchronoss.cpo.CpoTrxAdapter;
 import org.synchronoss.cpo.helper.ExceptionHelper;
 import org.synchronoss.cpo.jdbc.meta.JdbcCpoMetaDescriptor;
+import org.testng.annotations.*;
+import static org.testng.Assert.*;
 
 /**
- * BlobTest is a JUnit test class for testing the JdbcAdapter class Constructors
+ * BlobTest is a test class for testing the JdbcAdapter class Constructors
  *
  * @author david berry
  */
@@ -44,7 +42,7 @@ public class SelectForUpdateTest extends JdbcDbContainerBase {
   private CpoAdapter cpoAdapter = null;
   private CpoTrxAdapter trxAdapter = null;
   private JdbcCpoMetaDescriptor metaDescriptor = null;
-  private boolean isSupportsSelect4Update = Boolean.valueOf(JdbcJUnitProperty.getProperty(JdbcJUnitProperty.PROP_SELECT4UPDATE));
+  private boolean isSupportsSelect4Update = Boolean.valueOf(JdbcTestProperty.getProperty(JdbcTestProperty.PROP_SELECT4UPDATE));
 
   public SelectForUpdateTest() {
   }
@@ -52,7 +50,7 @@ public class SelectForUpdateTest extends JdbcDbContainerBase {
   /**
    * <code>setUp</code> Load the datasource from the properties in the property file jdbc_en_US.properties
    */
-  @BeforeEach
+  @BeforeClass
   public void setUp() {
     String method = "setUp:";
 
@@ -83,7 +81,7 @@ public class SelectForUpdateTest extends JdbcDbContainerBase {
   /**
    * DOCUMENT ME!
    */
-  @AfterEach
+  @AfterClass
   public void tearDown() {
    String method = "tearDown:";
    ValueObject vo = ValueObjectFactory.createValueObject(1);

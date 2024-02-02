@@ -20,10 +20,6 @@
  */
 package org.synchronoss.cpo.jdbc;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.*;
@@ -31,9 +27,11 @@ import org.synchronoss.cpo.helper.ExceptionHelper;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import org.testng.annotations.*;
+import static org.testng.Assert.*;
 
 /**
- * RetrieveBeanTest is a JUnit test class for testing the JdbcAdapter class Constructors
+ * RetrieveBeanTest is a test class for testing the JdbcAdapter class Constructors
  *
  * @author david berry
  */
@@ -42,7 +40,7 @@ public class CriteriaObjectTest extends JdbcDbContainerBase {
   private static final Logger logger = LoggerFactory.getLogger(CriteriaObjectTest.class);
   private CpoAdapter cpoAdapter = null;
   private ArrayList<ValueObject> al = new ArrayList<>();
-  private boolean isSupportsCalls = Boolean.valueOf(JdbcJUnitProperty.getProperty(JdbcJUnitProperty.PROP_CALLS_SUPPORTED));
+  private boolean isSupportsCalls = Boolean.valueOf(JdbcTestProperty.getProperty(JdbcTestProperty.PROP_CALLS_SUPPORTED));
 
   public CriteriaObjectTest() {
   }
@@ -53,7 +51,7 @@ public class CriteriaObjectTest extends JdbcDbContainerBase {
    * @author david berry
    * @version '$Id: RetrieveBeanTest.java,v 1.6 2006/01/30 19:09:23 dberry Exp $'
    */
-  @BeforeEach
+  @BeforeClass
   public void setUp() {
     String method = "setUp:";
 
@@ -145,7 +143,7 @@ public class CriteriaObjectTest extends JdbcDbContainerBase {
     }
   }
 
-  @AfterEach
+  @AfterClass
   public void tearDown() {
     String method = "tearDown:";
     try {

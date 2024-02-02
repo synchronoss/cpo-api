@@ -20,8 +20,8 @@
  */
 package org.synchronoss.cpo.jta;
 
-import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
+import org.testng.annotations.Test;
+import static org.testng.Assert.*;
 
 import javax.transaction.xa.XAException;
 import javax.transaction.xa.XAResource;
@@ -160,6 +160,7 @@ public class CpoXaResourceTest {
     }
   }
 
+  @Test
   public void testEnd(){
     StringBuilderXaResource xaResource = new StringBuilderXaResource();
     Xid xid1 = new MyXid(100, new byte[]{0x01}, new byte[]{0x02});
@@ -286,6 +287,7 @@ public class CpoXaResourceTest {
     }
   }
 
+  @Test
   public void testOutsideEnd() {
     StringBuilderXaResource xaResource1 = new StringBuilderXaResource();
     Xid xid1 = new MyXid(100, new byte[]{0x01}, new byte[]{0x02});
@@ -333,6 +335,7 @@ public class CpoXaResourceTest {
     }
   }
 
+  @Test
   public void testMultiResourcesEnd() {
     // We need to make sure that different Resource types that share CpoBaseXaResource do not interfere with each other
     // So two different XAs sharing CpoBaseXaResource should be able to take part of the same transaction and work independently
@@ -392,6 +395,7 @@ public class CpoXaResourceTest {
     }
   }
 
+  @Test
   public void testRecoverAndForget() {
     StringBuilderXaResource sbxa = new StringBuilderXaResource();
     Xid xid1 = new MyXid(100, new byte[]{0x01}, new byte[]{0x02});
@@ -452,6 +456,7 @@ public class CpoXaResourceTest {
     }
   }
 
+  @Test
   public void testFail() {
     // We need to make sure that different Resource types that share CpoBaseXaResource do not interfere with each other
     // So two different XAs sharing CpoBaseXaResource should be able to take part of the same transaction and work independently

@@ -45,11 +45,11 @@ public abstract class JdbcDbContainerBase {
   public static JdbcDatabaseContainer jdbcContainer;
 
   static {
-    dbType = JdbcJUnitProperty.getProperty(JdbcJUnitProperty.PROP_DB_TYPE);
-    dbUser = JdbcJUnitProperty.getProperty(JdbcJUnitProperty.PROP_DB_USER);
-    dbPswd = JdbcJUnitProperty.getProperty(JdbcJUnitProperty.PROP_DB_PSWD);
-    dbName = JdbcJUnitProperty.getProperty(JdbcJUnitProperty.PROP_DB_NAME);
-    initScript = JdbcJUnitProperty.getProperty(JdbcJUnitProperty.PROP_INIT_SCRIPT);
+    dbType = JdbcTestProperty.getProperty(JdbcTestProperty.PROP_DB_TYPE);
+    dbUser = JdbcTestProperty.getProperty(JdbcTestProperty.PROP_DB_USER);
+    dbPswd = JdbcTestProperty.getProperty(JdbcTestProperty.PROP_DB_PSWD);
+    dbName = JdbcTestProperty.getProperty(JdbcTestProperty.PROP_DB_NAME);
+    initScript = JdbcTestProperty.getProperty(JdbcTestProperty.PROP_INIT_SCRIPT);
     logger = LoggerFactory.getLogger(JdbcDatabaseContainer.class);
     jdbcContainer = createJdbcContainer(dbType, initScript, dbUser, dbPswd, dbName);
     if (jdbcContainer!=null)

@@ -18,27 +18,33 @@
  * A copy of the GNU Lesser General Public License may also be found at
  * http://www.gnu.org/licenses/lgpl.txt
  */
-package org.synchronoss.cpo.cassandra;
+package org.synchronoss.cpo.jdbc.test;
 
 import org.synchronoss.cpo.*;
-import org.synchronoss.cpo.cassandra.meta.CassandraCpoMetaDescriptor;
-import org.testng.annotations.*;
-import static org.testng.Assert.*;
+import org.synchronoss.cpo.jdbc.*;
+import org.synchronoss.cpo.jdbc.meta.JdbcCpoMetaDescriptor;
 
 import java.sql.Timestamp;
 import java.util.*;
+import org.testng.annotations.*;
+import static org.testng.Assert.*;
 
 /**
  * InsertObjectTest is a test class for testing the insert api calls of cpo
  *
  * @author david berry
  */
-public class InsertObjectTest extends CassandraContainerBase {
+public class CaseSensitiveTest extends JdbcDbContainerBase {
 
-  private ArrayList<ValueObject> al = new ArrayList<>();
+  private ArrayList<CaseValueObject> al = new ArrayList<>();
   private CpoAdapter cpoAdapter = null;
   private CpoAdapter readAdapter = null;
-  private CassandraCpoMetaDescriptor metaDescriptor = null;
+  private JdbcCpoMetaDescriptor metaDescriptor = null;
+  private boolean isSupportsMillis = Boolean.valueOf(JdbcTestProperty.getProperty(JdbcTestProperty.PROP_MILLIS_SUPPORTED));
+  private final String className = this.getClass().getSimpleName();
+
+  public CaseSensitiveTest() {
+  }
 
   /**
    * <code>setUp</code> Load the datasource from the properties in the property file jdbc_en_US.properties
@@ -51,14 +57,14 @@ public class InsertObjectTest extends CassandraContainerBase {
     String method = "setUp:";
 
     try {
-      cpoAdapter = CpoAdapterFactoryManager.getCpoAdapter(CassandraStatics.ADAPTER_CONTEXT_DEFAULT);
+      cpoAdapter = CpoAdapterFactoryManager.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_CASESENSITIVE);
       assertNotNull(cpoAdapter, method + "cpoAdapter is null");
-      metaDescriptor = (CassandraCpoMetaDescriptor)cpoAdapter.getCpoMetaDescriptor();
+      metaDescriptor = (JdbcCpoMetaDescriptor) cpoAdapter.getCpoMetaDescriptor();
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
     try {
-      readAdapter = CpoAdapterFactoryManager.getCpoAdapter(CassandraStatics.ADAPTER_CONTEXT_DEFAULT);
+      readAdapter = CpoAdapterFactoryManager.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_CASESENSITIVE);
       assertNotNull(readAdapter,method + "readAdapter is null");
     } catch (Exception e) {
       fail(method + e.getMessage());
@@ -66,16 +72,23 @@ public class InsertObjectTest extends CassandraContainerBase {
   }
 
   @Test
-  public void testInsertObject() {
-    String method = "testInsertObject:";
-    ValueObject valObj = ValueObjectFactory.createValueObject(5);
+  public void testCaseSensitiveObject() {
+    String method = "testCaseSensitiveObject:";
+    CaseValueObject valObj = new CaseValueObjectBean();
+    valObj.setId(98);
+    valObj.setName(className);
+    valObj.setAttrVarChar("testCaseSensitiveObject");
+    valObj.setAttrInteger(3);
+    Timestamp ts = new Timestamp(System.currentTimeMillis());
 
-    valObj.setAttrVarChar("testInsert");
-    valObj.setAttrInt(3);
-    Date ts = new Date();
+    if (!isSupportsMillis) {
+      ts.setNanos(0);
+    }
 
-    valObj.setAttrTimestamp(ts);
-    valObj.setAttrBool(true);
+    valObj.setAttrDatetime(ts);
+
+    valObj.setAttrBit(true);
+
     al.add(valObj);
 
     try {
@@ -85,41 +98,17 @@ public class InsertObjectTest extends CassandraContainerBase {
     }
 
     try {
-      ValueObject vo = readAdapter.retrieveBean(null, valObj, valObj, null, null);
-      assertEquals(valObj.getId(), vo.getId(), "Ids do not match");
-      assertEquals(valObj.getAttrInt(), vo.getAttrInt(), "Integers do not match");
-      assertEquals(vo.getAttrVarChar(), valObj.getAttrVarChar(), "Strings do not match");
-      assertEquals(vo.getAttrTimestamp(), valObj.getAttrTimestamp(), "Timestamps do not match");
-      assertTrue(vo.getAttrBool(), "boolean not stored correctly");
-    } catch (Exception e) {
-      fail(method + e.getMessage());
-    }
-  }
+      CaseValueObject vo = readAdapter.retrieveBean(CaseValueObject.FG_RETRIEVE_NULL, valObj, valObj, null, null);
+      assertNotEquals(valObj.getId(), vo.getId(), "Ids should not match");
+      assertNotEquals(valObj.getAttrInteger(), vo.getAttrInteger(), "Integers should not match");
+      assertNotEquals(vo.getAttrVarChar(), valObj.getAttrVarChar(), "Strings should not match");
+      assertFalse(valObj.getAttrDatetime().equals(vo.getAttrDatetime()), "Timestamps should not match");
+      assertFalse(vo.getAttrBit(), "boolean not stored correctly");
 
-  @Test
-  public void testInsertObjects() {
-
-    String method = "testInsertObjects:";
-    ValueObject vo = ValueObjectFactory.createValueObject(1);
-    vo.setAttrVarChar("Test");
-
-    al.add(vo);
-    al.add(ValueObjectFactory.createValueObject(2));
-    al.add(ValueObjectFactory.createValueObject(3));
-    al.add(ValueObjectFactory.createValueObject(4));
-    try {
-      cpoAdapter.insertObjects(al);
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
 
-    try {
-      Collection<ValueObject> col = readAdapter.retrieveBeans(null, vo);
-
-      assertEquals(col.size(), al.size(), method + "Invalid number of objects returned");
-    } catch (Exception e) {
-      fail(method + e.getMessage());
-    }
   }
 
   @AfterClass
@@ -127,6 +116,7 @@ public class InsertObjectTest extends CassandraContainerBase {
     String method = "tearDown:";
     try {
       cpoAdapter.deleteObjects(al);
+
     } catch (Exception e) {
       fail(method + e.getMessage());
     }

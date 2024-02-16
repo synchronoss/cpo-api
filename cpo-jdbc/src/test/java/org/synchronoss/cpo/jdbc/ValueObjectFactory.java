@@ -21,12 +21,15 @@
 package org.synchronoss.cpo.jdbc;
 
 public class ValueObjectFactory {
-  public static ValueObject createValueObject() {
-    return new ValueObjectBean();
+  public static ValueObject createValueObject(String testName) {
+    ValueObjectBean valueObjectBean = new ValueObjectBean();
+    valueObjectBean.setName(testName);
+    return valueObjectBean;
   }
-  public static ValueObject createValueObject(int id) {
+  public static ValueObject createValueObject(int id, String testName) {
     ValueObjectBean valueObjectBean = new ValueObjectBean();
     valueObjectBean.setId(id);
+    valueObjectBean.setName(testName);
     return valueObjectBean;
   }
 }

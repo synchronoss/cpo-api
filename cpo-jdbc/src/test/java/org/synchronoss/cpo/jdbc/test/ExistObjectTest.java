@@ -18,25 +18,34 @@
  * A copy of the GNU Lesser General Public License may also be found at
  * http://www.gnu.org/licenses/lgpl.txt
  */
-package org.synchronoss.cpo.cassandra;
+package org.synchronoss.cpo.jdbc.test;
 
 import org.slf4j.*;
 import org.synchronoss.cpo.*;
 import org.synchronoss.cpo.helper.ExceptionHelper;
-import org.testng.annotations.*;
-import static org.testng.Assert.*;
 
 import java.util.ArrayList;
+
+import org.synchronoss.cpo.jdbc.JdbcDbContainerBase;
+import org.synchronoss.cpo.jdbc.JdbcStatics;
+import org.synchronoss.cpo.jdbc.ValueObject;
+import org.synchronoss.cpo.jdbc.ValueObjectFactory;
+import org.testng.annotations.*;
+import static org.testng.Assert.*;
 
 /**
  * ExistObjectTest is a test class for the exists api calls
  *
  * @author david berry
  */
-public class ExistObjectTest extends CassandraContainerBase {
+public class ExistObjectTest extends JdbcDbContainerBase {
 
   private static final Logger logger = LoggerFactory.getLogger(ExistObjectTest.class);
   private CpoAdapter cpoAdapter = null;
+  private final String className = this.getClass().getSimpleName();
+
+  public ExistObjectTest() {
+  }
 
   /**
    * <code>setUp</code> Load the datasource from the properties in the property file jdbc_en_US.properties
@@ -49,13 +58,13 @@ public class ExistObjectTest extends CassandraContainerBase {
     String method = "setUp:";
 
     try {
-      cpoAdapter = CpoAdapterFactoryManager.getCpoAdapter(CassandraStatics.ADAPTER_CONTEXT_DEFAULT);
-      assertNotNull(cpoAdapter, method + "IdoAdapter is null");
+      cpoAdapter = CpoAdapterFactoryManager.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_JDBC);
+      assertNotNull(cpoAdapter, method + "cpoAdapter is null");
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
-    ValueObject vo = ValueObjectFactory.createValueObject(1);
-    vo.setAttrInt(3);
+    ValueObject vo = ValueObjectFactory.createValueObject(79, className);
+    vo.setAttrVarChar("WHERE");
 
     try {
       cpoAdapter.insertObject(vo);
@@ -70,52 +79,54 @@ public class ExistObjectTest extends CassandraContainerBase {
     String method = "testExistObject:";
 
     try {
-      ValueObject valObj = ValueObjectFactory.createValueObject(1);
+      ValueObject valObj = ValueObjectFactory.createValueObject(79, className);
       long count = cpoAdapter.existsObject(valObj);
-      assertTrue(count == 1, "Object not Found");
+      assertEquals(count, 1, "Object not Found");
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
 
     try {
-      ValueObject valObj = ValueObjectFactory.createValueObject(5);
+      ValueObject valObj = ValueObjectFactory.createValueObject(78, className);
       long count = cpoAdapter.existsObject(valObj);
-      assertTrue(count == 0, "Object Found");
+      assertEquals(count, 0, "Object Found");
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
+
   }
 
   @Test
   public void testExistObjectWhere() {
-    String method = "testExistObject:";
+    String method = "testExistObjectWhere:";
 
     try {
-      ValueObject valObj = ValueObjectFactory.createValueObject(1);
-      CpoWhere where = cpoAdapter.newWhere(CpoWhere.LOGIC_AND, "attrInt", CpoWhere.COMP_EQ, 3);
+      ValueObject valObj = ValueObjectFactory.createValueObject(79, className);
+      CpoWhere where = cpoAdapter.newWhere(CpoWhere.LOGIC_AND, ValueObject.ATTR_ATTRVARCHAR, CpoWhere.COMP_EQ, "WHERE");
       ArrayList<CpoWhere> wheres = new ArrayList<>();
       wheres.add(where);
-      long count = cpoAdapter.existsObject(null, valObj, wheres);
-      assertTrue(count == 1, "Object not Found");
+      long count = cpoAdapter.existsObject(ValueObject.FG_EXIST_NULL, valObj, wheres);
+      assertEquals(count, 1, "Object not Found");
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
 
     try {
-      ValueObject valObj = ValueObjectFactory.createValueObject(1);
-      CpoWhere where = cpoAdapter.newWhere(CpoWhere.LOGIC_AND, "attrInt", CpoWhere.COMP_EQ, 5);
+      ValueObject valObj = ValueObjectFactory.createValueObject(79, className);
+      CpoWhere where = cpoAdapter.newWhere(CpoWhere.LOGIC_AND, ValueObject.ATTR_ATTRVARCHAR, CpoWhere.COMP_EQ, "NOWHERE");
       ArrayList<CpoWhere> wheres = new ArrayList<>();
       wheres.add(where);
-      long count = cpoAdapter.existsObject(null, valObj, wheres);
-      assertTrue(count == 0, "Object Found");
+      long count = cpoAdapter.existsObject(ValueObject.FG_EXIST_NULL, valObj, wheres);
+      assertEquals(count, 0, "Object Found");
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
+
   }
 
   @AfterClass
   public void tearDown() {
-    ValueObject vo = ValueObjectFactory.createValueObject(1);
+    ValueObject vo = ValueObjectFactory.createValueObject(79, className);
     try {
       cpoAdapter.deleteObject(vo);
     } catch (Exception e) {

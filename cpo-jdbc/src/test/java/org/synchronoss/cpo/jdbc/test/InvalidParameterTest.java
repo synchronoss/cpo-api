@@ -18,21 +18,27 @@
  * A copy of the GNU Lesser General Public License may also be found at
  * http://www.gnu.org/licenses/lgpl.txt
  */
-package org.synchronoss.cpo.cassandra;
+package org.synchronoss.cpo.jdbc.test;
 
 import org.slf4j.*;
 import org.synchronoss.cpo.*;
 import org.synchronoss.cpo.helper.ExceptionHelper;
-import org.testng.annotations.*;
 
 import java.util.Collection;
 
+import org.synchronoss.cpo.jdbc.*;
+import org.testng.annotations.*;
 import static org.testng.Assert.*;
 
-public class InvalidParameterTest extends CassandraContainerBase {
+public class InvalidParameterTest extends JdbcDbContainerBase {
 
   private static final Logger logger = LoggerFactory.getLogger(InvalidParameterTest.class);
   private CpoAdapter cpoAdapter = null;
+  private final String className = this.getClass().getSimpleName();
+
+  public InvalidParameterTest() {
+
+  }
 
   /**
    * <code>setUp</code> Load the datasource from the properties in the property file jdbc_en_US.properties
@@ -44,8 +50,8 @@ public class InvalidParameterTest extends CassandraContainerBase {
     String method = "setUp:";
 
     try {
-      cpoAdapter = CpoAdapterFactoryManager.getCpoAdapter(CassandraStatics.ADAPTER_CONTEXT_DEFAULT);
-      assertNotNull(cpoAdapter, method + "IdoAdapter is null");
+      cpoAdapter = CpoAdapterFactoryManager.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_JDBC);
+      assertNotNull(cpoAdapter,method + "cpoAdapter is null");
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -57,7 +63,7 @@ public class InvalidParameterTest extends CassandraContainerBase {
     Collection<ValueObject> col = null;
 
     try {
-      ValueObject valObj = ValueObjectFactory.createValueObject();
+      ValueObject valObj = ValueObjectFactory.createValueObject(className);
       col = cpoAdapter.retrieveBeans("BadContext", valObj);
       fail(method + "Test got to unreachable code");
     } catch (CpoException ce) {
@@ -75,7 +81,7 @@ public class InvalidParameterTest extends CassandraContainerBase {
 
     try {
       ValueObject valObj = null;
-      col = cpoAdapter.retrieveBeans(null, valObj);
+      col = cpoAdapter.retrieveBeans(ValueObject.FG_LIST_NULL, valObj);
       fail(method + "Test got to unreachable code");
     } catch (CpoException ce) {
       //This is what I am expecting so let it go
@@ -91,7 +97,7 @@ public class InvalidParameterTest extends CassandraContainerBase {
     Collection<ValueObject> col = null;
 
     try {
-      ValueObject valObj = cpoAdapter.retrieveBean(null, null);
+      ValueObject valObj = cpoAdapter.retrieveBean(ValueObject.FG_RETRIEVE_NULL, null);
       fail(method + "Test got to unreachable code");
     } catch (CpoException ce) {
       //This is what I am expecting so let it go
@@ -108,7 +114,7 @@ public class InvalidParameterTest extends CassandraContainerBase {
 
     try {
       ValueObject valObj = null;
-      cpoAdapter.insertObject(null, valObj);
+      cpoAdapter.insertObject(ValueObject.FG_CREATE_NULL, valObj);
       fail(method + "Test got to unreachable code");
     } catch (CpoException ce) {
       //This is what I am expecting so let it go
@@ -121,16 +127,15 @@ public class InvalidParameterTest extends CassandraContainerBase {
   @Test
   public void testRetrieveBeanNullContext() {
     String method = "testRetrieveBeanNullContext:";
-    Collection<ValueObject> lvos = null;
+    Collection<LobValueObject> lvos = null;
 
     try {
-      ValueObject lvo = ValueObjectFactory.createValueObject();
+      LobValueObject lvo = new LobValueObjectBean();
       logger.debug("Calling the NULL List");
-      lvos = cpoAdapter.retrieveBeans("NULL", lvo);
+      lvos = cpoAdapter.retrieveBeans(ValueObject.FG_LIST_NULL, lvo);
       logger.debug("Called the NULL List");
       fail(method + "Test got to unreachable code");
     } catch (CpoException ce) {
-      //This is what I am expecting so let it go
       //This is what I am expecting so let it go
       logger.debug("Got a cpo exception");
     } catch (Exception e) {

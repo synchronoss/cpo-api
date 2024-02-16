@@ -18,10 +18,11 @@
  * A copy of the GNU Lesser General Public License may also be found at
  * http://www.gnu.org/licenses/lgpl.txt
  */
-package org.synchronoss.cpo.cassandra;
+package org.synchronoss.cpo.jdbc.test;
 
 import org.synchronoss.cpo.*;
-import org.synchronoss.cpo.cassandra.meta.CassandraCpoMetaDescriptor;
+import org.synchronoss.cpo.jdbc.*;
+import org.synchronoss.cpo.jdbc.meta.JdbcCpoMetaDescriptor;
 
 import java.sql.Timestamp;
 import java.util.*;
@@ -33,11 +34,16 @@ import static org.testng.Assert.*;
  *
  * @author david berry
  */
-public class UpdateObjectTest extends CassandraContainerBase {
+public class UpdateObjectTest extends JdbcDbContainerBase {
 
   private ArrayList<ValueObject> al = new ArrayList<>();
   private CpoAdapter cpoAdapter = null;
-  private CassandraCpoMetaDescriptor metaDescriptor = null;
+  private JdbcCpoMetaDescriptor metaDescriptor = null;
+  private boolean isSupportsMillis = Boolean.valueOf(JdbcTestProperty.getProperty(JdbcTestProperty.PROP_MILLIS_SUPPORTED));
+  private final String className = this.getClass().getSimpleName();
+
+  public UpdateObjectTest() {
+  }
 
   /**
    * <code>setUp</code> Load the datasource from the properties in the property file jdbc_en_US.properties
@@ -50,9 +56,9 @@ public class UpdateObjectTest extends CassandraContainerBase {
     String method = "setUp:";
 
     try {
-      cpoAdapter = CpoAdapterFactoryManager.getCpoAdapter(CassandraStatics.ADAPTER_CONTEXT_DEFAULT);
-      assertNotNull(cpoAdapter, method + "IdoAdapter is null");
-      metaDescriptor = (CassandraCpoMetaDescriptor) cpoAdapter.getCpoMetaDescriptor();
+      cpoAdapter = CpoAdapterFactoryManager.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_JDBC);
+      assertNotNull(cpoAdapter, method + "cpoAdapter is null");
+      metaDescriptor = (JdbcCpoMetaDescriptor) cpoAdapter.getCpoMetaDescriptor();
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -61,19 +67,19 @@ public class UpdateObjectTest extends CassandraContainerBase {
   @Test
   public void testUpdateObject() {
     String method = "testUpdateObject:";
-    ValueObject valObj = ValueObjectFactory.createValueObject(5);
+    ValueObject valObj = ValueObjectFactory.createValueObject(37, className);
 
     valObj.setAttrVarChar("testUpdate");
-    valObj.setAttrInt(3);
-    Date ts = new Timestamp(System.currentTimeMillis());
+    valObj.setAttrInteger(3);
+    Timestamp ts = new Timestamp(System.currentTimeMillis());
 
-//    if (!metaDescriptor.isSupportsMillis()) {
-//      ts.setNanos(0);
-//    }
+    if (!isSupportsMillis) {
+      ts.setNanos(0);
+    }
 
-    valObj.setAttrTimestamp(ts);
+    valObj.setAttrDatetime(ts);
 
-    valObj.setAttrBool(true);
+    valObj.setAttrBit(true);
 
     al.add(valObj);
 
@@ -86,11 +92,10 @@ public class UpdateObjectTest extends CassandraContainerBase {
     // try the where on the update, should update 0
     try {
       List<CpoWhere> cws = new ArrayList<>();
-      cws.add(cpoAdapter.newWhere(CpoWhere.LOGIC_NONE, "id", CpoWhere.COMP_EQ, 2));
-      valObj.setAttrInt(4);
-      cpoAdapter.updateObject(null, valObj, cws, null, null);
-      ValueObject rObj = cpoAdapter.retrieveBean(valObj);
-      assertTrue(rObj.getAttrInt()!=valObj.getAttrInt(), "It should not be equal since it did not update");
+      cws.add(cpoAdapter.newWhere(CpoWhere.LOGIC_NONE, ValueObject.ATTR_ID, CpoWhere.COMP_EQ, 36));
+      cws.add(cpoAdapter.newWhere(CpoWhere.LOGIC_AND, ValueObject.ATTR_NAME, CpoWhere.COMP_EQ, className));
+      long updated = cpoAdapter.updateObject(ValueObject.FG_UPDATE_DYNAMICWHERE, valObj, cws, null, null);
+      assertEquals(0, updated, "Should not have updated anything");
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -98,10 +103,10 @@ public class UpdateObjectTest extends CassandraContainerBase {
     // try the where on the update, should update 1
     try {
       List<CpoWhere> cws = new ArrayList<>();
-      cws.add(cpoAdapter.newWhere(CpoWhere.LOGIC_NONE, "id", CpoWhere.COMP_EQ, 5));
-      cpoAdapter.updateObject(null, valObj, cws, null, null);
-      ValueObject rObj = cpoAdapter.retrieveBean(valObj);
-      assertEquals(rObj.getAttrInt(), valObj.getAttrInt(), "It should be equal since it updated");
+      cws.add(cpoAdapter.newWhere(CpoWhere.LOGIC_NONE, ValueObject.ATTR_ID, CpoWhere.COMP_EQ, 37));
+      cws.add(cpoAdapter.newWhere(CpoWhere.LOGIC_AND, ValueObject.ATTR_NAME, CpoWhere.COMP_EQ, className));
+      long updated = cpoAdapter.updateObject(ValueObject.FG_UPDATE_DYNAMICWHERE, valObj, cws, null, null);
+      assertEquals(1, updated, "Should have updated 1");
     } catch (Exception e) {
       fail(method + e.getMessage());
     }

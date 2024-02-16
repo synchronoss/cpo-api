@@ -22,7 +22,7 @@ package org.synchronoss.cpo.cassandra;
 
 import org.synchronoss.cpo.*;
 import java.util.*;
-import org.testng.annotations.Test;
+import org.testng.annotations.*;
 import static org.testng.Assert.*;
 
 /**

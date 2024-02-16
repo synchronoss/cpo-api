@@ -26,6 +26,8 @@ import org.synchronoss.cpo.helper.ExceptionHelper;
 
 import java.io.File;
 import java.util.*;
+import org.testng.annotations.*;
+import static org.testng.Assert.*;
 
 /**
  * RetrieveBeanTest is a test class for testing the JdbcAdapter class Constructors
@@ -36,7 +38,10 @@ public class HotDeployTest extends CassandraContainerBase {
   private static final Logger logger = LoggerFactory.getLogger(HotDeployTest.class);
   private CpoAdapter cpoAdapter = null;
   private ArrayList<ValueObject> al = new ArrayList<>();
-  private File metaFile;
+  private final File metaFile = new File("metaData.xml");
+
+  public HotDeployTest() {
+  }
 
   /**
    * <code>setUp</code> Load the datasource from the properties in the property file jdbc_en_US.properties
@@ -47,12 +52,10 @@ public class HotDeployTest extends CassandraContainerBase {
   @BeforeClass
   public void setUp() {
     String method = "setUp:";
+
     try {
-      metaFile = File.createTempFile("metaData", ".xml", new File("."));
       cpoAdapter = CpoAdapterFactoryManager.getCpoAdapter(CassandraStatics.ADAPTER_CONTEXT_DEFAULT);
       assertNotNull(cpoAdapter, method + "CpoAdapter is null");
-      // lets save the existing config before we monkey with it
-      cpoAdapter.getCpoMetaDescriptor().export(metaFile);
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -73,18 +76,33 @@ public class HotDeployTest extends CassandraContainerBase {
     }
   }
 
-  @Test
+  private void saveMeta() throws CpoException {
+    cpoAdapter.getCpoMetaDescriptor().export(metaFile);
+  }
+
+  private void restoreMeta() throws CpoException {
+    if (metaFile.exists()){
+      // lets reset the metadata to before we changed it
+      List<String> metaFiles = new ArrayList<>();
+      metaFiles.add(metaFile.getName());
+      cpoAdapter.getCpoMetaDescriptor().refreshDescriptorMeta(metaFiles, true);
+      metaFile.delete();
+    }
+  }
+
+  @Test(priority = 2)
   public void testRefresh() {
-    String method = "testRetrieveBeans:";
+    String method = "testRefresh:";
     List<ValueObject> col;
 
-
     try {
+      // lets save the existing config before we monkey with it
+      saveMeta();
       ValueObject valObj = ValueObjectFactory.createValueObject();
 
       // make sure the default retrieve works
-      col = cpoAdapter.retrieveBeans(null, valObj);
-      assertTrue(col!=null, "Col size is " + col.size());
+      col = cpoAdapter.retrieveBeans(ValueObject.FG_LIST_NULL, valObj);
+      assertNotNull(col, "Col size is " + col.size());
 
       col = cpoAdapter.retrieveBeans("HotDeploySelect", valObj);
       fail("Should not have gotten here:");
@@ -100,37 +118,45 @@ public class HotDeployTest extends CassandraContainerBase {
       ValueObject valObj = ValueObjectFactory.createValueObject(2);
 
       // make sure the default retrieve still works
-      col = cpoAdapter.retrieveBeans(null, valObj);
-      assertTrue(col.size()==6, "Col size is " + col.size());
+      col = cpoAdapter.retrieveBeans(ValueObject.FG_LIST_NULL, valObj);
+      assertEquals(col.size(), 6, "Col size is " + col.size());
 
       List<ValueObject> col2 = cpoAdapter.retrieveBeans("HotDeploySelect", valObj);
-      assertTrue(col2.size()==6, "Col size is " + col2.size());
+      assertEquals(col2.size(), 6, "Col size is " + col2.size());
 
       for (int i=0; i<col.size(); i++) {
-        assertTrue(col.get(i).getId() == col2.get(i).getId(), "IDs must be equal");
+        assertEquals(col2.get(i).getId(), col.get(i).getId(), "IDs must be equal");
       }
 
       // make sure the first objects are the same
-
     } catch (Exception e) {
       String msg = ExceptionHelper.getLocalizedMessage(e);
-
       fail("Received an unexpected exception: "+msg);
     }
+
+    finally {
+      try{
+        restoreMeta();
+      } catch (Exception ignored) {
+      }
+    }
+
   }
 
-  @Test
+  @Test(priority = 1)
   public void testRefreshOverwrite() {
-    String method = "testRetrieveBeans:";
+    String method = "testRefreshOverwrite:";
     List<ValueObject> col;
 
-
     try {
+      // lets save the existing config before we monkey with it
+      saveMeta();
+
       ValueObject valObj = ValueObjectFactory.createValueObject();
 
       // make sure the default retrieve works
-      col = cpoAdapter.retrieveBeans(null, valObj);
-      assertTrue(col!=null, "Col size is " + col.size());
+      col = cpoAdapter.retrieveBeans(ValueObject.FG_LIST_NULL, valObj);
+      assertNotNull(col, "Col size is " + col.size());
 
       col = cpoAdapter.retrieveBeans("HotDeploySelect", valObj);
       fail("Should not have gotten here:");
@@ -147,19 +173,25 @@ public class HotDeployTest extends CassandraContainerBase {
 
       // the old retrieve should no longer be there
       try {
-        col = cpoAdapter.retrieveBeans(null, valObj);
+        col = cpoAdapter.retrieveBeans(ValueObject.FG_LIST_NULL, valObj);
         fail("should have thrown a cpo exception");
       } catch (CpoException ce) {
         // do nothing, this is expected
       }
 
       List<ValueObject> col2 = cpoAdapter.retrieveBeans("HotDeploySelect", valObj);
-      assertTrue(col2.size()==6, "Col size is " + col2.size());
+      assertEquals(col2.size(), 6, "Col size is " + col2.size());
 
     } catch (Exception e) {
       String msg = ExceptionHelper.getLocalizedMessage(e);
-
       fail("Received an unexpected exception: "+msg);
+    }
+
+    finally {
+      try{
+        restoreMeta();
+      } catch (Exception ignored) {
+      }
     }
   }
 
@@ -167,13 +199,7 @@ public class HotDeployTest extends CassandraContainerBase {
   public void tearDown() {
     String method = "tearDown:";
     try {
-      // lets reset the metadata to before we changed it
-      List<String> metaFiles = new ArrayList<>();
-      metaFiles.add(metaFile.getName());
-      cpoAdapter.getCpoMetaDescriptor().refreshDescriptorMeta(metaFiles, true);
-      metaFile.delete();
-
-      cpoAdapter.deleteObjects("TestOrderByDelete", al);
+      cpoAdapter.deleteObjects(ValueObject.FG_DELETE_TESTORDERBYDELETE, al);
     } catch (Exception e) {
       fail(method + e.getMessage());
     }

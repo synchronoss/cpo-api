@@ -52,6 +52,7 @@ public class CpoJavaSamplerClient extends AbstractJavaSamplerClient {
   private static final String DRIVER = "driver";
   private static final String CONFIG_PROCESSOR = "org.synchronoss.cpo.jdbc.config.JdbcCpoConfigProcessor";
   private static boolean isSupportsMillis = Boolean.valueOf(JdbcTestProperty.getProperty(JdbcTestProperty.PROP_MILLIS_SUPPORTED));
+  private final String className = this.getClass().getSimpleName();
 
   @Override
   public void setupTest(JavaSamplerContext javaSamplerContext) {
@@ -91,7 +92,7 @@ public class CpoJavaSamplerClient extends AbstractJavaSamplerClient {
 
     int id = Integer.parseInt(javaSamplerContext.getParameter(START_ID));
 
-    ValueObject valueObject = ValueObjectFactory.createValueObject(id);
+    ValueObject valueObject = ValueObjectFactory.createValueObject(id, className);
     result.setSampleLabel(Thread.currentThread().getName());
 
     valueObject.setAttrVarChar("testInsert");

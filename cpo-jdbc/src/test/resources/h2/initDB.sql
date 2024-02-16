@@ -24,6 +24,7 @@ DROP TABLE lob_test IF EXISTS ;
 
 CREATE TABLE IF NOT EXISTS value_object (
 id                      int           UNIQUE,
+name                    varchar       NOT NULL,
 attr_int                int           NULL,
 attr_int4               int4          NULL,
 attr_signed             signed        NULL,

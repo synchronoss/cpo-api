@@ -1,0 +1,163 @@
+/*
+ * Copyright (C) 2003-2012 David E. Berry
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ *
+ * A copy of the GNU Lesser General Public License may also be found at
+ * http://www.gnu.org/licenses/lgpl.txt
+ */
+package org.synchronoss.cpo.jdbc.test;
+
+import java.util.ArrayList;
+import org.synchronoss.cpo.CpoAdapterFactoryManager;
+import org.synchronoss.cpo.CpoException;
+import org.synchronoss.cpo.CpoTrxAdapter;
+import org.synchronoss.cpo.helper.ExceptionHelper;
+import org.synchronoss.cpo.jdbc.JdbcDbContainerBase;
+import org.synchronoss.cpo.jdbc.JdbcStatics;
+import org.synchronoss.cpo.jdbc.ValueObject;
+import org.synchronoss.cpo.jdbc.ValueObjectFactory;
+import org.testng.annotations.*;
+import static org.testng.Assert.*;
+
+/**
+ * BlobTest is a test class for testing the JdbcAdapter class Constructors
+ *
+ * @author david berry
+ */
+public class RollbackTrxTest extends JdbcDbContainerBase {
+
+  private CpoTrxAdapter trxAdapter = null;
+  private final String className = this.getClass().getSimpleName();
+
+  /**
+   * Creates a new RollbackTest object.
+   *
+   */
+  public RollbackTrxTest() {
+  }
+
+  /**
+   * <code>setUp</code> Load the datasource from the properties in the property file jdbc_en_US.properties
+   */
+  @BeforeClass
+  public void setUp() {
+    String method = "setUp:";
+
+    try {
+      trxAdapter = CpoAdapterFactoryManager.getCpoTrxAdapter(JdbcStatics.ADAPTER_CONTEXT_JDBC);
+      assertNotNull(trxAdapter, method + "trxAdapter is null");
+    } catch (Exception e) {
+      fail(method + e.getMessage());
+    }
+    ValueObject vo = ValueObjectFactory.createValueObject(57, className);
+    vo.setAttrVarChar("Test");
+    try {
+      trxAdapter.insertObject(vo);
+      trxAdapter.commit();
+    } catch (Exception e) {
+      try {
+        trxAdapter.rollback();
+      } catch (Exception e1) {
+      }
+      fail(method + e.getMessage());
+    }
+  }
+
+  /**
+   * DOCUMENT ME!
+   */
+  @AfterClass
+  public void tearDown() {
+    ValueObject vo = ValueObjectFactory.createValueObject(57, className);
+    try {
+      trxAdapter.deleteObject(vo);
+      trxAdapter.commit();
+    } catch (Exception e) {
+      try {
+        trxAdapter.rollback();
+      } catch (Exception e1) {
+      }
+    } finally {
+      try {
+        trxAdapter.close();
+      } catch (Exception e1) {
+      }
+      trxAdapter = null;
+    }
+  }
+
+  /**
+   * DOCUMENT ME!
+   */
+  @Test
+  public void testTrxRollbackProcessUpdateCollection() {
+    String method = "testTrxRollbackProcessUpdateCollection:";
+    ValueObject vo = ValueObjectFactory.createValueObject(56, className);
+    ValueObject vo2 = ValueObjectFactory.createValueObject(57, className);
+    ArrayList<ValueObject> al = new ArrayList<>();
+
+    al.add(vo);
+    al.add(vo2);
+
+    try {
+      trxAdapter.insertObjects(ValueObject.FG_CREATE_TESTROLLBACK, al);
+      trxAdapter.commit();
+      fail(method + "Insert should have thrown an exception");
+    } catch (Exception e) {
+      try {
+        trxAdapter.rollback();
+      } catch (CpoException ce) {
+        fail(method + "Rollback failed:" + ExceptionHelper.getLocalizedMessage(ce));
+
+      }
+      try {
+        ValueObject rvo = trxAdapter.retrieveBean(vo);
+        assertNull(rvo, method + "Value Object did not rollback");
+      } catch (Exception e2) {
+        fail(method + e.getMessage());
+      }
+    }
+  }
+
+  /**
+   * DOCUMENT ME!
+   */
+  @Test
+  public void testTrxSingleRollback() {
+    String method = "testTrxSingleRollback:";
+    ValueObject vo = ValueObjectFactory.createValueObject(56, className);
+    // This function group has multiple functions. Ids set using attributes
+    vo.setAttrSmallInt((short)57);
+    vo.setAttrInteger(56);
+    try {
+      trxAdapter.insertObject(ValueObject.FG_CREATE_TESTSINGLEROLLBACK, vo);
+      trxAdapter.commit();
+      fail(method + "Insert should have thrown an exception");
+    } catch (Exception e) {
+      try {
+        trxAdapter.rollback();
+      } catch (CpoException ce) {
+        fail(method + "Rollback failed:" + ExceptionHelper.getLocalizedMessage(ce));
+      }
+      try {
+        ValueObject rvo = trxAdapter.retrieveBean(vo);
+        assertNull(rvo, method + "Value Object did not rollback");
+      } catch (Exception e2) {
+        fail(method + e.getMessage());
+      }
+    }
+  }
+}

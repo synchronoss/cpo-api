@@ -56,9 +56,14 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
         <configuration>
-<!--          <excludes>-->
-<!--            <exclude>org/synchronoss/cpo/jdbc/BigBatchTest.java</exclude>-->
-<!--          </excludes>-->
+          <suiteXmlFiles>
+            <suiteXmlFile>src/test/resources/testng.xml</suiteXmlFile>
+            <suiteXmlFile>src/test/resources/h2/testng.xml</suiteXmlFile>
+<!--            <suiteXmlFile>src/test/resources/mariadb/testng.xml</suiteXmlFile>-->
+<!--            <suiteXmlFile>src/test/resources/mysql/testng.xml</suiteXmlFile>-->
+<!--            <suiteXmlFile>src/test/resources/oracle/testng.xml</suiteXmlFile>-->
+<!--            <suiteXmlFile>src/test/resources/postgres/testng.xml</suiteXmlFile>-->
+          </suiteXmlFiles>
         </configuration>
       </plugin>
        <plugin>
@@ -131,7 +136,7 @@
               <goal>generatejavasource</goal>
             </goals>
             <configuration>
-              <cpoConfig>${basedir}/${cpo.test.sqldir}/*.xml</cpoConfig>
+              <cpoConfig>${basedir}/${cpo.test.sqldir}/classdef/*.xml</cpoConfig>
               <generateClass>true</generateClass>
               <generateInterface>true</generateInterface>
               <scope>test</scope>
@@ -301,9 +306,9 @@
         <cpo.db.initScript>mysql/initDB.sql</cpo.db.initScript>
         <cpo.db.jndi>java:/comp/env/jdbc/cpodatasource</cpo.db.jndi>
         <cpo.db.class>com.mysql.cj.jdbc.MysqlConnectionPoolDataSource</cpo.db.class>
-        <cpo.valueMeta.xml>/mysql/mysqlValueMetaData.xml</cpo.valueMeta.xml>
-        <cpo.valueCaseMeta.xml>/mysql/mysqlValueCaseMetaData.xml</cpo.valueCaseMeta.xml>
-        <cpo.lobMeta.xml>/mysql/mysqlLobMetaData.xml</cpo.lobMeta.xml>
+        <cpo.valueMeta.xml>/mysql/classdef/mysqlValueMetaData.xml</cpo.valueMeta.xml>
+        <cpo.valueCaseMeta.xml>/mysql/classdef/mysqlValueCaseMetaData.xml</cpo.valueCaseMeta.xml>
+        <cpo.lobMeta.xml>/mysql/classdef/mysqlLobMetaData.xml</cpo.lobMeta.xml>
       </properties>
     </profile>
     <profile>
@@ -334,9 +339,9 @@
          <cpo.db.initScript>mariadb/initDB.sql</cpo.db.initScript>
          <cpo.db.jndi>java:/comp/env/jdbc/cpodatasource</cpo.db.jndi>
          <cpo.db.class>org.mariadb.jdbc.MariaDbDataSource</cpo.db.class>
-         <cpo.valueMeta.xml>/mariadb/mariadbValueMetaData.xml</cpo.valueMeta.xml>
-         <cpo.valueCaseMeta.xml>/mariadb/mariadbValueCaseMetaData.xml</cpo.valueCaseMeta.xml>
-         <cpo.lobMeta.xml>/mariadb/mariadbLobMetaData.xml</cpo.lobMeta.xml>
+         <cpo.valueMeta.xml>/mariadb/classdef/mariadbValueMetaData.xml</cpo.valueMeta.xml>
+         <cpo.valueCaseMeta.xml>/mariadb/classdef/mariadbValueCaseMetaData.xml</cpo.valueCaseMeta.xml>
+         <cpo.lobMeta.xml>/mariadb/classdef/mariadbLobMetaData.xml</cpo.lobMeta.xml>
        </properties>
      </profile>
     <profile>
@@ -367,9 +372,9 @@
         <cpo.db.initScript>oracle/initDB.sql</cpo.db.initScript>
         <cpo.db.jndi>cpodatasource</cpo.db.jndi>
         <cpo.db.class>oracle.jdbc.pool.OracleConnectionPoolDataSource</cpo.db.class>
-        <cpo.valueMeta.xml>/oracle/oracleValueMetaData.xml</cpo.valueMeta.xml>
-        <cpo.valueCaseMeta.xml>/oracle/oracleValueCaseMetaData.xml</cpo.valueCaseMeta.xml>
-        <cpo.lobMeta.xml>/oracle/oracleLobMetaData.xml</cpo.lobMeta.xml>
+        <cpo.valueMeta.xml>/oracle/classdef/oracleValueMetaData.xml</cpo.valueMeta.xml>
+        <cpo.valueCaseMeta.xml>/oracle/classdef/oracleValueCaseMetaData.xml</cpo.valueCaseMeta.xml>
+        <cpo.lobMeta.xml>/oracle/classdef/oracleLobMetaData.xml</cpo.lobMeta.xml>
       </properties>
     </profile>
     <profile>
@@ -400,9 +405,9 @@
         <cpo.db.initScript>oracle/initDB.sql</cpo.db.initScript>
         <cpo.db.jndi>cpodatasource</cpo.db.jndi>
         <cpo.db.class>oracle.jdbc.pool.OracleConnectionPoolDataSource</cpo.db.class>
-        <cpo.valueMeta.xml>/oracle/oracleValueMetaData.xml</cpo.valueMeta.xml>
-        <cpo.valueCaseMeta.xml>/oracle/oracleValueCaseMetaData.xml</cpo.valueCaseMeta.xml>
-        <cpo.lobMeta.xml>/oracle/oracleLobMetaData.xml</cpo.lobMeta.xml>
+        <cpo.valueMeta.xml>/oracle/classdef/oracleValueMetaData.xml</cpo.valueMeta.xml>
+        <cpo.valueCaseMeta.xml>/oracle/classdef/oracleValueCaseMetaData.xml</cpo.valueCaseMeta.xml>
+        <cpo.lobMeta.xml>/oracle/classdef/oracleLobMetaData.xml</cpo.lobMeta.xml>
       </properties>
     </profile>
     <profile>
@@ -433,9 +438,9 @@
         <cpo.db.initScript>oracle/initDB.sql</cpo.db.initScript>
         <cpo.db.jndi>cpodatasource</cpo.db.jndi>
         <cpo.db.class>oracle.jdbc.pool.OracleConnectionPoolDataSource</cpo.db.class>
-        <cpo.valueMeta.xml>/oracle/oracleValueMetaData.xml</cpo.valueMeta.xml>
-        <cpo.valueCaseMeta.xml>/oracle/oracleValueCaseMetaData.xml</cpo.valueCaseMeta.xml>
-        <cpo.lobMeta.xml>/oracle/oracleLobMetaData.xml</cpo.lobMeta.xml>
+        <cpo.valueMeta.xml>/oracle/classdef/oracleValueMetaData.xml</cpo.valueMeta.xml>
+        <cpo.valueCaseMeta.xml>/oracle/classdef/oracleValueCaseMetaData.xml</cpo.valueCaseMeta.xml>
+        <cpo.lobMeta.xml>/oracle/classdef/oracleLobMetaData.xml</cpo.lobMeta.xml>
       </properties>
     </profile>
     <profile>
@@ -465,9 +470,9 @@
         <cpo.db.initScript>h2/initDB.sql</cpo.db.initScript>
         <cpo.db.jndi>cpodatasource</cpo.db.jndi>
         <cpo.db.class>org.h2.jdbcx.JdbcDataSource</cpo.db.class>
-        <cpo.valueMeta.xml>/h2/h2ValueMetaData.xml</cpo.valueMeta.xml>
-        <cpo.valueCaseMeta.xml>/h2/h2ValueCaseMetaData.xml</cpo.valueCaseMeta.xml>
-        <cpo.lobMeta.xml>/h2/h2LobMetaData.xml</cpo.lobMeta.xml>
+        <cpo.valueMeta.xml>/h2/classdef/h2ValueMetaData.xml</cpo.valueMeta.xml>
+        <cpo.valueCaseMeta.xml>/h2/classdef/h2ValueCaseMetaData.xml</cpo.valueCaseMeta.xml>
+        <cpo.lobMeta.xml>/h2/classdef/h2LobMetaData.xml</cpo.lobMeta.xml>
       </properties>
     </profile>
     <profile>
@@ -498,9 +503,9 @@
         <cpo.db.initScript>postgres/initDB.sql</cpo.db.initScript>
         <cpo.db.jndi>java:/comp/env/jdbc/cpodatasource</cpo.db.jndi>
         <cpo.db.class>org.postgresql.ds.PGConnectionPoolDataSource</cpo.db.class>
-        <cpo.valueMeta.xml>/postgres/postgresValueMetaData.xml</cpo.valueMeta.xml>
-        <cpo.valueCaseMeta.xml>/postgres/postgresValueCaseMetaData.xml</cpo.valueCaseMeta.xml>
-        <cpo.lobMeta.xml>/postgres/postgresLobMetaData.xml</cpo.lobMeta.xml>
+        <cpo.valueMeta.xml>/postgres/classdef/postgresValueMetaData.xml</cpo.valueMeta.xml>
+        <cpo.valueCaseMeta.xml>/postgres/classdef/postgresValueCaseMetaData.xml</cpo.valueCaseMeta.xml>
+        <cpo.lobMeta.xml>/postgres/classdef/postgresLobMetaData.xml</cpo.lobMeta.xml>
       </properties>
     </profile>
   </profiles>

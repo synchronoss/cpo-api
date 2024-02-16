@@ -18,26 +18,34 @@
  * A copy of the GNU Lesser General Public License may also be found at
  * http://www.gnu.org/licenses/lgpl.txt
  */
-package org.synchronoss.cpo.cassandra;
+package org.synchronoss.cpo.jdbc.test;
 
 import org.synchronoss.cpo.*;
-import org.synchronoss.cpo.cassandra.meta.CassandraCpoMetaDescriptor;
-import org.testng.annotations.*;
-import static org.testng.Assert.*;
+import org.synchronoss.cpo.jdbc.*;
+import org.synchronoss.cpo.jdbc.meta.JdbcCpoMetaDescriptor;
 
 import java.sql.Timestamp;
-import java.util.*;
+import java.util.ArrayList;
+
+import org.testng.annotations.*;
+import static org.testng.Assert.*;
 
 /**
  * InheritanceTest is a test class for testing the polymorphic capabilites of CPO
  *
  * @author david berry
  */
-public class InheritanceTest extends CassandraContainerBase {
+public class InheritanceTest extends JdbcDbContainerBase {
 
   private ArrayList<ChildValueObject> al = new ArrayList<>();
   private CpoAdapter cpoAdapter = null;
-  private CassandraCpoMetaDescriptor metaDescriptor = null;
+  private JdbcCpoMetaDescriptor metaDescriptor = null;
+  private boolean isSupportsMillis = Boolean.valueOf(JdbcTestProperty.getProperty(JdbcTestProperty.PROP_MILLIS_SUPPORTED));
+  private final String className = this.getClass().getSimpleName();
+
+  public InheritanceTest() {
+
+  }
 
   /**
    * <code>setUp</code> Load the datasource from the properties in the property file jdbc_en_US.properties
@@ -50,9 +58,9 @@ public class InheritanceTest extends CassandraContainerBase {
     String method = "setUp:";
 
     try {
-      cpoAdapter = CpoAdapterFactoryManager.getCpoAdapter(CassandraStatics.ADAPTER_CONTEXT_DEFAULT);
-      assertNotNull(cpoAdapter, method + "IdoAdapter is null");
-      metaDescriptor = (CassandraCpoMetaDescriptor)cpoAdapter.getCpoMetaDescriptor();
+      cpoAdapter = CpoAdapterFactoryManager.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_JDBC);
+      assertNotNull(cpoAdapter,method + "cpoAdapter is null");
+      metaDescriptor = (JdbcCpoMetaDescriptor) cpoAdapter.getCpoMetaDescriptor();
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -63,14 +71,19 @@ public class InheritanceTest extends CassandraContainerBase {
     String method = "testInsertObject:";
     ChildValueObject valObj = new ChildValueObject();
 
-    valObj.setId(5);
+    valObj.setId(78);
+    valObj.setName(className);
     valObj.setAttrVarChar("testInsert");
-    valObj.setAttrInt(3);
-    Date ts = new Date();
+    valObj.setAttrInteger(3);
+    Timestamp ts = new Timestamp(System.currentTimeMillis());
 
-    valObj.setAttrTimestamp(ts);
+    if (!isSupportsMillis) {
+      ts.setNanos(0);
+    }
 
-    valObj.setAttrBool(true);
+    valObj.setAttrDatetime(ts);
+
+    valObj.setAttrBit(true);
 
     al.add(valObj);
 
@@ -81,15 +94,18 @@ public class InheritanceTest extends CassandraContainerBase {
     }
 
     try {
-      ChildValueObject vo = cpoAdapter.retrieveBean(null, valObj, valObj, null, null);
-      assertEquals(vo.getId(), valObj.getId(), "Ids do not match");
-      assertEquals(vo.getAttrInt(), valObj.getAttrInt(), "Integers do not match");
+      ChildValueObject vo = cpoAdapter.retrieveBean(ValueObject.FG_RETRIEVE_NULL, valObj, valObj, null, null);
+      assertEquals(vo.getId(), valObj.getId(),"Ids do not match");
+      assertEquals(vo.getAttrInteger(), valObj.getAttrInteger(),"Integers do not match");
       assertEquals(vo.getAttrVarChar(), valObj.getAttrVarChar(), "Strings do not match");
-      assertEquals(vo.getAttrTimestamp(), valObj.getAttrTimestamp(), "Timestamps do not match");
-      assertTrue(vo.getAttrBool(), "boolean not stored correctly");
+      assertEquals(vo.getAttrDatetime(), valObj.getAttrDatetime(),"Timestamps do not match");
+      assertTrue(vo.getAttrBit(),"boolean not stored correctly");
+
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
+
+
   }
 
   @AfterClass
@@ -97,6 +113,7 @@ public class InheritanceTest extends CassandraContainerBase {
     String method = "tearDown:";
     try {
       cpoAdapter.deleteObjects(al);
+
     } catch (Exception e) {
       fail(method + e.getMessage());
     }

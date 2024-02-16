@@ -18,11 +18,13 @@
  * A copy of the GNU Lesser General Public License may also be found at
  * http://www.gnu.org/licenses/lgpl.txt
  */
-package org.synchronoss.cpo.cassandra;
+package org.synchronoss.cpo.jdbc.test;
 
 import org.slf4j.*;
 import org.synchronoss.cpo.*;
-import org.synchronoss.cpo.cassandra.meta.CassandraCpoAttribute;
+import org.synchronoss.cpo.jdbc.JdbcCpoAttribute;
+import org.synchronoss.cpo.jdbc.JdbcDbContainerBase;
+import org.synchronoss.cpo.jdbc.JdbcStatics;
 import org.synchronoss.cpo.meta.domain.CpoAttribute;
 
 import java.util.List;
@@ -34,34 +36,53 @@ import static org.testng.Assert.*;
  *
  * @author david berry
  */
-public class EntityTest extends CassandraContainerBase {
+public class EntityTest extends JdbcDbContainerBase {
 
   private static final Logger logger = LoggerFactory.getLogger(EntityTest.class);
+
+  public EntityTest() {
+  }
+
+  /**
+   * <code>setUp</code> Load the datasource from the properties in the property file jdbc_en_US.properties
+   *
+   * @author david berry
+   * @version '$Id: ConstructorTest.java,v 1.7 2006/01/31 22:55:03 dberry Exp $'
+   */
+  @BeforeClass
+  public void setUp() {
+  }
 
   @Test
   public void testGetDataSourceEntities() {
     String method = "testGetDataSourceEntities:";
     try {
-      CpoAdapter cpoAdapter = CpoAdapterFactoryManager.getCpoAdapter(CassandraStatics.ADAPTER_CONTEXT_DEFAULT);
+      CpoAdapter cpoAdapter = CpoAdapterFactoryManager.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_CLASS);
       assertNotNull(cpoAdapter, method + "cpoAdapter is null");
 
-      List<CpoAttribute> attributes = cpoAdapter.getCpoAttributes("select * from value_object");
+      List<CpoAttribute> attributes = cpoAdapter.getCpoAttributes("select * from lob_test");
       for (CpoAttribute attribute : attributes) {
-        if (!(attribute instanceof CassandraCpoAttribute))
-          fail(attribute.toString()+" Attribute is not a CassandraCpoAttribute");
-        dumpAttribute((CassandraCpoAttribute)attribute);
+        if (!(attribute instanceof JdbcCpoAttribute))
+          fail("Attribute is not a JdbcCpoAttribute");
+        dumpAttribute((JdbcCpoAttribute)attribute);
       }
-      assertTrue(attributes.size() == 20, "List size is " + attributes.size());
+      assertEquals(attributes.size(), 4, "List size is " + attributes);
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
   }
 
-  private void dumpAttribute(CassandraCpoAttribute attribute) {
+  private void dumpAttribute(JdbcCpoAttribute attribute) {
     logger.debug("DataName: "+attribute.getDataName());
     logger.debug("DataType: "+attribute.getDataType());
+    logger.debug("DbColumn: "+attribute.getDbColumn());
+    logger.debug("DbTable: "+attribute.getDbTable());
     logger.debug("JavaName: "+attribute.getJavaName());
     logger.debug("JavaType: "+attribute.getJavaType());
     logger.debug("DataTypeMapEntry: "+attribute.getDataTypeInt());
+  }
+
+  @AfterClass
+  public void tearDown() {
   }
 }

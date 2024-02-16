@@ -39,7 +39,8 @@ public class HotDeployTest extends JdbcDbContainerBase {
   private static final Logger logger = LoggerFactory.getLogger(HotDeployTest.class);
   private CpoAdapter cpoAdapter = null;
   private ArrayList<ValueObject> al = new ArrayList<>();
-  private File metaFile = new File("metaData.xml");
+  private final File metaFile = new File("metaData.xml");
+  private final String className = this.getClass().getSimpleName();
 
   public HotDeployTest() {
   }
@@ -57,21 +58,20 @@ public class HotDeployTest extends JdbcDbContainerBase {
     try {
       cpoAdapter = CpoAdapterFactoryManager.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_JDBC);
       assertNotNull(cpoAdapter, method + "cpoAdapter is null");
-      // lets save the existing config before we monkey with it
-      cpoAdapter.getCpoMetaDescriptor().export(metaFile);
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
-    ValueObject vo = ValueObjectFactory.createValueObject(1);
+
+    ValueObject vo = ValueObjectFactory.createValueObject(101, className);
     vo.setAttrVarChar("Test");
     vo.setAttrSmallInt((short)1);
     vo.setAttrInteger(1);
     al.add(vo);
-    al.add(ValueObjectFactory.createValueObject(2));
-    al.add(ValueObjectFactory.createValueObject(3));
-    al.add(ValueObjectFactory.createValueObject(4));
-    al.add(ValueObjectFactory.createValueObject(5));
-    al.add(ValueObjectFactory.createValueObject(-6));
+    al.add(ValueObjectFactory.createValueObject(102, className));
+    al.add(ValueObjectFactory.createValueObject(103, className));
+    al.add(ValueObjectFactory.createValueObject(104, className));
+    al.add(ValueObjectFactory.createValueObject(105, className));
+    al.add(ValueObjectFactory.createValueObject(-106, className));
     try {
       cpoAdapter.insertObjects(ValueObject.FG_CREATE_TESTORDERBYINSERT, al);
     } catch (Exception e) {
@@ -79,17 +79,33 @@ public class HotDeployTest extends JdbcDbContainerBase {
     }
   }
 
-  @Test
+  private void saveMeta() throws CpoException {
+    cpoAdapter.getCpoMetaDescriptor().export(metaFile);
+  }
+
+  private void restoreMeta() throws CpoException {
+    if (metaFile.exists()){
+      // lets reset the metadata to before we changed it
+      List<String> metaFiles = new ArrayList<>();
+      metaFiles.add(metaFile.getName());
+      cpoAdapter.getCpoMetaDescriptor().refreshDescriptorMeta(metaFiles, true);
+      metaFile.delete();
+    }
+  }
+
+  @Test(priority = 2)
   public void testRefresh() {
-    String method = "testRetrieveBeans:";
+    String method = "testRefresh:";
     List<ValueObject> col;
 
     try {
-      ValueObject valObj = ValueObjectFactory.createValueObject();
+      // lets save the existing config before we monkey with it
+      saveMeta();
+      ValueObject valObj = ValueObjectFactory.createValueObject(className);
 
       // make sure the default retrieve works
       col = cpoAdapter.retrieveBeans(ValueObject.FG_LIST_NULL, valObj);
-      assertTrue(col!=null, "Col size is " + col.size());
+      assertNotNull(col, "Col size is " + col.size());
 
       col = cpoAdapter.retrieveBeans("HotDeploySelect", valObj);
       fail("Should not have gotten here:");
@@ -102,17 +118,17 @@ public class HotDeployTest extends JdbcDbContainerBase {
       metaFiles.add("/hotDeployMetaData.xml");
       cpoAdapter.getCpoMetaDescriptor().refreshDescriptorMeta(metaFiles);
 
-      ValueObject valObj = ValueObjectFactory.createValueObject(2);
+      ValueObject valObj = ValueObjectFactory.createValueObject(102, className);
 
       // make sure the default retrieve still works
       col = cpoAdapter.retrieveBeans(ValueObject.FG_LIST_NULL, valObj);
-      assertTrue(col.size()==6, "Col size is " + col.size());
+      assertEquals(col.size(), 6, "Col size is " + col.size());
 
       List<ValueObject> col2 = cpoAdapter.retrieveBeans("HotDeploySelect", valObj);
-      assertTrue(col2.size()==6, "Col size is " + col2.size());
+      assertEquals(col2.size(), 6, "Col size is " + col2.size());
 
       for (int i=0; i<col.size(); i++) {
-        assertTrue(col.get(i).getId() == col2.get(i).getId(), "IDs must be equal");
+        assertEquals(col2.get(i).getId(), col.get(i).getId(), "IDs must be equal");
       }
 
       // make sure the first objects are the same
@@ -120,19 +136,30 @@ public class HotDeployTest extends JdbcDbContainerBase {
       String msg = ExceptionHelper.getLocalizedMessage(e);
       fail("Received an unexpected exception: "+msg);
     }
+
+    finally {
+      try{
+        restoreMeta();
+      } catch (Exception ignored) {
+      }
+    }
+
   }
 
-  @Test
+  @Test(priority = 1)
   public void testRefreshOverwrite() {
-    String method = "testRetrieveBeans:";
+    String method = "testRefreshOverwrite:";
     List<ValueObject> col;
 
     try {
-      ValueObject valObj = ValueObjectFactory.createValueObject();
+      // lets save the existing config before we monkey with it
+      saveMeta();
+
+      ValueObject valObj = ValueObjectFactory.createValueObject(className);
 
       // make sure the default retrieve works
       col = cpoAdapter.retrieveBeans(ValueObject.FG_LIST_NULL, valObj);
-      assertTrue(col!=null, "Col size is " + col.size());
+      assertNotNull(col, "Col size is " + col.size());
 
       col = cpoAdapter.retrieveBeans("HotDeploySelect", valObj);
       fail("Should not have gotten here:");
@@ -145,7 +172,7 @@ public class HotDeployTest extends JdbcDbContainerBase {
       metaFiles.add("/hotDeployMetaData.xml");
       cpoAdapter.getCpoMetaDescriptor().refreshDescriptorMeta(metaFiles, true);
 
-      ValueObject valObj = ValueObjectFactory.createValueObject(2);
+      ValueObject valObj = ValueObjectFactory.createValueObject(102, className);
 
       // the old retrieve should no longer be there
       try {
@@ -156,11 +183,18 @@ public class HotDeployTest extends JdbcDbContainerBase {
       }
 
       List<ValueObject> col2 = cpoAdapter.retrieveBeans("HotDeploySelect", valObj);
-      assertTrue(col2.size()==6, "Col size is " + col2.size());
+      assertEquals(col2.size(), 6, "Col size is " + col2.size());
 
     } catch (Exception e) {
       String msg = ExceptionHelper.getLocalizedMessage(e);
       fail("Received an unexpected exception: "+msg);
+    }
+
+    finally {
+      try{
+        restoreMeta();
+      } catch (Exception ignored) {
+      }
     }
   }
 
@@ -168,12 +202,6 @@ public class HotDeployTest extends JdbcDbContainerBase {
   public void tearDown() {
     String method = "tearDown:";
     try {
-      // lets reset the metadata to before we changed it
-      List<String> metaFiles = new ArrayList<>();
-      metaFiles.add(metaFile.getName());
-      cpoAdapter.getCpoMetaDescriptor().refreshDescriptorMeta(metaFiles, true);
-      metaFile.delete();
-
       cpoAdapter.deleteObjects(ValueObject.FG_DELETE_TESTORDERBYDELETE, al);
     } catch (Exception e) {
       fail(method + e.getMessage());

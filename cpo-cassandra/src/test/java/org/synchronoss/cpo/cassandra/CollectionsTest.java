@@ -23,7 +23,7 @@ package org.synchronoss.cpo.cassandra;
 import org.synchronoss.cpo.CpoAdapter;
 import org.synchronoss.cpo.CpoAdapterFactoryManager;
 import org.synchronoss.cpo.cassandra.meta.CassandraCpoMetaDescriptor;
-import org.testng.annotations.Test;
+import org.testng.annotations.*;
 import static org.testng.Assert.*;
 
 import java.sql.Timestamp;

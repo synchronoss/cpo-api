@@ -18,29 +18,35 @@
  * A copy of the GNU Lesser General Public License may also be found at
  * http://www.gnu.org/licenses/lgpl.txt
  */
-package org.synchronoss.cpo.cassandra;
+package org.synchronoss.cpo.jdbc.test;
 
 import org.slf4j.*;
 import org.synchronoss.cpo.*;
-import org.synchronoss.cpo.cassandra.meta.CassandraCpoMetaDescriptor;
 import org.synchronoss.cpo.helper.ExceptionHelper;
+import org.synchronoss.cpo.jdbc.JdbcDbContainerBase;
+import org.synchronoss.cpo.jdbc.JdbcStatics;
+import org.synchronoss.cpo.jdbc.ValueObject;
+import org.synchronoss.cpo.jdbc.ValueObjectFactory;
 import org.testng.annotations.*;
 import static org.testng.Assert.*;
 
-import java.sql.Timestamp;
-import java.util.*;
+import java.util.ArrayList;
 
 /**
- * DeleteObjectTest is a test class for testing the JdbcAdapter deleteObject method
+ * BigBatchTest is a test class for testing big batches
  *
  * @author david berry
  */
-public class DeleteObjectTest extends CassandraContainerBase {
+public class BigBatchTest extends JdbcDbContainerBase {
 
-  private static final Logger logger = LoggerFactory.getLogger(DeleteObjectTest.class);
+  private static final Logger logger = LoggerFactory.getLogger(BigBatchTest.class);
   private ArrayList<ValueObject> al = new ArrayList<>();
   private CpoAdapter cpoAdapter = null;
-  private CassandraCpoMetaDescriptor metaDescriptor = null;
+  private final String className = this.getClass().getSimpleName();
+
+  public BigBatchTest() {
+
+  }
 
   /**
    * <code>setUp</code> Load the datasource from the properties in the property file jdbc_en_US.properties
@@ -53,45 +59,42 @@ public class DeleteObjectTest extends CassandraContainerBase {
     String method = "setUp:";
 
     try {
-      cpoAdapter = CpoAdapterFactoryManager.getCpoAdapter(CassandraStatics.ADAPTER_CONTEXT_DEFAULT);
-      assertNotNull(cpoAdapter, method + "IdoAdapter is null");
-      metaDescriptor = (CassandraCpoMetaDescriptor)cpoAdapter.getCpoMetaDescriptor();
+      cpoAdapter = CpoAdapterFactoryManager.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_JDBC);
+      assertNotNull(cpoAdapter, method + "cpoAdapter is null");
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
   }
 
+  /**
+   * So oracle seems to fail on a batch size of 100,000 but does not throw an error.
+   *
+   * lets try to break it to fix it to return a good message.
+   *
+   */
   @Test
-  public void testDeleteObject() {
-    String method = "testDeleteObject:";
-    ValueObject valObj = ValueObjectFactory.createValueObject(5);
+  public void testTooManyInserts() {
 
-    valObj.setAttrVarChar("testDelete");
-    valObj.setAttrInt(3);
-    Date ts = new Timestamp(System.currentTimeMillis());
+    String method = "testTooManyInserts:";
+    int numInserts = 100000;
 
-//    if (!metaDescriptor.isSupportsMillis()) {
-//      ts.setNanos(0);
-//    }
-
-    valObj.setAttrTimestamp(ts);
-    valObj.setAttrBool(true);
-    al.add(valObj);
-
-    try {
-      cpoAdapter.insertObject(valObj);
-    } catch (Exception e) {
-      logger.error(ExceptionHelper.getLocalizedMessage(e));
-      fail(method + e.getMessage());
+    for (int i = 0; i < numInserts; i++) {
+      al.add(ValueObjectFactory.createValueObject(numInserts+i, className));
     }
 
-    // try the where on the delete, should delete 0
     try {
-      long deleted = cpoAdapter.deleteObject(valObj);
+      long inserts = cpoAdapter.insertObjects(al);
+      assertEquals(inserts, numInserts,"inserts performed do not equal inserts requested: ");
+    } catch (CpoException ce) {
+      logger.debug("Received a CpoException:" + ExceptionHelper.getLocalizedMessage(ce));
     } catch (Exception e) {
       logger.error(ExceptionHelper.getLocalizedMessage(e));
-      fail(method + e.getMessage());
+      fail(method + ":Received an Exception instead of a CpoException: " + ExceptionHelper.getLocalizedMessage(e));
+    } catch (Throwable t) {
+      logger.error(ExceptionHelper.getLocalizedMessage(t));
+      fail(method + ":Received a Throwable instead of a CpoException: " + ExceptionHelper.getLocalizedMessage(t));
     }
+
   }
 
   @AfterClass
@@ -99,8 +102,9 @@ public class DeleteObjectTest extends CassandraContainerBase {
     String method = "tearDown:";
     try {
       cpoAdapter.deleteObjects(al);
+
     } catch (Exception e) {
-      logger.error(ExceptionHelper.getLocalizedMessage(e));
+            logger.error(ExceptionHelper.getLocalizedMessage(e));
       fail(method + e.getMessage());
     }
     cpoAdapter = null;

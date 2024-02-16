@@ -20,6 +20,8 @@
  */
 package org.synchronoss.cpo.jdbc;
 
+import org.synchronoss.cpo.jdbc.ValueObjectBean;
+
 /**
  * ChildValueObject is a class used to test the inheritance support of cpo
  *

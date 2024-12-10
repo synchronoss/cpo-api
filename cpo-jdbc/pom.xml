@@ -38,10 +38,10 @@
   </description>
   <properties>
     <oracleVersion>19.3.0.0</oracleVersion>
-    <mysqlVersion>8.0.28</mysqlVersion>
-    <mariadbVersion>2.6.0</mariadbVersion>
+    <mysqlVersion>8.0.33</mysqlVersion>
+    <mariadbVersion>3.4.1</mariadbVersion>
     <h2Version>1.4.200</h2Version>
-    <postgresVersion>42.4.4</postgresVersion>
+    <postgresVersion>42.7.3</postgresVersion>
   </properties>
   <build>
     <pluginManagement>

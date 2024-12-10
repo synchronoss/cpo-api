@@ -38,10 +38,10 @@
   </description>
   <properties>
     <oracleVersion>19.3.0.0</oracleVersion>
-    <mysqlVersion>8.0.33</mysqlVersion>
-    <mariadbVersion>3.4.1</mariadbVersion>
+    <mysqlVersion>9.1.0</mysqlVersion>
+    <mariadbVersion>3.5.1</mariadbVersion>
     <h2Version>1.4.200</h2Version>
-    <postgresVersion>42.7.3</postgresVersion>
+    <postgresVersion>42.7.4</postgresVersion>
   </properties>
   <build>
     <pluginManagement>
@@ -62,8 +62,8 @@
               <version>${postgresVersion}</version>
             </dependency>
             <dependency>
-              <groupId>mysql</groupId>
-              <artifactId>mysql-connector-java</artifactId>
+              <groupId>com.mysql</groupId>
+              <artifactId>mysql-connector-j</artifactId>
               <version>${mysqlVersion}</version>
             </dependency>
             <dependency>
@@ -202,8 +202,8 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>mysql</groupId>
-      <artifactId>mysql-connector-java</artifactId>
+      <groupId>com.mysql</groupId>
+      <artifactId>mysql-connector-j</artifactId>
       <version>${mysqlVersion}</version>
       <scope>test</scope>
     </dependency>

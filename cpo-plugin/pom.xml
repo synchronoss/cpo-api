@@ -36,7 +36,7 @@
   </parent>
   <description>CPO Maven Plugin</description>
   <properties>
-    <maven.version>3.8.1</maven.version>
+    <maven.version>3.9.1</maven.version>
   </properties>
   <dependencies>
     <dependency>
@@ -98,7 +98,7 @@
     <dependency>
       <groupId>org.codehaus.plexus</groupId>
       <artifactId>plexus-utils</artifactId>
-      <version>${maven.version}</version>
+      <version>4.0.1</version>
       <scope>provided</scope>
     </dependency>
     <dependency>

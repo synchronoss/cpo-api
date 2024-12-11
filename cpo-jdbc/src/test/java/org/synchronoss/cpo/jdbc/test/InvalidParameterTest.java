@@ -30,7 +30,7 @@ import org.synchronoss.cpo.jdbc.*;
 import org.testng.annotations.*;
 import static org.testng.Assert.*;
 
-public class InvalidParameterTest extends JdbcDbContainerBase {
+public class InvalidParameterTest {
 
   private static final Logger logger = LoggerFactory.getLogger(InvalidParameterTest.class);
   private CpoAdapter cpoAdapter = null;

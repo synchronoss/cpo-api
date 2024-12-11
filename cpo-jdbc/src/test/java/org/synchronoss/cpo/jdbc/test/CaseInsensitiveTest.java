@@ -34,7 +34,7 @@ import static org.testng.Assert.*;
  *
  * @author david berry
  */
-public class CaseInsensitiveTest extends JdbcDbContainerBase {
+public class CaseInsensitiveTest {
 
   private ArrayList<CaseValueObject> al = new ArrayList<>();
   private CpoAdapter cpoAdapter = null;

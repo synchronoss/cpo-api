@@ -34,7 +34,7 @@ import static org.testng.Assert.*;
  *
  * @author david berry
  */
-public class BlobTest extends JdbcDbContainerBase {
+public class BlobTest {
 
   private static final Logger logger = LoggerFactory.getLogger(BlobTest.class);
   private JdbcCpoMetaDescriptor metaDescriptor = null;

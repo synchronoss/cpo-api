@@ -37,7 +37,7 @@ import java.util.List;
  *
  * @author david berry
  */
-public class ConstructorTest extends JdbcDbContainerBase {
+public class ConstructorTest {
   private static final Logger logger = LoggerFactory.getLogger(ConstructorTest.class);
   private static final String PASSWORDSTRING = "password=";
   private final String className = this.getClass().getSimpleName();

@@ -35,7 +35,7 @@ import static org.testng.Assert.*;
  *
  * @author david berry
  */
-public class ExecuteTest extends JdbcDbContainerBase {
+public class ExecuteTest {
 
   private static final Logger logger = LoggerFactory.getLogger(ExecuteTest.class);
   private CpoAdapter cpoAdapter = null;

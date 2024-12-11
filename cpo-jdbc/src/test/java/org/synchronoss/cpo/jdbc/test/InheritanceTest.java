@@ -35,7 +35,7 @@ import static org.testng.Assert.*;
  *
  * @author david berry
  */
-public class InheritanceTest extends JdbcDbContainerBase {
+public class InheritanceTest {
 
   private ArrayList<ChildValueObject> al = new ArrayList<>();
   private CpoAdapter cpoAdapter = null;

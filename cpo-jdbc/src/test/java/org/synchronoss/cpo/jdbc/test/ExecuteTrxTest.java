@@ -35,7 +35,7 @@ import static org.testng.Assert.*;
  *
  * @author david berry
  */
-public class ExecuteTrxTest extends JdbcDbContainerBase {
+public class ExecuteTrxTest {
 
   private static final Logger logger = LoggerFactory.getLogger(ExecuteTrxTest.class);
 //  private CpoAdapter cpoAdapter = null;

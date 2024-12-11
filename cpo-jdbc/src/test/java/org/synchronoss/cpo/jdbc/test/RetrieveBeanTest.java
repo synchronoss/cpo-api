@@ -37,7 +37,7 @@ import static org.testng.Assert.*;
  *
  * @author david berry
  */
-public class RetrieveBeanTest extends JdbcDbContainerBase {
+public class RetrieveBeanTest {
 
   private static final Logger logger = LoggerFactory.getLogger(RetrieveBeanTest.class);
   private CpoAdapter cpoAdapter = null;

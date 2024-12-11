@@ -35,7 +35,7 @@ import static org.testng.Assert.*;
  *
  * @author david berry
  */
-public class RollbackTest extends JdbcDbContainerBase {
+public class RollbackTest {
 
   private CpoAdapter cpoAdapter = null;
   private final String className = this.getClass().getSimpleName();

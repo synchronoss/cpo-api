@@ -37,7 +37,7 @@ import static org.testng.Assert.*;
  *
  * @author david berry
  */
-public class SelectForUpdateTest extends JdbcDbContainerBase {
+public class SelectForUpdateTest {
 
   private static final Logger logger = LoggerFactory.getLogger(SelectForUpdateTest.class);
   private CpoAdapter cpoAdapter = null;

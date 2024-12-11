@@ -35,7 +35,7 @@ import static org.testng.Assert.*;
  *
  * @author david berry
  */
-public class BlobTrxTest extends JdbcDbContainerBase {
+public class BlobTrxTest {
 
   private static final Logger logger = LoggerFactory.getLogger(BlobTrxTest.class);
   private static int BLOB_SIZE = 64999;

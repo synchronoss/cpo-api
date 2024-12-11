@@ -38,7 +38,7 @@ import static org.testng.Assert.*;
  *
  * @author david berry
  */
-public class ExistObjectTest extends JdbcDbContainerBase {
+public class ExistObjectTest {
 
   private static final Logger logger = LoggerFactory.getLogger(ExistObjectTest.class);
   private CpoAdapter cpoAdapter = null;

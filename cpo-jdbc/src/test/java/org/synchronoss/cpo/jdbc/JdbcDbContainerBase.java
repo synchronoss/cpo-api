@@ -38,30 +38,37 @@ public abstract class JdbcDbContainerBase {
   private static String dbUser;
   private static String dbPswd;
   private static String dbName;
+  private static int dbPort;
   private static String initScript;
-  private static Logger logger;
+  private static Logger logger= LoggerFactory.getLogger(JdbcDbContainerBase.class);;
   private static TcpProxy proxy=null;
 
-  public static JdbcDatabaseContainer jdbcContainer;
+  public static JdbcDatabaseContainer<?> jdbcContainer;
 
   static {
+    logger.debug("In static initialization");
     dbType = JdbcTestProperty.getProperty(JdbcTestProperty.PROP_DB_TYPE);
     dbUser = JdbcTestProperty.getProperty(JdbcTestProperty.PROP_DB_USER);
     dbPswd = JdbcTestProperty.getProperty(JdbcTestProperty.PROP_DB_PSWD);
     dbName = JdbcTestProperty.getProperty(JdbcTestProperty.PROP_DB_NAME);
+    dbPort = Integer.valueOf(JdbcTestProperty.getProperty(JdbcTestProperty.PROP_DB_PORT));
     initScript = JdbcTestProperty.getProperty(JdbcTestProperty.PROP_INIT_SCRIPT);
     logger = LoggerFactory.getLogger(JdbcDatabaseContainer.class);
-    jdbcContainer = createJdbcContainer(dbType, initScript, dbUser, dbPswd, dbName);
-    if (jdbcContainer!=null)
+    jdbcContainer = createJdbcContainer(dbType, initScript, dbUser, dbPswd, dbName, dbPort);
+    if (jdbcContainer!=null) {
       jdbcContainer.start();
+      logger.debug("Container started");
+    } else {
+      logger.debug("Container not started");
+    }
   }
 
-  private static JdbcDatabaseContainer createJdbcContainer(String dbType, String initScript, String dbUser, String dbPswd, String dbName) {
+  private static JdbcDatabaseContainer<?> createJdbcContainer(String dbType, String initScript, String dbUser, String dbPswd, String dbName, int dbPort) {
     logger.debug("Creating a container for:"+dbType);
     switch (dbType) {
-      case MYSQL: return new MySQLContainer().withInitScript(initScript).withUsername(dbUser).withPassword(dbPswd).withDatabaseName(dbName);
-      case MARIADB: return new MariaDBContainer().withInitScript(initScript).withUsername(dbUser).withPassword(dbPswd).withDatabaseName(dbName);
-      case POSTGRES: return new PostgreSQLContainer().withInitScript(initScript).withUsername(dbUser).withPassword(dbPswd).withDatabaseName(dbName);
+      case MYSQL: return new MySQLContainer<>().withInitScript(initScript).withUsername(dbUser).withPassword(dbPswd).withDatabaseName(dbName).withExposedPorts(dbPort);
+      case MARIADB: return new MariaDBContainer<>().withInitScript(initScript).withUsername(dbUser).withPassword(dbPswd).withDatabaseName(dbName).withExposedPorts(dbPort);
+      case POSTGRES: return new PostgreSQLContainer<>().withInitScript(initScript).withUsername(dbUser).withPassword(dbPswd).withDatabaseName(dbName).withExposedPorts(dbPort);
       default: logger.debug("No Container to start, unknown dbType:"+dbType);
     }
     return null;

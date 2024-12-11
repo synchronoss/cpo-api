@@ -37,7 +37,7 @@ import static org.testng.Assert.*;
  *
  * @author david berry
  */
-public class CriteriaObjectTest extends JdbcDbContainerBase {
+public class CriteriaObjectTest {
 
   private static final Logger logger = LoggerFactory.getLogger(CriteriaObjectTest.class);
   private CpoAdapter cpoAdapter = null;

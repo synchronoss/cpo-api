@@ -72,6 +72,12 @@
       <cpoj:dbColumn>id</cpoj:dbColumn>
     </cpoAttribute>
     <cpoAttribute xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xsi:type="cpoj:ctJdbcAttribute">
+      <javaName>name</javaName>
+      <javaType>java.lang.String</javaType>
+      <dataName>NAME</dataName>
+      <dataType>VARCHAR</dataType>
+    </cpoAttribute>
+    <cpoAttribute xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xsi:type="cpoj:ctJdbcAttribute">
       <javaName>attrDouble</javaName>
       <javaType>double</javaType>
       <dataName>ATTR_double</dataName>

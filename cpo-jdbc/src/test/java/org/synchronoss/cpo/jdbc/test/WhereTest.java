@@ -36,7 +36,7 @@ import static org.testng.Assert.*;
  *
  * @author david berry
  */
-public class WhereTest extends JdbcDbContainerBase {
+public class WhereTest {
 
   private CpoAdapter cpoAdapter = null;
   private ArrayList<ValueObject> al = new ArrayList<>();

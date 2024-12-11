@@ -36,7 +36,7 @@ import static org.testng.Assert.*;
  *
  * @author david berry
  */
-public class DeleteObjectTest extends JdbcDbContainerBase {
+public class DeleteObjectTest {
 
   private static final Logger logger = LoggerFactory.getLogger(DeleteObjectTest.class);
   private ArrayList<ValueObject> al = new ArrayList<>();

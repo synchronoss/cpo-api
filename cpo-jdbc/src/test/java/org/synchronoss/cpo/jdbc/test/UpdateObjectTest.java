@@ -34,7 +34,7 @@ import static org.testng.Assert.*;
  *
  * @author david berry
  */
-public class UpdateObjectTest extends JdbcDbContainerBase {
+public class UpdateObjectTest {
 
   private ArrayList<ValueObject> al = new ArrayList<>();
   private CpoAdapter cpoAdapter = null;

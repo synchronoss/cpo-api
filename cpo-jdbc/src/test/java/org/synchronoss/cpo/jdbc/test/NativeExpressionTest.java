@@ -38,7 +38,7 @@ import static org.testng.Assert.*;
  *
  * @author david berry
  */
-public class NativeExpressionTest extends JdbcDbContainerBase {
+public class NativeExpressionTest {
 
   private CpoAdapter cpoAdapter = null;
   private ArrayList<ValueObject> al = new ArrayList<>();

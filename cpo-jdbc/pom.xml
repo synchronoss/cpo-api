@@ -40,7 +40,7 @@
     <oracleVersion>19.3.0.0</oracleVersion>
     <mysqlVersion>9.1.0</mysqlVersion>
     <mariadbVersion>3.5.1</mariadbVersion>
-    <h2Version>1.4.200</h2Version>
+    <h2Version>2.2.224</h2Version>
     <postgresVersion>42.7.4</postgresVersion>
   </properties>
   <build>
@@ -49,7 +49,7 @@
         <plugin>
           <groupId>org.codehaus.mojo</groupId>
           <artifactId>sql-maven-plugin</artifactId>
-          <version>1.5</version>
+          <version>3.0.0</version>
           <dependencies>
             <dependency>
               <groupId>com.oracle.ojdbc</groupId>
@@ -115,7 +115,7 @@
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>sql-maven-plugin</artifactId>
-        <version>1.5</version>
+        <version>3.0.0</version>
         <executions>
           <execution>
             <id>create-data</id>

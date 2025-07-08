@@ -23,7 +23,6 @@ package org.synchronoss.cpo.jdbc.test;
 import org.slf4j.*;
 import org.synchronoss.cpo.*;
 import org.synchronoss.cpo.helper.ExceptionHelper;
-import org.synchronoss.cpo.jdbc.JdbcDbContainerBase;
 import org.synchronoss.cpo.jdbc.JdbcStatics;
 import org.synchronoss.cpo.jdbc.ValueObject;
 import org.synchronoss.cpo.jdbc.ValueObjectFactory;

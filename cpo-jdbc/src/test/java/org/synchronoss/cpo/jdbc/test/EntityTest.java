@@ -23,7 +23,6 @@ package org.synchronoss.cpo.jdbc.test;
 import org.slf4j.*;
 import org.synchronoss.cpo.*;
 import org.synchronoss.cpo.jdbc.JdbcCpoAttribute;
-import org.synchronoss.cpo.jdbc.JdbcDbContainerBase;
 import org.synchronoss.cpo.jdbc.JdbcStatics;
 import org.synchronoss.cpo.meta.domain.CpoAttribute;
 

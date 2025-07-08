@@ -26,7 +26,6 @@ import org.synchronoss.cpo.CpoAdapter;
 import org.synchronoss.cpo.CpoAdapterFactoryManager;
 import org.synchronoss.cpo.CpoNativeFunction;
 import org.synchronoss.cpo.CpoWhere;
-import org.synchronoss.cpo.jdbc.JdbcDbContainerBase;
 import org.synchronoss.cpo.jdbc.JdbcStatics;
 import org.synchronoss.cpo.jdbc.ValueObject;
 import org.synchronoss.cpo.jdbc.ValueObjectFactory;

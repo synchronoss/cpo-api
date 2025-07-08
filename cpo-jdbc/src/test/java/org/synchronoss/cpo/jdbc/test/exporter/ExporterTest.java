@@ -40,7 +40,7 @@ import static org.testng.Assert.*;
  *
  * @author Michael Bellomo
  */
-public class ExporterTest extends JdbcDbContainerBase {
+public class ExporterTest {
 
   private static final Logger logger = LoggerFactory.getLogger(ExporterTest.class);
 

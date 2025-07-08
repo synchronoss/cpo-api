@@ -25,7 +25,6 @@ import org.synchronoss.cpo.*;
 
 import java.util.*;
 
-import org.synchronoss.cpo.jdbc.JdbcDbContainerBase;
 import org.synchronoss.cpo.jdbc.JdbcStatics;
 import org.synchronoss.cpo.jdbc.ValueObject;
 import org.synchronoss.cpo.jdbc.ValueObjectFactory;

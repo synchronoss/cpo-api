@@ -24,7 +24,6 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Collection;
 import org.synchronoss.cpo.*;
-import org.synchronoss.cpo.jdbc.JdbcDbContainerBase;
 import org.synchronoss.cpo.jdbc.JdbcStatics;
 import org.synchronoss.cpo.jdbc.ValueObject;
 import org.synchronoss.cpo.jdbc.ValueObjectFactory;

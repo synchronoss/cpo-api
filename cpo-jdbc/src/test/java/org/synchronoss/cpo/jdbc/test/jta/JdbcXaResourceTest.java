@@ -43,7 +43,7 @@ import static org.testng.Assert.*;
 /**
  * Created by dberry on 12/8/15.
  */
-public class JdbcXaResourceTest extends JdbcDbContainerBase {
+public class JdbcXaResourceTest {
   private static final Logger logger = LoggerFactory.getLogger(ExecuteTrxTest.class);
   private CpoAdapter cpoAdapter = null;
   private JdbcCpoXaAdapter cpoXaAdapter1 = null;

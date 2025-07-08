@@ -57,12 +57,7 @@
         <artifactId>maven-surefire-plugin</artifactId>
         <configuration>
           <suiteXmlFiles>
-            <suiteXmlFile>src/test/resources/testng.xml</suiteXmlFile>
-<!--            <suiteXmlFile>src/test/resources/h2/testng.xml</suiteXmlFile>-->
-            <suiteXmlFile>src/test/resources/mariadb/testng.xml</suiteXmlFile>
-<!--            <suiteXmlFile>src/test/resources/mysql/testng.xml</suiteXmlFile>-->
-<!--            <suiteXmlFile>src/test/resources/oracle/testng.xml</suiteXmlFile>-->
-<!--            <suiteXmlFile>src/test/resources/postgres/testng.xml</suiteXmlFile>-->
+            <suiteXmlFile>testng.xml</suiteXmlFile>
           </suiteXmlFiles>
         </configuration>
       </plugin>
@@ -70,60 +65,60 @@
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>xmlbeans-maven-plugin</artifactId>
       </plugin>
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>sql-maven-plugin</artifactId>
-        <version>1.5</version>
-        <dependencies>
-          <dependency>
-            <groupId>com.oracle.ojdbc</groupId>
-            <artifactId>ojdbc8</artifactId>
-            <version>${oracleVersion}</version>
-          </dependency>
-          <dependency>
-            <groupId>org.postgresql</groupId>
-            <artifactId>postgresql</artifactId>
-            <version>${postgresVersion}</version>
-          </dependency>
-          <dependency>
-            <groupId>com.mysql</groupId>
-            <artifactId>mysql-connector-j</artifactId>
-            <version>${mysqlVersion}</version>
-          </dependency>
-          <dependency>
-            <groupId>org.mariadb.jdbc</groupId>
-            <artifactId>mariadb-java-client</artifactId>
-            <version>${mariadbVersion}</version>
-          </dependency>
-          <dependency>
-            <groupId>com.h2database</groupId>
-            <artifactId>h2</artifactId>
-            <version>${h2Version}</version>
-          </dependency>
-        </dependencies>
-        <executions>
-          <execution>
-            <id>create-data</id>
-            <phase>process-test-resources</phase>
-            <goals>
-              <goal>execute</goal>
-            </goals>
-            <configuration>
-              <username>${cpo.db.user}</username>
-              <password>${cpo.db.pswd}</password>
-              <driver>${cpo.db.driver}</driver>
-              <url>${cpo.db.url}</url>
-              <autocommit>true</autocommit>
-              <delimiter>;</delimiter>
-              <skip>${cpo.skip.sql.plugin}</skip>
-              <onError>continue</onError>
-              <srcFiles>
-                <srcFile>${cpo.test.sqldir}/initDB.sql</srcFile>
-              </srcFiles>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
+<!--      <plugin>-->
+<!--        <groupId>org.codehaus.mojo</groupId>-->
+<!--        <artifactId>sql-maven-plugin</artifactId>-->
+<!--        <version>1.5</version>-->
+<!--        <dependencies>-->
+<!--          <dependency>-->
+<!--            <groupId>com.oracle.ojdbc</groupId>-->
+<!--            <artifactId>ojdbc8</artifactId>-->
+<!--            <version>${oracleVersion}</version>-->
+<!--          </dependency>-->
+<!--          <dependency>-->
+<!--            <groupId>org.postgresql</groupId>-->
+<!--            <artifactId>postgresql</artifactId>-->
+<!--            <version>${postgresVersion}</version>-->
+<!--          </dependency>-->
+<!--          <dependency>-->
+<!--            <groupId>com.mysql</groupId>-->
+<!--            <artifactId>mysql-connector-j</artifactId>-->
+<!--            <version>${mysqlVersion}</version>-->
+<!--          </dependency>-->
+<!--          <dependency>-->
+<!--            <groupId>org.mariadb.jdbc</groupId>-->
+<!--            <artifactId>mariadb-java-client</artifactId>-->
+<!--            <version>${mariadbVersion}</version>-->
+<!--          </dependency>-->
+<!--          <dependency>-->
+<!--            <groupId>com.h2database</groupId>-->
+<!--            <artifactId>h2</artifactId>-->
+<!--            <version>${h2Version}</version>-->
+<!--          </dependency>-->
+<!--        </dependencies>-->
+<!--        <executions>-->
+<!--          <execution>-->
+<!--            <id>create-data</id>-->
+<!--            <phase>process-test-resources</phase>-->
+<!--            <goals>-->
+<!--              <goal>execute</goal>-->
+<!--            </goals>-->
+<!--            <configuration>-->
+<!--              <username>${cpo.db.user}</username>-->
+<!--              <password>${cpo.db.pswd}</password>-->
+<!--              <driver>${cpo.db.driver}</driver>-->
+<!--              <url>${cpo.db.url}</url>-->
+<!--              <autocommit>true</autocommit>-->
+<!--              <delimiter>;</delimiter>-->
+<!--              <skip>${cpo.skip.sql.plugin}</skip>-->
+<!--              <onError>continue</onError>-->
+<!--              <srcFiles>-->
+<!--                <srcFile>${cpo.test.sqldir}/initDB.sql</srcFile>-->
+<!--              </srcFiles>-->
+<!--            </configuration>-->
+<!--          </execution>-->
+<!--        </executions>-->
+<!--      </plugin>-->
       <plugin>
         <groupId>org.synchronoss.cpo</groupId>
         <artifactId>cpo-plugin</artifactId>

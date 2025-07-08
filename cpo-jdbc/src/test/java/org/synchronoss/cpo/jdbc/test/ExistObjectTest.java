@@ -26,7 +26,6 @@ import org.synchronoss.cpo.helper.ExceptionHelper;
 
 import java.util.ArrayList;
 
-import org.synchronoss.cpo.jdbc.JdbcDbContainerBase;
 import org.synchronoss.cpo.jdbc.JdbcStatics;
 import org.synchronoss.cpo.jdbc.ValueObject;
 import org.synchronoss.cpo.jdbc.ValueObjectFactory;

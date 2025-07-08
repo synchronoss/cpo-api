@@ -20,50 +20,50 @@
  */
 package org.synchronoss.cpo.jdbc;
 
-import com.github.terma.javaniotcpproxy.TcpProxy;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.testcontainers.containers.JdbcDatabaseContainer;
 import org.testcontainers.containers.MariaDBContainer;
 import org.testcontainers.containers.MySQLContainer;
 import org.testcontainers.containers.PostgreSQLContainer;
+import org.testng.ISuite;
+import org.testng.ISuiteListener;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-public abstract class JdbcDbContainerBase {
+public class JdbcSuiteListener implements ISuiteListener {
   private static final String MYSQL = "mysql";
   private static final String MARIADB = "mariadb";
   private static final String POSTGRES = "postgres";
-  private static final String ORACLE_XE = "oracle-xe";
+  public static final String PROP_INIT_SCRIPT = "cpo.db.initScript";
+  public static final String PROP_DB_TYPE = "cpo.db";
+  public static final String PROP_DB_PORT = "cpo.db.port";
+  public static final String PROP_DB_USER = "cpo.db.user";
+  public static final String PROP_DB_PSWD = "cpo.db.pswd";
+  public static final String PROP_DB_NAME = "cpo.db.database";
 
-  private static String dbType;
-  private static String dbUser;
-  private static String dbPswd;
-  private static String dbName;
-  private static int dbPort;
-  private static String initScript;
-  private static Logger logger= LoggerFactory.getLogger(JdbcDbContainerBase.class);;
-  private static TcpProxy proxy=null;
+  private Logger logger = LoggerFactory.getLogger(JdbcSuiteListener.class);
+  private JdbcDatabaseContainer<?> jdbcContainer=null;
 
-  public static JdbcDatabaseContainer<?> jdbcContainer;
-
-  static {
-    logger.debug("In static initialization");
-    dbType = JdbcTestProperty.getProperty(JdbcTestProperty.PROP_DB_TYPE);
-    dbUser = JdbcTestProperty.getProperty(JdbcTestProperty.PROP_DB_USER);
-    dbPswd = JdbcTestProperty.getProperty(JdbcTestProperty.PROP_DB_PSWD);
-    dbName = JdbcTestProperty.getProperty(JdbcTestProperty.PROP_DB_NAME);
-    dbPort = Integer.valueOf(JdbcTestProperty.getProperty(JdbcTestProperty.PROP_DB_PORT));
-    initScript = JdbcTestProperty.getProperty(JdbcTestProperty.PROP_INIT_SCRIPT);
-    logger = LoggerFactory.getLogger(JdbcDatabaseContainer.class);
-    jdbcContainer = createJdbcContainer(dbType, initScript, dbUser, dbPswd, dbName, dbPort);
-    if (jdbcContainer!=null) {
+  @Override
+  public void onStart(ISuite suite) {
+    jdbcContainer = createJdbcContainer(
+            suite.getParameter(PROP_DB_TYPE),
+            suite.getParameter(PROP_INIT_SCRIPT),
+            suite.getParameter(PROP_DB_USER),
+            suite.getParameter(PROP_DB_PSWD),
+            suite.getParameter(PROP_DB_NAME),
+            Integer.parseInt(suite.getParameter(PROP_DB_PORT)));
+    if (jdbcContainer!=null)
       jdbcContainer.start();
-      logger.debug("Container started");
-    } else {
-      logger.debug("Container not started");
-    }
+    logger.debug("onStart");
   }
 
-  private static JdbcDatabaseContainer<?> createJdbcContainer(String dbType, String initScript, String dbUser, String dbPswd, String dbName, int dbPort) {
+  @Override
+  public void onFinish(ISuite suite) {
+    jdbcContainer.close();
+    logger.debug("onFinish");
+  }
+
+  private JdbcDatabaseContainer<?> createJdbcContainer(String dbType, String initScript, String dbUser, String dbPswd, String dbName, int dbPort) {
     logger.debug("Creating a container for:"+dbType);
     switch (dbType) {
       case MYSQL: return new MySQLContainer<>().withInitScript(initScript).withUsername(dbUser).withPassword(dbPswd).withDatabaseName(dbName).withExposedPorts(dbPort);
@@ -74,3 +74,4 @@ public abstract class JdbcDbContainerBase {
     return null;
   }
 }
+

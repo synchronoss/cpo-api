@@ -24,7 +24,6 @@
 <suite name="MariaDB" verbose="1">
   <test name="MariaDB JDBC Tests">
     <packages>
-      <package name="org.synchronoss.cpo.jdbc.db.maria.*" />
       <package name="org.synchronoss.cpo.jdbc.test.*" />
     </packages>
   </test>

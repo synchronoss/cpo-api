@@ -46,4 +46,4 @@ jobs:
           distribution: 'corretto'
       - name: Build and test
         id: build
-        run: ./testAllDbs.sh
+        run: ./testAllDBs.sh

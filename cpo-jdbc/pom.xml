@@ -37,11 +37,11 @@
     produces POJOs
   </description>
   <properties>
-    <oracleVersion>19.3.0.0</oracleVersion>
-    <mysqlVersion>9.1.0</mysqlVersion>
-    <mariadbVersion>3.5.1</mariadbVersion>
+    <oracleVersion>23.8.0.25.04</oracleVersion>
+    <mysqlVersion>9.3.0</mysqlVersion>
+    <mariadbVersion>3.4.2</mariadbVersion>
     <h2Version>2.2.224</h2Version>
-    <postgresVersion>42.7.4</postgresVersion>
+    <postgresVersion>42.7.7</postgresVersion>
   </properties>
   <build>
     <pluginManagement>
@@ -52,7 +52,7 @@
           <version>3.0.0</version>
           <dependencies>
             <dependency>
-              <groupId>com.oracle.ojdbc</groupId>
+              <groupId>com.oracle.database.jdbc</groupId>
               <artifactId>ojdbc8</artifactId>
               <version>${oracleVersion}</version>
             </dependency>
@@ -182,7 +182,7 @@
 
     <!-- Oracle is provided because of the oracle transforms -->
     <dependency>
-      <groupId>com.oracle.ojdbc</groupId>
+      <groupId>com.oracle.database.jdbc</groupId>
       <artifactId>ojdbc8</artifactId>
       <version>${oracleVersion}</version>
       <scope>provided</scope>
@@ -472,7 +472,7 @@
         <cpo.db.user>sa</cpo.db.user>
         <cpo.db.pswd />
         <cpo.db.host />
-        <cpo.db.port />
+        <cpo.db.port>0</cpo.db.port>
         <cpo.db.database>${basedir}/target/h2/cpo</cpo.db.database>
         <cpo.db.url>jdbc:h2:file:${cpo.db.database}</cpo.db.url>
         <cpo.db.userurl>jdbc:h2:file:${cpo.db.database};user=${cpo.db.user};password=${cpo.db.pswd}</cpo.db.userurl>

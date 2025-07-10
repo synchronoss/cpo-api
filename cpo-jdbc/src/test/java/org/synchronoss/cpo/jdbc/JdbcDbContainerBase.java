@@ -20,13 +20,17 @@
  */
 package org.synchronoss.cpo.jdbc;
 
+import com.github.terma.javaniotcpproxy.StaticTcpProxyConfig;
 import com.github.terma.javaniotcpproxy.TcpProxy;
+import com.github.terma.javaniotcpproxy.TcpProxyConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testcontainers.containers.JdbcDatabaseContainer;
 import org.testcontainers.containers.MariaDBContainer;
 import org.testcontainers.containers.MySQLContainer;
 import org.testcontainers.containers.PostgreSQLContainer;
+import org.testcontainers.utility.DockerImageName;
+import org.testcontainers.utility.MountableFile;
 
 public abstract class JdbcDbContainerBase {
   private static final String MYSQL = "mysql";
@@ -34,36 +38,65 @@ public abstract class JdbcDbContainerBase {
   private static final String POSTGRES = "postgres";
   private static final String ORACLE_XE = "oracle-xe";
 
-  private static String dbType;
-  private static String dbUser;
-  private static String dbPswd;
-  private static String dbName;
-  private static String initScript;
-  private static Logger logger;
-  private static TcpProxy proxy=null;
+  private static final Logger logger;
 
-  public static JdbcDatabaseContainer jdbcContainer;
+  private static final TcpProxy proxy;
+  private static final JdbcDatabaseContainer jdbcContainer;
 
   static {
-    dbType = JdbcJUnitProperty.getProperty(JdbcJUnitProperty.PROP_DB_TYPE);
-    dbUser = JdbcJUnitProperty.getProperty(JdbcJUnitProperty.PROP_DB_USER);
-    dbPswd = JdbcJUnitProperty.getProperty(JdbcJUnitProperty.PROP_DB_PSWD);
-    dbName = JdbcJUnitProperty.getProperty(JdbcJUnitProperty.PROP_DB_NAME);
-    initScript = JdbcJUnitProperty.getProperty(JdbcJUnitProperty.PROP_INIT_SCRIPT);
+    String dbType = JdbcJUnitProperty.getProperty(JdbcJUnitProperty.PROP_DB_TYPE);
+    String dbUser = JdbcJUnitProperty.getProperty(JdbcJUnitProperty.PROP_DB_USER);
+    String dbPswd = JdbcJUnitProperty.getProperty(JdbcJUnitProperty.PROP_DB_PSWD);
+    String dbName = JdbcJUnitProperty.getProperty(JdbcJUnitProperty.PROP_DB_NAME);
+    int dbPort = Integer.parseInt(JdbcJUnitProperty.getProperty(JdbcJUnitProperty.PROP_DB_PORT));
+
+    String initScript = JdbcJUnitProperty.getProperty(JdbcJUnitProperty.PROP_INIT_SCRIPT);
     logger = LoggerFactory.getLogger(JdbcDatabaseContainer.class);
     jdbcContainer = createJdbcContainer(dbType, initScript, dbUser, dbPswd, dbName);
-    if (jdbcContainer!=null)
+    if (jdbcContainer != null) {
       jdbcContainer.start();
+
+      // Now map the random port to something we can use in the config file
+      TcpProxyConfig config = new StaticTcpProxyConfig(dbPort, jdbcContainer.getHost(), jdbcContainer.getFirstMappedPort());
+      config.setWorkerCount(1);
+
+      // init proxy
+      proxy = new TcpProxy(config);
+
+      // start proxy
+      proxy.start();
+    } else {
+      proxy = null;
+    }
+
+
   }
 
   private static JdbcDatabaseContainer createJdbcContainer(String dbType, String initScript, String dbUser, String dbPswd, String dbName) {
-    logger.debug("Creating a container for:"+dbType);
+    logger.debug("Creating a container for:" + dbType);
     switch (dbType) {
-      case MYSQL: return new MySQLContainer().withInitScript(initScript).withUsername(dbUser).withPassword(dbPswd).withDatabaseName(dbName);
-      case MARIADB: return new MariaDBContainer().withInitScript(initScript).withUsername(dbUser).withPassword(dbPswd).withDatabaseName(dbName);
-      case POSTGRES: return new PostgreSQLContainer().withInitScript(initScript).withUsername(dbUser).withPassword(dbPswd).withDatabaseName(dbName);
-      default: logger.debug("No Container to start, unknown dbType:"+dbType);
+      case MYSQL:
+        return new MySQLContainer<>(DockerImageName.parse("mysql:latest"))
+                .withInitScript(initScript)
+                .withUsername(dbUser)
+                .withPassword(dbPswd)
+                .withDatabaseName(dbName);
+      case MARIADB:
+        return new MariaDBContainer<>(DockerImageName.parse("mariadb:latest"))
+                .withInitScript(initScript)
+                .withUsername(dbUser)
+                .withPassword(dbPswd)
+                .withDatabaseName(dbName);
+      case POSTGRES:
+        return new PostgreSQLContainer<>()
+                .withInitScript(initScript)
+                .withUsername(dbUser)
+                .withPassword(dbPswd)
+                .withDatabaseName(dbName);
+      default:
+        logger.debug("No Container to start, unknown dbType:" + dbType);
     }
     return null;
   }
+
 }

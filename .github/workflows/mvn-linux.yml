@@ -44,6 +44,15 @@ jobs:
         with:
           java-version: '8'
           distribution: 'corretto'
-      - name: Build and test
-        id: build
-        run: ./testAllDBs.sh
+      - name: Test H2
+        id: h2
+        run: mvn test
+      - name: Test MySQL
+        id: mysql
+        run: mvn -pl cpo-jdbc -am clean test -Dcpo.db=mysql
+      - name: Test MariaDB
+        id: mariadb
+        run: mvn -pl cpo-jdbc -am clean test -Dcpo.db=mariadb
+      - name: Test PostgreSql
+        id: postgres
+        run: mvn -pl cpo-jdbc -am clean test -Dcpo.db=postgres

@@ -25,10 +25,7 @@ import com.github.terma.javaniotcpproxy.TcpProxy;
 import com.github.terma.javaniotcpproxy.TcpProxyConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.testcontainers.containers.JdbcDatabaseContainer;
-import org.testcontainers.containers.MariaDBContainer;
-import org.testcontainers.containers.MySQLContainer;
-import org.testcontainers.containers.PostgreSQLContainer;
+import org.testcontainers.containers.*;
 import org.testcontainers.utility.DockerImageName;
 import org.testcontainers.utility.MountableFile;
 
@@ -93,6 +90,12 @@ public abstract class JdbcDbContainerBase {
                 .withUsername(dbUser)
                 .withPassword(dbPswd)
                 .withDatabaseName(dbName);
+        case ORACLE_XE:
+          return new OracleContainer(DockerImageName.parse("gvenzl/oracle-free:slim-faststart"))
+                  .withInitScript(initScript)
+                  .withUsername(dbUser)
+                  .withPassword(dbPswd)
+                  .withDatabaseName(dbName);
       default:
         logger.debug("No Container to start, unknown dbType:" + dbType);
     }

@@ -36,7 +36,7 @@ public class JdbcCpoMetaDescriptor extends CpoMetaDescriptor {
   }
 
   @Override
-  protected Class getMetaAdapterClass() throws CpoException {
+  protected Class<JdbcCpoMetaAdapter> getMetaAdapterClass() throws CpoException {
     return JdbcCpoMetaAdapter.class;
   }
 

@@ -113,31 +113,6 @@
         <artifactId>xmlbeans-maven-plugin</artifactId>
       </plugin>
       <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>sql-maven-plugin</artifactId>
-        <version>3.0.0</version>
-        <executions>
-          <execution>
-            <id>create-data</id>
-            <phase>process-test-resources</phase>
-            <goals>
-              <goal>execute</goal>
-            </goals>
-            <configuration>
-              <username>${cpo.db.user}</username>
-              <password>${cpo.db.pswd}</password>
-              <driver>${cpo.db.driver}</driver>
-              <url>${cpo.db.url}</url>
-              <skip>${cpo.skip.sql.plugin}</skip>
-              <onError>continue</onError>
-              <srcFiles>
-                <srcFile>${cpo.test.sqldir}/initDB.sql</srcFile>
-              </srcFiles>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
         <groupId>org.synchronoss.cpo</groupId>
         <artifactId>cpo-plugin</artifactId>
         <version>5.2.2-SNAPSHOT</version>
@@ -281,6 +256,12 @@
     <dependency>
       <groupId>org.testcontainers</groupId>
       <artifactId>oracle-xe</artifactId>
+      <version>${testContainersVersion}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.testcontainers</groupId>
+      <artifactId>oracle-free</artifactId>
       <version>${testContainersVersion}</version>
       <scope>test</scope>
     </dependency>
@@ -440,8 +421,8 @@
         <cpo.db.user>cpo</cpo.db.user>
         <cpo.db.pswd>cpo</cpo.db.pswd>
         <cpo.db.host>localhost</cpo.db.host>
-        <cpo.db.port>32118</cpo.db.port>
-        <cpo.db.database>XEPDB1</cpo.db.database>
+        <cpo.db.port>1521</cpo.db.port>
+        <cpo.db.database>cpo</cpo.db.database>
         <cpo.db.url>jdbc:oracle:thin:@${cpo.db.host}:${cpo.db.port}/${cpo.db.database}</cpo.db.url>
         <cpo.db.userurl>jdbc:oracle:thin:${cpo.db.user}/${cpo.db.pswd}@${cpo.db.host}:${cpo.db.port}/${cpo.db.database}</cpo.db.userurl>
         <cpo.db.driver>oracle.jdbc.OracleDriver</cpo.db.driver>
@@ -459,6 +440,35 @@
     </profile>
     <profile>
       <id>h2</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>sql-maven-plugin</artifactId>
+            <version>3.0.0</version>
+            <executions>
+              <execution>
+                <id>create-data</id>
+                <phase>process-test-resources</phase>
+                <goals>
+                  <goal>execute</goal>
+                </goals>
+                <configuration>
+                  <username>${cpo.db.user}</username>
+                  <password>${cpo.db.pswd}</password>
+                  <driver>${cpo.db.driver}</driver>
+                  <url>${cpo.db.url}</url>
+                  <skip>${cpo.skip.sql.plugin}</skip>
+                  <onError>continue</onError>
+                  <srcFiles>
+                    <srcFile>${cpo.test.sqldir}/initDB.sql</srcFile>
+                  </srcFiles>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
       <activation>
         <activeByDefault>false</activeByDefault>
         <property>

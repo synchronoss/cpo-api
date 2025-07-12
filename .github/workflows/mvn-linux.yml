@@ -46,4 +46,4 @@ jobs:
           distribution: 'corretto'
       - name: Build and test
         id: build
-        run: mvn test
+        run: ./testAllDBs.sh

@@ -79,7 +79,7 @@ public abstract class JdbcDbContainerBase {
                 .withPassword(dbPswd)
                 .withDatabaseName(dbName);
       case MARIADB:
-        return new MariaDBContainer<>(DockerImageName.parse("mariadb:10.11.13"))
+        return new MariaDBContainer<>(DockerImageName.parse("mariadb:10.6.22"))
                 .withInitScript(initScript)
                 .withUsername(dbUser)
                 .withPassword(dbPswd)

@@ -125,13 +125,13 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
   private void processDatabaseMetaData() throws CpoException {
     Connection c = null;
     try {
-      c = getWriteConnection();
+      c = getReadConnection();
       DatabaseMetaData dmd = c.getMetaData();
 
       // do all the tests here
       batchUpdatesSupported_ = dmd.supportsBatchUpdates();
 
-      this.closeLocalConnection(c);
+//      this.closeLocalConnection(c);
     } catch (Throwable t) {
       logger.error(ExceptionHelper.getLocalizedMessage(t), t);
       throw new CpoException("Could Not Retrieve Database Meta Data", t);
@@ -1224,7 +1224,7 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
       PreparedStatement ps = null;
       ResultSet rs = null;
       try {
-        c = getWriteConnection();
+        c = getReadConnection();
         ps = c.prepareStatement(expression);
         rs = ps.executeQuery();
         ResultSetMetaData rsmd = rs.getMetaData();

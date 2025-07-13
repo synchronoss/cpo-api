@@ -63,7 +63,8 @@ public class ExistObjectTest extends JdbcDbContainerBase {
     vo.setAttrVarChar("WHERE");
 
     try {
-      cpoAdapter.insertObject(vo);
+      long count = cpoAdapter.insertObject(vo);
+      assertEquals(1, count, "Should be inserted");
     } catch (Exception e) {
       logger.error(ExceptionHelper.getLocalizedMessage(e));
       fail(method + e.getMessage());
@@ -77,7 +78,7 @@ public class ExistObjectTest extends JdbcDbContainerBase {
     try {
       ValueObject valObj = ValueObjectFactory.createValueObject(1);
       long count = cpoAdapter.existsObject(valObj);
-      assertTrue(count == 1, "Object not Found");
+      assertEquals(1, count, "Object not Found");
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -85,7 +86,7 @@ public class ExistObjectTest extends JdbcDbContainerBase {
     try {
       ValueObject valObj = ValueObjectFactory.createValueObject(5);
       long count = cpoAdapter.existsObject(valObj);
-      assertTrue(count == 0, "Object Found");
+      assertEquals(0, count, "Object Found");
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -102,7 +103,7 @@ public class ExistObjectTest extends JdbcDbContainerBase {
       ArrayList<CpoWhere> wheres = new ArrayList<>();
       wheres.add(where);
       long count = cpoAdapter.existsObject(ValueObject.FG_EXIST_NULL, valObj, wheres);
-      assertTrue(count == 1, "Object not Found");
+      assertEquals(1, count, "Object not Found");
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -113,7 +114,7 @@ public class ExistObjectTest extends JdbcDbContainerBase {
       ArrayList<CpoWhere> wheres = new ArrayList<>();
       wheres.add(where);
       long count = cpoAdapter.existsObject(ValueObject.FG_EXIST_NULL, valObj, wheres);
-      assertTrue(count == 0, "Object Found");
+      assertEquals(0, count, "Object Found");
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -124,7 +125,8 @@ public class ExistObjectTest extends JdbcDbContainerBase {
   public void tearDown() {
     ValueObject vo = ValueObjectFactory.createValueObject(1);
     try {
-      cpoAdapter.deleteObject(vo);
+      long count = cpoAdapter.deleteObject(vo);
+      assertEquals(1, count, "Should be deleted");
     } catch (Exception e) {
       logger.error(ExceptionHelper.getLocalizedMessage(e));
     }

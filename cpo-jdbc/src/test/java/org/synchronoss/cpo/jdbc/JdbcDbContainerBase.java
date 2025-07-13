@@ -73,19 +73,19 @@ public abstract class JdbcDbContainerBase {
     logger.debug("Creating a container for:" + dbType);
     switch (dbType) {
       case MYSQL:
-        return new MySQLContainer<>(DockerImageName.parse("mysql:latest"))
+        return new MySQLContainer<>(DockerImageName.parse("mysql:8.4.5"))
                 .withInitScript(initScript)
                 .withUsername(dbUser)
                 .withPassword(dbPswd)
                 .withDatabaseName(dbName);
       case MARIADB:
-        return new MariaDBContainer<>(DockerImageName.parse("mariadb:latest"))
+        return new MariaDBContainer<>(DockerImageName.parse("mariadb:10.11.13"))
                 .withInitScript(initScript)
                 .withUsername(dbUser)
                 .withPassword(dbPswd)
                 .withDatabaseName(dbName);
       case POSTGRES:
-        return new PostgreSQLContainer<>()
+        return new PostgreSQLContainer<>(DockerImageName.parse("postgres:17.5"))
                 .withInitScript(initScript)
                 .withUsername(dbUser)
                 .withPassword(dbPswd)

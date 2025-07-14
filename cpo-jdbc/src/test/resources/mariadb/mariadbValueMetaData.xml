@@ -411,7 +411,7 @@
     </cpoFunctionGroup>
     <cpoFunctionGroup name="Select4UpdateNoWait" type="RETRIEVE">
       <cpoFunction name="ValueObject - SelectForUpdateNoWait">
-        <expression>select * from value_object where id = ? for update</expression>
+        <expression>select * from value_object where id = ? for update nowait</expression>
         <cpoArgument xsi:type="cpoj:ctJdbcArgument">
           <attributeName>id</attributeName>
           <cpoj:scope>IN</cpoj:scope>

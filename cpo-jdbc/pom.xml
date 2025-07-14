@@ -39,7 +39,7 @@
   <properties>
     <oracleVersion>23.8.0.25.04</oracleVersion>
     <mysqlVersion>9.3.0</mysqlVersion>
-    <mariadbVersion>3.4.2</mariadbVersion>
+    <mariadbVersion>3.5.4</mariadbVersion>
     <h2Version>2.2.224</h2Version>
     <postgresVersion>42.7.7</postgresVersion>
   </properties>
@@ -297,6 +297,7 @@
         <cpo.db.blobssupported>true</cpo.db.blobssupported>
         <cpo.db.callssupported>true</cpo.db.callssupported>
         <cpo.db.select4update>true</cpo.db.select4update>
+        <cpo.db.xasupported>true</cpo.db.xasupported>
         <cpo.db.millisupport>false</cpo.db.millisupport>
         <cpo.db.initScript>mysql/initDB.sql</cpo.db.initScript>
         <cpo.db.jndi>java:/comp/env/jdbc/cpodatasource</cpo.db.jndi>
@@ -329,11 +330,12 @@
          <cpo.db.driver>org.mariadb.jdbc.Driver</cpo.db.driver>
          <cpo.db.blobssupported>true</cpo.db.blobssupported>
          <cpo.db.callssupported>true</cpo.db.callssupported>
-         <cpo.db.select4update>true</cpo.db.select4update>
+         <cpo.db.select4update>false</cpo.db.select4update>
+         <cpo.db.xasupported>false</cpo.db.xasupported>
          <cpo.db.millisupport>false</cpo.db.millisupport>
          <cpo.db.initScript>mariadb/initDB.sql</cpo.db.initScript>
          <cpo.db.jndi>java:/comp/env/jdbc/cpodatasource</cpo.db.jndi>
-         <cpo.db.class>org.mariadb.jdbc.MariaDbDataSource</cpo.db.class>
+         <cpo.db.class>org.mariadb.jdbc.MariaDbPoolDataSource</cpo.db.class>
          <cpo.valueMeta.xml>/mariadb/mariadbValueMetaData.xml</cpo.valueMeta.xml>
          <cpo.valueCaseMeta.xml>/mariadb/mariadbValueCaseMetaData.xml</cpo.valueCaseMeta.xml>
          <cpo.lobMeta.xml>/mariadb/mariadbLobMetaData.xml</cpo.lobMeta.xml>
@@ -363,6 +365,7 @@
         <cpo.db.blobssupported>true</cpo.db.blobssupported>
         <cpo.db.callssupported>true</cpo.db.callssupported>
         <cpo.db.select4update>true</cpo.db.select4update>
+        <cpo.db.xasupported>true</cpo.db.xasupported>
         <cpo.db.millisupport>true</cpo.db.millisupport>
         <cpo.db.initScript>oracle/initDB.sql</cpo.db.initScript>
         <cpo.db.jndi>cpodatasource</cpo.db.jndi>
@@ -396,6 +399,7 @@
         <cpo.db.blobssupported>true</cpo.db.blobssupported>
         <cpo.db.callssupported>true</cpo.db.callssupported>
         <cpo.db.select4update>true</cpo.db.select4update>
+        <cpo.db.xasupported>true</cpo.db.xasupported>
         <cpo.db.millisupport>true</cpo.db.millisupport>
         <cpo.db.initScript>oracle/initDB.sql</cpo.db.initScript>
         <cpo.db.jndi>cpodatasource</cpo.db.jndi>
@@ -429,6 +433,7 @@
         <cpo.db.blobssupported>true</cpo.db.blobssupported>
         <cpo.db.callssupported>true</cpo.db.callssupported>
         <cpo.db.select4update>true</cpo.db.select4update>
+        <cpo.db.xasupported>true</cpo.db.xasupported>
         <cpo.db.millisupport>true</cpo.db.millisupport>
         <cpo.db.initScript>oracle/initDB.sql</cpo.db.initScript>
         <cpo.db.jndi>cpodatasource</cpo.db.jndi>
@@ -489,7 +494,8 @@
         <cpo.db.driver>org.h2.Driver</cpo.db.driver>
         <cpo.db.blobssupported>true</cpo.db.blobssupported>
         <cpo.db.callssupported>true</cpo.db.callssupported>
-        <cpo.db.select4update>false</cpo.db.select4update>
+        <cpo.db.select4update>true</cpo.db.select4update>
+        <cpo.db.xasupported>true</cpo.db.xasupported>
         <cpo.db.millisupport>true</cpo.db.millisupport>
         <cpo.db.initScript>h2/initDB.sql</cpo.db.initScript>
         <cpo.db.jndi>cpodatasource</cpo.db.jndi>
@@ -522,7 +528,8 @@
         <cpo.db.driver>org.postgresql.Driver</cpo.db.driver>
         <cpo.db.blobssupported>true</cpo.db.blobssupported>
         <cpo.db.callssupported>true</cpo.db.callssupported>
-        <cpo.db.select4update>false</cpo.db.select4update>
+        <cpo.db.select4update>true</cpo.db.select4update>
+        <cpo.db.xasupported>true</cpo.db.xasupported>
         <cpo.db.millisupport>true</cpo.db.millisupport>
         <cpo.db.initScript>postgres/initDB.sql</cpo.db.initScript>
         <cpo.db.jndi>java:/comp/env/jdbc/cpodatasource</cpo.db.jndi>

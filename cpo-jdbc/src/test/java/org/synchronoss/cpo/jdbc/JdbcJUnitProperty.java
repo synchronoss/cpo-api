@@ -36,6 +36,7 @@ public class JdbcJUnitProperty {
   public static final String PROP_BLOBS_SUPPORTED = "cpo.db.blobssupported";
   public static final String PROP_CALLS_SUPPORTED = "cpo.db.callssupported";
   public static final String PROP_SELECT4UPDATE = "cpo.db.select4update";
+  public static final String PROP_XA_SUPPORTED = "cpo.db.xasupported";
   public static final String PROP_MILLIS_SUPPORTED = "cpo.db.millisupport";
   public static final String PROP_INIT_SCRIPT = "cpo.db.initScript";
   public static final String PROP_DB_TYPE = "cpo.db";

@@ -56,3 +56,6 @@ jobs:
       - name: Test MySQL
         id: mysql
         run: mvn -pl cpo-jdbc -am clean test -Dcpo.db=mysql
+      - name: Test Oracle XE
+        id: oracle-xe
+        run: mvn -pl cpo-jdbc -am clean test -Dcpo.db=oracle-xe

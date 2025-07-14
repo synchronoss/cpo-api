@@ -54,6 +54,6 @@ test_db 'mariadb'
 
 test_db 'postgres'
 
-#test_db 'oracle-xe'
+test_db 'oracle-xe'
 
 echo 'All DBs passed the unit tests'

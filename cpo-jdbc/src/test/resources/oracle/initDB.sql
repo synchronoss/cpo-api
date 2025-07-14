@@ -19,9 +19,6 @@
 -- http://www.gnu.org/licenses/lgpl.txt
 --
 
-DROP TABLE VALUE_OBJECT;
-DROP TABLE LOB_TEST;
-
 CREATE TABLE value_object (
 ID                      int primary key
 ,ATTR_BOOL            	 char(1)  NULL
@@ -34,7 +31,7 @@ ID                      int primary key
 ,ATTR_CHAR               varchar(255) NULL
 ,ATTR_CHARACTER          varchar(255) NULL
 ,ATTR_DATE               date         NULL
-,ATTR_DATETIME			 timestamp	  NULL
+,ATTR_DATETIME			     timestamp	  NULL
 --,ATTR_TIME               time         NULL
 ,ATTR_TIMESTAMP          timestamp    NULL
 ,ATTR_DECIMAL            decimal(10,0) NULL
@@ -44,11 +41,13 @@ ID                      int primary key
 ,ATTR_REAL               double precision     NULL
 ,ATTR_BLOB               blob         NULL
 ,ATTR_LONGTEXT           long     NULL
-);
+)
+;
 
 CREATE TABLE LOB_TEST (
        LOB_ID               INT NOT NULL
        ,B_LOB                BLOB NULL
        ,B_LOB2               BLOB NULL
        ,C_LOB                CLOB NULL
-);
+)
+;

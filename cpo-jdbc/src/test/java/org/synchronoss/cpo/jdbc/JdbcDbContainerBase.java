@@ -91,7 +91,7 @@ public abstract class JdbcDbContainerBase {
                 .withPassword(dbPswd)
                 .withDatabaseName(dbName);
         case ORACLE_XE:
-          return new OracleContainer(DockerImageName.parse("gvenzl/oracle-free:slim-faststart"))
+          return new OracleContainer(DockerImageName.parse("gvenzl/oracle-xe:21.3.0-slim-faststart"))
                   .withInitScript(initScript)
                   .withUsername(dbUser)
                   .withPassword(dbPswd)

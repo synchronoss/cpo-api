@@ -97,7 +97,7 @@ public class BigRetrieveTest extends JdbcDbContainerBase {
     try {
       ValueObject valObj = ValueObjectFactory.createValueObject();
       col = cpoAdapter.retrieveBeans(ValueObject.FG_LIST_NULL, valObj);
-      assertTrue(col.size() == al.size(), "Col size is " + col.size());
+      assertEquals(col.size(), al.size(), "Col size is " + col.size());
 
     } catch (Exception e) {
       fail(method + e.getMessage());

@@ -101,7 +101,7 @@ public class BlobTest extends CassandraContainerBase {
       ByteBuffer blob1 = lvo.getAttrBlob();
       ByteBuffer blob2 = lvo2.getAttrBlob();
 
-      assertTrue(blob1.equals(blob2));
+      assertEquals(blob1, blob2);
     } catch (Exception ie) {
       logger.error("error retrieving lob", ie);
       fail(ie.getMessage());
@@ -114,7 +114,7 @@ public class BlobTest extends CassandraContainerBase {
       ByteBuffer blob1 = testBlob2;
       ByteBuffer blob2 = lvo2.getAttrBlob();
 
-      assertTrue(blob1.equals(blob2));
+      assertEquals(blob1, blob2);
     } catch (Exception ie) {
       logger.error("error updating lob", ie);
       fail(ie.getMessage());
@@ -158,7 +158,7 @@ public class BlobTest extends CassandraContainerBase {
       ByteBuffer blob1 = lvo.getAttrBlob2();
       ByteBuffer blob2 = lvo2.getAttrBlob2();
 
-      assertTrue(blob1.equals(blob2));
+      assertEquals(blob1, blob2);
     } catch (Exception ie) {
       logger.error("error retrieving lob", ie);
       fail(ie.getMessage());
@@ -171,7 +171,7 @@ public class BlobTest extends CassandraContainerBase {
       ByteBuffer blob1 = testBlob;
       ByteBuffer blob2 = lvo2.getAttrBlob2();
 
-      assertTrue(blob1.equals(blob2));
+      assertEquals(blob1, blob2);
     } catch (Exception ie) {
       logger.error("error updating lob", ie);
       fail(ie.getMessage());
@@ -234,7 +234,7 @@ public class BlobTest extends CassandraContainerBase {
       assertNotNull(blob1);
       assertNotNull(blob2);
 
-      assertTrue(blob1.equals(blob2));
+      assertEquals(blob1, blob2);
     } catch (Exception ie) {
       logger.error("error retrieving lob", ie);
       fail(ie.getMessage());
@@ -250,7 +250,7 @@ public class BlobTest extends CassandraContainerBase {
       assertNotNull(blob1);
       assertNotNull(blob2);
 
-      assertTrue(blob1.equals(blob2));
+      assertEquals(blob1, blob2);
     } catch (Exception ie) {
       logger.error("error updating lob", ie);
       fail(ie.getMessage());

@@ -162,6 +162,7 @@ public class CpoClassSourceGenerator implements MetaVisitor {
 
     // generate class declaration
     header.append("public class " + className + " implements " + interfaceName + ", java.io.Serializable {\n");
+    header.append("  private static final long serialVersionUID = 1L;\n");
 
     // footer
     footer.append("}\n");

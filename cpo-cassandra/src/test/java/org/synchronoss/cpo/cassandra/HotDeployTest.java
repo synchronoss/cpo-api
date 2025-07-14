@@ -89,7 +89,7 @@ public class HotDeployTest extends CassandraContainerBase {
 
       // make sure the default retrieve works
       col = cpoAdapter.retrieveBeans(null, valObj);
-      assertTrue(col!=null, "Col size is " + col.size());
+      assertNotNull(col, "Col size is " + col.size());
 
       col = cpoAdapter.retrieveBeans("HotDeploySelect", valObj);
       fail("Should not have gotten here:");
@@ -106,13 +106,13 @@ public class HotDeployTest extends CassandraContainerBase {
 
       // make sure the default retrieve still works
       col = cpoAdapter.retrieveBeans(null, valObj);
-      assertTrue(col.size()==6, "Col size is " + col.size());
+      assertEquals(6, col.size(), "Col size is " + col.size());
 
       List<ValueObject> col2 = cpoAdapter.retrieveBeans("HotDeploySelect", valObj);
-      assertTrue(col2.size()==6, "Col size is " + col2.size());
+      assertEquals(6, col2.size(), "Col size is " + col2.size());
 
       for (int i=0; i<col.size(); i++) {
-        assertTrue(col.get(i).getId() == col2.get(i).getId(), "IDs must be equal");
+        assertEquals(col.get(i).getId(), col2.get(i).getId(), "IDs must be equal");
       }
 
       // make sure the first objects are the same
@@ -135,7 +135,7 @@ public class HotDeployTest extends CassandraContainerBase {
 
       // make sure the default retrieve works
       col = cpoAdapter.retrieveBeans(null, valObj);
-      assertTrue(col!=null, "Col size is " + col.size());
+      assertNotNull(col, "Col size is " + col.size());
 
       col = cpoAdapter.retrieveBeans("HotDeploySelect", valObj);
       fail("Should not have gotten here:");
@@ -159,7 +159,7 @@ public class HotDeployTest extends CassandraContainerBase {
       }
 
       List<ValueObject> col2 = cpoAdapter.retrieveBeans("HotDeploySelect", valObj);
-      assertTrue(col2.size()==6, "Col size is " + col2.size());
+      assertEquals(6, col2.size(), "Col size is " + col2.size());
 
     } catch (Exception e) {
       String msg = ExceptionHelper.getLocalizedMessage(e);

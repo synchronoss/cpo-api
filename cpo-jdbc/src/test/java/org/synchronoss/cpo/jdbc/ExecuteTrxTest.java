@@ -92,8 +92,8 @@ public class ExecuteTrxTest extends JdbcDbContainerBase {
       try {
         rvo = trxAdapter.executeObject(ValueObject.FG_EXECUTE_TESTEXECUTEOBJECT, vo);
         trxAdapter.commit();
-        assertNotNull(method + "Returned Value object is null");
-        assertTrue(rvo.getAttrDouble() == 27, "power(3,3)=" + rvo.getAttrDouble());
+        assertNotNull(rvo,method + "Returned Value object is null");
+        assertEquals(27, rvo.getAttrDouble(), "power(3,3)=" + rvo.getAttrDouble());
       } catch (Exception e) {
         try { trxAdapter.rollback();} catch (Exception ex) {}
         logger.error(ExceptionHelper.getLocalizedMessage(e));

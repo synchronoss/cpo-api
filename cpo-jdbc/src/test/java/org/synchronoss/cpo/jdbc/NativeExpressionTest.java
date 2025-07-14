@@ -107,7 +107,7 @@ public class NativeExpressionTest extends JdbcDbContainerBase {
       ValueObject valObj = ValueObjectFactory.createValueObject(3);
       col = cpoAdapter.retrieveBeans(ValueObject.FG_LIST_TESTWHERERETRIEVE, valObj, valObj, null, null, cnqAl);
 
-      assertTrue(col.size() == 2, "Col size is " + col.size());
+      assertEquals(2, col.size(), "Col size is " + col.size());
 
     } catch (Exception e) {
       fail(method + e.getMessage());
@@ -130,7 +130,7 @@ public class NativeExpressionTest extends JdbcDbContainerBase {
       ValueObject valObj = ValueObjectFactory.createValueObject(3);
       col = cpoAdapter.retrieveBeans(ValueObject.FG_LIST_TESTWHERERETRIEVE, valObj, valObj, null, null, cnqAl);
 
-      assertTrue(col.size() == 6, "Col size is " + col.size());
+      assertEquals(6, col.size(), "Col size is " + col.size());
 
     } catch (Exception e) {
       fail(method + e.getMessage());

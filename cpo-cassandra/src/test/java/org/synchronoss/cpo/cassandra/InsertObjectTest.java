@@ -93,8 +93,8 @@ public class InsertObjectTest extends CassandraContainerBase {
 
     try {
       ValueObject vo = readAdapter.retrieveBean(null, valObj, valObj, null, null);
-      assertTrue(vo.getId() == valObj.getId(), "Ids do not match");
-      assertTrue(vo.getAttrInt() == valObj.getAttrInt(), "Integers do not match");
+      assertEquals(vo.getId(), valObj.getId(), "Ids do not match");
+      assertEquals(vo.getAttrInt(), valObj.getAttrInt(), "Integers do not match");
       assertEquals(vo.getAttrVarChar(), valObj.getAttrVarChar(), "Strings do not match");
       assertEquals(vo.getAttrTimestamp(), valObj.getAttrTimestamp(), "Timestamps do not match");
       assertTrue(vo.getAttrBool(), "boolean not stored correctly");

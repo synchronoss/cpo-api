@@ -91,7 +91,7 @@ public class RetrieveBeanTest extends JdbcDbContainerBase {
 
       ValueObject valObj = ValueObjectFactory.createValueObject();
       col = cpoAdapter1.retrieveBeans(ValueObject.FG_LIST_NULL, valObj);
-      assertTrue(col.size() == al.size(), "Col size is " + col.size());
+      assertEquals(col.size(), al.size(), "Col size is " + col.size());
 
       // The adapter is now open
       assertFalse(cpoAdapter1.isClosed());
@@ -106,14 +106,14 @@ public class RetrieveBeanTest extends JdbcDbContainerBase {
     try (CpoTrxAdapter cpoAdapter2 = cpoAdapter1) {
 
       // The adapter should still be closed
-      assertTrue(cpoAdapter1.isClosed());
+      assertTrue(cpoAdapter2.isClosed());
 
       ValueObject valObj = ValueObjectFactory.createValueObject();
-      col = cpoAdapter1.retrieveBeans(ValueObject.FG_LIST_NULL, valObj);
-      assertTrue(col.size() == al.size(), "Col size is " + col.size());
+      col = cpoAdapter2.retrieveBeans(ValueObject.FG_LIST_NULL, valObj);
+      assertEquals(col.size(), al.size(), "Col size is " + col.size());
 
       // The adapter is now open
-      assertFalse(cpoAdapter1.isClosed());
+      assertFalse(cpoAdapter2.isClosed());
 
     } catch (Exception e) {
       fail(method + e.getMessage());

@@ -60,11 +60,11 @@ public class ConstructorTest extends JdbcDbContainerBase {
 
       logger.debug("=====> DatasourceName: "+cpoAdapter.getDataSourceName());
       // make sure the password is not in the name
-      assertTrue(!cpoAdapter.getDataSourceName().contains(PASSWORDSTRING), "password is in datasource name");
+      assertFalse(cpoAdapter.getDataSourceName().contains(PASSWORDSTRING), "password is in datasource name");
 
       ValueObject valObj = ValueObjectFactory.createValueObject();
       List<ValueObject> objs = cpoAdapter.retrieveBeans(ValueObject.FG_LIST_NULL, valObj);
-      assertTrue(objs.size() == 0, "List size is " + objs.size());
+      assertEquals(0, objs.size(), "List size is " + objs.size());
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -78,11 +78,11 @@ public class ConstructorTest extends JdbcDbContainerBase {
       assertNotNull(cpoAdapter, method + "cpoAdapter is null");
 
       // make sure the password is not in the name
-      assertTrue(!cpoAdapter.getDataSourceName().contains(PASSWORDSTRING), "password is in datasource name:");
+      assertFalse(cpoAdapter.getDataSourceName().contains(PASSWORDSTRING), "password is in datasource name:");
 
       ValueObject valObj = ValueObjectFactory.createValueObject();
       List<ValueObject> objs = cpoAdapter.retrieveBeans(ValueObject.FG_LIST_NULL, valObj);
-      assertTrue(objs.size() == 0, "List size is " + objs.size());
+      assertEquals(0, objs.size(), "List size is " + objs.size());
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -96,11 +96,11 @@ public class ConstructorTest extends JdbcDbContainerBase {
       assertNotNull(cpoAdapter, method + "cpoAdapter is null");
 
       // make sure the password is not in the name
-      assertTrue(!cpoAdapter.getDataSourceName().contains(PASSWORDSTRING), "password is in datasource name");
+      assertFalse(cpoAdapter.getDataSourceName().contains(PASSWORDSTRING), "password is in datasource name");
 
       ValueObject valObj = ValueObjectFactory.createValueObject();
       List<ValueObject> objs = cpoAdapter.retrieveBeans(ValueObject.FG_LIST_NULL, valObj);
-      assertTrue(objs.size() == 0, "List size is " + objs.size());
+      assertEquals(0, objs.size(), "List size is " + objs.size());
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -119,7 +119,7 @@ public class ConstructorTest extends JdbcDbContainerBase {
 
      ValueObject valObj = ValueObjectFactory.createValueObject();
       List<ValueObject> objs = cpoAdapter.retrieveBeans(ValueObject.FG_LIST_NULL, valObj);
-      assertTrue(objs.size() == 0, "List size is " + objs.size());
+      assertEquals(0, objs.size(), "List size is " + objs.size());
     } catch (Exception e) {
       fail(method + e.getMessage());
     }

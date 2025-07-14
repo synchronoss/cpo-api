@@ -118,7 +118,7 @@ public class CriteriaObjectTest extends JdbcDbContainerBase {
       wheres.add(cw);
       Collection<ValueObject> col = cpoAdapter.retrieveBeans(CriteriaObject.FG_LIST_SELECTALL, critObject, new ValueObjectBean(), wheres, null);
 
-      assertTrue(col.size() == 3, "Col size is " + col.size());
+      assertEquals(3, col.size(), "Col size is " + col.size());
 
     } catch (Exception e) {
       fail(method + e.getMessage());
@@ -136,8 +136,8 @@ public class CriteriaObjectTest extends JdbcDbContainerBase {
 
       try {
         rvo = cpoAdapter.executeObject(CriteriaObject.FG_EXECUTE_EXECUTECRITERIA, critObject, new ValueObjectBean());
-        assertNotNull(method + "Returned Value object is null");
-        assertTrue(rvo.getAttrDouble() == 27, "power(3,3)=" + rvo.getAttrDouble());
+        assertNotNull(rvo,method + "Returned Value object is null");
+        assertEquals(27, rvo.getAttrDouble(), "power(3,3)=" + rvo.getAttrDouble());
       } catch (Exception e) {
         logger.error(ExceptionHelper.getLocalizedMessage(e));
         fail(method + e.getMessage());

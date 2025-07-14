@@ -75,7 +75,7 @@ public class ExistObjectTest extends CassandraContainerBase {
     try {
       ValueObject valObj = ValueObjectFactory.createValueObject(1);
       long count = cpoAdapter.existsObject(valObj);
-      assertTrue(count == 1, "Object not Found");
+      assertEquals(1, count, "Object not Found");
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -83,7 +83,7 @@ public class ExistObjectTest extends CassandraContainerBase {
     try {
       ValueObject valObj = ValueObjectFactory.createValueObject(5);
       long count = cpoAdapter.existsObject(valObj);
-      assertTrue(count == 0, "Object Found");
+      assertEquals(0, count, "Object Found");
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -99,7 +99,7 @@ public class ExistObjectTest extends CassandraContainerBase {
       ArrayList<CpoWhere> wheres = new ArrayList<>();
       wheres.add(where);
       long count = cpoAdapter.existsObject(null, valObj, wheres);
-      assertTrue(count == 1, "Object not Found");
+      assertEquals(1, count, "Object not Found");
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -110,7 +110,7 @@ public class ExistObjectTest extends CassandraContainerBase {
       ArrayList<CpoWhere> wheres = new ArrayList<>();
       wheres.add(where);
       long count = cpoAdapter.existsObject(null, valObj, wheres);
-      assertTrue(count == 0, "Object Found");
+      assertEquals(0, count, "Object Found");
     } catch (Exception e) {
       fail(method + e.getMessage());
     }

@@ -65,7 +65,7 @@ public class EntityTest extends JdbcDbContainerBase {
           fail("Attribute is not a JdbcCpoAttribute");
         dumpAttribute((JdbcCpoAttribute)attribute);
       }
-      assertTrue(attributes.size() == 4, "List size is " + attributes);
+      assertEquals(4, attributes.size(), "List size is " + attributes);
     } catch (Exception e) {
       fail(method + e.getMessage());
     }

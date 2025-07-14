@@ -86,8 +86,8 @@ public class ExecuteTest extends JdbcDbContainerBase {
 
       try {
         rvo = cpoAdapter.executeObject(ValueObject.FG_EXECUTE_TESTEXECUTEOBJECT, vo);
-        assertNotNull(method + "Returned Value object is null");
-        assertTrue(rvo.getAttrDouble() == 27, "power(3,3)=" + rvo.getAttrDouble());
+        assertNotNull(rvo,method + "Returned Value object is null");
+        assertEquals(27, rvo.getAttrDouble(), "power(3,3)=" + rvo.getAttrDouble());
       } catch (Exception e) {
         logger.error(ExceptionHelper.getLocalizedMessage(e));
         fail(method + e.getMessage());

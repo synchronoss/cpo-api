@@ -99,9 +99,9 @@ public class CaseSensitiveTest extends JdbcDbContainerBase {
 
     try {
       CaseValueObject vo = readAdapter.retrieveBean(CaseValueObject.FG_RETRIEVE_NULL, valObj, valObj, null, null);
-      assertFalse(vo.getId() == valObj.getId(), "Ids should not match");
-      assertFalse(vo.getAttrInteger() == valObj.getAttrInteger(), "Integers should not match");
-      assertFalse(valObj.getAttrVarChar().equals(vo.getAttrVarChar()), "Strings should not match");
+      assertNotEquals(vo.getId(), valObj.getId(), "Ids should not match");
+      assertNotEquals(vo.getAttrInteger(), valObj.getAttrInteger(), "Integers should not match");
+      assertNotEquals(valObj.getAttrVarChar(), vo.getAttrVarChar(), "Strings should not match");
       assertFalse(valObj.getAttrDatetime().equals(vo.getAttrDatetime()), "Timestamps should not match");
       assertFalse(vo.getAttrBit(), "boolean not stored correctly");
 

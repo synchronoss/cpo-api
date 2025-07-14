@@ -100,7 +100,7 @@ public class WhereTest extends CassandraContainerBase {
       wheres.add(cw);
       col = cpoAdapter.retrieveBeans("TestWhereRetrieve", valObj, wheres, null);
 
-      assertTrue(col.size() == 1, "Col size is " + col.size());
+      assertEquals(1, col.size(), "Col size is " + col.size());
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -120,7 +120,7 @@ public class WhereTest extends CassandraContainerBase {
       wheres.add(cw);
       col = cpoAdapter.retrieveBeans("TestWhereRetrieve", valObj, wheres, null);
 
-      assertTrue(col.size() == 1, "Col size is " + col.size());
+      assertEquals(1, col.size(), "Col size is " + col.size());
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -140,7 +140,7 @@ public class WhereTest extends CassandraContainerBase {
       wheres.add(cw);
       col = cpoAdapter.retrieveBeans(null, valObj, wheres, null);
 
-      assertTrue(col.size() == 1, "Col size is " + col.size());
+      assertEquals(1, col.size(), "Col size is " + col.size());
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -181,7 +181,7 @@ public class WhereTest extends CassandraContainerBase {
       wheres.add(cw);
       Collection<ValueObject> col = cpoAdapter.retrieveBeans("TestWhereRetrieve", valObj, wheres, null);
 
-      assertTrue(col.size() == 1, "Col size is " + col.size());
+      assertEquals(1, col.size(), "Col size is " + col.size());
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -206,7 +206,7 @@ public class WhereTest extends CassandraContainerBase {
       wheres.add(cw);
       Collection<ValueObject> col = cpoAdapter.retrieveBeans("TestWhereRetrieve", valObj, wheres, null);
 
-      assertTrue(col.size() == 1, "Col size is " + col.size());
+      assertEquals(1, col.size(), "Col size is " + col.size());
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -228,7 +228,7 @@ public class WhereTest extends CassandraContainerBase {
       wheres.add(cw);
       Collection<ValueObject> col = cpoAdapter.retrieveBeans("TestWhereRetrieve", valObj, wheres, null);
 
-      assertTrue(col.size() == 1, "Col size is " + col.size());
+      assertEquals(1, col.size(), "Col size is " + col.size());
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -251,7 +251,7 @@ public class WhereTest extends CassandraContainerBase {
       wheres.add(cw);
       Collection<ValueObject> coll = cpoAdapter.retrieveBeans("TestWhereRetrieve", valObj, wheres, null);
 
-      assertTrue(coll.size() == 3, "Collection size is " + coll.size());
+      assertEquals(3, coll.size(), "Collection size is " + coll.size());
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -277,7 +277,7 @@ public class WhereTest extends CassandraContainerBase {
       wheres.add(cw);
       Collection<ValueObject> coll = cpoAdapter.retrieveBeans("TestWhereRetrieve", valObj, wheres, null);
 
-      assertTrue(coll.size() == 3, "Collection size is " + coll.size());
+      assertEquals(3, coll.size(), "Collection size is " + coll.size());
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -303,7 +303,7 @@ public class WhereTest extends CassandraContainerBase {
       wheres.add(cw);
       Collection<ValueObject> coll = cpoAdapter.retrieveBeans("TestWhereRetrieve", valObj, wheres, null);
 
-      assertTrue(coll.size() == 3, "Collection size is " + coll.size());
+      assertEquals(3, coll.size(), "Collection size is " + coll.size());
     } catch (Exception e) {
       fail(method + e.getMessage());
     }

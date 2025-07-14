@@ -98,7 +98,7 @@ public class NativeExpressionTest extends CassandraContainerBase {
       ValueObject valObj = ValueObjectFactory.createValueObject(3);
       col = cpoAdapter.retrieveBeans("TestWhereRetrieve", valObj, valObj, null, null, cnqAl);
 
-      assertTrue(col.size() == 2, "Col size is " + col.size());
+      assertEquals(2, col.size(), "Col size is " + col.size());
     } catch (Exception e) {
       fail(method + e.getMessage());
     }

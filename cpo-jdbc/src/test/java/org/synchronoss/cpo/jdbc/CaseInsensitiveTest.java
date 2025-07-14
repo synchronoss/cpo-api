@@ -100,8 +100,8 @@ public class CaseInsensitiveTest extends JdbcDbContainerBase {
 
     try {
       CaseValueObject vo = readAdapter.retrieveBean(CaseValueObject.FG_RETRIEVE_NULL, valObj, valObj, null, null);
-      assertTrue(vo.getId() == valObj.getId(), "Ids do not match");
-      assertTrue(vo.getAttrInteger() == valObj.getAttrInteger(), "Integers do not match");
+      assertEquals(vo.getId(), valObj.getId(), "Ids do not match");
+      assertEquals(vo.getAttrInteger(), valObj.getAttrInteger(), "Integers do not match");
       assertEquals(vo.getAttrVarChar(), valObj.getAttrVarChar(),"Strings do not match");
       assertEquals(vo.getAttrDatetime(), valObj.getAttrDatetime(), "Timestamps do not match");
       assertTrue(vo.getAttrBit(), "boolean not stored correctly");

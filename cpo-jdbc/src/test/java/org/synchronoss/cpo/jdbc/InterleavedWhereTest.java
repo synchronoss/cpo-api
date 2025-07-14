@@ -120,7 +120,7 @@ public class InterleavedWhereTest extends JdbcDbContainerBase {
       wheres.add(cw);
       coll = cpoAdapter.retrieveBeans(ValueObject.FG_LIST_INTERLEAVEDWHERE, valObj, wheres, null);
 
-      assertTrue(coll.size() == 3, "Collection size is " + coll.size());
+      assertEquals(3, coll.size(), "Collection size is " + coll.size());
 
 
     } catch (Exception e) {

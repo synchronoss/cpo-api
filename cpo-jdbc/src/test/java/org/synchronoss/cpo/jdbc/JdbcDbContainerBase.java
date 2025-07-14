@@ -38,7 +38,7 @@ public abstract class JdbcDbContainerBase {
   private static final Logger logger;
 
   private static final TcpProxy proxy;
-  private static final JdbcDatabaseContainer jdbcContainer;
+  private static final JdbcDatabaseContainer<?> jdbcContainer;
 
   static {
     String dbType = JdbcJUnitProperty.getProperty(JdbcJUnitProperty.PROP_DB_TYPE);
@@ -69,7 +69,7 @@ public abstract class JdbcDbContainerBase {
 
   }
 
-  private static JdbcDatabaseContainer createJdbcContainer(String dbType, String initScript, String dbUser, String dbPswd, String dbName) {
+  private static JdbcDatabaseContainer<?> createJdbcContainer(String dbType, String initScript, String dbUser, String dbPswd, String dbName) {
     logger.debug("Creating a container for:" + dbType);
     switch (dbType) {
       case MYSQL:

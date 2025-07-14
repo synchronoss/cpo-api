@@ -85,7 +85,7 @@ public class RetrieveBeanTest extends CassandraContainerBase {
     try {
       ValueObject valObj = ValueObjectFactory.createValueObject();
       col = cpoAdapter.retrieveBeans(null, valObj);
-      assertTrue(col.size() == al.size(), "Col size is " + col.size());
+      assertEquals(col.size(), al.size(), "Col size is " + col.size());
 
     } catch (Exception e) {
       fail(method + e.getMessage());
@@ -101,7 +101,7 @@ public class RetrieveBeanTest extends CassandraContainerBase {
     try {
       ValueObject valObj = ValueObjectFactory.createValueObject();
       col = cpoAdapter.retrieveBeans(null, valObj, valObj);
-      assertTrue(col.size() == al.size(), "Col size is " + col.size());
+      assertEquals(col.size(), al.size(), "Col size is " + col.size());
 
     } catch (Exception e) {
       fail(method + e.getMessage());
@@ -124,7 +124,7 @@ public class RetrieveBeanTest extends CassandraContainerBase {
         }
         logger.debug("Retrieved Object #" + count);
       }
-      assertTrue(count == al.size(), "Result size is " + count);
+      assertEquals(count, al.size(), "Result size is " + count);
 
     } catch (Exception e) {
       fail(method + e.getMessage());
@@ -145,7 +145,7 @@ public class RetrieveBeanTest extends CassandraContainerBase {
           count++;
         }
       }
-      assertTrue(count == al.size(), "Result size is " + count);
+      assertEquals(count, al.size(), "Result size is " + count);
 
     } catch (Exception e) {
       fail(method + e.getMessage());
@@ -166,7 +166,7 @@ public class RetrieveBeanTest extends CassandraContainerBase {
           count++;
         }
       }
-      assertTrue(count == al.size(), "Result size is " + count);
+      assertEquals(count, al.size(), "Result size is " + count);
 
     } catch (Exception e) {
       fail(method + e.getMessage());
@@ -187,7 +187,7 @@ public class RetrieveBeanTest extends CassandraContainerBase {
           count++;
         }
       }
-      assertTrue(count == al.size(), "Result size is " + count);
+      assertEquals(count, al.size(), "Result size is " + count);
 
     } catch (Exception e) {
       fail(method + e.getMessage());
@@ -210,7 +210,7 @@ public class RetrieveBeanTest extends CassandraContainerBase {
         }
         logger.debug("Retrieved Object #" + count);
       }
-      assertTrue(count == al.size(), "Result size is " + count);
+      assertEquals(count, al.size(), "Result size is " + count);
 
     } catch (Exception e) {
       fail(method + e.getMessage());

@@ -164,21 +164,21 @@ public class SelectForUpdateTest extends JdbcDbContainerBase {
 
       try {
         long count = trxAdapter.existsObject(ValueObject.FG_EXIST_SELECTFORUPDATEEXISTZERO, vo2);
-        assertTrue(count == 0, "Zero objects should have been returned");
+        assertEquals(0, count, "Zero objects should have been returned");
       } catch (Exception e) {
         fail(method + "Select For Update should work:" + ExceptionHelper.getLocalizedMessage(e));
       }
 
       try {
         long count = trxAdapter.existsObject(ValueObject.FG_EXIST_SELECTFORUPDATEEXISTSINGLE, vo2);
-        assertTrue(count == 1, "One object should have been returned, got " + count);
+        assertEquals(1, count, "One object should have been returned, got " + count);
       } catch (Exception e) {
         fail(method + "Select For Update should work:" + ExceptionHelper.getLocalizedMessage(e));
       }
 
       try {
         long count = trxAdapter.existsObject(ValueObject.FG_EXIST_SELECTFORUPDATEEXISTALL, vo2);
-        assertTrue(count == 2, "Two objects should have been returned, got " + count);
+        assertEquals(2, count, "Two objects should have been returned, got " + count);
       } catch (Exception e) {
         fail(method + "Select For Update should work:" + ExceptionHelper.getLocalizedMessage(e));
       }

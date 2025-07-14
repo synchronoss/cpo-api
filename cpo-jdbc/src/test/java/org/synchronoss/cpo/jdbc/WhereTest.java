@@ -106,7 +106,7 @@ public class WhereTest extends JdbcDbContainerBase {
       wheres.add(cw);
       col = cpoAdapter.retrieveBeans(ValueObject.FG_LIST_TESTWHERERETRIEVE, valObj, wheres, null);
 
-      assertTrue(col.size() == 2, "Col size is " + col.size());
+      assertEquals(2, col.size(), "Col size is " + col.size());
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -126,7 +126,7 @@ public class WhereTest extends JdbcDbContainerBase {
       wheres.add(cw);
       col = cpoAdapter.retrieveBeans(ValueObject.FG_LIST_TESTWHERERETRIEVE, ValueObjectFactory.createValueObject(), wheres, null);
 
-      assertTrue(col.size() == 1, "Col size is " + col.size());
+      assertEquals(1, col.size(), "Col size is " + col.size());
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -146,7 +146,7 @@ public class WhereTest extends JdbcDbContainerBase {
       wheres.add(cw);
       col = cpoAdapter.retrieveBeans(ValueObject.FG_LIST_TESTWHERERETRIEVE, valObj, wheres, null);
 
-      assertTrue(col.size() == 2, "Col size is " + col.size());
+      assertEquals(2, col.size(), "Col size is " + col.size());
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -166,7 +166,7 @@ public class WhereTest extends JdbcDbContainerBase {
       wheres.add(cw);
       col = cpoAdapter.retrieveBeans(ValueObject.FG_LIST_NULL, valObj, wheres, null);
 
-      assertTrue(col.size() == 2, "Col size is " + col.size());
+      assertEquals(2, col.size(), "Col size is " + col.size());
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -214,7 +214,7 @@ public class WhereTest extends JdbcDbContainerBase {
       wheres.add(cw);
       col = cpoAdapter.retrieveBeans(ValueObject.FG_LIST_TESTWHERERETRIEVE, valObj, wheres, null);
 
-      assertTrue(col.size() == 3, "Col size is " + col.size());
+      assertEquals(3, col.size(), "Col size is " + col.size());
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -234,7 +234,7 @@ public class WhereTest extends JdbcDbContainerBase {
       wheres.add(cw);
       col = cpoAdapter.retrieveBeans(ValueObject.FG_LIST_TESTWHERERETRIEVE, valObj, wheres, null);
 
-      assertTrue(col.size() == 6, "Col size is " + col.size());
+      assertEquals(6, col.size(), "Col size is " + col.size());
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -255,9 +255,9 @@ public class WhereTest extends JdbcDbContainerBase {
       wheres.add(cw);
       col = cpoAdapter.retrieveBeans(ValueObject.FG_LIST_TESTWHERERETRIEVE, valObj, wheres, null);
 
-      assertTrue(col.size() == 1, "Col size is " + col.size());
+      assertEquals(1, col.size(), "Col size is " + col.size());
       ValueObject rvo = col.iterator().next();
-      assertTrue(rvo.getId() == -6, "-6 != " + rvo.getId());
+      assertEquals(-6, rvo.getId(), "-6 != " + rvo.getId());
     } catch (Exception e) {
       fail(method + e.getMessage());
     }

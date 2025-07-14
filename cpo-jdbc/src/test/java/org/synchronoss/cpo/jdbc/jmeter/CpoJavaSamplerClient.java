@@ -52,7 +52,7 @@ public class CpoJavaSamplerClient extends AbstractJavaSamplerClient {
   private static final String URL = "url";
   private static final String DRIVER = "driver";
   private static final String CONFIG_PROCESSOR = "org.synchronoss.cpo.jdbc.config.JdbcCpoConfigProcessor";
-  private static boolean isSupportsMillis = Boolean.valueOf(JdbcJUnitProperty.getProperty(JdbcJUnitProperty.PROP_MILLIS_SUPPORTED));
+  private static final boolean isSupportsMillis = Boolean.parseBoolean(JdbcJUnitProperty.getProperty(JdbcJUnitProperty.PROP_MILLIS_SUPPORTED));
 
   @Override
   public void setupTest(JavaSamplerContext javaSamplerContext) {
@@ -109,11 +109,7 @@ public class CpoJavaSamplerClient extends AbstractJavaSamplerClient {
     try {
       cpoAdapter.insertObject(valueObject);
       ValueObject vo = cpoAdapter.retrieveBean(ValueObject.FG_RETRIEVE_NULL, valueObject, valueObject, null, null);
-      if (vo != null && vo.getId() == valueObject.getId()) {
-        result.setSuccessful(true);
-      } else {
-        result.setSuccessful(false);
-      }
+      result.setSuccessful(vo != null && vo.getId() == valueObject.getId());
     } catch (CpoException ex) {
       logger.error(ex.getMessage(), ex);
       result.setSuccessful(false);

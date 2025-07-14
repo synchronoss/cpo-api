@@ -82,7 +82,7 @@ public class CpoXaResourceTest {
 
     try {
       xaResource.start(xid1, XAResource.TMNOFLAGS);
-      assertTrue(xaResource.length() == 0);
+      assertEquals(0, xaResource.length());
       xaResource.append(GLOBAL_RESOURCE);
       xaResource.end(xid1, XAResource.TMSUCCESS);
     } catch (XAException xae) {
@@ -114,7 +114,7 @@ public class CpoXaResourceTest {
       // should allow a start join on an unassigned xid
       xaResource.start(xid1, XAResource.TMJOIN);
       // check for the global value
-      assertEquals(xaResource.toString(), GLOBAL_RESOURCE);
+      assertEquals(GLOBAL_RESOURCE, xaResource.toString());
       // suspend the transaction for the next tests
       xaResource.end(xid1, XAResource.TMSUSPEND);
     } catch (XAException xae) {
@@ -146,7 +146,7 @@ public class CpoXaResourceTest {
       // should allow a start resume on a suspended xid
       xaResource.start(xid1, XAResource.TMRESUME);
       // check for the global value
-      assertEquals(xaResource.toString(), GLOBAL_RESOURCE);
+      assertEquals(GLOBAL_RESOURCE, xaResource.toString());
       // suspend the transaction for the next tests
       xaResource.end(xid1, XAResource.TMSUCCESS);
     } catch (XAException xae) {
@@ -197,7 +197,7 @@ public class CpoXaResourceTest {
     // create the global transaction and test end success
     try {
       xaResource.start(xid1, XAResource.TMNOFLAGS);
-      assertTrue(xaResource.length() == 0);
+      assertEquals(0, xaResource.length());
       xaResource.append(GLOBAL_RESOURCE);
       xaResource.end(xid1, XAResource.TMSUCCESS);
     } catch (XAException xae) {

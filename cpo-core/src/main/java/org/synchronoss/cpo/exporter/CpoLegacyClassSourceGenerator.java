@@ -123,7 +123,7 @@ public class CpoLegacyClassSourceGenerator extends CpoClassSourceGenerator {
 
     // generate class declaration
     header.append("public class " + className + " implements java.io.Serializable {\n");
-
+    header.append("  private static final long serialVersionUID = 1L;\n");
     // footer
     footer.append("}\n");
 

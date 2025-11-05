@@ -30,21 +30,21 @@
 
     <core:metaConfig name="jdbcMeta">
         <core:metaXml>/emptyClassMetaData.xml</core:metaXml>
-        <core:metaXml>${cpo.valueMeta.xml}</core:metaXml>
-        <core:metaXml>${cpo.lobMeta.xml}</core:metaXml>
+        <core:metaXml>${mysql.valueMeta}</core:metaXml>
+        <core:metaXml>${mysql.lobMeta}</core:metaXml>
         <core:metaXml>/emptyMetaData.xml</core:metaXml>
     </core:metaConfig>
     <core:metaConfig name="caseSensitive" caseSensitive="true">
-        <core:metaXml>${cpo.valueCaseMeta.xml}</core:metaXml>
+        <core:metaXml>${mysql.valueCaseMeta}</core:metaXml>
     </core:metaConfig>
     <core:metaConfig name="caseInsensitive" caseSensitive="false">
-        <core:metaXml>${cpo.valueCaseMeta.xml}</core:metaXml>
+        <core:metaXml>${mysql.valueCaseMeta}</core:metaXml>
     </core:metaConfig>
 
     <core:metaConfig name="jdbcMeta">
         <core:metaXml>/emptyClassMetaData.xml</core:metaXml>
-        <core:metaXml>${cpo.valueMeta.xml}</core:metaXml>
-        <core:metaXml>${cpo.lobMeta.xml}</core:metaXml>
+        <core:metaXml>${mysql.valueMeta}</core:metaXml>
+        <core:metaXml>${mysql.lobMeta}</core:metaXml>
         <core:metaXml>/emptyMetaData.xml</core:metaXml>
     </core:metaConfig>
 
@@ -53,30 +53,30 @@
         <core:metaDescriptorName>jdbcMeta</core:metaDescriptorName>
         <core:cpoConfigProcessor>org.synchronoss.cpo.jdbc.config.JdbcCpoConfigProcessor</core:cpoConfigProcessor>
         <jdbc:readWriteConfig>
-            <jdbc:dataSourceClassName>${cpo.db.class}</jdbc:dataSourceClassName>
-            <jdbc:url>${cpo.db.url}</jdbc:url>
-            <jdbc:property name="user" value="${cpo.db.user}"/>
-            <jdbc:property name="password" value="${cpo.db.pswd}"/>
+            <jdbc:dataSourceClassName>${mysql.db.class}</jdbc:dataSourceClassName>
+            <jdbc:url>${mysql.url}</jdbc:url>
+            <jdbc:property name="user" value="${mysql.user}"/>
+            <jdbc:property name="password" value="${mysql.pswd}"/>
         </jdbc:readWriteConfig>
     </core:dataConfig>
     <core:dataConfig xsi:type="jdbc:ctJdbcConfig" name="caseSensitive">
         <core:metaDescriptorName>caseSensitive</core:metaDescriptorName>
         <core:cpoConfigProcessor>org.synchronoss.cpo.jdbc.config.JdbcCpoConfigProcessor</core:cpoConfigProcessor>
         <jdbc:readWriteConfig>
-            <jdbc:dataSourceClassName>${cpo.db.class}</jdbc:dataSourceClassName>
-            <jdbc:url>${cpo.db.url}</jdbc:url>
-            <jdbc:property name="user" value="${cpo.db.user}"/>
-            <jdbc:property name="password" value="${cpo.db.pswd}"/>
+            <jdbc:dataSourceClassName>${mysql.db.class}</jdbc:dataSourceClassName>
+            <jdbc:url>${mysql.url}</jdbc:url>
+            <jdbc:property name="user" value="${mysql.user}"/>
+            <jdbc:property name="password" value="${mysql.pswd}"/>
         </jdbc:readWriteConfig>
     </core:dataConfig>
     <core:dataConfig xsi:type="jdbc:ctJdbcConfig" name="caseInsensitive">
         <core:metaDescriptorName>caseInsensitive</core:metaDescriptorName>
         <core:cpoConfigProcessor>org.synchronoss.cpo.jdbc.config.JdbcCpoConfigProcessor</core:cpoConfigProcessor>
         <jdbc:readWriteConfig>
-            <jdbc:dataSourceClassName>${cpo.db.class}</jdbc:dataSourceClassName>
-            <jdbc:url>${cpo.db.url}</jdbc:url>
-            <jdbc:property name="user" value="${cpo.db.user}"/>
-            <jdbc:property name="password" value="${cpo.db.pswd}"/>
+            <jdbc:dataSourceClassName>${mysql.db.class}</jdbc:dataSourceClassName>
+            <jdbc:url>${mysql.url}</jdbc:url>
+            <jdbc:property name="user" value="${mysql.user}"/>
+            <jdbc:property name="password" value="${mysql.pswd}"/>
         </jdbc:readWriteConfig>
     </core:dataConfig>
 
@@ -84,119 +84,119 @@
         <core:metaDescriptorName>jdbcMeta</core:metaDescriptorName>
         <core:cpoConfigProcessor>org.synchronoss.cpo.jdbc.config.JdbcCpoConfigProcessor</core:cpoConfigProcessor>
         <jdbc:readWriteConfig>
-            <jdbc:driverClassName>${cpo.db.driver}</jdbc:driverClassName>
-            <jdbc:url>${cpo.db.url}</jdbc:url>
-            <jdbc:user>${cpo.db.user}</jdbc:user>
-            <jdbc:password>${cpo.db.pswd}</jdbc:password>
+            <jdbc:driverClassName>${mysql.db.driver}</jdbc:driverClassName>
+            <jdbc:url>${mysql.url}</jdbc:url>
+            <jdbc:user>${mysql.user}</jdbc:user>
+            <jdbc:password>${mysql.pswd}</jdbc:password>
         </jdbc:readWriteConfig>
     </core:dataConfig>
     <core:dataConfig xsi:type="jdbc:ctJdbcConfig" name="driverUrlOnly">
         <core:metaDescriptorName>jdbcMeta</core:metaDescriptorName>
         <core:cpoConfigProcessor>org.synchronoss.cpo.jdbc.config.JdbcCpoConfigProcessor</core:cpoConfigProcessor>
         <jdbc:readWriteConfig>
-            <jdbc:driverClassName>${cpo.db.driver}</jdbc:driverClassName>
-            <jdbc:url>${cpo.db.userurl}</jdbc:url>
+            <jdbc:driverClassName>${mysql.driver}</jdbc:driverClassName>
+            <jdbc:url>${mysql.userurl}</jdbc:url>
         </jdbc:readWriteConfig>
     </core:dataConfig>
     <core:dataConfig xsi:type="jdbc:ctJdbcConfig" name="driverProp">
         <core:metaDescriptorName>jdbcMeta</core:metaDescriptorName>
         <core:cpoConfigProcessor>org.synchronoss.cpo.jdbc.config.JdbcCpoConfigProcessor</core:cpoConfigProcessor>
         <jdbc:readWriteConfig>
-            <jdbc:driverClassName>${cpo.db.driver}</jdbc:driverClassName>
-            <jdbc:url>${cpo.db.url}</jdbc:url>
-            <jdbc:property name="user" value="${cpo.db.user}"/>
-            <jdbc:property name="password" value="${cpo.db.pswd}"/>
+            <jdbc:driverClassName>${mysql.driver}</jdbc:driverClassName>
+            <jdbc:url>${mysql.url}</jdbc:url>
+            <jdbc:property name="user" value="${mysql.user}"/>
+            <jdbc:property name="password" value="${mysql.pswd}"/>
         </jdbc:readWriteConfig>
     </core:dataConfig>
     <core:dataConfig xsi:type="jdbc:ctJdbcConfig" name="class">
         <core:metaDescriptorName>jdbcMeta</core:metaDescriptorName>
         <core:cpoConfigProcessor>org.synchronoss.cpo.jdbc.config.JdbcCpoConfigProcessor</core:cpoConfigProcessor>
         <jdbc:readWriteConfig>
-            <jdbc:dataSourceClassName>${cpo.db.class}</jdbc:dataSourceClassName>
-            <jdbc:url>${cpo.db.url}</jdbc:url>
-            <jdbc:property name="user" value="${cpo.db.user}"/>
-            <jdbc:property name="password" value="${cpo.db.pswd}"/>
+            <jdbc:dataSourceClassName>${mysql.class}</jdbc:dataSourceClassName>
+            <jdbc:url>${mysql.url}</jdbc:url>
+            <jdbc:property name="user" value="${mysql.user}"/>
+            <jdbc:property name="password" value="${mysql.pswd}"/>
         </jdbc:readWriteConfig>
     </core:dataConfig>
     <core:dataConfig xsi:type="jdbc:ctJdbcConfig" name="classProp">
         <core:metaDescriptorName>jdbcMeta</core:metaDescriptorName>
         <core:cpoConfigProcessor>org.synchronoss.cpo.jdbc.config.JdbcCpoConfigProcessor</core:cpoConfigProcessor>
         <jdbc:readWriteConfig>
-            <jdbc:dataSourceClassName>${cpo.db.class}</jdbc:dataSourceClassName>
-            <jdbc:url>${cpo.db.url}</jdbc:url>
-            <jdbc:property name="user" value="${cpo.db.user}"/>
-            <jdbc:property name="password" value="${cpo.db.pswd}"/>
+            <jdbc:dataSourceClassName>${mysql.class}</jdbc:dataSourceClassName>
+            <jdbc:url>${mysql.url}</jdbc:url>
+            <jdbc:property name="user" value="${mysql.user}"/>
+            <jdbc:property name="password" value="${mysql.pswd}"/>
         </jdbc:readWriteConfig>
     </core:dataConfig>
     <!-- <dataConfig xsi:type="jdbc:ctJdbcConfig" name="jndi">
       <metaDescriptorName>jdbcMeta</metaDescriptorName>
       <cpoConfigProcessor>org.synchronoss.cpo.jdbc.config.JdbcCpoConfigProcessor</cpoConfigProcessor>
       <jdbc:readWriteConfig>
-       <jdbc:jndiName>${cpo.db.jndi}</jdbc:jndiName>
+       <jdbc:jndiName>${mysql.jndi}</jdbc:jndiName>
       </jdbc:readWriteConfig>
      </dataConfig>-->
     <core:dataConfig xsi:type="jdbc:ctJdbcConfig" name="driverdriver">
         <core:metaDescriptorName>jdbcMeta</core:metaDescriptorName>
         <core:cpoConfigProcessor>org.synchronoss.cpo.jdbc.config.JdbcCpoConfigProcessor</core:cpoConfigProcessor>
         <jdbc:readConfig>
-            <jdbc:driverClassName>${cpo.db.driver}</jdbc:driverClassName>
-            <jdbc:url>${cpo.db.url}</jdbc:url>
-            <jdbc:user>${cpo.db.user}</jdbc:user>
-            <jdbc:password>${cpo.db.pswd}</jdbc:password>
+            <jdbc:driverClassName>${mysql.driver}</jdbc:driverClassName>
+            <jdbc:url>${mysql.url}</jdbc:url>
+            <jdbc:user>${mysql.user}</jdbc:user>
+            <jdbc:password>${mysql.pswd}</jdbc:password>
         </jdbc:readConfig>
         <jdbc:writeConfig>
-            <jdbc:driverClassName>${cpo.db.driver}</jdbc:driverClassName>
-            <jdbc:url>${cpo.db.url}</jdbc:url>
-            <jdbc:user>${cpo.db.user}</jdbc:user>
-            <jdbc:password>${cpo.db.pswd}</jdbc:password>
+            <jdbc:driverClassName>${mysql.driver}</jdbc:driverClassName>
+            <jdbc:url>${mysql.url}</jdbc:url>
+            <jdbc:user>${mysql.user}</jdbc:user>
+            <jdbc:password>${mysql.pswd}</jdbc:password>
         </jdbc:writeConfig>
     </core:dataConfig>
     <core:dataConfig xsi:type="jdbc:ctJdbcConfig" name="classclass">
         <core:metaDescriptorName>jdbcMeta</core:metaDescriptorName>
         <core:cpoConfigProcessor>org.synchronoss.cpo.jdbc.config.JdbcCpoConfigProcessor</core:cpoConfigProcessor>
         <jdbc:readConfig>
-            <jdbc:dataSourceClassName>${cpo.db.class}</jdbc:dataSourceClassName>
-            <jdbc:url>${cpo.db.url}</jdbc:url>
-            <jdbc:property name="user" value="${cpo.db.user}"/>
-            <jdbc:property name="password" value="${cpo.db.pswd}"/>
+            <jdbc:dataSourceClassName>${mysql.class}</jdbc:dataSourceClassName>
+            <jdbc:url>${mysql.url}</jdbc:url>
+            <jdbc:property name="user" value="${mysql.user}"/>
+            <jdbc:property name="password" value="${mysql.pswd}"/>
         </jdbc:readConfig>
         <jdbc:writeConfig>
-            <jdbc:dataSourceClassName>${cpo.db.class}</jdbc:dataSourceClassName>
-            <jdbc:url>${cpo.db.url}</jdbc:url>
-            <jdbc:property name="user" value="${cpo.db.user}"/>
-            <jdbc:property name="password" value="${cpo.db.pswd}"/>
+            <jdbc:dataSourceClassName>${mysql.class}</jdbc:dataSourceClassName>
+            <jdbc:url>${mysql.url}</jdbc:url>
+            <jdbc:property name="user" value="${mysql.user}"/>
+            <jdbc:property name="password" value="${mysql.pswd}"/>
         </jdbc:writeConfig>
     </core:dataConfig>
     <core:dataConfig xsi:type="jdbc:ctJdbcConfig" name="driverclass">
         <core:metaDescriptorName>jdbcMeta</core:metaDescriptorName>
         <core:cpoConfigProcessor>org.synchronoss.cpo.jdbc.config.JdbcCpoConfigProcessor</core:cpoConfigProcessor>
         <jdbc:readConfig>
-            <jdbc:driverClassName>${cpo.db.driver}</jdbc:driverClassName>
-            <jdbc:url>${cpo.db.url}</jdbc:url>
-            <jdbc:user>${cpo.db.user}</jdbc:user>
-            <jdbc:password>${cpo.db.pswd}</jdbc:password>
+            <jdbc:driverClassName>${mysql.driver}</jdbc:driverClassName>
+            <jdbc:url>${mysql.url}</jdbc:url>
+            <jdbc:user>${mysql.user}</jdbc:user>
+            <jdbc:password>${mysql.pswd}</jdbc:password>
         </jdbc:readConfig>
         <jdbc:writeConfig>
-            <jdbc:dataSourceClassName>${cpo.db.class}</jdbc:dataSourceClassName>
-            <jdbc:url>${cpo.db.url}</jdbc:url>
-            <jdbc:property name="user" value="${cpo.db.user}"/>
-            <jdbc:property name="password" value="${cpo.db.pswd}"/>
+            <jdbc:dataSourceClassName>${mysql.class}</jdbc:dataSourceClassName>
+            <jdbc:url>${mysql.url}</jdbc:url>
+            <jdbc:property name="user" value="${mysql.user}"/>
+            <jdbc:property name="password" value="${mysql.pswd}"/>
         </jdbc:writeConfig>
     </core:dataConfig>
     <core:dataConfig xsi:type="jdbc:ctJdbcConfig" name="classdriver">
         <core:metaDescriptorName>jdbcMeta</core:metaDescriptorName>
         <core:cpoConfigProcessor>org.synchronoss.cpo.jdbc.config.JdbcCpoConfigProcessor</core:cpoConfigProcessor>
         <jdbc:readConfig>
-            <jdbc:dataSourceClassName>${cpo.db.class}</jdbc:dataSourceClassName>
-            <jdbc:url>${cpo.db.url}</jdbc:url>
-            <jdbc:property name="user" value="${cpo.db.user}"/>
-            <jdbc:property name="password" value="${cpo.db.pswd}"/>
+            <jdbc:dataSourceClassName>${mysql.class}</jdbc:dataSourceClassName>
+            <jdbc:url>${mysql.url}</jdbc:url>
+            <jdbc:property name="user" value="${mysql.user}"/>
+            <jdbc:property name="password" value="${mysql.pswd}"/>
         </jdbc:readConfig>
         <jdbc:writeConfig>
-            <jdbc:driverClassName>${cpo.db.driver}</jdbc:driverClassName>
-            <jdbc:url>${cpo.db.url}</jdbc:url>
-            <jdbc:user>${cpo.db.user}</jdbc:user>
-            <jdbc:password>${cpo.db.pswd}</jdbc:password>
+            <jdbc:driverClassName>${mysql.driver}</jdbc:driverClassName>
+            <jdbc:url>${mysql.url}</jdbc:url>
+            <jdbc:user>${mysql.user}</jdbc:user>
+            <jdbc:password>${mysql.pswd}</jdbc:password>
         </jdbc:writeConfig>
     </core:dataConfig>
 </core:cpoConfig>

@@ -20,6 +20,7 @@
  */
 package org.synchronoss.cpo.jdbc;
 
+import org.synchronoss.cpo.CpoAdapterFactoryManager;
 import org.testcontainers.containers.JdbcDatabaseContainer;
 import org.testcontainers.containers.MariaDBContainer;
 import org.testcontainers.containers.MySQLContainer;
@@ -30,28 +31,36 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class JdbcSuiteListener implements ISuiteListener {
+  private static final String H2 = "h2";
   private static final String MYSQL = "mysql";
   private static final String MARIADB = "mariadb";
   private static final String POSTGRES = "postgres";
-  public static final String PROP_INIT_SCRIPT = "cpo.db.initScript";
-  public static final String PROP_DB_TYPE = "cpo.db";
-  public static final String PROP_DB_PORT = "cpo.db.port";
-  public static final String PROP_DB_USER = "cpo.db.user";
-  public static final String PROP_DB_PSWD = "cpo.db.pswd";
-  public static final String PROP_DB_NAME = "cpo.db.database";
+  public static final String PROP_INIT_SCRIPT = "db.initScript";
+  public static final String PROP_CPO_CONFIG = "db.cpoConfig";
+  public static final String PROP_DB_TYPE = "db.type";
+  public static final String PROP_DB_PORT = "db.port";
+  public static final String PROP_DB_USER = "db.user";
+  public static final String PROP_DB_PSWD = "db.pswd";
+  public static final String PROP_DB_NAME = "db.database";
 
   private Logger logger = LoggerFactory.getLogger(JdbcSuiteListener.class);
   private JdbcDatabaseContainer<?> jdbcContainer=null;
 
   @Override
   public void onStart(ISuite suite) {
-    jdbcContainer = createJdbcContainer(
-            suite.getParameter(PROP_DB_TYPE),
-            suite.getParameter(PROP_INIT_SCRIPT),
-            suite.getParameter(PROP_DB_USER),
-            suite.getParameter(PROP_DB_PSWD),
-            suite.getParameter(PROP_DB_NAME),
-            Integer.parseInt(suite.getParameter(PROP_DB_PORT)));
+      String dbType = suite.getParameter(PROP_DB_TYPE);
+      String dbInitScript = suite.getParameter(PROP_INIT_SCRIPT);
+      String dbUser = suite.getParameter(PROP_DB_USER);
+      String dbPasswd = suite.getParameter(PROP_DB_PSWD);
+      String dbName = suite.getParameter(PROP_DB_NAME);
+      String dbPort = suite.getParameter(PROP_DB_PORT);
+      String cpoConfig = suite.getParameter(PROP_CPO_CONFIG);
+
+      CpoAdapterFactoryManager.loadAdapters(cpoConfig);
+
+      if (!dbType.equals(H2))
+          jdbcContainer = createJdbcContainer(dbType, dbInitScript, dbUser, dbPasswd, dbName, dbPort);
+
     if (jdbcContainer!=null)
       jdbcContainer.start();
     logger.debug("onStart");
@@ -59,19 +68,34 @@ public class JdbcSuiteListener implements ISuiteListener {
 
   @Override
   public void onFinish(ISuite suite) {
-    jdbcContainer.close();
+    if (jdbcContainer!=null)
+        jdbcContainer.close();
     logger.debug("onFinish");
   }
 
-  private JdbcDatabaseContainer<?> createJdbcContainer(String dbType, String initScript, String dbUser, String dbPswd, String dbName, int dbPort) {
+  private JdbcDatabaseContainer<?> createJdbcContainer(String dbType, String initScript, String dbUser, String dbPswd, String dbName, String dbPort) {
     logger.debug("Creating a container for:"+dbType);
+    JdbcDatabaseContainer<?> jdbcContainer = null;
     switch (dbType) {
-      case MYSQL: return new MySQLContainer<>().withInitScript(initScript).withUsername(dbUser).withPassword(dbPswd).withDatabaseName(dbName).withExposedPorts(dbPort);
-      case MARIADB: return new MariaDBContainer<>().withInitScript(initScript).withUsername(dbUser).withPassword(dbPswd).withDatabaseName(dbName).withExposedPorts(dbPort);
-      case POSTGRES: return new PostgreSQLContainer<>().withInitScript(initScript).withUsername(dbUser).withPassword(dbPswd).withDatabaseName(dbName).withExposedPorts(dbPort);
+      case MYSQL: jdbcContainer = new MySQLContainer<>(); break;
+      case MARIADB: jdbcContainer = new MariaDBContainer<>(); break;
+      case POSTGRES: jdbcContainer = new PostgreSQLContainer<>(); break;
       default: logger.debug("No Container to start, unknown dbType:"+dbType);
     }
-    return null;
+
+    if (initScript != null && !initScript.isEmpty())
+        jdbcContainer = jdbcContainer.withInitScript(initScript);
+
+    if (dbUser != null && !dbUser.isEmpty())
+        jdbcContainer = jdbcContainer.withUsername(dbUser);
+    if (dbPswd != null && !dbPswd.isEmpty())
+        jdbcContainer = jdbcContainer.withPassword(dbPswd);
+    if (dbName != null && !dbName.isEmpty())
+        jdbcContainer = jdbcContainer.withDatabaseName(dbName);
+    if (dbPort != null && !dbPort.isEmpty())
+        jdbcContainer = jdbcContainer.withExposedPorts(Integer.parseInt(dbPort));
+
+    return jdbcContainer;
   }
 }
 

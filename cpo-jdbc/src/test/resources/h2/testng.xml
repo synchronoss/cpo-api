@@ -21,11 +21,20 @@
 
 -->
 <!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
-<suite name="H2 Database" verbose="1">
-  <test name="H2 Database JDBC Tests">
-    <packages>
-      <package name="org.synchronoss.cpo.jdbc.db.h2.*" />
-      <package name="org.synchronoss.cpo.jdbc.test.*" />
-    </packages>
-  </test>
+<suite name="H2 Jdbc Test Suite" verbose="2">
+    <parameter name="cpo.db" value="h2"/>
+    <parameter name="cpo.db.database" value="/Users/dberry/project/cpo/api/cpo-jdbc/target/h2/cpo"/>
+    <parameter name="cpo.db.port" value=""/>
+    <parameter name="cpo.db.user" value="sa"/>
+    <parameter name="cpo.db.pswd" value=""/>
+    <parameter name="cpo.db.initScript" value="h2/initDB.sql"/>
+    <listeners>
+        <listener class-name="org.synchronoss.cpo.jdbc.JdbcSuiteListener"/>
+    </listeners>
+    <test name="H2 Jdbc Tests" verbose="2">
+        <packages>
+            <package name="org.synchronoss.cpo.jdbc" />
+            <package name="org.synchronoss.cpo.jdbc.test" />
+        </packages>
+    </test>
 </suite>

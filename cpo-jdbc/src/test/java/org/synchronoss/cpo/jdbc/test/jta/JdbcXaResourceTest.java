@@ -112,7 +112,7 @@ public class JdbcXaResourceTest {
     al.add(valObj1);
     al.add(valObj2);
 
-		Xid xid1 = new MyXid(100, new byte[]{0x01}, new byte[]{0x02});
+	Xid xid1 = new MyXid(100, new byte[]{0x01}, new byte[]{0x02});
   	Xid xid2 = new MyXid(100, new byte[]{0x11}, new byte[]{0x22});
 
     try {
@@ -140,7 +140,7 @@ public class JdbcXaResourceTest {
       assertEquals(list.get(1).getId(), 12, "ValuObject(2) is missing");
 
 
-      assertEquals(2, cpoXaAdapter1.deleteObjects(al));
+      assertEquals(cpoXaAdapter1.deleteObjects(al), 2);
     } catch (Exception e) {
       fail(method + ExceptionHelper.getLocalizedMessage(e));
     } finally {

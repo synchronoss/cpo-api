@@ -34,8 +34,7 @@
     </listeners>
     <test name="${h2.type} Jdbc Tests" verbose="2">
         <packages>
-            <package name="org.synchronoss.cpo.jdbc" />
-            <package name="org.synchronoss.cpo.jdbc.test" />
+            <package name="org.synchronoss.cpo.jdbc.*" />
         </packages>
     </test>
 </suite>

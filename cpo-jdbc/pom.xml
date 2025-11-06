@@ -120,8 +120,8 @@
       <h2.host />
       <h2.port />
       <h2.database>${basedir}/target/h2/cpo</h2.database>
-      <h2.url>jdbc:h2:file:${h2.database};INIT=RUNSCRIPT FROM '${basedir}/target/test-classes/h2/initDB.sql'</h2.url>
-      <h2.userurl>jdbc:h2:file:${h2.database};user=${h2.user};password=${h2.pswd};INIT=RUNSCRIPT FROM '${basedir}/target/test-classes/h2/initDB.sql'</h2.userurl>
+      <h2.url>jdbc:h2:file:${h2.database};AUTO_SERVER=TRUE;INIT=RUNSCRIPT FROM '${basedir}/target/test-classes/h2/initDB.sql'</h2.url>
+      <h2.userurl>jdbc:h2:file:${h2.database};user=${h2.user};password=${h2.pswd};AUTO_SERVER=TRUE;INIT=RUNSCRIPT FROM '${basedir}/target/test-classes/h2/initDB.sql'</h2.userurl>
       <h2.driver>org.h2.Driver</h2.driver>
       <h2.blobssupported>true</h2.blobssupported>
       <h2.callssupported>true</h2.callssupported>

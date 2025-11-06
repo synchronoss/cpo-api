@@ -100,7 +100,7 @@ public class BigRetrieveTest {
     try {
       ValueObject valObj = ValueObjectFactory.createValueObject(className);
       col = cpoAdapter.retrieveBeans(ValueObject.FG_LIST_NULL, valObj);
-      assertEquals(al.size(), col.size(), "Col size is " + col.size());
+      assertEquals(col.size(), al.size(), "Col size is " + col.size());
 
     } catch (Exception e) {
       fail(method + e.getMessage());

@@ -42,14 +42,14 @@ import java.util.*;
 public final class CpoAdapterFactoryManager extends CpoAdapterFactoryCache {
 
   private static final Logger logger = LoggerFactory.getLogger(CpoAdapterFactoryManager.class);
-  private static final String CPO_CONFIG = "CPO_CONFIG";
+  public static final String CPO_CONFIG = "CPO_CONFIG";
   private static final String CPO_CONFIG_XML = "/cpoConfig.xml";
   private static String defaultContext = null;
 
   static {
     String cpoConfig = System.getenv(CPO_CONFIG);
     if (cpoConfig==null)
-      cpoConfig=CPO_CONFIG_XML;
+      cpoConfig=System.getProperty(CPO_CONFIG, CPO_CONFIG_XML);
 
     loadAdapters(cpoConfig);
   }

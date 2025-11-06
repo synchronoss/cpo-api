@@ -22,10 +22,8 @@ package org.synchronoss.cpo.jdbc;
 
 import org.h2.tools.RunScript;
 import org.synchronoss.cpo.CpoAdapterFactoryManager;
-import org.testcontainers.containers.JdbcDatabaseContainer;
-import org.testcontainers.containers.MariaDBContainer;
-import org.testcontainers.containers.MySQLContainer;
-import org.testcontainers.containers.PostgreSQLContainer;
+import org.testcontainers.containers.*;
+import org.testcontainers.utility.DockerImageName;
 import org.testng.ISuite;
 import org.testng.ISuiteListener;
 import org.slf4j.Logger;
@@ -84,7 +82,9 @@ public class JdbcSuiteListener implements ISuiteListener {
 
           if (jdbcContainer != null) {
               jdbcContainer.start();
-              CpoAdapterFactoryManager.loadAdapters(cpoConfig);
+              logger.error("Trying to load cpoConfig <"+cpoConfig+">");
+              System.setProperty(CpoAdapterFactoryManager.CPO_CONFIG, cpoConfig);
+              logger.error("Loaded cpoConfig <"+cpoConfig+">");
           }
       }
 
@@ -107,8 +107,8 @@ public class JdbcSuiteListener implements ISuiteListener {
     switch (dbType) {
       case MYSQL: jdbcContainer = new MySQLContainer<>(); break;
       case MARIADB: jdbcContainer = new MariaDBContainer<>(); break;
-        case POSTGRES: jdbcContainer = new PostgreSQLContainer<>(); break;
-        case ORACLE: jdbcContainer = new PostgreSQLContainer<>(); break;
+      case POSTGRES: jdbcContainer = new PostgreSQLContainer<>(); break;
+      case ORACLE: jdbcContainer = new OracleContainer(); break;
       default: logger.debug("No Container to start, unknown dbType:"+dbType);
     }
 

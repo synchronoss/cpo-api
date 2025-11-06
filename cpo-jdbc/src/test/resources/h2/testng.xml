@@ -29,6 +29,11 @@
     <parameter name="db.pswd" value="${h2.pswd}"/>
     <parameter name="db.initScript" value="${h2.initScript}"/>
     <parameter name="db.cpoConfig" value="${h2.cpoConfig}"/>
+    <parameter name="db.url" value="${h2.url}"/>
+    <parameter name="db.blobsupport" value="${h2.blobsupport}"/>
+    <parameter name="db.callsupport" value="${h2.callsupport}"/>
+    <parameter name="db.select4update" value="${h2.select4update}"/>
+    <parameter name="db.millisupport" value="${h2.millisupport}"/>
     <listeners>
         <listener class-name="org.synchronoss.cpo.jdbc.JdbcSuiteListener"/>
     </listeners>

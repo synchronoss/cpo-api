@@ -46,7 +46,7 @@ public class BlobTrxTest {
   private char[] testClob = "This is a test Clob used for testing clobs".toCharArray();
   private byte[] testBlob2 = null;
   private char[] testClob2 = "This is a second test Clob used for testing clobs".toCharArray();
-  private boolean isSupportsBlobs = Boolean.valueOf(JdbcTestProperty.getProperty(JdbcTestProperty.PROP_BLOBS_SUPPORTED));
+  private boolean isSupportsBlobs = true;
 
   public BlobTrxTest() {
 
@@ -58,10 +58,12 @@ public class BlobTrxTest {
    * @author david berry
    * @version '$Id: BlobTestTrx.java,v 1.2 2006/01/31 22:31:06 dberry Exp $'
    */
+  @Parameters({ "db.blobsupport" })
   @BeforeClass
-  public void setUp() {
+  public void setUp(boolean blobSupport) {
 
     String method = "setUp:";
+    isSupportsBlobs = blobSupport;
 
     try {
       cpoAdapter = CpoAdapterFactoryManager.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_JDBC);

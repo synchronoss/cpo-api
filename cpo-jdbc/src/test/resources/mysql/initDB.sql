@@ -42,12 +42,7 @@ CREATE TABLE IF NOT EXISTS value_object
     attr_tinyint            tinyint(4)   NULL,
     attr_smallint           smallint(6)  NULL,
     attr_bigint             bigint(20)   NULL,
-    attr_real               real         NULL,
-    attr_binary             binary        NULL,
-    attr_varbinary          varbinary     NULL,
-    attr_nchar		        nchar(255) NULL,
-    attr_blob               blob         NULL,
-    attr_clob               longtext     NULL
+    attr_real               real         NULL
 )
 ENGINE = 'InnoDB';
 

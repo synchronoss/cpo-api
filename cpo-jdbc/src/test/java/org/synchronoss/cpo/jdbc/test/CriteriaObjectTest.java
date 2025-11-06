@@ -42,7 +42,7 @@ public class CriteriaObjectTest {
   private static final Logger logger = LoggerFactory.getLogger(CriteriaObjectTest.class);
   private CpoAdapter cpoAdapter = null;
   private ArrayList<ValueObject> al = new ArrayList<>();
-  private boolean isSupportsCalls = Boolean.valueOf(JdbcTestProperty.getProperty(JdbcTestProperty.PROP_CALLS_SUPPORTED));
+  private boolean isSupportsCalls = true;
   private final String className = this.getClass().getSimpleName();
 
   public CriteriaObjectTest() {
@@ -54,9 +54,11 @@ public class CriteriaObjectTest {
    * @author david berry
    * @version '$Id: RetrieveBeanTest.java,v 1.6 2006/01/30 19:09:23 dberry Exp $'
    */
+  @Parameters({ "db.callsupport" })
   @BeforeClass
-  public void setUp() {
+  public void setUp(boolean callSupport) {
     String method = "setUp:";
+    isSupportsCalls  = callSupport;
 
     try {
       cpoAdapter = CpoAdapterFactoryManager.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_JDBC);

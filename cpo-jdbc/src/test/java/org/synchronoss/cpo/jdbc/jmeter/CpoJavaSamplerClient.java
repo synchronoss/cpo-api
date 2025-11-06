@@ -29,6 +29,8 @@ import org.synchronoss.cpo.jdbc.*;
 import org.synchronoss.cpo.jdbc.cpoJdbcConfig.*;
 import org.synchronoss.cpo.jdbc.meta.JdbcCpoMetaDescriptor;
 import org.synchronoss.cpo.meta.CpoMetaDescriptor;
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.Parameters;
 
 import java.sql.Timestamp;
 
@@ -51,7 +53,6 @@ public class CpoJavaSamplerClient extends AbstractJavaSamplerClient {
   private static final String URL = "url";
   private static final String DRIVER = "driver";
   private static final String CONFIG_PROCESSOR = "org.synchronoss.cpo.jdbc.config.JdbcCpoConfigProcessor";
-  private static boolean isSupportsMillis = Boolean.valueOf(JdbcTestProperty.getProperty(JdbcTestProperty.PROP_MILLIS_SUPPORTED));
   private final String className = this.getClass().getSimpleName();
 
   @Override
@@ -99,9 +100,7 @@ public class CpoJavaSamplerClient extends AbstractJavaSamplerClient {
     valueObject.setAttrInteger(3);
     Timestamp ts = new Timestamp(System.currentTimeMillis());
 
-    if (!isSupportsMillis) {
-      ts.setNanos(0);
-    }
+    ts.setNanos(0);
 
     valueObject.setAttrDatetime(ts);
     valueObject.setAttrBit(true);

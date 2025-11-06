@@ -54,8 +54,8 @@
       <mysql.url>jdbc:mysql://${mysql.host}:${mysql.port}/${mysql.database}?noAccessToProcedureBodies=true&amp;amp;useCursorFetch=true&amp;amp;defaultFetchSize=0</mysql.url>
       <mysql.userurl>jdbc:mysql://${mysql.host}:${mysql.port}/${mysql.database}?user=${mysql.user}&amp;amp;password=${mysql.pswd}&amp;amp;noAccessToProcedureBodies=true&amp;amp;useCursorFetch=true&amp;amp;defaultFetchSize=0</mysql.userurl>
       <mysql.driver>com.mysql.cj.jdbc.Driver</mysql.driver>
-      <mysql.blobssupported>true</mysql.blobssupported>
-      <mysql.callssupported>true</mysql.callssupported>
+      <mysql.blobsupport>true</mysql.blobsupport>
+      <mysql.callsupport>true</mysql.callsupport>
       <mysql.select4update>true</mysql.select4update>
       <mysql.millisupport>false</mysql.millisupport>
       <mysql.initScript>mysql/initDB.sql</mysql.initScript>
@@ -77,8 +77,8 @@
       <mariadb.url>jdbc:mariadb://${mariadb.host}:${mariadb.port}/${mariadb.database}</mariadb.url>
       <mariadb.userurl>jdbc:mariadb://${mariadb.host}:${mariadb.port}/${mariadb.database}?user=${mariadb.user}&amp;amp;password=${mariadb.pswd}</mariadb.userurl>
       <mariadb.driver>org.mariadb.jdbc.Driver</mariadb.driver>
-      <mariadb.blobssupported>true</mariadb.blobssupported>
-      <mariadb.callssupported>true</mariadb.callssupported>
+      <mariadb.blobsupport>true</mariadb.blobsupport>
+      <mariadb.callsupport>true</mariadb.callsupport>
       <mariadb.select4update>true</mariadb.select4update>
       <mariadb.millisupport>false</mariadb.millisupport>
       <mariadb.initScript>mariadb/initDB.sql</mariadb.initScript>
@@ -100,8 +100,8 @@
       <oracle.url>jdbc:oracle:thin:@${oracle.host}:${oracle.port}:${oracle.database}</oracle.url>
       <oracle.userurl>jdbc:oracle:thin:${oracle.user}/${oracle.pswd}@${oracle.host}:${oracle.port}:${oracle.database}</oracle.userurl>
       <oracle.driver>oracle.jdbc.driver.OracleDriver</oracle.driver>
-      <oracle.blobssupported>true</oracle.blobssupported>
-      <oracle.callssupported>true</oracle.callssupported>
+      <oracle.blobsupport>true</oracle.blobsupport>
+      <oracle.callsupport>true</oracle.callsupport>
       <oracle.select4update>true</oracle.select4update>
       <oracle.millisupport>true</oracle.millisupport>
       <oracle.initScript>oracle/initDB.sql</oracle.initScript>
@@ -117,17 +117,17 @@
       <h2.resources>src/test/resources/h2</h2.resources>
       <h2.user>sa</h2.user>
       <h2.pswd />
-      <h2.host />
-      <h2.port />
-      <h2.database>${basedir}/target/h2/cpo</h2.database>
-      <h2.url>jdbc:h2:file:${h2.database};AUTO_SERVER=TRUE;INIT=RUNSCRIPT FROM '${basedir}/target/test-classes/h2/initDB.sql'</h2.url>
-      <h2.userurl>jdbc:h2:file:${h2.database};user=${h2.user};password=${h2.pswd};AUTO_SERVER=TRUE;INIT=RUNSCRIPT FROM '${basedir}/target/test-classes/h2/initDB.sql'</h2.userurl>
+      <h2.host>localhost</h2.host>
+      <h2.port>9123</h2.port>
+      <h2.database>cpo</h2.database>
+      <h2.url>jdbc:h2:tcp://${h2.host}:${h2.port}/${h2.database}</h2.url>
+      <h2.userurl>jdbc:h2:tcp://${h2.host}:${h2.port}/${h2.database};user=${h2.user};password=${h2.pswd}</h2.userurl>
       <h2.driver>org.h2.Driver</h2.driver>
-      <h2.blobssupported>true</h2.blobssupported>
-      <h2.callssupported>true</h2.callssupported>
+      <h2.blobsupport>true</h2.blobsupport>
+      <h2.callsupport>true</h2.callsupport>
       <h2.select4update>false</h2.select4update>
       <h2.millisupport>true</h2.millisupport>
-      <h2.initScript>h2/initDB.sql</h2.initScript>
+      <h2.initScript>${basedir}/target/test-classes/h2/initDB.sql</h2.initScript>
       <h2.cpoConfig>h2/cpoConfig.xml</h2.cpoConfig>
       <h2.jndi>cpodatasource</h2.jndi>
       <h2.class>org.h2.jdbcx.JdbcDataSource</h2.class>
@@ -146,8 +146,8 @@
       <postgres.url>jdbc:postgresql://${postgres.host}:${postgres.port}/${postgres.database}</postgres.url>
       <postgres.userurl>jdbc:postgresql://${postgres.host}:${postgres.port}/${postgres.database}?user=${postgres.user}&amp;amp;password=${postgres.pswd}&amp;amp;stringtype=unspecified</postgres.userurl>
       <postgres.driver>org.postgresql.Driver</postgres.driver>
-      <postgres.blobssupported>true</postgres.blobssupported>
-      <postgres.callssupported>true</postgres.callssupported>
+      <postgres.blobsupport>true</postgres.blobsupport>
+      <postgres.callsupport>true</postgres.callsupport>
       <postgres.select4update>false</postgres.select4update>
       <postgres.millisupport>true</postgres.millisupport>
       <postgres.initScript>postgres/initDB.sql</postgres.initScript>

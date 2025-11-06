@@ -39,7 +39,7 @@ public class UpdateObjectTest {
   private ArrayList<ValueObject> al = new ArrayList<>();
   private CpoAdapter cpoAdapter = null;
   private JdbcCpoMetaDescriptor metaDescriptor = null;
-  private boolean isSupportsMillis = Boolean.valueOf(JdbcTestProperty.getProperty(JdbcTestProperty.PROP_MILLIS_SUPPORTED));
+  private boolean isSupportsMillis = true;
   private final String className = this.getClass().getSimpleName();
 
   public UpdateObjectTest() {
@@ -51,9 +51,11 @@ public class UpdateObjectTest {
    * @author david berry
    * @version '$Id: InsertObjectTest.java,v 1.3 2006/01/30 19:09:23 dberry Exp $'
    */
+  @Parameters({ "db.millisupport" })
   @BeforeClass
-  public void setUp() {
-    String method = "setUp:";
+  public void setUp(boolean milliSupport) {
+      String method = "setUp:";
+      isSupportsMillis  = milliSupport;
 
     try {
       cpoAdapter = CpoAdapterFactoryManager.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_JDBC);

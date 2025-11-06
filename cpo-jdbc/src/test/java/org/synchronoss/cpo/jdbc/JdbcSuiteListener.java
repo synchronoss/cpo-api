@@ -20,6 +20,7 @@
  */
 package org.synchronoss.cpo.jdbc;
 
+import org.h2.tools.RunScript;
 import org.synchronoss.cpo.CpoAdapterFactoryManager;
 import org.testcontainers.containers.JdbcDatabaseContainer;
 import org.testcontainers.containers.MariaDBContainer;
@@ -30,6 +31,9 @@ import org.testng.ISuiteListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.h2.tools.Server;
+
+import java.nio.charset.Charset;
+import java.sql.SQLException;
 
 public class JdbcSuiteListener implements ISuiteListener {
   private static final String H2 = "h2";
@@ -43,9 +47,15 @@ public class JdbcSuiteListener implements ISuiteListener {
   public static final String PROP_DB_USER = "db.user";
   public static final String PROP_DB_PSWD = "db.pswd";
   public static final String PROP_DB_NAME = "db.database";
+  public static final String PROP_DB_URL = "db.url";
+  public static final String PROP_DB_BLOBSUPPORT = "db.blobsupport";
+  public static final String PROP_DB_CALLSUPORT = "db.callsupport";
+  public static final String PROP_DB_SELECT4UPDATE = "db.select4update";
+  public static final String PROP_DB_MILLISUPPORT = "db.millisupport";
 
   private Logger logger = LoggerFactory.getLogger(JdbcSuiteListener.class);
   private JdbcDatabaseContainer<?> jdbcContainer=null;
+  private Server h2Server = null;
 
   @Override
   public void onStart(ISuite suite) {
@@ -55,9 +65,20 @@ public class JdbcSuiteListener implements ISuiteListener {
       String dbPasswd = suite.getParameter(PROP_DB_PSWD);
       String dbName = suite.getParameter(PROP_DB_NAME);
       String dbPort = suite.getParameter(PROP_DB_PORT);
+      String dbUrl = suite.getParameter(PROP_DB_URL);
       String cpoConfig = suite.getParameter(PROP_CPO_CONFIG);
+      String initScript = suite.getParameter(PROP_INIT_SCRIPT);
 
-      if (!dbType.equals(H2)) {
+      if (dbType.equals(H2)) {
+          try {
+              h2Server = Server.createTcpServer("-tcpPort", dbPort, "-tcpAllowOthers", "-baseDir", "~/", "-ifNotExists");
+              h2Server.start();
+              RunScript.execute(dbUrl, dbUser, dbPasswd, initScript, null,false);
+          } catch (SQLException e) {
+              logger.error(e.getMessage());
+              System.exit(1);
+          }
+      } else {
           jdbcContainer = createJdbcContainer(dbType, dbInitScript, dbUser, dbPasswd, dbName, dbPort);
 
           if (jdbcContainer != null) {
@@ -74,6 +95,8 @@ public class JdbcSuiteListener implements ISuiteListener {
   public void onFinish(ISuite suite) {
     if (jdbcContainer!=null)
         jdbcContainer.close();
+    if (h2Server!=null)
+        h2Server.stop();
     logger.debug("onFinish");
   }
 

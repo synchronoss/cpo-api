@@ -42,12 +42,7 @@ CREATE TABLE IF NOT EXISTS value_object
     attr_tinyint   tinyint          NULL,
     attr_smallint  smallint         NULL,
     attr_bigint    bigint           NULL,
-    attr_real      real             NULL,
-    attr_binary    binary           NULL,
-    attr_varbinary varbinary        NULL,
-    attr_nchar     nchar(255)       NULL,
-    attr_blob      blob             NULL,
-    attr_clob      clob             NULL
+    attr_real      real             NULL
 );
 
 CREATE TABLE IF NOT EXISTS lob_test

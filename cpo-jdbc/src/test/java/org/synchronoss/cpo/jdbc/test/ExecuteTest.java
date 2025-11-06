@@ -40,7 +40,7 @@ public class ExecuteTest {
   private static final Logger logger = LoggerFactory.getLogger(ExecuteTest.class);
   private CpoAdapter cpoAdapter = null;
   private JdbcCpoMetaDescriptor metaDescriptor = null;
-  private boolean isSupportsCalls = Boolean.valueOf(JdbcTestProperty.getProperty(JdbcTestProperty.PROP_CALLS_SUPPORTED));
+  private boolean isSupportsCalls = true;
   private final String className = this.getClass().getSimpleName();
 
   /**
@@ -52,9 +52,11 @@ public class ExecuteTest {
   /**
    * <code>setUp</code> Load the datasource from the properties in the property file jdbc_en_US.properties
    */
+  @Parameters({ "db.callsupport" })
   @BeforeClass
-  public void setUp() {
-    String method = "setUp:";
+  public void setUp(boolean callSupport) {
+      String method = "setUp:";
+      isSupportsCalls  = callSupport;
 
     try {
       cpoAdapter = CpoAdapterFactoryManager.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_JDBC);

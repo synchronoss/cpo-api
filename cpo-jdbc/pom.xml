@@ -37,11 +37,11 @@
     produces POJOs
   </description>
   <properties>
-    <oracleVersion>19.3.0.0</oracleVersion>
-    <mysqlVersion>9.1.0</mysqlVersion>
-    <mariadbVersion>3.5.1</mariadbVersion>
-    <h2Version>2.2.224</h2Version>
-    <postgresVersion>42.7.4</postgresVersion>
+      <oracleVersion>23.8.0.25.04</oracleVersion>
+      <mysqlVersion>9.3.0</mysqlVersion>
+      <mariadbVersion>3.5.4</mariadbVersion>
+      <h2Version>2.2.224</h2Version>
+      <postgresVersion>42.7.7</postgresVersion>
 
       <!--  MySQL Test properties  -->
       <mysql.type>mysql</mysql.type>

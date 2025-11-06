@@ -20,6 +20,9 @@
  */
 package org.synchronoss.cpo.jdbc;
 
+import com.github.terma.javaniotcpproxy.StaticTcpProxyConfig;
+import com.github.terma.javaniotcpproxy.TcpProxy;
+import com.github.terma.javaniotcpproxy.TcpProxyConfig;
 import org.h2.tools.RunScript;
 import org.synchronoss.cpo.CpoAdapterFactoryManager;
 import org.testcontainers.containers.*;
@@ -56,6 +59,7 @@ public class JdbcSuiteListener implements ISuiteListener {
   private Logger logger = LoggerFactory.getLogger(JdbcSuiteListener.class);
   private JdbcDatabaseContainer<?> jdbcContainer=null;
   private Server h2Server = null;
+  private TcpProxy tcpProxy = null;
 
   @Override
   public void onStart(ISuite suite) {
@@ -84,9 +88,16 @@ public class JdbcSuiteListener implements ISuiteListener {
 
           if (jdbcContainer != null) {
               jdbcContainer.start();
-              logger.error("Trying to load cpoConfig <"+cpoConfig+">");
+              // Now map the random port to something we can use in the config file
+              TcpProxyConfig config = new StaticTcpProxyConfig(Integer.parseInt(dbPort), jdbcContainer.getHost(), jdbcContainer.getFirstMappedPort());
+              config.setWorkerCount(1);
+
+              // init proxy
+              tcpProxy = new TcpProxy(config);
+              // start proxy
+              tcpProxy.start();
+
               System.setProperty(CpoAdapterFactoryManager.CPO_CONFIG, cpoConfig);
-              logger.error("Loaded cpoConfig <"+cpoConfig+">");
           }
       }
 
@@ -96,6 +107,8 @@ public class JdbcSuiteListener implements ISuiteListener {
 
   @Override
   public void onFinish(ISuite suite) {
+      if (tcpProxy!=null)
+          tcpProxy.shutdown();
     if (jdbcContainer!=null)
         jdbcContainer.close();
     if (h2Server!=null)
@@ -125,8 +138,8 @@ public class JdbcSuiteListener implements ISuiteListener {
         jdbcContainer = jdbcContainer.withPassword(dbPswd);
     if (dbName != null && !dbName.isEmpty())
         jdbcContainer = jdbcContainer.withDatabaseName(dbName);
-    if (dbPort != null && !dbPort.isEmpty())
-        jdbcContainer = jdbcContainer.withExposedPorts(Integer.parseInt(dbPort));
+//    if (dbPort != null && !dbPort.isEmpty())
+//        jdbcContainer = jdbcContainer.withExposedPorts();
 
     return jdbcContainer;
   }

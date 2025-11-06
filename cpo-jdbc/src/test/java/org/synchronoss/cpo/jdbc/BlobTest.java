@@ -20,18 +20,16 @@
  */
 package org.synchronoss.cpo.jdbc;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.CpoAdapter;
 import org.synchronoss.cpo.CpoAdapterFactoryManager;
 import org.synchronoss.cpo.jdbc.meta.JdbcCpoMetaDescriptor;
+import org.testng.annotations.*;
+import static org.testng.Assert.*;
 
 /**
- * BlobTest is a JUnit test class for testing the JdbcAdapter class Constructors
+ * BlobTest is a test class for testing the JdbcAdapter class Constructors
  *
  * @author david berry
  */
@@ -56,7 +54,7 @@ public class BlobTest extends JdbcDbContainerBase {
    * @author david berry
    * @version '$Id: BlobTest.java,v 1.15 2006/02/15 18:34:19 dberry Exp $'
    */
-  @BeforeEach
+  @BeforeMethod
   public void setUp() {
 
     String method = "setUp:";
@@ -357,7 +355,7 @@ public class BlobTest extends JdbcDbContainerBase {
 
   }
 
-  @AfterEach
+  @AfterMethod
   public void tearDown() {
 
     cpoAdapter = null;

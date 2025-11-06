@@ -20,12 +20,11 @@
  */
 package org.synchronoss.cpo.jta;
 
-import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
-
 import javax.transaction.xa.XAException;
 import javax.transaction.xa.XAResource;
 import javax.transaction.xa.Xid;
+import org.testng.annotations.*;
+import static org.testng.Assert.*;
 
 
 /**

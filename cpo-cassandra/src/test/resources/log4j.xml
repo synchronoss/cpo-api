@@ -53,7 +53,7 @@
     </layout>
   </appender>
   <logger name="org.synchronoss">
-    <level value="debug"/>
+    <level value="info"/>
   </logger>
   <root>
     <priority value="debug"/>

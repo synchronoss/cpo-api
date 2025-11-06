@@ -365,7 +365,7 @@
         <groupId>org.jacoco</groupId>
         <artifactId>jacoco-maven-plugin</artifactId>
         <executions>
-          <!-- This section is for the junits -->
+          <!-- This section is for the units -->
           <execution>
             <id>default-prepare-agent</id>
             <goals>
@@ -420,12 +420,12 @@
   </build>
   <dependencyManagement>
     <dependencies>
-      <dependency>
-        <groupId>org.junit.jupiter</groupId>
-        <artifactId>junit-jupiter</artifactId>
-        <version>5.13.3</version>
-        <scope>test</scope>
-      </dependency>
+        <dependency>
+            <groupId>org.testng</groupId>
+            <artifactId>testng</artifactId>
+            <version>7.5.1</version>
+            <scope>test</scope>
+        </dependency>
       <dependency>
         <groupId>org.slf4j</groupId>
         <artifactId>slf4j-api</artifactId>

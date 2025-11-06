@@ -21,16 +21,13 @@
 package org.synchronoss.cpo.cassandra;
 
 import org.synchronoss.cpo.*;
+import org.testng.annotations.*;
+import static org.testng.Assert.*;
 
 import java.util.*;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
-
 /**
- * BlobTest is a JUnit test class for testing the JdbcAdapter class Constructors
+ * BlobTest is a test class for testing the JdbcAdapter class Constructors
  *
  * @author david berry
  */
@@ -45,7 +42,7 @@ public class OrderByTest extends CassandraContainerBase {
   /**
    * <code>setUp</code> Load the datasource from the properties in the property file jdbc_en_US.properties
    */
-  @BeforeEach
+  @BeforeMethod
   public void setUp() {
     String method = "setUp:";
 
@@ -69,7 +66,7 @@ public class OrderByTest extends CassandraContainerBase {
     }
   }
 
-  @AfterEach
+  @AfterMethod
   public void tearDown() {
     String method = "tearDown:";
     try {

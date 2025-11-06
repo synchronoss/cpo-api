@@ -20,19 +20,17 @@
  */
 package org.synchronoss.cpo.jdbc;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
 import org.synchronoss.cpo.*;
 import org.synchronoss.cpo.jdbc.meta.JdbcCpoMetaDescriptor;
+import org.testng.annotations.*;
+import static org.testng.Assert.*;
 
 import java.math.BigInteger;
 import java.sql.Timestamp;
 import java.util.*;
 
 /**
- * InsertObjectTest is a JUnit test class for testing the insert api calls of cpo
+ * InsertObjectTest is a test class for testing the insert api calls of cpo
  *
  * @author david berry
  */
@@ -53,7 +51,7 @@ public class InsertObjectTest extends JdbcDbContainerBase {
    * @author david berry
    * @version '$Id: InsertObjectTest.java,v 1.3 2006/01/30 19:09:23 dberry Exp $'
    */
-  @BeforeEach
+  @BeforeMethod
   public void setUp() {
     String method = "setUp:";
 
@@ -120,15 +118,16 @@ public class InsertObjectTest extends JdbcDbContainerBase {
   public void testInsertObjects() {
 
     String method = "testInsertObjects:";
-    ValueObject vo = ValueObjectFactory.createValueObject(1);
+    ValueObject vo = ValueObjectFactory.createValueObject(61);
     vo.setAttrVarChar("Test");
-
-    al.add(vo);
-    al.add(ValueObjectFactory.createValueObject(2));
-    al.add(ValueObjectFactory.createValueObject(3));
-    al.add(ValueObjectFactory.createValueObject(4));
+    ArrayList<ValueObject> a2 = new ArrayList<>();
+      a2.add(vo);
+      a2.add(ValueObjectFactory.createValueObject(62));
+      a2.add(ValueObjectFactory.createValueObject(63));
+      a2.add(ValueObjectFactory.createValueObject(64));
+      al.addAll(a2);
     try {
-      long inserts = cpoAdapter.insertObjects(al);
+      long inserts = cpoAdapter.insertObjects(a2);
       assertEquals(inserts, 4,"inserts performed do not equal inserts requested");
     } catch (Exception e) {
       fail(method + e.getMessage());
@@ -137,7 +136,7 @@ public class InsertObjectTest extends JdbcDbContainerBase {
     try {
       Collection<ValueObject> col = readAdapter.retrieveBeans(ValueObject.FG_LIST_NULL, vo);
 
-      assertTrue(col.size() == al.size(), method + "Invalid number of objects returned");
+      assertTrue(col.size() == a2.size(), method + "Invalid number of objects returned");
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -145,7 +144,7 @@ public class InsertObjectTest extends JdbcDbContainerBase {
 
   }
 
-  @AfterEach
+  @AfterMethod
   public void tearDown() {
     String method = "tearDown:";
     try {

@@ -23,16 +23,13 @@ package org.synchronoss.cpo.cassandra;
 import org.slf4j.*;
 import org.synchronoss.cpo.*;
 import org.synchronoss.cpo.helper.ExceptionHelper;
+import org.testng.annotations.*;
+import static org.testng.Assert.*;
 
 import java.util.ArrayList;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
-
 /**
- * ExistObjectTest is a JUnit test class for the exists api calls
+ * ExistObjectTest is a test class for the exists api calls
  *
  * @author david berry
  */
@@ -47,7 +44,7 @@ public class ExistObjectTest extends CassandraContainerBase {
    * @author david berry
    * @version '$Id: ExistObjectTest.java,v 1.2 2006/01/30 19:09:23 dberry Exp $'
    */
-  @BeforeEach
+  @BeforeMethod
   public void setUp() {
     String method = "setUp:";
 
@@ -116,7 +113,7 @@ public class ExistObjectTest extends CassandraContainerBase {
     }
   }
 
-  @AfterEach
+  @AfterMethod
   public void tearDown() {
     ValueObject vo = ValueObjectFactory.createValueObject(1);
     try {

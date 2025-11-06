@@ -24,14 +24,13 @@ import org.slf4j.*;
 import org.synchronoss.cpo.*;
 import org.synchronoss.cpo.cassandra.meta.CassandraCpoAttribute;
 import org.synchronoss.cpo.meta.domain.CpoAttribute;
+import org.testng.annotations.*;
+import static org.testng.Assert.*;
 
 import java.util.List;
 
-import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
-
 /**
- * ConstructorTest is a JUnit test class for testing the JdbcAdapter class Constructors
+ * ConstructorTest is a test class for testing the JdbcAdapter class Constructors
  *
  * @author david berry
  */

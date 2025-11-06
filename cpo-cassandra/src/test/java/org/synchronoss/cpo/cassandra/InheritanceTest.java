@@ -22,17 +22,14 @@ package org.synchronoss.cpo.cassandra;
 
 import org.synchronoss.cpo.*;
 import org.synchronoss.cpo.cassandra.meta.CassandraCpoMetaDescriptor;
+import org.testng.annotations.*;
+import static org.testng.Assert.*;
 
 import java.sql.Timestamp;
 import java.util.*;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
-
 /**
- * InheritanceTest is a JUnit test class for testing the polymorphic capabilites of CPO
+ * InheritanceTest is a test class for testing the polymorphic capabilites of CPO
  *
  * @author david berry
  */
@@ -48,7 +45,7 @@ public class InheritanceTest extends CassandraContainerBase {
    * @author david berry
    * @version '$Id: InsertObjectTest.java,v 1.3 2006/01/30 19:09:23 dberry Exp $'
    */
-  @BeforeEach
+  @BeforeMethod
   public void setUp() {
     String method = "setUp:";
 
@@ -69,7 +66,7 @@ public class InheritanceTest extends CassandraContainerBase {
     valObj.setId(5);
     valObj.setAttrVarChar("testInsert");
     valObj.setAttrInt(3);
-    Date ts = new Timestamp(System.currentTimeMillis());
+    Date ts = new Date(System.currentTimeMillis());
 
 //    if (!metaDescriptor.isSupportsMillis()) {
 //      ts.setNanos(0);
@@ -92,14 +89,14 @@ public class InheritanceTest extends CassandraContainerBase {
       assertEquals(vo.getId(), valObj.getId(), "Ids do not match");
       assertEquals(vo.getAttrInt(), valObj.getAttrInt(), "Integers do not match");
       assertEquals(vo.getAttrVarChar(), valObj.getAttrVarChar(), "Strings do not match");
-      assertEquals(vo.getAttrTimestamp(), valObj.getAttrTimestamp(), "Timestamps do not match");
+      assertEquals(vo.getAttrTimestamp().getTime(), valObj.getAttrTimestamp().getTime(), "Timestamps do not match");
       assertTrue(vo.getAttrBool(), "boolean not stored correctly");
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
   }
 
-  @AfterEach
+  @AfterMethod
   public void tearDown() {
     String method = "tearDown:";
     try {

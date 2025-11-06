@@ -40,6 +40,7 @@ public class JdbcSuiteListener implements ISuiteListener {
   private static final String MYSQL = "mysql";
   private static final String MARIADB = "mariadb";
   private static final String POSTGRES = "postgres";
+  private static final String ORACLE = "oracle";
   public static final String PROP_INIT_SCRIPT = "db.initScript";
   public static final String PROP_CPO_CONFIG = "db.cpoConfig";
   public static final String PROP_DB_TYPE = "db.type";
@@ -106,7 +107,8 @@ public class JdbcSuiteListener implements ISuiteListener {
     switch (dbType) {
       case MYSQL: jdbcContainer = new MySQLContainer<>(); break;
       case MARIADB: jdbcContainer = new MariaDBContainer<>(); break;
-      case POSTGRES: jdbcContainer = new PostgreSQLContainer<>(); break;
+        case POSTGRES: jdbcContainer = new PostgreSQLContainer<>(); break;
+        case ORACLE: jdbcContainer = new PostgreSQLContainer<>(); break;
       default: logger.debug("No Container to start, unknown dbType:"+dbType);
     }
 

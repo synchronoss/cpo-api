@@ -29,13 +29,17 @@
     <parameter name="db.pswd" value="${mysql.pswd}"/>
     <parameter name="db.initScript" value="${mysql.initScript}"/>
     <parameter name="db.cpoConfig" value="${mysql.cpoConfig}"/>
+    <parameter name="db.url" value="${mysql.url}"/>
+    <parameter name="db.blobsupport" value="${mysql.blobsupport}"/>
+    <parameter name="db.callsupport" value="${mysql.callsupport}"/>
+    <parameter name="db.select4update" value="${mysql.select4update}"/>
+    <parameter name="db.millisupport" value="${mysql.millisupport}"/>
     <listeners>
         <listener class-name="org.synchronoss.cpo.jdbc.JdbcSuiteListener"/>
     </listeners>
     <test name="${mysql.type} Jdbc Tests" verbose="2">
         <packages>
-            <package name="org.synchronoss.cpo.jdbc" />
-            <package name="org.synchronoss.cpo.jdbc.test" />
+            <package name="org.synchronoss.cpo.jdbc.*" />
         </packages>
     </test>
 </suite>

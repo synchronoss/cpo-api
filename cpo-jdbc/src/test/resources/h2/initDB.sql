@@ -47,8 +47,8 @@ CREATE TABLE IF NOT EXISTS value_object
 
 CREATE TABLE IF NOT EXISTS lob_test
 (
-    LOB_ID INT  NOT NULL,
-    B_LOB  BLOB NULL,
-    B_LOB2 BLOB NULL,
-    C_LOB  CLOB NULL
+    lob_id INT  NOT NULL,
+    b_lob  BLOB NULL,
+    b_lob2 BLOB NULL,
+    c_lob  CLOB NULL
 );

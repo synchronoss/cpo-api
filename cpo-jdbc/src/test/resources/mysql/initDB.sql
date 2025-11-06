@@ -25,7 +25,7 @@ DROP TABLE  IF EXISTS lob_test;
 CREATE TABLE IF NOT EXISTS value_object
 (
     id                      int(11) primary key,
-    name                    varchar(255) unique,
+    name                    varchar(255) NOT NULL,
     attr_integer            int(11)      NULL,
     attr_double             double       NULL,
     attr_float              float        NULL,
@@ -49,7 +49,7 @@ ENGINE = 'InnoDB';
 CREATE TABLE IF NOT EXISTS lob_test (
        lob_id               INT NOT NULL,
        b_lob                MEDIUMBLOB NULL,
-       b_lob2                MEDIUMBLOB NULL,
+       b_lob2               MEDIUMBLOB NULL,
        c_lob                MEDIUMTEXT NULL
 )
 ENGINE = 'InnoDB';

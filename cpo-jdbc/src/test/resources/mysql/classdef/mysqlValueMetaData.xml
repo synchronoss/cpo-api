@@ -141,6 +141,12 @@
       <cpoj:dbColumn>id</cpoj:dbColumn>
     </cpoAttribute>
     <cpoAttribute xsi:type="cpoj:ctJdbcAttribute">
+      <javaName>name</javaName>
+      <javaType>java.lang.String</javaType>
+      <dataName>NAME</dataName>
+      <dataType>VARCHAR</dataType>
+    </cpoAttribute>
+    <cpoAttribute xsi:type="cpoj:ctJdbcAttribute">
       <javaName>attrDouble</javaName>
       <javaType>double</javaType>
       <dataName>attr_double</dataName>
@@ -187,17 +193,13 @@
     </cpoAttribute>
     <cpoFunctionGroup type="CREATE">
       <cpoFunction name="ValueObject - Create">
-        <expression>insert into value_object(id, attr_char, attr_character, attr_date, attr_decimal, attr_integer, attr_numeric, attr_smallint, attr_timestamp, attr_varchar, attr_bool, attr_datetime, attr_bigint) values (?,?,?,?,?,?,?,?,?,?,?,?,?)</expression>
+        <expression>insert into value_object(id, attr_char, attr_date, attr_decimal, attr_integer, attr_numeric, attr_smallint, attr_timestamp, attr_varchar, attr_boolean, attr_datetime, attr_bigint) values (?,?,?,?,?,?,?,?,?,?,?,?)</expression>
         <cpoArgument xsi:type="cpoj:ctJdbcArgument">
           <attributeName>id</attributeName>
           <cpoj:scope>IN</cpoj:scope>
         </cpoArgument>
         <cpoArgument xsi:type="cpoj:ctJdbcArgument">
           <attributeName>attrChar</attributeName>
-          <cpoj:scope>IN</cpoj:scope>
-        </cpoArgument>
-        <cpoArgument xsi:type="cpoj:ctJdbcArgument">
-          <attributeName>attrCharacter</attributeName>
           <cpoj:scope>IN</cpoj:scope>
         </cpoArgument>
         <cpoArgument xsi:type="cpoj:ctJdbcArgument">
@@ -229,7 +231,7 @@
           <cpoj:scope>IN</cpoj:scope>
         </cpoArgument>
         <cpoArgument xsi:type="cpoj:ctJdbcArgument">
-          <attributeName>attrBit</attributeName>
+          <attributeName>attrBoolean</attributeName>
           <cpoj:scope>IN</cpoj:scope>
         </cpoArgument>
         <cpoArgument xsi:type="cpoj:ctJdbcArgument">
@@ -435,6 +437,29 @@
     <cpoFunctionGroup name="TestWhereRetrieve" type="LIST">
       <cpoFunction name="Value Object - TestWhereRetrieve">
         <expression>select * from value_object __CPO_WHERE__ order by id</expression>
+      </cpoFunction>
+    </cpoFunctionGroup>
+    <cpoFunctionGroup name="TestNullWhereRetrieve" type="LIST">
+      <cpoFunction name="Value Object - TestNullWhereRetrieve">
+        <expression>select * from value_object where name = ? __CPO_WHERE__ order by id</expression>
+        <cpoArgument xsi:type="cpoj:ctJdbcArgument">
+          <attributeName>name</attributeName>
+          <cpoj:scope>IN</cpoj:scope>
+        </cpoArgument>
+      </cpoFunction>
+    </cpoFunctionGroup>
+    <cpoFunctionGroup name="DynamicWhere" type="UPDATE">
+      <cpoFunction name="ValueObject - Default Update">
+        <expression>update value_object set attr_varchar=?</expression>
+        <cpoArgument xsi:type="cpoj:ctJdbcArgument">
+          <attributeName>attrVarChar</attributeName>
+          <cpoj:scope>IN</cpoj:scope>
+        </cpoArgument>
+      </cpoFunction>
+    </cpoFunctionGroup>
+    <cpoFunctionGroup name="DynamicWhere" type="LIST">
+      <cpoFunction name="ValueObject - list">
+        <expression>select * from value_object</expression>
       </cpoFunction>
     </cpoFunctionGroup>
   </cpoClass>

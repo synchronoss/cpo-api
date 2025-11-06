@@ -53,7 +53,7 @@
         <core:metaDescriptorName>jdbcMeta</core:metaDescriptorName>
         <core:cpoConfigProcessor>org.synchronoss.cpo.jdbc.config.JdbcCpoConfigProcessor</core:cpoConfigProcessor>
         <jdbc:readWriteConfig>
-            <jdbc:dataSourceClassName>${mysql.db.class}</jdbc:dataSourceClassName>
+            <jdbc:dataSourceClassName>${mysql.class}</jdbc:dataSourceClassName>
             <jdbc:url>${mysql.url}</jdbc:url>
             <jdbc:property name="user" value="${mysql.user}"/>
             <jdbc:property name="password" value="${mysql.pswd}"/>
@@ -63,7 +63,7 @@
         <core:metaDescriptorName>caseSensitive</core:metaDescriptorName>
         <core:cpoConfigProcessor>org.synchronoss.cpo.jdbc.config.JdbcCpoConfigProcessor</core:cpoConfigProcessor>
         <jdbc:readWriteConfig>
-            <jdbc:dataSourceClassName>${mysql.db.class}</jdbc:dataSourceClassName>
+            <jdbc:dataSourceClassName>${mysql.class}</jdbc:dataSourceClassName>
             <jdbc:url>${mysql.url}</jdbc:url>
             <jdbc:property name="user" value="${mysql.user}"/>
             <jdbc:property name="password" value="${mysql.pswd}"/>
@@ -73,7 +73,7 @@
         <core:metaDescriptorName>caseInsensitive</core:metaDescriptorName>
         <core:cpoConfigProcessor>org.synchronoss.cpo.jdbc.config.JdbcCpoConfigProcessor</core:cpoConfigProcessor>
         <jdbc:readWriteConfig>
-            <jdbc:dataSourceClassName>${mysql.db.class}</jdbc:dataSourceClassName>
+            <jdbc:dataSourceClassName>${mysql.class}</jdbc:dataSourceClassName>
             <jdbc:url>${mysql.url}</jdbc:url>
             <jdbc:property name="user" value="${mysql.user}"/>
             <jdbc:property name="password" value="${mysql.pswd}"/>
@@ -84,7 +84,7 @@
         <core:metaDescriptorName>jdbcMeta</core:metaDescriptorName>
         <core:cpoConfigProcessor>org.synchronoss.cpo.jdbc.config.JdbcCpoConfigProcessor</core:cpoConfigProcessor>
         <jdbc:readWriteConfig>
-            <jdbc:driverClassName>${mysql.db.driver}</jdbc:driverClassName>
+            <jdbc:driverClassName>${mysql.driver}</jdbc:driverClassName>
             <jdbc:url>${mysql.url}</jdbc:url>
             <jdbc:user>${mysql.user}</jdbc:user>
             <jdbc:password>${mysql.pswd}</jdbc:password>

@@ -72,6 +72,12 @@
       <cpoj:dbColumn>id</cpoj:dbColumn>
     </cpoAttribute>
     <cpoAttribute xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xsi:type="cpoj:ctJdbcAttribute">
+      <javaName>name</javaName>
+      <javaType>java.lang.String</javaType>
+      <dataName>Name</dataName>
+      <dataType>VARCHAR</dataType>
+    </cpoAttribute>
+    <cpoAttribute xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xsi:type="cpoj:ctJdbcAttribute">
       <javaName>attrDouble</javaName>
       <javaType>double</javaType>
       <dataName>ATTR_double</dataName>
@@ -112,17 +118,13 @@
     </cpoAttribute>
     <cpoFunctionGroup type="CREATE">
       <cpoFunction name="ValueObject - Create">
-        <expression>insert into value_object(id, attr_char, attr_character, attr_date, attr_decimal, attr_integer, attr_numeric, attr_smallint, attr_timestamp, attr_varchar, attr_bool, attr_datetime) values (?,?,?,?,?,?,?,?,?,?,?,?)</expression>
+        <expression>insert into value_object(id, attr_char, attr_date, attr_decimal, attr_integer, attr_numeric, attr_smallint, attr_timestamp, attr_varchar, attr_boolean, attr_datetime) values (?,?,?,?,?,?,?,?,?,?,?)</expression>
         <cpoArgument xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xsi:type="cpoj:ctJdbcArgument">
           <attributeName>id</attributeName>
           <cpoj:scope>IN</cpoj:scope>
         </cpoArgument>
         <cpoArgument xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xsi:type="cpoj:ctJdbcArgument">
           <attributeName>attrChar</attributeName>
-          <cpoj:scope>IN</cpoj:scope>
-        </cpoArgument>
-        <cpoArgument xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xsi:type="cpoj:ctJdbcArgument">
-          <attributeName>attrCharacter</attributeName>
           <cpoj:scope>IN</cpoj:scope>
         </cpoArgument>
         <cpoArgument xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xsi:type="cpoj:ctJdbcArgument">
@@ -154,7 +156,7 @@
           <cpoj:scope>IN</cpoj:scope>
         </cpoArgument>
         <cpoArgument xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xsi:type="cpoj:ctJdbcArgument">
-          <attributeName>attrBit</attributeName>
+          <attributeName>attrBoolean</attributeName>
           <cpoj:scope>IN</cpoj:scope>
         </cpoArgument>
         <cpoArgument xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xsi:type="cpoj:ctJdbcArgument">

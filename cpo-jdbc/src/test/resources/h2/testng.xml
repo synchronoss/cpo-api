@@ -21,17 +21,18 @@
 
 -->
 <!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
-<suite name="H2 Jdbc Test Suite" verbose="2">
-    <parameter name="cpo.db" value="h2"/>
-    <parameter name="cpo.db.database" value="/Users/dberry/project/cpo/api/cpo-jdbc/target/h2/cpo"/>
-    <parameter name="cpo.db.port" value=""/>
-    <parameter name="cpo.db.user" value="sa"/>
-    <parameter name="cpo.db.pswd" value=""/>
-    <parameter name="cpo.db.initScript" value="h2/initDB.sql"/>
+<suite name="${h2.type} Jdbc Test Suite" verbose="2">
+    <parameter name="db.type" value="${h2.type}"/>
+    <parameter name="db.database" value="${h2.database}"/>
+    <parameter name="db.port" value="${h2.port}"/>
+    <parameter name="db.user" value="${h2.user}"/>
+    <parameter name="db.pswd" value="${h2.pswd}"/>
+    <parameter name="db.initScript" value="${h2.initScript}"/>
+    <parameter name="db.cpoConfig" value="${h2.cpoConfig}"/>
     <listeners>
         <listener class-name="org.synchronoss.cpo.jdbc.JdbcSuiteListener"/>
     </listeners>
-    <test name="H2 Jdbc Tests" verbose="2">
+    <test name="${h2.type} Jdbc Tests" verbose="2">
         <packages>
             <package name="org.synchronoss.cpo.jdbc" />
             <package name="org.synchronoss.cpo.jdbc.test" />

@@ -29,6 +29,7 @@ import org.testng.ISuite;
 import org.testng.ISuiteListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.h2.tools.Server;
 
 public class JdbcSuiteListener implements ISuiteListener {
   private static final String H2 = "h2";
@@ -56,14 +57,17 @@ public class JdbcSuiteListener implements ISuiteListener {
       String dbPort = suite.getParameter(PROP_DB_PORT);
       String cpoConfig = suite.getParameter(PROP_CPO_CONFIG);
 
-      CpoAdapterFactoryManager.loadAdapters(cpoConfig);
-
-      if (!dbType.equals(H2))
+      if (!dbType.equals(H2)) {
           jdbcContainer = createJdbcContainer(dbType, dbInitScript, dbUser, dbPasswd, dbName, dbPort);
 
-    if (jdbcContainer!=null)
-      jdbcContainer.start();
+          if (jdbcContainer != null) {
+              jdbcContainer.start();
+              CpoAdapterFactoryManager.loadAdapters(cpoConfig);
+          }
+      }
+
     logger.debug("onStart");
+
   }
 
   @Override

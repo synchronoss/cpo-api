@@ -51,8 +51,8 @@
       <mysql.host>localhost</mysql.host>
       <mysql.port>3306</mysql.port>
       <mysql.database>cpo</mysql.database>
-      <mysql.url>jdbc:mysql://${cpo.db.host}:${cpo.db.port}/${cpo.db.database}?noAccessToProcedureBodies=true&amp;amp;useCursorFetch=true&amp;amp;defaultFetchSize=0</mysql.url>
-      <mysql.userurl>jdbc:mysql://${cpo.db.host}:${cpo.db.port}/${cpo.db.database}?user=${cpo.db.user}&amp;amp;password=${cpo.db.pswd}&amp;amp;noAccessToProcedureBodies=true&amp;amp;useCursorFetch=true&amp;amp;defaultFetchSize=0</mysql.userurl>
+      <mysql.url>jdbc:mysql://${mysql.host}:${mysql.port}/${mysql.database}?noAccessToProcedureBodies=true&amp;amp;useCursorFetch=true&amp;amp;defaultFetchSize=0</mysql.url>
+      <mysql.userurl>jdbc:mysql://${mysql.host}:${mysql.port}/${mysql.database}?user=${mysql.user}&amp;amp;password=${mysql.pswd}&amp;amp;noAccessToProcedureBodies=true&amp;amp;useCursorFetch=true&amp;amp;defaultFetchSize=0</mysql.userurl>
       <mysql.driver>com.mysql.cj.jdbc.Driver</mysql.driver>
       <mysql.blobssupported>true</mysql.blobssupported>
       <mysql.callssupported>true</mysql.callssupported>
@@ -62,9 +62,9 @@
       <mysql.cpoConfig>mysql/cpoConfig.xml</mysql.cpoConfig>
       <mysql.jndi>java:/comp/env/jdbc/cpodatasource</mysql.jndi>
       <mysql.class>com.mysql.cj.jdbc.MysqlConnectionPoolDataSource</mysql.class>
-      <mysql.valueMeta>/mysql/mysqlValueMetaData.xml</mysql.valueMeta>
-      <mysql.valueCaseMeta>/mysql/mysqlValueCaseMetaData.xml</mysql.valueCaseMeta>
-      <mysql.lobMeta>/mysql/mysqlLobMetaData.xml</mysql.lobMeta>
+      <mysql.valueMeta>/mysql/classdef/mysqlValueMetaData.xml</mysql.valueMeta>
+      <mysql.valueCaseMeta>/mysql/classdef/mysqlValueCaseMetaData.xml</mysql.valueCaseMeta>
+      <mysql.lobMeta>/mysql/classdef/mysqlLobMetaData.xml</mysql.lobMeta>
 
       <!--  MariaDB Test properties  -->
       <mariadb.type>mariadb</mariadb.type>
@@ -74,8 +74,8 @@
       <mariadb.host>localhost</mariadb.host>
       <mariadb.port>3306</mariadb.port>
       <mariadb.database>cpo</mariadb.database>
-      <mariadb.url>jdbc:mariadb://${cpo.db.host}:${cpo.db.port}/${cpo.db.database}</mariadb.url>
-      <mariadb.userurl>jdbc:mariadb://${cpo.db.host}:${cpo.db.port}/${cpo.db.database}?user=${cpo.db.user}&amp;amp;password=${cpo.db.pswd}</mariadb.userurl>
+      <mariadb.url>jdbc:mariadb://${mariadb.host}:${mariadb.port}/${mariadb.database}</mariadb.url>
+      <mariadb.userurl>jdbc:mariadb://${mariadb.host}:${mariadb.port}/${mariadb.database}?user=${mariadb.user}&amp;amp;password=${mariadb.pswd}</mariadb.userurl>
       <mariadb.driver>org.mariadb.jdbc.Driver</mariadb.driver>
       <mariadb.blobssupported>true</mariadb.blobssupported>
       <mariadb.callssupported>true</mariadb.callssupported>
@@ -85,9 +85,9 @@
       <mariadb.cpoConfig>mariadb/cpoConfig.xml</mariadb.cpoConfig>
       <mariadb.jndi>java:/comp/env/jdbc/cpodatasource</mariadb.jndi>
       <mariadb.class>org.mariadb.jdbc.MariaDbDataSource</mariadb.class>
-      <mariadb.valueMeta>/mariadb/mariadbValueMetaData.xml</mariadb.valueMeta>
-      <mariadb.valueCaseMeta>/mariadb/mariadbValueCaseMetaData.xml</mariadb.valueCaseMeta>
-      <mariadb.lobMeta>/mariadb/mariadbLobMetaData.xml</mariadb.lobMeta>
+      <mariadb.valueMeta>/mariadb/classdef/mariadbValueMetaData.xml</mariadb.valueMeta>
+      <mariadb.valueCaseMeta>/mariadb/classdef/mariadbValueCaseMetaData.xml</mariadb.valueCaseMeta>
+      <mariadb.lobMeta>/mariadb/classdef/mariadbLobMetaData.xml</mariadb.lobMeta>
 
       <!--  Oracle Test properties  -->
       <oracle.type>oracle</oracle.type>
@@ -97,8 +97,8 @@
       <oracle.host>pabetdd01v1.sncrcorp.net</oracle.host>
       <oracle.port>1521</oracle.port>
       <oracle.database>dcig1</oracle.database>
-      <oracle.url>jdbc:oracle:thin:@${cpo.db.host}:${cpo.db.port}:${cpo.db.database}</oracle.url>
-      <oracle.userurl>jdbc:oracle:thin:${cpo.db.user}/${cpo.db.pswd}@${cpo.db.host}:${cpo.db.port}:${cpo.db.database}</oracle.userurl>
+      <oracle.url>jdbc:oracle:thin:@${oracle.host}:${oracle.port}:${oracle.database}</oracle.url>
+      <oracle.userurl>jdbc:oracle:thin:${oracle.user}/${oracle.pswd}@${oracle.host}:${oracle.port}:${oracle.database}</oracle.userurl>
       <oracle.driver>oracle.jdbc.driver.OracleDriver</oracle.driver>
       <oracle.blobssupported>true</oracle.blobssupported>
       <oracle.callssupported>true</oracle.callssupported>
@@ -108,9 +108,9 @@
       <oracle.cpoConfig>oracle/cpoConfig.xml</oracle.cpoConfig>
       <oracle.jndi>cpodatasource</oracle.jndi>
       <oracle.class>oracle.jdbc.pool.OracleConnectionPoolDataSource</oracle.class>
-      <oracle.valueMeta>/oracle/oracleValueMetaData.xml</oracle.valueMeta>
-      <oracle.valueCaseMeta>/oracle/oracleValueCaseMetaData.xml</oracle.valueCaseMeta>
-      <oracle.lobMeta>/oracle/oracleLobMetaData.xml</oracle.lobMeta>
+      <oracle.valueMeta>/oracle/classdef/oracleValueMetaData.xml</oracle.valueMeta>
+      <oracle.valueCaseMeta>/oracle/classdef/oracleValueCaseMetaData.xml</oracle.valueCaseMeta>
+      <oracle.lobMeta>/oracle/classdef/oracleLobMetaData.xml</oracle.lobMeta>
 
       <!--  H2 Test properties  -->
       <h2.type>h2</h2.type>
@@ -120,8 +120,8 @@
       <h2.host />
       <h2.port />
       <h2.database>${basedir}/target/h2/cpo</h2.database>
-      <h2.url>jdbc:h2:file:${cpo.db.database}</h2.url>
-      <h2.userurl>jdbc:h2:file:${cpo.db.database};user=${cpo.db.user};password=${cpo.db.pswd}</h2.userurl>
+      <h2.url>jdbc:h2:file:${h2.database};INIT=RUNSCRIPT FROM '${basedir}/target/test-classes/h2/initDB.sql'</h2.url>
+      <h2.userurl>jdbc:h2:file:${h2.database};user=${h2.user};password=${h2.pswd};INIT=RUNSCRIPT FROM '${basedir}/target/test-classes/h2/initDB.sql'</h2.userurl>
       <h2.driver>org.h2.Driver</h2.driver>
       <h2.blobssupported>true</h2.blobssupported>
       <h2.callssupported>true</h2.callssupported>
@@ -131,9 +131,9 @@
       <h2.cpoConfig>h2/cpoConfig.xml</h2.cpoConfig>
       <h2.jndi>cpodatasource</h2.jndi>
       <h2.class>org.h2.jdbcx.JdbcDataSource</h2.class>
-      <h2.valueMeta>/h2/h2ValueMetaData.xml</h2.valueMeta>
-      <h2.valueCaseMeta>/h2/h2ValueCaseMetaData.xml</h2.valueCaseMeta>
-      <h2.lobMeta>/h2/h2LobMetaData.xml</h2.lobMeta>
+      <h2.valueMeta>/h2/classdef/h2ValueMetaData.xml</h2.valueMeta>
+      <h2.valueCaseMeta>/h2/classdef/h2ValueCaseMetaData.xml</h2.valueCaseMeta>
+      <h2.lobMeta>/h2/classdef/h2LobMetaData.xml</h2.lobMeta>
 
       <!--  PostgreSQL Test properties  -->
       <postgres.type>postgres</postgres.type>
@@ -143,8 +143,8 @@
       <postgres.host>localhost</postgres.host>
       <postgres.port>5432</postgres.port>
       <postgres.database>cpo</postgres.database>
-      <postgres.url>jdbc:postgresql://${cpo.db.host}:${cpo.db.port}/${cpo.db.database}</postgres.url>
-      <postgres.userurl>jdbc:postgresql://${cpo.db.host}:${cpo.db.port}/${cpo.db.database}?user=${cpo.db.user}&amp;amp;password=${cpo.db.pswd}&amp;amp;stringtype=unspecified</postgres.userurl>
+      <postgres.url>jdbc:postgresql://${postgres.host}:${postgres.port}/${postgres.database}</postgres.url>
+      <postgres.userurl>jdbc:postgresql://${postgres.host}:${postgres.port}/${postgres.database}?user=${postgres.user}&amp;amp;password=${postgres.pswd}&amp;amp;stringtype=unspecified</postgres.userurl>
       <postgres.driver>org.postgresql.Driver</postgres.driver>
       <postgres.blobssupported>true</postgres.blobssupported>
       <postgres.callssupported>true</postgres.callssupported>
@@ -154,9 +154,9 @@
       <postgres.cpoConfig>postgres/cpoConfig.xml</postgres.cpoConfig>
       <postgres.jndi>java:/comp/env/jdbc/cpodatasource</postgres.jndi>
       <postgres.class>org.postgresql.ds.PGConnectionPoolDataSource</postgres.class>
-      <postgres.valueMeta>/postgres/postgresValueMetaData.xml</postgres.valueMeta>
-      <postgres.valueCaseMeta>/postgres/postgresValueCaseMetaData.xml</postgres.valueCaseMeta>
-      <postgres.lobMeta>/postgres/postgresLobMetaData.xml</postgres.lobMeta>
+      <postgres.valueMeta>/postgres/classdef/postgresValueMetaData.xml</postgres.valueMeta>
+      <postgres.valueCaseMeta>/postgres/classdef/postgresValueCaseMetaData.xml</postgres.valueCaseMeta>
+      <postgres.lobMeta>/postgres/classdef/postgresLobMetaData.xml</postgres.lobMeta>
 
   </properties>
   <build>
@@ -173,7 +173,7 @@
         <artifactId>maven-surefire-plugin</artifactId>
         <configuration>
           <suiteXmlFiles>
-            <suiteXmlFile>src/test/resources/mysql/testng.xml</suiteXmlFile>
+            <suiteXmlFile>target/test-classes/h2/testng.xml</suiteXmlFile>
           </suiteXmlFiles>
         </configuration>
       </plugin>
@@ -193,7 +193,7 @@
               <goal>generatejavasource</goal>
             </goals>
             <configuration>
-              <cpoConfig>${basedir}/${mysql.resources}/classdef/*.xml</cpoConfig>
+              <cpoConfig>${basedir}/${h2.resources}/classdef/*.xml</cpoConfig>
               <generateClass>true</generateClass>
               <generateInterface>true</generateInterface>
               <scope>test</scope>

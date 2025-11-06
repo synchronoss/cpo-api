@@ -22,41 +22,34 @@
 DROP TABLE  IF EXISTS value_object;
 DROP TABLE  IF EXISTS lob_test;
 
-CREATE TABLE IF NOT EXISTS value_object (
-id                      int(11) primary key,
-name                    varchar(255) unique,
-attr_integer            int(11)      NULL,
-attr_int                int(11)      NULL,
-attr_double             double       NULL,
-attr_float              float        NULL,
-attr_varchar            varchar(255) NULL,
-attr_varchar_ignorecase varchar(255) NULL,
-attr_char		char(255) NULL,
-attr_character		char(255) NULL,
-attr_date               date         NULL,
-attr_time               time         NULL,
-attr_timestamp          timestamp    NULL,
-attr_datetime           datetime     NULL,
-attr_decimal            decimal(10,0) NULL,
-attr_numeric            decimal(10,0) NULL,
-attr_bit                bit(1)       NULL,
-attr_bool               bool       NULL,
-attr_boolean            boolean       NULL,
-attr_tinyint            tinyint(4)   NULL,
-attr_smallint           smallint(6)  NULL,
-attr_mediumint          mediumint(9) NULL,
-attr_bigint             bigint(20)   NULL,
-attr_real               double       NULL,
-attr_blob               blob         NULL,
-attr_tinyblob           tinyblob     NULL,
-attr_mediumblob         mediumblob   NULL,
-attr_longblob           longblob     NULL,
-attr_text               text         NULL,
-attr_tinytext           tinytext     NULL,
-attr_mediumtext         mediumtext   NULL,
-attr_longtext           longtext     NULL
-)
-ENGINE = 'InnoDB';
+CREATE TABLE IF NOT EXISTS value_object
+(
+    id                      int(11) primary key,
+    name                    varchar(255) unique,
+    attr_integer            int(11)      NULL,
+    attr_double             double       NULL,
+    attr_float              float        NULL,
+    attr_varchar            varchar(255) NULL,
+    attr_char		        char(255) NULL,
+    attr_date               date         NULL,
+    attr_time               time         NULL,
+    attr_timestamp          timestamp    NULL,
+    attr_datetime           datetime     NULL,
+    attr_decimal            decimal(10,0) NULL,
+    attr_numeric            numeric(10,0) NULL,
+    attr_bit                bit(1)       NULL,
+    attr_boolean            boolean       NULL,
+    attr_tinyint            tinyint(4)   NULL,
+    attr_smallint           smallint(6)  NULL,
+    attr_bigint             bigint(20)   NULL,
+    attr_real               real         NULL,
+    attr_binary             binary        NULL,
+    attr_varbinary          varbinary     NULL,
+    attr_nchar		        nchar(255) NULL,
+    attr_blob               blob         NULL,
+    attr_clob               longtext     NULL
+    )
+    ENGINE = 'InnoDB';
 
 CREATE TABLE IF NOT EXISTS lob_test (
        lob_id               INT NOT NULL,

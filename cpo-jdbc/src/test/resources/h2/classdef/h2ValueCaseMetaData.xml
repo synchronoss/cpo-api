@@ -23,540 +23,162 @@
 -->
 <cpoMetaData metaDescriptor="org.synchronoss.cpo.jdbc.meta.JdbcCpoMetaDescriptor" defaultPackageName="" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.synchronoss.org/cpo/core/CpoCoreMeta.xsd" xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd">
   <cpoClass name="org.synchronoss.cpo.jdbc.CaseValueObject">
-    <cpoAttribute xsi:type="cpoj:ctJdbcAttribute">
-      <javaName>id</javaName>
-      <javaType>int</javaType>
-      <dataName>iD</dataName>
-      <dataType>INTEGER</dataType>
-      <cpoj:dbTable>value_object</cpoj:dbTable>
-      <cpoj:dbColumn>id</cpoj:dbColumn>
-    </cpoAttribute>
-    <cpoAttribute xsi:type="cpoj:ctJdbcAttribute">
-      <javaName>name</javaName>
-      <javaType>java.lang.String</javaType>
-      <dataName>nAME</dataName>
-      <dataType>VARCHAR</dataType>
-    </cpoAttribute>
-    <cpoAttribute xsi:type="cpoj:ctJdbcAttribute">
-      <javaName>attrInt</javaName>
-      <javaType>int</javaType>
-      <dataName>ATTR_int</dataName>
-      <dataType>INTEGER</dataType>
-    </cpoAttribute>
-    <cpoAttribute xsi:type="cpoj:ctJdbcAttribute">
-      <javaName>attrInt4</javaName>
-      <javaType>int</javaType>
-      <dataName>ATTR_int4</dataName>
-      <dataType>INTEGER</dataType>
-    </cpoAttribute>
-    <cpoAttribute xsi:type="cpoj:ctJdbcAttribute">
-      <javaName>attrSigned</javaName>
-      <javaType>int</javaType>
-      <dataName>ATTR_signed</dataName>
-      <dataType>INTEGER</dataType>
-    </cpoAttribute>
-    <cpoAttribute xsi:type="cpoj:ctJdbcAttribute">
-      <javaName>attrInteger</javaName>
-      <javaType>int</javaType>
-      <dataName>ATTR_integer</dataName>
-      <dataType>INTEGER</dataType>
-      <transformClass>org.synchronoss.cpo.transform.jdbc.TransformNoOp</transformClass>
-    </cpoAttribute>
-    <cpoAttribute xsi:type="cpoj:ctJdbcAttribute">
-      <javaName>attrMediumInt</javaName>
-      <javaType>int</javaType>
-      <dataName>ATTR_mediumint</dataName>
-      <dataType>INTEGER</dataType>
-    </cpoAttribute>
-    <cpoAttribute xsi:type="cpoj:ctJdbcAttribute">
-      <javaName>attrBit</javaName>
-      <javaType>boolean</javaType>
-      <dataName>ATTR_bit</dataName>
-      <dataType>BIT</dataType>
-    </cpoAttribute>
-    <cpoAttribute xsi:type="cpoj:ctJdbcAttribute">
-      <javaName>attrBool</javaName>
-      <javaType>boolean</javaType>
-      <dataName>ATTR_bool</dataName>
-      <dataType>BOOLEAN</dataType>
-    </cpoAttribute>
-    <cpoAttribute xsi:type="cpoj:ctJdbcAttribute">
-      <javaName>attrBoolean</javaName>
-      <javaType>boolean</javaType>
-      <dataName>ATTR_boolean</dataName>
-      <dataType>BOOLEAN</dataType>
-    </cpoAttribute>
-    <cpoAttribute xsi:type="cpoj:ctJdbcAttribute">
-      <javaName>attrTinyInt</javaName>
-      <javaType>byte</javaType>
-      <dataName>ATTR_tinyint</dataName>
-      <dataType>TINYINT</dataType>
-    </cpoAttribute>
-    <cpoAttribute xsi:type="cpoj:ctJdbcAttribute">
-      <javaName>attrSmallInt</javaName>
-      <javaType>short</javaType>
-      <dataName>ATTR_smallint</dataName>
-      <dataType>SMALLINT</dataType>
-      <cpoj:dbTable>value_object</cpoj:dbTable>
-      <cpoj:dbColumn>attr_smallint</cpoj:dbColumn>
-    </cpoAttribute>
-    <cpoAttribute xsi:type="cpoj:ctJdbcAttribute">
-      <javaName>attrInt2</javaName>
-      <javaType>short</javaType>
-      <dataName>ATTR_int2</dataName>
-      <dataType>SMALLINT</dataType>
-    </cpoAttribute>
-    <cpoAttribute xsi:type="cpoj:ctJdbcAttribute">
-      <javaName>attrYear</javaName>
-      <javaType>short</javaType>
-      <dataName>ATTR_year</dataName>
-      <dataType>SMALLINT</dataType>
-    </cpoAttribute>
-    <cpoAttribute xsi:type="cpoj:ctJdbcAttribute">
-      <javaName>attrBigInt</javaName>
-      <javaType>java.math.BigInteger</javaType>
-      <dataName>ATTR_bigint</dataName>
-      <dataType>BIGINT</dataType>
-    </cpoAttribute>
-    <cpoAttribute xsi:type="cpoj:ctJdbcAttribute">
-      <javaName>attrInt8</javaName>
-      <javaType>long</javaType>
-      <dataName>ATTR_int8</dataName>
-      <dataType>BIGINT</dataType>
-    </cpoAttribute>
-    <cpoAttribute xsi:type="cpoj:ctJdbcAttribute">
-      <javaName>attrIdentity</javaName>
-      <javaType>long</javaType>
-      <dataName>ATTR_identity</dataName>
-      <dataType>BIGINT</dataType>
-    </cpoAttribute>
-    <cpoAttribute xsi:type="cpoj:ctJdbcAttribute">
-      <javaName>attrDec</javaName>
-      <javaType>java.math.BigDecimal</javaType>
-      <dataName>ATTR_dec</dataName>
-      <dataType>DECIMAL</dataType>
-    </cpoAttribute>
-    <cpoAttribute xsi:type="cpoj:ctJdbcAttribute">
-      <javaName>attrDecimal</javaName>
-      <javaType>java.math.BigDecimal</javaType>
-      <dataName>ATTR_decimal</dataName>
-      <dataType>DECIMAL</dataType>
-    </cpoAttribute>
-    <cpoAttribute xsi:type="cpoj:ctJdbcAttribute">
-      <javaName>attrNumber</javaName>
-      <javaType>java.math.BigDecimal</javaType>
-      <dataName>ATTR_number</dataName>
-      <dataType>NUMERIC</dataType>
-    </cpoAttribute>
-    <cpoAttribute xsi:type="cpoj:ctJdbcAttribute">
-      <javaName>attrNumeric</javaName>
-      <javaType>java.math.BigDecimal</javaType>
-      <dataName>ATTR_numeric</dataName>
-      <dataType>NUMERIC</dataType>
-    </cpoAttribute>
-    <cpoAttribute xsi:type="cpoj:ctJdbcAttribute">
-      <javaName>attrDouble</javaName>
-      <javaType>double</javaType>
-      <dataName>ATTR_double</dataName>
-      <dataType>DOUBLE</dataType>
-    </cpoAttribute>
-    <cpoAttribute xsi:type="cpoj:ctJdbcAttribute">
-      <javaName>attrFloatDouble</javaName>
-      <javaType>double</javaType>
-      <dataName>ATTR_floatdouble</dataName>
-      <dataType>FLOAT</dataType>
-    </cpoAttribute>
-    <cpoAttribute xsi:type="cpoj:ctJdbcAttribute">
-      <javaName>attrFloat8</javaName>
-      <javaType>double</javaType>
-      <dataName>ATTR_float8</dataName>
-      <dataType>DOUBLE</dataType>
-    </cpoAttribute>
-    <cpoAttribute xsi:type="cpoj:ctJdbcAttribute">
-      <javaName>attrReal</javaName>
-      <javaType>float</javaType>
-      <dataName>ATTR_real</dataName>
-      <dataType>REAL</dataType>
-    </cpoAttribute>
-    <cpoAttribute xsi:type="cpoj:ctJdbcAttribute">
-      <javaName>attrFloatReal</javaName>
-      <javaType>float</javaType>
-      <dataName>ATTR_floatreal</dataName>
-      <dataType>REAL</dataType>
-    </cpoAttribute>
-    <cpoAttribute xsi:type="cpoj:ctJdbcAttribute">
-      <javaName>attrFloat4</javaName>
-      <javaType>double</javaType>
-      <dataName>ATTR_float4</dataName>
-      <dataType>REAL</dataType>
-    </cpoAttribute>
-    <cpoAttribute xsi:type="cpoj:ctJdbcAttribute">
-      <javaName>attrTime</javaName>
-      <javaType>java.sql.Time</javaType>
-      <dataName>ATTR_time</dataName>
-      <dataType>TIME</dataType>
-    </cpoAttribute>
-    <cpoAttribute xsi:type="cpoj:ctJdbcAttribute">
-      <javaName>attrTimeWithoutTimezone</javaName>
-      <javaType>java.time.LocalTime</javaType>
-      <dataName>ATTR_TIME_WITHOUT_TIMEZONE</dataName>
-      <dataType>TIME</dataType>
-    </cpoAttribute>
-    <cpoAttribute xsi:type="cpoj:ctJdbcAttribute">
-      <javaName>attrTimeWithTimezone</javaName>
-      <javaType>java.time.OffsetTime</javaType>
-      <dataName>ATTR_TIME_WITH_TIMEZONE</dataName>
-      <dataType>TIME_WITH_TIMEZONE</dataType>
-    </cpoAttribute>
-    <cpoAttribute xsi:type="cpoj:ctJdbcAttribute">
-      <javaName>attrDate</javaName>
-      <javaType>java.sql.Date</javaType>
-      <dataName>ATTR_date</dataName>
-      <dataType>DATE</dataType>
-    </cpoAttribute>
-    <cpoAttribute xsi:type="cpoj:ctJdbcAttribute">
-      <javaName>attrDatetime</javaName>
-      <javaType>java.sql.Timestamp</javaType>
-      <dataName>ATTR_datetime</dataName>
-      <dataType>TIMESTAMP</dataType>
-    </cpoAttribute>
-    <cpoAttribute xsi:type="cpoj:ctJdbcAttribute">
-      <javaName>attrTimestamp</javaName>
-      <javaType>java.sql.Timestamp</javaType>
-      <dataName>ATTR_timestamp</dataName>
-      <dataType>TIMESTAMP</dataType>
-    </cpoAttribute>
-    <cpoAttribute xsi:type="cpoj:ctJdbcAttribute">
-      <javaName>attrTimestampWithoutTimezone</javaName>
-      <javaType>java.time.LocalDateTime</javaType>
-      <dataName>ATTR_TIMESTAMP_WITHOUT_TIMEZONE</dataName>
-      <dataType>TIMESTAMP</dataType>
-    </cpoAttribute>
-    <cpoAttribute xsi:type="cpoj:ctJdbcAttribute">
-      <javaName>attrTimestampWithTimezone</javaName>
-      <javaType>java.time.OffsetDateTime</javaType>
-      <dataName>ATTR_TIMESTAMP_WITH_TIMEZONE</dataName>
-      <dataType>TIMESTAMP_WITH_TIMEZONE</dataType>
-    </cpoAttribute>
-    <cpoAttribute xsi:type="cpoj:ctJdbcAttribute">
-      <javaName>attrBinary</javaName>
-      <javaType>byte[]</javaType>
-      <dataName>ATTR_binary</dataName>
-      <dataType>BINARY</dataType>
-    </cpoAttribute>
-    <cpoAttribute xsi:type="cpoj:ctJdbcAttribute">
-      <javaName>attrVarBinary</javaName>
-      <javaType>byte[]</javaType>
-      <dataName>ATTR_varbinary</dataName>
-      <dataType>VARBINARY</dataType>
-    </cpoAttribute>
-    <cpoAttribute xsi:type="cpoj:ctJdbcAttribute">
-      <javaName>attrBinaryVarying</javaName>
-      <javaType>byte[]</javaType>
-      <dataName>ATTR_binary_VARYING</dataName>
-      <dataType>BINARY</dataType>
-    </cpoAttribute>
-    <cpoAttribute xsi:type="cpoj:ctJdbcAttribute">
-      <javaName>attrLongVarBinary</javaName>
-      <javaType>byte[]</javaType>
-      <dataName>ATTR_longvarbinary</dataName>
-      <dataType>LONGVARBINARY</dataType>
-    </cpoAttribute>
-    <cpoAttribute xsi:type="cpoj:ctJdbcAttribute">
-      <javaName>attrRaw</javaName>
-      <javaType>byte[]</javaType>
-      <dataName>ATTR_raw</dataName>
-      <dataType>BINARY</dataType>
-    </cpoAttribute>
-    <cpoAttribute xsi:type="cpoj:ctJdbcAttribute">
-      <javaName>attrByteA</javaName>
-      <javaType>byte[]</javaType>
-      <dataName>ATTR_BYTEA</dataName>
-      <dataType>BINARY</dataType>
-    </cpoAttribute>
-    <cpoAttribute xsi:type="cpoj:ctJdbcAttribute">
-      <javaName>attrOther</javaName>
-      <javaType>java.lang.Object</javaType>
-      <dataName>ATTR_other</dataName>
-      <dataType>OTHER</dataType>
-    </cpoAttribute>
-    <cpoAttribute xsi:type="cpoj:ctJdbcAttribute">
-      <javaName>attrVarChar</javaName>
-      <javaType>java.lang.String</javaType>
-      <dataName>ATTR_varchar</dataName>
-      <dataType>VARCHAR</dataType>
-      <cpoj:dbTable>value_object</cpoj:dbTable>
-      <cpoj:dbColumn>attr_varchar</cpoj:dbColumn>
-    </cpoAttribute>
-    <cpoAttribute xsi:type="cpoj:ctJdbcAttribute">
-      <javaName>attrCharacterVarying</javaName>
-      <javaType>java.lang.String</javaType>
-      <dataName>ATTR_charactervarying</dataName>
-      <dataType>VARCHAR</dataType>
-    </cpoAttribute>
-    <cpoAttribute xsi:type="cpoj:ctJdbcAttribute">
-      <javaName>attrLongVarChar</javaName>
-      <javaType>java.lang.String</javaType>
-      <dataName>ATTR_longvarchar</dataName>
-      <dataType>LONGVARCHAR</dataType>
-    </cpoAttribute>
-    <cpoAttribute xsi:type="cpoj:ctJdbcAttribute">
-      <javaName>attrVarChar2</javaName>
-      <javaType>java.lang.String</javaType>
-      <dataName>ATTR_varchar2</dataName>
-      <dataType>VARCHAR</dataType>
-    </cpoAttribute>
-    <cpoAttribute xsi:type="cpoj:ctJdbcAttribute">
-      <javaName>attrNVarChar</javaName>
-      <javaType>java.lang.String</javaType>
-      <dataName>ATTR_nvarchar</dataName>
-      <dataType>NVARCHAR</dataType>
-    </cpoAttribute>
-    <cpoAttribute xsi:type="cpoj:ctJdbcAttribute">
-      <javaName>attrNVarChar2</javaName>
-      <javaType>java.lang.String</javaType>
-      <dataName>ATTR_nvarchar2</dataName>
-      <dataType>LONGNVARCHAR</dataType>
-    </cpoAttribute>
-    <cpoAttribute xsi:type="cpoj:ctJdbcAttribute">
-      <javaName>attrVarCharCaseSensitive</javaName>
-      <javaType>java.lang.String</javaType>
-      <dataName>ATTR_varchar_casesensitive</dataName>
-      <dataType>VARCHAR</dataType>
-    </cpoAttribute>
-    <cpoAttribute xsi:type="cpoj:ctJdbcAttribute">
-      <javaName>attrVarCharIgnoreCase</javaName>
-      <javaType>java.lang.String</javaType>
-      <dataName>ATTR_varchar_ignorecase</dataName>
-      <dataType>VARCHAR</dataType>
-    </cpoAttribute>
-    <cpoAttribute xsi:type="cpoj:ctJdbcAttribute">
-      <javaName>attrChar</javaName>
-      <javaType>java.lang.String</javaType>
-      <dataName>ATTR_char</dataName>
-      <dataType>CHAR</dataType>
-      <cpoj:dbTable>value_object</cpoj:dbTable>
-      <cpoj:dbColumn>attr_char</cpoj:dbColumn>
-    </cpoAttribute>
-    <cpoAttribute xsi:type="cpoj:ctJdbcAttribute">
-      <javaName>attrCharacter</javaName>
-      <javaType>java.lang.String</javaType>
-      <dataName>ATTR_character</dataName>
-      <dataType>CHAR</dataType>
-    </cpoAttribute>
-    <cpoAttribute xsi:type="cpoj:ctJdbcAttribute">
-      <javaName>attrNChar</javaName>
-      <javaType>java.lang.String</javaType>
-      <dataName>ATTR_nchar</dataName>
-      <dataType>NCHAR</dataType>
-    </cpoAttribute>
-    <cpoAttribute xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xsi:type="cpoj:ctJdbcAttribute">
-      <javaName>attrBlob</javaName>
-      <javaType>java.sql.Blob</javaType>
-      <dataName>ATTR_blob</dataName>
-      <dataType>BLOB</dataType>
-    </cpoAttribute>
-    <cpoAttribute xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xsi:type="cpoj:ctJdbcAttribute">
-      <javaName>attrBinaryLargeObject</javaName>
-      <javaType>java.sql.Blob</javaType>
-      <dataName>ATTR_BINARY_LARGE_OBJECT</dataName>
-      <dataType>BLOB</dataType>
-    </cpoAttribute>
-    <cpoAttribute xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xsi:type="cpoj:ctJdbcAttribute">
-      <javaName>attrTinyBlob</javaName>
-      <javaType>java.sql.Blob</javaType>
-      <dataName>ATTR_TINYBLOB</dataName>
-      <dataType>BLOB</dataType>
-    </cpoAttribute>
-    <cpoAttribute xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xsi:type="cpoj:ctJdbcAttribute">
-      <javaName>attrMediumBlob</javaName>
-      <javaType>java.sql.Blob</javaType>
-      <dataName>ATTR_MEDIUMBLOB</dataName>
-      <dataType>BLOB</dataType>
-    </cpoAttribute>
-    <cpoAttribute xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xsi:type="cpoj:ctJdbcAttribute">
-      <javaName>attrLongBlob</javaName>
-      <javaType>java.sql.Blob</javaType>
-      <dataName>ATTR_LONGBLOB</dataName>
-      <dataType>BLOB</dataType>
-    </cpoAttribute>
-    <cpoAttribute xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xsi:type="cpoj:ctJdbcAttribute">
-      <javaName>attrImage</javaName>
-      <javaType>java.sql.Blob</javaType>
-      <dataName>ATTR_IMAGE</dataName>
-      <dataType>BLOB</dataType>
-    </cpoAttribute>
-    <cpoAttribute xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xsi:type="cpoj:ctJdbcAttribute">
-      <javaName>attrOID</javaName>
-      <javaType>byte[]</javaType>
-      <dataName>ATTR_OID</dataName>
-      <dataType>BLOB</dataType>
-    </cpoAttribute>
-    <cpoAttribute xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xsi:type="cpoj:ctJdbcAttribute">
-      <javaName>attrClob</javaName>
-      <javaType>java.sql.Clob</javaType>
-      <dataName>ATTR_CLOB</dataName>
-      <dataType>CLOB</dataType>
-    </cpoAttribute>
-    <cpoAttribute xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xsi:type="cpoj:ctJdbcAttribute">
-      <javaName>attrCharacterLargeObject</javaName>
-      <javaType>java.sql.Clob</javaType>
-      <dataName>ATTR_CHARACTER_LARGE_OBJECT</dataName>
-      <dataType>CLOB</dataType>
-    </cpoAttribute>
-    <cpoAttribute xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xsi:type="cpoj:ctJdbcAttribute">
-      <javaName>attrText</javaName>
-      <javaType>java.sql.Clob</javaType>
-      <dataName>ATTR_TEXT</dataName>
-      <dataType>CLOB</dataType>
-    </cpoAttribute>
-    <cpoAttribute xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xsi:type="cpoj:ctJdbcAttribute">
-      <javaName>attrTinyText</javaName>
-      <javaType>java.sql.Clob</javaType>
-      <dataName>ATTR_TINYTEXT</dataName>
-      <dataType>CLOB</dataType>
-    </cpoAttribute>
-    <cpoAttribute xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xsi:type="cpoj:ctJdbcAttribute">
-      <javaName>attrMediumText</javaName>
-      <javaType>java.sql.Clob</javaType>
-      <dataName>ATTR_MEDIUMTEXT</dataName>
-      <dataType>CLOB</dataType>
-    </cpoAttribute>
-    <cpoAttribute xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xsi:type="cpoj:ctJdbcAttribute">
-      <javaName>attrLongText</javaName>
-      <javaType>java.sql.Clob</javaType>
-      <dataName>ATTR_LONGTEXT</dataName>
-      <dataType>CLOB</dataType>
-    </cpoAttribute>
-    <cpoAttribute xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xsi:type="cpoj:ctJdbcAttribute">
-      <javaName>attrNText</javaName>
-      <javaType>java.sql.NClob</javaType>
-      <dataName>ATTR_NTEXT</dataName>
-      <dataType>NCLOB</dataType>
-    </cpoAttribute>
-    <cpoAttribute xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xsi:type="cpoj:ctJdbcAttribute">
-      <javaName>attrNClob</javaName>
-      <javaType>java.sql.NClob</javaType>
-      <dataName>ATTR_NCLOB</dataName>
-      <dataType>NCLOB</dataType>
-    </cpoAttribute>
-    <cpoAttribute xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xsi:type="cpoj:ctJdbcAttribute">
-      <javaName>attrUUID</javaName>
-      <javaType>java.util.UUID</javaType>
-      <dataName>ATTR_UUID</dataName>
-      <dataType>JAVA_OBJECT</dataType>
-    </cpoAttribute>
-    <cpoAttribute xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xsi:type="cpoj:ctJdbcAttribute">
-      <javaName>attrArray</javaName>
-      <javaType>java.sql.Array</javaType>
-      <dataName>ATTR_ARRAY</dataName>
-      <dataType>ARRAY</dataType>
-    </cpoAttribute>
-    <cpoAttribute xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xsi:type="cpoj:ctJdbcAttribute">
-      <javaName>attrEnum</javaName>
-      <javaType>int</javaType>
-      <dataName>ATTR_ENUM</dataName>
-      <dataType>INTEGER</dataType>
-    </cpoAttribute>
-    <cpoAttribute xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xsi:type="cpoj:ctJdbcAttribute">
-      <javaName>attrGeometry</javaName>
-      <javaType>org.locationtech.jts.geom.Geometry</javaType>
-      <dataName>ATTR_GEOMETRY</dataName>
-      <dataType>JAVA_OBJECT</dataType>
-    </cpoAttribute>
-    <cpoAttribute xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xsi:type="cpoj:ctJdbcAttribute">
-      <javaName>attrGeometry2</javaName>
-      <javaType>java.lang.String</javaType>
-      <dataName>ATTR_GEOMETRY2</dataName>
-      <dataType>VARCHAR</dataType>
-    </cpoAttribute>
-    <cpoAttribute xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xsi:type="cpoj:ctJdbcAttribute">
-      <javaName>attrJSON</javaName>
-      <javaType>java.lang.String</javaType>
-      <dataName>ATTR_JSON</dataName>
-      <dataType>VARCHAR</dataType>
-    </cpoAttribute>
-    <cpoAttribute xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xsi:type="cpoj:ctJdbcAttribute">
-      <javaName>attrIntervalYear</javaName>
-      <javaType>java.time.Period</javaType>
-      <dataName>ATTR_INTERVAL_YEAR</dataName>
-      <dataType>JAVA_OBJECT</dataType>
-    </cpoAttribute>
-    <cpoAttribute xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xsi:type="cpoj:ctJdbcAttribute">
-      <javaName>attrIntervalMonth</javaName>
-      <javaType>java.time.Period</javaType>
-      <dataName>ATTR_INTERVAL_MONTH</dataName>
-      <dataType>JAVA_OBJECT</dataType>
-    </cpoAttribute>
-    <cpoAttribute xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xsi:type="cpoj:ctJdbcAttribute">
-      <javaName>attrIntervalDay</javaName>
-      <javaType>java.time.Duration</javaType>
-      <dataName>ATTR_INTERVAL_DAY</dataName>
-      <dataType>JAVA_OBJECT</dataType>
-    </cpoAttribute>
-    <cpoAttribute xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xsi:type="cpoj:ctJdbcAttribute">
-      <javaName>attrIntervalHour</javaName>
-      <javaType>java.time.Duration</javaType>
-      <dataName>ATTR_INTERVAL_HOUR</dataName>
-      <dataType>JAVA_OBJECT</dataType>
-    </cpoAttribute>
-    <cpoAttribute xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xsi:type="cpoj:ctJdbcAttribute">
-      <javaName>attrIntervalMinute</javaName>
-      <javaType>java.time.Duration</javaType>
-      <dataName>ATTR_INTERVAL_MINUTE</dataName>
-      <dataType>JAVA_OBJECT</dataType>
-    </cpoAttribute>
-    <cpoAttribute xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xsi:type="cpoj:ctJdbcAttribute">
-      <javaName>attrIntervalYear</javaName>
-      <javaType>java.time.Duration</javaType>
-      <dataName>ATTR_INTERVAL_SECOND</dataName>
-      <dataType>JAVA_OBJECT</dataType>
-    </cpoAttribute>
-    <cpoAttribute xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xsi:type="cpoj:ctJdbcAttribute">
-      <javaName>attrIntervalYearToMonth</javaName>
-      <javaType>java.time.Period</javaType>
-      <dataName>ATTR_INTERVAL_YEAR_TO_MONTH</dataName>
-      <dataType>JAVA_OBJECT</dataType>
-    </cpoAttribute>
-    <cpoAttribute xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xsi:type="cpoj:ctJdbcAttribute">
-      <javaName>attrIntervalDayToHour</javaName>
-      <javaType>java.time.Duration</javaType>
-      <dataName>ATTR_INTERVAL_DAY_TO_HOUR</dataName>
-      <dataType>JAVA_OBJECT</dataType>
-    </cpoAttribute>
-    <cpoAttribute xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xsi:type="cpoj:ctJdbcAttribute">
-      <javaName>attrIntervalDayToMinute</javaName>
-      <javaType>java.time.Duration</javaType>
-      <dataName>ATTR_INTERVAL_DAY_TO_MINUTE</dataName>
-      <dataType>JAVA_OBJECT</dataType>
-    </cpoAttribute>
-    <cpoAttribute xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xsi:type="cpoj:ctJdbcAttribute">
-      <javaName>attrIntervalDayToSecond</javaName>
-      <javaType>java.time.Duration</javaType>
-      <dataName>ATTR_INTERVAL_DAY_TO_SECOND</dataName>
-      <dataType>JAVA_OBJECT</dataType>
-    </cpoAttribute>
-    <cpoAttribute xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xsi:type="cpoj:ctJdbcAttribute">
-      <javaName>attrIntervalHourToMinute</javaName>
-      <javaType>java.time.Duration</javaType>
-      <dataName>ATTR_INTERVAL_HOUR_TO_MINUTE</dataName>
-      <dataType>JAVA_OBJECT</dataType>
-    </cpoAttribute>
-    <cpoAttribute xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xsi:type="cpoj:ctJdbcAttribute">
-      <javaName>attrIntervalHourToSecond</javaName>
-      <javaType>java.time.Duration</javaType>
-      <dataName>ATTR_INTERVAL_HOUR_TO_SECOND</dataName>
-      <dataType>JAVA_OBJECT</dataType>
-    </cpoAttribute>
-    <cpoAttribute xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xsi:type="cpoj:ctJdbcAttribute">
-      <javaName>attrIntervalMinuteToSecond</javaName>
-      <javaType>java.time.Duration</javaType>
-      <dataName>ATTR_INTERVAL_MINUTE_TO_SECOND</dataName>
-      <dataType>JAVA_OBJECT</dataType>
-    </cpoAttribute>
+      <cpoAttribute xsi:type="cpoj:ctJdbcAttribute">
+          <javaName>id</javaName>
+          <javaType>int</javaType>
+          <dataName>iD</dataName>
+          <dataType>INTEGER</dataType>
+          <cpoj:dbTable>value_object</cpoj:dbTable>
+          <cpoj:dbColumn>id</cpoj:dbColumn>
+      </cpoAttribute>
+      <cpoAttribute xsi:type="cpoj:ctJdbcAttribute">
+          <javaName>name</javaName>
+          <javaType>java.lang.String</javaType>
+          <dataName>NAME</dataName>
+          <dataType>VARCHAR</dataType>
+      </cpoAttribute>
+      <cpoAttribute xsi:type="cpoj:ctJdbcAttribute">
+          <javaName>attrInteger</javaName>
+          <javaType>int</javaType>
+          <dataName>attr_INTEGER</dataName>
+          <dataType>INTEGER</dataType>
+          <transformClass>org.synchronoss.cpo.transform.jdbc.TransformNoOp</transformClass>
+      </cpoAttribute>
+      <cpoAttribute xsi:type="cpoj:ctJdbcAttribute">
+          <javaName>attrDouble</javaName>
+          <javaType>double</javaType>
+          <dataName>attr_DOUBLE</dataName>
+          <dataType>DOUBLE</dataType>
+      </cpoAttribute>
+      <cpoAttribute xsi:type="cpoj:ctJdbcAttribute">
+          <javaName>attrFloat</javaName>
+          <javaType>float</javaType>
+          <dataName>attr_FLOAT</dataName>
+          <dataType>FLOAT</dataType>
+      </cpoAttribute>
+      <cpoAttribute xsi:type="cpoj:ctJdbcAttribute">
+          <javaName>attrVarChar</javaName>
+          <javaType>java.lang.String</javaType>
+          <dataName>attr_VARCHAR</dataName>
+          <dataType>VARCHAR</dataType>
+          <cpoj:dbTable>value_object</cpoj:dbTable>
+          <cpoj:dbColumn>attr_varchar</cpoj:dbColumn>
+      </cpoAttribute>
+      <cpoAttribute xsi:type="cpoj:ctJdbcAttribute">
+          <javaName>attrChar</javaName>
+          <javaType>java.lang.String</javaType>
+          <dataName>attr_CHAR</dataName>
+          <dataType>CHAR</dataType>
+          <cpoj:dbTable>value_object</cpoj:dbTable>
+          <cpoj:dbColumn>attr_char</cpoj:dbColumn>
+      </cpoAttribute>
+      <cpoAttribute xsi:type="cpoj:ctJdbcAttribute">
+          <javaName>attrDate</javaName>
+          <javaType>java.sql.Date</javaType>
+          <dataName>attr_DATE</dataName>
+          <dataType>DATE</dataType>
+      </cpoAttribute>
+      <cpoAttribute xsi:type="cpoj:ctJdbcAttribute">
+          <javaName>attrTime</javaName>
+          <javaType>java.sql.Time</javaType>
+          <dataName>attr_TIME</dataName>
+          <dataType>TIME</dataType>
+      </cpoAttribute>
+      <cpoAttribute xsi:type="cpoj:ctJdbcAttribute">
+          <javaName>attrTimestamp</javaName>
+          <javaType>java.sql.Timestamp</javaType>
+          <dataName>attr_TIMESTAMP</dataName>
+          <dataType>TIMESTAMP</dataType>
+      </cpoAttribute>
+      <cpoAttribute xsi:type="cpoj:ctJdbcAttribute">
+          <javaName>attrDatetime</javaName>
+          <javaType>java.sql.Timestamp</javaType>
+          <dataName>attr_DATETIME</dataName>
+          <dataType>TIMESTAMP</dataType>
+      </cpoAttribute>
+      <cpoAttribute xsi:type="cpoj:ctJdbcAttribute">
+          <javaName>attrDecimal</javaName>
+          <javaType>java.math.BigDecimal</javaType>
+          <dataName>attr_DECIMAL</dataName>
+          <dataType>DECIMAL</dataType>
+      </cpoAttribute>
+      <cpoAttribute xsi:type="cpoj:ctJdbcAttribute">
+          <javaName>attrNumeric</javaName>
+          <javaType>java.math.BigDecimal</javaType>
+          <dataName>attr_NUMERIC</dataName>
+          <dataType>NUMERIC</dataType>
+      </cpoAttribute>
+      <cpoAttribute xsi:type="cpoj:ctJdbcAttribute">
+          <javaName>attrBit</javaName>
+          <javaType>boolean</javaType>
+          <dataName>attr_BIT</dataName>
+          <dataType>BIT</dataType>
+      </cpoAttribute>
+      <cpoAttribute xsi:type="cpoj:ctJdbcAttribute">
+          <javaName>attrBoolean</javaName>
+          <javaType>boolean</javaType>
+          <dataName>attr_BOOLEAN</dataName>
+          <dataType>BOOLEAN</dataType>
+      </cpoAttribute>
+      <cpoAttribute xsi:type="cpoj:ctJdbcAttribute">
+          <javaName>attrTinyInt</javaName>
+          <javaType>byte</javaType>
+          <dataName>attr_TINYINT</dataName>
+          <dataType>TINYINT</dataType>
+      </cpoAttribute>
+      <cpoAttribute xsi:type="cpoj:ctJdbcAttribute">
+          <javaName>attrSmallInt</javaName>
+          <javaType>short</javaType>
+          <dataName>attr_SMALLINT</dataName>
+          <dataType>SMALLINT</dataType>
+          <cpoj:dbTable>value_object</cpoj:dbTable>
+          <cpoj:dbColumn>attr_smallint</cpoj:dbColumn>
+      </cpoAttribute>
+      <cpoAttribute xsi:type="cpoj:ctJdbcAttribute">
+          <javaName>attrBigInt</javaName>
+          <javaType>java.math.BigInteger</javaType>
+          <dataName>attr_BIGINT</dataName>
+          <dataType>BIGINT</dataType>
+      </cpoAttribute>
+      <cpoAttribute xsi:type="cpoj:ctJdbcAttribute">
+          <javaName>attrReal</javaName>
+          <javaType>float</javaType>
+          <dataName>attr_REAL</dataName>
+          <dataType>REAL</dataType>
+      </cpoAttribute>
+      <cpoAttribute xsi:type="cpoj:ctJdbcAttribute">
+          <javaName>attrBinary</javaName>
+          <javaType>byte[]</javaType>
+          <dataName>attr_BINARY</dataName>
+          <dataType>BINARY</dataType>
+      </cpoAttribute>
+      <cpoAttribute xsi:type="cpoj:ctJdbcAttribute">
+          <javaName>attrVarBinary</javaName>
+          <javaType>byte[]</javaType>
+          <dataName>attr_VARBINARY</dataName>
+          <dataType>VARBINARY</dataType>
+      </cpoAttribute>
+      <cpoAttribute xsi:type="cpoj:ctJdbcAttribute">
+          <javaName>attrNChar</javaName>
+          <javaType>java.lang.String</javaType>
+          <dataName>attr_NCHAR</dataName>
+          <dataType>NCHAR</dataType>
+      </cpoAttribute>
+      <cpoAttribute xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xsi:type="cpoj:ctJdbcAttribute">
+          <javaName>attrBlob</javaName>
+          <javaType>java.sql.Blob</javaType>
+          <dataName>attr_BLOB</dataName>
+          <dataType>BLOB</dataType>
+      </cpoAttribute>
+      <cpoAttribute xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xsi:type="cpoj:ctJdbcAttribute">
+          <javaName>attrClob</javaName>
+          <javaType>java.sql.Clob</javaType>
+          <dataName>attr_CLOB</dataName>
+          <dataType>CLOB</dataType>
+      </cpoAttribute>
     <cpoFunctionGroup type="CREATE">
       <cpoFunction name="ValueObject - Create" >
-        <expression>insert into value_object(id, name, attr_char, attr_character, attr_date, attr_decimal, attr_integer, attr_numeric, attr_smallint, attr_timestamp, attr_varchar, attr_bit, attr_bool, attr_datetime, attr_bigint) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)</expression>
+        <expression>insert into value_object(id, name, attr_char, attr_date, attr_decimal, attr_integer, attr_numeric, attr_smallint, attr_timestamp, attr_varchar, attr_bit, attr_boolean, attr_datetime, attr_bigint) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?)</expression>
         <cpoArgument xsi:type="cpoj:ctJdbcArgument">
           <attributeName>id</attributeName>
           <cpoj:scope>IN</cpoj:scope>
@@ -567,10 +189,6 @@
         </cpoArgument>
         <cpoArgument xsi:type="cpoj:ctJdbcArgument">
           <attributeName>attrChar</attributeName>
-          <cpoj:scope>IN</cpoj:scope>
-        </cpoArgument>
-        <cpoArgument xsi:type="cpoj:ctJdbcArgument">
-          <attributeName>attrCharacter</attributeName>
           <cpoj:scope>IN</cpoj:scope>
         </cpoArgument>
         <cpoArgument xsi:type="cpoj:ctJdbcArgument">
@@ -606,7 +224,7 @@
           <cpoj:scope>IN</cpoj:scope>
         </cpoArgument>
         <cpoArgument xsi:type="cpoj:ctJdbcArgument">
-          <attributeName>attrBool</attributeName>
+          <attributeName>attrBoolean</attributeName>
           <cpoj:scope>IN</cpoj:scope>
         </cpoArgument>
         <cpoArgument xsi:type="cpoj:ctJdbcArgument">

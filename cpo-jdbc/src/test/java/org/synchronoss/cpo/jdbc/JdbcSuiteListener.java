@@ -46,8 +46,9 @@ public class JdbcSuiteListener implements ISuiteListener {
   public static final String PROP_DB_USER = "db.user";
   public static final String PROP_DB_PSWD = "db.pswd";
   public static final String PROP_DB_NAME = "db.database";
-  public static final String PROP_DB_URL = "db.url";
-  public static final String PROP_DB_BLOBSUPPORT = "db.blobsupport";
+    public static final String PROP_DB_URL = "db.url";
+    public static final String PROP_DB_IMAGE = "db.image";
+    public static final String PROP_DB_BLOBSUPPORT = "db.blobsupport";
   public static final String PROP_DB_CALLSUPORT = "db.callsupport";
   public static final String PROP_DB_SELECT4UPDATE = "db.select4update";
   public static final String PROP_DB_MILLISUPPORT = "db.millisupport";
@@ -65,6 +66,7 @@ public class JdbcSuiteListener implements ISuiteListener {
       String dbName = suite.getParameter(PROP_DB_NAME);
       String dbPort = suite.getParameter(PROP_DB_PORT);
       String dbUrl = suite.getParameter(PROP_DB_URL);
+      String dbImage = suite.getParameter(PROP_DB_IMAGE);
       String cpoConfig = suite.getParameter(PROP_CPO_CONFIG);
       String initScript = suite.getParameter(PROP_INIT_SCRIPT);
 
@@ -78,7 +80,7 @@ public class JdbcSuiteListener implements ISuiteListener {
               System.exit(1);
           }
       } else {
-          jdbcContainer = createJdbcContainer(dbType, dbInitScript, dbUser, dbPasswd, dbName, dbPort);
+          jdbcContainer = createJdbcContainer(dbType, dbInitScript, dbUser, dbPasswd, dbName, dbPort, dbImage);
 
           if (jdbcContainer != null) {
               jdbcContainer.start();
@@ -101,14 +103,16 @@ public class JdbcSuiteListener implements ISuiteListener {
     logger.debug("onFinish");
   }
 
-  private JdbcDatabaseContainer<?> createJdbcContainer(String dbType, String initScript, String dbUser, String dbPswd, String dbName, String dbPort) {
+  private JdbcDatabaseContainer<?> createJdbcContainer(String dbType, String initScript, String dbUser, String dbPswd, String dbName, String dbPort, String image) {
     logger.debug("Creating a container for:"+dbType);
     JdbcDatabaseContainer<?> jdbcContainer = null;
+    DockerImageName imageName = DockerImageName.parse(image);
+
     switch (dbType) {
-      case MYSQL: jdbcContainer = new MySQLContainer<>(); break;
-      case MARIADB: jdbcContainer = new MariaDBContainer<>(); break;
-      case POSTGRES: jdbcContainer = new PostgreSQLContainer<>(); break;
-      case ORACLE: jdbcContainer = new OracleContainer(); break;
+      case MYSQL: jdbcContainer = new MySQLContainer<>(imageName); break;
+      case MARIADB: jdbcContainer = new MariaDBContainer<>(imageName); break;
+      case POSTGRES: jdbcContainer = new PostgreSQLContainer<>(imageName); break;
+      case ORACLE: jdbcContainer = new OracleContainer(imageName); break;
       default: logger.debug("No Container to start, unknown dbType:"+dbType);
     }
 

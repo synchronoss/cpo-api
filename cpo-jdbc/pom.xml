@@ -45,6 +45,7 @@
 
       <!--  MySQL Test properties  -->
       <mysql.type>mysql</mysql.type>
+      <mysql.image>mysql:8.4.5</mysql.image>
       <mysql.resources>src/test/resources/mysql</mysql.resources>
       <mysql.user>cpo</mysql.user>
       <mysql.pswd>cpo</mysql.pswd>
@@ -68,6 +69,7 @@
 
       <!--  MariaDB Test properties  -->
       <mariadb.type>mariadb</mariadb.type>
+      <mariadb.image>mariadb:11.8.2</mariadb.image>
       <mariadb.resources>src/test/resources/mariadb</mariadb.resources>
       <mariadb.user>cpo</mariadb.user>
       <mariadb.pswd>cpo</mariadb.pswd>
@@ -91,6 +93,7 @@
 
       <!--  Oracle Test properties  -->
       <oracle.type>oracle</oracle.type>
+      <oracle.image>gvenzl/oracle-xe:21.3.0-slim-faststart</oracle.image>
       <oracle.resources>src/test/resources/oracle</oracle.resources>
       <oracle.user>cpo</oracle.user>
       <oracle.pswd>cpo</oracle.pswd>
@@ -114,6 +117,7 @@
 
       <!--  H2 Test properties  -->
       <h2.type>h2</h2.type>
+      <h2.image>none</h2.image>
       <h2.resources>src/test/resources/h2</h2.resources>
       <h2.user>sa</h2.user>
       <h2.pswd />
@@ -137,6 +141,7 @@
 
       <!--  PostgreSQL Test properties  -->
       <postgres.type>postgres</postgres.type>
+      <postgres.image>postgres:17.5</postgres.image>
       <postgres.resources>src/test/resources/postgres</postgres.resources>
       <postgres.user>cpo</postgres.user>
       <postgres.pswd>cpo</postgres.pswd>

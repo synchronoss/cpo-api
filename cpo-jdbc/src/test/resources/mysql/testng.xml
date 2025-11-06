@@ -30,6 +30,7 @@
     <parameter name="db.initScript" value="${mysql.initScript}"/>
     <parameter name="db.cpoConfig" value="${mysql.cpoConfig}"/>
     <parameter name="db.url" value="${mysql.url}"/>
+    <parameter name="db.image" value="${mysql.image}"/>
     <parameter name="db.blobsupport" value="${mysql.blobsupport}"/>
     <parameter name="db.callsupport" value="${mysql.callsupport}"/>
     <parameter name="db.select4update" value="${mysql.select4update}"/>

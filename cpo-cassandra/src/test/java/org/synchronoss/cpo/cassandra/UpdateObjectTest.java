@@ -22,17 +22,14 @@ package org.synchronoss.cpo.cassandra;
 
 import org.synchronoss.cpo.*;
 import org.synchronoss.cpo.cassandra.meta.CassandraCpoMetaDescriptor;
+import org.testng.annotations.*;
+import static org.testng.Assert.*;
 
 import java.sql.Timestamp;
 import java.util.*;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
-
 /**
- * DeleteObjectTest is a JUnit test class for testing the JdbcAdapter deleteObject method
+ * DeleteObjectTest is a test class for testing the JdbcAdapter deleteObject method
  *
  * @author david berry
  */
@@ -48,7 +45,7 @@ public class UpdateObjectTest extends CassandraContainerBase {
    * @author david berry
    * @version '$Id: InsertObjectTest.java,v 1.3 2006/01/30 19:09:23 dberry Exp $'
    */
-  @BeforeEach
+  @BeforeMethod
   public void setUp() {
     String method = "setUp:";
 
@@ -110,7 +107,7 @@ public class UpdateObjectTest extends CassandraContainerBase {
     }
   }
 
-  @AfterEach
+  @AfterMethod
   public void tearDown() {
     String method = "tearDown:";
     try {

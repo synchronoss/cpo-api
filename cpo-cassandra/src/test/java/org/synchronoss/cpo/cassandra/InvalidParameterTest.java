@@ -23,12 +23,10 @@ package org.synchronoss.cpo.cassandra;
 import org.slf4j.*;
 import org.synchronoss.cpo.*;
 import org.synchronoss.cpo.helper.ExceptionHelper;
+import org.testng.annotations.*;
+import static org.testng.Assert.*;
 
 import java.util.Collection;
-
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
 
 public class InvalidParameterTest extends CassandraContainerBase {
 
@@ -40,7 +38,7 @@ public class InvalidParameterTest extends CassandraContainerBase {
    *
    * @author david berry
    */
-  @BeforeEach
+  @BeforeMethod
   public void setUp() {
     String method = "setUp:";
 

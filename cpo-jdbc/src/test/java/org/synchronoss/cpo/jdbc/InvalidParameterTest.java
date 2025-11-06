@@ -20,13 +20,11 @@
  */
 package org.synchronoss.cpo.jdbc;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
 import org.slf4j.*;
 import org.synchronoss.cpo.*;
 import org.synchronoss.cpo.helper.ExceptionHelper;
+import org.testng.annotations.*;
+import static org.testng.Assert.*;
 
 import java.util.Collection;
 
@@ -44,7 +42,7 @@ public class InvalidParameterTest extends JdbcDbContainerBase {
    *
    * @author david berry
    */
-  @BeforeEach
+  @BeforeMethod
   public void setUp() {
     String method = "setUp:";
 

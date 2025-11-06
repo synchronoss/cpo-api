@@ -24,11 +24,10 @@ import org.apache.xmlbeans.XmlException;
 import org.slf4j.*;
 import org.synchronoss.cpo.core.cpoCoreConfig.CpoConfigDocument;
 import org.synchronoss.cpo.helper.*;
+import org.testng.annotations.*;
+import static org.testng.Assert.*;
 
 import java.io.*;
-
-import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
 
 /**
  *

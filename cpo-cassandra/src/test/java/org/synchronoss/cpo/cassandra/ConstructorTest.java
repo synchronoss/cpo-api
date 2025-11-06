@@ -22,12 +22,11 @@ package org.synchronoss.cpo.cassandra;
 
 import org.slf4j.*;
 import org.synchronoss.cpo.*;
-
-import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
+import org.testng.annotations.*;
+import static org.testng.Assert.*;
 
 /**
- * ConstructorTest is a JUnit test class for testing the JdbcAdapter class Constructors
+ * ConstructorTest is a test class for testing the JdbcAdapter class Constructors
  *
  * @author david berry
  */

@@ -21,18 +21,16 @@
 package org.synchronoss.cpo.jdbc;
 
 import java.io.File;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
 import org.slf4j.*;
 import org.synchronoss.cpo.*;
 
 import java.util.*;
 import org.synchronoss.cpo.helper.ExceptionHelper;
+import org.testng.annotations.*;
+import static org.testng.Assert.*;
 
 /**
- * RetrieveBeanTest is a JUnit test class for testing the JdbcAdapter class Constructors
+ * RetrieveBeanTest is a test class for testing the JdbcAdapter class Constructors
  *
  * @author david berry
  */
@@ -51,7 +49,7 @@ public class HotDeployTest extends JdbcDbContainerBase {
    * @author david berry
    * @version '$Id: RetrieveBeanTest.java,v 1.6 2006/01/30 19:09:23 dberry Exp $'
    */
-  @BeforeEach
+  @BeforeClass
   public void setUp() {
     String method = "setUp:";
 
@@ -165,14 +163,23 @@ public class HotDeployTest extends JdbcDbContainerBase {
     }
   }
 
-  @AfterEach
+    @AfterMethod
+    public void resetMetaData() {
+        String method = "resetMetaData:";
+        try {
+            // lets reset the metadata to before we changed it
+            List<String> metaFiles = new ArrayList<>();
+            metaFiles.add(metaFile.getName());
+            cpoAdapter.getCpoMetaDescriptor().refreshDescriptorMeta(metaFiles, true);
+        } catch (Exception e) {
+            fail(method + e.getMessage());
+        }
+    }
+
+  @AfterClass
   public void tearDown() {
     String method = "tearDown:";
     try {
-      // lets reset the metadata to before we changed it
-      List<String> metaFiles = new ArrayList<>();
-      metaFiles.add(metaFile.getName());
-      cpoAdapter.getCpoMetaDescriptor().refreshDescriptorMeta(metaFiles, true);
       metaFile.delete();
 
       cpoAdapter.deleteObjects(ValueObject.FG_DELETE_TESTORDERBYDELETE, al);

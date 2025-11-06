@@ -20,18 +20,16 @@
  */
 package org.synchronoss.cpo.jdbc;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
 import org.synchronoss.cpo.*;
 import org.synchronoss.cpo.jdbc.meta.JdbcCpoMetaDescriptor;
+import org.testng.annotations.*;
+import static org.testng.Assert.*;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
 
 /**
- * InheritanceTest is a JUnit test class for testing the polymorphic capabilites of CPO
+ * InheritanceTest is a test class for testing the polymorphic capabilites of CPO
  *
  * @author david berry
  */
@@ -52,7 +50,7 @@ public class InheritanceTest extends JdbcDbContainerBase {
    * @author david berry
    * @version '$Id: InsertObjectTest.java,v 1.3 2006/01/30 19:09:23 dberry Exp $'
    */
-  @BeforeEach
+  @BeforeMethod
   public void setUp() {
     String method = "setUp:";
 
@@ -106,7 +104,7 @@ public class InheritanceTest extends JdbcDbContainerBase {
 
   }
 
-  @AfterEach
+  @AfterMethod
   public void tearDown() {
     String method = "tearDown:";
     try {

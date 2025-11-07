@@ -34,7 +34,7 @@ import static org.testng.Assert.*;
  *
  * @author david berry
  */
-public class BlobTrxTest extends JdbcDbContainerBase {
+public class BlobTrxTest {
 
   private static final Logger logger = LoggerFactory.getLogger(BlobTrxTest.class);
   private static int BLOB_SIZE = 64999;
@@ -45,7 +45,7 @@ public class BlobTrxTest extends JdbcDbContainerBase {
   private char[] testClob = "This is a test Clob used for testing clobs".toCharArray();
   private byte[] testBlob2 = null;
   private char[] testClob2 = "This is a second test Clob used for testing clobs".toCharArray();
-  private boolean isSupportsBlobs = Boolean.valueOf(JdbcJUnitProperty.getProperty(JdbcJUnitProperty.PROP_BLOBS_SUPPORTED));
+  private boolean isSupportsBlobs = true;
 
   public BlobTrxTest() {
 
@@ -57,10 +57,11 @@ public class BlobTrxTest extends JdbcDbContainerBase {
    * @author david berry
    * @version '$Id: BlobTestTrx.java,v 1.2 2006/01/31 22:31:06 dberry Exp $'
    */
-  @BeforeMethod
-  public void setUp() {
-
-    String method = "setUp:";
+  @Parameters({ "db.blobsupport" })
+  @BeforeClass
+  public void setUp(boolean blobSupport) {
+      String method = "setUp:";
+      isSupportsBlobs = blobSupport;
 
     try {
       cpoAdapter = CpoAdapterFactoryManager.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_JDBC);
@@ -410,7 +411,7 @@ public class BlobTrxTest extends JdbcDbContainerBase {
 
   }
 
-  @AfterMethod
+  @AfterClass
   public void tearDown() {
     try {
       trxAdapter.close();

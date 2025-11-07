@@ -36,13 +36,13 @@ import static org.testng.Assert.*;
  *
  * @author david berry
  */
-public class SelectForUpdateTest extends JdbcDbContainerBase {
+public class SelectForUpdateTest {
 
   private static final Logger logger = LoggerFactory.getLogger(SelectForUpdateTest.class);
   private CpoAdapter cpoAdapter = null;
   private CpoTrxAdapter trxAdapter = null;
   private JdbcCpoMetaDescriptor metaDescriptor = null;
-  private boolean isSupportsSelect4Update = Boolean.valueOf(JdbcJUnitProperty.getProperty(JdbcJUnitProperty.PROP_SELECT4UPDATE));
+  private boolean isSupportsSelect4Update = true;
 
   public SelectForUpdateTest() {
   }
@@ -50,9 +50,11 @@ public class SelectForUpdateTest extends JdbcDbContainerBase {
   /**
    * <code>setUp</code> Load the datasource from the properties in the property file jdbc_en_US.properties
    */
-  @BeforeMethod
-  public void setUp() {
-    String method = "setUp:";
+  @Parameters({ "db.select4update" })
+  @BeforeClass
+  public void setUp(boolean select4update) {
+      String method = "setUp:";
+      isSupportsSelect4Update = select4update;
 
     try {
       cpoAdapter = CpoAdapterFactoryManager.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_JDBC);
@@ -81,7 +83,7 @@ public class SelectForUpdateTest extends JdbcDbContainerBase {
   /**
    * DOCUMENT ME!
    */
-  @AfterMethod
+  @AfterClass
   public void tearDown() {
    String method = "tearDown:";
    ValueObject vo = ValueObjectFactory.createValueObject(1);

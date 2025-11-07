@@ -35,12 +35,12 @@ import java.util.Collection;
  *
  * @author david berry
  */
-public class CriteriaObjectTest extends JdbcDbContainerBase {
+public class CriteriaObjectTest {
 
   private static final Logger logger = LoggerFactory.getLogger(CriteriaObjectTest.class);
   private CpoAdapter cpoAdapter = null;
   private ArrayList<ValueObject> al = new ArrayList<>();
-  private boolean isSupportsCalls = Boolean.valueOf(JdbcJUnitProperty.getProperty(JdbcJUnitProperty.PROP_CALLS_SUPPORTED));
+  private boolean isSupportsCalls = true;
 
   public CriteriaObjectTest() {
   }
@@ -51,9 +51,11 @@ public class CriteriaObjectTest extends JdbcDbContainerBase {
    * @author david berry
    * @version '$Id: RetrieveBeanTest.java,v 1.6 2006/01/30 19:09:23 dberry Exp $'
    */
+  @Parameters({ "db.callsupport" })
   @BeforeClass
-  public void setUp() {
-    String method = "setUp:";
+  public void setUp(boolean callSupport) {
+      String method = "setUp:";
+      isSupportsCalls  = callSupport;
 
     try {
       cpoAdapter = CpoAdapterFactoryManager.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_JDBC);

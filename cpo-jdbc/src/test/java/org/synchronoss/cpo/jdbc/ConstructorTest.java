@@ -32,7 +32,7 @@ import java.util.List;
  *
  * @author david berry
  */
-public class ConstructorTest extends JdbcDbContainerBase {
+public class ConstructorTest {
   private static final Logger logger = LoggerFactory.getLogger(ConstructorTest.class);
   private static final String PASSWORDSTRING = "password=";
 
@@ -45,7 +45,7 @@ public class ConstructorTest extends JdbcDbContainerBase {
    * @author david berry
    * @version '$Id: ConstructorTest.java,v 1.7 2006/01/31 22:55:03 dberry Exp $'
    */
-  @BeforeMethod
+  @BeforeClass
   public void setUp() {
   }
 
@@ -213,7 +213,7 @@ public class ConstructorTest extends JdbcDbContainerBase {
     }
   }
 
-  @AfterMethod
+  @AfterClass
   public void tearDown() {
   }
 }

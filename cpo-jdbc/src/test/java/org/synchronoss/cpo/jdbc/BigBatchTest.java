@@ -33,7 +33,7 @@ import java.util.ArrayList;
  *
  * @author david berry
  */
-public class BigBatchTest extends JdbcDbContainerBase {
+public class BigBatchTest {
 
   private static final Logger logger = LoggerFactory.getLogger(BigBatchTest.class);
   private ArrayList<ValueObject> al = new ArrayList<>();
@@ -49,7 +49,7 @@ public class BigBatchTest extends JdbcDbContainerBase {
    * @author david berry
    * @version '$Id: InsertObjectTest.java,v 1.3 2006/01/30 19:09:23 dberry Exp $'
    */
-  @BeforeMethod
+  @BeforeClass
   public void setUp() {
     String method = "setUp:";
 
@@ -93,7 +93,7 @@ public class BigBatchTest extends JdbcDbContainerBase {
 
   }
 
-  @AfterMethod
+  @AfterClass
   public void tearDown() {
     String method = "tearDown:";
     try {

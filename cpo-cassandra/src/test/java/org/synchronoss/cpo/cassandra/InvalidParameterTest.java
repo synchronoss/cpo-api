@@ -38,7 +38,7 @@ public class InvalidParameterTest extends CassandraContainerBase {
    *
    * @author david berry
    */
-  @BeforeMethod
+  @BeforeClass
   public void setUp() {
     String method = "setUp:";
 

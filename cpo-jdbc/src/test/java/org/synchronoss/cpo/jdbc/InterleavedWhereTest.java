@@ -33,7 +33,7 @@ import static org.testng.Assert.*;
  *
  * @author david berry
  */
-public class InterleavedWhereTest extends JdbcDbContainerBase {
+public class InterleavedWhereTest {
 
   private CpoAdapter cpoAdapter = null;
   private ArrayList<ValueObject> al = new ArrayList<>();
@@ -47,7 +47,7 @@ public class InterleavedWhereTest extends JdbcDbContainerBase {
   /**
    * <code>setUp</code> Load the datasource from the properties in the property file jdbc_en_US.properties
    */
-  @BeforeMethod
+  @BeforeClass
   public void setUp() {
     String method = "setUp:";
 
@@ -81,7 +81,7 @@ public class InterleavedWhereTest extends JdbcDbContainerBase {
   /**
    * DOCUMENT ME!
    */
-  @AfterMethod
+  @AfterClass
   public void tearDown() {
     String method = "tearDown:";
     try {

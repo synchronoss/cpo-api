@@ -33,7 +33,7 @@ import java.util.ArrayList;
  *
  * @author david berry
  */
-public class ExistObjectTest extends JdbcDbContainerBase {
+public class ExistObjectTest {
 
   private static final Logger logger = LoggerFactory.getLogger(ExistObjectTest.class);
   private CpoAdapter cpoAdapter = null;
@@ -47,7 +47,7 @@ public class ExistObjectTest extends JdbcDbContainerBase {
    * @author david berry
    * @version '$Id: ExistObjectTest.java,v 1.2 2006/01/30 19:09:23 dberry Exp $'
    */
-  @BeforeMethod
+  @BeforeClass
   public void setUp() {
     String method = "setUp:";
 
@@ -119,7 +119,7 @@ public class ExistObjectTest extends JdbcDbContainerBase {
 
   }
 
-  @AfterMethod
+  @AfterClass
   public void tearDown() {
     ValueObject vo = ValueObjectFactory.createValueObject(1);
     try {

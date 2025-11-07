@@ -28,7 +28,7 @@ import static org.testng.Assert.*;
 
 import java.util.Collection;
 
-public class InvalidParameterTest extends JdbcDbContainerBase {
+public class InvalidParameterTest {
 
   private static final Logger logger = LoggerFactory.getLogger(InvalidParameterTest.class);
   private CpoAdapter cpoAdapter = null;
@@ -42,7 +42,7 @@ public class InvalidParameterTest extends JdbcDbContainerBase {
    *
    * @author david berry
    */
-  @BeforeMethod
+  @BeforeClass
   public void setUp() {
     String method = "setUp:";
 

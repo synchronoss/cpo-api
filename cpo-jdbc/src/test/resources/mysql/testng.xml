@@ -1,0 +1,54 @@
+<!--
+
+    Copyright (C) 2003-2012 David E. Berry
+
+    This library is free software; you can redistribute it and/or
+    modify it under the terms of the GNU Lesser General Public
+    License as published by the Free Software Foundation; either
+    version 2.1 of the License, or (at your option) any later version.
+
+    This library is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+    Lesser General Public License for more details.
+
+    You should have received a copy of the GNU Lesser General Public
+    License along with this library; if not, write to the Free Software
+    Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+
+    A copy of the GNU Lesser General Public License may also be found at
+    http://www.gnu.org/licenses/lgpl.txt
+
+-->
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="${mysql.type} Jdbc Test Suite" verbose="2">
+    <parameter name="db.type" value="${mysql.type}"/>
+    <parameter name="db.database" value="${mysql.database}"/>
+    <parameter name="db.port" value="${mysql.port}"/>
+    <parameter name="db.user" value="${mysql.user}"/>
+    <parameter name="db.pswd" value="${mysql.pswd}"/>
+    <parameter name="db.initScript" value="${mysql.initScript}"/>
+    <parameter name="db.cpoConfig" value="${mysql.cpoConfig}"/>
+    <parameter name="db.url" value="${mysql.url}"/>
+    <parameter name="db.image" value="${mysql.image}"/>
+    <parameter name="db.blobsupport" value="${mysql.blobsupport}"/>
+    <parameter name="db.callsupport" value="${mysql.callsupport}"/>
+    <parameter name="db.select4update" value="${mysql.select4update}"/>
+    <parameter name="db.millisupport" value="${mysql.millisupport}"/>
+    <parameter name="db.xasupport" value="${mysql.xasupport}"/>
+    <listeners>
+        <listener class-name="org.synchronoss.cpo.jdbc.JdbcSuiteListener"/>
+    </listeners>
+    <test name="${mysql.type} Jdbc Tests" verbose="2">
+        <packages>
+            <package name="org.synchronoss.cpo.jdbc.*" />
+        </packages>
+        <classes>
+            <class name="org.synchronoss.cpo.jdbc.BigBatchTest"> <!-- Target the specific class -->
+                <methods>
+                    <exclude name=".*" /> <!-- Exclude all methods within this class -->
+                </methods>
+            </class>
+        </classes>
+    </test>
+</suite>

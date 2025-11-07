@@ -33,13 +33,13 @@ import java.util.ArrayList;
  *
  * @author david berry
  */
-public class CaseInsensitiveTest extends JdbcDbContainerBase {
+public class CaseInsensitiveTest {
 
   private ArrayList<CaseValueObject> al = new ArrayList<>();
   private CpoAdapter cpoAdapter = null;
   private CpoAdapter readAdapter = null;
   private JdbcCpoMetaDescriptor metaDescriptor = null;
-  private boolean isSupportsMillis = Boolean.valueOf(JdbcJUnitProperty.getProperty(JdbcJUnitProperty.PROP_MILLIS_SUPPORTED));
+  private boolean isSupportsMillis = true;
 
   public CaseInsensitiveTest(){
   }
@@ -50,11 +50,13 @@ public class CaseInsensitiveTest extends JdbcDbContainerBase {
    * @author david berry
    * @version '$Id: InsertObjectTest.java,v 1.3 2006/01/30 19:09:23 dberry Exp $'
    */
-  @BeforeMethod
-  public void setUp() {
-    String method = "setUp:";
+  @Parameters({ "db.millisupport" })
+  @BeforeClass
+  public void setUp(boolean milliSupport) {
+      String method = "setUp:";
+      isSupportsMillis  = milliSupport;
 
-    try {
+      try {
       cpoAdapter = CpoAdapterFactoryManager.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_CASEINSENSITIVE);
       assertNotNull(cpoAdapter, method + "cpoAdapter is null");
       metaDescriptor = (JdbcCpoMetaDescriptor) cpoAdapter.getCpoMetaDescriptor();
@@ -86,7 +88,7 @@ public class CaseInsensitiveTest extends JdbcDbContainerBase {
 
     valObj.setAttrDatetime(ts);
 
-    valObj.setAttrBit(true);
+    valObj.setAttrBool(true);
 
     al.add(valObj);
 
@@ -102,7 +104,7 @@ public class CaseInsensitiveTest extends JdbcDbContainerBase {
       assertEquals(vo.getAttrInteger(), valObj.getAttrInteger(), "Integers do not match");
       assertEquals(vo.getAttrVarChar(), valObj.getAttrVarChar(),"Strings do not match");
       assertEquals(vo.getAttrDatetime(), valObj.getAttrDatetime(), "Timestamps do not match");
-      assertTrue(vo.getAttrBit(), "boolean not stored correctly");
+      assertTrue(vo.getAttrBool(), "boolean not stored correctly");
 
     } catch (Exception e) {
       fail(method + e.getMessage());
@@ -111,7 +113,7 @@ public class CaseInsensitiveTest extends JdbcDbContainerBase {
 
   }
 
-  @AfterMethod
+  @AfterClass
   public void tearDown() {
     String method = "tearDown:";
     try {

@@ -19,28 +19,24 @@
 -- http://www.gnu.org/licenses/lgpl.txt
 --
 
-CREATE TABLE value_object (
-ID                      int primary key
-,ATTR_BOOL            	 char(1)  NULL
-,ATTR_INTEGER            int      NULL
-,ATTR_INT                integer      NULL
-,ATTR_DOUBLE             double precision       NULL
-,ATTR_FLOAT              float        NULL
-,ATTR_VARCHAR            varchar(255) NULL
-,ATTR_VARCHAR_IGNORECASE varchar(255) NULL
-,ATTR_CHAR               varchar(255) NULL
-,ATTR_CHARACTER          varchar(255) NULL
-,ATTR_DATE               date         NULL
-,ATTR_DATETIME			     timestamp	  NULL
---,ATTR_TIME               time         NULL
-,ATTR_TIMESTAMP          timestamp    NULL
-,ATTR_DECIMAL            decimal(10,0) NULL
-,ATTR_NUMERIC            decimal(10,0) NULL
-,ATTR_SMALLINT           smallint  NULL
-,ATTR_BIGINT             numeric NULL
-,ATTR_REAL               double precision     NULL
-,ATTR_BLOB               blob         NULL
-,ATTR_LONGTEXT           long     NULL
+CREATE TABLE VALUE_OBJECT (
+    ID                      int primary key
+    ,ATTR_CHAR               varchar(255) NULL
+    ,ATTR_CHARACTER          varchar(255) NULL
+    ,ATTR_DATE               date         NULL
+    ,ATTR_DECIMAL            decimal(10,0) NULL
+    ,ATTR_INTEGER            int      NULL
+    ,ATTR_NUMERIC            decimal(10,0) NULL
+    ,ATTR_SMALLINT           smallint  NULL
+    ,ATTR_TIMESTAMP          timestamp    NULL
+    ,ATTR_VARCHAR            varchar(255) NULL
+    ,ATTR_BIT            	 char(1)  NULL
+    ,ATTR_BOOL            	 char(1)  NULL
+    ,ATTR_DATETIME			     timestamp	  NULL
+    ,ATTR_BIGINT             numeric NULL
+    ,ATTR_DOUBLE             double precision       NULL
+    ,ATTR_REAL               double precision     NULL
+    ,ATTR_FLOAT              float        NULL
 )
 ;
 

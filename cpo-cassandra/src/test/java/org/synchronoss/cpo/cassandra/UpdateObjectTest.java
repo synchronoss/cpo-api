@@ -45,7 +45,7 @@ public class UpdateObjectTest extends CassandraContainerBase {
    * @author david berry
    * @version '$Id: InsertObjectTest.java,v 1.3 2006/01/30 19:09:23 dberry Exp $'
    */
-  @BeforeMethod
+  @BeforeClass
   public void setUp() {
     String method = "setUp:";
 
@@ -107,7 +107,7 @@ public class UpdateObjectTest extends CassandraContainerBase {
     }
   }
 
-  @AfterMethod
+  @AfterClass
   public void tearDown() {
     String method = "tearDown:";
     try {

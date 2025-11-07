@@ -1,0 +1,54 @@
+<!--
+
+    Copyright (C) 2003-2012 David E. Berry
+
+    This library is free software; you can redistribute it and/or
+    modify it under the terms of the GNU Lesser General Public
+    License as published by the Free Software Foundation; either
+    version 2.1 of the License, or (at your option) any later version.
+
+    This library is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+    Lesser General Public License for more details.
+
+    You should have received a copy of the GNU Lesser General Public
+    License along with this library; if not, write to the Free Software
+    Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+
+    A copy of the GNU Lesser General Public License may also be found at
+    http://www.gnu.org/licenses/lgpl.txt
+
+-->
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="${postgres.type} Jdbc Test Suite" verbose="2">
+    <parameter name="db.type" value="${postgres.type}"/>
+    <parameter name="db.database" value="${postgres.database}"/>
+    <parameter name="db.port" value="${postgres.port}"/>
+    <parameter name="db.user" value="${postgres.user}"/>
+    <parameter name="db.pswd" value="${postgres.pswd}"/>
+    <parameter name="db.initScript" value="${postgres.initScript}"/>
+    <parameter name="db.cpoConfig" value="${postgres.cpoConfig}"/>
+    <parameter name="db.url" value="${postgres.url}"/>
+    <parameter name="db.image" value="${postgres.image}"/>
+    <parameter name="db.blobsupport" value="${postgres.blobsupport}"/>
+    <parameter name="db.callsupport" value="${postgres.callsupport}"/>
+    <parameter name="db.select4update" value="${postgres.select4update}"/>
+    <parameter name="db.millisupport" value="${postgres.millisupport}"/>
+    <parameter name="db.xasupport" value="${postgres.xasupport}"/>
+    <listeners>
+        <listener class-name="org.synchronoss.cpo.jdbc.JdbcSuiteListener"/>
+    </listeners>
+    <test name="${postgres.type} Jdbc Tests" verbose="2">
+        <packages>
+            <package name="org.synchronoss.cpo.jdbc.*" />
+        </packages>
+<!--        <classes>-->
+<!--            <class name="org.synchronoss.cpo.jdbc.BigBatchTest"> &lt;!&ndash; Target the specific class &ndash;&gt;-->
+<!--                <methods>-->
+<!--                    <exclude name=".*" /> &lt;!&ndash; Exclude all methods within this class &ndash;&gt;-->
+<!--                </methods>-->
+<!--            </class>-->
+<!--        </classes>-->
+    </test>
+</suite>

@@ -33,7 +33,7 @@ import java.util.*;
  *
  * @author david berry
  */
-public class BigRetrieveTest extends JdbcDbContainerBase {
+public class BigRetrieveTest {
 
   private static final Logger logger = LoggerFactory.getLogger(BigRetrieveTest.class);
   private ArrayList<ValueObject> al = new ArrayList<>();

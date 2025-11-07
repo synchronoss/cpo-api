@@ -25,11 +25,11 @@ import org.apache.jmeter.protocol.java.sampler.*;
 import org.apache.jmeter.samplers.SampleResult;
 import org.apache.log.Logger;
 import org.synchronoss.cpo.*;
-import org.synchronoss.cpo.core.cpoCoreConfig.CtDataSourceConfig;
 import org.synchronoss.cpo.jdbc.*;
 import org.synchronoss.cpo.jdbc.cpoJdbcConfig.*;
 import org.synchronoss.cpo.jdbc.meta.JdbcCpoMetaDescriptor;
 import org.synchronoss.cpo.meta.CpoMetaDescriptor;
+import org.testng.annotations.*;
 
 import java.sql.Timestamp;
 
@@ -52,14 +52,21 @@ public class CpoJavaSamplerClient extends AbstractJavaSamplerClient {
   private static final String URL = "url";
   private static final String DRIVER = "driver";
   private static final String CONFIG_PROCESSOR = "org.synchronoss.cpo.jdbc.config.JdbcCpoConfigProcessor";
-  private static final boolean isSupportsMillis = Boolean.parseBoolean(JdbcJUnitProperty.getProperty(JdbcJUnitProperty.PROP_MILLIS_SUPPORTED));
+  private static boolean isSupportsMillis = true;
+
+    @Parameters({ "db.millisupport" })
+    @BeforeClass
+    public void setUp(boolean milliSupport) {
+        String method = "setUp:";
+        isSupportsMillis = milliSupport;
+    }
 
   @Override
   public void setupTest(JavaSamplerContext javaSamplerContext) {
     super.setupTest(javaSamplerContext);
 
     try {
-      metaDescriptor = (JdbcCpoMetaDescriptor)CpoMetaDescriptor.getInstance("jmeter-" + System.currentTimeMillis(), "/oracle/oracleValueMetaData.xml", true);
+      metaDescriptor = (JdbcCpoMetaDescriptor)CpoMetaDescriptor.getInstance("jmeter-" + System.currentTimeMillis(), "/oracle/classdef/oracleValueMetaData.xml", true);
 
       CtJdbcConfig jdbcConfig = CtJdbcConfig.Factory.newInstance();
       jdbcConfig.setName(this.getClass().getName());

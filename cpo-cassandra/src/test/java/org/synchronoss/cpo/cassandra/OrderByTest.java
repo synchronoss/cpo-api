@@ -42,7 +42,7 @@ public class OrderByTest extends CassandraContainerBase {
   /**
    * <code>setUp</code> Load the datasource from the properties in the property file jdbc_en_US.properties
    */
-  @BeforeMethod
+  @BeforeClass
   public void setUp() {
     String method = "setUp:";
 
@@ -66,7 +66,7 @@ public class OrderByTest extends CassandraContainerBase {
     }
   }
 
-  @AfterMethod
+  @AfterClass
   public void tearDown() {
     String method = "tearDown:";
     try {

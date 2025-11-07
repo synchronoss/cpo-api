@@ -35,13 +35,13 @@ import java.util.*;
  *
  * @author david berry
  */
-public class DeleteObjectTest extends JdbcDbContainerBase {
+public class DeleteObjectTest {
 
   private static final Logger logger = LoggerFactory.getLogger(DeleteObjectTest.class);
   private ArrayList<ValueObject> al = new ArrayList<>();
   private CpoAdapter cpoAdapter = null;
   private JdbcCpoMetaDescriptor metaDescriptor = null;
-  private boolean isSupportsMillis = Boolean.valueOf(JdbcJUnitProperty.getProperty(JdbcJUnitProperty.PROP_MILLIS_SUPPORTED));
+  private boolean isSupportsMillis = true;
 
   public DeleteObjectTest() {
   }
@@ -52,11 +52,13 @@ public class DeleteObjectTest extends JdbcDbContainerBase {
    * @author david berry
    * @version '$Id: InsertObjectTest.java,v 1.3 2006/01/30 19:09:23 dberry Exp $'
    */
-  @BeforeMethod
-  public void setUp() {
-    String method = "setUp:";
+  @Parameters({ "db.millisupport" })
+  @BeforeClass
+  public void setUp(boolean milliSupport) {
+      String method = "setUp:";
+      isSupportsMillis  = milliSupport;
 
-    try {
+      try {
       cpoAdapter = CpoAdapterFactoryManager.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_JDBC);
       assertNotNull(cpoAdapter, method + "cpoAdapter is null");
       metaDescriptor = (JdbcCpoMetaDescriptor) cpoAdapter.getCpoMetaDescriptor();
@@ -117,7 +119,7 @@ public class DeleteObjectTest extends JdbcDbContainerBase {
 
   }
 
-  @AfterMethod
+  @AfterClass
   public void tearDown() {
     String method = "tearDown:";
     try {

@@ -39,7 +39,7 @@ import java.util.Arrays;
  *
  * @author Michael Bellomo
  */
-public class ExporterTest extends JdbcDbContainerBase {
+public class ExporterTest {
 
   private static final Logger logger = LoggerFactory.getLogger(ExporterTest.class);
 
@@ -49,7 +49,7 @@ public class ExporterTest extends JdbcDbContainerBase {
   public ExporterTest() {
   }
 
-  @BeforeMethod
+  @BeforeClass
   public void setUp() {
     String method = "setUp:";
 
@@ -62,7 +62,7 @@ public class ExporterTest extends JdbcDbContainerBase {
     }
   }
 
-  @AfterMethod
+  @AfterClass
   public void tearDown() {
     cpoAdapter = null;
   }

@@ -46,7 +46,7 @@ public class HotDeployTest extends CassandraContainerBase {
    * @author david berry
    * @version '$Id: RetrieveBeanTest.java,v 1.6 2006/01/30 19:09:23 dberry Exp $'
    */
-  @BeforeMethod
+  @BeforeClass
   public void setUp() {
     String method = "setUp:";
     try {
@@ -165,20 +165,29 @@ public class HotDeployTest extends CassandraContainerBase {
     }
   }
 
-  @AfterMethod
-  public void tearDown() {
-    String method = "tearDown:";
-    try {
-      // lets reset the metadata to before we changed it
-      List<String> metaFiles = new ArrayList<>();
-      metaFiles.add(metaFile.getName());
-      cpoAdapter.getCpoMetaDescriptor().refreshDescriptorMeta(metaFiles, true);
-      metaFile.delete();
-
-      cpoAdapter.deleteObjects("TestOrderByDelete", al);
-    } catch (Exception e) {
-      fail(method + e.getMessage());
+    @AfterMethod
+    public void resetMetaData() {
+        String method = "resetMetaData:";
+        try {
+            // lets reset the metadata to before we changed it
+            List<String> metaFiles = new ArrayList<>();
+            metaFiles.add(metaFile.getName());
+            cpoAdapter.getCpoMetaDescriptor().refreshDescriptorMeta(metaFiles, true);
+        } catch (Exception e) {
+            fail(method + e.getMessage());
+        }
     }
-    cpoAdapter = null;
-  }
+
+    @AfterClass
+    public void tearDown() {
+        String method = "tearDown:";
+        try {
+            metaFile.delete();
+
+            cpoAdapter.deleteObjects(ValueObject.FG_DELETE_TESTORDERBYDELETE, al);
+        } catch (Exception e) {
+            fail(method + e.getMessage());
+        }
+        cpoAdapter = null;
+    }
 }

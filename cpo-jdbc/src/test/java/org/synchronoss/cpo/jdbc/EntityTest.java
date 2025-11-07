@@ -33,7 +33,7 @@ import java.util.List;
  *
  * @author david berry
  */
-public class EntityTest extends JdbcDbContainerBase {
+public class EntityTest {
 
   private static final Logger logger = LoggerFactory.getLogger(EntityTest.class);
 
@@ -46,7 +46,7 @@ public class EntityTest extends JdbcDbContainerBase {
    * @author david berry
    * @version '$Id: ConstructorTest.java,v 1.7 2006/01/31 22:55:03 dberry Exp $'
    */
-  @BeforeMethod
+  @BeforeClass
   public void setUp() {
   }
 
@@ -79,7 +79,7 @@ public class EntityTest extends JdbcDbContainerBase {
     logger.debug("DataTypeMapEntry: "+attribute.getDataTypeInt());
   }
 
-  @AfterMethod
+  @AfterClass
   public void tearDown() {
   }
 }

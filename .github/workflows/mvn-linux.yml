@@ -44,18 +44,6 @@ jobs:
         with:
           java-version: '8'
           distribution: 'corretto'
-      - name: Test H2
-        id: h2
+      - name: Test CPO
+        id: All
         run: mvn test
-      - name: Test MySQL
-        id: mysql
-        run: mvn -pl cpo-jdbc -am clean test -Dcpo.db=mysql
-      - name: Test MariaDB
-        id: mariadb
-        run: mvn -pl cpo-jdbc -am clean test -Dcpo.db=mariadb
-      - name: Test PostgreSql
-        id: postgres
-        run: mvn -pl cpo-jdbc -am clean test -Dcpo.db=postgres
-      - name: Test Oracle XE
-        id: oracle-xe
-        run: mvn -pl cpo-jdbc -am clean test -Dcpo.db=oracle-xe

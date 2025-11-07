@@ -33,7 +33,7 @@ import static org.testng.Assert.*;
  *
  * @author david berry
  */
-public class RollbackTrxTest extends JdbcDbContainerBase {
+public class RollbackTrxTest {
 
   private CpoTrxAdapter trxAdapter = null;
 
@@ -47,7 +47,7 @@ public class RollbackTrxTest extends JdbcDbContainerBase {
   /**
    * <code>setUp</code> Load the datasource from the properties in the property file jdbc_en_US.properties
    */
-  @BeforeMethod
+  @BeforeClass
   public void setUp() {
     String method = "setUp:";
 
@@ -74,7 +74,7 @@ public class RollbackTrxTest extends JdbcDbContainerBase {
   /**
    * DOCUMENT ME!
    */
-  @AfterMethod
+  @AfterClass
   public void tearDown() {
     ValueObject vo = ValueObjectFactory.createValueObject(1);
     try {

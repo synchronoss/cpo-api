@@ -19,7 +19,7 @@
 -- http://www.gnu.org/licenses/lgpl.txt
 --
 
-CREATE TABLE value_object (
+CREATE TABLE VALUE_OBJECT (
     ID                      int primary key
     ,ATTR_CHAR               varchar(255) NULL
     ,ATTR_CHARACTER          varchar(255) NULL

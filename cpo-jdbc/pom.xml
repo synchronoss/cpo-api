@@ -114,12 +114,12 @@
       <oracle.cpoConfig>oracle/cpoConfig.xml</oracle.cpoConfig>
       <oracle.jndi>cpodatasource</oracle.jndi>
       <oracle.class>oracle.jdbc.pool.OracleConnectionPoolDataSource</oracle.class>
-<!--      <oracle.valueMeta>/oracle/classdef/oracleValueMetaData.xml</oracle.valueMeta>-->
-<!--      <oracle.valueCaseMeta>/oracle/classdef/oracleValueCaseMetaData.xml</oracle.valueCaseMeta>-->
-<!--      <oracle.lobMeta>/oracle/classdef/oracleLobMetaData.xml</oracle.lobMeta>-->
-      <oracle.valueMeta>/common/ValueMetaData.xml</oracle.valueMeta>
-      <oracle.valueCaseMeta>/common/ValueCaseMetaData.xml</oracle.valueCaseMeta>
-      <oracle.lobMeta>/common/LobMetaData.xml</oracle.lobMeta>
+      <oracle.valueMeta>/oracle/classdef/oracleValueMetaData.xml</oracle.valueMeta>
+      <oracle.valueCaseMeta>/oracle/classdef/oracleValueCaseMetaData.xml</oracle.valueCaseMeta>
+      <oracle.lobMeta>/oracle/classdef/oracleLobMetaData.xml</oracle.lobMeta>
+<!--      <oracle.valueMeta>/common/ValueMetaData.xml</oracle.valueMeta>-->
+<!--      <oracle.valueCaseMeta>/common/ValueCaseMetaData.xml</oracle.valueCaseMeta>-->
+<!--      <oracle.lobMeta>/common/LobMetaData.xml</oracle.lobMeta>-->
 
       <!--  H2 Test properties  -->
       <h2.type>h2</h2.type>
@@ -210,7 +210,7 @@
             </goals>
             <configuration>
                 <cpoConfig>${basedir}/src/test/resources/common/*.xml</cpoConfig>
-<!--                <cpoConfig>${basedir}/src/test/resources/mysql/classdef/*.xml</cpoConfig>-->
+<!--                <cpoConfig>${basedir}/src/test/resources/oracle/classdef/*.xml</cpoConfig>-->
               <generateClass>true</generateClass>
               <generateInterface>true</generateInterface>
               <scope>test</scope>

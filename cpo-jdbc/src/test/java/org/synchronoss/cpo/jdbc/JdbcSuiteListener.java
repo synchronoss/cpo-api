@@ -79,10 +79,11 @@ public class JdbcSuiteListener implements ISuiteListener {
                 System.exit(1);
             }
         } else {
-            jdbcContainer = createJdbcContainer(dbType, dbInitScript, dbUser, dbPasswd, dbName, dbPort, dbImage);
+            jdbcContainer = createJdbcContainer(dbType, dbInitScript, dbUser, dbPasswd, dbName, dbImage);
 
             if (jdbcContainer != null) {
                 jdbcContainer.start();
+
                 // Now map the random port to something we can use in the config file
                 TcpProxyConfig config = new StaticTcpProxyConfig(Integer.parseInt(dbPort), jdbcContainer.getHost(), jdbcContainer.getFirstMappedPort());
                 config.setWorkerCount(1);
@@ -114,7 +115,7 @@ public class JdbcSuiteListener implements ISuiteListener {
         logger.debug("onFinish");
     }
 
-    private JdbcDatabaseContainer<?> createJdbcContainer(String dbType, String initScript, String dbUser, String dbPswd, String dbName, String dbPort, String image) {
+    private JdbcDatabaseContainer<?> createJdbcContainer(String dbType, String initScript, String dbUser, String dbPswd, String dbName, String image) {
         logger.debug("Creating a container for:"+dbType);
         switch (dbType) {
             case MYSQL:

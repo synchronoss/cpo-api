@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2003-2012 David E. Berry
+ * Copyright (C) 2003-2025 David E. Berry
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -28,7 +28,7 @@ import java.util.HashMap;
 /**
  * Created by dberry on 3/9/15.
  */
-public abstract class CpoBaseXaResource<T> implements CpoXaResource {
+public abstract class CpoBaseXaResource<T> implements CpoXaResource<T> {
 
   // Mutex used for assigning the statemap for the class
   private static final String XA_STATEMAP_MUTEX = "XA_STATEMAP_MUTEX";
@@ -37,11 +37,10 @@ public abstract class CpoBaseXaResource<T> implements CpoXaResource {
 
   private T localResource = null;
 
-  private CpoXaStateMap<T> cpoXaStateMap = null;
+  private final CpoXaStateMap<T> cpoXaStateMap = getCpoXaStateMap();;
 
   public CpoBaseXaResource(T localResource) {
     this.localResource = localResource;
-    cpoXaStateMap = getCpoXaStateMap();
   }
 
   // Methods to be implemented by actual implementation
@@ -74,7 +73,7 @@ public abstract class CpoBaseXaResource<T> implements CpoXaResource {
   /**
    * Closes the resource associated with this instance
    *
-   * @throws XAException
+   * @throws XAException -
    */
   public void closeAssociated() throws XAException {
     Xid associatedXid = cpoXaStateMap.getXaResourceMap().get(this);
@@ -87,7 +86,7 @@ public abstract class CpoBaseXaResource<T> implements CpoXaResource {
    * Closes the resource for the specified xid
    *
    * @param xid of the global transaction
-   * @throws XAException
+   * @throws XAException - An error has occurred.
    */
   public void close(Xid xid) throws XAException {
     synchronized (cpoXaStateMap) {
@@ -188,7 +187,7 @@ public abstract class CpoBaseXaResource<T> implements CpoXaResource {
           cpoXaStateMap.getXaResourceMap().remove(cpoXaState.getAssignedResourceManager());
           cpoXaState.setAssociation(CpoXaState.XA_UNASSOCIATED);
           cpoXaState.setAssignedResourceManager(null);
-          cpoXaState.setSuccess(cpoXaState.isSuccess()&&false);
+          cpoXaState.setSuccess(!cpoXaState.isSuccess());
          break;
 
         case TMSUCCESS:
@@ -196,7 +195,7 @@ public abstract class CpoBaseXaResource<T> implements CpoXaResource {
           cpoXaStateMap.getXaResourceMap().remove(cpoXaState.getAssignedResourceManager());
           cpoXaState.setAssociation(CpoXaState.XA_UNASSOCIATED);
           cpoXaState.setAssignedResourceManager(null);
-          cpoXaState.setSuccess(cpoXaState.isSuccess()&&true);
+          cpoXaState.setSuccess(cpoXaState.isSuccess());
           break;
 
         default:

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2003-2012 David E. Berry
+ * Copyright (C) 2003-2025 David E. Berry
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -21,6 +21,11 @@
 package org.synchronoss.cpo.meta.domain;
 
 public class CpoClassCaseInsensitive extends CpoClass {
+
+    /**
+     * Version Id for this class.
+     */
+    private static final long serialVersionUID = 1L;
 
   public CpoClassCaseInsensitive() {
   }

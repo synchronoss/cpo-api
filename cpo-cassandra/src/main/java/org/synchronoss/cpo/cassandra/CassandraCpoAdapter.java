@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2003-2012 David E. Berry
+ * Copyright (C) 2003-2025 David E. Berry
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -40,6 +40,10 @@ import java.util.*;
  * To change this template use File | Settings | File Templates.
  */
 public class CassandraCpoAdapter extends CpoBaseAdapter<ClusterDataSource> {
+    /**
+     * Version Id for this class.
+     */
+    private static final long serialVersionUID = 1L;
   private static final Logger logger = LoggerFactory.getLogger(CassandraCpoAdapter.class);
   /**
    * CpoMetaDescriptor allows you to get the meta data for a class.

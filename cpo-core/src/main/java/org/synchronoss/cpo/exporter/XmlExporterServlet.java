@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2003-2012 David E. Berry
+ * Copyright (C) 2003-2025 David E. Berry
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -36,6 +36,10 @@ import java.io.*;
  * @since 7/16/12
  */
 public class XmlExporterServlet extends HttpServlet {
+    /**
+     * Version Id for this class.
+     */
+    private static final long serialVersionUID = 1L;
 
   private static final String HTML_CONTENT_TYPE = "text/html";
   private static final String XML_CONTENT_TYPE = "text/xml";

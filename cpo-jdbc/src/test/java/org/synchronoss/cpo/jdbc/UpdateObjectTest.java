@@ -50,7 +50,7 @@ public class UpdateObjectTest {
    * @version '$Id: InsertObjectTest.java,v 1.3 2006/01/30 19:09:23 dberry Exp $'
    */
   @Parameters({ "db.millisupport" })
-  @BeforeMethod
+  @BeforeClass
   public void setUp(boolean milliSupport) {
       String method = "setUp:";
       isSupportsMillis  = milliSupport;
@@ -110,7 +110,7 @@ public class UpdateObjectTest {
     }
   }
 
-  @AfterMethod
+  @AfterClass
   public void tearDown() {
     String method = "tearDown:";
     try {

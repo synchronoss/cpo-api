@@ -53,7 +53,7 @@ public class ExecuteTrxTest {
    * <code>setUp</code> Load the datasource from the properties in the property file jdbc_en_US.properties
    */
   @Parameters({ "db.callsupport" })
-  @BeforeMethod
+  @BeforeClass
   public void setUp(boolean callSupport) {
       String method = "setUp:";
       isSupportsCalls  = callSupport;
@@ -72,7 +72,7 @@ public class ExecuteTrxTest {
   /**
    * DOCUMENT ME!
    */
-  @AfterMethod
+  @AfterClass
   public void tearDown() {
     try{trxAdapter.close();} catch (Exception e) {}
     trxAdapter = null;

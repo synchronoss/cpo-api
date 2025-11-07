@@ -49,7 +49,7 @@ public class ExporterTest {
   public ExporterTest() {
   }
 
-  @BeforeMethod
+  @BeforeClass
   public void setUp() {
     String method = "setUp:";
 
@@ -62,7 +62,7 @@ public class ExporterTest {
     }
   }
 
-  @AfterMethod
+  @AfterClass
   public void tearDown() {
     cpoAdapter = null;
   }

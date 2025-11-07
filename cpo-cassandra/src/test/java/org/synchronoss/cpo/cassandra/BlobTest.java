@@ -47,7 +47,7 @@ public class BlobTest extends CassandraContainerBase {
    * @author david berry
    * @version '$Id: BlobTest.java,v 1.15 2006/02/15 18:34:19 dberry Exp $'
    */
-  @BeforeMethod
+  @BeforeClass
   public void setUp() {
 
     String method = "setUp:";
@@ -299,7 +299,7 @@ public class BlobTest extends CassandraContainerBase {
     }
   }
 
-  @AfterMethod
+  @AfterClass
   public void tearDown() {
     cpoAdapter = null;
   }

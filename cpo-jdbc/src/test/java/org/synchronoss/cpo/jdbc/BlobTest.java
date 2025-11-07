@@ -55,7 +55,7 @@ public class BlobTest {
    * @version '$Id: BlobTest.java,v 1.15 2006/02/15 18:34:19 dberry Exp $'
    */
   @Parameters({ "db.blobsupport" })
-  @BeforeMethod
+  @BeforeClass
   public void setUp(boolean blobSupport) {
       String method = "setUp:";
       isSupportsBlobs = blobSupport;
@@ -356,7 +356,7 @@ public class BlobTest {
 
   }
 
-  @AfterMethod
+  @AfterClass
   public void tearDown() {
 
     cpoAdapter = null;

@@ -44,7 +44,7 @@ public class ExistObjectTest extends CassandraContainerBase {
    * @author david berry
    * @version '$Id: ExistObjectTest.java,v 1.2 2006/01/30 19:09:23 dberry Exp $'
    */
-  @BeforeMethod
+  @BeforeClass
   public void setUp() {
     String method = "setUp:";
 
@@ -113,7 +113,7 @@ public class ExistObjectTest extends CassandraContainerBase {
     }
   }
 
-  @AfterMethod
+  @AfterClass
   public void tearDown() {
     ValueObject vo = ValueObjectFactory.createValueObject(1);
     try {

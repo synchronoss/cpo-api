@@ -51,7 +51,7 @@ public class SelectForUpdateTest {
    * <code>setUp</code> Load the datasource from the properties in the property file jdbc_en_US.properties
    */
   @Parameters({ "db.select4update" })
-  @BeforeMethod
+  @BeforeClass
   public void setUp(boolean select4update) {
       String method = "setUp:";
       isSupportsSelect4Update = select4update;
@@ -83,7 +83,7 @@ public class SelectForUpdateTest {
   /**
    * DOCUMENT ME!
    */
-  @AfterMethod
+  @AfterClass
   public void tearDown() {
    String method = "tearDown:";
    ValueObject vo = ValueObjectFactory.createValueObject(1);

@@ -58,7 +58,7 @@ public class BlobTrxTest {
    * @version '$Id: BlobTestTrx.java,v 1.2 2006/01/31 22:31:06 dberry Exp $'
    */
   @Parameters({ "db.blobsupport" })
-  @BeforeMethod
+  @BeforeClass
   public void setUp(boolean blobSupport) {
       String method = "setUp:";
       isSupportsBlobs = blobSupport;
@@ -411,7 +411,7 @@ public class BlobTrxTest {
 
   }
 
-  @AfterMethod
+  @AfterClass
   public void tearDown() {
     try {
       trxAdapter.close();

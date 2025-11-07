@@ -46,7 +46,7 @@ public class EntityTest {
    * @author david berry
    * @version '$Id: ConstructorTest.java,v 1.7 2006/01/31 22:55:03 dberry Exp $'
    */
-  @BeforeMethod
+  @BeforeClass
   public void setUp() {
   }
 
@@ -79,7 +79,7 @@ public class EntityTest {
     logger.debug("DataTypeMapEntry: "+attribute.getDataTypeInt());
   }
 
-  @AfterMethod
+  @AfterClass
   public void tearDown() {
   }
 }

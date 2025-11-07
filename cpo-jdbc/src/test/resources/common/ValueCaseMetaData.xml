@@ -21,148 +21,204 @@
     http://www.gnu.org/licenses/lgpl.txt
 
 -->
-<cpoMetaData xmlns="http://www.synchronoss.org/cpo/core/CpoCoreMeta.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" metaDescriptor="org.synchronoss.cpo.jdbc.meta.JdbcCpoMetaDescriptor" defaultPackageName="">
+<cpoMetaData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" metaDescriptor="org.synchronoss.cpo.jdbc.meta.JdbcCpoMetaDescriptor" xmlns="http://www.synchronoss.org/cpo/core/CpoCoreMeta.xsd" xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" defaultPackageName="">
   <cpoClass name="org.synchronoss.cpo.jdbc.CaseValueObject">
-    <cpoAttribute xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xsi:type="cpoj:ctJdbcAttribute">
-      <javaName>attrNumeric</javaName>
-      <javaType>java.math.BigDecimal</javaType>
-      <dataName>ATTR_numeric</dataName>
-      <dataType>NUMERIC</dataType>
-    </cpoAttribute>
-    <cpoAttribute xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xsi:type="cpoj:ctJdbcAttribute">
-      <javaName>attrDate</javaName>
-      <javaType>java.sql.Date</javaType>
-      <dataName>ATTR_date</dataName>
-      <dataType>DATE</dataType>
-    </cpoAttribute>
-    <cpoAttribute xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xsi:type="cpoj:ctJdbcAttribute">
-      <javaName>attrVarChar</javaName>
-      <javaType>java.lang.String</javaType>
-      <dataName>ATTR_varchar</dataName>
-      <dataType>VARCHAR</dataType>
-      <cpoj:dbTable>value_object</cpoj:dbTable>
-      <cpoj:dbColumn>attr_varchar</cpoj:dbColumn>
-    </cpoAttribute>
-    <cpoAttribute xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xsi:type="cpoj:ctJdbcAttribute">
-      <javaName>attrDatetime</javaName>
-      <javaType>java.sql.Timestamp</javaType>
-      <dataName>ATTR_datetime</dataName>
-      <dataType>TIMESTAMP</dataType>
-    </cpoAttribute>
-    <cpoAttribute xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xsi:type="cpoj:ctJdbcAttribute">
-      <javaName>attrTimestamp</javaName>
-      <javaType>java.sql.Timestamp</javaType>
-      <dataName>ATTR_timestamp</dataName>
-      <dataType>TIMESTAMP</dataType>
-    </cpoAttribute>
-    <cpoAttribute xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xsi:type="cpoj:ctJdbcAttribute">
-      <javaName>attrSmallInt</javaName>
-      <javaType>short</javaType>
-      <dataName>ATTR_smallint</dataName>
-      <dataType>SMALLINT</dataType>
-      <cpoj:dbTable>value_object</cpoj:dbTable>
-      <cpoj:dbColumn>attr_smallint</cpoj:dbColumn>
-    </cpoAttribute>
-    <cpoAttribute xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xsi:type="cpoj:ctJdbcAttribute">
-      <javaName>id</javaName>
-      <javaType>int</javaType>
-      <dataName>iD</dataName>
-      <dataType>INTEGER</dataType>
-      <cpoj:dbTable>value_object</cpoj:dbTable>
-      <cpoj:dbColumn>id</cpoj:dbColumn>
-    </cpoAttribute>
-    <cpoAttribute xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xsi:type="cpoj:ctJdbcAttribute">
-      <javaName>attrDouble</javaName>
-      <javaType>double</javaType>
-      <dataName>ATTR_double</dataName>
-      <dataType>DOUBLE</dataType>
-    </cpoAttribute>
-    <cpoAttribute xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xsi:type="cpoj:ctJdbcAttribute">
-      <javaName>attrBit</javaName>
-      <javaType>boolean</javaType>
-      <dataName>ATTR_bool</dataName>
-      <dataType>BOOLEAN</dataType>
-    </cpoAttribute>
-    <cpoAttribute xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xsi:type="cpoj:ctJdbcAttribute">
-      <javaName>attrChar</javaName>
-      <javaType>java.lang.String</javaType>
-      <dataName>ATTR_char</dataName>
-      <dataType>CHAR</dataType>
-      <cpoj:dbTable>value_object</cpoj:dbTable>
-      <cpoj:dbColumn>attr_char</cpoj:dbColumn>
-    </cpoAttribute>
-    <cpoAttribute xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xsi:type="cpoj:ctJdbcAttribute">
-      <javaName>attrDecimal</javaName>
-      <javaType>java.math.BigDecimal</javaType>
-      <dataName>ATTR_decimal</dataName>
-      <dataType>NUMERIC</dataType>
-    </cpoAttribute>
-    <cpoAttribute xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xsi:type="cpoj:ctJdbcAttribute">
-      <javaName>attrInteger</javaName>
-      <javaType>int</javaType>
-      <dataName>ATTR_integer</dataName>
-      <dataType>INTEGER</dataType>
-      <transformClass>org.synchronoss.cpo.transform.jdbc.TransformNoOp</transformClass>
-    </cpoAttribute>
-    <cpoAttribute xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xsi:type="cpoj:ctJdbcAttribute">
-      <javaName>attrCharacter</javaName>
-      <javaType>java.lang.String</javaType>
-      <dataName>ATTR_character</dataName>
-      <dataType>CHAR</dataType>
-    </cpoAttribute>
-    <cpoFunctionGroup type="CREATE">
-      <cpoFunction name="ValueObject - Create">
-        <expression>insert into value_object(id, attr_char, attr_character, attr_date, attr_decimal, attr_integer, attr_numeric, attr_smallint, attr_timestamp, attr_varchar, attr_bool, attr_datetime) values (?,?,?,?,?,?,?,?,?,?,?,?)</expression>
-        <cpoArgument xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xsi:type="cpoj:ctJdbcArgument">
-          <attributeName>id</attributeName>
-          <cpoj:scope>IN</cpoj:scope>
-        </cpoArgument>
-        <cpoArgument xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xsi:type="cpoj:ctJdbcArgument">
-          <attributeName>attrChar</attributeName>
-          <cpoj:scope>IN</cpoj:scope>
-        </cpoArgument>
-        <cpoArgument xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xsi:type="cpoj:ctJdbcArgument">
-          <attributeName>attrCharacter</attributeName>
-          <cpoj:scope>IN</cpoj:scope>
-        </cpoArgument>
-        <cpoArgument xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xsi:type="cpoj:ctJdbcArgument">
-          <attributeName>attrDate</attributeName>
-          <cpoj:scope>IN</cpoj:scope>
-        </cpoArgument>
-        <cpoArgument xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xsi:type="cpoj:ctJdbcArgument">
-          <attributeName>attrDecimal</attributeName>
-          <cpoj:scope>IN</cpoj:scope>
-        </cpoArgument>
-        <cpoArgument xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xsi:type="cpoj:ctJdbcArgument">
-          <attributeName>attrInteger</attributeName>
-          <cpoj:scope>IN</cpoj:scope>
-        </cpoArgument>
-        <cpoArgument xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xsi:type="cpoj:ctJdbcArgument">
-          <attributeName>attrNumeric</attributeName>
-          <cpoj:scope>IN</cpoj:scope>
-        </cpoArgument>
-        <cpoArgument xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xsi:type="cpoj:ctJdbcArgument">
-          <attributeName>attrSmallInt</attributeName>
-          <cpoj:scope>IN</cpoj:scope>
-        </cpoArgument>
-        <cpoArgument xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xsi:type="cpoj:ctJdbcArgument">
-          <attributeName>attrTimestamp</attributeName>
-          <cpoj:scope>IN</cpoj:scope>
-        </cpoArgument>
-        <cpoArgument xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xsi:type="cpoj:ctJdbcArgument">
-          <attributeName>attrVarChar</attributeName>
-          <cpoj:scope>IN</cpoj:scope>
-        </cpoArgument>
-        <cpoArgument xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xsi:type="cpoj:ctJdbcArgument">
-          <attributeName>attrBit</attributeName>
-          <cpoj:scope>IN</cpoj:scope>
-        </cpoArgument>
-        <cpoArgument xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xsi:type="cpoj:ctJdbcArgument">
-          <attributeName>attrDatetime</attributeName>
-          <cpoj:scope>IN</cpoj:scope>
-        </cpoArgument>
-      </cpoFunction>
-    </cpoFunctionGroup>
+      <cpoAttribute xsi:type="cpoj:ctJdbcAttribute">
+          <javaName>id</javaName>
+          <javaType>int</javaType>
+          <dataName>iD</dataName>
+          <dataType>INTEGER</dataType>
+          <cpoj:dbTable>value_object</cpoj:dbTable>
+          <cpoj:dbColumn>id</cpoj:dbColumn>
+      </cpoAttribute>
+      <cpoAttribute xsi:type="cpoj:ctJdbcAttribute">
+          <javaName>attrChar</javaName>
+          <javaType>java.lang.String</javaType>
+          <dataName>attr_CHAR</dataName>
+          <dataType>CHAR</dataType>
+          <cpoj:dbTable>value_object</cpoj:dbTable>
+          <cpoj:dbColumn>attr_char</cpoj:dbColumn>
+      </cpoAttribute>
+      <cpoAttribute xsi:type="cpoj:ctJdbcAttribute">
+          <javaName>attrCharacter</javaName>
+          <javaType>java.lang.String</javaType>
+          <dataName>attr_CHARACTER</dataName>
+          <dataType>CHAR</dataType>
+      </cpoAttribute>
+      <cpoAttribute xsi:type="cpoj:ctJdbcAttribute">
+          <javaName>attrDate</javaName>
+          <javaType>java.sql.Date</javaType>
+          <dataName>attr_DATE</dataName>
+          <dataType>DATE</dataType>
+      </cpoAttribute>
+      <cpoAttribute xsi:type="cpoj:ctJdbcAttribute">
+          <javaName>attrDecimal</javaName>
+          <javaType>java.math.BigDecimal</javaType>
+          <dataName>attr_DECIMAL</dataName>
+          <dataType>DECIMAL</dataType>
+      </cpoAttribute>
+      <cpoAttribute xsi:type="cpoj:ctJdbcAttribute">
+          <javaName>attrInteger</javaName>
+          <javaType>int</javaType>
+          <dataName>attr_INTEGER</dataName>
+          <dataType>INTEGER</dataType>
+          <transformClass>org.synchronoss.cpo.transform.jdbc.TransformNoOp</transformClass>
+      </cpoAttribute>
+      <cpoAttribute xsi:type="cpoj:ctJdbcAttribute">
+          <javaName>attrNumeric</javaName>
+          <javaType>java.math.BigDecimal</javaType>
+          <dataName>attr_NUMERIC</dataName>
+          <dataType>NUMERIC</dataType>
+      </cpoAttribute>
+      <cpoAttribute xsi:type="cpoj:ctJdbcAttribute">
+          <javaName>attrSmallInt</javaName>
+          <javaType>short</javaType>
+          <dataName>attr_SMALLINT</dataName>
+          <dataType>SMALLINT</dataType>
+          <cpoj:dbTable>value_object</cpoj:dbTable>
+          <cpoj:dbColumn>attr_smallint</cpoj:dbColumn>
+      </cpoAttribute>
+      <cpoAttribute xsi:type="cpoj:ctJdbcAttribute">
+          <javaName>attrTimestamp</javaName>
+          <javaType>java.sql.Timestamp</javaType>
+          <dataName>attr_TIMESTAMP</dataName>
+          <dataType>TIMESTAMP</dataType>
+      </cpoAttribute>
+      <cpoAttribute xsi:type="cpoj:ctJdbcAttribute">
+          <javaName>attrVarChar</javaName>
+          <javaType>java.lang.String</javaType>
+          <dataName>attr_VARCHAR</dataName>
+          <dataType>VARCHAR</dataType>
+          <cpoj:dbTable>value_object</cpoj:dbTable>
+          <cpoj:dbColumn>attr_varchar</cpoj:dbColumn>
+      </cpoAttribute>
+      <cpoAttribute xsi:type="cpoj:ctJdbcAttribute">
+          <javaName>attrBit</javaName>
+          <javaType>boolean</javaType>
+          <dataName>attr_BIT</dataName>
+          <dataType>BIT</dataType>
+      </cpoAttribute>
+      <cpoAttribute xsi:type="cpoj:ctJdbcAttribute">
+          <javaName>attrBool</javaName>
+          <javaType>boolean</javaType>
+          <dataName>attr_BOOL</dataName>
+          <dataType>BOOLEAN</dataType>
+      </cpoAttribute>
+      <cpoAttribute xsi:type="cpoj:ctJdbcAttribute">
+          <javaName>attrDatetime</javaName>
+          <javaType>java.sql.Timestamp</javaType>
+          <dataName>attr_DATETIME</dataName>
+          <dataType>TIMESTAMP</dataType>
+      </cpoAttribute>
+      <cpoAttribute xsi:type="cpoj:ctJdbcAttribute">
+          <javaName>attrTinyInt</javaName>
+          <javaType>byte</javaType>
+          <dataName>attr_TINYINT</dataName>
+          <dataType>TINYINT</dataType>
+      </cpoAttribute>
+      <cpoAttribute xsi:type="cpoj:ctJdbcAttribute">
+          <javaName>attrBigInt</javaName>
+          <javaType>java.math.BigInteger</javaType>
+          <dataName>attr_BIGINT</dataName>
+          <dataType>BIGINT</dataType>
+      </cpoAttribute>
+      <cpoAttribute xsi:type="cpoj:ctJdbcAttribute">
+          <javaName>attrDouble</javaName>
+          <javaType>double</javaType>
+          <dataName>attr_DOUBLE</dataName>
+          <dataType>DOUBLE</dataType>
+      </cpoAttribute>
+      <cpoAttribute xsi:type="cpoj:ctJdbcAttribute">
+          <javaName>attrReal</javaName>
+          <javaType>float</javaType>
+          <dataName>attr_REAL</dataName>
+          <dataType>REAL</dataType>
+      </cpoAttribute>
+      <cpoAttribute xsi:type="cpoj:ctJdbcAttribute">
+          <javaName>attrFloat</javaName>
+          <javaType>float</javaType>
+          <dataName>attr_FLOAT</dataName>
+          <dataType>REAL</dataType>
+      </cpoAttribute>
+      <cpoAttribute xsi:type="cpoj:ctJdbcAttribute">
+          <javaName>attrTime</javaName>
+          <javaType>java.sql.Time</javaType>
+          <dataName>attr_TIME</dataName>
+          <dataType>TIME</dataType>
+      </cpoAttribute>
+      <cpoAttribute xsi:type="cpoj:ctJdbcAttribute">
+          <javaName>attrBinary</javaName>
+          <javaType>byte[]</javaType>
+          <dataName>attr_BINARY</dataName>
+          <dataType>BINARY</dataType>
+      </cpoAttribute>
+      <cpoAttribute xsi:type="cpoj:ctJdbcAttribute">
+          <javaName>attrVarBinary</javaName>
+          <javaType>byte[]</javaType>
+          <dataName>attr_VARBINARY</dataName>
+          <dataType>VARBINARY</dataType>
+      </cpoAttribute>
+      <cpoFunctionGroup type="CREATE">
+          <cpoFunction name="ValueObject - Create" >
+              <expression>insert into value_object(id, attr_char, attr_character, attr_date, attr_decimal, attr_integer, attr_numeric, attr_smallint, attr_timestamp, attr_varchar, attr_bit, attr_bool, attr_datetime, attr_bigint) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?)</expression>
+              <cpoArgument xsi:type="cpoj:ctJdbcArgument">
+                  <attributeName>id</attributeName>
+                  <cpoj:scope>IN</cpoj:scope>
+              </cpoArgument>
+              <cpoArgument xsi:type="cpoj:ctJdbcArgument">
+                  <attributeName>attrChar</attributeName>
+                  <cpoj:scope>IN</cpoj:scope>
+              </cpoArgument>
+              <cpoArgument xsi:type="cpoj:ctJdbcArgument">
+                  <attributeName>attrCharacter</attributeName>
+                  <cpoj:scope>IN</cpoj:scope>
+              </cpoArgument>
+              <cpoArgument xsi:type="cpoj:ctJdbcArgument">
+                  <attributeName>attrDate</attributeName>
+                  <cpoj:scope>IN</cpoj:scope>
+              </cpoArgument>
+              <cpoArgument xsi:type="cpoj:ctJdbcArgument">
+                  <attributeName>attrDecimal</attributeName>
+                  <cpoj:scope>IN</cpoj:scope>
+              </cpoArgument>
+              <cpoArgument xsi:type="cpoj:ctJdbcArgument">
+                  <attributeName>attrInteger</attributeName>
+                  <cpoj:scope>IN</cpoj:scope>
+              </cpoArgument>
+              <cpoArgument xsi:type="cpoj:ctJdbcArgument">
+                  <attributeName>attrNumeric</attributeName>
+                  <cpoj:scope>IN</cpoj:scope>
+              </cpoArgument>
+              <cpoArgument xsi:type="cpoj:ctJdbcArgument">
+                  <attributeName>attrSmallInt</attributeName>
+                  <cpoj:scope>IN</cpoj:scope>
+              </cpoArgument>
+              <cpoArgument xsi:type="cpoj:ctJdbcArgument">
+                  <attributeName>attrTimestamp</attributeName>
+                  <cpoj:scope>IN</cpoj:scope>
+              </cpoArgument>
+              <cpoArgument xsi:type="cpoj:ctJdbcArgument">
+                  <attributeName>attrVarChar</attributeName>
+                  <cpoj:scope>IN</cpoj:scope>
+              </cpoArgument>
+              <cpoArgument xsi:type="cpoj:ctJdbcArgument">
+                  <attributeName>attrBit</attributeName>
+                  <cpoj:scope>IN</cpoj:scope>
+              </cpoArgument>
+              <cpoArgument xsi:type="cpoj:ctJdbcArgument">
+                  <attributeName>attrBool</attributeName>
+                  <cpoj:scope>IN</cpoj:scope>
+              </cpoArgument>
+              <cpoArgument xsi:type="cpoj:ctJdbcArgument">
+                  <attributeName>attrDatetime</attributeName>
+                  <cpoj:scope>IN</cpoj:scope>
+              </cpoArgument>
+              <cpoArgument xsi:type="cpoj:ctJdbcArgument">
+                  <attributeName>attrBigInt</attributeName>
+                  <cpoj:scope>IN</cpoj:scope>
+              </cpoArgument>
+          </cpoFunction>
+      </cpoFunctionGroup>
     <cpoFunctionGroup name="TestRollback" type="CREATE">
       <cpoFunction name="ValueObject - TestRollback">
         <expression>insert into value_object (id, attr_varchar) values (?,?)</expression>

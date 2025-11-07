@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright (C) 2003-2012 David E. Berry
+
+    This library is free software; you can redistribute it and/or
+    modify it under the terms of the GNU Lesser General Public
+    License as published by the Free Software Foundation; either
+    version 2.1 of the License, or (at your option) any later version.
+
+    This library is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+    Lesser General Public License for more details.
+
+    You should have received a copy of the GNU Lesser General Public
+    License along with this library; if not, write to the Free Software
+    Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+
+    A copy of the GNU Lesser General Public License may also be found at
+    http://www.gnu.org/licenses/lgpl.txt
+
+-->
+<core:cpoConfig xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xsi:schemaLocation="http://www.synchronoss.org/cpo/CpoConfig.xsd ../../../../../src/main/xsd/CpoConfig.xsd"
+ xmlns:core="http://www.synchronoss.org/cpo/core/CpoCoreConfig.xsd"
+ xmlns:jdbc="http://www.synchronoss.org/cpo/jdbc/CpoJdbcConfig.xsd"
+ xmlns="http://www.synchronoss.org/cpo/CpoConfig.xsd"
+ defaultConfig="jdbc">
+
+  <core:metaConfig name="jdbcMeta">
+    <core:metaXml>/emptyClassMetaData.xml</core:metaXml>
+    <core:metaXml>/common/ValueMetaData.xml</core:metaXml>
+    <core:metaXml>/common/LobMetaData.xml</core:metaXml>
+    <core:metaXml>/emptyMetaData.xml</core:metaXml>
+  </core:metaConfig>
+  <core:metaConfig name="caseSensitive" caseSensitive="true">
+    <core:metaXml>/common/ValueCaseMetaData.xml</core:metaXml>
+  </core:metaConfig>
+  <core:metaConfig name="caseInsensitive"  caseSensitive="false">
+    <core:metaXml>/common/ValueCaseMetaData.xml</core:metaXml>
+  </core:metaConfig>
+
+  <core:metaConfig name="jdbcMeta">
+    <core:metaXml>/emptyClassMetaData.xml</core:metaXml>
+    <core:metaXml>/common/ValueMetaData.xml</core:metaXml>
+    <core:metaXml>/common/LobMetaData.xml</core:metaXml>
+    <core:metaXml>/emptyMetaData.xml</core:metaXml>
+  </core:metaConfig>
+
+
+   <core:dataConfig xsi:type="jdbc:ctJdbcConfig" name="jdbc">
+    <core:metaDescriptorName>jdbcMeta</core:metaDescriptorName>
+    <core:cpoConfigProcessor>org.synchronoss.cpo.jdbc.config.JdbcCpoConfigProcessor</core:cpoConfigProcessor>
+    <jdbc:readWriteConfig>
+      <jdbc:dataSourceClassName>${mysql.class}</jdbc:dataSourceClassName>
+      <jdbc:url>${mysql.url}</jdbc:url>
+      <jdbc:property name="user" value="${mysql.user}"/>
+      <jdbc:property name="password" value="${mysql.pswd}"/>
+    </jdbc:readWriteConfig>
+  </core:dataConfig>
+     <core:dataConfig xsi:type="jdbc:ctJdbcConfig" name="caseSensitive">
+    <core:metaDescriptorName>caseSensitive</core:metaDescriptorName>
+    <core:cpoConfigProcessor>org.synchronoss.cpo.jdbc.config.JdbcCpoConfigProcessor</core:cpoConfigProcessor>
+    <jdbc:readWriteConfig>
+      <jdbc:dataSourceClassName>${mysql.class}</jdbc:dataSourceClassName>
+      <jdbc:url>${mysql.url}</jdbc:url>
+      <jdbc:property name="user" value="${mysql.user}"/>
+      <jdbc:property name="password" value="${mysql.pswd}"/>
+    </jdbc:readWriteConfig>
+  </core:dataConfig>
+   <core:dataConfig xsi:type="jdbc:ctJdbcConfig" name="caseInsensitive">
+    <core:metaDescriptorName>caseInsensitive</core:metaDescriptorName>
+    <core:cpoConfigProcessor>org.synchronoss.cpo.jdbc.config.JdbcCpoConfigProcessor</core:cpoConfigProcessor>
+    <jdbc:readWriteConfig>
+      <jdbc:dataSourceClassName>${mysql.class}</jdbc:dataSourceClassName>
+      <jdbc:url>${mysql.url}</jdbc:url>
+      <jdbc:property name="user" value="${mysql.user}"/>
+      <jdbc:property name="password" value="${mysql.pswd}"/>
+    </jdbc:readWriteConfig>
+  </core:dataConfig>
+
+ <core:dataConfig xsi:type="jdbc:ctJdbcConfig" name="driver">
+  <core:metaDescriptorName>jdbcMeta</core:metaDescriptorName>
+  <core:cpoConfigProcessor>org.synchronoss.cpo.jdbc.config.JdbcCpoConfigProcessor</core:cpoConfigProcessor>
+   <jdbc:readWriteConfig>
+    <jdbc:driverClassName>${mysql.driver}</jdbc:driverClassName>
+    <jdbc:url>${mysql.url}</jdbc:url>
+    <jdbc:user>${mysql.user}</jdbc:user>
+    <jdbc:password>${mysql.pswd}</jdbc:password>
+   </jdbc:readWriteConfig>
+ </core:dataConfig>
+ <core:dataConfig xsi:type="jdbc:ctJdbcConfig" name="driverUrlOnly">
+  <core:metaDescriptorName>jdbcMeta</core:metaDescriptorName>
+  <core:cpoConfigProcessor>org.synchronoss.cpo.jdbc.config.JdbcCpoConfigProcessor</core:cpoConfigProcessor>
+   <jdbc:readWriteConfig>
+    <jdbc:driverClassName>${mysql.driver}</jdbc:driverClassName>
+    <jdbc:url>${mysql.userurl}</jdbc:url>
+   </jdbc:readWriteConfig>
+ </core:dataConfig>
+ <core:dataConfig xsi:type="jdbc:ctJdbcConfig" name="driverProp">
+  <core:metaDescriptorName>jdbcMeta</core:metaDescriptorName>
+  <core:cpoConfigProcessor>org.synchronoss.cpo.jdbc.config.JdbcCpoConfigProcessor</core:cpoConfigProcessor>
+  <jdbc:readWriteConfig>
+   <jdbc:driverClassName>${mysql.driver}</jdbc:driverClassName>
+   <jdbc:url>${mysql.url}</jdbc:url>
+   <jdbc:property name="user" value="${mysql.user}"/>
+   <jdbc:property name="password" value="${mysql.pswd}"/>
+  </jdbc:readWriteConfig>
+ </core:dataConfig>
+ <core:dataConfig xsi:type="jdbc:ctJdbcConfig" name="class">
+  <core:metaDescriptorName>jdbcMeta</core:metaDescriptorName>
+  <core:cpoConfigProcessor>org.synchronoss.cpo.jdbc.config.JdbcCpoConfigProcessor</core:cpoConfigProcessor>
+  <jdbc:readWriteConfig>
+    <jdbc:dataSourceClassName>${mysql.class}</jdbc:dataSourceClassName>
+    <jdbc:url>${mysql.url}</jdbc:url>
+    <jdbc:property name="user" value="${mysql.user}"/>
+    <jdbc:property name="password" value="${mysql.pswd}"/>
+  </jdbc:readWriteConfig>
+ </core:dataConfig>
+ <core:dataConfig xsi:type="jdbc:ctJdbcConfig" name="classProp">
+  <core:metaDescriptorName>jdbcMeta</core:metaDescriptorName>
+  <core:cpoConfigProcessor>org.synchronoss.cpo.jdbc.config.JdbcCpoConfigProcessor</core:cpoConfigProcessor>
+  <jdbc:readWriteConfig>
+    <jdbc:dataSourceClassName>${mysql.class}</jdbc:dataSourceClassName>
+    <jdbc:url>${mysql.url}</jdbc:url>
+    <jdbc:property name="user" value="${mysql.user}"/>
+    <jdbc:property name="password" value="${mysql.pswd}"/>
+  </jdbc:readWriteConfig>
+ </core:dataConfig>
+<!-- <dataConfig xsi:type="jdbc:ctJdbcConfig" name="jndi">
+  <metaDescriptorName>jdbcMeta</metaDescriptorName>
+  <cpoConfigProcessor>org.synchronoss.cpo.jdbc.config.JdbcCpoConfigProcessor</cpoConfigProcessor>
+  <jdbc:readWriteConfig>
+   <jdbc:jndiName>${mysql.jndi}</jdbc:jndiName>
+  </jdbc:readWriteConfig>
+ </dataConfig>-->
+ <core:dataConfig xsi:type="jdbc:ctJdbcConfig" name="driverdriver">
+  <core:metaDescriptorName>jdbcMeta</core:metaDescriptorName>
+  <core:cpoConfigProcessor>org.synchronoss.cpo.jdbc.config.JdbcCpoConfigProcessor</core:cpoConfigProcessor>
+  <jdbc:readConfig>
+   <jdbc:driverClassName>${mysql.driver}</jdbc:driverClassName>
+   <jdbc:url>${mysql.url}</jdbc:url>
+   <jdbc:user>${mysql.user}</jdbc:user>
+   <jdbc:password>${mysql.pswd}</jdbc:password>
+  </jdbc:readConfig>
+  <jdbc:writeConfig>
+   <jdbc:driverClassName>${mysql.driver}</jdbc:driverClassName>
+   <jdbc:url>${mysql.url}</jdbc:url>
+   <jdbc:user>${mysql.user}</jdbc:user>
+   <jdbc:password>${mysql.pswd}</jdbc:password>
+  </jdbc:writeConfig>
+ </core:dataConfig>
+ <core:dataConfig xsi:type="jdbc:ctJdbcConfig" name="classclass">
+  <core:metaDescriptorName>jdbcMeta</core:metaDescriptorName>
+  <core:cpoConfigProcessor>org.synchronoss.cpo.jdbc.config.JdbcCpoConfigProcessor</core:cpoConfigProcessor>
+  <jdbc:readConfig>
+   <jdbc:dataSourceClassName>${mysql.class}</jdbc:dataSourceClassName>
+   <jdbc:url>${mysql.url}</jdbc:url>
+   <jdbc:property name="user" value="${mysql.user}"/>
+   <jdbc:property name="password" value="${mysql.pswd}"/>
+  </jdbc:readConfig>
+  <jdbc:writeConfig>
+   <jdbc:dataSourceClassName>${mysql.class}</jdbc:dataSourceClassName>
+   <jdbc:url>${mysql.url}</jdbc:url>
+   <jdbc:property name="user" value="${mysql.user}"/>
+   <jdbc:property name="password" value="${mysql.pswd}"/>
+  </jdbc:writeConfig>
+ </core:dataConfig>
+ <core:dataConfig xsi:type="jdbc:ctJdbcConfig" name="driverclass">
+  <core:metaDescriptorName>jdbcMeta</core:metaDescriptorName>
+  <core:cpoConfigProcessor>org.synchronoss.cpo.jdbc.config.JdbcCpoConfigProcessor</core:cpoConfigProcessor>
+  <jdbc:readConfig>
+   <jdbc:driverClassName>${mysql.driver}</jdbc:driverClassName>
+   <jdbc:url>${mysql.url}</jdbc:url>
+   <jdbc:user>${mysql.user}</jdbc:user>
+   <jdbc:password>${mysql.pswd}</jdbc:password>
+  </jdbc:readConfig>
+  <jdbc:writeConfig>
+   <jdbc:dataSourceClassName>${mysql.class}</jdbc:dataSourceClassName>
+   <jdbc:url>${mysql.url}</jdbc:url><jdbc:property name="user" value="${mysql.user}"/>
+   <jdbc:property name="password" value="${mysql.pswd}"/>
+  </jdbc:writeConfig>
+ </core:dataConfig>
+ <core:dataConfig xsi:type="jdbc:ctJdbcConfig" name="classdriver">
+  <core:metaDescriptorName>jdbcMeta</core:metaDescriptorName>
+  <core:cpoConfigProcessor>org.synchronoss.cpo.jdbc.config.JdbcCpoConfigProcessor</core:cpoConfigProcessor>
+  <jdbc:readConfig>
+   <jdbc:dataSourceClassName>${mysql.class}</jdbc:dataSourceClassName>
+   <jdbc:url>${mysql.url}</jdbc:url>
+    <jdbc:property name="user" value="${mysql.user}"/>
+    <jdbc:property name="password" value="${mysql.pswd}"/>
+  </jdbc:readConfig>
+  <jdbc:writeConfig>
+   <jdbc:driverClassName>${mysql.driver}</jdbc:driverClassName>
+   <jdbc:url>${mysql.url}</jdbc:url>
+   <jdbc:user>${mysql.user}</jdbc:user>
+   <jdbc:password>${mysql.pswd}</jdbc:password>
+  </jdbc:writeConfig>
+ </core:dataConfig>
+ </core:cpoConfig>

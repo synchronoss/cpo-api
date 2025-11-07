@@ -88,7 +88,7 @@ public class CaseInsensitiveTest {
 
     valObj.setAttrDatetime(ts);
 
-    valObj.setAttrBit(true);
+    valObj.setAttrBool(true);
 
     al.add(valObj);
 
@@ -104,7 +104,7 @@ public class CaseInsensitiveTest {
       assertEquals(vo.getAttrInteger(), valObj.getAttrInteger(), "Integers do not match");
       assertEquals(vo.getAttrVarChar(), valObj.getAttrVarChar(),"Strings do not match");
       assertEquals(vo.getAttrDatetime(), valObj.getAttrDatetime(), "Timestamps do not match");
-      assertTrue(vo.getAttrBit(), "boolean not stored correctly");
+      assertTrue(vo.getAttrBool(), "boolean not stored correctly");
 
     } catch (Exception e) {
       fail(method + e.getMessage());

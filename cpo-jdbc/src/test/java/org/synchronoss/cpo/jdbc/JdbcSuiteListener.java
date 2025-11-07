@@ -97,6 +97,8 @@ public class JdbcSuiteListener implements ISuiteListener {
 
         // Tell CPO where to find the config for the test
         System.setProperty(CpoAdapterFactoryManager.CPO_CONFIG, cpoConfig);
+        // Go Ahead and load them
+        CpoAdapterFactoryManager.loadAdapters();
         logger.debug("onStart");
 
     }
@@ -114,27 +116,34 @@ public class JdbcSuiteListener implements ISuiteListener {
 
     private JdbcDatabaseContainer<?> createJdbcContainer(String dbType, String initScript, String dbUser, String dbPswd, String dbName, String dbPort, String image) {
         logger.debug("Creating a container for:"+dbType);
-        JdbcDatabaseContainer<?> jdbcContainer = null;
-        DockerImageName imageName = DockerImageName.parse(image);
-
         switch (dbType) {
-            case MYSQL: jdbcContainer = new MySQLContainer<>(imageName); break;
-            case MARIADB: jdbcContainer = new MariaDBContainer<>(imageName); break;
-            case POSTGRES: jdbcContainer = new PostgreSQLContainer<>(imageName); break;
-            case ORACLE: jdbcContainer = new OracleContainer(imageName); break;
-            default: logger.debug("No Container to start, unknown dbType:"+dbType);
+            case MYSQL:
+                return new MySQLContainer<>(DockerImageName.parse(image))
+                        .withInitScript(initScript)
+                        .withUsername(dbUser)
+                        .withPassword(dbPswd)
+                        .withDatabaseName(dbName);
+            case MARIADB:
+                return new MariaDBContainer<>(DockerImageName.parse(image))
+                        .withInitScript(initScript)
+                        .withUsername(dbUser)
+                        .withPassword(dbPswd)
+                        .withDatabaseName(dbName);
+            case POSTGRES:
+                return new PostgreSQLContainer<>(DockerImageName.parse(image))
+                        .withInitScript(initScript)
+                        .withUsername(dbUser)
+                        .withPassword(dbPswd)
+                        .withDatabaseName(dbName);
+            case ORACLE:
+                return new OracleContainer(DockerImageName.parse(image))
+                        .withInitScript(initScript)
+                        .withUsername(dbUser)
+                        .withPassword(dbPswd)
+                        .withDatabaseName(dbName);
+            default:
+                logger.debug("No Container to start, unknown dbType:" + dbType);
         }
-
-        if (initScript != null && !initScript.isEmpty())
-            jdbcContainer = jdbcContainer.withInitScript(initScript);
-
-        if (dbUser != null && !dbUser.isEmpty())
-            jdbcContainer = jdbcContainer.withUsername(dbUser);
-        if (dbPswd != null && !dbPswd.isEmpty())
-            jdbcContainer = jdbcContainer.withPassword(dbPswd);
-        if (dbName != null && !dbName.isEmpty())
-            jdbcContainer = jdbcContainer.withDatabaseName(dbName);
-
-        return jdbcContainer;
+        return null;
     }
 }

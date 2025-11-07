@@ -37,14 +37,11 @@ CREATE TABLE IF NOT EXISTS value_object
     attr_bit       boolean          NULL,
     attr_bool      boolean          NULL,
     attr_datetime  timestamp        NULL,
-    attr_tinyint   tinyint          NULL,
     attr_bigint    bigint           NULL,
     attr_double    double precision NULL,
     attr_real      real             NULL,
     attr_float     float(20)        NULL,
-    attr_time      time             NULL,
-    attr_binary    binary           NULL,
-    attr_varbinary varbinary        NULL
+    attr_time      time             NULL
 );
 
 CREATE TABLE IF NOT EXISTS lob_test

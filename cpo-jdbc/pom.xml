@@ -64,9 +64,9 @@
       <mysql.cpoConfig>mysql/cpoConfig.xml</mysql.cpoConfig>
       <mysql.jndi>java:/comp/env/jdbc/cpodatasource</mysql.jndi>
       <mysql.class>com.mysql.cj.jdbc.MysqlConnectionPoolDataSource</mysql.class>
-      <mysql.valueMeta>/mysql/classdef/mysqlValueMetaData.xml</mysql.valueMeta>
-      <mysql.valueCaseMeta>/mysql/classdef/mysqlValueCaseMetaData.xml</mysql.valueCaseMeta>
-      <mysql.lobMeta>/mysql/classdef/mysqlLobMetaData.xml</mysql.lobMeta>
+      <mysql.valueMeta>/common/ValueMetaData.xml</mysql.valueMeta>
+      <mysql.valueCaseMeta>/common/ValueCaseMetaData.xml</mysql.valueCaseMeta>
+      <mysql.lobMeta>/common/LobMetaData.xml</mysql.lobMeta>
 
       <!--  MariaDB Test properties  -->
       <mariadb.type>mariadb</mariadb.type>
@@ -82,16 +82,16 @@
       <mariadb.driver>org.mariadb.jdbc.Driver</mariadb.driver>
       <mariadb.blobsupport>true</mariadb.blobsupport>
       <mariadb.callsupport>true</mariadb.callsupport>
-      <mariadb.select4update>true</mariadb.select4update>
+      <mariadb.select4update>false</mariadb.select4update>
       <mariadb.millisupport>false</mariadb.millisupport>
       <mariadb.xasupport>false</mariadb.xasupport>
       <mariadb.initScript>mariadb/initDB.sql</mariadb.initScript>
       <mariadb.cpoConfig>mariadb/cpoConfig.xml</mariadb.cpoConfig>
       <mariadb.jndi>java:/comp/env/jdbc/cpodatasource</mariadb.jndi>
-      <mariadb.class>org.mariadb.jdbc.MariaDbDataSource</mariadb.class>
-      <mariadb.valueMeta>/mariadb/classdef/mariadbValueMetaData.xml</mariadb.valueMeta>
-      <mariadb.valueCaseMeta>/mariadb/classdef/mariadbValueCaseMetaData.xml</mariadb.valueCaseMeta>
-      <mariadb.lobMeta>/mariadb/classdef/mariadbLobMetaData.xml</mariadb.lobMeta>
+      <mariadb.class>org.mariadb.jdbc.MariaDbPoolDataSource</mariadb.class>
+      <mariadb.valueMeta>/common/ValueMetaData.xml</mariadb.valueMeta>
+      <mariadb.valueCaseMeta>/common/ValueCaseMetaData.xml</mariadb.valueCaseMeta>
+      <mariadb.lobMeta>/common/LobMetaData.xml</mariadb.lobMeta>
 
       <!--  Oracle Test properties  -->
       <oracle.type>oracle</oracle.type>
@@ -99,9 +99,9 @@
       <oracle.resources>src/test/resources/oracle</oracle.resources>
       <oracle.user>cpo</oracle.user>
       <oracle.pswd>cpo</oracle.pswd>
-      <oracle.host>pabetdd01v1.sncrcorp.net</oracle.host>
+      <oracle.host>localhost</oracle.host>
       <oracle.port>1521</oracle.port>
-      <oracle.database>dcig1</oracle.database>
+      <oracle.database>cpo</oracle.database>
       <oracle.url>jdbc:oracle:thin:@${oracle.host}:${oracle.port}:${oracle.database}</oracle.url>
       <oracle.userurl>jdbc:oracle:thin:${oracle.user}/${oracle.pswd}@${oracle.host}:${oracle.port}:${oracle.database}</oracle.userurl>
       <oracle.driver>oracle.jdbc.driver.OracleDriver</oracle.driver>
@@ -114,9 +114,12 @@
       <oracle.cpoConfig>oracle/cpoConfig.xml</oracle.cpoConfig>
       <oracle.jndi>cpodatasource</oracle.jndi>
       <oracle.class>oracle.jdbc.pool.OracleConnectionPoolDataSource</oracle.class>
-      <oracle.valueMeta>/oracle/classdef/oracleValueMetaData.xml</oracle.valueMeta>
-      <oracle.valueCaseMeta>/oracle/classdef/oracleValueCaseMetaData.xml</oracle.valueCaseMeta>
-      <oracle.lobMeta>/oracle/classdef/oracleLobMetaData.xml</oracle.lobMeta>
+<!--      <oracle.valueMeta>/oracle/classdef/oracleValueMetaData.xml</oracle.valueMeta>-->
+<!--      <oracle.valueCaseMeta>/oracle/classdef/oracleValueCaseMetaData.xml</oracle.valueCaseMeta>-->
+<!--      <oracle.lobMeta>/oracle/classdef/oracleLobMetaData.xml</oracle.lobMeta>-->
+      <oracle.valueMeta>/common/ValueMetaData.xml</oracle.valueMeta>
+      <oracle.valueCaseMeta>/common/ValueCaseMetaData.xml</oracle.valueCaseMeta>
+      <oracle.lobMeta>/common/LobMetaData.xml</oracle.lobMeta>
 
       <!--  H2 Test properties  -->
       <h2.type>h2</h2.type>
@@ -139,9 +142,9 @@
       <h2.cpoConfig>h2/cpoConfig.xml</h2.cpoConfig>
       <h2.jndi>cpodatasource</h2.jndi>
       <h2.class>org.h2.jdbcx.JdbcDataSource</h2.class>
-      <h2.valueMeta>/h2/classdef/h2ValueMetaData.xml</h2.valueMeta>
-      <h2.valueCaseMeta>/h2/classdef/h2ValueCaseMetaData.xml</h2.valueCaseMeta>
-      <h2.lobMeta>/h2/classdef/h2LobMetaData.xml</h2.lobMeta>
+      <h2.valueMeta>/common/ValueMetaData.xml</h2.valueMeta>
+      <h2.valueCaseMeta>/common/ValueCaseMetaData.xml</h2.valueCaseMeta>
+      <h2.lobMeta>/common/LobMetaData.xml</h2.lobMeta>
 
       <!--  PostgreSQL Test properties  -->
       <postgres.type>postgres</postgres.type>
@@ -164,9 +167,9 @@
       <postgres.cpoConfig>postgres/cpoConfig.xml</postgres.cpoConfig>
       <postgres.jndi>java:/comp/env/jdbc/cpodatasource</postgres.jndi>
       <postgres.class>org.postgresql.ds.PGConnectionPoolDataSource</postgres.class>
-      <postgres.valueMeta>/postgres/classdef/postgresValueMetaData.xml</postgres.valueMeta>
-      <postgres.valueCaseMeta>/postgres/classdef/postgresValueCaseMetaData.xml</postgres.valueCaseMeta>
-      <postgres.lobMeta>/postgres/classdef/postgresLobMetaData.xml</postgres.lobMeta>
+      <postgres.valueMeta>/common/ValueMetaData.xml</postgres.valueMeta>
+      <postgres.valueCaseMeta>/common/ValueCaseMetaData.xml</postgres.valueCaseMeta>
+      <postgres.lobMeta>/common/LobMetaData.xml</postgres.lobMeta>
   </properties>
   <build>
     <plugins>
@@ -183,7 +186,10 @@
         <configuration>
             <suiteXmlFiles>
                 <suiteXmlFile>target/test-classes/h2/testng.xml</suiteXmlFile>
-<!--                <suiteXmlFile>target/test-classes/mysql/testng.xml</suiteXmlFile>-->
+                <suiteXmlFile>target/test-classes/mysql/testng.xml</suiteXmlFile>
+                <suiteXmlFile>target/test-classes/mariadb/testng.xml</suiteXmlFile>
+                <suiteXmlFile>target/test-classes/postgres/testng.xml</suiteXmlFile>
+<!--                <suiteXmlFile>target/test-classes/oracle/testng.xml</suiteXmlFile>-->
             </suiteXmlFiles>
         </configuration>
       </plugin>
@@ -203,7 +209,8 @@
               <goal>generatejavasource</goal>
             </goals>
             <configuration>
-              <cpoConfig>${basedir}/src/test/resources/common/*.xml</cpoConfig>
+                <cpoConfig>${basedir}/src/test/resources/common/*.xml</cpoConfig>
+<!--                <cpoConfig>${basedir}/src/test/resources/mysql/classdef/*.xml</cpoConfig>-->
               <generateClass>true</generateClass>
               <generateInterface>true</generateInterface>
               <scope>test</scope>

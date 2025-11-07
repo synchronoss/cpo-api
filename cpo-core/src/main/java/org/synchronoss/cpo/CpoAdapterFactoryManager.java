@@ -92,7 +92,7 @@ public final class CpoAdapterFactoryManager extends CpoAdapterFactoryCache {
     /**
      * LoadAdapters is responsible for loading the config file and then subsequently loading all the metadata.
      */
-    private static void loadAdapters() {
+    public static void loadAdapters() {
         String cpoConfig = System.getProperty(CPO_CONFIG, System.getenv(CPO_CONFIG));
         if (cpoConfig==null)
             cpoConfig = CPO_CONFIG_XML;

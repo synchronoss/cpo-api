@@ -111,12 +111,6 @@
           <dataType>TIMESTAMP</dataType>
       </cpoAttribute>
       <cpoAttribute xsi:type="cpoj:ctJdbcAttribute">
-          <javaName>attrTinyInt</javaName>
-          <javaType>byte</javaType>
-          <dataName>attr_TINYINT</dataName>
-          <dataType>TINYINT</dataType>
-      </cpoAttribute>
-      <cpoAttribute xsi:type="cpoj:ctJdbcAttribute">
           <javaName>attrBigInt</javaName>
           <javaType>java.math.BigInteger</javaType>
           <dataName>attr_BIGINT</dataName>
@@ -145,18 +139,6 @@
           <javaType>java.sql.Time</javaType>
           <dataName>attr_TIME</dataName>
           <dataType>TIME</dataType>
-      </cpoAttribute>
-      <cpoAttribute xsi:type="cpoj:ctJdbcAttribute">
-          <javaName>attrBinary</javaName>
-          <javaType>byte[]</javaType>
-          <dataName>attr_BINARY</dataName>
-          <dataType>BINARY</dataType>
-      </cpoAttribute>
-      <cpoAttribute xsi:type="cpoj:ctJdbcAttribute">
-          <javaName>attrVarBinary</javaName>
-          <javaType>byte[]</javaType>
-          <dataName>attr_VARBINARY</dataName>
-          <dataType>VARBINARY</dataType>
       </cpoAttribute>
       <cpoFunctionGroup type="CREATE">
           <cpoFunction name="ValueObject - Create" >

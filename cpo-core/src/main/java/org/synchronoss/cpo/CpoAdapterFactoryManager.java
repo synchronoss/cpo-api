@@ -42,16 +42,12 @@ import java.util.*;
 public final class CpoAdapterFactoryManager extends CpoAdapterFactoryCache {
 
   private static final Logger logger = LoggerFactory.getLogger(CpoAdapterFactoryManager.class);
-  private static final String CPO_CONFIG = "CPO_CONFIG";
+  public static final String CPO_CONFIG = "CPO_CONFIG";
   private static final String CPO_CONFIG_XML = "/cpoConfig.xml";
   private static String defaultContext = null;
 
   static {
-    String cpoConfig = System.getenv(CPO_CONFIG);
-    if (cpoConfig==null)
-      cpoConfig=CPO_CONFIG_XML;
-
-    loadAdapters(cpoConfig);
+      loadAdapters();
   }
 
   public static CpoAdapter getCpoAdapter() throws CpoException {
@@ -93,13 +89,23 @@ public final class CpoAdapterFactoryManager extends CpoAdapterFactoryCache {
     return cpoXaResource;
   }
 
+    /**
+     * LoadAdapters is responsible for loading the config file and then subsequently loading all the metadata.
+     */
+    private static void loadAdapters() {
+        String cpoConfig = System.getProperty(CPO_CONFIG, System.getenv(CPO_CONFIG));
+        if (cpoConfig==null)
+            cpoConfig = CPO_CONFIG_XML;
 
-  /**
-   * LoadAdapters is responsible for loading the config file and then subsequently loading all the metadata.
-   *
-   * @param cpoConfig
-   */
-  synchronized public static void loadAdapters(String cpoConfig) {
+        loadAdapters(cpoConfig);
+    }
+
+        /**
+         * LoadAdapters is responsible for loading the config file and then subsequently loading all the metadata.
+         *
+         * @param cpoConfig
+         */
+  synchronized private static void loadAdapters(String cpoConfig) {
     InputStream is = null;
 
     // See if the file is a uri

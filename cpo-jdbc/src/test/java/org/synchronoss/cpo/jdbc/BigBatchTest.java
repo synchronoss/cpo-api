@@ -33,7 +33,7 @@ import java.util.ArrayList;
  *
  * @author david berry
  */
-public class BigBatchTest extends JdbcDbContainerBase {
+public class BigBatchTest {
 
   private static final Logger logger = LoggerFactory.getLogger(BigBatchTest.class);
   private ArrayList<ValueObject> al = new ArrayList<>();

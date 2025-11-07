@@ -33,7 +33,7 @@ import java.util.List;
  *
  * @author david berry
  */
-public class EntityTest extends JdbcDbContainerBase {
+public class EntityTest {
 
   private static final Logger logger = LoggerFactory.getLogger(EntityTest.class);
 

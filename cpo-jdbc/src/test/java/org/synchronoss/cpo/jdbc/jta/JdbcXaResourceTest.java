@@ -41,13 +41,13 @@ import java.util.List;
 /**
  * Created by dberry on 12/8/15.
  */
-public class JdbcXaResourceTest extends JdbcDbContainerBase {
+public class JdbcXaResourceTest {
   private static final Logger logger = LoggerFactory.getLogger(JdbcXaResourceTest.class);
   private CpoAdapter cpoAdapter = null;
   private JdbcCpoXaAdapter cpoXaAdapter1 = null;
   private JdbcCpoXaAdapter cpoXaAdapter2 = null;
   private ArrayList<ValueObject> al = new ArrayList<>();
-  private boolean isXaSupported = Boolean.valueOf(JdbcJUnitProperty.getProperty(JdbcJUnitProperty.PROP_XA_SUPPORTED));
+  private boolean isXaSupported = true;
 
   /**
    * Creates a new XaResourceTest object.
@@ -58,9 +58,11 @@ public class JdbcXaResourceTest extends JdbcDbContainerBase {
   /**
    * <code>setUp</code> Load the datasource from the properties in the property file jdbc_en_US.properties
    */
+  @Parameters({ "db.xasupport" })
   @BeforeMethod
-  public void setUp() {
-    String method = "setUp:";
+  public void setUp(boolean xaSupport) {
+      String method = "setUp:";
+      isXaSupported = xaSupport;
 
     try {
       cpoAdapter = CpoAdapterFactoryManager.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_JDBC);

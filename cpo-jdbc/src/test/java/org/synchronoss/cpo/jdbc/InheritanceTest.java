@@ -33,12 +33,12 @@ import java.util.ArrayList;
  *
  * @author david berry
  */
-public class InheritanceTest extends JdbcDbContainerBase {
+public class InheritanceTest {
 
   private ArrayList<ChildValueObject> al = new ArrayList<>();
   private CpoAdapter cpoAdapter = null;
   private JdbcCpoMetaDescriptor metaDescriptor = null;
-  private boolean isSupportsMillis = Boolean.valueOf(JdbcJUnitProperty.getProperty(JdbcJUnitProperty.PROP_MILLIS_SUPPORTED));
+  private boolean isSupportsMillis = true;
 
   public InheritanceTest() {
 
@@ -50,11 +50,13 @@ public class InheritanceTest extends JdbcDbContainerBase {
    * @author david berry
    * @version '$Id: InsertObjectTest.java,v 1.3 2006/01/30 19:09:23 dberry Exp $'
    */
+  @Parameters({ "db.millisupport" })
   @BeforeMethod
-  public void setUp() {
-    String method = "setUp:";
+  public void setUp(boolean milliSupport) {
+      String method = "setUp:";
+      isSupportsMillis  = milliSupport;
 
-    try {
+      try {
       cpoAdapter = CpoAdapterFactoryManager.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_JDBC);
       assertNotNull(cpoAdapter,method + "cpoAdapter is null");
       metaDescriptor = (JdbcCpoMetaDescriptor) cpoAdapter.getCpoMetaDescriptor();

@@ -34,13 +34,13 @@ import java.util.*;
  *
  * @author david berry
  */
-public class InsertObjectTest extends JdbcDbContainerBase {
+public class InsertObjectTest {
 
   private ArrayList<ValueObject> al = new ArrayList<>();
   private CpoAdapter cpoAdapter = null;
   private CpoAdapter readAdapter = null;
   private JdbcCpoMetaDescriptor metaDescriptor = null;
-  private boolean isSupportsMillis = Boolean.valueOf(JdbcJUnitProperty.getProperty(JdbcJUnitProperty.PROP_MILLIS_SUPPORTED));
+  private boolean isSupportsMillis = true;
 
   public InsertObjectTest() {
   }
@@ -51,11 +51,13 @@ public class InsertObjectTest extends JdbcDbContainerBase {
    * @author david berry
    * @version '$Id: InsertObjectTest.java,v 1.3 2006/01/30 19:09:23 dberry Exp $'
    */
+  @Parameters({ "db.millisupport" })
   @BeforeMethod
-  public void setUp() {
-    String method = "setUp:";
+  public void setUp(boolean milliSupport) {
+      String method = "setUp:";
+      isSupportsMillis  = milliSupport;
 
-    try {
+      try {
       cpoAdapter = CpoAdapterFactoryManager.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_JDBC);
       assertNotNull(cpoAdapter, method + "cpoAdapter is null");
       metaDescriptor = (JdbcCpoMetaDescriptor) cpoAdapter.getCpoMetaDescriptor();

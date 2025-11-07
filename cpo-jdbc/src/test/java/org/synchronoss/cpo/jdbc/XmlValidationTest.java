@@ -36,7 +36,7 @@ import java.io.*;
 public class XmlValidationTest {
 
   private static final Logger logger = LoggerFactory.getLogger(XmlValidationTest.class);
-  static final String CPO_CONFIG_XML = "/cpoConfig.xml";
+  static final String CPO_CONFIG_XML = "/h2/cpoConfig.xml";
   static final String BAD_CPO_CONFIG_XML = "/badConfig.xml";
 
   public XmlValidationTest() {

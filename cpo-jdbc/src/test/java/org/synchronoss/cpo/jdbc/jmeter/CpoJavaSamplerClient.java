@@ -30,6 +30,7 @@ import org.synchronoss.cpo.jdbc.*;
 import org.synchronoss.cpo.jdbc.cpoJdbcConfig.*;
 import org.synchronoss.cpo.jdbc.meta.JdbcCpoMetaDescriptor;
 import org.synchronoss.cpo.meta.CpoMetaDescriptor;
+import org.testng.annotations.*;
 
 import java.sql.Timestamp;
 
@@ -52,7 +53,14 @@ public class CpoJavaSamplerClient extends AbstractJavaSamplerClient {
   private static final String URL = "url";
   private static final String DRIVER = "driver";
   private static final String CONFIG_PROCESSOR = "org.synchronoss.cpo.jdbc.config.JdbcCpoConfigProcessor";
-  private static final boolean isSupportsMillis = Boolean.parseBoolean(JdbcJUnitProperty.getProperty(JdbcJUnitProperty.PROP_MILLIS_SUPPORTED));
+  private static boolean isSupportsMillis = true;
+
+    @Parameters({ "db.millisupport" })
+    @BeforeClass
+    public void setUp(boolean milliSupport) {
+        String method = "setUp:";
+        isSupportsMillis = milliSupport;
+    }
 
   @Override
   public void setupTest(JavaSamplerContext javaSamplerContext) {

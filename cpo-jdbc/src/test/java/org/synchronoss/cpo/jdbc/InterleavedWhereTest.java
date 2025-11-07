@@ -33,7 +33,7 @@ import static org.testng.Assert.*;
  *
  * @author david berry
  */
-public class InterleavedWhereTest extends JdbcDbContainerBase {
+public class InterleavedWhereTest {
 
   private CpoAdapter cpoAdapter = null;
   private ArrayList<ValueObject> al = new ArrayList<>();

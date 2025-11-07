@@ -33,7 +33,7 @@ import static org.testng.Assert.*;
  *
  * @author david berry
  */
-public class BlobTest extends JdbcDbContainerBase {
+public class BlobTest {
 
   private static final Logger logger = LoggerFactory.getLogger(BlobTest.class);
   private JdbcCpoMetaDescriptor metaDescriptor = null;
@@ -42,7 +42,7 @@ public class BlobTest extends JdbcDbContainerBase {
   private char[] testClob = "This is a test Clob used for testing clobs".toCharArray();
   private byte[] testBlob2 = null;
   private char[] testClob2 = "This is a second test Clob used for testing clobs".toCharArray();
-  private boolean isSupportsBlobs = Boolean.valueOf(JdbcJUnitProperty.getProperty(JdbcJUnitProperty.PROP_BLOBS_SUPPORTED));
+  private boolean isSupportsBlobs = true;
 
   public BlobTest() {
 
@@ -54,10 +54,11 @@ public class BlobTest extends JdbcDbContainerBase {
    * @author david berry
    * @version '$Id: BlobTest.java,v 1.15 2006/02/15 18:34:19 dberry Exp $'
    */
+  @Parameters({ "db.blobsupport" })
   @BeforeMethod
-  public void setUp() {
-
-    String method = "setUp:";
+  public void setUp(boolean blobSupport) {
+      String method = "setUp:";
+      isSupportsBlobs = blobSupport;
 
     try {
       cpoAdapter = CpoAdapterFactoryManager.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_JDBC);

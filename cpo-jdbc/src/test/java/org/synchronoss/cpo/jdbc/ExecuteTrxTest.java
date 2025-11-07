@@ -34,13 +34,13 @@ import static org.testng.Assert.*;
  *
  * @author david berry
  */
-public class ExecuteTrxTest extends JdbcDbContainerBase {
+public class ExecuteTrxTest {
 
   private static final Logger logger = LoggerFactory.getLogger(ExecuteTrxTest.class);
 //  private CpoAdapter cpoAdapter = null;
   private CpoTrxAdapter trxAdapter = null;
   private JdbcCpoMetaDescriptor metaDescriptor = null;
-  private boolean isSupportsCalls = Boolean.valueOf(JdbcJUnitProperty.getProperty(JdbcJUnitProperty.PROP_CALLS_SUPPORTED));
+  private boolean isSupportsCalls = true;
 
   /**
    * Creates a new RollbackTest object.
@@ -52,9 +52,11 @@ public class ExecuteTrxTest extends JdbcDbContainerBase {
   /**
    * <code>setUp</code> Load the datasource from the properties in the property file jdbc_en_US.properties
    */
+  @Parameters({ "db.callsupport" })
   @BeforeMethod
-  public void setUp() {
-    String method = "setUp:";
+  public void setUp(boolean callSupport) {
+      String method = "setUp:";
+      isSupportsCalls  = callSupport;
 
     try {
 //      cpoAdapter = CpoAdapterFactoryManager.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_JDBC);

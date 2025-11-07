@@ -33,7 +33,7 @@ import static org.testng.Assert.*;
  *
  * @author david berry
  */
-public class RollbackTrxTest extends JdbcDbContainerBase {
+public class RollbackTrxTest {
 
   private CpoTrxAdapter trxAdapter = null;
 

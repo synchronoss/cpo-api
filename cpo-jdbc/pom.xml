@@ -182,8 +182,8 @@
         <artifactId>maven-surefire-plugin</artifactId>
         <configuration>
             <suiteXmlFiles>
-                <suiteXmlFile>target/test-classes/h2/testng.xml</suiteXmlFile>
-<!--                <suiteXmlFile>target/test-classes/mysql/testng.xml</suiteXmlFile>-->
+<!--                <suiteXmlFile>target/test-classes/h2/testng.xml</suiteXmlFile>-->
+                <suiteXmlFile>target/test-classes/mysql/testng.xml</suiteXmlFile>
             </suiteXmlFiles>
         </configuration>
       </plugin>

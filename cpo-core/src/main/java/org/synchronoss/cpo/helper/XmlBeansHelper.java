@@ -31,12 +31,12 @@ public class XmlBeansHelper {
   public static String validateXml(XmlObject xmlObj) {
     StringBuilder sb = new StringBuilder();
     String errMsg = null;
-    ArrayList<XmlValidationError> validationErrors = new ArrayList<>();
+    ArrayList<XmlError> validationErrors = new ArrayList<>();
     XmlOptions validationOptions = new XmlOptions(); 
     validationOptions.setErrorListener(validationErrors); 
     boolean isValid = xmlObj.validate(validationOptions); // to display error we should pass options.
     if (!isValid) {
-      for (XmlValidationError es : validationErrors) {
+      for (XmlError es : validationErrors) {
         sb.append(es.getMessage());
       }
       if (sb.length()>0)

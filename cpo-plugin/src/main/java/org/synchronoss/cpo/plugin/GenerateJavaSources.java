@@ -35,10 +35,7 @@ import org.apache.commons.io.filefilter.WildcardFileFilter;
 /**
  * Plugin goal that will generate the cpo classes based on the xml configuration file
  */
-@Mojo (name = "generatejavasource",
-    requiresDependencyResolution = ResolutionScope.RUNTIME,
-    configurator = "include-project-dependencies",
-    defaultPhase = LifecyclePhase.GENERATE_SOURCES)
+@Mojo (name = "generatejavasource")
 public class GenerateJavaSources extends AbstractMojo {
 
   private enum Scopes {

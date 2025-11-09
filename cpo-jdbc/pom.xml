@@ -25,7 +25,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.synchronoss.cpo</groupId>
   <artifactId>cpo-jdbc</artifactId>
-  <name>cpo-jdbc</name>
+  <name>jdbc</name>
   <version>5.2.2-SNAPSHOT</version>
   <parent>
     <groupId>org.synchronoss.cpo</groupId>
@@ -194,8 +194,14 @@
         </configuration>
       </plugin>
        <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>xmlbeans-maven-plugin</artifactId>
+           <groupId>org.apache.xmlbeans</groupId>
+           <artifactId>xmlbeans</artifactId>
+           <configuration>
+               <sourceDir>${project.basedir}/src/main/xsd</sourceDir>
+               <classTargetDir>${project.build.directory}/generated-sources/xmlbeans</classTargetDir>
+               <repackage>${project.groupId}.${project.name}.metadata</repackage>
+               <name>${project.name}</name>
+           </configuration>
       </plugin>
       <plugin>
         <groupId>org.synchronoss.cpo</groupId>
@@ -301,13 +307,8 @@
     </dependency>
     <!-- log4j implementation for test logging -->
     <dependency>
-      <groupId>org.slf4j</groupId>
-      <artifactId>slf4j-log4j12</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
       <groupId>org.apache.logging.log4j</groupId>
-      <artifactId>log4j-api</artifactId>
+      <artifactId>log4j-slf4j-impl</artifactId>
       <scope>test</scope>
     </dependency>
     <dependency>

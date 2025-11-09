@@ -47,10 +47,11 @@
     </license>
   </licenses>
   <properties>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+      <maven.compiler.release>21</maven.compiler.release>
+      <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <currentVersion>${project.version}</currentVersion>
     <testContainersVersion>1.21.3</testContainersVersion>
-    <slf4jVersion>2.0.12</slf4jVersion>
+    <slf4jVersion>2.0.17</slf4jVersion>
     <github.global.server>cpo-github</github.global.server>
   </properties>
   <ciManagement>
@@ -117,7 +118,7 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-clean-plugin</artifactId>
-          <version>3.1.0</version>
+          <version>3.2.0</version>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
@@ -187,10 +188,8 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-compiler-plugin</artifactId>
-          <version>3.8.1</version>
+          <version>3.14.1</version>
           <configuration>
-            <source>1.8</source>
-            <target>1.8</target>
             <compilerArgs>
               <arg>-Xlint:all</arg>
             </compilerArgs>
@@ -203,24 +202,18 @@
           <version>3.5.3</version>
         </plugin>
         <plugin>
-          <groupId>org.codehaus.mojo</groupId>
-          <artifactId>xmlbeans-maven-plugin</artifactId>
-          <version>2.3.3</version>
+            <groupId>org.apache.xmlbeans</groupId>
+            <artifactId>xmlbeans</artifactId>
+            <version>5.3.0</version>
           <executions>
             <execution>
               <id>Build-XMLBeans</id>
               <phase>generate-sources</phase>
-              <!--<phase>compile</phase>-->
               <goals>
-                <goal>xmlbeans</goal>
+                <goal>compile</goal>
               </goals>
             </execution>
           </executions>
-          <!--<inherited>true</inherited>-->
-          <configuration>
-            <schemaDirectory>src/main/xsd</schemaDirectory>
-            <javaSource>1.8</javaSource>
-          </configuration>
         </plugin>
         <plugin>
           <groupId>com.mycila</groupId>
@@ -276,7 +269,7 @@
       </plugins>
     </pluginManagement>
     <plugins>
-      <plugin>
+        <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-enforcer-plugin</artifactId>
         <version>1.4.1</version>
@@ -440,21 +433,15 @@
       </dependency>
       <!-- log4j implementation for test logging -->
       <dependency>
-        <groupId>org.slf4j</groupId>
-        <artifactId>slf4j-log4j12</artifactId>
-        <version>${slf4jVersion}</version>
-        <scope>test</scope>
-      </dependency>
-      <dependency>
         <groupId>org.apache.logging.log4j</groupId>
-        <artifactId>log4j-api</artifactId>
-        <version>2.24.2</version>
+        <artifactId>log4j-slf4j-impl</artifactId>
+        <version>2.13.1</version>
         <scope>test</scope>
       </dependency>
       <dependency>
         <groupId>org.apache.xmlbeans</groupId>
         <artifactId>xmlbeans</artifactId>
-        <version>3.1.0</version>
+        <version>5.3.0</version>
       </dependency>
     </dependencies>
   </dependencyManagement>
@@ -497,7 +484,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-plugin-plugin</artifactId>
-        <version>3.6.0</version>
+        <version>3.15.2</version>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>

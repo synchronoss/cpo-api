@@ -25,7 +25,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.synchronoss.cpo</groupId>
   <artifactId>cpo-core</artifactId>
-  <name>cpo-core</name>
+  <name>core</name>
   <version>5.2.2-SNAPSHOT</version>
   <description>CPO is a persistence layer that allows you to persist POJOs. cpo-core is the persistence agnostic classes
   that are used for  all persistence types.
@@ -52,13 +52,8 @@
     </dependency>
     <!-- log4j implementation for test logging -->
     <dependency>
-      <groupId>org.slf4j</groupId>
-      <artifactId>slf4j-log4j12</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
       <groupId>org.apache.logging.log4j</groupId>
-      <artifactId>log4j-api</artifactId>
+      <artifactId>log4j-slf4j-impl</artifactId>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -69,8 +64,14 @@
   <build>
     <plugins>
        <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>xmlbeans-maven-plugin</artifactId>
+           <groupId>org.apache.xmlbeans</groupId>
+           <artifactId>xmlbeans</artifactId>
+           <configuration>
+               <sourceDir>${project.basedir}/src/main/xsd</sourceDir>
+               <classTargetDir>${project.build.directory}/generated-sources/xmlbeans</classTargetDir>
+               <repackage>${project.groupId}.${project.name}.metadata</repackage>
+               <name>${project.name}</name>
+           </configuration>
       </plugin>
     </plugins>
   </build>

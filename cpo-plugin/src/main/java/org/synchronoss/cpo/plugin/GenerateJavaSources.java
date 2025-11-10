@@ -35,7 +35,9 @@ import org.apache.commons.io.filefilter.WildcardFileFilter;
 /**
  * Plugin goal that will generate the cpo classes based on the xml configuration file
  */
-@Mojo (name = "generatejavasource")
+@Mojo (name = "generatejavasource",
+        requiresDependencyResolution = ResolutionScope.COMPILE_PLUS_RUNTIME,
+        defaultPhase = LifecyclePhase.GENERATE_SOURCES)
 public class GenerateJavaSources extends AbstractMojo {
 
   private enum Scopes {
@@ -72,7 +74,7 @@ public class GenerateJavaSources extends AbstractMojo {
   /**
    * A reference to the Maven Project metadata.
    */
-  @Component
+  @Parameter(defaultValue = "${project}", readonly = true)
   protected MavenProject project;
 
   private final String JAVA_EXT = ".java";
@@ -188,5 +190,6 @@ public class GenerateJavaSources extends AbstractMojo {
       throw new MojoExecutionException("Exception caught", ex);
     }
   }
+
 }
 

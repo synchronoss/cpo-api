@@ -30,6 +30,7 @@ import org.synchronoss.cpo.jta.CpoXaResource;
 import org.synchronoss.cpo.meta.CpoMetaDescriptor;
 
 import java.io.*;
+import java.lang.reflect.InvocationTargetException;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -195,7 +196,7 @@ public final class CpoAdapterFactoryManager extends CpoAdapterFactoryCache {
 
     // make the CpoAdapter
     try {
-      CpoConfigProcessor configProcessor = (CpoConfigProcessor)CpoClassLoader.forName(dataSourceConfig.getCpoConfigProcessor()).newInstance();
+      CpoConfigProcessor configProcessor = (CpoConfigProcessor)CpoClassLoader.forName(dataSourceConfig.getCpoConfigProcessor()).getDeclaredConstructor().newInstance();
       cpoAdapterFactory = configProcessor.processCpoConfig(dataSourceConfig);
     } catch (ClassNotFoundException cnfe) {
       String msg = "CpoConfigProcessor not found: " + dataSourceConfig.getCpoConfigProcessor();
@@ -213,8 +214,14 @@ public final class CpoAdapterFactoryManager extends CpoAdapterFactoryCache {
       String msg = "Class is not instance of CpoConfigProcessor: " + dataSourceConfig.getCpoConfigProcessor();
       logger.error(msg);
       throw new CpoException(msg);
+    } catch (NoSuchMethodException e) {
+        String msg = "Could not find the constructor for CpoConfigProcessor: " + dataSourceConfig.getCpoConfigProcessor();
+        logger.error(msg);
+        throw new CpoException(msg);
+    } catch (InvocationTargetException e) {
+        throw new RuntimeException(e);
     }
 
-    return cpoAdapterFactory;
+      return cpoAdapterFactory;
   }
 }

@@ -33,7 +33,7 @@ import java.util.*;
  *
  * @author david berry
  */
-public class InheritanceTest extends CassandraContainerBase {
+public class InheritanceTest {
 
   private ArrayList<ChildValueObject> al = new ArrayList<>();
   private CpoAdapter cpoAdapter = null;

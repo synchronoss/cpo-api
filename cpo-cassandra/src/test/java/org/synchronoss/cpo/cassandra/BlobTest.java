@@ -33,7 +33,7 @@ import java.nio.ByteBuffer;
  *
  * @author david berry
  */
-public class BlobTest extends CassandraContainerBase {
+public class BlobTest {
 
   private static final Logger logger = LoggerFactory.getLogger(BlobTest.class);
   private CassandraCpoMetaDescriptor metaDescriptor = null;

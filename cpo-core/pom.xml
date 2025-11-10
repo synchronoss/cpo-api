@@ -50,12 +50,19 @@
         <groupId>javax.servlet</groupId>
         <artifactId>javax.servlet-api</artifactId>
     </dependency>
-    <!-- log4j implementation for test logging -->
-    <dependency>
-      <groupId>org.apache.logging.log4j</groupId>
-      <artifactId>log4j-slf4j-impl</artifactId>
-      <scope>test</scope>
-    </dependency>
+      <!-- logback implementation for test logging -->
+      <dependency>
+          <groupId>ch.qos.logback</groupId>
+          <artifactId>logback-core</artifactId>
+          <version>${logbackVersion}</version>
+          <scope>test</scope>
+      </dependency>
+      <dependency>
+          <groupId>ch.qos.logback</groupId>
+          <artifactId>logback-classic</artifactId>
+          <version>${logbackVersion}</version>
+          <scope>test</scope>
+      </dependency>
     <dependency>
       <groupId>org.apache.xmlbeans</groupId>
       <artifactId>xmlbeans</artifactId>

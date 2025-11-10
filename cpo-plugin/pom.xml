@@ -37,7 +37,7 @@
   <description>CPO Maven Plugin</description>
   <properties>
     <maven.version>3.9.11</maven.version>
-      <maven-plugin-tools.version>3.15.1</maven-plugin-tools.version>
+    <maven-plugin-tools.version>3.15.2</maven-plugin-tools.version>
   </properties>
   <dependencies>
       <dependency>
@@ -45,11 +45,6 @@
           <artifactId>testng</artifactId>
           <scope>test</scope>
       </dependency>
-    <dependency>
-      <groupId>org.slf4j</groupId>
-      <artifactId>slf4j-api</artifactId>
-      <scope>compile</scope>
-    </dependency>
     <dependency>
       <groupId>org.synchronoss.cpo</groupId>
       <artifactId>cpo-core</artifactId>
@@ -74,16 +69,10 @@
           <version>${maven-plugin-tools.version}</version>
           <scope>provided</scope>
       </dependency>
-    <!-- log4j implementation for test logging -->
-    <dependency>
-      <groupId>org.apache.logging.log4j</groupId>
-      <artifactId>log4j-slf4j-impl</artifactId>
-      <scope>test</scope>
-    </dependency>
     <dependency>
       <groupId>commons-io</groupId>
       <artifactId>commons-io</artifactId>
-      <version>2.16.1</version>
+      <version>2.21.0</version>
       <scope>compile</scope>
     </dependency>
   </dependencies>

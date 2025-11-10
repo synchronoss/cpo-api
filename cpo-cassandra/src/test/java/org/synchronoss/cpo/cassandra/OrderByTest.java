@@ -31,7 +31,7 @@ import java.util.*;
  *
  * @author david berry
  */
-public class OrderByTest extends CassandraContainerBase {
+public class OrderByTest {
 
   private CpoAdapter cpoAdapter = null;
   private ArrayList<ValueObject> al = new ArrayList<>();

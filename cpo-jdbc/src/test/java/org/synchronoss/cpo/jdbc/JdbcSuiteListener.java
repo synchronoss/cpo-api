@@ -67,13 +67,12 @@ public class JdbcSuiteListener implements ISuiteListener {
         String dbUrl = suite.getParameter(PROP_DB_URL);
         String dbImage = suite.getParameter(PROP_DB_IMAGE);
         String cpoConfig = suite.getParameter(PROP_CPO_CONFIG);
-        String initScript = suite.getParameter(PROP_INIT_SCRIPT);
 
         if (dbType.equals(H2)) {
             try {
                 h2Server = Server.createTcpServer("-tcpPort", dbPort, "-tcpAllowOthers", "-baseDir", "~/", "-ifNotExists");
                 h2Server.start();
-                RunScript.execute(dbUrl, dbUser, dbPasswd, initScript, null,false);
+                RunScript.execute(dbUrl, dbUser, dbPasswd, dbInitScript, null,false);
             } catch (SQLException e) {
                 logger.error(e.getMessage());
                 System.exit(1);

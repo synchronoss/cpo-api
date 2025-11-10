@@ -22,7 +22,7 @@
 
 -->
 <core:cpoConfig xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
- xsi:schemaLocation="http://www.synchronoss.org/cpo/CpoConfig.xsd ../../../../../src/main/xsd/CpoConfig.xsd"
+ xsi:schemaLocation="http://www.synchronoss.org/cpo/CpoConfig.xsd ../../../../../cpo-core/src/main/xsd/CpoConfig.xsd"
  xmlns:core="http://www.synchronoss.org/cpo/core/CpoCoreConfig.xsd"
  xmlns:jdbc="http://www.synchronoss.org/cpo/jdbc/CpoJdbcConfig.xsd"
  xmlns="http://www.synchronoss.org/cpo/CpoConfig.xsd"

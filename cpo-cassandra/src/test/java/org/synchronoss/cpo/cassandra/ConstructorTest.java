@@ -30,7 +30,7 @@ import static org.testng.Assert.*;
  *
  * @author david berry
  */
-public class ConstructorTest extends CassandraContainerBase {
+public class ConstructorTest {
   private static final Logger logger = LoggerFactory.getLogger(ConstructorTest.class);
 
   @Test

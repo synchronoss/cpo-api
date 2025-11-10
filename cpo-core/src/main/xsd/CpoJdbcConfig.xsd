@@ -27,7 +27,7 @@
     targetNamespace="http://www.synchronoss.org/cpo/jdbc/CpoJdbcConfig.xsd"
     elementFormDefault="qualified">
 
-    <xs:import namespace="http://www.synchronoss.org/cpo/core/CpoCoreConfig.xsd" schemaLocation="../../../../cpo-core/src/main/xsd/CpoCoreConfig.xsd"/>
+    <xs:import namespace="http://www.synchronoss.org/cpo/core/CpoCoreConfig.xsd" schemaLocation="CpoCoreConfig.xsd"/>
 
     <xs:complexType name="ctJdbcConfig">
         <xs:complexContent>

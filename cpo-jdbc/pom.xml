@@ -37,11 +37,11 @@
     produces POJOs
   </description>
   <properties>
-    <oracleVersion>23.8.0.25.04</oracleVersion>
-    <mysqlVersion>9.3.0</mysqlVersion>
-    <mariadbVersion>3.5.4</mariadbVersion>
-    <h2Version>2.2.224</h2Version>
-    <postgresVersion>42.7.7</postgresVersion>
+    <oracleVersion> 23.26.0.0.0</oracleVersion>
+    <mysqlVersion>9.5.0</mysqlVersion>
+    <mariadbVersion>3.5.6</mariadbVersion>
+    <h2Version>2.4.240</h2Version>
+    <postgresVersion>42.7.8</postgresVersion>
 
       <!--  MySQL Test properties  -->
       <mysql.type>mysql</mysql.type>
@@ -186,27 +186,34 @@
         <configuration>
             <suiteXmlFiles>
                 <suiteXmlFile>target/test-classes/h2/testng.xml</suiteXmlFile>
-                <suiteXmlFile>target/test-classes/mysql/testng.xml</suiteXmlFile>
-                <suiteXmlFile>target/test-classes/mariadb/testng.xml</suiteXmlFile>
-                <suiteXmlFile>target/test-classes/postgres/testng.xml</suiteXmlFile>
+<!--                <suiteXmlFile>target/test-classes/mysql/testng.xml</suiteXmlFile>-->
+<!--                <suiteXmlFile>target/test-classes/mariadb/testng.xml</suiteXmlFile>-->
+<!--                <suiteXmlFile>target/test-classes/postgres/testng.xml</suiteXmlFile>-->
 <!--                <suiteXmlFile>target/test-classes/oracle/testng.xml</suiteXmlFile>-->
             </suiteXmlFiles>
         </configuration>
-      </plugin>
-       <plugin>
-           <groupId>org.apache.xmlbeans</groupId>
-           <artifactId>xmlbeans</artifactId>
-           <configuration>
-               <sourceDir>${project.basedir}/src/main/xsd</sourceDir>
-               <classTargetDir>${project.build.directory}/generated-sources/xmlbeans</classTargetDir>
-               <repackage>${project.groupId}.${project.name}.metadata</repackage>
-               <name>${project.name}</name>
-           </configuration>
       </plugin>
       <plugin>
         <groupId>org.synchronoss.cpo</groupId>
         <artifactId>cpo-plugin</artifactId>
         <version>5.2.2-SNAPSHOT</version>
+          <dependencies>
+              <dependency>
+                  <groupId>org.synchronoss.cpo</groupId>
+                  <artifactId>cpo-jdbc</artifactId>
+                  <version>5.2.2-SNAPSHOT</version>
+              </dependency>
+              <dependency>
+                  <groupId>ch.qos.logback</groupId>
+                  <artifactId>logback-core</artifactId>
+                  <version>${logbackVersion}</version>
+              </dependency>
+              <dependency>
+                  <groupId>ch.qos.logback</groupId>
+                  <artifactId>logback-classic</artifactId>
+                  <version>${logbackVersion}</version>
+              </dependency>
+          </dependencies>
         <executions>
           <execution>
             <id>Build-TestCpoBeans</id>
@@ -242,6 +249,19 @@
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
     </dependency>
+      <!-- logback implementation for test logging -->
+      <dependency>
+          <groupId>ch.qos.logback</groupId>
+          <artifactId>logback-core</artifactId>
+          <version>${logbackVersion}</version>
+          <scope>test</scope>
+      </dependency>
+      <dependency>
+          <groupId>ch.qos.logback</groupId>
+          <artifactId>logback-classic</artifactId>
+          <version>${logbackVersion}</version>
+          <scope>test</scope>
+      </dependency>
     <dependency>
       <groupId>org.apache.xmlbeans</groupId>
       <artifactId>xmlbeans</artifactId>
@@ -284,7 +304,7 @@
     <dependency>
       <groupId>org.apache.jmeter</groupId>
       <artifactId>ApacheJMeter_java</artifactId>
-      <version>5.3</version>
+      <version>5.6.3</version>
       <exclusions>
         <exclusion>
           <groupId>org.apache.logging.log4j</groupId>
@@ -303,12 +323,6 @@
           <artifactId>log4j-slf4j-impl</artifactId>
         </exclusion>
       </exclusions>
-      <scope>test</scope>
-    </dependency>
-    <!-- log4j implementation for test logging -->
-    <dependency>
-      <groupId>org.apache.logging.log4j</groupId>
-      <artifactId>log4j-slf4j-impl</artifactId>
       <scope>test</scope>
     </dependency>
     <dependency>

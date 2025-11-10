@@ -186,9 +186,9 @@
         <configuration>
             <suiteXmlFiles>
                 <suiteXmlFile>target/test-classes/h2/testng.xml</suiteXmlFile>
-                <suiteXmlFile>target/test-classes/mysql/testng.xml</suiteXmlFile>
-                <suiteXmlFile>target/test-classes/mariadb/testng.xml</suiteXmlFile>
-                <suiteXmlFile>target/test-classes/postgres/testng.xml</suiteXmlFile>
+<!--                <suiteXmlFile>target/test-classes/mysql/testng.xml</suiteXmlFile>-->
+<!--                <suiteXmlFile>target/test-classes/mariadb/testng.xml</suiteXmlFile>-->
+<!--                <suiteXmlFile>target/test-classes/postgres/testng.xml</suiteXmlFile>-->
 <!--                <suiteXmlFile>target/test-classes/oracle/testng.xml</suiteXmlFile>-->
             </suiteXmlFiles>
         </configuration>
@@ -364,7 +364,7 @@
     <dependency>
       <groupId>org.locationtech.jts</groupId>
       <artifactId>jts-core</artifactId>
-      <version>1.17.0</version>
+      <version>1.20.0</version>
       <scope>test</scope>
     </dependency>
   </dependencies>

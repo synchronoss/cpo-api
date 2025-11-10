@@ -24,6 +24,7 @@ import org.apache.xmlbeans.*;
 import org.slf4j.*;
 import org.synchronoss.cpo.CpoException;
 import org.synchronoss.cpo.cache.CpoMetaDescriptorCache;
+import org.synchronoss.cpo.core.cpoCoreConfig.CpoConfigDocument;
 import org.synchronoss.cpo.core.cpoCoreMeta.CpoMetaDataDocument;
 import org.synchronoss.cpo.exporter.*;
 import org.synchronoss.cpo.helper.*;
@@ -139,6 +140,7 @@ public class CpoMetaDescriptor extends CpoMetaDescriptorCache implements CpoMeta
   protected static CpoMetaDescriptor createUpdateInstance(String name, String[] metaXmls, boolean caseSensitive) throws CpoException {
     CpoMetaDescriptor metaDescriptor = findCpoMetaDescriptor(name);
     String metaDescriptorClassName = null;
+      var errBuilder = new StringBuilder();
 
     for (String metaXml : metaXmls) {
       InputStream is = null;
@@ -148,7 +150,7 @@ public class CpoMetaDescriptor extends CpoMetaDescriptorCache implements CpoMeta
         URL cpoConfigUrl = new URL(metaXml);
         is = cpoConfigUrl.openStream();
       } catch (IOException e) {
-        logger.info("Uri Not Found: " + metaXml);
+          errBuilder.append("Uri Not Found: ").append(metaXml).append("\n");
       }
 
       // See if the file is a resource in the jar
@@ -156,12 +158,12 @@ public class CpoMetaDescriptor extends CpoMetaDescriptorCache implements CpoMeta
         is = CpoClassLoader.getResourceAsStream(metaXml);
 
       if (is == null) {
-        logger.info("Resource Not Found: " + metaXml);
+          errBuilder.append("Resource Not Found: ").append(metaXml).append("\n");
         try {
           //See if the file is a local file on the server
           is = new FileInputStream(metaXml);
         } catch (FileNotFoundException fnfe) {
-          logger.info("File Not Found: " + metaXml);
+            errBuilder.append("File Not Found: ").append(metaXml).append("\n");
           is = null;
         }
       }
@@ -169,7 +171,11 @@ public class CpoMetaDescriptor extends CpoMetaDescriptorCache implements CpoMeta
         CpoMetaDataDocument metaDataDoc;
         if (is == null) {
           //See if the config is sent in as a string
-          metaDataDoc = CpoMetaDataDocument.Factory.parse(metaXml);
+            try {
+                metaDataDoc = CpoMetaDataDocument.Factory.parse(metaXml);
+            } catch (XmlException e) {
+                throw new CpoException(errBuilder.toString(), e);
+            }
         } else {
           metaDataDoc = CpoMetaDataDocument.Factory.parse(is);
         }

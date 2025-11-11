@@ -37,7 +37,7 @@ import java.util.*;
 
 /**
  * JdbcCpoAdapter is an interface for a set of routines that are responsible for managing value objects from a
- * datasource.
+ * jdbc datasource.
  *
  * @author david berry
  */
@@ -109,7 +109,7 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
    * This constructor is used specifically to clone a JdbcCpoAdapter.
    *
    * @param jdbcCpoAdapter - the JdbcCpoAdapter to clone
-   * @throws CpoException
+   * @throws CpoException An exception occurred copying the datasource.
    */
   protected JdbcCpoAdapter(JdbcCpoAdapter jdbcCpoAdapter) throws CpoException {
     this.metaDescriptor = (JdbcCpoMetaDescriptor) jdbcCpoAdapter.getCpoMetaDescriptor();
@@ -140,6 +140,13 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
     }
   }
 
+    /**
+     * Finds or Creates a JdbcCpoAdapter.
+     *
+     * @param metaDescriptor - The meta descriptor for the datasource
+     * @param jdsiTrx - The datasurce info
+     * @throws CpoException - An error occurred finding of creating the datasource adapter
+     */
   public static JdbcCpoAdapter getInstance(JdbcCpoMetaDescriptor metaDescriptor, DataSourceInfo<DataSource> jdsiTrx) throws CpoException {
     String adapterKey = metaDescriptor + ":" + jdsiTrx.getDataSourceName();
     JdbcCpoAdapter adapter = (JdbcCpoAdapter) findCpoAdapter(adapterKey);
@@ -156,6 +163,7 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
    * @param metaDescriptor This datasource that identifies the cpo metadata datasource
    * @param jdsiWrite      The datasource that identifies the transaction database for write transactions.
    * @param jdsiRead       The datasource that identifies the transaction database for read-only transactions.
+   * @return - The JdbcCpoAdapter
    * @throws org.synchronoss.cpo.CpoException
    *          exception
    */
@@ -169,50 +177,6 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
     return adapter;
   }
 
-  /**
-   * The CpoAdapter will check to see if this object exists in the datasource.
-   * <p/>
-   * <pre>Example:
-   * <code>
-   * <p/>
-   * class SomeObject so = new SomeObject();
-   * long count = 0;
-   * class CpoAdapter cpo = null;
-   * <p/>
-   * <p/>
-   *  try {
-   *    cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));
-   *  } catch (CpoException ce) {
-   *    // Handle the error
-   *    cpo = null;
-   *  }
-   * <p/>
-   *  if (cpo!=null) {
-   *    so.setId(1);
-   *    so.setName("SomeName");
-   *    try{
-   *      CpoWhere where = cpo.newCpoWhere(CpoWhere.LOGIC_NONE, id, CpoWhere.COMP_EQ);
-   *      count = cpo.existsObject("SomeExistCheck",so, where);
-   *      if (count>0) {
-   *        // object exists
-   *      } else {
-   *        // object does not exist
-   *      }
-   *    } catch (CpoException ce) {
-   *      // Handle the error
-   *    }
-   *  }
-   * </code>
-   * </pre>
-   *
-   * @param name   The String name of the EXISTS Function Group that will be used to create the object in the datasource.
-   *               null signifies that the default rules will be used.
-   * @param obj    This is an object that has been defined within the metadata of the datasource. If the class is not
-   *               defined an exception will be thrown. This object will be searched for inside the datasource.
-   * @param wheres A CpoWhere object that passes in run-time constraints to the function that performs the the exist
-   * @return The number of objects that exist in the datasource that match the specified object
-   * @throws CpoException Thrown if there are errors accessing the datasource
-   */
   @Override
   public <T> long existsObject(String name, T obj, Collection<CpoWhere> wheres) throws CpoException {
     Connection c = null;
@@ -234,6 +198,7 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
   /**
    * The CpoAdapter will check to see if this object exists in the datasource.
    *
+   * @param <T>  The type of the object
    * @param name The name which identifies which EXISTS, INSERT, and UPDATE Function Groups to execute to persist the
    *             object.
    * @param obj  This is an object that has been defined within the metadata of the datasource. If the class is not

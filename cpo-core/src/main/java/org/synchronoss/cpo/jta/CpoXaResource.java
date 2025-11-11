@@ -33,6 +33,10 @@ import java.util.HashMap;
  * Created by dberry on 11/8/15.
  */
 public interface CpoXaResource<T> extends XAResource {
+    /**
+     * @param xid - The id of the XAResource to close
+     * @throws XAException - An exception occurred closing the resource
+     */
  void close(Xid xid) throws XAException;
 
  enum CpoXaError {
@@ -68,6 +72,11 @@ public interface CpoXaResource<T> extends XAResource {
    this.errorCode = errorCode;
   }
 
+     /**
+      * @param errCode - The error code for the XAException
+      * @param errString - The message for the XAException
+      * @return - The XAException
+      */
   static public XAException createXAException(CpoXaError errCode, String errString) {
     return new XAException(String.format("%s : %s", errCode.name(), errString));
   }

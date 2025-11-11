@@ -25,6 +25,7 @@ package org.synchronoss.cpo;
  * DataSource
  *
  * @author david.berry
+ * @param <T> The type of the DatasourceInfo
  */
 public interface DataSourceInfo<T> {
 
@@ -35,6 +36,7 @@ public interface DataSourceInfo<T> {
 
   /**
    * @return Returns the DataSource
+   * @throws CpoException - Cannot find the datasource
    */
   public T getDataSource() throws CpoException;
 }

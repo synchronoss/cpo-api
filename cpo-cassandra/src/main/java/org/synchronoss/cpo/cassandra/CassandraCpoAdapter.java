@@ -125,22 +125,22 @@ public class CassandraCpoAdapter extends CpoBaseAdapter<ClusterDataSource> {
 
   /**
    * The CpoAdapter will check to see if this object exists in the datasource.
-   * <p/>
+   * </p><p>
    * <pre>Example:
    * <code>
-   * <p/>
+   * </p><p>
    * class SomeObject so = new SomeObject();
    * long count = 0;
    * class CpoAdapter cpo = null;
-   * <p/>
-   * <p/>
+   * </p><p>
+   * </p><p>
    *  try {
    *    cpo = new CpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));
    *  } catch (CpoException ce) {
    *    // Handle the error
    *    cpo = null;
    *  }
-   * <p/>
+   * </p><p>
    *  if (cpo!=null) {
    *    so.setId(1);
    *    so.setName("SomeName");

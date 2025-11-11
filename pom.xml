@@ -248,7 +248,7 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-site-plugin</artifactId>
-          <version>3.9.0</version>
+          <version>3.21.0</version>
           <configuration>
             <skipDeploy>true</skipDeploy>
           </configuration>
@@ -474,14 +474,15 @@
             <reports>
               <report>index</report>
               <report>summary</report>
+              <report>modules</report>
               <report>dependencies</report>
               <report>dependency-convergence</report>
-              <report>project-team</report>
-              <report>issue-tracking</report>
-              <report>license</report>
-              <report>mailing-list</report>
+              <report>team</report>
+              <report>issue-management</report>
+              <report>licenses</report>
+              <report>mailing-lists</report>
               <report>scm</report>
-              <report>cim</report>
+              <report>ci-management</report>
             </reports>
           </reportSet>
         </reportSets>

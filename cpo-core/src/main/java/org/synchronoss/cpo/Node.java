@@ -200,7 +200,7 @@ public class Node implements Serializable, Cloneable, Comparable<Node> {
    * This function adds a child to the linked-list of children for this node. It adds the child to the end of the list.
    *
    * @param node Node that is the node to be added as a child of this Node.
-   * @throws ChildNodeException
+   * @throws ChildNodeException throws an exception if this child is not allowed to have children
    */
   public void addChild(Node node) throws ChildNodeException {
     if (node != null) {
@@ -227,7 +227,7 @@ public class Node implements Serializable, Cloneable, Comparable<Node> {
    * This function adds a child to the linked-list of children for this node. It adds the child to the end of the list.
    *
    * @param node Node that is the node to be added as a child of this Node.
-   * @throws ChildNodeException
+   * @throws ChildNodeException throws an exception if this node is not allowed to have children
    */
   public void addChildSort(Node node) throws ChildNodeException {
     addChildSort(node, null);
@@ -290,6 +290,7 @@ public class Node implements Serializable, Cloneable, Comparable<Node> {
    * Inserts a Sibling into the linked list just prior to this Node
    *
    * @param node Node to be made the prevSibling
+   * @throws ChildNodeException an exception inserting the child node
    */
   public void insertSiblingBefore(Node node) throws ChildNodeException {
     if (node != null) {
@@ -314,6 +315,7 @@ public class Node implements Serializable, Cloneable, Comparable<Node> {
    * Inserts a new Parent into the tree structure and adds this node as its child.
    *
    * @param node Node that will become this nodes new Parent.
+   * @throws ChildNodeException an exception adding the parent
    */
   public void insertParentBefore(Node node) throws ChildNodeException {
     if (node != null) {
@@ -330,6 +332,7 @@ public class Node implements Serializable, Cloneable, Comparable<Node> {
    * Parent Node.
    *
    * @param node Node to become a child of this node and parent to all pre-existing children of this node.
+   * @throws ChildNodeException an exception adding the parent
    */
   public void insertParentAfter(Node node) throws ChildNodeException {
     if (node != null) {
@@ -345,6 +348,8 @@ public class Node implements Serializable, Cloneable, Comparable<Node> {
    * Searches for an immediate child node and if found removes it from the linked-list of children.
    *
    * @param node Node to be searched for and removed if found.
+   * @return true if removed
+   * @throws ChildNodeException throws an exception if this node is not allowed to have children
    */
   public boolean removeChild(Node node) throws ChildNodeException {
     Node currNode = getFirstChild();
@@ -388,6 +393,7 @@ public class Node implements Serializable, Cloneable, Comparable<Node> {
 
   /**
    * Remove just this node from the tree. The children of this node get attached to the parent.
+   * @throws ChildNodeException error removing the child node
    */
   public void removeChildNode() throws ChildNodeException {
     Node parentLast;
@@ -411,6 +417,7 @@ public class Node implements Serializable, Cloneable, Comparable<Node> {
 
   /**
    * Remove this node and all its children from the tree.
+   * @throws ChildNodeException error removing the child node
    */
   public void removeAll() throws ChildNodeException {
     if (hasParent()) {
@@ -431,6 +438,7 @@ public class Node implements Serializable, Cloneable, Comparable<Node> {
    * Sets the first child node in the linked-list of children.
    *
    * @param node Node which will be made the first child node in the linked-list of children.
+   * @throws ChildNodeException throws if this node is not allowed to have children
    */
   public void setFirstChild(Node node) throws ChildNodeException {
     if (!allowChildren) {
@@ -445,6 +453,7 @@ public class Node implements Serializable, Cloneable, Comparable<Node> {
    *
    * @param nv INodeVisitor to call upon reaching a node when traversing the tree.
    * @see NodeVisitor
+   * @return false to cancel the visitor
    */
   public boolean acceptDFVisitor(NodeVisitor nv) throws Exception {
     Node currNode;
@@ -476,6 +485,9 @@ public class Node implements Serializable, Cloneable, Comparable<Node> {
     return continueVisit;
   }
 
+    /**
+     * @return the count of children
+     */
   public int getChildCount() {
     Node currNode;
     int count = 0;
@@ -492,6 +504,9 @@ public class Node implements Serializable, Cloneable, Comparable<Node> {
     return count;
   }
 
+    /**
+     * @return The list of child nodes
+     */
   public List<Node> getChildList() {
     Node currNode;
     ArrayList<Node> al = new ArrayList<>();

@@ -25,12 +25,12 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.synchronoss.cpo</groupId>
   <artifactId>cpo-jdbc</artifactId>
-  <name>jdbc</name>
-  <version>5.2.2-SNAPSHOT</version>
+    <name>jdbc</name>
+    <version>6.0.0-SNAPSHOT</version>
   <parent>
     <groupId>org.synchronoss.cpo</groupId>
     <artifactId>cpo</artifactId>
-    <version>5.2.2-SNAPSHOT</version>
+    <version>6.0.0-SNAPSHOT</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
   <description>CPO is a persistence layer that is thin wrapper around JDBC that consumes and
@@ -186,17 +186,21 @@
         <configuration>
             <suiteXmlFiles>
                 <suiteXmlFile>target/test-classes/h2/testng.xml</suiteXmlFile>
-<!--                <suiteXmlFile>target/test-classes/mysql/testng.xml</suiteXmlFile>-->
-<!--                <suiteXmlFile>target/test-classes/mariadb/testng.xml</suiteXmlFile>-->
-<!--                <suiteXmlFile>target/test-classes/postgres/testng.xml</suiteXmlFile>-->
+                <suiteXmlFile>target/test-classes/mysql/testng.xml</suiteXmlFile>
+                <suiteXmlFile>target/test-classes/mariadb/testng.xml</suiteXmlFile>
+                <suiteXmlFile>target/test-classes/postgres/testng.xml</suiteXmlFile>
 <!--                <suiteXmlFile>target/test-classes/oracle/testng.xml</suiteXmlFile>-->
             </suiteXmlFiles>
         </configuration>
       </plugin>
+       <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>xmlbeans-maven-plugin</artifactId>
+      </plugin>
       <plugin>
         <groupId>org.synchronoss.cpo</groupId>
         <artifactId>cpo-plugin</artifactId>
-        <version>5.2.2-SNAPSHOT</version>
+        <version>6.0.0-SNAPSHOT</version>
           <dependencies>
               <dependency>
                   <groupId>org.synchronoss.cpo</groupId>
@@ -237,7 +241,7 @@
     <dependency>
       <groupId>org.synchronoss.cpo</groupId>
       <artifactId>cpo-core</artifactId>
-      <version>5.2.2-SNAPSHOT</version>
+      <version>6.0.0-SNAPSHOT</version>
       <scope>compile</scope>
     </dependency>
       <dependency>

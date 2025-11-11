@@ -31,6 +31,7 @@ public interface NodeVisitor {
    *
    * @param node The node to be visited
    * @return a boolean (false) to end visit or (true) to continue visiting
+   * @throws Exception error visiting the node for the first time
    */
   public boolean visitBegin(Node node) throws Exception;
 
@@ -39,6 +40,7 @@ public interface NodeVisitor {
    *
    * @param node The node to be visited
    * @return a boolean (false) to end visit or (true) to continue visiting
+   * @throws Exception error visiting the node between children
    */
   public boolean visitMiddle(Node node) throws Exception;
 
@@ -47,6 +49,7 @@ public interface NodeVisitor {
    *
    * @param node The node to be visited
    * @return a boolean (false) to end visit or (true) to continue visiting
+   * @throws Exception error visiting the node after all the children
    */
   public boolean visitEnd(Node node) throws Exception;
 
@@ -55,6 +58,7 @@ public interface NodeVisitor {
    *
    * @param node The element to be visited
    * @return a boolean (false) to end visit or (true) to continue visiting
+   * @throws Exception error visiting the childless node
    */
   public boolean visit(Node node) throws Exception;
 }

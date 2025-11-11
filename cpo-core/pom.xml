@@ -24,16 +24,16 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.synchronoss.cpo</groupId>
-  <artifactId>cpo-core</artifactId>
-  <name>core</name>
-  <version>5.2.2-SNAPSHOT</version>
+    <artifactId>cpo-core</artifactId>
+    <name>core</name>
+  <version>6.0.0-SNAPSHOT</version>
   <description>CPO is a persistence layer that allows you to persist POJOs. cpo-core is the persistence agnostic classes
   that are used for  all persistence types.
   </description>
   <parent>
     <groupId>org.synchronoss.cpo</groupId>
     <artifactId>cpo</artifactId>
-    <version>5.2.2-SNAPSHOT</version>
+    <version>6.0.0-SNAPSHOT</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
   <dependencies>

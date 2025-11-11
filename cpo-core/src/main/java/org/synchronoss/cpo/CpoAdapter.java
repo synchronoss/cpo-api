@@ -26,13 +26,14 @@ import org.synchronoss.cpo.meta.domain.CpoAttribute;
 import java.util.*;
 
 /**
+ * <p>
  * CpoAdapter is an interface for a set of routines that are responsible for Creating, Retrieving, Updating, and
  * Deleting (CRUD) value objects within a datasource.
- * <p/>
+ * </p><p>
  * CpoAdapter is an interface that acts as a common facade for different datasources. It is conceivable that an
  * CpoAdapter can be implemented for JDBC, CSV, XML, LDAP, and more datasources producing classes such as
  * JdbcCpoAdapter, CsvCpoAdapter, XmlCpoAdapter, LdapCpoAdapter, etc.
- *
+ * </p>
  * @author david berry
  */
 public interface CpoAdapter extends java.io.Serializable {
@@ -130,22 +131,20 @@ public interface CpoAdapter extends java.io.Serializable {
   static final String EXECUTE_GROUP = GROUP_IDS[CpoAdapter.EXECUTE];
 
   /**
+   * <p>
    * Creates the Object in the datasource. The assumption is that the object does not exist in the datasource. This
    * method creates and stores the object in the datasource.
-   * <p/>
+   * </p>
    * <pre>Example:
-   * <code>
-   * <p/>
+   * {@code
    * class SomeObject so = new SomeObject();
    * class CpoAdapter cpo = null;
-   * <p/>
    *  try {
    *    cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));
    *  } catch (CpoException ce) {
    *    // Handle the error
    *    cpo = null;
    *  }
-   * <p/>
    *  if (cpo!=null) {
    *    so.setId(1);
    *    so.setName("SomeName");
@@ -155,9 +154,10 @@ public interface CpoAdapter extends java.io.Serializable {
    *      // Handle the error
    *    }
    *  }
-   * </code>
+   * }
    * </pre>
    *
+   * @param <T> The type of the POJO
    * @param obj This is an object that has been defined within the metadata of the datasource. If the class is not
    *            defined an exception will be thrown.
    * @return The number of objects created in the datasource
@@ -166,15 +166,16 @@ public interface CpoAdapter extends java.io.Serializable {
   public <T> long insertObject(T obj) throws CpoException;
 
   /**
+   * <p>
    * Creates the Object in the datasource. The assumption is that the object does not exist in the datasource. This
    * method creates and stores the object in the datasource
-   * <p/>
+   * </p>
    * <pre>Example:
-   * <code>
-   * <p/>
+   * {@code
+   *
    * class SomeObject so = new SomeObject();
    * class CpoAdapter cpo = null;
-   * <p/>
+   *
    *  try {
    *    cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));
    *  } catch (CpoException ce) {
@@ -190,9 +191,11 @@ public interface CpoAdapter extends java.io.Serializable {
    *      // Handle the error
    *    }
    *  }
-   * </code>
+   *
+   * }
    * </pre>
    *
+   * @param <T> The type of the POJO
    * @param name The String name of the CREATE Function Group that will be used to create the object in the datasource.
    *             null signifies that the default rules will be used which is equivalent to insertObject(Object obj);
    * @param obj  This is an object that has been defined within the metadata of the datasource. If the class is not
@@ -203,22 +206,22 @@ public interface CpoAdapter extends java.io.Serializable {
   public <T> long insertObject(String name, T obj) throws CpoException;
 
   /**
+   * <p>
    * Creates the Object in the datasource. The assumption is that the object does not exist in the datasource. This
    * method creates and stores the object in the datasource
-   * <p/>
+   * </p>
    * <pre>Example:
-   * <code>
-   * <p/>
+   * {@code
    * class SomeObject so = new SomeObject();
    * class CpoAdapter cpo = null;
-   * <p/>
+   *
    * try {
    * 	cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));
    * } catch (CpoException ce) {
    * 	// Handle the error
    * 	cpo = null;
    * }
-   * <p/>
+   *
    * if (cpo!=null) {
    * 	so.setId(1);
    * 	so.setName("SomeName");
@@ -228,9 +231,10 @@ public interface CpoAdapter extends java.io.Serializable {
    * 		// Handle the error
    *  }
    * }
-   * </code>
+   * }
    * </pre>
    *
+   * @param <T>               The type of the POJO
    * @param name              The String name of the CREATE Function Group that will be used to create the object in the datasource.
    *                          null signifies that the default rules will be used which is equivalent to insertObject(Object obj);
    * @param obj               This is an object that has been defined within the metadata of the datasource. If the class is not
@@ -245,29 +249,28 @@ public interface CpoAdapter extends java.io.Serializable {
   public <T> long insertObject(String name, T obj, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeFunction> nativeExpressions) throws CpoException;
 
   /**
+   * <p>
    * Iterates through a collection of Objects, creates and stores them in the datasource. The assumption is that the
    * objects contained in the collection do not exist in the datasource.
-   * <p/>
+   * </p><p>
    * This method creates and stores the objects in the datasource. The objects in the collection will be treated as one
    * transaction, assuming the datasource supports transactions.
-   * <p/>
+   * </p><p>
    * This means that if one of the objects fail being created in the datasource then the CpoAdapter will stop processing
    * the remainder of the collection and rollback all the objects created thus far. Rollback is on the underlying
    * datasource's support of rollback.
-   * <p/>
+   * </p>
    * <pre>Example:
-   * <code>
-   * <p/>
+   * {@code
    * class SomeObject so = null;
    * class CpoAdapter cpo = null;
-   * <p/>
    *  try {
    *    cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));
    *  } catch (CpoException ce) {
    *    // Handle the error
    *    cpo = null;
    *  }
-   * <p/>
+   *
    *  if (cpo!=null) {
    *    ArrayList al = new ArrayList();
    *    for (int i=0; i<3; i++){
@@ -276,16 +279,16 @@ public interface CpoAdapter extends java.io.Serializable {
    *      so.setName("SomeName");
    *      al.add(so);
    *    }
-   * <p/>
    *    try{
    *      cpo.insertObjects(al);
    *    } catch (CpoException ce) {
    *      // Handle the error
    *    }
    *  }
-   * </code>
+   * }
    * </pre>
    *
+   * @param <T> The type of the POJO
    * @param coll This is a collection of objects that have been defined within the metadata of the datasource. If the
    *             class is not defined an exception will be thrown.
    * @return The number of objects created in the datasource
@@ -294,29 +297,26 @@ public interface CpoAdapter extends java.io.Serializable {
   public <T> long insertObjects(Collection<T> coll) throws CpoException;
 
   /**
+   * <p>
    * Iterates through a collection of Objects, creates and stores them in the datasource. The assumption is that the
    * objects contained in the collection do not exist in the datasource.
-   * <p/>
+   * </p><p>
    * This method creates and stores the objects in the datasource. The objects in the collection will be treated as one
    * transaction, assuming the datasource supports transactions.
-   * <p/>
+   * </p><p>
    * This means that if one of the objects fail being created in the datasource then the CpoAdapter should stop
    * processing the remainder of the collection, and if supported, rollback all the objects created thus far.
-   * <p/>
+   * </p>
    * <pre>Example:
-   * <code>
-   * <p/>
+   * {@code
    * class SomeObject so = null;
    * class CpoAdapter cpo = null;
-   * <p/>
-   * <p/>
    *  try {
    *    cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));
    *  } catch (CpoException ce) {
    *    // Handle the error
    *    cpo = null;
    *  }
-   * <p/>
    *  if (cpo!=null) {
    *    ArrayList al = new ArrayList();
    *    for (int i=0; i<3; i++){
@@ -331,9 +331,10 @@ public interface CpoAdapter extends java.io.Serializable {
    *      // Handle the error
    *    }
    *  }
-   * </code>
+   * }
    * </pre>
    *
+   * @param <T> The type of the POJO
    * @param name The String name of the CREATE Function Group that will be used to create the object in the datasource.
    *             null signifies that the default rules will be used.
    * @param coll This is a collection of objects that have been defined within the metadata of the datasource. If the
@@ -344,21 +345,20 @@ public interface CpoAdapter extends java.io.Serializable {
   public <T> long insertObjects(String name, Collection<T> coll) throws CpoException;
 
   /**
+   * <p>
    * Iterates through a collection of Objects, creates and stores them in the datasource. The assumption is that the
    * objects contained in the collection do not exist in the datasource.
-   * <p/>
+   * </p><p>
    * This method creates and stores the objects in the datasource. The objects in the collection will be treated as one
    * transaction, assuming the datasource supports transactions.
-   * <p/>
+   * </p><p>
    * This means that if one of the objects fail being created in the datasource then the CpoAdapter should stop
    * processing the remainder of the collection, and if supported, rollback all the objects created thus far.
-   * <p/>
+   * </p>
    * <pre>Example:
-   * <code>
-   * <p/>
+   * {@code
    * class SomeObject so = null;
    * class CpoAdapter cpo = null;
-   * <p/>
    * try {
    * 	cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));
    * } catch (CpoException ce) {
@@ -379,9 +379,10 @@ public interface CpoAdapter extends java.io.Serializable {
    * 		// Handle the error
    *  }
    * }
-   * </code>
+   * }
    * </pre>
    *
+   * @param <T>               The type of the POJO
    * @param name              The String name of the CREATE Function Group that will be used to create the object in the datasource.
    *                          null signifies that the default rules will be used.
    * @param coll              This is a collection of objects that have been defined within the metadata of the datasource. If the
@@ -392,26 +393,24 @@ public interface CpoAdapter extends java.io.Serializable {
    *                          text will be embedded at run-time
    * @return The number of objects created in the datasource
    * @throws CpoException Thrown if there are errors accessing the datasource
-   */
+  */
   public <T> long insertObjects(String name, Collection<T> coll, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeFunction> nativeExpressions) throws CpoException;
 
   /**
+   * <p>
    * Removes the Object from the datasource. The assumption is that the object exists in the datasource. This method
    * stores the object in the datasource
-   * <p/>
+   * </p>
    * <pre>Example:
-   * <code>
-   * <p/>
+   * {@code
    * class SomeObject so = new SomeObject();
    * class CpoAdapter cpo = null;
-   * <p/>
    *  try {
    *    cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));
    *  } catch (CpoException ce) {
    *    // Handle the error
    *    cpo = null;
    *  }
-   * <p/>
    *  if (cpo!=null) {
    *    so.setId(1);
    *    so.setName("SomeName");
@@ -421,9 +420,10 @@ public interface CpoAdapter extends java.io.Serializable {
    *      // Handle the error
    *    }
    *  }
-   * </code>
+   * }
    * </pre>
    *
+   * @param <T> The type of the POJO
    * @param obj This is an object that has been defined within the metadata of the datasource. If the class is not
    *            defined an exception will be thrown. If the object does not exist in the datasource an exception will be thrown.
    * @return The number of objects deleted from the datasource
@@ -432,22 +432,20 @@ public interface CpoAdapter extends java.io.Serializable {
   public <T> long deleteObject(T obj) throws CpoException;
 
   /**
+   * <p>
    * Removes the Object from the datasource. The assumption is that the object exists in the datasource. This method
    * stores the object in the datasource
-   * <p/>
+   * </p>
    * <pre>Example:
-   * <code>
-   * <p/>
+   * {@code
    * class SomeObject so = new SomeObject();
    * class CpoAdapter cpo = null;
-   * <p/>
    *  try {
    *    cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));
    *  } catch (CpoException ce) {
    *    // Handle the error
    *    cpo = null;
    *  }
-   * <p/>
    *  if (cpo!=null) {
    *    so.setId(1);
    *    so.setName("SomeName");
@@ -457,9 +455,10 @@ public interface CpoAdapter extends java.io.Serializable {
    *      // Handle the error
    *    }
    *  }
-   * </code>
+   * }
    * </pre>
    *
+   * @param <T> The type of the POJO
    * @param name The String name of the DELETE Function Group that will be used to create the object in the datasource.
    *             null signifies that the default rules will be used.
    * @param obj  This is an object that has been defined within the metadata of the datasource. If the class is not
@@ -470,22 +469,20 @@ public interface CpoAdapter extends java.io.Serializable {
   public <T> long deleteObject(String name, T obj) throws CpoException;
 
   /**
+   * <p>
    * Removes the Object from the datasource. The assumption is that the object exists in the datasource. This method
    * stores the object in the datasource
-   * <p/>
+   * </p>
    * <pre>Example:
-   * <code>
-   * <p/>
+   * {@code
    * class SomeObject so = new SomeObject();
    * class CpoAdapter cpo = null;
-   * <p/>
    * try {
    * 	cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));
    * } catch (CpoException ce) {
    * 	// Handle the error
    * 	cpo = null;
    * }
-   * <p/>
    * if (cpo!=null) {
    * 	so.setId(1);
    * 	so.setName("SomeName");
@@ -495,9 +492,10 @@ public interface CpoAdapter extends java.io.Serializable {
    * 	// Handle the error
    *  }
    * }
-   * </code>
+   * }
    * </pre>
    *
+   * @param <T> The type of the POJO
    * @param name              The String name of the DELETE Function Group that will be used to create the object in the datasource.
    *                          null signifies that the default rules will be used.
    * @param obj               This is an object that has been defined within the metadata of the datasource. If the class is not
@@ -512,26 +510,24 @@ public interface CpoAdapter extends java.io.Serializable {
   public <T> long deleteObject(String name, T obj, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeFunction> nativeExpressions) throws CpoException;
 
   /**
+   * <p>
    * Removes the Objects contained in the collection from the datasource. The assumption is that the object exists in
    * the datasource. This method stores the objects contained in the collection in the datasource. The objects in the
    * collection will be treated as one transaction, assuming the datasource supports transactions.
-   * <p/>
+   * </p><p>
    * This means that if one of the objects fail being deleted in the datasource then the CpoAdapter should stop
    * processing the remainder of the collection, and if supported, rollback all the objects deleted thus far.
-   * <p/>
+   * </p>
    * <pre>Example:
-   * <code>
-   * <p/>
+   * {@code
    * class SomeObject so = null;
    * class CpoAdapter cpo = null;
-   * <p/>
    *  try {
    *    cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));
    *  } catch (CpoException ce) {
    *    // Handle the error
    *    cpo = null;
    *  }
-   * <p/>
    *  if (cpo!=null) {
    *    ArrayList al = new ArrayList();
    *    for (int i=0; i<3; i++){
@@ -540,17 +536,16 @@ public interface CpoAdapter extends java.io.Serializable {
    *      so.setName("SomeName");
    *      al.add(so);
    *    }
-   * <p/>
    *    try{
    *      cpo.deleteObjects(al);
    *    } catch (CpoException ce) {
    *      // Handle the error
    *    }
-   * <p/>
    *  }
-   * </code>
+   * }
    * </pre>
    *
+   * @param <T> The type of the POJO
    * @param coll This is a collection of objects that have been defined within the metadata of the datasource. If the
    *             class is not defined an exception will be thrown.
    * @return The number of objects deleted from the datasource
@@ -559,26 +554,24 @@ public interface CpoAdapter extends java.io.Serializable {
   public <T> long deleteObjects(Collection<T> coll) throws CpoException;
 
   /**
+   * <p>
    * Removes the Objects contained in the collection from the datasource. The assumption is that the object exists in
    * the datasource. This method stores the objects contained in the collection in the datasource. The objects in the
    * collection will be treated as one transaction, assuming the datasource supports transactions.
-   * <p/>
+   * </p><p>
    * This means that if one of the objects fail being deleted in the datasource then the CpoAdapter should stop
    * processing the remainder of the collection, and if supported, rollback all the objects deleted thus far.
-   * <p/>
+   * </p>
    * <pre>Example:
-   * <code>
-   * <p/>
+   * {@code
    * class SomeObject so = null;
    * class CpoAdapter cpo = null;
-   * <p/>
    *  try {
    *    cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));
    *  } catch (CpoException ce) {
    *    // Handle the error
    *    cpo = null;
    *  }
-   * <p/>
    *  if (cpo!=null) {
    *    ArrayList al = new ArrayList();
    *    for (int i=0; i<3; i++){
@@ -587,17 +580,16 @@ public interface CpoAdapter extends java.io.Serializable {
    *      so.setName("SomeName");
    *      al.add(so);
    *    }
-   * <p/>
    *    try{
    *        cpo.deleteObjects("IdNameDelete",al);
    *    } catch (CpoException ce) {
    *        // Handle the error
    *    }
-   * <p/>
    *  }
-   * </code>
+   * }
    * </pre>
    *
+   * @param <T> The type of the POJO
    * @param name The String name of the DELETE Function Group that will be used to create the object in the datasource.
    *             null signifies that the default rules will be used.
    * @param coll This is a collection of objects that have been defined within the metadata of the datasource. If the
@@ -608,26 +600,24 @@ public interface CpoAdapter extends java.io.Serializable {
   public <T> long deleteObjects(String name, Collection<T> coll) throws CpoException;
 
   /**
+   * <p>
    * Removes the Objects contained in the collection from the datasource. The assumption is that the object exists in
    * the datasource. This method stores the objects contained in the collection in the datasource. The objects in the
    * collection will be treated as one transaction, assuming the datasource supports transactions.
-   * <p/>
+   * </p><p>
    * This means that if one of the objects fail being deleted in the datasource then the CpoAdapter should stop
    * processing the remainder of the collection, and if supported, rollback all the objects deleted thus far.
-   * <p/>
+   * </p>
    * <pre>Example:
-   * <code>
-   * <p/>
+   * {@code
    * class SomeObject so = null;
    * class CpoAdapter cpo = null;
-   * <p/>
    * try {
    * 	cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));
    * } catch (CpoException ce) {
    * 	// Handle the error
    * 	cpo = null;
    * }
-   * <p/>
    * if (cpo!=null) {
    * 	ArrayList al = new ArrayList();
    * 	for (int i=0; i<3; i++){
@@ -636,16 +626,16 @@ public interface CpoAdapter extends java.io.Serializable {
    * 		so.setName("SomeName");
    * 		al.add(so);
    *  }
-   * <p/>
    * 	try{
    * 		cpo.deleteObjects("IdNameDelete",al);
    *  } catch (CpoException ce) {
    * 		// Handle the error
    *  }
    * }
-   * </code>
+   * }
    * </pre>
    *
+   * @param <T>               The type of the POJO
    * @param name              The String name of the DELETE Function Group that will be used to create the object in the datasource.
    *                          null signifies that the default rules will be used.
    * @param coll              This is a collection of objects that have been defined within the metadata of the datasource. If the
@@ -660,22 +650,20 @@ public interface CpoAdapter extends java.io.Serializable {
   public <T> long deleteObjects(String name, Collection<T> coll, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeFunction> nativeExpressions) throws CpoException;
 
   /**
+   * <p>
    * Executes an Object whose metadata will call an executable within the datasource. It is assumed that the executable
    * object exists in the metadatasource. If the executable does not exist, an exception will be thrown.
-   * <p/>
+   * </p>
    * <pre>Example:
-   * <code>
-   * <p/>
+   * {@code
    * class SomeObject so = new SomeObject();
    * class CpoAdapter cpo = null;
-   * <p/>
    *  try {
    *    cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));
    *  } catch (CpoException ce) {
    *    // Handle the error
    *    cpo = null;
    *  }
-   * <p/>
    *  if (cpo!=null) {
    *    so.setId(1);
    *    so.setName("SomeName");
@@ -685,13 +673,14 @@ public interface CpoAdapter extends java.io.Serializable {
    *      // Handle the error
    *    }
    *  }
-   * </code>
+   * }
    * </pre>
    *
+   * @param <T> The type of the POJO
    * @param obj This is an Object that has been defined within the metadata of the datasource. If the class is not
    *            defined an exception will be thrown. If the object does not exist in the datasource, an exception will be thrown.
    *            This object is used to populate the IN parameters used to executed the datasource object.
-   *            <p/>
+   *           <p>
    *            An object of this type will be created and filled with the returned data from the value_object. This newly created
    *            object will be returned from this method.
    * @return An object populated with the OUT parameters returned from the executable object
@@ -700,22 +689,20 @@ public interface CpoAdapter extends java.io.Serializable {
   public <T> T executeObject(T obj) throws CpoException;
 
   /**
+   * <p>
    * Executes an Object whose metadata will call an executable within the datasource. It is assumed that the executable
    * object exists in the metadatasource. If the executable does not exist, an exception will be thrown.
-   * <p/>
+   * </p>
    * <pre>Example:
-   * <code>
-   * <p/>
+   * {@code
    * class SomeObject so = new SomeObject();
    * class CpoAdapter cpo = null;
-   * <p/>
    *  try {
    *    cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));
    *  } catch (CpoException ce) {
    *    // Handle the error
    *    cpo = null;
    *  }
-   * <p/>
    *  if (cpo!=null) {
    *    so.setId(1);
    *    so.setName("SomeName");
@@ -725,9 +712,10 @@ public interface CpoAdapter extends java.io.Serializable {
    *      // Handle the error
    *    }
    *  }
-   * </code>
+   * }
    * </pre>
    *
+   * @param <T> The type of the POJO
    * @param name   The filter name which tells the datasource which objects should be returned. The name also signifies
    *               what data in the object will be populated.
    * @param object This is an object that has been defined within the metadata of the datasource. If the class is not
@@ -740,23 +728,21 @@ public interface CpoAdapter extends java.io.Serializable {
   public <T> T executeObject(String name, T object) throws CpoException;
 
   /**
+   * <p>
    * Executes an Object that represents an executable object within the datasource. It is assumed that the object exists
    * in the datasource. If the object does not exist, an exception will be thrown
-   * <p/>
+   * </p>
    * <pre>Example:
-   * <code>
-   * <p/>
+   * {@code
    * class SomeObject so = new SomeObject();
    * class SomeResult sr = new SomeResult();
    * class CpoAdapter cpo = null;
-   * <p/>
    *  try {
    *    cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));
    *  } catch (CpoException ce) {
    *    // Handle the error
    *    cpo = null;
    *  }
-   * <p/>
    *  if (cpo!=null) {
    *    so.setId(1);
    *    so.setName("SomeName");
@@ -766,9 +752,11 @@ public interface CpoAdapter extends java.io.Serializable {
    *      // Handle the error
    *    }
    *  }
-   * </code>
+   * }
    * </pre>
    *
+   * @param <T>      The type of the return POJO
+   * @param <C>      The type of the criteria POJO
    * @param name     The String name of the EXECUTE Function Group that will be used to create the object in the datasource.
    *                 null signifies that the default rules will be used.
    * @param criteria This is an object that has been defined within the metadata of the datasource. If the class is not
@@ -784,22 +772,20 @@ public interface CpoAdapter extends java.io.Serializable {
   public <T, C> T executeObject(String name, C criteria, T result) throws CpoException;
 
   /**
+   * <p>
    * The CpoAdapter will check to see if this object exists in the datasource.
-   * <p/>
+   * </p>
    * <pre>Example:
-   * <code>
-   * <p/>
+   * {@code
    * class SomeObject so = new SomeObject();
    * long count = 0;
    * class CpoAdapter cpo = null;
-   * <p/>
    *  try {
    *    cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));
    *  } catch (CpoException ce) {
    *    // Handle the error
    *    cpo = null;
    *  }
-   * <p/>
    *  if (cpo!=null) {
    *    so.setId(1);
    *    so.setName("SomeName");
@@ -814,9 +800,10 @@ public interface CpoAdapter extends java.io.Serializable {
    *      // Handle the error
    *    }
    *  }
-   * </code>
+   * }
    * </pre>
    *
+   * @param <T> The type of the POJO
    * @param obj This is an object that has been defined within the metadata of the datasource. If the class is not
    *            defined an exception will be thrown. This object will be searched for inside the datasource.
    * @return The number of objects that exist in the datasource that match the specified object
@@ -825,23 +812,20 @@ public interface CpoAdapter extends java.io.Serializable {
   public <T> long existsObject(T obj) throws CpoException;
 
   /**
+   * <p>
    * The CpoAdapter will check to see if this object exists in the datasource.
-   * <p/>
+   * </p>
    * <pre>Example:
-   * <code>
-   * <p/>
+   * {@code
    * class SomeObject so = new SomeObject();
    * long count = 0;
    * class CpoAdapter cpo = null;
-   * <p/>
-   * <p/>
    *  try {
    *    cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));
    *  } catch (CpoException ce) {
    *    // Handle the error
    *    cpo = null;
    *  }
-   * <p/>
    *  if (cpo!=null) {
    *    so.setId(1);
    *    so.setName("SomeName");
@@ -856,9 +840,10 @@ public interface CpoAdapter extends java.io.Serializable {
    *      // Handle the error
    *    }
    *  }
-   * </code>
+   * }
    * </pre>
    *
+   * @param <T> The type of the POJO
    * @param name The String name of the EXISTS Function Group that will be used to create the object in the datasource.
    *             null signifies that the default rules will be used.
    * @param obj  This is an object that has been defined within the metadata of the datasource. If the class is not
@@ -869,24 +854,20 @@ public interface CpoAdapter extends java.io.Serializable {
   public <T> long existsObject(String name, T obj) throws CpoException;
 
   /**
+   * <p>
    * The CpoAdapter will check to see if this object exists in the datasource.
-   * <p/>
+   * </p>
    * <pre>Example:
-   * <code>
-   * <p/>
+   * {@code
    * class SomeObject so = new SomeObject();
    * long count = 0;
    * class CpoAdapter cpo = null;
-   * <p/>
-   * <p/>
    *  try {
-   * <p/>
    *    cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));
    *  } catch (CpoException ce) {
    *    // Handle the error
    *    cpo = null;
    *  }
-   * <p/>
    *  if (cpo!=null) {
    *    so.setId(1);
    *    so.setName("SomeName");
@@ -902,9 +883,10 @@ public interface CpoAdapter extends java.io.Serializable {
    *      // Handle the error
    *    }
    *  }
-   * </code>
+   * }
    * </pre>
    *
+   * @param <T>    The type of the POJO
    * @param name   The String name of the EXISTS Function Group that will be used to create the object in the datasource.
    *               null signifies that the default rules will be used.
    * @param obj    This is an object that has been defined within the metadata of the datasource. If the class is not
@@ -977,6 +959,7 @@ public interface CpoAdapter extends java.io.Serializable {
   /**
    * DOCUMENT ME!
    *
+   * @param <T> The type of the POJO
    * @param logical DOCUMENT ME!
    * @param attr    DOCUMENT ME!
    * @param comp    DOCUMENT ME!
@@ -989,6 +972,7 @@ public interface CpoAdapter extends java.io.Serializable {
   /**
    * DOCUMENT ME!
    *
+   * @param <T>     The type of the POJO
    * @param logical DOCUMENT ME!
    * @param attr    DOCUMENT ME!
    * @param comp    DOCUMENT ME!
@@ -1000,24 +984,22 @@ public interface CpoAdapter extends java.io.Serializable {
   public <T> CpoWhere newWhere(int logical, String attr, int comp, T value, boolean not) throws CpoException;
 
   /**
+   * <p>
    * Persists the Object into the datasource. The CpoAdapter will check to see if this object exists in the datasource.
    * If it exists, the object is updated in the datasource If the object does not exist, then it is created in the
    * datasource. This method stores the object in the datasource. This method uses the default EXISTS, CREATE, and
    * UPDATE Function Groups specified for this object.
-   * <p/>
+   * </p>
    * <pre>Example:
-   * <code>
-   * <p/>
+   * {@code
    * class SomeObject so = new SomeObject();
    * class CpoAdapter cpo = null;
-   * <p/>
    *  try {
    *    cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));
    *  } catch (CpoException ce) {
    *    // Handle the error
    *    cpo = null;
    *  }
-   * <p/>
    *  if (cpo!=null) {
    *    so.setId(1);
    *    so.setName("SomeName");
@@ -1027,9 +1009,10 @@ public interface CpoAdapter extends java.io.Serializable {
    *      // Handle the error
    *    }
    *  }
-   * </code>
+   * }
    * </pre>
    *
+   * @param <T> The type of the POJO
    * @param obj This is an object that has been defined within the metadata of the datasource. If the class is not
    *            defined an exception will be thrown.
    * @return A count of the number of objects persisted
@@ -1041,23 +1024,21 @@ public interface CpoAdapter extends java.io.Serializable {
   public <T> long persistObject(T obj) throws CpoException;
 
   /**
+   * <p>
    * Persists the Object into the datasource. The CpoAdapter will check to see if this object exists in the datasource.
    * If it exists, the object is updated in the datasource If the object does not exist, then it is created in the
    * datasource. This method stores the object in the datasource.
-   * <p/>
+   * </p>
    * <pre>Example:
-   * <code>
-   * <p/>
+   * {@code
    * class SomeObject so = new SomeObject();
    * class CpoAdapter cpo = null;
-   * <p/>
    *  try {
    *    cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));
    *  } catch (CpoException ce) {
    *    // Handle the error
    *    cpo = null;
    *  }
-   * <p/>
    *  if (cpo!=null) {
    *    so.setId(1);
    *    so.setName("SomeName");
@@ -1067,9 +1048,10 @@ public interface CpoAdapter extends java.io.Serializable {
    *      // Handle the error
    *    }
    *  }
-   * </code>
+   * }
    * </pre>
    *
+   * @param <T>  The type of the POJO
    * @param name The name which identifies which EXISTS, INSERT, and UPDATE Function Groups to execute to persist the
    *             object.
    * @param obj  This is an object that has been defined within the metadata of the datasource. If the class is not
@@ -1083,25 +1065,23 @@ public interface CpoAdapter extends java.io.Serializable {
   public <T> long persistObject(String name, T obj) throws CpoException;
 
   /**
+   * <p>
    * Persists a collection of Objects into the datasource. The CpoAdapter will check to see if this object exists in the
    * datasource. If it exists, the object is updated in the datasource If the object does not exist, then it is created
    * in the datasource. This method stores the object in the datasource. The objects in the collection will be treated
    * as one transaction, meaning that if one of the objects fail being inserted or updated in the datasource then the
    * entire collection will be rolled back.
-   * <p/>
+   * </p>
    * <pre>Example:
-   * <code>
-   * <p/>
+   * {@code
    * class SomeObject so = null;
    * class CpoAdapter cpo = null;
-   * <p/>
    *  try {
    *    cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));
    *  } catch (CpoException ce) {
    *    // Handle the error
    *    cpo = null;
    *  }
-   * <p/>
    *  if (cpo!=null) {
    *    ArrayList al = new ArrayList();
    *    for (int i=0; i<3; i++){
@@ -1116,9 +1096,10 @@ public interface CpoAdapter extends java.io.Serializable {
    *      // Handle the error
    *    }
    *  }
-   * </code>
+   * }
    * </pre>
    *
+   * @param <T> The type of the POJO
    * @param coll This is a collection of objects that have been defined within the metadata of the datasource. If the
    *             class is not defined an exception will be thrown.
    * @return DOCUMENT ME!
@@ -1130,25 +1111,23 @@ public interface CpoAdapter extends java.io.Serializable {
   public <T> long persistObjects(Collection<T> coll) throws CpoException;
 
   /**
+   * <p>
    * Persists a collection of Objects into the datasource. The CpoAdapter will check to see if this object exists in the
    * datasource. If it exists, the object is updated in the datasource If the object does not exist, then it is created
    * in the datasource. This method stores the object in the datasource. The objects in the collection will be treated
    * as one transaction, meaning that if one of the objects fail being inserted or updated in the datasource then the
    * entire collection will be rolled back.
-   * <p/>
+   * </p>
    * <pre>Example:
-   * <code>
-   * <p/>
+   * {@code
    * class SomeObject so = null;
    * class CpoAdapter cpo = null;
-   * <p/>
    *  try {
    *    cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));
    *  } catch (CpoException ce) {
    *    // Handle the error
    *    cpo = null;
    *  }
-   * <p/>
    *  if (cpo!=null) {
    *    ArrayList al = new ArrayList();
    *    for (int i=0; i<3; i++){
@@ -1157,16 +1136,16 @@ public interface CpoAdapter extends java.io.Serializable {
    *      so.setName("SomeName");
    *      al.add(so);
    *    }
-   * <p/>
    *    try{
    *      cpo.persistObjects("myPersist",al);
    *    } catch (CpoException ce) {
    *      // Handle the error
    *    }
    *  }
-   * </code>
+   * }
    * </pre>
    *
+   * @param <T> The type of the POJO
    * @param name The name which identifies which EXISTS, INSERT, and UPDATE Function Groups to execute to persist the
    *             object.
    * @param coll This is a collection of objects that have been defined within the metadata of the datasource. If the
@@ -1183,6 +1162,7 @@ public interface CpoAdapter extends java.io.Serializable {
    * Retrieves the Bean from the datasource. The assumption is that the bean exists in the datasource. If the retrieve
    * function defined for these beans returns more than one row, an exception will be thrown.
    *
+   * @param <T>  The type of the POJO
    * @param bean This is a bean that has been defined within the metadata of the datasource. If the class is not defined
    *             an exception will be thrown. If the bean does not exist in the datasource, an exception will be thrown. The input
    *             bean is used to specify the search criteria, the output bean is populated with the results of the function.
@@ -1196,6 +1176,7 @@ public interface CpoAdapter extends java.io.Serializable {
    * Retrieves the bean from the datasource. The assumption is that the bean exists in the datasource. If the retrieve
    * function defined for this beans returns more than one row, an exception will be thrown.
    *
+   * @param <T>  The type of the POJO
    * @param name DOCUMENT ME!
    * @param bean This is an bean that has been defined within the metadata of the datasource. If the class is not
    *             defined an exception will be thrown. If the bean does not exist in the datasource, an exception will be thrown. The
@@ -1210,6 +1191,7 @@ public interface CpoAdapter extends java.io.Serializable {
    * Retrieves the bean from the datasource. The assumption is that the bean exists in the datasource. If the retrieve
    * function defined for this beans returns more than one row, an exception will be thrown.
    *
+   * @param <T> the type of the POJO
    * @param name              DOCUMENT ME!
    * @param bean              This is an bean that has been defined within the metadata of the datasource. If the class is not
    *                          defined an exception will be thrown. If the bean does not exist in the datasource, an exception will be thrown. The
@@ -1228,6 +1210,8 @@ public interface CpoAdapter extends java.io.Serializable {
    * Retrieves the bean from the datasource. The assumption is that the bean exists in the datasource. If the retrieve
    * function defined for this beans returns more than one row, an exception will be thrown.
    *
+   * @param <T>      The type of the return POJO
+   * @param <C>      The type of the criteria POJO
    * @param name     The filter name which tells the datasource which beans should be returned. The name also signifies what
    *                 data in the bean will be populated.
    * @param criteria This is an bean that has been defined within the metadata of the datasource. If the class is not
@@ -1248,6 +1232,8 @@ public interface CpoAdapter extends java.io.Serializable {
    * Retrieves the bean from the datasource. The assumption is that the bean exists in the datasource. If the retrieve
    * function defined for this beans returns more than one row, an exception will be thrown.
    *
+   * @param <T>               The type of the return POJO
+   * @param <C>               The type of the criteria POJO
    * @param name              The filter name which tells the datasource which beans should be returned. The name also signifies what
    *                          data in the bean will be populated.
    * @param criteria          This is an bean that has been defined within the metadata of the datasource. If the class is not
@@ -1269,6 +1255,7 @@ public interface CpoAdapter extends java.io.Serializable {
   /**
    * Retrieves the bean from the datasource. The assumption is that the bean exists in the datasource.
    *
+   * @param <C>      the type of the criteria POJO
    * @param name     The filter name which tells the datasource which beans should be returned. The name also signifies what
    *                 data in the bean will be populated.
    * @param criteria This is an bean that has been defined within the metadata of the datasource. If the class is not
@@ -1283,6 +1270,7 @@ public interface CpoAdapter extends java.io.Serializable {
   /**
    * Retrieves the bean from the datasource. The assumption is that the bean exists in the datasource.
    *
+   * @param <C>      the type of the criteria POJO
    * @param name     The filter name which tells the datasource which beans should be returned. The name also signifies what
    *                 data in the bean will be populated.
    * @param criteria This is an bean that has been defined within the metadata of the datasource. If the class is not
@@ -1299,6 +1287,7 @@ public interface CpoAdapter extends java.io.Serializable {
   /**
    * Retrieves the bean from the datasource. The assumption is that the bean exists in the datasource.
    *
+   * @param <C>      the type of the criteria POJO
    * @param name     The filter name which tells the datasource which beans should be returned. The name also signifies what
    *                 data in the bean will be populated.
    * @param criteria This is an bean that has been defined within the metadata of the datasource. If the class is not
@@ -1314,6 +1303,7 @@ public interface CpoAdapter extends java.io.Serializable {
   /**
    * Retrieves the bean from the datasource. The assumption is that the bean exists in the datasource.
    *
+   * @param <C>      the type of the criteria POJO
    * @param name     The filter name which tells the datasource which beans should be returned. The name also signifies what
    *                 data in the bean will be populated.
    * @param criteria This is an bean that has been defined within the metadata of the datasource. If the class is not
@@ -1330,6 +1320,8 @@ public interface CpoAdapter extends java.io.Serializable {
   /**
    * Retrieves the bean from the datasource. The assumption is that the bean exists in the datasource.
    *
+   * @param <T>      The type of the return POJO
+   * @param <C>      The type of the criteria POJO
    * @param name     The filter name which tells the datasource which beans should be returned. The name also signifies what
    *                 data in the bean will be populated.
    * @param criteria This is an bean that has been defined within the metadata of the datasource. If the class is not
@@ -1347,6 +1339,8 @@ public interface CpoAdapter extends java.io.Serializable {
   /**
    * Retrieves the bean from the datasource. The assumption is that the bean exists in the datasource.
    *
+   * @param <T>      The type of the return POJO
+   * @param <C>      The type of the criteria POJO
    * @param name     The filter name which tells the datasource which beans should be returned. The name also signifies what
    *                 data in the bean will be populated.
    * @param criteria This is an bean that has been defined within the metadata of the datasource. If the class is not
@@ -1366,6 +1360,8 @@ public interface CpoAdapter extends java.io.Serializable {
   /**
    * Retrieves the bean from the datasource. The assumption is that the bean exists in the datasource.
    *
+   * @param <T>      The type of the return POJO
+   * @param <C>      The type of the criteria POJO
    * @param name     The filter name which tells the datasource which beans should be returned. The name also signifies what
    *                 data in the bean will be populated.
    * @param criteria This is an bean that has been defined within the metadata of the datasource. If the class is not
@@ -1385,6 +1381,8 @@ public interface CpoAdapter extends java.io.Serializable {
   /**
    * Retrieves the bean from the datasource. The assumption is that the bean exists in the datasource.
    *
+   * @param <T>               The type of the return POJO
+   * @param <C>               The type of the criteria POJO
    * @param name              The filter name which tells the datasource which beans should be returned. The name also signifies what
    *                          data in the bean will be populated.
    * @param criteria          This is an bean that has been defined within the metadata of the datasource. If the class is not
@@ -1406,6 +1404,8 @@ public interface CpoAdapter extends java.io.Serializable {
   /**
    * Retrieves the bean from the datasource. The assumption is that the bean exists in the datasource.
    *
+   * @param <T>               The type of the return POJO
+   * @param <C>               The type of the criteria POJO
    * @param name              The filter name which tells the datasource which beans should be returned. The name also signifies what
    *                          data in the bean will be populated.
    * @param criteria          This is an bean that has been defined within the metadata of the datasource. If the class is not
@@ -1425,22 +1425,20 @@ public interface CpoAdapter extends java.io.Serializable {
   public <T, C> CpoResultSet<T> retrieveBeans(String name, C criteria, T result, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeFunction> nativeExpressions, int queueSize) throws CpoException;
 
   /**
+   * <p>
    * Update the Object in the datasource. The CpoAdapter will check to see if the object exists in the datasource. If it
    * exists then the object will be updated. If it does not exist, an exception will be thrown
-   * <p/>
+   * </p>
    * <pre>Example:
-   * <code>
-   * <p/>
+   * {@code
    * class SomeObject so = new SomeObject();
    * class CpoAdapter cpo = null;
-   * <p/>
    *  try {
    *    cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));
    *  } catch (CpoException ce) {
    *    // Handle the error
    *    cpo = null;
    *  }
-   * <p/>
    *  if (cpo!=null) {
    *    so.setId(1);
    *    so.setName("SomeName");
@@ -1450,9 +1448,10 @@ public interface CpoAdapter extends java.io.Serializable {
    *      // Handle the error
    *    }
    *  }
-   * </code>
+   * }
    * </pre>
    *
+   * @param <T> The type of the POJO
    * @param obj This is an object that has been defined within the metadata of the datasource. If the class is not
    *            defined an exception will be thrown.
    * @return The number of objects updated in the datasource
@@ -1461,22 +1460,20 @@ public interface CpoAdapter extends java.io.Serializable {
   public <T> long updateObject(T obj) throws CpoException;
 
   /**
+   * <p>
    * Update the Object in the datasource. The CpoAdapter will check to see if the object exists in the datasource. If it
    * exists then the object will be updated. If it does not exist, an exception will be thrown
-   * <p/>
+   * </p>
    * <pre>Example:
-   * <code>
-   * <p/>
+   * {@code
    * class SomeObject so = new SomeObject();
    * class CpoAdapter cpo = null;
-   * <p/>
    *  try {
    *    cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));
    *  } catch (CpoException ce) {
    *    // Handle the error
    *    cpo = null;
    *  }
-   * <p/>
    *  if (cpo!=null) {
    *    so.setId(1);
    *    so.setName("SomeName");
@@ -1486,9 +1483,10 @@ public interface CpoAdapter extends java.io.Serializable {
    *      // Handle the error
    *    }
    *  }
-   * </code>
+   * }
    * </pre>
    *
+   * @param <T>  The type of the POJO
    * @param name The String name of the UPDATE Function Group that will be used to create the object in the datasource.
    *             null signifies that the default rules will be used.
    * @param obj  This is an object that has been defined within the metadata of the datasource. If the class is not
@@ -1499,22 +1497,20 @@ public interface CpoAdapter extends java.io.Serializable {
   public <T> long updateObject(String name, T obj) throws CpoException;
 
   /**
+   * <p>
    * Update the Object in the datasource. The CpoAdapter will check to see if the object exists in the datasource. If it
    * exists then the object will be updated. If it does not exist, an exception will be thrown
-   * <p/>
+   * </p>
    * <pre>Example:
-   * <code>
-   * <p/>
+   * {@code
    * class SomeObject so = new SomeObject();
    * class CpoAdapter cpo = null;
-   * <p/>
    * try {
    * 	cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));
    * } catch (CpoException ce) {
    * 	// Handle the error
    * 	cpo = null;
    * }
-   * <p/>
    * if (cpo!=null) {
    * 	so.setId(1);
    * 	so.setName("SomeName");
@@ -1524,9 +1520,10 @@ public interface CpoAdapter extends java.io.Serializable {
    * 		// Handle the error
    *  }
    * }
-   * </code>
+   * }
    * </pre>
    *
+   * @param <T>               The type of the POJO
    * @param name              The String name of the UPDATE Function Group that will be used to create the object in the datasource.
    *                          null signifies that the default rules will be used.
    * @param obj               This is an object that has been defined within the metadata of the datasource. If the class is not
@@ -1540,24 +1537,22 @@ public interface CpoAdapter extends java.io.Serializable {
   public <T> long updateObject(String name, T obj, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeFunction> nativeExpressions) throws CpoException;
 
   /**
+   * <p>
    * Updates a collection of Objects in the datasource. The assumption is that the objects contained in the collection
    * exist in the datasource. This method stores the object in the datasource. The objects in the collection will be
    * treated as one transaction, meaning that if one of the objects fail being updated in the datasource then the entire
    * collection will be rolled back, if supported by the datasource.
-   * <p/>
+   * </p>
    * <pre>Example:
-   * <code>
-   * <p/>
+   * {@code
    * class SomeObject so = null;
    * class CpoAdapter cpo = null;
-   * <p/>
    *  try {
    *    cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));
    *  } catch (CpoException ce) {
    *    // Handle the error
    *    cpo = null;
    *  }
-   * <p/>
    *  if (cpo!=null) {
    *    ArrayList al = new ArrayList();
    *    for (int i=0; i<3; i++){
@@ -1566,16 +1561,16 @@ public interface CpoAdapter extends java.io.Serializable {
    *      so.setName("SomeName");
    *      al.add(so);
    *    }
-   * <p/>
    *    try{
    *      cpo.updateObjects(al);
    *    } catch (CpoException ce) {
    *      // Handle the error
    *    }
    *  }
-   * </code>
+   * }
    * </pre>
    *
+   * @param <T> The type of the POJO
    * @param coll This is a collection of objects that have been defined within the metadata of the datasource. If the
    *             class is not defined an exception will be thrown.
    * @return The number of objects updated in the datasource
@@ -1584,54 +1579,40 @@ public interface CpoAdapter extends java.io.Serializable {
   public <T> long updateObjects(Collection<T> coll) throws CpoException;
 
   /**
+   * <p>
    * Updates a collection of Objects in the datasource. The assumption is that the objects contained in the collection
    * exist in the datasource. This method stores the object in the datasource. The objects in the collection will be
    * treated as one transaction, meaning that if one of the objects fail being updated in the datasource then the entire
    * collection will be rolled back, if supported by the datasource.
-   * <p/>
+   * </p>
    * <pre>Example:
-   * <code>
-   * <p/>
+   * {@code
    * class SomeObject so = null;
    * class CpoAdapter cpo = null;
-   * <p/>
-   * <p/>
    *  try {
-   * <p/>
    *    cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));
-   * <p/>
    *  } catch (CpoException ce) {
-   * <p/>
    *    // Handle the error
    *    cpo = null;
-   * <p/>
    *  }
-   * <p/>
    *  if (cpo!=null) {
-   * <p/>
    *    ArrayList al = new ArrayList();
    *    for (int i=0; i<3; i++){
-   * <p/>
    *      so = new SomeObject();
    *      so.setId(1);
    *      so.setName("SomeName");
    *      al.add(so);
    *    }
-   * <p/>
    *      try{
-   * <p/>
    *        cpo.updateObjects("myUpdate",al);
-   * <p/>
    *      } catch (CpoException ce) {
-   * <p/>
    *        // Handle the error
-   * <p/>
    *      }
-   * <p/>
    *  }
-   * </code>
+   * }
    * </pre>
    *
+   * @param <T>  The type of the POJO
    * @param name The String name of the UPDATE Function Group that will be used to create the object in the datasource.
    *             null signifies that the default rules will be used.
    * @param coll This is a collection of objects that have been defined within the metadata of the datasource. If the
@@ -1642,24 +1623,22 @@ public interface CpoAdapter extends java.io.Serializable {
   public <T> long updateObjects(String name, Collection<T> coll) throws CpoException;
 
   /**
+   * <p>
    * Updates a collection of Objects in the datasource. The assumption is that the objects contained in the collection
    * exist in the datasource. This method stores the object in the datasource. The objects in the collection will be
    * treated as one transaction, meaning that if one of the objects fail being updated in the datasource then the entire
    * collection will be rolled back, if supported by the datasource.
-   * <p/>
+   * </p>
    * <pre>Example:
-   * <code>
-   * <p/>
+   * {@code
    * class SomeObject so = null;
    * class CpoAdapter cpo = null;
-   * <p/>
    * try {
    * 	cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));
    * } catch (CpoException ce) {
    * 	// Handle the error
    * 	cpo = null;
    * }
-   * <p/>
    * if (cpo!=null) {
    * 	ArrayList al = new ArrayList();
    * 	for (int i=0; i<3; i++){
@@ -1674,9 +1653,10 @@ public interface CpoAdapter extends java.io.Serializable {
    * 		// Handle the error
    *  }
    * }
-   * </code>
+   * }
    * </pre>
    *
+   * @param <T>               The type of the POJO
    * @param name              The String name of the UPDATE Function Group that will be used to create the object in the datasource.
    *                          null signifies that the default rules will be used.
    * @param coll              This is a collection of objects that have been defined within the metadata of the datasource. If the
@@ -1689,9 +1669,20 @@ public interface CpoAdapter extends java.io.Serializable {
    */
   public <T> long updateObjects(String name, Collection<T> coll, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeFunction> nativeExpressions) throws CpoException;
 
+    /**
+     * @return The CpoMetaDescriptor
+     */
   public CpoMetaDescriptor getCpoMetaDescriptor();
 
+    /**
+     * @return The name of the datasource
+     */
   public String getDataSourceName();
 
+    /**
+     * @param expression An expression defining the CpoAttributes that you want
+     * @return A list of CpoAttributes
+     * @throws CpoException An exception while getting the CpoAttributes
+     */
   public List<CpoAttribute> getCpoAttributes(String expression) throws CpoException;
 }

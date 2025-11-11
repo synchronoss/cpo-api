@@ -28,11 +28,6 @@
   <name>cpo</name>
   <packaging>pom</packaging>
   <version>5.2.2-SNAPSHOT</version>
-  <parent>
-    <groupId>org.sonatype.oss</groupId>
-    <artifactId>oss-parent</artifactId>
-    <version>9</version>
-  </parent>
   <description>CPO is a persistence layer that is thin wrapper around JDBC that consumes and produces POJOs</description>
   <url>http://synchronoss.github.io/cpo-api/</url>
   <licenses>
@@ -105,13 +100,6 @@
         <filtering>true</filtering>
       </testResource>
     </testResources>
-    <extensions>
-      <extension>
-        <groupId>org.apache.maven.wagon</groupId>
-        <artifactId>wagon-ssh</artifactId>
-        <version>3.4.1</version>
-      </extension>
-    </extensions>
     <pluginManagement>
       <plugins>
         <plugin>
@@ -316,19 +304,15 @@
           </execution>
         </executions>
       </plugin>
-      <plugin>
-        <groupId>org.sonatype.plugins</groupId>
-        <artifactId>nexus-staging-maven-plugin</artifactId>
-        <version>1.6.8</version>
-        <extensions>true</extensions>
-        <inherited>false</inherited>
-        <configuration>
-          <serverId>sonatype-nexus-staging</serverId>
-          <nexusUrl>https://oss.sonatype.org/</nexusUrl>
-          <stagingProfileId>b2828f5f73ba8</stagingProfileId>
-          <autoReleaseAfterClose>true</autoReleaseAfterClose>
-        </configuration>
-      </plugin>
+        <plugin>
+            <groupId>org.sonatype.central</groupId>
+            <artifactId>central-publishing-maven-plugin</artifactId>
+            <version>0.9.0</version>
+            <extensions>true</extensions>
+            <configuration>
+                <publishingServerId>central</publishingServerId>
+            </configuration>
+        </plugin>
       <plugin>
         <artifactId>maven-site-plugin</artifactId>
         <executions>

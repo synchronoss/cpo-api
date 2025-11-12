@@ -20,13 +20,17 @@
  */
 package org.synchronoss.cpo.jdbc;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
 import org.synchronoss.cpo.CpoAdapter;
 import org.synchronoss.cpo.CpoAdapterFactoryManager;
 import org.synchronoss.cpo.CpoOrderBy;
-import org.testng.annotations.*;
+import org.testng.annotations.AfterClass;
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.Test;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
 import static org.testng.Assert.*;
 
 /**

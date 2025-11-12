@@ -37,7 +37,7 @@ public abstract class CpoBaseXaResource<T> implements CpoXaResource<T> {
 
   private T localResource = null;
 
-  private final CpoXaStateMap<T> cpoXaStateMap = getCpoXaStateMap();;
+  private final CpoXaStateMap<T> cpoXaStateMap = getCpoXaStateMap();
 
   public CpoBaseXaResource(T localResource) {
     this.localResource = localResource;

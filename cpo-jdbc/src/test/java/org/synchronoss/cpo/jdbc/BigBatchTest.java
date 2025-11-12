@@ -20,13 +20,19 @@
  */
 package org.synchronoss.cpo.jdbc;
 
-import org.slf4j.*;
-import org.synchronoss.cpo.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.synchronoss.cpo.CpoAdapter;
+import org.synchronoss.cpo.CpoAdapterFactoryManager;
+import org.synchronoss.cpo.CpoException;
 import org.synchronoss.cpo.helper.ExceptionHelper;
-import org.testng.annotations.*;
-import static org.testng.Assert.*;
+import org.testng.annotations.AfterClass;
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.Test;
 
 import java.util.ArrayList;
+
+import static org.testng.Assert.*;
 
 /**
  * BigBatchTest is a test class for testing big batches

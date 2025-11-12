@@ -20,19 +20,35 @@
  */
 package org.synchronoss.cpo.jdbc.exporter;
 
-import org.slf4j.*;
-import org.synchronoss.cpo.*;
-import org.synchronoss.cpo.core.cpoCoreMeta.*;
-import org.synchronoss.cpo.exporter.*;
-import org.synchronoss.cpo.jdbc.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.synchronoss.cpo.CpoAdapter;
+import org.synchronoss.cpo.CpoAdapterFactoryManager;
+import org.synchronoss.cpo.CpoException;
+import org.synchronoss.cpo.core.cpoCoreMeta.CpoMetaDataDocument;
+import org.synchronoss.cpo.core.cpoCoreMeta.CtClass;
+import org.synchronoss.cpo.exporter.CpoClassSourceGenerator;
+import org.synchronoss.cpo.exporter.CpoInterfaceSourceGenerator;
+import org.synchronoss.cpo.exporter.CpoLegacyClassSourceGenerator;
+import org.synchronoss.cpo.exporter.MetaXmlObjectExporter;
+import org.synchronoss.cpo.jdbc.JdbcStatics;
+import org.synchronoss.cpo.jdbc.ValueObject;
+import org.synchronoss.cpo.jdbc.ValueObjectFactory;
 import org.synchronoss.cpo.jdbc.meta.JdbcCpoMetaDescriptor;
 import org.synchronoss.cpo.meta.domain.CpoClass;
-import org.testng.annotations.*;
-import static org.testng.Assert.*;
+import org.testng.annotations.AfterClass;
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.Test;
 
-import javax.tools.*;
-import java.io.*;
+import javax.tools.JavaCompiler;
+import javax.tools.JavaFileObject;
+import javax.tools.StandardJavaFileManager;
+import javax.tools.ToolProvider;
+import java.io.File;
+import java.io.FileWriter;
 import java.util.Arrays;
+
+import static org.testng.Assert.*;
 
 /**
  * test class for testing the ExporterTest

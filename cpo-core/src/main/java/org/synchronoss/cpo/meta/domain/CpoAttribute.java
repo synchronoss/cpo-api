@@ -20,15 +20,21 @@
  */
 package org.synchronoss.cpo.meta.domain;
 
-import org.slf4j.*;
-import org.synchronoss.cpo.*;
-import org.synchronoss.cpo.helper.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.synchronoss.cpo.CpoData;
+import org.synchronoss.cpo.CpoException;
+import org.synchronoss.cpo.helper.CpoClassLoader;
+import org.synchronoss.cpo.helper.ExceptionHelper;
 import org.synchronoss.cpo.meta.CpoMetaDescriptor;
 import org.synchronoss.cpo.meta.bean.CpoAttributeBean;
 import org.synchronoss.cpo.transform.CpoTransform;
 
-import java.lang.reflect.*;
-import java.util.*;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
 
 public class CpoAttribute extends CpoAttributeBean {
 
@@ -121,7 +127,7 @@ public class CpoAttribute extends CpoAttributeBean {
       for (Method m : methods) {
         // The method name must match as well as the number of parameters and return types
         if (!m.isSynthetic() && !m.isBridge() && m.getName().equals(methodName) && m.getParameterTypes().length == args) {
-          if ((!hasReturn && m.getReturnType() == java.lang.Void.TYPE) || (hasReturn && m.getReturnType() != java.lang.Void.TYPE)) {
+          if ((!hasReturn && m.getReturnType() == Void.TYPE) || (hasReturn && m.getReturnType() != Void.TYPE)) {
             retMethods.add(m);
           }
         }

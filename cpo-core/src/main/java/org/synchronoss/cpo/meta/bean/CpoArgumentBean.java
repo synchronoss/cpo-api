@@ -27,8 +27,8 @@ public class CpoArgumentBean implements java.io.Serializable {
   /*
    * Properties
    */
-  private java.lang.String attributeName;
-  private java.lang.String description;
+  private String attributeName;
+  private String description;
 
   public CpoArgumentBean() {
   }

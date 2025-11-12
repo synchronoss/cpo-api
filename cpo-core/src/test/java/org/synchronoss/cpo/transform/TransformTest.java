@@ -21,8 +21,10 @@
 package org.synchronoss.cpo.transform;
 
 import org.synchronoss.cpo.CpoException;
-import org.testng.annotations.*;
-import static org.testng.Assert.*;
+import org.testng.annotations.Test;
+
+import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.fail;
 
 public class TransformTest {
 

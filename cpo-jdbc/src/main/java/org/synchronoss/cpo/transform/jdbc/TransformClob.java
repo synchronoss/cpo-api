@@ -20,12 +20,15 @@
  */
 package org.synchronoss.cpo.transform.jdbc;
 
-import org.slf4j.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.CpoException;
-import org.synchronoss.cpo.jdbc.*;
+import org.synchronoss.cpo.jdbc.JdbcCallableStatementFactory;
+import org.synchronoss.cpo.jdbc.JdbcPreparedStatementFactory;
 
 import javax.sql.rowset.serial.SerialClob;
-import java.io.*;
+import java.io.CharArrayWriter;
+import java.io.Reader;
 import java.sql.Clob;
 
 /**

@@ -22,14 +22,23 @@
 package org.synchronoss.cpo.cassandra;
 
 import com.datastax.driver.core.*;
-import org.slf4j.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.*;
-import org.synchronoss.cpo.cassandra.meta.*;
+import org.synchronoss.cpo.cassandra.meta.CassandraCpoAttribute;
+import org.synchronoss.cpo.cassandra.meta.CassandraCpoMetaDescriptor;
+import org.synchronoss.cpo.cassandra.meta.CassandraMethodMapper;
+import org.synchronoss.cpo.cassandra.meta.CassandraResultSetCpoData;
 import org.synchronoss.cpo.helper.ExceptionHelper;
-import org.synchronoss.cpo.meta.*;
-import org.synchronoss.cpo.meta.domain.*;
+import org.synchronoss.cpo.meta.CpoMetaDescriptor;
+import org.synchronoss.cpo.meta.DataTypeMapEntry;
+import org.synchronoss.cpo.meta.domain.CpoAttribute;
+import org.synchronoss.cpo.meta.domain.CpoClass;
+import org.synchronoss.cpo.meta.domain.CpoFunction;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 /**
  * CassandraCpoAdapter is an interface for a set of routines that are responsible for managing value objects from a

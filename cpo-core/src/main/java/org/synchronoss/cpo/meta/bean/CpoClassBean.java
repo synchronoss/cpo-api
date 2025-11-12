@@ -27,8 +27,8 @@ public class CpoClassBean implements java.io.Serializable {
   /*
    * Properties
    */
-  private java.lang.String name;
-  private java.lang.String description;
+  private String name;
+  private String description;
 
   public CpoClassBean() {
   }
@@ -36,11 +36,11 @@ public class CpoClassBean implements java.io.Serializable {
   /*
    * Getters and Setters
    */
-  public java.lang.String getName() {
+  public String getName() {
     return this.name;
   }
 
-  public void setName(java.lang.String name) {
+  public void setName(String name) {
     this.name = name;
   }
 

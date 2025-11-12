@@ -30,7 +30,7 @@ import java.io.Reader;
  *
  * @author david berry
  */
-public class CpoCharArrayReader extends CharArrayReader implements java.io.Serializable, java.lang.Cloneable {
+public class CpoCharArrayReader extends CharArrayReader implements java.io.Serializable, Cloneable {
 
   /**
    * Version Id for this class.

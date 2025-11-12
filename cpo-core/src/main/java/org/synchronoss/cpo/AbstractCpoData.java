@@ -20,8 +20,6 @@
  */
 package org.synchronoss.cpo;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.meta.domain.CpoAttribute;
 
 /**
@@ -29,7 +27,6 @@ import org.synchronoss.cpo.meta.domain.CpoAttribute;
  */
 public abstract class AbstractCpoData implements CpoData {
 
-  private static final Logger logger = LoggerFactory.getLogger(AbstractCpoData.class);
   private CpoAttribute cpoAttribute = null;
 
   public AbstractCpoData(CpoAttribute cpoAttribute) {

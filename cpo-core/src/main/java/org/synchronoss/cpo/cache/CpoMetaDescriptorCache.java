@@ -22,7 +22,9 @@ package org.synchronoss.cpo.cache;
 
 import org.synchronoss.cpo.meta.CpoMetaDescriptor;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author dberry

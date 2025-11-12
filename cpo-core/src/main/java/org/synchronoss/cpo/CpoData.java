@@ -25,11 +25,11 @@ package org.synchronoss.cpo;
  */
 public interface CpoData {
 
-  public Object invokeGetter() throws CpoException;
+  Object invokeGetter() throws CpoException;
 
-  public void invokeSetter(Object instanceObject) throws CpoException;
+  void invokeSetter(Object instanceObject) throws CpoException;
 
-  public Object transformIn(Object datasourceObject) throws CpoException;
+  Object transformIn(Object datasourceObject) throws CpoException;
 
-  public Object transformOut(Object attributeObject) throws CpoException;
+  Object transformOut(Object attributeObject) throws CpoException;
 }

@@ -23,7 +23,8 @@ package org.synchronoss.cpo;
 import org.synchronoss.cpo.meta.domain.CpoAttribute;
 import org.synchronoss.cpo.meta.domain.CpoClass;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
 
 /**
  * BindableWhereBuilder is an interface for specifying the sort order in which objects are returned from the Datasource.

@@ -23,7 +23,8 @@ package org.synchronoss.cpo.meta;
 import org.synchronoss.cpo.CpoException;
 
 import java.io.Serializable;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * MethodMapper is a class defines the getters and setters for all the JDBC specific data classes

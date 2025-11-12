@@ -29,7 +29,7 @@ import java.io.Serial;
  *
  * @author david berry
  */
-public class JdbcCpoArgument extends CpoArgument implements java.io.Serializable, java.lang.Cloneable {
+public class JdbcCpoArgument extends CpoArgument implements java.io.Serializable, Cloneable {
 
   /**
    * Version Id for this class.

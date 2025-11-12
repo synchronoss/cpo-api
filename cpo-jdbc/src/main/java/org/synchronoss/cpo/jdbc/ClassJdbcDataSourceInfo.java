@@ -20,6 +20,13 @@
  */
 package org.synchronoss.cpo.jdbc;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.synchronoss.cpo.CpoException;
+import org.synchronoss.cpo.helper.CpoClassLoader;
+import org.synchronoss.cpo.helper.ExceptionHelper;
+
+import javax.sql.*;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.sql.Connection;
@@ -27,12 +34,6 @@ import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.SortedMap;
-import javax.sql.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.synchronoss.cpo.CpoException;
-import org.synchronoss.cpo.helper.CpoClassLoader;
-import org.synchronoss.cpo.helper.ExceptionHelper;
 
 /**
  * Collects the info required to instantiate a DataSource from a JDBC Driver

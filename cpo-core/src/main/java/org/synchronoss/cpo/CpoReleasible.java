@@ -32,6 +32,7 @@ public interface CpoReleasible {
   /**
    * release is called by the CPO framework. A transform can register a CpoReleasible that will be called when the
    * current prepared or callable statement has been executed.
+   * @throws CpoException An exception occurred
    */
-  public void release() throws CpoException;
+  void release() throws CpoException;
 }

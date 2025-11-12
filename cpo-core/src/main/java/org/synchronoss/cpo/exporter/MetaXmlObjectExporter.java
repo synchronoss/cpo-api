@@ -31,5 +31,5 @@ import org.synchronoss.cpo.core.cpoCoreMeta.CpoMetaDataDocument;
  */
 public interface MetaXmlObjectExporter extends MetaVisitor {
 
-  public CpoMetaDataDocument getCpoMetaDataDocument();
+  CpoMetaDataDocument getCpoMetaDataDocument();
 }

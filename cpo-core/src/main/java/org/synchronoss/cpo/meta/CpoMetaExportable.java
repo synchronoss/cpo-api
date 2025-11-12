@@ -22,7 +22,9 @@ package org.synchronoss.cpo.meta;
 
 import org.synchronoss.cpo.CpoException;
 
-import java.io.*;
+import java.io.File;
+import java.io.OutputStream;
+import java.io.Writer;
 
 /**
  * @author dberry
@@ -30,18 +32,24 @@ import java.io.*;
 public interface CpoMetaExportable {
 
   /**
-   * Performs an export of the meta data to the specified File
+   * Performs an export of the metadata to the specified File
+   * @param file The file to export to
+   * @throws CpoException An error has occurred
    */
-  public void export(File file) throws CpoException ;
+  void export(File file) throws CpoException ;
 
   /**
-   * Performs an export of the meta data to the specified Writer
+   * Performs an export of the metadata to the specified Writer
+   * @param writer The writer to export to
+   * @throws CpoException An error has occurred
    */
-  public void export(Writer writer) throws CpoException ;
+  void export(Writer writer) throws CpoException ;
 
   /**
-   * Performs an export of the meta data to the specified OutputStream
+   * Performs an export of the meta ata to the specified OutputStream
+   * @param outputStream The output stream to export to
+   * @throws CpoException An error has occurred
    */
-  public void export(OutputStream outputStream) throws CpoException ;
+  void export(OutputStream outputStream) throws CpoException ;
 
 }

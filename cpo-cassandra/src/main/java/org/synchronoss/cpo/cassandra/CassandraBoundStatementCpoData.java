@@ -22,8 +22,6 @@ package org.synchronoss.cpo.cassandra;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.synchronoss.cpo.CpoByteArrayInputStream;
-import org.synchronoss.cpo.CpoCharArrayReader;
 import org.synchronoss.cpo.CpoException;
 import org.synchronoss.cpo.cassandra.meta.CassandraMethodMapEntry;
 import org.synchronoss.cpo.cassandra.meta.CassandraMethodMapper;
@@ -32,9 +30,6 @@ import org.synchronoss.cpo.helper.ExceptionHelper;
 import org.synchronoss.cpo.meta.AbstractBindableCpoData;
 import org.synchronoss.cpo.meta.domain.CpoAttribute;
 import org.synchronoss.cpo.transform.CpoTransform;
-
-import java.io.InputStream;
-import java.io.Reader;
 
 /**
  * Helps manage data transfer between the CPO object and the Cassandra bound statement

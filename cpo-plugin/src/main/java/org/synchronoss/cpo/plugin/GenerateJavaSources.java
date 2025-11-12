@@ -20,17 +20,24 @@
  */
 package org.synchronoss.cpo.plugin;
 
-import org.apache.maven.plugin.*;
-import org.apache.maven.plugins.annotations.*;
+import org.apache.commons.io.filefilter.WildcardFileFilter;
+import org.apache.maven.plugin.AbstractMojo;
+import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
+import org.apache.maven.plugins.annotations.Parameter;
+import org.apache.maven.plugins.annotations.ResolutionScope;
 import org.apache.maven.project.MavenProject;
-import org.synchronoss.cpo.exporter.*;
+import org.synchronoss.cpo.exporter.CpoClassSourceGenerator;
+import org.synchronoss.cpo.exporter.CpoInterfaceSourceGenerator;
+import org.synchronoss.cpo.exporter.CpoLegacyClassSourceGenerator;
 import org.synchronoss.cpo.meta.CpoMetaDescriptor;
 import org.synchronoss.cpo.meta.domain.CpoClass;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileFilter;
+import java.io.FileWriter;
 import java.util.StringTokenizer;
-import org.apache.commons.io.filefilter.WildcardFileFilter;
 
 /**
  * Plugin goal that will generate the cpo classes based on the xml configuration file

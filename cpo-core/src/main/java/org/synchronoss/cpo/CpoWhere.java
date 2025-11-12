@@ -27,76 +27,76 @@ package org.synchronoss.cpo;
  */
 public interface CpoWhere {
 
-  static final int COMP_NONE = -1;
-  static final int COMP_EQ = 0;
-  static final int COMP_LT = 1;
-  static final int COMP_GT = 2;
-  static final int COMP_NEQ = 3;
-  static final int COMP_IN = 4;
-  static final int COMP_LIKE = 5;
-  static final int COMP_LTEQ = 6;
-  static final int COMP_GTEQ = 7;
-  static final int COMP_EXISTS = 8;
-  static final int COMP_ISNULL = 9;
-  static final int LOGIC_NONE = -1;
-  static final int LOGIC_AND = 0;
-  static final int LOGIC_OR = 1;
+  int COMP_NONE = -1;
+  int COMP_EQ = 0;
+  int COMP_LT = 1;
+  int COMP_GT = 2;
+  int COMP_NEQ = 3;
+  int COMP_IN = 4;
+  int COMP_LIKE = 5;
+  int COMP_LTEQ = 6;
+  int COMP_GTEQ = 7;
+  int COMP_EXISTS = 8;
+  int COMP_ISNULL = 9;
+  int LOGIC_NONE = -1;
+  int LOGIC_AND = 0;
+  int LOGIC_OR = 1;
 
-  public void setComparison(int comp);
+  void setComparison(int comp);
 
-  public int getComparison();
+  int getComparison();
 
-  public void setLogical(int log);
+  void setLogical(int log);
 
-  public int getLogical();
+  int getLogical();
 
-  public void setAttribute(String attr);
+  void setAttribute(String attr);
 
-  public String getAttribute();
+  String getAttribute();
 
-  public void setRightAttribute(String attr);
+  void setRightAttribute(String attr);
 
-  public String getRightAttribute();
+  String getRightAttribute();
 
-  public void setValue(Object val);
+  void setValue(Object val);
 
-  public Object getValue();
+  Object getValue();
 
-  public boolean getNot();
+  boolean getNot();
 
-  public void setNot(boolean b);
+  void setNot(boolean b);
 
-  public void addWhere(CpoWhere cw) throws CpoException;
+  void addWhere(CpoWhere cw) throws CpoException;
 
-  public void setAttributeFunction(String s);
+  void setAttributeFunction(String s);
 
-  public String getAttributeFunction();
+  String getAttributeFunction();
 
-  public void setValueFunction(String s);
+  void setValueFunction(String s);
 
-  public String getValueFunction();
+  String getValueFunction();
 
-  public void setRightAttributeFunction(String s);
+  void setRightAttributeFunction(String s);
 
-  public String getRightAttributeFunction();
+  String getRightAttributeFunction();
 
-  public void setStaticValue(String staticValue);
+  void setStaticValue(String staticValue);
 
-  public String getStaticValue();
+  String getStaticValue();
 
-  public boolean isLeaf();
+  boolean isLeaf();
 
   /**
    * Gets a string representing the name of this instance of the CpoOrderBy
    *
    * @return String The name of the CpoOrderBy
    */
-  public String getName();
+  String getName();
 
   /**
    * Sets a string representing the name of this instance of the CpoOrderBy
    *
    * @param s The name of the CpoOrderBy
    */
-  public void setName(String s);
+  void setName(String s);
 }

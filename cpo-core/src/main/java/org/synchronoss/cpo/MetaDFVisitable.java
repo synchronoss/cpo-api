@@ -29,5 +29,5 @@ package org.synchronoss.cpo;
  */
 public interface MetaDFVisitable {
 
-  public void acceptMetaDFVisitor(MetaVisitor visitor);
+  void acceptMetaDFVisitor(MetaVisitor visitor);
 }

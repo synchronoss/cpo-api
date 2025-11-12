@@ -20,14 +20,9 @@
  */
 package org.synchronoss.cpo.jta;
 
-import org.synchronoss.cpo.helper.ExceptionHelper;
-
 import javax.transaction.xa.XAException;
 import javax.transaction.xa.XAResource;
 import javax.transaction.xa.Xid;
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.util.HashMap;
 
 /**
  * Created by dberry on 11/8/15.

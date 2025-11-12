@@ -24,14 +24,14 @@ import com.github.terma.javaniotcpproxy.StaticTcpProxyConfig;
 import com.github.terma.javaniotcpproxy.TcpProxy;
 import com.github.terma.javaniotcpproxy.TcpProxyConfig;
 import org.h2.tools.RunScript;
+import org.h2.tools.Server;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.CpoAdapterFactoryManager;
 import org.testcontainers.containers.*;
 import org.testcontainers.utility.DockerImageName;
 import org.testng.ISuite;
 import org.testng.ISuiteListener;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.h2.tools.Server;
 
 import java.sql.SQLException;
 

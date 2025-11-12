@@ -26,19 +26,19 @@ package org.synchronoss.cpo.jdbc;
  */
 public interface JdbcStatics {
 
-  public static final String ADAPTER_CONTEXT_JDBC = "jdbc";
-  public static final String ADAPTER_CONTEXT_CLASS = "class";
-  public static final String ADAPTER_CONTEXT_DRIVER = "driver";
-  public static final String ADAPTER_CONTEXT_CLASSPROP = "classProp";
-  public static final String ADAPTER_CONTEXT_DRIVERPROP = "driverProp";
-  public static final String ADAPTER_CONTEXT_CLASSCLASS = "classclass";
-  public static final String ADAPTER_CONTEXT_DRIVERDRIVER = "driverdriver";
-  public static final String ADAPTER_CONTEXT_CLASSDRIVER = "classdriver";
-  public static final String ADAPTER_CONTEXT_DRIVERCLASS = "driverclass";
-  public static final String ADAPTER_CONTEXT_JDBC_URLONLY = "jdbcUrlOnly";
-  public static final String ADAPTER_CONTEXT_CLASS_URLONLY = "classUrlOnly";
-  public static final String ADAPTER_CONTEXT_DRIVER_URLONLY = "driverUrlOnly";
-  public static final String ADAPTER_CONTEXT_CASESENSITIVE = "caseSensitive";
-  public static final String ADAPTER_CONTEXT_CASEINSENSITIVE = "caseInsensitive";
-  public static int BLOB_SIZE = 64999;
+  String ADAPTER_CONTEXT_JDBC = "jdbc";
+  String ADAPTER_CONTEXT_CLASS = "class";
+  String ADAPTER_CONTEXT_DRIVER = "driver";
+  String ADAPTER_CONTEXT_CLASSPROP = "classProp";
+  String ADAPTER_CONTEXT_DRIVERPROP = "driverProp";
+  String ADAPTER_CONTEXT_CLASSCLASS = "classclass";
+  String ADAPTER_CONTEXT_DRIVERDRIVER = "driverdriver";
+  String ADAPTER_CONTEXT_CLASSDRIVER = "classdriver";
+  String ADAPTER_CONTEXT_DRIVERCLASS = "driverclass";
+  String ADAPTER_CONTEXT_JDBC_URLONLY = "jdbcUrlOnly";
+  String ADAPTER_CONTEXT_CLASS_URLONLY = "classUrlOnly";
+  String ADAPTER_CONTEXT_DRIVER_URLONLY = "driverUrlOnly";
+  String ADAPTER_CONTEXT_CASESENSITIVE = "caseSensitive";
+  String ADAPTER_CONTEXT_CASEINSENSITIVE = "caseInsensitive";
+  int BLOB_SIZE = 64999;
 }

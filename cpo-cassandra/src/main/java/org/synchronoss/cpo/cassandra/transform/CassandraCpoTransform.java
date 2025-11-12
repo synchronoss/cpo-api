@@ -41,6 +41,6 @@ public interface CassandraCpoTransform<D, J> extends CpoTransform<D, J> {
      * @return The datasource object
      * @throws CpoException an exception occurred
      */
-  public D transformOut(CassandraBoundStatementFactory cbsf, J attributeObject) throws CpoException;
+  D transformOut(CassandraBoundStatementFactory cbsf, J attributeObject) throws CpoException;
 
 }

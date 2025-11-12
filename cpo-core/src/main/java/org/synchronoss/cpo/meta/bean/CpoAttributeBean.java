@@ -27,12 +27,12 @@ public class CpoAttributeBean implements java.io.Serializable {
   /*
    * Properties
    */
-  private java.lang.String javaName;
-  private java.lang.String javaType;
-  private java.lang.String dataName;
-  private java.lang.String dataType;
-  private java.lang.String transformClassName;
-  private java.lang.String description;
+  private String javaName;
+  private String javaType;
+  private String dataName;
+  private String dataType;
+  private String transformClassName;
+  private String description;
 
   public CpoAttributeBean() {
   }

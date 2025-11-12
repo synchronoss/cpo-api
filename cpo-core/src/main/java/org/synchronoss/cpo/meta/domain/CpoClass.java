@@ -20,13 +20,20 @@
  */
 package org.synchronoss.cpo.meta.domain;
 
-import org.slf4j.*;
-import org.synchronoss.cpo.*;
-import org.synchronoss.cpo.helper.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.synchronoss.cpo.CpoException;
+import org.synchronoss.cpo.MetaDFVisitable;
+import org.synchronoss.cpo.MetaVisitor;
+import org.synchronoss.cpo.helper.CpoClassLoader;
+import org.synchronoss.cpo.helper.ExceptionHelper;
 import org.synchronoss.cpo.meta.CpoMetaDescriptor;
 import org.synchronoss.cpo.meta.bean.CpoClassBean;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 public abstract class CpoClass extends CpoClassBean implements Comparable<CpoClass>, MetaDFVisitable {
     /**
@@ -99,7 +106,7 @@ public abstract class CpoClass extends CpoClassBean implements Comparable<CpoCla
   public boolean existsFunctionGroup(String groupType, String groupName) throws CpoException {
     String key = buildFunctionGroupKey(groupType, groupName);
     CpoFunctionGroup group = functionGroups.get(key);
-    return (group != null);
+    return group != null;
   }
 
   public CpoFunctionGroup addFunctionGroup(CpoFunctionGroup group) {

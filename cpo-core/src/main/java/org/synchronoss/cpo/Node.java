@@ -277,7 +277,7 @@ public class Node implements Serializable, Cloneable, Comparable<Node> {
 
     if (c != null) {
       rc = c.compare(n1, n2);
-    } else if (n1 == null && n1 == n2) {
+    } else if (n1 == null && n2 == null) {
       rc = 0;
     } else {
       rc = n1.compareTo(n2);

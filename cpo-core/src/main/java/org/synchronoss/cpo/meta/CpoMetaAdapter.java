@@ -21,7 +21,8 @@
 package org.synchronoss.cpo.meta;
 
 import org.synchronoss.cpo.CpoException;
-import org.synchronoss.cpo.meta.domain.*;
+import org.synchronoss.cpo.meta.domain.CpoAttribute;
+import org.synchronoss.cpo.meta.domain.CpoClass;
 import org.synchronoss.cpo.parser.ExpressionParser;
 
 import java.util.List;
@@ -36,24 +37,24 @@ public interface CpoMetaAdapter {
    *
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
-  public <T> CpoClass getMetaClass(T obj) throws CpoException;
+  <T> CpoClass getMetaClass(T obj) throws CpoException;
 
   /**
    * Returns a list of the cpo class objects that the meta adapter is aware of.
    *
    * @return java.util.List of CpoClass
    */
-  public List<CpoClass> getCpoClasses() throws CpoException ;
+  List<CpoClass> getCpoClasses() throws CpoException ;
 
-  public ExpressionParser getExpressionParser() throws CpoException ;
+  ExpressionParser getExpressionParser() throws CpoException ;
 
-  public String getDataTypeName(CpoAttribute attribute) throws CpoException ;
+  String getDataTypeName(CpoAttribute attribute) throws CpoException ;
 
-  public Class<?> getDataTypeJavaClass(CpoAttribute attribute) throws CpoException ;
+  Class<?> getDataTypeJavaClass(CpoAttribute attribute) throws CpoException ;
 
-  public int getDataTypeInt(String dataTypeName) throws CpoException ;
+  int getDataTypeInt(String dataTypeName) throws CpoException ;
 
-  public DataTypeMapEntry<?> getDataTypeMapEntry(int dataTypeInt) throws CpoException;
+  DataTypeMapEntry<?> getDataTypeMapEntry(int dataTypeInt) throws CpoException;
 
-  public List<String> getAllowableDataTypes() throws CpoException ;
+  List<String> getAllowableDataTypes() throws CpoException ;
 }

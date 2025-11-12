@@ -22,18 +22,22 @@ package org.synchronoss.cpo.jdbc.meta;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.synchronoss.cpo.core.cpoCoreMeta.*;
-import org.synchronoss.cpo.jdbc.*;
-import org.synchronoss.cpo.jdbc.cpoJdbcMeta.*;
-import org.synchronoss.cpo.parser.BoundExpressionParser;
+import org.synchronoss.cpo.core.cpoCoreMeta.CtArgument;
+import org.synchronoss.cpo.core.cpoCoreMeta.CtAttribute;
+import org.synchronoss.cpo.jdbc.JdbcCpoArgument;
+import org.synchronoss.cpo.jdbc.JdbcCpoAttribute;
+import org.synchronoss.cpo.jdbc.cpoJdbcMeta.CtJdbcArgument;
+import org.synchronoss.cpo.jdbc.cpoJdbcMeta.CtJdbcAttribute;
 import org.synchronoss.cpo.meta.AbstractCpoMetaAdapter;
 import org.synchronoss.cpo.meta.DataTypeMapEntry;
 import org.synchronoss.cpo.meta.DataTypeMapper;
-import org.synchronoss.cpo.meta.domain.*;
+import org.synchronoss.cpo.meta.domain.CpoArgument;
+import org.synchronoss.cpo.meta.domain.CpoAttribute;
+import org.synchronoss.cpo.parser.BoundExpressionParser;
 import org.synchronoss.cpo.parser.ExpressionParser;
 
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.List;
 
 /**
  * Builds and manages the Java to Datasource type mapping

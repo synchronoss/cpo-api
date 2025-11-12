@@ -22,8 +22,11 @@ package org.synchronoss.cpo.jdbc;
 
 import javax.sql.DataSource;
 import java.io.PrintWriter;
-import java.sql.*;
-import java.util.*;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.sql.SQLFeatureNotSupportedException;
+import java.util.Properties;
+import java.util.SortedMap;
 import java.util.logging.Logger;
 
 /**

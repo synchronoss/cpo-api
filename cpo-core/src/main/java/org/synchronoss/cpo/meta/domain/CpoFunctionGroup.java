@@ -22,7 +22,8 @@ package org.synchronoss.cpo.meta.domain;
 
 import org.synchronoss.cpo.meta.bean.CpoFunctionGroupBean;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class CpoFunctionGroup extends CpoFunctionGroupBean implements Comparable<CpoFunctionGroup> {
 

@@ -20,13 +20,18 @@
  */
 package org.synchronoss.cpo.jdbc;
 
-import org.synchronoss.cpo.*;
+import org.synchronoss.cpo.CpoAdapter;
+import org.synchronoss.cpo.CpoAdapterFactoryManager;
 import org.synchronoss.cpo.jdbc.meta.JdbcCpoMetaDescriptor;
-import org.testng.annotations.*;
-import static org.testng.Assert.*;
+import org.testng.annotations.AfterClass;
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.Parameters;
+import org.testng.annotations.Test;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
+
+import static org.testng.Assert.*;
 
 /**
  * InheritanceTest is a test class for testing the polymorphic capabilites of CPO

@@ -20,16 +20,23 @@
  */
 package org.synchronoss.cpo.jdbc.config;
 
-import org.slf4j.*;
-import org.synchronoss.cpo.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.synchronoss.cpo.CpoAdapterFactory;
+import org.synchronoss.cpo.CpoException;
+import org.synchronoss.cpo.DataSourceInfo;
 import org.synchronoss.cpo.config.CpoConfigProcessor;
 import org.synchronoss.cpo.core.cpoCoreConfig.CtDataSourceConfig;
 import org.synchronoss.cpo.jdbc.*;
-import org.synchronoss.cpo.jdbc.cpoJdbcConfig.*;
+import org.synchronoss.cpo.jdbc.cpoJdbcConfig.CtJdbcConfig;
+import org.synchronoss.cpo.jdbc.cpoJdbcConfig.CtJdbcReadWriteConfig;
+import org.synchronoss.cpo.jdbc.cpoJdbcConfig.CtProperty;
 import org.synchronoss.cpo.jdbc.meta.JdbcCpoMetaDescriptor;
 import org.synchronoss.cpo.meta.CpoMetaDescriptor;
 
-import java.util.*;
+import java.util.Properties;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 /**
  * Processes the cpoConfig.xml data for Jdbc

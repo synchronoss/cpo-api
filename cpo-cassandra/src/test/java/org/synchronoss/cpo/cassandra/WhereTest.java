@@ -20,10 +20,16 @@
  */
 package org.synchronoss.cpo.cassandra;
 
-import org.synchronoss.cpo.*;
+import org.synchronoss.cpo.CpoAdapter;
+import org.synchronoss.cpo.CpoAdapterFactoryManager;
+import org.synchronoss.cpo.CpoWhere;
+import org.testng.annotations.AfterClass;
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.Test;
 
-import java.util.*;
-import org.testng.annotations.*;
+import java.util.ArrayList;
+import java.util.Collection;
+
 import static org.testng.Assert.*;
 
 /**

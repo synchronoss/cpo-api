@@ -27,9 +27,9 @@ public class CpoFunctionGroupBean implements java.io.Serializable {
   /*
    * Properties
    */
-  private java.lang.String name;
-  private java.lang.String type;
-  private java.lang.String description;
+  private String name;
+  private String type;
+  private String description;
 
   public CpoFunctionGroupBean() {
   }

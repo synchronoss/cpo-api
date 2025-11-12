@@ -20,10 +20,12 @@
  */
 package org.synchronoss.cpo.jta;
 
+import org.testng.annotations.Test;
+
 import javax.transaction.xa.XAException;
 import javax.transaction.xa.XAResource;
 import javax.transaction.xa.Xid;
-import org.testng.annotations.*;
+
 import static org.testng.Assert.*;
 
 

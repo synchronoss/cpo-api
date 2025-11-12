@@ -20,10 +20,12 @@
  */
 package org.synchronoss.cpo.meta.domain;
 
-import org.slf4j.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.meta.bean.CpoFunctionBean;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class CpoFunction extends CpoFunctionBean {
 
@@ -54,7 +56,7 @@ public class CpoFunction extends CpoFunctionBean {
 
   public boolean removeArgument(int index) {
     if (index >= 0 && index < arguments.size()) {
-      return (arguments.remove(index) != null);
+      return arguments.remove(index) != null;
     }
     return false;
   }

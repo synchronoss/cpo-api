@@ -30,7 +30,7 @@ import java.io.InputStream;
  *
  * @author david berry
  */
-public class CpoByteArrayInputStream extends ByteArrayInputStream implements java.io.Serializable, java.lang.Cloneable {
+public class CpoByteArrayInputStream extends ByteArrayInputStream implements java.io.Serializable, Cloneable {
 
   /**
    * Version Id for this class.

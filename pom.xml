@@ -241,11 +241,6 @@
                     <artifactId>sonar-maven-plugin</artifactId>
                     <version>5.2.0.4988</version>
                 </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-pmd-plugin</artifactId>
-                    <version>3.28.0</version>
-                </plugin>
             </plugins>
         </pluginManagement>
         <plugins>
@@ -383,15 +378,13 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-pmd-plugin</artifactId>
-                <version>3.13.0</version> <!-- or use version from pluginManagement -->
+                <version>3.28.0</version>
                 <configuration>
                     <language>java</language>
                     <minimumTokens>20</minimumTokens>
                     <includes>
                         <include>**/*.java</include>
                     </includes>
-                    <!-- failOnViolation is actually true by default, but can be disabled -->
-                    <failOnViolation>false</failOnViolation>
                     <!-- printFailingErrors is pretty useful -->
                     <printFailingErrors>true</printFailingErrors>
                     <excludeRoots>
@@ -401,9 +394,23 @@
                 </configuration>
                 <executions>
                     <execution>
+                        <id>PMD</id>
+                        <configuration>
+                            <!-- failOnViolation is actually true by default, but can be disabled -->
+                            <failOnViolation>false</failOnViolation>
+                        </configuration>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>CPD</id>
+                        <configuration>
+                            <!-- failOnViolation is actually true by default, but can be disabled -->
+                            <failOnViolation>false</failOnViolation>
+                        </configuration>
                         <goals>
                             <goal>cpd-check</goal>
-                            <goal>check</goal>
                         </goals>
                     </execution>
                 </executions>
@@ -517,12 +524,16 @@
                                         <matchType>ignoreCase</matchType>
                                     </tag>
                                     <tag>
+                                        <matchString>DOCUMENT ME</matchString>
+                                        <matchType>exact</matchType>
+                                    </tag>
+                                    <tag>
                                         <matchString>FIXME</matchString>
                                         <matchType>exact</matchType>
                                     </tag>
                                     <tag>
                                         <matchString>@deprecated</matchString>
-                                        <matchType>exact</matchType>
+                                        <matchType>ignorecase</matchType>
                                     </tag>
                                 </tags>
                             </tagClass>

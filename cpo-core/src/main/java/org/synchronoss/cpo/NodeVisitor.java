@@ -33,7 +33,7 @@ public interface NodeVisitor {
    * @return a boolean (false) to end visit or (true) to continue visiting
    * @throws Exception error visiting the node for the first time
    */
-  public boolean visitBegin(Node node) throws Exception;
+  boolean visitBegin(Node node) throws Exception;
 
   /**
    * This is called for composite nodes between visiting children
@@ -42,7 +42,7 @@ public interface NodeVisitor {
    * @return a boolean (false) to end visit or (true) to continue visiting
    * @throws Exception error visiting the node between children
    */
-  public boolean visitMiddle(Node node) throws Exception;
+  boolean visitMiddle(Node node) throws Exception;
 
   /**
    * This is called by composite nodes after visiting children
@@ -51,7 +51,7 @@ public interface NodeVisitor {
    * @return a boolean (false) to end visit or (true) to continue visiting
    * @throws Exception error visiting the node after all the children
    */
-  public boolean visitEnd(Node node) throws Exception;
+  boolean visitEnd(Node node) throws Exception;
 
   /**
    * This is called for component elements which have no children
@@ -60,5 +60,5 @@ public interface NodeVisitor {
    * @return a boolean (false) to end visit or (true) to continue visiting
    * @throws Exception error visiting the childless node
    */
-  public boolean visit(Node node) throws Exception;
+  boolean visit(Node node) throws Exception;
 }

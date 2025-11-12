@@ -21,11 +21,13 @@
 package org.synchronoss.cpo.jdbc.parser;
 
 import org.synchronoss.cpo.parser.BoundExpressionParser;
-import org.testng.annotations.*;
-import static org.testng.Assert.*;
+import org.testng.annotations.Test;
 
 import java.text.ParseException;
 import java.util.List;
+
+import static org.testng.Assert.assertTrue;
+import static org.testng.Assert.fail;
 
 // TODO - add more units for single quotes, double quotes, inner selects, etc
 public class BoundExpressionParserTest {

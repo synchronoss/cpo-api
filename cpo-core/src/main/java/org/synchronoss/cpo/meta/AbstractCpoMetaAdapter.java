@@ -20,7 +20,8 @@
  */
 package org.synchronoss.cpo.meta;
 
-import org.slf4j.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.CpoException;
 import org.synchronoss.cpo.core.cpoCoreMeta.*;
 import org.synchronoss.cpo.meta.domain.*;

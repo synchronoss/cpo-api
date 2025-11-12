@@ -20,10 +20,15 @@
  */
 package org.synchronoss.cpo;
 
-import org.slf4j.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.helper.ExceptionHelper;
-import org.synchronoss.cpo.meta.*;
-import org.synchronoss.cpo.meta.domain.*;
+import org.synchronoss.cpo.meta.MethodMapEntry;
+import org.synchronoss.cpo.meta.MethodMapper;
+import org.synchronoss.cpo.meta.domain.CpoArgument;
+import org.synchronoss.cpo.meta.domain.CpoAttribute;
+import org.synchronoss.cpo.meta.domain.CpoClass;
+import org.synchronoss.cpo.meta.domain.CpoFunction;
 
 import java.io.StringReader;
 import java.lang.reflect.InvocationTargetException;

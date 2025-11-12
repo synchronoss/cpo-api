@@ -432,6 +432,7 @@
                 <artifactId>testcontainers-bom</artifactId>
                 <version>${testContainersVersion}</version>
                 <type>pom</type>
+                <scope>import</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.xmlbeans</groupId>

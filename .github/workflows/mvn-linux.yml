@@ -33,6 +33,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       #
+      # Import the gpg key
+      #
+      - name: Import GPG key
+        uses: crazy-max/ghaction-import-gpg@v6
+        with:
+          gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
+          passphrase: ${{ secrets.GPG_PASSPHRASE }} # Optional, if your key has a passphrase
+          git_user_signingkey: true # Configure Git to use this key for signing
+          git_commit_gpgsign: true # Enable GPG signing for commits
+      #
       # Set up the environment 
       #
       - name: Checkout

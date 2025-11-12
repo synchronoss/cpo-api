@@ -26,10 +26,10 @@
     targetNamespace="http://www.synchronoss.org/cpo/CpoConfig.xsd"
     elementFormDefault="qualified">
     
-    <xs:import namespace="http://www.synchronoss.org/cpo/core/CpoCoreConfig.xsd" schemaLocation="../../../cpo-core/src/main/xsd/CpoCoreConfig.xsd"/>
+    <xs:import namespace="http://www.synchronoss.org/cpo/core/CpoCoreConfig.xsd" schemaLocation="CpoCoreConfig.xsd"/>
 
-    <xs:import namespace="http://www.synchronoss.org/cpo/jdbc/CpoJdbcConfig.xsd" schemaLocation="../../../cpo-jdbc/src/main/xsd/CpoJdbcConfig.xsd"/>
+    <xs:import namespace="http://www.synchronoss.org/cpo/jdbc/CpoJdbcConfig.xsd" schemaLocation="CpoJdbcConfig.xsd"/>
 
-    <xs:import namespace="http://www.synchronoss.org/cpo/cassandra/CpoCassandraConfig.xsd" schemaLocation="../../../cpo-cassandra/src/main/xsd/CpoCassandraConfig.xsd"/>
+    <xs:import namespace="http://www.synchronoss.org/cpo/cassandra/CpoCassandraConfig.xsd" schemaLocation="CpoCassandraConfig.xsd"/>
         
 </xs:schema>

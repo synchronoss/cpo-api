@@ -24,8 +24,8 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.synchronoss.cpo</groupId>
-  <artifactId>cpo-core</artifactId>
-  <name>cpo-core</name>
+    <artifactId>cpo-core</artifactId>
+    <name>core</name>
   <version>6.0.0-SNAPSHOT</version>
   <description>CPO is a persistence layer that allows you to persist POJOs. cpo-core is the persistence agnostic classes
   that are used for  all persistence types.
@@ -50,17 +50,19 @@
         <groupId>javax.servlet</groupId>
         <artifactId>javax.servlet-api</artifactId>
     </dependency>
-    <!-- log4j implementation for test logging -->
-    <dependency>
-      <groupId>org.slf4j</groupId>
-      <artifactId>slf4j-log4j12</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.logging.log4j</groupId>
-      <artifactId>log4j-api</artifactId>
-      <scope>test</scope>
-    </dependency>
+      <!-- logback implementation for test logging -->
+      <dependency>
+          <groupId>ch.qos.logback</groupId>
+          <artifactId>logback-core</artifactId>
+          <version>${logbackVersion}</version>
+          <scope>test</scope>
+      </dependency>
+      <dependency>
+          <groupId>ch.qos.logback</groupId>
+          <artifactId>logback-classic</artifactId>
+          <version>${logbackVersion}</version>
+          <scope>test</scope>
+      </dependency>
     <dependency>
       <groupId>org.apache.xmlbeans</groupId>
       <artifactId>xmlbeans</artifactId>
@@ -69,8 +71,14 @@
   <build>
     <plugins>
        <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>xmlbeans-maven-plugin</artifactId>
+           <groupId>org.apache.xmlbeans</groupId>
+           <artifactId>xmlbeans</artifactId>
+           <configuration>
+               <sourceDir>${project.basedir}/src/main/xsd</sourceDir>
+               <classTargetDir>${project.build.directory}/generated-sources/xmlbeans</classTargetDir>
+               <repackage>${project.groupId}.${project.name}.metadata</repackage>
+               <name>${project.name}</name>
+           </configuration>
       </plugin>
     </plugins>
   </build>

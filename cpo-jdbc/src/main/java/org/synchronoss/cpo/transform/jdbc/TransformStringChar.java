@@ -31,17 +31,18 @@ import org.synchronoss.cpo.jdbc.JdbcPreparedStatementFactory;
  */
 public class TransformStringChar implements JdbcCpoTransform<String, char[]> {
 
+    /**
+     * Convert a TransformStringChar
+     */
   public TransformStringChar() {
   }
 
   /**
    * Transforms the datasource object into an object required by the class
    *
-   * @param cpoAdapter The CpoAdapter for the datasource where the attribute is being retrieved
-   * @param parentObject The object that contains the attribute being retrieved.
-   * @param The object that represents the datasource object being retrieved
-   * @return The object to be stored in the attribute
-   * @throws CpoException
+   * @param lvc The String to transform
+   * @return The byte array
+   * @throws CpoException - an error occurred
    */
   @Override
   public char[] transformIn(String lvc) throws CpoException {
@@ -52,19 +53,18 @@ public class TransformStringChar implements JdbcCpoTransform<String, char[]> {
   /**
    * Transforms the data from the class attribute to the object required by the datasource
    *
-   * @param cpoAdapter The CpoAdapter for the datasource where the attribute is being persisted
-   * @param parentObject The object that contains the attribute being persisted.
-   * @param attributeObject The object that represents the attribute being persisted.
-   * @return The object to be stored in the datasource
-   * @throws CpoException
+   * @param jpsf The JdbcPreparedStatementFactory
+   * @param dataObj database object to be transformed
+   * @return The String to be stored in the java attribute
+   * @throws CpoException - an error occurred
    */
   @Override
-  public String transformOut(JdbcPreparedStatementFactory jpsf, char[] attrObj) throws CpoException {
-    return attrObj == null ? null : String.valueOf(attrObj);
+  public String transformOut(JdbcPreparedStatementFactory jpsf, char[] dataObj) throws CpoException {
+    return dataObj == null ? null : String.valueOf(dataObj);
   }
 
   @Override
-  public String transformOut(JdbcCallableStatementFactory jpsf, char[] attributeObject) throws CpoException, UnsupportedOperationException {
+  public String transformOut(JdbcCallableStatementFactory jpsf, char[] dataObject) throws CpoException, UnsupportedOperationException {
     throw new UnsupportedOperationException("Not supported yet.");
   }
 

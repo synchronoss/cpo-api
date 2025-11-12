@@ -32,13 +32,14 @@ import org.synchronoss.cpo.meta.domain.CpoArgument;
 import org.synchronoss.cpo.meta.domain.CpoAttribute;
 
 /**
- * Created with IntelliJ IDEA.
- * User: dberry
- * Date: 9/10/13
- * Time: 08:13 AM
- * To change this template use File | Settings | File Templates.
+ * Exports the Cassandra metadata
+ * @author dberry
  */
 public class CassandraMetaXmlObjectExporter extends CoreMetaXmlObjectExporter implements MetaXmlObjectExporter {
+    /**
+     * Constructs the CassandraMetaXmlObjectExporter
+     * @param metaDescriptor The descriptor to export
+     */
   public CassandraMetaXmlObjectExporter(CpoMetaDescriptor metaDescriptor) {
     super(metaDescriptor);
   }

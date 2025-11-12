@@ -27,14 +27,25 @@ import org.synchronoss.cpo.helper.ExceptionHelper;
 import java.lang.reflect.*;
 
 /**
- * Created with IntelliJ IDEA.
- * User: dberry
- * Date: 10/10/13
- * Time: 08:36 AM
- * To change this template use File | Settings | File Templates.
+ * Instantiates the Config file processor
+ *
+ * @param <T> The type of CpoConfigProcessor to instantiate
  */
 public class ConfigInstantiator<T> {
   private static final Logger logger = LoggerFactory.getLogger(ConfigInstantiator.class);
+
+    /**
+     * Construct a ConfigInstantiator
+     */
+  public ConfigInstantiator(){}
+
+    /**
+     * Instantiates the CpoConfigProcessor
+     *
+     * @param className The class to instantiate
+     * @return The instantiated CpoConfigProcessor
+     * @throws CpoException an error occurred
+     */
   public T instantiate(String className) throws CpoException {
     FactoryMethodName factoryMethodName=null;
 

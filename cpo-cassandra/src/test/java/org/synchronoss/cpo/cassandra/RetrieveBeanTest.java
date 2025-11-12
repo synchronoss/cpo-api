@@ -32,7 +32,7 @@ import java.util.*;
  *
  * @author david berry
  */
-public class RetrieveBeanTest extends CassandraContainerBase {
+public class RetrieveBeanTest {
 
   private static final Logger logger = LoggerFactory.getLogger(RetrieveBeanTest.class);
   private CpoAdapter cpoAdapter = null;

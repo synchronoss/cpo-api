@@ -35,7 +35,7 @@ import java.util.*;
  *
  * @author david berry
  */
-public class DeleteObjectTest extends CassandraContainerBase {
+public class DeleteObjectTest {
 
   private static final Logger logger = LoggerFactory.getLogger(DeleteObjectTest.class);
   private ArrayList<ValueObject> al = new ArrayList<>();

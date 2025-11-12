@@ -23,7 +23,8 @@ package org.synchronoss.cpo.jdbc.jmeter;
 import org.apache.jmeter.config.*;
 import org.apache.jmeter.protocol.java.sampler.*;
 import org.apache.jmeter.samplers.SampleResult;
-import org.apache.log.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.*;
 import org.synchronoss.cpo.jdbc.*;
 import org.synchronoss.cpo.jdbc.cpoJdbcConfig.*;
@@ -40,8 +41,7 @@ import java.sql.Timestamp;
  * @since 5/9/12
  */
 public class CpoJavaSamplerClient extends AbstractJavaSamplerClient {
-
-  private Logger logger = getLogger();
+    private Logger logger = LoggerFactory.getLogger(this.getClass());
 
   private JdbcCpoMetaDescriptor metaDescriptor = null;
   private CpoAdapter cpoAdapter = null;

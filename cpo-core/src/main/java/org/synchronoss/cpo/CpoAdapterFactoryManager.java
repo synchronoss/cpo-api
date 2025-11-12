@@ -30,6 +30,7 @@ import org.synchronoss.cpo.jta.CpoXaResource;
 import org.synchronoss.cpo.meta.CpoMetaDescriptor;
 
 import java.io.*;
+import java.lang.reflect.InvocationTargetException;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -107,13 +108,14 @@ public final class CpoAdapterFactoryManager extends CpoAdapterFactoryCache {
          */
   synchronized private static void loadAdapters(String cpoConfig) {
     InputStream is = null;
+    var errBuilder = new StringBuilder();
 
     // See if the file is a uri
     try {
       URL cpoConfigUrl = new URL(cpoConfig);
       is = cpoConfigUrl.openStream();
     } catch (IOException e) {
-      logger.info("Uri Not Found: " + cpoConfig);
+      errBuilder.append("Uri Not Found: ").append(cpoConfig).append("\n");
     }
 
     // See if the file is a resource in the jar
@@ -121,12 +123,12 @@ public final class CpoAdapterFactoryManager extends CpoAdapterFactoryCache {
       is = CpoClassLoader.getResourceAsStream(cpoConfig);
 
     if (is == null) {
-      logger.info("Resource Not Found: " + cpoConfig);
+      errBuilder.append("Resource Not Found: ").append(cpoConfig).append("\n");
       try {
         //See if the file is a local file on the server
         is = new FileInputStream(cpoConfig);
       } catch (FileNotFoundException fnfe) {
-        logger.info("File Not Found: " + cpoConfig);
+        errBuilder.append("File Not Found: ").append(cpoConfig).append("\n");
         is = null;
       }
     }
@@ -135,7 +137,11 @@ public final class CpoAdapterFactoryManager extends CpoAdapterFactoryCache {
       CpoConfigDocument configDoc;
       if (is == null) {
         //See if the config is sent in as a string
-        configDoc = CpoConfigDocument.Factory.parse(cpoConfig);
+          try {
+              configDoc = CpoConfigDocument.Factory.parse(cpoConfig);
+          } catch (XmlException e) {
+              throw new CpoException(errBuilder.toString(), e);
+          }
       } else {
         configDoc = CpoConfigDocument.Factory.parse(is);
       }
@@ -195,7 +201,7 @@ public final class CpoAdapterFactoryManager extends CpoAdapterFactoryCache {
 
     // make the CpoAdapter
     try {
-      CpoConfigProcessor configProcessor = (CpoConfigProcessor)CpoClassLoader.forName(dataSourceConfig.getCpoConfigProcessor()).newInstance();
+      CpoConfigProcessor configProcessor = (CpoConfigProcessor)CpoClassLoader.forName(dataSourceConfig.getCpoConfigProcessor()).getDeclaredConstructor().newInstance();
       cpoAdapterFactory = configProcessor.processCpoConfig(dataSourceConfig);
     } catch (ClassNotFoundException cnfe) {
       String msg = "CpoConfigProcessor not found: " + dataSourceConfig.getCpoConfigProcessor();
@@ -213,8 +219,14 @@ public final class CpoAdapterFactoryManager extends CpoAdapterFactoryCache {
       String msg = "Class is not instance of CpoConfigProcessor: " + dataSourceConfig.getCpoConfigProcessor();
       logger.error(msg);
       throw new CpoException(msg);
+    } catch (NoSuchMethodException e) {
+        String msg = "Could not find the constructor for CpoConfigProcessor: " + dataSourceConfig.getCpoConfigProcessor();
+        logger.error(msg);
+        throw new CpoException(msg);
+    } catch (InvocationTargetException e) {
+        throw new RuntimeException(e);
     }
 
-    return cpoAdapterFactory;
+      return cpoAdapterFactory;
   }
 }

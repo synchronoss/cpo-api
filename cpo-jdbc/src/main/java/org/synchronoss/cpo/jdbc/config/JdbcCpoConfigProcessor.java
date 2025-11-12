@@ -32,6 +32,7 @@ import org.synchronoss.cpo.meta.CpoMetaDescriptor;
 import java.util.*;
 
 /**
+ * Processes the cpoConfig.xml data for Jdbc
  *
  * @author dberry
  */
@@ -43,6 +44,9 @@ public class JdbcCpoConfigProcessor implements CpoConfigProcessor {
   private static final String PROP_USER = "user";
   private static final String PROP_PASSWORD = "password";
 
+    /**
+     * Default constructor
+     */
   public JdbcCpoConfigProcessor() {
   }
 

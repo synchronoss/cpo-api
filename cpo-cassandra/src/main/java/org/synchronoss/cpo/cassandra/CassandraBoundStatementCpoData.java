@@ -37,6 +37,7 @@ import java.io.InputStream;
 import java.io.Reader;
 
 /**
+ * Helps manage data transfer between the CPO object and the Cassandra bound statement
  *
  * @author dberry
  */
@@ -45,6 +46,13 @@ public class CassandraBoundStatementCpoData extends AbstractBindableCpoData {
   private static final Logger logger = LoggerFactory.getLogger(CassandraBoundStatementCpoData.class);
   private CassandraBoundStatementFactory cpoStatementFactory = null;
 
+    /**
+     * Constructs the CassandraBoundStatementCpoData
+     *
+     * @param cpoStatementFactory The CassandraBoundStatementFactory
+     * @param cpoAttribute        The CpoAttribute
+     * @param index               The index of the attribute in the bound statement
+     */
   public CassandraBoundStatementCpoData(CassandraBoundStatementFactory cpoStatementFactory, CpoAttribute cpoAttribute, int index) {
     super(cpoAttribute, index);
     this.cpoStatementFactory = cpoStatementFactory;

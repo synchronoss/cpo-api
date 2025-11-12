@@ -34,10 +34,7 @@ import java.util.*;
 /**
  * CassandraCpoAdapter is an interface for a set of routines that are responsible for managing value objects from a
  * datasource.
- * User: dberry
- * Date: 9/10/13
- * Time: 07:38 AM
- * To change this template use File | Settings | File Templates.
+ * @author dberry
  */
 public class CassandraCpoAdapter extends CpoBaseAdapter<ClusterDataSource> {
     /**
@@ -59,8 +56,7 @@ public class CassandraCpoAdapter extends CpoBaseAdapter<ClusterDataSource> {
    *
    * @param metaDescriptor This datasource that identifies the cpo metadata datasource
    * @param jdsiTrx        The datasoruce that identifies the transaction database.
-   * @throws org.synchronoss.cpo.CpoException
-   *          exception
+   * @throws CpoException  An error occured
    */
   protected CassandraCpoAdapter(CassandraCpoMetaDescriptor metaDescriptor, DataSourceInfo<ClusterDataSource> jdsiTrx) throws CpoException {
 
@@ -76,8 +72,7 @@ public class CassandraCpoAdapter extends CpoBaseAdapter<ClusterDataSource> {
    * @param metaDescriptor This datasource that identifies the cpo metadata datasource
    * @param jdsiWrite      The datasource that identifies the transaction database for write transactions.
    * @param jdsiRead       The datasource that identifies the transaction database for read-only transactions.
-   * @throws org.synchronoss.cpo.CpoException
-   *          exception
+   * @throws CpoException  An exception occurred
    */
   protected CassandraCpoAdapter(CassandraCpoMetaDescriptor metaDescriptor, DataSourceInfo<ClusterDataSource> jdsiWrite, DataSourceInfo<ClusterDataSource> jdsiRead) throws CpoException {
     this.metaDescriptor = metaDescriptor;
@@ -91,8 +86,8 @@ public class CassandraCpoAdapter extends CpoBaseAdapter<ClusterDataSource> {
    *
    * @param metaDescriptor This datasource that identifies the cpo metadata datasource
    * @param cdsiTrx        The datasource that identifies the transaction database for read and write transactions.
-   * @throws org.synchronoss.cpo.CpoException
-   *          exception
+   * @throws CpoException  An exception occurred
+   * @return               The CassandraCpoAdapter
    */
   public static CassandraCpoAdapter getInstance(CassandraCpoMetaDescriptor metaDescriptor, DataSourceInfo<ClusterDataSource> cdsiTrx) throws CpoException {
     String adapterKey = metaDescriptor + ":" + cdsiTrx.getDataSourceName();
@@ -110,8 +105,8 @@ public class CassandraCpoAdapter extends CpoBaseAdapter<ClusterDataSource> {
    * @param metaDescriptor This datasource that identifies the cpo metadata datasource
    * @param cdsiWrite      The datasource that identifies the transaction database for write transactions.
    * @param cdsiRead       The datasource that identifies the transaction database for read-only transactions.
-   * @throws org.synchronoss.cpo.CpoException
-   *          exception
+   * @throws CpoException  An exception occurred
+   * @return               The CassandraCpoAdapter
    */
   public static CassandraCpoAdapter getInstance(CassandraCpoMetaDescriptor metaDescriptor, DataSourceInfo<ClusterDataSource> cdsiWrite, DataSourceInfo<ClusterDataSource> cdsiRead) throws CpoException {
     String adapterKey = metaDescriptor + ":" + cdsiWrite.getDataSourceName() + ":" + cdsiRead.getDataSourceName();
@@ -124,23 +119,22 @@ public class CassandraCpoAdapter extends CpoBaseAdapter<ClusterDataSource> {
   }
 
   /**
+   * <p>
    * The CpoAdapter will check to see if this object exists in the datasource.
-   * </p><p>
+   * </p>
    * <pre>Example:
-   * <code>
-   * </p><p>
+   * {@code
    * class SomeObject so = new SomeObject();
    * long count = 0;
    * class CpoAdapter cpo = null;
-   * </p><p>
-   * </p><p>
+   *
    *  try {
    *    cpo = new CpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));
    *  } catch (CpoException ce) {
    *    // Handle the error
    *    cpo = null;
    *  }
-   * </p><p>
+
    *  if (cpo!=null) {
    *    so.setId(1);
    *    so.setName("SomeName");
@@ -156,15 +150,15 @@ public class CassandraCpoAdapter extends CpoBaseAdapter<ClusterDataSource> {
    *      // Handle the error
    *    }
    *  }
-   * </code>
+   * }
    * </pre>
    *
-   * @param name   The String name of the EXISTS Function Group that will be used to create the object in the datasource.
-   *               null signifies that the default rules will be used.
-   * @param obj    This is an object that has been defined within the metadata of the datasource. If the class is not
-   *               defined an exception will be thrown. This object will be searched for inside the datasource.
-   * @param wheres A CpoWhere object that passes in run-time constraints to the function that performs the the exist
-   * @return The number of objects that exist in the datasource that match the specified object
+   * @param name          The String name of the EXISTS Function Group that will be used to create the object in the datasource.
+   *                      null signifies that the default rules will be used.
+   * @param obj           This is an object that has been defined within the metadata of the datasource. If the class is not
+   *                      defined an exception will be thrown. This object will be searched for inside the datasource.
+   * @param wheres        A CpoWhere object that passes in run-time constraints to the function that performs the the exist
+   * @return              The number of objects that exist in the datasource that match the specified object
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
   @Override
@@ -186,13 +180,15 @@ public class CassandraCpoAdapter extends CpoBaseAdapter<ClusterDataSource> {
   /**
    * The CpoAdapter will check to see if this object exists in the datasource.
    *
-   * @param name The name which identifies which EXISTS, INSERT, and UPDATE Function Groups to execute to persist the
-   *             object.
-   * @param obj  This is an object that has been defined within the metadata of the datasource. If the class is not
-   *             defined an exception will be thrown.
-   * @param session  The datasource Connection with which to check if the object exists
-   * @return The int value of the first column returned in the record set
-   * @throws CpoException exception will be thrown if the Function Group has a function count != 1
+   * @param <T>           The type of object being checked
+   * @param name          The name which identifies which EXISTS, INSERT, and UPDATE Function Groups to execute to persist the
+   *                      object.
+   * @param obj           This is an object that has been defined within the metadata of the datasource. If the class is not
+   *                      defined an exception will be thrown.
+   * @param session       The session with which to check if the object exists
+   * @param wheres        A collection of CpoWheres used to find the T
+   * @return              The int value of the first column returned in the record set
+   * @throws CpoException Thrown if the Function Group has a function count != 1
    */
   protected <T> long existsObject(String name, T obj, Session session, Collection<CpoWhere> wheres) throws CpoException {
     long objCount = 0;
@@ -254,7 +250,8 @@ public class CassandraCpoAdapter extends CpoBaseAdapter<ClusterDataSource> {
 
   /**
    * getCpoMetaDescriptor returns the CpoMetaDescriptor associated with this CpoAdapter
-   * @return
+   *
+   * @return The CpoMetaDescriptor
    */
   @Override
   public CpoMetaDescriptor getCpoMetaDescriptor() {
@@ -264,8 +261,8 @@ public class CassandraCpoAdapter extends CpoBaseAdapter<ClusterDataSource> {
   /**
    * getReadSession returns the read session for Cassandra
    *
-   * @return A Session object for reading
-   * @throws CpoException
+   * @return              A Session object for reading
+   * @throws CpoException An exception occurred
    */
   protected Session getReadSession() throws CpoException {
     Session session;
@@ -292,7 +289,7 @@ public class CassandraCpoAdapter extends CpoBaseAdapter<ClusterDataSource> {
    * getWriteSession returns the write session for Cassandra
    *
    * @return A Session object for writing
-   * @throws CpoException
+   * @throws CpoException An exception occurred
    */
   protected Session getWriteSession() throws CpoException {
     Session session;
@@ -311,9 +308,9 @@ public class CassandraCpoAdapter extends CpoBaseAdapter<ClusterDataSource> {
   /**
    * Get the cpo attributes for this expression
    *
-   * @param expression - A string expression
+   * @param expression A string expression
    * @return A List of CpoAttribute
-   * @throws CpoException
+   * @throws CpoException An exception occurred
    */
   @Override
   public List<CpoAttribute> getCpoAttributes(String expression) throws CpoException {
@@ -378,13 +375,17 @@ public class CassandraCpoAdapter extends CpoBaseAdapter<ClusterDataSource> {
   }
 
   /**
-   * DOCUMENT ME!
+   * Updates objects in the datasource
    *
-   * @param obj       DOCUMENT ME!
-   * @param groupType DOCUMENT ME!
-   * @param groupName DOCUMENT ME!
-   * @return DOCUMENT ME!
-   * @throws CpoException DOCUMENT ME!
+   * @param <T>       The object type
+   * @param obj       The object instance
+   * @param groupType The query group type
+   * @param groupName The query group type
+   * @param wheres            A collection of CpoWhere objects to be used by the function
+   * @param orderBy           A collection of CpoOrderBy objects to be used by the function
+   * @param nativeExpressions A collection of CpoNativeFunction objects to be used by the function
+   * @return The number of records updated
+   * @throws CpoException any errors processing the update
    */
   protected <T> long processUpdateGroup(T obj, String groupType, String groupName, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeFunction> nativeExpressions) throws CpoException {
     Session sess = null;
@@ -401,14 +402,18 @@ public class CassandraCpoAdapter extends CpoBaseAdapter<ClusterDataSource> {
     return updateCount;
   }
   /**
-   * DOCUMENT ME!
+   * Updates objects in the datasource
    *
-   * @param obj       DOCUMENT ME!
-   * @param groupType DOCUMENT ME!
-   * @param groupName DOCUMENT ME!
-   * @param sess       DOCUMENT ME!
-   * @return DOCUMENT ME!
-   * @throws CpoException DOCUMENT ME!
+   * @param <T>       The object type
+   * @param obj       The object instance
+   * @param groupType The query group type
+   * @param groupName The query group type
+   * @param wheres            A collection of CpoWhere objects to be used by the function
+   * @param orderBy           A collection of CpoOrderBy objects to be used by the function
+   * @param nativeExpressions A collection of CpoNativeFunction objects to be used by the function
+   * @param sess              The session to use for the updates
+   * @return The number of records updated
+   * @throws CpoException any errors processing the update
    */
   protected <T> long processUpdateGroup(T obj, String groupType, String groupName, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeFunction> nativeExpressions, Session sess) throws CpoException {
     Logger localLogger = obj == null ? logger : LoggerFactory.getLogger(obj.getClass());
@@ -440,13 +445,17 @@ public class CassandraCpoAdapter extends CpoBaseAdapter<ClusterDataSource> {
   }
 
   /**
-   * DOCUMENT ME!
+   * Updates objects in the datasource
    *
-   * @param coll      DOCUMENT ME!
-   * @param groupType DOCUMENT ME!
-   * @param groupName DOCUMENT ME!
-   * @return DOCUMENT ME!
-   * @throws CpoException DOCUMENT ME!
+   * @param <T>       The object type
+   * @param coll      The collection of T to update
+   * @param groupType The query group type
+   * @param groupName The query group type
+   * @param wheres            A collection of CpoWhere objects to be used by the function
+   * @param orderBy           A collection of CpoOrderBy objects to be used by the function
+   * @param nativeExpressions A collection of CpoNativeFunction objects to be used by the function
+   * @return The number of records updated
+   * @throws CpoException any errors processing the update
    */
   protected <T> long processUpdateGroup(Collection<T> coll, String groupType, String groupName, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeFunction> nativeExpressions) throws CpoException {
     Session sess;
@@ -464,14 +473,18 @@ public class CassandraCpoAdapter extends CpoBaseAdapter<ClusterDataSource> {
   }
 
   /**
-   * DOCUMENT ME!
+   * Updates objects in the datasource
    *
-   * @param arr       DOCUMENT ME!
-   * @param groupType DOCUMENT ME!
-   * @param groupName DOCUMENT ME!
-   * @param sess       DOCUMENT ME!
-   * @return DOCUMENT ME!
-   * @throws CpoException DOCUMENT ME!
+   * @param <T>       The object type
+   * @param arr       The array of T to update
+   * @param groupType The query group type
+   * @param groupName The query group type
+   * @param wheres            A collection of CpoWhere objects to be used by the function
+   * @param orderBy           A collection of CpoOrderBy objects to be used by the function
+   * @param nativeExpressions A collection of CpoNativeFunction objects to be used by the function
+   * @param sess       The session to use for the update
+   * @return The number of records updated
+   * @throws CpoException any errors processing the update
    */
   protected <T> long processUpdateGroup(T[] arr, String groupType, String groupName, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeFunction> nativeExpressions, Session sess) throws CpoException {
     CpoClass cpoClass;
@@ -515,6 +528,8 @@ public class CassandraCpoAdapter extends CpoBaseAdapter<ClusterDataSource> {
    * Executes an Object whose MetaData contains a stored procedure. An assumption is that the object exists in the
    * datasource.
    *
+   * @param <T>      The result object type
+   * @param <C>      The criteria object type
    * @param name     The filter name which tells the datasource which objects should be returned. The name also signifies
    *                 what data in the object will be populated.
    * @param criteria This is an object that has been defined within the metadata of the datasource. If the class is not
@@ -534,6 +549,7 @@ public class CassandraCpoAdapter extends CpoBaseAdapter<ClusterDataSource> {
   /**
    * Retrieves the Object from the datasource.
    *
+   * @param <T>               The object type
    * @param obj               This is an object that has been defined within the metadata of the datasource. If the class is not
    *                          defined an exception will be thrown. The input object is used to specify the search criteria.
    * @param groupName         The name which identifies which RETRIEVE Function Group to execute to retrieve the object.
@@ -560,13 +576,20 @@ public class CassandraCpoAdapter extends CpoBaseAdapter<ClusterDataSource> {
   }
 
   /**
-   * DOCUMENT ME!
+   * Retrieves the Object from the datasource.
    *
-   * @param obj       DOCUMENT ME!
-   * @param groupName DOCUMENT ME!
-   * @param sess       DOCUMENT ME!
-   * @return DOCUMENT ME!
-   * @throws CpoException DOCUMENT ME!
+   * @param <T>      The object type
+   * @param obj               This is an object that has been defined within the metadata of the datasource. If the class is not
+   *                          defined an exception will be thrown. The input object is used to specify the search criteria.
+   * @param groupName         The name which identifies which RETRIEVE Function Group to execute to retrieve the object.
+   * @param wheres            A collection of CpoWhere objects to be used by the function
+   * @param orderBy           A collection of CpoOrderBy objects to be used by the function
+   * @param nativeExpressions A collection of CpoNativeFunction objects to be used by the function
+   * @param sess               The session to use for this select
+   * @return A populated object of the same type as the Object passed in as a argument. If no objects match the criteria
+   *         a NULL will be returned.
+   * @throws CpoException the retrieve function defined for this objects returns more than one row, an exception will be
+   *                      thrown.
    */
   protected <T> T processSelectGroup(T obj, String groupName, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeFunction> nativeExpressions, Session sess) throws CpoException {
     T criteriaObj = obj;
@@ -658,16 +681,19 @@ public class CassandraCpoAdapter extends CpoBaseAdapter<ClusterDataSource> {
   }
 
   /**
-   * DOCUMENT ME!
+   * Retrieves Objects from the datasource.
    *
-   * @param name        DOCUMENT ME!
-   * @param criteria    DOCUMENT ME!
-   * @param result      DOCUMENT ME!
-   * @param wheres      DOCUMENT ME!
-   * @param orderBy     DOCUMENT ME!
-   * @param useRetrieve DOCUMENT ME!
-   * @return DOCUMENT ME!
-   * @throws CpoException DOCUMENT ME!
+   * @param <T>               The result object type
+   * @param <C>               The criteria object type
+   * @param name              Query group name
+   * @param criteria          The criteria object
+   * @param result            The result object
+   * @param wheres            A collection of CpoWhere objects to be used by the function
+   * @param orderBy           A collection of CpoOrderBy objects to be used by the function
+   * @param nativeExpressions A collection of CpoNativeFunction objects to be used by the function
+   * @param useRetrieve       Use the RETRIEVE_GROUP instead of the LIST_GROUP
+   * @return A List of T or an Empty List.
+   * @throws CpoException Any errors retrieving the data from the datasource
    */
   protected <T, C> List<T> processSelectGroup(String name, C criteria, T result, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeFunction> nativeExpressions, boolean useRetrieve) throws CpoException {
     Session session = null;
@@ -683,6 +709,21 @@ public class CassandraCpoAdapter extends CpoBaseAdapter<ClusterDataSource> {
     return resultSet;
   }
 
+    /**
+     * Retrieves Objects from the datasource.
+     *
+     * @param <T>               The result object type
+     * @param <C>               The criteria object type
+     * @param name              Query group name
+     * @param criteria          The criteria object
+     * @param result            The result object
+     * @param wheres            A collection of CpoWhere objects to be used by the function
+     * @param orderBy           A collection of CpoOrderBy objects to be used by the function
+     * @param nativeExpressions A collection of CpoNativeFunction objects to be used by the function
+     * @param useRetrieve       Use the RETRIEVE_GROUP instead of the LIST_GROUP
+     * @param resultSet         The result set to add the results to.
+     * @throws CpoException Any errors retrieving the data from the datasource
+     */
   protected <T, C> void processSelectGroup(String name, C criteria, T result, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeFunction> nativeExpressions, boolean useRetrieve, CpoResultSet<T> resultSet) throws CpoException {
     Session session = null;
 
@@ -694,18 +735,22 @@ public class CassandraCpoAdapter extends CpoBaseAdapter<ClusterDataSource> {
     }
   }
 
-  /**
-    * DOCUMENT ME!
-    *
-    * @param name        DOCUMENT ME!
-    * @param criteria    DOCUMENT ME!
-    * @param result      DOCUMENT ME!
-    * @param wheres      DOCUMENT ME!
-    * @param orderBy     DOCUMENT ME!
-    * @param sess         DOCUMENT ME!
-    * @param useRetrieve DOCUMENT ME!
-    * @throws CpoException DOCUMENT ME!
-    */
+    /**
+     * Retrieves Objects from the datasource.
+     *
+     * @param <T>               The result object type
+     * @param <C>               The criteria object type
+     * @param name              Query group name
+     * @param criteria          The criteria object
+     * @param result            The result object
+     * @param wheres            A collection of CpoWhere objects to be used by the function
+     * @param orderBy           A collection of CpoOrderBy objects to be used by the function
+     * @param nativeExpressions A collection of CpoNativeFunction objects to be used by the function
+     * @param sess              The session to use for this select
+     * @param useRetrieve       Use the RETRIEVE_GROUP instead of the LIST_GROUP
+     * @param cpoResultSet         The result set to add the results to.
+     * @throws CpoException Any errors retrieving the data from the datasource
+     */
    protected <T, C> void processSelectGroup(String name, C criteria, T result, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeFunction> nativeExpressions,
                                             Session sess, boolean useRetrieve, CpoResultSet<T> cpoResultSet) throws CpoException {
      Logger localLogger = criteria == null ? logger : LoggerFactory.getLogger(criteria.getClass());
@@ -786,7 +831,7 @@ public class CassandraCpoAdapter extends CpoBaseAdapter<ClusterDataSource> {
          localLogger.info("=================== " + cpoResultSet.size() + " Records - Class=<" + criteria.getClass() + "> Type=<" + CpoAdapter.LIST_GROUP + "> Name=<" + name + "> Result=<" + result.getClass() + "> ====================");
        }
      } catch (Throwable t) {
-       String msg = "ProcessSelectGroup(String name, Object criteria, Object result, CpoWhere where, Collection orderBy, Connection con) failed. Error:";
+       String msg = "ProcessSelectGroup(String name, Object criteria, Object result, CpoWhere where, Collection orderBy, Session sess) failed. Error:";
        localLogger.error(msg, t);
        throw new CpoException(msg, t);
      } finally {
@@ -796,14 +841,17 @@ public class CassandraCpoAdapter extends CpoBaseAdapter<ClusterDataSource> {
    }
 
   /**
-   * DOCUMENT ME!
+   * Validates the type of query being performed. If it is a Persist Group,
+   * it checks the database to see if this is an update or an insert, and returns the query group. Otherwise, it sends
+   * back the original query group. Upserts only work for single objects.
    *
-   * @param obj  DOCUMENT ME!
-   * @param type DOCUMENT ME!
-   * @param name DOCUMENT ME!
-   * @param session    DOCUMENT ME!
-   * @return DOCUMENT ME!
-   * @throws CpoException DOCUMENT ME!
+   * @param <T>  The type of the object
+   * @param obj  The obj to insert or update
+   * @param type The group type
+   * @param name The group name
+   * @param session The session to use
+   * @return The selected group name
+   * @throws CpoException An exception occurred
    */
   protected <T> String getGroupType(T obj, String type, String name, Session session) throws CpoException {
     String retType = type;

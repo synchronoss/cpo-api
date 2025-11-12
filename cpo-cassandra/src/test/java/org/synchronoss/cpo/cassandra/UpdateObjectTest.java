@@ -33,7 +33,7 @@ import java.util.*;
  *
  * @author david berry
  */
-public class UpdateObjectTest extends CassandraContainerBase {
+public class UpdateObjectTest {
 
   private ArrayList<ValueObject> al = new ArrayList<>();
   private CpoAdapter cpoAdapter = null;

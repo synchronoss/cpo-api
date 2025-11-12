@@ -27,8 +27,19 @@ import org.synchronoss.cpo.meta.domain.CpoAttribute;
 
 import java.lang.reflect.InvocationTargetException;
 
+/**
+ * Result set data getter helper
+ */
 public class JdbcResultSetCpoData extends ResultSetCpoData {
 
+    /**
+     * Construct a JdbcResultSetCpoData
+     *
+     * @param methodMapper The method mapper
+     * @param rs - the result set
+     * @param cpoAttribute - The CpoAttribute to get
+     * @param index - The index of the CpoAttribute in the result set
+     */
   public JdbcResultSetCpoData(MethodMapper<?> methodMapper, Object rs, CpoAttribute cpoAttribute, int index) {
     super(methodMapper, rs, cpoAttribute, index);
   }

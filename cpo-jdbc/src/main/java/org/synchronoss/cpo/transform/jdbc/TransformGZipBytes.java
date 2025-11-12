@@ -37,17 +37,18 @@ public class TransformGZipBytes implements JdbcCpoTransform<byte[], byte[]> {
 
   private static final Logger logger = LoggerFactory.getLogger(TransformGZipBytes.class);
 
+    /**
+     * Construct the TransformGZipBytes
+     */
   public TransformGZipBytes() {
   }
 
   /**
    * Transforms the datasource object into an object required by the class
    *
-   * @param cpoAdapter The CpoAdapter for the datasource where the attribute is being retrieved
-   * @param parentObject The object that contains the attribute being retrieved.
-   * @param The object that represents the datasource object being retrieved
-   * @return The object to be stored in the attribute
-   * @throws CpoException
+   * @param inBytes The object that represents the datasource object being retrieved
+   * @return The byte array to be stored in the java attribute
+   * @throws CpoException - An error occurred
    */
   @Override
   public byte[] transformIn(byte[] inBytes) throws CpoException {
@@ -86,11 +87,10 @@ public class TransformGZipBytes implements JdbcCpoTransform<byte[], byte[]> {
   /**
    * Transforms the data from the class attribute to the object required by the datasource
    *
-   * @param cpoAdapter The CpoAdapter for the datasource where the attribute is being persisted
-   * @param parentObject The object that contains the attribute being persisted.
+   * @param jpsf The JdbcPreparedStatementFactory
    * @param attributeObject The object that represents the attribute being persisted.
-   * @return The object to be stored in the datasource
-   * @throws CpoException
+   * @return a byte array to put into the datastore
+   * @throws CpoException - An error occurred
    */
   @Override
   public byte[] transformOut(JdbcPreparedStatementFactory jpsf, byte[] attributeObject) throws CpoException {

@@ -25,7 +25,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.synchronoss.cpo</groupId>
   <artifactId>cpo-cassandra</artifactId>
-  <name>cpo-cassandra</name>
+  <name>cassandra</name>
   <version>6.0.0-SNAPSHOT</version>
   <description>CPO is a persistence layer that is thin wrapper around JDBC that consumes and
     produces POJOs. cpo-cassandra allows you to persist pojos to cassandra
@@ -36,79 +36,50 @@
     <version>6.0.0-SNAPSHOT</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
-  <dependencies>
-    <dependency>
-      <groupId>org.synchronoss.cpo</groupId>
-      <artifactId>cpo-core</artifactId>
-      <version>6.0.0-SNAPSHOT</version>
-      <scope>compile</scope>
-    </dependency>
-      <dependency>
-          <groupId>org.testng</groupId>
-          <artifactId>testng</artifactId>
-          <scope>test</scope>
-      </dependency>
-    <dependency>
-      <groupId>org.slf4j</groupId>
-      <artifactId>slf4j-api</artifactId>
-    </dependency>
-<!--     log4j implementation for test logging-->
-    <dependency>
-      <groupId>org.slf4j</groupId>
-      <artifactId>slf4j-log4j12</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.logging.log4j</groupId>
-      <artifactId>log4j-api</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.xmlbeans</groupId>
-      <artifactId>xmlbeans</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>com.datastax.cassandra</groupId>
-      <artifactId>cassandra-driver-core</artifactId>
-      <version>3.11.5</version>
-    </dependency>
-    <dependency>
-      <groupId>com.fasterxml.jackson.core</groupId>
-      <artifactId>jackson-annotations</artifactId>
-      <version>2.12.5</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.testcontainers</groupId>
-      <artifactId>cassandra</artifactId>
-      <version>${testContainersVersion}</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.github.terma</groupId>
-      <artifactId>javaniotcpproxy</artifactId>
-      <version>1.6</version>
-    </dependency>
-  </dependencies>
+    <properties>
+        <cassandra.initScript>initDB.cql</cassandra.initScript>
+        <cassandra.cpoConfig>cpoConfig.xml</cassandra.cpoConfig>
+        <cassandra.image>cassandra:3.11.19</cassandra.image>
+        <cassandra.contactPoint>127.0.0.1</cassandra.contactPoint>
+        <cassandra.keyspace>cpokeyspace</cassandra.keyspace>
+        <cassandra.metaXml>${project.baseUri}target/test-classes/cassandraMetaData.xml</cassandra.metaXml>
+        <cassandra.nativeport>9142</cassandra.nativeport>
+        <cassandra.storageport>7010</cassandra.storageport>
+        <cassandra.sslstorageport>7011</cassandra.sslstorageport>
+        <cassandra.rpcport>9171</cassandra.rpcport>
+    </properties>
   <build>
     <plugins>
       <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>xmlbeans-maven-plugin</artifactId>
-      </plugin>
-      <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
-        <configuration>
-          <environmentVariables>
-            <CPO_CONFIG>${project.baseUri}target/test-classes/cpoConfig.xml</CPO_CONFIG>
-          </environmentVariables>
-        </configuration>
+          <configuration>
+              <suiteXmlFiles>
+                  <suiteXmlFile>target/test-classes/testng.xml</suiteXmlFile>
+              </suiteXmlFiles>
+          </configuration>
       </plugin>
       <plugin>
         <groupId>org.synchronoss.cpo</groupId>
         <artifactId>cpo-plugin</artifactId>
         <version>6.0.0-SNAPSHOT</version>
+          <dependencies>
+              <dependency>
+                  <groupId>org.synchronoss.cpo</groupId>
+                  <artifactId>cpo-cassandra</artifactId>
+                  <version>6.0.0-SNAPSHOT</version>
+              </dependency>
+              <dependency>
+                  <groupId>ch.qos.logback</groupId>
+                  <artifactId>logback-core</artifactId>
+                  <version>${logbackVersion}</version>
+              </dependency>
+              <dependency>
+                  <groupId>ch.qos.logback</groupId>
+                  <artifactId>logback-classic</artifactId>
+                  <version>${logbackVersion}</version>
+              </dependency>
+          </dependencies>
         <executions>
           <execution>
             <id>Build-TestCpoBeans</id>
@@ -127,21 +98,66 @@
       </plugin>
     </plugins>
   </build>
-  <profiles>
-    <profile>
-      <id>cassandra</id>
-      <activation>
-        <activeByDefault>true</activeByDefault>
-      </activation>
-      <properties>
-        <cpo.cassandra.contactPoint>127.0.0.1</cpo.cassandra.contactPoint>
-        <cpo.cassandra.keyspace>cpokeyspace</cpo.cassandra.keyspace>
-        <cpo.cassandra.metaXml>${project.baseUri}target/test-classes/cassandraMetaData.xml</cpo.cassandra.metaXml>
-        <cpo.cassandra.nativeport>9142</cpo.cassandra.nativeport>
-        <cpo.cassandra.storageport>7010</cpo.cassandra.storageport>
-        <cpo.cassandra.sslstorageport>7011</cpo.cassandra.sslstorageport>
-        <cpo.cassandra.rpcport>9171</cpo.cassandra.rpcport>
-      </properties>
-    </profile>
-  </profiles>
+    <dependencies>
+        <dependency>
+            <groupId>org.synchronoss.cpo</groupId>
+            <artifactId>cpo-core</artifactId>
+            <version>6.0.0-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.testng</groupId>
+            <artifactId>testng</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+        </dependency>
+        <!-- logback implementation for test logging -->
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-core</artifactId>
+            <version>${logbackVersion}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>${logbackVersion}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.xmlbeans</groupId>
+            <artifactId>xmlbeans</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.datastax.cassandra</groupId>
+            <artifactId>cassandra-driver-core</artifactId>
+            <version>3.11.5</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-annotations</artifactId>
+            <version>3.0-rc5</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>testcontainers</artifactId>
+            <version>${testContainersVersion}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>cassandra</artifactId>
+            <version>${testContainersVersion}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.github.terma</groupId>
+            <artifactId>javaniotcpproxy</artifactId>
+            <version>1.6</version>
+        </dependency>
+    </dependencies>
 </project>

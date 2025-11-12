@@ -24,12 +24,19 @@ import org.synchronoss.cpo.*;
 import org.synchronoss.cpo.jta.CpoXaResource;
 
 /**
- * Created by dberry on 11/8/15.
+ * A factory for creating CassandraCpoAdapter
+ *
+ * @author dberry
  */
 public class CassandraCpoAdapterFactory implements CpoAdapterFactory {
 
   private CassandraCpoAdapter cassandraCpoAdapter = null;
 
+    /**
+     * Constructs a CassandraCpoAdapterFactory
+     *
+     * @param cassandraCpoAdapter A CassandraCpoAdapter
+     */
   public CassandraCpoAdapterFactory(CassandraCpoAdapter cassandraCpoAdapter) {
     this.cassandraCpoAdapter = cassandraCpoAdapter;
   }

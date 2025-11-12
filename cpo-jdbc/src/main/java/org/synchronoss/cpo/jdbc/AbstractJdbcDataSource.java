@@ -27,6 +27,8 @@ import java.util.*;
 import java.util.logging.Logger;
 
 /**
+ * An AbstractJDBCDatasource used for instantiating the DataSource from the database driver
+ *
  * @author dberry
  */
 public abstract class AbstractJdbcDataSource extends AbstractJdbcDataSourceInfo implements DataSource {
@@ -34,14 +36,31 @@ public abstract class AbstractJdbcDataSource extends AbstractJdbcDataSourceInfo 
   private PrintWriter printWriter_ = null;
   private int timeout_ = 0;
 
+    /**
+     * Constructs a AbstractJdbcDataSource
+     *
+     * @param dataSourceName - The name of the datasource to instantiate,
+     */
   public AbstractJdbcDataSource(String dataSourceName) {
     super(dataSourceName);
   }
 
+    /**
+     * Constructs a AbstractJdbcDataSource
+     *
+     * @param className - The DataSource className from the Driver.
+     * @param properties - The list of properties to be passed to the driver
+     */
   public AbstractJdbcDataSource(String className, SortedMap<String, String> properties) {
     super(className, properties);
   }
 
+    /**
+     * Constructs a AbstractJdbcDataSource
+     *
+     * @param className  - The DataSource className from the Driver.
+     * @param properties - The list of properties to be passed to the driver
+     */
   public AbstractJdbcDataSource(String className, Properties properties) {
     super(className, properties);
   }

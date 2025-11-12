@@ -86,7 +86,7 @@ public abstract class CpoBaseXaResource<T> implements CpoXaResource<T> {
    * Closes the resource for the specified xid
    *
    * @param xid of the global transaction
-   * @throws XAException - An error has occurred.
+   * @throws XAException An error has occurred.
    */
   public void close(Xid xid) throws XAException {
     synchronized (cpoXaStateMap) {
@@ -109,9 +109,9 @@ public abstract class CpoBaseXaResource<T> implements CpoXaResource<T> {
   /**
    * Commits the global transaction specified by xid.
    *
-   * @param xid      - A global transaction identifier
-   * @param onePhase - If true, the resource manager should use a one-phase commit protocol to commit the work done on behalf of xid.
-   * @throws XAException - An error has occurred. Possible XAExceptions are XA_HEURHAZ, XA_HEURCOM, XA_HEURRB, XA_HEURMIX, XAER_RMERR,
+   * @param xid      A global transaction identifier
+   * @param onePhase If true, the resource manager should use a one-phase commit protocol to commit the work done on behalf of xid.
+   * @throws XAException An error has occurred. Possible XAExceptions are XA_HEURHAZ, XA_HEURCOM, XA_HEURRB, XA_HEURMIX, XAER_RMERR,
    *                     XAER_RMFAIL, XAER_NOTA, XAER_INVAL, or XAER_PROTO.
    *                     <p>
    *                     If the resource manager did not commit the transaction and the parameter onePhase is set to true, the resource manager may throw
@@ -153,9 +153,9 @@ public abstract class CpoBaseXaResource<T> implements CpoXaResource<T> {
    * <p>
    * If TMSUCCESS is specified, the portion of work has completed successfully.
    *
-   * @param xid   - A global transaction identifier that is the same as the identifier used previously in the start method.
-   * @param flags - One of TMSUCCESS, TMFAIL, or TMSUSPEND.
-   * @throws XAException - An error has occurred. Possible XAException values are XAER_RMERR, XAER_RMFAIL, XAER_NOTA, XAER_INVAL, XAER_PROTO, or XA_RB*.
+   * @param xid   A global transaction identifier that is the same as the identifier used previously in the start method.
+   * @param flags One of TMSUCCESS, TMFAIL, or TMSUSPEND.
+   * @throws XAException An error has occurred. Possible XAException values are XAER_RMERR, XAER_RMFAIL, XAER_NOTA, XAER_INVAL, XAER_PROTO, or XA_RB*.
    */
   @Override
   public void end(Xid xid, int flags) throws XAException {
@@ -208,8 +208,8 @@ public abstract class CpoBaseXaResource<T> implements CpoXaResource<T> {
   /**
    * Tells the resource manager to forget about a heuristically completed transaction branch.
    *
-   * @param xid - A global transaction identifier.
-   * @throws XAException - An error has occurred. Possible exception values are XAER_RMERR, XAER_RMFAIL, XAER_NOTA, XAER_INVAL, or XAER_PROTO.
+   * @param xid A global transaction identifier.
+   * @throws XAException An error has occurred. Possible exception values are XAER_RMERR, XAER_RMFAIL, XAER_NOTA, XAER_INVAL, or XAER_PROTO.
    */
   @Override
   public void forget(Xid xid) throws XAException {
@@ -221,8 +221,8 @@ public abstract class CpoBaseXaResource<T> implements CpoXaResource<T> {
    * invoking this method, the return value is the default timeout set for the resource manager; otherwise, the value used in the previous
    * setTransactionTimeout call is returned.
    *
-   * @return - the transaction timeout value in seconds.
-   * @throws XAException - An error has occurred. Possible exception values are XAER_RMERR and XAER_RMFAIL.
+   * @return the transaction timeout value in seconds.
+   * @throws XAException An error has occurred. Possible exception values are XAER_RMERR and XAER_RMFAIL.
    */
   @Override
   public int getTransactionTimeout() throws XAException {
@@ -232,7 +232,7 @@ public abstract class CpoBaseXaResource<T> implements CpoXaResource<T> {
   /**
    * Ask the resource manager to prepare for a transaction commit of the transaction specified in xid.
    *
-   * @param xid - A global transaction identifier.
+   * @param xid A global transaction identifier.
    * @return - A value indicating the resource manager's vote on the outcome of the transaction. The possible values are: XA_RDONLY or XA_OK.
    * If the resource manager wants to roll back the transaction, it should do so by raising an appropriate XAException in the prepare method.
    * @throws XAException - An error has occurred. Possible exception values are: XA_RB*, XAER_RMERR, XAER_RMFAIL, XAER_NOTA, XAER_INVAL, or XAER_PROTO.

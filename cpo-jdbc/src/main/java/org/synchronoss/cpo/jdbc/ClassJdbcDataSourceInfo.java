@@ -36,7 +36,6 @@ import org.synchronoss.cpo.helper.ExceptionHelper;
 
 /**
  * Collects the info required to instantiate a DataSource from a JDBC Driver
- *
  * Provides the DataSourceInfo factory method getDataSource which instantiates the DataSource
  *
  * @author dberry
@@ -55,10 +54,10 @@ public class ClassJdbcDataSourceInfo extends AbstractJdbcDataSource implements C
   /**
    * Creates a ClassJdbcDataSourceInfo from a Jdbc Driver
    *
-   * @param classname The classname of a class that implements datasource
+   * @param className The classname of a class that implements datasource
    * @param properties - The connection properties for connecting to the database
    */
-  public ClassJdbcDataSourceInfo(String className, SortedMap<String, String> properties) throws CpoException {
+  public ClassJdbcDataSourceInfo(String className, SortedMap<String, String> properties) {
     super(className, properties);
     this.className=className;
     this.properties=properties;

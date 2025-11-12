@@ -21,21 +21,22 @@
     http://www.gnu.org/licenses/lgpl.txt
 
 -->
-<project>
+<site xmlns="http://maven.apache.org/SITE/2.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://maven.apache.org/SITE/2.0.0 https://maven.apache.org/xsd/site-2.0.0.xsd">
   <publishDate position="left" format="MM-dd-yyyy hh:mm:ss a"/>
   <skin>
     <groupId>org.apache.maven.skins</groupId>
     <artifactId>maven-fluido-skin</artifactId>
     <version>2.1.0</version>
   </skin>
-  <bannerLeft>
-    <name>CPO</name>
-    <href>/</href>
-  </bannerLeft>
-  <bannerRight>
-    <src>images/syn_logo.png</src>
-    <href>http://www.synchronoss.com</href>
-  </bannerRight>
+<!--  <bannerLeft>-->
+<!--    <name>CPO</name>-->
+<!--    <href>/</href>-->
+<!--  </bannerLeft>-->
+<!--  <bannerRight>-->
+<!--    <src>images/syn_logo.png</src>-->
+<!--    <href>http://www.synchronoss.com</href>-->
+<!--  </bannerRight>-->
   <body>
     <links>
       <item name="GitHub Project" href="http://github.com/cpo-org/cpo-api"/>
@@ -48,4 +49,4 @@
       <item name="CPO Util" href="http://cpo-org.github.io/cpo-util/"/>
     </menu>
   </body>
-</project>
+</site>

@@ -66,6 +66,8 @@ public class JdbcCpoXaAdapter extends CpoBaseXaResource<JdbcCpoAdapter> implemen
   private JdbcCpoAdapterFactory jdbcCpoAdapterFactory;
 
     /**
+     * Construct a JdbcCpoXaAdapter
+     *
      * @param jdbcCpoAdapterFactory  - The adapter factory to use to create the JdbcCpoXaAdapter
      * @throws CpoException - An error getting the JdbcCpoXaAdapter
      */

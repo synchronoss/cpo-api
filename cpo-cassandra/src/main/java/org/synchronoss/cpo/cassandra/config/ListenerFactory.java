@@ -33,9 +33,23 @@ import java.util.Collection;
  */
 public abstract class ListenerFactory implements FactoryMethodName {
 
+    /**
+     * Constructs a ListenerFactory
+     */
+    public ListenerFactory(){}
+
+    /**
+     * Gets the factory method name
+     * @return The factory method name
+     */
   public String getFactoryMethodName() {
     return "createListeners";
   }
 
+    /**
+     * Create the listeners
+     *
+     * @return A collection of Host.StateListener
+     */
   public abstract Collection<Host.StateListener> createListeners();
 }

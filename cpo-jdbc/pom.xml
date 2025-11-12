@@ -25,8 +25,8 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.synchronoss.cpo</groupId>
   <artifactId>cpo-jdbc</artifactId>
-  <name>cpo-jdbc</name>
-  <version>6.0.0-SNAPSHOT</version>
+    <name>jdbc</name>
+    <version>6.0.0-SNAPSHOT</version>
   <parent>
     <groupId>org.synchronoss.cpo</groupId>
     <artifactId>cpo</artifactId>
@@ -37,11 +37,11 @@
     produces POJOs
   </description>
   <properties>
-    <oracleVersion>23.8.0.25.04</oracleVersion>
-    <mysqlVersion>9.3.0</mysqlVersion>
-    <mariadbVersion>3.5.4</mariadbVersion>
-    <h2Version>2.2.224</h2Version>
-    <postgresVersion>42.7.7</postgresVersion>
+    <oracleVersion> 23.26.0.0.0</oracleVersion>
+    <mysqlVersion>9.5.0</mysqlVersion>
+    <mariadbVersion>3.5.6</mariadbVersion>
+    <h2Version>2.4.240</h2Version>
+    <postgresVersion>42.7.8</postgresVersion>
 
       <!--  MySQL Test properties  -->
       <mysql.type>mysql</mysql.type>
@@ -193,14 +193,27 @@
             </suiteXmlFiles>
         </configuration>
       </plugin>
-       <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>xmlbeans-maven-plugin</artifactId>
-      </plugin>
       <plugin>
         <groupId>org.synchronoss.cpo</groupId>
         <artifactId>cpo-plugin</artifactId>
         <version>6.0.0-SNAPSHOT</version>
+          <dependencies>
+              <dependency>
+                  <groupId>org.synchronoss.cpo</groupId>
+                  <artifactId>cpo-jdbc</artifactId>
+                  <version>6.0.0-SNAPSHOT</version>
+              </dependency>
+              <dependency>
+                  <groupId>ch.qos.logback</groupId>
+                  <artifactId>logback-core</artifactId>
+                  <version>${logbackVersion}</version>
+              </dependency>
+              <dependency>
+                  <groupId>ch.qos.logback</groupId>
+                  <artifactId>logback-classic</artifactId>
+                  <version>${logbackVersion}</version>
+              </dependency>
+          </dependencies>
         <executions>
           <execution>
             <id>Build-TestCpoBeans</id>
@@ -236,6 +249,19 @@
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
     </dependency>
+      <!-- logback implementation for test logging -->
+      <dependency>
+          <groupId>ch.qos.logback</groupId>
+          <artifactId>logback-core</artifactId>
+          <version>${logbackVersion}</version>
+          <scope>test</scope>
+      </dependency>
+      <dependency>
+          <groupId>ch.qos.logback</groupId>
+          <artifactId>logback-classic</artifactId>
+          <version>${logbackVersion}</version>
+          <scope>test</scope>
+      </dependency>
     <dependency>
       <groupId>org.apache.xmlbeans</groupId>
       <artifactId>xmlbeans</artifactId>
@@ -278,7 +304,7 @@
     <dependency>
       <groupId>org.apache.jmeter</groupId>
       <artifactId>ApacheJMeter_java</artifactId>
-      <version>5.3</version>
+      <version>5.6.3</version>
       <exclusions>
         <exclusion>
           <groupId>org.apache.logging.log4j</groupId>
@@ -297,17 +323,6 @@
           <artifactId>log4j-slf4j-impl</artifactId>
         </exclusion>
       </exclusions>
-      <scope>test</scope>
-    </dependency>
-    <!-- log4j implementation for test logging -->
-    <dependency>
-      <groupId>org.slf4j</groupId>
-      <artifactId>slf4j-log4j12</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.logging.log4j</groupId>
-      <artifactId>log4j-api</artifactId>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -349,7 +364,7 @@
     <dependency>
       <groupId>org.locationtech.jts</groupId>
       <artifactId>jts-core</artifactId>
-      <version>1.17.0</version>
+      <version>1.20.0</version>
       <scope>test</scope>
     </dependency>
   </dependencies>

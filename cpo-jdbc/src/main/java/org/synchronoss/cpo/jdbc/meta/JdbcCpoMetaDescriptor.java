@@ -26,11 +26,17 @@ import org.synchronoss.cpo.jdbc.exporter.JdbcMetaXmlObjectExporter;
 import org.synchronoss.cpo.meta.CpoMetaDescriptor;
 
 /**
- *
+ * Process the Jdbc specific metadata from the xml metadata
  * @author dberry
  */
 public class JdbcCpoMetaDescriptor extends CpoMetaDescriptor {
 
+    /**
+     * Constructs a JdbcCpoMetaDescriptor
+     * @param name - The name of the metadescriptor
+     * @param caseSensitive - Whether we do caseSensitive dataName matches or not
+     * @throws CpoException - Any errors processing the metadata
+     */
   public JdbcCpoMetaDescriptor(String name, boolean caseSensitive) throws CpoException {
     super(name, caseSensitive);
   }

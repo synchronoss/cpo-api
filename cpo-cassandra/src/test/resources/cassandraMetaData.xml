@@ -22,7 +22,7 @@
 
 -->
 <cpoMetaData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
- xsi:schemaLocation="http://www.synchronoss.org/cpo/core/CpoCoreMeta.xsd ../../main/xsd/CpoCassandraMeta.xsd"
+ xsi:schemaLocation="http://www.synchronoss.org/cpo/core/CpoCoreMeta.xsd ../../../../cpo-core/src/main/xsd/CpoCassandraMeta.xsd"
  xmlns="http://www.synchronoss.org/cpo/core/CpoCoreMeta.xsd"
  metaDescriptor="org.synchronoss.cpo.cassandra.meta.CassandraCpoMetaDescriptor"
  defaultPackageName="">

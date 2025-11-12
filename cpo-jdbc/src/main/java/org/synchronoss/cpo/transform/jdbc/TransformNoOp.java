@@ -36,6 +36,9 @@ public class TransformNoOp implements JdbcCpoTransform<Integer, Integer> {
 
   private static final Logger logger = LoggerFactory.getLogger(TransformNoOp.class);
 
+    /**
+     * Constructs a TransformNoOp
+     */
   public TransformNoOp() {
   }
 
@@ -49,7 +52,7 @@ public class TransformNoOp implements JdbcCpoTransform<Integer, Integer> {
    *
    * @param dbIn The value from the datasource that will be transformed into the format that is required by the pojo.
    * @return The object to be stored in the attribute
-   * @throws CpoException
+   * @throws CpoException An error occurred
    */
   @Override
   public Integer transformIn(Integer dbIn) throws CpoException {
@@ -58,18 +61,19 @@ public class TransformNoOp implements JdbcCpoTransform<Integer, Integer> {
   }
 
   /**
+   * <p>
    * Transforms the data from the class attribute to the object required by the datasource. The type of the attrOut
    * parameter and the type of the return value must change to match the types being converted. Reflection is used to
    * true everything up at runtime.
-   *
+   * </p><p>
    * e.g public Blob transformOut(JdbcCallableStatementFactory jcsf, byte[] attrOut) would be the signature for
    * converting a byte[] stored in the pojo into a Blob object for the datasource.
-   *
-   * @param jcsf a reference to the JdbcCallableStatementFactory. This is necessary as some DBMSs (ORACLE !#$%^&!) that
+   * </p>
+   * @param jcsf a reference to the JdbcCallableStatementFactory. This is necessary as some DBMSs (ORACLE) that
    * require access to the connection to deal with certain datatypes.
    * @param attrOut The attribute object that needs to get transformed into the db representation
    * @return The object to be stored in the datasource
-   * @throws CpoException
+   * @throws CpoException An error occurred
    */
   @Override
   public Integer transformOut(JdbcCallableStatementFactory jcsf, Integer attrOut) throws CpoException {
@@ -78,18 +82,19 @@ public class TransformNoOp implements JdbcCpoTransform<Integer, Integer> {
   }
 
   /**
+   * <p>
    * Transforms the data from the class attribute to the object required by the datasource. The type of the attrOut
    * parameter and the type of the return value must change to match the types being converted. Reflection is used to
    * true everything up at runtime.
-   *
+   * </p><p>
    * e.g public Blob transformOut(JdbcPreparedStatementFactory jpsf, byte[] attrOut) would be the signature for
    * converting a byte[] stored in the pojo into a Blob object for the datasource.
-   *
-   * @param jpsf a reference to the JdbcPreparedStatementFactory. This is necessary as some DBMSs (ORACLE !#$%^&!) that
+   * </p>
+   * @param jpsf a reference to the JdbcPreparedStatementFactory. This is necessary as some DBMSs (ORACLE) that
    * require access to the connection to deal with certain datatypes.
    * @param attrOut The attribute object that needs to get transformed into the db representation
    * @return The object to be stored in the datasource
-   * @throws CpoException
+   * @throws CpoException An error occurred
    */
   @Override
   public Integer transformOut(JdbcPreparedStatementFactory jpsf, Integer attrOut) throws CpoException {

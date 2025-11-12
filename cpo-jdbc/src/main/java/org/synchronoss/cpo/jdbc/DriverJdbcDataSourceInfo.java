@@ -29,7 +29,6 @@ import java.util.Properties;
 
 /**
  * Collects the info required to instantiate a DataSource from a JDBC Driver
- *
  * Provides the DataSourceInfo factory method getDataSource which instantiates the DataSource
  *
  * @author dberry
@@ -50,6 +49,7 @@ public class DriverJdbcDataSourceInfo extends AbstractJdbcDataSource {
    *
    * @param driver The text name of the driver
    * @param url - The url that points to the database.
+   * @throws CpoException - Any errors encountered loading the driver
    */
   public DriverJdbcDataSourceInfo(String driver, String url) throws CpoException {
     super(url);
@@ -64,6 +64,7 @@ public class DriverJdbcDataSourceInfo extends AbstractJdbcDataSource {
    * @param driver The text name of the driver
    * @param url - The url that points to the database.
    * @param properties - The connection properties for connecting to the database
+   * @throws CpoException - Any errors encountered loading the driver
    */
   public DriverJdbcDataSourceInfo(String driver, String url, Properties properties) throws CpoException {
     super(url, properties);
@@ -80,6 +81,7 @@ public class DriverJdbcDataSourceInfo extends AbstractJdbcDataSource {
    * @param url - The url that points to the database.
    * @param username - The username for connecting to the database
    * @param password - The password for connectinf to the database
+   * @throws CpoException - Any errors encountered loading the driver
    */
   public DriverJdbcDataSourceInfo(String driver, String url, String username, String password) throws CpoException {
     super(url + username);

@@ -31,9 +31,22 @@ import com.datastax.driver.core.policies.RetryPolicy;
  */
 public abstract class RetryPolicyFactory implements FactoryMethodName {
 
+    /**
+     * Constructs a RetryPolicyFactory
+     */
+    public RetryPolicyFactory(){}
+
+    /**
+     * Get the factory method name
+     * @return The method name
+     */
   public String getFactoryMethodName() {
     return "createRetryPolicy";
   }
 
+    /**
+     * Create the RetryPolicy
+     * @return The RetryPolicy
+     */
   public abstract RetryPolicy createRetryPolicy();
 }

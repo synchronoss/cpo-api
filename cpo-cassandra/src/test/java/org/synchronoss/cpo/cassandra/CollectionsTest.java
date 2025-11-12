@@ -34,7 +34,7 @@ import java.util.*;
  *
  * @author david berry
  */
-public class CollectionsTest extends CassandraContainerBase {
+public class CollectionsTest {
   private CpoAdapter cpoAdapter = null;
   private CpoAdapter readAdapter = null;
   private CassandraCpoMetaDescriptor metaDescriptor = null;

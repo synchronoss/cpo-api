@@ -34,7 +34,7 @@ import java.util.*;
  *
  * @author david berry
  */
-public class HotDeployTest extends CassandraContainerBase {
+public class HotDeployTest {
   private static final Logger logger = LoggerFactory.getLogger(HotDeployTest.class);
   private CpoAdapter cpoAdapter = null;
   private ArrayList<ValueObject> al = new ArrayList<>();

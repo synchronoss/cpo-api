@@ -33,7 +33,7 @@ import java.io.*;
  *
  * @author dberry
  */
-public class XmlValidationTest extends CassandraContainerBase {
+public class XmlValidationTest {
 
   private static final Logger logger = LoggerFactory.getLogger(XmlValidationTest.class);
   static final String CPO_CONFIG_XML = "/cpoConfig.xml";

@@ -23,17 +23,27 @@ package org.synchronoss.cpo.cassandra.config;
 import com.datastax.driver.core.policies.LoadBalancingPolicy;
 
 /**
- * Created with IntelliJ IDEA.
- * User: dberry
- * Date: 10/10/13
- * Time: 07:53 AM
- * To change this template use File | Settings | File Templates.
+ * Factory to construct a LoadBalancingPolicy
+ * @author dberry
  */
 public abstract class LoadBalancingPolicyFactory {
 
+    /**
+     * Constructs a LoadBalancingPolicyFactory
+     */
+    public LoadBalancingPolicyFactory(){}
+
+    /**
+     * Get the factory method name
+     * @return The method name
+     */
   public String getFactoryMethodName() {
     return "createLoadBalancingPolicy";
   }
 
+    /**
+     * Create the LoadBalancingPolicy
+     * @return The LoadBalancingPolicy
+     */
   public abstract LoadBalancingPolicy createLoadBalancingPolicy();
 }

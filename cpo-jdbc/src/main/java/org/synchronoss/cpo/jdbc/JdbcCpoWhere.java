@@ -36,13 +36,35 @@ public class JdbcCpoWhere extends BindableCpoWhere {
      */
     private static final long serialVersionUID = 1L;
 
+    /**
+     * Create a JdbcCpoWhere
+     */
   public JdbcCpoWhere() {
   }
 
+    /**
+     * Create a JdbcCpoWhere
+     *
+     * @param <T> - The type of the value being compared
+     * @param logical - Logical operator
+     * @param attr - Attribute being compared
+     * @param comp - Compare operator
+     * @param value - The value to compare against the attribute
+     */
   public <T> JdbcCpoWhere(int logical, String attr, int comp, T value) {
     super(logical, attr, comp, value);
   }
 
+    /**
+     * Create a JdbcCpoWhere
+     *
+     * @param <T> - The type of the value being compared
+     * @param logical - Logical operator
+     * @param attr - Attribute being compared
+     * @param comp - Compare operator
+     * @param value - The value to compare against the attribute
+     * @param not - add the logical not operator
+     */
   public <T> JdbcCpoWhere(int logical, String attr, int comp, T value, boolean not) {
     super(logical, attr, comp, value, not);
   }

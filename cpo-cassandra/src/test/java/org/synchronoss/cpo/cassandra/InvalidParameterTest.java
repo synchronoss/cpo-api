@@ -28,7 +28,7 @@ import static org.testng.Assert.*;
 
 import java.util.Collection;
 
-public class InvalidParameterTest extends CassandraContainerBase {
+public class InvalidParameterTest {
 
   private static final Logger logger = LoggerFactory.getLogger(InvalidParameterTest.class);
   private CpoAdapter cpoAdapter = null;

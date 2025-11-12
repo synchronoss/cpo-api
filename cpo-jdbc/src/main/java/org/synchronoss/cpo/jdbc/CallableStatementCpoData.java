@@ -35,6 +35,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.sql.CallableStatement;
 
 /**
+ * A class that builds constructs and executes callable statements
  *
  * @author dberry
  */
@@ -44,11 +45,25 @@ public class CallableStatementCpoData extends AbstractBindableCpoData {
   private CallableStatement cs = null;
   JdbcCallableStatementFactory jcsf = null;
 
+    /**
+     * Constructs a CallableStatementCpoData
+     *
+     * @param cs - The callable statement
+     * @param cpoAttribute - The attribute to add.
+     * @param index - The index of the attribute in the callable statement
+     */
   public CallableStatementCpoData(CallableStatement cs, CpoAttribute cpoAttribute, int index) {
     super(cpoAttribute, index);
     this.cs = cs;
   }
 
+    /**
+     * Constructs a CallableStatementCpoData
+     *
+     * @param jcsf - The factory for building the callable statement
+     * @param cpoAttribute - The attribute to add.
+     * @param index - The index of the attribute in the callable statement
+     */
   public CallableStatementCpoData(JdbcCallableStatementFactory jcsf, CpoAttribute cpoAttribute, int index) {
     super(cpoAttribute, index);
     this.jcsf = jcsf;

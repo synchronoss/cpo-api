@@ -31,7 +31,7 @@ import java.util.*;
  *
  * @author david berry
  */
-public class NativeExpressionTest extends CassandraContainerBase {
+public class NativeExpressionTest {
 
   private CpoAdapter cpoAdapter = null;
   private ArrayList<ValueObject> al = new ArrayList<>();

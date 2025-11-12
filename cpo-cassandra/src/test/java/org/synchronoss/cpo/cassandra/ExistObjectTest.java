@@ -33,7 +33,7 @@ import java.util.ArrayList;
  *
  * @author david berry
  */
-public class ExistObjectTest extends CassandraContainerBase {
+public class ExistObjectTest {
 
   private static final Logger logger = LoggerFactory.getLogger(ExistObjectTest.class);
   private CpoAdapter cpoAdapter = null;

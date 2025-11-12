@@ -31,9 +31,22 @@ import com.datastax.driver.core.SocketOptions;
  */
 public abstract class SSLOptionsFactory implements FactoryMethodName {
 
+    /**
+     * Constructs a SSLOptionsFactory
+     */
+    public SSLOptionsFactory(){}
+
+    /**
+     * Get the factory method name
+     * @return The method name
+     */
   public String getFactoryMethodName() {
     return "createSSLOptions";
   }
 
+    /**
+     * Create the SocketOptions
+     * @return The SocketOptions
+     */
   public abstract SocketOptions createSSLOptions();
 }

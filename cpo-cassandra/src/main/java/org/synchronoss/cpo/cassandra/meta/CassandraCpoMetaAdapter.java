@@ -54,6 +54,11 @@ public class CassandraCpoMetaAdapter extends AbstractCpoMetaAdapter {
   private static final DataTypeMapEntry<String> defaultDataTypeMapEntry = new DataTypeMapEntry<>(DataType.Name.VARCHAR.ordinal(), DataType.Name.VARCHAR.toString(), String.class);
   private static final DataTypeMapper dataTypeMapper = initDataTypeMapper();
 
+    /**
+     * Constructs a CassandraCpoMetaAdapter
+     */
+  public CassandraCpoMetaAdapter(){}
+
   @Override
   protected DataTypeMapper getDataTypeMapper() {
     return dataTypeMapper;

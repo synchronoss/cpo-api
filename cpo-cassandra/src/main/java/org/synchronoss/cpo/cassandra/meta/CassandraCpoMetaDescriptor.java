@@ -34,6 +34,12 @@ import org.synchronoss.cpo.meta.CpoMetaDescriptor;
  */
 public class CassandraCpoMetaDescriptor extends CpoMetaDescriptor {
 
+    /**
+     * Constructs a CassandraCpoMetaDescriptor
+     * @param name The descriptor name
+     * @param caseSensitive Is data member matching case sensitive
+     * @throws CpoException An error occurred
+     */
   public CassandraCpoMetaDescriptor(String name, boolean caseSensitive) throws CpoException {
     super(name, caseSensitive);
   }

@@ -36,7 +36,7 @@ public interface DataSourceInfo<T> {
 
   /**
    * @return Returns the DataSource
-   * @throws CpoException - Cannot find the datasource
+   * @throws CpoException Cannot find the datasource
    */
   public T getDataSource() throws CpoException;
 }

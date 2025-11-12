@@ -27,6 +27,7 @@ import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.CpoException;
 import org.synchronoss.cpo.meta.MethodMapper;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
@@ -49,6 +50,7 @@ public class CassandraMethodMapper implements Serializable, Cloneable {
   /**
    * Version Id for this class.
    */
+  @Serial
   private static final long serialVersionUID = 1L;
   private static final Class<BoundStatement> bsc = BoundStatement.class;
   private static final Class<Row> rsc = Row.class;
@@ -58,8 +60,14 @@ public class CassandraMethodMapper implements Serializable, Cloneable {
   private CassandraMethodMapper() {
   }
 
-  static public CassandraMethodMapEntry<?,?> getDatasourceMethod(Class<?> c) throws CpoException {
-    return (CassandraMethodMapEntry)methodMapper.getDataMethodMapEntry(c);
+    /**
+     * Looks up the datasource method for the Clazz
+     * @param clazz The clazz to lookup
+     * @return The CassandraMethodMapEntry
+     * @throws CpoException An error occurred
+     */
+  static public CassandraMethodMapEntry<?,?> getDatasourceMethod(Class<?> clazz) throws CpoException {
+    return (CassandraMethodMapEntry)methodMapper.getDataMethodMapEntry(clazz);
   }
 
   static private MethodMapper<CassandraMethodMapEntry<?,?>> initMethodMapper() throws IllegalArgumentException {
@@ -96,6 +104,10 @@ public class CassandraMethodMapper implements Serializable, Cloneable {
     return mapper;
   }
 
+    /**
+     * Gets the MethodMapper
+     * @return A MethodMapper
+     */
   public static MethodMapper getMethodMapper() {
     return methodMapper;
   }
@@ -118,6 +130,15 @@ public class CassandraMethodMapper implements Serializable, Cloneable {
     return setter;
   }
 
+    /**
+     * Loads the GetterMethod for the Datasource class
+     * @param methodType The type of method to load
+     * @param methodClass The Clazz we are getting the method from
+     * @param getterName the getter name
+     * @param <M> The type of the CLazz
+     * @return The Method
+     * @throws IllegalArgumentException An invalid Method Type, or invalid getter name was provided
+     */
   public static <M> Method loadGetter(int methodType, Class<M> methodClass, String getterName) throws IllegalArgumentException {
     Method getter=null;
     try {

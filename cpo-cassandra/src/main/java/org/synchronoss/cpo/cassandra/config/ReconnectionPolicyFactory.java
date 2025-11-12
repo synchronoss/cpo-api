@@ -31,9 +31,22 @@ import com.datastax.driver.core.policies.ReconnectionPolicy;
  */
 public abstract class ReconnectionPolicyFactory implements FactoryMethodName {
 
+    /**
+     * Constructs a ReconnectionPolicyFactory
+     */
+    public ReconnectionPolicyFactory(){}
+
+    /**
+     * Get the factory method name
+     * @return The method name
+     */
   public String getFactoryMethodName() {
     return "createReconnectionPolicy";
   }
 
+    /**
+     * Create the ReconnectionPolicy
+     * @return The ReconnectionPolicy
+     */
   public abstract ReconnectionPolicy createReconnectionPolicy();
 }

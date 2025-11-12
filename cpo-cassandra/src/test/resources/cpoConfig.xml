@@ -22,29 +22,29 @@
 
 -->
 <core:cpoConfig xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
- xsi:schemaLocation="http://www.synchronoss.org/cpo/CpoConfig.xsd ../../../../src/main/xsd/CpoConfig.xsd"
+ xsi:schemaLocation="http://www.synchronoss.org/cpo/CpoConfig.xsd ../../../../cpo-core/src/main/xsd/CpoConfig.xsd"
  xmlns:core="http://www.synchronoss.org/cpo/core/CpoCoreConfig.xsd"
  xmlns:cass="http://www.synchronoss.org/cpo/cassandra/CpoCassandraConfig.xsd"
  xmlns="http://www.synchronoss.org/cpo/CpoConfig.xsd"
  defaultConfig="defaultCluster">
 
   <core:metaConfig name="cassandraMeta">
-    <core:metaXml>${cpo.cassandra.metaXml}</core:metaXml>
+    <core:metaXml>${cassandra.metaXml}</core:metaXml>
   </core:metaConfig>
   <core:metaConfig name="caseSensitive" caseSensitive="true">
-    <core:metaXml>${cpo.cassandra.metaXml}</core:metaXml>
+    <core:metaXml>${cassandra.metaXml}</core:metaXml>
   </core:metaConfig>
   <core:metaConfig name="caseInsensitive"  caseSensitive="false">
-    <core:metaXml>${cpo.cassandra.metaXml}</core:metaXml>
+    <core:metaXml>${cassandra.metaXml}</core:metaXml>
   </core:metaConfig>
 
    <core:dataConfig xsi:type="cass:ctCassandraConfig" name="defaultCluster">
     <core:metaDescriptorName>cassandraMeta</core:metaDescriptorName>
     <core:cpoConfigProcessor>org.synchronoss.cpo.cassandra.config.CassandraCpoConfigProcessor</core:cpoConfigProcessor>
     <cass:readWriteConfig>
-      <cass:keySpace>${cpo.cassandra.keyspace}</cass:keySpace>
-      <cass:contactPoint>${cpo.cassandra.contactPoint}</cass:contactPoint>
-      <cass:port>${cpo.cassandra.nativeport}</cass:port>
+      <cass:keySpace>${cassandra.keyspace}</cass:keySpace>
+      <cass:contactPoint>${cassandra.contactPoint}</cass:contactPoint>
+      <cass:port>${cassandra.nativeport}</cass:port>
       <cass:poolingOptions></cass:poolingOptions>
       <cass:socketOptions></cass:socketOptions>
       <cass:queryOptions></cass:queryOptions>
@@ -54,18 +54,18 @@
    <core:metaDescriptorName>caseSensitive</core:metaDescriptorName>
    <core:cpoConfigProcessor>org.synchronoss.cpo.cassandra.config.CassandraCpoConfigProcessor</core:cpoConfigProcessor>
    <cass:readWriteConfig>
-     <cass:keySpace>${cpo.cassandra.keyspace}</cass:keySpace>
-     <cass:contactPoint>${cpo.cassandra.contactPoint}</cass:contactPoint>
-     <cass:port>${cpo.cassandra.nativeport}</cass:port>
+     <cass:keySpace>${cassandra.keyspace}</cass:keySpace>
+     <cass:contactPoint>${cassandra.contactPoint}</cass:contactPoint>
+     <cass:port>${cassandra.nativeport}</cass:port>
    </cass:readWriteConfig>
  </core:dataConfig>
   <core:dataConfig xsi:type="cass:ctCassandraConfig" name="caseInsensitive">
    <core:metaDescriptorName>caseInsensitive</core:metaDescriptorName>
    <core:cpoConfigProcessor>org.synchronoss.cpo.cassandra.config.CassandraCpoConfigProcessor</core:cpoConfigProcessor>
    <cass:readWriteConfig>
-     <cass:keySpace>${cpo.cassandra.keyspace}</cass:keySpace>
-     <cass:contactPoint>${cpo.cassandra.contactPoint}</cass:contactPoint>
-     <cass:port>${cpo.cassandra.nativeport}</cass:port>
+     <cass:keySpace>${cassandra.keyspace}</cass:keySpace>
+     <cass:contactPoint>${cassandra.contactPoint}</cass:contactPoint>
+     <cass:port>${cassandra.nativeport}</cass:port>
    </cass:readWriteConfig>
  </core:dataConfig>
  </core:cpoConfig>

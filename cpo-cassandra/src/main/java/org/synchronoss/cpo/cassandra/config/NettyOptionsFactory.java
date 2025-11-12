@@ -32,10 +32,23 @@ import com.datastax.driver.core.NettyOptions;
  */
 public abstract class NettyOptionsFactory implements FactoryMethodName {
 
+    /**
+     * Constructs a NettyOptionsFactory
+     */
+    public NettyOptionsFactory(){}
+
+    /**
+     * Get the factory method name
+     * @return The method name
+     */
   public String getFactoryMethodName() {
     return "createNettyOptions";
   }
 
+    /**
+     * Create the NettyOptions
+     * @return The NettyOptions
+     */
   public abstract NettyOptions createNettyOptions();
 
 }

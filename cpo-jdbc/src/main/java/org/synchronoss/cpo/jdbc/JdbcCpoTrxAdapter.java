@@ -25,14 +25,19 @@ import org.synchronoss.cpo.*;
 import org.synchronoss.cpo.jdbc.meta.JdbcCpoMetaDescriptor;
 
 import javax.sql.DataSource;
+import java.io.Serial;
 import java.sql.*;
 import java.util.HashMap;
 
+/**
+ * A transaction adapter that allows the user to control the commits and role backs
+ */
 public class JdbcCpoTrxAdapter extends JdbcCpoAdapter implements CpoTrxAdapter {
 
   /**
    * Version Id for this class.
    */
+  @Serial
   private static final long serialVersionUID = 1L;
 
   private static final Logger logger = LoggerFactory.getLogger(JdbcCpoTrxAdapter.class);
@@ -50,6 +55,12 @@ public class JdbcCpoTrxAdapter extends JdbcCpoAdapter implements CpoTrxAdapter {
   private JdbcCpoTrxAdapter() {
   }
 
+    /**
+     * Creates a JdbcCpoTrxAdapter from a jdbcCpoAdapter
+     *
+     * @param jdbcCpoAdapter The cpoAdapter to use behind the scenes
+     * @throws CpoException Any errors that might occur
+     */
   protected JdbcCpoTrxAdapter(JdbcCpoAdapter jdbcCpoAdapter) throws CpoException {
     super(jdbcCpoAdapter);
   }
@@ -134,9 +145,6 @@ public class JdbcCpoTrxAdapter extends JdbcCpoAdapter implements CpoTrxAdapter {
       }
   }
 
-  /**
-   * DOCUMENT ME!
-   */
   @Override
   protected void finalize() {
     try {
@@ -155,24 +163,46 @@ public class JdbcCpoTrxAdapter extends JdbcCpoAdapter implements CpoTrxAdapter {
     }
   }
 
+    /**
+     * Is the connection busy
+     *
+     * @param c The connection to check
+     * @return true if the connection is busy
+     */
   protected boolean isConnectionBusy(Connection c) {
     synchronized (busyMap_) {
       return c!=null && busyMap_.containsKey(c);
     }
   }
 
+    /**
+     * Mark the connection busy
+     *
+     * @param c The connection to mark
+     */
   protected void setConnectionBusy(Connection c) {
     synchronized (busyMap_) {
       busyMap_.put(c, c);
     }
   }
 
+    /**
+     * Mark the connection as not busy
+     *
+     * @param c The connection to mark
+     */
   protected void clearConnectionBusy(Connection c) {
     synchronized (busyMap_) {
       busyMap_.remove(c);
     }
   }
 
+    /**
+     * Get a static connection
+     *
+     * @return The static connection
+     * @throws CpoException - an error occurred
+     */
   protected Connection getStaticConnection() throws CpoException {
     if (writeConnection_ != null) {
       if (isConnectionBusy(writeConnection_)) {
@@ -189,12 +219,6 @@ public class JdbcCpoTrxAdapter extends JdbcCpoAdapter implements CpoTrxAdapter {
     writeConnection_ = c;
   }
 
-  /**
-   * DOCUMENT ME!
-   *
-   * @return DOCUMENT ME!
-   * @throws CpoException DOCUMENT ME!
-   */
   @Override
   protected Connection getReadConnection() throws CpoException {
     Connection connection = getStaticConnection();
@@ -204,12 +228,6 @@ public class JdbcCpoTrxAdapter extends JdbcCpoAdapter implements CpoTrxAdapter {
     return connection;
   }
 
-  /**
-   * DOCUMENT ME!
-   *
-   * @return DOCUMENT ME!
-   * @throws CpoException DOCUMENT ME!
-   */
   @Override
   protected Connection getWriteConnection() throws CpoException {
     Connection connection = getStaticConnection();

@@ -48,29 +48,25 @@ public class CassandraBoundStatementFactory extends CpoStatementFactory implemen
    * Version Id for this class.
    */
   private static final long serialVersionUID = 1L;
-  /**
-   * DOCUMENT ME!
-   */
   private static final Logger logger = LoggerFactory.getLogger(CassandraBoundStatementFactory.class);
   private BoundStatement boundStatement;
-
   private List<CpoReleasible> releasibles = new ArrayList<>();
 
   /**
    * Used to build the PreparedStatement that is used by CPO to create the actual JDBC PreparedStatement.
-   *
    * The constructor is called by the internal CPO framework. This is not to be used by users of CPO. Programmers that
    * build Transforms may need to use this object to get access to the actual connection.
    *
-   * @param sess The actual jdbc connection that will be used to create the callable statement.
+   * @param <T>                 The type of the object being bound
+   * @param sess                The actual jdbc connection that will be used to create the callable statement.
    * @param cassandraCpoAdapter The JdbcCpoAdapter that is controlling this transaction
-   * @param criteria The object that will be used to look up the cpo meta data
-   * @param function The CpoFunction that is being executed
-   * @param obj The pojo that is being acted upon
-   * @param wheres DOCUMENT ME!
-   * @param orderBy DOCUMENT ME!
-   * @param nativeQueries Additional sql to be embedded into the CpoFunction sql that is used to create the actual JDBC
-   * PreparedStatement
+   * @param criteria            The object that will be used to look up the cpo metadata
+   * @param function            The CpoFunction that is being executed
+   * @param obj                 The pojo that is being acted upon
+   * @param wheres              A collection of wheres to find the object
+   * @param orderBy             A collection of orderbys to sort the objects
+   * @param nativeQueries       Additional sql to be embedded into the CpoFunction sql that is used to create the actual
+   *                            JDBC PreparedStatement
    *
    * @throws org.synchronoss.cpo.CpoException if a CPO error occurs
    */
@@ -113,10 +109,18 @@ public class CassandraBoundStatementFactory extends CpoStatementFactory implemen
     return 0;
   }
 
+    /**
+     * Gets the BoundStatent associated with this factory
+     * @return The BoundStatement
+     */
   public BoundStatement getBoundStatement() {
     return boundStatement;
   }
 
+    /**
+     * Sets the BoundStatent associated with this factory
+     * @param boundStatement  The BoundStatement
+     */
   public void setBoundStatement(BoundStatement boundStatement) {
     this.boundStatement = boundStatement;
   }

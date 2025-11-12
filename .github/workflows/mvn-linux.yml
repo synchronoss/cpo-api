@@ -44,6 +44,6 @@ jobs:
         with:
           java-version: '21'
           distribution: 'corretto'
-      - name: Test CPO
+      - name: Verify CPO
         id: All
-        run: mvn test
+        run: mvn verify

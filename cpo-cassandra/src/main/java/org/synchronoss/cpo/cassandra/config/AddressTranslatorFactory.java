@@ -23,18 +23,30 @@ package org.synchronoss.cpo.cassandra.config;
 import com.datastax.driver.core.policies.AddressTranslator;
 
 /**
- * Created with IntelliJ IDEA.
- * User: dberry
- * Date: 10/10/13
- * Time: 07:57 AM
- * To change this template use File | Settings | File Templates.
+ * FactoryMethod for creating a Cassandra Address Translator
+ *
+ * @author dberry
  */
 public abstract class AddressTranslatorFactory implements FactoryMethodName {
 
+    /**
+     * Constructs the AddressTranslatorFactory
+     */
+    public AddressTranslatorFactory() {}
+
+    /**
+     * Gets the factory method name for the driver
+     * @return The method name
+     */
   public String getFactoryMethodName() {
     return "createAddressTranslator";
   }
 
+    /**
+     * Creates an AddressTranslator
+     *
+     * @return The AddressTranslator
+     */
   public abstract AddressTranslator createAddressTranslator();
 
 }

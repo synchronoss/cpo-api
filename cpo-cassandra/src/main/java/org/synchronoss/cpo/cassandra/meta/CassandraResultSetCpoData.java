@@ -27,8 +27,18 @@ import org.synchronoss.cpo.meta.domain.CpoAttribute;
 
 import java.lang.reflect.InvocationTargetException;
 
+/**
+ * Manages data transfer between the cpo objects and the result set
+ */
 public class CassandraResultSetCpoData extends ResultSetCpoData {
 
+    /**
+     * Constructs the CassandraResultSetCpoData
+     * @param methodMapper The MethodMapper
+     * @param rs The result set
+     * @param cpoAttribute The CpoAttribute
+     * @param index The index of the CpoAttribute in the result set
+     */
   public CassandraResultSetCpoData(MethodMapper<?> methodMapper, Object rs, CpoAttribute cpoAttribute, int index) {
     super(methodMapper, rs, cpoAttribute, index);
   }

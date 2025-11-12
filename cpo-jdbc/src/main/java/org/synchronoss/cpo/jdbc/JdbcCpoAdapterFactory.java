@@ -31,6 +31,11 @@ public class JdbcCpoAdapterFactory implements CpoAdapterFactory {
 
   private JdbcCpoAdapter jdbcCpoAdapter = null;
 
+    /**
+     * Constructs a JdbcCpoAdapterFactory from a JdbcCpoAdapter
+     *
+     * @param jdbcCpoAdapter A JdbcCpoAdapter
+     */
   public JdbcCpoAdapterFactory(JdbcCpoAdapter jdbcCpoAdapter) {
     this.jdbcCpoAdapter = jdbcCpoAdapter;
   }
@@ -41,17 +46,15 @@ public class JdbcCpoAdapterFactory implements CpoAdapterFactory {
   }
 
   /**
+   * <p>
    * Provides a mechanism for the user to obtain a CpoTrxAdapter object. This object allows the to control when commits
    * and rollbacks occur on CPO.
-   * </p><p>
-   * </p><p>
+   * </p>
    * <pre>Example:
-   * <code>
-   * </p><p>
+   * {@code
    * class SomeObject so = null;
    * class CpoAdapter cpo = null;
    * class CpoTrxAdapter cpoTrx = null;
-   * </p><p>
    * try {
    * 	cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));
    * 	cpoTrx = cpo.getCpoTrxAdapter();
@@ -59,7 +62,6 @@ public class JdbcCpoAdapterFactory implements CpoAdapterFactory {
    * 	// Handle the error
    * 	cpo = null;
    * }
-   * </p><p>
    * if (cpo!=null) {
    * 	try{
    * 		for (int i=0; i<3; i++){
@@ -74,7 +76,7 @@ public class JdbcCpoAdapterFactory implements CpoAdapterFactory {
    * 		cpoTrx.rollback();
    *  }
    * }
-   * </code>
+   * }
    * </pre>
    *
    * @return A CpoTrxAdapter to manage the transactionality of CPO

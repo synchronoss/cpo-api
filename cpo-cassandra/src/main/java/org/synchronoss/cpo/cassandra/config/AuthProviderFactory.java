@@ -20,23 +20,27 @@
  */
 package org.synchronoss.cpo.cassandra.config;
 
-//import com.datastax.driver.core.AuthProvider;
-
 import com.datastax.driver.core.AuthProvider;
 
 /**
- * Created with IntelliJ IDEA.
- * User: dberry
- * Date: 10/10/13
- * Time: 07:57 AM
- * To change this template use File | Settings | File Templates.
+ * Gets the method name for creating an AuthProvider
+ * @author dberry
  */
 public abstract class AuthProviderFactory implements FactoryMethodName {
 
-  public String getFactoryMethodName() {
+    /**
+     * Constructs the AuthProviderFactory
+     */
+    public AuthProviderFactory() {}
+
+    public String getFactoryMethodName() {
     return "createAuthProvider";
   }
 
+    /**
+     * Creates an AuthProvider
+     * @return The AuthProvider
+     */
   public abstract AuthProvider createAuthProvider();
 
 }

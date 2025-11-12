@@ -49,6 +49,11 @@ import java.util.Collection;
 public class CassandraCpoConfigProcessor implements CpoConfigProcessor {
   private static final Logger logger = LoggerFactory.getLogger(CassandraCpoConfigProcessor.class);
 
+    /**
+     * Constructs a CassandraCpoConfigProcessor
+     */
+  public CassandraCpoConfigProcessor(){}
+
   @Override
   public CpoAdapterFactory processCpoConfig(CtDataSourceConfig cpoConfig) throws CpoException {
     CpoAdapterFactory cpoAdapterFactory = null;
@@ -79,8 +84,8 @@ public class CassandraCpoConfigProcessor implements CpoConfigProcessor {
   /**
    * buildDataSourceInfo takes the config information from cpoconfig.xml and insantiates a CLusterDataSourceInfo object
    *
-   * @param dataConfigName - The name of the data config
-   * @param readWriteConfig - The configuration information
+   * @param dataConfigName The name of the data config
+   * @param readWriteConfig The configuration information
    * @return A ClusterDataSourceInfo Object
    * @throws CpoException
    */

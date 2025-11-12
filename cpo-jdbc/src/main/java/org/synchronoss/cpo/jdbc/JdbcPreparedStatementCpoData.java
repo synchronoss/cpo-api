@@ -33,6 +33,7 @@ import org.synchronoss.cpo.transform.jdbc.JdbcCpoTransform;
 import java.io.*;
 
 /**
+ * The data handler for a prepared statement
  *
  * @author dberry
  */
@@ -41,6 +42,13 @@ public class JdbcPreparedStatementCpoData extends AbstractBindableCpoData {
   private static final Logger logger = LoggerFactory.getLogger(JdbcPreparedStatementCpoData.class);
   private JdbcPreparedStatementFactory cpoStatementFactory = null;
 
+    /**
+     * Construct a JdbcPreparedStatementCpoData
+     *
+     * @param cpoStatementFactory  - The JdbcPreparedStatementFactory
+     * @param cpoAttribute - The CpoAttribute to manage
+     * @param index - The index of the CpoAttribute
+     */
   public JdbcPreparedStatementCpoData(JdbcPreparedStatementFactory cpoStatementFactory, CpoAttribute cpoAttribute, int index) {
     super(cpoAttribute, index);
     this.cpoStatementFactory = cpoStatementFactory;

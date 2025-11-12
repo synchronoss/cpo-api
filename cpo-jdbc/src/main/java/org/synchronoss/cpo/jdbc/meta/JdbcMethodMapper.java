@@ -52,8 +52,14 @@ public class JdbcMethodMapper implements java.io.Serializable, java.lang.Cloneab
   private JdbcMethodMapper() {
   }
 
+    /**
+     * Get the java sql method map
+     * @param c The class to look up the methods on.
+     * @return JdbcMethodMapEntry
+     * @throws CpoException An error getting the entry
+     */
   static public JdbcMethodMapEntry<?,?> getJavaSqlMethod(Class<?> c) throws CpoException {
-    return (JdbcMethodMapEntry)methodMapper.getDataMethodMapEntry(c);
+    return (JdbcMethodMapEntry<?,?>)methodMapper.getDataMethodMapEntry(c);
   }
 
   static private MethodMapper<JdbcMethodMapEntry<?,?>> initMethodMapper() throws IllegalArgumentException {
@@ -116,6 +122,11 @@ public class JdbcMethodMapper implements java.io.Serializable, java.lang.Cloneab
     return mapper;
   }
 
+    /**
+     * Gets the MethodMapper
+     *
+     * @return MethodMapper
+     */
   public static MethodMapper getMethodMapper() {
     return methodMapper;
   }

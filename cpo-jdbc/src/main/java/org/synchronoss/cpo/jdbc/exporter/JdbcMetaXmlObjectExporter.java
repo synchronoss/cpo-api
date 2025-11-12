@@ -40,6 +40,11 @@ import org.synchronoss.cpo.meta.domain.CpoAttribute;
  */
 public class JdbcMetaXmlObjectExporter extends CoreMetaXmlObjectExporter implements MetaXmlObjectExporter {
 
+    /**
+     * Constructs a JdbcMetaXmlObjectExporter object.
+     *
+     * @param metaDescriptor - The meta descriptor to export
+     */
   public JdbcMetaXmlObjectExporter(CpoMetaDescriptor metaDescriptor) {
     super(metaDescriptor);
   }

@@ -35,6 +35,9 @@ public class TransformNoOp implements CassandraCpoTransform<Integer, Integer> {
 
   private static final Logger logger = LoggerFactory.getLogger(TransformNoOp.class);
 
+    /**
+     * Create a TransformNoOp
+     */
   public TransformNoOp() {
   }
 
@@ -42,13 +45,13 @@ public class TransformNoOp implements CassandraCpoTransform<Integer, Integer> {
    * Transforms the datasource object into an object required by the class. The type of the dbIn parameter and the type
    * of the return value must change to match the types being converted. Reflection is used to true everything up at
    * runtime.
-   *
+   * <p>
    * e.g public byte[] transformIn(Blob dbIn) would be the signature for converting a Blob to a byte[] to be stored in
    * the pojo.
-   *
+   * </p>
    * @param dbIn The value from the datasource that will be transformed into the format that is required by the pojo.
    * @return The object to be stored in the attribute
-   * @throws org.synchronoss.cpo.CpoException
+   * @throws CpoException An error occurred
    */
   @Override
   public Integer transformIn(Integer dbIn) throws CpoException {
@@ -60,15 +63,15 @@ public class TransformNoOp implements CassandraCpoTransform<Integer, Integer> {
    * Transforms the data from the class attribute to the object required by the datasource. The type of the attrOut
    * parameter and the type of the return value must change to match the types being converted. Reflection is used to
    * true everything up at runtime.
-   *
+   * <p>
    * e.g public Blob transformOut(JdbcPreparedStatementFactory jpsf, byte[] attrOut) would be the signature for
    * converting a byte[] stored in the pojo into a Blob object for the datasource.
-   *
-   * @param cbsf a reference to the JdbcPreparedStatementFactory. This is necessary as some DBMSs (ORACLE !#$%^&!) that
+   * </p>
+   * @param cbsf a reference to the JdbcPreparedStatementFactory. This is necessary as some DBMSs (ORACLE) that
    * require access to the connection to deal with certain datatypes.
    * @param attrOut The attribute object that needs to get transformed into the db representation
    * @return The object to be stored in the datasource
-   * @throws org.synchronoss.cpo.CpoException
+   * @throws CpoException An error occurred
    */
   @Override
   public Integer transformOut(CassandraBoundStatementFactory cbsf, Integer attrOut) throws CpoException {

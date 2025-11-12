@@ -25,11 +25,8 @@ import com.datastax.driver.core.Cluster;
 import com.datastax.driver.core.Session;
 
 /**
- * Created with IntelliJ IDEA.
- * User: dberry
- * Date: 11/10/13
- * Time: 13:44 PM
- * To change this template use File | Settings | File Templates.
+ * Represents a Cassandra Cluster
+ * @author dberry
  */
 public class ClusterDataSource {
   private Cluster cluster = null;
@@ -39,6 +36,11 @@ public class ClusterDataSource {
   private ClusterDataSource(){
   }
 
+    /**
+     * Construct a ClusterDataSource
+     * @param cluster The cassandra cluster
+     * @param keySpace The keyspace
+     */
   public ClusterDataSource(Cluster cluster, String keySpace){
     this.cluster=cluster;
     this.keySpace=keySpace;

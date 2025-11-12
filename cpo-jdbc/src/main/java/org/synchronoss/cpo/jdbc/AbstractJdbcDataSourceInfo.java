@@ -25,6 +25,7 @@ import org.synchronoss.cpo.AbstractDataSourceInfo;
 import java.util.*;
 
 /**
+ * A class used for collecting the properties to instantiate the datasource
  *
  * @author dberry
  */
@@ -34,14 +35,31 @@ public abstract class AbstractJdbcDataSourceInfo extends AbstractDataSourceInfo 
   private static final String PASSWD = "passwd";
   private static final String PWD = "pwd";
 
+    /**
+     * Constructs a AbstractJdbcDataSourceInfo
+     *
+     * @param dataSourceName - The name of the datasource to instantiate,
+     */
   public AbstractJdbcDataSourceInfo(String dataSourceName) {
     super(dataSourceName);
   }
 
+    /**
+     * Constructs a AbstractJdbcDataSourceInfo
+     *
+     * @param className - The DataSource className from the Driver.
+     * @param properties - The list of properties to be passed to the driver
+     */
   public AbstractJdbcDataSourceInfo(String className, SortedMap<String, String> properties) {
     super(BuildDataSourceName(className, properties));
   }
 
+    /**
+     * Constructs a AbstractJdbcDataSourceInfo
+     *
+     * @param className  - The DataSource className from the Driver.
+     * @param properties - The list of properties to be passed to the driver
+     */
   public AbstractJdbcDataSourceInfo(String className, Properties properties) {
     super(BuildDataSourceName(className, properties));
   }

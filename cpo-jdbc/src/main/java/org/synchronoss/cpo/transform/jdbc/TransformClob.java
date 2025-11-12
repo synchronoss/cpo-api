@@ -37,6 +37,9 @@ public class TransformClob implements JdbcCpoTransform<Clob, char[]> {
 
   private static final Logger logger = LoggerFactory.getLogger(TransformClob.class);
 
+    /**
+     * Construct a TransformClob
+     */
   public TransformClob() {
   }
 
@@ -45,7 +48,7 @@ public class TransformClob implements JdbcCpoTransform<Clob, char[]> {
    *
    * @param clob The Clob from the database to be transformed into a byte array
    * @return The object to be stored in the attribute
-   * @throws CpoException
+   * @throws CpoException - An error occurred
    */
   @Override
   public char[] transformIn(Clob clob) throws CpoException {
@@ -78,7 +81,7 @@ public class TransformClob implements JdbcCpoTransform<Clob, char[]> {
    * @param jpsf The JdbcPreparedStatementFactory to have access to the actual connection and be able to work with closeable items
    * @param attributeObject The object that represents the attribute being persisted.
    * @return The object to be stored in the datasource
-   * @throws CpoException
+   * @throws CpoException TransformClob
    */
   @Override
   public Clob transformOut(JdbcPreparedStatementFactory jpsf, char[] attributeObject) throws CpoException {

@@ -23,10 +23,14 @@ package org.synchronoss.cpo.jdbc.meta;
 import org.slf4j.*;
 import org.synchronoss.cpo.meta.MethodMapEntry;
 
+import java.io.Serial;
 import java.lang.reflect.Method;
 
 /**
  * MethodMapEntry is a class defines the getters and setters for JDBC specific data classes
+ *
+ * @param <D> - The datasource type
+ * @param <J> - The java type
  *
  * @author david berry
  */
@@ -36,23 +40,54 @@ public class JdbcMethodMapEntry<J,D> extends MethodMapEntry<J,D> implements java
   /**
    * Version Id for this class.
    */
+  @Serial
   private static final long serialVersionUID = 1L;
+    /**
+     * Methods that accept and return streams
+     */
   public static final int METHOD_TYPE_STREAM = 1;
+    /**
+     * Methods that accept and return readers
+     */
   public static final int METHOD_TYPE_READER = 2;
+    /**
+     * Methods that accept and return objects
+     */
   public static final int METHOD_TYPE_OBJECT = 3;
   private Method csGetter = null;
   private Method csSetter = null;
 
+    /**
+     * Constructs a JdbcMethodMapEntry
+     *
+     * @param methodType - The method type (METHOD_TYPE_STREAM, METHOD_TYPE_READER, METHOD_TYPE_OBJECT)
+     * @param javaClass - The java clazz
+     * @param datasourceMethodClass - datasource clazz with the method on it.
+     * @param rsGetter - the resultset getter Method
+     * @param bsSetter - the prepared statement setter method
+     * @param csGetter - the callable statement getter method.
+     * @param csSetter - the callable statement setter method.
+     */
   public JdbcMethodMapEntry(int methodType, Class<J> javaClass, Class<D> datasourceMethodClass, Method rsGetter, Method bsSetter, Method csGetter, Method csSetter) {
     super(methodType, javaClass, datasourceMethodClass, rsGetter, bsSetter);
     this.csGetter = csGetter;
     this.csSetter = csSetter;
   }
 
+    /**
+     * Gets the callable statement getter
+     *
+     * @return The callable statement getter Method
+     */
   public Method getCsGetter() {
     return csGetter;
   }
 
+    /**
+     * Gets the callable statement setter
+     *
+     * @return The callable statement setter Method
+     */
   public Method getCsSetter() {
     return csSetter;
   }

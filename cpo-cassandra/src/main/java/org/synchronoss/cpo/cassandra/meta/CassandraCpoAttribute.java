@@ -29,6 +29,7 @@ import org.synchronoss.cpo.helper.ExceptionHelper;
 import org.synchronoss.cpo.meta.CpoMetaDescriptor;
 import org.synchronoss.cpo.meta.domain.CpoAttribute;
 
+import java.io.Serial;
 import java.lang.reflect.Method;
 
 /**
@@ -42,6 +43,7 @@ public class CassandraCpoAttribute extends CpoAttribute implements java.io.Seria
   /**
    * Version Id for this class.
    */
+  @Serial
   private static final long serialVersionUID = 1L;
   private String keyType_ = null;
   private String valueType_ = null;
@@ -52,37 +54,80 @@ public class CassandraCpoAttribute extends CpoAttribute implements java.io.Seria
   private CassandraCpoTransform cassandraTransform = null;
   private Method transformPSOutMethod = null;
 
+    /**
+     * Constructs the CassandraCpoAttribute
+     */
   public CassandraCpoAttribute() {
   }
 
+    /**
+     * Gets the keytype class name
+     *
+     * @return The keytype class name
+     */
   public String getKeyType() {
     return keyType_;
   }
 
+    /**
+     * Sets the Key Type
+     *
+     * @param keyType The keytype class name
+     */
   public void setKeyType(String keyType) {
     this.keyType_ = keyType;
   }
 
+    /**
+     * Gets the Value Type classname
+     *
+     * @return the Value Type classname
+     */
   public String getValueType() {
     return valueType_;
   }
 
+    /**
+     * Sets the Value Type classname
+     *
+    * @param valueType  the Value Type classname
+     */
   public void setValueType(String valueType) {
     this.valueType_ = valueType;
   }
 
+    /**
+     * Sets the Value Type classname
+     *
+     * @return  the Value Type classname
+     */
   public Class<?> getKeyTypeClass() {
     return keyTypeClass;
   }
 
+    /**
+     * Sets the Key Type Clazz
+     *
+     * @param keyTypeClass the Key Type Clazz
+     */
   public void setKeyTypeClass(Class<?> keyTypeClass) {
     this.keyTypeClass = keyTypeClass;
   }
 
+    /**
+     * Gets the Value Type Clazz
+     *
+     * @return the Value Type Clazz
+     */
   public Class<?> getValueTypeClass() {
     return valueTypeClass;
   }
 
+    /**
+     * Sets the Value Type Clazz
+     *
+     * @param valueTypeClass the Value Type Clazz
+     */
   public void setValueTypeClass(Class<?> valueTypeClass) {
     this.valueTypeClass = valueTypeClass;
   }
@@ -104,6 +149,16 @@ public class CassandraCpoAttribute extends CpoAttribute implements java.io.Seria
     setValueTypeClass(getTypeClass(metaClass.getName(), getJavaName(), getValueType(), "ValueType"));
   }
 
+    /**
+     * Loads, if needed, and returns the Type Clazz for the CpoAttribute
+     *
+     * @param className The classname
+     * @param attributeName The attribute name
+     * @param contextName The context name
+     * @param contextType The context type
+     * @return The Clazz
+     * @throws CpoException An errror occurred
+     */
   protected Class getTypeClass(String className, String attributeName, String contextName, String contextType) throws CpoException {
     Class contextClass=null;
     try {

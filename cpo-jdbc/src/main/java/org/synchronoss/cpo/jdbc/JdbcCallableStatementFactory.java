@@ -36,13 +36,6 @@ import java.util.*;
  */
 public class JdbcCallableStatementFactory implements CpoReleasible {
 
-  /**
-   * Version Id for this class.
-   */
-  private static final long serialVersionUID = 1L;
-  /**
-   * DOCUMENT ME!
-   */
   private static final Logger logger = LoggerFactory.getLogger(JdbcCallableStatementFactory.class);
   private CallableStatement cs_ = null;
 
@@ -54,7 +47,6 @@ public class JdbcCallableStatementFactory implements CpoReleasible {
 
   /**
    * Used to build the CallableStatement that is used by CPO to create the actual JDBC CallableStatement.
-   *
    * The constructor is called by the internal CPO framework. This is not to be used by users of CPO. Programmers that
    * build Transforms may need to use this object to get access to the actual connection.
    *
@@ -62,9 +54,8 @@ public class JdbcCallableStatementFactory implements CpoReleasible {
    * @param jca The JdbcCpoAdapter that is controlling this transaction
    * @param function The CpoFunction that is being executed
    * @param criteria The pojo that is being acted upon
-   *
+   * @param resultClass An instance of the result class
    * @throws CpoException if a CPO error occurs
-   * @throws SQLException if a JDBC error occurs
    */
   public JdbcCallableStatementFactory(Connection conn, JdbcCpoAdapter jca, CpoFunction function, Object criteria, CpoClass resultClass) throws CpoException {
     CallableStatement cstmt;
@@ -116,11 +107,17 @@ public class JdbcCallableStatementFactory implements CpoReleasible {
 
   /**
    * returns the jdbc callable statment associated with this object
+   * @return The CallableStatement
    */
   public CallableStatement getCallableStatement() {
     return cs_;
   }
 
+    /**
+     * Set the callable statement for this factory.
+     *
+     * @param cs the callable statement
+     */
   protected void setCallableStatement(CallableStatement cs) {
     cs_ = cs;
   }
@@ -128,6 +125,7 @@ public class JdbcCallableStatementFactory implements CpoReleasible {
   /**
    * returns the Out parameters from the callable statement
    *
+   * @return The out arguments from the Callable Statement
    */
   public List<CpoArgument> getOutArguments() {
     return outArguments;
@@ -137,6 +135,8 @@ public class JdbcCallableStatementFactory implements CpoReleasible {
    * Adds a releasible object to this object. The release method on the releasible will be called when the
    * callableStatement is executed.
    *
+   * @param releasible - A CpoReleasible object. An Object whose lifetime is associated with the lifetime of the
+   *                   Callable statement
    */
   public void AddReleasible(CpoReleasible releasible) {
     if (releasible != null) {
@@ -147,7 +147,7 @@ public class JdbcCallableStatementFactory implements CpoReleasible {
 
   /**
    * Called by the CPO framework. This method calls the
-   * <code>release</code> on all the CpoReleasible associated with this object
+   * {@code release} on all the CpoReleasible associated with this object
    */
   @Override
   public void release() throws CpoException {

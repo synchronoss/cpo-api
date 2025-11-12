@@ -31,6 +31,9 @@ import org.synchronoss.cpo.jdbc.JdbcPreparedStatementFactory;
  */
 public class TransformCharArray implements JdbcCpoTransform<String, char[]> {
 
+    /**
+     * Constructs a TransformCharArray
+     */
   public TransformCharArray() {
   }
 
@@ -39,7 +42,7 @@ public class TransformCharArray implements JdbcCpoTransform<String, char[]> {
    *
    * @param inStr - The string from the db to be a char array
    * @return The object to be stored in the attribute
-   * @throws CpoException
+   * @throws CpoException An error occurred during the transform
    */
   @Override
   public char[] transformIn(String inStr) throws CpoException {
@@ -58,7 +61,7 @@ public class TransformCharArray implements JdbcCpoTransform<String, char[]> {
    * @param jpsf The JdbcPreparedStatementFactory to have access to the actual connection and be able to work with closeable items
    * @param attributeObject The object that represents the attribute being persisted.
    * @return The object to be stored in the datasource
-   * @throws CpoException
+   * @throws CpoException An error occurred during the transform
    */
   @Override
   public String transformOut(JdbcPreparedStatementFactory jpsf, char[] attributeObject) throws CpoException {

@@ -193,10 +193,6 @@
             </suiteXmlFiles>
         </configuration>
       </plugin>
-       <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>xmlbeans-maven-plugin</artifactId>
-      </plugin>
       <plugin>
         <groupId>org.synchronoss.cpo</groupId>
         <artifactId>cpo-plugin</artifactId>

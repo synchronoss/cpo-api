@@ -34,17 +34,20 @@ import java.util.Calendar;
  */
 public class TransformTimestampToCalendar implements JdbcCpoTransform<Timestamp, Calendar> {
 
+    /**
+     * Construct a TransformTimestampToCalendar
+     */
   public TransformTimestampToCalendar() {
   }
 
   /**
-   * Transforms the
-   * <code>java.sql.Timestamp</code> returned from JDBC into a
-   * <code>java.util.Calendar</code> to be used by the class.
+   * Transforms the Timestamp to a Calendar
+   * {@code java.sql.Timestamp} returned from JDBC into a
+   * {@code java.util.Calendar} to be used by the class.
    *
    * @param ts The Timestamp from JDBC.
    * @return A Calendar Object
-   * @throws CpoException
+   * @throws CpoException - an error occurred
    */
   @Override
   public Calendar transformIn(Timestamp ts) throws CpoException {
@@ -57,15 +60,15 @@ public class TransformTimestampToCalendar implements JdbcCpoTransform<Timestamp,
   }
 
   /**
-   * Transforms a
-   * <code>java.util.Calendar</code> from the CPO Bean into a
-   * <code>java.sql.Timestamp</code> to be stored by JDBC
+   * Transforms a calendar to a sql timestamp
+   * {@code java.util.Calendar} from the CPO Bean into a
+   * {@code java.sql.Timestamp} to be stored by JDBC
    *
-   * @param jcsf a reference to the JdbcCallableStatementFactory. This is necessary as some DBMSs (ORACLE !#$%^&!) that
+   * @param jcsf a reference to the JdbcCallableStatementFactory. This is necessary as some DBMSs (ORACLE) that
    * require access to the connection to deal with certain datatypes.
-   * @param A Calendar instance
+   * @param cal A Calendar instance
    * @return A Timestamp object to be stored in the database.
-   * @throws CpoException
+   * @throws CpoException - an error occurred
    */
   @Override
   public Timestamp transformOut(JdbcCallableStatementFactory jcsf, Calendar cal) throws CpoException {
@@ -77,15 +80,15 @@ public class TransformTimestampToCalendar implements JdbcCpoTransform<Timestamp,
   }
 
   /**
-   * Transforms a
-   * <code>java.util.Calendar</code> from the CPO Bean into a
-   * <code>java.sql.Timestamp</code> to be stored by JDBC
+   * Transforms a calendar to a sql timestamp
+   * {@code java.util.Calendar} from the CPO Bean into a
+   * {@code java.sql.Timestamp} to be stored by JDBC
    *
-   * @param jpsf a reference to the JdbcPreparedStatementFactory. This is necessary as some DBMSs (ORACLE !#$%^&!) that
+   * @param jpsf a reference to the JdbcPreparedStatementFactory. This is necessary as some DBMSs (ORACLE) that
    * require access to the connection to deal with certain datatypes.
-   * @param A Calendar instance
+   * @param cal A Calendar instance
    * @return A Timestamp object to be stored in the database.
-   * @throws CpoException
+   * @throws CpoException - an error occurred
    */
   @Override
   public Timestamp transformOut(JdbcPreparedStatementFactory jpsf, Calendar cal) throws CpoException {

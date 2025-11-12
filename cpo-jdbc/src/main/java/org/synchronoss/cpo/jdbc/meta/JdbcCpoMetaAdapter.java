@@ -36,12 +36,19 @@ import java.math.BigDecimal;
 import java.util.*;
 
 /**
+ * Builds and manages the Java to Datasource type mapping
+ *
  * @author dberry
  */
 public class JdbcCpoMetaAdapter extends AbstractCpoMetaAdapter {
   private static final Logger logger = LoggerFactory.getLogger(JdbcCpoMetaAdapter.class);
   private static final DataTypeMapEntry<String> defaultDataTypeMapEntry = new DataTypeMapEntry<>(java.sql.Types.VARCHAR, "VARCHAR", String.class); //12
   private static final DataTypeMapper dataTypeMapper = initDataTypeMapper();
+
+    /**
+     * Constructs a JdbcCpoMetaAdapter
+     */
+  public JdbcCpoMetaAdapter() {}
 
   @Override
   protected DataTypeMapper getDataTypeMapper() {

@@ -84,6 +84,7 @@
               <version>${maven-plugin-tools.version}</version>
               <configuration>
                   <goalPrefix>plugin</goalPrefix>
+                  <helpPackageName>${project.groupId}.${project.name}</helpPackageName>
               </configuration>
               <executions>
                   <execution>

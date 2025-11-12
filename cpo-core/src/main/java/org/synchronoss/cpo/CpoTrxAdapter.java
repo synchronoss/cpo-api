@@ -30,13 +30,13 @@ public interface CpoTrxAdapter extends CpoAdapter, AutoCloseable {
 
   /**
    * Commits the current transaction behind the CpoTrxAdapter
-   * @throws CpoException - An error occurred
+   * @throws CpoException An error occurred
    */
   void commit() throws CpoException;
 
   /**
    * Rollback the current transaction behind the CpoTrxAdapter
-   * @throws CpoException - An error occurred
+   * @throws CpoException An error occurred
    */
   void rollback() throws CpoException;
 
@@ -49,14 +49,14 @@ public interface CpoTrxAdapter extends CpoAdapter, AutoCloseable {
   /**
    * Returns true if the TrxAdapter has been closed, false if it is still active
    * @return true if it is closed
-   * @throws CpoException - An error occurred
+   * @throws CpoException An error occurred
    */
   boolean isClosed() throws CpoException;
 
   /**
    * Returns true if the TrxAdapter is processing a request, false if it is not
    * @return true if the adapter is busy
-   * @throws CpoException - An error occurred
+   * @throws CpoException An error occurred
    */
   boolean isBusy() throws CpoException;
 

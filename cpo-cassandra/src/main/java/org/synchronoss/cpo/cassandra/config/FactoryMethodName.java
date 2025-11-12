@@ -21,12 +21,13 @@
 package org.synchronoss.cpo.cassandra.config;
 
 /**
- * Created with IntelliJ IDEA.
- * User: dberry
- * Date: 10/10/13
- * Time: 08:21 AM
- * To change this template use File | Settings | File Templates.
+ * Used to access methods on the driver
+ * @author dberry
  */
 public interface FactoryMethodName {
-  public String getFactoryMethodName();
+    /**
+     * Gets the factory method name
+     * @return The method name
+     */
+    String getFactoryMethodName();
 }

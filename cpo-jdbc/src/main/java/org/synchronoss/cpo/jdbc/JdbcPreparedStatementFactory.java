@@ -62,6 +62,7 @@ public class JdbcPreparedStatementFactory extends CpoStatementFactory implements
    * The constructor is called by the internal CPO framework. This is not to be used by users of CPO. Programmers that
    * build Transforms may need to use this object to get access to the actual connection.
    *
+   * @param <T> The cpo object being prepared to create a named logger
    * @param conn The actual jdbc connection that will be used to create the callable statement.
    * @param jca The JdbcCpoAdapter that is controlling this transaction
    * @param criteria The object that will be used to look up the cpo meta data
@@ -73,7 +74,6 @@ public class JdbcPreparedStatementFactory extends CpoStatementFactory implements
    * PreparedStatement
    *
    * @throws CpoException if a CPO error occurs
-   * @throws SQLException if a JDBC error occurs
    */
   public <T> JdbcPreparedStatementFactory(Connection conn, JdbcCpoAdapter jca, CpoClass criteria,
           CpoFunction function, T obj, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy,
@@ -120,13 +120,18 @@ public class JdbcPreparedStatementFactory extends CpoStatementFactory implements
     return 1;
   }
 
-  /**
-    * Returns the jdbc prepared statment associated with this object
+   /**
+    * Returns the jdbc prepared statement associated with this object
+    * @return A PreparedStatement
     */
    public PreparedStatement getPreparedStatement() {
      return ps_;
    }
 
+    /**
+     * Sets the jdbc prepared statement associated with this object
+     * @param ps The PreparedStatement to set
+     */
    protected void setPreparedStatement(PreparedStatement ps) {
      ps_ = ps;
    }

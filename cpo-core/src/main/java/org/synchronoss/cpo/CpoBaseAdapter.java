@@ -24,6 +24,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.cache.CpoAdapterCache;
 import org.synchronoss.cpo.enums.Comparison;
+import org.synchronoss.cpo.enums.Crud;
 import org.synchronoss.cpo.enums.Logical;
 import org.synchronoss.cpo.helper.ExceptionHelper;
 
@@ -89,62 +90,62 @@ public abstract class CpoBaseAdapter<D> extends CpoAdapterCache implements CpoAd
 
   @Override
   public <T> long insertObject(T obj) throws CpoException {
-    return processUpdateGroup(obj, CpoAdapter.CREATE_GROUP, null, null, null, null);
+    return processUpdateGroup(obj, Crud.CREATE, null, null, null, null);
   }
 
   @Override
   public <T> long insertObject(String name, T obj) throws CpoException {
-    return processUpdateGroup(obj, CpoAdapter.CREATE_GROUP, name, null, null, null);
+    return processUpdateGroup(obj, Crud.CREATE, name, null, null, null);
   }
 
   @Override
   public <T> long insertObject(String name, T obj, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeFunction> nativeExpressions) throws CpoException {
-    return processUpdateGroup(obj, CpoAdapter.CREATE_GROUP, name, wheres, orderBy, nativeExpressions);
+    return processUpdateGroup(obj, Crud.CREATE, name, wheres, orderBy, nativeExpressions);
   }
 
   @Override
   public <T> long insertObjects(Collection<T> coll) throws CpoException {
-    return processUpdateGroup(coll, CpoAdapter.CREATE_GROUP, null, null, null, null);
+    return processUpdateGroup(coll, Crud.CREATE, null, null, null, null);
   }
 
   @Override
   public <T> long insertObjects(String name, Collection<T> coll) throws CpoException {
-    return processUpdateGroup(coll, CpoAdapter.CREATE_GROUP, name, null, null, null);
+    return processUpdateGroup(coll, Crud.CREATE, name, null, null, null);
   }
 
   @Override
   public <T> long insertObjects(String name, Collection<T> coll, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeFunction> nativeExpressions) throws CpoException {
-    return processUpdateGroup(coll, CpoAdapter.CREATE_GROUP, name, wheres, orderBy, nativeExpressions);
+    return processUpdateGroup(coll, Crud.CREATE, name, wheres, orderBy, nativeExpressions);
   }
 
   @Override
   public <T> long deleteObject(T obj) throws CpoException {
-    return processUpdateGroup(obj, CpoAdapter.DELETE_GROUP, null, null, null, null);
+    return processUpdateGroup(obj, Crud.DELETE, null, null, null, null);
   }
 
   @Override
   public <T> long deleteObject(String name, T obj) throws CpoException {
-    return processUpdateGroup(obj, CpoAdapter.DELETE_GROUP, name, null, null, null);
+    return processUpdateGroup(obj, Crud.DELETE, name, null, null, null);
   }
 
   @Override
   public <T> long deleteObject(String name, T obj, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeFunction> nativeExpressions) throws CpoException {
-    return processUpdateGroup(obj, CpoAdapter.DELETE_GROUP, name, wheres, orderBy, nativeExpressions);
+    return processUpdateGroup(obj, Crud.DELETE, name, wheres, orderBy, nativeExpressions);
   }
 
   @Override
   public <T> long deleteObjects(Collection<T> coll) throws CpoException {
-    return processUpdateGroup(coll, CpoAdapter.DELETE_GROUP, null, null, null, null);
+    return processUpdateGroup(coll, Crud.DELETE, null, null, null, null);
   }
 
   @Override
   public <T> long deleteObjects(String name, Collection<T> coll) throws CpoException {
-    return processUpdateGroup(coll, CpoAdapter.DELETE_GROUP, name, null, null, null);
+    return processUpdateGroup(coll, Crud.DELETE, name, null, null, null);
   }
 
   @Override
   public <T> long deleteObjects(String name, Collection<T> coll, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeFunction> nativeExpressions) throws CpoException {
-    return processUpdateGroup(coll, CpoAdapter.DELETE_GROUP, name, wheres, orderBy, nativeExpressions);
+    return processUpdateGroup(coll, Crud.DELETE, name, wheres, orderBy, nativeExpressions);
   }
 
   @Override
@@ -209,22 +210,22 @@ public abstract class CpoBaseAdapter<D> extends CpoAdapterCache implements CpoAd
 
   @Override
   public <T> long persistObject(T obj) throws CpoException {
-    return processUpdateGroup(obj, CpoAdapter.PERSIST_GROUP, null, null, null, null);
+    return processUpdateGroup(obj, Crud.PERSIST, null, null, null, null);
   }
 
   @Override
   public <T> long persistObject(String name, T obj) throws CpoException {
-    return processUpdateGroup(obj, CpoAdapter.PERSIST_GROUP, name, null, null, null);
+    return processUpdateGroup(obj, Crud.PERSIST, name, null, null, null);
   }
 
   @Override
   public <T> long persistObjects(Collection<T> coll) throws CpoException {
-    return processUpdateGroup(coll, CpoAdapter.PERSIST_GROUP, null, null, null, null);
+    return processUpdateGroup(coll, Crud.PERSIST, null, null, null, null);
   }
 
   @Override
   public <T> long persistObjects(String name, Collection<T> coll) throws CpoException {
-    return processUpdateGroup(coll, CpoAdapter.PERSIST_GROUP, name, null, null, null);
+    return processUpdateGroup(coll, Crud.PERSIST, name, null, null, null);
   }
 
   @Override
@@ -318,37 +319,37 @@ public abstract class CpoBaseAdapter<D> extends CpoAdapterCache implements CpoAd
 
   @Override
   public <T> long updateObject(T obj) throws CpoException {
-    return processUpdateGroup(obj, CpoAdapter.UPDATE_GROUP, null, null, null, null);
+    return processUpdateGroup(obj, Crud.UPDATE, null, null, null, null);
   }
 
   @Override
   public <T> long updateObject(String name, T obj) throws CpoException {
-    return processUpdateGroup(obj, CpoAdapter.UPDATE_GROUP, name, null, null, null);
+    return processUpdateGroup(obj, Crud.UPDATE, name, null, null, null);
   }
 
   @Override
   public <T> long updateObject(String name, T obj, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeFunction> nativeExpressions) throws CpoException {
-    return processUpdateGroup(obj, CpoAdapter.UPDATE_GROUP, name, wheres, orderBy, nativeExpressions);
+    return processUpdateGroup(obj, Crud.UPDATE, name, wheres, orderBy, nativeExpressions);
   }
 
   @Override
   public <T> long updateObjects(Collection<T> coll) throws CpoException {
-    return processUpdateGroup(coll, CpoAdapter.UPDATE_GROUP, null, null, null, null);
+    return processUpdateGroup(coll, Crud.UPDATE, null, null, null, null);
   }
 
   @Override
   public <T> long updateObjects(String name, Collection<T> coll) throws CpoException {
-    return processUpdateGroup(coll, CpoAdapter.UPDATE_GROUP, name, null, null, null);
+    return processUpdateGroup(coll, Crud.UPDATE, name, null, null, null);
   }
 
   @Override
   public <T> long updateObjects(String name, Collection<T> coll, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeFunction> nativeExpressions) throws CpoException {
-    return processUpdateGroup(coll, CpoAdapter.UPDATE_GROUP, name, wheres, orderBy, nativeExpressions);
+    return processUpdateGroup(coll, Crud.UPDATE, name, wheres, orderBy, nativeExpressions);
   }
 
-  protected abstract <T> long processUpdateGroup(T obj, String groupType, String groupName, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeFunction> nativeExpressions) throws CpoException;
+  protected abstract <T> long processUpdateGroup(T obj, Crud crud, String groupName, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeFunction> nativeExpressions) throws CpoException;
 
-  protected abstract <T> long processUpdateGroup(Collection<T> coll, String groupType, String groupName, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeFunction> nativeExpressions) throws CpoException;
+  protected abstract <T> long processUpdateGroup(Collection<T> coll, Crud crud, String groupName, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeFunction> nativeExpressions) throws CpoException;
 
   protected abstract <T, C> T processExecuteGroup(String name, C criteria, T result) throws CpoException;
 

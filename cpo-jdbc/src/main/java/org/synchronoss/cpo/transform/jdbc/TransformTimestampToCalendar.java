@@ -21,7 +21,8 @@
 package org.synchronoss.cpo.transform.jdbc;
 
 import org.synchronoss.cpo.CpoException;
-import org.synchronoss.cpo.jdbc.*;
+import org.synchronoss.cpo.jdbc.JdbcCallableStatementFactory;
+import org.synchronoss.cpo.jdbc.JdbcPreparedStatementFactory;
 
 import java.sql.Timestamp;
 import java.util.Calendar;

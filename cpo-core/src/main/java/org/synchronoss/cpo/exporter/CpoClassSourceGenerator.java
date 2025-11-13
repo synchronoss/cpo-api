@@ -20,7 +20,6 @@
  */
 package org.synchronoss.cpo.exporter;
 
-import org.synchronoss.cpo.CpoException;
 import org.synchronoss.cpo.MetaVisitor;
 import org.synchronoss.cpo.meta.CpoMetaDescriptor;
 import org.synchronoss.cpo.meta.domain.*;

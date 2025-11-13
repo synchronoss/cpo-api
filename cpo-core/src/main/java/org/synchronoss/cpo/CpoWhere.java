@@ -20,6 +20,9 @@
  */
 package org.synchronoss.cpo;
 
+import org.synchronoss.cpo.enums.Comparison;
+import org.synchronoss.cpo.enums.Logical;
+
 /**
  * CpoWhere is an interface for specifying the where clause to filter objects that are returned from the Datasource.
  *
@@ -27,76 +30,61 @@ package org.synchronoss.cpo;
  */
 public interface CpoWhere {
 
-  static final int COMP_NONE = -1;
-  static final int COMP_EQ = 0;
-  static final int COMP_LT = 1;
-  static final int COMP_GT = 2;
-  static final int COMP_NEQ = 3;
-  static final int COMP_IN = 4;
-  static final int COMP_LIKE = 5;
-  static final int COMP_LTEQ = 6;
-  static final int COMP_GTEQ = 7;
-  static final int COMP_EXISTS = 8;
-  static final int COMP_ISNULL = 9;
-  static final int LOGIC_NONE = -1;
-  static final int LOGIC_AND = 0;
-  static final int LOGIC_OR = 1;
+  void setComparison(Comparison comparison);
 
-  public void setComparison(int comp);
+    Comparison getComparison();
 
-  public int getComparison();
+  void setLogical(Logical logical);
 
-  public void setLogical(int log);
+    Logical getLogical();
 
-  public int getLogical();
+  void setAttribute(String attr);
 
-  public void setAttribute(String attr);
+  String getAttribute();
 
-  public String getAttribute();
+  void setRightAttribute(String attr);
 
-  public void setRightAttribute(String attr);
+  String getRightAttribute();
 
-  public String getRightAttribute();
+  void setValue(Object val);
 
-  public void setValue(Object val);
+  Object getValue();
 
-  public Object getValue();
+  boolean getNot();
 
-  public boolean getNot();
+  void setNot(boolean b);
 
-  public void setNot(boolean b);
+  void addWhere(CpoWhere cw) throws CpoException;
 
-  public void addWhere(CpoWhere cw) throws CpoException;
+  void setAttributeFunction(String s);
 
-  public void setAttributeFunction(String s);
+  String getAttributeFunction();
 
-  public String getAttributeFunction();
+  void setValueFunction(String s);
 
-  public void setValueFunction(String s);
+  String getValueFunction();
 
-  public String getValueFunction();
+  void setRightAttributeFunction(String s);
 
-  public void setRightAttributeFunction(String s);
+  String getRightAttributeFunction();
 
-  public String getRightAttributeFunction();
+  void setStaticValue(String staticValue);
 
-  public void setStaticValue(String staticValue);
+  String getStaticValue();
 
-  public String getStaticValue();
-
-  public boolean isLeaf();
+  boolean isLeaf();
 
   /**
    * Gets a string representing the name of this instance of the CpoOrderBy
    *
    * @return String The name of the CpoOrderBy
    */
-  public String getName();
+  String getName();
 
   /**
    * Sets a string representing the name of this instance of the CpoOrderBy
    *
    * @param s The name of the CpoOrderBy
    */
-  public void setName(String s);
+  void setName(String s);
 }

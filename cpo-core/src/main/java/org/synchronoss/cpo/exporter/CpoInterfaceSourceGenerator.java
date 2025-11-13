@@ -20,9 +20,7 @@
  */
 package org.synchronoss.cpo.exporter;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.synchronoss.cpo.*;
+import org.synchronoss.cpo.MetaVisitor;
 import org.synchronoss.cpo.meta.CpoMetaDescriptor;
 import org.synchronoss.cpo.meta.domain.*;
 
@@ -34,7 +32,6 @@ import org.synchronoss.cpo.meta.domain.*;
  */
 public class CpoInterfaceSourceGenerator implements MetaVisitor {
 
-  private static final Logger logger = LoggerFactory.getLogger(CpoInterfaceSourceGenerator.class);
   private static final String ATTR_PREFIX = "ATTR_";
   private static final String FG_PREFIX = "FG_";
 

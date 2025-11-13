@@ -20,6 +20,9 @@
  */
 package org.synchronoss.cpo;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -30,12 +33,13 @@ import java.io.InputStream;
  *
  * @author david berry
  */
-public class CpoByteArrayInputStream extends ByteArrayInputStream implements java.io.Serializable, java.lang.Cloneable {
+public class CpoByteArrayInputStream extends ByteArrayInputStream implements java.io.Serializable, Cloneable {
 
   /**
    * Version Id for this class.
    */
   private static final long serialVersionUID = 1L;
+    private static final Logger logger = LoggerFactory.getLogger(CpoByteArrayInputStream.class);
   private byte[] buffer_ = null; //The buffer for the byte Array
   private int offset_ = 0;
   private int size_ = 0;
@@ -102,11 +106,12 @@ public class CpoByteArrayInputStream extends ByteArrayInputStream implements jav
         }
         cbais = new CpoByteArrayInputStream(baos.toByteArray());
       } catch (IOException ioe) {
-        // do nothing for now. The null should get someone's attention. 
+          logger.error("Error processing input stream", ioe);        // do nothing for now. The null should get someone's attention.
       } finally {
         try {
           is.close();
         } catch (IOException ioe) {
+            logger.error("Error closing input stream", ioe);
         }
       }
 

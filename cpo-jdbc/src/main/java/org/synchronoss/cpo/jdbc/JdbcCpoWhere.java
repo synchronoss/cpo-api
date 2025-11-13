@@ -21,6 +21,8 @@
 package org.synchronoss.cpo.jdbc;
 
 import org.synchronoss.cpo.BindableCpoWhere;
+import org.synchronoss.cpo.enums.Comparison;
+import org.synchronoss.cpo.enums.Logical;
 import org.synchronoss.cpo.meta.domain.CpoAttribute;
 
 /**
@@ -51,7 +53,7 @@ public class JdbcCpoWhere extends BindableCpoWhere {
      * @param comp - Compare operator
      * @param value - The value to compare against the attribute
      */
-  public <T> JdbcCpoWhere(int logical, String attr, int comp, T value) {
+  public <T> JdbcCpoWhere(Logical logical, String attr, Comparison comp, T value) {
     super(logical, attr, comp, value);
   }
 
@@ -65,7 +67,7 @@ public class JdbcCpoWhere extends BindableCpoWhere {
      * @param value - The value to compare against the attribute
      * @param not - add the logical not operator
      */
-  public <T> JdbcCpoWhere(int logical, String attr, int comp, T value, boolean not) {
+  public <T> JdbcCpoWhere(Logical logical, String attr, Comparison comp, T value, boolean not) {
     super(logical, attr, comp, value, not);
   }
 

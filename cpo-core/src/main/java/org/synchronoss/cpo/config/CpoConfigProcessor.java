@@ -20,7 +20,6 @@
  */
 package org.synchronoss.cpo.config;
 
-import org.synchronoss.cpo.CpoAdapter;
 import org.synchronoss.cpo.CpoAdapterFactory;
 import org.synchronoss.cpo.CpoException;
 import org.synchronoss.cpo.core.cpoCoreConfig.CtDataSourceConfig;
@@ -30,5 +29,5 @@ import org.synchronoss.cpo.core.cpoCoreConfig.CtDataSourceConfig;
  */
 public interface CpoConfigProcessor {
 
-  public CpoAdapterFactory processCpoConfig(CtDataSourceConfig cpoConfig) throws CpoException;
+  CpoAdapterFactory processCpoConfig(CtDataSourceConfig cpoConfig) throws CpoException;
 }

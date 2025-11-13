@@ -20,13 +20,21 @@
  */
 package org.synchronoss.cpo.meta.domain;
 
-import org.slf4j.*;
-import org.synchronoss.cpo.*;
-import org.synchronoss.cpo.helper.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.synchronoss.cpo.CpoException;
+import org.synchronoss.cpo.MetaDFVisitable;
+import org.synchronoss.cpo.MetaVisitor;
+import org.synchronoss.cpo.enums.Crud;
+import org.synchronoss.cpo.helper.CpoClassLoader;
+import org.synchronoss.cpo.helper.ExceptionHelper;
 import org.synchronoss.cpo.meta.CpoMetaDescriptor;
 import org.synchronoss.cpo.meta.bean.CpoClassBean;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 public abstract class CpoClass extends CpoClassBean implements Comparable<CpoClass>, MetaDFVisitable {
     /**
@@ -87,19 +95,19 @@ public abstract class CpoClass extends CpoClassBean implements Comparable<CpoCla
     return this.functionGroups;
   }
 
-  public CpoFunctionGroup getFunctionGroup(String groupType, String groupName) throws CpoException {
-    String key = buildFunctionGroupKey(groupType, groupName);
+  public CpoFunctionGroup getFunctionGroup(Crud crud, String groupName) throws CpoException {
+    String key = buildFunctionGroupKey(crud.operation, groupName);
     CpoFunctionGroup group = functionGroups.get(key);
     if (group == null) {
-      throw new CpoException("Function Group Not Found: " + groupType + ":" + groupName);
+      throw new CpoException("Function Group Not Found: " + crud.operation + ":" + groupName);
     }
     return group;
   }
 
-  public boolean existsFunctionGroup(String groupType, String groupName) throws CpoException {
-    String key = buildFunctionGroupKey(groupType, groupName);
+  public boolean existsFunctionGroup(Crud crud, String groupName) throws CpoException {
+    String key = buildFunctionGroupKey(crud.operation, groupName);
     CpoFunctionGroup group = functionGroups.get(key);
-    return (group != null);
+    return group != null;
   }
 
   public CpoFunctionGroup addFunctionGroup(CpoFunctionGroup group) {

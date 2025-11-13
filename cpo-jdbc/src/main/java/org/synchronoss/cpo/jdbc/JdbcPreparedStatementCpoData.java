@@ -20,8 +20,11 @@
  */
 package org.synchronoss.cpo.jdbc;
 
-import org.slf4j.*;
-import org.synchronoss.cpo.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.synchronoss.cpo.CpoByteArrayInputStream;
+import org.synchronoss.cpo.CpoCharArrayReader;
+import org.synchronoss.cpo.CpoException;
 import org.synchronoss.cpo.helper.ExceptionHelper;
 import org.synchronoss.cpo.jdbc.meta.JdbcMethodMapEntry;
 import org.synchronoss.cpo.jdbc.meta.JdbcMethodMapper;
@@ -30,7 +33,8 @@ import org.synchronoss.cpo.meta.domain.CpoAttribute;
 import org.synchronoss.cpo.transform.CpoTransform;
 import org.synchronoss.cpo.transform.jdbc.JdbcCpoTransform;
 
-import java.io.*;
+import java.io.InputStream;
+import java.io.Reader;
 
 /**
  * The data handler for a prepared statement

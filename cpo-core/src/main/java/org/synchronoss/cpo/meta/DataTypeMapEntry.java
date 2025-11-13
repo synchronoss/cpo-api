@@ -25,7 +25,7 @@ package org.synchronoss.cpo.meta;
  *
  * @author david berry
  */
-public class DataTypeMapEntry<T> implements java.io.Serializable, java.lang.Cloneable {
+public class DataTypeMapEntry<T> implements java.io.Serializable, Cloneable {
 
   /**
    * Version Id for this class.

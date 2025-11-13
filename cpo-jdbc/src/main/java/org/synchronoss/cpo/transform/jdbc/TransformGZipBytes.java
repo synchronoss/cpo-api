@@ -20,12 +20,17 @@
  */
 package org.synchronoss.cpo.transform.jdbc;
 
-import org.slf4j.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.CpoException;
-import org.synchronoss.cpo.jdbc.*;
+import org.synchronoss.cpo.jdbc.JdbcCallableStatementFactory;
+import org.synchronoss.cpo.jdbc.JdbcPreparedStatementFactory;
 
-import java.io.*;
-import java.util.zip.*;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
+import java.util.zip.GZIPInputStream;
+import java.util.zip.GZIPOutputStream;
 
 /**
  * Converts a compressed byte[] from a jdbc datasource to an uncompressed byte[] and from a byte[] to a compressed

@@ -18,35 +18,31 @@
  * A copy of the GNU Lesser General Public License may also be found at
  * http://www.gnu.org/licenses/lgpl.txt
  */
-package org.synchronoss.cpo.transform;
+package org.synchronoss.cpo.enums;
 
-import org.synchronoss.cpo.CpoException;
-import org.testng.annotations.Test;
+/**
+ * Logical operators for where clauses
+ */
+public enum Logical {
+    /**
+     * No operator
+     */
+    NONE("NONE"),
+    /**
+     * Logical AND operator
+     */
+    AND("AND"),
+    /**
+     * Logical OR operator
+     */
+    OR("OR");
 
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.fail;
+    /**
+     * The string operator in this enum
+     */
+    public final String operator;
 
-public class TransformTest {
-
-  @Test
-  public void testString2Byte() {
-    String testString="This is a test string";
-    byte[] bytes=null;
-    String transformedString="";
-    CpoTransform<byte[], String> transform = new TransformStringByte();
-
-    try {
-      bytes = transform.transformOut(testString);
-    }catch (CpoException ex) {
-      fail("transformOut threw an exception"+ex.getMessage());
+    Logical(String operator) {
+        this.operator = operator;
     }
-
-    try {
-      transformedString = transform.transformIn(bytes);
-    }catch (CpoException ex) {
-      fail("transformIn threw an exception"+ex.getMessage());
-    }
-
-    assertEquals(testString, transformedString);
-  }
 }

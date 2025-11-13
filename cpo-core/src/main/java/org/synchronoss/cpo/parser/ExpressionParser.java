@@ -33,21 +33,21 @@ public interface ExpressionParser {
    *
    * @return The expression
    */
-  public String getExpression();
+  String getExpression();
 
   /**
    * Sets the expression to be used for this parser
    *
    * @param expression The expression
    */
-  public void setExpression(String expression);
+  void setExpression(String expression);
 
   /**
    * Returns the count of the bind markers in the expression
    *
    * @return the number of bind markers
    */
-  public int countArguments();
+  int countArguments();
 
   /**
    * Returns a list of columns from the expression for each bind marker
@@ -55,5 +55,5 @@ public interface ExpressionParser {
    * @return List of Strings for the columns for the bind markers
    * @throws ParseException thrown if the expression cannot be parsed
    */
-  public List<String> parse() throws ParseException;
+  List<String> parse() throws ParseException;
 }

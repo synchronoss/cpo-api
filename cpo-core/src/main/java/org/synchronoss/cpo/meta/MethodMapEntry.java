@@ -20,9 +20,6 @@
  */
 package org.synchronoss.cpo.meta;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.lang.reflect.Method;
 
 /**
@@ -32,7 +29,6 @@ import java.lang.reflect.Method;
  */
 public class MethodMapEntry<J,D> implements java.io.Serializable, Cloneable {
 
-  private static final Logger logger = LoggerFactory.getLogger(MethodMapEntry.class);
   /**
    * Version Id for this class.
    */

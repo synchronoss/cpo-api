@@ -20,7 +20,8 @@
  */
 package org.synchronoss.cpo.jdbc.meta;
 
-import org.slf4j.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.meta.MethodMapEntry;
 
 import java.io.Serial;
@@ -34,7 +35,7 @@ import java.lang.reflect.Method;
  *
  * @author david berry
  */
-public class JdbcMethodMapEntry<J,D> extends MethodMapEntry<J,D> implements java.io.Serializable, java.lang.Cloneable {
+public class JdbcMethodMapEntry<J,D> extends MethodMapEntry<J,D> implements java.io.Serializable, Cloneable {
 
   private static final Logger logger = LoggerFactory.getLogger(JdbcMethodMapEntry.class);
   /**

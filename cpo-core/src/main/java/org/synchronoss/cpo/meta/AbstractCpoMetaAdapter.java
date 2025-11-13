@@ -20,9 +20,11 @@
  */
 package org.synchronoss.cpo.meta;
 
-import org.slf4j.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.CpoException;
 import org.synchronoss.cpo.core.cpoCoreMeta.*;
+import org.synchronoss.cpo.enums.Crud;
 import org.synchronoss.cpo.meta.domain.*;
 
 import java.util.*;
@@ -187,7 +189,7 @@ public abstract class AbstractCpoMetaAdapter implements CpoMetaAdapter {
       CpoFunctionGroup functionGroup = null;
 
       try {
-        functionGroup = cpoClass.getFunctionGroup(ctFunctionGroup.getType().toString(), ctFunctionGroup.getName());
+        functionGroup = cpoClass.getFunctionGroup(Crud.valueOf(ctFunctionGroup.getType().toString()), ctFunctionGroup.getName());
       } catch (Exception e) {
         // this a runtime exception that we can ignore during load time.
         if (logger.isTraceEnabled()) {

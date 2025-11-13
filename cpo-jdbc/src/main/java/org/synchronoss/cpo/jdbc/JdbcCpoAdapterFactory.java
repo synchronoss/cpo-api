@@ -20,7 +20,10 @@
  */
 package org.synchronoss.cpo.jdbc;
 
-import org.synchronoss.cpo.*;
+import org.synchronoss.cpo.CpoAdapter;
+import org.synchronoss.cpo.CpoAdapterFactory;
+import org.synchronoss.cpo.CpoException;
+import org.synchronoss.cpo.CpoTrxAdapter;
 import org.synchronoss.cpo.jdbc.jta.JdbcCpoXaAdapter;
 import org.synchronoss.cpo.jta.CpoXaResource;
 

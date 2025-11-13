@@ -20,7 +20,10 @@
  */
 package org.synchronoss.cpo;
 
-import org.synchronoss.cpo.meta.domain.*;
+import org.synchronoss.cpo.enums.Comparison;
+import org.synchronoss.cpo.enums.Logical;
+import org.synchronoss.cpo.meta.domain.CpoAttribute;
+import org.synchronoss.cpo.meta.domain.CpoClass;
 
 import java.util.Collection;
 
@@ -51,8 +54,8 @@ public class BindableCpoWhere extends Node implements CpoWhere {
     "AND", //LOGIC_AND
     "OR" //LOGIC_OR
   };
-  private int comparison = CpoWhere.COMP_NONE;
-  private int logical = CpoWhere.LOGIC_NONE;
+  private Comparison comparison = Comparison.NONE;
+  private Logical logical = Logical.NONE;
   private String attribute = null;
   private String rightAttribute = null;
   private Object value = null;
@@ -63,14 +66,14 @@ public class BindableCpoWhere extends Node implements CpoWhere {
   private String staticValue_ = null;
   private String name = "__CPO_WHERE__";
 
-  public <T> BindableCpoWhere(int logical, String attr, int comp, T value) {
+  public <T> BindableCpoWhere(Logical logical, String attr, Comparison comp, T value) {
     setLogical(logical);
     setAttribute(attr);
     setComparison(comp);
     setValue(value);
   }
 
-  public <T> BindableCpoWhere(int logical, String attr, int comp, T value, boolean not) {
+  public <T> BindableCpoWhere(Logical logical, String attr, Comparison comp, T value, boolean not) {
     setLogical(logical);
     setAttribute(attr);
     setComparison(comp);
@@ -82,30 +85,22 @@ public class BindableCpoWhere extends Node implements CpoWhere {
   }
 
   @Override
-  public void setComparison(int i) {
-    if (i < 0 || i >= comparisons.length) {
-      this.comparison = CpoWhere.COMP_NONE;
-    } else {
-      this.comparison = i;
-    }
+  public void setComparison(Comparison comparison) {
+      this.comparison = comparison;
   }
 
   @Override
-  public int getComparison() {
+  public Comparison getComparison() {
     return this.comparison;
   }
 
   @Override
-  public void setLogical(int i) {
-    if (i < 0 || i >= logicals.length) {
-      this.logical = CpoWhere.LOGIC_NONE;
-    } else {
-      this.logical = i;
-    }
+  public void setLogical(Logical logical) {
+      this.logical = logical;
   }
 
   @Override
-  public int getLogical() {
+  public Logical getLogical() {
     return this.logical;
   }
 
@@ -164,9 +159,9 @@ public class BindableCpoWhere extends Node implements CpoWhere {
     CpoAttribute cpoAttribute = null;
 
 
-    if (getLogical() != CpoWhere.LOGIC_NONE) {
+    if (getLogical() != Logical.NONE) {
       sb.append(" ");
-      sb.append(logicals[getLogical()]);
+      sb.append(getLogical().operator);
     } else if (!hasParent()) {
       // This is the root where clause
       sb.append("WHERE");
@@ -202,12 +197,12 @@ public class BindableCpoWhere extends Node implements CpoWhere {
       }
     }
 
-    if (getComparison() != CpoWhere.COMP_NONE) {
+    if (getComparison() != Comparison.NONE) {
       sb.append(" ");
-      sb.append(comparisons[getComparison()]);
+      sb.append(getComparison().operator);
     }
 
-    if (getComparison() != CpoWhere.COMP_ISNULL && (getValue() != null || getRightAttribute() != null || getStaticValue() != null)) {
+    if (getComparison() != Comparison.ISNULL && (getValue() != null || getRightAttribute() != null || getStaticValue() != null)) {
       sb.append(" ");
 
       if (getValue() != null) {
@@ -216,7 +211,7 @@ public class BindableCpoWhere extends Node implements CpoWhere {
             cpoAttribute = cpoClass.getAttributeJava(getRightAttribute());
           }
           sb.append(buildFunction(getValueFunction(), getAttributeName(cpoAttribute, getAttribute(), getRightAttribute()), "?"));
-        } else if (getComparison() == CpoWhere.COMP_IN && getValue() instanceof Collection) {
+        } else if (getComparison() == Comparison.IN && getValue() instanceof Collection) {
           Collection coll = (Collection) getValue();
           sb.append("(");
           if (coll.size() > 0) {

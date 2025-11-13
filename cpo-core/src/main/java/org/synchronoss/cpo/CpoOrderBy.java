@@ -29,7 +29,7 @@ import org.synchronoss.cpo.meta.domain.CpoClass;
  */
 public interface CpoOrderBy {
   
-  public static final String DEFAULT_MARKER = "__CPO_ORDERBY__";
+  String DEFAULT_MARKER = "__CPO_ORDERBY__";
 
   /**
    * Gets the boolean that determines if the objects will be returned from from the CpoAdapter in Ascending order or
@@ -37,14 +37,14 @@ public interface CpoOrderBy {
    *
    * @return boolean true if it is to sort in Ascensing Order false if it is to be sorted in Descending Order
    */
-  public boolean getAscending();
+  boolean getAscending();
 
   /**
    * Gets the name of the attribute that is to be used to sort the results from the CpoAdapter.
    *
    * @return String The name of the attribute
    */
-  public String getAttribute();
+  String getAttribute();
 
   /**
    * Gets a string representing a datasource specific function call that must be applied to the attribute that will be
@@ -54,19 +54,19 @@ public interface CpoOrderBy {
    *
    * @return String The name of the function
    */
-  public String getFunction();
+  String getFunction();
 
   /**
    * Gets the string marker that this cpoOrderBy will search for in the expression to replace
    *
    * @return String The marker of the CpoOrderBy
    */
-  public String getMarker();  
+  String getMarker();
   
   /**
    * @param cpoClass The cpoClass
    * @return the string that will be added into the expression
    * @throws CpoException an exception
    */
-  public String toString(CpoClass cpoClass) throws CpoException;
+  String toString(CpoClass cpoClass) throws CpoException;
 }

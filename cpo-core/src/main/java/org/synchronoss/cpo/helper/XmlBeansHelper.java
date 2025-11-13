@@ -20,7 +20,9 @@
  */
 package org.synchronoss.cpo.helper;
 
-import org.apache.xmlbeans.*;
+import org.apache.xmlbeans.XmlError;
+import org.apache.xmlbeans.XmlObject;
+import org.apache.xmlbeans.XmlOptions;
 
 import java.util.ArrayList;
 

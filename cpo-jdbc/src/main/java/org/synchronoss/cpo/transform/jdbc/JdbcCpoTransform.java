@@ -43,7 +43,7 @@ public interface JdbcCpoTransform<D, J> extends CpoTransform<D, J> {
      * @return The datasource object
      * @throws CpoException an error transforming the java object to the data object
      */
-  public D transformOut(JdbcPreparedStatementFactory jpsf, J attributeObject) throws CpoException;
+    D transformOut(JdbcPreparedStatementFactory jpsf, J attributeObject) throws CpoException;
 
     /**
      * Transforms a java object to a data source object for the preparedstatement
@@ -53,7 +53,7 @@ public interface JdbcCpoTransform<D, J> extends CpoTransform<D, J> {
      * @return The datasource object
      * @throws CpoException an error transforming the java object to the data object
      */
-  public D transformOut(JdbcCallableStatementFactory jcsf, J attributeObject) throws CpoException;
+    D transformOut(JdbcCallableStatementFactory jcsf, J attributeObject) throws CpoException;
 
 
   // TODO - add some transform in statements here.

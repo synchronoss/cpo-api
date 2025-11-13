@@ -20,11 +20,17 @@
  */
 package org.synchronoss.cpo.cassandra;
 
-import org.synchronoss.cpo.*;
-import org.testng.annotations.*;
-import static org.testng.Assert.*;
+import org.synchronoss.cpo.CpoAdapter;
+import org.synchronoss.cpo.CpoAdapterFactoryManager;
+import org.synchronoss.cpo.CpoOrderBy;
+import org.testng.annotations.AfterClass;
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.Test;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+
+import static org.testng.Assert.*;
 
 /**
  * BlobTest is a test class for testing the JdbcAdapter class Constructors
@@ -113,7 +119,7 @@ public class OrderByTest {
 //      inColl.add(new Integer(5));
 //
 ////      CpoWhere cw = cpoAdapter.newWhere();
-//      CpoWhere cw = cpoAdapter.newWhere(CpoWhere.LOGIC_NONE, "id", CpoWhere.COMP_IN, inColl);
+//      CpoWhere cw = cpoAdapter.newWhere(Logical.NONE, "id", Comparison.IN, inColl);
 //      ArrayList<CpoWhere> wheres = new ArrayList<CpoWhere>();
 //      wheres.add(cw);
 //

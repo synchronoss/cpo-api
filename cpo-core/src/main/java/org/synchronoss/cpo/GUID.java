@@ -20,7 +20,8 @@
  */
 package org.synchronoss.cpo;
 
-import org.slf4j.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.math.BigInteger;
 import java.net.InetAddress;
@@ -79,11 +80,11 @@ public class GUID {
   }
 
   public static String getGUID() {
-    GUID guid = GUID.getInstance();
+    GUID guid = getInstance();
     long timeNow = System.currentTimeMillis();
     int timeLow = (int) timeNow & 0xFFFFFFFF;
     int node = guid.sr.nextInt();
-    String retVal = (hexFormat(timeLow) + guid.guidMidValue + hexFormat(node));
+    String retVal = hexFormat(timeLow) + guid.guidMidValue + hexFormat(node);
     logger.debug("getGUID(): " + retVal);
     return retVal;
   }

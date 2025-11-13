@@ -20,10 +20,12 @@
  */
 package org.synchronoss.cpo.parser;
 
+import org.testng.annotations.Test;
+
 import java.text.ParseException;
 import java.util.Arrays;
 import java.util.List;
-import org.testng.annotations.*;
+
 import static org.testng.Assert.*;
 
 public class ParserTest {

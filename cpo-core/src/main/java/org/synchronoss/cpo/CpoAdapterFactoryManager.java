@@ -21,21 +21,26 @@
 package org.synchronoss.cpo;
 
 import org.apache.xmlbeans.XmlException;
-import org.slf4j.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.cache.CpoAdapterFactoryCache;
 import org.synchronoss.cpo.config.CpoConfigProcessor;
-import org.synchronoss.cpo.core.cpoCoreConfig.*;
-import org.synchronoss.cpo.helper.*;
+import org.synchronoss.cpo.core.cpoCoreConfig.CpoConfigDocument;
+import org.synchronoss.cpo.core.cpoCoreConfig.CtCpoConfig;
+import org.synchronoss.cpo.core.cpoCoreConfig.CtDataSourceConfig;
+import org.synchronoss.cpo.core.cpoCoreConfig.CtMetaDescriptor;
+import org.synchronoss.cpo.helper.CpoClassLoader;
+import org.synchronoss.cpo.helper.ExceptionHelper;
+import org.synchronoss.cpo.helper.XmlBeansHelper;
 import org.synchronoss.cpo.jta.CpoXaResource;
 import org.synchronoss.cpo.meta.CpoMetaDescriptor;
 
-import java.io.*;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
-import java.net.MalformedURLException;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.net.URL;
-import java.util.*;
 
 /**
  * @author dberry
@@ -192,7 +197,7 @@ public final class CpoAdapterFactoryManager extends CpoAdapterFactoryCache {
       logger.error("Error processing " + cpoConfig + ": ", ce);
     } finally {
       if (is != null)
-        try { is.close(); } catch (Exception e) {}
+        try { is.close(); } catch (Exception e) {logger.error("Error processing " + cpoConfig + ": ", e);}
     }
   }
 

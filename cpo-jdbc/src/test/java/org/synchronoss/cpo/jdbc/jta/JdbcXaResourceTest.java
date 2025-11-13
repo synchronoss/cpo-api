@@ -25,11 +25,15 @@ import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.CpoAdapter;
 import org.synchronoss.cpo.CpoAdapterFactoryManager;
 import org.synchronoss.cpo.CpoOrderBy;
-import org.synchronoss.cpo.jdbc.*;
 import org.synchronoss.cpo.helper.ExceptionHelper;
-import org.synchronoss.cpo.jta.CpoXaResource;
-import org.testng.annotations.*;
-import static org.testng.Assert.*;
+import org.synchronoss.cpo.jdbc.JdbcStatics;
+import org.synchronoss.cpo.jdbc.ValueObject;
+import org.synchronoss.cpo.jdbc.ValueObjectFactory;
+import org.synchronoss.cpo.jta.CpoXaError;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Parameters;
+import org.testng.annotations.Test;
 
 import javax.transaction.xa.XAException;
 import javax.transaction.xa.XAResource;
@@ -37,6 +41,8 @@ import javax.transaction.xa.Xid;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+
+import static org.testng.Assert.*;
 
 /**
  * Created by dberry on 12/8/15.
@@ -268,7 +274,7 @@ public class JdbcXaResourceTest {
           cpoXaAdapter1.recover(XAResource.TMSUCCESS);
           fail("XAException should have been thrown");
         } catch (XAException xae) {
-          assertTrue(xae.getLocalizedMessage().startsWith(CpoXaResource.CpoXaError.XAER_INVAL.toString()));
+          assertTrue(xae.getLocalizedMessage().startsWith(CpoXaError.XAER_INVAL.toString()));
         }
       } catch (Exception e) {
         fail(method + ExceptionHelper.getLocalizedMessage(e));

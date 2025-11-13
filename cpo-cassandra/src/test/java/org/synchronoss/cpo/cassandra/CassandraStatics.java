@@ -25,8 +25,8 @@ package org.synchronoss.cpo.cassandra;
  */
 public interface CassandraStatics {
 
-  public static final String ADAPTER_CONTEXT_DEFAULT = "defaultCluster";
-  public static final String ADAPTER_CONTEXT_CASESENSITIVE = "caseSensitive";
-  public static final String ADAPTER_CONTEXT_CASEINSENSITIVE = "caseInsensitive";
-  public static int BLOB_SIZE = 64999;
+  String ADAPTER_CONTEXT_DEFAULT = "defaultCluster";
+  String ADAPTER_CONTEXT_CASESENSITIVE = "caseSensitive";
+  String ADAPTER_CONTEXT_CASEINSENSITIVE = "caseInsensitive";
+  int BLOB_SIZE = 64999;
 }

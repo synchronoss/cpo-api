@@ -20,10 +20,18 @@
  */
 package org.synchronoss.cpo.cassandra;
 
-import org.synchronoss.cpo.*;
+import org.synchronoss.cpo.CpoAdapter;
+import org.synchronoss.cpo.CpoAdapterFactoryManager;
+import org.synchronoss.cpo.CpoWhere;
+import org.synchronoss.cpo.enums.Comparison;
+import org.synchronoss.cpo.enums.Logical;
+import org.testng.annotations.AfterClass;
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.Test;
 
-import java.util.*;
-import org.testng.annotations.*;
+import java.util.ArrayList;
+import java.util.Collection;
+
 import static org.testng.Assert.*;
 
 /**
@@ -91,7 +99,7 @@ public class WhereTest {
 
     try {
       ValueObject valObj = ValueObjectFactory.createValueObject();
-      cw = cpoAdapter.newWhere(CpoWhere.LOGIC_NONE, "id", CpoWhere.COMP_EQ, null);
+      cw = cpoAdapter.newWhere(Logical.NONE, "id", Comparison.EQ, null);
       cw.setStaticValue("3");
       ArrayList<CpoWhere> wheres = new ArrayList<>();
       wheres.add(cw);
@@ -111,7 +119,7 @@ public class WhereTest {
 
     try {
       ValueObject valObj = ValueObjectFactory.createValueObject(3);
-      cw = cpoAdapter.newWhere(CpoWhere.LOGIC_NONE, "id", CpoWhere.COMP_EQ, valObj);
+      cw = cpoAdapter.newWhere(Logical.NONE, "id", Comparison.EQ, valObj);
 
       ArrayList<CpoWhere> wheres = new ArrayList<>();
       wheres.add(cw);
@@ -131,7 +139,7 @@ public class WhereTest {
 
     try {
       ValueObject valObj = ValueObjectFactory.createValueObject(3);
-      cw = cpoAdapter.newWhere(CpoWhere.LOGIC_NONE, "id", CpoWhere.COMP_EQ, valObj);
+      cw = cpoAdapter.newWhere(Logical.NONE, "id", Comparison.EQ, valObj);
 
       ArrayList<CpoWhere> wheres = new ArrayList<>();
       wheres.add(cw);
@@ -168,8 +176,8 @@ public class WhereTest {
     try {
       ValueObject valObj = ValueObjectFactory.createValueObject(1);
       CpoWhere cw = cpoAdapter.newWhere();
-      CpoWhere cw1 = cpoAdapter.newWhere(CpoWhere.LOGIC_NONE, "id", CpoWhere.COMP_EQ, 1);
-      CpoWhere cw2 = cpoAdapter.newWhere(CpoWhere.LOGIC_AND, "attrInt", CpoWhere.COMP_EQ, 1);
+      CpoWhere cw1 = cpoAdapter.newWhere(Logical.NONE, "id", Comparison.EQ, 1);
+      CpoWhere cw2 = cpoAdapter.newWhere(Logical.AND, "attrInt", Comparison.EQ, 1);
 
       cw.addWhere(cw1);
       cw.addWhere(cw2);
@@ -193,8 +201,8 @@ public class WhereTest {
       valObj.setAttrInt(1);
 
       CpoWhere cw = cpoAdapter.newWhere();
-      CpoWhere cw1 = cpoAdapter.newWhere(CpoWhere.LOGIC_NONE, "attrInt", CpoWhere.COMP_EQ, valObj);
-      CpoWhere cw2 = cpoAdapter.newWhere(CpoWhere.LOGIC_AND, "id", CpoWhere.COMP_EQ, valObj);
+      CpoWhere cw1 = cpoAdapter.newWhere(Logical.NONE, "attrInt", Comparison.EQ, valObj);
+      CpoWhere cw2 = cpoAdapter.newWhere(Logical.AND, "id", Comparison.EQ, valObj);
 
       cw.addWhere(cw1);
       cw.addWhere(cw2);
@@ -217,7 +225,7 @@ public class WhereTest {
       ValueObject valObj = ValueObjectFactory.createValueObject(1);
 
       CpoWhere cw = cpoAdapter.newWhere();
-      CpoWhere cw1 = cpoAdapter.newWhere(CpoWhere.LOGIC_NONE, "id", CpoWhere.COMP_EQ, 1);
+      CpoWhere cw1 = cpoAdapter.newWhere(Logical.NONE, "id", Comparison.EQ, 1);
 
       cw.addWhere(cw1);
 
@@ -239,7 +247,7 @@ public class WhereTest {
       ValueObject valObj = ValueObjectFactory.createValueObject(1);
 
       CpoWhere cw = cpoAdapter.newWhere();
-      CpoWhere cw1 = cpoAdapter.newWhere(CpoWhere.LOGIC_NONE, "id", CpoWhere.COMP_IN, null);
+      CpoWhere cw1 = cpoAdapter.newWhere(Logical.NONE, "id", Comparison.IN, null);
       cw1.setStaticValue("(1,3,5)");
 
       cw.addWhere(cw1);
@@ -266,7 +274,7 @@ public class WhereTest {
       inColl.add(5);
 
       CpoWhere cw = cpoAdapter.newWhere();
-      CpoWhere cw1 = cpoAdapter.newWhere(CpoWhere.LOGIC_NONE, "id", CpoWhere.COMP_IN, inColl);
+      CpoWhere cw1 = cpoAdapter.newWhere(Logical.NONE, "id", Comparison.IN, inColl);
 
       cw.addWhere(cw1);
 
@@ -292,7 +300,7 @@ public class WhereTest {
       inColl.add(5);
 
       CpoWhere cw = cpoAdapter.newWhere();
-      CpoWhere cw1 = cpoAdapter.newWhere(CpoWhere.LOGIC_NONE, "id", CpoWhere.COMP_IN, inColl);
+      CpoWhere cw1 = cpoAdapter.newWhere(Logical.NONE, "id", Comparison.IN, inColl);
 
       cw.addWhere(cw1);
 

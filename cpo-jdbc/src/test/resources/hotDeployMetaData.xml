@@ -21,7 +21,8 @@
     http://www.gnu.org/licenses/lgpl.txt
 
 -->
-<cpoMetaData xmlns="http://www.synchronoss.org/cpo/core/CpoCoreMeta.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" metaDescriptor="org.synchronoss.cpo.jdbc.meta.JdbcCpoMetaDescriptor">
+<cpoMetaData xmlns="http://www.synchronoss.org/cpo/core/CpoCoreMeta.xsd"
+             metaDescriptor="org.synchronoss.cpo.jdbc.meta.JdbcCpoMetaDescriptor">
   <cpoClass name="org.synchronoss.cpo.jdbc.ValueObject">
     <cpoFunctionGroup name="HotDeploySelect" type="LIST">
       <cpoFunction name="HotDeploy - list">

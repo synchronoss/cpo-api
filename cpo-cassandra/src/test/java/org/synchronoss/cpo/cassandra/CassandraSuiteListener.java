@@ -31,8 +31,6 @@ import org.testcontainers.utility.DockerImageName;
 import org.testng.ISuite;
 import org.testng.ISuiteListener;
 
-import java.sql.SQLException;
-
 public class CassandraSuiteListener implements ISuiteListener {
     public static final String PROP_INIT_SCRIPT="cassandra.initScript";
     public static final String PROP_CPO_CONFIG = "cassandra.cpoConfig";

@@ -20,7 +20,8 @@
  */
 package org.synchronoss.cpo.jdbc;
 
-import org.slf4j.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.CpoException;
 import org.synchronoss.cpo.meta.CpoMetaDescriptor;
 import org.synchronoss.cpo.meta.domain.CpoAttribute;
@@ -34,7 +35,7 @@ import java.lang.reflect.Method;
  *
  * @author david berry
  */
-public class JdbcCpoAttribute extends CpoAttribute implements java.io.Serializable, java.lang.Cloneable {
+public class JdbcCpoAttribute extends CpoAttribute implements java.io.Serializable, Cloneable {
 
   private static final Logger logger = LoggerFactory.getLogger(JdbcCpoAttribute.class);
   /**

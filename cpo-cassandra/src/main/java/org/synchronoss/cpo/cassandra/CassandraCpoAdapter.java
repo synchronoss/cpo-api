@@ -22,14 +22,24 @@
 package org.synchronoss.cpo.cassandra;
 
 import com.datastax.driver.core.*;
-import org.slf4j.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.*;
-import org.synchronoss.cpo.cassandra.meta.*;
+import org.synchronoss.cpo.cassandra.meta.CassandraCpoAttribute;
+import org.synchronoss.cpo.cassandra.meta.CassandraCpoMetaDescriptor;
+import org.synchronoss.cpo.cassandra.meta.CassandraMethodMapper;
+import org.synchronoss.cpo.cassandra.meta.CassandraResultSetCpoData;
+import org.synchronoss.cpo.enums.Crud;
 import org.synchronoss.cpo.helper.ExceptionHelper;
-import org.synchronoss.cpo.meta.*;
-import org.synchronoss.cpo.meta.domain.*;
+import org.synchronoss.cpo.meta.CpoMetaDescriptor;
+import org.synchronoss.cpo.meta.DataTypeMapEntry;
+import org.synchronoss.cpo.meta.domain.CpoAttribute;
+import org.synchronoss.cpo.meta.domain.CpoClass;
+import org.synchronoss.cpo.meta.domain.CpoFunction;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 /**
  * CassandraCpoAdapter is an interface for a set of routines that are responsible for managing value objects from a
@@ -139,7 +149,7 @@ public class CassandraCpoAdapter extends CpoBaseAdapter<ClusterDataSource> {
    *    so.setId(1);
    *    so.setName("SomeName");
    *    try{
-   *      CpoWhere where = cpo.newCpoWhere(CpoWhere.LOGIC_NONE, id, CpoWhere.COMP_EQ);
+   *      CpoWhere where = cpo.newCpoWhere(Logical.NONE, id, Comparison.EQ);
    *      count = cpo.existsObject("SomeExistCheck",so, where);
    *      if (count>0) {
    *        // object exists
@@ -200,7 +210,7 @@ public class CassandraCpoAdapter extends CpoBaseAdapter<ClusterDataSource> {
 
     try {
       CpoClass cpoClass = metaDescriptor.getMetaClass(obj);
-      List<CpoFunction> cpoFunctions = cpoClass.getFunctionGroup(CpoAdapter.EXIST_GROUP, name).getFunctions();
+      List<CpoFunction> cpoFunctions = cpoClass.getFunctionGroup(Crud.EXIST, name).getFunctions();
       localLogger = LoggerFactory.getLogger(cpoClass.getMetaClass());
 
       for (CpoFunction cpoFunction : cpoFunctions) {
@@ -379,7 +389,7 @@ public class CassandraCpoAdapter extends CpoBaseAdapter<ClusterDataSource> {
    *
    * @param <T>       The object type
    * @param obj       The object instance
-   * @param groupType The query group type
+   * @param crud      The query group type
    * @param groupName The query group type
    * @param wheres            A collection of CpoWhere objects to be used by the function
    * @param orderBy           A collection of CpoOrderBy objects to be used by the function
@@ -387,16 +397,16 @@ public class CassandraCpoAdapter extends CpoBaseAdapter<ClusterDataSource> {
    * @return The number of records updated
    * @throws CpoException any errors processing the update
    */
-  protected <T> long processUpdateGroup(T obj, String groupType, String groupName, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeFunction> nativeExpressions) throws CpoException {
+  protected <T> long processUpdateGroup(T obj, Crud crud, String groupName, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeFunction> nativeExpressions) throws CpoException {
     Session sess = null;
     long updateCount = 0;
 
     try {
       sess = getWriteSession();
-      updateCount = processUpdateGroup(obj, groupType, groupName, wheres, orderBy, nativeExpressions, sess);
+      updateCount = processUpdateGroup(obj, crud, groupName, wheres, orderBy, nativeExpressions, sess);
     } catch (Exception e) {
       // Any exception has to try to rollback the work;
-      ExceptionHelper.reThrowCpoException(e, "processUpdateGroup(Object obj, String groupType, String groupName) failed");
+      ExceptionHelper.reThrowCpoException(e, "processUpdateGroup(Object obj, Crud crud, String groupName) failed");
     }
 
     return updateCount;
@@ -406,7 +416,7 @@ public class CassandraCpoAdapter extends CpoBaseAdapter<ClusterDataSource> {
    *
    * @param <T>       The object type
    * @param obj       The object instance
-   * @param groupType The query group type
+   * @param crud      The query group type
    * @param groupName The query group type
    * @param wheres            A collection of CpoWhere objects to be used by the function
    * @param orderBy           A collection of CpoOrderBy objects to be used by the function
@@ -415,7 +425,7 @@ public class CassandraCpoAdapter extends CpoBaseAdapter<ClusterDataSource> {
    * @return The number of records updated
    * @throws CpoException any errors processing the update
    */
-  protected <T> long processUpdateGroup(T obj, String groupType, String groupName, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeFunction> nativeExpressions, Session sess) throws CpoException {
+  protected <T> long processUpdateGroup(T obj, Crud crud, String groupName, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeFunction> nativeExpressions, Session sess) throws CpoException {
     Logger localLogger = obj == null ? logger : LoggerFactory.getLogger(obj.getClass());
     CpoClass cpoClass;
 
@@ -425,16 +435,16 @@ public class CassandraCpoAdapter extends CpoBaseAdapter<ClusterDataSource> {
 
     try {
       cpoClass = metaDescriptor.getMetaClass(obj);
-      List<CpoFunction> cpoFunctions = cpoClass.getFunctionGroup(getGroupType(obj, groupType, groupName, sess), groupName).getFunctions();
-      localLogger.info("=================== Class=<" + obj.getClass() + "> Type=<" + groupType + "> Name=<" + groupName + "> =========================");
+      List<CpoFunction> cpoFunctions = cpoClass.getFunctionGroup(getGroupType(obj, crud, groupName, sess), groupName).getFunctions();
+      localLogger.info("=================== Class=<" + obj.getClass() + "> Type=<" + crud.operation + "> Name=<" + groupName + "> =========================");
 
       for (CpoFunction cpoFunction : cpoFunctions) {
         CassandraBoundStatementFactory boundStatementFactory = new CassandraBoundStatementFactory(sess, this, cpoClass, cpoFunction, obj, wheres, orderBy, nativeExpressions);
         executeBoundStatement(sess, boundStatementFactory);
       }
-      localLogger.info("=================== " + " Updates - Class=<" + obj.getClass() + "> Type=<" + groupType + "> Name=<" + groupName + "> =========================");
+      localLogger.info("=================== " + " Updates - Class=<" + obj.getClass() + "> Type=<" + crud.operation + "> Name=<" + groupName + "> =========================");
     } catch (Throwable t) {
-      String msg = "ProcessUpdateGroup failed:" + groupType + "," + groupName + "," + obj.getClass().getName();
+      String msg = "ProcessUpdateGroup failed:" + crud.operation + "," + groupName + "," + obj.getClass().getName();
       // TODO FIX THIS
       // localLogger.error("bound values:" + this.parameterToString(jq));
       localLogger.error(msg, t);
@@ -449,7 +459,7 @@ public class CassandraCpoAdapter extends CpoBaseAdapter<ClusterDataSource> {
    *
    * @param <T>       The object type
    * @param coll      The collection of T to update
-   * @param groupType The query group type
+   * @param crud      The query group type
    * @param groupName The query group type
    * @param wheres            A collection of CpoWhere objects to be used by the function
    * @param orderBy           A collection of CpoOrderBy objects to be used by the function
@@ -457,16 +467,16 @@ public class CassandraCpoAdapter extends CpoBaseAdapter<ClusterDataSource> {
    * @return The number of records updated
    * @throws CpoException any errors processing the update
    */
-  protected <T> long processUpdateGroup(Collection<T> coll, String groupType, String groupName, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeFunction> nativeExpressions) throws CpoException {
+  protected <T> long processUpdateGroup(Collection<T> coll, Crud crud, String groupName, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeFunction> nativeExpressions) throws CpoException {
     Session sess;
     long updateCount = 0;
 
     try {
       sess = getWriteSession();
-      updateCount = processUpdateGroup(coll.toArray(), groupType, groupName, wheres, orderBy, nativeExpressions, sess);
+      updateCount = processUpdateGroup(coll.toArray(), crud, groupName, wheres, orderBy, nativeExpressions, sess);
     } catch (Exception e) {
       // Any exception has to try to rollback the work;
-      ExceptionHelper.reThrowCpoException(e, "processUpdateGroup(Collection coll, String groupType, String groupName) failed");
+      ExceptionHelper.reThrowCpoException(e, "processUpdateGroup(Collection coll, Crud crud, String groupName) failed");
     }
 
     return updateCount;
@@ -477,7 +487,7 @@ public class CassandraCpoAdapter extends CpoBaseAdapter<ClusterDataSource> {
    *
    * @param <T>       The object type
    * @param arr       The array of T to update
-   * @param groupType The query group type
+   * @param crud      The query group type
    * @param groupName The query group type
    * @param wheres            A collection of CpoWhere objects to be used by the function
    * @param orderBy           A collection of CpoOrderBy objects to be used by the function
@@ -486,7 +496,7 @@ public class CassandraCpoAdapter extends CpoBaseAdapter<ClusterDataSource> {
    * @return The number of records updated
    * @throws CpoException any errors processing the update
    */
-  protected <T> long processUpdateGroup(T[] arr, String groupType, String groupName, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeFunction> nativeExpressions, Session sess) throws CpoException {
+  protected <T> long processUpdateGroup(T[] arr, Crud crud, String groupName, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeFunction> nativeExpressions, Session sess) throws CpoException {
     CpoClass cpoClass;
     List<CpoFunction> cpoFunctions;
     CpoFunction cpoFunction;
@@ -495,11 +505,11 @@ public class CassandraCpoAdapter extends CpoBaseAdapter<ClusterDataSource> {
 
     try {
       cpoClass = metaDescriptor.getMetaClass(arr[0]);
-      cpoFunctions = cpoClass.getFunctionGroup(getGroupType(arr[0], groupType, groupName, sess), groupName).getFunctions();
+      cpoFunctions = cpoClass.getFunctionGroup(getGroupType(arr[0], crud, groupName, sess), groupName).getFunctions();
       localLogger = LoggerFactory.getLogger(cpoClass.getMetaClass());
 
       int numStatements=0;
-      localLogger.info("=================== Class=<" + arr[0].getClass() + "> Type=<" + groupType + "> Name=<" + groupName + "> =========================");
+      localLogger.info("=================== Class=<" + arr[0].getClass() + "> Type=<" + crud.operation + "> Name=<" + groupName + "> =========================");
       ArrayList<CassandraBoundStatementFactory> statemetnFactories = new ArrayList<>();
       for (T obj : arr) {
         for (CpoFunction function : cpoFunctions) {
@@ -511,10 +521,10 @@ public class CassandraCpoAdapter extends CpoBaseAdapter<ClusterDataSource> {
 
       executeBatchStatements(sess, statemetnFactories);
 
-      localLogger.info("=================== " + numStatements + " Updates - Class=<" + arr[0].getClass() + "> Type=<" + groupType + "> Name=<" + groupName + "> =========================");
+      localLogger.info("=================== " + numStatements + " Updates - Class=<" + arr[0].getClass() + "> Type=<" + crud.operation + "> Name=<" + groupName + "> =========================");
 
     } catch (Throwable t) {
-      String msg = "ProcessUpdateGroup failed:" + groupType + "," + groupName + "," + arr[0].getClass().getName();
+      String msg = "ProcessUpdateGroup failed:" + crud.operation + "," + groupName + "," + arr[0].getClass().getName();
       // TODO FIX This
       // localLogger.error("bound values:" + this.parameterToString(jq));
       localLogger.error(msg, t);
@@ -607,9 +617,9 @@ public class CassandraCpoAdapter extends CpoBaseAdapter<ClusterDataSource> {
 
     try {
       CpoClass cpoClass = metaDescriptor.getMetaClass(criteriaObj);
-      List<CpoFunction> functions = cpoClass.getFunctionGroup(CpoAdapter.RETRIEVE_GROUP, groupName).getFunctions();
+      List<CpoFunction> functions = cpoClass.getFunctionGroup(Crud.RETRIEVE, groupName).getFunctions();
 
-      localLogger.info("=================== Class=<" + criteriaObj.getClass() + "> Type=<" + CpoAdapter.RETRIEVE_GROUP + "> Name=<" + groupName + "> =========================");
+      localLogger.info("=================== Class=<" + criteriaObj.getClass() + "> Type=<" + Crud.RETRIEVE.operation + "> Name=<" + groupName + "> =========================");
 
       try {
         rObj = (T) obj.getClass().newInstance();
@@ -667,9 +677,9 @@ public class CassandraCpoAdapter extends CpoBaseAdapter<ClusterDataSource> {
 
       if (!recordsExist) {
         rObj = null;
-        localLogger.info("=================== 0 Records - 0 Attributes - Class=<" + criteriaObj.getClass() + "> Type=<" + CpoAdapter.RETRIEVE_GROUP + "> Name=<" + groupName + "> =========================");
+        localLogger.info("=================== 0 Records - 0 Attributes - Class=<" + criteriaObj.getClass() + "> Type=<" + Crud.RETRIEVE.operation + "> Name=<" + groupName + "> =========================");
       } else {
-        localLogger.info("=================== " + recordCount + " Records - " + attributesSet + " Attributes - Class=<" + criteriaObj.getClass() + ">  Type=<" + CpoAdapter.RETRIEVE_GROUP + "> Name=<" + groupName + "> =========================");
+        localLogger.info("=================== " + recordCount + " Records - " + attributesSet + " Attributes - Class=<" + criteriaObj.getClass() + ">  Type=<" + Crud.RETRIEVE.operation + "> Name=<" + groupName + "> =========================");
       }
     } catch (Throwable t) {
       String msg = "ProcessSeclectGroup(Object) failed: " + ExceptionHelper.getLocalizedMessage(t);
@@ -772,11 +782,11 @@ public class CassandraCpoAdapter extends CpoBaseAdapter<ClusterDataSource> {
        criteriaClass = metaDescriptor.getMetaClass(criteria);
        resultClass = metaDescriptor.getMetaClass(result);
        if (useRetrieve) {
-         localLogger.info("=================== Class=<" + criteria.getClass() + "> Type=<" + CpoAdapter.RETRIEVE_GROUP + "> Name=<" + name + "> =========================");
-         cpoFunctions = criteriaClass.getFunctionGroup(CpoAdapter.RETRIEVE_GROUP, name).getFunctions();
+         localLogger.info("=================== Class=<" + criteria.getClass() + "> Type=<" + Crud.RETRIEVE.operation + "> Name=<" + name + "> =========================");
+         cpoFunctions = criteriaClass.getFunctionGroup(Crud.RETRIEVE, name).getFunctions();
        } else {
-         localLogger.info("=================== Class=<" + criteria.getClass() + "> Type=<" + CpoAdapter.LIST_GROUP + "> Name=<" + name + "> =========================");
-         cpoFunctions = criteriaClass.getFunctionGroup(CpoAdapter.LIST_GROUP, name).getFunctions();
+         localLogger.info("=================== Class=<" + criteria.getClass() + "> Type=<" + Crud.LIST.operation + "> Name=<" + name + "> =========================");
+         cpoFunctions = criteriaClass.getFunctionGroup(Crud.LIST, name).getFunctions();
        }
 
        for (CpoFunction cpoFunction : cpoFunctions) {
@@ -828,7 +838,7 @@ public class CassandraCpoAdapter extends CpoBaseAdapter<ClusterDataSource> {
            }
          }
 
-         localLogger.info("=================== " + cpoResultSet.size() + " Records - Class=<" + criteria.getClass() + "> Type=<" + CpoAdapter.LIST_GROUP + "> Name=<" + name + "> Result=<" + result.getClass() + "> ====================");
+         localLogger.info("=================== " + cpoResultSet.size() + " Records - Class=<" + criteria.getClass() + "> Type=<" + Crud.LIST.operation + "> Name=<" + name + "> Result=<" + result.getClass() + "> ====================");
        }
      } catch (Throwable t) {
        String msg = "ProcessSelectGroup(String name, Object criteria, Object result, CpoWhere where, Collection orderBy, Session sess) failed. Error:";
@@ -841,29 +851,29 @@ public class CassandraCpoAdapter extends CpoBaseAdapter<ClusterDataSource> {
    }
 
   /**
-   * Validates the type of query being performed. If it is a Persist Group,
+   * Validates the crud of query being performed. If it is a Persist Group,
    * it checks the database to see if this is an update or an insert, and returns the query group. Otherwise, it sends
    * back the original query group. Upserts only work for single objects.
    *
-   * @param <T>  The type of the object
+   * @param <T>  The crud of the object
    * @param obj  The obj to insert or update
-   * @param type The group type
+   * @param crud The group crud
    * @param name The group name
    * @param session The session to use
    * @return The selected group name
    * @throws CpoException An exception occurred
    */
-  protected <T> String getGroupType(T obj, String type, String name, Session session) throws CpoException {
-    String retType = type;
+  protected <T> Crud getGroupType(T obj, Crud crud, String name, Session session) throws CpoException {
+      Crud retType = crud;
     long objCount;
 
-    if (CpoAdapter.PERSIST_GROUP.equals(retType)) {
+    if (Crud.UPSERT == retType) {
       objCount = existsObject(name, obj, session, null);
 
       if (objCount == 0) {
-        retType = CpoAdapter.CREATE_GROUP;
+        retType = Crud.CREATE;
       } else if (objCount == 1) {
-        retType = CpoAdapter.UPDATE_GROUP;
+        retType = Crud.UPDATE;
       } else {
         throw new CpoException("Persist can only UPDATE one record. Your EXISTS function returned 2 or more.");
       }

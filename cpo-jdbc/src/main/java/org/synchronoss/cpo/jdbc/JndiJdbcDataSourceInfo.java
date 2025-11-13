@@ -22,7 +22,8 @@ package org.synchronoss.cpo.jdbc;
 
 import org.synchronoss.cpo.CpoException;
 
-import javax.naming.*;
+import javax.naming.Context;
+import javax.naming.InitialContext;
 import javax.sql.DataSource;
 
 /**

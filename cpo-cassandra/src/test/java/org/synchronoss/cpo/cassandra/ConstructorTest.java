@@ -20,10 +20,14 @@
  */
 package org.synchronoss.cpo.cassandra;
 
-import org.slf4j.*;
-import org.synchronoss.cpo.*;
-import org.testng.annotations.*;
-import static org.testng.Assert.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.synchronoss.cpo.CpoAdapter;
+import org.synchronoss.cpo.CpoAdapterFactoryManager;
+import org.testng.annotations.Test;
+
+import static org.testng.Assert.assertNotNull;
+import static org.testng.Assert.fail;
 
 /**
  * ConstructorTest is a test class for testing the JdbcAdapter class Constructors

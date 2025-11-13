@@ -25,7 +25,8 @@ import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.CpoException;
 import org.synchronoss.cpo.meta.MethodMapper;
 
-import java.io.*;
+import java.io.InputStream;
+import java.io.Reader;
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.net.URL;
@@ -36,7 +37,7 @@ import java.sql.*;
  *
  * @author david berry
  */
-public class JdbcMethodMapper implements java.io.Serializable, java.lang.Cloneable {
+public class JdbcMethodMapper implements java.io.Serializable, Cloneable {
   private static final Logger logger = LoggerFactory.getLogger(JdbcMethodMapper.class);
 
   /**

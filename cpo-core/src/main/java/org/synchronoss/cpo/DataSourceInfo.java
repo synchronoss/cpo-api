@@ -32,11 +32,11 @@ public interface DataSourceInfo<T> {
   /**
    * @return Returns the dataSourceName.
    */
-  public String getDataSourceName();
+  String getDataSourceName();
 
   /**
    * @return Returns the DataSource
    * @throws CpoException Cannot find the datasource
    */
-  public T getDataSource() throws CpoException;
+  T getDataSource() throws CpoException;
 }

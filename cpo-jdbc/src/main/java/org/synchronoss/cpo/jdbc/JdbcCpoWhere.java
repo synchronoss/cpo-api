@@ -26,47 +26,39 @@ import org.synchronoss.cpo.enums.Logical;
 import org.synchronoss.cpo.meta.domain.CpoAttribute;
 
 /**
- * Created with IntelliJ IDEA.
- * User: dberry
- * Date: 13/10/13
- * Time: 14:05 PM
- * To change this template use File | Settings | File Templates.
+ * Created with IntelliJ IDEA. User: dberry Date: 13/10/13 Time: 14:05 PM To change this template
+ * use File | Settings | File Templates.
  */
 public class JdbcCpoWhere extends BindableCpoWhere {
-    /**
-     * Version Id for this class.
-     */
-    private static final long serialVersionUID = 1L;
+  /** Version Id for this class. */
+  private static final long serialVersionUID = 1L;
 
-    /**
-     * Create a JdbcCpoWhere
-     */
-  public JdbcCpoWhere() {
-  }
+  /** Create a JdbcCpoWhere */
+  public JdbcCpoWhere() {}
 
-    /**
-     * Create a JdbcCpoWhere
-     *
-     * @param <T> - The type of the value being compared
-     * @param logical - Logical operator
-     * @param attr - Attribute being compared
-     * @param comp - Compare operator
-     * @param value - The value to compare against the attribute
-     */
+  /**
+   * Create a JdbcCpoWhere
+   *
+   * @param <T> - The type of the value being compared
+   * @param logical - Logical operator
+   * @param attr - Attribute being compared
+   * @param comp - Compare operator
+   * @param value - The value to compare against the attribute
+   */
   public <T> JdbcCpoWhere(Logical logical, String attr, Comparison comp, T value) {
     super(logical, attr, comp, value);
   }
 
-    /**
-     * Create a JdbcCpoWhere
-     *
-     * @param <T> - The type of the value being compared
-     * @param logical - Logical operator
-     * @param attr - Attribute being compared
-     * @param comp - Compare operator
-     * @param value - The value to compare against the attribute
-     * @param not - add the logical not operator
-     */
+  /**
+   * Create a JdbcCpoWhere
+   *
+   * @param <T> - The type of the value being compared
+   * @param logical - Logical operator
+   * @param attr - Attribute being compared
+   * @param comp - Compare operator
+   * @param value - The value to compare against the attribute
+   * @param not - add the logical not operator
+   */
   public <T> JdbcCpoWhere(Logical logical, String attr, Comparison comp, T value, boolean not) {
     super(logical, attr, comp, value, not);
   }
@@ -89,5 +81,4 @@ public class JdbcCpoWhere extends BindableCpoWhere {
 
     return columnName.toString();
   }
-
 }

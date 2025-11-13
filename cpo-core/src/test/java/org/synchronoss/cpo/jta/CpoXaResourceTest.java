@@ -20,18 +20,14 @@
  */
 package org.synchronoss.cpo.jta;
 
-import org.testng.annotations.Test;
+import static org.testng.Assert.*;
 
 import javax.transaction.xa.XAException;
 import javax.transaction.xa.XAResource;
 import javax.transaction.xa.Xid;
+import org.testng.annotations.Test;
 
-import static org.testng.Assert.*;
-
-
-/**
- * Created by dberry on 8/9/15.
- */
+/** Created by dberry on 8/9/15. */
 public class CpoXaResourceTest {
   private static final String LOCAL_RESOURCE = "LocalResource";
   private static final String GLOBAL_RESOURCE = "GlobalResource";
@@ -41,9 +37,9 @@ public class CpoXaResourceTest {
   private static final String GLOBAL_RESOURCE2 = "GlobalResource2";
 
   @Test
-  public void testStart(){
+  public void testStart() {
     StringBuilderXaResource xaResource = new StringBuilderXaResource();
-    Xid xid1 = new MyXid(100, new byte[]{0x01}, new byte[]{0x02});
+    Xid xid1 = new MyXid(100, new byte[] {0x01}, new byte[] {0x02});
 
     xaResource.append(LOCAL_RESOURCE);
     assertEquals(xaResource.toString(), LOCAL_RESOURCE);
@@ -156,14 +152,14 @@ public class CpoXaResourceTest {
 
     try {
       xaResource.close(xid1);
-    }  catch (XAException xae) {
+    } catch (XAException xae) {
       fail("Close should not have thrown an exception");
     }
   }
 
-  public void testEnd(){
+  public void testEnd() {
     StringBuilderXaResource xaResource = new StringBuilderXaResource();
-    Xid xid1 = new MyXid(100, new byte[]{0x01}, new byte[]{0x02});
+    Xid xid1 = new MyXid(100, new byte[] {0x01}, new byte[] {0x02});
 
     xaResource.append(LOCAL_RESOURCE);
     assertEquals(xaResource.toString(), LOCAL_RESOURCE);
@@ -248,7 +244,6 @@ public class CpoXaResourceTest {
       fail("End should not have thrown an exception");
     }
 
-
     try {
       // you can't suspend a suspended
       xaResource.end(xid1, XAResource.TMSUSPEND);
@@ -282,17 +277,17 @@ public class CpoXaResourceTest {
 
     try {
       xaResource.close(xid1);
-    }  catch (XAException xae) {
+    } catch (XAException xae) {
       fail("Close should not have thrown an exception");
     }
   }
 
   public void testOutsideEnd() {
     StringBuilderXaResource xaResource1 = new StringBuilderXaResource();
-    Xid xid1 = new MyXid(100, new byte[]{0x01}, new byte[]{0x02});
+    Xid xid1 = new MyXid(100, new byte[] {0x01}, new byte[] {0x02});
 
     StringBuilderXaResource xaResource2 = new StringBuilderXaResource();
-    Xid xid2 = new MyXid(100, new byte[]{0x11}, new byte[]{0x22});
+    Xid xid2 = new MyXid(100, new byte[] {0x11}, new byte[] {0x22});
 
     // Setup the local values
     xaResource1.append(LOCAL_RESOURCE1);
@@ -311,7 +306,7 @@ public class CpoXaResourceTest {
       // so x1 ends x2 an x2 ends x1
       xaResource1.end(xid2, XAResource.TMSUCCESS);
       // make sure x2 is local now
-      assertEquals(xaResource2.toString(),LOCAL_RESOURCE2);
+      assertEquals(xaResource2.toString(), LOCAL_RESOURCE2);
 
       xaResource2.end(xid1, XAResource.TMSUCCESS);
       // make sure x1 is local now
@@ -323,24 +318,28 @@ public class CpoXaResourceTest {
 
     try {
       xaResource1.close(xid1);
-    }  catch (XAException xae) {
+    } catch (XAException xae) {
       fail("Close should not have thrown an exception");
     }
 
     try {
       xaResource1.close(xid2);
-    }  catch (XAException xae) {
+    } catch (XAException xae) {
       fail("Close should not have thrown an exception");
     }
   }
 
   public void testMultiResourcesEnd() {
-    // We need to make sure that different Resource types that share CpoBaseXaResource do not interfere with each other
-    // So two different XAs sharing CpoBaseXaResource should be able to take part of the same transaction and work independently
+    // We need to make sure that different Resource types that share CpoBaseXaResource do not
+    // interfere with each
+    // other
+    // So two different XAs sharing CpoBaseXaResource should be able to take part of the same
+    // transaction and work
+    // independently
 
     StringBuilderXaResource sbxa = new StringBuilderXaResource();
     EnhancedStringBuilderXaResource esbxa = new EnhancedStringBuilderXaResource();
-    Xid xid1 = new MyXid(100, new byte[]{0x01}, new byte[]{0x02});
+    Xid xid1 = new MyXid(100, new byte[] {0x01}, new byte[] {0x02});
 
     // Setup the local values
     sbxa.append(LOCAL_RESOURCE1);
@@ -356,7 +355,7 @@ public class CpoXaResourceTest {
       sbxa.append(GLOBAL_RESOURCE1);
 
       // make sure x2 is global now
-      assertEquals(sbxa.toString(),GLOBAL_RESOURCE1);
+      assertEquals(sbxa.toString(), GLOBAL_RESOURCE1);
       assertEquals(esbxa.toString(), LOCAL_RESOURCE2);
 
       sbxa.end(xid1, XAResource.TMSUCCESS);
@@ -366,7 +365,6 @@ public class CpoXaResourceTest {
 
     assertEquals(sbxa.toString(), LOCAL_RESOURCE1);
     assertEquals(esbxa.toString(), LOCAL_RESOURCE2);
-
 
     // have esbxa go global and test
     try {
@@ -388,14 +386,14 @@ public class CpoXaResourceTest {
 
     try {
       sbxa.close(xid1);
-    }  catch (XAException xae) {
+    } catch (XAException xae) {
       fail("Close should not have thrown an exception");
     }
   }
 
   public void testRecoverAndForget() {
     StringBuilderXaResource sbxa = new StringBuilderXaResource();
-    Xid xid1 = new MyXid(100, new byte[]{0x01}, new byte[]{0x02});
+    Xid xid1 = new MyXid(100, new byte[] {0x01}, new byte[] {0x02});
 
     // Setup the local values
     sbxa.append(LOCAL_RESOURCE1);
@@ -409,7 +407,7 @@ public class CpoXaResourceTest {
       sbxa.append(GLOBAL_RESOURCE1);
 
       // make sure x2 is global now
-      assertEquals(sbxa.toString(),GLOBAL_RESOURCE1);
+      assertEquals(sbxa.toString(), GLOBAL_RESOURCE1);
       sbxa.end(xid1, XAResource.TMSUCCESS);
     } catch (XAException xae) {
       fail("Start End should not have thrown an exception");
@@ -440,7 +438,7 @@ public class CpoXaResourceTest {
       sbxa.append(GLOBAL_RESOURCE1);
 
       // make sure x2 is global now
-      assertEquals(sbxa.toString(),GLOBAL_RESOURCE1);
+      assertEquals(sbxa.toString(), GLOBAL_RESOURCE1);
       sbxa.end(xid1, XAResource.TMSUCCESS);
     } catch (XAException xae) {
       fail("Start End should not have thrown an exception");
@@ -448,17 +446,21 @@ public class CpoXaResourceTest {
 
     try {
       sbxa.close(xid1);
-    }  catch (XAException xae) {
+    } catch (XAException xae) {
       fail("Close should not have thrown an exception");
     }
   }
 
   public void testFail() {
-    // We need to make sure that different Resource types that share CpoBaseXaResource do not interfere with each other
-    // So two different XAs sharing CpoBaseXaResource should be able to take part of the same transaction and work independently
+    // We need to make sure that different Resource types that share CpoBaseXaResource do not
+    // interfere with each
+    // other
+    // So two different XAs sharing CpoBaseXaResource should be able to take part of the same
+    // transaction and work
+    // independently
 
     StringBuilderXaResource sbxa = new StringBuilderXaResource();
-    Xid xid1 = new MyXid(100, new byte[]{0x01}, new byte[]{0x02});
+    Xid xid1 = new MyXid(100, new byte[] {0x01}, new byte[] {0x02});
 
     // Setup the local values
     sbxa.append(LOCAL_RESOURCE1);
@@ -495,7 +497,7 @@ public class CpoXaResourceTest {
       fail("Rollback should not have thrown an exception");
     }
 
-        // Do a fail
+    // Do a fail
     try {
       sbxa.start(xid1, XAResource.TMJOIN);
       // make sure x2 is global now
@@ -505,7 +507,7 @@ public class CpoXaResourceTest {
       fail("Start End should not have thrown an exception");
     }
 
-        // Do a Success
+    // Do a Success
     try {
       sbxa.start(xid1, XAResource.TMJOIN);
       // make sure x2 is global now
@@ -527,10 +529,9 @@ public class CpoXaResourceTest {
 
     try {
       sbxa.close(xid1);
-    }  catch (XAException xae) {
+    } catch (XAException xae) {
       fail("Close should not have thrown an exception");
     }
-
   }
 
   public class MyXid implements Xid {
@@ -538,8 +539,7 @@ public class CpoXaResourceTest {
     protected byte gtrid[];
     protected byte bqual[];
 
-    public MyXid() {
-    }
+    public MyXid() {}
 
     public MyXid(int formatId, byte gtrid[], byte bqual[]) {
       this.formatId = formatId;

@@ -20,16 +20,16 @@
  */
 package org.synchronoss.cpo;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import org.synchronoss.cpo.enums.Comparison;
 import org.synchronoss.cpo.enums.Logical;
 import org.synchronoss.cpo.meta.domain.CpoAttribute;
 import org.synchronoss.cpo.meta.domain.CpoClass;
 
-import java.util.ArrayList;
-import java.util.Collection;
-
 /**
- * BindableWhereBuilder is an interface for specifying the sort order in which objects are returned from the Datasource.
+ * BindableWhereBuilder is an interface for specifying the sort order in which objects are returned
+ * from the Datasource.
  *
  * @author david berry
  */
@@ -48,8 +48,7 @@ public class BindableWhereBuilder<T> implements NodeVisitor {
   }
 
   @SuppressWarnings("unused")
-  private BindableWhereBuilder() {
-  }
+  private BindableWhereBuilder() {}
 
   public BindableWhereBuilder(CpoClass cpoClass) {
     this.cpoClass = cpoClass;
@@ -119,10 +118,16 @@ public class BindableWhereBuilder<T> implements NodeVisitor {
       if (attribute == null) {
         if (bcw.getComparison() == Comparison.IN && bcw.getValue() instanceof Collection) {
           for (Object obj : (Collection) bcw.getValue()) {
-            bindValues.add(new BindAttribute(bcw.getAttribute() == null ? bcw.getRightAttribute() : bcw.getAttribute(), obj));
+            bindValues.add(
+                new BindAttribute(
+                    bcw.getAttribute() == null ? bcw.getRightAttribute() : bcw.getAttribute(),
+                    obj));
           }
         } else {
-          bindValues.add(new BindAttribute(bcw.getAttribute() == null ? bcw.getRightAttribute() : bcw.getAttribute(), bcw.getValue()));
+          bindValues.add(
+              new BindAttribute(
+                  bcw.getAttribute() == null ? bcw.getRightAttribute() : bcw.getAttribute(),
+                  bcw.getValue()));
         }
       } else {
         if (bcw.getComparison() == Comparison.IN && bcw.getValue() instanceof Collection) {

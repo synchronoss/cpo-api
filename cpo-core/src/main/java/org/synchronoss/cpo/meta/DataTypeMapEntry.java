@@ -27,17 +27,15 @@ package org.synchronoss.cpo.meta;
  */
 public class DataTypeMapEntry<T> implements java.io.Serializable, Cloneable {
 
-  /**
-   * Version Id for this class.
-   */
+  /** Version Id for this class. */
   private static final long serialVersionUID = 1L;
+
   private int dataTypeInt = Integer.MIN_VALUE;
   private String dataTypeName = null;
   private Class<T> javaClass = null;
 
   @SuppressWarnings("unused")
-  private DataTypeMapEntry() {
-  }
+  private DataTypeMapEntry() {}
 
   public DataTypeMapEntry(int dataTypeInt, String dataTypeName, Class<T> javaClass) {
     this.dataTypeInt = dataTypeInt;
@@ -57,13 +55,16 @@ public class DataTypeMapEntry<T> implements java.io.Serializable, Cloneable {
     return javaClass;
   }
 
-  public String makeJavaName(String dataTypeName){
+  public String makeJavaName(String dataTypeName) {
     dataTypeName = dataTypeName.toLowerCase();
 
     int idx;
     while ((idx = dataTypeName.indexOf("_")) > 0) {
       // remove the underscore, upper case the following character
-      dataTypeName = dataTypeName.substring(0, idx) + dataTypeName.substring(idx + 1, idx + 2).toUpperCase() + dataTypeName.substring(idx + 2);
+      dataTypeName =
+          dataTypeName.substring(0, idx)
+              + dataTypeName.substring(idx + 1, idx + 2).toUpperCase()
+              + dataTypeName.substring(idx + 2);
     }
     return dataTypeName;
   }

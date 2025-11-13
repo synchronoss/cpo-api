@@ -23,19 +23,21 @@ package org.synchronoss.cpo;
 import org.synchronoss.cpo.meta.domain.CpoClass;
 
 /**
- * CpoOrderBy is an interface for specifying the sort order in which objects are returned from the Datasource.
+ * CpoOrderBy is an interface for specifying the sort order in which objects are returned from the
+ * Datasource.
  *
  * @author david berry
  */
 public interface CpoOrderBy {
-  
+
   String DEFAULT_MARKER = "__CPO_ORDERBY__";
 
   /**
-   * Gets the boolean that determines if the objects will be returned from from the CpoAdapter in Ascending order or
-   * Descending order
+   * Gets the boolean that determines if the objects will be returned from from the CpoAdapter in
+   * Ascending order or Descending order
    *
-   * @return boolean true if it is to sort in Ascensing Order false if it is to be sorted in Descending Order
+   * @return boolean true if it is to sort in Ascensing Order false if it is to be sorted in
+   *     Descending Order
    */
   boolean getAscending();
 
@@ -47,10 +49,10 @@ public interface CpoOrderBy {
   String getAttribute();
 
   /**
-   * Gets a string representing a datasource specific function call that must be applied to the attribute that will be
-   * used for sorting.
+   * Gets a string representing a datasource specific function call that must be applied to the
+   * attribute that will be used for sorting.
    *
-   * i.e. - "upper(attribute_name)"
+   * <p>i.e. - "upper(attribute_name)"
    *
    * @return String The name of the function
    */
@@ -62,7 +64,7 @@ public interface CpoOrderBy {
    * @return String The marker of the CpoOrderBy
    */
   String getMarker();
-  
+
   /**
    * @param cpoClass The cpoClass
    * @return the string that will be added into the expression

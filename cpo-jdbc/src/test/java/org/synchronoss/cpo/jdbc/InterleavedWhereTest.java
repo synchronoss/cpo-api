@@ -20,6 +20,10 @@
  */
 package org.synchronoss.cpo.jdbc;
 
+import static org.testng.Assert.*;
+
+import java.util.ArrayList;
+import java.util.Collection;
 import org.synchronoss.cpo.CpoAdapter;
 import org.synchronoss.cpo.CpoAdapterFactoryManager;
 import org.synchronoss.cpo.CpoWhere;
@@ -28,11 +32,6 @@ import org.synchronoss.cpo.enums.Logical;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
-
-import java.util.ArrayList;
-import java.util.Collection;
-
-import static org.testng.Assert.*;
 
 /**
  * BlobTest is a test class for testing the JdbcAdapter class Constructors
@@ -44,14 +43,12 @@ public class InterleavedWhereTest {
   private CpoAdapter cpoAdapter = null;
   private ArrayList<ValueObject> al = new ArrayList<>();
 
-  /**
-   * Creates a new InterleavedWhereTest object.
-   */
-  public InterleavedWhereTest() {
-  }
+  /** Creates a new InterleavedWhereTest object. */
+  public InterleavedWhereTest() {}
 
   /**
-   * <code>setUp</code> Load the datasource from the properties in the property file jdbc_en_US.properties
+   * <code>setUp</code> Load the datasource from the properties in the property file
+   * jdbc_en_US.properties
    */
   @BeforeClass
   public void setUp() {
@@ -59,7 +56,7 @@ public class InterleavedWhereTest {
 
     try {
       cpoAdapter = CpoAdapterFactoryManager.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_JDBC);
-      assertNotNull(cpoAdapter,method + "cpoAdapter is null");
+      assertNotNull(cpoAdapter, method + "cpoAdapter is null");
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -84,9 +81,7 @@ public class InterleavedWhereTest {
     }
   }
 
-  /**
-   * DOCUMENT ME!
-   */
+  /** DOCUMENT ME! */
   @AfterClass
   public void tearDown() {
     String method = "tearDown:";
@@ -99,9 +94,7 @@ public class InterleavedWhereTest {
     cpoAdapter = null;
   }
 
-  /**
-   * DOCUMENT ME!
-   */
+  /** DOCUMENT ME! */
   @Test
   public void testInterleavedInWhereCollection() {
     String method = "testInterleavedInWhereCollection:";
@@ -126,10 +119,8 @@ public class InterleavedWhereTest {
 
       assertEquals(3, coll.size(), "Collection size is " + coll.size());
 
-
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
-
   }
 }

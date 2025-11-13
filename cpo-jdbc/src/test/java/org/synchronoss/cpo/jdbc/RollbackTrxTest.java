@@ -20,6 +20,9 @@
  */
 package org.synchronoss.cpo.jdbc;
 
+import static org.testng.Assert.*;
+
+import java.util.ArrayList;
 import org.synchronoss.cpo.CpoAdapterFactoryManager;
 import org.synchronoss.cpo.CpoException;
 import org.synchronoss.cpo.CpoTrxAdapter;
@@ -27,10 +30,6 @@ import org.synchronoss.cpo.helper.ExceptionHelper;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
-
-import java.util.ArrayList;
-
-import static org.testng.Assert.*;
 
 /**
  * BlobTest is a test class for testing the JdbcAdapter class Constructors
@@ -41,15 +40,12 @@ public class RollbackTrxTest {
 
   private CpoTrxAdapter trxAdapter = null;
 
-  /**
-   * Creates a new RollbackTest object.
-   *
-   */
-  public RollbackTrxTest() {
-  }
+  /** Creates a new RollbackTest object. */
+  public RollbackTrxTest() {}
 
   /**
-   * <code>setUp</code> Load the datasource from the properties in the property file jdbc_en_US.properties
+   * <code>setUp</code> Load the datasource from the properties in the property file
+   * jdbc_en_US.properties
    */
   @BeforeClass
   public void setUp() {
@@ -75,9 +71,7 @@ public class RollbackTrxTest {
     }
   }
 
-  /**
-   * DOCUMENT ME!
-   */
+  /** DOCUMENT ME! */
   @AfterClass
   public void tearDown() {
     ValueObject vo = ValueObjectFactory.createValueObject(1);
@@ -98,9 +92,7 @@ public class RollbackTrxTest {
     }
   }
 
-  /**
-   * DOCUMENT ME!
-   */
+  /** DOCUMENT ME! */
   @Test
   public void testTrxRollbackProcessUpdateCollection() {
     String method = "testTrxRollbackProcessUpdateCollection:";
@@ -120,7 +112,6 @@ public class RollbackTrxTest {
         trxAdapter.rollback();
       } catch (CpoException ce) {
         fail(method + "Rollback failed:" + ExceptionHelper.getLocalizedMessage(ce));
-
       }
       try {
         ValueObject rvo = trxAdapter.retrieveBean(vo);
@@ -131,9 +122,7 @@ public class RollbackTrxTest {
     }
   }
 
-  /**
-   * DOCUMENT ME!
-   */
+  /** DOCUMENT ME! */
   @Test
   public void testTrxSingleRollback() {
     String method = "testTrxSingleRollback:";

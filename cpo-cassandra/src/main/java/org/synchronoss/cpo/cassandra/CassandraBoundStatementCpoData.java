@@ -38,29 +38,34 @@ import org.synchronoss.cpo.transform.CpoTransform;
  */
 public class CassandraBoundStatementCpoData extends AbstractBindableCpoData {
 
-  private static final Logger logger = LoggerFactory.getLogger(CassandraBoundStatementCpoData.class);
+  private static final Logger logger =
+      LoggerFactory.getLogger(CassandraBoundStatementCpoData.class);
   private CassandraBoundStatementFactory cpoStatementFactory = null;
 
-    /**
-     * Constructs the CassandraBoundStatementCpoData
-     *
-     * @param cpoStatementFactory The CassandraBoundStatementFactory
-     * @param cpoAttribute        The CpoAttribute
-     * @param index               The index of the attribute in the bound statement
-     */
-  public CassandraBoundStatementCpoData(CassandraBoundStatementFactory cpoStatementFactory, CpoAttribute cpoAttribute, int index) {
+  /**
+   * Constructs the CassandraBoundStatementCpoData
+   *
+   * @param cpoStatementFactory The CassandraBoundStatementFactory
+   * @param cpoAttribute The CpoAttribute
+   * @param index The index of the attribute in the bound statement
+   */
+  public CassandraBoundStatementCpoData(
+      CassandraBoundStatementFactory cpoStatementFactory, CpoAttribute cpoAttribute, int index) {
     super(cpoAttribute, index);
     this.cpoStatementFactory = cpoStatementFactory;
   }
 
   @Override
   public void invokeSetter(Object instanceObject) throws CpoException {
-    Logger localLogger = instanceObject == null ? logger : LoggerFactory.getLogger(instanceObject.getClass());
+    Logger localLogger =
+        instanceObject == null ? logger : LoggerFactory.getLogger(instanceObject.getClass());
     CpoAttribute cpoAttribute = getCpoAttribute();
     Object param = transformOut(cpoAttribute.invokeGetter(instanceObject));
-   CassandraMethodMapEntry<?,?> methodMapEntry = CassandraMethodMapper.getDatasourceMethod(getDataSetterParamType());
+    CassandraMethodMapEntry<?, ?> methodMapEntry =
+        CassandraMethodMapper.getDatasourceMethod(getDataSetterParamType());
     if (methodMapEntry == null) {
-      throw new CpoException("Error Retrieveing Cassandra Method for type: " + getDataSetterParamType().getName());
+      throw new CpoException(
+          "Error Retrieveing Cassandra Method for type: " + getDataSetterParamType().getName());
     }
     localLogger.info(cpoAttribute.getDataName() + "=" + param);
     try {
@@ -68,12 +73,20 @@ public class CassandraBoundStatementCpoData extends AbstractBindableCpoData {
         case CassandraMethodMapEntry.METHOD_TYPE_BASIC:
         case CassandraMethodMapEntry.METHOD_TYPE_ONE:
         case CassandraMethodMapEntry.METHOD_TYPE_TWO:
-          methodMapEntry.getBsSetter().invoke(cpoStatementFactory.getBoundStatement(), getIndex(), param);
+          methodMapEntry
+              .getBsSetter()
+              .invoke(cpoStatementFactory.getBoundStatement(), getIndex(), param);
           break;
-        default: throw new CpoException("Invalid CassandraMethodMapEntry MetthodType: "+methodMapEntry.getMethodType());
+        default:
+          throw new CpoException(
+              "Invalid CassandraMethodMapEntry MetthodType: " + methodMapEntry.getMethodType());
       }
     } catch (Exception e) {
-      throw new CpoException("Error Invoking Cassandra Method: " + methodMapEntry.getBsSetter().getName() + ":" + ExceptionHelper.getLocalizedMessage(e));
+      throw new CpoException(
+          "Error Invoking Cassandra Method: "
+              + methodMapEntry.getBsSetter().getName()
+              + ":"
+              + ExceptionHelper.getLocalizedMessage(e));
     }
   }
 
@@ -84,12 +97,13 @@ public class CassandraBoundStatementCpoData extends AbstractBindableCpoData {
 
     if (cpoTransform != null) {
       if (cpoTransform instanceof CassandraCpoTransform) {
-        retObj = ((CassandraCpoTransform)cpoTransform).transformOut(cpoStatementFactory, attributeObject);
+        retObj =
+            ((CassandraCpoTransform) cpoTransform)
+                .transformOut(cpoStatementFactory, attributeObject);
       } else {
         retObj = cpoTransform.transformOut(attributeObject);
       }
     }
     return retObj;
   }
-
 }

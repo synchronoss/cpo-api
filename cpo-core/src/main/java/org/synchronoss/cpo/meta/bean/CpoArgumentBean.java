@@ -30,8 +30,7 @@ public class CpoArgumentBean implements java.io.Serializable {
   private String attributeName;
   private String description;
 
-  public CpoArgumentBean() {
-  }
+  public CpoArgumentBean() {}
 
   public String getAttributeName() {
     return attributeName;
@@ -63,10 +62,14 @@ public class CpoArgumentBean implements java.io.Serializable {
 
     CpoArgumentBean that = (CpoArgumentBean) o;
 
-    if (getAttributeName() != null ? !getAttributeName().equals(that.getAttributeName()) : that.getAttributeName() != null) {
+    if (getAttributeName() != null
+        ? !getAttributeName().equals(that.getAttributeName())
+        : that.getAttributeName() != null) {
       return false;
     }
-    if (getDescription() != null ? !getDescription().equals(that.getDescription()) : that.getDescription() != null) {
+    if (getDescription() != null
+        ? !getDescription().equals(that.getDescription())
+        : that.getDescription() != null) {
       return false;
     }
 

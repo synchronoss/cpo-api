@@ -20,6 +20,12 @@
  */
 package org.synchronoss.cpo.jdbc;
 
+import static org.testng.Assert.*;
+
+import java.math.BigInteger;
+import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.Collection;
 import org.synchronoss.cpo.CpoAdapter;
 import org.synchronoss.cpo.CpoAdapterFactoryManager;
 import org.synchronoss.cpo.jdbc.meta.JdbcCpoMetaDescriptor;
@@ -27,13 +33,6 @@ import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
-
-import java.math.BigInteger;
-import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.Collection;
-
-import static org.testng.Assert.*;
 
 /**
  * InsertObjectTest is a test class for testing the insert api calls of cpo
@@ -48,22 +47,22 @@ public class InsertObjectTest {
   private JdbcCpoMetaDescriptor metaDescriptor = null;
   private boolean isSupportsMillis = true;
 
-  public InsertObjectTest() {
-  }
+  public InsertObjectTest() {}
 
   /**
-   * <code>setUp</code> Load the datasource from the properties in the property file jdbc_en_US.properties
+   * <code>setUp</code> Load the datasource from the properties in the property file
+   * jdbc_en_US.properties
    *
    * @author david berry
    * @version '$Id: InsertObjectTest.java,v 1.3 2006/01/30 19:09:23 dberry Exp $'
    */
-  @Parameters({ "db.millisupport" })
+  @Parameters({"db.millisupport"})
   @BeforeClass
   public void setUp(boolean milliSupport) {
-      String method = "setUp:";
-      isSupportsMillis  = milliSupport;
+    String method = "setUp:";
+    isSupportsMillis = milliSupport;
 
-      try {
+    try {
       cpoAdapter = CpoAdapterFactoryManager.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_JDBC);
       assertNotNull(cpoAdapter, method + "cpoAdapter is null");
       metaDescriptor = (JdbcCpoMetaDescriptor) cpoAdapter.getCpoMetaDescriptor();
@@ -108,21 +107,22 @@ public class InsertObjectTest {
     }
 
     try {
-      ValueObject vo = readAdapter.retrieveBean(ValueObject.FG_RETRIEVE_NULL, valObj, valObj, null, null);
+      ValueObject vo =
+          readAdapter.retrieveBean(ValueObject.FG_RETRIEVE_NULL, valObj, valObj, null, null);
       assertEquals(vo.getId(), valObj.getId(), "Ids do not match");
       assertEquals(vo.getAttrInteger(), valObj.getAttrInteger(), "Integers do not match");
-      assertEquals(vo.getAttrVarChar(), valObj.getAttrVarChar(),"Strings do not match");
-      assertEquals(vo.getAttrDatetime(), valObj.getAttrDatetime(),"Timestamps do not match");
+      assertEquals(vo.getAttrVarChar(), valObj.getAttrVarChar(), "Strings do not match");
+      assertEquals(vo.getAttrDatetime(), valObj.getAttrDatetime(), "Timestamps do not match");
       assertTrue(vo.getAttrBit(), "boolean not stored correctly");
 
     } catch (Exception e) {
       fail(method + e.getMessage());
     } finally {
-        try {
-            cpoAdapter.deleteObject(valObj);
-        } catch (Exception e) {
-            fail(method + e.getMessage());
-        }
+      try {
+        cpoAdapter.deleteObject(valObj);
+      } catch (Exception e) {
+        fail(method + e.getMessage());
+      }
     }
   }
 
@@ -133,14 +133,14 @@ public class InsertObjectTest {
     ValueObject vo = ValueObjectFactory.createValueObject(61);
     vo.setAttrVarChar("Test");
     ArrayList<ValueObject> a2 = new ArrayList<>();
-      a2.add(vo);
-      a2.add(ValueObjectFactory.createValueObject(62));
-      a2.add(ValueObjectFactory.createValueObject(63));
-      a2.add(ValueObjectFactory.createValueObject(64));
-      al.addAll(a2);
+    a2.add(vo);
+    a2.add(ValueObjectFactory.createValueObject(62));
+    a2.add(ValueObjectFactory.createValueObject(63));
+    a2.add(ValueObjectFactory.createValueObject(64));
+    al.addAll(a2);
     try {
       long inserts = cpoAdapter.insertObjects(a2);
-      assertEquals(inserts, 4,"inserts performed do not equal inserts requested");
+      assertEquals(inserts, 4, "inserts performed do not equal inserts requested");
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -152,8 +152,6 @@ public class InsertObjectTest {
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
-
-
   }
 
   @AfterClass

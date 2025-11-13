@@ -20,33 +20,32 @@
  */
 package org.synchronoss.cpo;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * CpoByteArrayInputStream is a utility class to help process ByteArrayInputStreams
  *
  * @author david berry
  */
-public class CpoByteArrayInputStream extends ByteArrayInputStream implements java.io.Serializable, Cloneable {
+public class CpoByteArrayInputStream extends ByteArrayInputStream
+    implements java.io.Serializable, Cloneable {
 
-  /**
-   * Version Id for this class.
-   */
+  /** Version Id for this class. */
   private static final long serialVersionUID = 1L;
-    private static final Logger logger = LoggerFactory.getLogger(CpoByteArrayInputStream.class);
-  private byte[] buffer_ = null; //The buffer for the byte Array
+
+  private static final Logger logger = LoggerFactory.getLogger(CpoByteArrayInputStream.class);
+  private byte[] buffer_ = null; // The buffer for the byte Array
   private int offset_ = 0;
   private int size_ = 0;
 
   public CpoByteArrayInputStream(byte[] buffer) {
     super(buffer);
-    buffer_ =buffer;
+    buffer_ = buffer;
   }
 
   public CpoByteArrayInputStream(byte[] buffer, int offset, int length) {
@@ -86,12 +85,15 @@ public class CpoByteArrayInputStream extends ByteArrayInputStream implements jav
     if (getOffset() == 0) {
       l = getBuffer().length;
     } else {
-      l = getSize() < getBuffer().length - getOffset() ? getSize() : getBuffer().length - getOffset();
+      l =
+          getSize() < getBuffer().length - getOffset()
+              ? getSize()
+              : getBuffer().length - getOffset();
     }
     return l;
   }
 
-  static public CpoByteArrayInputStream getCpoStream(InputStream is) {
+  public static CpoByteArrayInputStream getCpoStream(InputStream is) {
     CpoByteArrayInputStream cbais = null;
 
     if (is instanceof CpoByteArrayInputStream) {
@@ -106,15 +108,16 @@ public class CpoByteArrayInputStream extends ByteArrayInputStream implements jav
         }
         cbais = new CpoByteArrayInputStream(baos.toByteArray());
       } catch (IOException ioe) {
-          logger.error("Error processing input stream", ioe);        // do nothing for now. The null should get someone's attention.
+        logger.error(
+            "Error processing input stream",
+            ioe); // do nothing for now. The null should get someone's attention.
       } finally {
         try {
           is.close();
         } catch (IOException ioe) {
-            logger.error("Error closing input stream", ioe);
+          logger.error("Error closing input stream", ioe);
         }
       }
-
     }
 
     return cbais;

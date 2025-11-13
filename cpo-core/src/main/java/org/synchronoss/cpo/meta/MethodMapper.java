@@ -20,31 +20,28 @@
  */
 package org.synchronoss.cpo.meta;
 
-import org.synchronoss.cpo.CpoException;
-
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
+import org.synchronoss.cpo.CpoException;
 
 /**
  * MethodMapper is a class defines the getters and setters for all the JDBC specific data classes
  *
  * @author david berry
  */
-public class MethodMapper<T extends MethodMapEntry<?,?>> implements Serializable, Cloneable {
+public class MethodMapper<T extends MethodMapEntry<?, ?>> implements Serializable, Cloneable {
 
-  /**
-   * Version Id for this class.
-   */
+  /** Version Id for this class. */
   private static final long serialVersionUID = 1L;
+
   private Map<Class<?>, T> dataMethodMap = new HashMap<>();
 
   public T getDataMethodMapEntry(Class<?> c) throws CpoException {
     return dataMethodMap.get(c);
   }
 
- public void addMethodMapEntry(T dataMethodMapEntry) {
-   dataMethodMap.put(dataMethodMapEntry.getJavaClass(), dataMethodMapEntry);
+  public void addMethodMapEntry(T dataMethodMapEntry) {
+    dataMethodMap.put(dataMethodMapEntry.getJavaClass(), dataMethodMapEntry);
   }
-
 }

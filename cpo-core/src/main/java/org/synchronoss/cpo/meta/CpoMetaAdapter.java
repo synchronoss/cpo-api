@@ -20,12 +20,11 @@
  */
 package org.synchronoss.cpo.meta;
 
+import java.util.List;
 import org.synchronoss.cpo.CpoException;
 import org.synchronoss.cpo.meta.domain.CpoAttribute;
 import org.synchronoss.cpo.meta.domain.CpoClass;
 import org.synchronoss.cpo.parser.ExpressionParser;
-
-import java.util.List;
 
 /**
  * @author dberry
@@ -44,17 +43,17 @@ public interface CpoMetaAdapter {
    *
    * @return java.util.List of CpoClass
    */
-  List<CpoClass> getCpoClasses() throws CpoException ;
+  List<CpoClass> getCpoClasses() throws CpoException;
 
-  ExpressionParser getExpressionParser() throws CpoException ;
+  ExpressionParser getExpressionParser() throws CpoException;
 
-  String getDataTypeName(CpoAttribute attribute) throws CpoException ;
+  String getDataTypeName(CpoAttribute attribute) throws CpoException;
 
-  Class<?> getDataTypeJavaClass(CpoAttribute attribute) throws CpoException ;
+  Class<?> getDataTypeJavaClass(CpoAttribute attribute) throws CpoException;
 
-  int getDataTypeInt(String dataTypeName) throws CpoException ;
+  int getDataTypeInt(String dataTypeName) throws CpoException;
 
   DataTypeMapEntry<?> getDataTypeMapEntry(int dataTypeInt) throws CpoException;
 
-  List<String> getAllowableDataTypes() throws CpoException ;
+  List<String> getAllowableDataTypes() throws CpoException;
 }

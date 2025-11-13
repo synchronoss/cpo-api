@@ -20,62 +20,35 @@
  */
 package org.synchronoss.cpo.enums;
 
-/**
- * The comparison operators for where clauses
- */
+/** The comparison operators for where clauses */
 public enum Comparison {
-    /**
-     * No comparison operator defined
-     */
-    NONE("NONE"),
-    /**
-     * The equals operator
-     */
-    EQ("="),
-    /**
-     *  The less than operator
-     */
-    LT("<"),
-    /**
-     * The greater than operator
-     */
-    GT(">"),
-    /**
-     * The not equals operator
-     */
-    NEQ("<>"),
-    /**
-     * The in operator
-     */
-    IN("IN"),
-    /**
-     * The like operator
-     */
-    LIKE("LIKE"),
-    /**
-     * The less than or equal to operator
-     */
-    LTEQ("<="),
-    /**
-     * The greater than or equal to operator
-     */
-    GTEQ(">="),
-    /**
-     * The exists operator
-     */
-    EXISTS("EXISTS"),
-    /**
-     * The is null operator
-     */
-    ISNULL("IS NULL");
+  /** No comparison operator defined */
+  NONE("NONE"),
+  /** The equals operator */
+  EQ("="),
+  /** The less than operator */
+  LT("<"),
+  /** The greater than operator */
+  GT(">"),
+  /** The not equals operator */
+  NEQ("<>"),
+  /** The in operator */
+  IN("IN"),
+  /** The like operator */
+  LIKE("LIKE"),
+  /** The less than or equal to operator */
+  LTEQ("<="),
+  /** The greater than or equal to operator */
+  GTEQ(">="),
+  /** The exists operator */
+  EXISTS("EXISTS"),
+  /** The is null operator */
+  ISNULL("IS NULL");
 
-    /**
-     * The string operator in this enum
-     */
-    public final String operator;
+  /** The string operator in this enum */
+  public final String operator;
 
-    Comparison(String operator) {
-        this.operator = operator;
-    }
-
+  Comparison(String operator) {
+    this.operator = operator;
+  }
 }

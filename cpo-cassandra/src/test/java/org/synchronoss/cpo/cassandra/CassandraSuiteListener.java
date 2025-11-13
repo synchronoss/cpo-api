@@ -32,60 +32,60 @@ import org.testng.ISuite;
 import org.testng.ISuiteListener;
 
 public class CassandraSuiteListener implements ISuiteListener {
-    public static final String PROP_INIT_SCRIPT="cassandra.initScript";
-    public static final String PROP_CPO_CONFIG = "cassandra.cpoConfig";
-    public static final String PROP_CONTACT_POINT = "cassandra.contactPoint";
-    public static final String PROP_KEY_SPACE = "cassandra.keyspace>cpokeyspace";
-    public static final String PROP_META_XML = "cassandra.metaXml";
-    public static final String PROP_NATIVE_PORT = "cassandra.nativeport";
-    public static final String PROP_STORAGE_PORT = "cassandra.storageport";
-    public static final String PROP_SSL_STORAGE_PORT = "cassandra.sslstorageport";
-    public static final String PROP_RPC_PORT = "cassandra.rpcport";
-    public static final String PROP_IMAGE = "cassandra.image";
+  public static final String PROP_INIT_SCRIPT = "cassandra.initScript";
+  public static final String PROP_CPO_CONFIG = "cassandra.cpoConfig";
+  public static final String PROP_CONTACT_POINT = "cassandra.contactPoint";
+  public static final String PROP_KEY_SPACE = "cassandra.keyspace>cpokeyspace";
+  public static final String PROP_META_XML = "cassandra.metaXml";
+  public static final String PROP_NATIVE_PORT = "cassandra.nativeport";
+  public static final String PROP_STORAGE_PORT = "cassandra.storageport";
+  public static final String PROP_SSL_STORAGE_PORT = "cassandra.sslstorageport";
+  public static final String PROP_RPC_PORT = "cassandra.rpcport";
+  public static final String PROP_IMAGE = "cassandra.image";
 
-    private Logger logger = LoggerFactory.getLogger(CassandraSuiteListener.class);
-    private CassandraContainer cassandraContainer=null;
-    private TcpProxy tcpProxy = null;
+  private Logger logger = LoggerFactory.getLogger(CassandraSuiteListener.class);
+  private CassandraContainer cassandraContainer = null;
+  private TcpProxy tcpProxy = null;
 
-    @Override
-    public void onStart(ISuite suite) {
-        String image = suite.getParameter(PROP_IMAGE);
-        String cpoConfig = suite.getParameter(PROP_CPO_CONFIG);
-        String initScript = suite.getParameter(PROP_INIT_SCRIPT);
-        String nativePort = suite.getParameter(PROP_NATIVE_PORT);
+  @Override
+  public void onStart(ISuite suite) {
+    String image = suite.getParameter(PROP_IMAGE);
+    String cpoConfig = suite.getParameter(PROP_CPO_CONFIG);
+    String initScript = suite.getParameter(PROP_INIT_SCRIPT);
+    String nativePort = suite.getParameter(PROP_NATIVE_PORT);
 
-        cassandraContainer = new CassandraContainer(DockerImageName.parse(image))
-                .withInitScript(initScript);
+    cassandraContainer =
+        new CassandraContainer(DockerImageName.parse(image)).withInitScript(initScript);
 
-        if (cassandraContainer != null) {
-            cassandraContainer.start();
+    if (cassandraContainer != null) {
+      cassandraContainer.start();
 
-            // Now map the random port to something we can use in the config file
-            TcpProxyConfig config = new StaticTcpProxyConfig(Integer.parseInt(nativePort), cassandraContainer.getHost(), cassandraContainer.getFirstMappedPort());
-            config.setWorkerCount(1);
+      // Now map the random port to something we can use in the config file
+      TcpProxyConfig config =
+          new StaticTcpProxyConfig(
+              Integer.parseInt(nativePort),
+              cassandraContainer.getHost(),
+              cassandraContainer.getFirstMappedPort());
+      config.setWorkerCount(1);
 
-            // init proxy
-            tcpProxy = new TcpProxy(config);
-            // start proxy
-            tcpProxy.start();
-
-        }
-
-        // Tell CPO where to find the config for the test
-        System.setProperty(CpoAdapterFactoryManager.CPO_CONFIG, cpoConfig);
-        // Go Ahead and load them
-        CpoAdapterFactoryManager.loadAdapters();
-
-        logger.debug("Cassandra Host:"+ cassandraContainer.getHost());
-
+      // init proxy
+      tcpProxy = new TcpProxy(config);
+      // start proxy
+      tcpProxy.start();
     }
 
-    @Override
-    public void onFinish(ISuite suite) {
-        if (tcpProxy!=null)
-            tcpProxy.shutdown();
-        if (cassandraContainer!=null)
-            cassandraContainer.close();
-        logger.debug("onFinish");
-    }
+    // Tell CPO where to find the config for the test
+    System.setProperty(CpoAdapterFactoryManager.CPO_CONFIG, cpoConfig);
+    // Go Ahead and load them
+    CpoAdapterFactoryManager.loadAdapters();
+
+    logger.debug("Cassandra Host:" + cassandraContainer.getHost());
+  }
+
+  @Override
+  public void onFinish(ISuite suite) {
+    if (tcpProxy != null) tcpProxy.shutdown();
+    if (cassandraContainer != null) cassandraContainer.close();
+    logger.debug("onFinish");
+  }
 }

@@ -20,16 +20,15 @@
  */
 package org.synchronoss.cpo.cassandra;
 
+import static org.testng.Assert.*;
+
+import java.util.*;
 import org.synchronoss.cpo.CpoAdapter;
 import org.synchronoss.cpo.CpoAdapterFactoryManager;
 import org.synchronoss.cpo.cassandra.meta.CassandraCpoMetaDescriptor;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
-
-import java.util.*;
-
-import static org.testng.Assert.*;
 
 /**
  * CollectionsTest is a test class for testing the List, Set, and Map attributes
@@ -43,7 +42,8 @@ public class CollectionsTest {
   private ArrayList<ValueObject> al = new ArrayList<>();
 
   /**
-   * <code>setUp</code> Load the datasource from the properties in the property file jdbc_en_US.properties
+   * <code>setUp</code> Load the datasource from the properties in the property file
+   * jdbc_en_US.properties
    *
    * @author david berry
    * @version '$Id: InsertObjectTest.java,v 1.3 2006/01/30 19:09:23 dberry Exp $'
@@ -55,12 +55,13 @@ public class CollectionsTest {
     try {
       cpoAdapter = CpoAdapterFactoryManager.getCpoAdapter(CassandraStatics.ADAPTER_CONTEXT_DEFAULT);
       assertNotNull(cpoAdapter, method + "IdoAdapter is null");
-      metaDescriptor = (CassandraCpoMetaDescriptor)cpoAdapter.getCpoMetaDescriptor();
+      metaDescriptor = (CassandraCpoMetaDescriptor) cpoAdapter.getCpoMetaDescriptor();
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
     try {
-      readAdapter = CpoAdapterFactoryManager.getCpoAdapter(CassandraStatics.ADAPTER_CONTEXT_DEFAULT);
+      readAdapter =
+          CpoAdapterFactoryManager.getCpoAdapter(CassandraStatics.ADAPTER_CONTEXT_DEFAULT);
       assertNotNull(readAdapter, method + "IdoAdapter is null");
     } catch (Exception e) {
       fail(method + e.getMessage());
@@ -86,7 +87,7 @@ public class CollectionsTest {
 
     try {
       ValueObject vo = readAdapter.retrieveBean(null, valObj, valObj, null, null);
-      assertEquals(testString, vo.getAttrList().get(0),"Strings do not match");
+      assertEquals(testString, vo.getAttrList().get(0), "Strings do not match");
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -123,7 +124,7 @@ public class CollectionsTest {
     String testKey = "CT";
     String testValue = "Hartford";
     ValueObject valObj = ValueObjectFactory.createValueObject(2);
-    Map<String,String> testMap = new HashMap<>();
+    Map<String, String> testMap = new HashMap<>();
     testMap.put(testKey, testValue);
 
     valObj.setAttrMap(testMap);

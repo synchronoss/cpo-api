@@ -22,28 +22,28 @@ package org.synchronoss.cpo.jta;
 
 import javax.transaction.xa.Xid;
 
-/**
- * Created by dberry on 3/9/15.
- */
+/** Created by dberry on 3/9/15. */
 public class CpoXaState<T> {
 
   public static final int XA_UNASSOCIATED = 0;
   public static final int XA_ASSOCIATED = 1;
   public static final int XA_SUSPENDED = 2;
 
-
   private Xid xid;
-  private T resource=null;
-  private int association=XA_UNASSOCIATED;
-  private boolean success=true;
-  private boolean prepared=false;
+  private T resource = null;
+  private int association = XA_UNASSOCIATED;
+  private boolean success = true;
+  private boolean prepared = false;
   private CpoBaseXaResource<T> assignedResourceManager;
 
-  private CpoXaState(){
+  private CpoXaState() {}
 
-  }
-
-  public CpoXaState(Xid xid, T resource, int state, CpoBaseXaResource<T> assignedResourceManager, boolean success) {
+  public CpoXaState(
+      Xid xid,
+      T resource,
+      int state,
+      CpoBaseXaResource<T> assignedResourceManager,
+      boolean success) {
     this.xid = xid;
     this.resource = resource;
     this.association = state;
@@ -62,13 +62,15 @@ public class CpoXaState<T> {
   public void setAssociation(int association) {
     this.association = association;
   }
+
   public int getAssociation() {
     return association;
   }
 
   public void setSuccess(boolean success) {
-     this.success = success;
-   }
+    this.success = success;
+  }
+
   public boolean isSuccess() {
     return success;
   }
@@ -76,6 +78,7 @@ public class CpoXaState<T> {
   public void setPrepared(boolean prepared) {
     this.prepared = prepared;
   }
+
   public boolean isPrepared() {
     return prepared;
   }

@@ -20,10 +20,9 @@
  */
 package org.synchronoss.cpo.cache;
 
-import org.synchronoss.cpo.CpoAdapter;
-
 import java.util.HashMap;
 import java.util.Map;
+import org.synchronoss.cpo.CpoAdapter;
 
 /**
  * @author dberry

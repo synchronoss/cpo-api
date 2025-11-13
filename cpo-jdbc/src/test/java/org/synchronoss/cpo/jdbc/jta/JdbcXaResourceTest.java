@@ -20,6 +20,14 @@
  */
 package org.synchronoss.cpo.jdbc.jta;
 
+import static org.testng.Assert.*;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import javax.transaction.xa.XAException;
+import javax.transaction.xa.XAResource;
+import javax.transaction.xa.Xid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.CpoAdapter;
@@ -35,18 +43,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
-import javax.transaction.xa.XAException;
-import javax.transaction.xa.XAResource;
-import javax.transaction.xa.Xid;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
-import static org.testng.Assert.*;
-
-/**
- * Created by dberry on 12/8/15.
- */
+/** Created by dberry on 12/8/15. */
 public class JdbcXaResourceTest {
   private static final Logger logger = LoggerFactory.getLogger(JdbcXaResourceTest.class);
   private CpoAdapter cpoAdapter = null;
@@ -55,25 +52,27 @@ public class JdbcXaResourceTest {
   private ArrayList<ValueObject> al = new ArrayList<>();
   private boolean isXaSupported = true;
 
-  /**
-   * Creates a new XaResourceTest object.
-   */
-  public JdbcXaResourceTest() {
-  }
+  /** Creates a new XaResourceTest object. */
+  public JdbcXaResourceTest() {}
 
   /**
-   * <code>setUp</code> Load the datasource from the properties in the property file jdbc_en_US.properties
+   * <code>setUp</code> Load the datasource from the properties in the property file
+   * jdbc_en_US.properties
    */
-  @Parameters({ "db.xasupport" })
+  @Parameters({"db.xasupport"})
   @BeforeMethod
   public void setUp(boolean xaSupport) {
-      String method = "setUp:";
-      isXaSupported = xaSupport;
+    String method = "setUp:";
+    isXaSupported = xaSupport;
 
     try {
       cpoAdapter = CpoAdapterFactoryManager.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_JDBC);
-      cpoXaAdapter1 = (JdbcCpoXaAdapter) CpoAdapterFactoryManager.getCpoXaAdapter(JdbcStatics.ADAPTER_CONTEXT_JDBC);
-      cpoXaAdapter2 = (JdbcCpoXaAdapter) CpoAdapterFactoryManager.getCpoXaAdapter(JdbcStatics.ADAPTER_CONTEXT_JDBC);
+      cpoXaAdapter1 =
+          (JdbcCpoXaAdapter)
+              CpoAdapterFactoryManager.getCpoXaAdapter(JdbcStatics.ADAPTER_CONTEXT_JDBC);
+      cpoXaAdapter2 =
+          (JdbcCpoXaAdapter)
+              CpoAdapterFactoryManager.getCpoXaAdapter(JdbcStatics.ADAPTER_CONTEXT_JDBC);
       assertNotNull(cpoXaAdapter1, method + "CpoXaAdapter1 is null");
       assertNotNull(cpoXaAdapter2, method + "CpoXaAdapter2 is null");
     } catch (Exception e) {
@@ -81,9 +80,7 @@ public class JdbcXaResourceTest {
     }
   }
 
-  /**
-   * DOCUMENT ME!
-   */
+  /** DOCUMENT ME! */
   @AfterMethod
   public void tearDown() {
     String method = "tearDown:";
@@ -100,9 +97,7 @@ public class JdbcXaResourceTest {
     cpoXaAdapter2 = null;
   }
 
-  /**
-   * Tests that simple distributed transaction processing works as expected.
-   */
+  /** Tests that simple distributed transaction processing works as expected. */
   @Test
   public void testCoordination() {
     if (isXaSupported) {
@@ -112,8 +107,8 @@ public class JdbcXaResourceTest {
       al.add(valObj1);
       al.add(valObj2);
 
-      Xid xid1 = new MyXid(100, new byte[]{0x01}, new byte[]{0x02});
-      Xid xid2 = new MyXid(100, new byte[]{0x11}, new byte[]{0x22});
+      Xid xid1 = new MyXid(100, new byte[] {0x01}, new byte[] {0x02});
+      Xid xid2 = new MyXid(100, new byte[] {0x11}, new byte[] {0x22});
 
       try {
         cpoXaAdapter1.start(xid1, XAResource.TMNOFLAGS);
@@ -134,11 +129,11 @@ public class JdbcXaResourceTest {
         colCob.add(cob);
 
         ValueObject valObj = ValueObjectFactory.createValueObject();
-        List<ValueObject> list = cpoXaAdapter1.retrieveBeans(ValueObject.FG_LIST_NULL, valObj, colCob);
+        List<ValueObject> list =
+            cpoXaAdapter1.retrieveBeans(ValueObject.FG_LIST_NULL, valObj, colCob);
         assertEquals(2, list.size(), "list size is " + list.size());
         assertEquals(1, list.get(0).getId(), "ValuObject(1) is missing");
         assertEquals(2, list.get(1).getId(), "ValuObject(2) is missing");
-
 
         assertEquals(2, cpoXaAdapter1.deleteObjects(al));
       } catch (Exception e) {
@@ -158,9 +153,7 @@ public class JdbcXaResourceTest {
     }
   }
 
-  /**
-   * Tests that simple distributed transaction processing works as expected.
-   */
+  /** Tests that simple distributed transaction processing works as expected. */
   @Test
   public void testRollback() {
     if (isXaSupported) {
@@ -170,8 +163,8 @@ public class JdbcXaResourceTest {
       al.add(valObj1);
       al.add(valObj2);
 
-      Xid xid1 = new MyXid(100, new byte[]{0x01}, new byte[]{0x02});
-      Xid xid2 = new MyXid(100, new byte[]{0x11}, new byte[]{0x22});
+      Xid xid1 = new MyXid(100, new byte[] {0x01}, new byte[] {0x02});
+      Xid xid2 = new MyXid(100, new byte[] {0x11}, new byte[] {0x22});
 
       try {
         cpoXaAdapter1.start(xid1, XAResource.TMNOFLAGS);
@@ -183,7 +176,6 @@ public class JdbcXaResourceTest {
 
         cpoXaAdapter1.prepare(xid1);
         cpoXaAdapter2.prepare(xid2);
-
 
         cpoXaAdapter1.rollback(xid1);
         cpoXaAdapter2.rollback(xid2);
@@ -208,9 +200,7 @@ public class JdbcXaResourceTest {
     }
   }
 
-  /**
-   * Tests that XA RECOVER works as expected.
-   */
+  /** Tests that XA RECOVER works as expected. */
   @Test
   public void testRecover() {
     if (isXaSupported) {
@@ -218,7 +208,7 @@ public class JdbcXaResourceTest {
       ValueObject valObj = ValueObjectFactory.createValueObject(1);
       al.add(valObj);
 
-      Xid xid = new MyXid(100, new byte[]{0x01}, new byte[]{0x02});
+      Xid xid = new MyXid(100, new byte[] {0x01}, new byte[] {0x02});
       try {
 
         cpoXaAdapter1.start(xid, XAResource.TMNOFLAGS);
@@ -228,7 +218,8 @@ public class JdbcXaResourceTest {
 
         // Now try and recover
 
-        Xid[] recoveredXids = cpoXaAdapter2.recover(XAResource.TMSTARTRSCAN | XAResource.TMENDRSCAN);
+        Xid[] recoveredXids =
+            cpoXaAdapter2.recover(XAResource.TMSTARTRSCAN | XAResource.TMENDRSCAN);
 
         assertNotNull(recoveredXids);
         assertTrue(recoveredXids.length > 0);
@@ -236,8 +227,7 @@ public class JdbcXaResourceTest {
         boolean xidFound = false;
 
         for (int i = 0; i < recoveredXids.length; i++) {
-          if (recoveredXids[i] != null &&
-                  recoveredXids[i].equals(xid)) {
+          if (recoveredXids[i] != null && recoveredXids[i].equals(xid)) {
             xidFound = true;
 
             break;
@@ -254,8 +244,7 @@ public class JdbcXaResourceTest {
         xidFound = false;
 
         for (int i = 0; i < recoveredXids.length; i++) {
-          if (recoveredXids[i] != null &&
-                  recoveredXids[i].equals(xid)) {
+          if (recoveredXids[i] != null && recoveredXids[i].equals(xid)) {
             xidFound = true;
 
             break;
@@ -289,7 +278,6 @@ public class JdbcXaResourceTest {
     }
   }
 
-
   @Test
   public void testSuspendableTx() throws Exception {
     if (isXaSupported) {
@@ -297,7 +285,7 @@ public class JdbcXaResourceTest {
       ValueObject valObj = ValueObjectFactory.createValueObject(1);
       al.add(valObj);
 
-      Xid xid = new MyXid(100, new byte[]{0x01}, new byte[]{0x02});
+      Xid xid = new MyXid(100, new byte[] {0x01}, new byte[] {0x02});
 
       try {
         cpoXaAdapter1.start(xid, XAResource.TMNOFLAGS);
@@ -328,7 +316,6 @@ public class JdbcXaResourceTest {
     } else {
       logger.error(cpoAdapter.getDataSourceName() + " does not support XA Transactions");
     }
-
   }
 
   @Test
@@ -339,7 +326,7 @@ public class JdbcXaResourceTest {
       al.add(valObj);
       int ret;
 
-      Xid xid1 = new MyXid(100, new byte[]{0x01}, new byte[]{0x02});
+      Xid xid1 = new MyXid(100, new byte[] {0x01}, new byte[] {0x02});
       try {
 
         cpoXaAdapter1.start(xid1, XAResource.TMNOFLAGS);
@@ -378,7 +365,7 @@ public class JdbcXaResourceTest {
       al.add(valObj);
       int ret;
 
-      Xid xid1 = new MyXid(100, new byte[]{0x01}, new byte[]{0x02});
+      Xid xid1 = new MyXid(100, new byte[] {0x01}, new byte[] {0x02});
       try {
 
         cpoXaAdapter1.start(xid1, XAResource.TMNOFLAGS);
@@ -406,7 +393,6 @@ public class JdbcXaResourceTest {
     } else {
       logger.error(cpoAdapter.getDataSourceName() + " does not support XA Transactions");
     }
-
   }
 
   @Test
@@ -421,7 +407,7 @@ public class JdbcXaResourceTest {
       al.add(valObj3);
       int ret;
 
-      Xid xid1 = new MyXid(100, new byte[]{0x01}, new byte[]{0x02});
+      Xid xid1 = new MyXid(100, new byte[] {0x01}, new byte[] {0x02});
 
       try {
         cpoXaAdapter1.start(xid1, XAResource.TMNOFLAGS);
@@ -469,8 +455,8 @@ public class JdbcXaResourceTest {
       al.add(valObj2);
       int ret;
 
-      Xid xid1 = new MyXid(100, new byte[]{0x01}, new byte[]{0x02});
-      Xid xid2 = new MyXid(100, new byte[]{0x11}, new byte[]{0x22});
+      Xid xid1 = new MyXid(100, new byte[] {0x01}, new byte[] {0x02});
+      Xid xid2 = new MyXid(100, new byte[] {0x11}, new byte[] {0x22});
       try {
 
         cpoXaAdapter1.start(xid1, XAResource.TMNOFLAGS);
@@ -514,7 +500,6 @@ public class JdbcXaResourceTest {
     } else {
       logger.error(cpoAdapter.getDataSourceName() + " does not support XA Transactions");
     }
-
   }
 
   @Test
@@ -527,7 +512,7 @@ public class JdbcXaResourceTest {
       al.add(valObj2);
       int ret;
 
-      Xid xid1 = new MyXid(100, new byte[]{0x01}, new byte[]{0x02});
+      Xid xid1 = new MyXid(100, new byte[] {0x01}, new byte[] {0x02});
       try {
 
         cpoXaAdapter1.start(xid1, XAResource.TMNOFLAGS);
@@ -562,8 +547,6 @@ public class JdbcXaResourceTest {
     } else {
       logger.error(cpoAdapter.getDataSourceName() + " does not support XA Transactions");
     }
-
-
   }
 
   @Test
@@ -579,9 +562,9 @@ public class JdbcXaResourceTest {
 
       Xid[] xids;
 
-      Xid xid1 = new MyXid(100, new byte[]{0x01}, new byte[]{0x02});
-      Xid xid2 = new MyXid(100, new byte[]{0x11}, new byte[]{0x22});
-      Xid xid3 = new MyXid(100, new byte[]{0x13}, new byte[]{0x23});
+      Xid xid1 = new MyXid(100, new byte[] {0x01}, new byte[] {0x02});
+      Xid xid2 = new MyXid(100, new byte[] {0x11}, new byte[] {0x22});
+      Xid xid3 = new MyXid(100, new byte[] {0x13}, new byte[] {0x23});
 
       // TODO - need to create some unfinished transactions
       try {
@@ -632,21 +615,17 @@ public class JdbcXaResourceTest {
     } else {
       logger.error(cpoAdapter.getDataSourceName() + " does not support XA Transactions");
     }
-
   }
 
   @Test
-  public void testNothing() {
-
-  }
+  public void testNothing() {}
 
   public class MyXid implements Xid {
     protected int formatId;
     protected byte[] gtrid;
     protected byte[] bqual;
 
-    public MyXid() {
-    }
+    public MyXid() {}
 
     public MyXid(int formatId, byte gtrid[], byte bqual[]) {
       this.formatId = formatId;

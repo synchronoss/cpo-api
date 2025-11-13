@@ -22,12 +22,14 @@ package org.synchronoss.cpo.cassandra.config;
 
 /**
  * Used to access methods on the driver
+ *
  * @author dberry
  */
 public interface FactoryMethodName {
-    /**
-     * Gets the factory method name
-     * @return The method name
-     */
-    String getFactoryMethodName();
+  /**
+   * Gets the factory method name
+   *
+   * @return The method name
+   */
+  String getFactoryMethodName();
 }

@@ -57,7 +57,7 @@ public class ExceptionHelper {
 
   public static void reThrowCpoException(Throwable e, String message) throws CpoException {
     if (e instanceof CpoException) {
-      throw (CpoException)e;
+      throw (CpoException) e;
     } else {
       throw new CpoException(message, e);
     }

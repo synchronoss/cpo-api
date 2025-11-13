@@ -25,8 +25,7 @@ public class CpoNativeFunction {
   private String marker = null;
   private String expession = null;
 
-  public CpoNativeFunction() {
-  }
+  public CpoNativeFunction() {}
 
   public CpoNativeFunction(String marker, String text) {
     this.marker = marker;

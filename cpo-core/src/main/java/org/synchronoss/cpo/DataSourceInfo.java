@@ -21,8 +21,8 @@
 package org.synchronoss.cpo;
 
 /**
- * Interface that defines the methods needed by CPO for any class that collects DataSource info and instantiates the
- * DataSource
+ * Interface that defines the methods needed by CPO for any class that collects DataSource info and
+ * instantiates the DataSource
  *
  * @author david.berry
  * @param <T> The type of the DatasourceInfo

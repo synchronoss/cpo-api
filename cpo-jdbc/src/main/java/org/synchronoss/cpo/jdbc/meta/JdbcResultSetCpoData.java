@@ -20,32 +20,31 @@
  */
 package org.synchronoss.cpo.jdbc.meta;
 
+import java.lang.reflect.InvocationTargetException;
 import org.synchronoss.cpo.meta.MethodMapEntry;
 import org.synchronoss.cpo.meta.MethodMapper;
 import org.synchronoss.cpo.meta.ResultSetCpoData;
 import org.synchronoss.cpo.meta.domain.CpoAttribute;
 
-import java.lang.reflect.InvocationTargetException;
-
-/**
- * Result set data getter helper
- */
+/** Result set data getter helper */
 public class JdbcResultSetCpoData extends ResultSetCpoData {
 
-    /**
-     * Construct a JdbcResultSetCpoData
-     *
-     * @param methodMapper The method mapper
-     * @param rs - the result set
-     * @param cpoAttribute - The CpoAttribute to get
-     * @param index - The index of the CpoAttribute in the result set
-     */
-  public JdbcResultSetCpoData(MethodMapper<?> methodMapper, Object rs, CpoAttribute cpoAttribute, int index) {
+  /**
+   * Construct a JdbcResultSetCpoData
+   *
+   * @param methodMapper The method mapper
+   * @param rs - the result set
+   * @param cpoAttribute - The CpoAttribute to get
+   * @param index - The index of the CpoAttribute in the result set
+   */
+  public JdbcResultSetCpoData(
+      MethodMapper<?> methodMapper, Object rs, CpoAttribute cpoAttribute, int index) {
     super(methodMapper, rs, cpoAttribute, index);
   }
 
-  protected Object invokeGetterImpl(CpoAttribute cpoAttribute, MethodMapEntry<?, ?> methodMapEntry) throws IllegalAccessException, InvocationTargetException {
-    Object javaObject=null;
+  protected Object invokeGetterImpl(CpoAttribute cpoAttribute, MethodMapEntry<?, ?> methodMapEntry)
+      throws IllegalAccessException, InvocationTargetException {
+    Object javaObject = null;
     switch (methodMapEntry.getMethodType()) {
       case JdbcMethodMapEntry.METHOD_TYPE_BASIC:
       case JdbcMethodMapEntry.METHOD_TYPE_STREAM:
@@ -53,10 +52,10 @@ public class JdbcResultSetCpoData extends ResultSetCpoData {
         javaObject = methodMapEntry.getRsGetter().invoke(getRs(), getIndex());
         break;
       case JdbcMethodMapEntry.METHOD_TYPE_OBJECT:
-        javaObject = methodMapEntry.getRsGetter().invoke(getRs(), getIndex(), methodMapEntry.getJavaClass());
+        javaObject =
+            methodMapEntry.getRsGetter().invoke(getRs(), getIndex(), methodMapEntry.getJavaClass());
         break;
     }
     return javaObject;
   }
-
 }

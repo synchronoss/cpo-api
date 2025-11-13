@@ -21,8 +21,8 @@
 package org.synchronoss.cpo;
 
 /**
- * Defines that a implementer of this interface allows visits from a MetaVisitor.
- * The visitor should traverse depth first.
+ * Defines that a implementer of this interface allows visits from a MetaVisitor. The visitor should
+ * traverse depth first.
  *
  * @author Michael Bellomo
  * @since 4/17/12

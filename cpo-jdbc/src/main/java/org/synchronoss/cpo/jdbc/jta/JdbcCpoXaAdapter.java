@@ -20,6 +20,10 @@
  */
 package org.synchronoss.cpo.jdbc.jta;
 
+import java.util.Collection;
+import java.util.List;
+import javax.transaction.xa.XAException;
+import javax.transaction.xa.XAResource;
 import org.synchronoss.cpo.*;
 import org.synchronoss.cpo.enums.Comparison;
 import org.synchronoss.cpo.enums.Logical;
@@ -32,76 +36,68 @@ import org.synchronoss.cpo.jta.CpoXaError;
 import org.synchronoss.cpo.meta.CpoMetaDescriptor;
 import org.synchronoss.cpo.meta.domain.CpoAttribute;
 
-import javax.transaction.xa.XAException;
-import javax.transaction.xa.XAResource;
-import java.util.Collection;
-import java.util.List;
-
 /**
- * <p>
  * A JdbcCpoXaAdapter wraps the XAResource processing around a JdbcCpoTrxAdapter.
- * </p><p>
- * It manages a local and global CpoTrxAdapter and manages the association of XIDs to transactions
- * </p><p>
- * The XAResource interface is a Java mapping of the industry standard XA interface based on the X/Open CAE Specification
- * (Distributed Transaction Processing: The XA Specification).
- * </p><p>
- * The XA interface defines the contract between a Resource Manager and a Transaction Manager in a distributed transaction processing (DTP) environment.
- * A JDBC driver or a JMS provider implements this interface to support the association between a global transaction and a database or message service connection.
- * </p><p>
- * The XAResource interface can be supported by any transactional resource that is intended to be used by application programs in an environment
- * where transactions are controlled by an external transaction manager. An example of such a resource is a database management system. An application
- * may access data through multiple database connections. Each database connection is enlisted with the transaction manager as a transactional resource.
- * The transaction manager obtains an XAResource for each connection participating in a global transaction. The transaction manager uses the start method to
- * associate the global transaction with the resource, and it uses the end method to disassociate the transaction from the resource. The resource manager is
- * responsible for associating the global transaction to all work performed on its data between the start and end method invocations.
- * </p><p>
- * At transaction commit time, the resource managers are informed by the transaction manager to prepare, commit, or rollback a transaction according to the
- * two-phase commit protocol.
- * </p>
+ *
+ * <p>It manages a local and global CpoTrxAdapter and manages the association of XIDs to
+ * transactions
+ *
+ * <p>The XAResource interface is a Java mapping of the industry standard XA interface based on the
+ * X/Open CAE Specification (Distributed Transaction Processing: The XA Specification).
+ *
+ * <p>The XA interface defines the contract between a Resource Manager and a Transaction Manager in
+ * a distributed transaction processing (DTP) environment. A JDBC driver or a JMS provider
+ * implements this interface to support the association between a global transaction and a database
+ * or message service connection.
+ *
+ * <p>The XAResource interface can be supported by any transactional resource that is intended to be
+ * used by application programs in an environment where transactions are controlled by an external
+ * transaction manager. An example of such a resource is a database management system. An
+ * application may access data through multiple database connections. Each database connection is
+ * enlisted with the transaction manager as a transactional resource. The transaction manager
+ * obtains an XAResource for each connection participating in a global transaction. The transaction
+ * manager uses the start method to associate the global transaction with the resource, and it uses
+ * the end method to disassociate the transaction from the resource. The resource manager is
+ * responsible for associating the global transaction to all work performed on its data between the
+ * start and end method invocations.
+ *
+ * <p>At transaction commit time, the resource managers are informed by the transaction manager to
+ * prepare, commit, or rollback a transaction according to the two-phase commit protocol.
  */
 public class JdbcCpoXaAdapter extends CpoBaseXaResource<JdbcCpoAdapter> implements CpoTrxAdapter {
-    /**
-     * Version Id for this class.
-     */
-    private static final long serialVersionUID = 1L;
+  /** Version Id for this class. */
+  private static final long serialVersionUID = 1L;
 
   private JdbcCpoAdapterFactory jdbcCpoAdapterFactory;
 
-    /**
-     * Construct a JdbcCpoXaAdapter
-     *
-     * @param jdbcCpoAdapterFactory  - The adapter factory to use to create the JdbcCpoXaAdapter
-     * @throws CpoException - An error getting the JdbcCpoXaAdapter
-     */
+  /**
+   * Construct a JdbcCpoXaAdapter
+   *
+   * @param jdbcCpoAdapterFactory - The adapter factory to use to create the JdbcCpoXaAdapter
+   * @throws CpoException - An error getting the JdbcCpoXaAdapter
+   */
   public JdbcCpoXaAdapter(JdbcCpoAdapterFactory jdbcCpoAdapterFactory) throws CpoException {
     super((JdbcCpoAdapter) jdbcCpoAdapterFactory.getCpoAdapter());
     this.jdbcCpoAdapterFactory = jdbcCpoAdapterFactory;
   }
 
-  /**
-   * Commits the current transaction behind the CpoTrxAdapter
-   */
+  /** Commits the current transaction behind the CpoTrxAdapter */
   @Override
   public void commit() throws CpoException {
     JdbcCpoAdapter currentResource = getCurrentResource();
-    if (currentResource != getLocalResource())
-      ((JdbcCpoTrxAdapter)currentResource).commit();
+    if (currentResource != getLocalResource()) ((JdbcCpoTrxAdapter) currentResource).commit();
   }
 
-  /**
-   * Rollback the current transaction behind the CpoTrxAdapter
-   */
+  /** Rollback the current transaction behind the CpoTrxAdapter */
   @Override
   public void rollback() throws CpoException {
     JdbcCpoAdapter currentResource = getCurrentResource();
-    if (currentResource != getLocalResource())
-      ((JdbcCpoTrxAdapter)currentResource).rollback();
+    if (currentResource != getLocalResource()) ((JdbcCpoTrxAdapter) currentResource).rollback();
   }
 
   /**
-   * Closes the current transaction behind the CpoTrxAdapter. All subsequent calls to the CpoTrxAdapter will throw an
-   * exception.
+   * Closes the current transaction behind the CpoTrxAdapter. All subsequent calls to the
+   * CpoTrxAdapter will throw an exception.
    */
   @Override
   public void close() throws CpoException {
@@ -112,28 +108,22 @@ public class JdbcCpoXaAdapter extends CpoBaseXaResource<JdbcCpoAdapter> implemen
     }
   }
 
-  /**
-   * Returns true if the TrxAdapter has been closed, false if it is still active
-   */
+  /** Returns true if the TrxAdapter has been closed, false if it is still active */
   @Override
   public boolean isClosed() throws CpoException {
     JdbcCpoAdapter currentResource = getCurrentResource();
     if (currentResource != getLocalResource())
-      return ((JdbcCpoTrxAdapter)currentResource).isClosed();
-    else
-      return true;
+      return ((JdbcCpoTrxAdapter) currentResource).isClosed();
+    else return true;
   }
 
-  /**
-   * Returns true if the TrxAdapter is processing a request, false if it is not
-   */
+  /** Returns true if the TrxAdapter is processing a request, false if it is not */
   @Override
   public boolean isBusy() throws CpoException {
     JdbcCpoAdapter currentResource = getCurrentResource();
     if (currentResource != getLocalResource())
-      return ((JdbcCpoTrxAdapter)currentResource).isBusy();
-    else
-      return false;
+      return ((JdbcCpoTrxAdapter) currentResource).isBusy();
+    else return false;
   }
 
   @Override
@@ -147,7 +137,13 @@ public class JdbcCpoXaAdapter extends CpoBaseXaResource<JdbcCpoAdapter> implemen
   }
 
   @Override
-  public <T> long insertObject(String name, T obj, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeFunction> nativeExpressions) throws CpoException {
+  public <T> long insertObject(
+      String name,
+      T obj,
+      Collection<CpoWhere> wheres,
+      Collection<CpoOrderBy> orderBy,
+      Collection<CpoNativeFunction> nativeExpressions)
+      throws CpoException {
     return getCurrentResource().insertObject(name, obj, wheres, orderBy, nativeExpressions);
   }
 
@@ -162,7 +158,13 @@ public class JdbcCpoXaAdapter extends CpoBaseXaResource<JdbcCpoAdapter> implemen
   }
 
   @Override
-  public <T> long insertObjects(String name, Collection<T> coll, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeFunction> nativeExpressions) throws CpoException {
+  public <T> long insertObjects(
+      String name,
+      Collection<T> coll,
+      Collection<CpoWhere> wheres,
+      Collection<CpoOrderBy> orderBy,
+      Collection<CpoNativeFunction> nativeExpressions)
+      throws CpoException {
     return getCurrentResource().insertObjects(name, coll, wheres, orderBy, nativeExpressions);
   }
 
@@ -173,27 +175,39 @@ public class JdbcCpoXaAdapter extends CpoBaseXaResource<JdbcCpoAdapter> implemen
 
   @Override
   public <T> long deleteObject(String name, T obj) throws CpoException {
-    return getCurrentResource().deleteObject( name, obj);
+    return getCurrentResource().deleteObject(name, obj);
   }
 
   @Override
-  public <T> long deleteObject(String name, T obj, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeFunction> nativeExpressions) throws CpoException {
-    return getCurrentResource().deleteObject( name, obj, wheres, orderBy, nativeExpressions);
+  public <T> long deleteObject(
+      String name,
+      T obj,
+      Collection<CpoWhere> wheres,
+      Collection<CpoOrderBy> orderBy,
+      Collection<CpoNativeFunction> nativeExpressions)
+      throws CpoException {
+    return getCurrentResource().deleteObject(name, obj, wheres, orderBy, nativeExpressions);
   }
 
   @Override
   public <T> long deleteObjects(Collection<T> coll) throws CpoException {
-    return  getCurrentResource().deleteObjects(coll);
+    return getCurrentResource().deleteObjects(coll);
   }
 
   @Override
   public <T> long deleteObjects(String name, Collection<T> coll) throws CpoException {
-    return  getCurrentResource().deleteObjects( name, coll);
+    return getCurrentResource().deleteObjects(name, coll);
   }
 
   @Override
-  public <T> long deleteObjects(String name, Collection<T> coll, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeFunction> nativeExpressions) throws CpoException {
-    return getCurrentResource().deleteObjects( name, coll, wheres, orderBy, nativeExpressions);
+  public <T> long deleteObjects(
+      String name,
+      Collection<T> coll,
+      Collection<CpoWhere> wheres,
+      Collection<CpoOrderBy> orderBy,
+      Collection<CpoNativeFunction> nativeExpressions)
+      throws CpoException {
+    return getCurrentResource().deleteObjects(name, coll, wheres, orderBy, nativeExpressions);
   }
 
   @Override
@@ -203,12 +217,12 @@ public class JdbcCpoXaAdapter extends CpoBaseXaResource<JdbcCpoAdapter> implemen
 
   @Override
   public <T> T executeObject(String name, T object) throws CpoException {
-    return getCurrentResource().executeObject( name, object );
+    return getCurrentResource().executeObject(name, object);
   }
 
   @Override
   public <T, C> T executeObject(String name, C criteria, T result) throws CpoException {
-    return getCurrentResource().executeObject( name, criteria, result );
+    return getCurrentResource().executeObject(name, criteria, result);
   }
 
   @Override
@@ -218,32 +232,36 @@ public class JdbcCpoXaAdapter extends CpoBaseXaResource<JdbcCpoAdapter> implemen
 
   @Override
   public <T> long existsObject(String name, T obj) throws CpoException {
-    return getCurrentResource().existsObject( name, obj);
+    return getCurrentResource().existsObject(name, obj);
   }
 
   @Override
-  public <T> long existsObject(String name, T obj, Collection<CpoWhere> wheres) throws CpoException {
-    return getCurrentResource().existsObject( name, obj, wheres);
+  public <T> long existsObject(String name, T obj, Collection<CpoWhere> wheres)
+      throws CpoException {
+    return getCurrentResource().existsObject(name, obj, wheres);
   }
 
   @Override
   public CpoOrderBy newOrderBy(String attribute, boolean ascending) throws CpoException {
-    return  getCurrentResource().newOrderBy(attribute, ascending);
+    return getCurrentResource().newOrderBy(attribute, ascending);
   }
 
   @Override
-  public CpoOrderBy newOrderBy(String marker, String attribute, boolean ascending) throws CpoException {
-    return  getCurrentResource().newOrderBy( marker,  attribute,  ascending);
+  public CpoOrderBy newOrderBy(String marker, String attribute, boolean ascending)
+      throws CpoException {
+    return getCurrentResource().newOrderBy(marker, attribute, ascending);
   }
 
   @Override
-  public CpoOrderBy newOrderBy(String attribute, boolean ascending, String function) throws CpoException {
-    return getCurrentResource().newOrderBy(attribute,  ascending,  function);
+  public CpoOrderBy newOrderBy(String attribute, boolean ascending, String function)
+      throws CpoException {
+    return getCurrentResource().newOrderBy(attribute, ascending, function);
   }
 
   @Override
-  public CpoOrderBy newOrderBy(String marker, String attribute, boolean ascending, String function) throws CpoException {
-    return getCurrentResource().newOrderBy( marker,  attribute,  ascending,  function);
+  public CpoOrderBy newOrderBy(String marker, String attribute, boolean ascending, String function)
+      throws CpoException {
+    return getCurrentResource().newOrderBy(marker, attribute, ascending, function);
   }
 
   @Override
@@ -252,13 +270,15 @@ public class JdbcCpoXaAdapter extends CpoBaseXaResource<JdbcCpoAdapter> implemen
   }
 
   @Override
-  public <T> CpoWhere newWhere(Logical logical, String attr, Comparison comp, T value) throws CpoException {
-    return getCurrentResource().newWhere( logical,  attr,  comp,  value);
+  public <T> CpoWhere newWhere(Logical logical, String attr, Comparison comp, T value)
+      throws CpoException {
+    return getCurrentResource().newWhere(logical, attr, comp, value);
   }
 
   @Override
-  public <T> CpoWhere newWhere(Logical logical, String attr, Comparison comp, T value, boolean not) throws CpoException {
-    return getCurrentResource().newWhere( logical,  attr,  comp,  value,  not);
+  public <T> CpoWhere newWhere(Logical logical, String attr, Comparison comp, T value, boolean not)
+      throws CpoException {
+    return getCurrentResource().newWhere(logical, attr, comp, value, not);
   }
 
   @Override
@@ -292,18 +312,38 @@ public class JdbcCpoXaAdapter extends CpoBaseXaResource<JdbcCpoAdapter> implemen
   }
 
   @Override
-  public <T> T retrieveBean(String name, T bean, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeFunction> nativeExpressions) throws CpoException {
+  public <T> T retrieveBean(
+      String name,
+      T bean,
+      Collection<CpoWhere> wheres,
+      Collection<CpoOrderBy> orderBy,
+      Collection<CpoNativeFunction> nativeExpressions)
+      throws CpoException {
     return getCurrentResource().retrieveBean(name, bean, wheres, orderBy, nativeExpressions);
   }
 
   @Override
-  public <T, C> T retrieveBean(String name, C criteria, T result, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy) throws CpoException {
+  public <T, C> T retrieveBean(
+      String name,
+      C criteria,
+      T result,
+      Collection<CpoWhere> wheres,
+      Collection<CpoOrderBy> orderBy)
+      throws CpoException {
     return getCurrentResource().retrieveBean(name, criteria, result, wheres, orderBy);
   }
 
   @Override
-  public <T, C> T retrieveBean(String name, C criteria, T result, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeFunction> nativeExpressions) throws CpoException {
-    return getCurrentResource().retrieveBean(name, criteria, result, wheres, orderBy, nativeExpressions);
+  public <T, C> T retrieveBean(
+      String name,
+      C criteria,
+      T result,
+      Collection<CpoWhere> wheres,
+      Collection<CpoOrderBy> orderBy,
+      Collection<CpoNativeFunction> nativeExpressions)
+      throws CpoException {
+    return getCurrentResource()
+        .retrieveBean(name, criteria, result, wheres, orderBy, nativeExpressions);
   }
 
   @Override
@@ -312,17 +352,21 @@ public class JdbcCpoXaAdapter extends CpoBaseXaResource<JdbcCpoAdapter> implemen
   }
 
   @Override
-  public <C> List<C> retrieveBeans(String name, C criteria, CpoWhere where, Collection<CpoOrderBy> orderBy) throws CpoException {
+  public <C> List<C> retrieveBeans(
+      String name, C criteria, CpoWhere where, Collection<CpoOrderBy> orderBy) throws CpoException {
     return getCurrentResource().retrieveBeans(name, criteria, where, orderBy);
   }
 
   @Override
-  public <C> List<C> retrieveBeans(String name, C criteria, Collection<CpoOrderBy> orderBy) throws CpoException {
+  public <C> List<C> retrieveBeans(String name, C criteria, Collection<CpoOrderBy> orderBy)
+      throws CpoException {
     return getCurrentResource().retrieveBeans(name, criteria, orderBy);
   }
 
   @Override
-  public <C> List<C> retrieveBeans(String name, C criteria, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy) throws CpoException {
+  public <C> List<C> retrieveBeans(
+      String name, C criteria, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy)
+      throws CpoException {
     return getCurrentResource().retrieveBeans(name, criteria, wheres, orderBy);
   }
 
@@ -332,23 +376,48 @@ public class JdbcCpoXaAdapter extends CpoBaseXaResource<JdbcCpoAdapter> implemen
   }
 
   @Override
-  public <T, C> List<T> retrieveBeans(String name, C criteria, T result, CpoWhere where, Collection<CpoOrderBy> orderBy) throws CpoException {
+  public <T, C> List<T> retrieveBeans(
+      String name, C criteria, T result, CpoWhere where, Collection<CpoOrderBy> orderBy)
+      throws CpoException {
     return getCurrentResource().retrieveBeans(name, criteria, result, where, orderBy);
   }
 
   @Override
-  public <T, C> List<T> retrieveBeans(String name, C criteria, T result, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy) throws CpoException {
+  public <T, C> List<T> retrieveBeans(
+      String name,
+      C criteria,
+      T result,
+      Collection<CpoWhere> wheres,
+      Collection<CpoOrderBy> orderBy)
+      throws CpoException {
     return getCurrentResource().retrieveBeans(name, criteria, result, wheres, orderBy);
   }
 
   @Override
-  public <T, C> List<T> retrieveBeans(String name, C criteria, T result, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeFunction> nativeExpressions) throws CpoException {
-    return getCurrentResource().retrieveBeans(name, criteria, result, wheres, orderBy, nativeExpressions);
+  public <T, C> List<T> retrieveBeans(
+      String name,
+      C criteria,
+      T result,
+      Collection<CpoWhere> wheres,
+      Collection<CpoOrderBy> orderBy,
+      Collection<CpoNativeFunction> nativeExpressions)
+      throws CpoException {
+    return getCurrentResource()
+        .retrieveBeans(name, criteria, result, wheres, orderBy, nativeExpressions);
   }
 
   @Override
-  public <T, C> CpoResultSet<T> retrieveBeans(String name, C criteria, T result, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeFunction> nativeExpressions, int queueSize) throws CpoException {
-    return getCurrentResource().retrieveBeans(name, criteria, result, wheres, orderBy, nativeExpressions, queueSize);
+  public <T, C> CpoResultSet<T> retrieveBeans(
+      String name,
+      C criteria,
+      T result,
+      Collection<CpoWhere> wheres,
+      Collection<CpoOrderBy> orderBy,
+      Collection<CpoNativeFunction> nativeExpressions,
+      int queueSize)
+      throws CpoException {
+    return getCurrentResource()
+        .retrieveBeans(name, criteria, result, wheres, orderBy, nativeExpressions, queueSize);
   }
 
   @Override
@@ -362,7 +431,13 @@ public class JdbcCpoXaAdapter extends CpoBaseXaResource<JdbcCpoAdapter> implemen
   }
 
   @Override
-  public <T> long updateObject(String name, T obj, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeFunction> nativeExpressions) throws CpoException {
+  public <T> long updateObject(
+      String name,
+      T obj,
+      Collection<CpoWhere> wheres,
+      Collection<CpoOrderBy> orderBy,
+      Collection<CpoNativeFunction> nativeExpressions)
+      throws CpoException {
     return getCurrentResource().updateObject(name, obj, wheres, orderBy, nativeExpressions);
   }
 
@@ -377,7 +452,13 @@ public class JdbcCpoXaAdapter extends CpoBaseXaResource<JdbcCpoAdapter> implemen
   }
 
   @Override
-  public <T> long updateObjects(String name, Collection<T> coll, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeFunction> nativeExpressions) throws CpoException {
+  public <T> long updateObjects(
+      String name,
+      Collection<T> coll,
+      Collection<CpoWhere> wheres,
+      Collection<CpoOrderBy> orderBy,
+      Collection<CpoNativeFunction> nativeExpressions)
+      throws CpoException {
     return getCurrentResource().updateObjects(name, coll, wheres, orderBy, nativeExpressions);
   }
 
@@ -396,65 +477,67 @@ public class JdbcCpoXaAdapter extends CpoBaseXaResource<JdbcCpoAdapter> implemen
     return getCurrentResource().getCpoAttributes(expression);
   }
 
-   @Override
-   public boolean isSameRM(XAResource xaResource) throws XAException {
-     if (xaResource == null)
-       throw CpoXaError.createXAException(CpoXaError.XAER_INVAL, "Invalid parameter. xaResource cannot be null.");
+  @Override
+  public boolean isSameRM(XAResource xaResource) throws XAException {
+    if (xaResource == null)
+      throw CpoXaError.createXAException(
+          CpoXaError.XAER_INVAL, "Invalid parameter. xaResource cannot be null.");
 
-     return xaResource instanceof JdbcCpoXaAdapter;
-   }
+    return xaResource instanceof JdbcCpoXaAdapter;
+  }
 
   @Override
   public boolean isLocalResourceBusy() throws XAException {
     return false;
-//    boolean busy;
-//    try {
-//      busy = getLocalResource().isBusy();
-//    } catch (CpoException ce) {
-//      throw new XAException(XAException.XAER_RMERR);
-//    }
-//    return busy;
+    //    boolean busy;
+    //    try {
+    //      busy = getLocalResource().isBusy();
+    //    } catch (CpoException ce) {
+    //      throw new XAException(XAException.XAER_RMERR);
+    //    }
+    //    return busy;
   }
 
   @Override
-  protected void prepareResource(JdbcCpoAdapter jdbcCpoAdapter) throws XAException {
-
-  }
+  protected void prepareResource(JdbcCpoAdapter jdbcCpoAdapter) throws XAException {}
 
   @Override
   public void commitResource(JdbcCpoAdapter jdbcCpoAdapter) throws XAException {
     try {
-      ((JdbcCpoTrxAdapter)jdbcCpoAdapter).commit();
+      ((JdbcCpoTrxAdapter) jdbcCpoAdapter).commit();
     } catch (CpoException ce) {
-      throw CpoXaError.createXAException(CpoXaError.XAER_RMERR, ExceptionHelper.getLocalizedMessage(ce));
+      throw CpoXaError.createXAException(
+          CpoXaError.XAER_RMERR, ExceptionHelper.getLocalizedMessage(ce));
     }
   }
 
   @Override
   public void rollbackResource(JdbcCpoAdapter jdbcCpoAdapter) throws XAException {
     try {
-      ((JdbcCpoTrxAdapter)jdbcCpoAdapter).rollback();
+      ((JdbcCpoTrxAdapter) jdbcCpoAdapter).rollback();
     } catch (CpoException ce) {
-      throw CpoXaError.createXAException(CpoXaError.XAER_RMERR, ExceptionHelper.getLocalizedMessage(ce));
+      throw CpoXaError.createXAException(
+          CpoXaError.XAER_RMERR, ExceptionHelper.getLocalizedMessage(ce));
     }
   }
 
   @Override
   public JdbcCpoTrxAdapter createNewResource() throws XAException {
     try {
-      return (JdbcCpoTrxAdapter)jdbcCpoAdapterFactory.getCpoTrxAdapter();
+      return (JdbcCpoTrxAdapter) jdbcCpoAdapterFactory.getCpoTrxAdapter();
     } catch (CpoException ce) {
-      throw CpoXaError.createXAException(CpoXaError.XAER_RMFAIL, ExceptionHelper.getLocalizedMessage(ce));
+      throw CpoXaError.createXAException(
+          CpoXaError.XAER_RMFAIL, ExceptionHelper.getLocalizedMessage(ce));
     }
   }
 
   @Override
   public void closeResource(JdbcCpoAdapter jdbcCpoAdapter) throws XAException {
     try {
-      ((JdbcCpoTrxAdapter)jdbcCpoAdapter).close();
+      ((JdbcCpoTrxAdapter) jdbcCpoAdapter).close();
     } catch (CpoException ce) {
-      throw CpoXaError.createXAException(CpoXaError.XAER_RMERR, ExceptionHelper.getLocalizedMessage(ce));
+      throw CpoXaError.createXAException(
+          CpoXaError.XAER_RMERR, ExceptionHelper.getLocalizedMessage(ce));
     }
   }
-
 }

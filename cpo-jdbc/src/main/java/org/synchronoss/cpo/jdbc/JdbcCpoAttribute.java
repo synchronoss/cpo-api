@@ -20,6 +20,8 @@
  */
 package org.synchronoss.cpo.jdbc;
 
+import java.io.Serial;
+import java.lang.reflect.Method;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.CpoException;
@@ -27,81 +29,74 @@ import org.synchronoss.cpo.meta.CpoMetaDescriptor;
 import org.synchronoss.cpo.meta.domain.CpoAttribute;
 import org.synchronoss.cpo.transform.jdbc.JdbcCpoTransform;
 
-import java.io.Serial;
-import java.lang.reflect.Method;
-
 /**
- * JdbcCpoAttribute. A class that includes the Jdbc specifc attributes that are additional to the CpoAttribute attributes
+ * JdbcCpoAttribute. A class that includes the Jdbc specifc attributes that are additional to the
+ * CpoAttribute attributes
  *
  * @author david berry
  */
 public class JdbcCpoAttribute extends CpoAttribute implements java.io.Serializable, Cloneable {
 
   private static final Logger logger = LoggerFactory.getLogger(JdbcCpoAttribute.class);
-  /**
-   * Version Id for this class.
-   */
-  @Serial
-  private static final long serialVersionUID = 1L;
+
+  /** Version Id for this class. */
+  @Serial private static final long serialVersionUID = 1L;
 
   private String dbTable_ = null;
   private String dbColumn_ = null;
-  //Transform attributes
+  // Transform attributes
   private JdbcCpoTransform jdbcTransform = null;
   private Method transformPSOutMethod = null;
   private Method transformCSOutMethod = null;
 
-    /**
-     * Constructs a JdbcCpoAttribute
-     */
-  public JdbcCpoAttribute() {
-  }
+  /** Constructs a JdbcCpoAttribute */
+  public JdbcCpoAttribute() {}
 
-    /**
-     * Set the db table associated with this attribute
-     *
-     * @param dbTable - The db table name to set.
-     */
+  /**
+   * Set the db table associated with this attribute
+   *
+   * @param dbTable - The db table name to set.
+   */
   public void setDbTable(String dbTable) {
     dbTable_ = dbTable;
   }
 
-    /**
-     * Set the db column associated with this attribute
-     *
-     * @param dbColumn  - The db column name to set.
-     */
+  /**
+   * Set the db column associated with this attribute
+   *
+   * @param dbColumn - The db column name to set.
+   */
   public void setDbColumn(String dbColumn) {
     dbColumn_ = dbColumn;
   }
 
-    /**
-     * Get the db table associated with this attribute
-     *
-     * @return The db table associated with this attribute.
-     */
+  /**
+   * Get the db table associated with this attribute
+   *
+   * @return The db table associated with this attribute.
+   */
   public String getDbTable() {
     return dbTable_;
   }
 
-    /**
-     * Get the db column associated with this attribute
-     *
-     * @return The db column associated with this attribute
-     */
+  /**
+   * Get the db column associated with this attribute
+   *
+   * @return The db column associated with this attribute
+   */
   public String getDbColumn() {
     return dbColumn_;
   }
 
-//  private void dumpMethod(Method m) {
-//    logger.debug("========================");
-//    logger.debug("===> Declaring Class: " + m.getDeclaringClass().getName());
-//    logger.debug("===> Method Signature: " + m.toString());
-//    logger.debug("===> Generic Signature: " + m.toGenericString());
-//    logger.debug("===> Method isBridge: " + m.isBridge());
-//    logger.debug("===> Method isSynthetic: " + m.isSynthetic());
-//    logger.debug("========================");
-//  }
+  //  private void dumpMethod(Method m) {
+  //    logger.debug("========================");
+  //    logger.debug("===> Declaring Class: " + m.getDeclaringClass().getName());
+  //    logger.debug("===> Method Signature: " + m.toString());
+  //    logger.debug("===> Generic Signature: " + m.toGenericString());
+  //    logger.debug("===> Method isBridge: " + m.isBridge());
+  //    logger.debug("===> Method isSynthetic: " + m.isSynthetic());
+  //    logger.debug("========================");
+  //  }
 
   @Override
   protected void initTransformClass(CpoMetaDescriptor metaDescriptor) throws CpoException {
@@ -110,15 +105,20 @@ public class JdbcCpoAttribute extends CpoAttribute implements java.io.Serializab
       jdbcTransform = (JdbcCpoTransform) getCpoTransform();
 
       for (Method m : findMethods(jdbcTransform.getClass(), TRANSFORM_OUT_NAME, 2, true)) {
-        if (m.getParameterTypes()[0].getName().equals("org.synchronoss.cpo.jdbc.JdbcPreparedStatementFactory")) {
+        if (m.getParameterTypes()[0]
+            .getName()
+            .equals("org.synchronoss.cpo.jdbc.JdbcPreparedStatementFactory")) {
           transformPSOutMethod = m;
-        } else if (m.getParameterTypes()[0].getName().equals("org.synchronoss.cpo.jdbc.JdbcCallableStatementFactory")) {
+        } else if (m.getParameterTypes()[0]
+            .getName()
+            .equals("org.synchronoss.cpo.jdbc.JdbcCallableStatementFactory")) {
           transformCSOutMethod = m;
         }
       }
     }
 
-    // TODO Revisit this. Initializing the java sql type here. Not sure that this is the right place.
+    // TODO Revisit this. Initializing the java sql type here. Not sure that this is the right
+    // place.
     setDataTypeInt(metaDescriptor.getDataTypeInt(getDataType()));
   }
 }

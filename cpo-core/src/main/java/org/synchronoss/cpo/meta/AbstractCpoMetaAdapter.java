@@ -20,6 +20,7 @@
  */
 package org.synchronoss.cpo.meta;
 
+import java.util.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.CpoException;
@@ -27,18 +28,16 @@ import org.synchronoss.cpo.core.cpoCoreMeta.*;
 import org.synchronoss.cpo.enums.Crud;
 import org.synchronoss.cpo.meta.domain.*;
 
-import java.util.*;
-
 /**
  * @author dberry
  */
 public abstract class AbstractCpoMetaAdapter implements CpoMetaAdapter {
 
   private static final Logger logger = LoggerFactory.getLogger(AbstractCpoMetaAdapter.class);
-  /**
-   * The map of classes in this metaAdapter
-   */
+
+  /** The map of classes in this metaAdapter */
   private Map<String, CpoClass> classMap = new HashMap<>();
+
   private CpoClass currentClass = null;
 
   protected AbstractCpoMetaAdapter() {
@@ -72,8 +71,7 @@ public abstract class AbstractCpoMetaAdapter implements CpoMetaAdapter {
         for (Class<?> clazz : classList) {
           className = clazz.getName();
           cpoClass = classMap.get(className);
-          if (cpoClass != null)
-            break;
+          if (cpoClass != null) break;
         }
       }
       if (cpoClass == null) {
@@ -96,7 +94,6 @@ public abstract class AbstractCpoMetaAdapter implements CpoMetaAdapter {
     }
     return superClassList;
   }
-
 
   @Override
   public List<CpoClass> getCpoClasses() {
@@ -122,11 +119,12 @@ public abstract class AbstractCpoMetaAdapter implements CpoMetaAdapter {
   @Override
   public Class<?> getDataTypeJavaClass(CpoAttribute attribute) {
     Class<?> clazz = String.class;
-    DataTypeMapEntry<?> dataTypeMapEntry = getDataTypeMapper().getDataTypeMapEntry(attribute.getDataType());
+    DataTypeMapEntry<?> dataTypeMapEntry =
+        getDataTypeMapper().getDataTypeMapEntry(attribute.getDataType());
 
     if (attribute.getTransformInMethod() != null) {
       clazz = attribute.getTransformInMethod().getReturnType();
-    } else if (attribute.getGetterReturnType()!=null) {
+    } else if (attribute.getGetterReturnType() != null) {
       clazz = attribute.getGetterReturnType();
     } else if (dataTypeMapEntry != null) {
       clazz = dataTypeMapEntry.getJavaClass();
@@ -152,7 +150,8 @@ public abstract class AbstractCpoMetaAdapter implements CpoMetaAdapter {
 
   protected abstract DataTypeMapper getDataTypeMapper();
 
-  protected void loadCpoMetaDataDocument(CpoMetaDataDocument metaDataDoc, boolean caseSensitive) throws CpoException {
+  protected void loadCpoMetaDataDocument(CpoMetaDataDocument metaDataDoc, boolean caseSensitive)
+      throws CpoException {
     for (CtClass ctClass : metaDataDoc.getCpoMetaData().getCpoClassArray()) {
 
       CpoClass cpoClass = getCpoClass(ctClass.getName());
@@ -189,7 +188,9 @@ public abstract class AbstractCpoMetaAdapter implements CpoMetaAdapter {
       CpoFunctionGroup functionGroup = null;
 
       try {
-        functionGroup = cpoClass.getFunctionGroup(Crud.valueOf(ctFunctionGroup.getType().toString()), ctFunctionGroup.getName());
+        functionGroup =
+            cpoClass.getFunctionGroup(
+                Crud.valueOf(ctFunctionGroup.getType().toString()), ctFunctionGroup.getName());
       } catch (Exception e) {
         // this a runtime exception that we can ignore during load time.
         if (logger.isTraceEnabled()) {
@@ -218,7 +219,8 @@ public abstract class AbstractCpoMetaAdapter implements CpoMetaAdapter {
     cpoAttribute.setTransformClassName(ctAttribute.getTransformClass());
   }
 
-  protected void loadCpoFunctionGroup(CpoFunctionGroup cpoFunctionGroup, CtFunctionGroup ctFunctionGroup) {
+  protected void loadCpoFunctionGroup(
+      CpoFunctionGroup cpoFunctionGroup, CtFunctionGroup ctFunctionGroup) {
     cpoFunctionGroup.setDescription(ctFunctionGroup.getDescription());
     if (ctFunctionGroup.isSetName()) {
       cpoFunctionGroup.setName(ctFunctionGroup.getName());

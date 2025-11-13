@@ -20,17 +20,16 @@
  */
 package org.synchronoss.cpo.jdbc;
 
+import static org.testng.Assert.*;
+
+import java.util.ArrayList;
+import java.util.Collection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.*;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
-
-import java.util.ArrayList;
-import java.util.Collection;
-
-import static org.testng.Assert.*;
 
 /**
  * RetrieveBeanTest is a test class for testing the JdbcAdapter class Constructors
@@ -43,11 +42,11 @@ public class RetrieveBeanTest {
   private CpoAdapter cpoAdapter = null;
   private ArrayList<ValueObject> al = new ArrayList<>();
 
-  public RetrieveBeanTest() {
-  }
+  public RetrieveBeanTest() {}
 
   /**
-   * <code>setUp</code> Load the datasource from the properties in the property file jdbc_en_US.properties
+   * <code>setUp</code> Load the datasource from the properties in the property file
+   * jdbc_en_US.properties
    *
    * @author david berry
    * @version '$Id: RetrieveBeanTest.java,v 1.6 2006/01/30 19:09:23 dberry Exp $'
@@ -86,7 +85,8 @@ public class RetrieveBeanTest {
     String method = "testLazyOpenAutoCloseLazyOpen:";
     Collection<ValueObject> col;
     CpoTrxAdapter cpoAdapter1 = null;
-    try (CpoTrxAdapter cpoAdapter2 = CpoAdapterFactoryManager.getCpoTrxAdapter(JdbcStatics.ADAPTER_CONTEXT_JDBC)) {
+    try (CpoTrxAdapter cpoAdapter2 =
+        CpoAdapterFactoryManager.getCpoTrxAdapter(JdbcStatics.ADAPTER_CONTEXT_JDBC)) {
       cpoAdapter1 = cpoAdapter2;
 
       // The adapter is closed until used
@@ -123,7 +123,6 @@ public class RetrieveBeanTest {
     }
     // The adapter should auto close
     assertTrue(cpoAdapter1.isClosed());
-
   }
 
   @Test
@@ -161,7 +160,8 @@ public class RetrieveBeanTest {
     String method = "testIsClosed:";
     Collection<ValueObject> col;
 
-    try (CpoTrxAdapter trx = CpoAdapterFactoryManager.getCpoTrxAdapter(JdbcStatics.ADAPTER_CONTEXT_JDBC)) {
+    try (CpoTrxAdapter trx =
+        CpoAdapterFactoryManager.getCpoTrxAdapter(JdbcStatics.ADAPTER_CONTEXT_JDBC)) {
       trx.isClosed();
       ValueObject valObj = ValueObjectFactory.createValueObject();
       col = trx.retrieveBeans(ValueObject.FG_LIST_NULL, valObj);
@@ -224,7 +224,8 @@ public class RetrieveBeanTest {
 
     try {
       ValueObject valObj = ValueObjectFactory.createValueObject();
-      crs = cpoAdapter.retrieveBeans(ValueObject.FG_LIST_NULL, valObj, valObj, null, null, null, 10);
+      crs =
+          cpoAdapter.retrieveBeans(ValueObject.FG_LIST_NULL, valObj, valObj, null, null, null, 10);
       for (ValueObject vo : crs) {
         if (vo != null) {
           count++;
@@ -245,7 +246,8 @@ public class RetrieveBeanTest {
 
     try {
       ValueObject valObj = ValueObjectFactory.createValueObject();
-      crs = cpoAdapter.retrieveBeans(ValueObject.FG_LIST_NULL, valObj, valObj, null, null, null, 11);
+      crs =
+          cpoAdapter.retrieveBeans(ValueObject.FG_LIST_NULL, valObj, valObj, null, null, null, 11);
       for (ValueObject vo : crs) {
         if (vo != null) {
           count++;
@@ -264,12 +266,13 @@ public class RetrieveBeanTest {
     CpoResultSet<ValueObject> crs;
     int count = 0;
 
-    try (CpoTrxAdapter trx = CpoAdapterFactoryManager.getCpoTrxAdapter(JdbcStatics.ADAPTER_CONTEXT_JDBC)) {
+    try (CpoTrxAdapter trx =
+        CpoAdapterFactoryManager.getCpoTrxAdapter(JdbcStatics.ADAPTER_CONTEXT_JDBC)) {
 
       ValueObject valObj = ValueObjectFactory.createValueObject();
       crs = trx.retrieveBeans(ValueObject.FG_LIST_NULL, valObj, valObj, null, null, null, 2);
 
-      //start this trx
+      // start this trx
       for (ValueObject vo : crs) {
         if (vo != null) {
           count++;
@@ -286,7 +289,7 @@ public class RetrieveBeanTest {
         logger.debug("Got the busy exception like expected");
       }
 
-      //cleanup the first trx
+      // cleanup the first trx
       for (ValueObject vo : crs) {
         if (vo != null) {
           count++;
@@ -307,7 +310,8 @@ public class RetrieveBeanTest {
 
     try {
       ValueObject valObj = ValueObjectFactory.createValueObject();
-      crs = cpoAdapter.retrieveBeans(ValueObject.FG_LIST_NULL, valObj, valObj, null, null, null, 20);
+      crs =
+          cpoAdapter.retrieveBeans(ValueObject.FG_LIST_NULL, valObj, valObj, null, null, null, 20);
       logger.debug("Returned from retrieveBeans");
       for (ValueObject vo : crs) {
         if (vo != null) {

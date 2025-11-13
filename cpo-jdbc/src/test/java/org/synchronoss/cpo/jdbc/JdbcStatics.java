@@ -21,7 +21,6 @@
 package org.synchronoss.cpo.jdbc;
 
 /**
- *
  * @author dberry
  */
 public interface JdbcStatics {

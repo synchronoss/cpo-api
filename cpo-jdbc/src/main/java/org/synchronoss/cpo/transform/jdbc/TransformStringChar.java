@@ -31,11 +31,8 @@ import org.synchronoss.cpo.jdbc.JdbcPreparedStatementFactory;
  */
 public class TransformStringChar implements JdbcCpoTransform<String, char[]> {
 
-    /**
-     * Convert a TransformStringChar
-     */
-  public TransformStringChar() {
-  }
+  /** Convert a TransformStringChar */
+  public TransformStringChar() {}
 
   /**
    * Transforms the datasource object into an object required by the class
@@ -59,12 +56,14 @@ public class TransformStringChar implements JdbcCpoTransform<String, char[]> {
    * @throws CpoException - an error occurred
    */
   @Override
-  public String transformOut(JdbcPreparedStatementFactory jpsf, char[] dataObj) throws CpoException {
+  public String transformOut(JdbcPreparedStatementFactory jpsf, char[] dataObj)
+      throws CpoException {
     return dataObj == null ? null : String.valueOf(dataObj);
   }
 
   @Override
-  public String transformOut(JdbcCallableStatementFactory jpsf, char[] dataObject) throws CpoException, UnsupportedOperationException {
+  public String transformOut(JdbcCallableStatementFactory jpsf, char[] dataObject)
+      throws CpoException, UnsupportedOperationException {
     throw new UnsupportedOperationException("Not supported yet.");
   }
 

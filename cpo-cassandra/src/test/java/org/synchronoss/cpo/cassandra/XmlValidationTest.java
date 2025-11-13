@@ -20,6 +20,10 @@
  */
 package org.synchronoss.cpo.cassandra;
 
+import static org.testng.Assert.fail;
+
+import java.io.IOException;
+import java.io.InputStream;
 import org.apache.xmlbeans.XmlException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,13 +32,7 @@ import org.synchronoss.cpo.helper.CpoClassLoader;
 import org.synchronoss.cpo.helper.XmlBeansHelper;
 import org.testng.annotations.Test;
 
-import java.io.IOException;
-import java.io.InputStream;
-
-import static org.testng.Assert.fail;
-
 /**
- *
  * @author dberry
  */
 public class XmlValidationTest {
@@ -44,38 +42,38 @@ public class XmlValidationTest {
   static final String BAD_CPO_CONFIG_XML = "/badConfig.xml";
 
   @Test
-  public void testBadXml(){
+  public void testBadXml() {
     InputStream is = CpoClassLoader.getResourceAsStream(BAD_CPO_CONFIG_XML);
 
     try {
       CpoConfigDocument configDoc = CpoConfigDocument.Factory.parse(is);
       String errMsg = XmlBeansHelper.validateXml(configDoc);
-      if (errMsg==null) {
+      if (errMsg == null) {
         fail("Should have received an error message");
       } else {
         logger.debug(errMsg);
       }
     } catch (IOException ioe) {
-        fail("Could not read config xml");
+      fail("Could not read config xml");
     } catch (XmlException xe) {
-        fail("Config xml was not well formed");
+      fail("Config xml was not well formed");
     }
   }
 
   @Test
-  public void testGoodXml(){
+  public void testGoodXml() {
     InputStream is = CpoClassLoader.getResourceAsStream(CPO_CONFIG_XML);
 
     try {
       CpoConfigDocument configDoc = CpoConfigDocument.Factory.parse(is);
       String errMsg = XmlBeansHelper.validateXml(configDoc);
-      if (errMsg!=null) {
+      if (errMsg != null) {
         fail("Should have received an error message:" + errMsg);
       }
     } catch (IOException ioe) {
-        fail("Could not read config xml");
+      fail("Could not read config xml");
     } catch (XmlException xe) {
-        fail("Config xml was not well formed");
+      fail("Config xml was not well formed");
     }
   }
 }

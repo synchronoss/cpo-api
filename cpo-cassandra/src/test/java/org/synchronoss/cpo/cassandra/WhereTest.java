@@ -20,6 +20,10 @@
  */
 package org.synchronoss.cpo.cassandra;
 
+import static org.testng.Assert.*;
+
+import java.util.ArrayList;
+import java.util.Collection;
 import org.synchronoss.cpo.CpoAdapter;
 import org.synchronoss.cpo.CpoAdapterFactoryManager;
 import org.synchronoss.cpo.CpoWhere;
@@ -28,11 +32,6 @@ import org.synchronoss.cpo.enums.Logical;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
-
-import java.util.ArrayList;
-import java.util.Collection;
-
-import static org.testng.Assert.*;
 
 /**
  * BlobTest is a test class for testing the JdbcAdapter class Constructors
@@ -44,11 +43,11 @@ public class WhereTest {
   private CpoAdapter cpoAdapter = null;
   private ArrayList<ValueObject> al = new ArrayList<>();
 
-  public WhereTest() {
-  }
+  public WhereTest() {}
 
   /**
-   * <code>setUp</code> Load the datasource from the properties in the property file jdbc_en_US.properties
+   * <code>setUp</code> Load the datasource from the properties in the property file
+   * jdbc_en_US.properties
    */
   @BeforeClass
   public void setUp() {
@@ -77,9 +76,7 @@ public class WhereTest {
     }
   }
 
-  /**
-   * DOCUMENT ME!
-   */
+  /** DOCUMENT ME! */
   @AfterClass
   public void tearDown() {
     String method = "tearDown:";
@@ -184,7 +181,8 @@ public class WhereTest {
 
       ArrayList<CpoWhere> wheres = new ArrayList<>();
       wheres.add(cw);
-      Collection<ValueObject> col = cpoAdapter.retrieveBeans("TestWhereRetrieve", valObj, wheres, null);
+      Collection<ValueObject> col =
+          cpoAdapter.retrieveBeans("TestWhereRetrieve", valObj, wheres, null);
 
       assertEquals(1, col.size(), "Col size is " + col.size());
     } catch (Exception e) {
@@ -209,7 +207,8 @@ public class WhereTest {
 
       ArrayList<CpoWhere> wheres = new ArrayList<>();
       wheres.add(cw);
-      Collection<ValueObject> col = cpoAdapter.retrieveBeans("TestWhereRetrieve", valObj, wheres, null);
+      Collection<ValueObject> col =
+          cpoAdapter.retrieveBeans("TestWhereRetrieve", valObj, wheres, null);
 
       assertEquals(1, col.size(), "Col size is " + col.size());
     } catch (Exception e) {
@@ -231,7 +230,8 @@ public class WhereTest {
 
       ArrayList<CpoWhere> wheres = new ArrayList<>();
       wheres.add(cw);
-      Collection<ValueObject> col = cpoAdapter.retrieveBeans("TestWhereRetrieve", valObj, wheres, null);
+      Collection<ValueObject> col =
+          cpoAdapter.retrieveBeans("TestWhereRetrieve", valObj, wheres, null);
 
       assertEquals(1, col.size(), "Col size is " + col.size());
     } catch (Exception e) {
@@ -254,7 +254,8 @@ public class WhereTest {
 
       ArrayList<CpoWhere> wheres = new ArrayList<>();
       wheres.add(cw);
-      Collection<ValueObject> coll = cpoAdapter.retrieveBeans("TestWhereRetrieve", valObj, wheres, null);
+      Collection<ValueObject> coll =
+          cpoAdapter.retrieveBeans("TestWhereRetrieve", valObj, wheres, null);
 
       assertEquals(3, coll.size(), "Collection size is " + coll.size());
     } catch (Exception e) {
@@ -280,7 +281,8 @@ public class WhereTest {
 
       ArrayList<CpoWhere> wheres = new ArrayList<>();
       wheres.add(cw);
-      Collection<ValueObject> coll = cpoAdapter.retrieveBeans("TestWhereRetrieve", valObj, wheres, null);
+      Collection<ValueObject> coll =
+          cpoAdapter.retrieveBeans("TestWhereRetrieve", valObj, wheres, null);
 
       assertEquals(3, coll.size(), "Collection size is " + coll.size());
     } catch (Exception e) {
@@ -306,7 +308,8 @@ public class WhereTest {
 
       ArrayList<CpoWhere> wheres = new ArrayList<>();
       wheres.add(cw);
-      Collection<ValueObject> coll = cpoAdapter.retrieveBeans("TestWhereRetrieve", valObj, wheres, null);
+      Collection<ValueObject> coll =
+          cpoAdapter.retrieveBeans("TestWhereRetrieve", valObj, wheres, null);
 
       assertEquals(3, coll.size(), "Collection size is " + coll.size());
     } catch (Exception e) {

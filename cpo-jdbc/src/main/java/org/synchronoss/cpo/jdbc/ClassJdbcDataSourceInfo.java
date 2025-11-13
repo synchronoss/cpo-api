@@ -20,13 +20,6 @@
  */
 package org.synchronoss.cpo.jdbc;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.synchronoss.cpo.CpoException;
-import org.synchronoss.cpo.helper.CpoClassLoader;
-import org.synchronoss.cpo.helper.ExceptionHelper;
-
-import javax.sql.*;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.sql.Connection;
@@ -34,21 +27,28 @@ import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.SortedMap;
+import javax.sql.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.synchronoss.cpo.CpoException;
+import org.synchronoss.cpo.helper.CpoClassLoader;
+import org.synchronoss.cpo.helper.ExceptionHelper;
 
 /**
- * Collects the info required to instantiate a DataSource from a JDBC Driver
- * Provides the DataSourceInfo factory method getDataSource which instantiates the DataSource
+ * Collects the info required to instantiate a DataSource from a JDBC Driver Provides the
+ * DataSourceInfo factory method getDataSource which instantiates the DataSource
  *
  * @author dberry
  */
-public class ClassJdbcDataSourceInfo extends AbstractJdbcDataSource implements ConnectionEventListener {
+public class ClassJdbcDataSourceInfo extends AbstractJdbcDataSource
+    implements ConnectionEventListener {
 
   private Logger logger = LoggerFactory.getLogger(this.getClass());
   private ConnectionPoolDataSource poolDataSource = null;
   private String className = null;
   private SortedMap<String, String> properties = null;
   // Make sure DataSource creation is thread safe.
-  final private Object LOCK = new Object();
+  private final Object LOCK = new Object();
   private Queue<PooledConnection> freeConnections = new LinkedList<>();
   private Queue<PooledConnection> usedConnections = new LinkedList<>();
 
@@ -60,8 +60,8 @@ public class ClassJdbcDataSourceInfo extends AbstractJdbcDataSource implements C
    */
   public ClassJdbcDataSourceInfo(String className, SortedMap<String, String> properties) {
     super(className, properties);
-    this.className=className;
-    this.properties=properties;
+    this.className = className;
+    this.properties = properties;
   }
 
   @Override
@@ -107,12 +107,15 @@ public class ClassJdbcDataSourceInfo extends AbstractJdbcDataSource implements C
       } else {
         throw new CpoException(className + "is not a DataSource");
       }
-      if (properties !=null)
-        setClassProperties(ds,properties);
+      if (properties != null) setClassProperties(ds, properties);
     } catch (ClassNotFoundException cnfe) {
       throw new CpoException("Could Not Find Class: " + className, cnfe);
     } catch (InstantiationException ie) {
-      throw new CpoException("Could Not Instantiate Class: " + className + ":" + ExceptionHelper.getLocalizedMessage(ie));
+      throw new CpoException(
+          "Could Not Instantiate Class: "
+              + className
+              + ":"
+              + ExceptionHelper.getLocalizedMessage(ie));
     } catch (IllegalAccessException iae) {
       throw new CpoException("Could Not Access Class: " + className, iae);
     }
@@ -168,12 +171,18 @@ public class ClassJdbcDataSourceInfo extends AbstractJdbcDataSource implements C
 
   private void setObjectProperty(Object obj, String key, String value) {
     String methodName = "set" + key.substring(0, 1).toUpperCase() + key.substring(1);
-    logger.debug("Calling "+methodName+"("+value+")");
+    logger.debug("Calling " + methodName + "(" + value + ")");
     try {
       Method setter = obj.getClass().getMethod(methodName, String.class);
       setter.invoke(obj, value);
     } catch (NoSuchMethodException nsme) {
-      logger.error("=========>>> Could not find setter Method:" + methodName + " for property:" + key + " please check the java docs for " + obj.getClass().getName());
+      logger.error(
+          "=========>>> Could not find setter Method:"
+              + methodName
+              + " for property:"
+              + key
+              + " please check the java docs for "
+              + obj.getClass().getName());
     } catch (InvocationTargetException ite) {
       logger.error("Error Invoking setter Method:" + methodName, ite);
     } catch (IllegalAccessException iae) {

@@ -20,6 +20,10 @@
  */
 package org.synchronoss.cpo.jdbc;
 
+import static org.testng.Assert.*;
+
+import java.sql.Timestamp;
+import java.util.ArrayList;
 import org.synchronoss.cpo.CpoAdapter;
 import org.synchronoss.cpo.CpoAdapterFactoryManager;
 import org.synchronoss.cpo.jdbc.meta.JdbcCpoMetaDescriptor;
@@ -27,11 +31,6 @@ import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
-
-import java.sql.Timestamp;
-import java.util.ArrayList;
-
-import static org.testng.Assert.*;
 
 /**
  * InheritanceTest is a test class for testing the polymorphic capabilites of CPO
@@ -45,25 +44,24 @@ public class InheritanceTest {
   private JdbcCpoMetaDescriptor metaDescriptor = null;
   private boolean isSupportsMillis = true;
 
-  public InheritanceTest() {
-
-  }
+  public InheritanceTest() {}
 
   /**
-   * <code>setUp</code> Load the datasource from the properties in the property file jdbc_en_US.properties
+   * <code>setUp</code> Load the datasource from the properties in the property file
+   * jdbc_en_US.properties
    *
    * @author david berry
    * @version '$Id: InsertObjectTest.java,v 1.3 2006/01/30 19:09:23 dberry Exp $'
    */
-  @Parameters({ "db.millisupport" })
+  @Parameters({"db.millisupport"})
   @BeforeClass
   public void setUp(boolean milliSupport) {
-      String method = "setUp:";
-      isSupportsMillis  = milliSupport;
+    String method = "setUp:";
+    isSupportsMillis = milliSupport;
 
-      try {
+    try {
       cpoAdapter = CpoAdapterFactoryManager.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_JDBC);
-      assertNotNull(cpoAdapter,method + "cpoAdapter is null");
+      assertNotNull(cpoAdapter, method + "cpoAdapter is null");
       metaDescriptor = (JdbcCpoMetaDescriptor) cpoAdapter.getCpoMetaDescriptor();
     } catch (Exception e) {
       fail(method + e.getMessage());
@@ -97,18 +95,17 @@ public class InheritanceTest {
     }
 
     try {
-      ChildValueObject vo = cpoAdapter.retrieveBean(ValueObject.FG_RETRIEVE_NULL, valObj, valObj, null, null);
-      assertEquals(vo.getId(), valObj.getId(),"Ids do not match");
-      assertEquals(vo.getAttrInteger(), valObj.getAttrInteger(),"Integers do not match");
+      ChildValueObject vo =
+          cpoAdapter.retrieveBean(ValueObject.FG_RETRIEVE_NULL, valObj, valObj, null, null);
+      assertEquals(vo.getId(), valObj.getId(), "Ids do not match");
+      assertEquals(vo.getAttrInteger(), valObj.getAttrInteger(), "Integers do not match");
       assertEquals(vo.getAttrVarChar(), valObj.getAttrVarChar(), "Strings do not match");
-      assertEquals(vo.getAttrDatetime(), valObj.getAttrDatetime(),"Timestamps do not match");
-      assertTrue(vo.getAttrBit(),"boolean not stored correctly");
+      assertEquals(vo.getAttrDatetime(), valObj.getAttrDatetime(), "Timestamps do not match");
+      assertTrue(vo.getAttrBit(), "boolean not stored correctly");
 
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
-
-
   }
 
   @AfterClass

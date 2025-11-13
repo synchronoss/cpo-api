@@ -31,8 +31,7 @@ public class CpoFunctionGroupBean implements java.io.Serializable {
   private String type;
   private String description;
 
-  public CpoFunctionGroupBean() {
-  }
+  public CpoFunctionGroupBean() {}
 
   public String getDescription() {
     return description;
@@ -78,7 +77,9 @@ public class CpoFunctionGroupBean implements java.io.Serializable {
     if (getType() != null ? !getType().equals(that.getType()) : that.getType() != null) {
       return false;
     }
-    if (getDescription() != null ? !getDescription().equals(that.getDescription()) : that.getDescription() != null) {
+    if (getDescription() != null
+        ? !getDescription().equals(that.getDescription())
+        : that.getDescription() != null) {
       return false;
     }
 

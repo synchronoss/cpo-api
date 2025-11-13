@@ -20,42 +20,52 @@
  */
 package org.synchronoss.cpo.cassandra.meta;
 
+import java.lang.reflect.InvocationTargetException;
 import org.synchronoss.cpo.meta.MethodMapEntry;
 import org.synchronoss.cpo.meta.MethodMapper;
 import org.synchronoss.cpo.meta.ResultSetCpoData;
 import org.synchronoss.cpo.meta.domain.CpoAttribute;
 
-import java.lang.reflect.InvocationTargetException;
-
-/**
- * Manages data transfer between the cpo objects and the result set
- */
+/** Manages data transfer between the cpo objects and the result set */
 public class CassandraResultSetCpoData extends ResultSetCpoData {
 
-    /**
-     * Constructs the CassandraResultSetCpoData
-     * @param methodMapper The MethodMapper
-     * @param rs The result set
-     * @param cpoAttribute The CpoAttribute
-     * @param index The index of the CpoAttribute in the result set
-     */
-  public CassandraResultSetCpoData(MethodMapper<?> methodMapper, Object rs, CpoAttribute cpoAttribute, int index) {
+  /**
+   * Constructs the CassandraResultSetCpoData
+   *
+   * @param methodMapper The MethodMapper
+   * @param rs The result set
+   * @param cpoAttribute The CpoAttribute
+   * @param index The index of the CpoAttribute in the result set
+   */
+  public CassandraResultSetCpoData(
+      MethodMapper<?> methodMapper, Object rs, CpoAttribute cpoAttribute, int index) {
     super(methodMapper, rs, cpoAttribute, index);
   }
 
-  protected Object invokeGetterImpl(CpoAttribute cpoAttribute, MethodMapEntry<?, ?> methodMapEntry) throws IllegalAccessException, InvocationTargetException {
+  protected Object invokeGetterImpl(CpoAttribute cpoAttribute, MethodMapEntry<?, ?> methodMapEntry)
+      throws IllegalAccessException, InvocationTargetException {
     CassandraCpoAttribute cassandraCpoAttribute = (CassandraCpoAttribute) cpoAttribute;
 
-    Object javaObject=null;
+    Object javaObject = null;
     switch (methodMapEntry.getMethodType()) {
       case CassandraMethodMapEntry.METHOD_TYPE_BASIC:
         javaObject = methodMapEntry.getRsGetter().invoke(getRs(), getIndex());
         break;
       case CassandraMethodMapEntry.METHOD_TYPE_ONE:
-        javaObject = methodMapEntry.getRsGetter().invoke(getRs(), getIndex(), cassandraCpoAttribute.getValueTypeClass());
+        javaObject =
+            methodMapEntry
+                .getRsGetter()
+                .invoke(getRs(), getIndex(), cassandraCpoAttribute.getValueTypeClass());
         break;
       case CassandraMethodMapEntry.METHOD_TYPE_TWO:
-        javaObject = methodMapEntry.getRsGetter().invoke(getRs(), getIndex(), cassandraCpoAttribute.getKeyTypeClass(), cassandraCpoAttribute.getValueTypeClass());
+        javaObject =
+            methodMapEntry
+                .getRsGetter()
+                .invoke(
+                    getRs(),
+                    getIndex(),
+                    cassandraCpoAttribute.getKeyTypeClass(),
+                    cassandraCpoAttribute.getValueTypeClass());
         break;
     }
     return javaObject;

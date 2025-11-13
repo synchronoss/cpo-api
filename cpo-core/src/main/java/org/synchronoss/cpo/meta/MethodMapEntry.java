@@ -27,12 +27,11 @@ import java.lang.reflect.Method;
  *
  * @author david berry
  */
-public class MethodMapEntry<J,D> implements java.io.Serializable, Cloneable {
+public class MethodMapEntry<J, D> implements java.io.Serializable, Cloneable {
 
-  /**
-   * Version Id for this class.
-   */
+  /** Version Id for this class. */
   private static final long serialVersionUID = 1L;
+
   public static final int METHOD_TYPE_BASIC = 0;
   private Class<J> javaClass_ = null;
   private Class<D> datasourceMethodClass = null;
@@ -41,15 +40,19 @@ public class MethodMapEntry<J,D> implements java.io.Serializable, Cloneable {
   private int methodType = METHOD_TYPE_BASIC;
 
   @SuppressWarnings("unused")
-  private MethodMapEntry() {
-  }
+  private MethodMapEntry() {}
 
-  public MethodMapEntry(int methodType, Class<J> javaClass, Class<D> datasourceMethodClass, Method rsGetter, Method bsSetter) {
-      this.methodType = methodType;
-      this.javaClass_ = javaClass;
-      this.datasourceMethodClass = datasourceMethodClass;
-      this.bsSetter = bsSetter;
-      this.rsGetter = rsGetter;
+  public MethodMapEntry(
+      int methodType,
+      Class<J> javaClass,
+      Class<D> datasourceMethodClass,
+      Method rsGetter,
+      Method bsSetter) {
+    this.methodType = methodType;
+    this.javaClass_ = javaClass;
+    this.datasourceMethodClass = datasourceMethodClass;
+    this.bsSetter = bsSetter;
+    this.rsGetter = rsGetter;
   }
 
   public Class<J> getJavaClass() {

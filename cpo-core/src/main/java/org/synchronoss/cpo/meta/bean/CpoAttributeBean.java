@@ -34,8 +34,7 @@ public class CpoAttributeBean implements java.io.Serializable {
   private String transformClassName;
   private String description;
 
-  public CpoAttributeBean() {
-  }
+  public CpoAttributeBean() {}
 
   public String getDataName() {
     return dataName;
@@ -99,22 +98,34 @@ public class CpoAttributeBean implements java.io.Serializable {
 
     CpoAttributeBean that = (CpoAttributeBean) o;
 
-    if (getJavaName() != null ? !getJavaName().equals(that.getJavaName()) : that.getJavaName() != null) {
+    if (getJavaName() != null
+        ? !getJavaName().equals(that.getJavaName())
+        : that.getJavaName() != null) {
       return false;
     }
-    if (getJavaType() != null ? !getJavaType().equals(that.getJavaType()) : that.getJavaType() != null) {
+    if (getJavaType() != null
+        ? !getJavaType().equals(that.getJavaType())
+        : that.getJavaType() != null) {
       return false;
     }
-    if (getDataName() != null ? !getDataName().equals(that.getDataName()) : that.getDataName() != null) {
+    if (getDataName() != null
+        ? !getDataName().equals(that.getDataName())
+        : that.getDataName() != null) {
       return false;
     }
-    if (getDataType() != null ? !getDataType().equals(that.getDataType()) : that.getDataType() != null) {
+    if (getDataType() != null
+        ? !getDataType().equals(that.getDataType())
+        : that.getDataType() != null) {
       return false;
     }
-    if (getTransformClassName() != null ? !getTransformClassName().equals(that.getTransformClassName()) : that.getTransformClassName() != null) {
+    if (getTransformClassName() != null
+        ? !getTransformClassName().equals(that.getTransformClassName())
+        : that.getTransformClassName() != null) {
       return false;
     }
-    if (getDescription() != null ? !getDescription().equals(that.getDescription()) : that.getDescription() != null) {
+    if (getDescription() != null
+        ? !getDescription().equals(that.getDescription())
+        : that.getDescription() != null) {
       return false;
     }
 
@@ -129,7 +140,8 @@ public class CpoAttributeBean implements java.io.Serializable {
     result = 31 * result + (getJavaType() != null ? getJavaType().hashCode() : 0);
     result = 31 * result + (getDataName() != null ? getDataName().hashCode() : 0);
     result = 31 * result + (getDataType() != null ? getDataType().hashCode() : 0);
-    result = 31 * result + (getTransformClassName() != null ? getTransformClassName().hashCode() : 0);
+    result =
+        31 * result + (getTransformClassName() != null ? getTransformClassName().hashCode() : 0);
     result = 31 * result + (getDescription() != null ? getDescription().hashCode() : 0);
     return result;
   }

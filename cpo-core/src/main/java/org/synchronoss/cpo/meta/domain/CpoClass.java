@@ -20,6 +20,10 @@
  */
 package org.synchronoss.cpo.meta.domain;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.CpoException;
@@ -31,35 +35,27 @@ import org.synchronoss.cpo.helper.ExceptionHelper;
 import org.synchronoss.cpo.meta.CpoMetaDescriptor;
 import org.synchronoss.cpo.meta.bean.CpoClassBean;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
-
-public abstract class CpoClass extends CpoClassBean implements Comparable<CpoClass>, MetaDFVisitable {
-    /**
-     * Version Id for this class.
-     */
-    private static final long serialVersionUID = 1L;
+public abstract class CpoClass extends CpoClassBean
+    implements Comparable<CpoClass>, MetaDFVisitable {
+  /** Version Id for this class. */
+  private static final long serialVersionUID = 1L;
 
   private static final Logger logger = LoggerFactory.getLogger(CpoClass.class);
   private Class<?> metaClass = null;
-  /**
-   * javaMap contains a Map of CpoAttribute Objects the key is the javaName of the attribute
-   */
+
+  /** javaMap contains a Map of CpoAttribute Objects the key is the javaName of the attribute */
   private Map<String, CpoAttribute> javaMap = new HashMap<>();
-  /**
-   * dataMap contains a Map of CpoAttribute Objects the key is the dataName of the attribute
-   */
+
+  /** dataMap contains a Map of CpoAttribute Objects the key is the dataName of the attribute */
   private Map<String, CpoAttribute> dataMap = new HashMap<>();
+
   /**
-   * functionGroups is a hashMap that contains a hashMap of CpoFunctionGroup Lists that are used by this object to persist and
-   * retrieve it into a datasource.
+   * functionGroups is a hashMap that contains a hashMap of CpoFunctionGroup Lists that are used by
+   * this object to persist and retrieve it into a datasource.
    */
   private Map<String, CpoFunctionGroup> functionGroups = new HashMap<>();
 
-  public CpoClass() {
-  }
+  public CpoClass() {}
 
   public Class<?> getMetaClass() {
     return metaClass;
@@ -77,7 +73,8 @@ public abstract class CpoClass extends CpoClassBean implements Comparable<CpoCla
 
   public void addAttribute(CpoAttribute cpoAttribute) {
     if (cpoAttribute != null) {
-      logger.debug("Adding Attribute: " + cpoAttribute.getJavaName() + ":" + cpoAttribute.getDataName());
+      logger.debug(
+          "Adding Attribute: " + cpoAttribute.getJavaName() + ":" + cpoAttribute.getDataName());
       javaMap.put(cpoAttribute.getJavaName(), cpoAttribute);
       addDataNameToMap(cpoAttribute.getDataName(), cpoAttribute);
     }
@@ -85,7 +82,8 @@ public abstract class CpoClass extends CpoClassBean implements Comparable<CpoCla
 
   public void removeAttribute(CpoAttribute cpoAttribute) {
     if (cpoAttribute != null) {
-      logger.debug("Removing Attribute: " + cpoAttribute.getJavaName() + ":" + cpoAttribute.getDataName());
+      logger.debug(
+          "Removing Attribute: " + cpoAttribute.getJavaName() + ":" + cpoAttribute.getDataName());
       javaMap.remove(cpoAttribute.getJavaName());
       removeDataNameFromMap(cpoAttribute.getDataName());
     }
@@ -177,21 +175,22 @@ public abstract class CpoClass extends CpoClassBean implements Comparable<CpoCla
     }
   }
 
-  synchronized public void loadRunTimeInfo(CpoMetaDescriptor metaDescriptor) throws CpoException {
-    if (metaClass==null) {
+  public synchronized void loadRunTimeInfo(CpoMetaDescriptor metaDescriptor) throws CpoException {
+    if (metaClass == null) {
       Class<?> tmpMetaClass = null;
 
       try {
-        logger.debug("Loading runtimeinfo for "+getName());
+        logger.debug("Loading runtimeinfo for " + getName());
         tmpMetaClass = CpoClassLoader.forName(getName());
       } catch (ClassNotFoundException cnfe) {
-        throw new CpoException("Class not found: " + getName() + ": " + ExceptionHelper.getLocalizedMessage(cnfe));
+        throw new CpoException(
+            "Class not found: " + getName() + ": " + ExceptionHelper.getLocalizedMessage(cnfe));
       }
 
       for (CpoAttribute attribute : javaMap.values()) {
         attribute.loadRunTimeInfo(metaDescriptor, tmpMetaClass);
       }
-      logger.debug("Loaded runtimeinfo for "+getName());
+      logger.debug("Loaded runtimeinfo for " + getName());
 
       metaClass = tmpMetaClass;
     }

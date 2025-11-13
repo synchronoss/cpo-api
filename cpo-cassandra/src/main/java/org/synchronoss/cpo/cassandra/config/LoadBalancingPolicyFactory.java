@@ -24,26 +24,27 @@ import com.datastax.driver.core.policies.LoadBalancingPolicy;
 
 /**
  * Factory to construct a LoadBalancingPolicy
+ *
  * @author dberry
  */
 public abstract class LoadBalancingPolicyFactory {
 
-    /**
-     * Constructs a LoadBalancingPolicyFactory
-     */
-    public LoadBalancingPolicyFactory(){}
+  /** Constructs a LoadBalancingPolicyFactory */
+  public LoadBalancingPolicyFactory() {}
 
-    /**
-     * Get the factory method name
-     * @return The method name
-     */
+  /**
+   * Get the factory method name
+   *
+   * @return The method name
+   */
   public String getFactoryMethodName() {
     return "createLoadBalancingPolicy";
   }
 
-    /**
-     * Create the LoadBalancingPolicy
-     * @return The LoadBalancingPolicy
-     */
+  /**
+   * Create the LoadBalancingPolicy
+   *
+   * @return The LoadBalancingPolicy
+   */
   public abstract LoadBalancingPolicy createLoadBalancingPolicy();
 }

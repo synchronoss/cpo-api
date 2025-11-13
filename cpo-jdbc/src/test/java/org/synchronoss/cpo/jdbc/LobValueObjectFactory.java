@@ -24,6 +24,7 @@ public class LobValueObjectFactory {
   public static LobValueObject createLobValueObject() {
     return new LobValueObjectBean();
   }
+
   public static LobValueObject createLobValueObject(int id, byte[] blob, char[] clob) {
     LobValueObject lobValueObject = new LobValueObjectBean();
     lobValueObject.setLobId(id);

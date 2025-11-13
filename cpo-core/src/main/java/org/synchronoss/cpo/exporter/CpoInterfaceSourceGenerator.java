@@ -50,7 +50,7 @@ public class CpoInterfaceSourceGenerator implements MetaVisitor {
   /**
    * Resets all of the buffers.
    *
-   * This is needed if you intend to reuse the visitor. This is always called by visit(CpoClass)
+   * <p>This is needed if you intend to reuse the visitor. This is always called by visit(CpoClass)
    */
   private void reset() {
     attributeStatics = new StringBuilder();
@@ -86,9 +86,7 @@ public class CpoInterfaceSourceGenerator implements MetaVisitor {
     return source.toString();
   }
 
-  /**
-   * Returns the name of the class to use
-   */
+  /** Returns the name of the class to use */
   protected String generateInterfaceName(CpoClass cpoClass) {
     String className = cpoClass.getName();
     if (className.lastIndexOf(".") != -1) {
@@ -96,7 +94,6 @@ public class CpoInterfaceSourceGenerator implements MetaVisitor {
     }
     return className;
   }
-
 
   @Override
   public void visit(CpoClass cpoClass) {
@@ -138,13 +135,20 @@ public class CpoInterfaceSourceGenerator implements MetaVisitor {
     String attClassName = cpoAttribute.getJavaType();
 
     // generate attribute statics
-    attributeStatics.append("  public final static String " + ATTR_PREFIX + attName.toUpperCase() + " = \"" + attName + "\";\n");
+    attributeStatics.append(
+        "  public final static String "
+            + ATTR_PREFIX
+            + attName.toUpperCase()
+            + " = \""
+            + attName
+            + "\";\n");
 
     // generate getter
     gettersSetters.append("  public " + attClassName + " " + getterName + ";\n");
 
     // generate setter
-    gettersSetters.append("  public void " + setterName + "(" + attClassName + " " + attName + ");\n");
+    gettersSetters.append(
+        "  public void " + setterName + "(" + attClassName + " " + attName + ");\n");
     gettersSetters.append("\n");
   }
 
@@ -163,7 +167,8 @@ public class CpoInterfaceSourceGenerator implements MetaVisitor {
     if (cpoFunctionGroup.getName() == null) {
       functionGroupStatics.append("  public final static String " + staticName + " = null;\n");
     } else {
-      functionGroupStatics.append("  public final static String " + staticName + " = \"" + fgName + "\";\n");
+      functionGroupStatics.append(
+          "  public final static String " + staticName + " = \"" + fgName + "\";\n");
     }
   }
 

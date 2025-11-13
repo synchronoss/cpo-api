@@ -20,32 +20,29 @@
  */
 package org.synchronoss.cpo;
 
+import java.util.Collection;
+import java.util.List;
 import org.synchronoss.cpo.enums.Comparison;
 import org.synchronoss.cpo.enums.Logical;
 import org.synchronoss.cpo.meta.CpoMetaDescriptor;
 import org.synchronoss.cpo.meta.domain.CpoAttribute;
 
-import java.util.Collection;
-import java.util.List;
-
 /**
- * <p>
- * CpoAdapter is an interface for a set of routines that are responsible for Creating, Retrieving, Updating, and
- * Deleting (CRUD) value objects within a datasource.
- * </p><p>
- * CpoAdapter is an interface that acts as a common facade for different datasources. It is conceivable that an
- * CpoAdapter can be implemented for JDBC, CSV, XML, LDAP, and more datasources producing classes such as
- * JdbcCpoAdapter, CsvCpoAdapter, XmlCpoAdapter, LdapCpoAdapter, etc.
- * </p>
+ * CpoAdapter is an interface for a set of routines that are responsible for Creating, Retrieving,
+ * Updating, and Deleting (CRUD) value objects within a datasource.
+ *
+ * <p>CpoAdapter is an interface that acts as a common facade for different datasources. It is
+ * conceivable that an CpoAdapter can be implemented for JDBC, CSV, XML, LDAP, and more datasources
+ * producing classes such as JdbcCpoAdapter, CsvCpoAdapter, XmlCpoAdapter, LdapCpoAdapter, etc.
+ *
  * @author david berry
  */
 public interface CpoAdapter extends java.io.Serializable {
 
   /**
-   * <p>
-   * Creates the Object in the datasource. The assumption is that the object does not exist in the datasource. This
-   * method creates and stores the object in the datasource.
-   * </p>
+   * Creates the Object in the datasource. The assumption is that the object does not exist in the
+   * datasource. This method creates and stores the object in the datasource.
+   *
    * <pre>Example:
    * {@code
    * class SomeObject so = new SomeObject();
@@ -69,18 +66,17 @@ public interface CpoAdapter extends java.io.Serializable {
    * </pre>
    *
    * @param <T> The type of the POJO
-   * @param obj This is an object that has been defined within the metadata of the datasource. If the class is not
-   *            defined an exception will be thrown.
+   * @param obj This is an object that has been defined within the metadata of the datasource. If
+   *     the class is not defined an exception will be thrown.
    * @return The number of objects created in the datasource
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
   <T> long insertObject(T obj) throws CpoException;
 
   /**
-   * <p>
-   * Creates the Object in the datasource. The assumption is that the object does not exist in the datasource. This
-   * method creates and stores the object in the datasource
-   * </p>
+   * Creates the Object in the datasource. The assumption is that the object does not exist in the
+   * datasource. This method creates and stores the object in the datasource
+   *
    * <pre>Example:
    * {@code
    *
@@ -107,20 +103,20 @@ public interface CpoAdapter extends java.io.Serializable {
    * </pre>
    *
    * @param <T> The type of the POJO
-   * @param name The String name of the CREATE Function Group that will be used to create the object in the datasource.
-   *             null signifies that the default rules will be used which is equivalent to insertObject(Object obj);
-   * @param obj  This is an object that has been defined within the metadata of the datasource. If the class is not
-   *             defined an exception will be thrown.
+   * @param name The String name of the CREATE Function Group that will be used to create the object
+   *     in the datasource. null signifies that the default rules will be used which is equivalent
+   *     to insertObject(Object obj);
+   * @param obj This is an object that has been defined within the metadata of the datasource. If
+   *     the class is not defined an exception will be thrown.
    * @return The number of objects created in the datasource
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
   <T> long insertObject(String name, T obj) throws CpoException;
 
   /**
-   * <p>
-   * Creates the Object in the datasource. The assumption is that the object does not exist in the datasource. This
-   * method creates and stores the object in the datasource
-   * </p>
+   * Creates the Object in the datasource. The assumption is that the object does not exist in the
+   * datasource. This method creates and stores the object in the datasource
+   *
    * <pre>Example:
    * {@code
    * class SomeObject so = new SomeObject();
@@ -145,32 +141,39 @@ public interface CpoAdapter extends java.io.Serializable {
    * }
    * </pre>
    *
-   * @param <T>               The type of the POJO
-   * @param name              The String name of the CREATE Function Group that will be used to create the object in the datasource.
-   *                          null signifies that the default rules will be used which is equivalent to insertObject(Object obj);
-   * @param obj               This is an object that has been defined within the metadata of the datasource. If the class is not
-   *                          defined an exception will be thrown.
-   * @param wheres            A collection of CpoWhere beans that define the constraints that should be used when retrieving beans
-   * @param orderBy           The CpoOrderBy bean that defines the order in which beans should be returned
-   * @param nativeExpressions Native expression that will be used to augment the expression stored in the meta data. This
-   *                          text will be embedded at run-time
+   * @param <T> The type of the POJO
+   * @param name The String name of the CREATE Function Group that will be used to create the object
+   *     in the datasource. null signifies that the default rules will be used which is equivalent
+   *     to insertObject(Object obj);
+   * @param obj This is an object that has been defined within the metadata of the datasource. If
+   *     the class is not defined an exception will be thrown.
+   * @param wheres A collection of CpoWhere beans that define the constraints that should be used
+   *     when retrieving beans
+   * @param orderBy The CpoOrderBy bean that defines the order in which beans should be returned
+   * @param nativeExpressions Native expression that will be used to augment the expression stored
+   *     in the meta data. This text will be embedded at run-time
    * @return The number of objects created in the datasource
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
-  <T> long insertObject(String name, T obj, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeFunction> nativeExpressions) throws CpoException;
+  <T> long insertObject(
+      String name,
+      T obj,
+      Collection<CpoWhere> wheres,
+      Collection<CpoOrderBy> orderBy,
+      Collection<CpoNativeFunction> nativeExpressions)
+      throws CpoException;
 
   /**
-   * <p>
-   * Iterates through a collection of Objects, creates and stores them in the datasource. The assumption is that the
-   * objects contained in the collection do not exist in the datasource.
-   * </p><p>
-   * This method creates and stores the objects in the datasource. The objects in the collection will be treated as one
-   * transaction, assuming the datasource supports transactions.
-   * </p><p>
-   * This means that if one of the objects fail being created in the datasource then the CpoAdapter will stop processing
-   * the remainder of the collection and rollback all the objects created thus far. Rollback is on the underlying
-   * datasource's support of rollback.
-   * </p>
+   * Iterates through a collection of Objects, creates and stores them in the datasource. The
+   * assumption is that the objects contained in the collection do not exist in the datasource.
+   *
+   * <p>This method creates and stores the objects in the datasource. The objects in the collection
+   * will be treated as one transaction, assuming the datasource supports transactions.
+   *
+   * <p>This means that if one of the objects fail being created in the datasource then the
+   * CpoAdapter will stop processing the remainder of the collection and rollback all the objects
+   * created thus far. Rollback is on the underlying datasource's support of rollback.
+   *
    * <pre>Example:
    * {@code
    * class SomeObject so = null;
@@ -200,24 +203,24 @@ public interface CpoAdapter extends java.io.Serializable {
    * </pre>
    *
    * @param <T> The type of the POJO
-   * @param coll This is a collection of objects that have been defined within the metadata of the datasource. If the
-   *             class is not defined an exception will be thrown.
+   * @param coll This is a collection of objects that have been defined within the metadata of the
+   *     datasource. If the class is not defined an exception will be thrown.
    * @return The number of objects created in the datasource
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
   <T> long insertObjects(Collection<T> coll) throws CpoException;
 
   /**
-   * <p>
-   * Iterates through a collection of Objects, creates and stores them in the datasource. The assumption is that the
-   * objects contained in the collection do not exist in the datasource.
-   * </p><p>
-   * This method creates and stores the objects in the datasource. The objects in the collection will be treated as one
-   * transaction, assuming the datasource supports transactions.
-   * </p><p>
-   * This means that if one of the objects fail being created in the datasource then the CpoAdapter should stop
-   * processing the remainder of the collection, and if supported, rollback all the objects created thus far.
-   * </p>
+   * Iterates through a collection of Objects, creates and stores them in the datasource. The
+   * assumption is that the objects contained in the collection do not exist in the datasource.
+   *
+   * <p>This method creates and stores the objects in the datasource. The objects in the collection
+   * will be treated as one transaction, assuming the datasource supports transactions.
+   *
+   * <p>This means that if one of the objects fail being created in the datasource then the
+   * CpoAdapter should stop processing the remainder of the collection, and if supported, rollback
+   * all the objects created thus far.
+   *
    * <pre>Example:
    * {@code
    * class SomeObject so = null;
@@ -246,26 +249,26 @@ public interface CpoAdapter extends java.io.Serializable {
    * </pre>
    *
    * @param <T> The type of the POJO
-   * @param name The String name of the CREATE Function Group that will be used to create the object in the datasource.
-   *             null signifies that the default rules will be used.
-   * @param coll This is a collection of objects that have been defined within the metadata of the datasource. If the
-   *             class is not defined an exception will be thrown.
+   * @param name The String name of the CREATE Function Group that will be used to create the object
+   *     in the datasource. null signifies that the default rules will be used.
+   * @param coll This is a collection of objects that have been defined within the metadata of the
+   *     datasource. If the class is not defined an exception will be thrown.
    * @return The number of objects created in the datasource
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
   <T> long insertObjects(String name, Collection<T> coll) throws CpoException;
 
   /**
-   * <p>
-   * Iterates through a collection of Objects, creates and stores them in the datasource. The assumption is that the
-   * objects contained in the collection do not exist in the datasource.
-   * </p><p>
-   * This method creates and stores the objects in the datasource. The objects in the collection will be treated as one
-   * transaction, assuming the datasource supports transactions.
-   * </p><p>
-   * This means that if one of the objects fail being created in the datasource then the CpoAdapter should stop
-   * processing the remainder of the collection, and if supported, rollback all the objects created thus far.
-   * </p>
+   * Iterates through a collection of Objects, creates and stores them in the datasource. The
+   * assumption is that the objects contained in the collection do not exist in the datasource.
+   *
+   * <p>This method creates and stores the objects in the datasource. The objects in the collection
+   * will be treated as one transaction, assuming the datasource supports transactions.
+   *
+   * <p>This means that if one of the objects fail being created in the datasource then the
+   * CpoAdapter should stop processing the remainder of the collection, and if supported, rollback
+   * all the objects created thus far.
+   *
    * <pre>Example:
    * {@code
    * class SomeObject so = null;
@@ -293,25 +296,31 @@ public interface CpoAdapter extends java.io.Serializable {
    * }
    * </pre>
    *
-   * @param <T>               The type of the POJO
-   * @param name              The String name of the CREATE Function Group that will be used to create the object in the datasource.
-   *                          null signifies that the default rules will be used.
-   * @param coll              This is a collection of objects that have been defined within the metadata of the datasource. If the
-   *                          class is not defined an exception will be thrown.
-   * @param wheres            A collection of CpoWhere beans that define the constraints that should be used when retrieving beans
-   * @param orderBy           The CpoOrderBy bean that defines the order in which beans should be returned
-   * @param nativeExpressions Native expression that will be used to augment the expression stored in the meta data. This
-   *                          text will be embedded at run-time
+   * @param <T> The type of the POJO
+   * @param name The String name of the CREATE Function Group that will be used to create the object
+   *     in the datasource. null signifies that the default rules will be used.
+   * @param coll This is a collection of objects that have been defined within the metadata of the
+   *     datasource. If the class is not defined an exception will be thrown.
+   * @param wheres A collection of CpoWhere beans that define the constraints that should be used
+   *     when retrieving beans
+   * @param orderBy The CpoOrderBy bean that defines the order in which beans should be returned
+   * @param nativeExpressions Native expression that will be used to augment the expression stored
+   *     in the meta data. This text will be embedded at run-time
    * @return The number of objects created in the datasource
    * @throws CpoException Thrown if there are errors accessing the datasource
-  */
-  <T> long insertObjects(String name, Collection<T> coll, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeFunction> nativeExpressions) throws CpoException;
+   */
+  <T> long insertObjects(
+      String name,
+      Collection<T> coll,
+      Collection<CpoWhere> wheres,
+      Collection<CpoOrderBy> orderBy,
+      Collection<CpoNativeFunction> nativeExpressions)
+      throws CpoException;
 
   /**
-   * <p>
-   * Removes the Object from the datasource. The assumption is that the object exists in the datasource. This method
-   * stores the object in the datasource
-   * </p>
+   * Removes the Object from the datasource. The assumption is that the object exists in the
+   * datasource. This method stores the object in the datasource
+   *
    * <pre>Example:
    * {@code
    * class SomeObject so = new SomeObject();
@@ -335,18 +344,18 @@ public interface CpoAdapter extends java.io.Serializable {
    * </pre>
    *
    * @param <T> The type of the POJO
-   * @param obj This is an object that has been defined within the metadata of the datasource. If the class is not
-   *            defined an exception will be thrown. If the object does not exist in the datasource an exception will be thrown.
+   * @param obj This is an object that has been defined within the metadata of the datasource. If
+   *     the class is not defined an exception will be thrown. If the object does not exist in the
+   *     datasource an exception will be thrown.
    * @return The number of objects deleted from the datasource
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
   <T> long deleteObject(T obj) throws CpoException;
 
   /**
-   * <p>
-   * Removes the Object from the datasource. The assumption is that the object exists in the datasource. This method
-   * stores the object in the datasource
-   * </p>
+   * Removes the Object from the datasource. The assumption is that the object exists in the
+   * datasource. This method stores the object in the datasource
+   *
    * <pre>Example:
    * {@code
    * class SomeObject so = new SomeObject();
@@ -370,20 +379,20 @@ public interface CpoAdapter extends java.io.Serializable {
    * </pre>
    *
    * @param <T> The type of the POJO
-   * @param name The String name of the DELETE Function Group that will be used to create the object in the datasource.
-   *             null signifies that the default rules will be used.
-   * @param obj  This is an object that has been defined within the metadata of the datasource. If the class is not
-   *             defined an exception will be thrown. If the object does not exist in the datasource an exception will be thrown.
+   * @param name The String name of the DELETE Function Group that will be used to create the object
+   *     in the datasource. null signifies that the default rules will be used.
+   * @param obj This is an object that has been defined within the metadata of the datasource. If
+   *     the class is not defined an exception will be thrown. If the object does not exist in the
+   *     datasource an exception will be thrown.
    * @return The number of objects deleted from the datasource
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
   <T> long deleteObject(String name, T obj) throws CpoException;
 
   /**
-   * <p>
-   * Removes the Object from the datasource. The assumption is that the object exists in the datasource. This method
-   * stores the object in the datasource
-   * </p>
+   * Removes the Object from the datasource. The assumption is that the object exists in the
+   * datasource. This method stores the object in the datasource
+   *
    * <pre>Example:
    * {@code
    * class SomeObject so = new SomeObject();
@@ -407,28 +416,37 @@ public interface CpoAdapter extends java.io.Serializable {
    * </pre>
    *
    * @param <T> The type of the POJO
-   * @param name              The String name of the DELETE Function Group that will be used to create the object in the datasource.
-   *                          null signifies that the default rules will be used.
-   * @param obj               This is an object that has been defined within the metadata of the datasource. If the class is not
-   *                          defined an exception will be thrown. If the object does not exist in the datasource an exception will be thrown.
-   * @param wheres            A collection of CpoWhere beans that define the constraints that should be used when retrieving beans
-   * @param orderBy           The CpoOrderBy bean that defines the order in which beans should be returned
-   * @param nativeExpressions Native expression that will be used to augment the expression stored in the meta data. This
-   *                          text will be embedded at run-time
+   * @param name The String name of the DELETE Function Group that will be used to create the object
+   *     in the datasource. null signifies that the default rules will be used.
+   * @param obj This is an object that has been defined within the metadata of the datasource. If
+   *     the class is not defined an exception will be thrown. If the object does not exist in the
+   *     datasource an exception will be thrown.
+   * @param wheres A collection of CpoWhere beans that define the constraints that should be used
+   *     when retrieving beans
+   * @param orderBy The CpoOrderBy bean that defines the order in which beans should be returned
+   * @param nativeExpressions Native expression that will be used to augment the expression stored
+   *     in the meta data. This text will be embedded at run-time
    * @return The number of objects deleted from the datasource
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
-  <T> long deleteObject(String name, T obj, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeFunction> nativeExpressions) throws CpoException;
+  <T> long deleteObject(
+      String name,
+      T obj,
+      Collection<CpoWhere> wheres,
+      Collection<CpoOrderBy> orderBy,
+      Collection<CpoNativeFunction> nativeExpressions)
+      throws CpoException;
 
   /**
-   * <p>
-   * Removes the Objects contained in the collection from the datasource. The assumption is that the object exists in
-   * the datasource. This method stores the objects contained in the collection in the datasource. The objects in the
-   * collection will be treated as one transaction, assuming the datasource supports transactions.
-   * </p><p>
-   * This means that if one of the objects fail being deleted in the datasource then the CpoAdapter should stop
-   * processing the remainder of the collection, and if supported, rollback all the objects deleted thus far.
-   * </p>
+   * Removes the Objects contained in the collection from the datasource. The assumption is that the
+   * object exists in the datasource. This method stores the objects contained in the collection in
+   * the datasource. The objects in the collection will be treated as one transaction, assuming the
+   * datasource supports transactions.
+   *
+   * <p>This means that if one of the objects fail being deleted in the datasource then the
+   * CpoAdapter should stop processing the remainder of the collection, and if supported, rollback
+   * all the objects deleted thus far.
+   *
    * <pre>Example:
    * {@code
    * class SomeObject so = null;
@@ -457,22 +475,23 @@ public interface CpoAdapter extends java.io.Serializable {
    * </pre>
    *
    * @param <T> The type of the POJO
-   * @param coll This is a collection of objects that have been defined within the metadata of the datasource. If the
-   *             class is not defined an exception will be thrown.
+   * @param coll This is a collection of objects that have been defined within the metadata of the
+   *     datasource. If the class is not defined an exception will be thrown.
    * @return The number of objects deleted from the datasource
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
   <T> long deleteObjects(Collection<T> coll) throws CpoException;
 
   /**
-   * <p>
-   * Removes the Objects contained in the collection from the datasource. The assumption is that the object exists in
-   * the datasource. This method stores the objects contained in the collection in the datasource. The objects in the
-   * collection will be treated as one transaction, assuming the datasource supports transactions.
-   * </p><p>
-   * This means that if one of the objects fail being deleted in the datasource then the CpoAdapter should stop
-   * processing the remainder of the collection, and if supported, rollback all the objects deleted thus far.
-   * </p>
+   * Removes the Objects contained in the collection from the datasource. The assumption is that the
+   * object exists in the datasource. This method stores the objects contained in the collection in
+   * the datasource. The objects in the collection will be treated as one transaction, assuming the
+   * datasource supports transactions.
+   *
+   * <p>This means that if one of the objects fail being deleted in the datasource then the
+   * CpoAdapter should stop processing the remainder of the collection, and if supported, rollback
+   * all the objects deleted thus far.
+   *
    * <pre>Example:
    * {@code
    * class SomeObject so = null;
@@ -501,24 +520,25 @@ public interface CpoAdapter extends java.io.Serializable {
    * </pre>
    *
    * @param <T> The type of the POJO
-   * @param name The String name of the DELETE Function Group that will be used to create the object in the datasource.
-   *             null signifies that the default rules will be used.
-   * @param coll This is a collection of objects that have been defined within the metadata of the datasource. If the
-   *             class is not defined an exception will be thrown.
+   * @param name The String name of the DELETE Function Group that will be used to create the object
+   *     in the datasource. null signifies that the default rules will be used.
+   * @param coll This is a collection of objects that have been defined within the metadata of the
+   *     datasource. If the class is not defined an exception will be thrown.
    * @return The number of objects deleted from the datasource
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
   <T> long deleteObjects(String name, Collection<T> coll) throws CpoException;
 
   /**
-   * <p>
-   * Removes the Objects contained in the collection from the datasource. The assumption is that the object exists in
-   * the datasource. This method stores the objects contained in the collection in the datasource. The objects in the
-   * collection will be treated as one transaction, assuming the datasource supports transactions.
-   * </p><p>
-   * This means that if one of the objects fail being deleted in the datasource then the CpoAdapter should stop
-   * processing the remainder of the collection, and if supported, rollback all the objects deleted thus far.
-   * </p>
+   * Removes the Objects contained in the collection from the datasource. The assumption is that the
+   * object exists in the datasource. This method stores the objects contained in the collection in
+   * the datasource. The objects in the collection will be treated as one transaction, assuming the
+   * datasource supports transactions.
+   *
+   * <p>This means that if one of the objects fail being deleted in the datasource then the
+   * CpoAdapter should stop processing the remainder of the collection, and if supported, rollback
+   * all the objects deleted thus far.
+   *
    * <pre>Example:
    * {@code
    * class SomeObject so = null;
@@ -546,25 +566,32 @@ public interface CpoAdapter extends java.io.Serializable {
    * }
    * </pre>
    *
-   * @param <T>               The type of the POJO
-   * @param name              The String name of the DELETE Function Group that will be used to create the object in the datasource.
-   *                          null signifies that the default rules will be used.
-   * @param coll              This is a collection of objects that have been defined within the metadata of the datasource. If the
-   *                          class is not defined an exception will be thrown.
-   * @param wheres            A collection of CpoWhere beans that define the constraints that should be used when retrieving beans
-   * @param orderBy           The CpoOrderBy bean that defines the order in which beans should be returned
-   * @param nativeExpressions Native expression that will be used to augment the expression stored in the meta data. This
-   *                          text will be embedded at run-time
+   * @param <T> The type of the POJO
+   * @param name The String name of the DELETE Function Group that will be used to create the object
+   *     in the datasource. null signifies that the default rules will be used.
+   * @param coll This is a collection of objects that have been defined within the metadata of the
+   *     datasource. If the class is not defined an exception will be thrown.
+   * @param wheres A collection of CpoWhere beans that define the constraints that should be used
+   *     when retrieving beans
+   * @param orderBy The CpoOrderBy bean that defines the order in which beans should be returned
+   * @param nativeExpressions Native expression that will be used to augment the expression stored
+   *     in the meta data. This text will be embedded at run-time
    * @return The number of objects deleted from the datasource
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
-  <T> long deleteObjects(String name, Collection<T> coll, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeFunction> nativeExpressions) throws CpoException;
+  <T> long deleteObjects(
+      String name,
+      Collection<T> coll,
+      Collection<CpoWhere> wheres,
+      Collection<CpoOrderBy> orderBy,
+      Collection<CpoNativeFunction> nativeExpressions)
+      throws CpoException;
 
   /**
-   * <p>
-   * Executes an Object whose metadata will call an executable within the datasource. It is assumed that the executable
-   * object exists in the metadatasource. If the executable does not exist, an exception will be thrown.
-   * </p>
+   * Executes an Object whose metadata will call an executable within the datasource. It is assumed
+   * that the executable object exists in the metadatasource. If the executable does not exist, an
+   * exception will be thrown.
+   *
    * <pre>Example:
    * {@code
    * class SomeObject so = new SomeObject();
@@ -588,22 +615,22 @@ public interface CpoAdapter extends java.io.Serializable {
    * </pre>
    *
    * @param <T> The type of the POJO
-   * @param obj This is an Object that has been defined within the metadata of the datasource. If the class is not
-   *            defined an exception will be thrown. If the object does not exist in the datasource, an exception will be thrown.
-   *            This object is used to populate the IN parameters used to executed the datasource object.
-   *           <p>
-   *            An object of this type will be created and filled with the returned data from the value_object. This newly created
-   *            object will be returned from this method.
+   * @param obj This is an Object that has been defined within the metadata of the datasource. If
+   *     the class is not defined an exception will be thrown. If the object does not exist in the
+   *     datasource, an exception will be thrown. This object is used to populate the IN parameters
+   *     used to executed the datasource object.
+   *     <p>An object of this type will be created and filled with the returned data from the
+   *     value_object. This newly created object will be returned from this method.
    * @return An object populated with the OUT parameters returned from the executable object
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
   <T> T executeObject(T obj) throws CpoException;
 
   /**
-   * <p>
-   * Executes an Object whose metadata will call an executable within the datasource. It is assumed that the executable
-   * object exists in the metadatasource. If the executable does not exist, an exception will be thrown.
-   * </p>
+   * Executes an Object whose metadata will call an executable within the datasource. It is assumed
+   * that the executable object exists in the metadatasource. If the executable does not exist, an
+   * exception will be thrown.
+   *
    * <pre>Example:
    * {@code
    * class SomeObject so = new SomeObject();
@@ -627,22 +654,23 @@ public interface CpoAdapter extends java.io.Serializable {
    * </pre>
    *
    * @param <T> The type of the POJO
-   * @param name   The filter name which tells the datasource which objects should be returned. The name also signifies
-   *               what data in the object will be populated.
-   * @param object This is an object that has been defined within the metadata of the datasource. If the class is not
-   *               defined an exception will be thrown. If the object does not exist in the datasource, an exception will be thrown.
-   *               This object is used to populate the IN parameters used to retrieve the collection of objects. This object defines
-   *               the object type that will be returned in the collection and contain the result set data or the OUT Parameters.
+   * @param name The filter name which tells the datasource which objects should be returned. The
+   *     name also signifies what data in the object will be populated.
+   * @param object This is an object that has been defined within the metadata of the datasource. If
+   *     the class is not defined an exception will be thrown. If the object does not exist in the
+   *     datasource, an exception will be thrown. This object is used to populate the IN parameters
+   *     used to retrieve the collection of objects. This object defines the object type that will
+   *     be returned in the collection and contain the result set data or the OUT Parameters.
    * @return A result object populate with the OUT parameters
    * @throws CpoException DOCUMENT ME!
    */
   <T> T executeObject(String name, T object) throws CpoException;
 
   /**
-   * <p>
-   * Executes an Object that represents an executable object within the datasource. It is assumed that the object exists
-   * in the datasource. If the object does not exist, an exception will be thrown
-   * </p>
+   * Executes an Object that represents an executable object within the datasource. It is assumed
+   * that the object exists in the datasource. If the object does not exist, an exception will be
+   * thrown
+   *
    * <pre>Example:
    * {@code
    * class SomeObject so = new SomeObject();
@@ -666,26 +694,26 @@ public interface CpoAdapter extends java.io.Serializable {
    * }
    * </pre>
    *
-   * @param <T>      The type of the return POJO
-   * @param <C>      The type of the criteria POJO
-   * @param name     The String name of the EXECUTE Function Group that will be used to create the object in the datasource.
-   *                 null signifies that the default rules will be used.
-   * @param criteria This is an object that has been defined within the metadata of the datasource. If the class is not
-   *                 defined an exception will be thrown. If the object does not exist in the datasource, an exception will be thrown.
-   *                 This object is used to populate the IN parameters used to retrieve the collection of objects.
-   * @param result   This is an object that has been defined within the metadata of the datasource. If the class is not
-   *                 defined an exception will be thrown. If the object does not exist in the datasource, an exception will be thrown.
-   *                 This object defines the object type that will be created, filled with the return data and returned from this
-   *                 method.
+   * @param <T> The type of the return POJO
+   * @param <C> The type of the criteria POJO
+   * @param name The String name of the EXECUTE Function Group that will be used to create the
+   *     object in the datasource. null signifies that the default rules will be used.
+   * @param criteria This is an object that has been defined within the metadata of the datasource.
+   *     If the class is not defined an exception will be thrown. If the object does not exist in
+   *     the datasource, an exception will be thrown. This object is used to populate the IN
+   *     parameters used to retrieve the collection of objects.
+   * @param result This is an object that has been defined within the metadata of the datasource. If
+   *     the class is not defined an exception will be thrown. If the object does not exist in the
+   *     datasource, an exception will be thrown. This object defines the object type that will be
+   *     created, filled with the return data and returned from this method.
    * @return An object populated with the out parameters
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
-   <T, C> T executeObject(String name, C criteria, T result) throws CpoException;
+  <T, C> T executeObject(String name, C criteria, T result) throws CpoException;
 
   /**
-   * <p>
    * The CpoAdapter will check to see if this object exists in the datasource.
-   * </p>
+   *
    * <pre>Example:
    * {@code
    * class SomeObject so = new SomeObject();
@@ -715,17 +743,17 @@ public interface CpoAdapter extends java.io.Serializable {
    * </pre>
    *
    * @param <T> The type of the POJO
-   * @param obj This is an object that has been defined within the metadata of the datasource. If the class is not
-   *            defined an exception will be thrown. This object will be searched for inside the datasource.
+   * @param obj This is an object that has been defined within the metadata of the datasource. If
+   *     the class is not defined an exception will be thrown. This object will be searched for
+   *     inside the datasource.
    * @return The number of objects that exist in the datasource that match the specified object
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
   <T> long existsObject(T obj) throws CpoException;
 
   /**
-   * <p>
    * The CpoAdapter will check to see if this object exists in the datasource.
-   * </p>
+   *
    * <pre>Example:
    * {@code
    * class SomeObject so = new SomeObject();
@@ -755,19 +783,19 @@ public interface CpoAdapter extends java.io.Serializable {
    * </pre>
    *
    * @param <T> The type of the POJO
-   * @param name The String name of the EXISTS Function Group that will be used to create the object in the datasource.
-   *             null signifies that the default rules will be used.
-   * @param obj  This is an object that has been defined within the metadata of the datasource. If the class is not
-   *             defined an exception will be thrown. This object will be searched for inside the datasource.
+   * @param name The String name of the EXISTS Function Group that will be used to create the object
+   *     in the datasource. null signifies that the default rules will be used.
+   * @param obj This is an object that has been defined within the metadata of the datasource. If
+   *     the class is not defined an exception will be thrown. This object will be searched for
+   *     inside the datasource.
    * @return The number of objects that exist in the datasource that match the specified object
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
   <T> long existsObject(String name, T obj) throws CpoException;
 
   /**
-   * <p>
    * The CpoAdapter will check to see if this object exists in the datasource.
-   * </p>
+   *
    * <pre>Example:
    * {@code
    * class SomeObject so = new SomeObject();
@@ -797,21 +825,22 @@ public interface CpoAdapter extends java.io.Serializable {
    * }
    * </pre>
    *
-   * @param <T>    The type of the POJO
-   * @param name   The String name of the EXISTS Function Group that will be used to create the object in the datasource.
-   *               null signifies that the default rules will be used.
-   * @param obj    This is an object that has been defined within the metadata of the datasource. If the class is not
-   *               defined an exception will be thrown. This object will be searched for inside the datasource.
-   * @param wheres A collection of CpoWhere objects that pass in run-time constraints to the function that performs the the
-   *               exist
+   * @param <T> The type of the POJO
+   * @param name The String name of the EXISTS Function Group that will be used to create the object
+   *     in the datasource. null signifies that the default rules will be used.
+   * @param obj This is an object that has been defined within the metadata of the datasource. If
+   *     the class is not defined an exception will be thrown. This object will be searched for
+   *     inside the datasource.
+   * @param wheres A collection of CpoWhere objects that pass in run-time constraints to the
+   *     function that performs the the exist
    * @return The number of objects that exist in the datasource that match the specified object
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
   <T> long existsObject(String name, T obj, Collection<CpoWhere> wheres) throws CpoException;
 
   /**
-   * newOrderBy allows you to dynamically change the order of the objects in the resulting collection. This allows you
-   * to apply user input in determining the order of the collection
+   * newOrderBy allows you to dynamically change the order of the objects in the resulting
+   * collection. This allows you to apply user input in determining the order of the collection
    *
    * @param attribute The name of the attribute from the pojo that will be sorted.
    * @param ascending If true, sort ascending. If false sort descending.
@@ -821,10 +850,11 @@ public interface CpoAdapter extends java.io.Serializable {
   CpoOrderBy newOrderBy(String attribute, boolean ascending) throws CpoException;
 
   /**
-   * newOrderBy allows you to dynamically change the order of the objects in the resulting collection. This allows you
-   * to apply user input in determining the order of the collection
+   * newOrderBy allows you to dynamically change the order of the objects in the resulting
+   * collection. This allows you to apply user input in determining the order of the collection
    *
-   * @param marker    the marker that will be replaced in the expression with the string representation of this orderBy
+   * @param marker the marker that will be replaced in the expression with the string representation
+   *     of this orderBy
    * @param attribute The name of the attribute from the pojo that will be sorted.
    * @param ascending If true, sort ascending. If false sort descending.
    * @return A CpoOrderBy object to be passed into retrieveBeans.
@@ -833,31 +863,35 @@ public interface CpoAdapter extends java.io.Serializable {
   CpoOrderBy newOrderBy(String marker, String attribute, boolean ascending) throws CpoException;
 
   /**
-   * newOrderBy allows you to dynamically change the order of the objects in the resulting collection. This allows you
-   * to apply user input in determining the order of the collection
+   * newOrderBy allows you to dynamically change the order of the objects in the resulting
+   * collection. This allows you to apply user input in determining the order of the collection
    *
    * @param attribute The name of the attribute from the pojo that will be sorted.
    * @param ascending If true, sort ascending. If false sort descending.
-   * @param function  A string which represents a datasource function that will be called on the attribute. must be
-   *                  contained in the function string. The attribute name will be replaced at run-time with its datasource counterpart
+   * @param function A string which represents a datasource function that will be called on the
+   *     attribute. must be contained in the function string. The attribute name will be replaced at
+   *     run-time with its datasource counterpart
    * @return A CpoOrderBy object to be passed into retrieveBeans.
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
   CpoOrderBy newOrderBy(String attribute, boolean ascending, String function) throws CpoException;
 
   /**
-   * newOrderBy allows you to dynamically change the order of the objects in the resulting collection. This allows you
-   * to apply user input in determining the order of the collection
+   * newOrderBy allows you to dynamically change the order of the objects in the resulting
+   * collection. This allows you to apply user input in determining the order of the collection
    *
-   * @param marker    the marker that will be replaced in the expression with the string representation of this orderBy
+   * @param marker the marker that will be replaced in the expression with the string representation
+   *     of this orderBy
    * @param attribute The name of the attribute from the pojo that will be sorted.
    * @param ascending If true, sort ascending. If false sort descending.
-   * @param function  A string which represents a datasource function that will be called on the attribute. must be
-   *                  contained in the function string. The attribute name will be replaced at run-time with its datasource counterpart
+   * @param function A string which represents a datasource function that will be called on the
+   *     attribute. must be contained in the function string. The attribute name will be replaced at
+   *     run-time with its datasource counterpart
    * @return A CpoOrderBy object to be passed into retrieveBeans.
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
-  CpoOrderBy newOrderBy(String marker, String attribute, boolean ascending, String function) throws CpoException;
+  CpoOrderBy newOrderBy(String marker, String attribute, boolean ascending, String function)
+      throws CpoException;
 
   /**
    * DOCUMENT ME!
@@ -867,40 +901,41 @@ public interface CpoAdapter extends java.io.Serializable {
    */
   CpoWhere newWhere() throws CpoException;
 
-    /**
-     * Creates a new CpoWhere object
-     *
-     * @param <T>  The type of the object
-     * @param logical The logical operator
-     * @param attr    The attribute name to compare
-     * @param comp    The compare operator
-     * @param value   The value to compare the attribute to.
-     * @return A CpoWhere
-     * @throws CpoException An error occurred
-     */
+  /**
+   * Creates a new CpoWhere object
+   *
+   * @param <T> The type of the object
+   * @param logical The logical operator
+   * @param attr The attribute name to compare
+   * @param comp The compare operator
+   * @param value The value to compare the attribute to.
+   * @return A CpoWhere
+   * @throws CpoException An error occurred
+   */
   <T> CpoWhere newWhere(Logical logical, String attr, Comparison comp, T value) throws CpoException;
 
-    /**
-     * Creates a new CpoWhere object
-     *
-     * @param <T>  The type of the object
-     * @param logical The logical operator
-     * @param attr    The attribute name to compare
-     * @param comp    The compare operator
-     * @param value   The value to compare the attribute to.
-     * @param not     negate the compare
-     * @return A CpoWhere
-     * @throws CpoException An error occurred
-     */
-  <T> CpoWhere newWhere(Logical logical, String attr, Comparison comp, T value, boolean not) throws CpoException;
+  /**
+   * Creates a new CpoWhere object
+   *
+   * @param <T> The type of the object
+   * @param logical The logical operator
+   * @param attr The attribute name to compare
+   * @param comp The compare operator
+   * @param value The value to compare the attribute to.
+   * @param not negate the compare
+   * @return A CpoWhere
+   * @throws CpoException An error occurred
+   */
+  <T> CpoWhere newWhere(Logical logical, String attr, Comparison comp, T value, boolean not)
+      throws CpoException;
 
   /**
-   * <p>
-   * Persists the Object into the datasource. The CpoAdapter will check to see if this object exists in the datasource.
-   * If it exists, the object is updated in the datasource If the object does not exist, then it is created in the
-   * datasource. This method stores the object in the datasource. This method uses the default EXISTS, CREATE, and
-   * UPDATE Function Groups specified for this object.
-   * </p>
+   * Persists the Object into the datasource. The CpoAdapter will check to see if this object exists
+   * in the datasource. If it exists, the object is updated in the datasource If the object does not
+   * exist, then it is created in the datasource. This method stores the object in the datasource.
+   * This method uses the default EXISTS, CREATE, and UPDATE Function Groups specified for this
+   * object.
+   *
    * <pre>Example:
    * {@code
    * class SomeObject so = new SomeObject();
@@ -924,8 +959,8 @@ public interface CpoAdapter extends java.io.Serializable {
    * </pre>
    *
    * @param <T> The type of the POJO
-   * @param obj This is an object that has been defined within the metadata of the datasource. If the class is not
-   *            defined an exception will be thrown.
+   * @param obj This is an object that has been defined within the metadata of the datasource. If
+   *     the class is not defined an exception will be thrown.
    * @return A count of the number of objects persisted
    * @throws CpoException Thrown if there are errors accessing the datasource
    * @see #existsObject
@@ -935,11 +970,10 @@ public interface CpoAdapter extends java.io.Serializable {
   <T> long persistObject(T obj) throws CpoException;
 
   /**
-   * <p>
-   * Persists the Object into the datasource. The CpoAdapter will check to see if this object exists in the datasource.
-   * If it exists, the object is updated in the datasource If the object does not exist, then it is created in the
-   * datasource. This method stores the object in the datasource.
-   * </p>
+   * Persists the Object into the datasource. The CpoAdapter will check to see if this object exists
+   * in the datasource. If it exists, the object is updated in the datasource If the object does not
+   * exist, then it is created in the datasource. This method stores the object in the datasource.
+   *
    * <pre>Example:
    * {@code
    * class SomeObject so = new SomeObject();
@@ -962,11 +996,11 @@ public interface CpoAdapter extends java.io.Serializable {
    * }
    * </pre>
    *
-   * @param <T>  The type of the POJO
-   * @param name The name which identifies which EXISTS, INSERT, and UPDATE Function Groups to execute to persist the
-   *             object.
-   * @param obj  This is an object that has been defined within the metadata of the datasource. If the class is not
-   *             defined an exception will be thrown.
+   * @param <T> The type of the POJO
+   * @param name The name which identifies which EXISTS, INSERT, and UPDATE Function Groups to
+   *     execute to persist the object.
+   * @param obj This is an object that has been defined within the metadata of the datasource. If
+   *     the class is not defined an exception will be thrown.
    * @return A count of the number of objects persisted
    * @throws CpoException Thrown if there are errors accessing the datasource
    * @see #existsObject
@@ -976,13 +1010,13 @@ public interface CpoAdapter extends java.io.Serializable {
   <T> long persistObject(String name, T obj) throws CpoException;
 
   /**
-   * <p>
-   * Persists a collection of Objects into the datasource. The CpoAdapter will check to see if this object exists in the
-   * datasource. If it exists, the object is updated in the datasource If the object does not exist, then it is created
-   * in the datasource. This method stores the object in the datasource. The objects in the collection will be treated
-   * as one transaction, meaning that if one of the objects fail being inserted or updated in the datasource then the
-   * entire collection will be rolled back.
-   * </p>
+   * Persists a collection of Objects into the datasource. The CpoAdapter will check to see if this
+   * object exists in the datasource. If it exists, the object is updated in the datasource If the
+   * object does not exist, then it is created in the datasource. This method stores the object in
+   * the datasource. The objects in the collection will be treated as one transaction, meaning that
+   * if one of the objects fail being inserted or updated in the datasource then the entire
+   * collection will be rolled back.
+   *
    * <pre>Example:
    * {@code
    * class SomeObject so = null;
@@ -1011,8 +1045,8 @@ public interface CpoAdapter extends java.io.Serializable {
    * </pre>
    *
    * @param <T> The type of the POJO
-   * @param coll This is a collection of objects that have been defined within the metadata of the datasource. If the
-   *             class is not defined an exception will be thrown.
+   * @param coll This is a collection of objects that have been defined within the metadata of the
+   *     datasource. If the class is not defined an exception will be thrown.
    * @return DOCUMENT ME!
    * @throws CpoException Thrown if there are errors accessing the datasource
    * @see #existsObject
@@ -1022,13 +1056,13 @@ public interface CpoAdapter extends java.io.Serializable {
   <T> long persistObjects(Collection<T> coll) throws CpoException;
 
   /**
-   * <p>
-   * Persists a collection of Objects into the datasource. The CpoAdapter will check to see if this object exists in the
-   * datasource. If it exists, the object is updated in the datasource If the object does not exist, then it is created
-   * in the datasource. This method stores the object in the datasource. The objects in the collection will be treated
-   * as one transaction, meaning that if one of the objects fail being inserted or updated in the datasource then the
-   * entire collection will be rolled back.
-   * </p>
+   * Persists a collection of Objects into the datasource. The CpoAdapter will check to see if this
+   * object exists in the datasource. If it exists, the object is updated in the datasource If the
+   * object does not exist, then it is created in the datasource. This method stores the object in
+   * the datasource. The objects in the collection will be treated as one transaction, meaning that
+   * if one of the objects fail being inserted or updated in the datasource then the entire
+   * collection will be rolled back.
+   *
    * <pre>Example:
    * {@code
    * class SomeObject so = null;
@@ -1057,10 +1091,10 @@ public interface CpoAdapter extends java.io.Serializable {
    * </pre>
    *
    * @param <T> The type of the POJO
-   * @param name The name which identifies which EXISTS, INSERT, and UPDATE Function Groups to execute to persist the
-   *             object.
-   * @param coll This is a collection of objects that have been defined within the metadata of the datasource. If the
-   *             class is not defined an exception will be thrown.
+   * @param name The name which identifies which EXISTS, INSERT, and UPDATE Function Groups to
+   *     execute to persist the object.
+   * @param coll This is a collection of objects that have been defined within the metadata of the
+   *     datasource. If the class is not defined an exception will be thrown.
    * @return DOCUMENT ME!
    * @throws CpoException Thrown if there are errors accessing the datasource
    * @see #existsObject
@@ -1070,276 +1104,375 @@ public interface CpoAdapter extends java.io.Serializable {
   <T> long persistObjects(String name, Collection<T> coll) throws CpoException;
 
   /**
-   * Retrieves the Bean from the datasource. The assumption is that the bean exists in the datasource. If the retrieve
-   * function defined for these beans returns more than one row, an exception will be thrown.
+   * Retrieves the Bean from the datasource. The assumption is that the bean exists in the
+   * datasource. If the retrieve function defined for these beans returns more than one row, an
+   * exception will be thrown.
    *
-   * @param <T>  The type of the POJO
-   * @param bean This is a bean that has been defined within the metadata of the datasource. If the class is not defined
-   *             an exception will be thrown. If the bean does not exist in the datasource, an exception will be thrown. The input
-   *             bean is used to specify the search criteria, the output bean is populated with the results of the function.
-   * @return A bean of the same type as the result parameter that is filled in as specified the metadata for the
-   *         retireve.
+   * @param <T> The type of the POJO
+   * @param bean This is a bean that has been defined within the metadata of the datasource. If the
+   *     class is not defined an exception will be thrown. If the bean does not exist in the
+   *     datasource, an exception will be thrown. The input bean is used to specify the search
+   *     criteria, the output bean is populated with the results of the function.
+   * @return A bean of the same type as the result parameter that is filled in as specified the
+   *     metadata for the retireve.
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
   <T> T retrieveBean(T bean) throws CpoException;
 
   /**
-   * Retrieves the bean from the datasource. The assumption is that the bean exists in the datasource. If the retrieve
-   * function defined for this beans returns more than one row, an exception will be thrown.
+   * Retrieves the bean from the datasource. The assumption is that the bean exists in the
+   * datasource. If the retrieve function defined for this beans returns more than one row, an
+   * exception will be thrown.
    *
-   * @param <T>  The type of the POJO
+   * @param <T> The type of the POJO
    * @param name DOCUMENT ME!
-   * @param bean This is an bean that has been defined within the metadata of the datasource. If the class is not
-   *             defined an exception will be thrown. If the bean does not exist in the datasource, an exception will be thrown. The
-   *             input bean is used to specify the search criteria, the output bean is populated with the results of the function.
-   * @return An bean of the same type as the result parameter that is filled in as specified the metadata for the
-   *         retireve.
+   * @param bean This is an bean that has been defined within the metadata of the datasource. If the
+   *     class is not defined an exception will be thrown. If the bean does not exist in the
+   *     datasource, an exception will be thrown. The input bean is used to specify the search
+   *     criteria, the output bean is populated with the results of the function.
+   * @return An bean of the same type as the result parameter that is filled in as specified the
+   *     metadata for the retireve.
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
   <T> T retrieveBean(String name, T bean) throws CpoException;
 
   /**
-   * Retrieves the bean from the datasource. The assumption is that the bean exists in the datasource. If the retrieve
-   * function defined for this beans returns more than one row, an exception will be thrown.
+   * Retrieves the bean from the datasource. The assumption is that the bean exists in the
+   * datasource. If the retrieve function defined for this beans returns more than one row, an
+   * exception will be thrown.
    *
    * @param <T> the type of the POJO
-   * @param name              DOCUMENT ME!
-   * @param bean              This is an bean that has been defined within the metadata of the datasource. If the class is not
-   *                          defined an exception will be thrown. If the bean does not exist in the datasource, an exception will be thrown. The
-   *                          input bean is used to specify the search criteria, the output bean is populated with the results of the function.
-   * @param wheres            A collection of CpoWhere beans that define the constraints that should be used when retrieving beans
-   * @param orderBy           The CpoOrderBy bean that defines the order in which beans should be returned
-   * @param nativeExpressions Native expression that will be used to augment the expression stored in the meta data. This
-   *                          text will be embedded at run-time
-   * @return An bean of the same type as the result parameter that is filled in as specified the metadata for the
-   *         retireve.
+   * @param name DOCUMENT ME!
+   * @param bean This is an bean that has been defined within the metadata of the datasource. If the
+   *     class is not defined an exception will be thrown. If the bean does not exist in the
+   *     datasource, an exception will be thrown. The input bean is used to specify the search
+   *     criteria, the output bean is populated with the results of the function.
+   * @param wheres A collection of CpoWhere beans that define the constraints that should be used
+   *     when retrieving beans
+   * @param orderBy The CpoOrderBy bean that defines the order in which beans should be returned
+   * @param nativeExpressions Native expression that will be used to augment the expression stored
+   *     in the meta data. This text will be embedded at run-time
+   * @return An bean of the same type as the result parameter that is filled in as specified the
+   *     metadata for the retireve.
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
-  <T> T retrieveBean(String name, T bean, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeFunction> nativeExpressions) throws CpoException;
+  <T> T retrieveBean(
+      String name,
+      T bean,
+      Collection<CpoWhere> wheres,
+      Collection<CpoOrderBy> orderBy,
+      Collection<CpoNativeFunction> nativeExpressions)
+      throws CpoException;
 
   /**
-   * Retrieves the bean from the datasource. The assumption is that the bean exists in the datasource. If the retrieve
-   * function defined for this beans returns more than one row, an exception will be thrown.
+   * Retrieves the bean from the datasource. The assumption is that the bean exists in the
+   * datasource. If the retrieve function defined for this beans returns more than one row, an
+   * exception will be thrown.
    *
-   * @param <T>      The type of the return POJO
-   * @param <C>      The type of the criteria POJO
-   * @param name     The filter name which tells the datasource which beans should be returned. The name also signifies what
-   *                 data in the bean will be populated.
-   * @param criteria This is an bean that has been defined within the metadata of the datasource. If the class is not
-   *                 defined an exception will be thrown. If the bean does not exist in the datasource, an exception will be thrown.
-   *                 This bean is used to specify the parameters used to retrieve the collection of beans.
-   * @param result   This is an bean that has been defined within the metadata of the datasource. If the class is not
-   *                 defined an exception will be thrown. If the bean does not exist in the datasource, an exception will be thrown.
-   *                 This bean is used to specify the bean type that will be returned in the collection.
-   * @param wheres   A collection of CpoWhere beans that define the constraints that should be used when retrieving beans
-   * @param orderBy  The CpoOrderBy bean that defines the order in which beans should be returned
-   * @return An bean of the same type as the result parameter that is filled in as specified the metadata for the
-   *         retireve.
+   * @param <T> The type of the return POJO
+   * @param <C> The type of the criteria POJO
+   * @param name The filter name which tells the datasource which beans should be returned. The name
+   *     also signifies what data in the bean will be populated.
+   * @param criteria This is an bean that has been defined within the metadata of the datasource. If
+   *     the class is not defined an exception will be thrown. If the bean does not exist in the
+   *     datasource, an exception will be thrown. This bean is used to specify the parameters used
+   *     to retrieve the collection of beans.
+   * @param result This is an bean that has been defined within the metadata of the datasource. If
+   *     the class is not defined an exception will be thrown. If the bean does not exist in the
+   *     datasource, an exception will be thrown. This bean is used to specify the bean type that
+   *     will be returned in the collection.
+   * @param wheres A collection of CpoWhere beans that define the constraints that should be used
+   *     when retrieving beans
+   * @param orderBy The CpoOrderBy bean that defines the order in which beans should be returned
+   * @return An bean of the same type as the result parameter that is filled in as specified the
+   *     metadata for the retireve.
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
-  <T, C> T retrieveBean(String name, C criteria, T result, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy) throws CpoException;
+  <T, C> T retrieveBean(
+      String name,
+      C criteria,
+      T result,
+      Collection<CpoWhere> wheres,
+      Collection<CpoOrderBy> orderBy)
+      throws CpoException;
 
   /**
-   * Retrieves the bean from the datasource. The assumption is that the bean exists in the datasource. If the retrieve
-   * function defined for this beans returns more than one row, an exception will be thrown.
+   * Retrieves the bean from the datasource. The assumption is that the bean exists in the
+   * datasource. If the retrieve function defined for this beans returns more than one row, an
+   * exception will be thrown.
    *
-   * @param <T>               The type of the return POJO
-   * @param <C>               The type of the criteria POJO
-   * @param name              The filter name which tells the datasource which beans should be returned. The name also signifies what
-   *                          data in the bean will be populated.
-   * @param criteria          This is an bean that has been defined within the metadata of the datasource. If the class is not
-   *                          defined an exception will be thrown. If the bean does not exist in the datasource, an exception will be thrown.
-   *                          This bean is used to specify the parameters used to retrieve the collection of beans.
-   * @param result            This is an bean that has been defined within the metadata of the datasource. If the class is not
-   *                          defined an exception will be thrown. If the bean does not exist in the datasource, an exception will be thrown.
-   *                          This bean is used to specify the bean type that will be returned in the collection.
-   * @param wheres            A collection of CpoWhere beans that define the constraints that should be used when retrieving beans
-   * @param orderBy           The CpoOrderBy bean that defines the order in which beans should be returned
-   * @param nativeExpressions Native expression that will be used to augment the expression stored in the meta data. This
-   *                          text will be embedded at run-time
-   * @return An bean of the same type as the result parameter that is filled in as specified the metadata for the
-   *         retireve.
+   * @param <T> The type of the return POJO
+   * @param <C> The type of the criteria POJO
+   * @param name The filter name which tells the datasource which beans should be returned. The name
+   *     also signifies what data in the bean will be populated.
+   * @param criteria This is an bean that has been defined within the metadata of the datasource. If
+   *     the class is not defined an exception will be thrown. If the bean does not exist in the
+   *     datasource, an exception will be thrown. This bean is used to specify the parameters used
+   *     to retrieve the collection of beans.
+   * @param result This is an bean that has been defined within the metadata of the datasource. If
+   *     the class is not defined an exception will be thrown. If the bean does not exist in the
+   *     datasource, an exception will be thrown. This bean is used to specify the bean type that
+   *     will be returned in the collection.
+   * @param wheres A collection of CpoWhere beans that define the constraints that should be used
+   *     when retrieving beans
+   * @param orderBy The CpoOrderBy bean that defines the order in which beans should be returned
+   * @param nativeExpressions Native expression that will be used to augment the expression stored
+   *     in the meta data. This text will be embedded at run-time
+   * @return An bean of the same type as the result parameter that is filled in as specified the
+   *     metadata for the retireve.
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
-  <T, C> T retrieveBean(String name, C criteria, T result, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeFunction> nativeExpressions) throws CpoException;
+  <T, C> T retrieveBean(
+      String name,
+      C criteria,
+      T result,
+      Collection<CpoWhere> wheres,
+      Collection<CpoOrderBy> orderBy,
+      Collection<CpoNativeFunction> nativeExpressions)
+      throws CpoException;
 
   /**
-   * Retrieves the bean from the datasource. The assumption is that the bean exists in the datasource.
+   * Retrieves the bean from the datasource. The assumption is that the bean exists in the
+   * datasource.
    *
-   * @param <C>      the type of the criteria POJO
-   * @param name     The filter name which tells the datasource which beans should be returned. The name also signifies what
-   *                 data in the bean will be populated.
-   * @param criteria This is an bean that has been defined within the metadata of the datasource. If the class is not
-   *                 defined an exception will be thrown. If the bean does not exist in the datasource, an exception will be thrown.
-   *                 This bean is used to specify the parameters used to retrieve the collection of beans.
-   * @return A collection of beans will be returned that meet the criteria specified by obj. The beans will be of the
-   *         same type as the bean that was passed in. If no beans match the criteria, an empty collection will be returned
+   * @param <C> the type of the criteria POJO
+   * @param name The filter name which tells the datasource which beans should be returned. The name
+   *     also signifies what data in the bean will be populated.
+   * @param criteria This is an bean that has been defined within the metadata of the datasource. If
+   *     the class is not defined an exception will be thrown. If the bean does not exist in the
+   *     datasource, an exception will be thrown. This bean is used to specify the parameters used
+   *     to retrieve the collection of beans.
+   * @return A collection of beans will be returned that meet the criteria specified by obj. The
+   *     beans will be of the same type as the bean that was passed in. If no beans match the
+   *     criteria, an empty collection will be returned
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
   <C> List<C> retrieveBeans(String name, C criteria) throws CpoException;
 
   /**
-   * Retrieves the bean from the datasource. The assumption is that the bean exists in the datasource.
+   * Retrieves the bean from the datasource. The assumption is that the bean exists in the
+   * datasource.
    *
-   * @param <C>      the type of the criteria POJO
-   * @param name     The filter name which tells the datasource which beans should be returned. The name also signifies what
-   *                 data in the bean will be populated.
-   * @param criteria This is an bean that has been defined within the metadata of the datasource. If the class is not
-   *                 defined an exception will be thrown. If the bean does not exist in the datasource, an exception will be thrown.
-   *                 This bean is used to specify the parameters used to retrieve the collection of beans.
-   * @param where    A CpoWhere bean that defines the constraints that should be used when retrieving beans
-   * @param orderBy  The CpoOrderBy bean that defines the order in which beans should be returned
-   * @return A collection of beans will be returned that meet the criteria specified by obj. The beans will be of the
-   *         same type as the bean that was passed in. If no beans match the criteria, an empty collection will be returned
+   * @param <C> the type of the criteria POJO
+   * @param name The filter name which tells the datasource which beans should be returned. The name
+   *     also signifies what data in the bean will be populated.
+   * @param criteria This is an bean that has been defined within the metadata of the datasource. If
+   *     the class is not defined an exception will be thrown. If the bean does not exist in the
+   *     datasource, an exception will be thrown. This bean is used to specify the parameters used
+   *     to retrieve the collection of beans.
+   * @param where A CpoWhere bean that defines the constraints that should be used when retrieving
+   *     beans
+   * @param orderBy The CpoOrderBy bean that defines the order in which beans should be returned
+   * @return A collection of beans will be returned that meet the criteria specified by obj. The
+   *     beans will be of the same type as the bean that was passed in. If no beans match the
+   *     criteria, an empty collection will be returned
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
-  <C> List<C> retrieveBeans(String name, C criteria, CpoWhere where, Collection<CpoOrderBy> orderBy) throws CpoException;
+  <C> List<C> retrieveBeans(String name, C criteria, CpoWhere where, Collection<CpoOrderBy> orderBy)
+      throws CpoException;
 
   /**
-   * Retrieves the bean from the datasource. The assumption is that the bean exists in the datasource.
+   * Retrieves the bean from the datasource. The assumption is that the bean exists in the
+   * datasource.
    *
-   * @param <C>      the type of the criteria POJO
-   * @param name     The filter name which tells the datasource which beans should be returned. The name also signifies what
-   *                 data in the bean will be populated.
-   * @param criteria This is an bean that has been defined within the metadata of the datasource. If the class is not
-   *                 defined an exception will be thrown. If the bean does not exist in the datasource, an exception will be thrown.
-   *                 This bean is used to specify the parameters used to retrieve the collection of beans.
-   * @param orderBy  The CpoOrderBy bean that defines the order in which beans should be returned
-   * @return A collection of beans will be returned that meet the criteria specified by obj. The beans will be of the
-   *         same type as the bean that was passed in. If no beans match the criteria, an empty collection will be returned
+   * @param <C> the type of the criteria POJO
+   * @param name The filter name which tells the datasource which beans should be returned. The name
+   *     also signifies what data in the bean will be populated.
+   * @param criteria This is an bean that has been defined within the metadata of the datasource. If
+   *     the class is not defined an exception will be thrown. If the bean does not exist in the
+   *     datasource, an exception will be thrown. This bean is used to specify the parameters used
+   *     to retrieve the collection of beans.
+   * @param orderBy The CpoOrderBy bean that defines the order in which beans should be returned
+   * @return A collection of beans will be returned that meet the criteria specified by obj. The
+   *     beans will be of the same type as the bean that was passed in. If no beans match the
+   *     criteria, an empty collection will be returned
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
-  <C> List<C> retrieveBeans(String name, C criteria, Collection<CpoOrderBy> orderBy) throws CpoException;
+  <C> List<C> retrieveBeans(String name, C criteria, Collection<CpoOrderBy> orderBy)
+      throws CpoException;
 
   /**
-   * Retrieves the bean from the datasource. The assumption is that the bean exists in the datasource.
+   * Retrieves the bean from the datasource. The assumption is that the bean exists in the
+   * datasource.
    *
-   * @param <C>      the type of the criteria POJO
-   * @param name     The filter name which tells the datasource which beans should be returned. The name also signifies what
-   *                 data in the bean will be populated.
-   * @param criteria This is an bean that has been defined within the metadata of the datasource. If the class is not
-   *                 defined an exception will be thrown. If the bean does not exist in the datasource, an exception will be thrown.
-   *                 This bean is used to specify the parameters used to retrieve the collection of beans.
-   * @param wheres   A collection of CpoWhere beans that define the constraints that should be used when retrieving beans
-   * @param orderBy  The CpoOrderBy bean that defines the order in which beans should be returned
-   * @return A collection of beans will be returned that meet the criteria specified by obj. The beans will be of the
-   *         same type as the bean that was passed in. If no beans match the criteria, an empty collection will be returned
+   * @param <C> the type of the criteria POJO
+   * @param name The filter name which tells the datasource which beans should be returned. The name
+   *     also signifies what data in the bean will be populated.
+   * @param criteria This is an bean that has been defined within the metadata of the datasource. If
+   *     the class is not defined an exception will be thrown. If the bean does not exist in the
+   *     datasource, an exception will be thrown. This bean is used to specify the parameters used
+   *     to retrieve the collection of beans.
+   * @param wheres A collection of CpoWhere beans that define the constraints that should be used
+   *     when retrieving beans
+   * @param orderBy The CpoOrderBy bean that defines the order in which beans should be returned
+   * @return A collection of beans will be returned that meet the criteria specified by obj. The
+   *     beans will be of the same type as the bean that was passed in. If no beans match the
+   *     criteria, an empty collection will be returned
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
-  <C> List<C> retrieveBeans(String name, C criteria, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy) throws CpoException;
+  <C> List<C> retrieveBeans(
+      String name, C criteria, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy)
+      throws CpoException;
 
   /**
-   * Retrieves the bean from the datasource. The assumption is that the bean exists in the datasource.
+   * Retrieves the bean from the datasource. The assumption is that the bean exists in the
+   * datasource.
    *
-   * @param <T>      The type of the return POJO
-   * @param <C>      The type of the criteria POJO
-   * @param name     The filter name which tells the datasource which beans should be returned. The name also signifies what
-   *                 data in the bean will be populated.
-   * @param criteria This is an bean that has been defined within the metadata of the datasource. If the class is not
-   *                 defined an exception will be thrown. If the bean does not exist in the datasource, an exception will be thrown.
-   *                 This bean is used to specify the parameters used to retrieve the collection of beans.
-   * @param result   This is an bean that has been defined within the metadata of the datasource. If the class is not
-   *                 defined an exception will be thrown. If the bean does not exist in the datasource, an exception will be thrown.
-   *                 This bean is used to specify the bean type that will be returned in the collection.
-   * @return A collection of beans will be returned that meet the criteria specified by obj. The beans will be of the
-   *         same type as the bean that was passed in. If no beans match the criteria, an empty collection will be returned
+   * @param <T> The type of the return POJO
+   * @param <C> The type of the criteria POJO
+   * @param name The filter name which tells the datasource which beans should be returned. The name
+   *     also signifies what data in the bean will be populated.
+   * @param criteria This is an bean that has been defined within the metadata of the datasource. If
+   *     the class is not defined an exception will be thrown. If the bean does not exist in the
+   *     datasource, an exception will be thrown. This bean is used to specify the parameters used
+   *     to retrieve the collection of beans.
+   * @param result This is an bean that has been defined within the metadata of the datasource. If
+   *     the class is not defined an exception will be thrown. If the bean does not exist in the
+   *     datasource, an exception will be thrown. This bean is used to specify the bean type that
+   *     will be returned in the collection.
+   * @return A collection of beans will be returned that meet the criteria specified by obj. The
+   *     beans will be of the same type as the bean that was passed in. If no beans match the
+   *     criteria, an empty collection will be returned
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
   <T, C> List<T> retrieveBeans(String name, C criteria, T result) throws CpoException;
 
   /**
-   * Retrieves the bean from the datasource. The assumption is that the bean exists in the datasource.
+   * Retrieves the bean from the datasource. The assumption is that the bean exists in the
+   * datasource.
    *
-   * @param <T>      The type of the return POJO
-   * @param <C>      The type of the criteria POJO
-   * @param name     The filter name which tells the datasource which beans should be returned. The name also signifies what
-   *                 data in the bean will be populated.
-   * @param criteria This is an bean that has been defined within the metadata of the datasource. If the class is not
-   *                 defined an exception will be thrown. If the bean does not exist in the datasource, an exception will be thrown.
-   *                 This bean is used to specify the parameters used to retrieve the collection of beans.
-   * @param result   This is an bean that has been defined within the metadata of the datasource. If the class is not
-   *                 defined an exception will be thrown. If the bean does not exist in the datasource, an exception will be thrown.
-   *                 This bean is used to specify the bean type that will be returned in the collection.
-   * @param where    A CpoWhere bean that defines the constraints that should be used when retrieving beans
-   * @param orderBy  The CpoOrderBy bean that defines the order in which beans should be returned
-   * @return A collection of beans will be returned that meet the criteria specified by obj. The beans will be of the
-   *         same type as the bean that was passed in. If no beans match the criteria, an empty collection will be returned
+   * @param <T> The type of the return POJO
+   * @param <C> The type of the criteria POJO
+   * @param name The filter name which tells the datasource which beans should be returned. The name
+   *     also signifies what data in the bean will be populated.
+   * @param criteria This is an bean that has been defined within the metadata of the datasource. If
+   *     the class is not defined an exception will be thrown. If the bean does not exist in the
+   *     datasource, an exception will be thrown. This bean is used to specify the parameters used
+   *     to retrieve the collection of beans.
+   * @param result This is an bean that has been defined within the metadata of the datasource. If
+   *     the class is not defined an exception will be thrown. If the bean does not exist in the
+   *     datasource, an exception will be thrown. This bean is used to specify the bean type that
+   *     will be returned in the collection.
+   * @param where A CpoWhere bean that defines the constraints that should be used when retrieving
+   *     beans
+   * @param orderBy The CpoOrderBy bean that defines the order in which beans should be returned
+   * @return A collection of beans will be returned that meet the criteria specified by obj. The
+   *     beans will be of the same type as the bean that was passed in. If no beans match the
+   *     criteria, an empty collection will be returned
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
-  <T, C> List<T> retrieveBeans(String name, C criteria, T result, CpoWhere where, Collection<CpoOrderBy> orderBy) throws CpoException;
+  <T, C> List<T> retrieveBeans(
+      String name, C criteria, T result, CpoWhere where, Collection<CpoOrderBy> orderBy)
+      throws CpoException;
 
   /**
-   * Retrieves the bean from the datasource. The assumption is that the bean exists in the datasource.
+   * Retrieves the bean from the datasource. The assumption is that the bean exists in the
+   * datasource.
    *
-   * @param <T>      The type of the return POJO
-   * @param <C>      The type of the criteria POJO
-   * @param name     The filter name which tells the datasource which beans should be returned. The name also signifies what
-   *                 data in the bean will be populated.
-   * @param criteria This is an bean that has been defined within the metadata of the datasource. If the class is not
-   *                 defined an exception will be thrown. If the bean does not exist in the datasource, an exception will be thrown.
-   *                 This bean is used to specify the parameters used to retrieve the collection of beans.
-   * @param result   This is an bean that has been defined within the metadata of the datasource. If the class is not
-   *                 defined an exception will be thrown. If the bean does not exist in the datasource, an exception will be thrown.
-   *                 This bean is used to specify the bean type that will be returned in the collection.
-   * @param wheres   A collection of CpoWhere beans that define the constraints that should be used when retrieving beans
-   * @param orderBy  The CpoOrderBy bean that defines the order in which beans should be returned
-   * @return A collection of beans will be returned that meet the criteria specified by obj. The beans will be of the
-   *         same type as the bean that was passed in. If no beans match the criteria, an empty collection will be returned
+   * @param <T> The type of the return POJO
+   * @param <C> The type of the criteria POJO
+   * @param name The filter name which tells the datasource which beans should be returned. The name
+   *     also signifies what data in the bean will be populated.
+   * @param criteria This is an bean that has been defined within the metadata of the datasource. If
+   *     the class is not defined an exception will be thrown. If the bean does not exist in the
+   *     datasource, an exception will be thrown. This bean is used to specify the parameters used
+   *     to retrieve the collection of beans.
+   * @param result This is an bean that has been defined within the metadata of the datasource. If
+   *     the class is not defined an exception will be thrown. If the bean does not exist in the
+   *     datasource, an exception will be thrown. This bean is used to specify the bean type that
+   *     will be returned in the collection.
+   * @param wheres A collection of CpoWhere beans that define the constraints that should be used
+   *     when retrieving beans
+   * @param orderBy The CpoOrderBy bean that defines the order in which beans should be returned
+   * @return A collection of beans will be returned that meet the criteria specified by obj. The
+   *     beans will be of the same type as the bean that was passed in. If no beans match the
+   *     criteria, an empty collection will be returned
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
-  <T, C> List<T> retrieveBeans(String name, C criteria, T result, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy) throws CpoException;
+  <T, C> List<T> retrieveBeans(
+      String name,
+      C criteria,
+      T result,
+      Collection<CpoWhere> wheres,
+      Collection<CpoOrderBy> orderBy)
+      throws CpoException;
 
   /**
-   * Retrieves the bean from the datasource. The assumption is that the bean exists in the datasource.
+   * Retrieves the bean from the datasource. The assumption is that the bean exists in the
+   * datasource.
    *
-   * @param <T>               The type of the return POJO
-   * @param <C>               The type of the criteria POJO
-   * @param name              The filter name which tells the datasource which beans should be returned. The name also signifies what
-   *                          data in the bean will be populated.
-   * @param criteria          This is an bean that has been defined within the metadata of the datasource. If the class is not
-   *                          defined an exception will be thrown. If the bean does not exist in the datasource, an exception will be thrown.
-   *                          This bean is used to specify the parameters used to retrieve the collection of beans.
-   * @param result            This is an bean that has been defined within the metadata of the datasource. If the class is not
-   *                          defined an exception will be thrown. If the bean does not exist in the datasource, an exception will be thrown.
-   *                          This bean is used to specify the bean type that will be returned in the collection.
-   * @param wheres            A collection of CpoWhere beans that define the constraints that should be used when retrieving beans
-   * @param orderBy           The CpoOrderBy bean that defines the order in which beans should be returned
-   * @param nativeExpressions Native expression that will be used to augment the expression stored in the meta data. This
-   *                          text will be embedded at run-time
-   * @return A collection of beans will be returned that meet the criteria specified by obj. The beans will be of the
-   *         same type as the bean that was passed in. If no beans match the criteria, an empty collection will be returned
+   * @param <T> The type of the return POJO
+   * @param <C> The type of the criteria POJO
+   * @param name The filter name which tells the datasource which beans should be returned. The name
+   *     also signifies what data in the bean will be populated.
+   * @param criteria This is an bean that has been defined within the metadata of the datasource. If
+   *     the class is not defined an exception will be thrown. If the bean does not exist in the
+   *     datasource, an exception will be thrown. This bean is used to specify the parameters used
+   *     to retrieve the collection of beans.
+   * @param result This is an bean that has been defined within the metadata of the datasource. If
+   *     the class is not defined an exception will be thrown. If the bean does not exist in the
+   *     datasource, an exception will be thrown. This bean is used to specify the bean type that
+   *     will be returned in the collection.
+   * @param wheres A collection of CpoWhere beans that define the constraints that should be used
+   *     when retrieving beans
+   * @param orderBy The CpoOrderBy bean that defines the order in which beans should be returned
+   * @param nativeExpressions Native expression that will be used to augment the expression stored
+   *     in the meta data. This text will be embedded at run-time
+   * @return A collection of beans will be returned that meet the criteria specified by obj. The
+   *     beans will be of the same type as the bean that was passed in. If no beans match the
+   *     criteria, an empty collection will be returned
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
-  <T, C> List<T> retrieveBeans(String name, C criteria, T result, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeFunction> nativeExpressions) throws CpoException;
+  <T, C> List<T> retrieveBeans(
+      String name,
+      C criteria,
+      T result,
+      Collection<CpoWhere> wheres,
+      Collection<CpoOrderBy> orderBy,
+      Collection<CpoNativeFunction> nativeExpressions)
+      throws CpoException;
 
   /**
-   * Retrieves the bean from the datasource. The assumption is that the bean exists in the datasource.
+   * Retrieves the bean from the datasource. The assumption is that the bean exists in the
+   * datasource.
    *
-   * @param <T>               The type of the return POJO
-   * @param <C>               The type of the criteria POJO
-   * @param name              The filter name which tells the datasource which beans should be returned. The name also signifies what
-   *                          data in the bean will be populated.
-   * @param criteria          This is an bean that has been defined within the metadata of the datasource. If the class is not
-   *                          defined an exception will be thrown. If the bean does not exist in the datasource, an exception will be thrown.
-   *                          This bean is used to specify the parameters used to retrieve the collection of beans.
-   * @param result            This is an bean that has been defined within the metadata of the datasource. If the class is not
-   *                          defined an exception will be thrown. If the bean does not exist in the datasource, an exception will be thrown.
-   *                          This bean is used to specify the bean type that will be returned in the collection.
-   * @param wheres            A collection of CpoWhere beans that define the constraints that should be used when retrieving beans
-   * @param orderBy           The CpoOrderBy bean that defines the order in which beans should be returned
-   * @param nativeExpressions Native expression that will be used to augment the expression stored in the meta data. This
-   *                          text will be embedded at run-time
-   * @param queueSize         queue size of the buffer that it uses to send the beans from the producer to the consumer.
+   * @param <T> The type of the return POJO
+   * @param <C> The type of the criteria POJO
+   * @param name The filter name which tells the datasource which beans should be returned. The name
+   *     also signifies what data in the bean will be populated.
+   * @param criteria This is an bean that has been defined within the metadata of the datasource. If
+   *     the class is not defined an exception will be thrown. If the bean does not exist in the
+   *     datasource, an exception will be thrown. This bean is used to specify the parameters used
+   *     to retrieve the collection of beans.
+   * @param result This is an bean that has been defined within the metadata of the datasource. If
+   *     the class is not defined an exception will be thrown. If the bean does not exist in the
+   *     datasource, an exception will be thrown. This bean is used to specify the bean type that
+   *     will be returned in the collection.
+   * @param wheres A collection of CpoWhere beans that define the constraints that should be used
+   *     when retrieving beans
+   * @param orderBy The CpoOrderBy bean that defines the order in which beans should be returned
+   * @param nativeExpressions Native expression that will be used to augment the expression stored
+   *     in the meta data. This text will be embedded at run-time
+   * @param queueSize queue size of the buffer that it uses to send the beans from the producer to
+   *     the consumer.
    * @return A CpoResultSet that can be iterated through
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
-  <T, C> CpoResultSet<T> retrieveBeans(String name, C criteria, T result, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeFunction> nativeExpressions, int queueSize) throws CpoException;
+  <T, C> CpoResultSet<T> retrieveBeans(
+      String name,
+      C criteria,
+      T result,
+      Collection<CpoWhere> wheres,
+      Collection<CpoOrderBy> orderBy,
+      Collection<CpoNativeFunction> nativeExpressions,
+      int queueSize)
+      throws CpoException;
 
   /**
-   * <p>
-   * Update the Object in the datasource. The CpoAdapter will check to see if the object exists in the datasource. If it
-   * exists then the object will be updated. If it does not exist, an exception will be thrown
-   * </p>
+   * Update the Object in the datasource. The CpoAdapter will check to see if the object exists in
+   * the datasource. If it exists then the object will be updated. If it does not exist, an
+   * exception will be thrown
+   *
    * <pre>Example:
    * {@code
    * class SomeObject so = new SomeObject();
@@ -1363,18 +1496,18 @@ public interface CpoAdapter extends java.io.Serializable {
    * </pre>
    *
    * @param <T> The type of the POJO
-   * @param obj This is an object that has been defined within the metadata of the datasource. If the class is not
-   *            defined an exception will be thrown.
+   * @param obj This is an object that has been defined within the metadata of the datasource. If
+   *     the class is not defined an exception will be thrown.
    * @return The number of objects updated in the datasource
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
   <T> long updateObject(T obj) throws CpoException;
 
   /**
-   * <p>
-   * Update the Object in the datasource. The CpoAdapter will check to see if the object exists in the datasource. If it
-   * exists then the object will be updated. If it does not exist, an exception will be thrown
-   * </p>
+   * Update the Object in the datasource. The CpoAdapter will check to see if the object exists in
+   * the datasource. If it exists then the object will be updated. If it does not exist, an
+   * exception will be thrown
+   *
    * <pre>Example:
    * {@code
    * class SomeObject so = new SomeObject();
@@ -1397,21 +1530,21 @@ public interface CpoAdapter extends java.io.Serializable {
    * }
    * </pre>
    *
-   * @param <T>  The type of the POJO
-   * @param name The String name of the UPDATE Function Group that will be used to create the object in the datasource.
-   *             null signifies that the default rules will be used.
-   * @param obj  This is an object that has been defined within the metadata of the datasource. If the class is not
-   *             defined an exception will be thrown.
+   * @param <T> The type of the POJO
+   * @param name The String name of the UPDATE Function Group that will be used to create the object
+   *     in the datasource. null signifies that the default rules will be used.
+   * @param obj This is an object that has been defined within the metadata of the datasource. If
+   *     the class is not defined an exception will be thrown.
    * @return The number of objects updated in the datasource
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
   <T> long updateObject(String name, T obj) throws CpoException;
 
   /**
-   * <p>
-   * Update the Object in the datasource. The CpoAdapter will check to see if the object exists in the datasource. If it
-   * exists then the object will be updated. If it does not exist, an exception will be thrown
-   * </p>
+   * Update the Object in the datasource. The CpoAdapter will check to see if the object exists in
+   * the datasource. If it exists then the object will be updated. If it does not exist, an
+   * exception will be thrown
+   *
    * <pre>Example:
    * {@code
    * class SomeObject so = new SomeObject();
@@ -1434,26 +1567,32 @@ public interface CpoAdapter extends java.io.Serializable {
    * }
    * </pre>
    *
-   * @param <T>               The type of the POJO
-   * @param name              The String name of the UPDATE Function Group that will be used to create the object in the datasource.
-   *                          null signifies that the default rules will be used.
-   * @param obj               This is an object that has been defined within the metadata of the datasource. If the class is not
-   *                          defined an exception will be thrown.
-   * @param wheres            A collection of CpoWhere objects to be used by the function
-   * @param orderBy           A collection of CpoOrderBy objects to be used by the function
+   * @param <T> The type of the POJO
+   * @param name The String name of the UPDATE Function Group that will be used to create the object
+   *     in the datasource. null signifies that the default rules will be used.
+   * @param obj This is an object that has been defined within the metadata of the datasource. If
+   *     the class is not defined an exception will be thrown.
+   * @param wheres A collection of CpoWhere objects to be used by the function
+   * @param orderBy A collection of CpoOrderBy objects to be used by the function
    * @param nativeExpressions A collection of CpoNativeFunction objects to be used by the function
    * @return The number of objects updated in the datasource
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
-  <T> long updateObject(String name, T obj, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeFunction> nativeExpressions) throws CpoException;
+  <T> long updateObject(
+      String name,
+      T obj,
+      Collection<CpoWhere> wheres,
+      Collection<CpoOrderBy> orderBy,
+      Collection<CpoNativeFunction> nativeExpressions)
+      throws CpoException;
 
   /**
-   * <p>
-   * Updates a collection of Objects in the datasource. The assumption is that the objects contained in the collection
-   * exist in the datasource. This method stores the object in the datasource. The objects in the collection will be
-   * treated as one transaction, meaning that if one of the objects fail being updated in the datasource then the entire
-   * collection will be rolled back, if supported by the datasource.
-   * </p>
+   * Updates a collection of Objects in the datasource. The assumption is that the objects contained
+   * in the collection exist in the datasource. This method stores the object in the datasource. The
+   * objects in the collection will be treated as one transaction, meaning that if one of the
+   * objects fail being updated in the datasource then the entire collection will be rolled back, if
+   * supported by the datasource.
+   *
    * <pre>Example:
    * {@code
    * class SomeObject so = null;
@@ -1482,20 +1621,20 @@ public interface CpoAdapter extends java.io.Serializable {
    * </pre>
    *
    * @param <T> The type of the POJO
-   * @param coll This is a collection of objects that have been defined within the metadata of the datasource. If the
-   *             class is not defined an exception will be thrown.
+   * @param coll This is a collection of objects that have been defined within the metadata of the
+   *     datasource. If the class is not defined an exception will be thrown.
    * @return The number of objects updated in the datasource
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
   <T> long updateObjects(Collection<T> coll) throws CpoException;
 
   /**
-   * <p>
-   * Updates a collection of Objects in the datasource. The assumption is that the objects contained in the collection
-   * exist in the datasource. This method stores the object in the datasource. The objects in the collection will be
-   * treated as one transaction, meaning that if one of the objects fail being updated in the datasource then the entire
-   * collection will be rolled back, if supported by the datasource.
-   * </p>
+   * Updates a collection of Objects in the datasource. The assumption is that the objects contained
+   * in the collection exist in the datasource. This method stores the object in the datasource. The
+   * objects in the collection will be treated as one transaction, meaning that if one of the
+   * objects fail being updated in the datasource then the entire collection will be rolled back, if
+   * supported by the datasource.
+   *
    * <pre>Example:
    * {@code
    * class SomeObject so = null;
@@ -1523,23 +1662,23 @@ public interface CpoAdapter extends java.io.Serializable {
    * }
    * </pre>
    *
-   * @param <T>  The type of the POJO
-   * @param name The String name of the UPDATE Function Group that will be used to create the object in the datasource.
-   *             null signifies that the default rules will be used.
-   * @param coll This is a collection of objects that have been defined within the metadata of the datasource. If the
-   *             class is not defined an exception will be thrown.
+   * @param <T> The type of the POJO
+   * @param name The String name of the UPDATE Function Group that will be used to create the object
+   *     in the datasource. null signifies that the default rules will be used.
+   * @param coll This is a collection of objects that have been defined within the metadata of the
+   *     datasource. If the class is not defined an exception will be thrown.
    * @return The number of objects updated in the datasource
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
   <T> long updateObjects(String name, Collection<T> coll) throws CpoException;
 
   /**
-   * <p>
-   * Updates a collection of Objects in the datasource. The assumption is that the objects contained in the collection
-   * exist in the datasource. This method stores the object in the datasource. The objects in the collection will be
-   * treated as one transaction, meaning that if one of the objects fail being updated in the datasource then the entire
-   * collection will be rolled back, if supported by the datasource.
-   * </p>
+   * Updates a collection of Objects in the datasource. The assumption is that the objects contained
+   * in the collection exist in the datasource. This method stores the object in the datasource. The
+   * objects in the collection will be treated as one transaction, meaning that if one of the
+   * objects fail being updated in the datasource then the entire collection will be rolled back, if
+   * supported by the datasource.
+   *
    * <pre>Example:
    * {@code
    * class SomeObject so = null;
@@ -1567,33 +1706,39 @@ public interface CpoAdapter extends java.io.Serializable {
    * }
    * </pre>
    *
-   * @param <T>               The type of the POJO
-   * @param name              The String name of the UPDATE Function Group that will be used to create the object in the datasource.
-   *                          null signifies that the default rules will be used.
-   * @param coll              This is a collection of objects that have been defined within the metadata of the datasource. If the
-   *                          class is not defined an exception will be thrown.
-   * @param wheres            A collection of CpoWhere objects to be used by the function
-   * @param orderBy           A collection of CpoOrderBy objects to be used by the function
+   * @param <T> The type of the POJO
+   * @param name The String name of the UPDATE Function Group that will be used to create the object
+   *     in the datasource. null signifies that the default rules will be used.
+   * @param coll This is a collection of objects that have been defined within the metadata of the
+   *     datasource. If the class is not defined an exception will be thrown.
+   * @param wheres A collection of CpoWhere objects to be used by the function
+   * @param orderBy A collection of CpoOrderBy objects to be used by the function
    * @param nativeExpressions A collection of CpoNativeFunction objects to be used by the function
    * @return The number of objects updated in the datasource
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
-  <T> long updateObjects(String name, Collection<T> coll, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeFunction> nativeExpressions) throws CpoException;
+  <T> long updateObjects(
+      String name,
+      Collection<T> coll,
+      Collection<CpoWhere> wheres,
+      Collection<CpoOrderBy> orderBy,
+      Collection<CpoNativeFunction> nativeExpressions)
+      throws CpoException;
 
-    /**
-     * @return The CpoMetaDescriptor
-     */
-    CpoMetaDescriptor getCpoMetaDescriptor();
+  /**
+   * @return The CpoMetaDescriptor
+   */
+  CpoMetaDescriptor getCpoMetaDescriptor();
 
-    /**
-     * @return The name of the datasource
-     */
-    String getDataSourceName();
+  /**
+   * @return The name of the datasource
+   */
+  String getDataSourceName();
 
-    /**
-     * @param expression An expression defining the CpoAttributes that you want
-     * @return A list of CpoAttributes
-     * @throws CpoException An exception while getting the CpoAttributes
-     */
-    List<CpoAttribute> getCpoAttributes(String expression) throws CpoException;
+  /**
+   * @param expression An expression defining the CpoAttributes that you want
+   * @return A list of CpoAttributes
+   * @throws CpoException An exception while getting the CpoAttributes
+   */
+  List<CpoAttribute> getCpoAttributes(String expression) throws CpoException;
 }

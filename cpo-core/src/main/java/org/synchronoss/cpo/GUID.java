@@ -20,12 +20,11 @@
  */
 package org.synchronoss.cpo;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.math.BigInteger;
 import java.net.InetAddress;
 import java.security.SecureRandom;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class GUID {
 
@@ -90,8 +89,8 @@ public class GUID {
   }
 
   /**
-   * Returns an 8 character hexidecimal representation of trgt. If the result is not equal to eight characters leading
-   * zeros are prefixed.
+   * Returns an 8 character hexidecimal representation of trgt. If the result is not equal to eight
+   * characters leading zeros are prefixed.
    *
    * @return 8 character hex representation of trgt
    */

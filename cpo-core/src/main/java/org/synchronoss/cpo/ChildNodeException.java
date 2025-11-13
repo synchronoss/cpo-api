@@ -27,9 +27,7 @@ package org.synchronoss.cpo;
  */
 public class ChildNodeException extends Exception {
 
-  /**
-   * Version Id for this class.
-   */
+  /** Version Id for this class. */
   private static final long serialVersionUID = 1L;
 
   public ChildNodeException(String message) {

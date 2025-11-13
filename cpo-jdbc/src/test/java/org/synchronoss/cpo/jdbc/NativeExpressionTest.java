@@ -20,6 +20,10 @@
  */
 package org.synchronoss.cpo.jdbc;
 
+import static org.testng.Assert.*;
+
+import java.util.ArrayList;
+import java.util.Collection;
 import org.synchronoss.cpo.CpoAdapter;
 import org.synchronoss.cpo.CpoAdapterFactoryManager;
 import org.synchronoss.cpo.CpoNativeFunction;
@@ -27,11 +31,6 @@ import org.synchronoss.cpo.CpoWhere;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
-
-import java.util.ArrayList;
-import java.util.Collection;
-
-import static org.testng.Assert.*;
 
 /**
  * BlobTest is a test class for testing the JdbcAdapter class Constructors
@@ -43,11 +42,11 @@ public class NativeExpressionTest {
   private CpoAdapter cpoAdapter = null;
   private ArrayList<ValueObject> al = new ArrayList<>();
 
-  public NativeExpressionTest() {
-  }
+  public NativeExpressionTest() {}
 
   /**
-   * <code>setUp</code> Load the datasource from the properties in the property file jdbc_en_US.properties
+   * <code>setUp</code> Load the datasource from the properties in the property file
+   * jdbc_en_US.properties
    */
   @BeforeClass
   public void setUp() {
@@ -61,7 +60,7 @@ public class NativeExpressionTest {
     }
     ValueObject vo = ValueObjectFactory.createValueObject(1);
     vo.setAttrVarChar("Test");
-    vo.setAttrSmallInt((short)1);
+    vo.setAttrSmallInt((short) 1);
     al.add(vo);
     al.add(ValueObjectFactory.createValueObject(2));
     al.add(ValueObjectFactory.createValueObject(3));
@@ -75,9 +74,7 @@ public class NativeExpressionTest {
     }
   }
 
-  /**
-   * DOCUMENT ME!
-   */
+  /** DOCUMENT ME! */
   @AfterClass
   public void tearDown() {
     String method = "tearDown:";
@@ -90,9 +87,7 @@ public class NativeExpressionTest {
     cpoAdapter = null;
   }
 
-  /**
-   * DOCUMENT ME!
-   */
+  /** DOCUMENT ME! */
   @Test
   public void testNativeOrWhere() {
     String method = "testNativeOrWhere:";
@@ -107,7 +102,9 @@ public class NativeExpressionTest {
       cnqAl.add(new CpoNativeFunction("__CPO_WHERE__", "WHERE ID = 2 OR ID = 3"));
 
       ValueObject valObj = ValueObjectFactory.createValueObject(3);
-      col = cpoAdapter.retrieveBeans(ValueObject.FG_LIST_TESTWHERERETRIEVE, valObj, valObj, null, null, cnqAl);
+      col =
+          cpoAdapter.retrieveBeans(
+              ValueObject.FG_LIST_TESTWHERERETRIEVE, valObj, valObj, null, null, cnqAl);
 
       assertEquals(2, col.size(), "Col size is " + col.size());
 
@@ -130,7 +127,9 @@ public class NativeExpressionTest {
       cnqAl.add(new CpoNativeFunction("__CPO_WHERE__", null));
 
       ValueObject valObj = ValueObjectFactory.createValueObject(3);
-      col = cpoAdapter.retrieveBeans(ValueObject.FG_LIST_TESTWHERERETRIEVE, valObj, valObj, null, null, cnqAl);
+      col =
+          cpoAdapter.retrieveBeans(
+              ValueObject.FG_LIST_TESTWHERERETRIEVE, valObj, valObj, null, null, cnqAl);
 
       assertEquals(6, col.size(), "Col size is " + col.size());
 

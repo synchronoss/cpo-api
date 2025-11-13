@@ -20,9 +20,8 @@
  */
 package org.synchronoss.cpo.jdbc;
 
-import org.synchronoss.cpo.meta.domain.CpoArgument;
-
 import java.io.Serial;
+import org.synchronoss.cpo.meta.domain.CpoArgument;
 
 /**
  * JdbcCpoArgument is a class that defines the arguments to a JDBC expression
@@ -31,20 +30,16 @@ import java.io.Serial;
  */
 public class JdbcCpoArgument extends CpoArgument implements java.io.Serializable, Cloneable {
 
-  /**
-   * Version Id for this class.
-   */
-  @Serial
-  private static final long serialVersionUID = 1L;
+  /** Version Id for this class. */
+  @Serial private static final long serialVersionUID = 1L;
+
   private static final String IN_PARAMETER = "IN";
   private static final String OUT_PARAMETER = "OUT";
-  private static final String INOUT_PARAMETER = "BOTH";  
+  private static final String INOUT_PARAMETER = "BOTH";
   private String scope = null;
   private String typeInfo = null;
 
-    /**
-     * Construct a JdbcCpoArgument
-     */
+  /** Construct a JdbcCpoArgument */
   public JdbcCpoArgument() {
     super();
   }
@@ -54,57 +49,57 @@ public class JdbcCpoArgument extends CpoArgument implements java.io.Serializable
     return (JdbcCpoAttribute) super.getAttribute();
   }
 
-    /**
-     * Is this attribute an IN parameter
-     *
-     * @return true if this attribute is an IN parameter
-     */
+  /**
+   * Is this attribute an IN parameter
+   *
+   * @return true if this attribute is an IN parameter
+   */
   public boolean isInParameter() {
     return IN_PARAMETER.equals(getScope()) || INOUT_PARAMETER.equals(getScope());
   }
 
-    /**
-     * Is this attribute an OUT parameter
-     *
-     * @return true if this attribute is an OUT parameter
-     */
+  /**
+   * Is this attribute an OUT parameter
+   *
+   * @return true if this attribute is an OUT parameter
+   */
   public boolean isOutParameter() {
     return OUT_PARAMETER.equals(getScope()) || INOUT_PARAMETER.equals(getScope());
   }
 
-    /**
-     * Gets the scope of this argument
-     *
-     * @return The scope
-     */
+  /**
+   * Gets the scope of this argument
+   *
+   * @return The scope
+   */
   public String getScope() {
     return scope;
   }
 
-    /**
-     * Sets this arguments scope
-     *
-     * @param scope - The scope of the argument
-     */
+  /**
+   * Sets this arguments scope
+   *
+   * @param scope - The scope of the argument
+   */
   public void setScope(String scope) {
     this.scope = scope;
   }
 
-    /**
-     * Get the type info for this argument
-     *
-     * @return The type info for this argument
-     */
+  /**
+   * Get the type info for this argument
+   *
+   * @return The type info for this argument
+   */
   public String getTypeInfo() {
     return typeInfo;
   }
 
-    /**
-     * Sets the type info for this argument
-     * @param typeInfo - The type info to set
-     */
+  /**
+   * Sets the type info for this argument
+   *
+   * @param typeInfo - The type info to set
+   */
   public void setTypeInfo(String typeInfo) {
     this.typeInfo = typeInfo;
   }
-    
 }

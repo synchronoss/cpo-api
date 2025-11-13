@@ -20,39 +20,38 @@
  */
 package org.synchronoss.cpo;
 
+import java.util.Collection;
 import org.synchronoss.cpo.enums.Comparison;
 import org.synchronoss.cpo.enums.Logical;
 import org.synchronoss.cpo.meta.domain.CpoAttribute;
 import org.synchronoss.cpo.meta.domain.CpoClass;
 
-import java.util.Collection;
-
 /**
- * BindableCpoWhere is an interface for specifying the sort order in which objects are returned from the Datasource.
+ * BindableCpoWhere is an interface for specifying the sort order in which objects are returned from
+ * the Datasource.
  *
  * @author david berry
  */
 public class BindableCpoWhere extends Node implements CpoWhere {
 
-  /**
-   * Version Id for this class.
-   */
+  /** Version Id for this class. */
   private static final long serialVersionUID = 1L;
+
   static final String[] comparisons = {
-    "=", //COMP_EQ
-    "<", //COMP_LT
-    ">", //COMP_GT
-    "<>", //COMP_NEQ
-    "IN", //COMP_IN
-    "LIKE", //COMP_LIKE
-    "<=", //COMP_LTEQ
-    ">=", //COMP_GTEQ
-    "EXISTS", //COMP_EXISTS
-    "IS NULL" //COMP_ISNULL
+    "=", // COMP_EQ
+    "<", // COMP_LT
+    ">", // COMP_GT
+    "<>", // COMP_NEQ
+    "IN", // COMP_IN
+    "LIKE", // COMP_LIKE
+    "<=", // COMP_LTEQ
+    ">=", // COMP_GTEQ
+    "EXISTS", // COMP_EXISTS
+    "IS NULL" // COMP_ISNULL
   };
   static final String[] logicals = {
-    "AND", //LOGIC_AND
-    "OR" //LOGIC_OR
+    "AND", // LOGIC_AND
+    "OR" // LOGIC_OR
   };
   private Comparison comparison = Comparison.NONE;
   private Logical logical = Logical.NONE;
@@ -81,12 +80,11 @@ public class BindableCpoWhere extends Node implements CpoWhere {
     setNot(not);
   }
 
-  public BindableCpoWhere() {
-  }
+  public BindableCpoWhere() {}
 
   @Override
   public void setComparison(Comparison comparison) {
-      this.comparison = comparison;
+    this.comparison = comparison;
   }
 
   @Override
@@ -96,7 +94,7 @@ public class BindableCpoWhere extends Node implements CpoWhere {
 
   @Override
   public void setLogical(Logical logical) {
-      this.logical = logical;
+    this.logical = logical;
   }
 
   @Override
@@ -158,7 +156,6 @@ public class BindableCpoWhere extends Node implements CpoWhere {
     StringBuilder sb = new StringBuilder();
     CpoAttribute cpoAttribute = null;
 
-
     if (getLogical() != Logical.NONE) {
       sb.append(" ");
       sb.append(getLogical().operator);
@@ -188,7 +185,9 @@ public class BindableCpoWhere extends Node implements CpoWhere {
 
       if (getAttributeFunction() != null) {
         if (cpoAttribute != null) {
-          sb.append(buildFunction(getAttributeFunction(), cpoAttribute.getJavaName(), fullyQualifiedColumn));
+          sb.append(
+              buildFunction(
+                  getAttributeFunction(), cpoAttribute.getJavaName(), fullyQualifiedColumn));
         } else {
           sb.append(getAttributeFunction());
         }
@@ -202,7 +201,8 @@ public class BindableCpoWhere extends Node implements CpoWhere {
       sb.append(getComparison().operator);
     }
 
-    if (getComparison() != Comparison.ISNULL && (getValue() != null || getRightAttribute() != null || getStaticValue() != null)) {
+    if (getComparison() != Comparison.ISNULL
+        && (getValue() != null || getRightAttribute() != null || getStaticValue() != null)) {
       sb.append(" ");
 
       if (getValue() != null) {
@@ -210,7 +210,11 @@ public class BindableCpoWhere extends Node implements CpoWhere {
           if (cpoAttribute == null) {
             cpoAttribute = cpoClass.getAttributeJava(getRightAttribute());
           }
-          sb.append(buildFunction(getValueFunction(), getAttributeName(cpoAttribute, getAttribute(), getRightAttribute()), "?"));
+          sb.append(
+              buildFunction(
+                  getValueFunction(),
+                  getAttributeName(cpoAttribute, getAttribute(), getRightAttribute()),
+                  "?"));
         } else if (getComparison() == Comparison.IN && getValue() instanceof Collection) {
           Collection coll = (Collection) getValue();
           sb.append("(");
@@ -234,7 +238,11 @@ public class BindableCpoWhere extends Node implements CpoWhere {
         }
 
         if (getRightAttributeFunction() != null) {
-          sb.append(buildFunction(getRightAttributeFunction(), getAttributeName(cpoAttribute, getAttribute(), getRightAttribute()), fullyQualifiedColumn));
+          sb.append(
+              buildFunction(
+                  getRightAttributeFunction(),
+                  getAttributeName(cpoAttribute, getAttribute(), getRightAttribute()),
+                  fullyQualifiedColumn));
         } else {
           sb.append(fullyQualifiedColumn);
         }
@@ -245,7 +253,8 @@ public class BindableCpoWhere extends Node implements CpoWhere {
     return sb.toString();
   }
 
-  private String getAttributeName(CpoAttribute jdbcAttribute, String leftAttribute, String rightAttribute) {
+  private String getAttributeName(
+      CpoAttribute jdbcAttribute, String leftAttribute, String rightAttribute) {
     String attrName = null;
 
     if (jdbcAttribute != null) {

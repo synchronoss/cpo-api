@@ -30,8 +30,7 @@ public class CpoClassBean implements java.io.Serializable {
   private String name;
   private String description;
 
-  public CpoClassBean() {
-  }
+  public CpoClassBean() {}
 
   /*
    * Getters and Setters
@@ -66,7 +65,9 @@ public class CpoClassBean implements java.io.Serializable {
     if (getName() != null ? !getName().equals(that.getName()) : that.getName() != null) {
       return false;
     }
-    if (getDescription() != null ? !getDescription().equals(that.getDescription()) : that.getDescription() != null) {
+    if (getDescription() != null
+        ? !getDescription().equals(that.getDescription())
+        : that.getDescription() != null) {
       return false;
     }
 

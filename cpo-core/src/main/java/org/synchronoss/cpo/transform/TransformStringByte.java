@@ -29,8 +29,7 @@ import org.synchronoss.cpo.CpoException;
  */
 public class TransformStringByte implements CpoTransform<byte[], String> {
 
-  public TransformStringByte() {
-  }
+  public TransformStringByte() {}
 
   @Override
   public String transformIn(byte[] bytes) throws CpoException {

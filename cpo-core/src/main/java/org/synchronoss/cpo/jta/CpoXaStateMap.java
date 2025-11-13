@@ -20,12 +20,10 @@
  */
 package org.synchronoss.cpo.jta;
 
-import javax.transaction.xa.Xid;
 import java.util.HashMap;
+import javax.transaction.xa.Xid;
 
-/**
- * Created by dberry on 8/9/15.
- */
+/** Created by dberry on 8/9/15. */
 public class CpoXaStateMap<T> {
 
   // map of all seen XIDs
@@ -43,5 +41,4 @@ public class CpoXaStateMap<T> {
   public HashMap<Xid, CpoXaState<T>> getXidStateMap() {
     return xidStateMap;
   }
-
 }

@@ -20,14 +20,13 @@
  */
 package org.synchronoss.cpo.parser;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.io.StringReader;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Michael Bellomo
@@ -37,13 +36,12 @@ public class BoundExpressionParser implements ExpressionParser {
 
   private static final Logger logger = LoggerFactory.getLogger(BoundExpressionParser.class);
 
-  private final static String COMPARE_CHARS = " =<>!()";
-  private final static String SEPARATOR_CHARS = " .,()\n";
+  private static final String COMPARE_CHARS = " =<>!()";
+  private static final String SEPARATOR_CHARS = " .,()\n";
 
   private String expression;
 
-  public BoundExpressionParser() {
-  }
+  public BoundExpressionParser() {}
 
   @Override
   public String getExpression() {
@@ -79,11 +77,11 @@ public class BoundExpressionParser implements ExpressionParser {
 
         do {
           rc = reader.read();
-          if (((char)rc) == '\'') {
+          if (((char) rc) == '\'') {
             inSingleQuotes = !inSingleQuotes;
-          } else if (((char)rc) == '"') {
+          } else if (((char) rc) == '"') {
             inDoubleQuotes = !inDoubleQuotes;
-          } else if (!inSingleQuotes && !inDoubleQuotes && ((char)rc) == '?') {
+          } else if (!inSingleQuotes && !inDoubleQuotes && ((char) rc) == '?') {
             indexes.add(idx);
           }
           idx++;
@@ -104,15 +102,12 @@ public class BoundExpressionParser implements ExpressionParser {
   @Override
   public List<String> parse() throws ParseException {
 
-    if (expression == null)
-      throw new ParseException("The expression is null", -1);
+    if (expression == null) throw new ParseException("The expression is null", -1);
 
-    if (logger.isDebugEnabled())
-      logger.debug("Expression: " + expression);
+    if (logger.isDebugEnabled()) logger.debug("Expression: " + expression);
 
     // expression is empty, nothing we can do
-    if (expression.length() < 1)
-      return null;
+    if (expression.length() < 1) return null;
 
     // no question marks, nothing to do
     if (!expression.contains("?")) {
@@ -138,7 +133,8 @@ public class BoundExpressionParser implements ExpressionParser {
 
       int valParenStart = expression.indexOf("(", colParenEnd);
       if (valParenStart == -1)
-        throw new ParseException("Unable to locate starting parenthesis for the column values.", -1);
+        throw new ParseException(
+            "Unable to locate starting parenthesis for the column values.", -1);
 
       // use the last close paren, this will make weird inner select stuff work,
       // but it won't be able to guess the inner select values
@@ -150,8 +146,7 @@ public class BoundExpressionParser implements ExpressionParser {
       String[] vals = expression.substring(valParenStart + 1, valParenEnd).split(",");
 
       // if cols or vals is null, it means we couldn't find any
-      if (cols == null || vals == null)
-        return null;
+      if (cols == null || vals == null) return null;
 
       if (logger.isDebugEnabled()) {
         logger.debug("Found cols: " + cols.length);
@@ -159,7 +154,13 @@ public class BoundExpressionParser implements ExpressionParser {
       }
 
       if (cols.length != vals.length)
-        throw new ParseException("You seem to have " + cols.length + " columns, and " + vals.length + " values.\n\nThose numbers should be equal.", -1);
+        throw new ParseException(
+            "You seem to have "
+                + cols.length
+                + " columns, and "
+                + vals.length
+                + " values.\n\nThose numbers should be equal.",
+            -1);
 
       // filter out columns that we're not providing values for
       for (int i = 0; i < vals.length; i++) {
@@ -183,8 +184,7 @@ public class BoundExpressionParser implements ExpressionParser {
       for (int qIdx : indexes) {
         String chunk = expression.substring(startIdx, qIdx);
 
-        if (logger.isDebugEnabled())
-          logger.debug("Chunk [" + chunk + "]");
+        if (logger.isDebugEnabled()) logger.debug("Chunk [" + chunk + "]");
 
         int idx = chunk.length() - 1;
         int fieldStartIdx = -1;

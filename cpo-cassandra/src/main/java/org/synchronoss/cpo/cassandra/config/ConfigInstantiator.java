@@ -20,13 +20,12 @@
  */
 package org.synchronoss.cpo.cassandra.config;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.CpoException;
 import org.synchronoss.cpo.helper.ExceptionHelper;
-
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 
 /**
  * Instantiates the Config file processor
@@ -36,39 +35,56 @@ import java.lang.reflect.Method;
 public class ConfigInstantiator<T> {
   private static final Logger logger = LoggerFactory.getLogger(ConfigInstantiator.class);
 
-    /**
-     * Construct a ConfigInstantiator
-     */
-  public ConfigInstantiator(){}
+  /** Construct a ConfigInstantiator */
+  public ConfigInstantiator() {}
 
-    /**
-     * Instantiates the CpoConfigProcessor
-     *
-     * @param className The class to instantiate
-     * @return The instantiated CpoConfigProcessor
-     * @throws CpoException an error occurred
-     */
+  /**
+   * Instantiates the CpoConfigProcessor
+   *
+   * @param className The class to instantiate
+   * @return The instantiated CpoConfigProcessor
+   * @throws CpoException an error occurred
+   */
   public T instantiate(String className) throws CpoException {
-    FactoryMethodName factoryMethodName=null;
+    FactoryMethodName factoryMethodName = null;
 
     // Lets create the Factory
     try {
       Class factoryClass = Class.forName(className);
-      factoryMethodName = (FactoryMethodName)factoryClass.newInstance();
+      factoryMethodName = (FactoryMethodName) factoryClass.newInstance();
       logger.debug("Created factory: " + className);
       Method factoryMethod = factoryClass.getMethod(factoryMethodName.getFactoryMethodName());
       return (T) factoryMethod.invoke(factoryMethodName);
     } catch (InstantiationException ie) {
-      throw new CpoException("Could not instantiate Factory Class: " + className + ":" + ExceptionHelper.getLocalizedMessage(ie));
+      throw new CpoException(
+          "Could not instantiate Factory Class: "
+              + className
+              + ":"
+              + ExceptionHelper.getLocalizedMessage(ie));
     } catch (IllegalAccessException iae) {
-      throw new CpoException("Could not access Factory Class: " + className + ":" + ExceptionHelper.getLocalizedMessage(iae));
+      throw new CpoException(
+          "Could not access Factory Class: "
+              + className
+              + ":"
+              + ExceptionHelper.getLocalizedMessage(iae));
     } catch (ClassCastException | NoSuchMethodException cce) {
-      throw new CpoException("Factory class must implement FactoryMethodName: " + className + ":" + ExceptionHelper.getLocalizedMessage(cce));
+      throw new CpoException(
+          "Factory class must implement FactoryMethodName: "
+              + className
+              + ":"
+              + ExceptionHelper.getLocalizedMessage(cce));
     } catch (ClassNotFoundException cnfe) {
-      throw new CpoException("Could not find Factory Class: " + className + ":" + ExceptionHelper.getLocalizedMessage(cnfe));
+      throw new CpoException(
+          "Could not find Factory Class: "
+              + className
+              + ":"
+              + ExceptionHelper.getLocalizedMessage(cnfe));
     } catch (InvocationTargetException ite) {
-      throw new CpoException("Factory class method threw an exception: " + className + ":" + ExceptionHelper.getLocalizedMessage(ite));
+      throw new CpoException(
+          "Factory class method threw an exception: "
+              + className
+              + ":"
+              + ExceptionHelper.getLocalizedMessage(ite));
     }
-
   }
 }

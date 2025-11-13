@@ -20,10 +20,9 @@
  */
 package org.synchronoss.cpo.meta.domain;
 
-import org.synchronoss.cpo.meta.bean.CpoFunctionGroupBean;
-
 import java.util.ArrayList;
 import java.util.List;
+import org.synchronoss.cpo.meta.bean.CpoFunctionGroupBean;
 
 public class CpoFunctionGroup extends CpoFunctionGroupBean implements Comparable<CpoFunctionGroup> {
 
@@ -31,8 +30,7 @@ public class CpoFunctionGroup extends CpoFunctionGroupBean implements Comparable
 
   List<CpoFunction> functions = new ArrayList<>();
 
-  public CpoFunctionGroup() {
-  }
+  public CpoFunctionGroup() {}
 
   public List<CpoFunction> getFunctions() {
     return functions;
@@ -50,7 +48,7 @@ public class CpoFunctionGroup extends CpoFunctionGroupBean implements Comparable
     }
     return false;
   }
-  
+
   public void clearFunctions() {
     functions.clear();
   }

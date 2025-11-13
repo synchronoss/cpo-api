@@ -20,6 +20,11 @@
  */
 package org.synchronoss.cpo.jdbc;
 
+import static org.testng.Assert.*;
+
+import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.CpoAdapter;
@@ -34,12 +39,6 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
-import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.testng.Assert.*;
-
 /**
  * DeleteObjectTest is a test class for testing the JdbcAdapter deleteObject method
  *
@@ -53,22 +52,22 @@ public class DeleteObjectTest {
   private JdbcCpoMetaDescriptor metaDescriptor = null;
   private boolean isSupportsMillis = true;
 
-  public DeleteObjectTest() {
-  }
+  public DeleteObjectTest() {}
 
   /**
-   * <code>setUp</code> Load the datasource from the properties in the property file jdbc_en_US.properties
+   * <code>setUp</code> Load the datasource from the properties in the property file
+   * jdbc_en_US.properties
    *
    * @author david berry
    * @version '$Id: InsertObjectTest.java,v 1.3 2006/01/30 19:09:23 dberry Exp $'
    */
-  @Parameters({ "db.millisupport" })
+  @Parameters({"db.millisupport"})
   @BeforeClass
   public void setUp(boolean milliSupport) {
-      String method = "setUp:";
-      isSupportsMillis  = milliSupport;
+    String method = "setUp:";
+    isSupportsMillis = milliSupport;
 
-      try {
+    try {
       cpoAdapter = CpoAdapterFactoryManager.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_JDBC);
       assertNotNull(cpoAdapter, method + "cpoAdapter is null");
       metaDescriptor = (JdbcCpoMetaDescriptor) cpoAdapter.getCpoMetaDescriptor();
@@ -119,14 +118,11 @@ public class DeleteObjectTest {
       List<CpoWhere> cws = new ArrayList<>();
       cws.add(cpoAdapter.newWhere(Logical.OR, ValueObject.ATTR_ID, Comparison.EQ, 2));
       long deleted = cpoAdapter.deleteObject(ValueObject.FG_DELETE_NULL, valObj, cws, null, null);
-      assertEquals(1, deleted,"Should have deleted 1");
+      assertEquals(1, deleted, "Should have deleted 1");
     } catch (Exception e) {
       logger.error(ExceptionHelper.getLocalizedMessage(e));
       fail(method + e.getMessage());
     }
-
-
-
   }
 
   @AfterClass

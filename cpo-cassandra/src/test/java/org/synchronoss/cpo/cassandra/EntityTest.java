@@ -20,6 +20,9 @@
  */
 package org.synchronoss.cpo.cassandra;
 
+import static org.testng.Assert.*;
+
+import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.CpoAdapter;
@@ -27,10 +30,6 @@ import org.synchronoss.cpo.CpoAdapterFactoryManager;
 import org.synchronoss.cpo.cassandra.meta.CassandraCpoAttribute;
 import org.synchronoss.cpo.meta.domain.CpoAttribute;
 import org.testng.annotations.Test;
-
-import java.util.List;
-
-import static org.testng.Assert.*;
 
 /**
  * ConstructorTest is a test class for testing the JdbcAdapter class Constructors
@@ -45,14 +44,15 @@ public class EntityTest {
   public void testGetDataSourceEntities() {
     String method = "testGetDataSourceEntities:";
     try {
-      CpoAdapter cpoAdapter = CpoAdapterFactoryManager.getCpoAdapter(CassandraStatics.ADAPTER_CONTEXT_DEFAULT);
+      CpoAdapter cpoAdapter =
+          CpoAdapterFactoryManager.getCpoAdapter(CassandraStatics.ADAPTER_CONTEXT_DEFAULT);
       assertNotNull(cpoAdapter, method + "cpoAdapter is null");
 
       List<CpoAttribute> attributes = cpoAdapter.getCpoAttributes("select * from value_object");
       for (CpoAttribute attribute : attributes) {
         if (!(attribute instanceof CassandraCpoAttribute))
-          fail(attribute.toString()+" Attribute is not a CassandraCpoAttribute");
-        dumpAttribute((CassandraCpoAttribute)attribute);
+          fail(attribute.toString() + " Attribute is not a CassandraCpoAttribute");
+        dumpAttribute((CassandraCpoAttribute) attribute);
       }
       assertEquals(20, attributes.size(), "List size is " + attributes.size());
     } catch (Exception e) {
@@ -61,10 +61,10 @@ public class EntityTest {
   }
 
   private void dumpAttribute(CassandraCpoAttribute attribute) {
-    logger.debug("DataName: "+attribute.getDataName());
-    logger.debug("DataType: "+attribute.getDataType());
-    logger.debug("JavaName: "+attribute.getJavaName());
-    logger.debug("JavaType: "+attribute.getJavaType());
-    logger.debug("DataTypeMapEntry: "+attribute.getDataTypeInt());
+    logger.debug("DataName: " + attribute.getDataName());
+    logger.debug("DataType: " + attribute.getDataType());
+    logger.debug("JavaName: " + attribute.getJavaName());
+    logger.debug("JavaType: " + attribute.getJavaType());
+    logger.debug("DataTypeMapEntry: " + attribute.getDataTypeInt());
   }
 }

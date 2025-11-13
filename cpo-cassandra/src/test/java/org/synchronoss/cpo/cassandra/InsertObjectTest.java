@@ -20,18 +20,17 @@
  */
 package org.synchronoss.cpo.cassandra;
 
+import static org.testng.Assert.*;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
 import org.synchronoss.cpo.CpoAdapter;
 import org.synchronoss.cpo.CpoAdapterFactoryManager;
 import org.synchronoss.cpo.cassandra.meta.CassandraCpoMetaDescriptor;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-
-import static org.testng.Assert.*;
 
 /**
  * InsertObjectTest is a test class for testing the insert api calls of cpo
@@ -46,7 +45,8 @@ public class InsertObjectTest {
   private CassandraCpoMetaDescriptor metaDescriptor = null;
 
   /**
-   * <code>setUp</code> Load the datasource from the properties in the property file jdbc_en_US.properties
+   * <code>setUp</code> Load the datasource from the properties in the property file
+   * jdbc_en_US.properties
    *
    * @author david berry
    * @version '$Id: InsertObjectTest.java,v 1.3 2006/01/30 19:09:23 dberry Exp $'
@@ -58,13 +58,14 @@ public class InsertObjectTest {
     try {
       cpoAdapter = CpoAdapterFactoryManager.getCpoAdapter(CassandraStatics.ADAPTER_CONTEXT_DEFAULT);
       assertNotNull(cpoAdapter, method + "cpoAdapter is null");
-      metaDescriptor = (CassandraCpoMetaDescriptor)cpoAdapter.getCpoMetaDescriptor();
+      metaDescriptor = (CassandraCpoMetaDescriptor) cpoAdapter.getCpoMetaDescriptor();
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
     try {
-      readAdapter = CpoAdapterFactoryManager.getCpoAdapter(CassandraStatics.ADAPTER_CONTEXT_DEFAULT);
-      assertNotNull(readAdapter,method + "readAdapter is null");
+      readAdapter =
+          CpoAdapterFactoryManager.getCpoAdapter(CassandraStatics.ADAPTER_CONTEXT_DEFAULT);
+      assertNotNull(readAdapter, method + "readAdapter is null");
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -79,9 +80,9 @@ public class InsertObjectTest {
     valObj.setAttrInt(3);
     Date ts = new Date(System.currentTimeMillis());
 
-//    if (!metaDescriptor.isSupportsMillis()) {
-//      ts.setNanos(0);
-//    }
+    //    if (!metaDescriptor.isSupportsMillis()) {
+    //      ts.setNanos(0);
+    //    }
 
     valObj.setAttrTimestamp(ts);
     valObj.setAttrBool(true);
@@ -98,7 +99,10 @@ public class InsertObjectTest {
       assertEquals(vo.getId(), valObj.getId(), "Ids do not match");
       assertEquals(vo.getAttrInt(), valObj.getAttrInt(), "Integers do not match");
       assertEquals(vo.getAttrVarChar(), valObj.getAttrVarChar(), "Strings do not match");
-      assertEquals(vo.getAttrTimestamp().getTime(), valObj.getAttrTimestamp().getTime(), "Timestamps do not match");
+      assertEquals(
+          vo.getAttrTimestamp().getTime(),
+          valObj.getAttrTimestamp().getTime(),
+          "Timestamps do not match");
       assertTrue(vo.getAttrBool(), "boolean not stored correctly");
     } catch (Exception e) {
       fail(method + e.getMessage());

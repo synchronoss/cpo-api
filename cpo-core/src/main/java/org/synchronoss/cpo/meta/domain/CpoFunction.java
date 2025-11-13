@@ -20,12 +20,11 @@
  */
 package org.synchronoss.cpo.meta.domain;
 
+import java.util.ArrayList;
+import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.meta.bean.CpoFunctionBean;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class CpoFunction extends CpoFunctionBean {
 
@@ -34,8 +33,7 @@ public class CpoFunction extends CpoFunctionBean {
   private static final Logger logger = LoggerFactory.getLogger(CpoFunction.class);
   List<CpoArgument> arguments = new ArrayList<>();
 
-  public CpoFunction() {
-  }
+  public CpoFunction() {}
 
   public List<CpoArgument> getArguments() {
     return arguments;
@@ -81,7 +79,7 @@ public class CpoFunction extends CpoFunctionBean {
     }
 
     // TODO make uncomment the following line and make work
-//    sb.append(jq.getName() + " " + jq.getType());
+    //    sb.append(jq.getName() + " " + jq.getType());
     args = function.getArguments();
 
     for (j = 1; j <= args.size(); j++) {
@@ -92,10 +90,9 @@ public class CpoFunction extends CpoFunctionBean {
           attribute = argument.getAttribute();
           c = attribute.getGetter().getReturnType();
           // TODO make uncomment the following line and make work
-//          type = attribute.getJavaSqlType();
+          //          type = attribute.getJavaSqlType();
           if (c != null) {
-            sb.append(" col" + j + ":" + c.getName() + " type:"
-                    + type + " ");
+            sb.append(" col" + j + ":" + c.getName() + " type:" + type + " ");
           } else {
             sb.append(j + ":null type:" + type + " ");
           }

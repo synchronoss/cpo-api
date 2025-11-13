@@ -20,6 +20,11 @@
  */
 package org.synchronoss.cpo.jdbc;
 
+import static org.testng.Assert.*;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.CpoAdapter;
@@ -30,12 +35,6 @@ import org.testng.annotations.AfterClass;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
-
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.testng.Assert.*;
 
 /**
  * RetrieveBeanTest is a test class for testing the JdbcAdapter class Constructors
@@ -48,11 +47,11 @@ public class HotDeployTest {
   private ArrayList<ValueObject> al = new ArrayList<>();
   private File metaFile = new File("metaData.xml");
 
-  public HotDeployTest() {
-  }
+  public HotDeployTest() {}
 
   /**
-   * <code>setUp</code> Load the datasource from the properties in the property file jdbc_en_US.properties
+   * <code>setUp</code> Load the datasource from the properties in the property file
+   * jdbc_en_US.properties
    *
    * @author david berry
    * @version '$Id: RetrieveBeanTest.java,v 1.6 2006/01/30 19:09:23 dberry Exp $'
@@ -71,7 +70,7 @@ public class HotDeployTest {
     }
     ValueObject vo = ValueObjectFactory.createValueObject(1);
     vo.setAttrVarChar("Test");
-    vo.setAttrSmallInt((short)1);
+    vo.setAttrSmallInt((short) 1);
     vo.setAttrInteger(1);
     al.add(vo);
     al.add(ValueObjectFactory.createValueObject(2));
@@ -101,7 +100,7 @@ public class HotDeployTest {
       col = cpoAdapter.retrieveBeans("HotDeploySelect", valObj);
       fail("Should not have gotten here:");
     } catch (Exception e) {
-      logger.debug("Received an expected Exception: "+e.getLocalizedMessage());
+      logger.debug("Received an expected Exception: " + e.getLocalizedMessage());
     }
 
     try {
@@ -118,14 +117,14 @@ public class HotDeployTest {
       List<ValueObject> col2 = cpoAdapter.retrieveBeans("HotDeploySelect", valObj);
       assertEquals(6, col2.size(), "Col size is " + col2.size());
 
-      for (int i=0; i<col.size(); i++) {
+      for (int i = 0; i < col.size(); i++) {
         assertEquals(col.get(i).getId(), col2.get(i).getId(), "IDs must be equal");
       }
 
       // make sure the first objects are the same
     } catch (Exception e) {
       String msg = ExceptionHelper.getLocalizedMessage(e);
-      fail("Received an unexpected exception: "+msg);
+      fail("Received an unexpected exception: " + msg);
     }
   }
 
@@ -144,7 +143,7 @@ public class HotDeployTest {
       col = cpoAdapter.retrieveBeans("HotDeploySelect", valObj);
       fail("Should not have gotten here:");
     } catch (Exception e) {
-      logger.debug("Received an expected Exception: "+e.getLocalizedMessage());
+      logger.debug("Received an expected Exception: " + e.getLocalizedMessage());
     }
 
     try {
@@ -167,22 +166,22 @@ public class HotDeployTest {
 
     } catch (Exception e) {
       String msg = ExceptionHelper.getLocalizedMessage(e);
-      fail("Received an unexpected exception: "+msg);
+      fail("Received an unexpected exception: " + msg);
     }
   }
 
-    @AfterMethod
-    public void resetMetaData() {
-        String method = "resetMetaData:";
-        try {
-            // lets reset the metadata to before we changed it
-            List<String> metaFiles = new ArrayList<>();
-            metaFiles.add(metaFile.getName());
-            cpoAdapter.getCpoMetaDescriptor().refreshDescriptorMeta(metaFiles, true);
-        } catch (Exception e) {
-            fail(method + e.getMessage());
-        }
+  @AfterMethod
+  public void resetMetaData() {
+    String method = "resetMetaData:";
+    try {
+      // lets reset the metadata to before we changed it
+      List<String> metaFiles = new ArrayList<>();
+      metaFiles.add(metaFile.getName());
+      cpoAdapter.getCpoMetaDescriptor().refreshDescriptorMeta(metaFiles, true);
+    } catch (Exception e) {
+      fail(method + e.getMessage());
     }
+  }
 
   @AfterClass
   public void tearDown() {

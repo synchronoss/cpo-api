@@ -20,6 +20,10 @@
  */
 package org.synchronoss.cpo.jdbc;
 
+import java.io.InputStream;
+import java.io.Reader;
+import java.lang.reflect.InvocationTargetException;
+import java.sql.CallableStatement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.CpoByteArrayInputStream;
@@ -33,11 +37,6 @@ import org.synchronoss.cpo.meta.domain.CpoAttribute;
 import org.synchronoss.cpo.transform.CpoTransform;
 import org.synchronoss.cpo.transform.jdbc.JdbcCpoTransform;
 
-import java.io.InputStream;
-import java.io.Reader;
-import java.lang.reflect.InvocationTargetException;
-import java.sql.CallableStatement;
-
 /**
  * A class that builds constructs and executes callable statements
  *
@@ -49,40 +48,43 @@ public class CallableStatementCpoData extends AbstractBindableCpoData {
   private CallableStatement cs = null;
   JdbcCallableStatementFactory jcsf = null;
 
-    /**
-     * Constructs a CallableStatementCpoData
-     *
-     * @param cs - The callable statement
-     * @param cpoAttribute - The attribute to add.
-     * @param index - The index of the attribute in the callable statement
-     */
+  /**
+   * Constructs a CallableStatementCpoData
+   *
+   * @param cs - The callable statement
+   * @param cpoAttribute - The attribute to add.
+   * @param index - The index of the attribute in the callable statement
+   */
   public CallableStatementCpoData(CallableStatement cs, CpoAttribute cpoAttribute, int index) {
     super(cpoAttribute, index);
     this.cs = cs;
   }
 
-    /**
-     * Constructs a CallableStatementCpoData
-     *
-     * @param jcsf - The factory for building the callable statement
-     * @param cpoAttribute - The attribute to add.
-     * @param index - The index of the attribute in the callable statement
-     */
-  public CallableStatementCpoData(JdbcCallableStatementFactory jcsf, CpoAttribute cpoAttribute, int index) {
+  /**
+   * Constructs a CallableStatementCpoData
+   *
+   * @param jcsf - The factory for building the callable statement
+   * @param cpoAttribute - The attribute to add.
+   * @param index - The index of the attribute in the callable statement
+   */
+  public CallableStatementCpoData(
+      JdbcCallableStatementFactory jcsf, CpoAttribute cpoAttribute, int index) {
     super(cpoAttribute, index);
     this.jcsf = jcsf;
   }
 
   @Override
   public Object invokeGetter() throws CpoException {
-    Object javaObject=null;
-    JdbcMethodMapEntry<?,?> jdbcMethodMapEntry = JdbcMethodMapper.getJavaSqlMethod(getDataGetterReturnType());
+    Object javaObject = null;
+    JdbcMethodMapEntry<?, ?> jdbcMethodMapEntry =
+        JdbcMethodMapper.getJavaSqlMethod(getDataGetterReturnType());
     if (jdbcMethodMapEntry == null) {
       if (Object.class.isAssignableFrom(getDataGetterReturnType())) {
         jdbcMethodMapEntry = JdbcMethodMapper.getJavaSqlMethod(Object.class);
       }
-      if (jdbcMethodMapEntry==null) {
-        throw new CpoException("Error Retrieving Jdbc Method for type: " + getDataGetterReturnType().getName());
+      if (jdbcMethodMapEntry == null) {
+        throw new CpoException(
+            "Error Retrieving Jdbc Method for type: " + getDataGetterReturnType().getName());
       }
     }
 
@@ -96,15 +98,20 @@ public class CallableStatementCpoData extends AbstractBindableCpoData {
           break;
         case JdbcMethodMapEntry.METHOD_TYPE_OBJECT:
         default:
-          javaObject = jdbcMethodMapEntry.getCsGetter().invoke(cs, getIndex(), jdbcMethodMapEntry.getJavaClass());
+          javaObject =
+              jdbcMethodMapEntry
+                  .getCsGetter()
+                  .invoke(cs, getIndex(), jdbcMethodMapEntry.getJavaClass());
           break;
       }
       javaObject = transformIn(javaObject);
     } catch (IllegalAccessException iae) {
-      logger.debug("Error Invoking CallableStatement Method: " + ExceptionHelper.getLocalizedMessage(iae));
+      logger.debug(
+          "Error Invoking CallableStatement Method: " + ExceptionHelper.getLocalizedMessage(iae));
       throw new CpoException(iae);
     } catch (InvocationTargetException ite) {
-      logger.debug("Error Invoking CallableStatement Method: " + ExceptionHelper.getLocalizedMessage(ite));
+      logger.debug(
+          "Error Invoking CallableStatement Method: " + ExceptionHelper.getLocalizedMessage(ite));
       throw new CpoException(ite.getCause());
     }
 
@@ -113,16 +120,19 @@ public class CallableStatementCpoData extends AbstractBindableCpoData {
 
   @Override
   public void invokeSetter(Object instanceObject) throws CpoException {
-    Logger localLogger = instanceObject == null ? logger : LoggerFactory.getLogger(instanceObject.getClass());
+    Logger localLogger =
+        instanceObject == null ? logger : LoggerFactory.getLogger(instanceObject.getClass());
     CpoAttribute cpoAttribute = getCpoAttribute();
     Object param = transformOut(cpoAttribute.invokeGetter(instanceObject));
-    JdbcMethodMapEntry<?,?> jdbcMethodMapEntry = JdbcMethodMapper.getJavaSqlMethod(getDataSetterParamType());
+    JdbcMethodMapEntry<?, ?> jdbcMethodMapEntry =
+        JdbcMethodMapper.getJavaSqlMethod(getDataSetterParamType());
     if (jdbcMethodMapEntry == null) {
       if (Object.class.isAssignableFrom(getDataSetterParamType())) {
         jdbcMethodMapEntry = JdbcMethodMapper.getJavaSqlMethod(Object.class);
       }
-      if (jdbcMethodMapEntry==null) {
-        throw new CpoException("Error Retrieving Jdbc Method for type: " + getDataSetterParamType().getName());
+      if (jdbcMethodMapEntry == null) {
+        throw new CpoException(
+            "Error Retrieving Jdbc Method for type: " + getDataSetterParamType().getName());
       }
     }
     localLogger.info(cpoAttribute.getDataName() + "=" + param);
@@ -136,16 +146,24 @@ public class CallableStatementCpoData extends AbstractBindableCpoData {
         case JdbcMethodMapEntry.METHOD_TYPE_STREAM:
           CpoByteArrayInputStream cbais = CpoByteArrayInputStream.getCpoStream((InputStream) param);
           // Get the length of the InputStream in param
-          jdbcMethodMapEntry.getCsSetter().invoke(jcsf.getCallableStatement(), getIndex(), cbais, cbais.getLength());
+          jdbcMethodMapEntry
+              .getCsSetter()
+              .invoke(jcsf.getCallableStatement(), getIndex(), cbais, cbais.getLength());
           break;
         case JdbcMethodMapEntry.METHOD_TYPE_READER:
           CpoCharArrayReader ccar = CpoCharArrayReader.getCpoReader((Reader) param);
           // Get the length of the Reader in param
-          jdbcMethodMapEntry.getCsSetter().invoke(jcsf.getCallableStatement(), getIndex(), ccar, ccar.getLength());
+          jdbcMethodMapEntry
+              .getCsSetter()
+              .invoke(jcsf.getCallableStatement(), getIndex(), ccar, ccar.getLength());
           break;
       }
     } catch (Exception e) {
-      throw new CpoException("Error Invoking Jdbc Method: " + jdbcMethodMapEntry.getBsSetter().getName() + ":" + ExceptionHelper.getLocalizedMessage(e));
+      throw new CpoException(
+          "Error Invoking Jdbc Method: "
+              + jdbcMethodMapEntry.getBsSetter().getName()
+              + ":"
+              + ExceptionHelper.getLocalizedMessage(e));
     }
   }
 
@@ -156,12 +174,11 @@ public class CallableStatementCpoData extends AbstractBindableCpoData {
 
     if (cpoTransform != null) {
       if (cpoTransform instanceof JdbcCpoTransform) {
-        retObj = ((JdbcCpoTransform)cpoTransform).transformOut(jcsf, attributeObject);
+        retObj = ((JdbcCpoTransform) cpoTransform).transformOut(jcsf, attributeObject);
       } else {
         retObj = cpoTransform.transformOut(attributeObject);
       }
     }
     return retObj;
   }
-
 }

@@ -20,31 +20,31 @@
  */
 package org.synchronoss.cpo.transform;
 
-import org.synchronoss.cpo.CpoException;
-import org.testng.annotations.Test;
-
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.fail;
+
+import org.synchronoss.cpo.CpoException;
+import org.testng.annotations.Test;
 
 public class TransformTest {
 
   @Test
   public void testString2Byte() {
-    String testString="This is a test string";
-    byte[] bytes=null;
-    String transformedString="";
+    String testString = "This is a test string";
+    byte[] bytes = null;
+    String transformedString = "";
     CpoTransform<byte[], String> transform = new TransformStringByte();
 
     try {
       bytes = transform.transformOut(testString);
-    }catch (CpoException ex) {
-      fail("transformOut threw an exception"+ex.getMessage());
+    } catch (CpoException ex) {
+      fail("transformOut threw an exception" + ex.getMessage());
     }
 
     try {
       transformedString = transform.transformIn(bytes);
-    }catch (CpoException ex) {
-      fail("transformIn threw an exception"+ex.getMessage());
+    } catch (CpoException ex) {
+      fail("transformIn threw an exception" + ex.getMessage());
     }
 
     assertEquals(testString, transformedString);

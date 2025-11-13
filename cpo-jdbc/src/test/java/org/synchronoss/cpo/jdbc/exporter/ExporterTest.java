@@ -20,6 +20,15 @@
  */
 package org.synchronoss.cpo.jdbc.exporter;
 
+import static org.testng.Assert.*;
+
+import java.io.File;
+import java.io.FileWriter;
+import java.util.Arrays;
+import javax.tools.JavaCompiler;
+import javax.tools.JavaFileObject;
+import javax.tools.StandardJavaFileManager;
+import javax.tools.ToolProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.CpoAdapter;
@@ -40,16 +49,6 @@ import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import javax.tools.JavaCompiler;
-import javax.tools.JavaFileObject;
-import javax.tools.StandardJavaFileManager;
-import javax.tools.ToolProvider;
-import java.io.File;
-import java.io.FileWriter;
-import java.util.Arrays;
-
-import static org.testng.Assert.*;
-
 /**
  * test class for testing the ExporterTest
  *
@@ -62,8 +61,7 @@ public class ExporterTest {
   private CpoAdapter cpoAdapter = null;
   private JdbcCpoMetaDescriptor metaDescriptor = null;
 
-  public ExporterTest() {
-  }
+  public ExporterTest() {}
 
   @BeforeClass
   public void setUp() {
@@ -71,7 +69,7 @@ public class ExporterTest {
 
     try {
       cpoAdapter = CpoAdapterFactoryManager.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_JDBC);
-      assertNotNull(cpoAdapter,method + "CpoAdapter is null");
+      assertNotNull(cpoAdapter, method + "CpoAdapter is null");
       metaDescriptor = (JdbcCpoMetaDescriptor) cpoAdapter.getCpoMetaDescriptor();
     } catch (Exception e) {
       fail(method + e.getMessage());
@@ -121,7 +119,8 @@ public class ExporterTest {
   public void testLegacyClassSourceExport() {
     logger.debug("testLegacyClassSourceExport");
     try {
-      CpoLegacyClassSourceGenerator classSourceGenerator = new CpoLegacyClassSourceGenerator(metaDescriptor);
+      CpoLegacyClassSourceGenerator classSourceGenerator =
+          new CpoLegacyClassSourceGenerator(metaDescriptor);
 
       logger.debug("Generating java source");
       CpoClass cpoClass = metaDescriptor.getMetaClass(ValueObjectFactory.createValueObject());
@@ -144,8 +143,10 @@ public class ExporterTest {
       logger.debug("Compiling class source");
       JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
       StandardJavaFileManager fileManager = compiler.getStandardFileManager(null, null, null);
-      Iterable<? extends JavaFileObject> compilationUnits = fileManager.getJavaFileObjectsFromFiles(Arrays.asList(javaFile));
-      boolean result = compiler.getTask(null, fileManager, null, null, null, compilationUnits).call();
+      Iterable<? extends JavaFileObject> compilationUnits =
+          fileManager.getJavaFileObjectsFromFiles(Arrays.asList(javaFile));
+      boolean result =
+          compiler.getTask(null, fileManager, null, null, null, compilationUnits).call();
 
       // validate the result
       assertTrue(result);
@@ -161,7 +162,8 @@ public class ExporterTest {
   public void testInterfaceSourceExport() {
     logger.debug("testInterfaceSourceExport");
     try {
-      CpoInterfaceSourceGenerator interfaceSourceGenerator = new CpoInterfaceSourceGenerator(metaDescriptor);
+      CpoInterfaceSourceGenerator interfaceSourceGenerator =
+          new CpoInterfaceSourceGenerator(metaDescriptor);
 
       logger.debug("Generating interface source");
       CpoClass cpoClass = metaDescriptor.getMetaClass(ValueObjectFactory.createValueObject());
@@ -184,8 +186,10 @@ public class ExporterTest {
       logger.debug("Compiling class source");
       JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
       StandardJavaFileManager fileManager = compiler.getStandardFileManager(null, null, null);
-      Iterable<? extends JavaFileObject> compilationUnits = fileManager.getJavaFileObjectsFromFiles(Arrays.asList(javaFile));
-      boolean result = compiler.getTask(null, fileManager, null, null, null, compilationUnits).call();
+      Iterable<? extends JavaFileObject> compilationUnits =
+          fileManager.getJavaFileObjectsFromFiles(Arrays.asList(javaFile));
+      boolean result =
+          compiler.getTask(null, fileManager, null, null, null, compilationUnits).call();
 
       // validate the result
       assertTrue(result);
@@ -201,7 +205,8 @@ public class ExporterTest {
   public void testClassSourceExport() {
     logger.debug("testClassSourceExport");
     try {
-      CpoInterfaceSourceGenerator interfaceSourceGenerator = new CpoInterfaceSourceGenerator(metaDescriptor);
+      CpoInterfaceSourceGenerator interfaceSourceGenerator =
+          new CpoInterfaceSourceGenerator(metaDescriptor);
 
       logger.debug("Generating interface source");
       CpoClass cpoClass = metaDescriptor.getMetaClass(ValueObjectFactory.createValueObject());
@@ -213,14 +218,16 @@ public class ExporterTest {
       assertFalse(interfaceSource.isEmpty());
 
       // write the file
-      File interfaceFile = new File("target", interfaceSourceGenerator.getInterfaceName() + ".java");
+      File interfaceFile =
+          new File("target", interfaceSourceGenerator.getInterfaceName() + ".java");
       logger.debug("Saving interface source to " + interfaceFile.getAbsolutePath());
       FileWriter iw = new FileWriter(interfaceFile);
       iw.write(interfaceSource);
       iw.flush();
       iw.close();
 
-      CpoClassSourceGenerator interfaceClassSourceGenerator = new CpoClassSourceGenerator(metaDescriptor);
+      CpoClassSourceGenerator interfaceClassSourceGenerator =
+          new CpoClassSourceGenerator(metaDescriptor);
 
       logger.debug("Generating java source");
       cpoClass.acceptMetaDFVisitor(interfaceClassSourceGenerator);
@@ -242,8 +249,10 @@ public class ExporterTest {
       logger.debug("Compiling interface and class source");
       JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
       StandardJavaFileManager fileManager = compiler.getStandardFileManager(null, null, null);
-      Iterable<? extends JavaFileObject> compilationUnits = fileManager.getJavaFileObjectsFromFiles(Arrays.asList(interfaceFile, javaFile));
-      boolean result = compiler.getTask(null, fileManager, null, null, null, compilationUnits).call();
+      Iterable<? extends JavaFileObject> compilationUnits =
+          fileManager.getJavaFileObjectsFromFiles(Arrays.asList(interfaceFile, javaFile));
+      boolean result =
+          compiler.getTask(null, fileManager, null, null, null, compilationUnits).call();
 
       // validate the result
       assertTrue(result);

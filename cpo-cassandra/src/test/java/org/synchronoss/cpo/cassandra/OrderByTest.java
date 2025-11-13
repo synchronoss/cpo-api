@@ -20,17 +20,16 @@
  */
 package org.synchronoss.cpo.cassandra;
 
+import static org.testng.Assert.*;
+
+import java.util.ArrayList;
+import java.util.Collection;
 import org.synchronoss.cpo.CpoAdapter;
 import org.synchronoss.cpo.CpoAdapterFactoryManager;
 import org.synchronoss.cpo.CpoOrderBy;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
-
-import java.util.ArrayList;
-import java.util.Collection;
-
-import static org.testng.Assert.*;
 
 /**
  * BlobTest is a test class for testing the JdbcAdapter class Constructors
@@ -42,11 +41,11 @@ public class OrderByTest {
   private CpoAdapter cpoAdapter = null;
   private ArrayList<ValueObject> al = new ArrayList<>();
 
-  public OrderByTest() {
-  }
+  public OrderByTest() {}
 
   /**
-   * <code>setUp</code> Load the datasource from the properties in the property file jdbc_en_US.properties
+   * <code>setUp</code> Load the datasource from the properties in the property file
+   * jdbc_en_US.properties
    */
   @BeforeClass
   public void setUp() {
@@ -54,7 +53,7 @@ public class OrderByTest {
 
     try {
       cpoAdapter = CpoAdapterFactoryManager.getCpoAdapter(CassandraStatics.ADAPTER_CONTEXT_DEFAULT);
-      assertNotNull(cpoAdapter,method + "CpoAdapter is null");
+      assertNotNull(cpoAdapter, method + "CpoAdapter is null");
       // Add the test valueObjects
     } catch (Exception e) {
       fail(method + e.getMessage());
@@ -103,104 +102,101 @@ public class OrderByTest {
     }
   }
 
-  /**
-   * TODO - add back in when you get the tables correct
-   */
+  /** TODO - add back in when you get the tables correct */
   @Test
   public void testOrderByAscending() {
-//    String method = "testOrderByAscending:";
-//    Collection<ValueObject> col;
-//
-//
-//    try {
-//      Collection<Integer> inColl = new ArrayList<Integer>();
-//      inColl.add(new Integer(1));
-//      inColl.add(new Integer(3));
-//      inColl.add(new Integer(5));
-//
-////      CpoWhere cw = cpoAdapter.newWhere();
-//      CpoWhere cw = cpoAdapter.newWhere(Logical.NONE, "id", Comparison.IN, inColl);
-//      ArrayList<CpoWhere> wheres = new ArrayList<CpoWhere>();
-//      wheres.add(cw);
-//
-//      CpoOrderBy cob = cpoAdapter.newOrderBy("id", true);
-//      Collection<CpoOrderBy> colCob = new ArrayList<CpoOrderBy>();
-//      colCob.add(cob);
-//      ValueObject valObj = ValueObjectFactory.createValueObject();
-//      col = cpoAdapter.retrieveBeans("TestOrderByRetrieve", valObj, wheres, colCob);
-//
-//      int id = 1;
-//      for (ValueObject vo : col) {
-//        assertEquals(id, vo.getId());
-//        id++;
-//      }
-//    } catch (Exception e) {
-//      fail(method + e.getMessage());
-//    }
+    //    String method = "testOrderByAscending:";
+    //    Collection<ValueObject> col;
+    //
+    //
+    //    try {
+    //      Collection<Integer> inColl = new ArrayList<Integer>();
+    //      inColl.add(new Integer(1));
+    //      inColl.add(new Integer(3));
+    //      inColl.add(new Integer(5));
+    //
+    ////      CpoWhere cw = cpoAdapter.newWhere();
+    //      CpoWhere cw = cpoAdapter.newWhere(Logical.NONE, "id", Comparison.IN, inColl);
+    //      ArrayList<CpoWhere> wheres = new ArrayList<CpoWhere>();
+    //      wheres.add(cw);
+    //
+    //      CpoOrderBy cob = cpoAdapter.newOrderBy("id", true);
+    //      Collection<CpoOrderBy> colCob = new ArrayList<CpoOrderBy>();
+    //      colCob.add(cob);
+    //      ValueObject valObj = ValueObjectFactory.createValueObject();
+    //      col = cpoAdapter.retrieveBeans("TestOrderByRetrieve", valObj, wheres, colCob);
+    //
+    //      int id = 1;
+    //      for (ValueObject vo : col) {
+    //        assertEquals(id, vo.getId());
+    //        id++;
+    //      }
+    //    } catch (Exception e) {
+    //      fail(method + e.getMessage());
+    //    }
   }
 
-  /**
-   * TODO - add back in when you get the tables correct
-   */
+  /** TODO - add back in when you get the tables correct */
   @Test
   public void testOrderByDescending() {
-//    String method = "testOrderByDescending:";
-//    List<ValueObject> col;
-//
-//    try {
-//      CpoOrderBy cob = cpoAdapter.newOrderBy("id", false, null);
-//      CpoOrderBy cob2 = cpoAdapter.newOrderBy(CpoOrderBy.DEFAULT_MARKER, "attrVarChar", false, null);
-//      Collection<CpoOrderBy> colCob = new ArrayList<CpoOrderBy>();
-//      colCob.add(cob);
-//      colCob.add(cob2);
-//      ValueObject valObj = ValueObjectFactory.createValueObject();
-//      col = cpoAdapter.retrieveBeans("TestOrderByRetrieve", valObj, colCob);
-//      int id = 5;
-//      for (ValueObject vo : col) {
-//        assertEquals(id, vo.getId());
-//        id--;
-//      }
-//    } catch (Exception e) {
-//      fail(method + e.getMessage());
-//    }
+    //    String method = "testOrderByDescending:";
+    //    List<ValueObject> col;
+    //
+    //    try {
+    //      CpoOrderBy cob = cpoAdapter.newOrderBy("id", false, null);
+    //      CpoOrderBy cob2 = cpoAdapter.newOrderBy(CpoOrderBy.DEFAULT_MARKER, "attrVarChar", false,
+    // null);
+    //      Collection<CpoOrderBy> colCob = new ArrayList<CpoOrderBy>();
+    //      colCob.add(cob);
+    //      colCob.add(cob2);
+    //      ValueObject valObj = ValueObjectFactory.createValueObject();
+    //      col = cpoAdapter.retrieveBeans("TestOrderByRetrieve", valObj, colCob);
+    //      int id = 5;
+    //      for (ValueObject vo : col) {
+    //        assertEquals(id, vo.getId());
+    //        id--;
+    //      }
+    //    } catch (Exception e) {
+    //      fail(method + e.getMessage());
+    //    }
   }
 
   @Test
   public void testOrderByFunction() {
-//    String method = "testOrderByAscending:";
-//    Collection<ValueObject> col;
-//
-//    ValueObject vobj = ValueObjectFactory.createValueObject(-6);
-//    try {
-//      cpoAdapter.insertObject("TestOrderByInsert", vobj);
-//    } catch (Exception e) {
-//      fail(method + e.getMessage());
-//    }
-//    try {
-//      CpoOrderBy cob = cpoAdapter.newOrderBy("id", true, "ABS(id)");
-//      Collection<CpoOrderBy> colCob = new ArrayList<CpoOrderBy>();
-//      colCob.add(cob);
-//      ValueObject valObj = ValueObjectFactory.createValueObject();
-//      col = cpoAdapter.retrieveBeans("TestOrderByRetrieve", valObj, colCob);
-//
-//      int id = 1;
-//      for (ValueObject vo : col) {
-//        int voId = vo.getId();
-//        if (voId < 0) {
-//          voId *= -1;
-//        }
-//        assertEquals(id, voId);
-//        id++;
-//      }
-//    } catch (Exception e) {
-//      fail(method + e.getMessage());
-//    }
-//
-//    try {
-//      cpoAdapter.deleteObject("TestOrderByDelete", vobj);
-//
-//    } catch (Exception e) {
-//      fail(method + e.getMessage());
-//    }
+    //    String method = "testOrderByAscending:";
+    //    Collection<ValueObject> col;
+    //
+    //    ValueObject vobj = ValueObjectFactory.createValueObject(-6);
+    //    try {
+    //      cpoAdapter.insertObject("TestOrderByInsert", vobj);
+    //    } catch (Exception e) {
+    //      fail(method + e.getMessage());
+    //    }
+    //    try {
+    //      CpoOrderBy cob = cpoAdapter.newOrderBy("id", true, "ABS(id)");
+    //      Collection<CpoOrderBy> colCob = new ArrayList<CpoOrderBy>();
+    //      colCob.add(cob);
+    //      ValueObject valObj = ValueObjectFactory.createValueObject();
+    //      col = cpoAdapter.retrieveBeans("TestOrderByRetrieve", valObj, colCob);
+    //
+    //      int id = 1;
+    //      for (ValueObject vo : col) {
+    //        int voId = vo.getId();
+    //        if (voId < 0) {
+    //          voId *= -1;
+    //        }
+    //        assertEquals(id, voId);
+    //        id++;
+    //      }
+    //    } catch (Exception e) {
+    //      fail(method + e.getMessage());
+    //    }
+    //
+    //    try {
+    //      cpoAdapter.deleteObject("TestOrderByDelete", vobj);
+    //
+    //    } catch (Exception e) {
+    //      fail(method + e.getMessage());
+    //    }
   }
 }

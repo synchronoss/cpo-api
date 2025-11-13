@@ -20,10 +20,7 @@
  */
 package org.synchronoss.cpo;
 
-/**
- * This is the interface for the visitors to the Node Hierarchy
- *
- */
+/** This is the interface for the visitors to the Node Hierarchy */
 public interface NodeVisitor {
 
   /**

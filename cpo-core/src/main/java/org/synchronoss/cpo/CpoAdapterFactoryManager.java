@@ -197,7 +197,7 @@ public final class CpoAdapterFactoryManager extends CpoAdapterFactoryCache {
       logger.error("Error processing " + cpoConfig + ": ", ce);
     } finally {
       if (is != null)
-        try { is.close(); } catch (Exception e) {}
+        try { is.close(); } catch (Exception e) {logger.error("Error processing " + cpoConfig + ": ", e);}
     }
   }
 

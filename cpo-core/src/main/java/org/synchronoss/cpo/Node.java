@@ -25,6 +25,9 @@
  */
 package org.synchronoss.cpo;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -43,6 +46,8 @@ public class Node implements Serializable, Cloneable, Comparable<Node> {
    * Version Id for this class.
    */
   private static final long serialVersionUID = 1L;
+    private static final Logger logger = LoggerFactory.getLogger(Node.class);
+
   private static final int CHILD_NODE = 0;
   /**
    * The parent node for this Node
@@ -539,6 +544,7 @@ public class Node implements Serializable, Cloneable, Comparable<Node> {
           thisClone.addChild((Node)currNode.clone());
         } catch (ChildNodeException e) {
           // This should not happen since we are cloning a parent if we got here.
+            logger.error("Error adding cloned node ", e);
         }
         currNode = currNode.getNextSibling();
       } while (currNode != getFirstChild());

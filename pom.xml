@@ -396,7 +396,6 @@
                     <execution>
                         <id>PMD</id>
                         <configuration>
-                            <!-- failOnViolation is actually true by default, but can be disabled -->
                             <failOnViolation>false</failOnViolation>
                         </configuration>
                         <goals>
@@ -406,7 +405,6 @@
                     <execution>
                         <id>CPD</id>
                         <configuration>
-                            <!-- failOnViolation is actually true by default, but can be disabled -->
                             <failOnViolation>false</failOnViolation>
                         </configuration>
                         <goals>

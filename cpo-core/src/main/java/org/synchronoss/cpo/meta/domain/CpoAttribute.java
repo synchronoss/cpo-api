@@ -126,11 +126,16 @@ public class CpoAttribute extends CpoAttributeBean {
       // go through once and find the accessor methods that match the method name
       for (Method m : methods) {
         // The method name must match as well as the number of parameters and return types
-        if (!m.isSynthetic() && !m.isBridge() && m.getName().equals(methodName) && m.getParameterTypes().length == args) {
-          if ((!hasReturn && m.getReturnType() == Void.TYPE) || (hasReturn && m.getReturnType() != Void.TYPE)) {
+        if (!m.isSynthetic()
+                && !m.isBridge()
+                && m.getName().equals(methodName)
+                && m.getParameterTypes().length == args
+                && (
+                        (!hasReturn && m.getReturnType() == Void.TYPE) || (hasReturn && m.getReturnType() != Void.TYPE)
+                   )
+        ) {
             retMethods.add(m);
           }
-        }
       }
     } catch (Exception e) {
       throw new CpoException("findMethod() Failed - Method Not Found: " + methodName);

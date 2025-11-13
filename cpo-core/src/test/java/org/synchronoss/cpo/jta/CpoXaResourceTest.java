@@ -57,7 +57,7 @@ public class CpoXaResourceTest {
       fail("Start not allowed when local is busy");
     } catch (XAException xae) {
       // exception expected
-      assertTrue(xae.getLocalizedMessage().startsWith(CpoXaResource.CpoXaError.XAER_OUTSIDE.toString()));
+      assertTrue(xae.getLocalizedMessage().startsWith(CpoXaError.XAER_OUTSIDE.toString()));
     }
 
     // make it unbusy
@@ -69,7 +69,7 @@ public class CpoXaResourceTest {
       fail("Start join not allowed for new xid");
     } catch (XAException xae) {
       // exception expected
-      assertTrue(xae.getLocalizedMessage().startsWith(CpoXaResource.CpoXaError.XAER_NOTA.toString()));
+      assertTrue(xae.getLocalizedMessage().startsWith(CpoXaError.XAER_NOTA.toString()));
     }
 
     try {
@@ -78,7 +78,7 @@ public class CpoXaResourceTest {
       fail("Start resume not allowed for new xid");
     } catch (XAException xae) {
       // exception expected
-      assertTrue(xae.getLocalizedMessage().startsWith(CpoXaResource.CpoXaError.XAER_NOTA.toString()));
+      assertTrue(xae.getLocalizedMessage().startsWith(CpoXaError.XAER_NOTA.toString()));
     }
 
     try {
@@ -99,7 +99,7 @@ public class CpoXaResourceTest {
       fail("Start not allowed when local is busy");
     } catch (XAException xae) {
       // exception expected
-      assertTrue(xae.getLocalizedMessage().startsWith(CpoXaResource.CpoXaError.XAER_DUPID.toString()));
+      assertTrue(xae.getLocalizedMessage().startsWith(CpoXaError.XAER_DUPID.toString()));
     }
 
     try {
@@ -108,7 +108,7 @@ public class CpoXaResourceTest {
       fail("Start resume not allowed for an unassigned xid");
     } catch (XAException xae) {
       // exception expected
-      assertTrue(xae.getLocalizedMessage().startsWith(CpoXaResource.CpoXaError.XAER_PROTO.toString()));
+      assertTrue(xae.getLocalizedMessage().startsWith(CpoXaError.XAER_PROTO.toString()));
     }
 
     try {
@@ -131,7 +131,7 @@ public class CpoXaResourceTest {
       fail("Start NO flags not allowed on a suspended xid");
     } catch (XAException xae) {
       // exception expected
-      assertTrue(xae.getLocalizedMessage().startsWith(CpoXaResource.CpoXaError.XAER_DUPID.toString()));
+      assertTrue(xae.getLocalizedMessage().startsWith(CpoXaError.XAER_DUPID.toString()));
     }
 
     try {
@@ -140,7 +140,7 @@ public class CpoXaResourceTest {
       fail("Start join not allowed on a suspended xid");
     } catch (XAException xae) {
       // exception expected
-      assertTrue(xae.getLocalizedMessage().startsWith(CpoXaResource.CpoXaError.XAER_PROTO.toString()));
+      assertTrue(xae.getLocalizedMessage().startsWith(CpoXaError.XAER_PROTO.toString()));
     }
 
     try {
@@ -174,7 +174,7 @@ public class CpoXaResourceTest {
       fail("End success not allowed on unknown xid");
     } catch (XAException xae) {
       // exception expected
-      assertTrue(xae.getLocalizedMessage().startsWith(CpoXaResource.CpoXaError.XAER_NOTA.toString()));
+      assertTrue(xae.getLocalizedMessage().startsWith(CpoXaError.XAER_NOTA.toString()));
     }
 
     try {
@@ -183,7 +183,7 @@ public class CpoXaResourceTest {
       fail("End fail not allowed on unknown xid");
     } catch (XAException xae) {
       // exception expected
-      assertTrue(xae.getLocalizedMessage().startsWith(CpoXaResource.CpoXaError.XAER_NOTA.toString()));
+      assertTrue(xae.getLocalizedMessage().startsWith(CpoXaError.XAER_NOTA.toString()));
     }
 
     try {
@@ -192,7 +192,7 @@ public class CpoXaResourceTest {
       fail("End suspend not allowed on unknown xid");
     } catch (XAException xae) {
       // exception expected
-      assertTrue(xae.getLocalizedMessage().startsWith(CpoXaResource.CpoXaError.XAER_NOTA.toString()));
+      assertTrue(xae.getLocalizedMessage().startsWith(CpoXaError.XAER_NOTA.toString()));
     }
 
     // create the global transaction and test end success
@@ -211,7 +211,7 @@ public class CpoXaResourceTest {
       fail("End success not allowed on unassigned xid");
     } catch (XAException xae) {
       // exception expected
-      assertTrue(xae.getLocalizedMessage().startsWith(CpoXaResource.CpoXaError.XAER_PROTO.toString()));
+      assertTrue(xae.getLocalizedMessage().startsWith(CpoXaError.XAER_PROTO.toString()));
     }
 
     try {
@@ -220,7 +220,7 @@ public class CpoXaResourceTest {
       fail("End fail not allowed on unassigned xid");
     } catch (XAException xae) {
       // exception expected
-      assertTrue(xae.getLocalizedMessage().startsWith(CpoXaResource.CpoXaError.XAER_PROTO.toString()));
+      assertTrue(xae.getLocalizedMessage().startsWith(CpoXaError.XAER_PROTO.toString()));
     }
 
     try {
@@ -229,7 +229,7 @@ public class CpoXaResourceTest {
       fail("End suspend not allowed on unassigned xid");
     } catch (XAException xae) {
       // exception expected
-      assertTrue(xae.getLocalizedMessage().startsWith(CpoXaResource.CpoXaError.XAER_PROTO.toString()));
+      assertTrue(xae.getLocalizedMessage().startsWith(CpoXaError.XAER_PROTO.toString()));
     }
 
     // join the xid and fail
@@ -255,7 +255,7 @@ public class CpoXaResourceTest {
       fail("End suspend not allowed on suspended xid");
     } catch (XAException xae) {
       // exception expected
-      assertTrue(xae.getLocalizedMessage().startsWith(CpoXaResource.CpoXaError.XAER_PROTO.toString()));
+      assertTrue(xae.getLocalizedMessage().startsWith(CpoXaError.XAER_PROTO.toString()));
     }
 
     // test failing a suspend
@@ -478,7 +478,7 @@ public class CpoXaResourceTest {
       fail("prepare should have thrown an exception");
     } catch (XAException xae) {
       // should be a rollback
-      assertTrue(xae.getLocalizedMessage().startsWith(CpoXaResource.CpoXaError.XA_RBROLLBACK.toString()));
+      assertTrue(xae.getLocalizedMessage().startsWith(CpoXaError.XA_RBROLLBACK.toString()));
     }
 
     try {
@@ -515,7 +515,7 @@ public class CpoXaResourceTest {
       fail("prepare should have thrown an exception");
     } catch (XAException xae) {
       // should be a rollback
-      assertTrue(xae.getLocalizedMessage().startsWith(CpoXaResource.CpoXaError.XA_RBROLLBACK.toString()));
+      assertTrue(xae.getLocalizedMessage().startsWith(CpoXaError.XA_RBROLLBACK.toString()));
     }
 
     try {

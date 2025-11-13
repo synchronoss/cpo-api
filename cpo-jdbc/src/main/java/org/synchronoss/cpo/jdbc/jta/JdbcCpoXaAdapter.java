@@ -28,6 +28,7 @@ import org.synchronoss.cpo.jdbc.JdbcCpoAdapter;
 import org.synchronoss.cpo.jdbc.JdbcCpoAdapterFactory;
 import org.synchronoss.cpo.jdbc.JdbcCpoTrxAdapter;
 import org.synchronoss.cpo.jta.CpoBaseXaResource;
+import org.synchronoss.cpo.jta.CpoXaError;
 import org.synchronoss.cpo.meta.CpoMetaDescriptor;
 import org.synchronoss.cpo.meta.domain.CpoAttribute;
 

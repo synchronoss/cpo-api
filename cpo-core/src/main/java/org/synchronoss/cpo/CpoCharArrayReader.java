@@ -20,6 +20,9 @@
  */
 package org.synchronoss.cpo;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.CharArrayReader;
 import java.io.CharArrayWriter;
 import java.io.IOException;
@@ -36,6 +39,7 @@ public class CpoCharArrayReader extends CharArrayReader implements java.io.Seria
    * Version Id for this class.
    */
   private static final long serialVersionUID = 1L;
+    private static final Logger logger = LoggerFactory.getLogger(CpoCharArrayReader.class);
   private char[] buffer_ = null; //The buffer for the byte Array
   private int offset_ = 0;
   private int size_ = 0;
@@ -102,11 +106,13 @@ public class CpoCharArrayReader extends CharArrayReader implements java.io.Seria
         }
         ccar = new CpoCharArrayReader(caw.toCharArray());
       } catch (IOException ioe) {
-        // do nothing for now. The null should get someone's attention. 
+        // do nothing for now. The null should get someone's attention.
+          logger.warn("Problem reading cpo reader", ioe);
       } finally {
         try {
           r.close();
         } catch (IOException ioe) {
+            logger.warn("Problem closing cpo reader", ioe);
         }
       }
     }

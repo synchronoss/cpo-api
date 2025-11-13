@@ -82,7 +82,7 @@ public class CpoMetaDescriptor extends CpoMetaDescriptorCache implements CpoMeta
   }
 
   public static boolean isValidMetaDescriptor(CpoMetaDescriptor metaDescriptor) {
-    return (findCpoMetaDescriptor(metaDescriptor.getName()) != null);
+    return findCpoMetaDescriptor(metaDescriptor.getName()) != null;
   }
 
   public static CpoMetaDescriptor getInstance(String name) throws CpoException {

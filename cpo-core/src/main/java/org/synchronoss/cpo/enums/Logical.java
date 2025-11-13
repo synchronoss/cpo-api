@@ -27,7 +27,7 @@ public enum Logical {
     /**
      * No operator
      */
-    NONE(""),
+    NONE("NONE"),
     /**
      * Logical AND operator
      */

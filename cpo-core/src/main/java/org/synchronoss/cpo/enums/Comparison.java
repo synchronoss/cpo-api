@@ -27,7 +27,7 @@ public enum Comparison {
     /**
      * No comparison operator defined
      */
-    NONE(""),
+    NONE("NONE"),
     /**
      * The equals operator
      */

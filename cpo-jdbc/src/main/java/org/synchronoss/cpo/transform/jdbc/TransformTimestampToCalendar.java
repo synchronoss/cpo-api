@@ -20,30 +20,25 @@
  */
 package org.synchronoss.cpo.transform.jdbc;
 
+import java.sql.Timestamp;
+import java.util.Calendar;
 import org.synchronoss.cpo.CpoException;
 import org.synchronoss.cpo.jdbc.JdbcCallableStatementFactory;
 import org.synchronoss.cpo.jdbc.JdbcPreparedStatementFactory;
 
-import java.sql.Timestamp;
-import java.util.Calendar;
-
 /**
- * This is an example of a transform that does nothing. It is used to test the mechanics of the transform logic within
- * CPO.
+ * This is an example of a transform that does nothing. It is used to test the mechanics of the
+ * transform logic within CPO.
  *
  * @author david berry
  */
 public class TransformTimestampToCalendar implements JdbcCpoTransform<Timestamp, Calendar> {
 
-    /**
-     * Construct a TransformTimestampToCalendar
-     */
-  public TransformTimestampToCalendar() {
-  }
+  /** Construct a TransformTimestampToCalendar */
+  public TransformTimestampToCalendar() {}
 
   /**
-   * Transforms the Timestamp to a Calendar
-   * {@code java.sql.Timestamp} returned from JDBC into a
+   * Transforms the Timestamp to a Calendar {@code java.sql.Timestamp} returned from JDBC into a
    * {@code java.util.Calendar} to be used by the class.
    *
    * @param ts The Timestamp from JDBC.
@@ -61,18 +56,18 @@ public class TransformTimestampToCalendar implements JdbcCpoTransform<Timestamp,
   }
 
   /**
-   * Transforms a calendar to a sql timestamp
-   * {@code java.util.Calendar} from the CPO Bean into a
+   * Transforms a calendar to a sql timestamp {@code java.util.Calendar} from the CPO Bean into a
    * {@code java.sql.Timestamp} to be stored by JDBC
    *
-   * @param jcsf a reference to the JdbcCallableStatementFactory. This is necessary as some DBMSs (ORACLE) that
-   * require access to the connection to deal with certain datatypes.
+   * @param jcsf a reference to the JdbcCallableStatementFactory. This is necessary as some DBMSs
+   *     (ORACLE) that require access to the connection to deal with certain datatypes.
    * @param cal A Calendar instance
    * @return A Timestamp object to be stored in the database.
    * @throws CpoException - an error occurred
    */
   @Override
-  public Timestamp transformOut(JdbcCallableStatementFactory jcsf, Calendar cal) throws CpoException {
+  public Timestamp transformOut(JdbcCallableStatementFactory jcsf, Calendar cal)
+      throws CpoException {
     Timestamp ts = null;
     if (cal != null) {
       ts = new Timestamp(cal.getTimeInMillis());
@@ -81,18 +76,18 @@ public class TransformTimestampToCalendar implements JdbcCpoTransform<Timestamp,
   }
 
   /**
-   * Transforms a calendar to a sql timestamp
-   * {@code java.util.Calendar} from the CPO Bean into a
+   * Transforms a calendar to a sql timestamp {@code java.util.Calendar} from the CPO Bean into a
    * {@code java.sql.Timestamp} to be stored by JDBC
    *
-   * @param jpsf a reference to the JdbcPreparedStatementFactory. This is necessary as some DBMSs (ORACLE) that
-   * require access to the connection to deal with certain datatypes.
+   * @param jpsf a reference to the JdbcPreparedStatementFactory. This is necessary as some DBMSs
+   *     (ORACLE) that require access to the connection to deal with certain datatypes.
    * @param cal A Calendar instance
    * @return A Timestamp object to be stored in the database.
    * @throws CpoException - an error occurred
    */
   @Override
-  public Timestamp transformOut(JdbcPreparedStatementFactory jpsf, Calendar cal) throws CpoException {
+  public Timestamp transformOut(JdbcPreparedStatementFactory jpsf, Calendar cal)
+      throws CpoException {
     Timestamp ts = null;
     if (cal != null) {
       ts = new Timestamp(cal.getTimeInMillis());

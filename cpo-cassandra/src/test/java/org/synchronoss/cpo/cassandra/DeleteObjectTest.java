@@ -20,6 +20,12 @@
  */
 package org.synchronoss.cpo.cassandra;
 
+import static org.testng.Assert.assertNotNull;
+import static org.testng.Assert.fail;
+
+import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.Date;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.CpoAdapter;
@@ -29,13 +35,6 @@ import org.synchronoss.cpo.helper.ExceptionHelper;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
-
-import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.Date;
-
-import static org.testng.Assert.assertNotNull;
-import static org.testng.Assert.fail;
 
 /**
  * DeleteObjectTest is a test class for testing the JdbcAdapter deleteObject method
@@ -50,7 +49,8 @@ public class DeleteObjectTest {
   private CassandraCpoMetaDescriptor metaDescriptor = null;
 
   /**
-   * <code>setUp</code> Load the datasource from the properties in the property file jdbc_en_US.properties
+   * <code>setUp</code> Load the datasource from the properties in the property file
+   * jdbc_en_US.properties
    *
    * @author david berry
    * @version '$Id: InsertObjectTest.java,v 1.3 2006/01/30 19:09:23 dberry Exp $'
@@ -62,7 +62,7 @@ public class DeleteObjectTest {
     try {
       cpoAdapter = CpoAdapterFactoryManager.getCpoAdapter(CassandraStatics.ADAPTER_CONTEXT_DEFAULT);
       assertNotNull(cpoAdapter, method + "IdoAdapter is null");
-      metaDescriptor = (CassandraCpoMetaDescriptor)cpoAdapter.getCpoMetaDescriptor();
+      metaDescriptor = (CassandraCpoMetaDescriptor) cpoAdapter.getCpoMetaDescriptor();
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -77,9 +77,9 @@ public class DeleteObjectTest {
     valObj.setAttrInt(3);
     Date ts = new Timestamp(System.currentTimeMillis());
 
-//    if (!metaDescriptor.isSupportsMillis()) {
-//      ts.setNanos(0);
-//    }
+    //    if (!metaDescriptor.isSupportsMillis()) {
+    //      ts.setNanos(0);
+    //    }
 
     valObj.setAttrTimestamp(ts);
     valObj.setAttrBool(true);

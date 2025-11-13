@@ -20,6 +20,8 @@
  */
 package org.synchronoss.cpo.jdbc;
 
+import static org.testng.Assert.*;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.CpoAdapter;
@@ -29,8 +31,6 @@ import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
-
-import static org.testng.Assert.*;
 
 /**
  * BlobTest is a test class for testing the JdbcAdapter class Constructors
@@ -48,21 +48,20 @@ public class BlobTest {
   private char[] testClob2 = "This is a second test Clob used for testing clobs".toCharArray();
   private boolean isSupportsBlobs = true;
 
-  public BlobTest() {
-
-  }
+  public BlobTest() {}
 
   /**
-   * <code>setUp</code> Load the datasource from the properties in the property file jdbc_en_US.properties
+   * <code>setUp</code> Load the datasource from the properties in the property file
+   * jdbc_en_US.properties
    *
    * @author david berry
    * @version '$Id: BlobTest.java,v 1.15 2006/02/15 18:34:19 dberry Exp $'
    */
-  @Parameters({ "db.blobsupport" })
+  @Parameters({"db.blobsupport"})
   @BeforeClass
   public void setUp(boolean blobSupport) {
-      String method = "setUp:";
-      isSupportsBlobs = blobSupport;
+    String method = "setUp:";
+    isSupportsBlobs = blobSupport;
 
     try {
       cpoAdapter = CpoAdapterFactoryManager.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_JDBC);
@@ -146,7 +145,6 @@ public class BlobTest {
     } else {
       logger.error(cpoAdapter.getDataSourceName() + " does not support BLOBs");
     }
-
   }
 
   @Test
@@ -211,7 +209,6 @@ public class BlobTest {
     } else {
       logger.error(cpoAdapter.getDataSourceName() + " does not support BLOBs");
     }
-
   }
 
   /*
@@ -274,7 +271,6 @@ public class BlobTest {
 
         assertTrue(isEqual(blob1, blob2));
 
-
       } catch (Exception ie) {
         logger.error("error retrieving lob", ie);
         fail(ie.getMessage());
@@ -293,7 +289,6 @@ public class BlobTest {
 
         assertTrue(isEqual(blob1, blob2));
 
-
       } catch (Exception ie) {
         logger.error("error updating lob", ie);
         fail(ie.getMessage());
@@ -301,7 +296,6 @@ public class BlobTest {
     } else {
       logger.error(cpoAdapter.getDataSourceName() + " does not support BLOBs");
     }
-
   }
 
   @Test
@@ -357,16 +351,12 @@ public class BlobTest {
     } else {
       logger.error(cpoAdapter.getDataSourceName() + " does not support BLOBs");
     }
-
   }
 
   @AfterClass
   public void tearDown() {
 
     cpoAdapter = null;
-
-
-
   }
 
   private boolean isEqual(byte[] b1, byte[] b2) {
@@ -390,6 +380,5 @@ public class BlobTest {
     }
 
     return true;
-
   }
 }

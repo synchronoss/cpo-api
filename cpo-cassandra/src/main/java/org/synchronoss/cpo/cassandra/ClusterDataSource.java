@@ -26,6 +26,7 @@ import com.datastax.driver.core.Session;
 
 /**
  * Represents a Cassandra Cluster
+ *
  * @author dberry
  */
 public class ClusterDataSource {
@@ -33,22 +34,20 @@ public class ClusterDataSource {
   private String keySpace = null;
   private Session session = null;
 
-  private ClusterDataSource(){
-  }
+  private ClusterDataSource() {}
 
-    /**
-     * Construct a ClusterDataSource
-     * @param cluster The cassandra cluster
-     * @param keySpace The keyspace
-     */
-  public ClusterDataSource(Cluster cluster, String keySpace){
-    this.cluster=cluster;
-    this.keySpace=keySpace;
+  /**
+   * Construct a ClusterDataSource
+   *
+   * @param cluster The cassandra cluster
+   * @param keySpace The keyspace
+   */
+  public ClusterDataSource(Cluster cluster, String keySpace) {
+    this.cluster = cluster;
+    this.keySpace = keySpace;
 
-    if (cluster==null)
-      throw new IllegalArgumentException("Cluster cannot be null");
-    if (keySpace==null)
-      throw new IllegalArgumentException("KeySpace cannot be null");
+    if (cluster == null) throw new IllegalArgumentException("Cluster cannot be null");
+    if (keySpace == null) throw new IllegalArgumentException("KeySpace cannot be null");
     session = cluster.connect(keySpace);
   }
 

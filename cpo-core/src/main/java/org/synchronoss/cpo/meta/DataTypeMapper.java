@@ -20,19 +20,15 @@
  */
 package org.synchronoss.cpo.meta;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
- * Created with IntelliJ IDEA.
- * User: dberry
- * Date: 10/10/13
- * Time: 21:33 PM
- * To change this template use File | Settings | File Templates.
+ * Created with IntelliJ IDEA. User: dberry Date: 10/10/13 Time: 21:33 PM To change this template
+ * use File | Settings | File Templates.
  */
 public class DataTypeMapper {
 
@@ -42,8 +38,7 @@ public class DataTypeMapper {
   DataTypeMapEntry<?> defaultDataTypeMapEntry = null;
 
   // Do not allow default constructor
-  private DataTypeMapper() {
-  }
+  private DataTypeMapper() {}
 
   public DataTypeMapper(DataTypeMapEntry<?> defaultDataTypeMapEntry) {
     if (defaultDataTypeMapEntry == null) {

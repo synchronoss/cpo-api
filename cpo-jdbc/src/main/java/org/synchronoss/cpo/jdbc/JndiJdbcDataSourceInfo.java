@@ -20,16 +20,15 @@
  */
 package org.synchronoss.cpo.jdbc;
 
-import org.synchronoss.cpo.CpoException;
-
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.sql.DataSource;
+import org.synchronoss.cpo.CpoException;
 
 /**
  * Collects the info required to instantiate a DataSource stored as a JNDI Resource.
  *
- * Provides the DataSourceInfo factory method getDataSource which instantiates the DataSource
+ * <p>Provides the DataSourceInfo factory method getDataSource which instantiates the DataSource
  *
  * @author dberry
  */
@@ -39,7 +38,8 @@ public class JndiJdbcDataSourceInfo extends AbstractJdbcDataSourceInfo {
   private Context jndiCtx = null;
 
   /**
-   * Creates a JndiJdbcDataSourceInfo from a JNDIName that represents the datasource in the application server.
+   * Creates a JndiJdbcDataSourceInfo from a JNDIName that represents the datasource in the
+   * application server.
    *
    * @param jndiName The JndiName of the app server datasource
    */
@@ -49,7 +49,8 @@ public class JndiJdbcDataSourceInfo extends AbstractJdbcDataSourceInfo {
   }
 
   /**
-   * Creates a JndiJdbcDataSourceInfo from a JNDIName that represents the datasource in the application server.
+   * Creates a JndiJdbcDataSourceInfo from a JNDIName that represents the datasource in the
+   * application server.
    *
    * @param jndiName The JndiName of the app server datasource
    * @param ctx - The context for which the Jndi Lookup should use.
@@ -67,7 +68,7 @@ public class JndiJdbcDataSourceInfo extends AbstractJdbcDataSourceInfo {
       if (jndiCtx == null) {
         jndiCtx = new InitialContext();
       }
-      datasource = (DataSource)jndiCtx.lookup(jndiName);
+      datasource = (DataSource) jndiCtx.lookup(jndiName);
     } catch (Exception e) {
       throw new CpoException("Error instantiating DataSource", e);
     }

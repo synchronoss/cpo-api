@@ -27,32 +27,29 @@ import org.synchronoss.cpo.CpoTrxAdapter;
 import org.synchronoss.cpo.jdbc.jta.JdbcCpoXaAdapter;
 import org.synchronoss.cpo.jta.CpoXaResource;
 
-/**
- * Created by dberry on 11/8/15.
- */
+/** Created by dberry on 11/8/15. */
 public class JdbcCpoAdapterFactory implements CpoAdapterFactory {
 
   private JdbcCpoAdapter jdbcCpoAdapter = null;
 
-    /**
-     * Constructs a JdbcCpoAdapterFactory from a JdbcCpoAdapter
-     *
-     * @param jdbcCpoAdapter A JdbcCpoAdapter
-     */
+  /**
+   * Constructs a JdbcCpoAdapterFactory from a JdbcCpoAdapter
+   *
+   * @param jdbcCpoAdapter A JdbcCpoAdapter
+   */
   public JdbcCpoAdapterFactory(JdbcCpoAdapter jdbcCpoAdapter) {
     this.jdbcCpoAdapter = jdbcCpoAdapter;
   }
 
   @Override
-  public CpoAdapter getCpoAdapter()  throws CpoException {
+  public CpoAdapter getCpoAdapter() throws CpoException {
     return jdbcCpoAdapter;
   }
 
   /**
-   * <p>
-   * Provides a mechanism for the user to obtain a CpoTrxAdapter object. This object allows the to control when commits
-   * and rollbacks occur on CPO.
-   * </p>
+   * Provides a mechanism for the user to obtain a CpoTrxAdapter object. This object allows the to
+   * control when commits and rollbacks occur on CPO.
+   *
    * <pre>Example:
    * {@code
    * class SomeObject so = null;
@@ -86,12 +83,13 @@ public class JdbcCpoAdapterFactory implements CpoAdapterFactory {
    * @throws CpoException Thrown if there are errors accessing the datasource
    * @see CpoTrxAdapter
    */
-  @Override public CpoTrxAdapter getCpoTrxAdapter() throws CpoException {
+  @Override
+  public CpoTrxAdapter getCpoTrxAdapter() throws CpoException {
     return new JdbcCpoTrxAdapter(jdbcCpoAdapter);
   }
 
   @Override
-  public CpoXaResource getCpoXaAdapter()  throws CpoException {
+  public CpoXaResource getCpoXaAdapter() throws CpoException {
     return new JdbcCpoXaAdapter(this);
   }
 }

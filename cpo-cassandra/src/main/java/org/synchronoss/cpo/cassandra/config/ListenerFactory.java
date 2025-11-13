@@ -21,35 +21,30 @@
 package org.synchronoss.cpo.cassandra.config;
 
 import com.datastax.driver.core.Host;
-
 import java.util.Collection;
 
 /**
- * Created with IntelliJ IDEA.
- * User: dberry
- * Date: 10/10/13
- * Time: 07:58 AM
- * To change this template use File | Settings | File Templates.
+ * Created with IntelliJ IDEA. User: dberry Date: 10/10/13 Time: 07:58 AM To change this template
+ * use File | Settings | File Templates.
  */
 public abstract class ListenerFactory implements FactoryMethodName {
 
-    /**
-     * Constructs a ListenerFactory
-     */
-    public ListenerFactory(){}
+  /** Constructs a ListenerFactory */
+  public ListenerFactory() {}
 
-    /**
-     * Gets the factory method name
-     * @return The factory method name
-     */
+  /**
+   * Gets the factory method name
+   *
+   * @return The factory method name
+   */
   public String getFactoryMethodName() {
     return "createListeners";
   }
 
-    /**
-     * Create the listeners
-     *
-     * @return A collection of Host.StateListener
-     */
+  /**
+   * Create the listeners
+   *
+   * @return A collection of Host.StateListener
+   */
   public abstract Collection<Host.StateListener> createListeners();
 }

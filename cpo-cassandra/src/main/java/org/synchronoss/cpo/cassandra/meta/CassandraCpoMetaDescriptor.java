@@ -26,20 +26,18 @@ import org.synchronoss.cpo.exporter.MetaXmlObjectExporter;
 import org.synchronoss.cpo.meta.CpoMetaDescriptor;
 
 /**
- * Created with IntelliJ IDEA.
- * User: dberry
- * Date: 9/10/13
- * Time: 07:56 AM
- * To change this template use File | Settings | File Templates.
+ * Created with IntelliJ IDEA. User: dberry Date: 9/10/13 Time: 07:56 AM To change this template use
+ * File | Settings | File Templates.
  */
 public class CassandraCpoMetaDescriptor extends CpoMetaDescriptor {
 
-    /**
-     * Constructs a CassandraCpoMetaDescriptor
-     * @param name The descriptor name
-     * @param caseSensitive Is data member matching case sensitive
-     * @throws CpoException An error occurred
-     */
+  /**
+   * Constructs a CassandraCpoMetaDescriptor
+   *
+   * @param name The descriptor name
+   * @param caseSensitive Is data member matching case sensitive
+   * @throws CpoException An error occurred
+   */
   public CassandraCpoMetaDescriptor(String name, boolean caseSensitive) throws CpoException {
     super(name, caseSensitive);
   }
@@ -53,5 +51,4 @@ public class CassandraCpoMetaDescriptor extends CpoMetaDescriptor {
   protected MetaXmlObjectExporter getMetaXmlObjectExporter() {
     return new CassandraMetaXmlObjectExporter(this);
   }
-
 }

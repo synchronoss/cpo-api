@@ -26,7 +26,7 @@ import org.synchronoss.cpo.meta.domain.CpoClass;
 /**
  * The CpoClassSourceGenerator generates java source code to define the cpo classes.
  *
- * This implemenation will generate only a class, without extending an interface.  It is available
+ * <p>This implemenation will generate only a class, without extending an interface. It is available
  * to support existing systems that aren't able/willing to change to the interface model.
  *
  * @author Michael Bellomo
@@ -100,9 +100,7 @@ public class CpoLegacyClassSourceGenerator extends CpoClassSourceGenerator {
     return source.toString();
   }
 
-  /**
-   * Returns the name of the class to use
-   */
+  /** Returns the name of the class to use */
   protected String generateClassName(CpoClass cpoClass) {
     return super.generateInterfaceName(cpoClass);
   }

@@ -31,8 +31,7 @@ public class CpoFunctionBean implements java.io.Serializable {
   private String expression;
   private String description;
 
-  public CpoFunctionBean() {
-  }
+  public CpoFunctionBean() {}
 
   public String getName() {
     return name;
@@ -72,10 +71,14 @@ public class CpoFunctionBean implements java.io.Serializable {
 
     CpoFunctionBean that = (CpoFunctionBean) o;
 
-    if (getExpression() != null ? !getExpression().equals(that.getExpression()) : that.getExpression() != null) {
+    if (getExpression() != null
+        ? !getExpression().equals(that.getExpression())
+        : that.getExpression() != null) {
       return false;
     }
-    if (getDescription() != null ? !getDescription().equals(that.getDescription()) : that.getDescription() != null) {
+    if (getDescription() != null
+        ? !getDescription().equals(that.getDescription())
+        : that.getDescription() != null) {
       return false;
     }
 

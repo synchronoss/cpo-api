@@ -29,24 +29,22 @@ import com.datastax.driver.core.policies.AddressTranslator;
  */
 public abstract class AddressTranslatorFactory implements FactoryMethodName {
 
-    /**
-     * Constructs the AddressTranslatorFactory
-     */
-    public AddressTranslatorFactory() {}
+  /** Constructs the AddressTranslatorFactory */
+  public AddressTranslatorFactory() {}
 
-    /**
-     * Gets the factory method name for the driver
-     * @return The method name
-     */
+  /**
+   * Gets the factory method name for the driver
+   *
+   * @return The method name
+   */
   public String getFactoryMethodName() {
     return "createAddressTranslator";
   }
 
-    /**
-     * Creates an AddressTranslator
-     *
-     * @return The AddressTranslator
-     */
+  /**
+   * Creates an AddressTranslator
+   *
+   * @return The AddressTranslator
+   */
   public abstract AddressTranslator createAddressTranslator();
-
 }

@@ -20,11 +20,10 @@
  */
 package org.synchronoss.cpo.helper;
 
+import java.util.ArrayList;
 import org.apache.xmlbeans.XmlError;
 import org.apache.xmlbeans.XmlObject;
 import org.apache.xmlbeans.XmlOptions;
-
-import java.util.ArrayList;
 
 /**
  * @author dberry
@@ -34,15 +33,15 @@ public class XmlBeansHelper {
     StringBuilder sb = new StringBuilder();
     String errMsg = null;
     ArrayList<XmlError> validationErrors = new ArrayList<>();
-    XmlOptions validationOptions = new XmlOptions(); 
-    validationOptions.setErrorListener(validationErrors); 
-    boolean isValid = xmlObj.validate(validationOptions); // to display error we should pass options.
+    XmlOptions validationOptions = new XmlOptions();
+    validationOptions.setErrorListener(validationErrors);
+    boolean isValid =
+        xmlObj.validate(validationOptions); // to display error we should pass options.
     if (!isValid) {
       for (XmlError es : validationErrors) {
         sb.append(es.getMessage());
       }
-      if (sb.length()>0)
-        errMsg=sb.toString();
+      if (sb.length() > 0) errMsg = sb.toString();
     }
     return errMsg;
   }

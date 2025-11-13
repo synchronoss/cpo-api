@@ -25,17 +25,15 @@ import org.synchronoss.cpo.jdbc.JdbcCallableStatementFactory;
 import org.synchronoss.cpo.jdbc.JdbcPreparedStatementFactory;
 
 /**
- * Converts a char[] from a jdbc datasource getString() call and from a char[] to a setString() in a datasource
+ * Converts a char[] from a jdbc datasource getString() call and from a char[] to a setString() in a
+ * datasource
  *
  * @author david berry
  */
 public class TransformCharArray implements JdbcCpoTransform<String, char[]> {
 
-    /**
-     * Constructs a TransformCharArray
-     */
-  public TransformCharArray() {
-  }
+  /** Constructs a TransformCharArray */
+  public TransformCharArray() {}
 
   /**
    * Transforms the datasource object into an object required by the class
@@ -58,13 +56,15 @@ public class TransformCharArray implements JdbcCpoTransform<String, char[]> {
   /**
    * Transforms the data from the class attribute to the object required by the datasource
    *
-   * @param jpsf The JdbcPreparedStatementFactory to have access to the actual connection and be able to work with closeable items
+   * @param jpsf The JdbcPreparedStatementFactory to have access to the actual connection and be
+   *     able to work with closeable items
    * @param attributeObject The object that represents the attribute being persisted.
    * @return The object to be stored in the datasource
    * @throws CpoException An error occurred during the transform
    */
   @Override
-  public String transformOut(JdbcPreparedStatementFactory jpsf, char[] attributeObject) throws CpoException {
+  public String transformOut(JdbcPreparedStatementFactory jpsf, char[] attributeObject)
+      throws CpoException {
 
     String retStr = null;
     if (attributeObject != null) {
@@ -75,7 +75,8 @@ public class TransformCharArray implements JdbcCpoTransform<String, char[]> {
   }
 
   @Override
-  public String transformOut(JdbcCallableStatementFactory jpsf, char[] attributeObject) throws CpoException, UnsupportedOperationException {
+  public String transformOut(JdbcCallableStatementFactory jpsf, char[] attributeObject)
+      throws CpoException, UnsupportedOperationException {
     throw new UnsupportedOperationException("Not supported yet.");
   }
 

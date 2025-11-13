@@ -23,30 +23,27 @@ package org.synchronoss.cpo.cassandra.config;
 import com.datastax.driver.core.policies.ReconnectionPolicy;
 
 /**
- * Created with IntelliJ IDEA.
- * User: dberry
- * Date: 10/10/13
- * Time: 07:56 AM
- * To change this template use File | Settings | File Templates.
+ * Created with IntelliJ IDEA. User: dberry Date: 10/10/13 Time: 07:56 AM To change this template
+ * use File | Settings | File Templates.
  */
 public abstract class ReconnectionPolicyFactory implements FactoryMethodName {
 
-    /**
-     * Constructs a ReconnectionPolicyFactory
-     */
-    public ReconnectionPolicyFactory(){}
+  /** Constructs a ReconnectionPolicyFactory */
+  public ReconnectionPolicyFactory() {}
 
-    /**
-     * Get the factory method name
-     * @return The method name
-     */
+  /**
+   * Get the factory method name
+   *
+   * @return The method name
+   */
   public String getFactoryMethodName() {
     return "createReconnectionPolicy";
   }
 
-    /**
-     * Create the ReconnectionPolicy
-     * @return The ReconnectionPolicy
-     */
+  /**
+   * Create the ReconnectionPolicy
+   *
+   * @return The ReconnectionPolicy
+   */
   public abstract ReconnectionPolicy createReconnectionPolicy();
 }

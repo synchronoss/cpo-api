@@ -20,6 +20,12 @@
  */
 package org.synchronoss.cpo.cassandra;
 
+import static org.testng.Assert.*;
+
+import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 import org.synchronoss.cpo.CpoAdapter;
 import org.synchronoss.cpo.CpoAdapterFactoryManager;
 import org.synchronoss.cpo.CpoWhere;
@@ -29,13 +35,6 @@ import org.synchronoss.cpo.enums.Logical;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
-
-import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
-import static org.testng.Assert.*;
 
 /**
  * DeleteObjectTest is a test class for testing the JdbcAdapter deleteObject method
@@ -49,7 +48,8 @@ public class UpdateObjectTest {
   private CassandraCpoMetaDescriptor metaDescriptor = null;
 
   /**
-   * <code>setUp</code> Load the datasource from the properties in the property file jdbc_en_US.properties
+   * <code>setUp</code> Load the datasource from the properties in the property file
+   * jdbc_en_US.properties
    *
    * @author david berry
    * @version '$Id: InsertObjectTest.java,v 1.3 2006/01/30 19:09:23 dberry Exp $'
@@ -76,9 +76,9 @@ public class UpdateObjectTest {
     valObj.setAttrInt(3);
     Date ts = new Timestamp(System.currentTimeMillis());
 
-//    if (!metaDescriptor.isSupportsMillis()) {
-//      ts.setNanos(0);
-//    }
+    //    if (!metaDescriptor.isSupportsMillis()) {
+    //      ts.setNanos(0);
+    //    }
 
     valObj.setAttrTimestamp(ts);
 
@@ -99,7 +99,9 @@ public class UpdateObjectTest {
       valObj.setAttrInt(4);
       cpoAdapter.updateObject(null, valObj, cws, null, null);
       ValueObject rObj = cpoAdapter.retrieveBean(valObj);
-      assertTrue(rObj.getAttrInt()!=valObj.getAttrInt(), "It should not be equal since it did not update");
+      assertTrue(
+          rObj.getAttrInt() != valObj.getAttrInt(),
+          "It should not be equal since it did not update");
     } catch (Exception e) {
       fail(method + e.getMessage());
     }

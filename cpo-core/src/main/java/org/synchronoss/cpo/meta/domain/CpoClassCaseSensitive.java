@@ -21,13 +21,10 @@
 package org.synchronoss.cpo.meta.domain;
 
 public class CpoClassCaseSensitive extends CpoClass {
-    /**
-     * Version Id for this class.
-     */
-    private static final long serialVersionUID = 1L;
+  /** Version Id for this class. */
+  private static final long serialVersionUID = 1L;
 
-  public CpoClassCaseSensitive() {
-  }
+  public CpoClassCaseSensitive() {}
 
   public CpoAttribute getAttributeData(String dataName) {
     if (dataName == null) {

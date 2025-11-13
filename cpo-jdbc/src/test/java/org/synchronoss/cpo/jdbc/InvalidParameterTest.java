@@ -20,6 +20,10 @@
  */
 package org.synchronoss.cpo.jdbc;
 
+import static org.testng.Assert.assertNotNull;
+import static org.testng.Assert.fail;
+
+import java.util.Collection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.CpoAdapter;
@@ -29,22 +33,16 @@ import org.synchronoss.cpo.helper.ExceptionHelper;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import java.util.Collection;
-
-import static org.testng.Assert.assertNotNull;
-import static org.testng.Assert.fail;
-
 public class InvalidParameterTest {
 
   private static final Logger logger = LoggerFactory.getLogger(InvalidParameterTest.class);
   private CpoAdapter cpoAdapter = null;
 
-  public InvalidParameterTest() {
-
-  }
+  public InvalidParameterTest() {}
 
   /**
-   * <code>setUp</code> Load the datasource from the properties in the property file jdbc_en_US.properties
+   * <code>setUp</code> Load the datasource from the properties in the property file
+   * jdbc_en_US.properties
    *
    * @author david berry
    */
@@ -54,7 +52,7 @@ public class InvalidParameterTest {
 
     try {
       cpoAdapter = CpoAdapterFactoryManager.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_JDBC);
-      assertNotNull(cpoAdapter,method + "cpoAdapter is null");
+      assertNotNull(cpoAdapter, method + "cpoAdapter is null");
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -70,7 +68,7 @@ public class InvalidParameterTest {
       col = cpoAdapter.retrieveBeans("BadContext", valObj);
       fail(method + "Test got to unreachable code");
     } catch (CpoException ce) {
-      //This is what I am expecting so let it go
+      // This is what I am expecting so let it go
       logger.debug("Got a cpo exception");
     } catch (Exception e) {
       fail(method + "Unexpected Exception" + ExceptionHelper.getLocalizedMessage(e));
@@ -87,7 +85,7 @@ public class InvalidParameterTest {
       col = cpoAdapter.retrieveBeans(ValueObject.FG_LIST_NULL, valObj);
       fail(method + "Test got to unreachable code");
     } catch (CpoException ce) {
-      //This is what I am expecting so let it go
+      // This is what I am expecting so let it go
       logger.debug("Got a cpo exception");
     } catch (Exception e) {
       fail(method + "Unexpected Exception" + ExceptionHelper.getLocalizedMessage(e));
@@ -103,7 +101,7 @@ public class InvalidParameterTest {
       ValueObject valObj = cpoAdapter.retrieveBean(ValueObject.FG_RETRIEVE_NULL, null);
       fail(method + "Test got to unreachable code");
     } catch (CpoException ce) {
-      //This is what I am expecting so let it go
+      // This is what I am expecting so let it go
       logger.debug("Got a cpo exception");
     } catch (Exception e) {
       fail(method + "Unexpected Exception" + ExceptionHelper.getLocalizedMessage(e));
@@ -120,7 +118,7 @@ public class InvalidParameterTest {
       cpoAdapter.insertObject(ValueObject.FG_CREATE_NULL, valObj);
       fail(method + "Test got to unreachable code");
     } catch (CpoException ce) {
-      //This is what I am expecting so let it go
+      // This is what I am expecting so let it go
       logger.debug("Got a cpo exception");
     } catch (Exception e) {
       fail(method + "Unexpected Exception" + ExceptionHelper.getLocalizedMessage(e));
@@ -139,7 +137,7 @@ public class InvalidParameterTest {
       logger.debug("Called the NULL List");
       fail(method + "Test got to unreachable code");
     } catch (CpoException ce) {
-      //This is what I am expecting so let it go
+      // This is what I am expecting so let it go
       logger.debug("Got a cpo exception");
     } catch (Exception e) {
       fail(method + "Unexpected Exception" + ExceptionHelper.getLocalizedMessage(e));

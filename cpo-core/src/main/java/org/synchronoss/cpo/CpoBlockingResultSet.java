@@ -20,14 +20,13 @@
  */
 package org.synchronoss.cpo;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.concurrent.LinkedBlockingQueue;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class CpoBlockingResultSet<E> implements CpoResultSet<E>, Iterator<E> {
 
@@ -39,8 +38,7 @@ public class CpoBlockingResultSet<E> implements CpoResultSet<E>, Iterator<E> {
   private final Set<Thread> producers = new HashSet<>();
   private final Set<Thread> consumers = new HashSet<>();
 
-  private CpoBlockingResultSet() {
-  }
+  private CpoBlockingResultSet() {}
 
   public CpoBlockingResultSet(int capacity) {
     this.capacity = capacity;

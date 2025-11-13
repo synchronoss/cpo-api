@@ -28,8 +28,7 @@ public class CpoArgument extends CpoArgumentBean {
 
   CpoAttribute attribute = null;
 
-  public CpoArgument() {
-  }
+  public CpoArgument() {}
 
   public CpoAttribute getAttribute() {
     return attribute;
@@ -37,8 +36,7 @@ public class CpoArgument extends CpoArgumentBean {
 
   public void setAttribute(CpoAttribute attribute) {
     this.attribute = attribute;
-    if (attribute!=null)
-      setAttributeName(attribute.getJavaName());
+    if (attribute != null) setAttributeName(attribute.getJavaName());
   }
 
   @Override

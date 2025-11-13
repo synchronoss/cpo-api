@@ -20,6 +20,9 @@
  */
 package org.synchronoss.cpo.cassandra;
 
+import static org.testng.Assert.*;
+
+import java.util.ArrayList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.CpoAdapter;
@@ -32,10 +35,6 @@ import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import java.util.ArrayList;
-
-import static org.testng.Assert.*;
-
 /**
  * ExistObjectTest is a test class for the exists api calls
  *
@@ -47,7 +46,8 @@ public class ExistObjectTest {
   private CpoAdapter cpoAdapter = null;
 
   /**
-   * <code>setUp</code> Load the datasource from the properties in the property file jdbc_en_US.properties
+   * <code>setUp</code> Load the datasource from the properties in the property file
+   * jdbc_en_US.properties
    *
    * @author david berry
    * @version '$Id: ExistObjectTest.java,v 1.2 2006/01/30 19:09:23 dberry Exp $'

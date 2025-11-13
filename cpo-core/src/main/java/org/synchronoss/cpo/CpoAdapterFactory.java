@@ -22,13 +22,11 @@ package org.synchronoss.cpo;
 
 import org.synchronoss.cpo.jta.CpoXaResource;
 
-/**
- * Created by dberry on 11/8/15.
- */
+/** Created by dberry on 11/8/15. */
 public interface CpoAdapterFactory {
-  CpoAdapter getCpoAdapter() throws CpoException ;
+  CpoAdapter getCpoAdapter() throws CpoException;
 
-  CpoTrxAdapter getCpoTrxAdapter() throws CpoException ;
+  CpoTrxAdapter getCpoTrxAdapter() throws CpoException;
 
-  CpoXaResource getCpoXaAdapter() throws CpoException ;
+  CpoXaResource getCpoXaAdapter() throws CpoException;
 }

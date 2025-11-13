@@ -27,16 +27,16 @@ package org.synchronoss.cpo.helper;
 import java.io.InputStream;
 
 /**
- * This is a proxy class designed to handle the different classloaders needed when running in a container as a skinny
- * war versus running from the console.
+ * This is a proxy class designed to handle the different classloaders needed when running in a
+ * container as a skinny war versus running from the console.
  *
- * Currently check the classloader for cpo first, then use the contextClassloader second.
+ * <p>Currently check the classloader for cpo first, then use the contextClassloader second.
  *
  * @author dberry
  */
-final public class CpoClassLoader {
+public final class CpoClassLoader {
 
-  static public InputStream getResourceAsStream(String name) {
+  public static InputStream getResourceAsStream(String name) {
     InputStream is = CpoClassLoader.class.getResourceAsStream(name);
     if (is == null) {
       is = Thread.currentThread().getContextClassLoader().getResourceAsStream(name);
@@ -44,7 +44,7 @@ final public class CpoClassLoader {
     return is;
   }
 
-  static public Class<?> forName(String className) throws ClassNotFoundException {
+  public static Class<?> forName(String className) throws ClassNotFoundException {
     Class<?> clazz = null;
     try {
       clazz = Class.forName(className);

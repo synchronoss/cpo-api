@@ -38,6 +38,7 @@ public class CpoArrayResultSet<E> extends ArrayList<E> implements CpoResultSet<E
   public CpoArrayResultSet(int initialCapacity) {
     super(initialCapacity);
   }
+
   private static final long serialVersionUID = 1L;
 
   @Override

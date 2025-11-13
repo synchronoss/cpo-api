@@ -20,6 +20,10 @@
  */
 package org.synchronoss.cpo.jdbc;
 
+import static org.testng.Assert.*;
+
+import java.sql.Timestamp;
+import java.util.ArrayList;
 import org.synchronoss.cpo.CpoAdapter;
 import org.synchronoss.cpo.CpoAdapterFactoryManager;
 import org.synchronoss.cpo.jdbc.meta.JdbcCpoMetaDescriptor;
@@ -27,11 +31,6 @@ import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
-
-import java.sql.Timestamp;
-import java.util.ArrayList;
-
-import static org.testng.Assert.*;
 
 /**
  * InsertObjectTest is a test class for testing the insert api calls of cpo
@@ -46,31 +45,33 @@ public class CaseSensitiveTest {
   private JdbcCpoMetaDescriptor metaDescriptor = null;
   private boolean isSupportsMillis = true;
 
-  public CaseSensitiveTest() {
-  }
+  public CaseSensitiveTest() {}
 
   /**
-   * <code>setUp</code> Load the datasource from the properties in the property file jdbc_en_US.properties
+   * <code>setUp</code> Load the datasource from the properties in the property file
+   * jdbc_en_US.properties
    *
    * @author david berry
    * @version '$Id: InsertObjectTest.java,v 1.3 2006/01/30 19:09:23 dberry Exp $'
    */
-  @Parameters({ "db.millisupport" })
+  @Parameters({"db.millisupport"})
   @BeforeClass
   public void setUp(boolean milliSupport) {
-      String method = "setUp:";
-      isSupportsMillis  = milliSupport;
+    String method = "setUp:";
+    isSupportsMillis = milliSupport;
 
-      try {
-      cpoAdapter = CpoAdapterFactoryManager.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_CASESENSITIVE);
+    try {
+      cpoAdapter =
+          CpoAdapterFactoryManager.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_CASESENSITIVE);
       assertNotNull(cpoAdapter, method + "cpoAdapter is null");
       metaDescriptor = (JdbcCpoMetaDescriptor) cpoAdapter.getCpoMetaDescriptor();
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
     try {
-      readAdapter = CpoAdapterFactoryManager.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_CASESENSITIVE);
-      assertNotNull(readAdapter,method + "readAdapter is null");
+      readAdapter =
+          CpoAdapterFactoryManager.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_CASESENSITIVE);
+      assertNotNull(readAdapter, method + "readAdapter is null");
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -103,17 +104,18 @@ public class CaseSensitiveTest {
     }
 
     try {
-      CaseValueObject vo = readAdapter.retrieveBean(CaseValueObject.FG_RETRIEVE_NULL, valObj, valObj, null, null);
+      CaseValueObject vo =
+          readAdapter.retrieveBean(CaseValueObject.FG_RETRIEVE_NULL, valObj, valObj, null, null);
       assertNotEquals(vo.getId(), valObj.getId(), "Ids should not match");
       assertNotEquals(vo.getAttrInteger(), valObj.getAttrInteger(), "Integers should not match");
       assertNotEquals(valObj.getAttrVarChar(), vo.getAttrVarChar(), "Strings should not match");
-      assertFalse(valObj.getAttrDatetime().equals(vo.getAttrDatetime()), "Timestamps should not match");
+      assertFalse(
+          valObj.getAttrDatetime().equals(vo.getAttrDatetime()), "Timestamps should not match");
       assertFalse(vo.getAttrBit(), "boolean not stored correctly");
 
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
-
   }
 
   @AfterClass

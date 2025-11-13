@@ -24,7 +24,8 @@ import org.synchronoss.cpo.enums.Comparison;
 import org.synchronoss.cpo.enums.Logical;
 
 /**
- * CpoWhere is an interface for specifying the where clause to filter objects that are returned from the Datasource.
+ * CpoWhere is an interface for specifying the where clause to filter objects that are returned from
+ * the Datasource.
  *
  * @author david berry
  */
@@ -32,11 +33,11 @@ public interface CpoWhere {
 
   void setComparison(Comparison comparison);
 
-    Comparison getComparison();
+  Comparison getComparison();
 
   void setLogical(Logical logical);
 
-    Logical getLogical();
+  Logical getLogical();
 
   void setAttribute(String attr);
 

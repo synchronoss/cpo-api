@@ -19,70 +19,61 @@
  * http://www.gnu.org/licenses/lgpl.txt
  */
 /**
- * This Object is the basis for the CompositePattern. It can be both a composite or a component node. The isLeaf flag
- * determines how it treats itself. It is important for the inheriting classes to call setLeaf() to tell the Node how to
- * act.
+ * This Object is the basis for the CompositePattern. It can be both a composite or a component
+ * node. The isLeaf flag determines how it treats itself. It is important for the inheriting classes
+ * to call setLeaf() to tell the Node how to act.
  */
 package org.synchronoss.cpo;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
- * This is a general Node class to be used to build different types of trees. There are very few rules in this class as
- * they should be implemented by users of this class.
+ * This is a general Node class to be used to build different types of trees. There are very few
+ * rules in this class as they should be implemented by users of this class.
  *
  * @author David E. Berry
  * @version 1.0
  */
 public class Node implements Serializable, Cloneable, Comparable<Node> {
 
-  /**
-   * Version Id for this class.
-   */
+  /** Version Id for this class. */
   private static final long serialVersionUID = 1L;
-    private static final Logger logger = LoggerFactory.getLogger(Node.class);
+
+  private static final Logger logger = LoggerFactory.getLogger(Node.class);
 
   private static final int CHILD_NODE = 0;
-  /**
-   * The parent node for this Node
-   */
+
+  /** The parent node for this Node */
   private Node parent = null;
-  /**
-   * The first child in the linked list of children
-   */
+
+  /** The first child in the linked list of children */
   private Node firstChild = null;
-  /**
-   * The previous sibling for this node
-   */
+
+  /** The previous sibling for this node */
   private Node prevSibling = null;
-  /**
-   * The next sibling for this node
-   */
+
+  /** The next sibling for this node */
   private Node nextSibling = null;
-  /**
-   * Whether this node is allowed to have chidren.
-   */
+
+  /** Whether this node is allowed to have chidren. */
   private boolean allowChildren = true;
 
   /**
-   * This is the default constructor for the Node class. By default, it creates a Composite Node, that is, a Node that
-   * can have children nodes.
+   * This is the default constructor for the Node class. By default, it creates a Composite Node,
+   * that is, a Node that can have children nodes.
    */
-  protected Node() {
-  }
+  protected Node() {}
 
   /**
    * This constructor allows you to create a composite or component node based on the node_type.
    *
    * @param nodeType nodeType can be one of two values:
-   *
-   * Node.ParentNode Node.ChildNode
+   *     <p>Node.ParentNode Node.ChildNode
    */
   protected Node(int nodeType) {
     if (nodeType == CHILD_NODE) {
@@ -94,17 +85,14 @@ public class Node implements Serializable, Cloneable, Comparable<Node> {
    * This is the factory method for creating Node objects.
    *
    * @param nodeType nodeType can be one of two values:
-   *
-   * Node.ParentNode Node.ChildNode
+   *     <p>Node.ParentNode Node.ChildNode
    * @return an Instance of an Node
    */
-  static public Node createNode(int nodeType) {
+  public static Node createNode(int nodeType) {
     return new Node(nodeType);
   }
 
-  /**
-   * Resets all the attributes to their default state.
-   */
+  /** Resets all the attributes to their default state. */
   public void release() {
 
     parent = null;
@@ -135,8 +123,8 @@ public class Node implements Serializable, Cloneable, Comparable<Node> {
   }
 
   /**
-   * Sets the PrevSibling for this node. It also sets the NextSibling of the previous node to insure that the
-   * doubly-linked list is maintained.
+   * Sets the PrevSibling for this node. It also sets the NextSibling of the previous node to insure
+   * that the doubly-linked list is maintained.
    *
    * @param node The node that will become the previous Sibling
    */
@@ -146,8 +134,8 @@ public class Node implements Serializable, Cloneable, Comparable<Node> {
   }
 
   /**
-   * Sets the NextSibling for this node. It also sets the PrevSibling of the next node to insure that the doubly-linked
-   * list is maintained.
+   * Sets the NextSibling for this node. It also sets the PrevSibling of the next node to insure
+   * that the doubly-linked list is maintained.
    *
    * @param node The node that will become the next Sibling
    */
@@ -202,7 +190,8 @@ public class Node implements Serializable, Cloneable, Comparable<Node> {
   }
 
   /**
-   * This function adds a child to the linked-list of children for this node. It adds the child to the end of the list.
+   * This function adds a child to the linked-list of children for this node. It adds the child to
+   * the end of the list.
    *
    * @param node Node that is the node to be added as a child of this Node.
    * @throws ChildNodeException throws an exception if this child is not allowed to have children
@@ -217,7 +206,7 @@ public class Node implements Serializable, Cloneable, Comparable<Node> {
         setFirstChild(node);
         getFirstChild().setPrevSibling(firstChild);
         getFirstChild().setNextSibling(firstChild);
-      } else {    // Add it to the end of the list
+      } else { // Add it to the end of the list
         Node lastChild = getFirstChild().getPrevSibling();
         if (lastChild != null) {
           lastChild.setNextSibling(node);
@@ -229,7 +218,8 @@ public class Node implements Serializable, Cloneable, Comparable<Node> {
   }
 
   /**
-   * This function adds a child to the linked-list of children for this node. It adds the child to the end of the list.
+   * This function adds a child to the linked-list of children for this node. It adds the child to
+   * the end of the list.
    *
    * @param node Node that is the node to be added as a child of this Node.
    * @throws ChildNodeException throws an exception if this node is not allowed to have children
@@ -248,7 +238,7 @@ public class Node implements Serializable, Cloneable, Comparable<Node> {
         setFirstChild(node);
         getFirstChild().setPrevSibling(node);
         getFirstChild().setNextSibling(node);
-      } else {    // Add it in sorted order
+      } else { // Add it in sorted order
         boolean added = false;
         Node currNode = getFirstChild();
         do {
@@ -333,10 +323,11 @@ public class Node implements Serializable, Cloneable, Comparable<Node> {
   }
 
   /**
-   * Inserts a new Parent Node as a child of this node and moves all pre-existing children to be children of the new
-   * Parent Node.
+   * Inserts a new Parent Node as a child of this node and moves all pre-existing children to be
+   * children of the new Parent Node.
    *
-   * @param node Node to become a child of this node and parent to all pre-existing children of this node.
+   * @param node Node to become a child of this node and parent to all pre-existing children of this
+   *     node.
    * @throws ChildNodeException an exception adding the parent
    */
   public void insertParentAfter(Node node) throws ChildNodeException {
@@ -345,7 +336,7 @@ public class Node implements Serializable, Cloneable, Comparable<Node> {
       node.setFirstChild(getFirstChild());
 
       setFirstChild(null); // clear our list
-      addChild(node);      // make our child
+      addChild(node); // make our child
     }
   }
 
@@ -383,9 +374,9 @@ public class Node implements Serializable, Cloneable, Comparable<Node> {
 
             rc = true;
 
-            // do not release. Item.resolve expects the 
+            // do not release. Item.resolve expects the
             // pointers to be intact after a remove
-            //node.release();
+            // node.release();
             break;
           }
           currNode = currNode.getNextSibling();
@@ -398,6 +389,7 @@ public class Node implements Serializable, Cloneable, Comparable<Node> {
 
   /**
    * Remove just this node from the tree. The children of this node get attached to the parent.
+   *
    * @throws ChildNodeException error removing the child node
    */
   public void removeChildNode() throws ChildNodeException {
@@ -412,7 +404,7 @@ public class Node implements Serializable, Cloneable, Comparable<Node> {
       // add the first child to the end of the parent list
       parentLast.setNextSibling(getFirstChild());
 
-      //point the last child to the start of the parent list
+      // point the last child to the start of the parent list
       thisLast.setNextSibling(getParentNode().getFirstChild());
 
       // Now remove self
@@ -422,6 +414,7 @@ public class Node implements Serializable, Cloneable, Comparable<Node> {
 
   /**
    * Remove this node and all its children from the tree.
+   *
    * @throws ChildNodeException error removing the child node
    */
   public void removeAll() throws ChildNodeException {
@@ -453,8 +446,9 @@ public class Node implements Serializable, Cloneable, Comparable<Node> {
   }
 
   /**
-   * Implements the visitor pattern. This is a Depth-based traversal that will call the INodeVisitor visitBegin(),
-   * visitMiddle(), and visitEnd() for parent nodes and will call visit() for leaf nodes.
+   * Implements the visitor pattern. This is a Depth-based traversal that will call the INodeVisitor
+   * visitBegin(), visitMiddle(), and visitEnd() for parent nodes and will call visit() for leaf
+   * nodes.
    *
    * @param nv INodeVisitor to call upon reaching a node when traversing the tree.
    * @see NodeVisitor
@@ -490,14 +484,14 @@ public class Node implements Serializable, Cloneable, Comparable<Node> {
     return continueVisit;
   }
 
-    /**
-     * @return the count of children
-     */
+  /**
+   * @return the count of children
+   */
   public int getChildCount() {
     Node currNode;
     int count = 0;
 
-    //Do we have any children
+    // Do we have any children
     if (!isLeaf()) {
       currNode = getFirstChild();
       do {
@@ -509,14 +503,14 @@ public class Node implements Serializable, Cloneable, Comparable<Node> {
     return count;
   }
 
-    /**
-     * @return The list of child nodes
-     */
+  /**
+   * @return The list of child nodes
+   */
   public List<Node> getChildList() {
     Node currNode;
     ArrayList<Node> al = new ArrayList<>();
 
-    //Do we have any children
+    // Do we have any children
     if (!isLeaf()) {
       currNode = getFirstChild();
       do {
@@ -530,21 +524,21 @@ public class Node implements Serializable, Cloneable, Comparable<Node> {
 
   @Override
   public Object clone() throws CloneNotSupportedException {
-    Node thisClone = (Node)super.clone();
+    Node thisClone = (Node) super.clone();
     Node currNode;
 
-    thisClone.release(); //Clear all the attributes
+    thisClone.release(); // Clear all the attributes
     thisClone.setAllowChildren(getAllowChildren());
 
-    //Do we have any children
+    // Do we have any children
     if (!isLeaf()) {
       currNode = getFirstChild();
       do {
         try {
-          thisClone.addChild((Node)currNode.clone());
+          thisClone.addChild((Node) currNode.clone());
         } catch (ChildNodeException e) {
           // This should not happen since we are cloning a parent if we got here.
-            logger.error("Error adding cloned node ", e);
+          logger.error("Error adding cloned node ", e);
         }
         currNode = currNode.getNextSibling();
       } while (currNode != getFirstChild());

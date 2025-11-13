@@ -24,14 +24,11 @@ import javax.transaction.xa.XAException;
 import javax.transaction.xa.XAResource;
 import javax.transaction.xa.Xid;
 
-/**
- * Created by dberry on 11/8/15.
- */
+/** Created by dberry on 11/8/15. */
 public interface CpoXaResource<T> extends XAResource {
-    /**
-     * @param xid The id of the XAResource to close
-     * @throws XAException An exception occurred closing the resource
-     */
- void close(Xid xid) throws XAException;
-
+  /**
+   * @param xid The id of the XAResource to close
+   * @throws XAException An exception occurred closing the resource
+   */
+  void close(Xid xid) throws XAException;
 }

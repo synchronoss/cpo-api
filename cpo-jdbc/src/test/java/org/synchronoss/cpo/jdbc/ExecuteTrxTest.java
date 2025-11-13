@@ -20,6 +20,8 @@
  */
 package org.synchronoss.cpo.jdbc;
 
+import static org.testng.Assert.*;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.CpoAdapterFactoryManager;
@@ -31,8 +33,6 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
-import static org.testng.Assert.*;
-
 /**
  * BlobTest is a test class for testing the JdbcAdapter class Constructors
  *
@@ -41,50 +41,46 @@ import static org.testng.Assert.*;
 public class ExecuteTrxTest {
 
   private static final Logger logger = LoggerFactory.getLogger(ExecuteTrxTest.class);
-//  private CpoAdapter cpoAdapter = null;
+  //  private CpoAdapter cpoAdapter = null;
   private CpoTrxAdapter trxAdapter = null;
   private JdbcCpoMetaDescriptor metaDescriptor = null;
   private boolean isSupportsCalls = true;
 
-  /**
-   * Creates a new RollbackTest object.
-   *
-   */
-  public ExecuteTrxTest() {
-  }
+  /** Creates a new RollbackTest object. */
+  public ExecuteTrxTest() {}
 
   /**
-   * <code>setUp</code> Load the datasource from the properties in the property file jdbc_en_US.properties
+   * <code>setUp</code> Load the datasource from the properties in the property file
+   * jdbc_en_US.properties
    */
-  @Parameters({ "db.callsupport" })
+  @Parameters({"db.callsupport"})
   @BeforeClass
   public void setUp(boolean callSupport) {
-      String method = "setUp:";
-      isSupportsCalls  = callSupport;
+    String method = "setUp:";
+    isSupportsCalls = callSupport;
 
     try {
-//      cpoAdapter = CpoAdapterFactoryManager.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_JDBC);
+      //      cpoAdapter = CpoAdapterFactoryManager.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_JDBC);
       trxAdapter = CpoAdapterFactoryManager.getCpoTrxAdapter(JdbcStatics.ADAPTER_CONTEXT_JDBC);
-//      assertNotNull(method + "CpoAdapter is null", cpoAdapter);
-      assertNotNull(trxAdapter,method + "trxAdapter is null");
+      //      assertNotNull(method + "CpoAdapter is null", cpoAdapter);
+      assertNotNull(trxAdapter, method + "trxAdapter is null");
       metaDescriptor = (JdbcCpoMetaDescriptor) trxAdapter.getCpoMetaDescriptor();
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
   }
 
-  /**
-   * DOCUMENT ME!
-   */
+  /** DOCUMENT ME! */
   @AfterClass
   public void tearDown() {
-    try{trxAdapter.close();} catch (Exception e) {}
+    try {
+      trxAdapter.close();
+    } catch (Exception e) {
+    }
     trxAdapter = null;
   }
 
-  /**
-   * DOCUMENT ME!
-   */
+  /** DOCUMENT ME! */
   @Test
   public void testExecuteTrx() {
     if (isSupportsCalls) {
@@ -96,24 +92,29 @@ public class ExecuteTrxTest {
       try {
         rvo = trxAdapter.executeObject(ValueObject.FG_EXECUTE_TESTEXECUTEOBJECT, vo);
         trxAdapter.commit();
-        assertNotNull(rvo,method + "Returned Value object is null");
+        assertNotNull(rvo, method + "Returned Value object is null");
         assertEquals(27, rvo.getAttrDouble(), "power(3,3)=" + rvo.getAttrDouble());
       } catch (Exception e) {
-        try { trxAdapter.rollback();} catch (Exception ex) {}
+        try {
+          trxAdapter.rollback();
+        } catch (Exception ex) {
+        }
         logger.error(ExceptionHelper.getLocalizedMessage(e));
         fail(method + e.getMessage());
       }
 
-
       try {
         vo = ValueObjectFactory.createValueObject(1);
-        vo.setAttrSmallInt((short)3);
+        vo.setAttrSmallInt((short) 3);
         rvo = trxAdapter.executeObject(ValueObject.FG_EXECUTE_TESTEXECUTEOBJECTNOTRANSFORM, vo);
         trxAdapter.commit();
         assertNotNull(method + "Returned Value object is null");
         assertTrue(rvo.getAttrDouble() == 27, "power(3,3)=" + rvo.getAttrDouble());
       } catch (Exception e) {
-        try { trxAdapter.rollback();} catch (Exception ex) {}
+        try {
+          trxAdapter.rollback();
+        } catch (Exception ex) {
+        }
         logger.error(ExceptionHelper.getLocalizedMessage(e));
         fail(method + e.getMessage());
       }
@@ -136,11 +137,13 @@ public class ExecuteTrxTest {
         assertNotNull(method + "Returned Value object is null");
         assertTrue(rvo.getAttrDouble() == 27, "power(3,3)=" + rvo.getAttrDouble());
       } catch (Exception e) {
-        try { trxAdapter.rollback();} catch (Exception ex) {}
+        try {
+          trxAdapter.rollback();
+        } catch (Exception ex) {
+        }
         logger.error(ExceptionHelper.getLocalizedMessage(e));
         fail(method + e.getMessage());
       }
     }
   }
-
 }

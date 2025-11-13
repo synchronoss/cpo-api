@@ -21,17 +21,14 @@
 package org.synchronoss.cpo;
 
 /**
- * A
- * <code>CpoException</code> is the common superclass for any number of CPO related exceptions that may occur during the
- * execution of a business task.
+ * A <code>CpoException</code> is the common superclass for any number of CPO related exceptions
+ * that may occur during the execution of a business task.
  *
  * @author David E. Berry
  */
 public class CpoException extends Exception {
 
-  /**
-   * Version Id for this class.
-   */
+  /** Version Id for this class. */
   private static final long serialVersionUID = 1L;
 
   /**
@@ -41,16 +38,11 @@ public class CpoException extends Exception {
    */
   private Throwable detail;
 
-  /**
-   * Constructs a
-   * <code>CpoException</code> with no specified detail message.
-   */
-  public CpoException() {
-  }
+  /** Constructs a <code>CpoException</code> with no specified detail message. */
+  public CpoException() {}
 
   /**
-   * Constructs a
-   * <code>CpoException</code> with the specified detail message.
+   * Constructs a <code>CpoException</code> with the specified detail message.
    *
    * @param s the detail message
    */
@@ -59,8 +51,7 @@ public class CpoException extends Exception {
   }
 
   /**
-   * Constructs a
-   * <code>CpoException</code> with the specified detail message and nested exception.
+   * Constructs a <code>CpoException</code> with the specified detail message and nested exception.
    *
    * @param s the detail message
    * @param ex the nested exception
@@ -71,8 +62,7 @@ public class CpoException extends Exception {
   }
 
   /**
-   * Constructs a
-   * <code>CpoException</code> with the specified detail message and nested exception.
+   * Constructs a <code>CpoException</code> with the specified detail message and nested exception.
    *
    * @param ex the nested exception
    */
@@ -120,8 +110,8 @@ public class CpoException extends Exception {
   }
 
   /**
-   * Prints the composite message and the embedded stack trace to the specified stream
-   * <code>ps</code>.
+   * Prints the composite message and the embedded stack trace to the specified stream <code>ps
+   * </code>.
    *
    * @param ps the print stream
    */
@@ -135,18 +125,15 @@ public class CpoException extends Exception {
     }
   }
 
-  /**
-   * Prints the composite message to
-   * <code>System.err</code>.
-   */
+  /** Prints the composite message to <code>System.err</code>. */
   @Override
   public void printStackTrace() {
     printStackTrace(System.err);
   }
 
   /**
-   * Prints the composite message and the embedded stack trace to the specified print writer
-   * <code>pw</code>.
+   * Prints the composite message and the embedded stack trace to the specified print writer <code>
+   * pw</code>.
    *
    * @param pw the print writer
    */

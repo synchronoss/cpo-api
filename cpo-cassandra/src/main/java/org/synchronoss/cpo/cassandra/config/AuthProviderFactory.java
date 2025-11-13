@@ -24,23 +24,22 @@ import com.datastax.driver.core.AuthProvider;
 
 /**
  * Gets the method name for creating an AuthProvider
+ *
  * @author dberry
  */
 public abstract class AuthProviderFactory implements FactoryMethodName {
 
-    /**
-     * Constructs the AuthProviderFactory
-     */
-    public AuthProviderFactory() {}
+  /** Constructs the AuthProviderFactory */
+  public AuthProviderFactory() {}
 
-    public String getFactoryMethodName() {
+  public String getFactoryMethodName() {
     return "createAuthProvider";
   }
 
-    /**
-     * Creates an AuthProvider
-     * @return The AuthProvider
-     */
+  /**
+   * Creates an AuthProvider
+   *
+   * @return The AuthProvider
+   */
   public abstract AuthProvider createAuthProvider();
-
 }

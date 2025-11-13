@@ -20,6 +20,12 @@
  */
 package org.synchronoss.cpo.jdbc;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.*;
@@ -30,29 +36,20 @@ import org.synchronoss.cpo.meta.domain.CpoAttribute;
 import org.synchronoss.cpo.meta.domain.CpoClass;
 import org.synchronoss.cpo.meta.domain.CpoFunction;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
 /**
- * JdbcPreparedStatementFactory is the object that encapsulates the creation of the actual PreparedStatement for the
- * JDBC driver.
+ * JdbcPreparedStatementFactory is the object that encapsulates the creation of the actual
+ * PreparedStatement for the JDBC driver.
  *
  * @author david berry
  */
 public class JdbcPreparedStatementFactory extends CpoStatementFactory implements CpoReleasible {
 
-  /**
-   * Version Id for this class.
-   */
+  /** Version Id for this class. */
   private static final long serialVersionUID = 1L;
-  /**
-   * DOCUMENT ME!
-   */
+
+  /** DOCUMENT ME! */
   private static final Logger logger = LoggerFactory.getLogger(JdbcPreparedStatementFactory.class);
+
   private PreparedStatement ps_ = null;
 
   private List<CpoReleasible> releasibles = new ArrayList<>();
@@ -60,10 +57,12 @@ public class JdbcPreparedStatementFactory extends CpoStatementFactory implements
   private static final String ORDERBY_MARKER = "__CPO_ORDERBY__";
 
   /**
-   * Used to build the PreparedStatement that is used by CPO to create the actual JDBC PreparedStatement.
+   * Used to build the PreparedStatement that is used by CPO to create the actual JDBC
+   * PreparedStatement.
    *
-   * The constructor is called by the internal CPO framework. This is not to be used by users of CPO. Programmers that
-   * build Transforms may need to use this object to get access to the actual connection.
+   * <p>The constructor is called by the internal CPO framework. This is not to be used by users of
+   * CPO. Programmers that build Transforms may need to use this object to get access to the actual
+   * connection.
    *
    * @param <T> The cpo object being prepared to create a named logger
    * @param conn The actual jdbc connection that will be used to create the callable statement.
@@ -73,19 +72,26 @@ public class JdbcPreparedStatementFactory extends CpoStatementFactory implements
    * @param obj The pojo that is being acted upon
    * @param wheres DOCUMENT ME!
    * @param orderBy DOCUMENT ME!
-   * @param nativeQueries Additional sql to be embedded into the CpoFunction sql that is used to create the actual JDBC
-   * PreparedStatement
-   *
+   * @param nativeQueries Additional sql to be embedded into the CpoFunction sql that is used to
+   *     create the actual JDBC PreparedStatement
    * @throws CpoException if a CPO error occurs
    */
-  public <T> JdbcPreparedStatementFactory(Connection conn, JdbcCpoAdapter jca, CpoClass criteria,
-          CpoFunction function, T obj, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy,
-          Collection<CpoNativeFunction> nativeQueries) throws CpoException {
+  public <T> JdbcPreparedStatementFactory(
+      Connection conn,
+      JdbcCpoAdapter jca,
+      CpoClass criteria,
+      CpoFunction function,
+      T obj,
+      Collection<CpoWhere> wheres,
+      Collection<CpoOrderBy> orderBy,
+      Collection<CpoNativeFunction> nativeQueries)
+      throws CpoException {
     super(obj == null ? logger : LoggerFactory.getLogger(obj.getClass()));
     // get the list of bindValues from the function parameters
     List<BindAttribute> bindValues = getBindValues(function, obj);
 
-    String sql = buildSql(criteria, function.getExpression(), wheres, orderBy, nativeQueries, bindValues);
+    String sql =
+        buildSql(criteria, function.getExpression(), wheres, orderBy, nativeQueries, bindValues);
 
     getLocalLogger().debug("CpoFunction SQL = <" + sql + ">");
 
@@ -94,23 +100,32 @@ public class JdbcPreparedStatementFactory extends CpoStatementFactory implements
     try {
       pstmt = conn.prepareStatement(sql);
     } catch (SQLException se) {
-      getLocalLogger().error("Error Instantiating JdbcPreparedStatementFactory SQL=<" + sql + ">" + ExceptionHelper.getLocalizedMessage(se));
+      getLocalLogger()
+          .error(
+              "Error Instantiating JdbcPreparedStatementFactory SQL=<"
+                  + sql
+                  + ">"
+                  + ExceptionHelper.getLocalizedMessage(se));
       throw new CpoException(se);
     }
     setPreparedStatement(pstmt);
 
     setBindValues(bindValues);
-
   }
 
   @Override
   protected MethodMapper getMethodMapper() {
-    return JdbcMethodMapper.getMethodMapper();  //To change body of implemented methods use File | Settings | File Templates.
+    return JdbcMethodMapper
+        .getMethodMapper(); // To change body of implemented methods use File | Settings | File
+    // Templates.
   }
 
   @Override
   protected CpoData getCpoData(CpoAttribute cpoAttribute, int index) {
-    return new JdbcPreparedStatementCpoData(this, cpoAttribute, index);  //To change body of implemented methods use File | Settings | File Templates.
+    return new JdbcPreparedStatementCpoData(
+        this,
+        cpoAttribute,
+        index); // To change body of implemented methods use File | Settings | File Templates.
   }
 
   @Override
@@ -123,20 +138,21 @@ public class JdbcPreparedStatementFactory extends CpoStatementFactory implements
     return 1;
   }
 
-   /**
-    * Returns the jdbc prepared statement associated with this object
-    * @return A PreparedStatement
-    */
-   public PreparedStatement getPreparedStatement() {
-     return ps_;
-   }
+  /**
+   * Returns the jdbc prepared statement associated with this object
+   *
+   * @return A PreparedStatement
+   */
+  public PreparedStatement getPreparedStatement() {
+    return ps_;
+  }
 
-    /**
-     * Sets the jdbc prepared statement associated with this object
-     * @param ps The PreparedStatement to set
-     */
-   protected void setPreparedStatement(PreparedStatement ps) {
-     ps_ = ps;
-   }
-
+  /**
+   * Sets the jdbc prepared statement associated with this object
+   *
+   * @param ps The PreparedStatement to set
+   */
+  protected void setPreparedStatement(PreparedStatement ps) {
+    ps_ = ps;
+  }
 }

@@ -22,6 +22,7 @@ package org.synchronoss.cpo.cassandra.config;
 
 import com.datastax.driver.core.*;
 import com.datastax.driver.core.policies.*;
+import java.util.Collection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.CpoAdapterFactory;
@@ -35,24 +36,18 @@ import org.synchronoss.cpo.config.CpoConfigProcessor;
 import org.synchronoss.cpo.core.cpoCoreConfig.CtDataSourceConfig;
 import org.synchronoss.cpo.meta.CpoMetaDescriptor;
 
-import java.util.Collection;
-
 /**
- * CassandraCpoConfigProcessor processes the datasource configuration file for cassandra. It pulls out all the information needed to configure a cluster for use
- * within the application.
+ * CassandraCpoConfigProcessor processes the datasource configuration file for cassandra. It pulls
+ * out all the information needed to configure a cluster for use within the application.
  *
- * User: dberry
- * Date: 9/10/13
- * Time: 08:20 AM
- * To change this template use File | Settings | File Templates.
+ * <p>User: dberry Date: 9/10/13 Time: 08:20 AM To change this template use File | Settings | File
+ * Templates.
  */
 public class CassandraCpoConfigProcessor implements CpoConfigProcessor {
   private static final Logger logger = LoggerFactory.getLogger(CassandraCpoConfigProcessor.class);
 
-    /**
-     * Constructs a CassandraCpoConfigProcessor
-     */
-  public CassandraCpoConfigProcessor(){}
+  /** Constructs a CassandraCpoConfigProcessor */
+  public CassandraCpoConfigProcessor() {}
 
   @Override
   public CpoAdapterFactory processCpoConfig(CtDataSourceConfig cpoConfig) throws CpoException {
@@ -64,58 +59,76 @@ public class CassandraCpoConfigProcessor implements CpoConfigProcessor {
 
     CtCassandraConfig cassandraConfig = (CtCassandraConfig) cpoConfig;
 
-    CassandraCpoMetaDescriptor metaDescriptor = (CassandraCpoMetaDescriptor) CpoMetaDescriptor.getInstance(cassandraConfig.getMetaDescriptorName());
+    CassandraCpoMetaDescriptor metaDescriptor =
+        (CassandraCpoMetaDescriptor)
+            CpoMetaDescriptor.getInstance(cassandraConfig.getMetaDescriptorName());
 
     // build the cluster information
     if (cassandraConfig.isSetReadWriteConfig()) {
-      ClusterDataSourceInfo clusterInfo = buildDataSourceInfo(cassandraConfig.getName(), cassandraConfig.getReadWriteConfig());
-      cpoAdapterFactory = new CassandraCpoAdapterFactory(CassandraCpoAdapter.getInstance(metaDescriptor, clusterInfo));
+      ClusterDataSourceInfo clusterInfo =
+          buildDataSourceInfo(cassandraConfig.getName(), cassandraConfig.getReadWriteConfig());
+      cpoAdapterFactory =
+          new CassandraCpoAdapterFactory(
+              CassandraCpoAdapter.getInstance(metaDescriptor, clusterInfo));
     } else {
-      ClusterDataSourceInfo readClusterInfo = buildDataSourceInfo(cassandraConfig.getName(), cassandraConfig.getReadConfig());
-      ClusterDataSourceInfo writeClusterInfo = buildDataSourceInfo(cassandraConfig.getName(), cassandraConfig.getWriteConfig());
-      cpoAdapterFactory = new CassandraCpoAdapterFactory(CassandraCpoAdapter.getInstance(metaDescriptor, writeClusterInfo, readClusterInfo));
+      ClusterDataSourceInfo readClusterInfo =
+          buildDataSourceInfo(cassandraConfig.getName(), cassandraConfig.getReadConfig());
+      ClusterDataSourceInfo writeClusterInfo =
+          buildDataSourceInfo(cassandraConfig.getName(), cassandraConfig.getWriteConfig());
+      cpoAdapterFactory =
+          new CassandraCpoAdapterFactory(
+              CassandraCpoAdapter.getInstance(metaDescriptor, writeClusterInfo, readClusterInfo));
     }
-    logger.debug("Adapter Datasourcename =" + cpoAdapterFactory.getCpoAdapter().getDataSourceName());
+    logger.debug(
+        "Adapter Datasourcename =" + cpoAdapterFactory.getCpoAdapter().getDataSourceName());
 
     return cpoAdapterFactory;
-
   }
 
   /**
-   * buildDataSourceInfo takes the config information from cpoconfig.xml and insantiates a CLusterDataSourceInfo object
+   * buildDataSourceInfo takes the config information from cpoconfig.xml and insantiates a
+   * CLusterDataSourceInfo object
    *
    * @param dataConfigName The name of the data config
    * @param readWriteConfig The configuration information
    * @return A ClusterDataSourceInfo Object
    * @throws CpoException
    */
-  private ClusterDataSourceInfo buildDataSourceInfo(String dataConfigName, CtCassandraReadWriteConfig readWriteConfig) throws CpoException {
-    ClusterDataSourceInfo clusterInfo = new ClusterDataSourceInfo(dataConfigName, readWriteConfig.getKeySpace(), readWriteConfig.getContactPointArray());
+  private ClusterDataSourceInfo buildDataSourceInfo(
+      String dataConfigName, CtCassandraReadWriteConfig readWriteConfig) throws CpoException {
+    ClusterDataSourceInfo clusterInfo =
+        new ClusterDataSourceInfo(
+            dataConfigName, readWriteConfig.getKeySpace(), readWriteConfig.getContactPointArray());
 
     // add clusterName
-    if(readWriteConfig.isSetClusterName())
+    if (readWriteConfig.isSetClusterName())
       clusterInfo.setClusterName(readWriteConfig.getClusterName());
 
     // add maxSchemaAgreementWaitSeconds
     if (readWriteConfig.isSetMaxSchemaAgreementWaitSeconds())
-      clusterInfo.setMaxSchemaAgreementWaitSeconds(readWriteConfig.getMaxSchemaAgreementWaitSeconds());
+      clusterInfo.setMaxSchemaAgreementWaitSeconds(
+          readWriteConfig.getMaxSchemaAgreementWaitSeconds());
 
     // add port
-    if (readWriteConfig.isSetPort())
-      clusterInfo.setPort(readWriteConfig.getPort());
+    if (readWriteConfig.isSetPort()) clusterInfo.setPort(readWriteConfig.getPort());
 
     // add loadBalancing
     if (readWriteConfig.isSetLoadBalancingPolicy()) {
-      clusterInfo.setLoadBalancingPolicy(new ConfigInstantiator<LoadBalancingPolicy>().instantiate(readWriteConfig.getLoadBalancingPolicy()));
+      clusterInfo.setLoadBalancingPolicy(
+          new ConfigInstantiator<LoadBalancingPolicy>()
+              .instantiate(readWriteConfig.getLoadBalancingPolicy()));
     }
 
     // add reconnectionPolicy
     if (readWriteConfig.isSetReconnectionPolicy())
-      clusterInfo.setReconnectionPolicy(new ConfigInstantiator<ReconnectionPolicy>().instantiate(readWriteConfig.getReconnectionPolicy()));
+      clusterInfo.setReconnectionPolicy(
+          new ConfigInstantiator<ReconnectionPolicy>()
+              .instantiate(readWriteConfig.getReconnectionPolicy()));
 
     // add retryPolicy
     if (readWriteConfig.isSetRetryPolicy())
-      clusterInfo.setRetryPolicy(new ConfigInstantiator<RetryPolicy>().instantiate(readWriteConfig.getRetryPolicy()));
+      clusterInfo.setRetryPolicy(
+          new ConfigInstantiator<RetryPolicy>().instantiate(readWriteConfig.getRetryPolicy()));
 
     // add credentials
     if (readWriteConfig.isSetCredentials()) {
@@ -126,32 +139,39 @@ public class CassandraCpoConfigProcessor implements CpoConfigProcessor {
 
     // add addressTranslater
     if (readWriteConfig.isSetAddressTranslater())
-      clusterInfo.setAddressTranslater(new ConfigInstantiator<AddressTranslator>().instantiate(readWriteConfig.getAddressTranslater()));
+      clusterInfo.setAddressTranslater(
+          new ConfigInstantiator<AddressTranslator>()
+              .instantiate(readWriteConfig.getAddressTranslater()));
 
     // add AuthProvider
     if (readWriteConfig.isSetAuthProvider())
-      clusterInfo.setAuthProvider(new ConfigInstantiator<AuthProvider>().instantiate(readWriteConfig.getAuthProvider()));
+      clusterInfo.setAuthProvider(
+          new ConfigInstantiator<AuthProvider>().instantiate(readWriteConfig.getAuthProvider()));
 
     // add Compression
     if (readWriteConfig.isSetCompression())
-      clusterInfo.setCompressionType(ProtocolOptions.Compression.valueOf(readWriteConfig.getCompression().toString()));
+      clusterInfo.setCompressionType(
+          ProtocolOptions.Compression.valueOf(readWriteConfig.getCompression().toString()));
 
     // add NettyOptions
     if (readWriteConfig.isSetNettyOptions())
-      clusterInfo.setNettyOptions(new ConfigInstantiator<NettyOptions>().instantiate(readWriteConfig.getNettyOptions()));
+      clusterInfo.setNettyOptions(
+          new ConfigInstantiator<NettyOptions>().instantiate(readWriteConfig.getNettyOptions()));
 
     // add Metrics
-    if (readWriteConfig.isSetMetrics())
-      clusterInfo.setUseMetrics(readWriteConfig.getMetrics());
+    if (readWriteConfig.isSetMetrics()) clusterInfo.setUseMetrics(readWriteConfig.getMetrics());
 
     // add SSL
     if (readWriteConfig.isSetSslOptions() && !readWriteConfig.isNilSslOptions()) {
-        clusterInfo.setSslOptions(new ConfigInstantiator<SSLOptions>().instantiate(readWriteConfig.getSslOptions()));
+      clusterInfo.setSslOptions(
+          new ConfigInstantiator<SSLOptions>().instantiate(readWriteConfig.getSslOptions()));
     }
 
     // add Listeners
-    if (readWriteConfig.isSetInitialListeners()){
-      clusterInfo.setListeners(new ConfigInstantiator<Collection<Host.StateListener>>().instantiate(readWriteConfig.getInitialListeners()));
+    if (readWriteConfig.isSetInitialListeners()) {
+      clusterInfo.setListeners(
+          new ConfigInstantiator<Collection<Host.StateListener>>()
+              .instantiate(readWriteConfig.getInitialListeners()));
     }
 
     // add JMX Reporting
@@ -160,7 +180,8 @@ public class CassandraCpoConfigProcessor implements CpoConfigProcessor {
 
     // add protocolVersion
     if (readWriteConfig.isSetProtocolVersion())
-      clusterInfo.setProtocolVersion(ProtocolVersion.valueOf(readWriteConfig.getProtocolVersion().toString()));
+      clusterInfo.setProtocolVersion(
+          ProtocolVersion.valueOf(readWriteConfig.getProtocolVersion().toString()));
 
     // add pooling options
     if (readWriteConfig.isSetPoolingOptions())
@@ -176,11 +197,15 @@ public class CassandraCpoConfigProcessor implements CpoConfigProcessor {
 
     // add speculativeExecutionPolicy
     if (readWriteConfig.isSetSpeculativeExecutionPolicy())
-      clusterInfo.setSpeculativeExecutionPolicy(new ConfigInstantiator<SpeculativeExecutionPolicy>().instantiate(readWriteConfig.getSpeculativeExecutionPolicy()));
+      clusterInfo.setSpeculativeExecutionPolicy(
+          new ConfigInstantiator<SpeculativeExecutionPolicy>()
+              .instantiate(readWriteConfig.getSpeculativeExecutionPolicy()));
 
     // add TimestampGenerator
     if (readWriteConfig.isSetTimestampGenerator())
-      clusterInfo.setTimestampGenerator(new ConfigInstantiator<TimestampGenerator>().instantiate(readWriteConfig.getTimestampGenerator()));
+      clusterInfo.setTimestampGenerator(
+          new ConfigInstantiator<TimestampGenerator>()
+              .instantiate(readWriteConfig.getTimestampGenerator()));
 
     logger.debug("Created DataSourceInfo: " + clusterInfo);
     return clusterInfo;
@@ -191,12 +216,14 @@ public class CassandraCpoConfigProcessor implements CpoConfigProcessor {
 
     if (ctPoolingOptions.isSetConnectionsPerHost()) {
       CtConnectionsPerHost cph = ctPoolingOptions.getConnectionsPerHost();
-      poolingOptions.setConnectionsPerHost(HostDistance.valueOf(cph.getDistance().toString()), cph.getCore(), cph.getMax());
+      poolingOptions.setConnectionsPerHost(
+          HostDistance.valueOf(cph.getDistance().toString()), cph.getCore(), cph.getMax());
     }
 
     if (ctPoolingOptions.isSetCoreConnectionsPerHost()) {
       CtHostDistanceAndThreshold hdt = ctPoolingOptions.getCoreConnectionsPerHost();
-      poolingOptions.setCoreConnectionsPerHost(HostDistance.valueOf(hdt.getDistance().toString()), hdt.getThreshold());
+      poolingOptions.setCoreConnectionsPerHost(
+          HostDistance.valueOf(hdt.getDistance().toString()), hdt.getThreshold());
     }
 
     if (ctPoolingOptions.isSetHeartbeatIntervalSeconds()) {
@@ -209,23 +236,25 @@ public class CassandraCpoConfigProcessor implements CpoConfigProcessor {
 
     if (ctPoolingOptions.isSetMaxConnectionsPerHost()) {
       CtHostDistanceAndThreshold hdt = ctPoolingOptions.getMaxConnectionsPerHost();
-      poolingOptions.setMaxConnectionsPerHost(HostDistance.valueOf(hdt.getDistance().toString()), hdt.getThreshold());
+      poolingOptions.setMaxConnectionsPerHost(
+          HostDistance.valueOf(hdt.getDistance().toString()), hdt.getThreshold());
     }
 
     if (ctPoolingOptions.isSetMaxRequestsPerConnection()) {
       CtHostDistanceAndThreshold hdt = ctPoolingOptions.getMaxRequestsPerConnection();
-      poolingOptions.setMaxRequestsPerConnection(HostDistance.valueOf(hdt.getDistance().toString()), hdt.getThreshold());
+      poolingOptions.setMaxRequestsPerConnection(
+          HostDistance.valueOf(hdt.getDistance().toString()), hdt.getThreshold());
     }
 
     if (ctPoolingOptions.isSetNewConnectionThreshold()) {
       CtHostDistanceAndThreshold hdt = ctPoolingOptions.getNewConnectionThreshold();
-      poolingOptions.setNewConnectionThreshold(HostDistance.valueOf(hdt.getDistance().toString()), hdt.getThreshold());
+      poolingOptions.setNewConnectionThreshold(
+          HostDistance.valueOf(hdt.getDistance().toString()), hdt.getThreshold());
     }
 
     if (ctPoolingOptions.isSetPoolTimeoutMillis()) {
       poolingOptions.setPoolTimeoutMillis(ctPoolingOptions.getPoolTimeoutMillis());
     }
-
 
     return poolingOptions;
   }
@@ -234,16 +263,17 @@ public class CassandraCpoConfigProcessor implements CpoConfigProcessor {
     QueryOptions queryOptions = new QueryOptions();
 
     if (ctQueryOptions.isSetConsistencyLevel())
-      queryOptions.setConsistencyLevel(ConsistencyLevel.valueOf(ctQueryOptions.getConsistencyLevel().toString()));
+      queryOptions.setConsistencyLevel(
+          ConsistencyLevel.valueOf(ctQueryOptions.getConsistencyLevel().toString()));
 
     if (ctQueryOptions.isSetDefaultIdempotence())
       queryOptions.setDefaultIdempotence(ctQueryOptions.getDefaultIdempotence());
 
-    if (ctQueryOptions.isSetFetchSize())
-      queryOptions.setFetchSize(ctQueryOptions.getFetchSize());
+    if (ctQueryOptions.isSetFetchSize()) queryOptions.setFetchSize(ctQueryOptions.getFetchSize());
 
     if (ctQueryOptions.isSetSerialConsistencyLevel())
-      queryOptions.setSerialConsistencyLevel(ConsistencyLevel.valueOf(ctQueryOptions.getSerialConsistencyLevel().toString()));
+      queryOptions.setSerialConsistencyLevel(
+          ConsistencyLevel.valueOf(ctQueryOptions.getSerialConsistencyLevel().toString()));
 
     return queryOptions;
   }
@@ -269,13 +299,11 @@ public class CassandraCpoConfigProcessor implements CpoConfigProcessor {
     if (ctSocketOptions.isSetSendBufferSize())
       socketOptions.setSendBufferSize(ctSocketOptions.getSendBufferSize());
 
-    if (ctSocketOptions.isSetSoLinger())
-      socketOptions.setSoLinger(ctSocketOptions.getSoLinger());
+    if (ctSocketOptions.isSetSoLinger()) socketOptions.setSoLinger(ctSocketOptions.getSoLinger());
 
     if (ctSocketOptions.isSetTcpNoDelay())
       socketOptions.setTcpNoDelay(ctSocketOptions.getTcpNoDelay());
 
     return socketOptions;
   }
-
 }

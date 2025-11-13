@@ -20,6 +20,14 @@
  */
 package org.synchronoss.cpo.jdbc;
 
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+import javax.sql.DataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.*;
@@ -37,63 +45,43 @@ import org.synchronoss.cpo.meta.domain.CpoAttribute;
 import org.synchronoss.cpo.meta.domain.CpoClass;
 import org.synchronoss.cpo.meta.domain.CpoFunction;
 
-import javax.naming.Context;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
-import javax.sql.DataSource;
-import java.sql.*;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
 /**
- * JdbcCpoAdapter is an interface for a set of routines that are responsible for managing value objects from a
- * jdbc datasource.
+ * JdbcCpoAdapter is an interface for a set of routines that are responsible for managing value
+ * objects from a jdbc datasource.
  *
  * @author david berry
  */
 public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
 
-  /**
-   * Version Id for this class.
-   */
+  /** Version Id for this class. */
   private static final long serialVersionUID = 1L;
-  /**
-   * DOCUMENT ME!
-   */
+
+  /** DOCUMENT ME! */
   private static final Logger logger = LoggerFactory.getLogger(JdbcCpoAdapter.class);
 
-  /**
-   * DOCUMENT ME!
-   */
+  /** DOCUMENT ME! */
   private Context context_ = null;
 
-  /**
-   * DOCUMENT ME!
-   */
+  /** DOCUMENT ME! */
   private boolean invalidReadConnection_ = false;
+
   private boolean batchUpdatesSupported_ = false;
 
-  /**
-   * CpoMetaDescriptor allows you to get the meta data for a class.
-   */
+  /** CpoMetaDescriptor allows you to get the meta data for a class. */
   private JdbcCpoMetaDescriptor metaDescriptor = null;
 
-    /**
-     * Creates a JdbcCpoAdapter.
-     */
-  protected JdbcCpoAdapter() {
-  }
+  /** Creates a JdbcCpoAdapter. */
+  protected JdbcCpoAdapter() {}
 
   /**
    * Creates a JdbcCpoAdapter.
    *
    * @param metaDescriptor This datasource that identifies the cpo metadata datasource
-   * @param jdsiTrx        The datasoruce that identifies the transaction database.
-   * @throws org.synchronoss.cpo.CpoException
-   *          exception
+   * @param jdsiTrx The datasoruce that identifies the transaction database.
+   * @throws org.synchronoss.cpo.CpoException exception
    */
-  protected JdbcCpoAdapter(JdbcCpoMetaDescriptor metaDescriptor, DataSourceInfo<DataSource> jdsiTrx) throws CpoException {
+  protected JdbcCpoAdapter(JdbcCpoMetaDescriptor metaDescriptor, DataSourceInfo<DataSource> jdsiTrx)
+      throws CpoException {
 
     this.metaDescriptor = metaDescriptor;
     setWriteDataSource(jdsiTrx.getDataSource());
@@ -106,12 +94,17 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
    * Creates a JdbcCpoAdapter.
    *
    * @param metaDescriptor This datasource that identifies the cpo metadata datasource
-   * @param jdsiWrite      The datasource that identifies the transaction database for write transactions.
-   * @param jdsiRead       The datasource that identifies the transaction database for read-only transactions.
-   * @throws org.synchronoss.cpo.CpoException
-   *          exception
+   * @param jdsiWrite The datasource that identifies the transaction database for write
+   *     transactions.
+   * @param jdsiRead The datasource that identifies the transaction database for read-only
+   *     transactions.
+   * @throws org.synchronoss.cpo.CpoException exception
    */
-  protected JdbcCpoAdapter(JdbcCpoMetaDescriptor metaDescriptor, DataSourceInfo<DataSource> jdsiWrite, DataSourceInfo<DataSource> jdsiRead) throws CpoException {
+  protected JdbcCpoAdapter(
+      JdbcCpoMetaDescriptor metaDescriptor,
+      DataSourceInfo<DataSource> jdsiWrite,
+      DataSourceInfo<DataSource> jdsiRead)
+      throws CpoException {
     this.metaDescriptor = metaDescriptor;
     setWriteDataSource(jdsiWrite.getDataSource());
     setReadDataSource(jdsiRead.getDataSource());
@@ -133,11 +126,11 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
     setDataSourceName(jdbcCpoAdapter.getDataSourceName());
   }
 
-    /**
-     * Are batch updates supported
-     *
-     * @return true if batch updates are supported
-     */
+  /**
+   * Are batch updates supported
+   *
+   * @return true if batch updates are supported
+   */
   protected boolean isBatchUpdatesSupported() {
     return batchUpdatesSupported_;
   }
@@ -151,7 +144,7 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
       // do all the tests here
       batchUpdatesSupported_ = dmd.supportsBatchUpdates();
 
-//      this.closeLocalConnection(c);
+      //      this.closeLocalConnection(c);
     } catch (Throwable t) {
       logger.error(ExceptionHelper.getLocalizedMessage(t), t);
       throw new CpoException("Could Not Retrieve Database Meta Data", t);
@@ -160,15 +153,17 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
     }
   }
 
-    /**
-     * Finds or Creates a JdbcCpoAdapter.
-     *
-     * @param metaDescriptor - The meta descriptor for the datasource
-     * @param jdsiTrx - The datasurce info
-     * @return A JdbcCpoAdapter
-     * @throws CpoException - An error occurred finding of creating the datasource adapter
-     */
-  public static JdbcCpoAdapter getInstance(JdbcCpoMetaDescriptor metaDescriptor, DataSourceInfo<DataSource> jdsiTrx) throws CpoException {
+  /**
+   * Finds or Creates a JdbcCpoAdapter.
+   *
+   * @param metaDescriptor - The meta descriptor for the datasource
+   * @param jdsiTrx - The datasurce info
+   * @return A JdbcCpoAdapter
+   * @throws CpoException - An error occurred finding of creating the datasource adapter
+   */
+  public static JdbcCpoAdapter getInstance(
+      JdbcCpoMetaDescriptor metaDescriptor, DataSourceInfo<DataSource> jdsiTrx)
+      throws CpoException {
     String adapterKey = metaDescriptor + ":" + jdsiTrx.getDataSourceName();
     JdbcCpoAdapter adapter = (JdbcCpoAdapter) findCpoAdapter(adapterKey);
     if (adapter == null) {
@@ -182,14 +177,20 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
    * Creates a JdbcCpoAdapter.
    *
    * @param metaDescriptor This datasource that identifies the cpo metadata datasource
-   * @param jdsiWrite      The datasource that identifies the transaction database for write transactions.
-   * @param jdsiRead       The datasource that identifies the transaction database for read-only transactions.
+   * @param jdsiWrite The datasource that identifies the transaction database for write
+   *     transactions.
+   * @param jdsiRead The datasource that identifies the transaction database for read-only
+   *     transactions.
    * @return - A JdbcCpoAdapter
-   * @throws org.synchronoss.cpo.CpoException
-   *          exception
+   * @throws org.synchronoss.cpo.CpoException exception
    */
-  public static JdbcCpoAdapter getInstance(JdbcCpoMetaDescriptor metaDescriptor, DataSourceInfo<DataSource> jdsiWrite, DataSourceInfo<DataSource> jdsiRead) throws CpoException {
-    String adapterKey = metaDescriptor + ":" + jdsiWrite.getDataSourceName() + ":" + jdsiRead.getDataSourceName();
+  public static JdbcCpoAdapter getInstance(
+      JdbcCpoMetaDescriptor metaDescriptor,
+      DataSourceInfo<DataSource> jdsiWrite,
+      DataSourceInfo<DataSource> jdsiRead)
+      throws CpoException {
+    String adapterKey =
+        metaDescriptor + ":" + jdsiWrite.getDataSourceName() + ":" + jdsiRead.getDataSourceName();
     JdbcCpoAdapter adapter = (JdbcCpoAdapter) findCpoAdapter(adapterKey);
     if (adapter == null) {
       adapter = new JdbcCpoAdapter(metaDescriptor, jdsiWrite, jdsiRead);
@@ -199,7 +200,8 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
   }
 
   @Override
-  public <T> long existsObject(String name, T obj, Collection<CpoWhere> wheres) throws CpoException {
+  public <T> long existsObject(String name, T obj, Collection<CpoWhere> wheres)
+      throws CpoException {
     Connection c = null;
     long objCount = -1;
 
@@ -219,17 +221,18 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
   /**
    * The CpoAdapter will check to see if this object exists in the datasource.
    *
-   * @param <T>  The type of the object
-   * @param name The name which identifies which EXISTS, INSERT, and UPDATE Function Groups to execute to persist the
-   *             object.
-   * @param obj  This is an object that has been defined within the metadata of the datasource. If the class is not
-   *             defined an exception will be thrown.
-   * @param con  The datasource Connection with which to check if the object exists
+   * @param <T> The type of the object
+   * @param name The name which identifies which EXISTS, INSERT, and UPDATE Function Groups to
+   *     execute to persist the object.
+   * @param obj This is an object that has been defined within the metadata of the datasource. If
+   *     the class is not defined an exception will be thrown.
+   * @param con The datasource Connection with which to check if the object exists
    * @param wheres A collection of where clauses
    * @return The int value of the first column returned in the record set
    * @throws CpoException exception will be thrown if the Function Group has a function count != 1
    */
-  protected <T> long existsObject(String name, T obj, Connection con, Collection<CpoWhere> wheres) throws CpoException {
+  protected <T> long existsObject(String name, T obj, Connection con, Collection<CpoWhere> wheres)
+      throws CpoException {
     PreparedStatement ps = null;
     ResultSet rs = null;
     ResultSetMetaData rsmd;
@@ -248,7 +251,9 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
 
       for (CpoFunction cpoFunction : cpoFunctions) {
         localLogger.info(cpoFunction.getExpression());
-        JdbcPreparedStatementFactory jpsf = new JdbcPreparedStatementFactory(con, this, cpoClass, cpoFunction, obj, wheres, null, null);
+        JdbcPreparedStatementFactory jpsf =
+            new JdbcPreparedStatementFactory(
+                con, this, cpoClass, cpoFunction, obj, wheres, null, null);
         ps = jpsf.getPreparedStatement();
 
         long qCount = 0; // set the results for this function to 0
@@ -310,11 +315,11 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
   /**
    * Creates a new CpoWhere object
    *
-   * @param <T>  The type of the object
+   * @param <T> The type of the object
    * @param logical The logical operator
-   * @param attr    The attribute name to compare
-   * @param comp    The compare operator
-   * @param value   The value to compare the attribute to.
+   * @param attr The attribute name to compare
+   * @param comp The compare operator
+   * @param value The value to compare the attribute to.
    * @return A CpoWhere
    */
   @Override
@@ -325,19 +330,19 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
   /**
    * Creates a new CpoWhere object
    *
-   * @param <T>  The type of the object
+   * @param <T> The type of the object
    * @param logical The logical operator
-   * @param attr    The attribute name to compare
-   * @param comp    The compare operator
-   * @param value   The value to compare the attribute to.
-   * @param not     negate the compare
+   * @param attr The attribute name to compare
+   * @param comp The compare operator
+   * @param value The value to compare the attribute to.
+   * @param not negate the compare
    * @return A CpoWhere
    */
   @Override
-  public <T> CpoWhere newWhere(Logical logical, String attr, Comparison comp, T value, boolean not) {
+  public <T> CpoWhere newWhere(
+      Logical logical, String attr, Comparison comp, T value, boolean not) {
     return new JdbcCpoWhere(logical, attr, comp, value, not);
   }
-
 
   /**
    * Sets the JNDI context
@@ -367,20 +372,20 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
   }
 
   /**
-   * Validates the crud of query being performed. If it is a Persist Group,
-   * it checks the database to see if this is an update or an insert, and returns the query group. Otherwise, it sends
-   * back the original query group. Upserts only work for single objects.
+   * Validates the crud of query being performed. If it is a Persist Group, it checks the database
+   * to see if this is an update or an insert, and returns the query group. Otherwise, it sends back
+   * the original query group. Upserts only work for single objects.
    *
-   * @param <T>  The crud of the object
-   * @param obj  The obj to insert or update
+   * @param <T> The crud of the object
+   * @param obj The obj to insert or update
    * @param crud The group crud
    * @param name The group name
-   * @param c    The connection to use
+   * @param c The connection to use
    * @return The crud operation to use
    * @throws CpoException An exception occurred
    */
   protected <T> Crud adjustCrud(T obj, Crud crud, String name, Connection c) throws CpoException {
-      Crud retType = crud;
+    Crud retType = crud;
     long objCount;
 
     if (Crud.UPSERT == retType) {
@@ -391,7 +396,8 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
       } else if (objCount == 1) {
         retType = Crud.UPDATE;
       } else {
-        throw new CpoException("Persist can only UPDATE one record. Your EXISTS function returned 2 or more.");
+        throw new CpoException(
+            "Persist can only UPDATE one record. Your EXISTS function returned 2 or more.");
       }
     }
 
@@ -433,12 +439,12 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
     return connection;
   }
 
-    /**
-     * Gets the write connection for this CpoAdapter
-     *
-     * @return A write connection
-     * @throws CpoException An error has occurred.
-     */
+  /**
+   * Gets the write connection for this CpoAdapter
+   *
+   * @return A write connection
+   * @throws CpoException An error has occurred.
+   */
   protected Connection getWriteConnection() throws CpoException {
     Connection connection;
 
@@ -478,7 +484,7 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
    */
   protected void commitLocalConnection(Connection connection) {
     try {
-      if (connection != null ) {
+      if (connection != null) {
         connection.commit();
       }
     } catch (SQLException e) {
@@ -506,19 +512,21 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
   }
 
   /**
-   * Executes an Object whose MetaData contains a stored procedure. An assumption is that the object exists in the
-   * datasource.
+   * Executes an Object whose MetaData contains a stored procedure. An assumption is that the object
+   * exists in the datasource.
    *
-   * @param <T>      The result object type
-   * @param <C>      The criteria object type
-   * @param name     The filter name which tells the datasource which objects should be returned. The name also signifies
-   *                 what data in the object will be populated.
-   * @param criteria This is an object that has been defined within the metadata of the datasource. If the class is not
-   *                 defined an exception will be thrown. If the object does not exist in the datasource, an exception will be thrown.
-   *                 This object is used to populate the IN arguments used to retrieve the collection of objects.
-   * @param result   This is an object that has been defined within the metadata of the datasource. If the class is not
-   *                 defined an exception will be thrown. If the object does not exist in the datasource, an exception will be thrown.
-   *                 This object defines the object type that will be returned in the
+   * @param <T> The result object type
+   * @param <C> The criteria object type
+   * @param name The filter name which tells the datasource which objects should be returned. The
+   *     name also signifies what data in the object will be populated.
+   * @param criteria This is an object that has been defined within the metadata of the datasource.
+   *     If the class is not defined an exception will be thrown. If the object does not exist in
+   *     the datasource, an exception will be thrown. This object is used to populate the IN
+   *     arguments used to retrieve the collection of objects.
+   * @param result This is an object that has been defined within the metadata of the datasource. If
+   *     the class is not defined an exception will be thrown. If the object does not exist in the
+   *     datasource, an exception will be thrown. This object defines the object type that will be
+   *     returned in the
    * @return A result object populate with the OUT arguments
    * @throws CpoException DOCUMENT ME!
    */
@@ -533,7 +541,8 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
     } catch (Exception e) {
       // Any exception has to try to rollback the work;
       rollbackLocalConnection(c);
-      ExceptionHelper.reThrowCpoException(e, "processExecuteGroup(String name, Object criteria, Object result) failed");
+      ExceptionHelper.reThrowCpoException(
+          e, "processExecuteGroup(String name, Object criteria, Object result) failed");
     } finally {
       closeLocalConnection(c);
     }
@@ -542,24 +551,27 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
   }
 
   /**
-   * Executes an Object whose MetaData contains a stored procedure. An assumption is that the object exists in the
-   * datasource.
+   * Executes an Object whose MetaData contains a stored procedure. An assumption is that the object
+   * exists in the datasource.
    *
-   * @param <T>      The result object type
-   * @param <C>      The criteria object type
-   * @param name     The filter name which tells the datasource which objects should be returned. The name also signifies
-   *                 what data in the object will be populated.
-   * @param criteria This is an object that has been defined within the metadata of the datasource. If the class is not
-   *                 defined an exception will be thrown. If the object does not exist in the datasource, an exception will be thrown.
-   *                 This object is used to populate the IN arguments used to retrieve the collection of objects.
-   * @param conn     The connection to use to execute this group
-   * @param result   This is an object that has been defined within the metadata of the datasource. If the class is not
-   *                 defined an exception will be thrown. If the object does not exist in the datasource, an exception will be thrown.
-   *                 This object defines the object type that will be returned in the
+   * @param <T> The result object type
+   * @param <C> The criteria object type
+   * @param name The filter name which tells the datasource which objects should be returned. The
+   *     name also signifies what data in the object will be populated.
+   * @param criteria This is an object that has been defined within the metadata of the datasource.
+   *     If the class is not defined an exception will be thrown. If the object does not exist in
+   *     the datasource, an exception will be thrown. This object is used to populate the IN
+   *     arguments used to retrieve the collection of objects.
+   * @param conn The connection to use to execute this group
+   * @param result This is an object that has been defined within the metadata of the datasource. If
+   *     the class is not defined an exception will be thrown. If the object does not exist in the
+   *     datasource, an exception will be thrown. This object defines the object type that will be
+   *     returned in the
    * @return A result object populate with the OUT arguments
    * @throws CpoException DOCUMENT ME!
    */
-  protected <T, C> T processExecuteGroup(String name, C criteria, T result, Connection conn) throws CpoException {
+  protected <T, C> T processExecuteGroup(String name, C criteria, T result, Connection conn)
+      throws CpoException {
     CallableStatement cstmt = null;
     CpoClass criteriaClass;
     CpoClass resultClass;
@@ -576,8 +588,14 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
       criteriaClass = metaDescriptor.getMetaClass(criteria);
       resultClass = metaDescriptor.getMetaClass(result);
 
-      List<CpoFunction> functions = criteriaClass.getFunctionGroup(Crud.EXECUTE, name).getFunctions();
-      localLogger.info("===================processExecuteGroup (" + name + ") Count<" + functions.size() + ">=========================");
+      List<CpoFunction> functions =
+          criteriaClass.getFunctionGroup(Crud.EXECUTE, name).getFunctions();
+      localLogger.info(
+          "===================processExecuteGroup ("
+              + name
+              + ") Count<"
+              + functions.size()
+              + ">=========================");
 
       try {
         returnObject = (T) result.getClass().newInstance();
@@ -611,13 +629,20 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
           JdbcCpoArgument jdbcArgument = (JdbcCpoArgument) cpoArgument;
           if (jdbcArgument.isOutParameter()) {
             JdbcCpoAttribute jdbcAttribute = jdbcArgument.getAttribute();
-            if (jdbcAttribute==null) {
-              jdbcAttribute = (JdbcCpoAttribute) resultClass.getAttributeJava(jdbcArgument.getAttributeName());
-              if (jdbcAttribute==null) {
-                throw new CpoException("Attribute <"+jdbcArgument.getAttributeName()+"> does not exist on class <"+resultClass.getName()+">");
+            if (jdbcAttribute == null) {
+              jdbcAttribute =
+                  (JdbcCpoAttribute) resultClass.getAttributeJava(jdbcArgument.getAttributeName());
+              if (jdbcAttribute == null) {
+                throw new CpoException(
+                    "Attribute <"
+                        + jdbcArgument.getAttributeName()
+                        + "> does not exist on class <"
+                        + resultClass.getName()
+                        + ">");
               }
             }
-            jdbcAttribute.invokeSetter(returnObject, new CallableStatementCpoData(cstmt, jdbcAttribute, j));
+            jdbcAttribute.invokeSetter(
+                returnObject, new CallableStatementCpoData(cstmt, jdbcAttribute, j));
           }
           j++;
         }
@@ -625,7 +650,9 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
         cstmt.close();
       }
     } catch (Throwable t) {
-      String msg = "ProcessExecuteGroup(String name, Object criteria, Object result, Connection conn) failed. SQL=";
+      String msg =
+          "ProcessExecuteGroup(String name, Object criteria, Object result, Connection conn)"
+              + " failed. SQL=";
       localLogger.error(msg, t);
       throw new CpoException(msg, t);
     } finally {
@@ -641,19 +668,27 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
   /**
    * Retrieves the Object from the datasource.
    *
-   * @param <T>      The object type
-   * @param obj               This is an object that has been defined within the metadata of the datasource. If the class is not
-   *                          defined an exception will be thrown. The input object is used to specify the search criteria.
-   * @param groupName         The name which identifies which RETRIEVE Function Group to execute to retrieve the object.
-   * @param wheres            A collection of CpoWhere objects to be used by the function
-   * @param orderBy           A collection of CpoOrderBy objects to be used by the function
+   * @param <T> The object type
+   * @param obj This is an object that has been defined within the metadata of the datasource. If
+   *     the class is not defined an exception will be thrown. The input object is used to specify
+   *     the search criteria.
+   * @param groupName The name which identifies which RETRIEVE Function Group to execute to retrieve
+   *     the object.
+   * @param wheres A collection of CpoWhere objects to be used by the function
+   * @param orderBy A collection of CpoOrderBy objects to be used by the function
    * @param nativeExpressions A collection of CpoNativeFunction objects to be used by the function
-   * @return A populated object of the same type as the Object passed in as a argument. If no objects match the criteria
-   *         a NULL will be returned.
-   * @throws CpoException the retrieve function defined for this objects returns more than one row, an exception will be
-   *                      thrown.
+   * @return A populated object of the same type as the Object passed in as a argument. If no
+   *     objects match the criteria a NULL will be returned.
+   * @throws CpoException the retrieve function defined for this objects returns more than one row,
+   *     an exception will be thrown.
    */
-  protected <T> T processSelectGroup(T obj, String groupName, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeFunction> nativeExpressions) throws CpoException {
+  protected <T> T processSelectGroup(
+      T obj,
+      String groupName,
+      Collection<CpoWhere> wheres,
+      Collection<CpoOrderBy> orderBy,
+      Collection<CpoNativeFunction> nativeExpressions)
+      throws CpoException {
     Connection c = null;
     T result = null;
 
@@ -667,7 +702,8 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
     } catch (Exception e) {
       // Any exception has to try to rollback the work;
       rollbackLocalConnection(c);
-      ExceptionHelper.reThrowCpoException(e, "processSelectGroup(Object obj, String groupName) failed");
+      ExceptionHelper.reThrowCpoException(
+          e, "processSelectGroup(Object obj, String groupName) failed");
     } finally {
       closeLocalConnection(c);
     }
@@ -678,20 +714,29 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
   /**
    * Retrieves the Object from the datasource.
    *
-   * @param <T>      The object type
-   * @param obj               This is an object that has been defined within the metadata of the datasource. If the class is not
-   *                          defined an exception will be thrown. The input object is used to specify the search criteria.
-   * @param groupName         The name which identifies which RETRIEVE Function Group to execute to retrieve the object.
-   * @param wheres            A collection of CpoWhere objects to be used by the function
-   * @param orderBy           A collection of CpoOrderBy objects to be used by the function
+   * @param <T> The object type
+   * @param obj This is an object that has been defined within the metadata of the datasource. If
+   *     the class is not defined an exception will be thrown. The input object is used to specify
+   *     the search criteria.
+   * @param groupName The name which identifies which RETRIEVE Function Group to execute to retrieve
+   *     the object.
+   * @param wheres A collection of CpoWhere objects to be used by the function
+   * @param orderBy A collection of CpoOrderBy objects to be used by the function
    * @param nativeExpressions A collection of CpoNativeFunction objects to be used by the function
-   * @param con               The connection to use for this select
-   * @return A populated object of the same type as the Object passed in as a argument. If no objects match the criteria
-   *         a NULL will be returned.
-   * @throws CpoException the retrieve function defined for this objects returns more than one row, an exception will be
-   *                      thrown.
+   * @param con The connection to use for this select
+   * @return A populated object of the same type as the Object passed in as a argument. If no
+   *     objects match the criteria a NULL will be returned.
+   * @throws CpoException the retrieve function defined for this objects returns more than one row,
+   *     an exception will be thrown.
    */
-  protected <T> T processSelectGroup(T obj, String groupName, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeFunction> nativeExpressions, Connection con) throws CpoException {
+  protected <T> T processSelectGroup(
+      T obj,
+      String groupName,
+      Collection<CpoWhere> wheres,
+      Collection<CpoOrderBy> orderBy,
+      Collection<CpoNativeFunction> nativeExpressions,
+      Connection con)
+      throws CpoException {
     PreparedStatement ps = null;
     ResultSet rs = null;
     ResultSetMetaData rsmd;
@@ -713,14 +758,25 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
 
     try {
       cpoClass = metaDescriptor.getMetaClass(criteriaObj);
-      List<CpoFunction> functions = cpoClass.getFunctionGroup(Crud.RETRIEVE, groupName).getFunctions();
+      List<CpoFunction> functions =
+          cpoClass.getFunctionGroup(Crud.RETRIEVE, groupName).getFunctions();
 
-      localLogger.info("=================== Class=<" + criteriaObj.getClass() + "> Type=<" + Crud.RETRIEVE.operation + "> Name=<" + groupName + "> =========================");
+      localLogger.info(
+          "=================== Class=<"
+              + criteriaObj.getClass()
+              + "> Type=<"
+              + Crud.RETRIEVE.operation
+              + "> Name=<"
+              + groupName
+              + "> =========================");
 
       try {
         rObj = (T) obj.getClass().newInstance();
       } catch (IllegalAccessException iae) {
-        localLogger.error("=================== Could not access default constructor for Class=<" + obj.getClass() + "> ==================");
+        localLogger.error(
+            "=================== Could not access default constructor for Class=<"
+                + obj.getClass()
+                + "> ==================");
         throw new CpoException("Unable to access the constructor of the Return Object", iae);
       } catch (InstantiationException iae) {
         throw new CpoException("Unable to instantiate Return Object", iae);
@@ -728,7 +784,9 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
 
       for (CpoFunction cpoFunction : functions) {
 
-        JdbcPreparedStatementFactory jpsf = new JdbcPreparedStatementFactory(con, this, cpoClass, cpoFunction, criteriaObj, wheres, orderBy, nativeExpressions);
+        JdbcPreparedStatementFactory jpsf =
+            new JdbcPreparedStatementFactory(
+                con, this, cpoClass, cpoFunction, criteriaObj, wheres, orderBy, nativeExpressions);
         ps = jpsf.getPreparedStatement();
 
         // insertions on
@@ -739,14 +797,18 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
         if (rs.isBeforeFirst()) {
           rsmd = rs.getMetaData();
 
-          if ((rsmd.getColumnCount() == 2) && "CPO_ATTRIBUTE".equalsIgnoreCase(rsmd.getColumnLabel(1)) && "CPO_VALUE".equalsIgnoreCase(rsmd.getColumnLabel(2))) {
+          if ((rsmd.getColumnCount() == 2)
+              && "CPO_ATTRIBUTE".equalsIgnoreCase(rsmd.getColumnLabel(1))
+              && "CPO_VALUE".equalsIgnoreCase(rsmd.getColumnLabel(2))) {
             while (rs.next()) {
               recordsExist = true;
               recordCount++;
               attribute = (JdbcCpoAttribute) cpoClass.getAttributeData(rs.getString(1));
 
               if (attribute != null) {
-                attribute.invokeSetter(rObj, new JdbcResultSetCpoData(JdbcMethodMapper.getMethodMapper(), rs, attribute, 2));
+                attribute.invokeSetter(
+                    rObj,
+                    new JdbcResultSetCpoData(JdbcMethodMapper.getMethodMapper(), rs, attribute, 2));
                 attributesSet++;
               }
             }
@@ -757,7 +819,9 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
               attribute = (JdbcCpoAttribute) cpoClass.getAttributeData(rsmd.getColumnLabel(k));
 
               if (attribute != null) {
-                attribute.invokeSetter(rObj, new JdbcResultSetCpoData(JdbcMethodMapper.getMethodMapper(), rs, attribute, k));
+                attribute.invokeSetter(
+                    rObj,
+                    new JdbcResultSetCpoData(JdbcMethodMapper.getMethodMapper(), rs, attribute, k));
                 attributesSet++;
               }
             }
@@ -779,9 +843,27 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
 
       if (!recordsExist) {
         rObj = null;
-        localLogger.info("=================== 0 Records - 0 Attributes - Class=<" + criteriaObj.getClass() + "> Type=<" + Crud.RETRIEVE.operation + "> Name=<" + groupName + "> =========================");
+        localLogger.info(
+            "=================== 0 Records - 0 Attributes - Class=<"
+                + criteriaObj.getClass()
+                + "> Type=<"
+                + Crud.RETRIEVE.operation
+                + "> Name=<"
+                + groupName
+                + "> =========================");
       } else {
-        localLogger.info("=================== " + recordCount + " Records - " + attributesSet + " Attributes - Class=<" + criteriaObj.getClass() + ">  Type=<" + Crud.RETRIEVE.operation + "> Name=<" + groupName + "> =========================");
+        localLogger.info(
+            "=================== "
+                + recordCount
+                + " Records - "
+                + attributesSet
+                + " Attributes - Class=<"
+                + criteriaObj.getClass()
+                + ">  Type=<"
+                + Crud.RETRIEVE.operation
+                + "> Name=<"
+                + groupName
+                + "> =========================");
       }
     } catch (Throwable t) {
       String msg = "ProcessSeclectGroup(Object) failed: " + ExceptionHelper.getLocalizedMessage(t);
@@ -799,33 +881,44 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
   /**
    * Retrieves Objects from the datasource.
    *
-   * @param <T>               The result object type
-   * @param <C>               The criteria object type
-   * @param name              Query group name
-   * @param criteria          The criteria object
-   * @param result            The result object
-   * @param wheres            A collection of CpoWhere objects to be used by the function
-   * @param orderBy           A collection of CpoOrderBy objects to be used by the function
+   * @param <T> The result object type
+   * @param <C> The criteria object type
+   * @param name Query group name
+   * @param criteria The criteria object
+   * @param result The result object
+   * @param wheres A collection of CpoWhere objects to be used by the function
+   * @param orderBy A collection of CpoOrderBy objects to be used by the function
    * @param nativeExpressions A collection of CpoNativeFunction objects to be used by the function
-   * @param useRetrieve       Use the RETRIEVE_GROUP instead of the LIST_GROUP
+   * @param useRetrieve Use the RETRIEVE_GROUP instead of the LIST_GROUP
    * @return A List of T or an Empty List.
    * @throws CpoException Any errors retrieving the data from the datasource
    */
-  protected <T, C> List<T> processSelectGroup(String name, C criteria, T result, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeFunction> nativeExpressions,
-                                              boolean useRetrieve) throws CpoException {
+  protected <T, C> List<T> processSelectGroup(
+      String name,
+      C criteria,
+      T result,
+      Collection<CpoWhere> wheres,
+      Collection<CpoOrderBy> orderBy,
+      Collection<CpoNativeFunction> nativeExpressions,
+      boolean useRetrieve)
+      throws CpoException {
     Connection con = null;
     CpoArrayResultSet<T> resultSet = new CpoArrayResultSet<>();
 
     try {
       con = getReadConnection();
-      processSelectGroup(name, criteria, result, wheres, orderBy, nativeExpressions, con, useRetrieve, resultSet);
+      processSelectGroup(
+          name, criteria, result, wheres, orderBy, nativeExpressions, con, useRetrieve, resultSet);
       // The select may have a for update clause on it
       // Since the connection is cached we need to get rid of this
       commitLocalConnection(con);
     } catch (Exception e) {
       // Any exception has to try to rollback the work;
       rollbackLocalConnection(con);
-      ExceptionHelper.reThrowCpoException(e, "processSelectGroup(String name, Object criteria, Object result,CpoWhere where, Collection orderBy, boolean useRetrieve) failed");
+      ExceptionHelper.reThrowCpoException(
+          e,
+          "processSelectGroup(String name, Object criteria, Object result,CpoWhere where,"
+              + " Collection orderBy, boolean useRetrieve) failed");
     } finally {
       closeLocalConnection(con);
     }
@@ -833,35 +926,47 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
     return resultSet;
   }
 
-    /**
-     * Retrieves Objects from the datasource.
-     *
-     * @param <T>               The result object type
-     * @param <C>               The criteria object type
-     * @param name              Query group name
-     * @param criteria          The criteria object
-     * @param result            The result object
-     * @param wheres            A collection of CpoWhere objects to be used by the function
-     * @param orderBy           A collection of CpoOrderBy objects to be used by the function
-     * @param nativeExpressions A collection of CpoNativeFunction objects to be used by the function
-     * @param useRetrieve       Use the RETRIEVE_GROUP instead of the LIST_GROUP
-     * @param resultSet         The result set to add the results to.
-     * @throws CpoException Any errors retrieving the data from the datasource
-     */
-  protected <T, C> void processSelectGroup(String name, C criteria, T result, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeFunction> nativeExpressions,
-                                           boolean useRetrieve, CpoResultSet<T> resultSet) throws CpoException {
+  /**
+   * Retrieves Objects from the datasource.
+   *
+   * @param <T> The result object type
+   * @param <C> The criteria object type
+   * @param name Query group name
+   * @param criteria The criteria object
+   * @param result The result object
+   * @param wheres A collection of CpoWhere objects to be used by the function
+   * @param orderBy A collection of CpoOrderBy objects to be used by the function
+   * @param nativeExpressions A collection of CpoNativeFunction objects to be used by the function
+   * @param useRetrieve Use the RETRIEVE_GROUP instead of the LIST_GROUP
+   * @param resultSet The result set to add the results to.
+   * @throws CpoException Any errors retrieving the data from the datasource
+   */
+  protected <T, C> void processSelectGroup(
+      String name,
+      C criteria,
+      T result,
+      Collection<CpoWhere> wheres,
+      Collection<CpoOrderBy> orderBy,
+      Collection<CpoNativeFunction> nativeExpressions,
+      boolean useRetrieve,
+      CpoResultSet<T> resultSet)
+      throws CpoException {
     Connection con = null;
 
     try {
       con = getReadConnection();
-      processSelectGroup(name, criteria, result, wheres, orderBy, nativeExpressions, con, useRetrieve, resultSet);
+      processSelectGroup(
+          name, criteria, result, wheres, orderBy, nativeExpressions, con, useRetrieve, resultSet);
       // The select may have a for update clause on it
       // Since the connection is cached we need to get rid of this
       commitLocalConnection(con);
     } catch (Exception e) {
       // Any exception has to try to rollback the work;
       rollbackLocalConnection(con);
-      ExceptionHelper.reThrowCpoException(e, "processSelectGroup(String name, Object criteria, Object result,CpoWhere where, Collection orderBy, boolean useRetrieve) failed");
+      ExceptionHelper.reThrowCpoException(
+          e,
+          "processSelectGroup(String name, Object criteria, Object result,CpoWhere where,"
+              + " Collection orderBy, boolean useRetrieve) failed");
     } finally {
       closeLocalConnection(con);
     }
@@ -870,20 +975,30 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
   /**
    * Retrieves Objects from the datasource.
    *
-   * @param <T>               The result object type
-   * @param <C>               The criteria object type
-   * @param name              Query group name
-   * @param criteria          The criteria object
-   * @param result            The result object
-   * @param wheres            A collection of CpoWhere objects to be used by the function
-   * @param orderBy           A collection of CpoOrderBy objects to be used by the function
+   * @param <T> The result object type
+   * @param <C> The criteria object type
+   * @param name Query group name
+   * @param criteria The criteria object
+   * @param result The result object
+   * @param wheres A collection of CpoWhere objects to be used by the function
+   * @param orderBy A collection of CpoOrderBy objects to be used by the function
    * @param nativeExpressions A collection of CpoNativeFunction objects to be used by the function
-   * @param useRetrieve       Use the RETRIEVE_GROUP instead of the LIST_GROUP
-   * @param con               The connection to use for this select
-   * @param resultSet         The result set to add the results to.
+   * @param useRetrieve Use the RETRIEVE_GROUP instead of the LIST_GROUP
+   * @param con The connection to use for this select
+   * @param resultSet The result set to add the results to.
    * @throws CpoException Any errors retrieving the data from the datasource
    */
-  protected <T, C> void processSelectGroup(String name, C criteria, T result, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeFunction> nativeExpressions, Connection con, boolean useRetrieve, CpoResultSet<T> resultSet) throws CpoException {
+  protected <T, C> void processSelectGroup(
+      String name,
+      C criteria,
+      T result,
+      Collection<CpoWhere> wheres,
+      Collection<CpoOrderBy> orderBy,
+      Collection<CpoNativeFunction> nativeExpressions,
+      Connection con,
+      boolean useRetrieve,
+      CpoResultSet<T> resultSet)
+      throws CpoException {
     Logger localLogger = criteria == null ? logger : LoggerFactory.getLogger(criteria.getClass());
     PreparedStatement ps = null;
     List<CpoFunction> cpoFunctions;
@@ -906,15 +1021,38 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
       criteriaClass = metaDescriptor.getMetaClass(criteria);
       resultClass = metaDescriptor.getMetaClass(result);
       if (useRetrieve) {
-        localLogger.info("=================== Class=<" + criteria.getClass() + "> Type=<" + Crud.RETRIEVE.operation + "> Name=<" + name + "> =========================");
+        localLogger.info(
+            "=================== Class=<"
+                + criteria.getClass()
+                + "> Type=<"
+                + Crud.RETRIEVE.operation
+                + "> Name=<"
+                + name
+                + "> =========================");
         cpoFunctions = criteriaClass.getFunctionGroup(Crud.RETRIEVE, name).getFunctions();
       } else {
-        localLogger.info("=================== Class=<" + criteria.getClass() + "> Type=<" + Crud.LIST.operation + "> Name=<" + name + "> =========================");
+        localLogger.info(
+            "=================== Class=<"
+                + criteria.getClass()
+                + "> Type=<"
+                + Crud.LIST.operation
+                + "> Name=<"
+                + name
+                + "> =========================");
         cpoFunctions = criteriaClass.getFunctionGroup(Crud.LIST, name).getFunctions();
       }
 
       for (CpoFunction cpoFunction : cpoFunctions) {
-        jpsf = new JdbcPreparedStatementFactory(con, this, criteriaClass, cpoFunction, criteria, wheres, orderBy, nativeExpressions);
+        jpsf =
+            new JdbcPreparedStatementFactory(
+                con,
+                this,
+                criteriaClass,
+                cpoFunction,
+                criteria,
+                wheres,
+                orderBy,
+                nativeExpressions);
         ps = jpsf.getPreparedStatement();
         if (resultSet.getFetchSize() != -1) {
           ps.setFetchSize(resultSet.getFetchSize());
@@ -941,7 +1079,10 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
           try {
             obj = (T) result.getClass().newInstance();
           } catch (IllegalAccessException iae) {
-            localLogger.error("=================== Could not access default constructor for Class=<" + result.getClass() + "> ==================");
+            localLogger.error(
+                "=================== Could not access default constructor for Class=<"
+                    + result.getClass()
+                    + "> ==================");
             throw new CpoException("Unable to access the constructor of the Return Object", iae);
           } catch (InstantiationException iae) {
             throw new CpoException("Unable to instantiate Return Object", iae);
@@ -949,7 +1090,10 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
 
           for (k = 1; k <= columnCount; k++) {
             if (attributes[k] != null) {
-              attributes[k].invokeSetter(obj, new JdbcResultSetCpoData(JdbcMethodMapper.getMethodMapper(), rs, attributes[k], k));
+              attributes[k].invokeSetter(
+                  obj,
+                  new JdbcResultSetCpoData(
+                      JdbcMethodMapper.getMethodMapper(), rs, attributes[k], k));
             }
           }
 
@@ -964,10 +1108,23 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
         resultSetClose(rs);
         statementClose(ps);
 
-        localLogger.info("=================== " + resultSet.size() + " Records - Class=<" + criteria.getClass() + "> Type=<" + Crud.LIST.operation + "> Name=<" + name + "> Result=<" + result.getClass() + "> ====================");
+        localLogger.info(
+            "=================== "
+                + resultSet.size()
+                + " Records - Class=<"
+                + criteria.getClass()
+                + "> Type=<"
+                + Crud.LIST.operation
+                + "> Name=<"
+                + name
+                + "> Result=<"
+                + result.getClass()
+                + "> ====================");
       }
     } catch (Throwable t) {
-      String msg = "ProcessSelectGroup(String name, Object criteria, Object result, CpoWhere where, Collection orderBy, Connection con) failed. Error:";
+      String msg =
+          "ProcessSelectGroup(String name, Object criteria, Object result, CpoWhere where,"
+              + " Collection orderBy, Connection con) failed. Error:";
       localLogger.error(msg, t);
       throw new CpoException(msg, t);
     } finally {
@@ -979,17 +1136,24 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
   /**
    * Updates objects in the datasource
    *
-   * @param <T>       The object type
-   * @param obj       The object instance
-   * @param crud      The query group type
+   * @param <T> The object type
+   * @param obj The object instance
+   * @param crud The query group type
    * @param groupName The query group type
-   * @param wheres            A collection of CpoWhere objects to be used by the function
-   * @param orderBy           A collection of CpoOrderBy objects to be used by the function
+   * @param wheres A collection of CpoWhere objects to be used by the function
+   * @param orderBy A collection of CpoOrderBy objects to be used by the function
    * @param nativeExpressions A collection of CpoNativeFunction objects to be used by the function
    * @return The number of records updated
    * @throws CpoException any errors processing the update
    */
-  protected <T> long processUpdateGroup(T obj, Crud crud, String groupName, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeFunction> nativeExpressions) throws CpoException {
+  protected <T> long processUpdateGroup(
+      T obj,
+      Crud crud,
+      String groupName,
+      Collection<CpoWhere> wheres,
+      Collection<CpoOrderBy> orderBy,
+      Collection<CpoNativeFunction> nativeExpressions)
+      throws CpoException {
     Connection c = null;
     long updateCount = 0;
 
@@ -1000,7 +1164,8 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
     } catch (Exception e) {
       // Any exception has to try to rollback the work;
       rollbackLocalConnection(c);
-      ExceptionHelper.reThrowCpoException(e, "processUdateGroup(Object obj, String crud, String groupName) failed");
+      ExceptionHelper.reThrowCpoException(
+          e, "processUdateGroup(Object obj, String crud, String groupName) failed");
     } finally {
       closeLocalConnection(c);
     }
@@ -1008,21 +1173,29 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
     return updateCount;
   }
 
-   /**
+  /**
    * Updates objects in the datasource
    *
-   * @param <T>       The object type
-   * @param obj       The object instance
-   * @param crud      The query group type
+   * @param <T> The object type
+   * @param obj The object instance
+   * @param crud The query group type
    * @param groupName The query group type
-   * @param wheres            A collection of CpoWhere objects to be used by the function
-   * @param orderBy           A collection of CpoOrderBy objects to be used by the function
+   * @param wheres A collection of CpoWhere objects to be used by the function
+   * @param orderBy A collection of CpoOrderBy objects to be used by the function
    * @param nativeExpressions A collection of CpoNativeFunction objects to be used by the function
-   * @param con       The connection to use for the update
+   * @param con The connection to use for the update
    * @return The number of records updated
    * @throws CpoException any errors processing the update
    */
-  protected <T> long processUpdateGroup(T obj, Crud crud, String groupName, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeFunction> nativeExpressions, Connection con) throws CpoException {
+  protected <T> long processUpdateGroup(
+      T obj,
+      Crud crud,
+      String groupName,
+      Collection<CpoWhere> wheres,
+      Collection<CpoOrderBy> orderBy,
+      Collection<CpoNativeFunction> nativeExpressions,
+      Connection con)
+      throws CpoException {
     Logger localLogger = obj == null ? logger : LoggerFactory.getLogger(obj.getClass());
     CpoClass cpoClass;
     PreparedStatement ps = null;
@@ -1031,30 +1204,58 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
     long updateCount = 0;
 
     if (obj == null) {
-      throw new CpoException("NULL Object passed into insertObject, deleteObject, updateObject, or persistObject");
+      throw new CpoException(
+          "NULL Object passed into insertObject, deleteObject, updateObject, or persistObject");
     }
 
     try {
       cpoClass = metaDescriptor.getMetaClass(obj);
-      List<CpoFunction> cpoFunctions = cpoClass.getFunctionGroup(adjustCrud(obj, crud, groupName, con), groupName).getFunctions();
-      localLogger.info("=================== Class=<" + obj.getClass() + "> Type=<" + crud.operation + "> Name=<" + groupName + "> =========================");
+      List<CpoFunction> cpoFunctions =
+          cpoClass
+              .getFunctionGroup(adjustCrud(obj, crud, groupName, con), groupName)
+              .getFunctions();
+      localLogger.info(
+          "=================== Class=<"
+              + obj.getClass()
+              + "> Type=<"
+              + crud.operation
+              + "> Name=<"
+              + groupName
+              + "> =========================");
 
       int numRows = 0;
 
       for (CpoFunction cpoFunction : cpoFunctions) {
-        jpsf = new JdbcPreparedStatementFactory(con, this, cpoClass, cpoFunction, obj, wheres, orderBy, nativeExpressions);
+        jpsf =
+            new JdbcPreparedStatementFactory(
+                con, this, cpoClass, cpoFunction, obj, wheres, orderBy, nativeExpressions);
         ps = jpsf.getPreparedStatement();
         numRows += ps.executeUpdate();
         jpsf.release();
         ps.close();
       }
-      localLogger.info("=================== " + numRows + " Updates - Class=<" + obj.getClass() + "> Type=<" + crud.operation + "> Name=<" + groupName + "> =========================");
+      localLogger.info(
+          "=================== "
+              + numRows
+              + " Updates - Class=<"
+              + obj.getClass()
+              + "> Type=<"
+              + crud.operation
+              + "> Name=<"
+              + groupName
+              + "> =========================");
 
       if (numRows > 0) {
         updateCount++;
       }
     } catch (Throwable t) {
-      String msg = "ProcessUpdateGroup failed:" + crud.operation + "," + groupName + "," + obj.getClass().getName();
+      String msg =
+          "ProcessUpdateGroup failed:"
+              + crud.operation
+              + ","
+              + groupName
+              + ","
+              + obj.getClass().getName();
       // TODO FIX THIS
       // localLogger.error("bound values:" + this.parameterToString(jq));
       localLogger.error(msg, t);
@@ -1069,21 +1270,29 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
     return updateCount;
   }
 
-    /**
-     * Updates objects in the datasource
-     *
-     * @param <T>       The object type
-     * @param arr       The array of T to update
-     * @param crud      The query group type
-     * @param groupName The query group type
-     * @param wheres            A collection of CpoWhere objects to be used by the function
-     * @param orderBy           A collection of CpoOrderBy objects to be used by the function
-     * @param nativeExpressions A collection of CpoNativeFunction objects to be used by the function
-     * @param con       The connection to use for the update
-     * @return The number of records updated
-     * @throws CpoException any errors processing the update
-     */
-  protected <T> long processBatchUpdateGroup(T[] arr, Crud crud, String groupName, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeFunction> nativeExpressions, Connection con) throws CpoException {
+  /**
+   * Updates objects in the datasource
+   *
+   * @param <T> The object type
+   * @param arr The array of T to update
+   * @param crud The query group type
+   * @param groupName The query group type
+   * @param wheres A collection of CpoWhere objects to be used by the function
+   * @param orderBy A collection of CpoOrderBy objects to be used by the function
+   * @param nativeExpressions A collection of CpoNativeFunction objects to be used by the function
+   * @param con The connection to use for the update
+   * @return The number of records updated
+   * @throws CpoException any errors processing the update
+   */
+  protected <T> long processBatchUpdateGroup(
+      T[] arr,
+      Crud crud,
+      String groupName,
+      Collection<CpoWhere> wheres,
+      Collection<CpoOrderBy> orderBy,
+      Collection<CpoNativeFunction> nativeExpressions,
+      Connection con)
+      throws CpoException {
     CpoClass jmc;
     List<CpoFunction> cpoFunctions;
     PreparedStatement ps = null;
@@ -1095,20 +1304,30 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
 
     try {
       jmc = metaDescriptor.getMetaClass(arr[0]);
-      cpoFunctions = jmc.getFunctionGroup(adjustCrud(arr[0], crud, groupName, con), groupName).getFunctions();
+      cpoFunctions =
+          jmc.getFunctionGroup(adjustCrud(arr[0], crud, groupName, con), groupName).getFunctions();
       localLogger = LoggerFactory.getLogger(jmc.getMetaClass());
 
       int numRows = 0;
 
       // Only Batch if there is only one function
       if (cpoFunctions.size() == 1) {
-        localLogger.info("=================== BATCH - Class=<" + arr[0].getClass() + "> Type=<" + crud.operation + "> Name=<" + groupName + "> =========================");
+        localLogger.info(
+            "=================== BATCH - Class=<"
+                + arr[0].getClass()
+                + "> Type=<"
+                + crud.operation
+                + "> Name=<"
+                + groupName
+                + "> =========================");
         cpoFunction = cpoFunctions.get(0);
-        jpsf = new JdbcPreparedStatementFactory(con, this, jmc, cpoFunction, arr[0], wheres, orderBy, nativeExpressions);
+        jpsf =
+            new JdbcPreparedStatementFactory(
+                con, this, jmc, cpoFunction, arr[0], wheres, orderBy, nativeExpressions);
         ps = jpsf.getPreparedStatement();
         ps.addBatch();
         for (int j = 1; j < arr.length; j++) {
-//          jpsf.bindParameters(arr[j]);
+          //          jpsf.bindParameters(arr[j]);
           jpsf.setBindValues(jpsf.getBindValues(cpoFunction, arr[j]));
           ps.addBatch();
         }
@@ -1123,26 +1342,59 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
             numRows += update;
           }
         }
-        localLogger.info("=================== BATCH - " + numRows + " Updates - Class=<" + arr[0].getClass() + "> Type=<" + crud.operation + "> Name=<" + groupName + "> =========================");
+        localLogger.info(
+            "=================== BATCH - "
+                + numRows
+                + " Updates - Class=<"
+                + arr[0].getClass()
+                + "> Type=<"
+                + crud.operation
+                + "> Name=<"
+                + groupName
+                + "> =========================");
       } else {
-        localLogger.info("=================== Class=<" + arr[0].getClass() + "> Type=<" + crud.operation + "> Name=<" + groupName + "> =========================");
+        localLogger.info(
+            "=================== Class=<"
+                + arr[0].getClass()
+                + "> Type=<"
+                + crud.operation
+                + "> Name=<"
+                + groupName
+                + "> =========================");
         for (T obj : arr) {
           for (CpoFunction function : cpoFunctions) {
-            jpsf = new JdbcPreparedStatementFactory(con, this, jmc, function, obj, wheres, orderBy, nativeExpressions);
+            jpsf =
+                new JdbcPreparedStatementFactory(
+                    con, this, jmc, function, obj, wheres, orderBy, nativeExpressions);
             ps = jpsf.getPreparedStatement();
             numRows += ps.executeUpdate();
             jpsf.release();
             ps.close();
           }
         }
-        localLogger.info("=================== " + numRows + " Updates - Class=<" + arr[0].getClass() + "> Type=<" + crud.operation + "> Name=<" + groupName + "> =========================");
+        localLogger.info(
+            "=================== "
+                + numRows
+                + " Updates - Class=<"
+                + arr[0].getClass()
+                + "> Type=<"
+                + crud.operation
+                + "> Name=<"
+                + groupName
+                + "> =========================");
       }
 
       if (numRows > 0) {
         updateCount = numRows;
       }
     } catch (Throwable t) {
-      String msg = "ProcessUpdateGroup failed:" + crud.operation + "," + groupName + "," + arr[0].getClass().getName();
+      String msg =
+          "ProcessUpdateGroup failed:"
+              + crud.operation
+              + ","
+              + groupName
+              + ","
+              + arr[0].getClass().getName();
       // TODO FIX This
       // localLogger.error("bound values:" + this.parameterToString(jq));
       localLogger.error(msg, t);
@@ -1157,32 +1409,41 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
     return updateCount;
   }
 
-    /**
-     * Updates objects in the datasource
-     *
-     * @param <T>       The object type
-     * @param coll      The collection of T to update
-     * @param crud      The query group type
-     * @param groupName The query group type
-     * @param wheres            A collection of CpoWhere objects to be used by the function
-     * @param orderBy           A collection of CpoOrderBy objects to be used by the function
-     * @param nativeExpressions A collection of CpoNativeFunction objects to be used by the function
-     * @return The number of records updated
-     * @throws CpoException any errors processing the update
-     */
-  protected <T> long processUpdateGroup(Collection<T> coll, Crud crud, String groupName, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeFunction> nativeExpressions) throws CpoException {
+  /**
+   * Updates objects in the datasource
+   *
+   * @param <T> The object type
+   * @param coll The collection of T to update
+   * @param crud The query group type
+   * @param groupName The query group type
+   * @param wheres A collection of CpoWhere objects to be used by the function
+   * @param orderBy A collection of CpoOrderBy objects to be used by the function
+   * @param nativeExpressions A collection of CpoNativeFunction objects to be used by the function
+   * @return The number of records updated
+   * @throws CpoException any errors processing the update
+   */
+  protected <T> long processUpdateGroup(
+      Collection<T> coll,
+      Crud crud,
+      String groupName,
+      Collection<CpoWhere> wheres,
+      Collection<CpoOrderBy> orderBy,
+      Collection<CpoNativeFunction> nativeExpressions)
+      throws CpoException {
     Connection c = null;
     long updateCount = 0;
 
     try {
       c = getWriteConnection();
 
-      updateCount = processUpdateGroup(coll, crud, groupName, wheres, orderBy, nativeExpressions, c);
+      updateCount =
+          processUpdateGroup(coll, crud, groupName, wheres, orderBy, nativeExpressions, c);
       commitLocalConnection(c);
     } catch (Exception e) {
       // Any exception has to try to rollback the work;
       rollbackLocalConnection(c);
-      ExceptionHelper.reThrowCpoException(e, "processUpdateGroup(Collection coll, String crud, String groupName) failed");
+      ExceptionHelper.reThrowCpoException(
+          e, "processUpdateGroup(Collection coll, String crud, String groupName) failed");
     } finally {
       closeLocalConnection(c);
     }
@@ -1190,21 +1451,29 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
     return updateCount;
   }
 
-    /**
-     * Updates objects in the datasource
-     *
-     * @param <T>       The object type
-     * @param coll      The collection of T to update
-     * @param crud      The query group type
-     * @param groupName The query group type
-     * @param wheres            A collection of CpoWhere objects to be used by the function
-     * @param orderBy           A collection of CpoOrderBy objects to be used by the function
-     * @param nativeExpressions A collection of CpoNativeFunction objects to be used by the function
-     * @param con       The connection to use for the update
-     * @return The number of records updated
-     * @throws CpoException any errors processing the update
-     */
-  protected <T> long processUpdateGroup(Collection<T> coll, Crud crud, String groupName, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeFunction> nativeExpressions, Connection con) throws CpoException {
+  /**
+   * Updates objects in the datasource
+   *
+   * @param <T> The object type
+   * @param coll The collection of T to update
+   * @param crud The query group type
+   * @param groupName The query group type
+   * @param wheres A collection of CpoWhere objects to be used by the function
+   * @param orderBy A collection of CpoOrderBy objects to be used by the function
+   * @param nativeExpressions A collection of CpoNativeFunction objects to be used by the function
+   * @param con The connection to use for the update
+   * @return The number of records updated
+   * @throws CpoException any errors processing the update
+   */
+  protected <T> long processUpdateGroup(
+      Collection<T> coll,
+      Crud crud,
+      String groupName,
+      Collection<CpoWhere> wheres,
+      Collection<CpoOrderBy> orderBy,
+      Collection<CpoNativeFunction> nativeExpressions,
+      Connection con)
+      throws CpoException {
     long updateCount = 0;
 
     if (!coll.isEmpty()) {
@@ -1220,17 +1489,18 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
       }
 
       if (allEqual && batchUpdatesSupported_ && !Crud.UPSERT.equals(crud)) {
-        updateCount = processBatchUpdateGroup(arr, crud, groupName, wheres, orderBy, nativeExpressions, con);
+        updateCount =
+            processBatchUpdateGroup(arr, crud, groupName, wheres, orderBy, nativeExpressions, con);
       } else {
         for (T obj : arr) {
-          updateCount += processUpdateGroup(obj, crud, groupName, wheres, orderBy, nativeExpressions, con);
+          updateCount +=
+              processUpdateGroup(obj, crud, groupName, wheres, orderBy, nativeExpressions, con);
         }
       }
     }
 
     return updateCount;
   }
-
 
   private void statementClose(Statement s) {
     if (s != null) {
@@ -1284,7 +1554,8 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
             // do nothing if this call is not supported
           }
 
-          DataTypeMapEntry<?> dataTypeMapEntry = metaDescriptor.getDataTypeMapEntry(rsmd.getColumnType(i));
+          DataTypeMapEntry<?> dataTypeMapEntry =
+              metaDescriptor.getDataTypeMapEntry(rsmd.getColumnType(i));
           attribute.setDataType(dataTypeMapEntry.getDataTypeName());
           attribute.setDataTypeInt(dataTypeMapEntry.getDataTypeInt());
           attribute.setJavaType(dataTypeMapEntry.getJavaClass().getName());
@@ -1303,5 +1574,4 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
     }
     return attributes;
   }
-
 }

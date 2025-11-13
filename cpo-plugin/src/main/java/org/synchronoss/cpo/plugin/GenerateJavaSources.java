@@ -20,6 +20,10 @@
  */
 package org.synchronoss.cpo.plugin;
 
+import java.io.File;
+import java.io.FileFilter;
+import java.io.FileWriter;
+import java.util.StringTokenizer;
 import org.apache.commons.io.filefilter.WildcardFileFilter;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -34,53 +38,47 @@ import org.synchronoss.cpo.exporter.CpoLegacyClassSourceGenerator;
 import org.synchronoss.cpo.meta.CpoMetaDescriptor;
 import org.synchronoss.cpo.meta.domain.CpoClass;
 
-import java.io.File;
-import java.io.FileFilter;
-import java.io.FileWriter;
-import java.util.StringTokenizer;
-
-/**
- * Plugin goal that will generate the cpo classes based on the xml configuration file
- */
-@Mojo (name = "generatejavasource",
-        requiresDependencyResolution = ResolutionScope.COMPILE_PLUS_RUNTIME,
-        defaultPhase = LifecyclePhase.GENERATE_SOURCES)
+/** Plugin goal that will generate the cpo classes based on the xml configuration file */
+@Mojo(
+    name = "generatejavasource",
+    requiresDependencyResolution = ResolutionScope.COMPILE_PLUS_RUNTIME,
+    defaultPhase = LifecyclePhase.GENERATE_SOURCES)
 public class GenerateJavaSources extends AbstractMojo {
 
   private enum Scopes {
     test
   }
 
-  @Parameter (property = "cpoConfig", required = true)
+  @Parameter(property = "cpoConfig", required = true)
   private String cpoConfig;
 
-  /**
-   * Default output directory
-   */
-  @Parameter (property = "outputDir", required = true, defaultValue = "${project.build.directory}/generated-sources/cpo")
+  /** Default output directory */
+  @Parameter(
+      property = "outputDir",
+      required = true,
+      defaultValue = "${project.build.directory}/generated-sources/cpo")
   private String outputDir;
 
-  /**
-   * Output directory for test scope executions
-   */
-  @Parameter (property = "testOutputDir", required = true, defaultValue = "${project.build.directory}/generated-test-sources/cpo")
+  /** Output directory for test scope executions */
+  @Parameter(
+      property = "testOutputDir",
+      required = true,
+      defaultValue = "${project.build.directory}/generated-test-sources/cpo")
   private String testOutputDir;
 
-  @Parameter (property = "scope", required = true, defaultValue = "compile")
+  @Parameter(property = "scope", required = true, defaultValue = "compile")
   private String scope;
 
-  @Parameter (property = "filter", defaultValue = ".*")
+  @Parameter(property = "filter", defaultValue = ".*")
   private String filter;
 
-  @Parameter (property = "generateInterface", defaultValue = "false")
+  @Parameter(property = "generateInterface", defaultValue = "false")
   private boolean generateInterface = false;
 
-  @Parameter (property = "generateClass", defaultValue = "true")
+  @Parameter(property = "generateClass", defaultValue = "true")
   private boolean generateClass = true;
 
-  /**
-   * A reference to the Maven Project metadata.
-   */
+  /** A reference to the Maven Project metadata. */
   @Parameter(defaultValue = "${project}", readonly = true)
   protected MavenProject project;
 
@@ -100,7 +98,8 @@ public class GenerateJavaSources extends AbstractMojo {
       // test scope, so use test output directory and add to test compile path
       srcDir = new File(testOutputDir);
       project.addTestCompileSourceRoot(srcDir.getAbsolutePath());
-      getLog().debug("Adding " + srcDir.getAbsolutePath() + " to the project's test compile sources.");
+      getLog()
+          .debug("Adding " + srcDir.getAbsolutePath() + " to the project's test compile sources.");
     } else {
       // default scope, so use output directory and add to compile path
       srcDir = new File(outputDir);
@@ -113,7 +112,8 @@ public class GenerateJavaSources extends AbstractMojo {
     File outputDirectory = new File(project.getBuild().getOutputDirectory());
     if (!outputDirectory.exists()) {
       if (!outputDirectory.mkdirs()) {
-        throw new MojoExecutionException("Unable to create output directory: " + outputDirectory.getAbsolutePath());
+        throw new MojoExecutionException(
+            "Unable to create output directory: " + outputDirectory.getAbsolutePath());
       }
     }
 
@@ -125,17 +125,18 @@ public class GenerateJavaSources extends AbstractMojo {
       if (!dir.exists()) {
         throw new MojoExecutionException("Could not find directory: " + directory);
       }
-      String fileName = cpoConfig.substring(filenameStart+1);
+      String fileName = cpoConfig.substring(filenameStart + 1);
       getLog().info("Filename: " + fileName);
 
       FileFilter fileFilter = new WildcardFileFilter(fileName);
       File foundFiles[] = dir.listFiles(fileFilter);
-      if (foundFiles==null || foundFiles.length==0) {
+      if (foundFiles == null || foundFiles.length == 0) {
         throw new MojoExecutionException("Could not find file: " + cpoConfig);
       }
       for (File file : foundFiles) {
 
-        CpoMetaDescriptor metaDescriptor = CpoMetaDescriptor.getInstance(META_DESCRIPTOR_NAME, file.getAbsolutePath(), true);
+        CpoMetaDescriptor metaDescriptor =
+            CpoMetaDescriptor.getInstance(META_DESCRIPTOR_NAME, file.getAbsolutePath(), true);
 
         for (CpoClass cpoClass : metaDescriptor.getCpoClasses()) {
 
@@ -155,15 +156,18 @@ public class GenerateJavaSources extends AbstractMojo {
 
             if (!classDir.exists()) {
               if (!classDir.mkdirs()) {
-                throw new MojoExecutionException("Unable to create class directories: " + classDir.getAbsolutePath());
+                throw new MojoExecutionException(
+                    "Unable to create class directories: " + classDir.getAbsolutePath());
               }
             }
 
             if (generateInterface) {
-              CpoInterfaceSourceGenerator interfaceSourceGenerator = new CpoInterfaceSourceGenerator(metaDescriptor);
+              CpoInterfaceSourceGenerator interfaceSourceGenerator =
+                  new CpoInterfaceSourceGenerator(metaDescriptor);
               cpoClass.acceptMetaDFVisitor(interfaceSourceGenerator);
 
-              File interfaceFile = new File(classDir, interfaceSourceGenerator.getInterfaceName() + JAVA_EXT);
+              File interfaceFile =
+                  new File(classDir, interfaceSourceGenerator.getInterfaceName() + JAVA_EXT);
               getLog().info("cpo-plugin generated " + interfaceFile.getAbsolutePath());
 
               FileWriter iw = new FileWriter(interfaceFile);
@@ -197,6 +201,4 @@ public class GenerateJavaSources extends AbstractMojo {
       throw new MojoExecutionException("Exception caught", ex);
     }
   }
-
 }
-

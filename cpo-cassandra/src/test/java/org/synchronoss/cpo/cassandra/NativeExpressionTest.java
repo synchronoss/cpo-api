@@ -20,6 +20,10 @@
  */
 package org.synchronoss.cpo.cassandra;
 
+import static org.testng.Assert.*;
+
+import java.util.ArrayList;
+import java.util.Collection;
 import org.synchronoss.cpo.CpoAdapter;
 import org.synchronoss.cpo.CpoAdapterFactoryManager;
 import org.synchronoss.cpo.CpoNativeFunction;
@@ -27,11 +31,6 @@ import org.synchronoss.cpo.CpoWhere;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
-
-import java.util.ArrayList;
-import java.util.Collection;
-
-import static org.testng.Assert.*;
 
 /**
  * BlobTest is a test class for testing the JdbcAdapter class Constructors
@@ -43,11 +42,11 @@ public class NativeExpressionTest {
   private CpoAdapter cpoAdapter = null;
   private ArrayList<ValueObject> al = new ArrayList<>();
 
-  public NativeExpressionTest() {
-  }
+  public NativeExpressionTest() {}
 
   /**
-   * <code>setUp</code> Load the datasource from the properties in the property file jdbc_en_US.properties
+   * <code>setUp</code> Load the datasource from the properties in the property file
+   * jdbc_en_US.properties
    */
   @BeforeClass
   public void setUp() {

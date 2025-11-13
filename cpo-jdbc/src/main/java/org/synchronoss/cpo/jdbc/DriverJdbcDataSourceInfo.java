@@ -20,18 +20,17 @@
  */
 package org.synchronoss.cpo.jdbc;
 
-import org.synchronoss.cpo.CpoException;
-import org.synchronoss.cpo.helper.CpoClassLoader;
-
-import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
+import javax.sql.DataSource;
+import org.synchronoss.cpo.CpoException;
+import org.synchronoss.cpo.helper.CpoClassLoader;
 
 /**
- * Collects the info required to instantiate a DataSource from a JDBC Driver
- * Provides the DataSourceInfo factory method getDataSource which instantiates the DataSource
+ * Collects the info required to instantiate a DataSource from a JDBC Driver Provides the
+ * DataSourceInfo factory method getDataSource which instantiates the DataSource
  *
  * @author dberry
  */
@@ -68,7 +67,8 @@ public class DriverJdbcDataSourceInfo extends AbstractJdbcDataSource {
    * @param properties - The connection properties for connecting to the database
    * @throws CpoException - Any errors encountered loading the driver
    */
-  public DriverJdbcDataSourceInfo(String driver, String url, Properties properties) throws CpoException {
+  public DriverJdbcDataSourceInfo(String driver, String url, Properties properties)
+      throws CpoException {
     super(url, properties);
     loadDriver(driver);
     connectionType = URL_PROPS_CONNECTION;
@@ -85,7 +85,8 @@ public class DriverJdbcDataSourceInfo extends AbstractJdbcDataSource {
    * @param password - The password for connectinf to the database
    * @throws CpoException - Any errors encountered loading the driver
    */
-  public DriverJdbcDataSourceInfo(String driver, String url, String username, String password) throws CpoException {
+  public DriverJdbcDataSourceInfo(String driver, String url, String username, String password)
+      throws CpoException {
     super(url + username);
     loadDriver(driver);
     connectionType = URL_USER_PASSWORD_CONNECTION;

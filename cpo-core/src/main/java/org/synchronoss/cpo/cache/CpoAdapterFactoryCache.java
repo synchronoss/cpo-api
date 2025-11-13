@@ -20,10 +20,9 @@
  */
 package org.synchronoss.cpo.cache;
 
-import org.synchronoss.cpo.CpoAdapterFactory;
-
 import java.util.HashMap;
 import java.util.Map;
+import org.synchronoss.cpo.CpoAdapterFactory;
 
 /**
  * @author dberry
@@ -42,7 +41,8 @@ public class CpoAdapterFactoryCache {
     return adapter;
   }
 
-  protected static CpoAdapterFactory addCpoAdapterFactory(String adapterKey, CpoAdapterFactory adapter) {
+  protected static CpoAdapterFactory addCpoAdapterFactory(
+      String adapterKey, CpoAdapterFactory adapter) {
     CpoAdapterFactory oldAdapter = null;
 
     if (adapterKey != null && adapter != null) {
@@ -55,5 +55,4 @@ public class CpoAdapterFactoryCache {
   protected static void clearCpoAdapterFactoryCache() {
     adapterMap.clear();
   }
-
 }

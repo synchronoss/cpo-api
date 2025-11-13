@@ -35,26 +35,25 @@ import org.synchronoss.cpo.transform.CpoTransform;
  */
 public interface JdbcCpoTransform<D, J> extends CpoTransform<D, J> {
 
-    /**
-     * Transforms a java object to a data source object for the preparedstatement
-     *
-     * @param jpsf the prepared statement factory that will be receiving the object
-     * @param attributeObject the java object to be transformed
-     * @return The datasource object
-     * @throws CpoException an error transforming the java object to the data object
-     */
-    D transformOut(JdbcPreparedStatementFactory jpsf, J attributeObject) throws CpoException;
+  /**
+   * Transforms a java object to a data source object for the preparedstatement
+   *
+   * @param jpsf the prepared statement factory that will be receiving the object
+   * @param attributeObject the java object to be transformed
+   * @return The datasource object
+   * @throws CpoException an error transforming the java object to the data object
+   */
+  D transformOut(JdbcPreparedStatementFactory jpsf, J attributeObject) throws CpoException;
 
-    /**
-     * Transforms a java object to a data source object for the preparedstatement
-     *
-     * @param jcsf the callable statement factory that will be receiving the object
-     * @param attributeObject  the java object to be transformed
-     * @return The datasource object
-     * @throws CpoException an error transforming the java object to the data object
-     */
-    D transformOut(JdbcCallableStatementFactory jcsf, J attributeObject) throws CpoException;
-
+  /**
+   * Transforms a java object to a data source object for the preparedstatement
+   *
+   * @param jcsf the callable statement factory that will be receiving the object
+   * @param attributeObject the java object to be transformed
+   * @return The datasource object
+   * @throws CpoException an error transforming the java object to the data object
+   */
+  D transformOut(JdbcCallableStatementFactory jcsf, J attributeObject) throws CpoException;
 
   // TODO - add some transform in statements here.
 }

@@ -38,13 +38,14 @@ import org.synchronoss.cpo.meta.domain.CpoAttribute;
  * @author Michael Bellomo
  * @since 4/18/12
  */
-public class JdbcMetaXmlObjectExporter extends CoreMetaXmlObjectExporter implements MetaXmlObjectExporter {
+public class JdbcMetaXmlObjectExporter extends CoreMetaXmlObjectExporter
+    implements MetaXmlObjectExporter {
 
-    /**
-     * Constructs a JdbcMetaXmlObjectExporter object.
-     *
-     * @param metaDescriptor - The meta descriptor to export
-     */
+  /**
+   * Constructs a JdbcMetaXmlObjectExporter object.
+   *
+   * @param metaDescriptor - The meta descriptor to export
+   */
   public JdbcMetaXmlObjectExporter(CpoMetaDescriptor metaDescriptor) {
     super(metaDescriptor);
   }
@@ -62,7 +63,8 @@ public class JdbcMetaXmlObjectExporter extends CoreMetaXmlObjectExporter impleme
 
     if (currentCtClass != null) {
 
-      // CtClass.addNewCpoAttribute() can't be used here because it returns a CtAttribute, not a CtJdbcAttribute
+      // CtClass.addNewCpoAttribute() can't be used here because it returns a CtAttribute, not a
+      // CtJdbcAttribute
       CtJdbcAttribute ctJdbcAttribute = CtJdbcAttribute.Factory.newInstance();
 
       ctJdbcAttribute.setJavaName(jdbcAttribute.getJavaName());
@@ -70,7 +72,8 @@ public class JdbcMetaXmlObjectExporter extends CoreMetaXmlObjectExporter impleme
       ctJdbcAttribute.setDataName(jdbcAttribute.getDataName());
       ctJdbcAttribute.setDataType(jdbcAttribute.getDataType());
 
-      if (jdbcAttribute.getTransformClassName() != null && jdbcAttribute.getTransformClassName().length() > 0) {
+      if (jdbcAttribute.getTransformClassName() != null
+          && jdbcAttribute.getTransformClassName().length() > 0) {
         ctJdbcAttribute.setTransformClass(jdbcAttribute.getTransformClassName());
       }
 
@@ -105,7 +108,8 @@ public class JdbcMetaXmlObjectExporter extends CoreMetaXmlObjectExporter impleme
 
     if (currentCtFunction != null) {
 
-      // CtFunction.addNewCpoArgument() can't be used here because it returns a CtArgument, not a CtJdbcArgument
+      // CtFunction.addNewCpoArgument() can't be used here because it returns a CtArgument, not a
+      // CtJdbcArgument
       CtJdbcArgument ctJdbcArgument = CtJdbcArgument.Factory.newInstance();
 
       ctJdbcArgument.setAttributeName(jdbcArgument.getAttributeName());

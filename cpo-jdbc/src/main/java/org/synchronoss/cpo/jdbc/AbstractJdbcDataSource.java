@@ -20,7 +20,6 @@
  */
 package org.synchronoss.cpo.jdbc;
 
-import javax.sql.DataSource;
 import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -28,42 +27,44 @@ import java.sql.SQLFeatureNotSupportedException;
 import java.util.Properties;
 import java.util.SortedMap;
 import java.util.logging.Logger;
+import javax.sql.DataSource;
 
 /**
  * An AbstractJDBCDatasource used for instantiating the DataSource from the database driver
  *
  * @author dberry
  */
-public abstract class AbstractJdbcDataSource extends AbstractJdbcDataSourceInfo implements DataSource {
+public abstract class AbstractJdbcDataSource extends AbstractJdbcDataSourceInfo
+    implements DataSource {
 
   private PrintWriter printWriter_ = null;
   private int timeout_ = 0;
 
-    /**
-     * Constructs a AbstractJdbcDataSource
-     *
-     * @param dataSourceName - The name of the datasource to instantiate,
-     */
+  /**
+   * Constructs a AbstractJdbcDataSource
+   *
+   * @param dataSourceName - The name of the datasource to instantiate,
+   */
   public AbstractJdbcDataSource(String dataSourceName) {
     super(dataSourceName);
   }
 
-    /**
-     * Constructs a AbstractJdbcDataSource
-     *
-     * @param className - The DataSource className from the Driver.
-     * @param properties - The list of properties to be passed to the driver
-     */
+  /**
+   * Constructs a AbstractJdbcDataSource
+   *
+   * @param className - The DataSource className from the Driver.
+   * @param properties - The list of properties to be passed to the driver
+   */
   public AbstractJdbcDataSource(String className, SortedMap<String, String> properties) {
     super(className, properties);
   }
 
-    /**
-     * Constructs a AbstractJdbcDataSource
-     *
-     * @param className  - The DataSource className from the Driver.
-     * @param properties - The list of properties to be passed to the driver
-     */
+  /**
+   * Constructs a AbstractJdbcDataSource
+   *
+   * @param className - The DataSource className from the Driver.
+   * @param properties - The list of properties to be passed to the driver
+   */
   public AbstractJdbcDataSource(String className, Properties properties) {
     super(className, properties);
   }

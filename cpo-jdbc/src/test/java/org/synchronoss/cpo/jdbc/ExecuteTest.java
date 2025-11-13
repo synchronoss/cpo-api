@@ -20,6 +20,8 @@
  */
 package org.synchronoss.cpo.jdbc;
 
+import static org.testng.Assert.*;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.CpoAdapter;
@@ -30,8 +32,6 @@ import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
-
-import static org.testng.Assert.*;
 
 /**
  * BlobTest is a test class for testing the JdbcAdapter class Constructors
@@ -45,20 +45,18 @@ public class ExecuteTest {
   private JdbcCpoMetaDescriptor metaDescriptor = null;
   private boolean isSupportsCalls = true;
 
-  /**
-   * Creates a new RollbackTest object.
-   */
-  public ExecuteTest() {
-  }
+  /** Creates a new RollbackTest object. */
+  public ExecuteTest() {}
 
   /**
-   * <code>setUp</code> Load the datasource from the properties in the property file jdbc_en_US.properties
+   * <code>setUp</code> Load the datasource from the properties in the property file
+   * jdbc_en_US.properties
    */
-  @Parameters({ "db.callsupport" })
+  @Parameters({"db.callsupport"})
   @BeforeClass
   public void setUp(boolean callSupport) {
-      String method = "setUp:";
-      isSupportsCalls  = callSupport;
+    String method = "setUp:";
+    isSupportsCalls = callSupport;
 
     try {
       cpoAdapter = CpoAdapterFactoryManager.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_JDBC);
@@ -69,17 +67,13 @@ public class ExecuteTest {
     }
   }
 
-  /**
-   * DOCUMENT ME!
-   */
+  /** DOCUMENT ME! */
   @AfterClass
   public void tearDown() {
     cpoAdapter = null;
   }
 
-  /**
-   * DOCUMENT ME!
-   */
+  /** DOCUMENT ME! */
   @Test
   public void testExecute() {
     if (isSupportsCalls) {
@@ -90,17 +84,16 @@ public class ExecuteTest {
 
       try {
         rvo = cpoAdapter.executeObject(ValueObject.FG_EXECUTE_TESTEXECUTEOBJECT, vo);
-        assertNotNull(rvo,method + "Returned Value object is null");
+        assertNotNull(rvo, method + "Returned Value object is null");
         assertEquals(27, rvo.getAttrDouble(), "power(3,3)=" + rvo.getAttrDouble());
       } catch (Exception e) {
         logger.error(ExceptionHelper.getLocalizedMessage(e));
         fail(method + e.getMessage());
       }
 
-
       try {
         vo = ValueObjectFactory.createValueObject(1);
-        vo.setAttrSmallInt((short)3);
+        vo.setAttrSmallInt((short) 3);
         rvo = cpoAdapter.executeObject(ValueObject.FG_EXECUTE_TESTEXECUTEOBJECTNOTRANSFORM, vo);
         assertNotNull(method + "Returned Value object is null");
         assertTrue(rvo.getAttrDouble() == 27, "power(3,3)=" + rvo.getAttrDouble());

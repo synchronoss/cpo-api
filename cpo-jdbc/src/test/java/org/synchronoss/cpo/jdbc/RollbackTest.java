@@ -20,15 +20,14 @@
  */
 package org.synchronoss.cpo.jdbc;
 
+import static org.testng.Assert.*;
+
+import java.util.ArrayList;
 import org.synchronoss.cpo.CpoAdapter;
 import org.synchronoss.cpo.CpoAdapterFactoryManager;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
-
-import java.util.ArrayList;
-
-import static org.testng.Assert.*;
 
 /**
  * BlobTest is a test class for testing the JdbcAdapter class Constructors
@@ -39,11 +38,11 @@ public class RollbackTest {
 
   private CpoAdapter cpoAdapter = null;
 
-  public RollbackTest() {
-  }
+  public RollbackTest() {}
 
   /**
-   * <code>setUp</code> Load the datasource from the properties in the property file jdbc_en_US.properties
+   * <code>setUp</code> Load the datasource from the properties in the property file
+   * jdbc_en_US.properties
    */
   @BeforeClass
   public void setUp() {
@@ -61,12 +60,9 @@ public class RollbackTest {
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
-
   }
 
-  /**
-   * DOCUMENT ME!
-   */
+  /** DOCUMENT ME! */
   @AfterClass
   public void tearDown() {
     ValueObject vo = ValueObjectFactory.createValueObject(1);
@@ -77,9 +73,7 @@ public class RollbackTest {
     cpoAdapter = null;
   }
 
-  /**
-   * DOCUMENT ME!
-   */
+  /** DOCUMENT ME! */
   @Test
   public void testRollbackProcessUpdateCollection() {
     String method = "testRollbackProcessUpdateCollection:";
@@ -103,9 +97,7 @@ public class RollbackTest {
     }
   }
 
-  /**
-   * DOCUMENT ME!
-   */
+  /** DOCUMENT ME! */
   @Test
   public void testSingleRollback() {
     String method = "testSingleRollback:";

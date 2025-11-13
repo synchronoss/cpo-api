@@ -20,18 +20,17 @@
  */
 package org.synchronoss.cpo.jdbc;
 
+import static org.testng.Assert.*;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import org.synchronoss.cpo.CpoAdapter;
 import org.synchronoss.cpo.CpoAdapterFactoryManager;
 import org.synchronoss.cpo.CpoOrderBy;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
-import static org.testng.Assert.*;
 
 /**
  * BlobTest is a test class for testing the JdbcAdapter class Constructors
@@ -43,11 +42,11 @@ public class OrderByTest {
   private CpoAdapter cpoAdapter = null;
   private ArrayList<ValueObject> al = new ArrayList<>();
 
-  public OrderByTest() {
-  }
+  public OrderByTest() {}
 
   /**
-   * <code>setUp</code> Load the datasource from the properties in the property file jdbc_en_US.properties
+   * <code>setUp</code> Load the datasource from the properties in the property file
+   * jdbc_en_US.properties
    */
   @BeforeClass
   public void setUp() {
@@ -71,13 +70,9 @@ public class OrderByTest {
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
-
-
   }
 
-  /**
-   * DOCUMENT ME!
-   */
+  /** DOCUMENT ME! */
   @AfterClass
   public void tearDown() {
     String method = "tearDown:";
@@ -90,9 +85,7 @@ public class OrderByTest {
     cpoAdapter = null;
   }
 
-  /**
-   * DOCUMENT ME!
-   */
+  /** DOCUMENT ME! */
   @Test
   public void testNewOrderBy() {
     String method = "testNewOrderBy:";
@@ -113,9 +106,7 @@ public class OrderByTest {
     }
   }
 
-  /**
-   * DOCUMENT ME!
-   */
+  /** DOCUMENT ME! */
   @Test
   public void testOrderByAscending() {
     String method = "testOrderByAscending:";
@@ -123,7 +114,8 @@ public class OrderByTest {
 
     try {
       CpoOrderBy cob = cpoAdapter.newOrderBy(ValueObject.ATTR_ID, true);
-      CpoOrderBy cob1 = cpoAdapter.newOrderBy(CpoOrderBy.DEFAULT_MARKER, ValueObject.ATTR_ATTRVARCHAR, true);
+      CpoOrderBy cob1 =
+          cpoAdapter.newOrderBy(CpoOrderBy.DEFAULT_MARKER, ValueObject.ATTR_ATTRVARCHAR, true);
       Collection<CpoOrderBy> colCob = new ArrayList<>();
       colCob.add(cob);
       colCob.add(cob1);
@@ -140,9 +132,7 @@ public class OrderByTest {
     }
   }
 
-  /**
-   * DOCUMENT ME!
-   */
+  /** DOCUMENT ME! */
   @Test
   public void testOrderByDescending() {
     String method = "testOrderByDescending:";
@@ -150,7 +140,9 @@ public class OrderByTest {
 
     try {
       CpoOrderBy cob = cpoAdapter.newOrderBy(ValueObject.ATTR_ID, false, null);
-      CpoOrderBy cob2 = cpoAdapter.newOrderBy(CpoOrderBy.DEFAULT_MARKER, ValueObject.ATTR_ATTRVARCHAR, false, null);
+      CpoOrderBy cob2 =
+          cpoAdapter.newOrderBy(
+              CpoOrderBy.DEFAULT_MARKER, ValueObject.ATTR_ATTRVARCHAR, false, null);
       Collection<CpoOrderBy> colCob = new ArrayList<>();
       colCob.add(cob);
       colCob.add(cob2);

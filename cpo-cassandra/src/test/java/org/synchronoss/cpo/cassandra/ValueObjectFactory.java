@@ -26,11 +26,13 @@ public class ValueObjectFactory {
   public static ValueObject createValueObject() {
     return new ValueObjectBean();
   }
+
   public static ValueObject createValueObject(int id) {
     ValueObjectBean valueObjectBean = new ValueObjectBean();
     valueObjectBean.setId(id);
     return valueObjectBean;
   }
+
   public static ValueObject createValueObject(int id, ByteBuffer byteBuffer) {
     ValueObjectBean valueObjectBean = new ValueObjectBean();
     valueObjectBean.setId(id);

@@ -20,6 +20,9 @@
  */
 package org.synchronoss.cpo.jdbc;
 
+import static org.testng.Assert.*;
+
+import java.util.ArrayList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.CpoAdapter;
@@ -32,10 +35,6 @@ import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import java.util.ArrayList;
-
-import static org.testng.Assert.*;
-
 /**
  * ExistObjectTest is a test class for the exists api calls
  *
@@ -46,11 +45,11 @@ public class ExistObjectTest {
   private static final Logger logger = LoggerFactory.getLogger(ExistObjectTest.class);
   private CpoAdapter cpoAdapter = null;
 
-  public ExistObjectTest() {
-  }
+  public ExistObjectTest() {}
 
   /**
-   * <code>setUp</code> Load the datasource from the properties in the property file jdbc_en_US.properties
+   * <code>setUp</code> Load the datasource from the properties in the property file
+   * jdbc_en_US.properties
    *
    * @author david berry
    * @version '$Id: ExistObjectTest.java,v 1.2 2006/01/30 19:09:23 dberry Exp $'
@@ -96,7 +95,6 @@ public class ExistObjectTest {
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
-
   }
 
   @Test
@@ -105,7 +103,8 @@ public class ExistObjectTest {
 
     try {
       ValueObject valObj = ValueObjectFactory.createValueObject(1);
-      CpoWhere where = cpoAdapter.newWhere(Logical.AND, ValueObject.ATTR_ATTRVARCHAR, Comparison.EQ, "WHERE");
+      CpoWhere where =
+          cpoAdapter.newWhere(Logical.AND, ValueObject.ATTR_ATTRVARCHAR, Comparison.EQ, "WHERE");
       ArrayList<CpoWhere> wheres = new ArrayList<>();
       wheres.add(where);
       long count = cpoAdapter.existsObject(ValueObject.FG_EXIST_NULL, valObj, wheres);
@@ -116,7 +115,8 @@ public class ExistObjectTest {
 
     try {
       ValueObject valObj = ValueObjectFactory.createValueObject(1);
-      CpoWhere where = cpoAdapter.newWhere(Logical.AND, ValueObject.ATTR_ATTRVARCHAR, Comparison.EQ, "NOWHERE");
+      CpoWhere where =
+          cpoAdapter.newWhere(Logical.AND, ValueObject.ATTR_ATTRVARCHAR, Comparison.EQ, "NOWHERE");
       ArrayList<CpoWhere> wheres = new ArrayList<>();
       wheres.add(where);
       long count = cpoAdapter.existsObject(ValueObject.FG_EXIST_NULL, valObj, wheres);
@@ -124,7 +124,6 @@ public class ExistObjectTest {
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
-
   }
 
   @AfterClass

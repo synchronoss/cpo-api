@@ -20,6 +20,12 @@
  */
 package org.synchronoss.cpo;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.lang.reflect.InvocationTargetException;
+import java.net.URL;
 import org.apache.xmlbeans.XmlException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,13 +41,6 @@ import org.synchronoss.cpo.helper.XmlBeansHelper;
 import org.synchronoss.cpo.jta.CpoXaResource;
 import org.synchronoss.cpo.meta.CpoMetaDescriptor;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.lang.reflect.InvocationTargetException;
-import java.net.URL;
-
 /**
  * @author dberry
  */
@@ -53,7 +52,7 @@ public final class CpoAdapterFactoryManager extends CpoAdapterFactoryCache {
   private static String defaultContext = null;
 
   static {
-      loadAdapters();
+    loadAdapters();
   }
 
   public static CpoAdapter getCpoAdapter() throws CpoException {
@@ -61,7 +60,7 @@ public final class CpoAdapterFactoryManager extends CpoAdapterFactoryCache {
   }
 
   public static CpoAdapter getCpoAdapter(String context) throws CpoException {
-    CpoAdapter cpoAdapter=null;
+    CpoAdapter cpoAdapter = null;
     CpoAdapterFactory cpoAdapterFactory = findCpoAdapterFactory(context);
     if (cpoAdapterFactory != null) {
       cpoAdapter = cpoAdapterFactory.getCpoAdapter();
@@ -74,7 +73,7 @@ public final class CpoAdapterFactoryManager extends CpoAdapterFactoryCache {
   }
 
   public static CpoTrxAdapter getCpoTrxAdapter(String context) throws CpoException {
-    CpoTrxAdapter cpoTrxAdapter=null;
+    CpoTrxAdapter cpoTrxAdapter = null;
     CpoAdapterFactory cpoAdapterFactory = findCpoAdapterFactory(context);
     if (cpoAdapterFactory != null) {
       cpoTrxAdapter = cpoAdapterFactory.getCpoTrxAdapter();
@@ -87,7 +86,7 @@ public final class CpoAdapterFactoryManager extends CpoAdapterFactoryCache {
   }
 
   public static CpoXaResource getCpoXaAdapter(String context) throws CpoException {
-    CpoXaResource cpoXaResource =null;
+    CpoXaResource cpoXaResource = null;
     CpoAdapterFactory cpoAdapterFactory = findCpoAdapterFactory(context);
     if (cpoAdapterFactory != null) {
       cpoXaResource = cpoAdapterFactory.getCpoXaAdapter();
@@ -95,23 +94,24 @@ public final class CpoAdapterFactoryManager extends CpoAdapterFactoryCache {
     return cpoXaResource;
   }
 
-    /**
-     * LoadAdapters is responsible for loading the config file and then subsequently loading all the metadata.
-     */
-    public static void loadAdapters() {
-        String cpoConfig = System.getProperty(CPO_CONFIG, System.getenv(CPO_CONFIG));
-        if (cpoConfig==null)
-            cpoConfig = CPO_CONFIG_XML;
+  /**
+   * LoadAdapters is responsible for loading the config file and then subsequently loading all the
+   * metadata.
+   */
+  public static void loadAdapters() {
+    String cpoConfig = System.getProperty(CPO_CONFIG, System.getenv(CPO_CONFIG));
+    if (cpoConfig == null) cpoConfig = CPO_CONFIG_XML;
 
-        loadAdapters(cpoConfig);
-    }
+    loadAdapters(cpoConfig);
+  }
 
-        /**
-         * LoadAdapters is responsible for loading the config file and then subsequently loading all the metadata.
-         *
-         * @param cpoConfig
-         */
-  synchronized private static void loadAdapters(String cpoConfig) {
+  /**
+   * LoadAdapters is responsible for loading the config file and then subsequently loading all the
+   * metadata.
+   *
+   * @param cpoConfig
+   */
+  private static synchronized void loadAdapters(String cpoConfig) {
     InputStream is = null;
     var errBuilder = new StringBuilder();
 
@@ -124,13 +124,12 @@ public final class CpoAdapterFactoryManager extends CpoAdapterFactoryCache {
     }
 
     // See if the file is a resource in the jar
-    if (is == null)
-      is = CpoClassLoader.getResourceAsStream(cpoConfig);
+    if (is == null) is = CpoClassLoader.getResourceAsStream(cpoConfig);
 
     if (is == null) {
       errBuilder.append("Resource Not Found: ").append(cpoConfig).append("\n");
       try {
-        //See if the file is a local file on the server
+        // See if the file is a local file on the server
         is = new FileInputStream(cpoConfig);
       } catch (FileNotFoundException fnfe) {
         errBuilder.append("File Not Found: ").append(cpoConfig).append("\n");
@@ -141,12 +140,12 @@ public final class CpoAdapterFactoryManager extends CpoAdapterFactoryCache {
     try {
       CpoConfigDocument configDoc;
       if (is == null) {
-        //See if the config is sent in as a string
-          try {
-              configDoc = CpoConfigDocument.Factory.parse(cpoConfig);
-          } catch (XmlException e) {
-              throw new CpoException(errBuilder.toString(), e);
-          }
+        // See if the config is sent in as a string
+        try {
+          configDoc = CpoConfigDocument.Factory.parse(cpoConfig);
+        } catch (XmlException e) {
+          throw new CpoException(errBuilder.toString(), e);
+        }
       } else {
         configDoc = CpoConfigDocument.Factory.parse(is);
       }
@@ -156,8 +155,10 @@ public final class CpoAdapterFactoryManager extends CpoAdapterFactoryCache {
         logger.error("Invalid CPO Config file: " + cpoConfig + ":" + errMsg);
       } else {
         logger.info("Processing Config File: " + cpoConfig);
-        // Moving the clear to here to make sure we get a good file before we just blow away all the adapters.
-        // We are doing a load clear all the caches first, in case the load gets called more than once.
+        // Moving the clear to here to make sure we get a good file before we just blow away all the
+        // adapters.
+        // We are doing a load clear all the caches first, in case the load gets called more than
+        // once.
         CpoMetaDescriptor.clearAllInstances();
         clearCpoAdapterFactoryCache();
 
@@ -178,7 +179,8 @@ public final class CpoAdapterFactoryManager extends CpoAdapterFactoryCache {
           }
 
           // this will create and cache, so we don't need the return
-          CpoMetaDescriptor.getInstance(metaDescriptor.getName(), metaDescriptor.getMetaXmlArray(), caseSensitive);
+          CpoMetaDescriptor.getInstance(
+              metaDescriptor.getName(), metaDescriptor.getMetaXmlArray(), caseSensitive);
         }
 
         // now lets loop through all the adapters and get them cached.
@@ -197,41 +199,59 @@ public final class CpoAdapterFactoryManager extends CpoAdapterFactoryCache {
       logger.error("Error processing " + cpoConfig + ": ", ce);
     } finally {
       if (is != null)
-        try { is.close(); } catch (Exception e) {logger.error("Error processing " + cpoConfig + ": ", e);}
+        try {
+          is.close();
+        } catch (Exception e) {
+          logger.error("Error processing " + cpoConfig + ": ", e);
+        }
     }
   }
 
-  public static CpoAdapterFactory makeCpoAdapterFactory(CtDataSourceConfig dataSourceConfig) throws CpoException {
+  public static CpoAdapterFactory makeCpoAdapterFactory(CtDataSourceConfig dataSourceConfig)
+      throws CpoException {
     CpoAdapterFactory cpoAdapterFactory;
 
     // make the CpoAdapter
     try {
-      CpoConfigProcessor configProcessor = (CpoConfigProcessor)CpoClassLoader.forName(dataSourceConfig.getCpoConfigProcessor()).getDeclaredConstructor().newInstance();
+      CpoConfigProcessor configProcessor =
+          (CpoConfigProcessor)
+              CpoClassLoader.forName(dataSourceConfig.getCpoConfigProcessor())
+                  .getDeclaredConstructor()
+                  .newInstance();
       cpoAdapterFactory = configProcessor.processCpoConfig(dataSourceConfig);
     } catch (ClassNotFoundException cnfe) {
       String msg = "CpoConfigProcessor not found: " + dataSourceConfig.getCpoConfigProcessor();
       logger.error(msg);
       throw new CpoException(msg);
     } catch (IllegalAccessException iae) {
-      String msg = "Could not access CpoConfigProcessor: " + dataSourceConfig.getCpoConfigProcessor();
+      String msg =
+          "Could not access CpoConfigProcessor: " + dataSourceConfig.getCpoConfigProcessor();
       logger.error(msg);
       throw new CpoException(msg);
     } catch (InstantiationException ie) {
-      String msg = "Could not instantiate CpoConfigProcessor: " + dataSourceConfig.getCpoConfigProcessor() + ": " + ExceptionHelper.getLocalizedMessage(ie);
+      String msg =
+          "Could not instantiate CpoConfigProcessor: "
+              + dataSourceConfig.getCpoConfigProcessor()
+              + ": "
+              + ExceptionHelper.getLocalizedMessage(ie);
       logger.error(msg);
       throw new CpoException(msg);
     } catch (ClassCastException cce) {
-      String msg = "Class is not instance of CpoConfigProcessor: " + dataSourceConfig.getCpoConfigProcessor();
+      String msg =
+          "Class is not instance of CpoConfigProcessor: "
+              + dataSourceConfig.getCpoConfigProcessor();
       logger.error(msg);
       throw new CpoException(msg);
     } catch (NoSuchMethodException e) {
-        String msg = "Could not find the constructor for CpoConfigProcessor: " + dataSourceConfig.getCpoConfigProcessor();
-        logger.error(msg);
-        throw new CpoException(msg);
+      String msg =
+          "Could not find the constructor for CpoConfigProcessor: "
+              + dataSourceConfig.getCpoConfigProcessor();
+      logger.error(msg);
+      throw new CpoException(msg);
     } catch (InvocationTargetException e) {
-        throw new RuntimeException(e);
+      throw new RuntimeException(e);
     }
 
-      return cpoAdapterFactory;
+    return cpoAdapterFactory;
   }
 }

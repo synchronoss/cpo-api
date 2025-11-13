@@ -20,14 +20,14 @@
  */
 package org.synchronoss.cpo.cassandra;
 
+import static org.testng.Assert.assertNotNull;
+import static org.testng.Assert.fail;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.CpoAdapter;
 import org.synchronoss.cpo.CpoAdapterFactoryManager;
 import org.testng.annotations.Test;
-
-import static org.testng.Assert.assertNotNull;
-import static org.testng.Assert.fail;
 
 /**
  * ConstructorTest is a test class for testing the JdbcAdapter class Constructors
@@ -41,11 +41,12 @@ public class ConstructorTest {
   public void testConstructorClass() {
     String method = "testConstructorClass:";
     try {
-      CpoAdapter cpoAdapter = CpoAdapterFactoryManager.getCpoAdapter(CassandraStatics.ADAPTER_CONTEXT_DEFAULT);
-      assertNotNull(cpoAdapter,method + "cpoAdapter is null");
+      CpoAdapter cpoAdapter =
+          CpoAdapterFactoryManager.getCpoAdapter(CassandraStatics.ADAPTER_CONTEXT_DEFAULT);
+      assertNotNull(cpoAdapter, method + "cpoAdapter is null");
       assertNotNull("DataSourceName is null", cpoAdapter.getDataSourceName());
 
-      logger.debug("=====> DatasourceName: "+cpoAdapter.getDataSourceName());
+      logger.debug("=====> DatasourceName: " + cpoAdapter.getDataSourceName());
     } catch (Exception e) {
       fail(method + e.getMessage());
     }

@@ -34,13 +34,13 @@ import org.synchronoss.cpo.transform.CpoTransform;
  */
 public interface CassandraCpoTransform<D, J> extends CpoTransform<D, J> {
 
-    /**
-     * Transforms a java class to a datasource class
-     * @param cbsf The CassandraBoundStatementFactory
-     * @param attributeObject The java attribute to be transformed
-     * @return The datasource object
-     * @throws CpoException an exception occurred
-     */
+  /**
+   * Transforms a java class to a datasource class
+   *
+   * @param cbsf The CassandraBoundStatementFactory
+   * @param attributeObject The java attribute to be transformed
+   * @return The datasource object
+   * @throws CpoException an exception occurred
+   */
   D transformOut(CassandraBoundStatementFactory cbsf, J attributeObject) throws CpoException;
-
 }

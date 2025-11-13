@@ -20,6 +20,9 @@
  */
 package org.synchronoss.cpo.cassandra;
 
+import static org.testng.Assert.*;
+
+import java.nio.ByteBuffer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.CpoAdapter;
@@ -28,10 +31,6 @@ import org.synchronoss.cpo.cassandra.meta.CassandraCpoMetaDescriptor;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
-
-import java.nio.ByteBuffer;
-
-import static org.testng.Assert.*;
 
 /**
  * BlobTest is a test class for testing the JdbcAdapter class Constructors
@@ -47,7 +46,8 @@ public class BlobTest {
   private ByteBuffer testBlob2 = null;
 
   /**
-   * <code>setUp</code> Load the datasource from the properties in the property file jdbc_en_US.properties
+   * <code>setUp</code> Load the datasource from the properties in the property file
+   * jdbc_en_US.properties
    *
    * @author david berry
    * @version '$Id: BlobTest.java,v 1.15 2006/02/15 18:34:19 dberry Exp $'
@@ -60,7 +60,7 @@ public class BlobTest {
     try {
       cpoAdapter = CpoAdapterFactoryManager.getCpoAdapter(CassandraStatics.ADAPTER_CONTEXT_DEFAULT);
       assertNotNull(cpoAdapter, method + "IdoAdapter is null");
-      metaDescriptor = (CassandraCpoMetaDescriptor)cpoAdapter.getCpoMetaDescriptor();
+      metaDescriptor = (CassandraCpoMetaDescriptor) cpoAdapter.getCpoMetaDescriptor();
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -71,12 +71,12 @@ public class BlobTest {
 
     testBlob = ByteBuffer.allocate(CassandraStatics.BLOB_SIZE);
     for (int i = 0; i < CassandraStatics.BLOB_SIZE; i++) {
-      testBlob.put((byte)(((int)'a') + (i % 26)));
+      testBlob.put((byte) (((int) 'a') + (i % 26)));
     }
 
     testBlob2 = ByteBuffer.allocate(CassandraStatics.BLOB_SIZE);
     for (int i = 0; i < CassandraStatics.BLOB_SIZE; i++) {
-      testBlob2.put((byte)(((int)'z') - (i % 26)));
+      testBlob2.put((byte) (((int) 'z') - (i % 26)));
     }
 
     ValueObject lvo = ValueObjectFactory.createValueObject(1, testBlob);
@@ -128,12 +128,12 @@ public class BlobTest {
 
     testBlob = ByteBuffer.allocate(CassandraStatics.BLOB_SIZE);
     for (int i = 0; i < CassandraStatics.BLOB_SIZE; i++) {
-      testBlob.put((byte)(((int)'a') + (i % 26)));
+      testBlob.put((byte) (((int) 'a') + (i % 26)));
     }
 
     testBlob2 = ByteBuffer.allocate(CassandraStatics.BLOB_SIZE);
     for (int i = 0; i < CassandraStatics.BLOB_SIZE; i++) {
-      testBlob2.put((byte)(((int)'z') - (i % 26)));
+      testBlob2.put((byte) (((int) 'z') - (i % 26)));
     }
 
     ValueObject lvo = ValueObjectFactory.createValueObject(1, testBlob);

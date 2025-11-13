@@ -20,46 +20,45 @@
  */
 package org.synchronoss.cpo.exporter;
 
-import org.synchronoss.cpo.CpoException;
-import org.synchronoss.cpo.helper.ExceptionHelper;
-import org.synchronoss.cpo.meta.CpoMetaDescriptor;
-
+import java.io.IOException;
+import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.io.PrintWriter;
+import org.synchronoss.cpo.CpoException;
+import org.synchronoss.cpo.helper.ExceptionHelper;
+import org.synchronoss.cpo.meta.CpoMetaDescriptor;
 
 /**
- * Servlet that will output the current state of a meta descriptor in the form of xml.
- * This xml can be opened in CpoUtil for viewing or any other means appropriate
+ * Servlet that will output the current state of a meta descriptor in the form of xml. This xml can
+ * be opened in CpoUtil for viewing or any other means appropriate
  *
  * @author Michael Bellomo
  * @since 7/16/12
  */
 public class XmlExporterServlet extends HttpServlet {
-    /**
-     * Version Id for this class.
-     */
-    private static final long serialVersionUID = 1L;
+  /** Version Id for this class. */
+  private static final long serialVersionUID = 1L;
 
   private static final String HTML_CONTENT_TYPE = "text/html";
   private static final String XML_CONTENT_TYPE = "text/xml";
   public static final String PARAM_META_DESCRIPTOR_NAME = "metaDescriptorName";
 
   @Override
-  public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+  public void doGet(HttpServletRequest request, HttpServletResponse response)
+      throws ServletException, IOException {
     doPost(request, response);
   }
 
   @Override
-  public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+  public void doPost(HttpServletRequest request, HttpServletResponse response)
+      throws ServletException, IOException {
     PrintWriter pw = response.getWriter();
     try {
       String metaDescriptorName = request.getParameter(PARAM_META_DESCRIPTOR_NAME);
 
-      if (metaDescriptorName==null) {
+      if (metaDescriptorName == null) {
         throw new CpoException("Missing MetaDescriptor name");
       }
 

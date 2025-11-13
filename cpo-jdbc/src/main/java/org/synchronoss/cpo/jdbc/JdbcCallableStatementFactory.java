@@ -20,6 +20,10 @@
  */
 package org.synchronoss.cpo.jdbc;
 
+import java.sql.CallableStatement;
+import java.sql.Connection;
+import java.util.ArrayList;
+import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.CpoData;
@@ -30,14 +34,9 @@ import org.synchronoss.cpo.meta.domain.CpoArgument;
 import org.synchronoss.cpo.meta.domain.CpoClass;
 import org.synchronoss.cpo.meta.domain.CpoFunction;
 
-import java.sql.CallableStatement;
-import java.sql.Connection;
-import java.util.ArrayList;
-import java.util.List;
-
 /**
- * JdbcCallableStatementFactory is the object that encapsulates the creation of the actual CallableStatement for the
- * JDBC driver.
+ * JdbcCallableStatementFactory is the object that encapsulates the creation of the actual
+ * CallableStatement for the JDBC driver.
  *
  * @author david berry
  */
@@ -47,15 +46,16 @@ public class JdbcCallableStatementFactory implements CpoReleasible {
   private CallableStatement cs_ = null;
 
   @SuppressWarnings("unused")
-  private JdbcCallableStatementFactory() {
-  }
+  private JdbcCallableStatementFactory() {}
+
   private List<CpoReleasible> releasibles = new ArrayList<>();
   private List<CpoArgument> outArguments = new ArrayList<>();
 
   /**
-   * Used to build the CallableStatement that is used by CPO to create the actual JDBC CallableStatement.
-   * The constructor is called by the internal CPO framework. This is not to be used by users of CPO. Programmers that
-   * build Transforms may need to use this object to get access to the actual connection.
+   * Used to build the CallableStatement that is used by CPO to create the actual JDBC
+   * CallableStatement. The constructor is called by the internal CPO framework. This is not to be
+   * used by users of CPO. Programmers that build Transforms may need to use this object to get
+   * access to the actual connection.
    *
    * @param conn The actual jdbc connection that will be used to create the callable statement.
    * @param jca The JdbcCpoAdapter that is controlling this transaction
@@ -64,7 +64,13 @@ public class JdbcCallableStatementFactory implements CpoReleasible {
    * @param resultClass An instance of the result class
    * @throws CpoException if a CPO error occurs
    */
-  public JdbcCallableStatementFactory(Connection conn, JdbcCpoAdapter jca, CpoFunction function, Object criteria, CpoClass resultClass) throws CpoException {
+  public JdbcCallableStatementFactory(
+      Connection conn,
+      JdbcCpoAdapter jca,
+      CpoFunction function,
+      Object criteria,
+      CpoClass resultClass)
+      throws CpoException {
     CallableStatement cstmt;
     JdbcCpoAttribute attribute;
     Logger localLogger = criteria == null ? logger : LoggerFactory.getLogger(criteria.getClass());
@@ -89,42 +95,51 @@ public class JdbcCallableStatementFactory implements CpoReleasible {
         }
 
         if (jdbcArgument.isOutParameter()) {
-          // The function will not know the type of the attribute on the result object, so look it up now
-          if (attribute==null) {
-            attribute = (JdbcCpoAttribute) resultClass.getAttributeJava(argument.getAttributeName());
-            if (attribute==null) {
-              throw new CpoException("Attribute <"+argument.getAttributeName()+"> does not exist on class <"+resultClass.getName()+">");
+          // The function will not know the type of the attribute on the result object, so look it
+          // up now
+          if (attribute == null) {
+            attribute =
+                (JdbcCpoAttribute) resultClass.getAttributeJava(argument.getAttributeName());
+            if (attribute == null) {
+              throw new CpoException(
+                  "Attribute <"
+                      + argument.getAttributeName()
+                      + "> does not exist on class <"
+                      + resultClass.getName()
+                      + ">");
             }
           }
-          localLogger.debug("Setting OUT parameter " + j + " as Type " + attribute.getDataTypeInt());
-          if (jdbcArgument.getTypeInfo()!=null)
+          localLogger.debug(
+              "Setting OUT parameter " + j + " as Type " + attribute.getDataTypeInt());
+          if (jdbcArgument.getTypeInfo() != null)
             cstmt.registerOutParameter(j, attribute.getDataTypeInt(), jdbcArgument.getTypeInfo());
-          else
-            cstmt.registerOutParameter(j, attribute.getDataTypeInt());
+          else cstmt.registerOutParameter(j, attribute.getDataTypeInt());
         }
         j++;
       }
 
     } catch (Exception e) {
-      localLogger.error("Error Instantiating JdbcCallableStatementFactory" + ExceptionHelper.getLocalizedMessage(e));
+      localLogger.error(
+          "Error Instantiating JdbcCallableStatementFactory"
+              + ExceptionHelper.getLocalizedMessage(e));
       throw new CpoException(e);
     }
-
   }
 
   /**
    * returns the jdbc callable statment associated with this object
+   *
    * @return The CallableStatement
    */
   public CallableStatement getCallableStatement() {
     return cs_;
   }
 
-    /**
-     * Set the callable statement for this factory.
-     *
-     * @param cs the callable statement
-     */
+  /**
+   * Set the callable statement for this factory.
+   *
+   * @param cs the callable statement
+   */
   protected void setCallableStatement(CallableStatement cs) {
     cs_ = cs;
   }
@@ -139,22 +154,21 @@ public class JdbcCallableStatementFactory implements CpoReleasible {
   }
 
   /**
-   * Adds a releasible object to this object. The release method on the releasible will be called when the
-   * callableStatement is executed.
+   * Adds a releasible object to this object. The release method on the releasible will be called
+   * when the callableStatement is executed.
    *
-   * @param releasible - A CpoReleasible object. An Object whose lifetime is associated with the lifetime of the
-   *                   Callable statement
+   * @param releasible - A CpoReleasible object. An Object whose lifetime is associated with the
+   *     lifetime of the Callable statement
    */
   public void AddReleasible(CpoReleasible releasible) {
     if (releasible != null) {
       releasibles.add(releasible);
     }
-
   }
 
   /**
-   * Called by the CPO framework. This method calls the
-   * {@code release} on all the CpoReleasible associated with this object
+   * Called by the CPO framework. This method calls the {@code release} on all the CpoReleasible
+   * associated with this object
    */
   @Override
   public void release() throws CpoException {

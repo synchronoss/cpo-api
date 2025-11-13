@@ -56,7 +56,7 @@ public class CpoClassSourceGenerator implements MetaVisitor {
   /**
    * Resets all of the buffers.
    *
-   * This is needed if you intend to reuse the visitor. This is always called by visit(CpoClass)
+   * <p>This is needed if you intend to reuse the visitor. This is always called by visit(CpoClass)
    */
   protected void reset() {
     attributeStatics = new StringBuilder();
@@ -126,9 +126,7 @@ public class CpoClassSourceGenerator implements MetaVisitor {
     return source.toString();
   }
 
-  /**
-   * The cpoClass name will be used for the name of the interface
-   */
+  /** The cpoClass name will be used for the name of the interface */
   protected String generateInterfaceName(CpoClass cpoClass) {
     String className = cpoClass.getName();
     if (className.lastIndexOf(".") != -1) {
@@ -137,9 +135,7 @@ public class CpoClassSourceGenerator implements MetaVisitor {
     return className;
   }
 
-  /**
-   * Returns the name of the class to use
-   */
+  /** Returns the name of the class to use */
   protected String generateClassName(CpoClass cpoClass) {
     return generateInterfaceName(cpoClass) + CLASS_SUFFIX;
   }
@@ -160,7 +156,12 @@ public class CpoClassSourceGenerator implements MetaVisitor {
     }
 
     // generate class declaration
-    header.append("public class " + className + " implements " + interfaceName + ", java.io.Serializable {\n");
+    header.append(
+        "public class "
+            + className
+            + " implements "
+            + interfaceName
+            + ", java.io.Serializable {\n");
     header.append("  private static final long serialVersionUID = 1L;\n");
 
     // footer
@@ -192,7 +193,8 @@ public class CpoClassSourceGenerator implements MetaVisitor {
 
     // generate attribute statics
     String staticName = ATTR_PREFIX + attName.toUpperCase();
-    attributeStatics.append("  public final static String " + staticName + " = \"" + attName + "\";\n");
+    attributeStatics.append(
+        "  public final static String " + staticName + " = \"" + attName + "\";\n");
 
     // generate property declarations
     properties.append("  protected " + attClassName + " " + attName + ";\n");
@@ -203,7 +205,8 @@ public class CpoClassSourceGenerator implements MetaVisitor {
     gettersSetters.append("  }\n\n");
 
     // generate setter
-    gettersSetters.append("  public void " + setterName + "(" + attClassName + " " + attName + ") {\n");
+    gettersSetters.append(
+        "  public void " + setterName + "(" + attClassName + " " + attName + ") {\n");
     gettersSetters.append("    this." + attName + " = " + attName + ";\n");
     gettersSetters.append("  }\n\n");
 
@@ -213,22 +216,43 @@ public class CpoClassSourceGenerator implements MetaVisitor {
       equals.append("    if (" + getterName + " != that." + getterName + ")\n");
     } else if (attClass.isArray()) {
       // array type, use Array.equals()
-      equals.append("    if (!java.util.Arrays.equals(" + getterName + ", that." + getterName + "))\n");
+      equals.append(
+          "    if (!java.util.Arrays.equals(" + getterName + ", that." + getterName + "))\n");
     } else {
       // object, use .equals
-      equals.append("    if (" + getterName + " != null ? !" + getterName + ".equals(that." + getterName + ") : that." + getterName + " != null)\n");
+      equals.append(
+          "    if ("
+              + getterName
+              + " != null ? !"
+              + getterName
+              + ".equals(that."
+              + getterName
+              + ") : that."
+              + getterName
+              + " != null)\n");
     }
     equals.append("      return false;\n");
 
     // hashCode()
     if (attClass.isPrimitive()) {
       // primitive type, need some magic
-      hashCode.append("    result = 31 * result + (String.valueOf(" + getterName + ").hashCode());\n");
+      hashCode.append(
+          "    result = 31 * result + (String.valueOf(" + getterName + ").hashCode());\n");
     } else if (attClass.isArray()) {
       // array type, use Array.hashCode()
-      hashCode.append("    result = 31 * result + (" + getterName + "!= null ? java.util.Arrays.hashCode(" + getterName + ") : 0);\n");
+      hashCode.append(
+          "    result = 31 * result + ("
+              + getterName
+              + "!= null ? java.util.Arrays.hashCode("
+              + getterName
+              + ") : 0);\n");
     } else {
-      hashCode.append("    result = 31 * result + (" + getterName + " != null ? " + getterName + ".hashCode() : 0);\n");
+      hashCode.append(
+          "    result = 31 * result + ("
+              + getterName
+              + " != null ? "
+              + getterName
+              + ".hashCode() : 0);\n");
     }
 
     // toString()
@@ -250,7 +274,8 @@ public class CpoClassSourceGenerator implements MetaVisitor {
     if (cpoFunctionGroup.getName() == null) {
       functionGroupStatics.append("  public final static String " + staticName + " = null;\n");
     } else {
-      functionGroupStatics.append("  public final static String " + staticName + " = \"" + fgName + "\";\n");
+      functionGroupStatics.append(
+          "  public final static String " + staticName + " = \"" + fgName + "\";\n");
     }
   }
 
@@ -272,7 +297,7 @@ public class CpoClassSourceGenerator implements MetaVisitor {
     Class clazz = String.class;
 
     try {
-      switch(className){
+      switch (className) {
         case "boolean":
           clazz = boolean.class;
           break;
@@ -322,8 +347,8 @@ public class CpoClassSourceGenerator implements MetaVisitor {
           clazz = Class.forName(className);
           break;
       }
-    } catch(ClassNotFoundException cnfe) {
-      System.err.println("Could not find class:"+className+"!");
+    } catch (ClassNotFoundException cnfe) {
+      System.err.println("Could not find class:" + className + "!");
     }
     return clazz;
   }

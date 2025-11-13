@@ -20,6 +20,10 @@
  */
 package org.synchronoss.cpo.jdbc;
 
+import static org.testng.Assert.*;
+
+import java.util.ArrayList;
+import java.util.Collection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.CpoAdapter;
@@ -29,11 +33,6 @@ import org.synchronoss.cpo.helper.ExceptionHelper;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
-
-import java.util.ArrayList;
-import java.util.Collection;
-
-import static org.testng.Assert.*;
 
 /**
  * BigBatchTest is a test class for testing big batches
@@ -46,12 +45,11 @@ public class BigRetrieveTest {
   private ArrayList<ValueObject> al = new ArrayList<>();
   private CpoAdapter cpoAdapter = null;
 
-  public BigRetrieveTest() {
-
-  }
+  public BigRetrieveTest() {}
 
   /**
-   * <code>setUp</code> Load the datasource from the properties in the property file jdbc_en_US.properties
+   * <code>setUp</code> Load the datasource from the properties in the property file
+   * jdbc_en_US.properties
    *
    * @author david berry
    * @version '$Id: InsertObjectTest.java,v 1.3 2006/01/30 19:09:23 dberry Exp $'
@@ -71,8 +69,7 @@ public class BigRetrieveTest {
   /**
    * So oracle seems to fail on a batch size of 100,000 but does not throw an error.
    *
-   * lets try to break it to fix it to return a good message.
-   *
+   * <p>lets try to break it to fix it to return a good message.
    */
   @Test
   public void testBigRetrieve() {
@@ -91,10 +88,16 @@ public class BigRetrieveTest {
       logger.debug("Received a CpoException:" + ExceptionHelper.getLocalizedMessage(ce));
     } catch (Exception e) {
       logger.error(ExceptionHelper.getLocalizedMessage(e));
-      fail(method + ":Received an Exception instead of a CpoException: " + ExceptionHelper.getLocalizedMessage(e));
+      fail(
+          method
+              + ":Received an Exception instead of a CpoException: "
+              + ExceptionHelper.getLocalizedMessage(e));
     } catch (Throwable t) {
       logger.error(ExceptionHelper.getLocalizedMessage(t));
-      fail(method + ":Received a Throwable instead of a CpoException: " + ExceptionHelper.getLocalizedMessage(t));
+      fail(
+          method
+              + ":Received a Throwable instead of a CpoException: "
+              + ExceptionHelper.getLocalizedMessage(t));
     }
 
     Collection<ValueObject> col;
@@ -116,7 +119,7 @@ public class BigRetrieveTest {
       cpoAdapter.deleteObjects(al);
 
     } catch (Exception e) {
-            logger.error(ExceptionHelper.getLocalizedMessage(e));
+      logger.error(ExceptionHelper.getLocalizedMessage(e));
       fail(method + e.getMessage());
     }
     cpoAdapter = null;

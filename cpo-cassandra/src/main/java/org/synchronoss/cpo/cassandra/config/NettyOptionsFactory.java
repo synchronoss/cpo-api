@@ -20,35 +20,30 @@
  */
 package org.synchronoss.cpo.cassandra.config;
 
-
 import com.datastax.driver.core.NettyOptions;
 
 /**
- * Created with IntelliJ IDEA.
- * User: dberry
- * Date: 10/10/13
- * Time: 07:57 AM
- * To change this template use File | Settings | File Templates.
+ * Created with IntelliJ IDEA. User: dberry Date: 10/10/13 Time: 07:57 AM To change this template
+ * use File | Settings | File Templates.
  */
 public abstract class NettyOptionsFactory implements FactoryMethodName {
 
-    /**
-     * Constructs a NettyOptionsFactory
-     */
-    public NettyOptionsFactory(){}
+  /** Constructs a NettyOptionsFactory */
+  public NettyOptionsFactory() {}
 
-    /**
-     * Get the factory method name
-     * @return The method name
-     */
+  /**
+   * Get the factory method name
+   *
+   * @return The method name
+   */
   public String getFactoryMethodName() {
     return "createNettyOptions";
   }
 
-    /**
-     * Create the NettyOptions
-     * @return The NettyOptions
-     */
+  /**
+   * Create the NettyOptions
+   *
+   * @return The NettyOptions
+   */
   public abstract NettyOptions createNettyOptions();
-
 }

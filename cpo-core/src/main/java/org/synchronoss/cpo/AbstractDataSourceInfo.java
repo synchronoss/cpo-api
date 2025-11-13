@@ -21,11 +21,8 @@
 package org.synchronoss.cpo;
 
 /**
- * Created with IntelliJ IDEA.
- * User: dberry
- * Date: 9/10/13
- * Time: 12:51 PM
- * To change this template use File | Settings | File Templates.
+ * Created with IntelliJ IDEA. User: dberry Date: 9/10/13 Time: 12:51 PM To change this template use
+ * File | Settings | File Templates.
  */
 public abstract class AbstractDataSourceInfo<T> implements DataSourceInfo<T> {
   private T dataSource = null;
@@ -35,10 +32,10 @@ public abstract class AbstractDataSourceInfo<T> implements DataSourceInfo<T> {
   private final Object LOCK = new Object();
 
   public AbstractDataSourceInfo(String dataSourceName) {
-    this.dataSourceName=dataSourceName;
+    this.dataSourceName = dataSourceName;
   }
 
-  protected abstract T createDataSource() throws CpoException ;
+  protected abstract T createDataSource() throws CpoException;
 
   @Override
   public String getDataSourceName() {

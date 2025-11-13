@@ -20,11 +20,10 @@
  */
 package org.synchronoss.cpo.jdbc;
 
-import org.synchronoss.cpo.AbstractDataSourceInfo;
-
 import java.util.Properties;
 import java.util.SortedMap;
 import java.util.TreeMap;
+import org.synchronoss.cpo.AbstractDataSourceInfo;
 
 /**
  * A class used for collecting the properties to instantiate the datasource
@@ -37,31 +36,31 @@ public abstract class AbstractJdbcDataSourceInfo extends AbstractDataSourceInfo 
   private static final String PASSWD = "passwd";
   private static final String PWD = "pwd";
 
-    /**
-     * Constructs a AbstractJdbcDataSourceInfo
-     *
-     * @param dataSourceName - The name of the datasource to instantiate,
-     */
+  /**
+   * Constructs a AbstractJdbcDataSourceInfo
+   *
+   * @param dataSourceName - The name of the datasource to instantiate,
+   */
   public AbstractJdbcDataSourceInfo(String dataSourceName) {
     super(dataSourceName);
   }
 
-    /**
-     * Constructs a AbstractJdbcDataSourceInfo
-     *
-     * @param className - The DataSource className from the Driver.
-     * @param properties - The list of properties to be passed to the driver
-     */
+  /**
+   * Constructs a AbstractJdbcDataSourceInfo
+   *
+   * @param className - The DataSource className from the Driver.
+   * @param properties - The list of properties to be passed to the driver
+   */
   public AbstractJdbcDataSourceInfo(String className, SortedMap<String, String> properties) {
     super(BuildDataSourceName(className, properties));
   }
 
-    /**
-     * Constructs a AbstractJdbcDataSourceInfo
-     *
-     * @param className  - The DataSource className from the Driver.
-     * @param properties - The list of properties to be passed to the driver
-     */
+  /**
+   * Constructs a AbstractJdbcDataSourceInfo
+   *
+   * @param className - The DataSource className from the Driver.
+   * @param properties - The list of properties to be passed to the driver
+   */
   public AbstractJdbcDataSourceInfo(String className, Properties properties) {
     super(BuildDataSourceName(className, properties));
   }
@@ -71,8 +70,8 @@ public abstract class AbstractJdbcDataSourceInfo extends AbstractDataSourceInfo 
     // the same datasource with the same properties but in different order,
     // we will generate the same key.
     SortedMap<String, String> map = new TreeMap<>();
-    for (Object key : properties.keySet()){
-      map.put((String)key, properties.getProperty((String)key));
+    for (Object key : properties.keySet()) {
+      map.put((String) key, properties.getProperty((String) key));
     }
     return BuildDataSourceName(s, map);
   }
@@ -81,9 +80,11 @@ public abstract class AbstractJdbcDataSourceInfo extends AbstractDataSourceInfo 
     StringBuilder dsName = new StringBuilder(s);
 
     for (Object obj : map.keySet()) {
-      String key = (String)obj;
+      String key = (String) obj;
       // Don't store the password in the datasource generated name.
-      if (!PASSWORD.equalsIgnoreCase(key) && !PASSWD.equalsIgnoreCase(key) && !PWD.equalsIgnoreCase(key) ) {
+      if (!PASSWORD.equalsIgnoreCase(key)
+          && !PASSWD.equalsIgnoreCase(key)
+          && !PWD.equalsIgnoreCase(key)) {
         dsName.append(key);
         dsName.append("=");
         dsName.append(map.get(key));
@@ -92,5 +93,4 @@ public abstract class AbstractJdbcDataSourceInfo extends AbstractDataSourceInfo 
 
     return dsName.toString();
   }
-
 }

@@ -24,6 +24,7 @@ public class ValueObjectFactory {
   public static ValueObject createValueObject() {
     return new ValueObjectBean();
   }
+
   public static ValueObject createValueObject(int id) {
     ValueObjectBean valueObjectBean = new ValueObjectBean();
     valueObjectBean.setId(id);

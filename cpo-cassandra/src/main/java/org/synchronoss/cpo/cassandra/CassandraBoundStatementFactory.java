@@ -22,6 +22,9 @@ package org.synchronoss.cpo.cassandra;
 
 import com.datastax.driver.core.BoundStatement;
 import com.datastax.driver.core.Session;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.*;
@@ -32,71 +35,85 @@ import org.synchronoss.cpo.meta.domain.CpoAttribute;
 import org.synchronoss.cpo.meta.domain.CpoClass;
 import org.synchronoss.cpo.meta.domain.CpoFunction;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
 /**
- * CassandraBoundStatementFactory is the object that encapsulates the creation of the actual PreparedStatement for the
- * JDBC driver.
+ * CassandraBoundStatementFactory is the object that encapsulates the creation of the actual
+ * PreparedStatement for the JDBC driver.
  *
  * @author david berry
  */
 public class CassandraBoundStatementFactory extends CpoStatementFactory implements CpoReleasible {
 
-  /**
-   * Version Id for this class.
-   */
+  /** Version Id for this class. */
   private static final long serialVersionUID = 1L;
-  private static final Logger logger = LoggerFactory.getLogger(CassandraBoundStatementFactory.class);
+
+  private static final Logger logger =
+      LoggerFactory.getLogger(CassandraBoundStatementFactory.class);
   private BoundStatement boundStatement;
   private List<CpoReleasible> releasibles = new ArrayList<>();
 
   /**
-   * Used to build the PreparedStatement that is used by CPO to create the actual JDBC PreparedStatement.
-   * The constructor is called by the internal CPO framework. This is not to be used by users of CPO. Programmers that
-   * build Transforms may need to use this object to get access to the actual connection.
+   * Used to build the PreparedStatement that is used by CPO to create the actual JDBC
+   * PreparedStatement. The constructor is called by the internal CPO framework. This is not to be
+   * used by users of CPO. Programmers that build Transforms may need to use this object to get
+   * access to the actual connection.
    *
-   * @param <T>                 The type of the object being bound
-   * @param sess                The actual jdbc connection that will be used to create the callable statement.
+   * @param <T> The type of the object being bound
+   * @param sess The actual jdbc connection that will be used to create the callable statement.
    * @param cassandraCpoAdapter The JdbcCpoAdapter that is controlling this transaction
-   * @param criteria            The object that will be used to look up the cpo metadata
-   * @param function            The CpoFunction that is being executed
-   * @param obj                 The pojo that is being acted upon
-   * @param wheres              A collection of wheres to find the object
-   * @param orderBy             A collection of orderbys to sort the objects
-   * @param nativeQueries       Additional sql to be embedded into the CpoFunction sql that is used to create the actual
-   *                            JDBC PreparedStatement
-   *
+   * @param criteria The object that will be used to look up the cpo metadata
+   * @param function The CpoFunction that is being executed
+   * @param obj The pojo that is being acted upon
+   * @param wheres A collection of wheres to find the object
+   * @param orderBy A collection of orderbys to sort the objects
+   * @param nativeQueries Additional sql to be embedded into the CpoFunction sql that is used to
+   *     create the actual JDBC PreparedStatement
    * @throws org.synchronoss.cpo.CpoException if a CPO error occurs
    */
-  public <T> CassandraBoundStatementFactory(Session sess, CassandraCpoAdapter cassandraCpoAdapter, CpoClass criteria,
-                                            CpoFunction function, T obj, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy,
-                                            Collection<CpoNativeFunction> nativeQueries) throws CpoException {
+  public <T> CassandraBoundStatementFactory(
+      Session sess,
+      CassandraCpoAdapter cassandraCpoAdapter,
+      CpoClass criteria,
+      CpoFunction function,
+      T obj,
+      Collection<CpoWhere> wheres,
+      Collection<CpoOrderBy> orderBy,
+      Collection<CpoNativeFunction> nativeQueries)
+      throws CpoException {
     super(obj == null ? logger : LoggerFactory.getLogger(obj.getClass()));
     // get the list of bindValues from the function parameters
     List<BindAttribute> bindValues = getBindValues(function, obj);
 
-    String sql = buildSql(criteria, function.getExpression(), wheres, orderBy, nativeQueries, bindValues);
+    String sql =
+        buildSql(criteria, function.getExpression(), wheres, orderBy, nativeQueries, bindValues);
 
     getLocalLogger().debug("CpoFunction SQL = <" + sql + ">");
     try {
       setBoundStatement(sess.prepare(sql).bind());
       setBindValues(bindValues);
     } catch (Throwable t) {
-      getLocalLogger().error("Error Instantiating CassandraBoundStatementFactory SQL=<" + sql + ">" + ExceptionHelper.getLocalizedMessage(t));
+      getLocalLogger()
+          .error(
+              "Error Instantiating CassandraBoundStatementFactory SQL=<"
+                  + sql
+                  + ">"
+                  + ExceptionHelper.getLocalizedMessage(t));
       throw new CpoException(t);
     }
   }
 
   @Override
   protected MethodMapper getMethodMapper() {
-    return CassandraMethodMapper.getMethodMapper();  //To change body of implemented methods use File | Settings | File Templates.
+    return CassandraMethodMapper
+        .getMethodMapper(); // To change body of implemented methods use File | Settings | File
+    // Templates.
   }
 
   @Override
   protected CpoData getCpoData(CpoAttribute cpoAttribute, int index) {
-    return new CassandraBoundStatementCpoData(this, cpoAttribute, index);  //To change body of implemented methods use File | Settings | File Templates.
+    return new CassandraBoundStatementCpoData(
+        this,
+        cpoAttribute,
+        index); // To change body of implemented methods use File | Settings | File Templates.
   }
 
   @Override
@@ -109,20 +126,21 @@ public class CassandraBoundStatementFactory extends CpoStatementFactory implemen
     return 0;
   }
 
-    /**
-     * Gets the BoundStatent associated with this factory
-     * @return The BoundStatement
-     */
+  /**
+   * Gets the BoundStatent associated with this factory
+   *
+   * @return The BoundStatement
+   */
   public BoundStatement getBoundStatement() {
     return boundStatement;
   }
 
-    /**
-     * Sets the BoundStatent associated with this factory
-     * @param boundStatement  The BoundStatement
-     */
+  /**
+   * Sets the BoundStatent associated with this factory
+   *
+   * @param boundStatement The BoundStatement
+   */
   public void setBoundStatement(BoundStatement boundStatement) {
     this.boundStatement = boundStatement;
   }
-
 }

@@ -33,13 +33,16 @@ import org.synchronoss.cpo.meta.domain.CpoAttribute;
 
 /**
  * Exports the Cassandra metadata
+ *
  * @author dberry
  */
-public class CassandraMetaXmlObjectExporter extends CoreMetaXmlObjectExporter implements MetaXmlObjectExporter {
-    /**
-     * Constructs the CassandraMetaXmlObjectExporter
-     * @param metaDescriptor The descriptor to export
-     */
+public class CassandraMetaXmlObjectExporter extends CoreMetaXmlObjectExporter
+    implements MetaXmlObjectExporter {
+  /**
+   * Constructs the CassandraMetaXmlObjectExporter
+   *
+   * @param metaDescriptor The descriptor to export
+   */
   public CassandraMetaXmlObjectExporter(CpoMetaDescriptor metaDescriptor) {
     super(metaDescriptor);
   }
@@ -57,7 +60,8 @@ public class CassandraMetaXmlObjectExporter extends CoreMetaXmlObjectExporter im
 
     if (currentCtClass != null) {
 
-      // CtClass.addNewCpoAttribute() can't be used here because it returns a CtAttribute, not a CtJdbcAttribute
+      // CtClass.addNewCpoAttribute() can't be used here because it returns a CtAttribute, not a
+      // CtJdbcAttribute
       CtCassandraAttribute ctCassandraAttribute = CtCassandraAttribute.Factory.newInstance();
 
       ctCassandraAttribute.setJavaName(cassAttribute.getJavaName());
@@ -65,7 +69,8 @@ public class CassandraMetaXmlObjectExporter extends CoreMetaXmlObjectExporter im
       ctCassandraAttribute.setDataName(cassAttribute.getDataName());
       ctCassandraAttribute.setDataType(cassAttribute.getDataType());
 
-      if (cassAttribute.getTransformClassName() != null && cassAttribute.getTransformClassName().length() > 0) {
+      if (cassAttribute.getTransformClassName() != null
+          && cassAttribute.getTransformClassName().length() > 0) {
         ctCassandraAttribute.setTransformClass(cassAttribute.getTransformClassName());
       }
 
@@ -77,7 +82,7 @@ public class CassandraMetaXmlObjectExporter extends CoreMetaXmlObjectExporter im
         ctCassandraAttribute.setKeyType(cassAttribute.getKeyType());
       }
 
-      if (cassAttribute.getValueType() != null && !cassAttribute.getValueType().isEmpty()){
+      if (cassAttribute.getValueType() != null && !cassAttribute.getValueType().isEmpty()) {
         ctCassandraAttribute.setValueType(cassAttribute.getValueType());
       }
 
@@ -92,7 +97,8 @@ public class CassandraMetaXmlObjectExporter extends CoreMetaXmlObjectExporter im
 
     if (currentCtFunction != null) {
 
-      // CtFunction.addNewCpoArgument() can't be used here because it returns a CtArgument, not a ctCassandraArgument
+      // CtFunction.addNewCpoArgument() can't be used here because it returns a CtArgument, not a
+      // ctCassandraArgument
       CtCassandraArgument ctCassandraArgument = CtCassandraArgument.Factory.newInstance();
 
       ctCassandraArgument.setAttributeName(cpoArgument.getAttributeName());
@@ -105,5 +111,4 @@ public class CassandraMetaXmlObjectExporter extends CoreMetaXmlObjectExporter im
       ctArgument.set(ctCassandraArgument);
     }
   }
-
 }

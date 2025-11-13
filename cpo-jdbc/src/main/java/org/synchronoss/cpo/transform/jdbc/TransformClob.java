@@ -20,16 +20,15 @@
  */
 package org.synchronoss.cpo.transform.jdbc;
 
+import java.io.CharArrayWriter;
+import java.io.Reader;
+import java.sql.Clob;
+import javax.sql.rowset.serial.SerialClob;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.CpoException;
 import org.synchronoss.cpo.jdbc.JdbcCallableStatementFactory;
 import org.synchronoss.cpo.jdbc.JdbcPreparedStatementFactory;
-
-import javax.sql.rowset.serial.SerialClob;
-import java.io.CharArrayWriter;
-import java.io.Reader;
-import java.sql.Clob;
 
 /**
  * Converts a java.sql.Clob from a jdbc datasource to a byte[] and from a byte[] to a java.sql.clob
@@ -40,11 +39,8 @@ public class TransformClob implements JdbcCpoTransform<Clob, char[]> {
 
   private static final Logger logger = LoggerFactory.getLogger(TransformClob.class);
 
-    /**
-     * Construct a TransformClob
-     */
-  public TransformClob() {
-  }
+  /** Construct a TransformClob */
+  public TransformClob() {}
 
   /**
    * Transforms the datasource object into an object required by the class
@@ -81,13 +77,15 @@ public class TransformClob implements JdbcCpoTransform<Clob, char[]> {
   /**
    * Transforms the data from the class attribute to the object required by the datasource
    *
-   * @param jpsf The JdbcPreparedStatementFactory to have access to the actual connection and be able to work with closeable items
+   * @param jpsf The JdbcPreparedStatementFactory to have access to the actual connection and be
+   *     able to work with closeable items
    * @param attributeObject The object that represents the attribute being persisted.
    * @return The object to be stored in the datasource
    * @throws CpoException TransformClob
    */
   @Override
-  public Clob transformOut(JdbcPreparedStatementFactory jpsf, char[] attributeObject) throws CpoException {
+  public Clob transformOut(JdbcPreparedStatementFactory jpsf, char[] attributeObject)
+      throws CpoException {
     Clob newClob = null;
 
     try {
@@ -103,7 +101,8 @@ public class TransformClob implements JdbcCpoTransform<Clob, char[]> {
   }
 
   @Override
-  public Clob transformOut(JdbcCallableStatementFactory jpsf, char[] attributeObject) throws CpoException, UnsupportedOperationException {
+  public Clob transformOut(JdbcCallableStatementFactory jpsf, char[] attributeObject)
+      throws CpoException, UnsupportedOperationException {
     throw new UnsupportedOperationException("Not supported yet.");
   }
 

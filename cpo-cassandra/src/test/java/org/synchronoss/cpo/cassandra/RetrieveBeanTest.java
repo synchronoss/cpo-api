@@ -20,6 +20,10 @@
  */
 package org.synchronoss.cpo.cassandra;
 
+import static org.testng.Assert.*;
+
+import java.util.ArrayList;
+import java.util.Collection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.CpoAdapter;
@@ -28,11 +32,6 @@ import org.synchronoss.cpo.CpoResultSet;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
-
-import java.util.ArrayList;
-import java.util.Collection;
-
-import static org.testng.Assert.*;
 
 /**
  * RetrieveBeanTest is a test class for testing the JdbcAdapter class Constructors
@@ -46,7 +45,8 @@ public class RetrieveBeanTest {
   private ArrayList<ValueObject> al = new ArrayList<>();
 
   /**
-   * <code>setUp</code> Load the datasource from the properties in the property file jdbc_en_US.properties
+   * <code>setUp</code> Load the datasource from the properties in the property file
+   * jdbc_en_US.properties
    *
    * @author david berry
    * @version '$Id: RetrieveBeanTest.java,v 1.6 2006/01/30 19:09:23 dberry Exp $'
@@ -85,7 +85,6 @@ public class RetrieveBeanTest {
     String method = "testRetrieveBeans:";
     Collection<ValueObject> col;
 
-
     try {
       ValueObject valObj = ValueObjectFactory.createValueObject();
       col = cpoAdapter.retrieveBeans(null, valObj);
@@ -100,7 +99,6 @@ public class RetrieveBeanTest {
   public void testRetrieveBeans2() {
     String method = "testRetrieveBeans:";
     Collection<ValueObject> col;
-
 
     try {
       ValueObject valObj = ValueObjectFactory.createValueObject();
@@ -232,7 +230,7 @@ public class RetrieveBeanTest {
       rvo = cpoAdapter.retrieveBean(vo);
       assertNotNull(rvo, method + "Returned Value object is null");
       assertNotSame(vo, rvo, method + "ValueObjects are the same");
-      assertEquals(rvo.getAttrVarChar(), "Test",method + "Strings are not the same");
+      assertEquals(rvo.getAttrVarChar(), "Test", method + "Strings are not the same");
       if (rvo.getAttrVarChar().equals(vo.getAttrVarChar())) {
         fail(method + "ValueObjects are the same");
       }
@@ -250,7 +248,7 @@ public class RetrieveBeanTest {
 
     try {
       rvo = cpoAdapter.retrieveBean(vo);
-      assertNull(rvo,method + "Returned Value object is Not Null");
+      assertNull(rvo, method + "Returned Value object is Not Null");
     } catch (Exception e) {
       fail(method + e.getMessage());
     }

@@ -20,6 +20,10 @@
  */
 package org.synchronoss.cpo;
 
+import java.io.StringReader;
+import java.lang.reflect.InvocationTargetException;
+import java.util.*;
+import java.util.Map.Entry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.helper.ExceptionHelper;
@@ -30,28 +34,20 @@ import org.synchronoss.cpo.meta.domain.CpoAttribute;
 import org.synchronoss.cpo.meta.domain.CpoClass;
 import org.synchronoss.cpo.meta.domain.CpoFunction;
 
-import java.io.StringReader;
-import java.lang.reflect.InvocationTargetException;
-import java.util.*;
-import java.util.Map.Entry;
-
 /**
- * JdbcPreparedStatementFactory is the object that encapsulates the creation of the actual PreparedStatement for the
- * JDBC driver.
+ * JdbcPreparedStatementFactory is the object that encapsulates the creation of the actual
+ * PreparedStatement for the JDBC driver.
  *
  * @author david berry
  */
 public abstract class CpoStatementFactory implements CpoReleasible {
 
-  /**
-   * Version Id for this class.
-   */
+  /** Version Id for this class. */
   private static final long serialVersionUID = 1L;
 
-  /**
-   * DOCUMENT ME!
-   */
+  /** DOCUMENT ME! */
   private static final Logger logger = LoggerFactory.getLogger(CpoStatementFactory.class);
+
   private Logger localLogger = null;
 
   private List<CpoReleasible> releasibles = new ArrayList<>();
@@ -62,7 +58,7 @@ public abstract class CpoStatementFactory implements CpoReleasible {
     // hidden constructor
   }
 
-  public CpoStatementFactory(Logger localLogger){
+  public CpoStatementFactory(Logger localLogger) {
     this.localLogger = localLogger;
   }
 
@@ -77,12 +73,17 @@ public abstract class CpoStatementFactory implements CpoReleasible {
    * @param sql DOCUMENT ME!
    * @param wheres DOCUMENT ME!
    * @param orderBy DOCUMENT ME!
-   *
    * @return DOCUMENT ME!
-   *
    * @throws org.synchronoss.cpo.CpoException DOCUMENT ME!
    */
-  protected <T> String buildSql(CpoClass cpoClass, String sql, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy, Collection<CpoNativeFunction> nativeQueries, List<BindAttribute> bindValues) throws CpoException {
+  protected <T> String buildSql(
+      CpoClass cpoClass,
+      String sql,
+      Collection<CpoWhere> wheres,
+      Collection<CpoOrderBy> orderBy,
+      Collection<CpoNativeFunction> nativeQueries,
+      List<BindAttribute> bindValues)
+      throws CpoException {
     StringBuilder sqlText = new StringBuilder();
 
     sqlText.append(sql);
@@ -124,7 +125,12 @@ public abstract class CpoStatementFactory implements CpoReleasible {
           sb.append(ob.toString(cpoClass));
         }
       } catch (CpoException ce) {
-        throw new CpoException("Error Processing OrderBy Attribute<" + ExceptionHelper.getLocalizedMessage(ce) + "> not Found. JDBC Expression=<" + sqlText.toString() + ">");
+        throw new CpoException(
+            "Error Processing OrderBy Attribute<"
+                + ExceptionHelper.getLocalizedMessage(ce)
+                + "> not Found. JDBC Expression=<"
+                + sqlText.toString()
+                + ">");
       }
 
       Set<Entry<String, StringBuilder>> entries = mapOrderBy.entrySet();
@@ -164,19 +170,23 @@ public abstract class CpoStatementFactory implements CpoReleasible {
     String replaceText = replace == null ? "" : replace;
     int rLength = replaceText.length();
 
-    //OUT.debug("starting string <"+source.toString()+">");
+    // OUT.debug("starting string <"+source.toString()+">");
     if (source != null && source.length() > 0) {
       while ((attrOffset = source.indexOf(marker, fromIndex)) != -1) {
         source.replace(attrOffset, attrOffset + mLength, replaceText);
         fromIndex = attrOffset + rLength;
       }
     }
-    //OUT.debug("ending string <"+source.toString()+">");
+    // OUT.debug("ending string <"+source.toString()+">");
 
     return source;
   }
 
-  private <T> StringBuilder replaceMarker(StringBuilder source, String marker, BindableWhereBuilder<T> jwb, List<BindAttribute> bindValues) {
+  private <T> StringBuilder replaceMarker(
+      StringBuilder source,
+      String marker,
+      BindableWhereBuilder<T> jwb,
+      List<BindAttribute> bindValues) {
     int attrOffset;
     int fromIndex = 0;
     int mLength = marker.length();
@@ -184,7 +194,7 @@ public abstract class CpoStatementFactory implements CpoReleasible {
     int rLength = replace.length();
     Collection<BindAttribute> jwbBindValues = jwb.getBindValues();
 
-    //OUT.debug("starting string <"+source.toString()+">");
+    // OUT.debug("starting string <"+source.toString()+">");
     if (source != null && source.length() > 0) {
       while ((attrOffset = source.indexOf(marker, fromIndex)) != -1) {
         source.replace(attrOffset, attrOffset + mLength, replace);
@@ -192,7 +202,7 @@ public abstract class CpoStatementFactory implements CpoReleasible {
         bindValues.addAll(countBindMarkers(source.substring(0, attrOffset)), jwbBindValues);
       }
     }
-    //OUT.debug("ending string <"+source.toString()+">");
+    // OUT.debug("ending string <"+source.toString()+">");
 
     return source;
   }
@@ -226,10 +236,9 @@ public abstract class CpoStatementFactory implements CpoReleasible {
     return qMarks;
   }
 
-   /**
-   * Adds a releasible object to this object. The release method on the releasible will be called when the
-   * PreparedStatement is executed.
-   *
+  /**
+   * Adds a releasible object to this object. The release method on the releasible will be called
+   * when the PreparedStatement is executed.
    */
   public void AddReleasible(CpoReleasible releasible) {
     if (releasible != null) {
@@ -238,8 +247,8 @@ public abstract class CpoStatementFactory implements CpoReleasible {
   }
 
   /**
-   * Called by the CPO framework. This method calls the
-   * <code>release</code> on all the CpoReleasible associated with this object
+   * Called by the CPO framework. This method calls the <code>release</code> on all the
+   * CpoReleasible associated with this object
    */
   @Override
   public void release() throws CpoException {
@@ -254,9 +263,8 @@ public abstract class CpoStatementFactory implements CpoReleasible {
   }
 
   /**
-   * Called by the CPO Framework. Binds all the attibutes from the class for the CPO meta parameters and the parameters
-   * from the dynamic where.
-   *
+   * Called by the CPO Framework. Binds all the attibutes from the class for the CPO meta parameters
+   * and the parameters from the dynamic where.
    */
   public List<BindAttribute> getBindValues(CpoFunction function, Object obj) throws CpoException {
     List<BindAttribute> bindValues = new ArrayList<>();
@@ -271,16 +279,15 @@ public abstract class CpoStatementFactory implements CpoReleasible {
   }
 
   /**
-   * Called by the CPO Framework. Binds all the attibutes from the class for the CPO meta parameters and the parameters
-   * from the dynamic where.
-   *
+   * Called by the CPO Framework. Binds all the attibutes from the class for the CPO meta parameters
+   * and the parameters from the dynamic where.
    */
   public void setBindValues(Collection<BindAttribute> bindValues) throws CpoException {
 
     if (bindValues != null) {
       int index = getStartingIndex();
 
-      //runs through the bind attributes and binds them to the prepared statement
+      // runs through the bind attributes and binds them to the prepared statement
       // They must be in correct order.
       for (BindAttribute bindAttr : bindValues) {
         Object bindObject = bindAttr.getBindObject();
@@ -288,7 +295,8 @@ public abstract class CpoStatementFactory implements CpoReleasible {
 
         // check to see if we are getting a cpo value object or an object that
         // can be put directly in the statement (String, BigDecimal, etc)
-        MethodMapEntry<?, ?> jsm = ((MethodMapper<?>)getMethodMapper()).getDataMethodMapEntry(bindObject.getClass());
+        MethodMapEntry<?, ?> jsm =
+            ((MethodMapper<?>) getMethodMapper()).getDataMethodMapEntry(bindObject.getClass());
 
         if (jsm != null) {
           try {
@@ -299,10 +307,14 @@ public abstract class CpoStatementFactory implements CpoReleasible {
             }
             jsm.getBsSetter().invoke(this.getBindableStatement(), index++, bindObject);
           } catch (IllegalAccessException iae) {
-            localLogger.error("Error Accessing Prepared Statement Setter: " + ExceptionHelper.getLocalizedMessage(iae));
+            localLogger.error(
+                "Error Accessing Prepared Statement Setter: "
+                    + ExceptionHelper.getLocalizedMessage(iae));
             throw new CpoException(iae);
           } catch (InvocationTargetException ite) {
-            localLogger.error("Error Invoking Prepared Statement Setter: " + ExceptionHelper.getLocalizedMessage(ite));
+            localLogger.error(
+                "Error Invoking Prepared Statement Setter: "
+                    + ExceptionHelper.getLocalizedMessage(ite));
             throw new CpoException(ite.getCause());
           }
         } else {

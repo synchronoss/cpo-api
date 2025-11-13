@@ -20,32 +20,24 @@
  */
 package org.synchronoss.cpo.jdbc;
 
+import java.io.Serial;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.HashMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.CpoException;
 import org.synchronoss.cpo.CpoTrxAdapter;
 
-import java.io.Serial;
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.util.HashMap;
-
-/**
- * A transaction adapter that allows the user to control the commits and role backs
- */
+/** A transaction adapter that allows the user to control the commits and role backs */
 public class JdbcCpoTrxAdapter extends JdbcCpoAdapter implements CpoTrxAdapter {
 
-  /**
-   * Version Id for this class.
-   */
-  @Serial
-  private static final long serialVersionUID = 1L;
+  /** Version Id for this class. */
+  @Serial private static final long serialVersionUID = 1L;
 
   private static final Logger logger = LoggerFactory.getLogger(JdbcCpoTrxAdapter.class);
 
-  /**
-   * DOCUMENT ME!
-   */
+  /** DOCUMENT ME! */
   // Default Connection. Only used JdbcCpoTrxAdapter
   private Connection writeConnection_ = null;
 
@@ -53,15 +45,14 @@ public class JdbcCpoTrxAdapter extends JdbcCpoAdapter implements CpoTrxAdapter {
   private static final HashMap<Connection, Connection> busyMap_ = new HashMap<>();
 
   @SuppressWarnings("unused")
-  private JdbcCpoTrxAdapter() {
-  }
+  private JdbcCpoTrxAdapter() {}
 
-    /**
-     * Creates a JdbcCpoTrxAdapter from a jdbcCpoAdapter
-     *
-     * @param jdbcCpoAdapter The cpoAdapter to use behind the scenes
-     * @throws CpoException Any errors that might occur
-     */
+  /**
+   * Creates a JdbcCpoTrxAdapter from a jdbcCpoAdapter
+   *
+   * @param jdbcCpoAdapter The cpoAdapter to use behind the scenes
+   * @throws CpoException Any errors that might occur
+   */
   protected JdbcCpoTrxAdapter(JdbcCpoAdapter jdbcCpoAdapter) throws CpoException {
     super(jdbcCpoAdapter);
   }
@@ -108,9 +99,7 @@ public class JdbcCpoTrxAdapter extends JdbcCpoAdapter implements CpoTrxAdapter {
     return closed;
   }
 
-  /**
-   * Returns true if the TrxAdapter is processing a request, false if it is not
-   */
+  /** Returns true if the TrxAdapter is processing a request, false if it is not */
   @Override
   public boolean isBusy() throws CpoException {
     return isConnectionBusy(writeConnection_);
@@ -120,30 +109,30 @@ public class JdbcCpoTrxAdapter extends JdbcCpoAdapter implements CpoTrxAdapter {
   public void close() throws CpoException {
     Connection conn = getStaticConnection();
 
-      try {
-        if (conn != null && !conn.isClosed()) {
-          try {
-            conn.rollback();
-          } catch (Exception e) {
-            if (logger.isTraceEnabled()) {
-              logger.trace(e.getLocalizedMessage());
-            }
-          }
-          try {
-            conn.close();
-          } catch (Exception e) {
-            if (logger.isTraceEnabled()) {
-              logger.trace(e.getLocalizedMessage());
-            }
+    try {
+      if (conn != null && !conn.isClosed()) {
+        try {
+          conn.rollback();
+        } catch (Exception e) {
+          if (logger.isTraceEnabled()) {
+            logger.trace(e.getLocalizedMessage());
           }
         }
-      } catch (Exception e) {
-        if (logger.isTraceEnabled()) {
-          logger.trace(e.getLocalizedMessage());
+        try {
+          conn.close();
+        } catch (Exception e) {
+          if (logger.isTraceEnabled()) {
+            logger.trace(e.getLocalizedMessage());
+          }
         }
-      } finally {
-        setStaticConnection(null);
       }
+    } catch (Exception e) {
+      if (logger.isTraceEnabled()) {
+        logger.trace(e.getLocalizedMessage());
+      }
+    } finally {
+      setStaticConnection(null);
+    }
   }
 
   @Override
@@ -156,7 +145,7 @@ public class JdbcCpoTrxAdapter extends JdbcCpoAdapter implements CpoTrxAdapter {
       }
     }
     try {
-        this.close();
+      this.close();
     } catch (Exception e) {
       if (logger.isTraceEnabled()) {
         logger.trace(e.getLocalizedMessage());
@@ -164,53 +153,54 @@ public class JdbcCpoTrxAdapter extends JdbcCpoAdapter implements CpoTrxAdapter {
     }
   }
 
-    /**
-     * Is the connection busy
-     *
-     * @param c The connection to check
-     * @return true if the connection is busy
-     */
+  /**
+   * Is the connection busy
+   *
+   * @param c The connection to check
+   * @return true if the connection is busy
+   */
   protected boolean isConnectionBusy(Connection c) {
     synchronized (busyMap_) {
-      return c!=null && busyMap_.containsKey(c);
+      return c != null && busyMap_.containsKey(c);
     }
   }
 
-    /**
-     * Mark the connection busy
-     *
-     * @param c The connection to mark
-     */
+  /**
+   * Mark the connection busy
+   *
+   * @param c The connection to mark
+   */
   protected void setConnectionBusy(Connection c) {
     synchronized (busyMap_) {
       busyMap_.put(c, c);
     }
   }
 
-    /**
-     * Mark the connection as not busy
-     *
-     * @param c The connection to mark
-     */
+  /**
+   * Mark the connection as not busy
+   *
+   * @param c The connection to mark
+   */
   protected void clearConnectionBusy(Connection c) {
     synchronized (busyMap_) {
       busyMap_.remove(c);
     }
   }
 
-    /**
-     * Get a static connection
-     *
-     * @return The static connection
-     * @throws CpoException - an error occurred
-     */
+  /**
+   * Get a static connection
+   *
+   * @return The static connection
+   * @throws CpoException - an error occurred
+   */
   protected Connection getStaticConnection() throws CpoException {
     if (writeConnection_ != null) {
       if (isConnectionBusy(writeConnection_)) {
         throw new CpoException("Error Connection Busy");
       }
     } else {
-      // enable lazy loading and automatic connection creating for re-using and adapter after closing it
+      // enable lazy loading and automatic connection creating for re-using and adapter after
+      // closing it
       writeConnection_ = super.getWriteConnection();
     }
     return writeConnection_;
@@ -238,11 +228,9 @@ public class JdbcCpoTrxAdapter extends JdbcCpoAdapter implements CpoTrxAdapter {
     return connection;
   }
 
-
   /**
-   *
-   * Closes a local connection. A CpoTrxAdapter allows the user to manage the transaction so <code>closeLocalConnection</code>
-   * does nothing
+   * Closes a local connection. A CpoTrxAdapter allows the user to manage the transaction so <code>
+   * closeLocalConnection</code> does nothing
    *
    * @param connection The connection to be closed
    */
@@ -252,26 +240,20 @@ public class JdbcCpoTrxAdapter extends JdbcCpoAdapter implements CpoTrxAdapter {
   }
 
   /**
-   *
-   * Commits a local connection. A CpoTrxAdapter allows the user to manage the transaction so <code>commitLocalConnection</code>
-   * does nothing
+   * Commits a local connection. A CpoTrxAdapter allows the user to manage the transaction so <code>
+   * commitLocalConnection</code> does nothing
    *
    * @param connection The connection to be committed
    */
   @Override
-  protected void commitLocalConnection(Connection connection) {
-  }
+  protected void commitLocalConnection(Connection connection) {}
 
   /**
-   *
-   * Rollbacks a local connection. A CpoTrxAdapter allows the user to manage the transaction so <code>rollbackLocalConnection</code>
-   * does nothing
+   * Rollbacks a local connection. A CpoTrxAdapter allows the user to manage the transaction so
+   * <code>rollbackLocalConnection</code> does nothing
    *
    * @param connection The connection to be rolled back
    */
   @Override
-  protected void rollbackLocalConnection(Connection connection) {
-  }
-
-
+  protected void rollbackLocalConnection(Connection connection) {}
 }

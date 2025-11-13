@@ -20,20 +20,18 @@
  */
 package org.synchronoss.cpo.jta;
 
-import javax.transaction.xa.XAException;
-import javax.transaction.xa.Xid;
 import java.util.ArrayList;
 import java.util.HashMap;
+import javax.transaction.xa.XAException;
+import javax.transaction.xa.Xid;
 
-/**
- * Created by dberry on 3/9/15.
- */
+/** Created by dberry on 3/9/15. */
 public abstract class CpoBaseXaResource<T> implements CpoXaResource<T> {
 
   // Mutex used for assigning the statemap for the class
   private static final String XA_STATEMAP_MUTEX = "XA_STATEMAP_MUTEX";
 
-  private static final HashMap<String,CpoXaStateMap<?>> cpoXaStateMapMap = new HashMap<>();
+  private static final HashMap<String, CpoXaStateMap<?>> cpoXaStateMapMap = new HashMap<>();
 
   private T localResource = null;
 
@@ -45,17 +43,22 @@ public abstract class CpoBaseXaResource<T> implements CpoXaResource<T> {
 
   // Methods to be implemented by actual implementation
   protected abstract boolean isLocalResourceBusy() throws XAException;
-  protected abstract  void prepareResource(T xaResource) throws XAException;
-  protected abstract  void commitResource(T xaResource) throws XAException;
-  protected abstract  void rollbackResource(T xaResource) throws XAException;
-  protected abstract  T createNewResource() throws XAException;
-  protected abstract  void closeResource(T xaResource) throws XAException;
+
+  protected abstract void prepareResource(T xaResource) throws XAException;
+
+  protected abstract void commitResource(T xaResource) throws XAException;
+
+  protected abstract void rollbackResource(T xaResource) throws XAException;
+
+  protected abstract T createNewResource() throws XAException;
+
+  protected abstract void closeResource(T xaResource) throws XAException;
 
   protected T getCurrentResource() {
     synchronized (cpoXaStateMap) {
       T currentResource = null;
       Xid associatedXid = cpoXaStateMap.getXaResourceMap().get(this);
-      if ( associatedXid != null) {
+      if (associatedXid != null) {
         CpoXaState<T> cpoXaState = cpoXaStateMap.getXidStateMap().get(associatedXid);
         currentResource = cpoXaState.getResource();
       }
@@ -77,7 +80,7 @@ public abstract class CpoBaseXaResource<T> implements CpoXaResource<T> {
    */
   public void closeAssociated() throws XAException {
     Xid associatedXid = cpoXaStateMap.getXaResourceMap().get(this);
-    if ( associatedXid != null) {
+    if (associatedXid != null) {
       close(associatedXid);
     }
   }
@@ -109,13 +112,14 @@ public abstract class CpoBaseXaResource<T> implements CpoXaResource<T> {
   /**
    * Commits the global transaction specified by xid.
    *
-   * @param xid      A global transaction identifier
-   * @param onePhase If true, the resource manager should use a one-phase commit protocol to commit the work done on behalf of xid.
-   * @throws XAException An error has occurred. Possible XAExceptions are XA_HEURHAZ, XA_HEURCOM, XA_HEURRB, XA_HEURMIX, XAER_RMERR,
-   *                     XAER_RMFAIL, XAER_NOTA, XAER_INVAL, or XAER_PROTO.
-   *                     <p>
-   *                     If the resource manager did not commit the transaction and the parameter onePhase is set to true, the resource manager may throw
-   *                     one of the XA_RB* exceptions. Upon return, the resource manager has rolled back the branch's work and has released all held resources.
+   * @param xid A global transaction identifier
+   * @param onePhase If true, the resource manager should use a one-phase commit protocol to commit
+   *     the work done on behalf of xid.
+   * @throws XAException An error has occurred. Possible XAExceptions are XA_HEURHAZ, XA_HEURCOM,
+   *     XA_HEURRB, XA_HEURMIX, XAER_RMERR, XAER_RMFAIL, XAER_NOTA, XAER_INVAL, or XAER_PROTO.
+   *     <p>If the resource manager did not commit the transaction and the parameter onePhase is set
+   *     to true, the resource manager may throw one of the XA_RB* exceptions. Upon return, the
+   *     resource manager has rolled back the branch's work and has released all held resources.
    */
   @Override
   public void commit(Xid xid, boolean onePhase) throws XAException {
@@ -125,70 +129,78 @@ public abstract class CpoBaseXaResource<T> implements CpoXaResource<T> {
       if (cpoXaState == null)
         throw CpoXaError.createXAException(CpoXaError.XAER_NOTA, "Unknown XID");
 
-      if (cpoXaState.getAssociation()==CpoXaState.XA_UNASSOCIATED) {
+      if (cpoXaState.getAssociation() == CpoXaState.XA_UNASSOCIATED) {
         if (onePhase) {
           if (!cpoXaState.isSuccess()) {
             rollbackResource(cpoXaState.getResource());
             cpoXaState.setSuccess(true);
-            throw CpoXaError.createXAException(CpoXaError.XA_RBROLLBACK, "Trying to commit an unsuccessful transaction. Transaction Rolled Back");
+            throw CpoXaError.createXAException(
+                CpoXaError.XA_RBROLLBACK,
+                "Trying to commit an unsuccessful transaction. Transaction Rolled Back");
           }
           prepareResource(cpoXaState.getResource());
         }
         commitResource(cpoXaState.getResource());
         cpoXaState.setPrepared(false);
       } else {
-        throw CpoXaError.createXAException(CpoXaError.XAER_PROTO, "Commit can only be called on an unassociated XID");
+        throw CpoXaError.createXAException(
+            CpoXaError.XAER_PROTO, "Commit can only be called on an unassociated XID");
       }
     }
   }
 
   /**
-   * Ends the work performed on behalf of a transaction branch. The resource manager disassociates the XA resource from the transaction branch
-   * specified and lets the transaction complete.
-   * <p>
-   * If TMSUSPEND is specified in the flags, the transaction branch is temporarily suspended in an incomplete state. The transaction context is
-   * in a suspended state and must be resumed via the start method with TMRESUME specified.
-   * <p>
-   * If TMFAIL is specified, the portion of work has failed. The resource manager may mark the transaction as rollback-only
-   * <p>
-   * If TMSUCCESS is specified, the portion of work has completed successfully.
+   * Ends the work performed on behalf of a transaction branch. The resource manager disassociates
+   * the XA resource from the transaction branch specified and lets the transaction complete.
    *
-   * @param xid   A global transaction identifier that is the same as the identifier used previously in the start method.
+   * <p>If TMSUSPEND is specified in the flags, the transaction branch is temporarily suspended in
+   * an incomplete state. The transaction context is in a suspended state and must be resumed via
+   * the start method with TMRESUME specified.
+   *
+   * <p>If TMFAIL is specified, the portion of work has failed. The resource manager may mark the
+   * transaction as rollback-only
+   *
+   * <p>If TMSUCCESS is specified, the portion of work has completed successfully.
+   *
+   * @param xid A global transaction identifier that is the same as the identifier used previously
+   *     in the start method.
    * @param flags One of TMSUCCESS, TMFAIL, or TMSUSPEND.
-   * @throws XAException An error has occurred. Possible XAException values are XAER_RMERR, XAER_RMFAIL, XAER_NOTA, XAER_INVAL, XAER_PROTO, or XA_RB*.
+   * @throws XAException An error has occurred. Possible XAException values are XAER_RMERR,
+   *     XAER_RMFAIL, XAER_NOTA, XAER_INVAL, XAER_PROTO, or XA_RB*.
    */
   @Override
   public void end(Xid xid, int flags) throws XAException {
-    synchronized(cpoXaStateMap) {
+    synchronized (cpoXaStateMap) {
       CpoXaState<T> cpoXaState = cpoXaStateMap.getXidStateMap().get(xid);
 
       if (cpoXaState == null)
         throw CpoXaError.createXAException(CpoXaError.XAER_NOTA, "Unknown XID");
 
       // has this already been ended
-      if (cpoXaState.getAssociation()==CpoXaState.XA_UNASSOCIATED)
+      if (cpoXaState.getAssociation() == CpoXaState.XA_UNASSOCIATED)
         throw CpoXaError.createXAException(CpoXaError.XAER_PROTO, "Cannot End an Unassociated XID");
 
-      switch(flags) {
+      switch (flags) {
         case TMSUSPEND:
           // You can only suspend an associated transaction
-          if (cpoXaState.getAssociation()==CpoXaState.XA_ASSOCIATED) {
+          if (cpoXaState.getAssociation() == CpoXaState.XA_ASSOCIATED) {
             cpoXaStateMap.getXaResourceMap().remove(cpoXaState.getAssignedResourceManager());
             cpoXaState.setAssociation(CpoXaState.XA_SUSPENDED);
             cpoXaState.setAssignedResourceManager(null);
           } else {
-            throw CpoXaError.createXAException(CpoXaError.XAER_PROTO, "You can only suspend an associated XID");
+            throw CpoXaError.createXAException(
+                CpoXaError.XAER_PROTO, "You can only suspend an associated XID");
           }
           break;
 
-          //you can fail or succeed an associated or suspended trx
+        // you can fail or succeed an associated or suspended trx
         case TMFAIL:
           // mark transaction as failed
           cpoXaStateMap.getXaResourceMap().remove(cpoXaState.getAssignedResourceManager());
           cpoXaState.setAssociation(CpoXaState.XA_UNASSOCIATED);
           cpoXaState.setAssignedResourceManager(null);
           cpoXaState.setSuccess(!cpoXaState.isSuccess());
-         break;
+          break;
 
         case TMSUCCESS:
           // mark transaction as success
@@ -201,7 +213,6 @@ public abstract class CpoBaseXaResource<T> implements CpoXaResource<T> {
         default:
           throw CpoXaError.createXAException(CpoXaError.XAER_INVAL, "Invalid flag for end()");
       }
-
     }
   }
 
@@ -209,7 +220,8 @@ public abstract class CpoBaseXaResource<T> implements CpoXaResource<T> {
    * Tells the resource manager to forget about a heuristically completed transaction branch.
    *
    * @param xid A global transaction identifier.
-   * @throws XAException An error has occurred. Possible exception values are XAER_RMERR, XAER_RMFAIL, XAER_NOTA, XAER_INVAL, or XAER_PROTO.
+   * @throws XAException An error has occurred. Possible exception values are XAER_RMERR,
+   *     XAER_RMFAIL, XAER_NOTA, XAER_INVAL, or XAER_PROTO.
    */
   @Override
   public void forget(Xid xid) throws XAException {
@@ -217,12 +229,14 @@ public abstract class CpoBaseXaResource<T> implements CpoXaResource<T> {
   }
 
   /**
-   * Obtains the current transaction timeout value set for this XAResource instance. If XAResource.setTransactionTimeout was not used prior to
-   * invoking this method, the return value is the default timeout set for the resource manager; otherwise, the value used in the previous
+   * Obtains the current transaction timeout value set for this XAResource instance. If
+   * XAResource.setTransactionTimeout was not used prior to invoking this method, the return value
+   * is the default timeout set for the resource manager; otherwise, the value used in the previous
    * setTransactionTimeout call is returned.
    *
    * @return the transaction timeout value in seconds.
-   * @throws XAException An error has occurred. Possible exception values are XAER_RMERR and XAER_RMFAIL.
+   * @throws XAException An error has occurred. Possible exception values are XAER_RMERR and
+   *     XAER_RMFAIL.
    */
   @Override
   public int getTransactionTimeout() throws XAException {
@@ -230,12 +244,15 @@ public abstract class CpoBaseXaResource<T> implements CpoXaResource<T> {
   }
 
   /**
-   * Ask the resource manager to prepare for a transaction commit of the transaction specified in xid.
+   * Ask the resource manager to prepare for a transaction commit of the transaction specified in
+   * xid.
    *
    * @param xid A global transaction identifier.
-   * @return - A value indicating the resource manager's vote on the outcome of the transaction. The possible values are: XA_RDONLY or XA_OK.
-   * If the resource manager wants to roll back the transaction, it should do so by raising an appropriate XAException in the prepare method.
-   * @throws XAException - An error has occurred. Possible exception values are: XA_RB*, XAER_RMERR, XAER_RMFAIL, XAER_NOTA, XAER_INVAL, or XAER_PROTO.
+   * @return - A value indicating the resource manager's vote on the outcome of the transaction. The
+   *     possible values are: XA_RDONLY or XA_OK. If the resource manager wants to roll back the
+   *     transaction, it should do so by raising an appropriate XAException in the prepare method.
+   * @throws XAException - An error has occurred. Possible exception values are: XA_RB*, XAER_RMERR,
+   *     XAER_RMFAIL, XAER_NOTA, XAER_INVAL, or XAER_PROTO.
    */
   @Override
   public int prepare(Xid xid) throws XAException {
@@ -249,14 +266,17 @@ public abstract class CpoBaseXaResource<T> implements CpoXaResource<T> {
         rollbackResource(cpoXaState.getResource());
         cpoXaState.setPrepared(false);
         cpoXaState.setSuccess(true);
-        throw CpoXaError.createXAException(CpoXaError.XA_RBROLLBACK, "Trying to prepare an unsuccessfull transaction. Rollback performed");
+        throw CpoXaError.createXAException(
+            CpoXaError.XA_RBROLLBACK,
+            "Trying to prepare an unsuccessfull transaction. Rollback performed");
       }
 
-      if (cpoXaState.getAssociation()==CpoXaState.XA_UNASSOCIATED){
+      if (cpoXaState.getAssociation() == CpoXaState.XA_UNASSOCIATED) {
         prepareResource(cpoXaState.getResource());
         cpoXaState.setPrepared(true);
       } else {
-          throw CpoXaError.createXAException(CpoXaError.XAER_PROTO, "Prepare can only be called on an associated XID");
+        throw CpoXaError.createXAException(
+            CpoXaError.XAER_PROTO, "Prepare can only be called on an associated XID");
       }
 
       return XA_OK;
@@ -264,13 +284,17 @@ public abstract class CpoBaseXaResource<T> implements CpoXaResource<T> {
   }
 
   /**
-   * Obtains a list of prepared transaction branches from a resource manager. The transaction manager calls this method during recovery to obtain the
-   * list of transaction branches that are currently in prepared or heuristically completed states.
+   * Obtains a list of prepared transaction branches from a resource manager. The transaction
+   * manager calls this method during recovery to obtain the list of transaction branches that are
+   * currently in prepared or heuristically completed states.
    *
-   * @param flags - One of TMSTARTRSCAN, TMENDRSCAN, TMNOFLAGS. TMNOFLAGS must be used when no other flags are set in the parameter.
-   * @return - The resource manager returns zero or more XIDs of the transaction branches that are currently in a prepared or heuristically completed state.
-   * If an error occurs during the operation, the resource manager should throw the appropriate XAException.
-   * @throws XAException - An error has occurred. Possible values are XAER_RMERR, XAER_RMFAIL, XAER_INVAL, and XAER_PROTO.
+   * @param flags - One of TMSTARTRSCAN, TMENDRSCAN, TMNOFLAGS. TMNOFLAGS must be used when no other
+   *     flags are set in the parameter.
+   * @return - The resource manager returns zero or more XIDs of the transaction branches that are
+   *     currently in a prepared or heuristically completed state. If an error occurs during the
+   *     operation, the resource manager should throw the appropriate XAException.
+   * @throws XAException - An error has occurred. Possible values are XAER_RMERR, XAER_RMFAIL,
+   *     XAER_INVAL, and XAER_PROTO.
    */
   @Override
   public Xid[] recover(int flags) throws XAException {
@@ -283,8 +307,7 @@ public abstract class CpoBaseXaResource<T> implements CpoXaResource<T> {
           ArrayList<Xid> xids = new ArrayList<>();
 
           for (CpoXaState<T> cpoXaState : cpoXaStateMap.getXidStateMap().values()) {
-            if (cpoXaState.isPrepared())
-              xids.add(cpoXaState.getXid());
+            if (cpoXaState.isPrepared()) xids.add(cpoXaState.getXid());
           }
           return xids.toArray(new Xid[0]);
         default:
@@ -297,11 +320,11 @@ public abstract class CpoBaseXaResource<T> implements CpoXaResource<T> {
    * Informs the resource manager to roll back work done on behalf of a transaction branch.
    *
    * @param xid - A global transaction identifier.
-   * @throws XAException - An error has occurred. Possible XAExceptions are XA_HEURHAZ, XA_HEURCOM, XA_HEURRB, XA_HEURMIX, XAER_RMERR, XAER_RMFAIL, XAER_NOTA,
-   *                     XAER_INVAL, or XAER_PROTO.
-   *                     <p>
-   *                     If the transaction branch is already marked rollback-only the resource manager may throw one of the XA_RB* exceptions. Upon return, the resource manager
-   *                     has rolled back the branch's work and has released all held resources.
+   * @throws XAException - An error has occurred. Possible XAExceptions are XA_HEURHAZ, XA_HEURCOM,
+   *     XA_HEURRB, XA_HEURMIX, XAER_RMERR, XAER_RMFAIL, XAER_NOTA, XAER_INVAL, or XAER_PROTO.
+   *     <p>If the transaction branch is already marked rollback-only the resource manager may throw
+   *     one of the XA_RB* exceptions. Upon return, the resource manager has rolled back the
+   *     branch's work and has released all held resources.
    */
   @Override
   public void rollback(Xid xid) throws XAException {
@@ -311,25 +334,29 @@ public abstract class CpoBaseXaResource<T> implements CpoXaResource<T> {
       if (cpoXaState == null)
         throw CpoXaError.createXAException(CpoXaError.XAER_NOTA, "Unknown XID");
 
-      if (cpoXaState.getAssociation()==CpoXaState.XA_UNASSOCIATED) {
+      if (cpoXaState.getAssociation() == CpoXaState.XA_UNASSOCIATED) {
         rollbackResource(cpoXaState.getResource());
         cpoXaState.setPrepared(false);
         cpoXaState.setSuccess(true);
       } else {
-        throw CpoXaError.createXAException(CpoXaError.XAER_PROTO, "Rollback can only be called on an unassociated XID");
+        throw CpoXaError.createXAException(
+            CpoXaError.XAER_PROTO, "Rollback can only be called on an unassociated XID");
       }
     }
   }
 
   /**
-   * Sets the current transaction timeout value for this XAResource instance. Once set, this timeout value is effective until setTransactionTimeout is invoked
-   * again with a different value. To reset the timeout value to the default value used by the resource manager, set the value to zero. If the timeout operation
-   * is performed successfully, the method returns true; otherwise false. If a resource manager does not support explicitly setting the transaction timeout value,
+   * Sets the current transaction timeout value for this XAResource instance. Once set, this timeout
+   * value is effective until setTransactionTimeout is invoked again with a different value. To
+   * reset the timeout value to the default value used by the resource manager, set the value to
+   * zero. If the timeout operation is performed successfully, the method returns true; otherwise
+   * false. If a resource manager does not support explicitly setting the transaction timeout value,
    * this method returns false.
    *
    * @param seconds - The transaction timeout value in seconds.
    * @return - true if the transaction timeout value is set successfully; otherwise false.
-   * @throws XAException - An error has occurred. Possible exception values are XAER_RMERR, XAER_RMFAIL, or XAER_INVAL.
+   * @throws XAException - An error has occurred. Possible exception values are XAER_RMERR,
+   *     XAER_RMFAIL, or XAER_INVAL.
    */
   @Override
   public boolean setTransactionTimeout(int seconds) throws XAException {
@@ -337,14 +364,17 @@ public abstract class CpoBaseXaResource<T> implements CpoXaResource<T> {
   }
 
   /**
-   * Starts work on behalf of a transaction branch specified in xid. If TMJOIN is specified, the start applies to joining a transaction previously seen by the
-   * resource manager. If TMRESUME is specified, the start applies to resuming a suspended transaction specified in the parameter xid. If neither TMJOIN nor TMRESUME
-   * is specified and the transaction specified by xid has previously been seen by the resource manager, the resource manager throws the XAException exception with
-   * XAER_DUPID error code.
+   * Starts work on behalf of a transaction branch specified in xid. If TMJOIN is specified, the
+   * start applies to joining a transaction previously seen by the resource manager. If TMRESUME is
+   * specified, the start applies to resuming a suspended transaction specified in the parameter
+   * xid. If neither TMJOIN nor TMRESUME is specified and the transaction specified by xid has
+   * previously been seen by the resource manager, the resource manager throws the XAException
+   * exception with XAER_DUPID error code.
    *
-   * @param xid   - A global transaction identifier to be associated with the resource.
+   * @param xid - A global transaction identifier to be associated with the resource.
    * @param flags - One of TMNOFLAGS, TMJOIN, or TMRESUME.
-   * @throws XAException - An error has occurred. Possible exceptions are XA_RB*, XAER_RMERR, XAER_RMFAIL, XAER_DUPID, XAER_OUTSIDE, XAER_NOTA, XAER_INVAL, or XAER_PROTO.
+   * @throws XAException - An error has occurred. Possible exceptions are XA_RB*, XAER_RMERR,
+   *     XAER_RMFAIL, XAER_DUPID, XAER_OUTSIDE, XAER_NOTA, XAER_INVAL, or XAER_PROTO.
    */
   @Override
   public void start(Xid xid, int flags) throws XAException {
@@ -352,7 +382,8 @@ public abstract class CpoBaseXaResource<T> implements CpoXaResource<T> {
     synchronized (cpoXaStateMap) {
       // see if we are already associated with a global transaction
       if (cpoXaStateMap.getXaResourceMap().get(this) != null)
-        throw CpoXaError.createXAException(CpoXaError.XAER_PROTO, "Start can not be called on an associated XID");
+        throw CpoXaError.createXAException(
+            CpoXaError.XAER_PROTO, "Start can not be called on an associated XID");
 
       // see if we are not in the middle of doing something on the local transaction
       if (isLocalResourceBusy())
@@ -366,7 +397,8 @@ public abstract class CpoBaseXaResource<T> implements CpoXaResource<T> {
           if (cpoXaState != null)
             throw CpoXaError.createXAException(CpoXaError.XAER_DUPID, "Duplicate XID");
 
-          cpoXaState = new CpoXaState<>(xid, createNewResource(), CpoXaState.XA_ASSOCIATED, this, true);
+          cpoXaState =
+              new CpoXaState<>(xid, createNewResource(), CpoXaState.XA_ASSOCIATED, this, true);
           cpoXaStateMap.getXidStateMap().put(xid, cpoXaState);
           cpoXaStateMap.getXaResourceMap().put(this, xid);
           break;
@@ -375,12 +407,13 @@ public abstract class CpoBaseXaResource<T> implements CpoXaResource<T> {
           if (cpoXaState == null)
             throw CpoXaError.createXAException(CpoXaError.XAER_NOTA, "Unknown XID");
 
-          if (cpoXaState.getAssociation()==CpoXaState.XA_UNASSOCIATED) {
+          if (cpoXaState.getAssociation() == CpoXaState.XA_UNASSOCIATED) {
             cpoXaState.setAssociation(CpoXaState.XA_ASSOCIATED);
             cpoXaState.setAssignedResourceManager(this);
             cpoXaStateMap.getXaResourceMap().put(this, xid);
           } else {
-            throw CpoXaError.createXAException(CpoXaError.XAER_PROTO, "TMJOIN can only be used with an unassociated XID");
+            throw CpoXaError.createXAException(
+                CpoXaError.XAER_PROTO, "TMJOIN can only be used with an unassociated XID");
           }
           break;
 
@@ -394,7 +427,8 @@ public abstract class CpoBaseXaResource<T> implements CpoXaResource<T> {
             cpoXaState.setAssignedResourceManager(this);
             cpoXaStateMap.getXaResourceMap().put(this, xid);
           } else {
-            throw CpoXaError.createXAException(CpoXaError.XAER_PROTO, "TMRESUME can only be used with a suspended XID");
+            throw CpoXaError.createXAException(
+                CpoXaError.XAER_PROTO, "TMRESUME can only be used with a suspended XID");
           }
           break;
 
@@ -404,17 +438,15 @@ public abstract class CpoBaseXaResource<T> implements CpoXaResource<T> {
     }
   }
 
-
   private CpoXaStateMap<T> getCpoXaStateMap() {
-    synchronized(XA_STATEMAP_MUTEX) {
-      CpoXaStateMap<T> stateMap = (CpoXaStateMap<T>)cpoXaStateMapMap.get(this.getClass().getName());
-      if (stateMap==null) {
+    synchronized (XA_STATEMAP_MUTEX) {
+      CpoXaStateMap<T> stateMap =
+          (CpoXaStateMap<T>) cpoXaStateMapMap.get(this.getClass().getName());
+      if (stateMap == null) {
         stateMap = new CpoXaStateMap<T>();
         cpoXaStateMapMap.put(this.getClass().getName(), stateMap);
       }
       return stateMap;
     }
   }
-
-
 }

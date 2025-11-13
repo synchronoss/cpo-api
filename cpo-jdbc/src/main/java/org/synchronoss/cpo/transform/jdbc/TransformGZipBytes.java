@@ -20,21 +20,20 @@
  */
 package org.synchronoss.cpo.transform.jdbc;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
+import java.util.zip.GZIPInputStream;
+import java.util.zip.GZIPOutputStream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.CpoException;
 import org.synchronoss.cpo.jdbc.JdbcCallableStatementFactory;
 import org.synchronoss.cpo.jdbc.JdbcPreparedStatementFactory;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
-import java.util.zip.GZIPInputStream;
-import java.util.zip.GZIPOutputStream;
-
 /**
- * Converts a compressed byte[] from a jdbc datasource to an uncompressed byte[] and from a byte[] to a compressed
- * byte[] in a datasource
+ * Converts a compressed byte[] from a jdbc datasource to an uncompressed byte[] and from a byte[]
+ * to a compressed byte[] in a datasource
  *
  * @author david berry
  */
@@ -42,11 +41,8 @@ public class TransformGZipBytes implements JdbcCpoTransform<byte[], byte[]> {
 
   private static final Logger logger = LoggerFactory.getLogger(TransformGZipBytes.class);
 
-    /**
-     * Construct the TransformGZipBytes
-     */
-  public TransformGZipBytes() {
-  }
+  /** Construct the TransformGZipBytes */
+  public TransformGZipBytes() {}
 
   /**
    * Transforms the datasource object into an object required by the class
@@ -98,7 +94,8 @@ public class TransformGZipBytes implements JdbcCpoTransform<byte[], byte[]> {
    * @throws CpoException - An error occurred
    */
   @Override
-  public byte[] transformOut(JdbcPreparedStatementFactory jpsf, byte[] attributeObject) throws CpoException {
+  public byte[] transformOut(JdbcPreparedStatementFactory jpsf, byte[] attributeObject)
+      throws CpoException {
 
     byte[] retBytes = null;
 
@@ -129,7 +126,8 @@ public class TransformGZipBytes implements JdbcCpoTransform<byte[], byte[]> {
   }
 
   @Override
-  public byte[] transformOut(JdbcCallableStatementFactory jpsf, byte[] attributeObject) throws CpoException, UnsupportedOperationException {
+  public byte[] transformOut(JdbcCallableStatementFactory jpsf, byte[] attributeObject)
+      throws CpoException, UnsupportedOperationException {
     throw new UnsupportedOperationException("Not supported yet.");
   }
 

@@ -20,6 +20,7 @@
  */
 package org.synchronoss.cpo.jdbc.jmeter;
 
+import java.sql.Timestamp;
 import org.apache.jmeter.config.Argument;
 import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.protocol.java.sampler.AbstractJavaSamplerClient;
@@ -39,8 +40,6 @@ import org.synchronoss.cpo.meta.CpoMetaDescriptor;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Parameters;
 
-import java.sql.Timestamp;
-
 /**
  * JMeter Samplier Client to allow a load test of cpo
  *
@@ -48,7 +47,7 @@ import java.sql.Timestamp;
  * @since 5/9/12
  */
 public class CpoJavaSamplerClient extends AbstractJavaSamplerClient {
-    private Logger logger = LoggerFactory.getLogger(this.getClass());
+  private Logger logger = LoggerFactory.getLogger(this.getClass());
 
   private JdbcCpoMetaDescriptor metaDescriptor = null;
   private CpoAdapter cpoAdapter = null;
@@ -58,22 +57,28 @@ public class CpoJavaSamplerClient extends AbstractJavaSamplerClient {
   private static final String PASSWORD = "password";
   private static final String URL = "url";
   private static final String DRIVER = "driver";
-  private static final String CONFIG_PROCESSOR = "org.synchronoss.cpo.jdbc.config.JdbcCpoConfigProcessor";
+  private static final String CONFIG_PROCESSOR =
+      "org.synchronoss.cpo.jdbc.config.JdbcCpoConfigProcessor";
   private static boolean isSupportsMillis = true;
 
-    @Parameters({ "db.millisupport" })
-    @BeforeClass
-    public void setUp(boolean milliSupport) {
-        String method = "setUp:";
-        isSupportsMillis = milliSupport;
-    }
+  @Parameters({"db.millisupport"})
+  @BeforeClass
+  public void setUp(boolean milliSupport) {
+    String method = "setUp:";
+    isSupportsMillis = milliSupport;
+  }
 
   @Override
   public void setupTest(JavaSamplerContext javaSamplerContext) {
     super.setupTest(javaSamplerContext);
 
     try {
-      metaDescriptor = (JdbcCpoMetaDescriptor)CpoMetaDescriptor.getInstance("jmeter-" + System.currentTimeMillis(), "/oracle/classdef/oracleValueMetaData.xml", true);
+      metaDescriptor =
+          (JdbcCpoMetaDescriptor)
+              CpoMetaDescriptor.getInstance(
+                  "jmeter-" + System.currentTimeMillis(),
+                  "/oracle/classdef/oracleValueMetaData.xml",
+                  true);
 
       CtJdbcConfig jdbcConfig = CtJdbcConfig.Factory.newInstance();
       jdbcConfig.setName(this.getClass().getName());
@@ -122,7 +127,9 @@ public class CpoJavaSamplerClient extends AbstractJavaSamplerClient {
 
     try {
       cpoAdapter.insertObject(valueObject);
-      ValueObject vo = cpoAdapter.retrieveBean(ValueObject.FG_RETRIEVE_NULL, valueObject, valueObject, null, null);
+      ValueObject vo =
+          cpoAdapter.retrieveBean(
+              ValueObject.FG_RETRIEVE_NULL, valueObject, valueObject, null, null);
       result.setSuccessful(vo != null && vo.getId() == valueObject.getId());
     } catch (CpoException ex) {
       logger.error(ex.getMessage(), ex);

@@ -23,30 +23,27 @@ package org.synchronoss.cpo.cassandra.config;
 import com.datastax.driver.core.SocketOptions;
 
 /**
- * Created with IntelliJ IDEA.
- * User: dberry
- * Date: 10/10/13
- * Time: 07:58 AM
- * To change this template use File | Settings | File Templates.
+ * Created with IntelliJ IDEA. User: dberry Date: 10/10/13 Time: 07:58 AM To change this template
+ * use File | Settings | File Templates.
  */
 public abstract class SSLOptionsFactory implements FactoryMethodName {
 
-    /**
-     * Constructs a SSLOptionsFactory
-     */
-    public SSLOptionsFactory(){}
+  /** Constructs a SSLOptionsFactory */
+  public SSLOptionsFactory() {}
 
-    /**
-     * Get the factory method name
-     * @return The method name
-     */
+  /**
+   * Get the factory method name
+   *
+   * @return The method name
+   */
   public String getFactoryMethodName() {
     return "createSSLOptions";
   }
 
-    /**
-     * Create the SocketOptions
-     * @return The SocketOptions
-     */
+  /**
+   * Create the SocketOptions
+   *
+   * @return The SocketOptions
+   */
   public abstract SocketOptions createSSLOptions();
 }

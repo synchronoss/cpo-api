@@ -35,11 +35,11 @@ public class CassandraCpoAdapterFactory implements CpoAdapterFactory {
 
   private CassandraCpoAdapter cassandraCpoAdapter = null;
 
-    /**
-     * Constructs a CassandraCpoAdapterFactory
-     *
-     * @param cassandraCpoAdapter A CassandraCpoAdapter
-     */
+  /**
+   * Constructs a CassandraCpoAdapterFactory
+   *
+   * @param cassandraCpoAdapter A CassandraCpoAdapter
+   */
   public CassandraCpoAdapterFactory(CassandraCpoAdapter cassandraCpoAdapter) {
     this.cassandraCpoAdapter = cassandraCpoAdapter;
   }

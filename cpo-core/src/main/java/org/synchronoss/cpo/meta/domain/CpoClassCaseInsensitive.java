@@ -22,13 +22,10 @@ package org.synchronoss.cpo.meta.domain;
 
 public class CpoClassCaseInsensitive extends CpoClass {
 
-    /**
-     * Version Id for this class.
-     */
-    private static final long serialVersionUID = 1L;
+  /** Version Id for this class. */
+  private static final long serialVersionUID = 1L;
 
-  public CpoClassCaseInsensitive() {
-  }
+  public CpoClassCaseInsensitive() {}
 
   public CpoAttribute getAttributeData(String dataName) {
     if (dataName == null) {

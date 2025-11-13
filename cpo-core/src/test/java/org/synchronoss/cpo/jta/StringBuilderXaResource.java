@@ -23,9 +23,7 @@ package org.synchronoss.cpo.jta;
 import javax.transaction.xa.XAException;
 import javax.transaction.xa.XAResource;
 
-/**
- * Created by dberry on 8/9/15.
- */
+/** Created by dberry on 8/9/15. */
 public class StringBuilderXaResource extends CpoBaseXaResource<StringBuilder> {
   private boolean busy = false;
 
@@ -40,25 +38,20 @@ public class StringBuilderXaResource extends CpoBaseXaResource<StringBuilder> {
   public boolean isBusy() {
     return busy;
   }
+
   @Override
   protected boolean isLocalResourceBusy() throws XAException {
     return isBusy();
   }
 
   @Override
-  protected void prepareResource(StringBuilder xaResource) throws XAException {
-
-  }
+  protected void prepareResource(StringBuilder xaResource) throws XAException {}
 
   @Override
-  protected void commitResource(StringBuilder xaResource) throws XAException {
-
-  }
+  protected void commitResource(StringBuilder xaResource) throws XAException {}
 
   @Override
-  protected void rollbackResource(StringBuilder xaResource) throws XAException {
-
-  }
+  protected void rollbackResource(StringBuilder xaResource) throws XAException {}
 
   @Override
   protected StringBuilder createNewResource() throws XAException {
@@ -66,25 +59,24 @@ public class StringBuilderXaResource extends CpoBaseXaResource<StringBuilder> {
   }
 
   @Override
-  protected void closeResource(StringBuilder xaResource) throws XAException {
-
-  }
+  protected void closeResource(StringBuilder xaResource) throws XAException {}
 
   /**
-    * This method is called to determine if the resource manager instance represented by the target object is the same as the resouce manager
-    * instance represented by the parameter xares.
-    *
-    * @param xaResource - An XAResource object whose resource manager instance is to be compared with the resource manager instance of the target object.
-    * @return - true if it's the same RM instance; otherwise false.
-    * @throws XAException - An error has occurred. Possible exception values are XAER_RMERR and XAER_RMFAIL.
-    */
-   @Override
-   public boolean isSameRM(XAResource xaResource) throws XAException {
-     if (xaResource == null)
-       throw new XAException(XAException.XAER_INVAL);
+   * This method is called to determine if the resource manager instance represented by the target
+   * object is the same as the resouce manager instance represented by the parameter xares.
+   *
+   * @param xaResource - An XAResource object whose resource manager instance is to be compared with
+   *     the resource manager instance of the target object.
+   * @return - true if it's the same RM instance; otherwise false.
+   * @throws XAException - An error has occurred. Possible exception values are XAER_RMERR and
+   *     XAER_RMFAIL.
+   */
+  @Override
+  public boolean isSameRM(XAResource xaResource) throws XAException {
+    if (xaResource == null) throw new XAException(XAException.XAER_INVAL);
 
-     return xaResource instanceof StringBuilderXaResource;
-   }
+    return xaResource instanceof StringBuilderXaResource;
+  }
 
   // StringBuilder Proxy methods
 
@@ -93,27 +85,24 @@ public class StringBuilderXaResource extends CpoBaseXaResource<StringBuilder> {
   }
 
   public StringBuilder append(String str) {
-      return getCurrentResource().append(str);
+    return getCurrentResource().append(str);
   }
 
   /**
    * Appends the specified {@code StringBuffer} to this sequence.
-   * <p>
-   * The characters of the {@code StringBuffer} argument are appended,
-   * in order, to this sequence, increasing the
-   * length of this sequence by the length of the argument.
-   * If {@code sb} is {@code null}, then the four characters
-   * {@code "null"} are appended to this sequence.
-   * <p>
-   * Let <i>n</i> be the length of this character sequence just prior to
-   * execution of the {@code append} method. Then the character at index
-   * <i>k</i> in the new character sequence is equal to the character at
-   * index <i>k</i> in the old character sequence, if <i>k</i> is less than
-   * <i>n</i>; otherwise, it is equal to the character at index <i>k-n</i>
-   * in the argument {@code sb}.
    *
-   * @param   sb   the {@code StringBuffer} to append.
-   * @return  a reference to this object.
+   * <p>The characters of the {@code StringBuffer} argument are appended, in order, to this
+   * sequence, increasing the length of this sequence by the length of the argument. If {@code sb}
+   * is {@code null}, then the four characters {@code "null"} are appended to this sequence.
+   *
+   * <p>Let <i>n</i> be the length of this character sequence just prior to execution of the {@code
+   * append} method. Then the character at index <i>k</i> in the new character sequence is equal to
+   * the character at index <i>k</i> in the old character sequence, if <i>k</i> is less than
+   * <i>n</i>; otherwise, it is equal to the character at index <i>k-n</i> in the argument {@code
+   * sb}.
+   *
+   * @param sb the {@code StringBuffer} to append.
+   * @return a reference to this object.
    */
   public StringBuilder append(StringBuffer sb) {
     return getCurrentResource().append(sb);
@@ -124,7 +113,7 @@ public class StringBuilderXaResource extends CpoBaseXaResource<StringBuilder> {
   }
 
   /**
-   * @throws     IndexOutOfBoundsException {@inheritDoc}
+   * @throws IndexOutOfBoundsException {@inheritDoc}
    */
   public StringBuilder append(CharSequence s, int start, int end) {
     return getCurrentResource().append(s, start, end);
@@ -176,7 +165,8 @@ public class StringBuilderXaResource extends CpoBaseXaResource<StringBuilder> {
    * @throws StringIndexOutOfBoundsException {@inheritDoc}
    */
   public StringBuilder delete(int start, int end) {
-    return getCurrentResource().delete(start, end);}
+    return getCurrentResource().delete(start, end);
+  }
 
   /**
    * @throws StringIndexOutOfBoundsException {@inheritDoc}
@@ -195,9 +185,7 @@ public class StringBuilderXaResource extends CpoBaseXaResource<StringBuilder> {
   /**
    * @throws StringIndexOutOfBoundsException {@inheritDoc}
    */
-  public StringBuilder insert(int index, char[] str, int offset,
-                              int len)
-  {
+  public StringBuilder insert(int index, char[] str, int offset, int len) {
     return getCurrentResource().insert(index, str, offset, len);
   }
 
@@ -232,9 +220,7 @@ public class StringBuilderXaResource extends CpoBaseXaResource<StringBuilder> {
   /**
    * @throws IndexOutOfBoundsException {@inheritDoc}
    */
-  public StringBuilder insert(int dstOffset, CharSequence s,
-                              int start, int end)
-  {
+  public StringBuilder insert(int dstOffset, CharSequence s, int start, int end) {
     return getCurrentResource().insert(dstOffset, s, start, end);
   }
 
@@ -302,62 +288,53 @@ public class StringBuilderXaResource extends CpoBaseXaResource<StringBuilder> {
 
   @Override
   public String toString() {
-      // Create a copy, don't share the array
+    // Create a copy, don't share the array
     return getCurrentResource().toString();
   }
 
   /**
-   * Returns the length of this character sequence.  The length is the number
-   * of 16-bit <code>char</code>s in the sequence.
+   * Returns the length of this character sequence. The length is the number of 16-bit <code>char
+   * </code>s in the sequence.
    *
-   * @return  the number of <code>char</code>s in this sequence
+   * @return the number of <code>char</code>s in this sequence
    */
-  int length(){
+  int length() {
     return getCurrentResource().length();
   }
 
   /**
-   * Returns the <code>char</code> value at the specified index.  An index ranges from zero
-   * to <tt>length() - 1</tt>.  The first <code>char</code> value of the sequence is at
-   * index zero, the next at index one, and so on, as for array
-   * indexing.
+   * Returns the <code>char</code> value at the specified index. An index ranges from zero to
+   * <tt>length() - 1</tt>. The first <code>char</code> value of the sequence is at index zero, the
+   * next at index one, and so on, as for array indexing.
    *
-   * <p>If the <code>char</code> value specified by the index is a
-   * <a href="{@docRoot}/java/lang/Character.html#unicode">surrogate</a>, the surrogate
-   * value is returned.
+   * <p>If the <code>char</code> value specified by the index is a <a
+   * href="{@docRoot}/java/lang/Character.html#unicode">surrogate</a>, the surrogate value is
+   * returned.
    *
-   * @param   index   the index of the <code>char</code> value to be returned
-   *
-   * @return  the specified <code>char</code> value
-   *
-   * @throws  IndexOutOfBoundsException
-   *          if the <tt>index</tt> argument is negative or not less than
-   *          <tt>length()</tt>
+   * @param index the index of the <code>char</code> value to be returned
+   * @return the specified <code>char</code> value
+   * @throws IndexOutOfBoundsException if the <tt>index</tt> argument is negative or not less than
+   *     <tt>length()</tt>
    */
-  char charAt(int index){
+  char charAt(int index) {
     return getCurrentResource().charAt(index);
   }
 
   /**
-   * Returns a <code>CharSequence</code> that is a subsequence of this sequence.
-   * The subsequence starts with the <code>char</code> value at the specified index and
-   * ends with the <code>char</code> value at index <tt>end - 1</tt>.  The length
-   * (in <code>char</code>s) of the
-   * returned sequence is <tt>end - start</tt>, so if <tt>start == end</tt>
-   * then an empty sequence is returned.
+   * Returns a <code>CharSequence</code> that is a subsequence of this sequence. The subsequence
+   * starts with the <code>char</code> value at the specified index and ends with the <code>char
+   * </code> value at index <tt>end - 1</tt>. The length (in <code>char</code>s) of the returned
+   * sequence is <tt>end - start</tt>, so if <tt>start == end</tt> then an empty sequence is
+   * returned.
    *
-   * @param   start   the start index, inclusive
-   * @param   end     the end index, exclusive
-   *
-   * @return  the specified subsequence
-   *
-   * @throws  IndexOutOfBoundsException
-   *          if <tt>start</tt> or <tt>end</tt> are negative,
-   *          if <tt>end</tt> is greater than <tt>length()</tt>,
-   *          or if <tt>start</tt> is greater than <tt>end</tt>
+   * @param start the start index, inclusive
+   * @param end the end index, exclusive
+   * @return the specified subsequence
+   * @throws IndexOutOfBoundsException if <tt>start</tt> or <tt>end</tt> are negative, if
+   *     <tt>end</tt> is greater than <tt>length()</tt>, or if <tt>start</tt> is greater than
+   *     <tt>end</tt>
    */
-  CharSequence subSequence(int start, int end){
+  CharSequence subSequence(int start, int end) {
     return getCurrentResource().subSequence(start, end);
   }
-
 }

@@ -73,7 +73,8 @@ public class CoreMetaXmlObjectExporter implements MetaXmlObjectExporter, MetaVis
       ctAttribute.setDataName(cpoAttribute.getDataName());
       ctAttribute.setDataType(cpoAttribute.getDataType());
 
-      if (cpoAttribute.getTransformClassName() != null && cpoAttribute.getTransformClassName().length() > 0) {
+      if (cpoAttribute.getTransformClassName() != null
+          && cpoAttribute.getTransformClassName().length() > 0) {
         ctAttribute.setTransformClass(cpoAttribute.getTransformClassName());
       }
 
@@ -94,7 +95,8 @@ public class CoreMetaXmlObjectExporter implements MetaXmlObjectExporter, MetaVis
 
       ctFunctionGroup.setType(StFunctionGroupType.Enum.forString(cpoFunctionGroup.getType()));
 
-      if (cpoFunctionGroup.getDescription() != null && cpoFunctionGroup.getDescription().length() > 0) {
+      if (cpoFunctionGroup.getDescription() != null
+          && cpoFunctionGroup.getDescription().length() > 0) {
         ctFunctionGroup.setDescription(cpoFunctionGroup.getDescription());
       }
 

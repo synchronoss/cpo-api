@@ -23,30 +23,27 @@ package org.synchronoss.cpo.cassandra.config;
 import com.datastax.driver.core.policies.RetryPolicy;
 
 /**
- * Created with IntelliJ IDEA.
- * User: dberry
- * Date: 10/10/13
- * Time: 07:57 AM
- * To change this template use File | Settings | File Templates.
+ * Created with IntelliJ IDEA. User: dberry Date: 10/10/13 Time: 07:57 AM To change this template
+ * use File | Settings | File Templates.
  */
 public abstract class RetryPolicyFactory implements FactoryMethodName {
 
-    /**
-     * Constructs a RetryPolicyFactory
-     */
-    public RetryPolicyFactory(){}
+  /** Constructs a RetryPolicyFactory */
+  public RetryPolicyFactory() {}
 
-    /**
-     * Get the factory method name
-     * @return The method name
-     */
+  /**
+   * Get the factory method name
+   *
+   * @return The method name
+   */
   public String getFactoryMethodName() {
     return "createRetryPolicy";
   }
 
-    /**
-     * Create the RetryPolicy
-     * @return The RetryPolicy
-     */
+  /**
+   * Create the RetryPolicy
+   *
+   * @return The RetryPolicy
+   */
   public abstract RetryPolicy createRetryPolicy();
 }

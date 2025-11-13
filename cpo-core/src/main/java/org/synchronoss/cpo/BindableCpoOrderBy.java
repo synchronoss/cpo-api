@@ -24,7 +24,8 @@ import org.synchronoss.cpo.meta.domain.CpoAttribute;
 import org.synchronoss.cpo.meta.domain.CpoClass;
 
 /**
- * BindableCpoOrderBy is an interface for specifying the sort order in which objects are returned from the Datasource.
+ * BindableCpoOrderBy is an interface for specifying the sort order in which objects are returned
+ * from the Datasource.
  *
  * @author david berry
  */
@@ -36,8 +37,7 @@ public class BindableCpoOrderBy implements CpoOrderBy {
   private String marker = DEFAULT_MARKER;
 
   @SuppressWarnings("unused")
-  private BindableCpoOrderBy() {
-  }
+  private BindableCpoOrderBy() {}
 
   public BindableCpoOrderBy(String attr, boolean asc) {
     ascending = asc;
@@ -66,10 +66,11 @@ public class BindableCpoOrderBy implements CpoOrderBy {
   }
 
   /**
-   * Gets the boolean that determines if the objects will be returned from from the CpoAdapter in Ascending order or
-   * Descending order
+   * Gets the boolean that determines if the objects will be returned from from the CpoAdapter in
+   * Ascending order or Descending order
    *
-   * @return boolean true if it is to sort in Ascensing Order false if it is to be sorted in Descending Order
+   * @return boolean true if it is to sort in Ascensing Order false if it is to be sorted in
+   *     Descending Order
    */
   @Override
   public boolean getAscending() {
@@ -87,10 +88,10 @@ public class BindableCpoOrderBy implements CpoOrderBy {
   }
 
   /**
-   * Gets a string representing a datasource specific function call that must be applied to the attribute that will be
-   * used for sorting.
+   * Gets a string representing a datasource specific function call that must be applied to the
+   * attribute that will be used for sorting.
    *
-   * i.e. - "upper(attribute_name)"
+   * <p>i.e. - "upper(attribute_name)"
    *
    * @return String The name of the function
    */
@@ -141,5 +142,4 @@ public class BindableCpoOrderBy implements CpoOrderBy {
   public String getMarker() {
     return marker;
   }
-
 }

@@ -20,6 +20,8 @@
  */
 package org.synchronoss.cpo.jdbc;
 
+import static org.testng.Assert.*;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.CpoAdapter;
@@ -32,8 +34,6 @@ import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
-
-import static org.testng.Assert.*;
 
 /**
  * BlobTest is a test class for testing the JdbcAdapter class Constructors
@@ -48,17 +48,17 @@ public class SelectForUpdateTest {
   private JdbcCpoMetaDescriptor metaDescriptor = null;
   private boolean isSupportsSelect4Update = true;
 
-  public SelectForUpdateTest() {
-  }
+  public SelectForUpdateTest() {}
 
   /**
-   * <code>setUp</code> Load the datasource from the properties in the property file jdbc_en_US.properties
+   * <code>setUp</code> Load the datasource from the properties in the property file
+   * jdbc_en_US.properties
    */
-  @Parameters({ "db.select4update" })
+  @Parameters({"db.select4update"})
   @BeforeClass
   public void setUp(boolean select4update) {
-      String method = "setUp:";
-      isSupportsSelect4Update = select4update;
+    String method = "setUp:";
+    isSupportsSelect4Update = select4update;
 
     try {
       cpoAdapter = CpoAdapterFactoryManager.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_JDBC);
@@ -84,13 +84,11 @@ public class SelectForUpdateTest {
     }
   }
 
-  /**
-   * DOCUMENT ME!
-   */
+  /** DOCUMENT ME! */
   @AfterClass
   public void tearDown() {
-   String method = "tearDown:";
-   ValueObject vo = ValueObjectFactory.createValueObject(1);
+    String method = "tearDown:";
+    ValueObject vo = ValueObjectFactory.createValueObject(1);
     ValueObject vo2 = ValueObjectFactory.createValueObject(2);
     try {
       trxAdapter.deleteObject(vo);
@@ -111,9 +109,7 @@ public class SelectForUpdateTest {
     }
   }
 
-  /**
-   * DOCUMENT ME!
-   */
+  /** DOCUMENT ME! */
   @Test
   public void testSelect4UpdateSingleObject() {
     if (isSupportsSelect4Update) {
@@ -146,14 +142,16 @@ public class SelectForUpdateTest {
           trxAdapter.rollback();
         } catch (CpoException ce) {
           fail(method + "Rollback failed:" + ExceptionHelper.getLocalizedMessage(e));
-
         }
         fail(method + "Commit should have worked.");
       }
       try {
         cpoAdapter.retrieveBean(ValueObject.FG_RETRIEVE_SELECT4UPDATENOWAIT, vo2);
       } catch (Exception e) {
-        fail(method + "SelectForUpdateNoWait should success:" + ExceptionHelper.getLocalizedMessage(e));
+        fail(
+            method
+                + "SelectForUpdateNoWait should success:"
+                + ExceptionHelper.getLocalizedMessage(e));
       }
     } else {
       logger.error(cpoAdapter.getDataSourceName() + " does not support Select For Update");
@@ -194,7 +192,6 @@ public class SelectForUpdateTest {
           trxAdapter.rollback();
         } catch (CpoException ce) {
           fail(method + "Rollback failed:" + ExceptionHelper.getLocalizedMessage(ce));
-
         }
         fail(method + "Commit should have worked.");
       }

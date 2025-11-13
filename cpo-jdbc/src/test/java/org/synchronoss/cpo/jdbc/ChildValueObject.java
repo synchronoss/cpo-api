@@ -27,8 +27,6 @@ package org.synchronoss.cpo.jdbc;
  */
 public class ChildValueObject extends ValueObjectBean implements java.io.Serializable, Cloneable {
 
-  /**
-   *
-   */
+  /** */
   private static final long serialVersionUID = 1L;
 }

@@ -20,29 +20,19 @@
  */
 package org.synchronoss.cpo.enums;
 
-/**
- * Logical operators for where clauses
- */
+/** Logical operators for where clauses */
 public enum Logical {
-    /**
-     * No operator
-     */
-    NONE("NONE"),
-    /**
-     * Logical AND operator
-     */
-    AND("AND"),
-    /**
-     * Logical OR operator
-     */
-    OR("OR");
+  /** No operator */
+  NONE("NONE"),
+  /** Logical AND operator */
+  AND("AND"),
+  /** Logical OR operator */
+  OR("OR");
 
-    /**
-     * The string operator in this enum
-     */
-    public final String operator;
+  /** The string operator in this enum */
+  public final String operator;
 
-    Logical(String operator) {
-        this.operator = operator;
-    }
+  Logical(String operator) {
+    this.operator = operator;
+  }
 }

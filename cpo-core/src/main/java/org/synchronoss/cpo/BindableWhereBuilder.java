@@ -20,6 +20,8 @@
  */
 package org.synchronoss.cpo;
 
+import org.synchronoss.cpo.enums.Comparison;
+import org.synchronoss.cpo.enums.Logical;
 import org.synchronoss.cpo.meta.domain.CpoAttribute;
 import org.synchronoss.cpo.meta.domain.CpoClass;
 
@@ -63,7 +65,7 @@ public class BindableWhereBuilder<T> implements NodeVisitor {
   public boolean visitBegin(Node node) throws Exception {
     BindableCpoWhere jcw = (BindableCpoWhere) node;
     whereClause.append(jcw.toString(cpoClass));
-    if (jcw.hasParent() || jcw.getLogical() != CpoWhere.LOGIC_NONE) {
+    if (jcw.hasParent() || jcw.getLogical() != Logical.NONE) {
       whereClause.append(" (");
     } else {
       whereClause.append(" ");
@@ -92,7 +94,7 @@ public class BindableWhereBuilder<T> implements NodeVisitor {
   @Override
   public boolean visitEnd(Node node) throws Exception {
     BindableCpoWhere bcw = (BindableCpoWhere) node;
-    if (bcw.hasParent() || bcw.getLogical() != CpoWhere.LOGIC_NONE) {
+    if (bcw.hasParent() || bcw.getLogical() != Logical.NONE) {
       whereClause.append(")");
     }
     return true;
@@ -115,7 +117,7 @@ public class BindableWhereBuilder<T> implements NodeVisitor {
         attribute = cpoClass.getAttributeJava(bcw.getRightAttribute());
       }
       if (attribute == null) {
-        if (bcw.getComparison() == CpoWhere.COMP_IN && bcw.getValue() instanceof Collection) {
+        if (bcw.getComparison() == Comparison.IN && bcw.getValue() instanceof Collection) {
           for (Object obj : (Collection) bcw.getValue()) {
             bindValues.add(new BindAttribute(bcw.getAttribute() == null ? bcw.getRightAttribute() : bcw.getAttribute(), obj));
           }
@@ -123,7 +125,7 @@ public class BindableWhereBuilder<T> implements NodeVisitor {
           bindValues.add(new BindAttribute(bcw.getAttribute() == null ? bcw.getRightAttribute() : bcw.getAttribute(), bcw.getValue()));
         }
       } else {
-        if (bcw.getComparison() == CpoWhere.COMP_IN && bcw.getValue() instanceof Collection) {
+        if (bcw.getComparison() == Comparison.IN && bcw.getValue() instanceof Collection) {
           for (Object obj : (Collection) bcw.getValue()) {
             bindValues.add(new BindAttribute(attribute, obj));
           }

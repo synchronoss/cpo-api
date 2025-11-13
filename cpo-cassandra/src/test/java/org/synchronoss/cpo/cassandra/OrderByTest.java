@@ -119,7 +119,7 @@ public class OrderByTest {
 //      inColl.add(new Integer(5));
 //
 ////      CpoWhere cw = cpoAdapter.newWhere();
-//      CpoWhere cw = cpoAdapter.newWhere(CpoWhere.LOGIC_NONE, "id", CpoWhere.COMP_IN, inColl);
+//      CpoWhere cw = cpoAdapter.newWhere(Logical.NONE, "id", Comparison.IN, inColl);
 //      ArrayList<CpoWhere> wheres = new ArrayList<CpoWhere>();
 //      wheres.add(cw);
 //

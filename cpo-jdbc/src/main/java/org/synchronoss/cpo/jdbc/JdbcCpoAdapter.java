@@ -23,6 +23,8 @@ package org.synchronoss.cpo.jdbc;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.*;
+import org.synchronoss.cpo.enums.Comparison;
+import org.synchronoss.cpo.enums.Logical;
 import org.synchronoss.cpo.helper.ExceptionHelper;
 import org.synchronoss.cpo.jdbc.meta.JdbcCpoMetaDescriptor;
 import org.synchronoss.cpo.jdbc.meta.JdbcMethodMapper;
@@ -315,7 +317,7 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
    * @return A CpoWhere
    */
   @Override
-  public <T> CpoWhere newWhere(int logical, String attr, int comp, T value) {
+  public <T> CpoWhere newWhere(Logical logical, String attr, Comparison comp, T value) {
     return new JdbcCpoWhere(logical, attr, comp, value);
   }
 
@@ -331,7 +333,7 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
    * @return A CpoWhere
    */
   @Override
-  public <T> CpoWhere newWhere(int logical, String attr, int comp, T value, boolean not) {
+  public <T> CpoWhere newWhere(Logical logical, String attr, Comparison comp, T value, boolean not) {
     return new JdbcCpoWhere(logical, attr, comp, value, not);
   }
 

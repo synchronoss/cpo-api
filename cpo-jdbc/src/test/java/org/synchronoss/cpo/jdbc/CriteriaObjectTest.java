@@ -25,6 +25,8 @@ import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.CpoAdapter;
 import org.synchronoss.cpo.CpoAdapterFactoryManager;
 import org.synchronoss.cpo.CpoWhere;
+import org.synchronoss.cpo.enums.Comparison;
+import org.synchronoss.cpo.enums.Logical;
 import org.synchronoss.cpo.helper.ExceptionHelper;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
@@ -114,8 +116,8 @@ public class CriteriaObjectTest {
       critObject.setMinId(3);
       critObject.setMaxId(7);
       CpoWhere cw = cpoAdapter.newWhere();
-      CpoWhere cw1 = cpoAdapter.newWhere(CpoWhere.LOGIC_NONE, CriteriaObject.ATTR_MINID, CpoWhere.COMP_GT, critObject);
-      CpoWhere cw2 = cpoAdapter.newWhere(CpoWhere.LOGIC_AND, CriteriaObject.ATTR_MAXID, CpoWhere.COMP_LT, critObject);
+      CpoWhere cw1 = cpoAdapter.newWhere(Logical.NONE, CriteriaObject.ATTR_MINID, Comparison.GT, critObject);
+      CpoWhere cw2 = cpoAdapter.newWhere(Logical.AND, CriteriaObject.ATTR_MAXID, Comparison.LT, critObject);
 
       cw.addWhere(cw1);
       cw.addWhere(cw2);

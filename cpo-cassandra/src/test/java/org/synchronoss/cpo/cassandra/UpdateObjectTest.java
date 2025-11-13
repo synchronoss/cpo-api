@@ -24,6 +24,8 @@ import org.synchronoss.cpo.CpoAdapter;
 import org.synchronoss.cpo.CpoAdapterFactoryManager;
 import org.synchronoss.cpo.CpoWhere;
 import org.synchronoss.cpo.cassandra.meta.CassandraCpoMetaDescriptor;
+import org.synchronoss.cpo.enums.Comparison;
+import org.synchronoss.cpo.enums.Logical;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -93,7 +95,7 @@ public class UpdateObjectTest {
     // try the where on the update, should update 0
     try {
       List<CpoWhere> cws = new ArrayList<>();
-      cws.add(cpoAdapter.newWhere(CpoWhere.LOGIC_NONE, "id", CpoWhere.COMP_EQ, 2));
+      cws.add(cpoAdapter.newWhere(Logical.NONE, "id", Comparison.EQ, 2));
       valObj.setAttrInt(4);
       cpoAdapter.updateObject(null, valObj, cws, null, null);
       ValueObject rObj = cpoAdapter.retrieveBean(valObj);
@@ -105,7 +107,7 @@ public class UpdateObjectTest {
     // try the where on the update, should update 1
     try {
       List<CpoWhere> cws = new ArrayList<>();
-      cws.add(cpoAdapter.newWhere(CpoWhere.LOGIC_NONE, "id", CpoWhere.COMP_EQ, 5));
+      cws.add(cpoAdapter.newWhere(Logical.NONE, "id", Comparison.EQ, 5));
       cpoAdapter.updateObject(null, valObj, cws, null, null);
       ValueObject rObj = cpoAdapter.retrieveBean(valObj);
       assertEquals(rObj.getAttrInt(), valObj.getAttrInt(), "It should be equal since it updated");

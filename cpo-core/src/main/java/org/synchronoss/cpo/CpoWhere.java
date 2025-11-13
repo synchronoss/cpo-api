@@ -20,6 +20,9 @@
  */
 package org.synchronoss.cpo;
 
+import org.synchronoss.cpo.enums.Comparison;
+import org.synchronoss.cpo.enums.Logical;
+
 /**
  * CpoWhere is an interface for specifying the where clause to filter objects that are returned from the Datasource.
  *
@@ -27,28 +30,13 @@ package org.synchronoss.cpo;
  */
 public interface CpoWhere {
 
-  int COMP_NONE = -1;
-  int COMP_EQ = 0;
-  int COMP_LT = 1;
-  int COMP_GT = 2;
-  int COMP_NEQ = 3;
-  int COMP_IN = 4;
-  int COMP_LIKE = 5;
-  int COMP_LTEQ = 6;
-  int COMP_GTEQ = 7;
-  int COMP_EXISTS = 8;
-  int COMP_ISNULL = 9;
-  int LOGIC_NONE = -1;
-  int LOGIC_AND = 0;
-  int LOGIC_OR = 1;
+  void setComparison(Comparison comparison);
 
-  void setComparison(int comp);
+    Comparison getComparison();
 
-  int getComparison();
+  void setLogical(Logical logical);
 
-  void setLogical(int log);
-
-  int getLogical();
+    Logical getLogical();
 
   void setAttribute(String attr);
 

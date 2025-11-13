@@ -23,6 +23,8 @@ package org.synchronoss.cpo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.cache.CpoAdapterCache;
+import org.synchronoss.cpo.enums.Comparison;
+import org.synchronoss.cpo.enums.Logical;
 import org.synchronoss.cpo.helper.ExceptionHelper;
 
 import java.util.ArrayList;
@@ -196,12 +198,12 @@ public abstract class CpoBaseAdapter<D> extends CpoAdapterCache implements CpoAd
   }
 
   @Override
-  public <T> CpoWhere newWhere(int logical, String attr, int comp, T value) throws CpoException {
+  public <T> CpoWhere newWhere(Logical logical, String attr, Comparison comp, T value) throws CpoException {
     return new BindableCpoWhere(logical, attr, comp, value);
   }
 
   @Override
-  public <T> CpoWhere newWhere(int logical, String attr, int comp, T value, boolean not) throws CpoException {
+  public <T> CpoWhere newWhere(Logical logical, String attr, Comparison comp, T value, boolean not) throws CpoException {
     return new BindableCpoWhere(logical, attr, comp, value, not);
   }
 

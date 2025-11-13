@@ -20,6 +20,8 @@
  */
 package org.synchronoss.cpo;
 
+import org.synchronoss.cpo.enums.Comparison;
+import org.synchronoss.cpo.enums.Logical;
 import org.synchronoss.cpo.meta.CpoMetaDescriptor;
 import org.synchronoss.cpo.meta.domain.CpoAttribute;
 
@@ -873,7 +875,7 @@ public interface CpoAdapter extends java.io.Serializable {
    *    so.setId(1);
    *    so.setName("SomeName");
    *    try{
-   *      CpoWhere where = cpo.newCpoWhere(CpoWhere.LOGIC_NONE, id, CpoWhere.COMP_EQ);
+   *      CpoWhere where = cpo.newCpoWhere(Logical.NONE, id, Comparison.EQ);
    *      count = cpo.existsObject("SomeExistCheck",so, where);
    *      if (count>0) {
    *        // object exists
@@ -957,32 +959,32 @@ public interface CpoAdapter extends java.io.Serializable {
    */
   CpoWhere newWhere() throws CpoException;
 
-  /**
-   * DOCUMENT ME!
-   *
-   * @param <T> The type of the POJO
-   * @param logical DOCUMENT ME!
-   * @param attr    DOCUMENT ME!
-   * @param comp    DOCUMENT ME!
-   * @param value   DOCUMENT ME!
-   * @return DOCUMENT ME!
-   * @throws CpoException Thrown if there are errors accessing the datasource
-   */
-  <T> CpoWhere newWhere(int logical, String attr, int comp, T value) throws CpoException;
+    /**
+     * Creates a new CpoWhere object
+     *
+     * @param <T>  The type of the object
+     * @param logical The logical operator
+     * @param attr    The attribute name to compare
+     * @param comp    The compare operator
+     * @param value   The value to compare the attribute to.
+     * @return A CpoWhere
+     * @throws CpoException An error occurred
+     */
+  <T> CpoWhere newWhere(Logical logical, String attr, Comparison comp, T value) throws CpoException;
 
-  /**
-   * DOCUMENT ME!
-   *
-   * @param <T>     The type of the POJO
-   * @param logical DOCUMENT ME!
-   * @param attr    DOCUMENT ME!
-   * @param comp    DOCUMENT ME!
-   * @param value   DOCUMENT ME!
-   * @param not     DOCUMENT ME!
-   * @return DOCUMENT ME!
-   * @throws CpoException Thrown if there are errors accessing the datasource
-   */
-  <T> CpoWhere newWhere(int logical, String attr, int comp, T value, boolean not) throws CpoException;
+    /**
+     * Creates a new CpoWhere object
+     *
+     * @param <T>  The type of the object
+     * @param logical The logical operator
+     * @param attr    The attribute name to compare
+     * @param comp    The compare operator
+     * @param value   The value to compare the attribute to.
+     * @param not     negate the compare
+     * @return A CpoWhere
+     * @throws CpoException An error occurred
+     */
+  <T> CpoWhere newWhere(Logical logical, String attr, Comparison comp, T value, boolean not) throws CpoException;
 
   /**
    * <p>

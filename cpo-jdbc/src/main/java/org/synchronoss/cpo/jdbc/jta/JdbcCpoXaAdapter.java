@@ -21,6 +21,8 @@
 package org.synchronoss.cpo.jdbc.jta;
 
 import org.synchronoss.cpo.*;
+import org.synchronoss.cpo.enums.Comparison;
+import org.synchronoss.cpo.enums.Logical;
 import org.synchronoss.cpo.helper.ExceptionHelper;
 import org.synchronoss.cpo.jdbc.JdbcCpoAdapter;
 import org.synchronoss.cpo.jdbc.JdbcCpoAdapterFactory;
@@ -249,12 +251,12 @@ public class JdbcCpoXaAdapter extends CpoBaseXaResource<JdbcCpoAdapter> implemen
   }
 
   @Override
-  public <T> CpoWhere newWhere(int logical, String attr, int comp, T value) throws CpoException {
+  public <T> CpoWhere newWhere(Logical logical, String attr, Comparison comp, T value) throws CpoException {
     return getCurrentResource().newWhere( logical,  attr,  comp,  value);
   }
 
   @Override
-  public <T> CpoWhere newWhere(int logical, String attr, int comp, T value, boolean not) throws CpoException {
+  public <T> CpoWhere newWhere(Logical logical, String attr, Comparison comp, T value, boolean not) throws CpoException {
     return getCurrentResource().newWhere( logical,  attr,  comp,  value,  not);
   }
 

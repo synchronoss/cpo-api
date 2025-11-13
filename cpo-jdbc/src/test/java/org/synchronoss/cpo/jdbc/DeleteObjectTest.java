@@ -25,6 +25,8 @@ import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.CpoAdapter;
 import org.synchronoss.cpo.CpoAdapterFactoryManager;
 import org.synchronoss.cpo.CpoWhere;
+import org.synchronoss.cpo.enums.Comparison;
+import org.synchronoss.cpo.enums.Logical;
 import org.synchronoss.cpo.helper.ExceptionHelper;
 import org.synchronoss.cpo.jdbc.meta.JdbcCpoMetaDescriptor;
 import org.testng.annotations.AfterClass;
@@ -104,7 +106,7 @@ public class DeleteObjectTest {
     // try the where on the delete, should delete 0
     try {
       List<CpoWhere> cws = new ArrayList<>();
-      cws.add(cpoAdapter.newWhere(CpoWhere.LOGIC_AND, ValueObject.ATTR_ID, CpoWhere.COMP_EQ, 2));
+      cws.add(cpoAdapter.newWhere(Logical.AND, ValueObject.ATTR_ID, Comparison.EQ, 2));
       long deleted = cpoAdapter.deleteObject(ValueObject.FG_DELETE_NULL, valObj, cws, null, null);
       assertEquals(0, deleted, "Should not have deleted anything");
     } catch (Exception e) {
@@ -115,7 +117,7 @@ public class DeleteObjectTest {
     // try the where on the delete, should delete 1
     try {
       List<CpoWhere> cws = new ArrayList<>();
-      cws.add(cpoAdapter.newWhere(CpoWhere.LOGIC_OR, ValueObject.ATTR_ID, CpoWhere.COMP_EQ, 2));
+      cws.add(cpoAdapter.newWhere(Logical.OR, ValueObject.ATTR_ID, Comparison.EQ, 2));
       long deleted = cpoAdapter.deleteObject(ValueObject.FG_DELETE_NULL, valObj, cws, null, null);
       assertEquals(1, deleted,"Should have deleted 1");
     } catch (Exception e) {

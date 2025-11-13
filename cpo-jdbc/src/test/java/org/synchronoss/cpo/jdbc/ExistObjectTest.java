@@ -25,6 +25,8 @@ import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.CpoAdapter;
 import org.synchronoss.cpo.CpoAdapterFactoryManager;
 import org.synchronoss.cpo.CpoWhere;
+import org.synchronoss.cpo.enums.Comparison;
+import org.synchronoss.cpo.enums.Logical;
 import org.synchronoss.cpo.helper.ExceptionHelper;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
@@ -103,7 +105,7 @@ public class ExistObjectTest {
 
     try {
       ValueObject valObj = ValueObjectFactory.createValueObject(1);
-      CpoWhere where = cpoAdapter.newWhere(CpoWhere.LOGIC_AND, ValueObject.ATTR_ATTRVARCHAR, CpoWhere.COMP_EQ, "WHERE");
+      CpoWhere where = cpoAdapter.newWhere(Logical.AND, ValueObject.ATTR_ATTRVARCHAR, Comparison.EQ, "WHERE");
       ArrayList<CpoWhere> wheres = new ArrayList<>();
       wheres.add(where);
       long count = cpoAdapter.existsObject(ValueObject.FG_EXIST_NULL, valObj, wheres);
@@ -114,7 +116,7 @@ public class ExistObjectTest {
 
     try {
       ValueObject valObj = ValueObjectFactory.createValueObject(1);
-      CpoWhere where = cpoAdapter.newWhere(CpoWhere.LOGIC_AND, ValueObject.ATTR_ATTRVARCHAR, CpoWhere.COMP_EQ, "NOWHERE");
+      CpoWhere where = cpoAdapter.newWhere(Logical.AND, ValueObject.ATTR_ATTRVARCHAR, Comparison.EQ, "NOWHERE");
       ArrayList<CpoWhere> wheres = new ArrayList<>();
       wheres.add(where);
       long count = cpoAdapter.existsObject(ValueObject.FG_EXIST_NULL, valObj, wheres);

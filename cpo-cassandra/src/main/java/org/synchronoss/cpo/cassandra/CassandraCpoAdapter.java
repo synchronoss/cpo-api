@@ -148,7 +148,7 @@ public class CassandraCpoAdapter extends CpoBaseAdapter<ClusterDataSource> {
    *    so.setId(1);
    *    so.setName("SomeName");
    *    try{
-   *      CpoWhere where = cpo.newCpoWhere(CpoWhere.LOGIC_NONE, id, CpoWhere.COMP_EQ);
+   *      CpoWhere where = cpo.newCpoWhere(Logical.NONE, id, Comparison.EQ);
    *      count = cpo.existsObject("SomeExistCheck",so, where);
    *      if (count>0) {
    *        // object exists

@@ -867,7 +867,7 @@ public class CassandraCpoAdapter extends CpoBaseAdapter<ClusterDataSource> {
       Crud retType = crud;
     long objCount;
 
-    if (Crud.PERSIST == retType) {
+    if (Crud.UPSERT == retType) {
       objCount = existsObject(name, obj, session, null);
 
       if (objCount == 0) {

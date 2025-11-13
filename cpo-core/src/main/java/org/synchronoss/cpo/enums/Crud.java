@@ -47,9 +47,9 @@ public enum Crud {
     LIST("LIST"),
 
     /**
-     * Identifies the operation to be processed by CPO. PERSIST signifies that the CPO will try to add or update the object in the datasource.
+     * Identifies the operation to be processed by CPO. UPSERT signifies that the CPO will try to add or update the object in the datasource.
      */
-    PERSIST("PERSIST"),
+    UPSERT("UPSERT"),
 
     /**
      * Identifies the operation to be processed by CPO. EXIST signifies that the CPO will check to see if the object exists in the datasource.

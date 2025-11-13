@@ -210,22 +210,22 @@ public abstract class CpoBaseAdapter<D> extends CpoAdapterCache implements CpoAd
 
   @Override
   public <T> long persistObject(T obj) throws CpoException {
-    return processUpdateGroup(obj, Crud.PERSIST, null, null, null, null);
+    return processUpdateGroup(obj, Crud.UPSERT, null, null, null, null);
   }
 
   @Override
   public <T> long persistObject(String name, T obj) throws CpoException {
-    return processUpdateGroup(obj, Crud.PERSIST, name, null, null, null);
+    return processUpdateGroup(obj, Crud.UPSERT, name, null, null, null);
   }
 
   @Override
   public <T> long persistObjects(Collection<T> coll) throws CpoException {
-    return processUpdateGroup(coll, Crud.PERSIST, null, null, null, null);
+    return processUpdateGroup(coll, Crud.UPSERT, null, null, null, null);
   }
 
   @Override
   public <T> long persistObjects(String name, Collection<T> coll) throws CpoException {
-    return processUpdateGroup(coll, Crud.PERSIST, name, null, null, null);
+    return processUpdateGroup(coll, Crud.UPSERT, name, null, null, null);
   }
 
   @Override

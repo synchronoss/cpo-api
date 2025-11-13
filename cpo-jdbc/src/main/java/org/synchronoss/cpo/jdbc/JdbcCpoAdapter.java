@@ -383,7 +383,7 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
       Crud retType = crud;
     long objCount;
 
-    if (Crud.PERSIST == retType) {
+    if (Crud.UPSERT == retType) {
       objCount = existsObject(name, obj, c, null);
 
       if (objCount == 0) {
@@ -1219,7 +1219,7 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
         }
       }
 
-      if (allEqual && batchUpdatesSupported_ && !Crud.PERSIST.equals(crud)) {
+      if (allEqual && batchUpdatesSupported_ && !Crud.UPSERT.equals(crud)) {
         updateCount = processBatchUpdateGroup(arr, crud, groupName, wheres, orderBy, nativeExpressions, con);
       } else {
         for (T obj : arr) {

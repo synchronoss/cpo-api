@@ -45,7 +45,7 @@
     </properties>
 
     <name>cpo</name>
-    <description>CPO is a persistence layer that is thin wrapper around JDBC that consumes and produces POJOs
+    <description>CPO is a persistence layer that is thin wrapper around JDBC that consumes and produces JAVABEANs
     </description>
     <url>http://synchronoss.github.io/cpo-api/</url>
     <inceptionYear>2003</inceptionYear>

@@ -72,8 +72,8 @@ public class SelectForUpdateTest {
     ValueObject vo = ValueObjectFactory.createValueObject(1);
     ValueObject vo2 = ValueObjectFactory.createValueObject(2);
     try {
-      trxAdapter.insertObject(vo);
-      trxAdapter.insertObject(vo2);
+      trxAdapter.insertBean(vo);
+      trxAdapter.insertBean(vo2);
       trxAdapter.commit();
     } catch (Exception e) {
       try {
@@ -91,8 +91,8 @@ public class SelectForUpdateTest {
     ValueObject vo = ValueObjectFactory.createValueObject(1);
     ValueObject vo2 = ValueObjectFactory.createValueObject(2);
     try {
-      trxAdapter.deleteObject(vo);
-      trxAdapter.deleteObject(vo2);
+      trxAdapter.deleteBean(vo);
+      trxAdapter.deleteBean(vo2);
       trxAdapter.commit();
     } catch (Exception e) {
       try {
@@ -165,21 +165,21 @@ public class SelectForUpdateTest {
       ValueObject vo2 = ValueObjectFactory.createValueObject(1);
 
       try {
-        long count = trxAdapter.existsObject(ValueObject.FG_EXIST_SELECTFORUPDATEEXISTZERO, vo2);
+        long count = trxAdapter.existsBean(ValueObject.FG_EXIST_SELECTFORUPDATEEXISTZERO, vo2);
         assertEquals(0, count, "Zero objects should have been returned");
       } catch (Exception e) {
         fail(method + "Select For Update should work:" + ExceptionHelper.getLocalizedMessage(e));
       }
 
       try {
-        long count = trxAdapter.existsObject(ValueObject.FG_EXIST_SELECTFORUPDATEEXISTSINGLE, vo2);
+        long count = trxAdapter.existsBean(ValueObject.FG_EXIST_SELECTFORUPDATEEXISTSINGLE, vo2);
         assertEquals(1, count, "One object should have been returned, got " + count);
       } catch (Exception e) {
         fail(method + "Select For Update should work:" + ExceptionHelper.getLocalizedMessage(e));
       }
 
       try {
-        long count = trxAdapter.existsObject(ValueObject.FG_EXIST_SELECTFORUPDATEEXISTALL, vo2);
+        long count = trxAdapter.existsBean(ValueObject.FG_EXIST_SELECTFORUPDATEEXISTALL, vo2);
         assertEquals(2, count, "Two objects should have been returned, got " + count);
       } catch (Exception e) {
         fail(method + "Select For Update should work:" + ExceptionHelper.getLocalizedMessage(e));

@@ -83,7 +83,7 @@ public class InheritanceTest {
     al.add(valObj);
 
     try {
-      cpoAdapter.insertObject(valObj);
+      cpoAdapter.insertBean(valObj);
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -107,7 +107,7 @@ public class InheritanceTest {
   public void tearDown() {
     String method = "tearDown:";
     try {
-      cpoAdapter.deleteObjects(al);
+      cpoAdapter.deleteBeans(al);
     } catch (Exception e) {
       fail(method + e.getMessage());
     }

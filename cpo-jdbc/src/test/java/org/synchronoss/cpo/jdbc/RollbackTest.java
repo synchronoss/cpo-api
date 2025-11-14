@@ -56,7 +56,7 @@ public class RollbackTest {
     }
     ValueObject vo = ValueObjectFactory.createValueObject(1);
     try {
-      cpoAdapter.insertObject(vo);
+      cpoAdapter.insertBean(vo);
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -67,7 +67,7 @@ public class RollbackTest {
   public void tearDown() {
     ValueObject vo = ValueObjectFactory.createValueObject(1);
     try {
-      cpoAdapter.deleteObject(vo);
+      cpoAdapter.deleteBean(vo);
     } catch (Exception e) {
     }
     cpoAdapter = null;
@@ -85,7 +85,7 @@ public class RollbackTest {
     al.add(vo2);
 
     try {
-      cpoAdapter.insertObjects(ValueObject.FG_CREATE_TESTROLLBACK, al);
+      cpoAdapter.insertBeans(ValueObject.FG_CREATE_TESTROLLBACK, al);
       fail(method + "Insert should have thrown an exception");
     } catch (Exception e) {
       try {
@@ -103,7 +103,7 @@ public class RollbackTest {
     String method = "testSingleRollback:";
     ValueObject vo = ValueObjectFactory.createValueObject(2);
     try {
-      cpoAdapter.insertObject(ValueObject.FG_CREATE_TESTSINGLEROLLBACK, vo);
+      cpoAdapter.insertBean(ValueObject.FG_CREATE_TESTSINGLEROLLBACK, vo);
       fail(method + "Insert should have thrown an exception");
     } catch (Exception e) {
       try {

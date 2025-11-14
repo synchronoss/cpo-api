@@ -89,7 +89,7 @@ public class InsertObjectTest {
     al.add(valObj);
 
     try {
-      cpoAdapter.insertObject(valObj);
+      cpoAdapter.insertBean(valObj);
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -121,7 +121,7 @@ public class InsertObjectTest {
     al.add(ValueObjectFactory.createValueObject(3));
     al.add(ValueObjectFactory.createValueObject(4));
     try {
-      cpoAdapter.insertObjects(al);
+      cpoAdapter.insertBeans(al);
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -139,7 +139,7 @@ public class InsertObjectTest {
   public void tearDown() {
     String method = "tearDown:";
     try {
-      cpoAdapter.deleteObjects(al);
+      cpoAdapter.deleteBeans(al);
     } catch (Exception e) {
       fail(method + e.getMessage());
     }

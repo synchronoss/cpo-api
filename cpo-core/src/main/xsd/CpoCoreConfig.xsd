@@ -44,7 +44,7 @@
         <xs:sequence>
             <xs:element name="metaDescriptorName" type="xs:string">
                 <xs:annotation>
-                    <xs:documentation>The Descriptor for the meta data to load up for the class</xs:documentation>
+                    <xs:documentation>The Descriptor for the metadata to load up for the class</xs:documentation>
                 </xs:annotation>
             </xs:element>
             <xs:element name="cpoConfigProcessor" type="xs:string">
@@ -70,7 +70,7 @@
         </xs:sequence>
         <xs:attribute name="name" type="xs:string" use="required">
             <xs:annotation>
-                <xs:documentation>This is the descriptor name that will be used to identify this meta data from within CPO. Only one meta descriptor can have this name. Last in wins.</xs:documentation>
+                <xs:documentation>This is the descriptor name that will be used to identify this metadata from within CPO. Only one meta descriptor can have this name. Last in wins.</xs:documentation>
             </xs:annotation>
         </xs:attribute>
         <xs:attribute name="caseSensitive" type="xs:boolean" use="optional" default="true">

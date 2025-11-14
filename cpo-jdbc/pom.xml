@@ -34,7 +34,7 @@
     <relativePath>../pom.xml</relativePath>
   </parent>
   <description>CPO is a persistence layer that is thin wrapper around JDBC that consumes and
-    produces POJOs
+    produces JAVABEANs
   </description>
   <properties>
     <oracleVersion> 23.26.0.0.0</oracleVersion>

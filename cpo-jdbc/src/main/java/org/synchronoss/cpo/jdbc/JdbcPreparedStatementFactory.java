@@ -67,9 +67,9 @@ public class JdbcPreparedStatementFactory extends CpoStatementFactory implements
    * @param <T> The cpo object being prepared to create a named logger
    * @param conn The actual jdbc connection that will be used to create the callable statement.
    * @param jca The JdbcCpoAdapter that is controlling this transaction
-   * @param criteria The object that will be used to look up the cpo meta data
+   * @param criteria The object that will be used to look up the cpo metadata
    * @param function The CpoFunction that is being executed
-   * @param obj The pojo that is being acted upon
+   * @param obj The bean that is being acted upon
    * @param wheres DOCUMENT ME!
    * @param orderBy DOCUMENT ME!
    * @param nativeQueries Additional sql to be embedded into the CpoFunction sql that is used to

@@ -80,7 +80,7 @@ public class CollectionsTest {
     al.add(valObj);
 
     try {
-      cpoAdapter.insertObject(valObj);
+      cpoAdapter.insertBean(valObj);
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -105,7 +105,7 @@ public class CollectionsTest {
     al.add(valObj);
 
     try {
-      cpoAdapter.insertObject(valObj);
+      cpoAdapter.insertBean(valObj);
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -131,7 +131,7 @@ public class CollectionsTest {
     al.add(valObj);
 
     try {
-      cpoAdapter.insertObject(valObj);
+      cpoAdapter.insertBean(valObj);
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -148,7 +148,7 @@ public class CollectionsTest {
   public void tearDown() {
     String method = "tearDown:";
     try {
-      cpoAdapter.deleteObjects(al);
+      cpoAdapter.deleteBeans(al);
     } catch (Exception e) {
       fail(method + e.getMessage());
     }

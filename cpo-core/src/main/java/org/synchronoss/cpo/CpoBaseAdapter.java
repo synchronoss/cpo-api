@@ -33,8 +33,7 @@ import org.synchronoss.cpo.enums.Logical;
 import org.synchronoss.cpo.helper.ExceptionHelper;
 
 /**
- * Created with IntelliJ IDEA. User: dberry Date: 9/10/13 Time: 09:00 AM To change this template use
- * File | Settings | File Templates.
+ * The CpoBaseAdapter has common functionality needed by all Adapter implementations
  *
  * @param <D> The type of the Datasource
  */
@@ -80,112 +79,112 @@ public abstract class CpoBaseAdapter<D> extends CpoAdapterCache implements CpoAd
   }
 
   @Override
-  public <T> long insertObject(T obj) throws CpoException {
-    return processUpdateGroup(obj, Crud.CREATE, null, null, null, null);
+  public <T> long insertBean(T bean) throws CpoException {
+    return processUpdateGroup(bean, Crud.CREATE, null, null, null, null);
   }
 
   @Override
-  public <T> long insertObject(String name, T obj) throws CpoException {
-    return processUpdateGroup(obj, Crud.CREATE, name, null, null, null);
+  public <T> long insertBean(String groupName, T bean) throws CpoException {
+    return processUpdateGroup(bean, Crud.CREATE, groupName, null, null, null);
   }
 
   @Override
-  public <T> long insertObject(
-      String name,
-      T obj,
+  public <T> long insertBean(
+      String groupName,
+      T bean,
       Collection<CpoWhere> wheres,
       Collection<CpoOrderBy> orderBy,
       Collection<CpoNativeFunction> nativeExpressions)
       throws CpoException {
-    return processUpdateGroup(obj, Crud.CREATE, name, wheres, orderBy, nativeExpressions);
+    return processUpdateGroup(bean, Crud.CREATE, groupName, wheres, orderBy, nativeExpressions);
   }
 
   @Override
-  public <T> long insertObjects(Collection<T> coll) throws CpoException {
-    return processUpdateGroup(coll, Crud.CREATE, null, null, null, null);
+  public <T> long insertBeans(Collection<T> beans) throws CpoException {
+    return processUpdateGroup(beans, Crud.CREATE, null, null, null, null);
   }
 
   @Override
-  public <T> long insertObjects(String name, Collection<T> coll) throws CpoException {
-    return processUpdateGroup(coll, Crud.CREATE, name, null, null, null);
+  public <T> long insertBeans(String groupName, Collection<T> beans) throws CpoException {
+    return processUpdateGroup(beans, Crud.CREATE, groupName, null, null, null);
   }
 
   @Override
-  public <T> long insertObjects(
-      String name,
-      Collection<T> coll,
+  public <T> long insertBeans(
+      String groupName,
+      Collection<T> beans,
       Collection<CpoWhere> wheres,
       Collection<CpoOrderBy> orderBy,
       Collection<CpoNativeFunction> nativeExpressions)
       throws CpoException {
-    return processUpdateGroup(coll, Crud.CREATE, name, wheres, orderBy, nativeExpressions);
+    return processUpdateGroup(beans, Crud.CREATE, groupName, wheres, orderBy, nativeExpressions);
   }
 
   @Override
-  public <T> long deleteObject(T obj) throws CpoException {
-    return processUpdateGroup(obj, Crud.DELETE, null, null, null, null);
+  public <T> long deleteBean(T bean) throws CpoException {
+    return processUpdateGroup(bean, Crud.DELETE, null, null, null, null);
   }
 
   @Override
-  public <T> long deleteObject(String name, T obj) throws CpoException {
-    return processUpdateGroup(obj, Crud.DELETE, name, null, null, null);
+  public <T> long deleteBean(String groupName, T bean) throws CpoException {
+    return processUpdateGroup(bean, Crud.DELETE, groupName, null, null, null);
   }
 
   @Override
-  public <T> long deleteObject(
-      String name,
-      T obj,
+  public <T> long deleteBean(
+      String groupName,
+      T bean,
       Collection<CpoWhere> wheres,
       Collection<CpoOrderBy> orderBy,
       Collection<CpoNativeFunction> nativeExpressions)
       throws CpoException {
-    return processUpdateGroup(obj, Crud.DELETE, name, wheres, orderBy, nativeExpressions);
+    return processUpdateGroup(bean, Crud.DELETE, groupName, wheres, orderBy, nativeExpressions);
   }
 
   @Override
-  public <T> long deleteObjects(Collection<T> coll) throws CpoException {
-    return processUpdateGroup(coll, Crud.DELETE, null, null, null, null);
+  public <T> long deleteBeans(Collection<T> beans) throws CpoException {
+    return processUpdateGroup(beans, Crud.DELETE, null, null, null, null);
   }
 
   @Override
-  public <T> long deleteObjects(String name, Collection<T> coll) throws CpoException {
-    return processUpdateGroup(coll, Crud.DELETE, name, null, null, null);
+  public <T> long deleteBeans(String groupName, Collection<T> beans) throws CpoException {
+    return processUpdateGroup(beans, Crud.DELETE, groupName, null, null, null);
   }
 
   @Override
-  public <T> long deleteObjects(
-      String name,
-      Collection<T> coll,
+  public <T> long deleteBeans(
+      String groupName,
+      Collection<T> beans,
       Collection<CpoWhere> wheres,
       Collection<CpoOrderBy> orderBy,
       Collection<CpoNativeFunction> nativeExpressions)
       throws CpoException {
-    return processUpdateGroup(coll, Crud.DELETE, name, wheres, orderBy, nativeExpressions);
+    return processUpdateGroup(beans, Crud.DELETE, groupName, wheres, orderBy, nativeExpressions);
   }
 
   @Override
-  public <T> T executeObject(T object) throws CpoException {
-    return processExecuteGroup(null, object, object);
+  public <T> T executeBean(T bean) throws CpoException {
+    return processExecuteGroup(null, bean, bean);
   }
 
   @Override
-  public <T> T executeObject(String name, T object) throws CpoException {
-    return processExecuteGroup(name, object, object);
+  public <T> T executeBean(String groupName, T bean) throws CpoException {
+    return processExecuteGroup(groupName, bean, bean);
   }
 
   @Override
-  public <T, C> T executeObject(String name, C criteria, T result) throws CpoException {
-    return processExecuteGroup(name, criteria, result);
+  public <T, C> T executeBean(String groupName, C criteria, T result) throws CpoException {
+    return processExecuteGroup(groupName, criteria, result);
   }
 
   @Override
-  public <T> long existsObject(T obj) throws CpoException {
-    return this.existsObject(null, obj);
+  public <T> long existsBean(T bean) throws CpoException {
+    return this.existsBean(null, bean);
   }
 
   @Override
-  public <T> long existsObject(String name, T obj) throws CpoException {
-    return this.existsObject(name, obj, null);
+  public <T> long existsBean(String groupName, T bean) throws CpoException {
+    return this.existsBean(groupName, bean, null);
   }
 
   @Override
@@ -229,23 +228,23 @@ public abstract class CpoBaseAdapter<D> extends CpoAdapterCache implements CpoAd
   }
 
   @Override
-  public <T> long persistObject(T obj) throws CpoException {
-    return processUpdateGroup(obj, Crud.UPSERT, null, null, null, null);
+  public <T> long upsertBean(T bean) throws CpoException {
+    return processUpdateGroup(bean, Crud.UPSERT, null, null, null, null);
   }
 
   @Override
-  public <T> long persistObject(String name, T obj) throws CpoException {
-    return processUpdateGroup(obj, Crud.UPSERT, name, null, null, null);
+  public <T> long upsertBean(String groupName, T bean) throws CpoException {
+    return processUpdateGroup(bean, Crud.UPSERT, groupName, null, null, null);
   }
 
   @Override
-  public <T> long persistObjects(Collection<T> coll) throws CpoException {
-    return processUpdateGroup(coll, Crud.UPSERT, null, null, null, null);
+  public <T> long upsertBeans(Collection<T> beans) throws CpoException {
+    return processUpdateGroup(beans, Crud.UPSERT, null, null, null, null);
   }
 
   @Override
-  public <T> long persistObjects(String name, Collection<T> coll) throws CpoException {
-    return processUpdateGroup(coll, Crud.UPSERT, name, null, null, null);
+  public <T> long upsertBeans(String groupName, Collection<T> beans) throws CpoException {
+    return processUpdateGroup(beans, Crud.UPSERT, groupName, null, null, null);
   }
 
   @Override
@@ -254,35 +253,35 @@ public abstract class CpoBaseAdapter<D> extends CpoAdapterCache implements CpoAd
   }
 
   @Override
-  public <T> T retrieveBean(String name, T bean) throws CpoException {
-    return processSelectGroup(bean, name, null, null, null);
+  public <T> T retrieveBean(String groupName, T bean) throws CpoException {
+    return processSelectGroup(bean, groupName, null, null, null);
   }
 
   @Override
   public <T> T retrieveBean(
-      String name,
+      String groupName,
       T bean,
       Collection<CpoWhere> wheres,
       Collection<CpoOrderBy> orderBy,
       Collection<CpoNativeFunction> nativeExpressions)
       throws CpoException {
-    return processSelectGroup(bean, name, wheres, orderBy, nativeExpressions);
+    return processSelectGroup(bean, groupName, wheres, orderBy, nativeExpressions);
   }
 
   @Override
   public <T, C> T retrieveBean(
-      String name,
+      String groupName,
       C criteria,
       T result,
       Collection<CpoWhere> wheres,
       Collection<CpoOrderBy> orderBy)
       throws CpoException {
-    return retrieveBean(name, criteria, result, wheres, orderBy, null);
+    return retrieveBean(groupName, criteria, result, wheres, orderBy, null);
   }
 
   @Override
   public <T, C> T retrieveBean(
-      String name,
+      String groupName,
       C criteria,
       T result,
       Collection<CpoWhere> wheres,
@@ -290,7 +289,7 @@ public abstract class CpoBaseAdapter<D> extends CpoAdapterCache implements CpoAd
       Collection<CpoNativeFunction> nativeExpressions)
       throws CpoException {
     Iterator<T> it =
-        processSelectGroup(name, criteria, result, wheres, orderBy, nativeExpressions, true)
+        processSelectGroup(groupName, criteria, result, wheres, orderBy, nativeExpressions, true)
             .iterator();
     if (it.hasNext()) {
       return it.next();
@@ -300,77 +299,79 @@ public abstract class CpoBaseAdapter<D> extends CpoAdapterCache implements CpoAd
   }
 
   @Override
-  public <C> List<C> retrieveBeans(String name, C criteria) throws CpoException {
-    return processSelectGroup(name, criteria, criteria, null, null, null, false);
+  public <C> List<C> retrieveBeans(String groupName, C criteria) throws CpoException {
+    return processSelectGroup(groupName, criteria, criteria, null, null, null, false);
   }
 
   @Override
   public <C> List<C> retrieveBeans(
-      String name, C criteria, CpoWhere where, Collection<CpoOrderBy> orderBy) throws CpoException {
-    ArrayList<CpoWhere> wheres = null;
-    if (where != null) {
-      wheres = new ArrayList<>();
-      wheres.add(where);
-    }
-    return processSelectGroup(name, criteria, criteria, wheres, orderBy, null, false);
-  }
-
-  @Override
-  public <C> List<C> retrieveBeans(
-      String name, C criteria, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy)
-      throws CpoException {
-    return processSelectGroup(name, criteria, criteria, wheres, orderBy, null, false);
-  }
-
-  @Override
-  public <C> List<C> retrieveBeans(String name, C criteria, Collection<CpoOrderBy> orderBy)
-      throws CpoException {
-    return processSelectGroup(name, criteria, criteria, null, orderBy, null, false);
-  }
-
-  @Override
-  public <T, C> List<T> retrieveBeans(String name, C criteria, T result) throws CpoException {
-    return processSelectGroup(name, criteria, result, null, null, null, false);
-  }
-
-  @Override
-  public <T, C> List<T> retrieveBeans(
-      String name, C criteria, T result, CpoWhere where, Collection<CpoOrderBy> orderBy)
+      String groupName, C criteria, CpoWhere where, Collection<CpoOrderBy> orderBy)
       throws CpoException {
     ArrayList<CpoWhere> wheres = null;
     if (where != null) {
       wheres = new ArrayList<>();
       wheres.add(where);
     }
-    return processSelectGroup(name, criteria, result, wheres, orderBy, null, false);
+    return processSelectGroup(groupName, criteria, criteria, wheres, orderBy, null, false);
+  }
+
+  @Override
+  public <C> List<C> retrieveBeans(
+      String groupName, C criteria, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy)
+      throws CpoException {
+    return processSelectGroup(groupName, criteria, criteria, wheres, orderBy, null, false);
+  }
+
+  @Override
+  public <C> List<C> retrieveBeans(String groupName, C criteria, Collection<CpoOrderBy> orderBy)
+      throws CpoException {
+    return processSelectGroup(groupName, criteria, criteria, null, orderBy, null, false);
+  }
+
+  @Override
+  public <T, C> List<T> retrieveBeans(String groupName, C criteria, T result) throws CpoException {
+    return processSelectGroup(groupName, criteria, result, null, null, null, false);
   }
 
   @Override
   public <T, C> List<T> retrieveBeans(
-      String name,
+      String groupName, C criteria, T result, CpoWhere where, Collection<CpoOrderBy> orderBy)
+      throws CpoException {
+    ArrayList<CpoWhere> wheres = null;
+    if (where != null) {
+      wheres = new ArrayList<>();
+      wheres.add(where);
+    }
+    return processSelectGroup(groupName, criteria, result, wheres, orderBy, null, false);
+  }
+
+  @Override
+  public <T, C> List<T> retrieveBeans(
+      String groupName,
       C criteria,
       T result,
       Collection<CpoWhere> wheres,
       Collection<CpoOrderBy> orderBy)
       throws CpoException {
-    return processSelectGroup(name, criteria, result, wheres, orderBy, null, false);
+    return processSelectGroup(groupName, criteria, result, wheres, orderBy, null, false);
   }
 
   @Override
   public <T, C> List<T> retrieveBeans(
-      String name,
+      String groupName,
       C criteria,
       T result,
       Collection<CpoWhere> wheres,
       Collection<CpoOrderBy> orderBy,
       Collection<CpoNativeFunction> nativeExpressions)
       throws CpoException {
-    return processSelectGroup(name, criteria, result, wheres, orderBy, nativeExpressions, false);
+    return processSelectGroup(
+        groupName, criteria, result, wheres, orderBy, nativeExpressions, false);
   }
 
   @Override
   public <T, C> CpoResultSet<T> retrieveBeans(
-      String name,
+      String groupName,
       C criteria,
       T result,
       Collection<CpoWhere> wheres,
@@ -380,56 +381,69 @@ public abstract class CpoBaseAdapter<D> extends CpoAdapterCache implements CpoAd
     CpoBlockingResultSet<T> resultSet = new CpoBlockingResultSet<>(queueSize);
     RetrieverThread<T, C> retrieverThread =
         new RetrieverThread<T, C>(
-            name, criteria, result, wheres, orderBy, nativeExpressions, false, resultSet);
+            groupName, criteria, result, wheres, orderBy, nativeExpressions, false, resultSet);
 
     retrieverThread.start();
     return resultSet;
   }
 
   @Override
-  public <T> long updateObject(T obj) throws CpoException {
-    return processUpdateGroup(obj, Crud.UPDATE, null, null, null, null);
+  public <T> long updateBean(T bean) throws CpoException {
+    return processUpdateGroup(bean, Crud.UPDATE, null, null, null, null);
   }
 
   @Override
-  public <T> long updateObject(String name, T obj) throws CpoException {
-    return processUpdateGroup(obj, Crud.UPDATE, name, null, null, null);
+  public <T> long updateBean(String groupName, T bean) throws CpoException {
+    return processUpdateGroup(bean, Crud.UPDATE, groupName, null, null, null);
   }
 
   @Override
-  public <T> long updateObject(
-      String name,
-      T obj,
+  public <T> long updateBean(
+      String groupName,
+      T bean,
       Collection<CpoWhere> wheres,
       Collection<CpoOrderBy> orderBy,
       Collection<CpoNativeFunction> nativeExpressions)
       throws CpoException {
-    return processUpdateGroup(obj, Crud.UPDATE, name, wheres, orderBy, nativeExpressions);
+    return processUpdateGroup(bean, Crud.UPDATE, groupName, wheres, orderBy, nativeExpressions);
   }
 
   @Override
-  public <T> long updateObjects(Collection<T> coll) throws CpoException {
-    return processUpdateGroup(coll, Crud.UPDATE, null, null, null, null);
+  public <T> long updateBeans(Collection<T> beans) throws CpoException {
+    return processUpdateGroup(beans, Crud.UPDATE, null, null, null, null);
   }
 
   @Override
-  public <T> long updateObjects(String name, Collection<T> coll) throws CpoException {
-    return processUpdateGroup(coll, Crud.UPDATE, name, null, null, null);
+  public <T> long updateBeans(String groupName, Collection<T> beans) throws CpoException {
+    return processUpdateGroup(beans, Crud.UPDATE, groupName, null, null, null);
   }
 
   @Override
-  public <T> long updateObjects(
-      String name,
-      Collection<T> coll,
+  public <T> long updateBeans(
+      String groupName,
+      Collection<T> beans,
       Collection<CpoWhere> wheres,
       Collection<CpoOrderBy> orderBy,
       Collection<CpoNativeFunction> nativeExpressions)
       throws CpoException {
-    return processUpdateGroup(coll, Crud.UPDATE, name, wheres, orderBy, nativeExpressions);
+    return processUpdateGroup(beans, Crud.UPDATE, groupName, wheres, orderBy, nativeExpressions);
   }
 
+  /**
+   * Updates beans in the datasource
+   *
+   * @param <T> The bean type
+   * @param bean The bean instance
+   * @param crud The query group type
+   * @param groupName The query group type
+   * @param wheres A collection of CpoWhere beans to be used by the function
+   * @param orderBy A collection of CpoOrderBy beans to be used by the function
+   * @param nativeExpressions A collection of CpoNativeFunction beans to be used by the function
+   * @return The number of records updated
+   * @throws CpoException Thrown if there are errors accessing the datasource
+   */
   protected abstract <T> long processUpdateGroup(
-      T obj,
+      T bean,
       Crud crud,
       String groupName,
       Collection<CpoWhere> wheres,
@@ -437,8 +451,21 @@ public abstract class CpoBaseAdapter<D> extends CpoAdapterCache implements CpoAd
       Collection<CpoNativeFunction> nativeExpressions)
       throws CpoException;
 
+  /**
+   * Updates beans in the datasource
+   *
+   * @param <T> The bean type
+   * @param beans The collection of T to update
+   * @param crud The query group type
+   * @param groupName The query group type
+   * @param wheres A collection of CpoWhere beans to be used by the function
+   * @param orderBy A collection of CpoOrderBy beans to be used by the function
+   * @param nativeExpressions A collection of CpoNativeFunction beans to be used by the function
+   * @return The number of records updated
+   * @throws CpoException Thrown if there are errors accessing the datasource
+   */
   protected abstract <T> long processUpdateGroup(
-      Collection<T> coll,
+      Collection<T> beans,
       Crud crud,
       String groupName,
       Collection<CpoWhere> wheres,
@@ -446,22 +473,117 @@ public abstract class CpoBaseAdapter<D> extends CpoAdapterCache implements CpoAd
       Collection<CpoNativeFunction> nativeExpressions)
       throws CpoException;
 
-  protected abstract <T, C> T processExecuteGroup(String name, C criteria, T result)
+  /**
+   * Executes a bean whose MetaData contains a stored procedure. An assumption is that the bean
+   * exists in the datasource.
+   *
+   * @param <T> The result bean type
+   * @param <C> The criteria bean type
+   * @param groupName The filter groupName which tells the datasource which beans should be
+   *     returned. The groupName also signifies what data in the bean will be populated.
+   * @param criteria This is a bean that has been defined within the metadata of the datasource. If
+   *     the class is not defined an exception will be thrown. If the bean does not exist in the
+   *     datasource, an exception will be thrown. This bean is used to populate the IN arguments
+   *     used to retrieve the collection of beans.
+   * @param result This is a bean that has been defined within the metadata of the datasource. If
+   *     the class is not defined an exception will be thrown. If the bean does not exist in the
+   *     datasource, an exception will be thrown. This bean defines the bean type that will be
+   *     returned in the
+   * @return A result bean populate with the OUT arguments
+   * @throws CpoException Thrown if there are errors accessing the datasource
+   */
+  protected abstract <T, C> T processExecuteGroup(String groupName, C criteria, T result)
       throws CpoException;
 
-  public abstract <T> long existsObject(String name, T obj, Collection<CpoWhere> wheres)
+  /**
+   * The CpoAdapter will check to see if this object exists in the datasource.
+   *
+   * <pre>Example:
+   * {@code
+   * class SomeObject so = new SomeObject();
+   * long count = 0;
+   * class CpoAdapter cpo = null;
+   *
+   *  try {
+   *    cpo = new CpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));
+   *  } catch (CpoException ce) {
+   *    // Handle the error
+   *    cpo = null;
+   *  }
+   *
+   *  if (cpo!=null) {
+   *    so.setId(1);
+   *    so.setName("SomeName");
+   *    try{
+   *      CpoWhere where = cpo.newCpoWhere(Logical.NONE, id, Comparison.EQ);
+   *      count = cpo.existsObject("SomeExistCheck",so, where);
+   *      if (count>0) {
+   *        // object exists
+   *      } else {
+   *        // object does not exist
+   *      }
+   *    } catch (CpoException ce) {
+   *      // Handle the error
+   *    }
+   *  }
+   * }
+   * </pre>
+   *
+   * @param groupName The String name of the EXISTS Function Group that will be used to create the
+   *     object in the datasource. null signifies that the default rules will be used.
+   * @param bean This is an object that has been defined within the metadata of the datasource. If
+   *     the class is not defined an exception will be thrown. This object will be searched for
+   *     inside the datasource.
+   * @param wheres A CpoWhere object that passes in run-time constraints to the function that
+   *     performs the exist
+   * @return The number of objects that exist in the datasource that match the specified object
+   * @throws CpoException Thrown if there are errors accessing the datasource
+   */
+  public abstract <T> long existsBean(String groupName, T bean, Collection<CpoWhere> wheres)
       throws CpoException;
 
+  /**
+   * Retrieves the bean from the datasource.
+   *
+   * @param <T> The bean type
+   * @param bean This is a bean that has been defined within the metadata of the datasource. If the
+   *     class is not defined an exception will be thrown. The input bean is used to specify the
+   *     search criteria.
+   * @param groupName The name which identifies which RETRIEVE Function Group to execute to retrieve
+   *     the bean.
+   * @param wheres A collection of CpoWhere beans to be used by the function
+   * @param orderBy A collection of CpoOrderBy beans to be used by the function
+   * @param nativeExpressions A collection of CpoNativeFunction beans to be used by the function
+   * @return A populated bean of the same type as the bean passed in as a argument. If no beans
+   *     match the criteria a NULL will be returned.
+   * @throws CpoException Thrown if there are errors accessing the datasource or more than one row
+   *     is returned
+   */
   protected abstract <T> T processSelectGroup(
-      T obj,
+      T bean,
       String groupName,
       Collection<CpoWhere> wheres,
       Collection<CpoOrderBy> orderBy,
       Collection<CpoNativeFunction> nativeExpressions)
       throws CpoException;
 
+  /**
+   * Retrieves beans from the datasource.
+   *
+   * @param <T> The result bean type
+   * @param <C> The criteria bean type
+   * @param groupName Query group groupName
+   * @param criteria The criteria bean
+   * @param result The result bean
+   * @param wheres A collection of CpoWhere beans to be used by the function
+   * @param orderBy A collection of CpoOrderBy beans to be used by the function
+   * @param nativeExpressions A collection of CpoNativeFunction beans to be used by the function
+   * @param useRetrieve Use the RETRIEVE_GROUP instead of the LIST_GROUP
+   * @return A List of T or an Empty List.
+   * @throws CpoException Thrown if there are errors accessing the datasource
+   */
   protected abstract <T, C> List<T> processSelectGroup(
-      String name,
+      String groupName,
       C criteria,
       T result,
       Collection<CpoWhere> wheres,
@@ -470,8 +592,23 @@ public abstract class CpoBaseAdapter<D> extends CpoAdapterCache implements CpoAd
       boolean useRetrieve)
       throws CpoException;
 
+  /**
+   * Retrieves beans from the datasource.
+   *
+   * @param <T> The result bean type
+   * @param <C> The criteria bean type
+   * @param groupName Query group groupName
+   * @param criteria The criteria bean
+   * @param result The result bean
+   * @param wheres A collection of CpoWhere beans to be used by the function
+   * @param orderBy A collection of CpoOrderBy beans to be used by the function
+   * @param nativeExpressions A collection of CpoNativeFunction beans to be used by the function
+   * @param useRetrieve Use the RETRIEVE_GROUP instead of the LIST_GROUP
+   * @param resultSet The result set to add the results to.
+   * @throws CpoException Any errors retrieving the data from the datasource
+   */
   protected abstract <T, C> void processSelectGroup(
-      String name,
+      String groupName,
       C criteria,
       T result,
       Collection<CpoWhere> wheres,

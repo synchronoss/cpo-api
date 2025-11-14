@@ -47,7 +47,7 @@ import org.synchronoss.cpo.meta.domain.CpoFunction;
 
 /**
  * JdbcCpoAdapter is an interface for a set of routines that are responsible for managing value
- * objects from a jdbc datasource.
+ * beans from a jdbc datasource.
  *
  * @author david berry
  */
@@ -56,18 +56,15 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
   /** Version Id for this class. */
   private static final long serialVersionUID = 1L;
 
-  /** DOCUMENT ME! */
   private static final Logger logger = LoggerFactory.getLogger(JdbcCpoAdapter.class);
 
-  /** DOCUMENT ME! */
   private Context context_ = null;
 
-  /** DOCUMENT ME! */
   private boolean invalidReadConnection_ = false;
 
   private boolean batchUpdatesSupported_ = false;
 
-  /** CpoMetaDescriptor allows you to get the meta data for a class. */
+  /** CpoMetaDescriptor allows you to get the metadata for a class. */
   private JdbcCpoMetaDescriptor metaDescriptor = null;
 
   /** Creates a JdbcCpoAdapter. */
@@ -147,7 +144,7 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
       //      this.closeLocalConnection(c);
     } catch (Throwable t) {
       logger.error(ExceptionHelper.getLocalizedMessage(t), t);
-      throw new CpoException("Could Not Retrieve Database Meta Data", t);
+      throw new CpoException("Could Not Retrieve Database Metadata", t);
     } finally {
       closeLocalConnection(c);
     }
@@ -200,7 +197,7 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
   }
 
   @Override
-  public <T> long existsObject(String name, T obj, Collection<CpoWhere> wheres)
+  public <T> long existsBean(String groupName, T bean, Collection<CpoWhere> wheres)
       throws CpoException {
     Connection c = null;
     long objCount = -1;
@@ -208,9 +205,9 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
     try {
       c = getReadConnection();
 
-      objCount = existsObject(name, obj, c, wheres);
+      objCount = existsBean(groupName, bean, c, wheres);
     } catch (Exception e) {
-      throw new CpoException("existsObjects(String, Object) failed", e);
+      throw new CpoException("existsBean(String, T) failed", e);
     } finally {
       closeLocalConnection(c);
     }
@@ -219,20 +216,20 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
   }
 
   /**
-   * The CpoAdapter will check to see if this object exists in the datasource.
+   * The CpoAdapter will check to see if this bean exists in the datasource.
    *
-   * @param <T> The type of the object
-   * @param name The name which identifies which EXISTS, INSERT, and UPDATE Function Groups to
-   *     execute to persist the object.
-   * @param obj This is an object that has been defined within the metadata of the datasource. If
-   *     the class is not defined an exception will be thrown.
-   * @param con The datasource Connection with which to check if the object exists
+   * @param <T> The type of the bean
+   * @param groupName The groupName which identifies which EXISTS, INSERT, and UPDATE Function
+   *     Groups to execute to upsert the bean.
+   * @param bean This is a bean that has been defined within the metadata of the datasource. If the
+   *     class is not defined an exception will be thrown.
+   * @param con The datasource Connection with which to check if the bean exists
    * @param wheres A collection of where clauses
    * @return The int value of the first column returned in the record set
    * @throws CpoException exception will be thrown if the Function Group has a function count != 1
    */
-  protected <T> long existsObject(String name, T obj, Connection con, Collection<CpoWhere> wheres)
-      throws CpoException {
+  protected <T> long existsBean(
+      String groupName, T bean, Connection con, Collection<CpoWhere> wheres) throws CpoException {
     PreparedStatement ps = null;
     ResultSet rs = null;
     ResultSetMetaData rsmd;
@@ -240,20 +237,21 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
     long objCount = 0;
     Logger localLogger = logger;
 
-    if (obj == null) {
-      throw new CpoException("NULL Object passed into existsObject");
+    if (bean == null) {
+      throw new CpoException("NULL Bean passed into existsBean");
     }
 
     try {
-      cpoClass = metaDescriptor.getMetaClass(obj);
-      List<CpoFunction> cpoFunctions = cpoClass.getFunctionGroup(Crud.EXIST, name).getFunctions();
+      cpoClass = metaDescriptor.getMetaClass(bean);
+      List<CpoFunction> cpoFunctions =
+          cpoClass.getFunctionGroup(Crud.EXIST, groupName).getFunctions();
       localLogger = LoggerFactory.getLogger(cpoClass.getMetaClass());
 
       for (CpoFunction cpoFunction : cpoFunctions) {
         localLogger.info(cpoFunction.getExpression());
         JdbcPreparedStatementFactory jpsf =
             new JdbcPreparedStatementFactory(
-                con, this, cpoClass, cpoFunction, obj, wheres, null, null);
+                con, this, cpoClass, cpoFunction, bean, wheres, null, null);
         ps = jpsf.getPreparedStatement();
 
         long qCount = 0; // set the results for this function to 0
@@ -266,7 +264,7 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
         if (rsmd.getColumnCount() == 1) {
           if (rs.next()) {
             try {
-              qCount = rs.getLong(1); // get the number of objects
+              qCount = rs.getLong(1); // get the number of beans
               // that exist
             } catch (Exception e) {
               // Exists result not an int so bail to record counter
@@ -291,7 +289,7 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
         ps = null;
       }
     } catch (SQLException e) {
-      String msg = "existsObject(name, obj, con) failed:";
+      String msg = "existsBean(groupName, bean, con) failed:";
       localLogger.error(msg, e);
       throw new CpoException(msg, e);
     } finally {
@@ -302,42 +300,16 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
     return objCount;
   }
 
-  /**
-   * Creates a new JdbcCpoWhere object
-   *
-   * @return A CpoWhere
-   */
   @Override
   public CpoWhere newWhere() {
     return new JdbcCpoWhere();
   }
 
-  /**
-   * Creates a new CpoWhere object
-   *
-   * @param <T> The type of the object
-   * @param logical The logical operator
-   * @param attr The attribute name to compare
-   * @param comp The compare operator
-   * @param value The value to compare the attribute to.
-   * @return A CpoWhere
-   */
   @Override
   public <T> CpoWhere newWhere(Logical logical, String attr, Comparison comp, T value) {
     return new JdbcCpoWhere(logical, attr, comp, value);
   }
 
-  /**
-   * Creates a new CpoWhere object
-   *
-   * @param <T> The type of the object
-   * @param logical The logical operator
-   * @param attr The attribute name to compare
-   * @param comp The compare operator
-   * @param value The value to compare the attribute to.
-   * @param not negate the compare
-   * @return A CpoWhere
-   */
   @Override
   public <T> CpoWhere newWhere(
       Logical logical, String attr, Comparison comp, T value, boolean not) {
@@ -372,24 +344,25 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
   }
 
   /**
-   * Validates the crud of query being performed. If it is a Persist Group, it checks the database
+   * Validates the crud of query being performed. If it is an UPSERT Group, it checks the database
    * to see if this is an update or an insert, and returns the query group. Otherwise, it sends back
-   * the original query group. Upserts only work for single objects.
+   * the original query group. Upserts only work for single beans.
    *
-   * @param <T> The crud of the object
-   * @param obj The obj to insert or update
+   * @param <T> The crud of the bean
+   * @param bean The bean to insert or update
    * @param crud The group crud
-   * @param name The group name
+   * @param groupName The groupName
    * @param c The connection to use
    * @return The crud operation to use
    * @throws CpoException An exception occurred
    */
-  protected <T> Crud adjustCrud(T obj, Crud crud, String name, Connection c) throws CpoException {
+  protected <T> Crud adjustCrud(T bean, Crud crud, String groupName, Connection c)
+      throws CpoException {
     Crud retType = crud;
     long objCount;
 
     if (Crud.UPSERT == retType) {
-      objCount = existsObject(name, obj, c, null);
+      objCount = existsBean(groupName, bean, c, null);
 
       if (objCount == 0) {
         retType = Crud.CREATE;
@@ -397,7 +370,7 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
         retType = Crud.UPDATE;
       } else {
         throw new CpoException(
-            "Persist can only UPDATE one record. Your EXISTS function returned 2 or more.");
+            "UPSERT can only UPDATE one record. Your EXISTS function returned 2 or more.");
       }
     }
 
@@ -511,38 +484,21 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
     }
   }
 
-  /**
-   * Executes an Object whose MetaData contains a stored procedure. An assumption is that the object
-   * exists in the datasource.
-   *
-   * @param <T> The result object type
-   * @param <C> The criteria object type
-   * @param name The filter name which tells the datasource which objects should be returned. The
-   *     name also signifies what data in the object will be populated.
-   * @param criteria This is an object that has been defined within the metadata of the datasource.
-   *     If the class is not defined an exception will be thrown. If the object does not exist in
-   *     the datasource, an exception will be thrown. This object is used to populate the IN
-   *     arguments used to retrieve the collection of objects.
-   * @param result This is an object that has been defined within the metadata of the datasource. If
-   *     the class is not defined an exception will be thrown. If the object does not exist in the
-   *     datasource, an exception will be thrown. This object defines the object type that will be
-   *     returned in the
-   * @return A result object populate with the OUT arguments
-   * @throws CpoException DOCUMENT ME!
-   */
-  protected <T, C> T processExecuteGroup(String name, C criteria, T result) throws CpoException {
+  @Override
+  protected <T, C> T processExecuteGroup(String groupName, C criteria, T result)
+      throws CpoException {
     Connection c = null;
     T obj = null;
 
     try {
       c = getWriteConnection();
-      obj = processExecuteGroup(name, criteria, result, c);
+      obj = processExecuteGroup(groupName, criteria, result, c);
       commitLocalConnection(c);
     } catch (Exception e) {
       // Any exception has to try to rollback the work;
       rollbackLocalConnection(c);
       ExceptionHelper.reThrowCpoException(
-          e, "processExecuteGroup(String name, Object criteria, Object result) failed");
+          e, "processExecuteGroup(String groupName, C criteria, T result) failed");
     } finally {
       closeLocalConnection(c);
     }
@@ -551,37 +507,37 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
   }
 
   /**
-   * Executes an Object whose MetaData contains a stored procedure. An assumption is that the object
+   * Executes a Bean whose MetaData contains a stored procedure. An assumption is that the bean
    * exists in the datasource.
    *
-   * @param <T> The result object type
-   * @param <C> The criteria object type
-   * @param name The filter name which tells the datasource which objects should be returned. The
-   *     name also signifies what data in the object will be populated.
-   * @param criteria This is an object that has been defined within the metadata of the datasource.
-   *     If the class is not defined an exception will be thrown. If the object does not exist in
-   *     the datasource, an exception will be thrown. This object is used to populate the IN
-   *     arguments used to retrieve the collection of objects.
+   * @param <T> The result bean type
+   * @param <C> The criteria bean type
+   * @param groupName The filter groupName which tells the datasource which beans should be
+   *     returned. The groupName also signifies what data in the bean will be populated.
+   * @param criteria This is a bean that has been defined within the metadata of the datasource. If
+   *     the class is not defined an exception will be thrown. If the bean does not exist in the
+   *     datasource, an exception will be thrown. This bean is used to populate the IN arguments
+   *     used to retrieve the collection of beans.
    * @param conn The connection to use to execute this group
-   * @param result This is an object that has been defined within the metadata of the datasource. If
-   *     the class is not defined an exception will be thrown. If the object does not exist in the
-   *     datasource, an exception will be thrown. This object defines the object type that will be
+   * @param result This is a bean that has been defined within the metadata of the datasource. If
+   *     the class is not defined an exception will be thrown. If the bean does not exist in the
+   *     datasource, an exception will be thrown. This bean defines the bean type that will be
    *     returned in the
-   * @return A result object populate with the OUT arguments
+   * @return A result bean populate with the OUT arguments
    * @throws CpoException DOCUMENT ME!
    */
-  protected <T, C> T processExecuteGroup(String name, C criteria, T result, Connection conn)
+  protected <T, C> T processExecuteGroup(String groupName, C criteria, T result, Connection conn)
       throws CpoException {
     CallableStatement cstmt = null;
     CpoClass criteriaClass;
     CpoClass resultClass;
-    T returnObject = null;
+    T returnBean = null;
     Logger localLogger = criteria == null ? logger : LoggerFactory.getLogger(criteria.getClass());
 
     JdbcCallableStatementFactory jcsf = null;
 
     if (criteria == null || result == null) {
-      throw new CpoException("NULL Object passed into executeObject");
+      throw new CpoException("NULL Bean passed into executeBean");
     }
 
     try {
@@ -589,41 +545,41 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
       resultClass = metaDescriptor.getMetaClass(result);
 
       List<CpoFunction> functions =
-          criteriaClass.getFunctionGroup(Crud.EXECUTE, name).getFunctions();
+          criteriaClass.getFunctionGroup(Crud.EXECUTE, groupName).getFunctions();
       localLogger.info(
           "===================processExecuteGroup ("
-              + name
+              + groupName
               + ") Count<"
               + functions.size()
               + ">=========================");
 
       try {
-        returnObject = (T) result.getClass().newInstance();
+        returnBean = (T) result.getClass().newInstance();
       } catch (IllegalAccessException iae) {
-        throw new CpoException("Unable to access the constructor of the Return Object", iae);
+        throw new CpoException("Unable to access the constructor of the Return Bean", iae);
       } catch (InstantiationException iae) {
-        throw new CpoException("Unable to instantiate Return Object", iae);
+        throw new CpoException("Unable to instantiate Return Bean", iae);
       }
 
       // Loop through the queries and process each one
       for (CpoFunction function : functions) {
 
-        localLogger.debug("Executing Call:" + criteriaClass.getName() + ":" + name);
+        localLogger.debug("Executing Call:" + criteriaClass.getName() + ":" + groupName);
 
         jcsf = new JdbcCallableStatementFactory(conn, this, function, criteria, resultClass);
         cstmt = jcsf.getCallableStatement();
         cstmt.execute();
         jcsf.release();
 
-        localLogger.debug("Processing Call:" + criteriaClass.getName() + ":" + name);
+        localLogger.debug("Processing Call:" + criteriaClass.getName() + ":" + groupName);
 
         // Todo: Add Code here to go through the arguments, find record sets,
         // and process them
         // Process the non-record set out params and make it the first
-        // object in the collection
+        // bean in the collection
 
         // Loop through the OUT Parameters and set them in the result
-        // object
+        // bean
         int j = 1;
         for (CpoArgument cpoArgument : jcsf.getOutArguments()) {
           JdbcCpoArgument jdbcArgument = (JdbcCpoArgument) cpoArgument;
@@ -642,7 +598,7 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
               }
             }
             jdbcAttribute.invokeSetter(
-                returnObject, new CallableStatementCpoData(cstmt, jdbcAttribute, j));
+                returnBean, new CallableStatementCpoData(cstmt, jdbcAttribute, j));
           }
           j++;
         }
@@ -651,7 +607,7 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
       }
     } catch (Throwable t) {
       String msg =
-          "ProcessExecuteGroup(String name, Object criteria, Object result, Connection conn)"
+          "processExecuteGroup(String groupName, C criteria, T result, Connection conn)"
               + " failed. SQL=";
       localLogger.error(msg, t);
       throw new CpoException(msg, t);
@@ -662,28 +618,12 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
       }
     }
 
-    return returnObject;
+    return returnBean;
   }
 
-  /**
-   * Retrieves the Object from the datasource.
-   *
-   * @param <T> The object type
-   * @param obj This is an object that has been defined within the metadata of the datasource. If
-   *     the class is not defined an exception will be thrown. The input object is used to specify
-   *     the search criteria.
-   * @param groupName The name which identifies which RETRIEVE Function Group to execute to retrieve
-   *     the object.
-   * @param wheres A collection of CpoWhere objects to be used by the function
-   * @param orderBy A collection of CpoOrderBy objects to be used by the function
-   * @param nativeExpressions A collection of CpoNativeFunction objects to be used by the function
-   * @return A populated object of the same type as the Object passed in as a argument. If no
-   *     objects match the criteria a NULL will be returned.
-   * @throws CpoException the retrieve function defined for this objects returns more than one row,
-   *     an exception will be thrown.
-   */
+  @Override
   protected <T> T processSelectGroup(
-      T obj,
+      T bean,
       String groupName,
       Collection<CpoWhere> wheres,
       Collection<CpoOrderBy> orderBy,
@@ -694,7 +634,7 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
 
     try {
       c = getReadConnection();
-      result = processSelectGroup(obj, groupName, wheres, orderBy, nativeExpressions, c);
+      result = processSelectGroup(bean, groupName, wheres, orderBy, nativeExpressions, c);
 
       // The select may have a for update clause on it
       // Since the connection is cached we need to get rid of this
@@ -702,8 +642,7 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
     } catch (Exception e) {
       // Any exception has to try to rollback the work;
       rollbackLocalConnection(c);
-      ExceptionHelper.reThrowCpoException(
-          e, "processSelectGroup(Object obj, String groupName) failed");
+      ExceptionHelper.reThrowCpoException(e, "processSelectGroup(T bean, String groupName) failed");
     } finally {
       closeLocalConnection(c);
     }
@@ -712,25 +651,25 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
   }
 
   /**
-   * Retrieves the Object from the datasource.
+   * Retrieves the Bean from the datasource.
    *
-   * @param <T> The object type
-   * @param obj This is an object that has been defined within the metadata of the datasource. If
-   *     the class is not defined an exception will be thrown. The input object is used to specify
-   *     the search criteria.
+   * @param <T> The bean type
+   * @param bean This is a bean that has been defined within the metadata of the datasource. If the
+   *     class is not defined an exception will be thrown. The input bean is used to specify the
+   *     search criteria.
    * @param groupName The name which identifies which RETRIEVE Function Group to execute to retrieve
-   *     the object.
-   * @param wheres A collection of CpoWhere objects to be used by the function
-   * @param orderBy A collection of CpoOrderBy objects to be used by the function
-   * @param nativeExpressions A collection of CpoNativeFunction objects to be used by the function
+   *     the bean.
+   * @param wheres A collection of CpoWhere beans to be used by the function
+   * @param orderBy A collection of CpoOrderBy beans to be used by the function
+   * @param nativeExpressions A collection of CpoNativeFunction beans to be used by the function
    * @param con The connection to use for this select
-   * @return A populated object of the same type as the Object passed in as a argument. If no
-   *     objects match the criteria a NULL will be returned.
-   * @throws CpoException the retrieve function defined for this objects returns more than one row,
-   *     an exception will be thrown.
+   * @return A populated bean of the same type as the Bean passed in as a argument. If no beans
+   *     match the criteria a NULL will be returned.
+   * @throws CpoException the retrieve function defined for this beans returns more than one row, an
+   *     exception will be thrown.
    */
   protected <T> T processSelectGroup(
-      T obj,
+      T bean,
       String groupName,
       Collection<CpoWhere> wheres,
       Collection<CpoOrderBy> orderBy,
@@ -742,9 +681,9 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
     ResultSetMetaData rsmd;
     CpoClass cpoClass;
     JdbcCpoAttribute attribute;
-    T criteriaObj = obj;
+    T criteriaObj = bean;
     boolean recordsExist = false;
-    Logger localLogger = obj == null ? logger : LoggerFactory.getLogger(obj.getClass());
+    Logger localLogger = bean == null ? logger : LoggerFactory.getLogger(bean.getClass());
 
     int recordCount = 0;
     int attributesSet = 0;
@@ -752,8 +691,8 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
     int k;
     T rObj = null;
 
-    if (obj == null) {
-      throw new CpoException("NULL Object passed into retrieveBean");
+    if (bean == null) {
+      throw new CpoException("NULL Bean passed into retrieveBean");
     }
 
     try {
@@ -771,15 +710,15 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
               + "> =========================");
 
       try {
-        rObj = (T) obj.getClass().newInstance();
+        rObj = (T) bean.getClass().newInstance();
       } catch (IllegalAccessException iae) {
         localLogger.error(
             "=================== Could not access default constructor for Class=<"
-                + obj.getClass()
+                + bean.getClass()
                 + "> ==================");
-        throw new CpoException("Unable to access the constructor of the Return Object", iae);
+        throw new CpoException("Unable to access the constructor of the Return Bean", iae);
       } catch (InstantiationException iae) {
-        throw new CpoException("Unable to instantiate Return Object", iae);
+        throw new CpoException("Unable to instantiate Return Bean", iae);
       }
 
       for (CpoFunction cpoFunction : functions) {
@@ -827,7 +766,8 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
             }
 
             if (rs.next()) {
-              String msg = "ProcessSelectGroup(Object, String) failed: Multiple Records Returned";
+              String msg =
+                  "processSelectGroup(T bean, String groupName) failed: Multiple Records Returned";
               localLogger.error(msg);
               throw new CpoException(msg);
             }
@@ -866,7 +806,7 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
                 + "> =========================");
       }
     } catch (Throwable t) {
-      String msg = "ProcessSeclectGroup(Object) failed: " + ExceptionHelper.getLocalizedMessage(t);
+      String msg = "processSeclectGroup(T bean) failed: " + ExceptionHelper.getLocalizedMessage(t);
       localLogger.error(msg, t);
       rObj = null;
       throw new CpoException(msg, t);
@@ -878,23 +818,9 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
     return rObj;
   }
 
-  /**
-   * Retrieves Objects from the datasource.
-   *
-   * @param <T> The result object type
-   * @param <C> The criteria object type
-   * @param name Query group name
-   * @param criteria The criteria object
-   * @param result The result object
-   * @param wheres A collection of CpoWhere objects to be used by the function
-   * @param orderBy A collection of CpoOrderBy objects to be used by the function
-   * @param nativeExpressions A collection of CpoNativeFunction objects to be used by the function
-   * @param useRetrieve Use the RETRIEVE_GROUP instead of the LIST_GROUP
-   * @return A List of T or an Empty List.
-   * @throws CpoException Any errors retrieving the data from the datasource
-   */
+  @Override
   protected <T, C> List<T> processSelectGroup(
-      String name,
+      String groupName,
       C criteria,
       T result,
       Collection<CpoWhere> wheres,
@@ -908,7 +834,15 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
     try {
       con = getReadConnection();
       processSelectGroup(
-          name, criteria, result, wheres, orderBy, nativeExpressions, con, useRetrieve, resultSet);
+          groupName,
+          criteria,
+          result,
+          wheres,
+          orderBy,
+          nativeExpressions,
+          con,
+          useRetrieve,
+          resultSet);
       // The select may have a for update clause on it
       // Since the connection is cached we need to get rid of this
       commitLocalConnection(con);
@@ -917,7 +851,7 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
       rollbackLocalConnection(con);
       ExceptionHelper.reThrowCpoException(
           e,
-          "processSelectGroup(String name, Object criteria, Object result,CpoWhere where,"
+          "processSelectGroup(String groupName, C criteria, T result,C poWhere where,"
               + " Collection orderBy, boolean useRetrieve) failed");
     } finally {
       closeLocalConnection(con);
@@ -926,23 +860,9 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
     return resultSet;
   }
 
-  /**
-   * Retrieves Objects from the datasource.
-   *
-   * @param <T> The result object type
-   * @param <C> The criteria object type
-   * @param name Query group name
-   * @param criteria The criteria object
-   * @param result The result object
-   * @param wheres A collection of CpoWhere objects to be used by the function
-   * @param orderBy A collection of CpoOrderBy objects to be used by the function
-   * @param nativeExpressions A collection of CpoNativeFunction objects to be used by the function
-   * @param useRetrieve Use the RETRIEVE_GROUP instead of the LIST_GROUP
-   * @param resultSet The result set to add the results to.
-   * @throws CpoException Any errors retrieving the data from the datasource
-   */
+  @Override
   protected <T, C> void processSelectGroup(
-      String name,
+      String groupName,
       C criteria,
       T result,
       Collection<CpoWhere> wheres,
@@ -956,7 +876,15 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
     try {
       con = getReadConnection();
       processSelectGroup(
-          name, criteria, result, wheres, orderBy, nativeExpressions, con, useRetrieve, resultSet);
+          groupName,
+          criteria,
+          result,
+          wheres,
+          orderBy,
+          nativeExpressions,
+          con,
+          useRetrieve,
+          resultSet);
       // The select may have a for update clause on it
       // Since the connection is cached we need to get rid of this
       commitLocalConnection(con);
@@ -965,7 +893,7 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
       rollbackLocalConnection(con);
       ExceptionHelper.reThrowCpoException(
           e,
-          "processSelectGroup(String name, Object criteria, Object result,CpoWhere where,"
+          "processSelectGroup(String groupName, C criteria, T result,CpoWhere where,"
               + " Collection orderBy, boolean useRetrieve) failed");
     } finally {
       closeLocalConnection(con);
@@ -973,23 +901,23 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
   }
 
   /**
-   * Retrieves Objects from the datasource.
+   * Retrieves Beans from the datasource.
    *
-   * @param <T> The result object type
-   * @param <C> The criteria object type
-   * @param name Query group name
-   * @param criteria The criteria object
-   * @param result The result object
-   * @param wheres A collection of CpoWhere objects to be used by the function
-   * @param orderBy A collection of CpoOrderBy objects to be used by the function
-   * @param nativeExpressions A collection of CpoNativeFunction objects to be used by the function
+   * @param <T> The result bean type
+   * @param <C> The criteria bean type
+   * @param groupName Query group groupName
+   * @param criteria The criteria bean
+   * @param result The result bean
+   * @param wheres A collection of CpoWhere beans to be used by the function
+   * @param orderBy A collection of CpoOrderBy beans to be used by the function
+   * @param nativeExpressions A collection of CpoNativeFunction beans to be used by the function
    * @param useRetrieve Use the RETRIEVE_GROUP instead of the LIST_GROUP
    * @param con The connection to use for this select
    * @param resultSet The result set to add the results to.
    * @throws CpoException Any errors retrieving the data from the datasource
    */
   protected <T, C> void processSelectGroup(
-      String name,
+      String groupName,
       C criteria,
       T result,
       Collection<CpoWhere> wheres,
@@ -1014,7 +942,7 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
     int i;
 
     if (criteria == null || result == null) {
-      throw new CpoException("NULL Object passed into retrieveBean or retrieveBeans");
+      throw new CpoException("NULL Bean passed into retrieveBean or retrieveBeans");
     }
 
     try {
@@ -1027,9 +955,9 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
                 + "> Type=<"
                 + Crud.RETRIEVE.operation
                 + "> Name=<"
-                + name
+                + groupName
                 + "> =========================");
-        cpoFunctions = criteriaClass.getFunctionGroup(Crud.RETRIEVE, name).getFunctions();
+        cpoFunctions = criteriaClass.getFunctionGroup(Crud.RETRIEVE, groupName).getFunctions();
       } else {
         localLogger.info(
             "=================== Class=<"
@@ -1037,9 +965,9 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
                 + "> Type=<"
                 + Crud.LIST.operation
                 + "> Name=<"
-                + name
+                + groupName
                 + "> =========================");
-        cpoFunctions = criteriaClass.getFunctionGroup(Crud.LIST, name).getFunctions();
+        cpoFunctions = criteriaClass.getFunctionGroup(Crud.LIST, groupName).getFunctions();
       }
 
       for (CpoFunction cpoFunction : cpoFunctions) {
@@ -1083,9 +1011,9 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
                 "=================== Could not access default constructor for Class=<"
                     + result.getClass()
                     + "> ==================");
-            throw new CpoException("Unable to access the constructor of the Return Object", iae);
+            throw new CpoException("Unable to access the constructor of the Return Bean", iae);
           } catch (InstantiationException iae) {
-            throw new CpoException("Unable to instantiate Return Object", iae);
+            throw new CpoException("Unable to instantiate Return Bean", iae);
           }
 
           for (k = 1; k <= columnCount; k++) {
@@ -1116,14 +1044,14 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
                 + "> Type=<"
                 + Crud.LIST.operation
                 + "> Name=<"
-                + name
+                + groupName
                 + "> Result=<"
                 + result.getClass()
                 + "> ====================");
       }
     } catch (Throwable t) {
       String msg =
-          "ProcessSelectGroup(String name, Object criteria, Object result, CpoWhere where,"
+          "processSelectGroup(String groupName, C criteria, T result, CpoWhere where,"
               + " Collection orderBy, Connection con) failed. Error:";
       localLogger.error(msg, t);
       throw new CpoException(msg, t);
@@ -1133,21 +1061,9 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
     }
   }
 
-  /**
-   * Updates objects in the datasource
-   *
-   * @param <T> The object type
-   * @param obj The object instance
-   * @param crud The query group type
-   * @param groupName The query group type
-   * @param wheres A collection of CpoWhere objects to be used by the function
-   * @param orderBy A collection of CpoOrderBy objects to be used by the function
-   * @param nativeExpressions A collection of CpoNativeFunction objects to be used by the function
-   * @return The number of records updated
-   * @throws CpoException any errors processing the update
-   */
+  @Override
   protected <T> long processUpdateGroup(
-      T obj,
+      T bean,
       Crud crud,
       String groupName,
       Collection<CpoWhere> wheres,
@@ -1159,13 +1075,14 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
 
     try {
       c = getWriteConnection();
-      updateCount = processUpdateGroup(obj, crud, groupName, wheres, orderBy, nativeExpressions, c);
+      updateCount =
+          processUpdateGroup(bean, crud, groupName, wheres, orderBy, nativeExpressions, c);
       commitLocalConnection(c);
     } catch (Exception e) {
       // Any exception has to try to rollback the work;
       rollbackLocalConnection(c);
       ExceptionHelper.reThrowCpoException(
-          e, "processUdateGroup(Object obj, String crud, String groupName) failed");
+          e, "processUdateGroup(T bean, String crud, String groupName) failed");
     } finally {
       closeLocalConnection(c);
     }
@@ -1174,21 +1091,21 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
   }
 
   /**
-   * Updates objects in the datasource
+   * Updates beans in the datasource
    *
-   * @param <T> The object type
-   * @param obj The object instance
+   * @param <T> The bean type
+   * @param bean The bean instance
    * @param crud The query group type
    * @param groupName The query group type
-   * @param wheres A collection of CpoWhere objects to be used by the function
-   * @param orderBy A collection of CpoOrderBy objects to be used by the function
-   * @param nativeExpressions A collection of CpoNativeFunction objects to be used by the function
+   * @param wheres A collection of CpoWhere beans to be used by the function
+   * @param orderBy A collection of CpoOrderBy beans to be used by the function
+   * @param nativeExpressions A collection of CpoNativeFunction beans to be used by the function
    * @param con The connection to use for the update
    * @return The number of records updated
    * @throws CpoException any errors processing the update
    */
   protected <T> long processUpdateGroup(
-      T obj,
+      T bean,
       Crud crud,
       String groupName,
       Collection<CpoWhere> wheres,
@@ -1196,27 +1113,27 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
       Collection<CpoNativeFunction> nativeExpressions,
       Connection con)
       throws CpoException {
-    Logger localLogger = obj == null ? logger : LoggerFactory.getLogger(obj.getClass());
+    Logger localLogger = bean == null ? logger : LoggerFactory.getLogger(bean.getClass());
     CpoClass cpoClass;
     PreparedStatement ps = null;
 
     JdbcPreparedStatementFactory jpsf = null;
     long updateCount = 0;
 
-    if (obj == null) {
+    if (bean == null) {
       throw new CpoException(
-          "NULL Object passed into insertObject, deleteObject, updateObject, or persistObject");
+          "NULL Bean passed into insertBean, deleteBean, updateBean, or upsertBean");
     }
 
     try {
-      cpoClass = metaDescriptor.getMetaClass(obj);
+      cpoClass = metaDescriptor.getMetaClass(bean);
       List<CpoFunction> cpoFunctions =
           cpoClass
-              .getFunctionGroup(adjustCrud(obj, crud, groupName, con), groupName)
+              .getFunctionGroup(adjustCrud(bean, crud, groupName, con), groupName)
               .getFunctions();
       localLogger.info(
           "=================== Class=<"
-              + obj.getClass()
+              + bean.getClass()
               + "> Type=<"
               + crud.operation
               + "> Name=<"
@@ -1228,7 +1145,7 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
       for (CpoFunction cpoFunction : cpoFunctions) {
         jpsf =
             new JdbcPreparedStatementFactory(
-                con, this, cpoClass, cpoFunction, obj, wheres, orderBy, nativeExpressions);
+                con, this, cpoClass, cpoFunction, bean, wheres, orderBy, nativeExpressions);
         ps = jpsf.getPreparedStatement();
         numRows += ps.executeUpdate();
         jpsf.release();
@@ -1238,7 +1155,7 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
           "=================== "
               + numRows
               + " Updates - Class=<"
-              + obj.getClass()
+              + bean.getClass()
               + "> Type=<"
               + crud.operation
               + "> Name=<"
@@ -1255,7 +1172,7 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
               + ","
               + groupName
               + ","
-              + obj.getClass().getName();
+              + bean.getClass().getName();
       // TODO FIX THIS
       // localLogger.error("bound values:" + this.parameterToString(jq));
       localLogger.error(msg, t);
@@ -1271,21 +1188,21 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
   }
 
   /**
-   * Updates objects in the datasource
+   * Updates beans in the datasource
    *
-   * @param <T> The object type
-   * @param arr The array of T to update
+   * @param <T> The bean type
+   * @param beans The array of T to update
    * @param crud The query group type
    * @param groupName The query group type
-   * @param wheres A collection of CpoWhere objects to be used by the function
-   * @param orderBy A collection of CpoOrderBy objects to be used by the function
-   * @param nativeExpressions A collection of CpoNativeFunction objects to be used by the function
+   * @param wheres A collection of CpoWhere beans to be used by the function
+   * @param orderBy A collection of CpoOrderBy beans to be used by the function
+   * @param nativeExpressions A collection of CpoNativeFunction beans to be used by the function
    * @param con The connection to use for the update
    * @return The number of records updated
    * @throws CpoException any errors processing the update
    */
   protected <T> long processBatchUpdateGroup(
-      T[] arr,
+      T[] beans,
       Crud crud,
       String groupName,
       Collection<CpoWhere> wheres,
@@ -1303,9 +1220,10 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
     Logger localLogger = logger;
 
     try {
-      jmc = metaDescriptor.getMetaClass(arr[0]);
+      jmc = metaDescriptor.getMetaClass(beans[0]);
       cpoFunctions =
-          jmc.getFunctionGroup(adjustCrud(arr[0], crud, groupName, con), groupName).getFunctions();
+          jmc.getFunctionGroup(adjustCrud(beans[0], crud, groupName, con), groupName)
+              .getFunctions();
       localLogger = LoggerFactory.getLogger(jmc.getMetaClass());
 
       int numRows = 0;
@@ -1314,7 +1232,7 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
       if (cpoFunctions.size() == 1) {
         localLogger.info(
             "=================== BATCH - Class=<"
-                + arr[0].getClass()
+                + beans[0].getClass()
                 + "> Type=<"
                 + crud.operation
                 + "> Name=<"
@@ -1323,12 +1241,12 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
         cpoFunction = cpoFunctions.get(0);
         jpsf =
             new JdbcPreparedStatementFactory(
-                con, this, jmc, cpoFunction, arr[0], wheres, orderBy, nativeExpressions);
+                con, this, jmc, cpoFunction, beans[0], wheres, orderBy, nativeExpressions);
         ps = jpsf.getPreparedStatement();
         ps.addBatch();
-        for (int j = 1; j < arr.length; j++) {
-          //          jpsf.bindParameters(arr[j]);
-          jpsf.setBindValues(jpsf.getBindValues(cpoFunction, arr[j]));
+        for (int j = 1; j < beans.length; j++) {
+          //          jpsf.bindParameters(beans[j]);
+          jpsf.setBindValues(jpsf.getBindValues(cpoFunction, beans[j]));
           ps.addBatch();
         }
         updates = ps.executeBatch();
@@ -1346,7 +1264,7 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
             "=================== BATCH - "
                 + numRows
                 + " Updates - Class=<"
-                + arr[0].getClass()
+                + beans[0].getClass()
                 + "> Type=<"
                 + crud.operation
                 + "> Name=<"
@@ -1355,13 +1273,13 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
       } else {
         localLogger.info(
             "=================== Class=<"
-                + arr[0].getClass()
+                + beans[0].getClass()
                 + "> Type=<"
                 + crud.operation
                 + "> Name=<"
                 + groupName
                 + "> =========================");
-        for (T obj : arr) {
+        for (T obj : beans) {
           for (CpoFunction function : cpoFunctions) {
             jpsf =
                 new JdbcPreparedStatementFactory(
@@ -1376,7 +1294,7 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
             "=================== "
                 + numRows
                 + " Updates - Class=<"
-                + arr[0].getClass()
+                + beans[0].getClass()
                 + "> Type=<"
                 + crud.operation
                 + "> Name=<"
@@ -1394,7 +1312,7 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
               + ","
               + groupName
               + ","
-              + arr[0].getClass().getName();
+              + beans[0].getClass().getName();
       // TODO FIX This
       // localLogger.error("bound values:" + this.parameterToString(jq));
       localLogger.error(msg, t);
@@ -1409,21 +1327,9 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
     return updateCount;
   }
 
-  /**
-   * Updates objects in the datasource
-   *
-   * @param <T> The object type
-   * @param coll The collection of T to update
-   * @param crud The query group type
-   * @param groupName The query group type
-   * @param wheres A collection of CpoWhere objects to be used by the function
-   * @param orderBy A collection of CpoOrderBy objects to be used by the function
-   * @param nativeExpressions A collection of CpoNativeFunction objects to be used by the function
-   * @return The number of records updated
-   * @throws CpoException any errors processing the update
-   */
+  @Override
   protected <T> long processUpdateGroup(
-      Collection<T> coll,
+      Collection<T> beans,
       Crud crud,
       String groupName,
       Collection<CpoWhere> wheres,
@@ -1437,13 +1343,13 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
       c = getWriteConnection();
 
       updateCount =
-          processUpdateGroup(coll, crud, groupName, wheres, orderBy, nativeExpressions, c);
+          processUpdateGroup(beans, crud, groupName, wheres, orderBy, nativeExpressions, c);
       commitLocalConnection(c);
     } catch (Exception e) {
       // Any exception has to try to rollback the work;
       rollbackLocalConnection(c);
       ExceptionHelper.reThrowCpoException(
-          e, "processUpdateGroup(Collection coll, String crud, String groupName) failed");
+          e, "processUpdateGroup(Collection beans, String crud, String groupName) failed");
     } finally {
       closeLocalConnection(c);
     }
@@ -1452,21 +1358,21 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
   }
 
   /**
-   * Updates objects in the datasource
+   * Updates beans in the datasource
    *
-   * @param <T> The object type
-   * @param coll The collection of T to update
+   * @param <T> The bean type
+   * @param beans The collection of T to update
    * @param crud The query group type
    * @param groupName The query group type
-   * @param wheres A collection of CpoWhere objects to be used by the function
-   * @param orderBy A collection of CpoOrderBy objects to be used by the function
-   * @param nativeExpressions A collection of CpoNativeFunction objects to be used by the function
+   * @param wheres A collection of CpoWhere beans to be used by the function
+   * @param orderBy A collection of CpoOrderBy beans to be used by the function
+   * @param nativeExpressions A collection of CpoNativeFunction beans to be used by the function
    * @param con The connection to use for the update
    * @return The number of records updated
    * @throws CpoException any errors processing the update
    */
   protected <T> long processUpdateGroup(
-      Collection<T> coll,
+      Collection<T> beans,
       Crud crud,
       String groupName,
       Collection<CpoWhere> wheres,
@@ -1476,8 +1382,8 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
       throws CpoException {
     long updateCount = 0;
 
-    if (!coll.isEmpty()) {
-      T[] arr = (T[]) coll.toArray();
+    if (!beans.isEmpty()) {
+      T[] arr = (T[]) beans.toArray();
 
       T obj1 = arr[0];
       boolean allEqual = true;

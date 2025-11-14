@@ -51,7 +51,7 @@ public abstract class CpoClass extends CpoClassBean
 
   /**
    * functionGroups is a hashMap that contains a hashMap of CpoFunctionGroup Lists that are used by
-   * this object to persist and retrieve it into a datasource.
+   * this bean to create and retrieve it into a datasource.
    */
   private Map<String, CpoFunctionGroup> functionGroups = new HashMap<>();
 

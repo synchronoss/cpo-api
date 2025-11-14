@@ -45,10 +45,10 @@ public class TransformNoOp implements JdbcCpoTransform<Integer, Integer> {
    * Reflection is used to true everything up at runtime.
    *
    * <p>e.g public byte[] transformIn(Blob dbIn) would be the signature for converting a Blob to a
-   * byte[] to be stored in the pojo.
+   * byte[] to be stored in the bean.
    *
    * @param dbIn The value from the datasource that will be transformed into the format that is
-   *     required by the pojo.
+   *     required by the bean.
    * @return The object to be stored in the attribute
    * @throws CpoException An error occurred
    */
@@ -64,7 +64,7 @@ public class TransformNoOp implements JdbcCpoTransform<Integer, Integer> {
    * converted. Reflection is used to true everything up at runtime.
    *
    * <p>e.g public Blob transformOut(JdbcCallableStatementFactory jcsf, byte[] attrOut) would be the
-   * signature for converting a byte[] stored in the pojo into a Blob object for the datasource.
+   * signature for converting a byte[] stored in the bean into a Blob object for the datasource.
    *
    * @param jcsf a reference to the JdbcCallableStatementFactory. This is necessary as some DBMSs
    *     (ORACLE) that require access to the connection to deal with certain datatypes.
@@ -86,7 +86,7 @@ public class TransformNoOp implements JdbcCpoTransform<Integer, Integer> {
    * converted. Reflection is used to true everything up at runtime.
    *
    * <p>e.g public Blob transformOut(JdbcPreparedStatementFactory jpsf, byte[] attrOut) would be the
-   * signature for converting a byte[] stored in the pojo into a Blob object for the datasource.
+   * signature for converting a byte[] stored in the bean into a Blob object for the datasource.
    *
    * @param jpsf a reference to the JdbcPreparedStatementFactory. This is necessary as some DBMSs
    *     (ORACLE) that require access to the connection to deal with certain datatypes.

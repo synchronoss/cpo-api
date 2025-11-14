@@ -32,7 +32,7 @@ import org.synchronoss.cpo.parser.ExpressionParser;
 public interface CpoMetaAdapter {
 
   /**
-   * Returns the meta data for the class that is contained within the meta data source
+   * Returns the metadata for the class that is contained within the metadata source
    *
    * @throws CpoException Thrown if there are errors accessing the datasource
    */

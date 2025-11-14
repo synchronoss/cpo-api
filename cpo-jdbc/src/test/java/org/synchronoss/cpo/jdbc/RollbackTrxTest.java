@@ -60,7 +60,7 @@ public class RollbackTrxTest {
     ValueObject vo = ValueObjectFactory.createValueObject(1);
     vo.setAttrVarChar("Test");
     try {
-      trxAdapter.insertObject(vo);
+      trxAdapter.insertBean(vo);
       trxAdapter.commit();
     } catch (Exception e) {
       try {
@@ -76,7 +76,7 @@ public class RollbackTrxTest {
   public void tearDown() {
     ValueObject vo = ValueObjectFactory.createValueObject(1);
     try {
-      trxAdapter.deleteObject(vo);
+      trxAdapter.deleteBean(vo);
       trxAdapter.commit();
     } catch (Exception e) {
       try {
@@ -104,7 +104,7 @@ public class RollbackTrxTest {
     al.add(vo2);
 
     try {
-      trxAdapter.insertObjects(ValueObject.FG_CREATE_TESTROLLBACK, al);
+      trxAdapter.insertBeans(ValueObject.FG_CREATE_TESTROLLBACK, al);
       trxAdapter.commit();
       fail(method + "Insert should have thrown an exception");
     } catch (Exception e) {
@@ -128,7 +128,7 @@ public class RollbackTrxTest {
     String method = "testTrxSingleRollback:";
     ValueObject vo = ValueObjectFactory.createValueObject(2);
     try {
-      trxAdapter.insertObject(ValueObject.FG_CREATE_TESTSINGLEROLLBACK, vo);
+      trxAdapter.insertBean(ValueObject.FG_CREATE_TESTSINGLEROLLBACK, vo);
       trxAdapter.commit();
       fail(method + "Insert should have thrown an exception");
     } catch (Exception e) {

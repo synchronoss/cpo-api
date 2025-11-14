@@ -77,7 +77,7 @@ public class HotDeployTest {
     al.add(ValueObjectFactory.createValueObject(5));
     al.add(ValueObjectFactory.createValueObject(-6));
     try {
-      cpoAdapter.insertObjects("TestOrderByInsert", al);
+      cpoAdapter.insertBeans("TestOrderByInsert", al);
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -190,7 +190,7 @@ public class HotDeployTest {
     try {
       metaFile.delete();
 
-      cpoAdapter.deleteObjects(ValueObject.FG_DELETE_TESTORDERBYDELETE, al);
+      cpoAdapter.deleteBeans(ValueObject.FG_DELETE_TESTORDERBYDELETE, al);
     } catch (Exception e) {
       fail(method + e.getMessage());
     }

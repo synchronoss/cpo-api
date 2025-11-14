@@ -83,7 +83,7 @@ public class CriteriaObjectTest {
     al.add(ValueObjectFactory.createValueObject(9));
     al.add(ValueObjectFactory.createValueObject(10));
     try {
-      cpoAdapter.insertObjects(ValueObjectBean.FG_CREATE_TESTORDERBYINSERT, al);
+      cpoAdapter.insertBeans(ValueObjectBean.FG_CREATE_TESTORDERBYINSERT, al);
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -149,7 +149,7 @@ public class CriteriaObjectTest {
 
       try {
         rvo =
-            cpoAdapter.executeObject(
+            cpoAdapter.executeBean(
                 CriteriaObject.FG_EXECUTE_EXECUTECRITERIA, critObject, new ValueObjectBean());
         assertNotNull(rvo, method + "Returned Value object is null");
         assertEquals(27, rvo.getAttrDouble(), "power(3,3)=" + rvo.getAttrDouble());
@@ -164,7 +164,7 @@ public class CriteriaObjectTest {
   public void tearDown() {
     String method = "tearDown:";
     try {
-      cpoAdapter.deleteObjects(ValueObject.FG_DELETE_TESTORDERBYDELETE, al);
+      cpoAdapter.deleteBeans(ValueObject.FG_DELETE_TESTORDERBYDELETE, al);
 
     } catch (Exception e) {
       fail(method + e.getMessage());

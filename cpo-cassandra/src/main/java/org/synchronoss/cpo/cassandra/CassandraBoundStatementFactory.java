@@ -62,7 +62,7 @@ public class CassandraBoundStatementFactory extends CpoStatementFactory implemen
    * @param cassandraCpoAdapter The JdbcCpoAdapter that is controlling this transaction
    * @param criteria The object that will be used to look up the cpo metadata
    * @param function The CpoFunction that is being executed
-   * @param obj The pojo that is being acted upon
+   * @param obj The bean that is being acted upon
    * @param wheres A collection of wheres to find the object
    * @param orderBy A collection of orderbys to sort the objects
    * @param nativeQueries Additional sql to be embedded into the CpoFunction sql that is used to

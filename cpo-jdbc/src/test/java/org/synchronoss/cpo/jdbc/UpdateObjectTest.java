@@ -92,7 +92,7 @@ public class UpdateObjectTest {
     al.add(valObj);
 
     try {
-      cpoAdapter.insertObject(valObj);
+      cpoAdapter.insertBean(valObj);
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -101,7 +101,7 @@ public class UpdateObjectTest {
     try {
       List<CpoWhere> cws = new ArrayList<>();
       cws.add(cpoAdapter.newWhere(Logical.NONE, ValueObject.ATTR_ID, Comparison.EQ, 2));
-      long updated = cpoAdapter.updateObject(ValueObject.FG_UPDATE_NULL, valObj, cws, null, null);
+      long updated = cpoAdapter.updateBean(ValueObject.FG_UPDATE_NULL, valObj, cws, null, null);
       assertEquals(0, updated, "Should not have updated anything");
     } catch (Exception e) {
       fail(method + e.getMessage());
@@ -111,7 +111,7 @@ public class UpdateObjectTest {
     try {
       List<CpoWhere> cws = new ArrayList<>();
       cws.add(cpoAdapter.newWhere(Logical.NONE, ValueObject.ATTR_ID, Comparison.EQ, 5));
-      long updated = cpoAdapter.updateObject(ValueObject.FG_UPDATE_NULL, valObj, cws, null, null);
+      long updated = cpoAdapter.updateBean(ValueObject.FG_UPDATE_NULL, valObj, cws, null, null);
       assertEquals(1, updated, "Should have updated 1");
     } catch (Exception e) {
       fail(method + e.getMessage());
@@ -122,7 +122,7 @@ public class UpdateObjectTest {
   public void tearDown() {
     String method = "tearDown:";
     try {
-      cpoAdapter.deleteObjects(al);
+      cpoAdapter.deleteBeans(al);
 
     } catch (Exception e) {
       fail(method + e.getMessage());

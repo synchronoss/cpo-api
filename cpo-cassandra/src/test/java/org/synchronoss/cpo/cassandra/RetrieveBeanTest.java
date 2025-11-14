@@ -74,7 +74,7 @@ public class RetrieveBeanTest {
     al.add(ValueObjectFactory.createValueObject(9));
     al.add(ValueObjectFactory.createValueObject(10));
     try {
-      cpoAdapter.insertObjects("TestOrderByInsert", al);
+      cpoAdapter.insertBeans("TestOrderByInsert", al);
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -258,7 +258,7 @@ public class RetrieveBeanTest {
   public void tearDown() {
     String method = "tearDown:";
     try {
-      cpoAdapter.deleteObjects("TestOrderByDelete", al);
+      cpoAdapter.deleteBeans("TestOrderByDelete", al);
 
     } catch (Exception e) {
       fail(method + e.getMessage());

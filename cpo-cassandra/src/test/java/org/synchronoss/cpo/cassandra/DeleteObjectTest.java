@@ -86,7 +86,7 @@ public class DeleteObjectTest {
     al.add(valObj);
 
     try {
-      cpoAdapter.insertObject(valObj);
+      cpoAdapter.insertBean(valObj);
     } catch (Exception e) {
       logger.error(ExceptionHelper.getLocalizedMessage(e));
       fail(method + e.getMessage());
@@ -94,7 +94,7 @@ public class DeleteObjectTest {
 
     // try the where on the delete, should delete 0
     try {
-      long deleted = cpoAdapter.deleteObject(valObj);
+      long deleted = cpoAdapter.deleteBean(valObj);
     } catch (Exception e) {
       logger.error(ExceptionHelper.getLocalizedMessage(e));
       fail(method + e.getMessage());
@@ -105,7 +105,7 @@ public class DeleteObjectTest {
   public void tearDown() {
     String method = "tearDown:";
     try {
-      cpoAdapter.deleteObjects(al);
+      cpoAdapter.deleteBeans(al);
     } catch (Exception e) {
       logger.error(ExceptionHelper.getLocalizedMessage(e));
       fail(method + e.getMessage());

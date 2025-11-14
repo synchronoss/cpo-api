@@ -85,7 +85,7 @@ public class JdbcXaResourceTest {
   public void tearDown() {
     String method = "tearDown:";
     try {
-      cpoAdapter.deleteObjects(al);
+      cpoAdapter.deleteBeans(al);
     } catch (Exception e) {
       fail(method + e.getMessage());
     } finally {
@@ -113,8 +113,8 @@ public class JdbcXaResourceTest {
       try {
         cpoXaAdapter1.start(xid1, XAResource.TMNOFLAGS);
         cpoXaAdapter2.start(xid2, XAResource.TMNOFLAGS);
-        cpoXaAdapter1.insertObject(valObj1);
-        cpoXaAdapter2.insertObject(valObj2);
+        cpoXaAdapter1.insertBean(valObj1);
+        cpoXaAdapter2.insertBean(valObj2);
         cpoXaAdapter1.end(xid1, XAResource.TMSUCCESS);
         cpoXaAdapter2.end(xid2, XAResource.TMSUCCESS);
 
@@ -135,7 +135,7 @@ public class JdbcXaResourceTest {
         assertEquals(1, list.get(0).getId(), "ValuObject(1) is missing");
         assertEquals(2, list.get(1).getId(), "ValuObject(2) is missing");
 
-        assertEquals(2, cpoXaAdapter1.deleteObjects(al));
+        assertEquals(2, cpoXaAdapter1.deleteBeans(al));
       } catch (Exception e) {
         fail(method + ExceptionHelper.getLocalizedMessage(e));
       } finally {
@@ -169,8 +169,8 @@ public class JdbcXaResourceTest {
       try {
         cpoXaAdapter1.start(xid1, XAResource.TMNOFLAGS);
         cpoXaAdapter2.start(xid2, XAResource.TMNOFLAGS);
-        cpoXaAdapter1.insertObject(valObj1);
-        cpoXaAdapter2.insertObject(valObj2);
+        cpoXaAdapter1.insertBean(valObj1);
+        cpoXaAdapter2.insertBean(valObj2);
         cpoXaAdapter1.end(xid1, XAResource.TMSUCCESS);
         cpoXaAdapter2.end(xid2, XAResource.TMSUCCESS);
 
@@ -212,7 +212,7 @@ public class JdbcXaResourceTest {
       try {
 
         cpoXaAdapter1.start(xid, XAResource.TMNOFLAGS);
-        cpoXaAdapter1.insertObject(valObj);
+        cpoXaAdapter1.insertBean(valObj);
         cpoXaAdapter1.end(xid, XAResource.TMSUCCESS);
         cpoXaAdapter1.prepare(xid);
 
@@ -330,7 +330,7 @@ public class JdbcXaResourceTest {
       try {
 
         cpoXaAdapter1.start(xid1, XAResource.TMNOFLAGS);
-        cpoXaAdapter1.insertObject(valObj);
+        cpoXaAdapter1.insertBean(valObj);
         cpoXaAdapter1.end(xid1, XAResource.TMSUCCESS);
 
         // make sure a cpoAdapter cannot see the insert
@@ -369,7 +369,7 @@ public class JdbcXaResourceTest {
       try {
 
         cpoXaAdapter1.start(xid1, XAResource.TMNOFLAGS);
-        cpoXaAdapter1.insertObject(valObj);
+        cpoXaAdapter1.insertBean(valObj);
         cpoXaAdapter1.end(xid1, XAResource.TMSUCCESS);
 
         // make sure a cpoAdapter cannot see the insert
@@ -411,15 +411,15 @@ public class JdbcXaResourceTest {
 
       try {
         cpoXaAdapter1.start(xid1, XAResource.TMNOFLAGS);
-        cpoXaAdapter1.insertObject(valObj1);
+        cpoXaAdapter1.insertBean(valObj1);
         cpoXaAdapter1.end(xid1, XAResource.TMSUSPEND);
 
         // This update is done outside of transaction scope, so it
         // is not affected by the XA rollback.
-        cpoXaAdapter1.insertObject(valObj2);
+        cpoXaAdapter1.insertBean(valObj2);
 
         cpoXaAdapter1.start(xid1, XAResource.TMRESUME);
-        cpoXaAdapter1.insertObject(valObj3);
+        cpoXaAdapter1.insertBean(valObj3);
         cpoXaAdapter1.end(xid1, XAResource.TMSUCCESS);
 
         ret = cpoXaAdapter1.prepare(xid1);
@@ -460,7 +460,7 @@ public class JdbcXaResourceTest {
       try {
 
         cpoXaAdapter1.start(xid1, XAResource.TMNOFLAGS);
-        cpoXaAdapter1.insertObject(valObj1);
+        cpoXaAdapter1.insertBean(valObj1);
         cpoXaAdapter1.end(xid1, XAResource.TMSUCCESS);
 
         cpoXaAdapter1.start(xid2, XAResource.TMNOFLAGS);
@@ -472,7 +472,7 @@ public class JdbcXaResourceTest {
           cpoXaAdapter1.commit(xid1, false);
         }
 
-        cpoXaAdapter1.insertObject(valObj2);
+        cpoXaAdapter1.insertBean(valObj2);
         cpoXaAdapter1.end(xid2, XAResource.TMSUCCESS);
 
         ret = cpoXaAdapter1.prepare(xid2);
@@ -516,12 +516,12 @@ public class JdbcXaResourceTest {
       try {
 
         cpoXaAdapter1.start(xid1, XAResource.TMNOFLAGS);
-        cpoXaAdapter1.insertObject(valObj1);
+        cpoXaAdapter1.insertBean(valObj1);
         cpoXaAdapter1.end(xid1, XAResource.TMSUCCESS);
 
         if (cpoXaAdapter2.isSameRM(cpoXaAdapter1)) {
           cpoXaAdapter2.start(xid1, XAResource.TMJOIN);
-          cpoXaAdapter2.insertObject(valObj2);
+          cpoXaAdapter2.insertBean(valObj2);
           cpoXaAdapter2.end(xid1, XAResource.TMSUCCESS);
         } else {
           fail("Unable to join XAResources with the same resource manager");
@@ -570,16 +570,16 @@ public class JdbcXaResourceTest {
       try {
 
         cpoXaAdapter1.start(xid1, XAResource.TMNOFLAGS);
-        cpoXaAdapter1.insertObject(valObj1);
+        cpoXaAdapter1.insertBean(valObj1);
         cpoXaAdapter1.end(xid1, XAResource.TMSUCCESS);
         cpoXaAdapter1.prepare(xid1);
 
         cpoXaAdapter1.start(xid2, XAResource.TMNOFLAGS);
-        cpoXaAdapter1.insertObject(valObj2);
+        cpoXaAdapter1.insertBean(valObj2);
         cpoXaAdapter1.end(xid2, XAResource.TMSUSPEND);
 
         cpoXaAdapter1.start(xid3, XAResource.TMNOFLAGS);
-        cpoXaAdapter1.insertObject(valObj3);
+        cpoXaAdapter1.insertBean(valObj3);
         cpoXaAdapter1.end(xid3, XAResource.TMFAIL);
 
         xids = cpoXaAdapter1.recover(XAResource.TMSTARTRSCAN | XAResource.TMENDRSCAN);

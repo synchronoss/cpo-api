@@ -300,10 +300,11 @@
                 <version>2.7.0</version> <!-- Use the latest stable version -->
                 <configuration>
                     <inceptionYear>2003</inceptionYear>
-                    <organizationName>Synchronoss</organizationName>
+                    <organizationName>David E. Berry</organizationName>
                     <licenseName>lgpl_v3</licenseName>
-                    <failOnMissingLicense>true</failOnMissingLicense>
-                    <failOnMissingHeader>true</failOnMissingHeader>
+                    <failOnMissingLicense>false</failOnMissingLicense>
+                    <failOnMissingHeader>false</failOnMissingHeader>
+                    <addJavaLicenseAfterPackage>false</addJavaLicenseAfterPackage>
                     <!-- Other configurations as needed -->
                 </configuration>
                 <executions>

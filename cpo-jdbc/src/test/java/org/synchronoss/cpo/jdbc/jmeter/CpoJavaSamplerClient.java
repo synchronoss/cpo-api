@@ -126,7 +126,7 @@ public class CpoJavaSamplerClient extends AbstractJavaSamplerClient {
     valueObject.setAttrBit(true);
 
     try {
-      cpoAdapter.insertObject(valueObject);
+      cpoAdapter.insertBean(valueObject);
       ValueObject vo =
           cpoAdapter.retrieveBean(
               ValueObject.FG_RETRIEVE_NULL, valueObject, valueObject, null, null);

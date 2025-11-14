@@ -127,118 +127,118 @@ public class JdbcCpoXaAdapter extends CpoBaseXaResource<JdbcCpoAdapter> implemen
   }
 
   @Override
-  public <T> long insertObject(T obj) throws CpoException {
-    return getCurrentResource().insertObject(obj);
+  public <T> long insertBean(T bean) throws CpoException {
+    return getCurrentResource().insertBean(bean);
   }
 
   @Override
-  public <T> long insertObject(String name, T obj) throws CpoException {
-    return getCurrentResource().insertObject(name, obj);
+  public <T> long insertBean(String groupName, T bean) throws CpoException {
+    return getCurrentResource().insertBean(groupName, bean);
   }
 
   @Override
-  public <T> long insertObject(
-      String name,
-      T obj,
+  public <T> long insertBean(
+      String groupName,
+      T bean,
       Collection<CpoWhere> wheres,
       Collection<CpoOrderBy> orderBy,
       Collection<CpoNativeFunction> nativeExpressions)
       throws CpoException {
-    return getCurrentResource().insertObject(name, obj, wheres, orderBy, nativeExpressions);
+    return getCurrentResource().insertBean(groupName, bean, wheres, orderBy, nativeExpressions);
   }
 
   @Override
-  public <T> long insertObjects(Collection<T> coll) throws CpoException {
-    return getCurrentResource().insertObjects(coll);
+  public <T> long insertBeans(Collection<T> beans) throws CpoException {
+    return getCurrentResource().insertBeans(beans);
   }
 
   @Override
-  public <T> long insertObjects(String name, Collection<T> coll) throws CpoException {
-    return getCurrentResource().insertObjects(name, coll);
+  public <T> long insertBeans(String groupName, Collection<T> beans) throws CpoException {
+    return getCurrentResource().insertBeans(groupName, beans);
   }
 
   @Override
-  public <T> long insertObjects(
-      String name,
-      Collection<T> coll,
+  public <T> long insertBeans(
+      String groupName,
+      Collection<T> beans,
       Collection<CpoWhere> wheres,
       Collection<CpoOrderBy> orderBy,
       Collection<CpoNativeFunction> nativeExpressions)
       throws CpoException {
-    return getCurrentResource().insertObjects(name, coll, wheres, orderBy, nativeExpressions);
+    return getCurrentResource().insertBeans(groupName, beans, wheres, orderBy, nativeExpressions);
   }
 
   @Override
-  public <T> long deleteObject(T obj) throws CpoException {
-    return getCurrentResource().deleteObject(obj);
+  public <T> long deleteBean(T bean) throws CpoException {
+    return getCurrentResource().deleteBean(bean);
   }
 
   @Override
-  public <T> long deleteObject(String name, T obj) throws CpoException {
-    return getCurrentResource().deleteObject(name, obj);
+  public <T> long deleteBean(String groupName, T bean) throws CpoException {
+    return getCurrentResource().deleteBean(groupName, bean);
   }
 
   @Override
-  public <T> long deleteObject(
-      String name,
-      T obj,
+  public <T> long deleteBean(
+      String groupName,
+      T bean,
       Collection<CpoWhere> wheres,
       Collection<CpoOrderBy> orderBy,
       Collection<CpoNativeFunction> nativeExpressions)
       throws CpoException {
-    return getCurrentResource().deleteObject(name, obj, wheres, orderBy, nativeExpressions);
+    return getCurrentResource().deleteBean(groupName, bean, wheres, orderBy, nativeExpressions);
   }
 
   @Override
-  public <T> long deleteObjects(Collection<T> coll) throws CpoException {
-    return getCurrentResource().deleteObjects(coll);
+  public <T> long deleteBeans(Collection<T> beans) throws CpoException {
+    return getCurrentResource().deleteBeans(beans);
   }
 
   @Override
-  public <T> long deleteObjects(String name, Collection<T> coll) throws CpoException {
-    return getCurrentResource().deleteObjects(name, coll);
+  public <T> long deleteBeans(String groupName, Collection<T> beans) throws CpoException {
+    return getCurrentResource().deleteBeans(groupName, beans);
   }
 
   @Override
-  public <T> long deleteObjects(
-      String name,
-      Collection<T> coll,
+  public <T> long deleteBeans(
+      String groupName,
+      Collection<T> beans,
       Collection<CpoWhere> wheres,
       Collection<CpoOrderBy> orderBy,
       Collection<CpoNativeFunction> nativeExpressions)
       throws CpoException {
-    return getCurrentResource().deleteObjects(name, coll, wheres, orderBy, nativeExpressions);
+    return getCurrentResource().deleteBeans(groupName, beans, wheres, orderBy, nativeExpressions);
   }
 
   @Override
-  public <T> T executeObject(T obj) throws CpoException {
-    return getCurrentResource().executeObject(obj);
+  public <T> T executeBean(T bean) throws CpoException {
+    return getCurrentResource().executeBean(bean);
   }
 
   @Override
-  public <T> T executeObject(String name, T object) throws CpoException {
-    return getCurrentResource().executeObject(name, object);
+  public <T> T executeBean(String groupName, T bean) throws CpoException {
+    return getCurrentResource().executeBean(groupName, bean);
   }
 
   @Override
-  public <T, C> T executeObject(String name, C criteria, T result) throws CpoException {
-    return getCurrentResource().executeObject(name, criteria, result);
+  public <T, C> T executeBean(String groupName, C criteria, T result) throws CpoException {
+    return getCurrentResource().executeBean(groupName, criteria, result);
   }
 
   @Override
-  public <T> long existsObject(T obj) throws CpoException {
-    return getCurrentResource().existsObject(obj);
+  public <T> long existsBean(T bean) throws CpoException {
+    return getCurrentResource().existsBean(bean);
   }
 
   @Override
-  public <T> long existsObject(String name, T obj) throws CpoException {
-    return getCurrentResource().existsObject(name, obj);
+  public <T> long existsBean(String groupName, T bean) throws CpoException {
+    return getCurrentResource().existsBean(groupName, bean);
   }
 
   @Override
-  public <T> long existsObject(String name, T obj, Collection<CpoWhere> wheres)
+  public <T> long existsBean(String groupName, T bean, Collection<CpoWhere> wheres)
       throws CpoException {
-    return getCurrentResource().existsObject(name, obj, wheres);
+    return getCurrentResource().existsBean(groupName, bean, wheres);
   }
 
   @Override
@@ -282,23 +282,23 @@ public class JdbcCpoXaAdapter extends CpoBaseXaResource<JdbcCpoAdapter> implemen
   }
 
   @Override
-  public <T> long persistObject(T bean) throws CpoException {
-    return getCurrentResource().persistObject(bean);
+  public <T> long upsertBean(T bean) throws CpoException {
+    return getCurrentResource().upsertBean(bean);
   }
 
   @Override
-  public <T> long persistObject(String name, T bean) throws CpoException {
-    return getCurrentResource().persistObject(name, bean);
+  public <T> long upsertBean(String groupName, T bean) throws CpoException {
+    return getCurrentResource().upsertBean(groupName, bean);
   }
 
   @Override
-  public <T> long persistObjects(Collection<T> coll) throws CpoException {
-    return getCurrentResource().persistObjects(coll);
+  public <T> long upsertBeans(Collection<T> beans) throws CpoException {
+    return getCurrentResource().upsertBeans(beans);
   }
 
   @Override
-  public <T> long persistObjects(String name, Collection<T> coll) throws CpoException {
-    return getCurrentResource().persistObjects(name, coll);
+  public <T> long upsertBeans(String groupName, Collection<T> beans) throws CpoException {
+    return getCurrentResource().upsertBeans(groupName, beans);
   }
 
   @Override
@@ -307,35 +307,35 @@ public class JdbcCpoXaAdapter extends CpoBaseXaResource<JdbcCpoAdapter> implemen
   }
 
   @Override
-  public <T> T retrieveBean(String name, T bean) throws CpoException {
-    return getCurrentResource().retrieveBean(name, bean);
+  public <T> T retrieveBean(String groupName, T bean) throws CpoException {
+    return getCurrentResource().retrieveBean(groupName, bean);
   }
 
   @Override
   public <T> T retrieveBean(
-      String name,
+      String groupName,
       T bean,
       Collection<CpoWhere> wheres,
       Collection<CpoOrderBy> orderBy,
       Collection<CpoNativeFunction> nativeExpressions)
       throws CpoException {
-    return getCurrentResource().retrieveBean(name, bean, wheres, orderBy, nativeExpressions);
+    return getCurrentResource().retrieveBean(groupName, bean, wheres, orderBy, nativeExpressions);
   }
 
   @Override
   public <T, C> T retrieveBean(
-      String name,
+      String groupName,
       C criteria,
       T result,
       Collection<CpoWhere> wheres,
       Collection<CpoOrderBy> orderBy)
       throws CpoException {
-    return getCurrentResource().retrieveBean(name, criteria, result, wheres, orderBy);
+    return getCurrentResource().retrieveBean(groupName, criteria, result, wheres, orderBy);
   }
 
   @Override
   public <T, C> T retrieveBean(
-      String name,
+      String groupName,
       C criteria,
       T result,
       Collection<CpoWhere> wheres,
@@ -343,59 +343,60 @@ public class JdbcCpoXaAdapter extends CpoBaseXaResource<JdbcCpoAdapter> implemen
       Collection<CpoNativeFunction> nativeExpressions)
       throws CpoException {
     return getCurrentResource()
-        .retrieveBean(name, criteria, result, wheres, orderBy, nativeExpressions);
+        .retrieveBean(groupName, criteria, result, wheres, orderBy, nativeExpressions);
   }
 
   @Override
-  public <C> List<C> retrieveBeans(String name, C criteria) throws CpoException {
-    return getCurrentResource().retrieveBeans(name, criteria);
-  }
-
-  @Override
-  public <C> List<C> retrieveBeans(
-      String name, C criteria, CpoWhere where, Collection<CpoOrderBy> orderBy) throws CpoException {
-    return getCurrentResource().retrieveBeans(name, criteria, where, orderBy);
-  }
-
-  @Override
-  public <C> List<C> retrieveBeans(String name, C criteria, Collection<CpoOrderBy> orderBy)
-      throws CpoException {
-    return getCurrentResource().retrieveBeans(name, criteria, orderBy);
+  public <C> List<C> retrieveBeans(String groupName, C criteria) throws CpoException {
+    return getCurrentResource().retrieveBeans(groupName, criteria);
   }
 
   @Override
   public <C> List<C> retrieveBeans(
-      String name, C criteria, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy)
+      String groupName, C criteria, CpoWhere where, Collection<CpoOrderBy> orderBy)
       throws CpoException {
-    return getCurrentResource().retrieveBeans(name, criteria, wheres, orderBy);
+    return getCurrentResource().retrieveBeans(groupName, criteria, where, orderBy);
   }
 
   @Override
-  public <T, C> List<T> retrieveBeans(String name, C criteria, T result) throws CpoException {
-    return getCurrentResource().retrieveBeans(name, criteria, result);
+  public <C> List<C> retrieveBeans(String groupName, C criteria, Collection<CpoOrderBy> orderBy)
+      throws CpoException {
+    return getCurrentResource().retrieveBeans(groupName, criteria, orderBy);
+  }
+
+  @Override
+  public <C> List<C> retrieveBeans(
+      String groupName, C criteria, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy)
+      throws CpoException {
+    return getCurrentResource().retrieveBeans(groupName, criteria, wheres, orderBy);
+  }
+
+  @Override
+  public <T, C> List<T> retrieveBeans(String groupName, C criteria, T result) throws CpoException {
+    return getCurrentResource().retrieveBeans(groupName, criteria, result);
   }
 
   @Override
   public <T, C> List<T> retrieveBeans(
-      String name, C criteria, T result, CpoWhere where, Collection<CpoOrderBy> orderBy)
+      String groupName, C criteria, T result, CpoWhere where, Collection<CpoOrderBy> orderBy)
       throws CpoException {
-    return getCurrentResource().retrieveBeans(name, criteria, result, where, orderBy);
+    return getCurrentResource().retrieveBeans(groupName, criteria, result, where, orderBy);
   }
 
   @Override
   public <T, C> List<T> retrieveBeans(
-      String name,
+      String groupName,
       C criteria,
       T result,
       Collection<CpoWhere> wheres,
       Collection<CpoOrderBy> orderBy)
       throws CpoException {
-    return getCurrentResource().retrieveBeans(name, criteria, result, wheres, orderBy);
+    return getCurrentResource().retrieveBeans(groupName, criteria, result, wheres, orderBy);
   }
 
   @Override
   public <T, C> List<T> retrieveBeans(
-      String name,
+      String groupName,
       C criteria,
       T result,
       Collection<CpoWhere> wheres,
@@ -403,12 +404,12 @@ public class JdbcCpoXaAdapter extends CpoBaseXaResource<JdbcCpoAdapter> implemen
       Collection<CpoNativeFunction> nativeExpressions)
       throws CpoException {
     return getCurrentResource()
-        .retrieveBeans(name, criteria, result, wheres, orderBy, nativeExpressions);
+        .retrieveBeans(groupName, criteria, result, wheres, orderBy, nativeExpressions);
   }
 
   @Override
   public <T, C> CpoResultSet<T> retrieveBeans(
-      String name,
+      String groupName,
       C criteria,
       T result,
       Collection<CpoWhere> wheres,
@@ -417,49 +418,49 @@ public class JdbcCpoXaAdapter extends CpoBaseXaResource<JdbcCpoAdapter> implemen
       int queueSize)
       throws CpoException {
     return getCurrentResource()
-        .retrieveBeans(name, criteria, result, wheres, orderBy, nativeExpressions, queueSize);
+        .retrieveBeans(groupName, criteria, result, wheres, orderBy, nativeExpressions, queueSize);
   }
 
   @Override
-  public <T> long updateObject(T obj) throws CpoException {
-    return getCurrentResource().updateObject(obj);
+  public <T> long updateBean(T bean) throws CpoException {
+    return getCurrentResource().updateBean(bean);
   }
 
   @Override
-  public <T> long updateObject(String name, T obj) throws CpoException {
-    return getCurrentResource().updateObject(name, obj);
+  public <T> long updateBean(String groupName, T bean) throws CpoException {
+    return getCurrentResource().updateBean(groupName, bean);
   }
 
   @Override
-  public <T> long updateObject(
-      String name,
-      T obj,
+  public <T> long updateBean(
+      String groupName,
+      T bean,
       Collection<CpoWhere> wheres,
       Collection<CpoOrderBy> orderBy,
       Collection<CpoNativeFunction> nativeExpressions)
       throws CpoException {
-    return getCurrentResource().updateObject(name, obj, wheres, orderBy, nativeExpressions);
+    return getCurrentResource().updateBean(groupName, bean, wheres, orderBy, nativeExpressions);
   }
 
   @Override
-  public <T> long updateObjects(Collection<T> coll) throws CpoException {
-    return getCurrentResource().updateObjects(coll);
+  public <T> long updateBeans(Collection<T> beans) throws CpoException {
+    return getCurrentResource().updateBeans(beans);
   }
 
   @Override
-  public <T> long updateObjects(String name, Collection<T> coll) throws CpoException {
-    return getCurrentResource().updateObjects(name, coll);
+  public <T> long updateBeans(String groupName, Collection<T> beans) throws CpoException {
+    return getCurrentResource().updateBeans(groupName, beans);
   }
 
   @Override
-  public <T> long updateObjects(
-      String name,
-      Collection<T> coll,
+  public <T> long updateBeans(
+      String groupName,
+      Collection<T> beans,
       Collection<CpoWhere> wheres,
       Collection<CpoOrderBy> orderBy,
       Collection<CpoNativeFunction> nativeExpressions)
       throws CpoException {
-    return getCurrentResource().updateObjects(name, coll, wheres, orderBy, nativeExpressions);
+    return getCurrentResource().updateBeans(groupName, beans, wheres, orderBy, nativeExpressions);
   }
 
   @Override

@@ -99,7 +99,7 @@ public class CaseInsensitiveTest {
     al.add(valObj);
 
     try {
-      cpoAdapter.insertObject(valObj);
+      cpoAdapter.insertBean(valObj);
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -122,7 +122,7 @@ public class CaseInsensitiveTest {
   public void tearDown() {
     String method = "tearDown:";
     try {
-      cpoAdapter.deleteObjects(al);
+      cpoAdapter.deleteBeans(al);
 
     } catch (Exception e) {
       fail(method + e.getMessage());

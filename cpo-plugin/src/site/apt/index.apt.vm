@@ -35,9 +35,9 @@ Contents
 
 {convertsqltoxml} goal
 
-  This goal will connect to an existing database, read your cpo config, and generate the cpo meta data xml file.
+  This goal will connect to an existing database, read your cpo config, and generate the cpo metadata xml file.
 
-  To use the cpo-plugin to create a XML meta data file from an existing CPO database configuration, run the following:
+  To use the cpo-plugin to create a XML metadata file from an existing CPO database configuration, run the following:
 
   mvn org.synchronoss.cpo:cpo-plugin:${currentVersion}:convertsqltoxml -DdbTablePrefix=<prefix> -DdbUrl=<url>
 
@@ -63,7 +63,7 @@ Contents
 
   mvn org.synchronoss.cpo:cpo-plugin:${currentVersion}:generatejavasource -DcpoConfig=<config>
 
-  Replace <config> with the location of your cpo meta data xml file
+  Replace <config> with the location of your cpo metadata xml file
 
   It's more likely that this goal will be included in the build/plugins section of your project's pom.  To enable that configuration, here's an example:
 

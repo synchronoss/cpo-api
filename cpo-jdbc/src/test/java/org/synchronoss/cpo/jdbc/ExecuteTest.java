@@ -83,7 +83,7 @@ public class ExecuteTest {
       ValueObject rvo;
 
       try {
-        rvo = cpoAdapter.executeObject(ValueObject.FG_EXECUTE_TESTEXECUTEOBJECT, vo);
+        rvo = cpoAdapter.executeBean(ValueObject.FG_EXECUTE_TESTEXECUTEOBJECT, vo);
         assertNotNull(rvo, method + "Returned Value object is null");
         assertEquals(27, rvo.getAttrDouble(), "power(3,3)=" + rvo.getAttrDouble());
       } catch (Exception e) {
@@ -94,7 +94,7 @@ public class ExecuteTest {
       try {
         vo = ValueObjectFactory.createValueObject(1);
         vo.setAttrSmallInt((short) 3);
-        rvo = cpoAdapter.executeObject(ValueObject.FG_EXECUTE_TESTEXECUTEOBJECTNOTRANSFORM, vo);
+        rvo = cpoAdapter.executeBean(ValueObject.FG_EXECUTE_TESTEXECUTEOBJECTNOTRANSFORM, vo);
         assertNotNull(method + "Returned Value object is null");
         assertTrue(rvo.getAttrDouble() == 27, "power(3,3)=" + rvo.getAttrDouble());
       } catch (Exception e) {
@@ -115,7 +115,7 @@ public class ExecuteTest {
       ValueObject rvo;
 
       try {
-        rvo = cpoAdapter.executeObject(ValueObject.FG_EXECUTE_TESTEXECUTEOBJECT, vo, vo);
+        rvo = cpoAdapter.executeBean(ValueObject.FG_EXECUTE_TESTEXECUTEOBJECT, vo, vo);
         assertNotNull(method + "Returned Value object is null");
         assertTrue(rvo.getAttrDouble() == 27, "power(3,3)=" + rvo.getAttrDouble());
       } catch (Exception e) {

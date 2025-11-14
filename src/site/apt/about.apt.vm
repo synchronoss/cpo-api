@@ -33,7 +33,7 @@ About - CPO ${currentVersion}
 
   CPO is a Class Persistence interface for storing objects in different datasources. The interface is currently implemented for JDBC datasources but can be expanded to XML, Flat File, RMS, LDAP, etc.
 
-  The jdbc implementation of CPO provides an OJM api and utility. OJM differs from ORM and the Java Persistence API (JPA) in that it lets the developer, database admin, or data architect be responsible for the design of the database. The developer uses CPO to map plain old java objects (POJOs) to JDBC calls which execute native sql against the database. This provides the most flexibility when accessing legacy databases where the developers may have little control over the DBMS. This also allows you to use all of the syntax, functions, data types, and stored procedures available in the database.
+  The jdbc implementation of CPO provides an OJM api and utility. OJM differs from ORM and the Java Persistence API (JPA) in that it lets the developer, database admin, or data architect be responsible for the design of the database. The developer uses CPO to map plain old java objects (JAVABEANs) to JDBC calls which execute native sql against the database. This provides the most flexibility when accessing legacy databases where the developers may have little control over the DBMS. This also allows you to use all of the syntax, functions, data types, and stored procedures available in the database.
 
   CPO has been tested using Oracle, MySql, and HSqlDB. We have been using CPO for over three years and thought that it may be useful to others as well.
 
@@ -71,23 +71,23 @@ About - CPO ${currentVersion}
 
     * Dynamic Order By Clauses
 
-    * POJO based persistence
+    * JAVABEAN based persistence
 
-    * One POJO to One Table
+    * One JAVABEAN to One Table
 
-    * One POJO to Many Tables
+    * One JAVABEAN to Many Tables
 
-    * One POJO to Many Records in One Table (Name-Value Pairs)
+    * One JAVABEAN to Many Records in One Table (Name-Value Pairs)
 
-    * POJOs can be Sparsely or Fully Populated Based on Context
+    * JAVABEANs can be Sparsely or Fully Populated Based on Context
 
-    * POJOs can be populated by the OUT parameters of the Stored Procedure
+    * JAVABEANs can be populated by the OUT parameters of the Stored Procedure
 
-    * Single POJO can have Multiple Data Representations within a DBMS
+    * Single JAVABEAN can have Multiple Data Representations within a DBMS
 
     * Supports simultaneous access to multiple datasources
 
-    * POJOs can be shared across multiple datasources
+    * JAVABEANs can be shared across multiple datasources
 
   * Java
 

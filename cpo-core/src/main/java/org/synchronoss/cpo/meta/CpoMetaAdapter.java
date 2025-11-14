@@ -32,16 +32,19 @@ import org.synchronoss.cpo.parser.ExpressionParser;
 public interface CpoMetaAdapter {
 
   /**
-   * Returns the meta data for the class that is contained within the meta data source
+   * Returns the metadata for the class that is contained within the metadata source
    *
+   * @param <T> The bean Type
+   * @param bean The java bean whose metaclass is needed
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
-  <T> CpoClass getMetaClass(T obj) throws CpoException;
+  <T> CpoClass getMetaClass(T bean) throws CpoException;
 
   /**
    * Returns a list of the cpo class objects that the meta adapter is aware of.
    *
    * @return java.util.List of CpoClass
+   * @throws CpoException Thrown if there are errors accessing the datasource
    */
   List<CpoClass> getCpoClasses() throws CpoException;
 

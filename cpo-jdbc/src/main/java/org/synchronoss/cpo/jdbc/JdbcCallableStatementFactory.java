@@ -60,7 +60,7 @@ public class JdbcCallableStatementFactory implements CpoReleasible {
    * @param conn The actual jdbc connection that will be used to create the callable statement.
    * @param jca The JdbcCpoAdapter that is controlling this transaction
    * @param function The CpoFunction that is being executed
-   * @param criteria The pojo that is being acted upon
+   * @param criteria The bean that is being acted upon
    * @param resultClass An instance of the result class
    * @throws CpoException if a CPO error occurs
    */

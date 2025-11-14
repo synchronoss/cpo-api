@@ -82,7 +82,7 @@ public class BigBatchTest {
     }
 
     try {
-      long inserts = cpoAdapter.insertObjects(al);
+      long inserts = cpoAdapter.insertBeans(al);
       assertEquals(inserts, numInserts, "inserts performed do not equal inserts requested: ");
     } catch (CpoException ce) {
       logger.debug("Received a CpoException:" + ExceptionHelper.getLocalizedMessage(ce));
@@ -105,7 +105,7 @@ public class BigBatchTest {
   public void tearDown() {
     String method = "tearDown:";
     try {
-      cpoAdapter.deleteObjects(al);
+      cpoAdapter.deleteBeans(al);
 
     } catch (Exception e) {
       logger.error(ExceptionHelper.getLocalizedMessage(e));

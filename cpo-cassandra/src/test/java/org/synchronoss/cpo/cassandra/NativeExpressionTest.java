@@ -68,7 +68,7 @@ public class NativeExpressionTest {
     al.add(ValueObjectFactory.createValueObject(5));
     al.add(ValueObjectFactory.createValueObject(-6));
     try {
-      cpoAdapter.insertObjects("TestOrderByInsert", al);
+      cpoAdapter.insertBeans("TestOrderByInsert", al);
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -78,7 +78,7 @@ public class NativeExpressionTest {
   public void tearDown() {
     String method = "tearDown:";
     try {
-      cpoAdapter.deleteObjects("TestOrderByDelete", al);
+      cpoAdapter.deleteBeans("TestOrderByDelete", al);
     } catch (Exception e) {
       fail(method + e.getMessage());
     }

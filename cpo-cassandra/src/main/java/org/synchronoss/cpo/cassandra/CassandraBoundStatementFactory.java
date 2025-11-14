@@ -62,7 +62,7 @@ public class CassandraBoundStatementFactory extends CpoStatementFactory implemen
    * @param cassandraCpoAdapter The JdbcCpoAdapter that is controlling this transaction
    * @param criteria The object that will be used to look up the cpo metadata
    * @param function The CpoFunction that is being executed
-   * @param obj The pojo that is being acted upon
+   * @param bean The bean that is being acted upon
    * @param wheres A collection of wheres to find the object
    * @param orderBy A collection of orderbys to sort the objects
    * @param nativeQueries Additional sql to be embedded into the CpoFunction sql that is used to
@@ -74,14 +74,14 @@ public class CassandraBoundStatementFactory extends CpoStatementFactory implemen
       CassandraCpoAdapter cassandraCpoAdapter,
       CpoClass criteria,
       CpoFunction function,
-      T obj,
+      T bean,
       Collection<CpoWhere> wheres,
       Collection<CpoOrderBy> orderBy,
       Collection<CpoNativeFunction> nativeQueries)
       throws CpoException {
-    super(obj == null ? logger : LoggerFactory.getLogger(obj.getClass()));
+    super(bean == null ? logger : LoggerFactory.getLogger(bean.getClass()));
     // get the list of bindValues from the function parameters
-    List<BindAttribute> bindValues = getBindValues(function, obj);
+    List<BindAttribute> bindValues = getBindValues(function, bean);
 
     String sql =
         buildSql(criteria, function.getExpression(), wheres, orderBy, nativeQueries, bindValues);

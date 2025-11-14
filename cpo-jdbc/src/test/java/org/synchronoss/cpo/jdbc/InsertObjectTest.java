@@ -101,7 +101,7 @@ public class InsertObjectTest {
     al.add(valObj);
 
     try {
-      cpoAdapter.insertObject(valObj);
+      cpoAdapter.insertBean(valObj);
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -119,7 +119,7 @@ public class InsertObjectTest {
       fail(method + e.getMessage());
     } finally {
       try {
-        cpoAdapter.deleteObject(valObj);
+        cpoAdapter.deleteBean(valObj);
       } catch (Exception e) {
         fail(method + e.getMessage());
       }
@@ -139,7 +139,7 @@ public class InsertObjectTest {
     a2.add(ValueObjectFactory.createValueObject(64));
     al.addAll(a2);
     try {
-      long inserts = cpoAdapter.insertObjects(a2);
+      long inserts = cpoAdapter.insertBeans(a2);
       assertEquals(inserts, 4, "inserts performed do not equal inserts requested");
     } catch (Exception e) {
       fail(method + e.getMessage());
@@ -158,7 +158,7 @@ public class InsertObjectTest {
   public void tearDown() {
     String method = "tearDown:";
     try {
-      cpoAdapter.deleteObjects(al);
+      cpoAdapter.deleteBeans(al);
 
     } catch (Exception e) {
       fail(method + e.getMessage());

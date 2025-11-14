@@ -87,7 +87,7 @@ public class UpdateObjectTest {
     al.add(valObj);
 
     try {
-      cpoAdapter.insertObject(valObj);
+      cpoAdapter.insertBean(valObj);
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -97,7 +97,7 @@ public class UpdateObjectTest {
       List<CpoWhere> cws = new ArrayList<>();
       cws.add(cpoAdapter.newWhere(Logical.NONE, "id", Comparison.EQ, 2));
       valObj.setAttrInt(4);
-      cpoAdapter.updateObject(null, valObj, cws, null, null);
+      cpoAdapter.updateBean(null, valObj, cws, null, null);
       ValueObject rObj = cpoAdapter.retrieveBean(valObj);
       assertTrue(
           rObj.getAttrInt() != valObj.getAttrInt(),
@@ -110,7 +110,7 @@ public class UpdateObjectTest {
     try {
       List<CpoWhere> cws = new ArrayList<>();
       cws.add(cpoAdapter.newWhere(Logical.NONE, "id", Comparison.EQ, 5));
-      cpoAdapter.updateObject(null, valObj, cws, null, null);
+      cpoAdapter.updateBean(null, valObj, cws, null, null);
       ValueObject rObj = cpoAdapter.retrieveBean(valObj);
       assertEquals(rObj.getAttrInt(), valObj.getAttrInt(), "It should be equal since it updated");
     } catch (Exception e) {
@@ -122,7 +122,7 @@ public class UpdateObjectTest {
   public void tearDown() {
     String method = "tearDown:";
     try {
-      cpoAdapter.deleteObjects(al);
+      cpoAdapter.deleteBeans(al);
 
     } catch (Exception e) {
       fail(method + e.getMessage());

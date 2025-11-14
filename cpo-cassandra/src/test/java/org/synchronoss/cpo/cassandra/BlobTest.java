@@ -85,14 +85,14 @@ public class BlobTest {
     lvo.setAttrBlob2(testBlob2);
 
     try {
-      cpoAdapter.deleteObject("deleteLVO", lvo);
+      cpoAdapter.deleteBean("deleteLVO", lvo);
     } catch (Exception ie) {
       logger.error("error deleting lob");
       fail(ie.getMessage());
     }
 
     try {
-      cpoAdapter.insertObject("createLVO", lvo);
+      cpoAdapter.insertBean("createLVO", lvo);
     } catch (Exception ie) {
       logger.error("error inserting lob", ie);
       fail(ie.getMessage());
@@ -111,7 +111,7 @@ public class BlobTest {
 
     try {
       lvo2.setAttrBlob(testBlob2);
-      cpoAdapter.updateObject("updateLVO", lvo2);
+      cpoAdapter.updateBean("updateLVO", lvo2);
       lvo2 = cpoAdapter.retrieveBean("retrieveLVO", lvo);
       ByteBuffer blob1 = testBlob2;
       ByteBuffer blob2 = lvo2.getAttrBlob();
@@ -142,14 +142,14 @@ public class BlobTest {
     lvo.setAttrBlob2(testBlob2);
 
     try {
-      cpoAdapter.deleteObject("deleteLVO", lvo);
+      cpoAdapter.deleteBean("deleteLVO", lvo);
     } catch (Exception ie) {
       logger.error("error deleting lob");
       fail(ie.getMessage());
     }
 
     try {
-      cpoAdapter.insertObject("createLVO", lvo);
+      cpoAdapter.insertBean("createLVO", lvo);
     } catch (Exception ie) {
       logger.error("error inserting lob", ie);
       fail(ie.getMessage());
@@ -168,7 +168,7 @@ public class BlobTest {
 
     try {
       lvo2.setAttrBlob2(testBlob);
-      cpoAdapter.updateObject("updateLVO", lvo2);
+      cpoAdapter.updateBean("updateLVO", lvo2);
       lvo2 = cpoAdapter.retrieveBean("retrieveLVO", lvo);
       ByteBuffer blob1 = testBlob;
       ByteBuffer blob2 = lvo2.getAttrBlob2();
@@ -215,14 +215,14 @@ public class BlobTest {
     lvo.setAttrBlob2(testBlob2);
 
     try {
-      cpoAdapter.deleteObject("deleteLVO", lvo);
+      cpoAdapter.deleteBean("deleteLVO", lvo);
     } catch (Exception ie) {
       logger.error("error deleting lob");
       fail(ie.getMessage());
     }
 
     try {
-      cpoAdapter.insertObject("createLVO", lvo);
+      cpoAdapter.insertBean("createLVO", lvo);
     } catch (Exception ie) {
       logger.error("error inserting lob", ie);
       fail(ie.getMessage());
@@ -244,7 +244,7 @@ public class BlobTest {
 
     try {
       lvo2.setAttrBlob(testBlob2);
-      cpoAdapter.updateObject("updateLVO", lvo2);
+      cpoAdapter.updateBean("updateLVO", lvo2);
       lvo2 = cpoAdapter.retrieveBean("retrieveLVO", lvo);
       ByteBuffer blob1 = testBlob2;
       ByteBuffer blob2 = lvo2.getAttrBlob();
@@ -268,14 +268,14 @@ public class BlobTest {
     lvo.setAttrBlob2(null);
 
     try {
-      cpoAdapter.deleteObject("deleteLVO", lvo);
+      cpoAdapter.deleteBean("deleteLVO", lvo);
     } catch (Exception ie) {
       logger.error("error deleting lob");
       fail(ie.getMessage());
     }
 
     try {
-      cpoAdapter.insertObject("createLVO", lvo);
+      cpoAdapter.insertBean("createLVO", lvo);
     } catch (Exception ie) {
       logger.error("error inserting lob", ie);
       fail(ie.getMessage());
@@ -293,7 +293,7 @@ public class BlobTest {
 
     try {
       lvo2.setAttrBlob(null);
-      cpoAdapter.updateObject("updateLVO", lvo2);
+      cpoAdapter.updateBean("updateLVO", lvo2);
       lvo2 = cpoAdapter.retrieveBean("retrieveLVO", lvo);
 
       assertNull(lvo2.getAttrBlob());

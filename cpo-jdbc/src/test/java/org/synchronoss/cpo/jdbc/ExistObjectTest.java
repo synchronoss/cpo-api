@@ -68,7 +68,7 @@ public class ExistObjectTest {
     vo.setAttrVarChar("WHERE");
 
     try {
-      long count = cpoAdapter.insertObject(vo);
+      long count = cpoAdapter.insertBean(vo);
       assertEquals(1, count, "Should be inserted");
     } catch (Exception e) {
       logger.error(ExceptionHelper.getLocalizedMessage(e));
@@ -82,7 +82,7 @@ public class ExistObjectTest {
 
     try {
       ValueObject valObj = ValueObjectFactory.createValueObject(1);
-      long count = cpoAdapter.existsObject(valObj);
+      long count = cpoAdapter.existsBean(valObj);
       assertEquals(1, count, "Object not Found");
     } catch (Exception e) {
       fail(method + e.getMessage());
@@ -90,7 +90,7 @@ public class ExistObjectTest {
 
     try {
       ValueObject valObj = ValueObjectFactory.createValueObject(5);
-      long count = cpoAdapter.existsObject(valObj);
+      long count = cpoAdapter.existsBean(valObj);
       assertEquals(0, count, "Object Found");
     } catch (Exception e) {
       fail(method + e.getMessage());
@@ -107,7 +107,7 @@ public class ExistObjectTest {
           cpoAdapter.newWhere(Logical.AND, ValueObject.ATTR_ATTRVARCHAR, Comparison.EQ, "WHERE");
       ArrayList<CpoWhere> wheres = new ArrayList<>();
       wheres.add(where);
-      long count = cpoAdapter.existsObject(ValueObject.FG_EXIST_NULL, valObj, wheres);
+      long count = cpoAdapter.existsBean(ValueObject.FG_EXIST_NULL, valObj, wheres);
       assertEquals(1, count, "Object not Found");
     } catch (Exception e) {
       fail(method + e.getMessage());
@@ -119,7 +119,7 @@ public class ExistObjectTest {
           cpoAdapter.newWhere(Logical.AND, ValueObject.ATTR_ATTRVARCHAR, Comparison.EQ, "NOWHERE");
       ArrayList<CpoWhere> wheres = new ArrayList<>();
       wheres.add(where);
-      long count = cpoAdapter.existsObject(ValueObject.FG_EXIST_NULL, valObj, wheres);
+      long count = cpoAdapter.existsBean(ValueObject.FG_EXIST_NULL, valObj, wheres);
       assertEquals(0, count, "Object Found");
     } catch (Exception e) {
       fail(method + e.getMessage());
@@ -130,7 +130,7 @@ public class ExistObjectTest {
   public void tearDown() {
     ValueObject vo = ValueObjectFactory.createValueObject(1);
     try {
-      long count = cpoAdapter.deleteObject(vo);
+      long count = cpoAdapter.deleteBean(vo);
       assertEquals(1, count, "Should be deleted");
     } catch (Exception e) {
       logger.error(ExceptionHelper.getLocalizedMessage(e));

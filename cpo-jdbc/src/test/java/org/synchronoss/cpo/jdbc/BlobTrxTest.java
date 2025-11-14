@@ -97,7 +97,7 @@ public class BlobTrxTest {
       lvo.setBLob2(testBlob2);
 
       try {
-        trxAdapter.deleteObject(LobValueObject.FG_DELETE_DELETELVO, lvo);
+        trxAdapter.deleteBean(LobValueObject.FG_DELETE_DELETELVO, lvo);
         trxAdapter.commit();
       } catch (Exception ie) {
         logger.error("error deleting lob");
@@ -109,7 +109,7 @@ public class BlobTrxTest {
       }
 
       try {
-        trxAdapter.insertObject(LobValueObject.FG_CREATE_CREATELVO, lvo);
+        trxAdapter.insertBean(LobValueObject.FG_CREATE_CREATELVO, lvo);
         trxAdapter.commit();
       } catch (Exception ie) {
         logger.error("error inserting lob", ie);
@@ -135,7 +135,7 @@ public class BlobTrxTest {
       try {
         lvo2.setBLob(testBlob2);
         lvo2.setCLob(testClob2);
-        trxAdapter.updateObject(LobValueObject.FG_UPDATE_UPDATELVO, lvo2);
+        trxAdapter.updateBean(LobValueObject.FG_UPDATE_UPDATELVO, lvo2);
         trxAdapter.commit();
 
         lvo2 = trxAdapter.retrieveBean(LobValueObject.FG_RETRIEVE_RETRIEVELVO, lvo);
@@ -178,7 +178,7 @@ public class BlobTrxTest {
       lvo.setBLob2(testBlob2);
 
       try {
-        trxAdapter.deleteObject(LobValueObject.FG_DELETE_DELETELVO, lvo);
+        trxAdapter.deleteBean(LobValueObject.FG_DELETE_DELETELVO, lvo);
         trxAdapter.commit();
       } catch (Exception ie) {
         logger.error("error deleting lob");
@@ -190,7 +190,7 @@ public class BlobTrxTest {
       }
 
       try {
-        trxAdapter.insertObject(LobValueObject.FG_CREATE_CREATELVO, lvo);
+        trxAdapter.insertBean(LobValueObject.FG_CREATE_CREATELVO, lvo);
         trxAdapter.commit();
       } catch (Exception ie) {
         logger.error("error inserting lob", ie);
@@ -215,7 +215,7 @@ public class BlobTrxTest {
 
       try {
         lvo2.setBLob2(testBlob);
-        trxAdapter.updateObject(LobValueObject.FG_UPDATE_UPDATELVO, lvo2);
+        trxAdapter.updateBean(LobValueObject.FG_UPDATE_UPDATELVO, lvo2);
         trxAdapter.commit();
         lvo2 = trxAdapter.retrieveBean(LobValueObject.FG_RETRIEVE_RETRIEVELVO, lvo);
         String blob1 = new String(testBlob);
@@ -273,7 +273,7 @@ public class BlobTrxTest {
       lvo.setBLob2(testBlob2);
 
       try {
-        trxAdapter.deleteObject(LobValueObject.FG_DELETE_DELETELVO, lvo);
+        trxAdapter.deleteBean(LobValueObject.FG_DELETE_DELETELVO, lvo);
         trxAdapter.commit();
       } catch (Exception ie) {
         logger.error("error deleting lob");
@@ -285,7 +285,7 @@ public class BlobTrxTest {
       }
 
       try {
-        trxAdapter.insertObject(LobValueObject.FG_CREATE_CREATELVO, lvo);
+        trxAdapter.insertBean(LobValueObject.FG_CREATE_CREATELVO, lvo);
         trxAdapter.commit();
       } catch (Exception ie) {
         logger.error("error inserting lob", ie);
@@ -314,7 +314,7 @@ public class BlobTrxTest {
       try {
         lvo2.setBLob(testBlob2);
         lvo2.setCLob(testClob2);
-        trxAdapter.updateObject(LobValueObject.FG_UPDATE_UPDATELVO, lvo2);
+        trxAdapter.updateBean(LobValueObject.FG_UPDATE_UPDATELVO, lvo2);
         trxAdapter.commit();
         lvo2 = trxAdapter.retrieveBean(LobValueObject.FG_RETRIEVE_RETRIEVELVO, lvo);
         byte blob1[] = testBlob2;
@@ -349,7 +349,7 @@ public class BlobTrxTest {
       lvo.setBLob2(null);
 
       try {
-        trxAdapter.deleteObject(LobValueObject.FG_DELETE_DELETELVO, lvo);
+        trxAdapter.deleteBean(LobValueObject.FG_DELETE_DELETELVO, lvo);
         trxAdapter.commit();
       } catch (Exception ie) {
         logger.error("error deleting lob");
@@ -361,7 +361,7 @@ public class BlobTrxTest {
       }
 
       try {
-        trxAdapter.insertObject(LobValueObject.FG_CREATE_CREATELVO, lvo);
+        trxAdapter.insertBean(LobValueObject.FG_CREATE_CREATELVO, lvo);
         trxAdapter.commit();
       } catch (Exception ie) {
         logger.error("error inserting lob", ie);
@@ -387,7 +387,7 @@ public class BlobTrxTest {
       try {
         lvo2.setBLob(null);
         lvo2.setCLob(null);
-        trxAdapter.updateObject(LobValueObject.FG_UPDATE_UPDATELVO, lvo2);
+        trxAdapter.updateBean(LobValueObject.FG_UPDATE_UPDATELVO, lvo2);
         trxAdapter.commit();
         lvo2 = trxAdapter.retrieveBean(LobValueObject.FG_RETRIEVE_RETRIEVELVO, lvo);
 

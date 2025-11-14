@@ -66,7 +66,7 @@ public class ExistObjectTest {
     vo.setAttrInt(3);
 
     try {
-      cpoAdapter.insertObject(vo);
+      cpoAdapter.insertBean(vo);
     } catch (Exception e) {
       logger.error(ExceptionHelper.getLocalizedMessage(e));
       fail(method + e.getMessage());
@@ -79,7 +79,7 @@ public class ExistObjectTest {
 
     try {
       ValueObject valObj = ValueObjectFactory.createValueObject(1);
-      long count = cpoAdapter.existsObject(valObj);
+      long count = cpoAdapter.existsBean(valObj);
       assertEquals(1, count, "Object not Found");
     } catch (Exception e) {
       fail(method + e.getMessage());
@@ -87,7 +87,7 @@ public class ExistObjectTest {
 
     try {
       ValueObject valObj = ValueObjectFactory.createValueObject(5);
-      long count = cpoAdapter.existsObject(valObj);
+      long count = cpoAdapter.existsBean(valObj);
       assertEquals(0, count, "Object Found");
     } catch (Exception e) {
       fail(method + e.getMessage());
@@ -103,7 +103,7 @@ public class ExistObjectTest {
       CpoWhere where = cpoAdapter.newWhere(Logical.AND, "attrInt", Comparison.EQ, 3);
       ArrayList<CpoWhere> wheres = new ArrayList<>();
       wheres.add(where);
-      long count = cpoAdapter.existsObject(null, valObj, wheres);
+      long count = cpoAdapter.existsBean(null, valObj, wheres);
       assertEquals(1, count, "Object not Found");
     } catch (Exception e) {
       fail(method + e.getMessage());
@@ -114,7 +114,7 @@ public class ExistObjectTest {
       CpoWhere where = cpoAdapter.newWhere(Logical.AND, "attrInt", Comparison.EQ, 5);
       ArrayList<CpoWhere> wheres = new ArrayList<>();
       wheres.add(where);
-      long count = cpoAdapter.existsObject(null, valObj, wheres);
+      long count = cpoAdapter.existsBean(null, valObj, wheres);
       assertEquals(0, count, "Object Found");
     } catch (Exception e) {
       fail(method + e.getMessage());
@@ -125,7 +125,7 @@ public class ExistObjectTest {
   public void tearDown() {
     ValueObject vo = ValueObjectFactory.createValueObject(1);
     try {
-      cpoAdapter.deleteObject(vo);
+      cpoAdapter.deleteBean(vo);
     } catch (Exception e) {
       logger.error(ExceptionHelper.getLocalizedMessage(e));
     }

@@ -196,29 +196,6 @@
                     </executions>
                 </plugin>
                 <plugin>
-                    <groupId>com.mycila</groupId>
-                    <artifactId>license-maven-plugin</artifactId>
-                    <version>5.0.0</version>
-                    <configuration>
-                        <header>src/main/resources/license.txt</header>
-                        <failIfMissing>false</failIfMissing>
-                        <strictCheck>true</strictCheck>
-                        <mapping>
-                            <!-- use /* instead of /** for java files -->
-                            <java>SLASHSTAR_STYLE</java>
-                            <!-- use sql for cql -->
-                            <cql>DOUBLEDASHES_STYLE</cql>
-                        </mapping>
-                        <excludes>
-                            <!-- netbeans action file -->
-                            <exclude>nbactions.xml</exclude>
-                            <exclude>**/*.example</exclude>
-                            <exclude>**/*.cql</exclude>
-                            <!-- this causes issues w/ the embedded cassandra, so don't add comments to cql -->
-                        </excludes>
-                    </configuration>
-                </plugin>
-                <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-site-plugin</artifactId>
                     <version>3.21.0</version>
@@ -318,15 +295,26 @@
                 </executions>
             </plugin>
             <plugin>
-                <groupId>com.mycila</groupId>
+                <groupId>org.codehaus.mojo</groupId>
                 <artifactId>license-maven-plugin</artifactId>
+                <version>2.7.0</version> <!-- Use the latest stable version -->
+                <configuration>
+                    <inceptionYear>2003</inceptionYear>
+                    <organizationName>Synchronoss</organizationName>
+                    <licenseName>lgpl_v3</licenseName>
+                    <failOnMissingLicense>true</failOnMissingLicense>
+                    <failOnMissingHeader>true</failOnMissingHeader>
+                    <!-- Other configurations as needed -->
+                </configuration>
                 <executions>
                     <execution>
-                        <id>check-headers</id>
-                        <phase>validate</phase>
+                        <id>check-licenses</id>
                         <goals>
-                            <goal>format</goal>
+                            <goal>check-file-header</goal>
+                            <goal>check-project-license</goal>
+                            <goal>aggregate-add-third-party</goal>
                         </goals>
+                        <phase>process-sources</phase>
                     </execution>
                 </executions>
             </plugin>

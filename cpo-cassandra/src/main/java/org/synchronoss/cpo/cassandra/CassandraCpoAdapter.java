@@ -165,34 +165,35 @@ public class CassandraCpoAdapter extends CpoBaseAdapter<ClusterDataSource> {
    * The CpoAdapter will check to see if this bean exists in the datasource.
    *
    * @param <T> The type of bean being checked
-   * @param name The name which identifies which EXISTS, INSERT, and UPDATE Function Groups to
-   *     execute to upsert the bean.
-   * @param obj This is a bean that has been defined within the metadata of the datasource. If the
+   * @param groupName The groupName which identifies which EXISTS, INSERT, and UPDATE Function
+   *     Groups to execute to upsert the bean.
+   * @param bean This is a bean that has been defined within the metadata of the datasource. If the
    *     class is not defined an exception will be thrown.
    * @param session The session with which to check if the bean exists
    * @param wheres A collection of CpoWheres used to find the T
    * @return The int value of the first column returned in the record set
    * @throws CpoException Thrown if the Function Group has a function count != 1
    */
-  protected <T> long existsBean(String name, T obj, Session session, Collection<CpoWhere> wheres)
-      throws CpoException {
-    long objCount = 0;
+  protected <T> long existsBean(
+      String groupName, T bean, Session session, Collection<CpoWhere> wheres) throws CpoException {
+    long count = 0;
     Logger localLogger = logger;
 
-    if (obj == null) {
+    if (bean == null) {
       throw new CpoException("NULL bean passed into existsBean");
     }
 
     try {
-      CpoClass cpoClass = metaDescriptor.getMetaClass(obj);
-      List<CpoFunction> cpoFunctions = cpoClass.getFunctionGroup(Crud.EXIST, name).getFunctions();
+      CpoClass cpoClass = metaDescriptor.getMetaClass(bean);
+      List<CpoFunction> cpoFunctions =
+          cpoClass.getFunctionGroup(Crud.EXIST, groupName).getFunctions();
       localLogger = LoggerFactory.getLogger(cpoClass.getMetaClass());
 
       for (CpoFunction cpoFunction : cpoFunctions) {
         localLogger.info(cpoFunction.getExpression());
         CassandraBoundStatementFactory boundStatementFactory =
             new CassandraBoundStatementFactory(
-                session, this, cpoClass, cpoFunction, obj, wheres, null, null);
+                session, this, cpoClass, cpoFunction, bean, wheres, null, null);
         BoundStatement boundStatement = boundStatementFactory.getBoundStatement();
 
         long qCount = 0; // set the results for this function to 0
@@ -224,15 +225,15 @@ public class CassandraCpoAdapter extends CpoBaseAdapter<ClusterDataSource> {
           qCount++;
         }
 
-        objCount += qCount;
+        count += qCount;
       }
     } catch (Exception e) {
-      String msg = "existsBean(name, obj, session) failed:";
+      String msg = "existsBean(groupName, bean, session) failed:";
       localLogger.error(msg, e);
       throw new CpoException(msg, e);
     }
 
-    return objCount;
+    return count;
   }
 
   /**
@@ -541,11 +542,11 @@ public class CassandraCpoAdapter extends CpoBaseAdapter<ClusterDataSource> {
               + groupName
               + "> =========================");
       ArrayList<CassandraBoundStatementFactory> statemetnFactories = new ArrayList<>();
-      for (T obj : beans) {
+      for (T bean : beans) {
         for (CpoFunction function : cpoFunctions) {
           boundStatementFactory =
               new CassandraBoundStatementFactory(
-                  sess, this, cpoClass, function, obj, wheres, orderBy, nativeExpressions);
+                  sess, this, cpoClass, function, bean, wheres, orderBy, nativeExpressions);
           statemetnFactories.add(boundStatementFactory);
           numStatements++;
         }
@@ -866,7 +867,7 @@ public class CassandraCpoAdapter extends CpoBaseAdapter<ClusterDataSource> {
 
     ColumnDefinitions columnDefs;
     int columnCount;
-    T obj;
+    T bean;
     CpoAttribute[] attributes;
 
     if (criteria == null || result == null) {
@@ -934,7 +935,7 @@ public class CassandraCpoAdapter extends CpoBaseAdapter<ClusterDataSource> {
 
         for (Row row : rs) {
           try {
-            obj = (T) result.getClass().newInstance();
+            bean = (T) result.getClass().newInstance();
           } catch (IllegalAccessException iae) {
             localLogger.error(
                 "=================== Could not access default constructor for Class=<"
@@ -948,14 +949,14 @@ public class CassandraCpoAdapter extends CpoBaseAdapter<ClusterDataSource> {
           for (int k = 0; k < columnCount; k++) {
             if (attributes[k] != null) {
               attributes[k].invokeSetter(
-                  obj,
+                  bean,
                   new CassandraResultSetCpoData(
                       CassandraMethodMapper.getMethodMapper(), row, attributes[k], k));
             }
           }
 
           try {
-            cpoResultSet.put(obj);
+            cpoResultSet.put(bean);
           } catch (InterruptedException e) {
             localLogger.error("Retriever Thread was interrupted", e);
             break;

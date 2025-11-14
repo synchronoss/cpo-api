@@ -827,15 +827,15 @@ public interface CpoAdapter extends java.io.Serializable {
    * @param <T> The type of the JavaBean
    * @param groupName The String groupName of the EXISTS Function Group that will be used to create
    *     the bean in the datasource. null signifies that the default rules will be used.
-   * @param obj This is a bean that has been defined within the metadata of the datasource. If the
+   * @param bean This is a bean that has been defined within the metadata of the datasource. If the
    *     class is not defined an exception will be thrown. This bean will be searched for inside the
    *     datasource.
    * @param wheres A collection of CpoWhere beans that pass in run-time constraints to the function
-   *     that performs the the exist
+   *     that performs the exist operation
    * @return The number of beans that exist in the datasource that match the specified bean
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
-  <T> long existsBean(String groupName, T obj, Collection<CpoWhere> wheres) throws CpoException;
+  <T> long existsBean(String groupName, T bean, Collection<CpoWhere> wheres) throws CpoException;
 
   /**
    * newOrderBy allows you to dynamically change the order of the beans in the resulting collection.

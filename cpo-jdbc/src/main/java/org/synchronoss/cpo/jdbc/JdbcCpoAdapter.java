@@ -488,11 +488,11 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
   protected <T, C> T processExecuteGroup(String groupName, C criteria, T result)
       throws CpoException {
     Connection c = null;
-    T obj = null;
+    T bean = null;
 
     try {
       c = getWriteConnection();
-      obj = processExecuteGroup(groupName, criteria, result, c);
+      bean = processExecuteGroup(groupName, criteria, result, c);
       commitLocalConnection(c);
     } catch (Exception e) {
       // Any exception has to try to rollback the work;
@@ -503,7 +503,7 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
       closeLocalConnection(c);
     }
 
-    return obj;
+    return bean;
   }
 
   /**
@@ -936,7 +936,7 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
     ResultSetMetaData rsmd;
     int columnCount;
     int k;
-    T obj;
+    T bean;
     JdbcCpoAttribute[] attributes;
     JdbcPreparedStatementFactory jpsf;
     int i;
@@ -1005,7 +1005,7 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
 
         while (rs.next()) {
           try {
-            obj = (T) result.getClass().newInstance();
+            bean = (T) result.getClass().newInstance();
           } catch (IllegalAccessException iae) {
             localLogger.error(
                 "=================== Could not access default constructor for Class=<"
@@ -1019,14 +1019,14 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
           for (k = 1; k <= columnCount; k++) {
             if (attributes[k] != null) {
               attributes[k].invokeSetter(
-                  obj,
+                  bean,
                   new JdbcResultSetCpoData(
                       JdbcMethodMapper.getMethodMapper(), rs, attributes[k], k));
             }
           }
 
           try {
-            resultSet.put(obj);
+            resultSet.put(bean);
           } catch (InterruptedException e) {
             localLogger.error("Retriever Thread was interrupted", e);
             break;
@@ -1279,11 +1279,11 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
                 + "> Name=<"
                 + groupName
                 + "> =========================");
-        for (T obj : beans) {
+        for (T bean : beans) {
           for (CpoFunction function : cpoFunctions) {
             jpsf =
                 new JdbcPreparedStatementFactory(
-                    con, this, jmc, function, obj, wheres, orderBy, nativeExpressions);
+                    con, this, jmc, function, bean, wheres, orderBy, nativeExpressions);
             ps = jpsf.getPreparedStatement();
             numRows += ps.executeUpdate();
             jpsf.release();
@@ -1385,10 +1385,10 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
     if (!beans.isEmpty()) {
       T[] arr = (T[]) beans.toArray();
 
-      T obj1 = arr[0];
+      T firstBean = arr[0];
       boolean allEqual = true;
       for (int i = 1; i < arr.length; i++) {
-        if (!obj1.getClass().getName().equals(arr[i].getClass().getName())) {
+        if (!firstBean.getClass().getName().equals(arr[i].getClass().getName())) {
           allEqual = false;
           break;
         }
@@ -1398,9 +1398,9 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
         updateCount =
             processBatchUpdateGroup(arr, crud, groupName, wheres, orderBy, nativeExpressions, con);
       } else {
-        for (T obj : arr) {
+        for (T bean : arr) {
           updateCount +=
-              processUpdateGroup(obj, crud, groupName, wheres, orderBy, nativeExpressions, con);
+              processUpdateGroup(bean, crud, groupName, wheres, orderBy, nativeExpressions, con);
         }
       }
     }

@@ -69,7 +69,7 @@ public class JdbcPreparedStatementFactory extends CpoStatementFactory implements
    * @param jca The JdbcCpoAdapter that is controlling this transaction
    * @param criteria The object that will be used to look up the cpo metadata
    * @param function The CpoFunction that is being executed
-   * @param obj The bean that is being acted upon
+   * @param bean The bean that is being acted upon
    * @param wheres DOCUMENT ME!
    * @param orderBy DOCUMENT ME!
    * @param nativeQueries Additional sql to be embedded into the CpoFunction sql that is used to
@@ -81,14 +81,14 @@ public class JdbcPreparedStatementFactory extends CpoStatementFactory implements
       JdbcCpoAdapter jca,
       CpoClass criteria,
       CpoFunction function,
-      T obj,
+      T bean,
       Collection<CpoWhere> wheres,
       Collection<CpoOrderBy> orderBy,
       Collection<CpoNativeFunction> nativeQueries)
       throws CpoException {
-    super(obj == null ? logger : LoggerFactory.getLogger(obj.getClass()));
+    super(bean == null ? logger : LoggerFactory.getLogger(bean.getClass()));
     // get the list of bindValues from the function parameters
-    List<BindAttribute> bindValues = getBindValues(function, obj);
+    List<BindAttribute> bindValues = getBindValues(function, bean);
 
     String sql =
         buildSql(criteria, function.getExpression(), wheres, orderBy, nativeQueries, bindValues);

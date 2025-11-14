@@ -236,9 +236,9 @@ public class JdbcCpoXaAdapter extends CpoBaseXaResource<JdbcCpoAdapter> implemen
   }
 
   @Override
-  public <T> long existsBean(String groupName, T obj, Collection<CpoWhere> wheres)
+  public <T> long existsBean(String groupName, T bean, Collection<CpoWhere> wheres)
       throws CpoException {
-    return getCurrentResource().existsBean(groupName, obj, wheres);
+    return getCurrentResource().existsBean(groupName, bean, wheres);
   }
 
   @Override

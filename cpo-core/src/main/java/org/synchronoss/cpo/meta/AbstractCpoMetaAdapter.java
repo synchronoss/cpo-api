@@ -47,20 +47,20 @@ public abstract class AbstractCpoMetaAdapter implements CpoMetaAdapter {
   /**
    * DOCUMENT ME!
    *
-   * @param obj DOCUMENT ME!
+   * @param bean DOCUMENT ME!
    * @return DOCUMENT ME!
    * @throws CpoException DOCUMENT ME!
    */
   @Override
-  public <T> CpoClass getMetaClass(T obj) throws CpoException {
+  public <T> CpoClass getMetaClass(T bean) throws CpoException {
     CpoClass cpoClass = null;
     String className;
     String requestedName;
     List<Class<?>> classList = new ArrayList<>();
     Class<?> requestedClass;
 
-    if (obj != null) {
-      requestedClass = obj.getClass();
+    if (bean != null) {
+      requestedClass = bean.getClass();
       classList.add(requestedClass);
       requestedName = requestedClass.getName();
       className = requestedName;

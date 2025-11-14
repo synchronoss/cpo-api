@@ -316,8 +316,8 @@ public class CpoMetaDescriptor extends CpoMetaDescriptorCache
   }
 
   @Override
-  public <T> CpoClass getMetaClass(T obj) throws CpoException {
-    CpoClass cpoClass = getCpoMetaAdapter().getMetaClass(obj);
+  public <T> CpoClass getMetaClass(T bean) throws CpoException {
+    CpoClass cpoClass = getCpoMetaAdapter().getMetaClass(bean);
     if (cpoClass != null) {
       cpoClass.loadRunTimeInfo(this);
     }

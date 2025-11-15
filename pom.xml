@@ -303,14 +303,14 @@
                     <licenseName>lgpl_v3</licenseName>
                     <failOnMissingLicense>true</failOnMissingLicense>
                     <failOnMissingHeader>true</failOnMissingHeader>
-                    <includes>
-                        <include>**/pom.xml</include>
-                    </includes>
+                    <processStartTag>[-------------------------------------------------------------------------</processStartTag>
+                    <sectionDelimiter>--------------------------------------------------------------------------</sectionDelimiter>
+                    <processEndTag>--------------------------------------------------------------------------]</processEndTag>
                     <!-- Other configurations as needed -->
                 </configuration>
                 <executions>
                     <execution>
-                        <id>check-licenses</id>
+                        <id>update-licenses</id>
                         <goals>
                             <goal>update-file-header</goal>
                             <goal>update-project-license</goal>

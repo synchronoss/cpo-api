@@ -1,26 +1,25 @@
 <?xml version="1.0"?>
 <!--
+  #%L
+  cpo
+  %%
+  Copyright (C) 2003 - 2025 David E. Berry
+  %%
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU Lesser General Public License as
+  published by the Free Software Foundation, either version 3 of the
+  License, or (at your option) any later version.
 
-    Copyright (C) 2003-2025 David E. Berry
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Lesser Public License for more details.
 
-    This library is free software; you can redistribute it and/or
-    modify it under the terms of the GNU Lesser General Public
-    License as published by the Free Software Foundation; either
-    version 2.1 of the License, or (at your option) any later version.
-
-    This library is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-    Lesser General Public License for more details.
-
-    You should have received a copy of the GNU Lesser General Public
-    License along with this library; if not, write to the Free Software
-    Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
-
-    A copy of the GNU Lesser General Public License may also be found at
-    http://www.gnu.org/licenses/lgpl.txt
-
--->
+  You should have received a copy of the GNU General Lesser Public
+  License along with this program.  If not, see
+  <http://www.gnu.org/licenses/lgpl-3.0.html>.
+  #L%
+  -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
@@ -243,7 +242,7 @@
                 <executions>
                     <execution>
                         <goals>
-                            <goal>check</goal>
+                            <goal>apply</goal>
                         </goals>
                         <phase>compile</phase> <!-- Or validate, or any other suitable phase -->
                    </execution>
@@ -299,20 +298,22 @@
                 <artifactId>license-maven-plugin</artifactId>
                 <version>2.7.0</version> <!-- Use the latest stable version -->
                 <configuration>
-                    <inceptionYear>2003</inceptionYear>
+                    <inceptionYear>${project.inceptionYear}</inceptionYear>
                     <organizationName>David E. Berry</organizationName>
                     <licenseName>lgpl_v3</licenseName>
-                    <failOnMissingLicense>false</failOnMissingLicense>
-                    <failOnMissingHeader>false</failOnMissingHeader>
-                    <addJavaLicenseAfterPackage>false</addJavaLicenseAfterPackage>
+                    <failOnMissingLicense>true</failOnMissingLicense>
+                    <failOnMissingHeader>true</failOnMissingHeader>
+                    <processStartTag>[[</processStartTag>
+                    <sectionDelimiter>==</sectionDelimiter>
+                    <processEndTag>]]</processEndTag>
                     <!-- Other configurations as needed -->
                 </configuration>
                 <executions>
                     <execution>
-                        <id>check-licenses</id>
+                        <id>update-licenses</id>
                         <goals>
-                            <goal>check-file-header</goal>
-                            <goal>check-project-license</goal>
+                            <goal>update-file-header</goal>
+                            <goal>update-project-license</goal>
                             <goal>aggregate-add-third-party</goal>
                         </goals>
                         <phase>process-sources</phase>

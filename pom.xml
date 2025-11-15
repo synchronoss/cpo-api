@@ -303,9 +303,9 @@
                     <licenseName>lgpl_v3</licenseName>
                     <failOnMissingLicense>true</failOnMissingLicense>
                     <failOnMissingHeader>true</failOnMissingHeader>
-                    <processStartTag>[-------------------------------------------------------------------------</processStartTag>
-                    <sectionDelimiter>--------------------------------------------------------------------------</sectionDelimiter>
-                    <processEndTag>--------------------------------------------------------------------------]</processEndTag>
+                    <processStartTag>[[</processStartTag>
+                    <sectionDelimiter>==</sectionDelimiter>
+                    <processEndTag>]]</processEndTag>
                     <!-- Other configurations as needed -->
                 </configuration>
                 <executions>

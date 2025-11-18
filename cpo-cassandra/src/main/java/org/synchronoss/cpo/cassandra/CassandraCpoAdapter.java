@@ -473,7 +473,7 @@ public class CassandraCpoAdapter extends CpoBaseAdapter<ClusterDataSource> {
 
   @Override
   protected <T> long processUpdateGroup(
-      Collection<T> beans,
+      List<T> beans,
       Crud crud,
       String groupName,
       Collection<CpoWhere> wheres,
@@ -486,8 +486,7 @@ public class CassandraCpoAdapter extends CpoBaseAdapter<ClusterDataSource> {
     try {
       sess = getWriteSession();
       updateCount =
-          processUpdateGroup(
-              beans.toArray(), crud, groupName, wheres, orderBy, nativeExpressions, sess);
+          processUpdateGroup(beans, crud, groupName, wheres, orderBy, nativeExpressions, sess);
     } catch (Exception e) {
       // Any exception has to try to rollback the work;
       ExceptionHelper.reThrowCpoException(
@@ -512,7 +511,7 @@ public class CassandraCpoAdapter extends CpoBaseAdapter<ClusterDataSource> {
    * @throws CpoException any errors processing the update
    */
   protected <T> long processUpdateGroup(
-      T[] beans,
+      List<T> beans,
       Crud crud,
       String groupName,
       Collection<CpoWhere> wheres,
@@ -526,18 +525,21 @@ public class CassandraCpoAdapter extends CpoBaseAdapter<ClusterDataSource> {
     CassandraBoundStatementFactory boundStatementFactory = null;
     Logger localLogger = logger;
 
+    if (beans.isEmpty()) return 0;
+    var beanInstance = beans.getFirst();
+
     try {
-      cpoClass = metaDescriptor.getMetaClass(beans[0]);
+      cpoClass = metaDescriptor.getMetaClass(beanInstance);
       cpoFunctions =
           cpoClass
-              .getFunctionGroup(adjustCrud(beans[0], crud, groupName, sess), groupName)
+              .getFunctionGroup(adjustCrud(beanInstance, crud, groupName, sess), groupName)
               .getFunctions();
       localLogger = LoggerFactory.getLogger(cpoClass.getMetaClass());
 
       int numStatements = 0;
       localLogger.info(
           "=================== Class=<"
-              + beans[0].getClass()
+              + beanInstance.getClass()
               + "> Type=<"
               + crud.operation
               + "> Name=<"
@@ -560,7 +562,7 @@ public class CassandraCpoAdapter extends CpoBaseAdapter<ClusterDataSource> {
           "=================== "
               + numStatements
               + " Updates - Class=<"
-              + beans[0].getClass()
+              + beanInstance.getClass()
               + "> Type=<"
               + crud.operation
               + "> Name=<"
@@ -574,7 +576,7 @@ public class CassandraCpoAdapter extends CpoBaseAdapter<ClusterDataSource> {
               + ","
               + groupName
               + ","
-              + beans[0].getClass().getName();
+              + beanInstance.getClass().getName();
       // TODO FIX This
       // localLogger.error("bound values:" + this.parameterToString(jq));
       localLogger.error(msg, t);

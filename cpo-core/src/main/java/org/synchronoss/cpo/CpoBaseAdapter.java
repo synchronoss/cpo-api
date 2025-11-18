@@ -24,6 +24,7 @@ package org.synchronoss.cpo;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.stream.Stream;
 import org.synchronoss.cpo.cache.CpoAdapterCache;
 import org.synchronoss.cpo.enums.Comparison;
@@ -107,19 +108,19 @@ public abstract class CpoBaseAdapter<D> extends CpoAdapterCache implements CpoAd
   }
 
   @Override
-  public <T> long insertBeans(Collection<T> beans) throws CpoException {
+  public <T> long insertBeans(List<T> beans) throws CpoException {
     return processUpdateGroup(beans, Crud.CREATE, null, null, null, null);
   }
 
   @Override
-  public <T> long insertBeans(String groupName, Collection<T> beans) throws CpoException {
+  public <T> long insertBeans(String groupName, List<T> beans) throws CpoException {
     return processUpdateGroup(beans, Crud.CREATE, groupName, null, null, null);
   }
 
   @Override
   public <T> long insertBeans(
       String groupName,
-      Collection<T> beans,
+      List<T> beans,
       Collection<CpoWhere> wheres,
       Collection<CpoOrderBy> orderBy,
       Collection<CpoNativeFunction> nativeExpressions)
@@ -149,19 +150,19 @@ public abstract class CpoBaseAdapter<D> extends CpoAdapterCache implements CpoAd
   }
 
   @Override
-  public <T> long deleteBeans(Collection<T> beans) throws CpoException {
+  public <T> long deleteBeans(List<T> beans) throws CpoException {
     return processUpdateGroup(beans, Crud.DELETE, null, null, null, null);
   }
 
   @Override
-  public <T> long deleteBeans(String groupName, Collection<T> beans) throws CpoException {
+  public <T> long deleteBeans(String groupName, List<T> beans) throws CpoException {
     return processUpdateGroup(beans, Crud.DELETE, groupName, null, null, null);
   }
 
   @Override
   public <T> long deleteBeans(
       String groupName,
-      Collection<T> beans,
+      List<T> beans,
       Collection<CpoWhere> wheres,
       Collection<CpoOrderBy> orderBy,
       Collection<CpoNativeFunction> nativeExpressions)
@@ -245,12 +246,12 @@ public abstract class CpoBaseAdapter<D> extends CpoAdapterCache implements CpoAd
   }
 
   @Override
-  public <T> long upsertBeans(Collection<T> beans) throws CpoException {
+  public <T> long upsertBeans(List<T> beans) throws CpoException {
     return processUpdateGroup(beans, Crud.UPSERT, null, null, null, null);
   }
 
   @Override
-  public <T> long upsertBeans(String groupName, Collection<T> beans) throws CpoException {
+  public <T> long upsertBeans(String groupName, List<T> beans) throws CpoException {
     return processUpdateGroup(beans, Crud.UPSERT, groupName, null, null, null);
   }
 
@@ -395,19 +396,19 @@ public abstract class CpoBaseAdapter<D> extends CpoAdapterCache implements CpoAd
   }
 
   @Override
-  public <T> long updateBeans(Collection<T> beans) throws CpoException {
+  public <T> long updateBeans(List<T> beans) throws CpoException {
     return processUpdateGroup(beans, Crud.UPDATE, null, null, null, null);
   }
 
   @Override
-  public <T> long updateBeans(String groupName, Collection<T> beans) throws CpoException {
+  public <T> long updateBeans(String groupName, List<T> beans) throws CpoException {
     return processUpdateGroup(beans, Crud.UPDATE, groupName, null, null, null);
   }
 
   @Override
   public <T> long updateBeans(
       String groupName,
-      Collection<T> beans,
+      List<T> beans,
       Collection<CpoWhere> wheres,
       Collection<CpoOrderBy> orderBy,
       Collection<CpoNativeFunction> nativeExpressions)
@@ -451,7 +452,7 @@ public abstract class CpoBaseAdapter<D> extends CpoAdapterCache implements CpoAd
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
   protected abstract <T> long processUpdateGroup(
-      Collection<T> beans,
+      List<T> beans,
       Crud crud,
       String groupName,
       Collection<CpoWhere> wheres,

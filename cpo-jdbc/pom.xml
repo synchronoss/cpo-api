@@ -51,8 +51,8 @@
       <mysql.host>localhost</mysql.host>
       <mysql.port>3306</mysql.port>
       <mysql.database>cpo</mysql.database>
-      <mysql.url>jdbc:mysql://${mysql.host}:${mysql.port}/${mysql.database}?noAccessToProcedureBodies=true&amp;amp;useCursorFetch=true&amp;amp;defaultFetchSize=0</mysql.url>
-      <mysql.userurl>jdbc:mysql://${mysql.host}:${mysql.port}/${mysql.database}?user=${mysql.user}&amp;amp;password=${mysql.pswd}&amp;amp;noAccessToProcedureBodies=true&amp;amp;useCursorFetch=true&amp;amp;defaultFetchSize=0</mysql.userurl>
+      <mysql.url>jdbc:mysql://${mysql.host}:${mysql.port}/${mysql.database}?noAccessToProcedureBodies=true&amp;amp;useCursorFetch=true</mysql.url>
+      <mysql.userurl>jdbc:mysql://${mysql.host}:${mysql.port}/${mysql.database}?user=${mysql.user}&amp;amp;password=${mysql.pswd}&amp;amp;noAccessToProcedureBodies=true&amp;amp;useCursorFetch=true</mysql.userurl>
       <mysql.driver>com.mysql.cj.jdbc.Driver</mysql.driver>
       <mysql.blobsupport>true</mysql.blobsupport>
       <mysql.callsupport>true</mysql.callsupport>
@@ -76,8 +76,8 @@
       <mariadb.host>localhost</mariadb.host>
       <mariadb.port>3306</mariadb.port>
       <mariadb.database>cpo</mariadb.database>
-      <mariadb.url>jdbc:mariadb://${mariadb.host}:${mariadb.port}/${mariadb.database}</mariadb.url>
-      <mariadb.userurl>jdbc:mariadb://${mariadb.host}:${mariadb.port}/${mariadb.database}?user=${mariadb.user}&amp;amp;password=${mariadb.pswd}</mariadb.userurl>
+      <mariadb.url>jdbc:mariadb://${mariadb.host}:${mariadb.port}/${mariadb.database}?useCursorFetch=true</mariadb.url>
+      <mariadb.userurl>jdbc:mariadb://${mariadb.host}:${mariadb.port}/${mariadb.database}?user=${mariadb.user}&amp;amp;password=${mariadb.pswd}&amp;amp;useCursorFetch=true</mariadb.userurl>
       <mariadb.driver>org.mariadb.jdbc.Driver</mariadb.driver>
       <mariadb.blobsupport>true</mariadb.blobsupport>
       <mariadb.callsupport>true</mariadb.callsupport>

@@ -211,7 +211,7 @@ public interface CpoAdapter extends java.io.Serializable {
    * @return The number of beans created in the datasource
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
-  <T> long insertBeans(Collection<T> beans) throws CpoException;
+  <T> long insertBeans(List<T> beans) throws CpoException;
 
   /**
    * Iterates through a collection of beans, creates and stores them in the datasource. The
@@ -259,7 +259,7 @@ public interface CpoAdapter extends java.io.Serializable {
    * @return The number of beans created in the datasource
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
-  <T> long insertBeans(String groupName, Collection<T> beans) throws CpoException;
+  <T> long insertBeans(String groupName, List<T> beans) throws CpoException;
 
   /**
    * Iterates through a collection of beans, creates and stores them in the datasource. The
@@ -314,7 +314,7 @@ public interface CpoAdapter extends java.io.Serializable {
    */
   <T> long insertBeans(
       String groupName,
-      Collection<T> beans,
+      List<T> beans,
       Collection<CpoWhere> wheres,
       Collection<CpoOrderBy> orderBy,
       Collection<CpoNativeFunction> nativeExpressions)
@@ -483,7 +483,7 @@ public interface CpoAdapter extends java.io.Serializable {
    * @return The number of beans deleted from the datasource
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
-  <T> long deleteBeans(Collection<T> beans) throws CpoException;
+  <T> long deleteBeans(List<T> beans) throws CpoException;
 
   /**
    * Removes the beans contained in the collection from the datasource. The assumption is that the
@@ -530,7 +530,7 @@ public interface CpoAdapter extends java.io.Serializable {
    * @return The number of beans deleted from the datasource
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
-  <T> long deleteBeans(String groupName, Collection<T> beans) throws CpoException;
+  <T> long deleteBeans(String groupName, List<T> beans) throws CpoException;
 
   /**
    * Removes the beans contained in the collection from the datasource. The assumption is that the
@@ -584,7 +584,7 @@ public interface CpoAdapter extends java.io.Serializable {
    */
   <T> long deleteBeans(
       String groupName,
-      Collection<T> beans,
+      List<T> beans,
       Collection<CpoWhere> wheres,
       Collection<CpoOrderBy> orderBy,
       Collection<CpoNativeFunction> nativeExpressions)
@@ -1054,7 +1054,7 @@ public interface CpoAdapter extends java.io.Serializable {
    * @see #insertBean
    * @see #updateBean
    */
-  <T> long upsertBeans(Collection<T> beans) throws CpoException;
+  <T> long upsertBeans(List<T> beans) throws CpoException;
 
   /**
    * Upserts a collection of beans into the datasource. The CpoAdapter will check to see if this
@@ -1102,7 +1102,7 @@ public interface CpoAdapter extends java.io.Serializable {
    * @see #insertBean
    * @see #updateBean
    */
-  <T> long upsertBeans(String groupName, Collection<T> beans) throws CpoException;
+  <T> long upsertBeans(String groupName, List<T> beans) throws CpoException;
 
   /**
    * Retrieves the bean from the datasource. The assumption is that the bean exists in the
@@ -1592,7 +1592,7 @@ public interface CpoAdapter extends java.io.Serializable {
    * @return The number of beans updated in the datasource
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
-  <T> long updateBeans(Collection<T> beans) throws CpoException;
+  <T> long updateBeans(List<T> beans) throws CpoException;
 
   /**
    * Updates a collection of beans in the datasource. The assumption is that the beans contained in
@@ -1636,7 +1636,7 @@ public interface CpoAdapter extends java.io.Serializable {
    * @return The number of beans updated in the datasource
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
-  <T> long updateBeans(String groupName, Collection<T> beans) throws CpoException;
+  <T> long updateBeans(String groupName, List<T> beans) throws CpoException;
 
   /**
    * Updates a collection of beans in the datasource. The assumption is that the beans contained in
@@ -1685,7 +1685,7 @@ public interface CpoAdapter extends java.io.Serializable {
    */
   <T> long updateBeans(
       String groupName,
-      Collection<T> beans,
+      List<T> beans,
       Collection<CpoWhere> wheres,
       Collection<CpoOrderBy> orderBy,
       Collection<CpoNativeFunction> nativeExpressions)

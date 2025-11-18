@@ -1147,7 +1147,7 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
    * Updates beans in the datasource
    *
    * @param <T> The bean type
-   * @param beans The array of T to update
+   * @param beans The list of T to update
    * @param crud The query group type
    * @param groupName The query group type
    * @param wheres A collection of CpoWhere beans to be used by the function
@@ -1158,7 +1158,7 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
    * @throws CpoException any errors processing the update
    */
   protected <T> long processBatchUpdateGroup(
-      T[] beans,
+      List<T> beans,
       Crud crud,
       String groupName,
       Collection<CpoWhere> wheres,
@@ -1175,10 +1175,13 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
     int[] updates;
     Logger localLogger = logger;
 
+    if (beans.isEmpty()) return updateCount;
+
+    T firstBean = beans.getFirst();
     try {
-      jmc = metaDescriptor.getMetaClass(beans[0]);
+      jmc = metaDescriptor.getMetaClass(firstBean);
       cpoFunctions =
-          jmc.getFunctionGroup(adjustCrud(beans[0], crud, groupName, con), groupName)
+          jmc.getFunctionGroup(adjustCrud(firstBean, crud, groupName, con), groupName)
               .getFunctions();
       localLogger = LoggerFactory.getLogger(jmc.getMetaClass());
 
@@ -1188,7 +1191,7 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
       if (cpoFunctions.size() == 1) {
         localLogger.info(
             "=================== BATCH - Class=<"
-                + beans[0].getClass()
+                + firstBean.getClass()
                 + "> Type=<"
                 + crud.operation
                 + "> Name=<"
@@ -1197,12 +1200,12 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
         cpoFunction = cpoFunctions.get(0);
         jpsf =
             new JdbcPreparedStatementFactory(
-                con, this, jmc, cpoFunction, beans[0], wheres, orderBy, nativeExpressions);
+                con, this, jmc, cpoFunction, firstBean, wheres, orderBy, nativeExpressions);
         ps = jpsf.getPreparedStatement();
         ps.addBatch();
-        for (int j = 1; j < beans.length; j++) {
+        for (T bean : beans.subList(1, beans.size())) {
           //          jpsf.bindParameters(beans[j]);
-          jpsf.setBindValues(jpsf.getBindValues(cpoFunction, beans[j]));
+          jpsf.setBindValues(jpsf.getBindValues(cpoFunction, bean));
           ps.addBatch();
         }
         updates = ps.executeBatch();
@@ -1220,7 +1223,7 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
             "=================== BATCH - "
                 + numRows
                 + " Updates - Class=<"
-                + beans[0].getClass()
+                + firstBean.getClass()
                 + "> Type=<"
                 + crud.operation
                 + "> Name=<"
@@ -1229,7 +1232,7 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
       } else {
         localLogger.info(
             "=================== Class=<"
-                + beans[0].getClass()
+                + firstBean.getClass()
                 + "> Type=<"
                 + crud.operation
                 + "> Name=<"
@@ -1250,7 +1253,7 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
             "=================== "
                 + numRows
                 + " Updates - Class=<"
-                + beans[0].getClass()
+                + firstBean.getClass()
                 + "> Type=<"
                 + crud.operation
                 + "> Name=<"
@@ -1268,7 +1271,7 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
               + ","
               + groupName
               + ","
-              + beans[0].getClass().getName();
+              + firstBean.getClass().getName();
       // TODO FIX This
       // localLogger.error("bound values:" + this.parameterToString(jq));
       localLogger.error(msg, t);
@@ -1285,7 +1288,7 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
 
   @Override
   protected <T> long processUpdateGroup(
-      Collection<T> beans,
+      List<T> beans,
       Crud crud,
       String groupName,
       Collection<CpoWhere> wheres,
@@ -1328,7 +1331,7 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
    * @throws CpoException any errors processing the update
    */
   protected <T> long processUpdateGroup(
-      Collection<T> beans,
+      List<T> beans,
       Crud crud,
       String groupName,
       Collection<CpoWhere> wheres,
@@ -1338,26 +1341,15 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
       throws CpoException {
     long updateCount = 0;
 
-    if (!beans.isEmpty()) {
-      T[] arr = (T[]) beans.toArray();
+    if (beans.isEmpty()) return updateCount;
 
-      T firstBean = arr[0];
-      boolean allEqual = true;
-      for (int i = 1; i < arr.length; i++) {
-        if (!firstBean.getClass().getName().equals(arr[i].getClass().getName())) {
-          allEqual = false;
-          break;
-        }
-      }
-
-      if (allEqual && batchUpdatesSupported_ && !Crud.UPSERT.equals(crud)) {
-        updateCount =
-            processBatchUpdateGroup(arr, crud, groupName, wheres, orderBy, nativeExpressions, con);
-      } else {
-        for (T bean : arr) {
-          updateCount +=
-              processUpdateGroup(bean, crud, groupName, wheres, orderBy, nativeExpressions, con);
-        }
+    if (batchUpdatesSupported_ && !Crud.UPSERT.equals(crud)) {
+      updateCount =
+          processBatchUpdateGroup(beans, crud, groupName, wheres, orderBy, nativeExpressions, con);
+    } else {
+      for (T bean : beans) {
+        updateCount +=
+            processUpdateGroup(bean, crud, groupName, wheres, orderBy, nativeExpressions, con);
       }
     }
 

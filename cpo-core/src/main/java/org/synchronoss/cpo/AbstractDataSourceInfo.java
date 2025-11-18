@@ -29,12 +29,14 @@ package org.synchronoss.cpo;
 public abstract class AbstractDataSourceInfo<T> implements DataSourceInfo<T> {
   private T dataSource = null;
   private String dataSourceName = null;
+  private int fetchSize = 0;
 
   // Make sure DataSource creation is thread safe.
   private final Object LOCK = new Object();
 
-  public AbstractDataSourceInfo(String dataSourceName) {
+  public AbstractDataSourceInfo(String dataSourceName, int fetchSize) {
     this.dataSourceName = dataSourceName;
+    this.fetchSize = fetchSize;
   }
 
   protected abstract T createDataSource() throws CpoException;
@@ -42,6 +44,15 @@ public abstract class AbstractDataSourceInfo<T> implements DataSourceInfo<T> {
   @Override
   public String getDataSourceName() {
     return dataSourceName;
+  }
+
+  @Override
+  public int getFetchSize() {
+    return fetchSize;
+  }
+
+  public void setFetchSize(int fetchSize) {
+    this.fetchSize = fetchSize;
   }
 
   @Override

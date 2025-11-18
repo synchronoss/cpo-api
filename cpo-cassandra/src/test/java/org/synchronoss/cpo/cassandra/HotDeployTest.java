@@ -27,6 +27,7 @@ import static org.testng.Assert.*;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Stream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.CpoAdapter;
@@ -94,11 +95,16 @@ public class HotDeployTest {
       ValueObject valObj = ValueObjectFactory.createValueObject();
 
       // make sure the default retrieve works
-      col = cpoAdapter.retrieveBeans(null, valObj);
-      assertNotNull(col, "Col size is " + col.size());
+      try (Stream<ValueObject> beans =
+          cpoAdapter.retrieveBeans(ValueObject.FG_LIST_NULL, valObj, valObj); ) {
+        long count = beans.count();
+        assertEquals(count, 6, "Number of beans is " + count);
+      }
 
-      col = cpoAdapter.retrieveBeans("HotDeploySelect", valObj);
-      fail("Should not have gotten here:");
+      try (Stream<ValueObject> beans = cpoAdapter.retrieveBeans("HotDeploySelect", valObj); ) {
+        long count = beans.count();
+        fail(method + "Test got to unreachable code " + count);
+      }
     } catch (Exception e) {
       logger.debug("Received an expected Exception: " + e.getLocalizedMessage());
     }
@@ -111,21 +117,29 @@ public class HotDeployTest {
       ValueObject valObj = ValueObjectFactory.createValueObject(2);
 
       // make sure the default retrieve still works
-      col = cpoAdapter.retrieveBeans(null, valObj);
-      assertEquals(6, col.size(), "Col size is " + col.size());
-
-      List<ValueObject> col2 = cpoAdapter.retrieveBeans("HotDeploySelect", valObj);
-      assertEquals(6, col2.size(), "Col size is " + col2.size());
-
-      for (int i = 0; i < col.size(); i++) {
-        assertEquals(col.get(i).getId(), col2.get(i).getId(), "IDs must be equal");
+      List<ValueObject> list1;
+      // make sure the default retrieve still works
+      try (Stream<ValueObject> beans =
+          cpoAdapter.retrieveBeans(ValueObject.FG_LIST_NULL, valObj, valObj); ) {
+        list1 = beans.toList();
       }
+      assertNotNull(list1);
+      assertEquals(list1.size(), 6, "Number of beans is " + list1.size());
+
+      List<ValueObject> list2;
+      try (Stream<ValueObject> beans = cpoAdapter.retrieveBeans("HotDeploySelect", valObj); ) {
+        list2 = beans.toList();
+      }
+      assertNotNull(list2);
+      assertEquals(list2.size(), 6, "Number of beans is " + list2.size());
 
       // make sure the first objects are the same
+      for (int i = 0; i < list1.size(); i++) {
+        assertEquals(list1.get(i).getId(), list2.get(i).getId(), "IDs must be equal");
+      }
 
     } catch (Exception e) {
       String msg = ExceptionHelper.getLocalizedMessage(e);
-
       fail("Received an unexpected exception: " + msg);
     }
   }
@@ -138,12 +152,16 @@ public class HotDeployTest {
     try {
       ValueObject valObj = ValueObjectFactory.createValueObject();
 
-      // make sure the default retrieve works
-      col = cpoAdapter.retrieveBeans(null, valObj);
-      assertNotNull(col, "Col size is " + col.size());
+      try (Stream<ValueObject> beans =
+          cpoAdapter.retrieveBeans(ValueObject.FG_LIST_NULL, valObj, valObj); ) {
+        long count = beans.count();
+        assertEquals(count, 6, "Number of beans is " + count);
+      }
 
-      col = cpoAdapter.retrieveBeans("HotDeploySelect", valObj);
-      fail("Should not have gotten here:");
+      try (Stream<ValueObject> beans = cpoAdapter.retrieveBeans("HotDeploySelect", valObj); ) {
+        long count = beans.count();
+        fail(method + "Test got to unreachable code " + count);
+      }
     } catch (Exception e) {
       logger.debug("Received an expected Exception: " + e.getLocalizedMessage());
     }
@@ -155,20 +173,21 @@ public class HotDeployTest {
 
       ValueObject valObj = ValueObjectFactory.createValueObject(2);
 
-      // the old retrieve should no longer be there
-      try {
-        col = cpoAdapter.retrieveBeans(null, valObj);
-        fail("should have thrown a cpo exception");
+      try (Stream<ValueObject> beans =
+          cpoAdapter.retrieveBeans(ValueObject.FG_LIST_NULL, valObj, valObj); ) {
+        long count = beans.count();
+        assertEquals(count, 6, "Number of beans is " + count);
+        fail(method + "Test got to unreachable code " + count);
       } catch (CpoException ce) {
         // do nothing, this is expected
       }
 
-      List<ValueObject> col2 = cpoAdapter.retrieveBeans("HotDeploySelect", valObj);
-      assertEquals(6, col2.size(), "Col size is " + col2.size());
-
+      try (Stream<ValueObject> beans = cpoAdapter.retrieveBeans("HotDeploySelect", valObj); ) {
+        long count = beans.count();
+        assertEquals(count, 6, "Number of beans is " + count);
+      }
     } catch (Exception e) {
       String msg = ExceptionHelper.getLocalizedMessage(e);
-
       fail("Received an unexpected exception: " + msg);
     }
   }

@@ -24,6 +24,7 @@ package org.synchronoss.cpo.jdbc.jta;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Stream;
 import javax.transaction.xa.XAException;
 import javax.transaction.xa.XAResource;
 import org.synchronoss.cpo.*;
@@ -117,15 +118,6 @@ public class JdbcCpoXaAdapter extends CpoBaseXaResource<JdbcCpoAdapter> implemen
     if (currentResource != getLocalResource())
       return ((JdbcCpoTrxAdapter) currentResource).isClosed();
     else return true;
-  }
-
-  /** Returns true if the TrxAdapter is processing a request, false if it is not */
-  @Override
-  public boolean isBusy() throws CpoException {
-    JdbcCpoAdapter currentResource = getCurrentResource();
-    if (currentResource != getLocalResource())
-      return ((JdbcCpoTrxAdapter) currentResource).isBusy();
-    else return false;
   }
 
   @Override
@@ -349,44 +341,45 @@ public class JdbcCpoXaAdapter extends CpoBaseXaResource<JdbcCpoAdapter> implemen
   }
 
   @Override
-  public <C> List<C> retrieveBeans(String groupName, C criteria) throws CpoException {
+  public <C> Stream<C> retrieveBeans(String groupName, C criteria) throws CpoException {
     return getCurrentResource().retrieveBeans(groupName, criteria);
   }
 
   @Override
-  public <C> List<C> retrieveBeans(
+  public <C> Stream<C> retrieveBeans(
       String groupName, C criteria, CpoWhere where, Collection<CpoOrderBy> orderBy)
       throws CpoException {
     return getCurrentResource().retrieveBeans(groupName, criteria, where, orderBy);
   }
 
   @Override
-  public <C> List<C> retrieveBeans(String groupName, C criteria, Collection<CpoOrderBy> orderBy)
+  public <C> Stream<C> retrieveBeans(String groupName, C criteria, Collection<CpoOrderBy> orderBy)
       throws CpoException {
     return getCurrentResource().retrieveBeans(groupName, criteria, orderBy);
   }
 
   @Override
-  public <C> List<C> retrieveBeans(
+  public <C> Stream<C> retrieveBeans(
       String groupName, C criteria, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy)
       throws CpoException {
     return getCurrentResource().retrieveBeans(groupName, criteria, wheres, orderBy);
   }
 
   @Override
-  public <T, C> List<T> retrieveBeans(String groupName, C criteria, T result) throws CpoException {
+  public <T, C> Stream<T> retrieveBeans(String groupName, C criteria, T result)
+      throws CpoException {
     return getCurrentResource().retrieveBeans(groupName, criteria, result);
   }
 
   @Override
-  public <T, C> List<T> retrieveBeans(
+  public <T, C> Stream<T> retrieveBeans(
       String groupName, C criteria, T result, CpoWhere where, Collection<CpoOrderBy> orderBy)
       throws CpoException {
     return getCurrentResource().retrieveBeans(groupName, criteria, result, where, orderBy);
   }
 
   @Override
-  public <T, C> List<T> retrieveBeans(
+  public <T, C> Stream<T> retrieveBeans(
       String groupName,
       C criteria,
       T result,
@@ -397,7 +390,7 @@ public class JdbcCpoXaAdapter extends CpoBaseXaResource<JdbcCpoAdapter> implemen
   }
 
   @Override
-  public <T, C> List<T> retrieveBeans(
+  public <T, C> Stream<T> retrieveBeans(
       String groupName,
       C criteria,
       T result,
@@ -407,20 +400,6 @@ public class JdbcCpoXaAdapter extends CpoBaseXaResource<JdbcCpoAdapter> implemen
       throws CpoException {
     return getCurrentResource()
         .retrieveBeans(groupName, criteria, result, wheres, orderBy, nativeExpressions);
-  }
-
-  @Override
-  public <T, C> CpoResultSet<T> retrieveBeans(
-      String groupName,
-      C criteria,
-      T result,
-      Collection<CpoWhere> wheres,
-      Collection<CpoOrderBy> orderBy,
-      Collection<CpoNativeFunction> nativeExpressions,
-      int queueSize)
-      throws CpoException {
-    return getCurrentResource()
-        .retrieveBeans(groupName, criteria, result, wheres, orderBy, nativeExpressions, queueSize);
   }
 
   @Override
@@ -476,6 +455,16 @@ public class JdbcCpoXaAdapter extends CpoBaseXaResource<JdbcCpoAdapter> implemen
   }
 
   @Override
+  public int getFetchSize() {
+    return getCurrentResource().getFetchSize();
+  }
+
+  @Override
+  public void setFetchSize(int fetchSize) {
+    getCurrentResource().setFetchSize(fetchSize);
+  }
+
+  @Override
   public List<CpoAttribute> getCpoAttributes(String expression) throws CpoException {
     return getCurrentResource().getCpoAttributes(expression);
   }
@@ -487,18 +476,6 @@ public class JdbcCpoXaAdapter extends CpoBaseXaResource<JdbcCpoAdapter> implemen
           CpoXaError.XAER_INVAL, "Invalid parameter. xaResource cannot be null.");
 
     return xaResource instanceof JdbcCpoXaAdapter;
-  }
-
-  @Override
-  public boolean isLocalResourceBusy() throws XAException {
-    return false;
-    //    boolean busy;
-    //    try {
-    //      busy = getLocalResource().isBusy();
-    //    } catch (CpoException ce) {
-    //      throw new XAException(XAException.XAER_RMERR);
-    //    }
-    //    return busy;
   }
 
   @Override

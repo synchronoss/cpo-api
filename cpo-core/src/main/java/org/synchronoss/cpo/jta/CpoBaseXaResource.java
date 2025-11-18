@@ -43,9 +43,6 @@ public abstract class CpoBaseXaResource<T> implements CpoXaResource<T> {
     this.localResource = localResource;
   }
 
-  // Methods to be implemented by actual implementation
-  protected abstract boolean isLocalResourceBusy() throws XAException;
-
   protected abstract void prepareResource(T xaResource) throws XAException;
 
   protected abstract void commitResource(T xaResource) throws XAException;
@@ -386,10 +383,6 @@ public abstract class CpoBaseXaResource<T> implements CpoXaResource<T> {
       if (cpoXaStateMap.getXaResourceMap().get(this) != null)
         throw CpoXaError.createXAException(
             CpoXaError.XAER_PROTO, "Start can not be called on an associated XID");
-
-      // see if we are not in the middle of doing something on the local transaction
-      if (isLocalResourceBusy())
-        throw CpoXaError.createXAException(CpoXaError.XAER_OUTSIDE, "Local Transaction is busy");
 
       CpoXaState<T> cpoXaState = cpoXaStateMap.getXidStateMap().get(xid);
 

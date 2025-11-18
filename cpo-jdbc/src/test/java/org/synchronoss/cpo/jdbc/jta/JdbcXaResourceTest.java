@@ -26,7 +26,7 @@ import static org.testng.Assert.*;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
+import java.util.stream.Stream;
 import javax.transaction.xa.XAException;
 import javax.transaction.xa.XAResource;
 import javax.transaction.xa.Xid;
@@ -131,13 +131,16 @@ public class JdbcXaResourceTest {
         colCob.add(cob);
 
         ValueObject valObj = ValueObjectFactory.createValueObject();
-        List<ValueObject> list =
-            cpoXaAdapter1.retrieveBeans(ValueObject.FG_LIST_NULL, valObj, colCob);
-        assertEquals(2, list.size(), "list size is " + list.size());
-        assertEquals(1, list.get(0).getId(), "ValuObject(1) is missing");
-        assertEquals(2, list.get(1).getId(), "ValuObject(2) is missing");
-
-        assertEquals(2, cpoXaAdapter1.deleteBeans(al));
+        try (Stream<ValueObject> beans =
+            cpoXaAdapter1.retrieveBeans(ValueObject.FG_LIST_NULL, valObj, colCob)) {
+          var list = beans.toList();
+          var rvo = list.getFirst();
+          assertEquals(rvo.getId(), 1, "1 != " + rvo.getId());
+          assertEquals(list.size(), 2, "list size is " + list.size());
+          assertEquals(list.get(0).getId(), 1, "ValuObject(1) is missing");
+          assertEquals(list.get(1).getId(), 2, "ValuObject(2) is missing");
+          assertEquals(cpoXaAdapter1.deleteBeans(al), 2);
+        }
       } catch (Exception e) {
         fail(method + ExceptionHelper.getLocalizedMessage(e));
       } finally {
@@ -183,8 +186,11 @@ public class JdbcXaResourceTest {
         cpoXaAdapter2.rollback(xid2);
 
         ValueObject valObj = ValueObjectFactory.createValueObject();
-        List<ValueObject> list = cpoAdapter.retrieveBeans(ValueObject.FG_LIST_NULL, valObj);
-        assertTrue(list.isEmpty(), "list SHOULD BE EMPTY");
+        try (Stream<ValueObject> beans =
+            cpoAdapter.retrieveBeans(ValueObject.FG_LIST_NULL, valObj)) {
+          var list = beans.toList();
+          assertTrue(list.isEmpty(), "list SHOULD BE EMPTY");
+        }
       } catch (Exception e) {
         fail(method + ExceptionHelper.getLocalizedMessage(e));
       } finally {
@@ -430,10 +436,12 @@ public class JdbcXaResourceTest {
         }
         // make sure that only valobj2 is in the database
         ValueObject valObj = ValueObjectFactory.createValueObject();
-        List<ValueObject> list = cpoAdapter.retrieveBeans(ValueObject.FG_LIST_NULL, valObj);
-        assertEquals(1, list.size(), "list size is " + list.size());
-        assertEquals(list.get(0).getId(), valObj2.getId(), "valObj2 is missing");
-
+        try (Stream<ValueObject> beans =
+            cpoAdapter.retrieveBeans(ValueObject.FG_LIST_NULL, valObj)) {
+          var list = beans.toList();
+          assertEquals(list.size(), 1, "list size is " + list.size());
+          assertEquals(list.getFirst().getId(), valObj2.getId(), "valObj2 is missing");
+        }
       } catch (Exception e) {
         fail(method + ExceptionHelper.getLocalizedMessage(e));
       } finally {
@@ -484,9 +492,12 @@ public class JdbcXaResourceTest {
         // make sure the xid1 insert can be seen
         // make sure the xid2 insert cannot be seen
         ValueObject valObj = ValueObjectFactory.createValueObject();
-        List<ValueObject> list = cpoAdapter.retrieveBeans(ValueObject.FG_LIST_NULL, valObj);
-        assertEquals(1, list.size(), "list size is " + list.size());
-        assertEquals(list.get(0).getId(), valObj1.getId(), "valObj1 is missing");
+        try (Stream<ValueObject> beans =
+            cpoAdapter.retrieveBeans(ValueObject.FG_LIST_NULL, valObj)) {
+          var list = beans.toList();
+          assertEquals(list.size(), 1, "list size is " + list.size());
+          assertEquals(list.getFirst().getId(), valObj1.getId(), "valObj2 is missing");
+        }
       } catch (Exception e) {
         fail(method + ExceptionHelper.getLocalizedMessage(e));
       } finally {
@@ -536,8 +547,11 @@ public class JdbcXaResourceTest {
 
         // make sure both records exist
         ValueObject valObj = ValueObjectFactory.createValueObject();
-        List<ValueObject> list = cpoAdapter.retrieveBeans(ValueObject.FG_LIST_NULL, valObj);
-        assertEquals(2, list.size(), "list size is " + list.size());
+        try (Stream<ValueObject> beans =
+            cpoAdapter.retrieveBeans(ValueObject.FG_LIST_NULL, valObj)) {
+          var list = beans.toList();
+          assertEquals(list.size(), 2, "list size is " + list.size());
+        }
       } catch (Exception e) {
         fail(method + ExceptionHelper.getLocalizedMessage(e));
       } finally {

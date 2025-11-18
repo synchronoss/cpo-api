@@ -26,6 +26,7 @@ import static org.testng.Assert.*;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.stream.Stream;
 import org.synchronoss.cpo.CpoAdapter;
 import org.synchronoss.cpo.CpoAdapterFactoryManager;
 import org.synchronoss.cpo.CpoNativeFunction;
@@ -89,6 +90,31 @@ public class NativeExpressionTest {
     cpoAdapter = null;
   }
 
+  @Test
+  public void testNativeInWhere() {
+    String method = "testNativeOrWhere:";
+    Collection<ValueObject> col;
+    CpoWhere cw = null;
+    CpoWhere cw1 = null;
+    CpoWhere cw2 = null;
+
+    try {
+      ArrayList<CpoNativeFunction> cnqAl = new ArrayList<>();
+
+      cnqAl.add(new CpoNativeFunction("__CPO_WHERE__", "WHERE id IN (2,3)"));
+
+      ValueObject valObj = ValueObjectFactory.createValueObject(3);
+      try (Stream<ValueObject> beans =
+          cpoAdapter.retrieveBeans(
+              ValueObject.FG_LIST_TESTWHERERETRIEVE, valObj, valObj, null, null, cnqAl); ) {
+        long count = beans.count();
+        assertEquals(count, 2, "Number of beans is " + count);
+      }
+    } catch (Exception e) {
+      fail(method + e.getMessage());
+    }
+  }
+
   /** DOCUMENT ME! */
   @Test
   public void testNativeOrWhere() {
@@ -104,12 +130,12 @@ public class NativeExpressionTest {
       cnqAl.add(new CpoNativeFunction("__CPO_WHERE__", "WHERE ID = 2 OR ID = 3"));
 
       ValueObject valObj = ValueObjectFactory.createValueObject(3);
-      col =
+      try (Stream<ValueObject> beans =
           cpoAdapter.retrieveBeans(
-              ValueObject.FG_LIST_TESTWHERERETRIEVE, valObj, valObj, null, null, cnqAl);
-
-      assertEquals(2, col.size(), "Col size is " + col.size());
-
+              ValueObject.FG_LIST_TESTWHERERETRIEVE, valObj, valObj, null, null, cnqAl); ) {
+        long count = beans.count();
+        assertEquals(count, 2, "Number of beans is " + count);
+      }
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -129,12 +155,12 @@ public class NativeExpressionTest {
       cnqAl.add(new CpoNativeFunction("__CPO_WHERE__", null));
 
       ValueObject valObj = ValueObjectFactory.createValueObject(3);
-      col =
+      try (Stream<ValueObject> beans =
           cpoAdapter.retrieveBeans(
-              ValueObject.FG_LIST_TESTWHERERETRIEVE, valObj, valObj, null, null, cnqAl);
-
-      assertEquals(6, col.size(), "Col size is " + col.size());
-
+              ValueObject.FG_LIST_TESTWHERERETRIEVE, valObj, valObj, null, null, cnqAl); ) {
+        long count = beans.count();
+        assertEquals(count, 6, "Number of beans is " + count);
+      }
     } catch (Exception e) {
       fail(method + e.getMessage());
     }

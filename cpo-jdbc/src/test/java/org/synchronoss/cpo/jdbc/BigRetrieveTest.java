@@ -26,6 +26,7 @@ import static org.testng.Assert.*;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.stream.Stream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.CpoAdapter;
@@ -106,9 +107,11 @@ public class BigRetrieveTest {
 
     try {
       ValueObject valObj = ValueObjectFactory.createValueObject();
-      col = cpoAdapter.retrieveBeans(ValueObject.FG_LIST_NULL, valObj);
-      assertEquals(col.size(), al.size(), "Col size is " + col.size());
-
+      try (Stream<ValueObject> beans =
+          cpoAdapter.retrieveBeans(ValueObject.FG_LIST_NULL, valObj); ) {
+        long count = beans.count();
+        assertEquals(count, al.size(), "Number of beans is " + count);
+      }
     } catch (Exception e) {
       fail(method + e.getMessage());
     }

@@ -25,7 +25,6 @@ package org.synchronoss.cpo.jdbc;
 import java.io.Serial;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.HashMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.CpoException;
@@ -42,9 +41,6 @@ public class JdbcCpoTrxAdapter extends JdbcCpoAdapter implements CpoTrxAdapter {
   /** DOCUMENT ME! */
   // Default Connection. Only used JdbcCpoTrxAdapter
   private Connection writeConnection_ = null;
-
-  // map to keep track of busy connections
-  private static final HashMap<Connection, Connection> busyMap_ = new HashMap<>();
 
   @SuppressWarnings("unused")
   private JdbcCpoTrxAdapter() {}
@@ -101,12 +97,6 @@ public class JdbcCpoTrxAdapter extends JdbcCpoAdapter implements CpoTrxAdapter {
     return closed;
   }
 
-  /** Returns true if the TrxAdapter is processing a request, false if it is not */
-  @Override
-  public boolean isBusy() throws CpoException {
-    return isConnectionBusy(writeConnection_);
-  }
-
   @Override
   public void close() throws CpoException {
     Connection conn = getStaticConnection();
@@ -137,58 +127,6 @@ public class JdbcCpoTrxAdapter extends JdbcCpoAdapter implements CpoTrxAdapter {
     }
   }
 
-  @Override
-  protected void finalize() {
-    try {
-      super.finalize();
-    } catch (Throwable e) {
-      if (logger.isTraceEnabled()) {
-        logger.trace(e.getLocalizedMessage());
-      }
-    }
-    try {
-      this.close();
-    } catch (Exception e) {
-      if (logger.isTraceEnabled()) {
-        logger.trace(e.getLocalizedMessage());
-      }
-    }
-  }
-
-  /**
-   * Is the connection busy
-   *
-   * @param c The connection to check
-   * @return true if the connection is busy
-   */
-  protected boolean isConnectionBusy(Connection c) {
-    synchronized (busyMap_) {
-      return c != null && busyMap_.containsKey(c);
-    }
-  }
-
-  /**
-   * Mark the connection busy
-   *
-   * @param c The connection to mark
-   */
-  protected void setConnectionBusy(Connection c) {
-    synchronized (busyMap_) {
-      busyMap_.put(c, c);
-    }
-  }
-
-  /**
-   * Mark the connection as not busy
-   *
-   * @param c The connection to mark
-   */
-  protected void clearConnectionBusy(Connection c) {
-    synchronized (busyMap_) {
-      busyMap_.remove(c);
-    }
-  }
-
   /**
    * Get a static connection
    *
@@ -197,9 +135,6 @@ public class JdbcCpoTrxAdapter extends JdbcCpoAdapter implements CpoTrxAdapter {
    */
   protected Connection getStaticConnection() throws CpoException {
     if (writeConnection_ != null) {
-      if (isConnectionBusy(writeConnection_)) {
-        throw new CpoException("Error Connection Busy");
-      }
     } else {
       // enable lazy loading and automatic connection creating for re-using and adapter after
       // closing it
@@ -214,20 +149,12 @@ public class JdbcCpoTrxAdapter extends JdbcCpoAdapter implements CpoTrxAdapter {
 
   @Override
   protected Connection getReadConnection() throws CpoException {
-    Connection connection = getStaticConnection();
-
-    setConnectionBusy(connection);
-
-    return connection;
+    return getStaticConnection();
   }
 
   @Override
   protected Connection getWriteConnection() throws CpoException {
-    Connection connection = getStaticConnection();
-
-    setConnectionBusy(connection);
-
-    return connection;
+    return getStaticConnection();
   }
 
   /**
@@ -237,9 +164,7 @@ public class JdbcCpoTrxAdapter extends JdbcCpoAdapter implements CpoTrxAdapter {
    * @param connection The connection to be closed
    */
   @Override
-  protected void closeLocalConnection(Connection connection) {
-    clearConnectionBusy(connection);
-  }
+  protected void closeLocalConnection(Connection connection) {}
 
   /**
    * Commits a local connection. A CpoTrxAdapter allows the user to manage the transaction so <code>

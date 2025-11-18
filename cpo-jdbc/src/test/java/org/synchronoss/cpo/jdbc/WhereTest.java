@@ -27,6 +27,7 @@ import static org.testng.Assert.*;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.stream.Stream;
 import org.synchronoss.cpo.CpoAdapter;
 import org.synchronoss.cpo.CpoAdapterFactoryManager;
 import org.synchronoss.cpo.CpoOrderBy;
@@ -108,9 +109,11 @@ public class WhereTest {
       cw.setStaticValue("3");
       ArrayList<CpoWhere> wheres = new ArrayList<>();
       wheres.add(cw);
-      col = cpoAdapter.retrieveBeans(ValueObject.FG_LIST_TESTWHERERETRIEVE, valObj, wheres, null);
-
-      assertEquals(2, col.size(), "Col size is " + col.size());
+      try (Stream<ValueObject> beans =
+          cpoAdapter.retrieveBeans(ValueObject.FG_LIST_TESTWHERERETRIEVE, valObj, wheres, null)) {
+        long count = beans.count();
+        assertEquals(count, 2, "Number of beans is " + count);
+      }
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -128,14 +131,15 @@ public class WhereTest {
 
       ArrayList<CpoWhere> wheres = new ArrayList<>();
       wheres.add(cw);
-      col =
+      try (Stream<ValueObject> beans =
           cpoAdapter.retrieveBeans(
               ValueObject.FG_LIST_TESTWHERERETRIEVE,
               ValueObjectFactory.createValueObject(),
               wheres,
-              null);
-
-      assertEquals(1, col.size(), "Col size is " + col.size());
+              null)) {
+        long count = beans.count();
+        assertEquals(count, 1, "Number of beans is " + count);
+      }
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -153,9 +157,11 @@ public class WhereTest {
 
       ArrayList<CpoWhere> wheres = new ArrayList<>();
       wheres.add(cw);
-      col = cpoAdapter.retrieveBeans(ValueObject.FG_LIST_TESTWHERERETRIEVE, valObj, wheres, null);
-
-      assertEquals(2, col.size(), "Col size is " + col.size());
+      try (Stream<ValueObject> beans =
+          cpoAdapter.retrieveBeans(ValueObject.FG_LIST_TESTWHERERETRIEVE, valObj, wheres, null)) {
+        long count = beans.count();
+        assertEquals(count, 2, "Number of beans is " + count);
+      }
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -173,9 +179,11 @@ public class WhereTest {
 
       ArrayList<CpoWhere> wheres = new ArrayList<>();
       wheres.add(cw);
-      col = cpoAdapter.retrieveBeans(ValueObject.FG_LIST_NULL, valObj, wheres, null);
-
-      assertEquals(2, col.size(), "Col size is " + col.size());
+      try (Stream<ValueObject> beans =
+          cpoAdapter.retrieveBeans(ValueObject.FG_LIST_NULL, valObj, wheres, null)) {
+        long count = beans.count();
+        assertEquals(count, 2, "Number of beans is " + count);
+      }
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -190,11 +198,11 @@ public class WhereTest {
     String method = "testNoWhere:";
     Collection<ValueObject> col = null;
 
-    try {
-      ValueObject valObj = ValueObjectFactory.createValueObject(3);
-
-      col = cpoAdapter.retrieveBeans(ValueObject.FG_LIST_TESTWHERERETRIEVE, valObj);
-
+    ValueObject valObj = ValueObjectFactory.createValueObject(3);
+    try (Stream<ValueObject> beans =
+        cpoAdapter.retrieveBeans(ValueObject.FG_LIST_TESTWHERERETRIEVE, valObj)) {
+      long count = beans.count();
+      assertEquals(count, 6, "Number of beans is " + count);
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -221,9 +229,11 @@ public class WhereTest {
 
       cw.addWhere(cwAnd);
       wheres.add(cw);
-      col = cpoAdapter.retrieveBeans(ValueObject.FG_LIST_TESTWHERERETRIEVE, valObj, wheres, null);
-
-      assertEquals(3, col.size(), "Col size is " + col.size());
+      try (Stream<ValueObject> beans =
+          cpoAdapter.retrieveBeans(ValueObject.FG_LIST_TESTWHERERETRIEVE, valObj, wheres, null)) {
+        long count = beans.count();
+        assertEquals(count, 3, "Number of beans is " + count);
+      }
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -241,9 +251,11 @@ public class WhereTest {
 
       ArrayList<CpoWhere> wheres = new ArrayList<>();
       wheres.add(cw);
-      col = cpoAdapter.retrieveBeans(ValueObject.FG_LIST_TESTWHERERETRIEVE, valObj, wheres, null);
-
-      assertEquals(6, col.size(), "Col size is " + col.size());
+      try (Stream<ValueObject> beans =
+          cpoAdapter.retrieveBeans(ValueObject.FG_LIST_TESTWHERERETRIEVE, valObj, wheres, null)) {
+        long count = beans.count();
+        assertEquals(count, 6, "Number of beans is " + count);
+      }
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -262,11 +274,13 @@ public class WhereTest {
 
       ArrayList<CpoWhere> wheres = new ArrayList<>();
       wheres.add(cw);
-      col = cpoAdapter.retrieveBeans(ValueObject.FG_LIST_TESTWHERERETRIEVE, valObj, wheres, null);
-
-      assertEquals(1, col.size(), "Col size is " + col.size());
-      ValueObject rvo = col.iterator().next();
-      assertEquals(-6, rvo.getId(), "-6 != " + rvo.getId());
+      try (Stream<ValueObject> beans =
+          cpoAdapter.retrieveBeans(ValueObject.FG_LIST_TESTWHERERETRIEVE, valObj, wheres, null)) {
+        var list = beans.toList();
+        assertEquals(list.size(), 1, "Number of beans is " + list.size());
+        var rvo = list.getFirst();
+        assertEquals(rvo.getId(), -6, "-6 != " + rvo.getId());
+      }
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -285,11 +299,13 @@ public class WhereTest {
 
       ArrayList<CpoWhere> wheres = new ArrayList<>();
       wheres.add(cw);
-      col = cpoAdapter.retrieveBeans(ValueObject.FG_LIST_TESTWHERERETRIEVE, valObj, wheres, null);
-
-      assertTrue(col.size() == 1, "Col size is " + col.size());
-      ValueObject rvo = col.iterator().next();
-      assertTrue(rvo.getId() == 1, "1 != " + rvo.getId());
+      try (Stream<ValueObject> beans =
+          cpoAdapter.retrieveBeans(ValueObject.FG_LIST_TESTWHERERETRIEVE, valObj, wheres, null)) {
+        var list = beans.toList();
+        assertEquals(list.size(), 1, "Number of beans is " + list.size());
+        var rvo = list.getFirst();
+        assertEquals(rvo.getId(), 1, "1 != " + rvo.getId());
+      }
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -313,10 +329,11 @@ public class WhereTest {
 
       ArrayList<CpoWhere> wheres = new ArrayList<>();
       wheres.add(cw);
-      Collection<ValueObject> col =
-          cpoAdapter.retrieveBeans(ValueObject.FG_LIST_TESTWHERERETRIEVE, valObj, wheres, null);
-
-      assertTrue(col.isEmpty(), "Col size is " + col.size());
+      try (Stream<ValueObject> beans =
+          cpoAdapter.retrieveBeans(ValueObject.FG_LIST_TESTWHERERETRIEVE, valObj, wheres, null)) {
+        long count = beans.count();
+        assertEquals(count, 0, "Number of beans is " + count);
+      }
 
       cw = cpoAdapter.newWhere();
       cw1 = cpoAdapter.newWhere(Logical.NONE, ValueObject.ATTR_ATTRCHAR, Comparison.ISNULL, null);
@@ -327,9 +344,11 @@ public class WhereTest {
 
       wheres.clear();
       wheres.add(cw);
-      col = cpoAdapter.retrieveBeans(ValueObject.FG_LIST_TESTWHERERETRIEVE, valObj, wheres, null);
-
-      assertTrue(col.size() == 1, "Col size is " + col.size());
+      try (Stream<ValueObject> beans =
+          cpoAdapter.retrieveBeans(ValueObject.FG_LIST_TESTWHERERETRIEVE, valObj, wheres, null)) {
+        long count = beans.count();
+        assertEquals(count, 1, "Number of beans is " + count);
+      }
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -351,10 +370,11 @@ public class WhereTest {
 
       ArrayList<CpoWhere> wheres = new ArrayList<>();
       wheres.add(cw);
-      Collection<ValueObject> col =
-          cpoAdapter.retrieveBeans(ValueObject.FG_LIST_TESTWHERERETRIEVE, valObj, wheres, null);
-
-      assertTrue(col.size() == 2, "Col size is " + col.size());
+      try (Stream<ValueObject> beans =
+          cpoAdapter.retrieveBeans(ValueObject.FG_LIST_TESTWHERERETRIEVE, valObj, wheres, null)) {
+        long count = beans.count();
+        assertEquals(count, 2, "Number of beans is " + count);
+      }
 
       cw = cpoAdapter.newWhere();
       cw1 = cpoAdapter.newWhere(Logical.NONE, ValueObject.ATTR_ID, Comparison.EQ, null);
@@ -366,9 +386,11 @@ public class WhereTest {
 
       wheres.clear();
       wheres.add(cw);
-      col = cpoAdapter.retrieveBeans(ValueObject.FG_LIST_TESTWHERERETRIEVE, valObj, wheres, null);
-
-      assertTrue(col.size() == 6, "Col size is " + col.size());
+      try (Stream<ValueObject> beans =
+          cpoAdapter.retrieveBeans(ValueObject.FG_LIST_TESTWHERERETRIEVE, valObj, wheres, null)) {
+        long count = beans.count();
+        assertEquals(count, 6, "Number of beans is " + count);
+      }
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -390,12 +412,13 @@ public class WhereTest {
 
       ArrayList<CpoWhere> wheres = new ArrayList<>();
       wheres.add(cw);
-      Collection<ValueObject> col =
-          cpoAdapter.retrieveBeans(ValueObject.FG_LIST_TESTWHERERETRIEVE, valObj, wheres, null);
-
-      assertTrue(col.size() == 1, "Col size is " + col.size());
-      ValueObject rvo = col.iterator().next();
-      assertTrue(rvo.getId() == 1, "1 != " + rvo.getId());
+      try (Stream<ValueObject> beans =
+          cpoAdapter.retrieveBeans(ValueObject.FG_LIST_TESTWHERERETRIEVE, valObj, wheres, null)) {
+        var list = beans.toList();
+        assertEquals(list.size(), 1, "Number of beans is " + list.size());
+        var rvo = list.getFirst();
+        assertEquals(rvo.getId(), 1, "1 != " + rvo.getId());
+      }
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -413,12 +436,14 @@ public class WhereTest {
       cw.setComparison(Comparison.EQ);
       cw.setLogical(Logical.NONE);
 
-      Collection<ValueObject> col =
-          cpoAdapter.retrieveBeans(ValueObject.FG_LIST_TESTWHERERETRIEVE, valObj, valObj, cw, null);
-
-      assertTrue(col.size() == 1, "Col size is " + col.size());
-      ValueObject rvo = col.iterator().next();
-      assertTrue(rvo.getId() == 1, "1 != " + rvo.getId());
+      try (Stream<ValueObject> beans =
+          cpoAdapter.retrieveBeans(
+              ValueObject.FG_LIST_TESTWHERERETRIEVE, valObj, valObj, cw, null)) {
+        var list = beans.toList();
+        assertEquals(list.size(), 1, "Number of beans is " + list.size());
+        var rvo = list.getFirst();
+        assertEquals(rvo.getId(), 1, "1 != " + rvo.getId());
+      }
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -442,10 +467,11 @@ public class WhereTest {
 
       ArrayList<CpoWhere> wheres = new ArrayList<>();
       wheres.add(cw);
-      Collection<ValueObject> col =
-          cpoAdapter.retrieveBeans(ValueObject.FG_LIST_TESTWHERERETRIEVE, valObj, wheres, null);
-
-      assertTrue(col.size() == 1, "Col size is " + col.size());
+      try (Stream<ValueObject> beans =
+          cpoAdapter.retrieveBeans(ValueObject.FG_LIST_TESTWHERERETRIEVE, valObj, wheres, null)) {
+        long count = beans.count();
+        assertEquals(count, 1, "Number of beans is " + count);
+      }
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -469,10 +495,11 @@ public class WhereTest {
 
       ArrayList<CpoWhere> wheres = new ArrayList<>();
       wheres.add(cw);
-      Collection<ValueObject> col =
-          cpoAdapter.retrieveBeans(ValueObject.FG_LIST_TESTWHERERETRIEVE, valObj, wheres, null);
-
-      assertTrue(col.size() == 1, "Col size is " + col.size());
+      try (Stream<ValueObject> beans =
+          cpoAdapter.retrieveBeans(ValueObject.FG_LIST_TESTWHERERETRIEVE, valObj, wheres, null)) {
+        long count = beans.count();
+        assertEquals(count, 1, "Number of beans is " + count);
+      }
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -496,10 +523,11 @@ public class WhereTest {
 
       ArrayList<CpoWhere> wheres = new ArrayList<>();
       wheres.add(cw);
-      Collection<ValueObject> col =
-          cpoAdapter.retrieveBeans(ValueObject.FG_LIST_TESTWHERERETRIEVE, valObj, wheres, null);
-
-      assertTrue(col.size() == 1, "Col size is " + col.size());
+      try (Stream<ValueObject> beans =
+          cpoAdapter.retrieveBeans(ValueObject.FG_LIST_TESTWHERERETRIEVE, valObj, wheres, null)) {
+        long count = beans.count();
+        assertEquals(count, 1, "Number of beans is " + count);
+      }
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -519,10 +547,11 @@ public class WhereTest {
 
       ArrayList<CpoWhere> wheres = new ArrayList<>();
       wheres.add(cw);
-      Collection<ValueObject> col =
-          cpoAdapter.retrieveBeans(ValueObject.FG_LIST_TESTWHERERETRIEVE, valObj, wheres, null);
-
-      assertTrue(col.size() == 1, "Col size is " + col.size());
+      try (Stream<ValueObject> beans =
+          cpoAdapter.retrieveBeans(ValueObject.FG_LIST_TESTWHERERETRIEVE, valObj, wheres, null)) {
+        long count = beans.count();
+        assertEquals(count, 1, "Number of beans is " + count);
+      }
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -543,10 +572,11 @@ public class WhereTest {
 
       ArrayList<CpoWhere> wheres = new ArrayList<>();
       wheres.add(cw);
-      Collection<ValueObject> coll =
-          cpoAdapter.retrieveBeans(ValueObject.FG_LIST_TESTWHERERETRIEVE, valObj, wheres, null);
-
-      assertTrue(coll.size() == 3, "Collection size is " + coll.size());
+      try (Stream<ValueObject> beans =
+          cpoAdapter.retrieveBeans(ValueObject.FG_LIST_TESTWHERERETRIEVE, valObj, wheres, null)) {
+        long count = beans.count();
+        assertEquals(count, 3, "Number of beans is " + count);
+      }
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -570,10 +600,11 @@ public class WhereTest {
 
       ArrayList<CpoWhere> wheres = new ArrayList<>();
       wheres.add(cw);
-      Collection<ValueObject> coll =
-          cpoAdapter.retrieveBeans(ValueObject.FG_LIST_TESTWHERERETRIEVE, valObj, wheres, null);
-
-      assertTrue(coll.size() == 3, "Collection size is " + coll.size());
+      try (Stream<ValueObject> beans =
+          cpoAdapter.retrieveBeans(ValueObject.FG_LIST_TESTWHERERETRIEVE, valObj, wheres, null)) {
+        long count = beans.count();
+        assertEquals(count, 3, "Number of beans is " + count);
+      }
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -606,10 +637,11 @@ public class WhereTest {
       wheres.add(cw1);
       wheres.add(cw2);
       wheres.add(cw3);
-      Collection<ValueObject> coll =
-          cpoAdapter.retrieveBeans(ValueObject.FG_LIST_TESTORDERBYRETRIEVE, valObj, wheres, null);
-
-      assertTrue(coll.size() == 6, "Collection size is " + coll.size());
+      try (Stream<ValueObject> beans =
+          cpoAdapter.retrieveBeans(ValueObject.FG_LIST_TESTORDERBYRETRIEVE, valObj, wheres, null)) {
+        long count = beans.count();
+        assertEquals(count, 6, "Number of beans is " + count);
+      }
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -633,10 +665,11 @@ public class WhereTest {
 
       ArrayList<CpoWhere> wheres = new ArrayList<>();
       wheres.add(cw);
-      Collection<ValueObject> coll =
-          cpoAdapter.retrieveBeans(ValueObject.FG_LIST_TESTWHERERETRIEVE, valObj, wheres, null);
-
-      assertTrue(coll.size() == 3, "Collection size is " + coll.size());
+      try (Stream<ValueObject> beans =
+          cpoAdapter.retrieveBeans(ValueObject.FG_LIST_TESTWHERERETRIEVE, valObj, wheres, null)) {
+        long count = beans.count();
+        assertEquals(count, 3, "Number of beans is " + count);
+      }
     } catch (Exception e) {
       fail(method + e.getMessage());
     }

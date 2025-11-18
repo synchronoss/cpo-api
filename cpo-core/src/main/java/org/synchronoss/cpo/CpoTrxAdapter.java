@@ -57,12 +57,4 @@ public interface CpoTrxAdapter extends CpoAdapter, AutoCloseable {
    * @throws CpoException An error occurred
    */
   boolean isClosed() throws CpoException;
-
-  /**
-   * Returns true if the TrxAdapter is processing a request, false if it is not
-   *
-   * @return true if the adapter is busy
-   * @throws CpoException An error occurred
-   */
-  boolean isBusy() throws CpoException;
 }

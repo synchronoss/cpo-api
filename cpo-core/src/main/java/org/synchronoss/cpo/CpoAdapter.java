@@ -24,6 +24,7 @@ package org.synchronoss.cpo;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Stream;
 import org.synchronoss.cpo.enums.Comparison;
 import org.synchronoss.cpo.enums.Logical;
 import org.synchronoss.cpo.meta.CpoMetaDescriptor;
@@ -1247,7 +1248,7 @@ public interface CpoAdapter extends java.io.Serializable {
    *     criteria, an empty collection will be returned
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
-  <C> List<C> retrieveBeans(String groupName, C criteria) throws CpoException;
+  <C> Stream<C> retrieveBeans(String groupName, C criteria) throws CpoException;
 
   /**
    * Retrieves the bean from the datasource. The assumption is that the bean exists in the
@@ -1268,7 +1269,7 @@ public interface CpoAdapter extends java.io.Serializable {
    *     criteria, an empty collection will be returned
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
-  <C> List<C> retrieveBeans(
+  <C> Stream<C> retrieveBeans(
       String groupName, C criteria, CpoWhere where, Collection<CpoOrderBy> orderBy)
       throws CpoException;
 
@@ -1289,7 +1290,7 @@ public interface CpoAdapter extends java.io.Serializable {
    *     criteria, an empty collection will be returned
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
-  <C> List<C> retrieveBeans(String groupName, C criteria, Collection<CpoOrderBy> orderBy)
+  <C> Stream<C> retrieveBeans(String groupName, C criteria, Collection<CpoOrderBy> orderBy)
       throws CpoException;
 
   /**
@@ -1311,7 +1312,7 @@ public interface CpoAdapter extends java.io.Serializable {
    *     criteria, an empty collection will be returned
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
-  <C> List<C> retrieveBeans(
+  <C> Stream<C> retrieveBeans(
       String groupName, C criteria, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy)
       throws CpoException;
 
@@ -1331,12 +1332,12 @@ public interface CpoAdapter extends java.io.Serializable {
    *     the class is not defined an exception will be thrown. If the bean does not exist in the
    *     datasource, an exception will be thrown. This bean is used to specify the bean type that
    *     will be returned in the collection.
-   * @return A collection of beans will be returned that meet the criteria specified by obj. The
-   *     beans will be of the same type as the bean that was passed in. If no beans match the
-   *     criteria, an empty collection will be returned
+   * @return A stream of beans will be returned that meet the criteria specified by obj. The beans
+   *     will be of the same type as the bean that was passed in. If no beans match the criteria, an
+   *     empty collection will be returned
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
-  <T, C> List<T> retrieveBeans(String groupName, C criteria, T result) throws CpoException;
+  <T, C> Stream<T> retrieveBeans(String groupName, C criteria, T result) throws CpoException;
 
   /**
    * Retrieves the bean from the datasource. The assumption is that the bean exists in the
@@ -1357,12 +1358,12 @@ public interface CpoAdapter extends java.io.Serializable {
    * @param where A CpoWhere bean that defines the constraints that should be used when retrieving
    *     beans
    * @param orderBy The CpoOrderBy bean that defines the order in which beans should be returned
-   * @return A collection of beans will be returned that meet the criteria specified by obj. The
-   *     beans will be of the same type as the bean that was passed in. If no beans match the
-   *     criteria, an empty collection will be returned
+   * @return A stream of beans will be returned that meet the criteria specified by obj. The beans
+   *     will be of the same type as the bean that was passed in. If no beans match the criteria, an
+   *     empty collection will be returned
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
-  <T, C> List<T> retrieveBeans(
+  <T, C> Stream<T> retrieveBeans(
       String groupName, C criteria, T result, CpoWhere where, Collection<CpoOrderBy> orderBy)
       throws CpoException;
 
@@ -1385,12 +1386,12 @@ public interface CpoAdapter extends java.io.Serializable {
    * @param wheres A collection of CpoWhere beans that define the constraints that should be used
    *     when retrieving beans
    * @param orderBy The CpoOrderBy bean that defines the order in which beans should be returned
-   * @return A collection of beans will be returned that meet the criteria specified by obj. The
-   *     beans will be of the same type as the bean that was passed in. If no beans match the
-   *     criteria, an empty collection will be returned
+   * @return A stream of beans will be returned that meet the criteria specified by obj. The beans
+   *     will be of the same type as the bean that was passed in. If no beans match the criteria, an
+   *     empty collection will be returned
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
-  <T, C> List<T> retrieveBeans(
+  <T, C> Stream<T> retrieveBeans(
       String groupName,
       C criteria,
       T result,
@@ -1419,54 +1420,18 @@ public interface CpoAdapter extends java.io.Serializable {
    * @param orderBy The CpoOrderBy bean that defines the order in which beans should be returned
    * @param nativeExpressions Native expression that will be used to augment the expression stored
    *     in the metadata. This text will be embedded at run-time
-   * @return A collection of beans will be returned that meet the criteria specified by obj. The
-   *     beans will be of the same type as the bean that was passed in. If no beans match the
-   *     criteria, an empty collection will be returned
+   * @return A stream of beans will be returned that meet the criteria specified by obj. The beans
+   *     will be of the same type as the bean that was passed in. If no beans match the criteria, an
+   *     empty collection will be returned
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
-  <T, C> List<T> retrieveBeans(
+  <T, C> Stream<T> retrieveBeans(
       String groupName,
       C criteria,
       T result,
       Collection<CpoWhere> wheres,
       Collection<CpoOrderBy> orderBy,
       Collection<CpoNativeFunction> nativeExpressions)
-      throws CpoException;
-
-  /**
-   * Retrieves the bean from the datasource. The assumption is that the bean exists in the
-   * datasource.
-   *
-   * @param <T> The type of the return JavaBean
-   * @param <C> The type of the criteria JavaBean
-   * @param groupName The filter groupName which tells the datasource which beans should be
-   *     returned. The groupName also signifies what data in the bean will be populated.
-   * @param criteria This is a bean that has been defined within the metadata of the datasource. If
-   *     the class is not defined an exception will be thrown. If the bean does not exist in the
-   *     datasource, an exception will be thrown. This bean is used to specify the parameters used
-   *     to retrieve the collection of beans.
-   * @param result This is a bean that has been defined within the metadata of the datasource. If
-   *     the class is not defined an exception will be thrown. If the bean does not exist in the
-   *     datasource, an exception will be thrown. This bean is used to specify the bean type that
-   *     will be returned in the collection.
-   * @param wheres A collection of CpoWhere beans that define the constraints that should be used
-   *     when retrieving beans
-   * @param orderBy The CpoOrderBy bean that defines the order in which beans should be returned
-   * @param nativeExpressions Native expression that will be used to augment the expression stored
-   *     in the metadata. This text will be embedded at run-time
-   * @param queueSize queue size of the buffer that it uses to send the beans from the producer to
-   *     the consumer.
-   * @return A CpoResultSet that can be iterated through
-   * @throws CpoException Thrown if there are errors accessing the datasource
-   */
-  <T, C> CpoResultSet<T> retrieveBeans(
-      String groupName,
-      C criteria,
-      T result,
-      Collection<CpoWhere> wheres,
-      Collection<CpoOrderBy> orderBy,
-      Collection<CpoNativeFunction> nativeExpressions,
-      int queueSize)
       throws CpoException;
 
   /**
@@ -1739,6 +1704,20 @@ public interface CpoAdapter extends java.io.Serializable {
    * @return The name of the datasource
    */
   String getDataSourceName();
+
+  /**
+   * Get the fetch size for the datasource
+   *
+   * @return The fetchsize
+   */
+  int getFetchSize();
+
+  /**
+   * set the fetch size for the datasource
+   *
+   * @param fetchSize The fetchsize to set for retrieving data
+   */
+  void setFetchSize(int fetchSize);
 
   /**
    * @param expression An expression defining the CpoAttributes that you want

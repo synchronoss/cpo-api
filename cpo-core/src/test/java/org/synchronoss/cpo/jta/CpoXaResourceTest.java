@@ -46,21 +46,6 @@ public class CpoXaResourceTest {
     xaResource.append(LOCAL_RESOURCE);
     assertEquals(xaResource.toString(), LOCAL_RESOURCE);
 
-    // simulate busy
-    xaResource.setBusy(true);
-
-    try {
-      // should not allow a start if local is busy
-      xaResource.start(xid1, XAResource.TMNOFLAGS);
-      fail("Start not allowed when local is busy");
-    } catch (XAException xae) {
-      // exception expected
-      assertTrue(xae.getLocalizedMessage().startsWith(CpoXaError.XAER_OUTSIDE.toString()));
-    }
-
-    // make it unbusy
-    xaResource.setBusy(false);
-
     try {
       // should not allow a start join if the xid is new
       xaResource.start(xid1, XAResource.TMJOIN);

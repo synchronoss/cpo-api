@@ -45,8 +45,8 @@ public class JndiJdbcDataSourceInfo extends AbstractJdbcDataSourceInfo {
    *
    * @param jndiName The JndiName of the app server datasource
    */
-  public JndiJdbcDataSourceInfo(String jndiName) {
-    super(jndiName);
+  public JndiJdbcDataSourceInfo(String jndiName, int fetchSize) {
+    super(jndiName, fetchSize);
     this.jndiName = jndiName;
   }
 
@@ -57,8 +57,8 @@ public class JndiJdbcDataSourceInfo extends AbstractJdbcDataSourceInfo {
    * @param jndiName The JndiName of the app server datasource
    * @param ctx - The context for which the Jndi Lookup should use.
    */
-  public JndiJdbcDataSourceInfo(String jndiName, Context ctx) {
-    super(jndiName);
+  public JndiJdbcDataSourceInfo(String jndiName, int fetchSize, Context ctx) {
+    super(jndiName, fetchSize);
     this.jndiName = jndiName;
     jndiCtx = ctx;
   }

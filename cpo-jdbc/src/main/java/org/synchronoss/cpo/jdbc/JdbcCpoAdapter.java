@@ -23,9 +23,10 @@ package org.synchronoss.cpo.jdbc;
  */
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
+import java.util.function.Consumer;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
@@ -86,6 +87,7 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
     setWriteDataSource(jdsiTrx.getDataSource());
     setReadDataSource(jdsiTrx.getDataSource());
     setDataSourceName(jdsiTrx.getDataSourceName());
+    setFetchSize(jdsiTrx.getFetchSize());
     processDatabaseMetaData();
   }
 
@@ -108,6 +110,7 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
     setWriteDataSource(jdsiWrite.getDataSource());
     setReadDataSource(jdsiRead.getDataSource());
     setDataSourceName(jdsiWrite.getDataSourceName());
+    setFetchSize(jdsiWrite.getFetchSize());
     processDatabaseMetaData();
   }
 
@@ -123,6 +126,7 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
     setWriteDataSource(jdbcCpoAdapter.getWriteDataSource());
     setReadDataSource(jdbcCpoAdapter.getReadDataSource());
     setDataSourceName(jdbcCpoAdapter.getDataSourceName());
+    setFetchSize(jdbcCpoAdapter.getFetchSize());
   }
 
   /**
@@ -263,19 +267,17 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
         rsmd = rs.getMetaData();
 
         // see if they are using the count(*) logic
-        if (rsmd.getColumnCount() == 1) {
+        if (rsmd.getColumnCount() == 1 && rs.next()) {
+          try {
+            qCount = rs.getLong(1); // get the number of beans
+            // that exist
+          } catch (Exception e) {
+            // Exists result not an int so bail to record counter
+            qCount = 1;
+          }
           if (rs.next()) {
-            try {
-              qCount = rs.getLong(1); // get the number of beans
-              // that exist
-            } catch (Exception e) {
-              // Exists result not an int so bail to record counter
-              qCount = 1;
-            }
-            if (rs.next()) {
-              // EXIST function has more than one record so not a count(*)
-              qCount = 2;
-            }
+            // EXIST function has more than one record so not a count(*)
+            qCount = 2;
           }
         }
 
@@ -389,7 +391,7 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
     Connection connection;
 
     try {
-      if (!(invalidReadConnection_)) {
+      if (!invalidReadConnection_) {
         connection = getReadDataSource().getConnection();
       } else {
         connection = getWriteDataSource().getConnection();
@@ -821,7 +823,7 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
   }
 
   @Override
-  protected <T, C> List<T> processSelectGroup(
+  protected <T, C> Stream<T> processSelectGroup(
       String groupName,
       C criteria,
       T result,
@@ -831,23 +833,11 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
       boolean useRetrieve)
       throws CpoException {
     Connection con = null;
-    CpoArrayResultSet<T> resultSet = new CpoArrayResultSet<>();
 
     try {
       con = getReadConnection();
-      processSelectGroup(
-          groupName,
-          criteria,
-          result,
-          wheres,
-          orderBy,
-          nativeExpressions,
-          con,
-          useRetrieve,
-          resultSet);
-      // The select may have a for update clause on it
-      // Since the connection is cached we need to get rid of this
-      commitLocalConnection(con);
+      return processSelectGroup(
+          groupName, criteria, result, wheres, orderBy, nativeExpressions, con, useRetrieve);
     } catch (Exception e) {
       // Any exception has to try to rollback the work;
       rollbackLocalConnection(con);
@@ -855,51 +845,9 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
           e,
           "processSelectGroup(String groupName, C criteria, T result,C poWhere where,"
               + " Collection orderBy, boolean useRetrieve) failed");
-    } finally {
       closeLocalConnection(con);
     }
-
-    return resultSet;
-  }
-
-  @Override
-  protected <T, C> void processSelectGroup(
-      String groupName,
-      C criteria,
-      T result,
-      Collection<CpoWhere> wheres,
-      Collection<CpoOrderBy> orderBy,
-      Collection<CpoNativeFunction> nativeExpressions,
-      boolean useRetrieve,
-      CpoResultSet<T> resultSet)
-      throws CpoException {
-    Connection con = null;
-
-    try {
-      con = getReadConnection();
-      processSelectGroup(
-          groupName,
-          criteria,
-          result,
-          wheres,
-          orderBy,
-          nativeExpressions,
-          con,
-          useRetrieve,
-          resultSet);
-      // The select may have a for update clause on it
-      // Since the connection is cached we need to get rid of this
-      commitLocalConnection(con);
-    } catch (Exception e) {
-      // Any exception has to try to rollback the work;
-      rollbackLocalConnection(con);
-      ExceptionHelper.reThrowCpoException(
-          e,
-          "processSelectGroup(String groupName, C criteria, T result,CpoWhere where,"
-              + " Collection orderBy, boolean useRetrieve) failed");
-    } finally {
-      closeLocalConnection(con);
-    }
+    return Stream.empty();
   }
 
   /**
@@ -915,10 +863,10 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
    * @param nativeExpressions A collection of CpoNativeFunction beans to be used by the function
    * @param useRetrieve Use the RETRIEVE_GROUP instead of the LIST_GROUP
    * @param con The connection to use for this select
-   * @param resultSet The result set to add the results to.
+   * @return A stream of T
    * @throws CpoException Any errors retrieving the data from the datasource
    */
-  protected <T, C> void processSelectGroup(
+  protected <T, C> Stream<T> processSelectGroup(
       String groupName,
       C criteria,
       T result,
@@ -926,8 +874,7 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
       Collection<CpoOrderBy> orderBy,
       Collection<CpoNativeFunction> nativeExpressions,
       Connection con,
-      boolean useRetrieve,
-      CpoResultSet<T> resultSet)
+      boolean useRetrieve)
       throws CpoException {
     Logger localLogger = criteria == null ? logger : LoggerFactory.getLogger(criteria.getClass());
     PreparedStatement ps = null;
@@ -937,11 +884,8 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
     ResultSet rs = null;
     ResultSetMetaData rsmd;
     int columnCount;
-    int k;
-    T bean;
     JdbcCpoAttribute[] attributes;
     JdbcPreparedStatementFactory jpsf;
-    int i;
 
     if (criteria == null || result == null) {
       throw new CpoException("NULL Bean passed into retrieveBean or retrieveBeans");
@@ -984,9 +928,7 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
                 orderBy,
                 nativeExpressions);
         ps = jpsf.getPreparedStatement();
-        if (resultSet.getFetchSize() != -1) {
-          ps.setFetchSize(resultSet.getFetchSize());
-        }
+        ps.setFetchSize(getFetchSize());
 
         localLogger.debug("Retrieving Records");
 
@@ -1001,66 +943,78 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
 
         attributes = new JdbcCpoAttribute[columnCount + 1];
 
-        for (k = 1; k <= columnCount; k++) {
+        for (int k = 1; k <= columnCount; k++) {
           attributes[k] = (JdbcCpoAttribute) resultClass.getAttributeData(rsmd.getColumnLabel(k));
         }
 
-        while (rs.next()) {
-          try {
-            bean = (T) result.getClass().newInstance();
-          } catch (IllegalAccessException iae) {
-            localLogger.error(
-                "=================== Could not access default constructor for Class=<"
-                    + result.getClass()
-                    + "> ==================");
-            throw new CpoException("Unable to access the constructor of the Return Bean", iae);
-          } catch (InstantiationException iae) {
-            throw new CpoException("Unable to instantiate Return Bean", iae);
-          }
+        ResultSet finalRs = rs;
+        PreparedStatement finalPs = ps;
+        return StreamSupport.stream(
+                new Spliterators.AbstractSpliterator<T>(Long.MAX_VALUE, Spliterator.ORDERED) {
+                  @Override
+                  public boolean tryAdvance(Consumer<? super T> action) {
+                    try {
+                      if (!finalRs.next()) return false;
+                      T bean = null;
+                      try {
+                        bean = (T) result.getClass().newInstance();
+                      } catch (IllegalAccessException iae) {
+                        localLogger.error(
+                            "=================== Could not access default constructor for Class=<"
+                                + result.getClass()
+                                + "> ==================");
+                        throw new CpoException(
+                            "Unable to access the constructor of the Return Bean", iae);
+                      } catch (InstantiationException iae) {
+                        throw new CpoException("Unable to instantiate Return Bean", iae);
+                      }
 
-          for (k = 1; k <= columnCount; k++) {
-            if (attributes[k] != null) {
-              attributes[k].invokeSetter(
-                  bean,
-                  new JdbcResultSetCpoData(
-                      JdbcMethodMapper.getMethodMapper(), rs, attributes[k], k));
-            }
-          }
-
-          try {
-            resultSet.put(bean);
-          } catch (InterruptedException e) {
-            localLogger.error("Retriever Thread was interrupted", e);
-            break;
-          }
-        }
-
-        resultSetClose(rs);
-        statementClose(ps);
-
-        localLogger.info(
-            "=================== "
-                + resultSet.size()
-                + " Records - Class=<"
-                + criteria.getClass()
-                + "> Type=<"
-                + Crud.LIST.operation
-                + "> Name=<"
-                + groupName
-                + "> Result=<"
-                + result.getClass()
-                + "> ====================");
+                      for (int k = 1; k <= columnCount; k++) {
+                        if (attributes[k] != null) {
+                          attributes[k].invokeSetter(
+                              bean,
+                              new JdbcResultSetCpoData(
+                                  JdbcMethodMapper.getMethodMapper(), finalRs, attributes[k], k));
+                        }
+                      }
+                      action.accept(bean);
+                      return true;
+                    } catch (Exception ex) {
+                      throw new RuntimeException(ex);
+                    }
+                  }
+                },
+                false)
+            .onClose(
+                () -> {
+                  try {
+                    // The select may have a for update clause on it
+                    // Since the connection is cached we need to get rid of this
+                    resultSetClose(finalRs);
+                    statementClose(finalPs);
+                    commitLocalConnection(con);
+                    closeLocalConnection(con);
+                  } catch (Exception e) {
+                    resultSetClose(finalRs);
+                    statementClose(finalPs);
+                    rollbackLocalConnection(con);
+                    closeLocalConnection(con);
+                    throw new RuntimeException(e);
+                  }
+                });
       }
     } catch (Throwable t) {
+      resultSetClose(rs);
+      statementClose(ps);
+      rollbackLocalConnection(con);
+      closeLocalConnection(con);
       String msg =
           "processSelectGroup(String groupName, C criteria, T result, CpoWhere where,"
               + " Collection orderBy, Connection con) failed. Error:";
       localLogger.error(msg, t);
       throw new CpoException(msg, t);
-    } finally {
-      resultSetClose(rs);
-      statementClose(ps);
     }
+    return Stream.empty();
   }
 
   @Override

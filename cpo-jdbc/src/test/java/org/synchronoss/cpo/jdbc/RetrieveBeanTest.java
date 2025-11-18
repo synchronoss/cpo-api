@@ -26,12 +26,11 @@ import static org.testng.Assert.*;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.stream.Stream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.*;
-import org.testng.annotations.AfterClass;
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.Test;
+import org.testng.annotations.*;
 
 /**
  * RetrieveBeanTest is a test class for testing the JdbcAdapter class Constructors
@@ -95,8 +94,11 @@ public class RetrieveBeanTest {
       assertTrue(cpoAdapter1.isClosed());
 
       ValueObject valObj = ValueObjectFactory.createValueObject();
-      col = cpoAdapter1.retrieveBeans(ValueObject.FG_LIST_NULL, valObj);
-      assertEquals(col.size(), al.size(), "Col size is " + col.size());
+      try (Stream<ValueObject> beans =
+          cpoAdapter1.retrieveBeans(ValueObject.FG_LIST_NULL, valObj); ) {
+        long count = beans.count();
+        assertEquals(count, al.size(), "Number of beans is " + count);
+      }
 
       // The adapter is now open
       assertFalse(cpoAdapter1.isClosed());
@@ -114,8 +116,11 @@ public class RetrieveBeanTest {
       assertTrue(cpoAdapter2.isClosed());
 
       ValueObject valObj = ValueObjectFactory.createValueObject();
-      col = cpoAdapter2.retrieveBeans(ValueObject.FG_LIST_NULL, valObj);
-      assertEquals(col.size(), al.size(), "Col size is " + col.size());
+      try (Stream<ValueObject> beans =
+          cpoAdapter2.retrieveBeans(ValueObject.FG_LIST_NULL, valObj); ) {
+        long count = beans.count();
+        assertEquals(count, al.size(), "Number of beans is " + count);
+      }
 
       // The adapter is now open
       assertFalse(cpoAdapter2.isClosed());
@@ -134,9 +139,11 @@ public class RetrieveBeanTest {
 
     try {
       ValueObject valObj = ValueObjectFactory.createValueObject();
-      col = cpoAdapter.retrieveBeans(ValueObject.FG_LIST_NULL, valObj);
-      assertTrue(col.size() == al.size(), "Col size is " + col.size());
-
+      try (Stream<ValueObject> beans =
+          cpoAdapter.retrieveBeans(ValueObject.FG_LIST_NULL, valObj); ) {
+        long count = beans.count();
+        assertEquals(count, al.size(), "Number of beans is " + count);
+      }
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -149,9 +156,11 @@ public class RetrieveBeanTest {
 
     try {
       ValueObject valObj = ValueObjectFactory.createValueObject();
-      col = cpoAdapter.retrieveBeans(ValueObject.FG_LIST_NULL, valObj, valObj);
-      assertTrue(col.size() == al.size(), "Col size is " + col.size());
-
+      try (Stream<ValueObject> beans =
+          cpoAdapter.retrieveBeans(ValueObject.FG_LIST_NULL, valObj, valObj); ) {
+        long count = beans.count();
+        assertEquals(count, al.size(), "Number of beans is " + count);
+      }
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -161,167 +170,53 @@ public class RetrieveBeanTest {
   public void testIsClosed() {
     String method = "testIsClosed:";
     Collection<ValueObject> col;
+    CpoTrxAdapter trxCheck = null;
 
     try (CpoTrxAdapter trx =
         CpoAdapterFactoryManager.getCpoTrxAdapter(JdbcStatics.ADAPTER_CONTEXT_JDBC)) {
-      trx.isClosed();
+      // closed until used
+      assertTrue(trx.isClosed());
+      trxCheck = trx;
       ValueObject valObj = ValueObjectFactory.createValueObject();
-      col = trx.retrieveBeans(ValueObject.FG_LIST_NULL, valObj);
-      assertTrue(col.size() == al.size(), "Col size is " + col.size());
+      try (Stream<ValueObject> beans =
+          cpoAdapter.retrieveBeans(ValueObject.FG_LIST_NULL, valObj); ) {
+        long count = beans.count();
+        assertEquals(count, al.size(), "Number of beans is " + count);
+      }
       trx.commit();
+      assertFalse(trx.isClosed());
     } catch (Exception e) {
+      fail(method + e.getMessage());
+    }
+
+    try {
+      assertTrue(trxCheck.isClosed());
+    } catch (CpoException e) {
       fail(method + e.getMessage());
     }
   }
 
-  @Test
-  public void testRetrieveBeansNoWaitSize2() {
+  @DataProvider(name = "fetchSize")
+  public Object[][] createData1() {
+    return new Object[][] {
+      {2}, {9}, {10}, {11}, {20},
+    };
+  }
+
+  @Test(dataProvider = "fetchSize")
+  public void testRetrieveBeansFetchSize(Integer fetchSize) {
     String method = "testRetrieveBeansNoWaitSize2:";
-    CpoResultSet<ValueObject> crs;
-    int count = 0;
 
     try {
       ValueObject valObj = ValueObjectFactory.createValueObject();
-      crs = cpoAdapter.retrieveBeans(ValueObject.FG_LIST_NULL, valObj, valObj, null, null, null, 2);
-      logger.debug("Returned from retrieveBeans");
-      for (ValueObject vo : crs) {
-        if (vo != null) {
-          count++;
-        }
-        logger.debug("Retrieved Object #" + count);
+      var oldSize = cpoAdapter.getFetchSize();
+      cpoAdapter.setFetchSize(fetchSize);
+      try (Stream<ValueObject> beans =
+          cpoAdapter.retrieveBeans(ValueObject.FG_LIST_NULL, valObj, valObj, null, null, null); ) {
+        long count = beans.count();
+        assertEquals(count, al.size(), "Number of beans is " + count);
       }
-      assertTrue(count == al.size(), "Result size is " + count);
-
-    } catch (Exception e) {
-      fail(method + e.getMessage());
-    }
-  }
-
-  @Test
-  public void testRetrieveBeansNoWaitSize9() {
-    String method = "testRetrieveBeansNoWaitSize9:";
-    CpoResultSet<ValueObject> crs;
-    int count = 0;
-
-    try {
-      ValueObject valObj = ValueObjectFactory.createValueObject();
-      crs = cpoAdapter.retrieveBeans(ValueObject.FG_LIST_NULL, valObj, valObj, null, null, null, 9);
-      for (ValueObject vo : crs) {
-        if (vo != null) {
-          count++;
-        }
-      }
-      assertTrue(count == al.size(), "Result size is " + count);
-
-    } catch (Exception e) {
-      fail(method + e.getMessage());
-    }
-  }
-
-  @Test
-  public void testRetrieveBeansNoWaitSize10() {
-    String method = "testRetrieveBeansNoWaitSize10:";
-    CpoResultSet<ValueObject> crs;
-    int count = 0;
-
-    try {
-      ValueObject valObj = ValueObjectFactory.createValueObject();
-      crs =
-          cpoAdapter.retrieveBeans(ValueObject.FG_LIST_NULL, valObj, valObj, null, null, null, 10);
-      for (ValueObject vo : crs) {
-        if (vo != null) {
-          count++;
-        }
-      }
-      assertTrue(count == al.size(), "Result size is " + count);
-
-    } catch (Exception e) {
-      fail(method + e.getMessage());
-    }
-  }
-
-  @Test
-  public void testRetrieveBeansNoWaitSize11() {
-    String method = "testRetrieveBeansNoWaitSize11:";
-    CpoResultSet<ValueObject> crs;
-    int count = 0;
-
-    try {
-      ValueObject valObj = ValueObjectFactory.createValueObject();
-      crs =
-          cpoAdapter.retrieveBeans(ValueObject.FG_LIST_NULL, valObj, valObj, null, null, null, 11);
-      for (ValueObject vo : crs) {
-        if (vo != null) {
-          count++;
-        }
-      }
-      assertTrue(count == al.size(), "Result size is " + count);
-
-    } catch (Exception e) {
-      fail(method + e.getMessage());
-    }
-  }
-
-  @Test
-  public void testConnectionBusy() {
-    String method = "testConnectionBusy:";
-    CpoResultSet<ValueObject> crs;
-    int count = 0;
-
-    try (CpoTrxAdapter trx =
-        CpoAdapterFactoryManager.getCpoTrxAdapter(JdbcStatics.ADAPTER_CONTEXT_JDBC)) {
-
-      ValueObject valObj = ValueObjectFactory.createValueObject();
-      crs = trx.retrieveBeans(ValueObject.FG_LIST_NULL, valObj, valObj, null, null, null, 2);
-
-      // start this trx
-      for (ValueObject vo : crs) {
-        if (vo != null) {
-          count++;
-        }
-        break;
-      }
-
-      // Let's see if it lets me do two trxs at once
-      try {
-        trx.retrieveBeans(ValueObject.FG_LIST_NULL, valObj);
-        fail(method + "Cpo allowed me to reuse a busy connection");
-      } catch (Exception busy) {
-        // THis should happen
-        logger.debug("Got the busy exception like expected");
-      }
-
-      // cleanup the first trx
-      for (ValueObject vo : crs) {
-        if (vo != null) {
-          count++;
-        }
-      }
-      assertTrue(count == al.size(), "Result size is " + count);
-
-    } catch (Exception e) {
-      fail(method + e.getMessage());
-    }
-  }
-
-  @Test
-  public void testRetrieveBeansNoWaitSize20() {
-    String method = "testRetrieveBeansNoWaitSize20:";
-    CpoResultSet<ValueObject> crs;
-    int count = 0;
-
-    try {
-      ValueObject valObj = ValueObjectFactory.createValueObject();
-      crs =
-          cpoAdapter.retrieveBeans(ValueObject.FG_LIST_NULL, valObj, valObj, null, null, null, 20);
-      logger.debug("Returned from retrieveBeans");
-      for (ValueObject vo : crs) {
-        if (vo != null) {
-          count++;
-        }
-        logger.debug("Retrieved Object #" + count);
-      }
-      assertTrue(count == al.size(), "Result size is " + count);
+      cpoAdapter.setFetchSize(oldSize);
 
     } catch (Exception e) {
       fail(method + e.getMessage());

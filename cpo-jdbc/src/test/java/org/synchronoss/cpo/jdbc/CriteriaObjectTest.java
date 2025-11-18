@@ -25,7 +25,7 @@ package org.synchronoss.cpo.jdbc;
 import static org.testng.Assert.*;
 
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.stream.Stream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.CpoAdapter;
@@ -94,17 +94,17 @@ public class CriteriaObjectTest {
   @Test
   public void testRetrieveBeanWithCriteria() {
     String method = "testRetrieveBeanWithCriteria:";
-    Collection<ValueObject> col;
 
     try {
       CriteriaObject critObject = new CriteriaObjectBean();
       critObject.setMinId(3);
       critObject.setMaxId(7);
-      col =
+      try (Stream<ValueObject> beans =
           cpoAdapter.retrieveBeans(
-              CriteriaObject.FG_LIST_SELECTBETWEEN, critObject, new ValueObjectBean());
-      assertTrue(col.size() == 5, "Col size is " + col.size());
-
+              CriteriaObject.FG_LIST_SELECTBETWEEN, critObject, new ValueObjectBean()); ) {
+        long count = beans.count();
+        assertEquals(count, 5, "Number of beans is " + count);
+      }
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -129,12 +129,16 @@ public class CriteriaObjectTest {
 
       ArrayList<CpoWhere> wheres = new ArrayList<>();
       wheres.add(cw);
-      Collection<ValueObject> col =
+      try (Stream<ValueObject> beans =
           cpoAdapter.retrieveBeans(
-              CriteriaObject.FG_LIST_SELECTALL, critObject, new ValueObjectBean(), wheres, null);
-
-      assertEquals(3, col.size(), "Col size is " + col.size());
-
+              CriteriaObject.FG_LIST_SELECTALL,
+              critObject,
+              new ValueObjectBean(),
+              wheres,
+              null); ) {
+        long count = beans.count();
+        assertEquals(count, 3, "Number of beans is " + count);
+      }
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -154,7 +158,7 @@ public class CriteriaObjectTest {
             cpoAdapter.executeBean(
                 CriteriaObject.FG_EXECUTE_EXECUTECRITERIA, critObject, new ValueObjectBean());
         assertNotNull(rvo, method + "Returned Value object is null");
-        assertEquals(27, rvo.getAttrDouble(), "power(3,3)=" + rvo.getAttrDouble());
+        assertEquals(rvo.getAttrDouble(), 27, "power(3,3)=" + rvo.getAttrDouble());
       } catch (Exception e) {
         logger.error(ExceptionHelper.getLocalizedMessage(e));
         fail(method + e.getMessage());

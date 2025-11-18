@@ -23,9 +23,10 @@ package org.synchronoss.cpo.cassandra;
  */
 
 import com.datastax.driver.core.*;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
+import java.util.function.Consumer;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.*;
@@ -766,7 +767,7 @@ public class CassandraCpoAdapter extends CpoBaseAdapter<ClusterDataSource> {
   }
 
   @Override
-  protected <T, C> List<T> processSelectGroup(
+  protected <T, C> Stream<T> processSelectGroup(
       String groupName,
       C criteria,
       T result,
@@ -776,61 +777,18 @@ public class CassandraCpoAdapter extends CpoBaseAdapter<ClusterDataSource> {
       boolean useRetrieve)
       throws CpoException {
     Session session = null;
-    CpoArrayResultSet<T> resultSet = new CpoArrayResultSet<>();
-
-    try {
-      session = getWriteSession();
-      processSelectGroup(
-          groupName,
-          criteria,
-          result,
-          wheres,
-          orderBy,
-          nativeExpressions,
-          session,
-          useRetrieve,
-          resultSet);
-    } catch (Exception e) {
-      // Any exception has to try to rollback the work;
-      ExceptionHelper.reThrowCpoException(
-          e,
-          "processSelectGroup(String groupName, C criteria, T result,CpoWhere where,"
-              + " Collection orderBy, boolean useRetrieve) failed");
-    }
-    return resultSet;
-  }
-
-  @Override
-  protected <T, C> void processSelectGroup(
-      String groupName,
-      C criteria,
-      T result,
-      Collection<CpoWhere> wheres,
-      Collection<CpoOrderBy> orderBy,
-      Collection<CpoNativeFunction> nativeExpressions,
-      boolean useRetrieve,
-      CpoResultSet<T> resultSet)
-      throws CpoException {
-    Session session = null;
 
     try {
       session = getReadSession();
-      processSelectGroup(
-          groupName,
-          criteria,
-          result,
-          wheres,
-          orderBy,
-          nativeExpressions,
-          session,
-          useRetrieve,
-          resultSet);
+      return processSelectGroup(
+          groupName, criteria, result, wheres, orderBy, nativeExpressions, session, useRetrieve);
     } catch (Exception e) {
       ExceptionHelper.reThrowCpoException(
           e,
           "processSelectGroup(String groupName, C criteria, T result,CpoWhere where,"
               + " Collection orderBy, boolean useRetrieve) failed");
     }
+    return Stream.empty();
   }
 
   /**
@@ -846,10 +804,10 @@ public class CassandraCpoAdapter extends CpoBaseAdapter<ClusterDataSource> {
    * @param nativeExpressions A collection of CpoNativeFunction beans to be used by the function
    * @param sess The session to use for this select
    * @param useRetrieve Use the RETRIEVE_GROUP instead of the LIST_GROUP
-   * @param cpoResultSet The result set to add the results to.
+   * @return A stream of T
    * @throws CpoException Any errors retrieving the data from the datasource
    */
-  protected <T, C> void processSelectGroup(
+  protected <T, C> Stream<T> processSelectGroup(
       String groupName,
       C criteria,
       T result,
@@ -857,8 +815,7 @@ public class CassandraCpoAdapter extends CpoBaseAdapter<ClusterDataSource> {
       Collection<CpoOrderBy> orderBy,
       Collection<CpoNativeFunction> nativeExpressions,
       Session sess,
-      boolean useRetrieve,
-      CpoResultSet<T> cpoResultSet)
+      boolean useRetrieve)
       throws CpoException {
     Logger localLogger = criteria == null ? logger : LoggerFactory.getLogger(criteria.getClass());
     CassandraBoundStatementFactory boundStatementFactory = null;
@@ -913,9 +870,7 @@ public class CassandraCpoAdapter extends CpoBaseAdapter<ClusterDataSource> {
                 nativeExpressions);
         BoundStatement boundStatement = boundStatementFactory.getBoundStatement();
 
-        if (cpoResultSet.getFetchSize() != -1) {
-          boundStatement.setFetchSize(cpoResultSet.getFetchSize());
-        }
+        boundStatement.setFetchSize(getFetchSize());
 
         localLogger.debug("Retrieving Records");
 
@@ -934,58 +889,62 @@ public class CassandraCpoAdapter extends CpoBaseAdapter<ClusterDataSource> {
           attributes[k] = resultClass.getAttributeData(columnDefs.getName(k));
         }
 
-        for (Row row : rs) {
-          try {
-            bean = (T) result.getClass().newInstance();
-          } catch (IllegalAccessException iae) {
-            localLogger.error(
-                "=================== Could not access default constructor for Class=<"
-                    + result.getClass()
-                    + "> ==================");
-            throw new CpoException("Unable to access the constructor of the Return bean", iae);
-          } catch (InstantiationException iae) {
-            throw new CpoException("Unable to instantiate Return bean", iae);
-          }
+        CassandraBoundStatementFactory finalBoundStatementFactory = boundStatementFactory;
+        return StreamSupport.stream(
+                new Spliterators.AbstractSpliterator<T>(Long.MAX_VALUE, Spliterator.ORDERED) {
+                  @Override
+                  public boolean tryAdvance(Consumer<? super T> action) {
+                    try {
+                      if (rs.isExhausted()) return false;
+                      Row row = rs.one();
+                      T bean = null;
+                      try {
+                        bean = (T) result.getClass().newInstance();
+                      } catch (IllegalAccessException iae) {
+                        localLogger.error(
+                            "=================== Could not access default constructor for Class=<"
+                                + result.getClass()
+                                + "> ==================");
+                        throw new CpoException(
+                            "Unable to access the constructor of the Return bean", iae);
+                      } catch (InstantiationException iae) {
+                        throw new CpoException("Unable to instantiate Return bean", iae);
+                      }
 
-          for (int k = 0; k < columnCount; k++) {
-            if (attributes[k] != null) {
-              attributes[k].invokeSetter(
-                  bean,
-                  new CassandraResultSetCpoData(
-                      CassandraMethodMapper.getMethodMapper(), row, attributes[k], k));
-            }
-          }
-
-          try {
-            cpoResultSet.put(bean);
-          } catch (InterruptedException e) {
-            localLogger.error("Retriever Thread was interrupted", e);
-            break;
-          }
-        }
-
-        localLogger.info(
-            "=================== "
-                + cpoResultSet.size()
-                + " Records - Class=<"
-                + criteria.getClass()
-                + "> Type=<"
-                + Crud.LIST.operation
-                + "> Name=<"
-                + groupName
-                + "> Result=<"
-                + result.getClass()
-                + "> ====================");
+                      for (int k = 0; k < columnCount; k++) {
+                        if (attributes[k] != null) {
+                          attributes[k].invokeSetter(
+                              bean,
+                              new CassandraResultSetCpoData(
+                                  CassandraMethodMapper.getMethodMapper(), row, attributes[k], k));
+                        }
+                      }
+                      action.accept(bean);
+                      return true;
+                    } catch (CpoException ex) {
+                      throw new RuntimeException(ex);
+                    }
+                  }
+                },
+                false)
+            .onClose(
+                () -> {
+                  try {
+                    finalBoundStatementFactory.release();
+                  } catch (CpoException e) {
+                    throw new RuntimeException(e);
+                  }
+                });
       }
     } catch (Throwable t) {
+      if (boundStatementFactory != null) boundStatementFactory.release();
       String msg =
           "processSelectGroup(String groupName, C criteria, T result, CpoWhere where,"
               + " Collection orderBy, Session sess) failed. Error:";
       localLogger.error(msg, t);
       throw new CpoException(msg, t);
-    } finally {
-      if (boundStatementFactory != null) boundStatementFactory.release();
     }
+    return Stream.empty();
   }
 
   /**

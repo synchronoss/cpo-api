@@ -26,6 +26,7 @@ import static org.testng.Assert.*;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.stream.Stream;
 import org.synchronoss.cpo.CpoAdapter;
 import org.synchronoss.cpo.CpoAdapterFactoryManager;
 import org.synchronoss.cpo.CpoWhere;
@@ -117,10 +118,11 @@ public class InterleavedWhereTest {
 
       ArrayList<CpoWhere> wheres = new ArrayList<>();
       wheres.add(cw);
-      coll = cpoAdapter.retrieveBeans(ValueObject.FG_LIST_INTERLEAVEDWHERE, valObj, wheres, null);
-
-      assertEquals(3, coll.size(), "Collection size is " + coll.size());
-
+      try (Stream<ValueObject> beans =
+          cpoAdapter.retrieveBeans(ValueObject.FG_LIST_INTERLEAVEDWHERE, valObj, wheres, null); ) {
+        long count = beans.count();
+        assertEquals(count, 3, "Number of beans is " + count);
+      }
     } catch (Exception e) {
       fail(method + e.getMessage());
     }

@@ -26,6 +26,7 @@ import static org.testng.Assert.*;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.stream.Stream;
 import org.synchronoss.cpo.CpoAdapter;
 import org.synchronoss.cpo.CpoAdapterFactoryManager;
 import org.synchronoss.cpo.CpoNativeFunction;
@@ -101,9 +102,12 @@ public class NativeExpressionTest {
       cnqAl.add(new CpoNativeFunction("__CPO_WHERE__", "WHERE id IN (2,3)"));
 
       ValueObject valObj = ValueObjectFactory.createValueObject(3);
-      col = cpoAdapter.retrieveBeans("TestWhereRetrieve", valObj, valObj, null, null, cnqAl);
-
-      assertEquals(2, col.size(), "Col size is " + col.size());
+      try (Stream<ValueObject> beans =
+          cpoAdapter.retrieveBeans(
+              ValueObject.FG_LIST_TESTWHERERETRIEVE, valObj, valObj, null, null, cnqAl); ) {
+        long count = beans.count();
+        assertEquals(count, 2, "Number of beans is " + count);
+      }
     } catch (Exception e) {
       fail(method + e.getMessage());
     }

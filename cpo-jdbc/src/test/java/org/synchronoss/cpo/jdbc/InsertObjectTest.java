@@ -27,7 +27,7 @@ import static org.testng.Assert.*;
 import java.math.BigInteger;
 import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.stream.Stream;
 import org.synchronoss.cpo.CpoAdapter;
 import org.synchronoss.cpo.CpoAdapterFactoryManager;
 import org.synchronoss.cpo.jdbc.meta.JdbcCpoMetaDescriptor;
@@ -147,10 +147,9 @@ public class InsertObjectTest {
       fail(method + e.getMessage());
     }
 
-    try {
-      Collection<ValueObject> col = readAdapter.retrieveBeans(ValueObject.FG_LIST_NULL, vo);
-
-      assertTrue(col.size() == a2.size(), method + "Invalid number of objects returned");
+    try (Stream<ValueObject> beans = cpoAdapter.retrieveBeans(ValueObject.FG_LIST_NULL, vo); ) {
+      long count = beans.count();
+      assertEquals(count, a2.size(), "Number of beans is " + count);
     } catch (Exception e) {
       fail(method + e.getMessage());
     }

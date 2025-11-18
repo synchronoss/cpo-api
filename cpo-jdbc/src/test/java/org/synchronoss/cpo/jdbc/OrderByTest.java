@@ -27,6 +27,8 @@ import static org.testng.Assert.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Stream;
 import org.synchronoss.cpo.CpoAdapter;
 import org.synchronoss.cpo.CpoAdapterFactoryManager;
 import org.synchronoss.cpo.CpoOrderBy;
@@ -122,12 +124,10 @@ public class OrderByTest {
       colCob.add(cob);
       colCob.add(cob1);
       ValueObject valObj = ValueObjectFactory.createValueObject();
-      col = cpoAdapter.retrieveBeans(ValueObject.FG_LIST_TESTORDERBYRETRIEVE, valObj, colCob);
-
-      int id = 1;
-      for (ValueObject vo : col) {
-        assertEquals(id, vo.getId());
-        id++;
+      try (Stream<ValueObject> beans =
+          cpoAdapter.retrieveBeans(ValueObject.FG_LIST_TESTORDERBYRETRIEVE, valObj, colCob); ) {
+        AtomicInteger id = new AtomicInteger(1);
+        beans.forEach(bean -> assertEquals(bean.getId(), id.getAndIncrement()));
       }
     } catch (Exception e) {
       fail(method + e.getMessage());
@@ -149,11 +149,10 @@ public class OrderByTest {
       colCob.add(cob);
       colCob.add(cob2);
       ValueObject valObj = ValueObjectFactory.createValueObject();
-      col = cpoAdapter.retrieveBeans(ValueObject.FG_LIST_TESTORDERBYRETRIEVE, valObj, colCob);
-      int id = 5;
-      for (ValueObject vo : col) {
-        assertEquals(id, vo.getId());
-        id--;
+      try (Stream<ValueObject> beans =
+          cpoAdapter.retrieveBeans(ValueObject.FG_LIST_TESTORDERBYRETRIEVE, valObj, colCob); ) {
+        AtomicInteger id = new AtomicInteger(5);
+        beans.forEach(bean -> assertEquals(bean.getId(), id.getAndDecrement()));
       }
     } catch (Exception e) {
       fail(method + e.getMessage());
@@ -176,16 +175,10 @@ public class OrderByTest {
       Collection<CpoOrderBy> colCob = new ArrayList<>();
       colCob.add(cob);
       ValueObject valObj = ValueObjectFactory.createValueObject();
-      col = cpoAdapter.retrieveBeans(ValueObject.FG_LIST_TESTORDERBYRETRIEVE, valObj, colCob);
-
-      int id = 1;
-      for (ValueObject vo : col) {
-        int voId = vo.getId();
-        if (voId < 0) {
-          voId *= -1;
-        }
-        assertEquals(id, voId);
-        id++;
+      try (Stream<ValueObject> beans =
+          cpoAdapter.retrieveBeans(ValueObject.FG_LIST_TESTORDERBYRETRIEVE, valObj, colCob); ) {
+        AtomicInteger id = new AtomicInteger(1);
+        beans.forEach(bean -> assertEquals(Math.abs(bean.getId()), id.getAndIncrement()));
       }
     } catch (Exception e) {
       fail(method + e.getMessage());

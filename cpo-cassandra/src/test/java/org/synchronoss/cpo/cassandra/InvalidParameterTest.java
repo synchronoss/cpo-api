@@ -26,6 +26,7 @@ import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.fail;
 
 import java.util.Collection;
+import java.util.stream.Stream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.CpoAdapter;
@@ -65,8 +66,10 @@ public class InvalidParameterTest {
 
     try {
       ValueObject valObj = ValueObjectFactory.createValueObject();
-      col = cpoAdapter.retrieveBeans("BadContext", valObj);
-      fail(method + "Test got to unreachable code");
+      try (Stream<ValueObject> beans = cpoAdapter.retrieveBeans("BadContext", valObj); ) {
+        long count = beans.count();
+        fail(method + "Test got to unreachable code " + count);
+      }
     } catch (CpoException ce) {
       // This is what I am expecting so let it go
       logger.debug("Got a cpo exception");
@@ -82,8 +85,11 @@ public class InvalidParameterTest {
 
     try {
       ValueObject valObj = null;
-      col = cpoAdapter.retrieveBeans(null, valObj);
-      fail(method + "Test got to unreachable code");
+      try (Stream<ValueObject> beans =
+          cpoAdapter.retrieveBeans(ValueObject.FG_LIST_NULL, valObj); ) {
+        long count = beans.count();
+        fail(method + "Test got to unreachable code " + count);
+      }
     } catch (CpoException ce) {
       // This is what I am expecting so let it go
       logger.debug("Got a cpo exception");
@@ -133,9 +139,11 @@ public class InvalidParameterTest {
     try {
       ValueObject lvo = ValueObjectFactory.createValueObject();
       logger.debug("Calling the NULL List");
-      lvos = cpoAdapter.retrieveBeans("NULL", lvo);
-      logger.debug("Called the NULL List");
-      fail(method + "Test got to unreachable code");
+      try (Stream<ValueObject> beans = cpoAdapter.retrieveBeans("NULL", lvo); ) {
+        logger.debug("Called the NULL List");
+        long count = beans.count();
+        fail(method + "Test got to unreachable code " + count);
+      }
     } catch (CpoException ce) {
       // This is what I am expecting so let it go
       // This is what I am expecting so let it go

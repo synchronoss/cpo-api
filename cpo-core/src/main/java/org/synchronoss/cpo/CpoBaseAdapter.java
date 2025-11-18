@@ -24,15 +24,11 @@ package org.synchronoss.cpo;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.util.stream.Stream;
 import org.synchronoss.cpo.cache.CpoAdapterCache;
 import org.synchronoss.cpo.enums.Comparison;
 import org.synchronoss.cpo.enums.Crud;
 import org.synchronoss.cpo.enums.Logical;
-import org.synchronoss.cpo.helper.ExceptionHelper;
 
 /**
  * The CpoBaseAdapter has common functionality needed by all Adapter implementations
@@ -42,8 +38,6 @@ import org.synchronoss.cpo.helper.ExceptionHelper;
 public abstract class CpoBaseAdapter<D> extends CpoAdapterCache implements CpoAdapter {
   /** Version Id for this class. */
   private static final long serialVersionUID = 1L;
-
-  private static final Logger logger = LoggerFactory.getLogger(CpoBaseAdapter.class);
 
   // DataSource Information
 
@@ -55,6 +49,9 @@ public abstract class CpoBaseAdapter<D> extends CpoAdapterCache implements CpoAd
 
   /** The name of the datasource */
   private String dataSourceName = null;
+
+  /** The fetchSize used when getting data from the datasource */
+  private int fetchSize = 0;
 
   protected D getReadDataSource() {
     return readDataSource;
@@ -78,6 +75,14 @@ public abstract class CpoBaseAdapter<D> extends CpoAdapterCache implements CpoAd
 
   protected void setDataSourceName(String dataSourceName) {
     this.dataSourceName = dataSourceName;
+  }
+
+  public int getFetchSize() {
+    return fetchSize;
+  }
+
+  public void setFetchSize(int fetchSize) {
+    this.fetchSize = fetchSize;
   }
 
   @Override
@@ -290,23 +295,19 @@ public abstract class CpoBaseAdapter<D> extends CpoAdapterCache implements CpoAd
       Collection<CpoOrderBy> orderBy,
       Collection<CpoNativeFunction> nativeExpressions)
       throws CpoException {
-    Iterator<T> it =
+    var optionalT =
         processSelectGroup(groupName, criteria, result, wheres, orderBy, nativeExpressions, true)
-            .iterator();
-    if (it.hasNext()) {
-      return it.next();
-    } else {
-      return null;
-    }
+            .findFirst();
+    return optionalT.orElse(null);
   }
 
   @Override
-  public <C> List<C> retrieveBeans(String groupName, C criteria) throws CpoException {
+  public <C> Stream<C> retrieveBeans(String groupName, C criteria) throws CpoException {
     return processSelectGroup(groupName, criteria, criteria, null, null, null, false);
   }
 
   @Override
-  public <C> List<C> retrieveBeans(
+  public <C> Stream<C> retrieveBeans(
       String groupName, C criteria, CpoWhere where, Collection<CpoOrderBy> orderBy)
       throws CpoException {
     ArrayList<CpoWhere> wheres = null;
@@ -318,25 +319,26 @@ public abstract class CpoBaseAdapter<D> extends CpoAdapterCache implements CpoAd
   }
 
   @Override
-  public <C> List<C> retrieveBeans(
+  public <C> Stream<C> retrieveBeans(
       String groupName, C criteria, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy)
       throws CpoException {
     return processSelectGroup(groupName, criteria, criteria, wheres, orderBy, null, false);
   }
 
   @Override
-  public <C> List<C> retrieveBeans(String groupName, C criteria, Collection<CpoOrderBy> orderBy)
+  public <C> Stream<C> retrieveBeans(String groupName, C criteria, Collection<CpoOrderBy> orderBy)
       throws CpoException {
     return processSelectGroup(groupName, criteria, criteria, null, orderBy, null, false);
   }
 
   @Override
-  public <T, C> List<T> retrieveBeans(String groupName, C criteria, T result) throws CpoException {
+  public <T, C> Stream<T> retrieveBeans(String groupName, C criteria, T result)
+      throws CpoException {
     return processSelectGroup(groupName, criteria, result, null, null, null, false);
   }
 
   @Override
-  public <T, C> List<T> retrieveBeans(
+  public <T, C> Stream<T> retrieveBeans(
       String groupName, C criteria, T result, CpoWhere where, Collection<CpoOrderBy> orderBy)
       throws CpoException {
     ArrayList<CpoWhere> wheres = null;
@@ -348,7 +350,7 @@ public abstract class CpoBaseAdapter<D> extends CpoAdapterCache implements CpoAd
   }
 
   @Override
-  public <T, C> List<T> retrieveBeans(
+  public <T, C> Stream<T> retrieveBeans(
       String groupName,
       C criteria,
       T result,
@@ -359,7 +361,7 @@ public abstract class CpoBaseAdapter<D> extends CpoAdapterCache implements CpoAd
   }
 
   @Override
-  public <T, C> List<T> retrieveBeans(
+  public <T, C> Stream<T> retrieveBeans(
       String groupName,
       C criteria,
       T result,
@@ -369,24 +371,6 @@ public abstract class CpoBaseAdapter<D> extends CpoAdapterCache implements CpoAd
       throws CpoException {
     return processSelectGroup(
         groupName, criteria, result, wheres, orderBy, nativeExpressions, false);
-  }
-
-  @Override
-  public <T, C> CpoResultSet<T> retrieveBeans(
-      String groupName,
-      C criteria,
-      T result,
-      Collection<CpoWhere> wheres,
-      Collection<CpoOrderBy> orderBy,
-      Collection<CpoNativeFunction> nativeExpressions,
-      int queueSize) {
-    CpoBlockingResultSet<T> resultSet = new CpoBlockingResultSet<>(queueSize);
-    RetrieverThread<T, C> retrieverThread =
-        new RetrieverThread<T, C>(
-            groupName, criteria, result, wheres, orderBy, nativeExpressions, false, resultSet);
-
-    retrieverThread.start();
-    return resultSet;
   }
 
   @Override
@@ -581,10 +565,10 @@ public abstract class CpoBaseAdapter<D> extends CpoAdapterCache implements CpoAd
    * @param orderBy A collection of CpoOrderBy beans to be used by the function
    * @param nativeExpressions A collection of CpoNativeFunction beans to be used by the function
    * @param useRetrieve Use the RETRIEVE_GROUP instead of the LIST_GROUP
-   * @return A List of T or an Empty List.
+   * @return A Stream of T or an Empty Stream.
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
-  protected abstract <T, C> List<T> processSelectGroup(
+  protected abstract <T, C> Stream<T> processSelectGroup(
       String groupName,
       C criteria,
       T result,
@@ -593,80 +577,4 @@ public abstract class CpoBaseAdapter<D> extends CpoAdapterCache implements CpoAd
       Collection<CpoNativeFunction> nativeExpressions,
       boolean useRetrieve)
       throws CpoException;
-
-  /**
-   * Retrieves beans from the datasource.
-   *
-   * @param <T> The result bean type
-   * @param <C> The criteria bean type
-   * @param groupName Query group groupName
-   * @param criteria The criteria bean
-   * @param result The result bean
-   * @param wheres A collection of CpoWhere beans to be used by the function
-   * @param orderBy A collection of CpoOrderBy beans to be used by the function
-   * @param nativeExpressions A collection of CpoNativeFunction beans to be used by the function
-   * @param useRetrieve Use the RETRIEVE_GROUP instead of the LIST_GROUP
-   * @param resultSet The result set to add the results to.
-   * @throws CpoException Any errors retrieving the data from the datasource
-   */
-  protected abstract <T, C> void processSelectGroup(
-      String groupName,
-      C criteria,
-      T result,
-      Collection<CpoWhere> wheres,
-      Collection<CpoOrderBy> orderBy,
-      Collection<CpoNativeFunction> nativeExpressions,
-      boolean useRetrieve,
-      CpoResultSet<T> resultSet)
-      throws CpoException;
-
-  protected class RetrieverThread<T, C> extends Thread {
-
-    String name;
-    C criteria;
-    T result;
-    Collection<CpoWhere> wheres;
-    Collection<CpoOrderBy> orderBy;
-    Collection<CpoNativeFunction> nativeExpressions;
-    boolean useRetrieve;
-    CpoBlockingResultSet<T> resultSet;
-    Thread callingThread = null;
-
-    public RetrieverThread(
-        String name,
-        C criteria,
-        T result,
-        Collection<CpoWhere> wheres,
-        Collection<CpoOrderBy> orderBy,
-        Collection<CpoNativeFunction> nativeExpressions,
-        boolean useRetrieve,
-        CpoBlockingResultSet<T> resultSet) {
-      this.name = name;
-      this.criteria = criteria;
-      this.result = result;
-      this.wheres = wheres;
-      this.orderBy = orderBy;
-      this.useRetrieve = useRetrieve;
-      this.resultSet = resultSet;
-      this.nativeExpressions = nativeExpressions;
-      callingThread = Thread.currentThread();
-    }
-
-    @Override
-    public void run() {
-      try {
-        processSelectGroup(
-            name, criteria, result, wheres, orderBy, nativeExpressions, false, resultSet);
-      } catch (CpoException e) {
-        logger.error(ExceptionHelper.getLocalizedMessage(e));
-      } finally {
-        // wait until the calling thread is finished processing the records
-        while (resultSet.size() > 0) {
-          Thread.yield();
-        }
-        // Tell the calling thread that it should not wait on the blocking queue any longer.
-        callingThread.interrupt();
-      }
-    }
-  }
 }

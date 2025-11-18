@@ -68,15 +68,24 @@ public class CassandraCpoConfigProcessor implements CpoConfigProcessor {
     // build the cluster information
     if (cassandraConfig.isSetReadWriteConfig()) {
       ClusterDataSourceInfo clusterInfo =
-          buildDataSourceInfo(cassandraConfig.getName(), cassandraConfig.getReadWriteConfig());
+          buildDataSourceInfo(
+              cassandraConfig.getName(),
+              cassandraConfig.getReadWriteConfig(),
+              cassandraConfig.getFetchSize().intValue());
       cpoAdapterFactory =
           new CassandraCpoAdapterFactory(
               CassandraCpoAdapter.getInstance(metaDescriptor, clusterInfo));
     } else {
       ClusterDataSourceInfo readClusterInfo =
-          buildDataSourceInfo(cassandraConfig.getName(), cassandraConfig.getReadConfig());
+          buildDataSourceInfo(
+              cassandraConfig.getName(),
+              cassandraConfig.getReadConfig(),
+              cassandraConfig.getFetchSize().intValue());
       ClusterDataSourceInfo writeClusterInfo =
-          buildDataSourceInfo(cassandraConfig.getName(), cassandraConfig.getWriteConfig());
+          buildDataSourceInfo(
+              cassandraConfig.getName(),
+              cassandraConfig.getWriteConfig(),
+              cassandraConfig.getFetchSize().intValue());
       cpoAdapterFactory =
           new CassandraCpoAdapterFactory(
               CassandraCpoAdapter.getInstance(metaDescriptor, writeClusterInfo, readClusterInfo));
@@ -97,10 +106,14 @@ public class CassandraCpoConfigProcessor implements CpoConfigProcessor {
    * @throws CpoException
    */
   private ClusterDataSourceInfo buildDataSourceInfo(
-      String dataConfigName, CtCassandraReadWriteConfig readWriteConfig) throws CpoException {
+      String dataConfigName, CtCassandraReadWriteConfig readWriteConfig, int fetchSize)
+      throws CpoException {
     ClusterDataSourceInfo clusterInfo =
         new ClusterDataSourceInfo(
-            dataConfigName, readWriteConfig.getKeySpace(), readWriteConfig.getContactPointArray());
+            dataConfigName,
+            readWriteConfig.getKeySpace(),
+            readWriteConfig.getContactPointArray(),
+            fetchSize);
 
     // add clusterName
     if (readWriteConfig.isSetClusterName())

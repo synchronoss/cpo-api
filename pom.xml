@@ -170,6 +170,7 @@
                     <configuration>
                         <release>21</release>
                         <compilerArgs>
+<!--                            <arg>-Werror</arg>-->
                             <arg>-Xlint:all</arg>
                         </compilerArgs>
                         <showDeprecation>true</showDeprecation>
@@ -399,6 +400,7 @@
                 <version>3.28.0</version>
                 <configuration>
                     <language>java</language>
+                    <targetJdk>21</targetJdk>
                     <minimumTokens>20</minimumTokens>
                     <includes>
                         <include>**/*.java</include>

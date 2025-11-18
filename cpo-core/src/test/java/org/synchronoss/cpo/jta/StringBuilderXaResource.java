@@ -27,23 +27,9 @@ import javax.transaction.xa.XAResource;
 
 /** Created by dberry on 8/9/15. */
 public class StringBuilderXaResource extends CpoBaseXaResource<StringBuilder> {
-  private boolean busy = false;
 
   public StringBuilderXaResource() {
     super(new StringBuilder());
-  }
-
-  public void setBusy(boolean busy) {
-    this.busy = busy;
-  }
-
-  public boolean isBusy() {
-    return busy;
-  }
-
-  @Override
-  protected boolean isLocalResourceBusy() throws XAException {
-    return isBusy();
   }
 
   @Override

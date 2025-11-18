@@ -112,11 +112,9 @@ public class GenerateJavaSources extends AbstractMojo {
     getLog().info("Generating cpo java sources to " + srcDir);
 
     File outputDirectory = new File(project.getBuild().getOutputDirectory());
-    if (!outputDirectory.exists()) {
-      if (!outputDirectory.mkdirs()) {
-        throw new MojoExecutionException(
-            "Unable to create output directory: " + outputDirectory.getAbsolutePath());
-      }
+    if (!outputDirectory.exists() && !outputDirectory.mkdirs()) {
+      throw new MojoExecutionException(
+          "Unable to create output directory: " + outputDirectory.getAbsolutePath());
     }
 
     try {
@@ -156,11 +154,9 @@ public class GenerateJavaSources extends AbstractMojo {
               }
             }
 
-            if (!classDir.exists()) {
-              if (!classDir.mkdirs()) {
-                throw new MojoExecutionException(
-                    "Unable to create class directories: " + classDir.getAbsolutePath());
-              }
+            if (!classDir.exists() && !classDir.mkdirs()) {
+              throw new MojoExecutionException(
+                  "Unable to create class directories: " + classDir.getAbsolutePath());
             }
 
             if (generateInterface) {

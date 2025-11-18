@@ -22,6 +22,7 @@ package org.synchronoss.cpo.jdbc;
  * ]]
  */
 
+import java.lang.ref.Cleaner;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.sql.Connection;
@@ -43,7 +44,9 @@ import org.synchronoss.cpo.helper.ExceptionHelper;
  * @author dberry
  */
 public class ClassJdbcDataSourceInfo extends AbstractJdbcDataSource
-    implements ConnectionEventListener {
+    implements ConnectionEventListener, AutoCloseable {
+  private static final Cleaner cleaner = Cleaner.create();
+  private final Cleaner.Cleanable cleanable;
 
   private Logger logger = LoggerFactory.getLogger(this.getClass());
   private ConnectionPoolDataSource poolDataSource = null;
@@ -60,10 +63,12 @@ public class ClassJdbcDataSourceInfo extends AbstractJdbcDataSource
    * @param className The classname of a class that implements datasource
    * @param properties - The connection properties for connecting to the database
    */
-  public ClassJdbcDataSourceInfo(String className, SortedMap<String, String> properties) {
-    super(className, properties);
+  public ClassJdbcDataSourceInfo(
+      String className, SortedMap<String, String> properties, int fetchSize) {
+    super(className, properties, fetchSize);
     this.className = className;
     this.properties = properties;
+    this.cleanable = cleaner.register(this, new ConnectionCleaner(this));
   }
 
   @Override
@@ -91,7 +96,7 @@ public class ClassJdbcDataSourceInfo extends AbstractJdbcDataSource
     info.append("JdbcDataSource(");
     info.append(getDataSourceName());
     info.append(")");
-    return (info.toString());
+    return info.toString();
   }
 
   @Override
@@ -147,13 +152,13 @@ public class ClassJdbcDataSourceInfo extends AbstractJdbcDataSource
   }
 
   @Override
-  protected void finalize() throws Throwable {
-    super.finalize();
+  public void close() {
     for (PooledConnection pc : freeConnections) {
       pc.removeConnectionEventListener(this);
       try {
         pc.close();
       } catch (SQLException se) {
+        logger.error(se.getMessage(), se);
       }
     }
     for (PooledConnection pc : usedConnections) {
@@ -161,6 +166,7 @@ public class ClassJdbcDataSourceInfo extends AbstractJdbcDataSource
       try {
         pc.close();
       } catch (SQLException se) {
+        logger.error(se.getMessage(), se);
       }
     }
   }
@@ -189,6 +195,20 @@ public class ClassJdbcDataSourceInfo extends AbstractJdbcDataSource
       logger.error("Error Invoking setter Method:" + methodName, ite);
     } catch (IllegalAccessException iae) {
       logger.error("Error accessing setter Method:" + methodName, iae);
+    }
+  }
+
+  private static class ConnectionCleaner implements Runnable {
+    private final ClassJdbcDataSourceInfo jdbcDataSourceInfo;
+
+    ConnectionCleaner(ClassJdbcDataSourceInfo jdbcDataSourceInfo) {
+      this.jdbcDataSourceInfo = jdbcDataSourceInfo;
+      ;
+    }
+
+    @Override
+    public void run() {
+      jdbcDataSourceInfo.close();
     }
   }
 }

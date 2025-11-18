@@ -37,6 +37,11 @@ public interface DataSourceInfo<T> {
   String getDataSourceName();
 
   /**
+   * @return Returns the fetchSize for this datasource.
+   */
+  int getFetchSize();
+
+  /**
    * @return Returns the DataSource
    * @throws CpoException Cannot find the datasource
    */

@@ -52,10 +52,11 @@ public class DriverJdbcDataSourceInfo extends AbstractJdbcDataSource {
    *
    * @param driver The text name of the driver
    * @param url - The url that points to the database.
+   * @param fetchSize The fetchSize for the datasource
    * @throws CpoException - Any errors encountered loading the driver
    */
-  public DriverJdbcDataSourceInfo(String driver, String url) throws CpoException {
-    super(url);
+  public DriverJdbcDataSourceInfo(String driver, String url, int fetchSize) throws CpoException {
+    super(url, fetchSize);
     loadDriver(driver);
     connectionType = URL_CONNECTION;
     this.url = url;
@@ -67,11 +68,12 @@ public class DriverJdbcDataSourceInfo extends AbstractJdbcDataSource {
    * @param driver The text name of the driver
    * @param url - The url that points to the database.
    * @param properties - The connection properties for connecting to the database
+   * @param fetchSize The fetchSize for the datasource
    * @throws CpoException - Any errors encountered loading the driver
    */
-  public DriverJdbcDataSourceInfo(String driver, String url, Properties properties)
+  public DriverJdbcDataSourceInfo(String driver, String url, Properties properties, int fetchSize)
       throws CpoException {
-    super(url, properties);
+    super(url, properties, fetchSize);
     loadDriver(driver);
     connectionType = URL_PROPS_CONNECTION;
     this.url = url;
@@ -84,12 +86,14 @@ public class DriverJdbcDataSourceInfo extends AbstractJdbcDataSource {
    * @param driver The text name of the driver
    * @param url - The url that points to the database.
    * @param username - The username for connecting to the database
-   * @param password - The password for connectinf to the database
+   * @param password - The password for connecting to the database
+   * @param fetchSize The fetchSize for the datasource
    * @throws CpoException - Any errors encountered loading the driver
    */
-  public DriverJdbcDataSourceInfo(String driver, String url, String username, String password)
+  public DriverJdbcDataSourceInfo(
+      String driver, String url, String username, String password, int fetchSize)
       throws CpoException {
-    super(url + username);
+    super(url + username, fetchSize);
     loadDriver(driver);
     connectionType = URL_USER_PASSWORD_CONNECTION;
     this.url = url;
@@ -110,13 +114,13 @@ public class DriverJdbcDataSourceInfo extends AbstractJdbcDataSource {
   private Connection makeNewConnection() throws SQLException {
     Connection connection = null;
     switch (connectionType) {
-      case DriverJdbcDataSourceInfo.URL_CONNECTION:
+      case URL_CONNECTION:
         connection = DriverManager.getConnection(url);
         break;
-      case DriverJdbcDataSourceInfo.URL_PROPS_CONNECTION:
+      case URL_PROPS_CONNECTION:
         connection = DriverManager.getConnection(url, properties);
         break;
-      case DriverJdbcDataSourceInfo.URL_USER_PASSWORD_CONNECTION:
+      case URL_USER_PASSWORD_CONNECTION:
         connection = DriverManager.getConnection(url, username, password);
         break;
       default:
@@ -131,7 +135,7 @@ public class DriverJdbcDataSourceInfo extends AbstractJdbcDataSource {
     info.append("JdbcDataSource(");
     info.append(getDataSourceName());
     info.append(")");
-    return (info.toString());
+    return info.toString();
   }
 
   private void loadDriver(String driver) throws CpoException {

@@ -25,8 +25,8 @@ package org.synchronoss.cpo.cassandra;
 import static org.testng.Assert.*;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
+import java.util.stream.Stream;
 import org.synchronoss.cpo.CpoAdapter;
 import org.synchronoss.cpo.CpoAdapterFactoryManager;
 import org.synchronoss.cpo.cassandra.meta.CassandraCpoMetaDescriptor;
@@ -128,10 +128,9 @@ public class InsertObjectTest {
       fail(method + e.getMessage());
     }
 
-    try {
-      Collection<ValueObject> col = readAdapter.retrieveBeans(null, vo);
-
-      assertEquals(col.size(), al.size(), method + "Invalid number of objects returned");
+    try (Stream<ValueObject> beans = cpoAdapter.retrieveBeans(ValueObject.FG_LIST_NULL, vo); ) {
+      long count = beans.count();
+      assertEquals(count, al.size(), "Number of beans is " + count);
     } catch (Exception e) {
       fail(method + e.getMessage());
     }

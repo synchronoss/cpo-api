@@ -142,19 +142,19 @@ public class JdbcCpoXaAdapter extends CpoBaseXaResource<JdbcCpoAdapter> implemen
   }
 
   @Override
-  public <T> long insertBeans(Collection<T> beans) throws CpoException {
+  public <T> long insertBeans(List<T> beans) throws CpoException {
     return getCurrentResource().insertBeans(beans);
   }
 
   @Override
-  public <T> long insertBeans(String groupName, Collection<T> beans) throws CpoException {
+  public <T> long insertBeans(String groupName, List<T> beans) throws CpoException {
     return getCurrentResource().insertBeans(groupName, beans);
   }
 
   @Override
   public <T> long insertBeans(
       String groupName,
-      Collection<T> beans,
+      List<T> beans,
       Collection<CpoWhere> wheres,
       Collection<CpoOrderBy> orderBy,
       Collection<CpoNativeFunction> nativeExpressions)
@@ -184,19 +184,19 @@ public class JdbcCpoXaAdapter extends CpoBaseXaResource<JdbcCpoAdapter> implemen
   }
 
   @Override
-  public <T> long deleteBeans(Collection<T> beans) throws CpoException {
+  public <T> long deleteBeans(List<T> beans) throws CpoException {
     return getCurrentResource().deleteBeans(beans);
   }
 
   @Override
-  public <T> long deleteBeans(String groupName, Collection<T> beans) throws CpoException {
+  public <T> long deleteBeans(String groupName, List<T> beans) throws CpoException {
     return getCurrentResource().deleteBeans(groupName, beans);
   }
 
   @Override
   public <T> long deleteBeans(
       String groupName,
-      Collection<T> beans,
+      List<T> beans,
       Collection<CpoWhere> wheres,
       Collection<CpoOrderBy> orderBy,
       Collection<CpoNativeFunction> nativeExpressions)
@@ -286,12 +286,12 @@ public class JdbcCpoXaAdapter extends CpoBaseXaResource<JdbcCpoAdapter> implemen
   }
 
   @Override
-  public <T> long upsertBeans(Collection<T> beans) throws CpoException {
+  public <T> long upsertBeans(List<T> beans) throws CpoException {
     return getCurrentResource().upsertBeans(beans);
   }
 
   @Override
-  public <T> long upsertBeans(String groupName, Collection<T> beans) throws CpoException {
+  public <T> long upsertBeans(String groupName, List<T> beans) throws CpoException {
     return getCurrentResource().upsertBeans(groupName, beans);
   }
 
@@ -424,19 +424,19 @@ public class JdbcCpoXaAdapter extends CpoBaseXaResource<JdbcCpoAdapter> implemen
   }
 
   @Override
-  public <T> long updateBeans(Collection<T> beans) throws CpoException {
+  public <T> long updateBeans(List<T> beans) throws CpoException {
     return getCurrentResource().updateBeans(beans);
   }
 
   @Override
-  public <T> long updateBeans(String groupName, Collection<T> beans) throws CpoException {
+  public <T> long updateBeans(String groupName, List<T> beans) throws CpoException {
     return getCurrentResource().updateBeans(groupName, beans);
   }
 
   @Override
   public <T> long updateBeans(
       String groupName,
-      Collection<T> beans,
+      List<T> beans,
       Collection<CpoWhere> wheres,
       Collection<CpoOrderBy> orderBy,
       Collection<CpoNativeFunction> nativeExpressions)

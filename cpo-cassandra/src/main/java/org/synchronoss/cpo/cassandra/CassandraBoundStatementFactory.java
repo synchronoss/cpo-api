@@ -90,7 +90,8 @@ public class CassandraBoundStatementFactory extends CpoStatementFactory implemen
 
     getLocalLogger().debug("CpoFunction SQL = <" + sql + ">");
     try {
-      setBoundStatement(sess.prepare(sql).bind());
+      boundStatement = sess.prepare(sql).bind();
+      boundStatement.setFetchSize(cassandraCpoAdapter.getFetchSize());
       setBindValues(bindValues);
     } catch (Throwable t) {
       getLocalLogger()
@@ -135,14 +136,5 @@ public class CassandraBoundStatementFactory extends CpoStatementFactory implemen
    */
   public BoundStatement getBoundStatement() {
     return boundStatement;
-  }
-
-  /**
-   * Sets the BoundStatent associated with this factory
-   *
-   * @param boundStatement The BoundStatement
-   */
-  public void setBoundStatement(BoundStatement boundStatement) {
-    this.boundStatement = boundStatement;
   }
 }

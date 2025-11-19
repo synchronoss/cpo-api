@@ -71,8 +71,8 @@ public class ClusterDataSourceInfo extends AbstractDataSourceInfo<ClusterDataSou
    * @param contactPoints The contact points
    */
   public ClusterDataSourceInfo(
-      String clusterName, String keySpace, String[] contactPoints, int fetchSize) {
-    super(buildDataSourceName(clusterName, keySpace, contactPoints), fetchSize);
+      String clusterName, String keySpace, String[] contactPoints, int fetchSize, int batchSize) {
+    super(buildDataSourceName(clusterName, keySpace, contactPoints), fetchSize, batchSize);
     this.keySpace = keySpace;
     this.clusterName = clusterName;
     this.contactPoints = contactPoints;

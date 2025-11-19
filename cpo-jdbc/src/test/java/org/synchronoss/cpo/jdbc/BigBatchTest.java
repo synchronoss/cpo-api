@@ -79,6 +79,10 @@ public class BigBatchTest {
     int numInserts = 100000;
     int id = numInserts;
 
+    int oldBatchSize = cpoAdapter.getBatchSize();
+    assertEquals(oldBatchSize, 100);
+    cpoAdapter.setBatchSize(10000);
+
     for (int i = 0; i < numInserts; i++) {
       al.add(ValueObjectFactory.createValueObject(id++));
     }
@@ -100,6 +104,8 @@ public class BigBatchTest {
           method
               + ":Received a Throwable instead of a CpoException: "
               + ExceptionHelper.getLocalizedMessage(t));
+    } finally {
+      cpoAdapter.setBatchSize(oldBatchSize);
     }
   }
 

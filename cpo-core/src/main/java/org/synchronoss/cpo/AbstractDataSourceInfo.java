@@ -30,13 +30,15 @@ public abstract class AbstractDataSourceInfo<T> implements DataSourceInfo<T> {
   private T dataSource = null;
   private String dataSourceName = null;
   private int fetchSize = 0;
+  private int batchSize = 0;
 
   // Make sure DataSource creation is thread safe.
   private final Object LOCK = new Object();
 
-  public AbstractDataSourceInfo(String dataSourceName, int fetchSize) {
+  public AbstractDataSourceInfo(String dataSourceName, int fetchSize, int batchSize) {
     this.dataSourceName = dataSourceName;
     this.fetchSize = fetchSize;
+    this.batchSize = batchSize;
   }
 
   protected abstract T createDataSource() throws CpoException;
@@ -51,8 +53,9 @@ public abstract class AbstractDataSourceInfo<T> implements DataSourceInfo<T> {
     return fetchSize;
   }
 
-  public void setFetchSize(int fetchSize) {
-    this.fetchSize = fetchSize;
+  @Override
+  public int getBatchSize() {
+    return batchSize;
   }
 
   @Override

@@ -70,9 +70,6 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
   /** CpoMetaDescriptor allows you to get the metadata for a class. */
   private JdbcCpoMetaDescriptor metaDescriptor = null;
 
-  /** Creates a JdbcCpoAdapter. */
-  protected JdbcCpoAdapter() {}
-
   /**
    * Creates a JdbcCpoAdapter.
    *
@@ -82,12 +79,10 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
    */
   protected JdbcCpoAdapter(JdbcCpoMetaDescriptor metaDescriptor, DataSourceInfo<DataSource> jdsiTrx)
       throws CpoException {
-
+    super(jdsiTrx.getDataSourceName(), jdsiTrx.getFetchSize(), jdsiTrx.getBatchSize());
     this.metaDescriptor = metaDescriptor;
     setWriteDataSource(jdsiTrx.getDataSource());
     setReadDataSource(jdsiTrx.getDataSource());
-    setDataSourceName(jdsiTrx.getDataSourceName());
-    setFetchSize(jdsiTrx.getFetchSize());
     processDatabaseMetaData();
   }
 
@@ -106,11 +101,10 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
       DataSourceInfo<DataSource> jdsiWrite,
       DataSourceInfo<DataSource> jdsiRead)
       throws CpoException {
+    super(jdsiWrite.getDataSourceName(), jdsiWrite.getFetchSize(), jdsiWrite.getBatchSize());
     this.metaDescriptor = metaDescriptor;
     setWriteDataSource(jdsiWrite.getDataSource());
     setReadDataSource(jdsiRead.getDataSource());
-    setDataSourceName(jdsiWrite.getDataSourceName());
-    setFetchSize(jdsiWrite.getFetchSize());
     processDatabaseMetaData();
   }
 
@@ -121,12 +115,14 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
    * @throws CpoException An exception occurred copying the datasource.
    */
   protected JdbcCpoAdapter(JdbcCpoAdapter jdbcCpoAdapter) throws CpoException {
+    super(
+        jdbcCpoAdapter.getDataSourceName(),
+        jdbcCpoAdapter.getFetchSize(),
+        jdbcCpoAdapter.getBatchSize());
     this.metaDescriptor = (JdbcCpoMetaDescriptor) jdbcCpoAdapter.getCpoMetaDescriptor();
     batchUpdatesSupported_ = jdbcCpoAdapter.isBatchUpdatesSupported();
     setWriteDataSource(jdbcCpoAdapter.getWriteDataSource());
     setReadDataSource(jdbcCpoAdapter.getReadDataSource());
-    setDataSourceName(jdbcCpoAdapter.getDataSourceName());
-    setFetchSize(jdbcCpoAdapter.getFetchSize());
   }
 
   /**
@@ -928,7 +924,6 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
                 orderBy,
                 nativeExpressions);
         ps = jpsf.getPreparedStatement();
-        ps.setFetchSize(getFetchSize());
 
         localLogger.debug("Retrieving Records");
 
@@ -1185,8 +1180,6 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
               .getFunctions();
       localLogger = LoggerFactory.getLogger(jmc.getMetaClass());
 
-      int numRows = 0;
-
       // Only Batch if there is only one function
       if (cpoFunctions.size() == 1) {
         localLogger.info(
@@ -1203,25 +1196,21 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
                 con, this, jmc, cpoFunction, firstBean, wheres, orderBy, nativeExpressions);
         ps = jpsf.getPreparedStatement();
         ps.addBatch();
+        int batchCount = 1;
         for (T bean : beans.subList(1, beans.size())) {
           //          jpsf.bindParameters(beans[j]);
           jpsf.setBindValues(jpsf.getBindValues(cpoFunction, bean));
           ps.addBatch();
-        }
-        updates = ps.executeBatch();
-        jpsf.release();
-        ps.close();
-        for (int update : updates) {
-          if (update < 0 && update == PreparedStatement.SUCCESS_NO_INFO) {
-            // something updated but we do not know what or how many so default to one.
-            numRows++;
-          } else {
-            numRows += update;
+          if (getBatchSize() > 0 && ++batchCount % getBatchSize() == 0) {
+            updateCount += executeBatch(ps);
           }
         }
+        updateCount += executeBatch(ps);
+        jpsf.release();
+        ps.close();
         localLogger.info(
             "=================== BATCH - "
-                + numRows
+                + updateCount
                 + " Updates - Class=<"
                 + firstBean.getClass()
                 + "> Type=<"
@@ -1244,14 +1233,14 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
                 new JdbcPreparedStatementFactory(
                     con, this, jmc, function, bean, wheres, orderBy, nativeExpressions);
             ps = jpsf.getPreparedStatement();
-            numRows += ps.executeUpdate();
+            updateCount += ps.executeUpdate();
             jpsf.release();
             ps.close();
           }
         }
         localLogger.info(
             "=================== "
-                + numRows
+                + updateCount
                 + " Updates - Class=<"
                 + firstBean.getClass()
                 + "> Type=<"
@@ -1261,9 +1250,6 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
                 + "> =========================");
       }
 
-      if (numRows > 0) {
-        updateCount = numRows;
-      }
     } catch (Throwable t) {
       String msg =
           "ProcessUpdateGroup failed:"
@@ -1283,6 +1269,20 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
       }
     }
 
+    return updateCount;
+  }
+
+  private long executeBatch(PreparedStatement ps) throws SQLException {
+    long updateCount = 0;
+    int[] updates = ps.executeBatch();
+    for (int update : updates) {
+      if (update < 0 && update == PreparedStatement.SUCCESS_NO_INFO) {
+        // something updated but we do not know what or how many so default to one.
+        updateCount++;
+      } else {
+        updateCount += update;
+      }
+    }
     return updateCount;
   }
 

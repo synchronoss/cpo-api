@@ -1720,6 +1720,20 @@ public interface CpoAdapter extends java.io.Serializable {
   void setFetchSize(int fetchSize);
 
   /**
+   * Get the batch size for updating the datasource
+   *
+   * @return The batchsize
+   */
+  int getBatchSize();
+
+  /**
+   * set the batch size for updating the datasource
+   *
+   * @param batchsize The batchsize for updating the datasource
+   */
+  void setBatchSize(int batchsize);
+
+  /**
    * @param expression An expression defining the CpoAttributes that you want
    * @return A list of CpoAttributes
    * @throws CpoException Thrown if there are errors accessing the datasource

@@ -71,11 +71,10 @@ public class CassandraCpoAdapter extends CpoBaseAdapter<ClusterDataSource> {
   protected CassandraCpoAdapter(
       CassandraCpoMetaDescriptor metaDescriptor, DataSourceInfo<ClusterDataSource> jdsiTrx)
       throws CpoException {
-
+    super(jdsiTrx.getDataSourceName(), jdsiTrx.getFetchSize(), jdsiTrx.getBatchSize());
     this.metaDescriptor = metaDescriptor;
     setWriteDataSource(jdsiTrx.getDataSource());
     setReadDataSource(jdsiTrx.getDataSource());
-    setDataSourceName(jdsiTrx.getDataSourceName());
   }
 
   /**
@@ -93,10 +92,10 @@ public class CassandraCpoAdapter extends CpoBaseAdapter<ClusterDataSource> {
       DataSourceInfo<ClusterDataSource> jdsiWrite,
       DataSourceInfo<ClusterDataSource> jdsiRead)
       throws CpoException {
+    super(jdsiWrite.getDataSourceName(), jdsiWrite.getFetchSize(), jdsiWrite.getBatchSize());
     this.metaDescriptor = metaDescriptor;
     setWriteDataSource(jdsiWrite.getDataSource());
     setReadDataSource(jdsiRead.getDataSource());
-    setDataSourceName(jdsiWrite.getDataSourceName());
   }
 
   /**
@@ -871,8 +870,6 @@ public class CassandraCpoAdapter extends CpoBaseAdapter<ClusterDataSource> {
                 orderBy,
                 nativeExpressions);
         BoundStatement boundStatement = boundStatementFactory.getBoundStatement();
-
-        boundStatement.setFetchSize(getFetchSize());
 
         localLogger.debug("Retrieving Records");
 

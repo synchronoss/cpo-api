@@ -70,18 +70,19 @@ public class JdbcCpoConfigProcessor implements CpoConfigProcessor {
         (JdbcCpoMetaDescriptor) CpoMetaDescriptor.getInstance(jdbcConfig.getMetaDescriptorName());
 
     int fetchSize = jdbcConfig.getFetchSize().intValue();
+    int batchSize = jdbcConfig.getBatchSize().intValue();
 
     // build a datasource info
     if (jdbcConfig.isSetReadWriteConfig()) {
       DataSourceInfo dataSourceInfo =
-          buildDataSourceInfo(jdbcConfig.getReadWriteConfig(), fetchSize);
+          buildDataSourceInfo(jdbcConfig.getReadWriteConfig(), fetchSize, batchSize);
       cpoAdapterFactory =
           new JdbcCpoAdapterFactory(JdbcCpoAdapter.getInstance(metaDescriptor, dataSourceInfo));
     } else {
       DataSourceInfo readDataSourceInfo =
-          buildDataSourceInfo(jdbcConfig.getReadConfig(), fetchSize);
+          buildDataSourceInfo(jdbcConfig.getReadConfig(), fetchSize, batchSize);
       DataSourceInfo writeDataSourceInfo =
-          buildDataSourceInfo(jdbcConfig.getWriteConfig(), fetchSize);
+          buildDataSourceInfo(jdbcConfig.getWriteConfig(), fetchSize, batchSize);
       cpoAdapterFactory =
           new JdbcCpoAdapterFactory(
               JdbcCpoAdapter.getInstance(metaDescriptor, writeDataSourceInfo, readDataSourceInfo));
@@ -90,12 +91,13 @@ public class JdbcCpoConfigProcessor implements CpoConfigProcessor {
     return cpoAdapterFactory;
   }
 
-  private DataSourceInfo buildDataSourceInfo(CtJdbcReadWriteConfig readWriteConfig, int fetchSize)
-      throws CpoException {
+  private DataSourceInfo buildDataSourceInfo(
+      CtJdbcReadWriteConfig readWriteConfig, int fetchSize, int batchSize) throws CpoException {
     DataSourceInfo dataSourceInfo = null;
 
     if (readWriteConfig.isSetJndiName()) {
-      dataSourceInfo = new JndiJdbcDataSourceInfo(readWriteConfig.getJndiName(), fetchSize);
+      dataSourceInfo =
+          new JndiJdbcDataSourceInfo(readWriteConfig.getJndiName(), fetchSize, batchSize);
     } else if (readWriteConfig.isSetDataSourceClassName()) {
       SortedMap<String, String> props = new TreeMap<>();
 
@@ -118,7 +120,8 @@ public class JdbcCpoConfigProcessor implements CpoConfigProcessor {
       }
 
       dataSourceInfo =
-          new ClassJdbcDataSourceInfo(readWriteConfig.getDataSourceClassName(), props, fetchSize);
+          new ClassJdbcDataSourceInfo(
+              readWriteConfig.getDataSourceClassName(), props, fetchSize, batchSize);
     } else if (readWriteConfig.isSetDriverClassName()) {
       if (readWriteConfig.isSetUser()) {
         dataSourceInfo =
@@ -127,7 +130,8 @@ public class JdbcCpoConfigProcessor implements CpoConfigProcessor {
                 readWriteConfig.getUrl(),
                 readWriteConfig.getUser(),
                 readWriteConfig.getPassword(),
-                fetchSize);
+                fetchSize,
+                batchSize);
       } else if (readWriteConfig.getPropertyArray().length > 0) {
         Properties props = new Properties();
         for (CtProperty property : readWriteConfig.getPropertyArray()) {
@@ -135,11 +139,18 @@ public class JdbcCpoConfigProcessor implements CpoConfigProcessor {
         }
         dataSourceInfo =
             new DriverJdbcDataSourceInfo(
-                readWriteConfig.getDriverClassName(), readWriteConfig.getUrl(), props, fetchSize);
+                readWriteConfig.getDriverClassName(),
+                readWriteConfig.getUrl(),
+                props,
+                fetchSize,
+                batchSize);
       } else {
         dataSourceInfo =
             new DriverJdbcDataSourceInfo(
-                readWriteConfig.getDriverClassName(), readWriteConfig.getUrl(), fetchSize);
+                readWriteConfig.getDriverClassName(),
+                readWriteConfig.getUrl(),
+                fetchSize,
+                batchSize);
       }
     }
 

@@ -64,8 +64,8 @@ public class ClassJdbcDataSourceInfo extends AbstractJdbcDataSource
    * @param properties - The connection properties for connecting to the database
    */
   public ClassJdbcDataSourceInfo(
-      String className, SortedMap<String, String> properties, int fetchSize) {
-    super(className, properties, fetchSize);
+      String className, SortedMap<String, String> properties, int fetchSize, int batchSize) {
+    super(className, properties, fetchSize, batchSize);
     this.className = className;
     this.properties = properties;
     this.cleanable = cleaner.register(this, new ConnectionCleaner(this));

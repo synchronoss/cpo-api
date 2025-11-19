@@ -44,9 +44,11 @@ public class JndiJdbcDataSourceInfo extends AbstractJdbcDataSourceInfo {
    * application server.
    *
    * @param jndiName The JndiName of the app server datasource
+   * @param fetchSize The fetchSize for the datasource
+   * @param batchSize The batchSize used to update the datasource
    */
-  public JndiJdbcDataSourceInfo(String jndiName, int fetchSize) {
-    super(jndiName, fetchSize);
+  public JndiJdbcDataSourceInfo(String jndiName, int fetchSize, int batchSize) {
+    super(jndiName, fetchSize, batchSize);
     this.jndiName = jndiName;
   }
 
@@ -55,10 +57,12 @@ public class JndiJdbcDataSourceInfo extends AbstractJdbcDataSourceInfo {
    * application server.
    *
    * @param jndiName The JndiName of the app server datasource
+   * @param fetchSize The fetchSize for the datasource
+   * @param batchSize The batchSize used to update the datasource
    * @param ctx - The context for which the Jndi Lookup should use.
    */
-  public JndiJdbcDataSourceInfo(String jndiName, int fetchSize, Context ctx) {
-    super(jndiName, fetchSize);
+  public JndiJdbcDataSourceInfo(String jndiName, int fetchSize, int batchSize, Context ctx) {
+    super(jndiName, fetchSize, batchSize);
     this.jndiName = jndiName;
     jndiCtx = ctx;
   }

@@ -71,7 +71,8 @@ public class CassandraCpoConfigProcessor implements CpoConfigProcessor {
           buildDataSourceInfo(
               cassandraConfig.getName(),
               cassandraConfig.getReadWriteConfig(),
-              cassandraConfig.getFetchSize().intValue());
+              cassandraConfig.getFetchSize().intValue(),
+              cassandraConfig.getBatchSize().intValue());
       cpoAdapterFactory =
           new CassandraCpoAdapterFactory(
               CassandraCpoAdapter.getInstance(metaDescriptor, clusterInfo));
@@ -80,12 +81,14 @@ public class CassandraCpoConfigProcessor implements CpoConfigProcessor {
           buildDataSourceInfo(
               cassandraConfig.getName(),
               cassandraConfig.getReadConfig(),
-              cassandraConfig.getFetchSize().intValue());
+              cassandraConfig.getFetchSize().intValue(),
+              cassandraConfig.getBatchSize().intValue());
       ClusterDataSourceInfo writeClusterInfo =
           buildDataSourceInfo(
               cassandraConfig.getName(),
               cassandraConfig.getWriteConfig(),
-              cassandraConfig.getFetchSize().intValue());
+              cassandraConfig.getFetchSize().intValue(),
+              cassandraConfig.getBatchSize().intValue());
       cpoAdapterFactory =
           new CassandraCpoAdapterFactory(
               CassandraCpoAdapter.getInstance(metaDescriptor, writeClusterInfo, readClusterInfo));
@@ -106,14 +109,18 @@ public class CassandraCpoConfigProcessor implements CpoConfigProcessor {
    * @throws CpoException
    */
   private ClusterDataSourceInfo buildDataSourceInfo(
-      String dataConfigName, CtCassandraReadWriteConfig readWriteConfig, int fetchSize)
+      String dataConfigName,
+      CtCassandraReadWriteConfig readWriteConfig,
+      int fetchSize,
+      int batchSize)
       throws CpoException {
     ClusterDataSourceInfo clusterInfo =
         new ClusterDataSourceInfo(
             dataConfigName,
             readWriteConfig.getKeySpace(),
             readWriteConfig.getContactPointArray(),
-            fetchSize);
+            fetchSize,
+            batchSize);
 
     // add clusterName
     if (readWriteConfig.isSetClusterName())

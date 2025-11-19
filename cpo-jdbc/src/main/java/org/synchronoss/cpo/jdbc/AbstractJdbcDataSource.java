@@ -48,8 +48,8 @@ public abstract class AbstractJdbcDataSource extends AbstractJdbcDataSourceInfo
    * @param dataSourceName - The name of the datasource to instantiate,
    * @param fetchSize The fetchSize for this datasource
    */
-  public AbstractJdbcDataSource(String dataSourceName, int fetchSize) {
-    super(dataSourceName, fetchSize);
+  public AbstractJdbcDataSource(String dataSourceName, int fetchSize, int batchSize) {
+    super(dataSourceName, fetchSize, batchSize);
   }
 
   /**
@@ -60,8 +60,8 @@ public abstract class AbstractJdbcDataSource extends AbstractJdbcDataSourceInfo
    * @param fetchSize The fetchSize for this datasource
    */
   public AbstractJdbcDataSource(
-      String className, SortedMap<String, String> properties, int fetchSize) {
-    super(className, properties, fetchSize);
+      String className, SortedMap<String, String> properties, int fetchSize, int batchSize) {
+    super(className, properties, fetchSize, batchSize);
   }
 
   /**
@@ -71,8 +71,9 @@ public abstract class AbstractJdbcDataSource extends AbstractJdbcDataSourceInfo
    * @param properties The list of properties to be passed to the driver
    * @param fetchSize The fetchSize for this datasource
    */
-  public AbstractJdbcDataSource(String className, Properties properties, int fetchSize) {
-    super(className, properties, fetchSize);
+  public AbstractJdbcDataSource(
+      String className, Properties properties, int fetchSize, int batchSize) {
+    super(className, properties, fetchSize, batchSize);
   }
 
   @Override

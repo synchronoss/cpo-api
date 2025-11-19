@@ -97,10 +97,10 @@ public class JdbcPreparedStatementFactory extends CpoStatementFactory implements
 
     getLocalLogger().debug("CpoFunction SQL = <" + sql + ">");
 
-    PreparedStatement pstmt = null;
-
     try {
-      pstmt = conn.prepareStatement(sql);
+      ps_ = conn.prepareStatement(sql);
+      ps_.setFetchSize(jca.getFetchSize());
+      setBindValues(bindValues);
     } catch (SQLException se) {
       getLocalLogger()
           .error(
@@ -110,9 +110,6 @@ public class JdbcPreparedStatementFactory extends CpoStatementFactory implements
                   + ExceptionHelper.getLocalizedMessage(se));
       throw new CpoException(se);
     }
-    setPreparedStatement(pstmt);
-
-    setBindValues(bindValues);
   }
 
   @Override
@@ -147,14 +144,5 @@ public class JdbcPreparedStatementFactory extends CpoStatementFactory implements
    */
   public PreparedStatement getPreparedStatement() {
     return ps_;
-  }
-
-  /**
-   * Sets the jdbc prepared statement associated with this object
-   *
-   * @param ps The PreparedStatement to set
-   */
-  protected void setPreparedStatement(PreparedStatement ps) {
-    ps_ = ps;
   }
 }

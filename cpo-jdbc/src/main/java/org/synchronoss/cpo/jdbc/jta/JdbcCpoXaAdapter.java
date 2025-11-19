@@ -465,6 +465,16 @@ public class JdbcCpoXaAdapter extends CpoBaseXaResource<JdbcCpoAdapter> implemen
   }
 
   @Override
+  public int getBatchSize() {
+    return getCurrentResource().getBatchSize();
+  }
+
+  @Override
+  public void setBatchSize(int batchSize) {
+    getCurrentResource().setBatchSize(batchSize);
+  }
+
+  @Override
   public List<CpoAttribute> getCpoAttributes(String expression) throws CpoException {
     return getCurrentResource().getCpoAttributes(expression);
   }

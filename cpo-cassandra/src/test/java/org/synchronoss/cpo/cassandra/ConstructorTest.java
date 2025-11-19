@@ -22,8 +22,7 @@ package org.synchronoss.cpo.cassandra;
  * ]]
  */
 
-import static org.testng.Assert.assertNotNull;
-import static org.testng.Assert.fail;
+import static org.testng.Assert.*;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,6 +46,7 @@ public class ConstructorTest {
           CpoAdapterFactoryManager.getCpoAdapter(CassandraStatics.ADAPTER_CONTEXT_DEFAULT);
       assertNotNull(cpoAdapter, method + "cpoAdapter is null");
       assertNotNull("DataSourceName is null", cpoAdapter.getDataSourceName());
+      assertEquals(cpoAdapter.getBatchSize(), 100, "Default batch size should be 100");
 
       logger.debug("=====> DatasourceName: " + cpoAdapter.getDataSourceName());
     } catch (Exception e) {

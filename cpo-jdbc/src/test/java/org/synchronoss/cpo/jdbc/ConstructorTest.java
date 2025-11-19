@@ -67,6 +67,8 @@ public class ConstructorTest {
       assertFalse(
           cpoAdapter.getDataSourceName().contains(PASSWORDSTRING),
           "password is in datasource name");
+      assertEquals(cpoAdapter.getBatchSize(), 100, "Default batch size should be 100");
+      assertEquals(cpoAdapter.getFetchSize(), 100, "Default fetch size should be 100");
 
       ValueObject valObj = ValueObjectFactory.createValueObject();
       try (Stream<ValueObject> beans =
@@ -92,6 +94,8 @@ public class ConstructorTest {
           cpoAdapter.getDataSourceName().contains(PASSWORDSTRING),
           "password is in datasource name:");
 
+      assertEquals(cpoAdapter.getBatchSize(), 100, "Default batch size should be 100");
+      assertEquals(cpoAdapter.getFetchSize(), 100, "Default fetch size should be 100");
       ValueObject valObj = ValueObjectFactory.createValueObject();
       try (Stream<ValueObject> beans =
           cpoAdapter.retrieveBeans(ValueObject.FG_LIST_NULL, valObj); ) {
@@ -116,6 +120,8 @@ public class ConstructorTest {
           cpoAdapter.getDataSourceName().contains(PASSWORDSTRING),
           "password is in datasource name");
 
+      assertEquals(cpoAdapter.getBatchSize(), 100, "Default batch size should be 100");
+      assertEquals(cpoAdapter.getFetchSize(), 100, "Default fetch size should be 100");
       ValueObject valObj = ValueObjectFactory.createValueObject();
       try (Stream<ValueObject> beans =
           cpoAdapter.retrieveBeans(ValueObject.FG_LIST_NULL, valObj); ) {
@@ -139,6 +145,8 @@ public class ConstructorTest {
       // The password is in the url as this is url only so it may hve the password string in it.
       // assertTrue("password is in datasource
       // name"+cpoAdapter.getDataSourceName(),cpoAdapter.getDataSourceName().indexOf(PASSWORDSTRING)==-1);
+      assertEquals(cpoAdapter.getBatchSize(), 100, "Default batch size should be 100");
+      assertEquals(cpoAdapter.getFetchSize(), 100, "Default fetch size should be 100");
 
       ValueObject valObj = ValueObjectFactory.createValueObject();
       try (Stream<ValueObject> beans =
@@ -164,6 +172,8 @@ public class ConstructorTest {
           !cpoAdapter.getDataSourceName().contains(PASSWORDSTRING),
           "password is in datasource name");
 
+      assertEquals(cpoAdapter.getBatchSize(), 100, "Default batch size should be 100");
+      assertEquals(cpoAdapter.getFetchSize(), 100, "Default fetch size should be 100");
       ValueObject valObj = ValueObjectFactory.createValueObject();
       try (Stream<ValueObject> beans =
           cpoAdapter.retrieveBeans(ValueObject.FG_LIST_NULL, valObj); ) {
@@ -188,6 +198,8 @@ public class ConstructorTest {
           !cpoAdapter.getDataSourceName().contains(PASSWORDSTRING),
           "password is in datasource name");
 
+      assertEquals(cpoAdapter.getBatchSize(), 100, "Default batch size should be 100");
+      assertEquals(cpoAdapter.getFetchSize(), 100, "Default fetch size should be 100");
       ValueObject valObj = ValueObjectFactory.createValueObject();
       try (Stream<ValueObject> beans =
           cpoAdapter.retrieveBeans(ValueObject.FG_LIST_NULL, valObj); ) {
@@ -212,6 +224,8 @@ public class ConstructorTest {
           !cpoAdapter.getDataSourceName().contains(PASSWORDSTRING),
           "password is in datasource name");
 
+      assertEquals(cpoAdapter.getBatchSize(), 100, "Default batch size should be 100");
+      assertEquals(cpoAdapter.getFetchSize(), 100, "Default fetch size should be 100");
       ValueObject valObj = ValueObjectFactory.createValueObject();
       try (Stream<ValueObject> beans =
           cpoAdapter.retrieveBeans(ValueObject.FG_LIST_NULL, valObj); ) {
@@ -236,6 +250,8 @@ public class ConstructorTest {
           !cpoAdapter.getDataSourceName().contains(PASSWORDSTRING),
           "password is in datasource name");
 
+      assertEquals(cpoAdapter.getBatchSize(), 100, "Default batch size should be 100");
+      assertEquals(cpoAdapter.getFetchSize(), 100, "Default fetch size should be 100");
       ValueObject valObj = ValueObjectFactory.createValueObject();
       try (Stream<ValueObject> beans =
           cpoAdapter.retrieveBeans(ValueObject.FG_LIST_NULL, valObj); ) {
@@ -260,6 +276,8 @@ public class ConstructorTest {
           !cpoAdapter.getDataSourceName().contains(PASSWORDSTRING),
           "password is in datasource name");
 
+      assertEquals(cpoAdapter.getBatchSize(), 100, "Default batch size should be 100");
+      assertEquals(cpoAdapter.getFetchSize(), 100, "Default fetch size should be 100");
       ValueObject valObj = ValueObjectFactory.createValueObject();
       try (Stream<ValueObject> beans =
           cpoAdapter.retrieveBeans(ValueObject.FG_LIST_NULL, valObj); ) {

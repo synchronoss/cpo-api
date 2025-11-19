@@ -80,6 +80,10 @@ public class BigRetrieveTest {
     String method = "testBigRetrieve:";
     int numInserts = 10000;
 
+    int oldBatchSize = cpoAdapter.getBatchSize();
+    assertEquals(oldBatchSize, 100);
+    cpoAdapter.setBatchSize(1000);
+
     for (int i = 0; i < numInserts; i++) {
       al.add(ValueObjectFactory.createValueObject(i));
     }
@@ -101,9 +105,15 @@ public class BigRetrieveTest {
           method
               + ":Received a Throwable instead of a CpoException: "
               + ExceptionHelper.getLocalizedMessage(t));
+    } finally {
+      cpoAdapter.setBatchSize(oldBatchSize);
     }
 
     Collection<ValueObject> col;
+
+    int oldFetchSize = cpoAdapter.getFetchSize();
+    assertEquals(oldFetchSize, 100);
+    cpoAdapter.setFetchSize(1000);
 
     try {
       ValueObject valObj = ValueObjectFactory.createValueObject();
@@ -114,6 +124,8 @@ public class BigRetrieveTest {
       }
     } catch (Exception e) {
       fail(method + e.getMessage());
+    } finally {
+      cpoAdapter.setFetchSize(oldFetchSize);
     }
   }
 

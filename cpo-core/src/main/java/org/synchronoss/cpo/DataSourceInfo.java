@@ -42,6 +42,11 @@ public interface DataSourceInfo<T> {
   int getFetchSize();
 
   /**
+   * @return Returns the batchSize for this datasource.
+   */
+  int getBatchSize();
+
+  /**
    * @return Returns the DataSource
    * @throws CpoException Cannot find the datasource
    */

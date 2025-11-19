@@ -42,9 +42,6 @@ public class JdbcCpoTrxAdapter extends JdbcCpoAdapter implements CpoTrxAdapter {
   // Default Connection. Only used JdbcCpoTrxAdapter
   private Connection writeConnection_ = null;
 
-  @SuppressWarnings("unused")
-  private JdbcCpoTrxAdapter() {}
-
   /**
    * Creates a JdbcCpoTrxAdapter from a jdbcCpoAdapter
    *

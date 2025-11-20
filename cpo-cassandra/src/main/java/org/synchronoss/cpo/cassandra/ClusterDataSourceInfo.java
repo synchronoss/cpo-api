@@ -24,11 +24,12 @@ package org.synchronoss.cpo.cassandra;
 
 import com.datastax.driver.core.*;
 import com.datastax.driver.core.policies.*;
-import java.util.Collection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.AbstractDataSourceInfo;
 import org.synchronoss.cpo.CpoException;
+
+import java.util.Collection;
 
 /**
  * Contains the information needed to connect to a Cassandra cluster

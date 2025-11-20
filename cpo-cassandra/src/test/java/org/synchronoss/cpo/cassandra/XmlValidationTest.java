@@ -22,10 +22,6 @@ package org.synchronoss.cpo.cassandra;
  * ]]
  */
 
-import static org.testng.Assert.fail;
-
-import java.io.IOException;
-import java.io.InputStream;
 import org.apache.xmlbeans.XmlException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,6 +29,11 @@ import org.synchronoss.cpo.core.cpoCoreConfig.CpoConfigDocument;
 import org.synchronoss.cpo.helper.CpoClassLoader;
 import org.synchronoss.cpo.helper.XmlBeansHelper;
 import org.testng.annotations.Test;
+
+import java.io.IOException;
+import java.io.InputStream;
+
+import static org.testng.Assert.fail;
 
 /**
  * @author dberry

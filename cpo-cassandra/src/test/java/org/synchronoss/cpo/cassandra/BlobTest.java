@@ -22,9 +22,6 @@ package org.synchronoss.cpo.cassandra;
  * ]]
  */
 
-import static org.testng.Assert.*;
-
-import java.nio.ByteBuffer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.CpoAdapter;
@@ -33,6 +30,10 @@ import org.synchronoss.cpo.cassandra.meta.CassandraCpoMetaDescriptor;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
+
+import java.nio.ByteBuffer;
+
+import static org.testng.Assert.*;
 
 /**
  * BlobTest is a test class for testing the JdbcAdapter class Constructors

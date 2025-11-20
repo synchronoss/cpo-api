@@ -23,6 +23,7 @@ package org.synchronoss.cpo.cassandra.config;
  */
 
 import com.datastax.driver.core.Host;
+
 import java.util.Collection;
 
 /**

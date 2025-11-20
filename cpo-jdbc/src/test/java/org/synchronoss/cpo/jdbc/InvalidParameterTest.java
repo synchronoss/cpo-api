@@ -22,7 +22,8 @@ package org.synchronoss.cpo.jdbc;
  * ]]
  */
 
-import static org.testng.Assert.*;
+import static org.testng.Assert.assertNotNull;
+import static org.testng.Assert.fail;
 
 import java.util.Collection;
 import java.util.stream.Stream;

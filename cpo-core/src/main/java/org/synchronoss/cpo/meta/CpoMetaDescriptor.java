@@ -41,7 +41,11 @@ import org.synchronoss.cpo.exporter.MetaXmlObjectExporter;
 import org.synchronoss.cpo.helper.CpoClassLoader;
 import org.synchronoss.cpo.helper.ExceptionHelper;
 import org.synchronoss.cpo.helper.XmlBeansHelper;
-import org.synchronoss.cpo.meta.domain.*;
+import org.synchronoss.cpo.meta.domain.CpoArgument;
+import org.synchronoss.cpo.meta.domain.CpoAttribute;
+import org.synchronoss.cpo.meta.domain.CpoClass;
+import org.synchronoss.cpo.meta.domain.CpoFunction;
+import org.synchronoss.cpo.meta.domain.CpoFunctionGroup;
 import org.synchronoss.cpo.parser.ExpressionParser;
 
 /**

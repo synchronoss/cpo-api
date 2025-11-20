@@ -30,7 +30,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.CpoData;
 import org.synchronoss.cpo.CpoException;
-import org.synchronoss.cpo.CpoReleasible;
+import org.synchronoss.cpo.CpoReleasable;
 import org.synchronoss.cpo.helper.ExceptionHelper;
 import org.synchronoss.cpo.meta.domain.CpoArgument;
 import org.synchronoss.cpo.meta.domain.CpoClass;
@@ -42,7 +42,7 @@ import org.synchronoss.cpo.meta.domain.CpoFunction;
  *
  * @author david berry
  */
-public class JdbcCallableStatementFactory implements CpoReleasible {
+public class JdbcCallableStatementFactory implements CpoReleasable {
 
   private static final Logger logger = LoggerFactory.getLogger(JdbcCallableStatementFactory.class);
   private CallableStatement cs_ = null;
@@ -50,7 +50,7 @@ public class JdbcCallableStatementFactory implements CpoReleasible {
   @SuppressWarnings("unused")
   private JdbcCallableStatementFactory() {}
 
-  private List<CpoReleasible> releasibles = new ArrayList<>();
+  private List<CpoReleasable> releasables = new ArrayList<>();
   private List<CpoArgument> outArguments = new ArrayList<>();
 
   /**
@@ -156,27 +156,27 @@ public class JdbcCallableStatementFactory implements CpoReleasible {
   }
 
   /**
-   * Adds a releasible object to this object. The release method on the releasible will be called
+   * Adds a releasable object to this object. The release method on the releasable will be called
    * when the callableStatement is executed.
    *
-   * @param releasible - A CpoReleasible object. An Object whose lifetime is associated with the
+   * @param releasable - A CpoReleasable object. An Object whose lifetime is associated with the
    *     lifetime of the Callable statement
    */
-  public void AddReleasible(CpoReleasible releasible) {
-    if (releasible != null) {
-      releasibles.add(releasible);
+  public void AddReleasable(CpoReleasable releasable) {
+    if (releasable != null) {
+      releasables.add(releasable);
     }
   }
 
   /**
-   * Called by the CPO framework. This method calls the {@code release} on all the CpoReleasible
+   * Called by the CPO framework. This method calls the {@code release} on all the CpoReleasable
    * associated with this object
    */
   @Override
   public void release() throws CpoException {
-    for (CpoReleasible releasible : releasibles) {
+    for (CpoReleasable releasable : releasables) {
       try {
-        releasible.release();
+        releasable.release();
       } catch (CpoException ce) {
         logger.error("Error Releasing Callable Statement Transform Object", ce);
         throw ce;

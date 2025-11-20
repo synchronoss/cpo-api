@@ -22,11 +22,12 @@ package org.synchronoss.cpo.cassandra.meta;
  * ]]
  */
 
-import java.io.Serial;
-import java.lang.reflect.Method;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.meta.MethodMapEntry;
+
+import java.io.Serial;
+import java.lang.reflect.Method;
 
 /**
  * MethodMapEntry is a class defines the getters and setters for JDBC specific data classes

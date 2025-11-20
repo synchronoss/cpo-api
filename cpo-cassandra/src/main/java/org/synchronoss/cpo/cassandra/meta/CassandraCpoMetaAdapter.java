@@ -26,11 +26,6 @@ import com.datastax.driver.core.DataType;
 import com.datastax.driver.core.LocalDate;
 import com.datastax.driver.core.TupleValue;
 import com.datastax.driver.core.UDTValue;
-import java.math.BigDecimal;
-import java.math.BigInteger;
-import java.net.InetAddress;
-import java.nio.ByteBuffer;
-import java.util.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.CpoException;
@@ -42,6 +37,12 @@ import org.synchronoss.cpo.meta.DataTypeMapper;
 import org.synchronoss.cpo.meta.domain.CpoAttribute;
 import org.synchronoss.cpo.parser.BoundExpressionParser;
 import org.synchronoss.cpo.parser.ExpressionParser;
+
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.net.InetAddress;
+import java.nio.ByteBuffer;
+import java.util.*;
 
 /**
  * Created with IntelliJ IDEA. User: dberry Date: 9/10/13 Time: 08:14 AM To change this template use

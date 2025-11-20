@@ -24,7 +24,11 @@ package org.synchronoss.cpo.exporter;
 
 import org.synchronoss.cpo.MetaVisitor;
 import org.synchronoss.cpo.meta.CpoMetaDescriptor;
-import org.synchronoss.cpo.meta.domain.*;
+import org.synchronoss.cpo.meta.domain.CpoArgument;
+import org.synchronoss.cpo.meta.domain.CpoAttribute;
+import org.synchronoss.cpo.meta.domain.CpoClass;
+import org.synchronoss.cpo.meta.domain.CpoFunction;
+import org.synchronoss.cpo.meta.domain.CpoFunctionGroup;
 
 /**
  * The CpoInterfaceSourceGenerator generates java source code to define the cpo interfaces.

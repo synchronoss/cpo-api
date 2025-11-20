@@ -24,6 +24,11 @@ package org.synchronoss.cpo.cassandra.meta;
 
 import com.datastax.driver.core.BoundStatement;
 import com.datastax.driver.core.Row;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.synchronoss.cpo.CpoException;
+import org.synchronoss.cpo.meta.MethodMapper;
+
 import java.io.Serial;
 import java.io.Serializable;
 import java.lang.reflect.Method;
@@ -35,10 +40,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.synchronoss.cpo.CpoException;
-import org.synchronoss.cpo.meta.MethodMapper;
 
 /**
  * MethodMapper is a class defines the getters and setters for all the JDBC specific data classes

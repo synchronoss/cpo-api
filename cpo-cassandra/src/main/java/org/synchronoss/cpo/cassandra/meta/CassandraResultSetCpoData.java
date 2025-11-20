@@ -22,12 +22,11 @@ package org.synchronoss.cpo.cassandra.meta;
  * ]]
  */
 
+import java.lang.reflect.InvocationTargetException;
 import org.synchronoss.cpo.meta.MethodMapEntry;
 import org.synchronoss.cpo.meta.MethodMapper;
 import org.synchronoss.cpo.meta.ResultSetCpoData;
 import org.synchronoss.cpo.meta.domain.CpoAttribute;
-
-import java.lang.reflect.InvocationTargetException;
 
 /** Manages data transfer between the cpo objects and the result set */
 public class CassandraResultSetCpoData extends ResultSetCpoData {

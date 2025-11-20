@@ -32,6 +32,7 @@ import com.datastax.driver.core.Session;
  */
 public class ClusterDataSource {
   private Cluster cluster = null;
+
   private String keySpace = null;
   private Session session = null;
 
@@ -54,5 +55,13 @@ public class ClusterDataSource {
 
   Session getSession() {
     return session;
+  }
+
+  public Cluster getCluster() {
+    return cluster;
+  }
+
+  public String getKeySpace() {
+    return keySpace;
   }
 }

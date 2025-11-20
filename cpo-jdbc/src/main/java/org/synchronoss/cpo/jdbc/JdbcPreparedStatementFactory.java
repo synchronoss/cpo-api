@@ -25,7 +25,6 @@ package org.synchronoss.cpo.jdbc;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import org.slf4j.Logger;
@@ -53,8 +52,6 @@ public class JdbcPreparedStatementFactory extends CpoStatementFactory implements
   private static final Logger logger = LoggerFactory.getLogger(JdbcPreparedStatementFactory.class);
 
   private PreparedStatement ps_ = null;
-
-  private List<CpoReleasable> releasables = new ArrayList<>();
 
   /**
    * Used to build the PreparedStatement that is used by CPO to create the actual JDBC

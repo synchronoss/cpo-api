@@ -24,6 +24,7 @@ package org.synchronoss.cpo.cassandra.config;
 
 import com.datastax.driver.core.*;
 import com.datastax.driver.core.policies.*;
+import java.util.Collection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.CpoAdapterFactory;
@@ -36,8 +37,6 @@ import org.synchronoss.cpo.cassandra.meta.CassandraCpoMetaDescriptor;
 import org.synchronoss.cpo.config.CpoConfigProcessor;
 import org.synchronoss.cpo.core.cpoCoreConfig.CtDataSourceConfig;
 import org.synchronoss.cpo.meta.CpoMetaDescriptor;
-
-import java.util.Collection;
 
 /**
  * CassandraCpoConfigProcessor processes the datasource configuration file for cassandra. It pulls

@@ -23,11 +23,9 @@ package org.synchronoss.cpo.jdbc;
  */
 
 import java.io.Serial;
-import java.lang.reflect.Method;
 import org.synchronoss.cpo.CpoException;
 import org.synchronoss.cpo.meta.CpoMetaDescriptor;
 import org.synchronoss.cpo.meta.domain.CpoAttribute;
-import org.synchronoss.cpo.transform.jdbc.JdbcCpoTransform;
 
 /**
  * JdbcCpoAttribute. A class that includes the Jdbc specifc attributes that are additional to the
@@ -42,10 +40,6 @@ public class JdbcCpoAttribute extends CpoAttribute implements java.io.Serializab
 
   private String dbTable_ = null;
   private String dbColumn_ = null;
-  // Transform attributes
-  private JdbcCpoTransform jdbcTransform = null;
-  private Method transformPSOutMethod = null;
-  private Method transformCSOutMethod = null;
 
   /** Constructs a JdbcCpoAttribute */
   public JdbcCpoAttribute() {}
@@ -99,22 +93,6 @@ public class JdbcCpoAttribute extends CpoAttribute implements java.io.Serializab
   @Override
   protected void initTransformClass(CpoMetaDescriptor metaDescriptor) throws CpoException {
     super.initTransformClass(metaDescriptor);
-    if (getCpoTransform() != null && getCpoTransform() instanceof JdbcCpoTransform) {
-      jdbcTransform = (JdbcCpoTransform) getCpoTransform();
-
-      for (Method m : findMethods(jdbcTransform.getClass(), TRANSFORM_OUT_NAME, 2, true)) {
-        if (m.getParameterTypes()[0]
-            .getName()
-            .equals("org.synchronoss.cpo.jdbc.JdbcPreparedStatementFactory")) {
-          transformPSOutMethod = m;
-        } else if (m.getParameterTypes()[0]
-            .getName()
-            .equals("org.synchronoss.cpo.jdbc.JdbcCallableStatementFactory")) {
-          transformCSOutMethod = m;
-        }
-      }
-    }
-
     // TODO Revisit this. Initializing the java sql type here. Not sure that this is the right
     // place.
     setDataTypeInt(metaDescriptor.getDataTypeInt(getDataType()));

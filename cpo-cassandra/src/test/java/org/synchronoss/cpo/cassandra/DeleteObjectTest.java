@@ -22,6 +22,12 @@ package org.synchronoss.cpo.cassandra;
  * ]]
  */
 
+import static org.testng.Assert.assertNotNull;
+import static org.testng.Assert.fail;
+
+import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.Date;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.CpoAdapter;
@@ -31,13 +37,6 @@ import org.synchronoss.cpo.helper.ExceptionHelper;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
-
-import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.Date;
-
-import static org.testng.Assert.assertNotNull;
-import static org.testng.Assert.fail;
 
 /**
  * DeleteObjectTest is a test class for testing the JdbcAdapter deleteObject method

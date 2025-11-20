@@ -23,6 +23,10 @@ package org.synchronoss.cpo.cassandra;
  */
 
 import com.datastax.driver.core.*;
+import java.util.*;
+import java.util.function.Consumer;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.*;
@@ -37,11 +41,6 @@ import org.synchronoss.cpo.meta.DataTypeMapEntry;
 import org.synchronoss.cpo.meta.domain.CpoAttribute;
 import org.synchronoss.cpo.meta.domain.CpoClass;
 import org.synchronoss.cpo.meta.domain.CpoFunction;
-
-import java.util.*;
-import java.util.function.Consumer;
-import java.util.stream.Stream;
-import java.util.stream.StreamSupport;
 
 /**
  * CassandraCpoAdapter is an interface for a set of routines that are responsible for managing value
@@ -223,9 +222,7 @@ public class CassandraCpoAdapter extends CpoBaseAdapter<ClusterDataSource> {
           }
         }
 
-        for (Row row : rs) {
-          qCount++;
-        }
+        qCount += rs.all().size();
 
         count += qCount;
       }
@@ -258,7 +255,7 @@ public class CassandraCpoAdapter extends CpoBaseAdapter<ClusterDataSource> {
     Session session;
 
     try {
-      if (!(invalidReadSession)) {
+      if (!invalidReadSession) {
         session = getReadDataSource().getSession();
       } else {
         session = getWriteDataSource().getSession();
@@ -521,7 +518,6 @@ public class CassandraCpoAdapter extends CpoBaseAdapter<ClusterDataSource> {
       throws CpoException {
     CpoClass cpoClass;
     List<CpoFunction> cpoFunctions;
-    CpoFunction cpoFunction;
     CassandraBoundStatementFactory boundStatementFactory = null;
     Logger localLogger = logger;
 
@@ -827,7 +823,6 @@ public class CassandraCpoAdapter extends CpoBaseAdapter<ClusterDataSource> {
 
     ColumnDefinitions columnDefs;
     int columnCount;
-    T bean;
     CpoAttribute[] attributes;
 
     if (criteria == null || result == null) {
@@ -859,83 +854,75 @@ public class CassandraCpoAdapter extends CpoBaseAdapter<ClusterDataSource> {
         cpoFunctions = criteriaClass.getFunctionGroup(Crud.LIST, groupName).getFunctions();
       }
 
-      for (CpoFunction cpoFunction : cpoFunctions) {
-        boundStatementFactory =
-            new CassandraBoundStatementFactory(
-                sess,
-                this,
-                criteriaClass,
-                cpoFunction,
-                criteria,
-                wheres,
-                orderBy,
-                nativeExpressions);
-        BoundStatement boundStatement = boundStatementFactory.getBoundStatement();
+      CpoFunction cpoFunction = cpoFunctions.getFirst();
+      boundStatementFactory =
+          new CassandraBoundStatementFactory(
+              sess, this, criteriaClass, cpoFunction, criteria, wheres, orderBy, nativeExpressions);
+      BoundStatement boundStatement = boundStatementFactory.getBoundStatement();
 
-        localLogger.debug("Retrieving Records");
+      localLogger.debug("Retrieving Records");
 
-        ResultSet rs = sess.execute(boundStatement);
-        boundStatementFactory.release();
+      ResultSet rs = sess.execute(boundStatement);
+      boundStatementFactory.release();
 
-        localLogger.debug("Processing Records");
+      localLogger.debug("Processing Records");
 
-        columnDefs = rs.getColumnDefinitions();
+      columnDefs = rs.getColumnDefinitions();
 
-        columnCount = columnDefs.size();
+      columnCount = columnDefs.size();
 
-        attributes = new CpoAttribute[columnCount];
+      attributes = new CpoAttribute[columnCount];
 
-        for (int k = 0; k < columnCount; k++) {
-          attributes[k] = resultClass.getAttributeData(columnDefs.getName(k));
-        }
-
-        CassandraBoundStatementFactory finalBoundStatementFactory = boundStatementFactory;
-        return StreamSupport.stream(
-                new Spliterators.AbstractSpliterator<T>(Long.MAX_VALUE, Spliterator.ORDERED) {
-                  @Override
-                  public boolean tryAdvance(Consumer<? super T> action) {
-                    try {
-                      if (rs.isExhausted()) return false;
-                      Row row = rs.one();
-                      T bean = null;
-                      try {
-                        bean = (T) result.getClass().newInstance();
-                      } catch (IllegalAccessException iae) {
-                        localLogger.error(
-                            "=================== Could not access default constructor for Class=<"
-                                + result.getClass()
-                                + "> ==================");
-                        throw new CpoException(
-                            "Unable to access the constructor of the Return bean", iae);
-                      } catch (InstantiationException iae) {
-                        throw new CpoException("Unable to instantiate Return bean", iae);
-                      }
-
-                      for (int k = 0; k < columnCount; k++) {
-                        if (attributes[k] != null) {
-                          attributes[k].invokeSetter(
-                              bean,
-                              new CassandraResultSetCpoData(
-                                  CassandraMethodMapper.getMethodMapper(), row, attributes[k], k));
-                        }
-                      }
-                      action.accept(bean);
-                      return true;
-                    } catch (CpoException ex) {
-                      throw new RuntimeException(ex);
-                    }
-                  }
-                },
-                false)
-            .onClose(
-                () -> {
-                  try {
-                    finalBoundStatementFactory.release();
-                  } catch (CpoException e) {
-                    throw new RuntimeException(e);
-                  }
-                });
+      for (int k = 0; k < columnCount; k++) {
+        attributes[k] = resultClass.getAttributeData(columnDefs.getName(k));
       }
+
+      CassandraBoundStatementFactory finalBoundStatementFactory = boundStatementFactory;
+      return StreamSupport.stream(
+              new Spliterators.AbstractSpliterator<T>(Long.MAX_VALUE, Spliterator.ORDERED) {
+                @Override
+                public boolean tryAdvance(Consumer<? super T> action) {
+                  try {
+                    if (rs.isExhausted()) return false;
+                    Row row = rs.one();
+                    T bean = null;
+                    try {
+                      bean = (T) result.getClass().newInstance();
+                    } catch (IllegalAccessException iae) {
+                      localLogger.error(
+                          "=================== Could not access default constructor for Class=<"
+                              + result.getClass()
+                              + "> ==================");
+                      throw new CpoException(
+                          "Unable to access the constructor of the Return bean", iae);
+                    } catch (InstantiationException iae) {
+                      throw new CpoException("Unable to instantiate Return bean", iae);
+                    }
+
+                    for (int k = 0; k < columnCount; k++) {
+                      if (attributes[k] != null) {
+                        attributes[k].invokeSetter(
+                            bean,
+                            new CassandraResultSetCpoData(
+                                CassandraMethodMapper.getMethodMapper(), row, attributes[k], k));
+                      }
+                    }
+                    action.accept(bean);
+                    return true;
+                  } catch (CpoException ex) {
+                    throw new RuntimeException(ex);
+                  }
+                }
+              },
+              false)
+          .onClose(
+              () -> {
+                try {
+                  finalBoundStatementFactory.release();
+                } catch (CpoException e) {
+                  throw new RuntimeException(e);
+                }
+              });
     } catch (Throwable t) {
       if (boundStatementFactory != null) boundStatementFactory.release();
       String msg =
@@ -944,7 +931,6 @@ public class CassandraCpoAdapter extends CpoBaseAdapter<ClusterDataSource> {
       localLogger.error(msg, t);
       throw new CpoException(msg, t);
     }
-    return Stream.empty();
   }
 
   /**

@@ -22,6 +22,11 @@ package org.synchronoss.cpo.cassandra;
  * ]]
  */
 
+import static org.testng.Assert.*;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.stream.Stream;
 import org.synchronoss.cpo.CpoAdapter;
 import org.synchronoss.cpo.CpoAdapterFactoryManager;
 import org.synchronoss.cpo.CpoNativeFunction;
@@ -29,12 +34,6 @@ import org.synchronoss.cpo.CpoWhere;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.stream.Stream;
-
-import static org.testng.Assert.*;
 
 /**
  * BlobTest is a test class for testing the JdbcAdapter class Constructors

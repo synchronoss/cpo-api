@@ -24,7 +24,6 @@ package org.synchronoss.cpo.cassandra;
 
 import com.datastax.driver.core.BoundStatement;
 import com.datastax.driver.core.Session;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import org.slf4j.Logger;
@@ -43,7 +42,7 @@ import org.synchronoss.cpo.meta.domain.CpoFunction;
  *
  * @author david berry
  */
-public class CassandraBoundStatementFactory extends CpoStatementFactory implements CpoReleasible {
+public class CassandraBoundStatementFactory extends CpoStatementFactory implements CpoReleasable {
 
   /** Version Id for this class. */
   private static final long serialVersionUID = 1L;
@@ -51,7 +50,6 @@ public class CassandraBoundStatementFactory extends CpoStatementFactory implemen
   private static final Logger logger =
       LoggerFactory.getLogger(CassandraBoundStatementFactory.class);
   private BoundStatement boundStatement;
-  private List<CpoReleasible> releasibles = new ArrayList<>();
 
   /**
    * Used to build the PreparedStatement that is used by CPO to create the actual JDBC

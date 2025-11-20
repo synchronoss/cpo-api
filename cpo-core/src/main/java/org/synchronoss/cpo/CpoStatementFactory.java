@@ -42,7 +42,7 @@ import org.synchronoss.cpo.meta.domain.CpoFunction;
  *
  * @author david berry
  */
-public abstract class CpoStatementFactory implements CpoReleasible {
+public abstract class CpoStatementFactory implements CpoReleasable {
 
   /** Version Id for this class. */
   private static final long serialVersionUID = 1L;
@@ -52,7 +52,7 @@ public abstract class CpoStatementFactory implements CpoReleasible {
 
   private Logger localLogger = null;
 
-  private List<CpoReleasible> releasibles = new ArrayList<>();
+  private List<CpoReleasable> releasables = new ArrayList<>();
   private static final String WHERE_MARKER = "__CPO_WHERE__";
   private static final String ORDERBY_MARKER = "__CPO_ORDERBY__";
 
@@ -239,24 +239,24 @@ public abstract class CpoStatementFactory implements CpoReleasible {
   }
 
   /**
-   * Adds a releasible object to this object. The release method on the releasible will be called
+   * Adds a releasable object to this object. The release method on the releasable will be called
    * when the PreparedStatement is executed.
    */
-  public void AddReleasible(CpoReleasible releasible) {
-    if (releasible != null) {
-      releasibles.add(releasible);
+  public void AddReleasable(CpoReleasable releasable) {
+    if (releasable != null) {
+      releasables.add(releasable);
     }
   }
 
   /**
    * Called by the CPO framework. This method calls the <code>release</code> on all the
-   * CpoReleasible associated with this object
+   * CpoReleasable associated with this object
    */
   @Override
   public void release() throws CpoException {
-    for (CpoReleasible releasible : releasibles) {
+    for (CpoReleasable releasable : releasables) {
       try {
-        releasible.release();
+        releasable.release();
       } catch (CpoException ce) {
         localLogger.error("Error Releasing Prepared Statement Transform Object", ce);
         throw ce;

@@ -22,7 +22,11 @@ package org.synchronoss.cpo;
  * ]]
  */
 
-import org.synchronoss.cpo.meta.domain.*;
+import org.synchronoss.cpo.meta.domain.CpoArgument;
+import org.synchronoss.cpo.meta.domain.CpoAttribute;
+import org.synchronoss.cpo.meta.domain.CpoClass;
+import org.synchronoss.cpo.meta.domain.CpoFunction;
+import org.synchronoss.cpo.meta.domain.CpoFunctionGroup;
 
 /**
  * This defines a depth first meta visitor.

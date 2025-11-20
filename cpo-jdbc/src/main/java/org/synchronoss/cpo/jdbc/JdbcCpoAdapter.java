@@ -912,92 +912,84 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
         cpoFunctions = criteriaClass.getFunctionGroup(Crud.LIST, groupName).getFunctions();
       }
 
-      for (CpoFunction cpoFunction : cpoFunctions) {
-        jpsf =
-            new JdbcPreparedStatementFactory(
-                con,
-                this,
-                criteriaClass,
-                cpoFunction,
-                criteria,
-                wheres,
-                orderBy,
-                nativeExpressions);
-        ps = jpsf.getPreparedStatement();
+      CpoFunction cpoFunction = cpoFunctions.getFirst();
+      jpsf =
+          new JdbcPreparedStatementFactory(
+              con, this, criteriaClass, cpoFunction, criteria, wheres, orderBy, nativeExpressions);
+      ps = jpsf.getPreparedStatement();
 
-        localLogger.debug("Retrieving Records");
+      localLogger.debug("Retrieving Records");
 
-        rs = ps.executeQuery();
-        jpsf.release();
+      rs = ps.executeQuery();
+      jpsf.release();
 
-        localLogger.debug("Processing Records");
+      localLogger.debug("Processing Records");
 
-        rsmd = rs.getMetaData();
+      rsmd = rs.getMetaData();
 
-        columnCount = rsmd.getColumnCount();
+      columnCount = rsmd.getColumnCount();
 
-        attributes = new JdbcCpoAttribute[columnCount + 1];
+      attributes = new JdbcCpoAttribute[columnCount + 1];
 
-        for (int k = 1; k <= columnCount; k++) {
-          attributes[k] = (JdbcCpoAttribute) resultClass.getAttributeData(rsmd.getColumnLabel(k));
-        }
-
-        ResultSet finalRs = rs;
-        PreparedStatement finalPs = ps;
-        return StreamSupport.stream(
-                new Spliterators.AbstractSpliterator<T>(Long.MAX_VALUE, Spliterator.ORDERED) {
-                  @Override
-                  public boolean tryAdvance(Consumer<? super T> action) {
-                    try {
-                      if (!finalRs.next()) return false;
-                      T bean = null;
-                      try {
-                        bean = (T) result.getClass().newInstance();
-                      } catch (IllegalAccessException iae) {
-                        localLogger.error(
-                            "=================== Could not access default constructor for Class=<"
-                                + result.getClass()
-                                + "> ==================");
-                        throw new CpoException(
-                            "Unable to access the constructor of the Return Bean", iae);
-                      } catch (InstantiationException iae) {
-                        throw new CpoException("Unable to instantiate Return Bean", iae);
-                      }
-
-                      for (int k = 1; k <= columnCount; k++) {
-                        if (attributes[k] != null) {
-                          attributes[k].invokeSetter(
-                              bean,
-                              new JdbcResultSetCpoData(
-                                  JdbcMethodMapper.getMethodMapper(), finalRs, attributes[k], k));
-                        }
-                      }
-                      action.accept(bean);
-                      return true;
-                    } catch (Exception ex) {
-                      throw new RuntimeException(ex);
-                    }
-                  }
-                },
-                false)
-            .onClose(
-                () -> {
-                  try {
-                    // The select may have a for update clause on it
-                    // Since the connection is cached we need to get rid of this
-                    resultSetClose(finalRs);
-                    statementClose(finalPs);
-                    commitLocalConnection(con);
-                    closeLocalConnection(con);
-                  } catch (Exception e) {
-                    resultSetClose(finalRs);
-                    statementClose(finalPs);
-                    rollbackLocalConnection(con);
-                    closeLocalConnection(con);
-                    throw new RuntimeException(e);
-                  }
-                });
+      for (int k = 1; k <= columnCount; k++) {
+        attributes[k] = (JdbcCpoAttribute) resultClass.getAttributeData(rsmd.getColumnLabel(k));
       }
+
+      ResultSet finalRs = rs;
+      PreparedStatement finalPs = ps;
+      return StreamSupport.stream(
+              new Spliterators.AbstractSpliterator<T>(Long.MAX_VALUE, Spliterator.ORDERED) {
+                @Override
+                public boolean tryAdvance(Consumer<? super T> action) {
+                  try {
+                    if (!finalRs.next()) return false;
+                    T bean = null;
+                    try {
+                      bean = (T) result.getClass().newInstance();
+                    } catch (IllegalAccessException iae) {
+                      localLogger.error(
+                          "=================== Could not access default constructor for Class=<"
+                              + result.getClass()
+                              + "> ==================");
+                      throw new CpoException(
+                          "Unable to access the constructor of the Return Bean", iae);
+                    } catch (InstantiationException iae) {
+                      throw new CpoException("Unable to instantiate Return Bean", iae);
+                    }
+
+                    for (int k = 1; k <= columnCount; k++) {
+                      if (attributes[k] != null) {
+                        attributes[k].invokeSetter(
+                            bean,
+                            new JdbcResultSetCpoData(
+                                JdbcMethodMapper.getMethodMapper(), finalRs, attributes[k], k));
+                      }
+                    }
+                    action.accept(bean);
+                    return true;
+                  } catch (Exception ex) {
+                    throw new RuntimeException(ex);
+                  }
+                }
+              },
+              false)
+          .onClose(
+              () -> {
+                try {
+                  // The select may have a for update clause on it
+                  // Since the connection is cached we need to get rid of this
+                  resultSetClose(finalRs);
+                  statementClose(finalPs);
+                  commitLocalConnection(con);
+                  closeLocalConnection(con);
+                } catch (Exception e) {
+                  resultSetClose(finalRs);
+                  statementClose(finalPs);
+                  rollbackLocalConnection(con);
+                  closeLocalConnection(con);
+                  throw new RuntimeException(e);
+                }
+              });
     } catch (Throwable t) {
       resultSetClose(rs);
       statementClose(ps);
@@ -1009,7 +1001,6 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
       localLogger.error(msg, t);
       throw new CpoException(msg, t);
     }
-    return Stream.empty();
   }
 
   @Override
@@ -1167,7 +1158,6 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
     CpoFunction cpoFunction;
     JdbcPreparedStatementFactory jpsf = null;
     long updateCount = 0;
-    int[] updates;
     Logger localLogger = logger;
 
     if (beans.isEmpty()) return updateCount;
@@ -1406,6 +1396,7 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
             attribute.setDbTable(rsmd.getTableName(i));
           } catch (Exception e) {
             // do nothing if this call is not supported
+            logger.info("Could not get table name", e);
           }
 
           DataTypeMapEntry<?> dataTypeMapEntry =

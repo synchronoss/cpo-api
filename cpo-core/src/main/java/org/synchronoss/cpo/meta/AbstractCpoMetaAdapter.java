@@ -26,9 +26,20 @@ import java.util.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.CpoException;
-import org.synchronoss.cpo.core.cpoCoreMeta.*;
+import org.synchronoss.cpo.core.cpoCoreMeta.CpoMetaDataDocument;
+import org.synchronoss.cpo.core.cpoCoreMeta.CtArgument;
+import org.synchronoss.cpo.core.cpoCoreMeta.CtAttribute;
+import org.synchronoss.cpo.core.cpoCoreMeta.CtClass;
+import org.synchronoss.cpo.core.cpoCoreMeta.CtFunction;
+import org.synchronoss.cpo.core.cpoCoreMeta.CtFunctionGroup;
 import org.synchronoss.cpo.enums.Crud;
-import org.synchronoss.cpo.meta.domain.*;
+import org.synchronoss.cpo.meta.domain.CpoArgument;
+import org.synchronoss.cpo.meta.domain.CpoAttribute;
+import org.synchronoss.cpo.meta.domain.CpoClass;
+import org.synchronoss.cpo.meta.domain.CpoClassCaseInsensitive;
+import org.synchronoss.cpo.meta.domain.CpoClassCaseSensitive;
+import org.synchronoss.cpo.meta.domain.CpoFunction;
+import org.synchronoss.cpo.meta.domain.CpoFunctionGroup;
 
 /**
  * @author dberry

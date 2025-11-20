@@ -245,7 +245,7 @@
                         <goals>
                             <goal>apply</goal>
                         </goals>
-                        <phase>compile</phase> <!-- Or validate, or any other suitable phase -->
+                        <phase>process-sources</phase> <!-- Or validate, or any other suitable phase -->
                    </execution>
                 </executions>
             </plugin>
@@ -416,11 +416,12 @@
                     <execution>
                         <id>PMD</id>
                         <configuration>
-                            <failOnViolation>false</failOnViolation>
+                            <failOnViolation>true</failOnViolation>
                         </configuration>
                         <goals>
                             <goal>check</goal>
                         </goals>
+                        <phase>compile</phase>
                     </execution>
                     <execution>
                         <id>CPD</id>

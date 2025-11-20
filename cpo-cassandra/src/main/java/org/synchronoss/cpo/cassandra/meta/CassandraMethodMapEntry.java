@@ -24,8 +24,6 @@ package org.synchronoss.cpo.cassandra.meta;
 
 import java.io.Serial;
 import java.lang.reflect.Method;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.meta.MethodMapEntry;
 
 /**
@@ -37,8 +35,6 @@ import org.synchronoss.cpo.meta.MethodMapEntry;
  */
 public class CassandraMethodMapEntry<J, D> extends MethodMapEntry<J, D>
     implements java.io.Serializable, Cloneable {
-
-  private static final Logger logger = LoggerFactory.getLogger(CassandraMethodMapEntry.class);
 
   /** Version Id for this class. */
   @Serial private static final long serialVersionUID = 1L;

@@ -46,7 +46,6 @@ import org.synchronoss.cpo.helper.ExceptionHelper;
 public class ClassJdbcDataSourceInfo extends AbstractJdbcDataSource
     implements ConnectionEventListener, AutoCloseable {
   private static final Cleaner cleaner = Cleaner.create();
-  private final Cleaner.Cleanable cleanable;
 
   private Logger logger = LoggerFactory.getLogger(this.getClass());
   private ConnectionPoolDataSource poolDataSource = null;
@@ -68,7 +67,7 @@ public class ClassJdbcDataSourceInfo extends AbstractJdbcDataSource
     super(className, properties, fetchSize, batchSize);
     this.className = className;
     this.properties = properties;
-    this.cleanable = cleaner.register(this, new ConnectionCleaner(this));
+    cleaner.register(this, new ConnectionCleaner(this));
   }
 
   @Override
@@ -203,7 +202,6 @@ public class ClassJdbcDataSourceInfo extends AbstractJdbcDataSource
 
     ConnectionCleaner(ClassJdbcDataSourceInfo jdbcDataSourceInfo) {
       this.jdbcDataSourceInfo = jdbcDataSourceInfo;
-      ;
     }
 
     @Override

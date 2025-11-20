@@ -131,8 +131,7 @@ public class JdbcCpoTrxAdapter extends JdbcCpoAdapter implements CpoTrxAdapter {
    * @throws CpoException - an error occurred
    */
   protected Connection getStaticConnection() throws CpoException {
-    if (writeConnection_ != null) {
-    } else {
+    if (writeConnection_ == null) {
       // enable lazy loading and automatic connection creating for re-using and adapter after
       // closing it
       writeConnection_ = super.getWriteConnection();

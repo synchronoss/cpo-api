@@ -273,14 +273,14 @@ public class CassandraMethodMapper implements Serializable, Cloneable {
       String setterName)
       throws IllegalArgumentException {
     Method rsGetter = loadGetter(methodType, rsc, getterName);
-    Method bsSetter = loadSetter(methodType, bsc, datasourceMethodClass, setterName);
+    Method bsSetter = loadSetter(bsc, datasourceMethodClass, setterName);
 
     return new CassandraMethodMapEntry(
         methodType, javaClass, datasourceMethodClass, rsGetter, bsSetter);
   }
 
   private static <M, D> Method loadSetter(
-      int methodType, Class<M> methodClass, Class<D> datasourceClass, String setterName)
+      Class<M> methodClass, Class<D> datasourceClass, String setterName)
       throws IllegalArgumentException {
     Method setter;
     try {

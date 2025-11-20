@@ -27,7 +27,9 @@ import java.io.Reader;
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.net.URL;
-import java.sql.*;
+import java.sql.CallableStatement;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.CpoException;
@@ -243,22 +245,22 @@ public class JdbcMethodMapper implements java.io.Serializable, Cloneable {
     mapper.addMethodMapEntry(
         makeJdbcMethodMapEntry(
             JdbcMethodMapEntry.METHOD_TYPE_BASIC,
-            RowId.class,
-            RowId.class,
+            java.sql.RowId.class,
+            java.sql.RowId.class,
             "getRowId",
             "setRowId"));
     mapper.addMethodMapEntry(
         makeJdbcMethodMapEntry(
             JdbcMethodMapEntry.METHOD_TYPE_BASIC,
-            NClob.class,
-            NClob.class,
+            java.sql.NClob.class,
+            java.sql.NClob.class,
             "getNClob",
             "setNClob"));
     mapper.addMethodMapEntry(
         makeJdbcMethodMapEntry(
             JdbcMethodMapEntry.METHOD_TYPE_BASIC,
-            SQLXML.class,
-            SQLXML.class,
+            java.sql.SQLXML.class,
+            java.sql.SQLXML.class,
             "getSQLXML",
             "setSQLXML"));
 
@@ -267,7 +269,7 @@ public class JdbcMethodMapper implements java.io.Serializable, Cloneable {
     mapper.addMethodMapEntry(
         makeJdbcMethodMapEntry(
             JdbcMethodMapEntry.METHOD_TYPE_OBJECT,
-            java.sql.ResultSet.class,
+            ResultSet.class,
             Object.class,
             "getObject",
             "setObject"));
@@ -356,9 +358,9 @@ public class JdbcMethodMapper implements java.io.Serializable, Cloneable {
       String getterName,
       String setterName)
       throws IllegalArgumentException {
-    Method rsGetter = loadGetter(methodType, rsc, getterName, javaClass);
+    Method rsGetter = loadGetter(methodType, rsc, getterName);
     Method bsSetter = loadSetter(methodType, psc, datasourceMethodClass, setterName);
-    Method csGetter = loadGetter(methodType, csc, getterName, javaClass);
+    Method csGetter = loadGetter(methodType, csc, getterName);
     Method csSetter = loadSetter(methodType, csc, datasourceMethodClass, setterName);
 
     return new JdbcMethodMapEntry<>(
@@ -385,8 +387,7 @@ public class JdbcMethodMapper implements java.io.Serializable, Cloneable {
     return setter;
   }
 
-  private static <M, J> Method loadGetter(
-      int methodType, Class<M> methodClass, String getterName, Class<J> javaClass)
+  private static <M> Method loadGetter(int methodType, Class<M> methodClass, String getterName)
       throws IllegalArgumentException {
     Method getter;
     try {

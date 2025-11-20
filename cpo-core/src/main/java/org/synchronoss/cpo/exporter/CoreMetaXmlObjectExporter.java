@@ -23,9 +23,20 @@ package org.synchronoss.cpo.exporter;
  */
 
 import org.synchronoss.cpo.MetaVisitor;
-import org.synchronoss.cpo.core.cpoCoreMeta.*;
+import org.synchronoss.cpo.core.cpoCoreMeta.CpoMetaDataDocument;
+import org.synchronoss.cpo.core.cpoCoreMeta.CtArgument;
+import org.synchronoss.cpo.core.cpoCoreMeta.CtAttribute;
+import org.synchronoss.cpo.core.cpoCoreMeta.CtClass;
+import org.synchronoss.cpo.core.cpoCoreMeta.CtCpoMetaData;
+import org.synchronoss.cpo.core.cpoCoreMeta.CtFunction;
+import org.synchronoss.cpo.core.cpoCoreMeta.CtFunctionGroup;
+import org.synchronoss.cpo.core.cpoCoreMeta.StFunctionGroupType;
 import org.synchronoss.cpo.meta.CpoMetaDescriptor;
-import org.synchronoss.cpo.meta.domain.*;
+import org.synchronoss.cpo.meta.domain.CpoArgument;
+import org.synchronoss.cpo.meta.domain.CpoAttribute;
+import org.synchronoss.cpo.meta.domain.CpoClass;
+import org.synchronoss.cpo.meta.domain.CpoFunction;
+import org.synchronoss.cpo.meta.domain.CpoFunctionGroup;
 
 /**
  * XmlObject exporter for meta objects

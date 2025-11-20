@@ -23,11 +23,9 @@ package org.synchronoss.cpo.cassandra.meta;
  */
 
 import java.io.Serial;
-import java.lang.reflect.Method;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.CpoException;
-import org.synchronoss.cpo.cassandra.transform.CassandraCpoTransform;
 import org.synchronoss.cpo.helper.CpoClassLoader;
 import org.synchronoss.cpo.helper.ExceptionHelper;
 import org.synchronoss.cpo.meta.CpoMetaDescriptor;
@@ -50,10 +48,6 @@ public class CassandraCpoAttribute extends CpoAttribute implements java.io.Seria
   private String valueType_ = null;
   private Class<?> keyTypeClass = null;
   private Class<?> valueTypeClass = null;
-
-  // Transform attributes
-  private CassandraCpoTransform cassandraTransform = null;
-  private Method transformPSOutMethod = null;
 
   /** Constructs the CassandraCpoAttribute */
   public CassandraCpoAttribute() {}
@@ -183,17 +177,6 @@ public class CassandraCpoAttribute extends CpoAttribute implements java.io.Seria
   @Override
   protected void initTransformClass(CpoMetaDescriptor metaDescriptor) throws CpoException {
     super.initTransformClass(metaDescriptor);
-    if (getCpoTransform() != null && getCpoTransform() instanceof CassandraCpoTransform) {
-      cassandraTransform = (CassandraCpoTransform) getCpoTransform();
-
-      for (Method m : findMethods(cassandraTransform.getClass(), TRANSFORM_OUT_NAME, 2, true)) {
-        if (m.getParameterTypes()[0]
-            .getName()
-            .equals("org.synchronoss.cpo.cassandra.CassandraBoundStatementFactory")) {
-          transformPSOutMethod = m;
-        }
-      }
-    }
 
     // TODO Revisit this. Initializing the java sql type here. Not sure that this is the right
     // place.

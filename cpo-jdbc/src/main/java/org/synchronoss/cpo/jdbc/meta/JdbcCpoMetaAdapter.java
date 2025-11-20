@@ -205,9 +205,7 @@ public class JdbcCpoMetaAdapter extends AbstractCpoMetaAdapter {
     // dbspecific types needed to generate the class from a function.
     dataTypeMapper.addDataTypeEntry(
         new DataTypeMapEntry<>(
-            100,
-            "VARCHAR_IGNORECASE",
-            java.lang.String.class)); // HSQLDB TYPE for VARCHAR_IGNORE_CASE
+            100, "VARCHAR_IGNORECASE", String.class)); // HSQLDB TYPE for VARCHAR_IGNORE_CASE
 
     logger.debug("Returning the DataMapper");
     return dataTypeMapper;

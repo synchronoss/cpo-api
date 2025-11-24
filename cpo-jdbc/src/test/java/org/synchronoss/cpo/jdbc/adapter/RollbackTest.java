@@ -1,4 +1,4 @@
-package org.synchronoss.cpo.jdbc;
+package org.synchronoss.cpo.jdbc.adapter;
 
 /*-
  * [[
@@ -25,10 +25,9 @@ package org.synchronoss.cpo.jdbc;
 import static org.testng.Assert.*;
 
 import java.util.ArrayList;
+import org.synchronoss.cpo.CpoAdapter;
 import org.synchronoss.cpo.CpoAdapterFactoryManager;
-import org.synchronoss.cpo.CpoException;
-import org.synchronoss.cpo.CpoTrxAdapter;
-import org.synchronoss.cpo.helper.ExceptionHelper;
+import org.synchronoss.cpo.jdbc.ValueObject;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -38,12 +37,11 @@ import org.testng.annotations.Test;
  *
  * @author david berry
  */
-public class RollbackTrxTest {
+public class RollbackTest {
 
-  private CpoTrxAdapter trxAdapter = null;
+  private CpoAdapter cpoAdapter = null;
 
-  /** Creates a new RollbackTest object. */
-  public RollbackTrxTest() {}
+  public RollbackTest() {}
 
   /**
    * <code>setUp</code> Load the datasource from the properties in the property file
@@ -54,21 +52,15 @@ public class RollbackTrxTest {
     String method = "setUp:";
 
     try {
-      trxAdapter = CpoAdapterFactoryManager.getCpoTrxAdapter(JdbcStatics.ADAPTER_CONTEXT_JDBC);
-      assertNotNull(trxAdapter, method + "trxAdapter is null");
+      cpoAdapter = CpoAdapterFactoryManager.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_JDBC);
+      assertNotNull(cpoAdapter, method + "cpoAdapter is null");
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
     ValueObject vo = ValueObjectFactory.createValueObject(1);
-    vo.setAttrVarChar("Test");
     try {
-      trxAdapter.insertBean(vo);
-      trxAdapter.commit();
+      cpoAdapter.insertBean(vo);
     } catch (Exception e) {
-      try {
-        trxAdapter.rollback();
-      } catch (Exception e1) {
-      }
       fail(method + e.getMessage());
     }
   }
@@ -78,26 +70,16 @@ public class RollbackTrxTest {
   public void tearDown() {
     ValueObject vo = ValueObjectFactory.createValueObject(1);
     try {
-      trxAdapter.deleteBean(vo);
-      trxAdapter.commit();
+      cpoAdapter.deleteBean(vo);
     } catch (Exception e) {
-      try {
-        trxAdapter.rollback();
-      } catch (Exception e1) {
-      }
-    } finally {
-      try {
-        trxAdapter.close();
-      } catch (Exception e1) {
-      }
-      trxAdapter = null;
     }
+    cpoAdapter = null;
   }
 
   /** DOCUMENT ME! */
   @Test
-  public void testTrxRollbackProcessUpdateCollection() {
-    String method = "testTrxRollbackProcessUpdateCollection:";
+  public void testRollbackProcessUpdateCollection() {
+    String method = "testRollbackProcessUpdateCollection:";
     ValueObject vo = ValueObjectFactory.createValueObject(2);
     ValueObject vo2 = ValueObjectFactory.createValueObject(1);
     ArrayList<ValueObject> al = new ArrayList<>();
@@ -106,17 +88,11 @@ public class RollbackTrxTest {
     al.add(vo2);
 
     try {
-      trxAdapter.insertBeans(ValueObject.FG_CREATE_TESTROLLBACK, al);
-      trxAdapter.commit();
+      cpoAdapter.insertBeans(ValueObject.FG_CREATE_TESTROLLBACK, al);
       fail(method + "Insert should have thrown an exception");
     } catch (Exception e) {
       try {
-        trxAdapter.rollback();
-      } catch (CpoException ce) {
-        fail(method + "Rollback failed:" + ExceptionHelper.getLocalizedMessage(ce));
-      }
-      try {
-        ValueObject rvo = trxAdapter.retrieveBean(vo);
+        ValueObject rvo = cpoAdapter.retrieveBean(vo);
         assertNull(rvo, method + "Value Object did not rollback");
       } catch (Exception e2) {
         fail(method + e.getMessage());
@@ -126,21 +102,15 @@ public class RollbackTrxTest {
 
   /** DOCUMENT ME! */
   @Test
-  public void testTrxSingleRollback() {
-    String method = "testTrxSingleRollback:";
+  public void testSingleRollback() {
+    String method = "testSingleRollback:";
     ValueObject vo = ValueObjectFactory.createValueObject(2);
     try {
-      trxAdapter.insertBean(ValueObject.FG_CREATE_TESTSINGLEROLLBACK, vo);
-      trxAdapter.commit();
+      cpoAdapter.insertBean(ValueObject.FG_CREATE_TESTSINGLEROLLBACK, vo);
       fail(method + "Insert should have thrown an exception");
     } catch (Exception e) {
       try {
-        trxAdapter.rollback();
-      } catch (CpoException ce) {
-        fail(method + "Rollback failed:" + ExceptionHelper.getLocalizedMessage(ce));
-      }
-      try {
-        ValueObject rvo = trxAdapter.retrieveBean(vo);
+        ValueObject rvo = cpoAdapter.retrieveBean(vo);
         assertNull(rvo, method + "Value Object did not rollback");
       } catch (Exception e2) {
         fail(method + e.getMessage());

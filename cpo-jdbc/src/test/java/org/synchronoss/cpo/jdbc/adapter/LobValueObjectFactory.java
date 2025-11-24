@@ -1,4 +1,4 @@
-package org.synchronoss.cpo.jdbc;
+package org.synchronoss.cpo.jdbc.adapter;
 
 /*-
  * [[
@@ -22,14 +22,19 @@ package org.synchronoss.cpo.jdbc;
  * ]]
  */
 
-public class ValueObjectFactory {
-  public static ValueObject createValueObject() {
-    return new ValueObjectBean();
+import org.synchronoss.cpo.jdbc.LobValueObject;
+import org.synchronoss.cpo.jdbc.LobValueObjectBean;
+
+public class LobValueObjectFactory {
+  public static LobValueObject createLobValueObject() {
+    return new LobValueObjectBean();
   }
 
-  public static ValueObject createValueObject(int id) {
-    ValueObjectBean valueObjectBean = new ValueObjectBean();
-    valueObjectBean.setId(id);
-    return valueObjectBean;
+  public static LobValueObject createLobValueObject(int id, byte[] blob, char[] clob) {
+    LobValueObject lobValueObject = new LobValueObjectBean();
+    lobValueObject.setLobId(id);
+    lobValueObject.setBLob(blob);
+    lobValueObject.setCLob(clob);
+    return lobValueObject;
   }
 }

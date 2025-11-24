@@ -89,7 +89,7 @@ public class CollectionsTest {
 
     try {
       ValueObject vo = readAdapter.retrieveBean(null, valObj, valObj, null, null);
-      assertEquals(testString, vo.getAttrList().get(0), "Strings do not match");
+      assertEquals(vo.getAttrList().get(0), testString, "Strings do not match");
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -140,7 +140,7 @@ public class CollectionsTest {
 
     try {
       ValueObject vo = readAdapter.retrieveBean(null, valObj, valObj, null, null);
-      assertEquals(testValue, vo.getAttrMap().get(testKey), "Strings do not match");
+      assertEquals(vo.getAttrMap().get(testKey), testValue, "Strings do not match");
     } catch (Exception e) {
       fail(method + e.getMessage());
     }

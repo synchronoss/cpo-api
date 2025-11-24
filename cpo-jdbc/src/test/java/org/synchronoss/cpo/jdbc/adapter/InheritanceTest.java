@@ -1,4 +1,4 @@
-package org.synchronoss.cpo.jdbc;
+package org.synchronoss.cpo.jdbc.adapter;
 
 /*-
  * [[
@@ -24,32 +24,28 @@ package org.synchronoss.cpo.jdbc;
 
 import static org.testng.Assert.*;
 
-import java.math.BigInteger;
 import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.stream.Stream;
 import org.synchronoss.cpo.CpoAdapter;
 import org.synchronoss.cpo.CpoAdapterFactoryManager;
-import org.synchronoss.cpo.jdbc.meta.JdbcCpoMetaDescriptor;
+import org.synchronoss.cpo.jdbc.ValueObject;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
 /**
- * InsertObjectTest is a test class for testing the insert api calls of cpo
+ * InheritanceTest is a test class for testing the polymorphic capabilites of CPO
  *
  * @author david berry
  */
-public class InsertObjectTest {
+public class InheritanceTest {
 
-  private ArrayList<ValueObject> al = new ArrayList<>();
+  private ArrayList<ChildValueObject> al = new ArrayList<>();
   private CpoAdapter cpoAdapter = null;
-  private CpoAdapter readAdapter = null;
-  private JdbcCpoMetaDescriptor metaDescriptor = null;
   private boolean isSupportsMillis = true;
 
-  public InsertObjectTest() {}
+  public InheritanceTest() {}
 
   /**
    * <code>setUp</code> Load the datasource from the properties in the property file
@@ -67,13 +63,6 @@ public class InsertObjectTest {
     try {
       cpoAdapter = CpoAdapterFactoryManager.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_JDBC);
       assertNotNull(cpoAdapter, method + "cpoAdapter is null");
-      metaDescriptor = (JdbcCpoMetaDescriptor) cpoAdapter.getCpoMetaDescriptor();
-    } catch (Exception e) {
-      fail(method + e.getMessage());
-    }
-    try {
-      readAdapter = CpoAdapterFactoryManager.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_JDBC);
-      assertNotNull(readAdapter, method + "readAdapter is null");
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -82,8 +71,9 @@ public class InsertObjectTest {
   @Test
   public void testInsertObject() {
     String method = "testInsertObject:";
-    ValueObject valObj = ValueObjectFactory.createValueObject(5);
+    ChildValueObject valObj = new ChildValueObject();
 
+    valObj.setId(5);
     valObj.setAttrVarChar("testInsert");
     valObj.setAttrInteger(3);
     Timestamp ts = new Timestamp(System.currentTimeMillis());
@@ -96,10 +86,6 @@ public class InsertObjectTest {
 
     valObj.setAttrBit(true);
 
-    // test the setObject and getObject type
-    BigInteger bigInteger = BigInteger.valueOf(1234);
-    valObj.setAttrBigInt(bigInteger);
-
     al.add(valObj);
 
     try {
@@ -109,47 +95,14 @@ public class InsertObjectTest {
     }
 
     try {
-      ValueObject vo =
-          readAdapter.retrieveBean(ValueObject.FG_RETRIEVE_NULL, valObj, valObj, null, null);
+      ChildValueObject vo =
+          cpoAdapter.retrieveBean(ValueObject.FG_RETRIEVE_NULL, valObj, valObj, null, null);
       assertEquals(vo.getId(), valObj.getId(), "Ids do not match");
       assertEquals(vo.getAttrInteger(), valObj.getAttrInteger(), "Integers do not match");
       assertEquals(vo.getAttrVarChar(), valObj.getAttrVarChar(), "Strings do not match");
       assertEquals(vo.getAttrDatetime(), valObj.getAttrDatetime(), "Timestamps do not match");
       assertTrue(vo.getAttrBit(), "boolean not stored correctly");
 
-    } catch (Exception e) {
-      fail(method + e.getMessage());
-    } finally {
-      try {
-        cpoAdapter.deleteBean(valObj);
-      } catch (Exception e) {
-        fail(method + e.getMessage());
-      }
-    }
-  }
-
-  @Test
-  public void testInsertObjects() {
-
-    String method = "testInsertObjects:";
-    ValueObject vo = ValueObjectFactory.createValueObject(61);
-    vo.setAttrVarChar("Test");
-    ArrayList<ValueObject> a2 = new ArrayList<>();
-    a2.add(vo);
-    a2.add(ValueObjectFactory.createValueObject(62));
-    a2.add(ValueObjectFactory.createValueObject(63));
-    a2.add(ValueObjectFactory.createValueObject(64));
-    al.addAll(a2);
-    try {
-      long inserts = cpoAdapter.insertBeans(a2);
-      assertEquals(inserts, 4, "inserts performed do not equal inserts requested");
-    } catch (Exception e) {
-      fail(method + e.getMessage());
-    }
-
-    try (Stream<ValueObject> beans = cpoAdapter.retrieveBeans(ValueObject.FG_LIST_NULL, vo); ) {
-      long count = beans.count();
-      assertEquals(count, a2.size(), "Number of beans is " + count);
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -165,6 +118,5 @@ public class InsertObjectTest {
       fail(method + e.getMessage());
     }
     cpoAdapter = null;
-    readAdapter = null;
   }
 }

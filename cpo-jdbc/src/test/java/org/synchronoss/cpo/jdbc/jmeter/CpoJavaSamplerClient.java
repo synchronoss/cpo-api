@@ -34,7 +34,7 @@ import org.synchronoss.cpo.CpoAdapter;
 import org.synchronoss.cpo.CpoAdapterFactoryManager;
 import org.synchronoss.cpo.CpoException;
 import org.synchronoss.cpo.jdbc.ValueObject;
-import org.synchronoss.cpo.jdbc.ValueObjectFactory;
+import org.synchronoss.cpo.jdbc.adapter.ValueObjectFactory;
 import org.synchronoss.cpo.jdbc.cpoJdbcConfig.CtJdbcConfig;
 import org.synchronoss.cpo.jdbc.cpoJdbcConfig.CtJdbcReadWriteConfig;
 import org.synchronoss.cpo.jdbc.meta.JdbcCpoMetaDescriptor;

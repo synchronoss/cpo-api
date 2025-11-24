@@ -69,6 +69,8 @@ public class JdbcSuiteListener implements ISuiteListener {
     String dbImage = suite.getParameter(PROP_DB_IMAGE);
     String cpoConfig = suite.getParameter(PROP_CPO_CONFIG);
 
+    if (dbType == null) return;
+
     if (dbType.equals(H2)) {
       try {
         h2Server =

@@ -1,4 +1,4 @@
-package org.synchronoss.cpo.jdbc;
+package org.synchronoss.cpo.jdbc.adapter;
 
 /*-
  * [[
@@ -29,6 +29,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.CpoAdapter;
 import org.synchronoss.cpo.CpoAdapterFactoryManager;
+import org.synchronoss.cpo.jdbc.JdbcCpoAttribute;
 import org.synchronoss.cpo.meta.domain.CpoAttribute;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
@@ -68,7 +69,7 @@ public class EntityTest {
         if (!(attribute instanceof JdbcCpoAttribute)) fail("Attribute is not a JdbcCpoAttribute");
         dumpAttribute((JdbcCpoAttribute) attribute);
       }
-      assertEquals(4, attributes.size(), "List size is " + attributes);
+      assertEquals(attributes.size(), 4, "List size is " + attributes);
     } catch (Exception e) {
       fail(method + e.getMessage());
     }

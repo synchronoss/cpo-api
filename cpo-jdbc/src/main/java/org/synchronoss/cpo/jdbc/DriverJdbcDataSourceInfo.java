@@ -135,7 +135,7 @@ public class DriverJdbcDataSourceInfo extends AbstractJdbcDataSource {
   }
 
   @Override
-  public synchronized String toString() {
+  public String toString() {
     StringBuilder info = new StringBuilder();
     info.append("JdbcDataSource(");
     info.append(getDataSourceName());

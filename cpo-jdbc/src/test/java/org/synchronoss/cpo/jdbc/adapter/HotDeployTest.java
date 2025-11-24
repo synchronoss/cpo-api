@@ -1,4 +1,4 @@
-package org.synchronoss.cpo.jdbc;
+package org.synchronoss.cpo.jdbc.adapter;
 
 /*-
  * [[
@@ -34,6 +34,7 @@ import org.synchronoss.cpo.CpoAdapter;
 import org.synchronoss.cpo.CpoAdapterFactoryManager;
 import org.synchronoss.cpo.CpoException;
 import org.synchronoss.cpo.helper.ExceptionHelper;
+import org.synchronoss.cpo.jdbc.ValueObject;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeClass;
@@ -47,8 +48,8 @@ import org.testng.annotations.Test;
 public class HotDeployTest {
   private static final Logger logger = LoggerFactory.getLogger(HotDeployTest.class);
   private CpoAdapter cpoAdapter = null;
-  private ArrayList<ValueObject> al = new ArrayList<>();
-  private File metaFile = new File("metaData.xml");
+  private final ArrayList<ValueObject> al = new ArrayList<>();
+  private final File metaFile = new File("metaData.xml");
 
   public HotDeployTest() {}
 
@@ -211,7 +212,7 @@ public class HotDeployTest {
   public void tearDown() {
     String method = "tearDown:";
     try {
-      metaFile.delete();
+      assertTrue(metaFile.delete());
 
       cpoAdapter.deleteBeans(ValueObject.FG_DELETE_TESTORDERBYDELETE, al);
     } catch (Exception e) {

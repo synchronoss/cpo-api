@@ -1,4 +1,4 @@
-package org.synchronoss.cpo.jdbc;
+package org.synchronoss.cpo.jdbc.adapter;
 
 /*-
  * [[
@@ -28,7 +28,8 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import org.synchronoss.cpo.CpoAdapter;
 import org.synchronoss.cpo.CpoAdapterFactoryManager;
-import org.synchronoss.cpo.jdbc.meta.JdbcCpoMetaDescriptor;
+import org.synchronoss.cpo.jdbc.CaseValueObject;
+import org.synchronoss.cpo.jdbc.CaseValueObjectBean;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Parameters;
@@ -41,10 +42,9 @@ import org.testng.annotations.Test;
  */
 public class CaseInsensitiveTest {
 
-  private ArrayList<CaseValueObject> al = new ArrayList<>();
+  private final ArrayList<CaseValueObject> al = new ArrayList<>();
   private CpoAdapter cpoAdapter = null;
   private CpoAdapter readAdapter = null;
-  private JdbcCpoMetaDescriptor metaDescriptor = null;
   private boolean isSupportsMillis = true;
 
   public CaseInsensitiveTest() {}
@@ -66,7 +66,6 @@ public class CaseInsensitiveTest {
       cpoAdapter =
           CpoAdapterFactoryManager.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_CASEINSENSITIVE);
       assertNotNull(cpoAdapter, method + "cpoAdapter is null");
-      metaDescriptor = (JdbcCpoMetaDescriptor) cpoAdapter.getCpoMetaDescriptor();
     } catch (Exception e) {
       fail(method + e.getMessage());
     }

@@ -1,8 +1,8 @@
-package org.synchronoss.cpo.cassandra;
+package org.synchronoss.cpo.jdbc.adapter;
 
 /*-
  * [[
- * cassandra
+ * jdbc
  * ==
  * Copyright (C) 2003 - 2025 David E. Berry
  * ==
@@ -33,6 +33,7 @@ import org.synchronoss.cpo.CpoWhere;
 import org.synchronoss.cpo.enums.Comparison;
 import org.synchronoss.cpo.enums.Logical;
 import org.synchronoss.cpo.helper.ExceptionHelper;
+import org.synchronoss.cpo.jdbc.ValueObject;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -47,6 +48,8 @@ public class ExistObjectTest {
   private static final Logger logger = LoggerFactory.getLogger(ExistObjectTest.class);
   private CpoAdapter cpoAdapter = null;
 
+  public ExistObjectTest() {}
+
   /**
    * <code>setUp</code> Load the datasource from the properties in the property file
    * jdbc_en_US.properties
@@ -59,16 +62,17 @@ public class ExistObjectTest {
     String method = "setUp:";
 
     try {
-      cpoAdapter = CpoAdapterFactoryManager.getCpoAdapter(CassandraStatics.ADAPTER_CONTEXT_DEFAULT);
-      assertNotNull(cpoAdapter, method + "IdoAdapter is null");
+      cpoAdapter = CpoAdapterFactoryManager.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_JDBC);
+      assertNotNull(cpoAdapter, method + "cpoAdapter is null");
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
     ValueObject vo = ValueObjectFactory.createValueObject(1);
-    vo.setAttrInt(3);
+    vo.setAttrVarChar("WHERE");
 
     try {
-      cpoAdapter.insertBean(vo);
+      long count = cpoAdapter.insertBean(vo);
+      assertEquals(count, 1, "Should be inserted");
     } catch (Exception e) {
       logger.error(ExceptionHelper.getLocalizedMessage(e));
       fail(method + e.getMessage());
@@ -98,14 +102,15 @@ public class ExistObjectTest {
 
   @Test
   public void testExistObjectWhere() {
-    String method = "testExistObject:";
+    String method = "testExistObjectWhere:";
 
     try {
       ValueObject valObj = ValueObjectFactory.createValueObject(1);
-      CpoWhere where = cpoAdapter.newWhere(Logical.AND, "attrInt", Comparison.EQ, 3);
+      CpoWhere where =
+          cpoAdapter.newWhere(Logical.AND, ValueObject.ATTR_ATTRVARCHAR, Comparison.EQ, "WHERE");
       ArrayList<CpoWhere> wheres = new ArrayList<>();
       wheres.add(where);
-      long count = cpoAdapter.existsBean(null, valObj, wheres);
+      long count = cpoAdapter.existsBean(ValueObject.FG_EXIST_NULL, valObj, wheres);
       assertEquals(count, 1, "Object not Found");
     } catch (Exception e) {
       fail(method + e.getMessage());
@@ -113,10 +118,11 @@ public class ExistObjectTest {
 
     try {
       ValueObject valObj = ValueObjectFactory.createValueObject(1);
-      CpoWhere where = cpoAdapter.newWhere(Logical.AND, "attrInt", Comparison.EQ, 5);
+      CpoWhere where =
+          cpoAdapter.newWhere(Logical.AND, ValueObject.ATTR_ATTRVARCHAR, Comparison.EQ, "NOWHERE");
       ArrayList<CpoWhere> wheres = new ArrayList<>();
       wheres.add(where);
-      long count = cpoAdapter.existsBean(null, valObj, wheres);
+      long count = cpoAdapter.existsBean(ValueObject.FG_EXIST_NULL, valObj, wheres);
       assertEquals(count, 0, "Object Found");
     } catch (Exception e) {
       fail(method + e.getMessage());
@@ -127,7 +133,8 @@ public class ExistObjectTest {
   public void tearDown() {
     ValueObject vo = ValueObjectFactory.createValueObject(1);
     try {
-      cpoAdapter.deleteBean(vo);
+      long count = cpoAdapter.deleteBean(vo);
+      assertEquals(count, 1, "Should be deleted");
     } catch (Exception e) {
       logger.error(ExceptionHelper.getLocalizedMessage(e));
     }

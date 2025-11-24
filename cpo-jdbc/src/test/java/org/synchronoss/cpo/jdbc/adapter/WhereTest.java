@@ -1,4 +1,4 @@
-package org.synchronoss.cpo.jdbc;
+package org.synchronoss.cpo.jdbc.adapter;
 
 /*-
  * [[
@@ -34,6 +34,7 @@ import org.synchronoss.cpo.CpoOrderBy;
 import org.synchronoss.cpo.CpoWhere;
 import org.synchronoss.cpo.enums.Comparison;
 import org.synchronoss.cpo.enums.Logical;
+import org.synchronoss.cpo.jdbc.ValueObject;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -698,7 +699,7 @@ public class WhereTest {
           cpoAdapter.retrieveBean(ValueObject.FG_RETRIEVE_NULL, valObj, wheres, orderBys, null);
 
       assertNotNull(valObj, "Value Object should not be null");
-      assertTrue(valObj.getId() == 1, "Id should equal 1");
+      assertEquals(valObj.getId(), 1, "Id should equal 1");
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -727,7 +728,7 @@ public class WhereTest {
           cpoAdapter.retrieveBean(ValueObject.FG_RETRIEVE_NULL, valObj, valObj, wheres, orderBys);
 
       assertNotNull(valObj, "Value Object should not be null");
-      assertTrue(valObj.getId() == 1, "Id should equal 1");
+      assertEquals(valObj.getId(), 1, "Id should equal 1");
     } catch (Exception e) {
       fail(method + e.getMessage());
     }

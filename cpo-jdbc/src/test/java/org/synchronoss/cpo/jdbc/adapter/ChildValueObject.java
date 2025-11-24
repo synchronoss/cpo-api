@@ -1,4 +1,4 @@
-package org.synchronoss.cpo.jdbc;
+package org.synchronoss.cpo.jdbc.adapter;
 
 /*-
  * [[
@@ -22,16 +22,15 @@ package org.synchronoss.cpo.jdbc;
  * ]]
  */
 
-public class LobValueObjectFactory {
-  public static LobValueObject createLobValueObject() {
-    return new LobValueObjectBean();
-  }
+import org.synchronoss.cpo.jdbc.ValueObjectBean;
 
-  public static LobValueObject createLobValueObject(int id, byte[] blob, char[] clob) {
-    LobValueObject lobValueObject = new LobValueObjectBean();
-    lobValueObject.setLobId(id);
-    lobValueObject.setBLob(blob);
-    lobValueObject.setCLob(clob);
-    return lobValueObject;
-  }
+/**
+ * ChildValueObject is a class used to test the inheritance support of cpo
+ *
+ * @author david berry
+ */
+public class ChildValueObject extends ValueObjectBean implements java.io.Serializable, Cloneable {
+
+  /** */
+  private static final long serialVersionUID = 1L;
 }

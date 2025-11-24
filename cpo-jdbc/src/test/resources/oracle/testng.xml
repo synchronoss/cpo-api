@@ -43,7 +43,7 @@
             <package name="org.synchronoss.cpo.jdbc.*" />
         </packages>
         <classes>
-            <class name="org.synchronoss.cpo.jdbc.BigBatchTest"> <!-- Target the specific class -->
+            <class name="org.synchronoss.cpo.jdbc.adapter.BigBatchTest"> <!-- Target the specific class -->
                 <methods>
                     <exclude name=".*" /> <!-- Exclude all methods within this class -->
                 </methods>

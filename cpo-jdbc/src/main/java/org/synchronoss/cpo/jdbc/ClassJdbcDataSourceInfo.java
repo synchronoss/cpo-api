@@ -27,9 +27,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.LinkedList;
-import java.util.Queue;
 import java.util.SortedMap;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import javax.sql.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,14 +46,14 @@ public class ClassJdbcDataSourceInfo extends AbstractJdbcDataSource
     implements ConnectionEventListener, AutoCloseable {
   private static final Cleaner cleaner = Cleaner.create();
 
-  private Logger logger = LoggerFactory.getLogger(this.getClass());
+  private final Logger logger = LoggerFactory.getLogger(this.getClass());
   private ConnectionPoolDataSource poolDataSource = null;
   private String className = null;
   private SortedMap<String, String> properties = null;
-  // Make sure DataSource creation is thread safe.
-  private final Object LOCK = new Object();
-  private Queue<PooledConnection> freeConnections = new LinkedList<>();
-  private Queue<PooledConnection> usedConnections = new LinkedList<>();
+  private final ConcurrentLinkedQueue<PooledConnection> freeConnections =
+      new ConcurrentLinkedQueue<>();
+  private final ConcurrentLinkedQueue<PooledConnection> usedConnections =
+      new ConcurrentLinkedQueue<>();
 
   /**
    * Creates a ClassJdbcDataSourceInfo from a Jdbc Driver
@@ -77,20 +76,16 @@ public class ClassJdbcDataSourceInfo extends AbstractJdbcDataSource
 
   private Connection getPooledConnection() throws SQLException {
     PooledConnection pooledConn;
-    synchronized (LOCK) {
-      if (!freeConnections.isEmpty()) {
-        pooledConn = freeConnections.poll();
-      } else {
-        pooledConn = poolDataSource.getPooledConnection();
-        pooledConn.addConnectionEventListener(this);
-      }
-      usedConnections.add(pooledConn);
+    if ((pooledConn = freeConnections.poll()) == null) {
+      pooledConn = poolDataSource.getPooledConnection();
+      pooledConn.addConnectionEventListener(this);
     }
+    usedConnections.add(pooledConn);
     return pooledConn.getConnection();
   }
 
   @Override
-  public synchronized String toString() {
+  public String toString() {
     StringBuilder info = new StringBuilder();
     info.append("JdbcDataSource(");
     info.append(getDataSourceName());
@@ -131,22 +126,18 @@ public class ClassJdbcDataSourceInfo extends AbstractJdbcDataSource
 
   @Override
   public void connectionClosed(ConnectionEvent ce) {
-    synchronized (LOCK) {
-      PooledConnection pc = (PooledConnection) ce.getSource();
-      if (usedConnections.remove(pc)) {
-        freeConnections.add(pc);
-      }
+    PooledConnection pc = (PooledConnection) ce.getSource();
+    if (usedConnections.remove(pc)) {
+      freeConnections.add(pc);
     }
   }
 
   @Override
   public void connectionErrorOccurred(ConnectionEvent ce) {
-    synchronized (LOCK) {
-      PooledConnection pc = (PooledConnection) ce.getSource();
-      if (!usedConnections.remove(pc)) {
-        // just in case the error is on a connection in the free pool
-        freeConnections.remove(pc);
-      }
+    PooledConnection pc = (PooledConnection) ce.getSource();
+    if (!usedConnections.remove(pc)) {
+      // just in case the error is on a connection in the free pool
+      freeConnections.remove(pc);
     }
   }
 

@@ -22,18 +22,20 @@ package org.synchronoss.cpo;
  * ]]
  */
 
+import java.util.concurrent.locks.ReentrantLock;
+
 /**
  * Created with IntelliJ IDEA. User: dberry Date: 9/10/13 Time: 12:51 PM To change this template use
  * File | Settings | File Templates.
  */
 public abstract class AbstractDataSourceInfo<T> implements DataSourceInfo<T> {
   private T dataSource = null;
-  private String dataSourceName = null;
-  private int fetchSize = 0;
-  private int batchSize = 0;
+  private final String dataSourceName;
+  private final int fetchSize;
+  private final int batchSize;
 
   // Make sure DataSource creation is thread safe.
-  private final Object LOCK = new Object();
+  private final ReentrantLock lock = new ReentrantLock();
 
   public AbstractDataSourceInfo(String dataSourceName, int fetchSize, int batchSize) {
     this.dataSourceName = dataSourceName;
@@ -60,14 +62,15 @@ public abstract class AbstractDataSourceInfo<T> implements DataSourceInfo<T> {
 
   @Override
   public T getDataSource() throws CpoException {
-    if (dataSource == null) {
-      synchronized (LOCK) {
-        try {
-          dataSource = createDataSource();
-        } catch (Exception e) {
-          throw new CpoException("Error instantiating DataSource", e);
-        }
+    lock.lock();
+    try {
+      if (dataSource == null) {
+        dataSource = createDataSource();
       }
+    } catch (Exception e) {
+      throw new CpoException("Error instantiating DataSource", e);
+    } finally {
+      lock.unlock();
     }
 
     return dataSource;

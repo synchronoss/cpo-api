@@ -1,4 +1,4 @@
-package org.synchronoss.cpo.jdbc;
+package org.synchronoss.cpo.jdbc.adapter;
 
 /*-
  * [[
@@ -34,6 +34,10 @@ import org.synchronoss.cpo.CpoWhere;
 import org.synchronoss.cpo.enums.Comparison;
 import org.synchronoss.cpo.enums.Logical;
 import org.synchronoss.cpo.helper.ExceptionHelper;
+import org.synchronoss.cpo.jdbc.CriteriaObject;
+import org.synchronoss.cpo.jdbc.CriteriaObjectBean;
+import org.synchronoss.cpo.jdbc.ValueObject;
+import org.synchronoss.cpo.jdbc.ValueObjectBean;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Parameters;
@@ -48,7 +52,7 @@ public class CriteriaObjectTest {
 
   private static final Logger logger = LoggerFactory.getLogger(CriteriaObjectTest.class);
   private CpoAdapter cpoAdapter = null;
-  private ArrayList<ValueObject> al = new ArrayList<>();
+  private final ArrayList<ValueObject> al = new ArrayList<>();
   private boolean isSupportsCalls = true;
 
   public CriteriaObjectTest() {}

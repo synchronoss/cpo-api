@@ -1,4 +1,4 @@
-package org.synchronoss.cpo.jdbc;
+package org.synchronoss.cpo.jdbc.adapter;
 
 /*-
  * [[
@@ -30,7 +30,7 @@ import java.util.stream.Stream;
 import org.synchronoss.cpo.CpoAdapter;
 import org.synchronoss.cpo.CpoAdapterFactoryManager;
 import org.synchronoss.cpo.CpoNativeFunction;
-import org.synchronoss.cpo.CpoWhere;
+import org.synchronoss.cpo.jdbc.ValueObject;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -43,7 +43,7 @@ import org.testng.annotations.Test;
 public class NativeExpressionTest {
 
   private CpoAdapter cpoAdapter = null;
-  private ArrayList<ValueObject> al = new ArrayList<>();
+  private final ArrayList<ValueObject> al = new ArrayList<>();
 
   public NativeExpressionTest() {}
 
@@ -94,9 +94,6 @@ public class NativeExpressionTest {
   public void testNativeInWhere() {
     String method = "testNativeOrWhere:";
     Collection<ValueObject> col;
-    CpoWhere cw = null;
-    CpoWhere cw1 = null;
-    CpoWhere cw2 = null;
 
     try {
       ArrayList<CpoNativeFunction> cnqAl = new ArrayList<>();
@@ -120,9 +117,6 @@ public class NativeExpressionTest {
   public void testNativeOrWhere() {
     String method = "testNativeOrWhere:";
     Collection<ValueObject> col;
-    CpoWhere cw = null;
-    CpoWhere cw1 = null;
-    CpoWhere cw2 = null;
 
     try {
       ArrayList<CpoNativeFunction> cnqAl = new ArrayList<>();
@@ -145,9 +139,6 @@ public class NativeExpressionTest {
   public void testNullNative() {
     String method = "testNullNative:";
     Collection<ValueObject> col;
-    CpoWhere cw = null;
-    CpoWhere cw1 = null;
-    CpoWhere cw2 = null;
 
     try {
       ArrayList<CpoNativeFunction> cnqAl = new ArrayList<>();

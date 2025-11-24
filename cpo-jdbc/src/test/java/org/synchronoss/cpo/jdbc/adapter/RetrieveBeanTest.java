@@ -1,4 +1,4 @@
-package org.synchronoss.cpo.jdbc;
+package org.synchronoss.cpo.jdbc.adapter;
 
 /*-
  * [[
@@ -33,6 +33,7 @@ import org.synchronoss.cpo.CpoAdapter;
 import org.synchronoss.cpo.CpoAdapterFactoryManager;
 import org.synchronoss.cpo.CpoException;
 import org.synchronoss.cpo.CpoTrxAdapter;
+import org.synchronoss.cpo.jdbc.ValueObject;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
@@ -47,7 +48,7 @@ public class RetrieveBeanTest {
 
   private static final Logger logger = LoggerFactory.getLogger(RetrieveBeanTest.class);
   private CpoAdapter cpoAdapter = null;
-  private ArrayList<ValueObject> al = new ArrayList<>();
+  private final ArrayList<ValueObject> al = new ArrayList<>();
 
   public RetrieveBeanTest() {}
 

@@ -1,4 +1,4 @@
-package org.synchronoss.cpo.jdbc;
+package org.synchronoss.cpo.jdbc.adapter;
 
 /*-
  * [[
@@ -22,13 +22,17 @@ package org.synchronoss.cpo.jdbc;
  * ]]
  */
 
-/**
- * ChildValueObject is a class used to test the inheritance support of cpo
- *
- * @author david berry
- */
-public class ChildValueObject extends ValueObjectBean implements java.io.Serializable, Cloneable {
+import org.synchronoss.cpo.jdbc.ValueObject;
+import org.synchronoss.cpo.jdbc.ValueObjectBean;
 
-  /** */
-  private static final long serialVersionUID = 1L;
+public class ValueObjectFactory {
+  public static ValueObject createValueObject() {
+    return new ValueObjectBean();
+  }
+
+  public static ValueObject createValueObject(int id) {
+    ValueObjectBean valueObjectBean = new ValueObjectBean();
+    valueObjectBean.setId(id);
+    return valueObjectBean;
+  }
 }

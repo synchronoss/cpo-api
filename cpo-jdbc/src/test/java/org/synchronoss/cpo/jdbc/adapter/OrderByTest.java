@@ -1,4 +1,4 @@
-package org.synchronoss.cpo.jdbc;
+package org.synchronoss.cpo.jdbc.adapter;
 
 /*-
  * [[
@@ -32,6 +32,7 @@ import java.util.stream.Stream;
 import org.synchronoss.cpo.CpoAdapter;
 import org.synchronoss.cpo.CpoAdapterFactoryManager;
 import org.synchronoss.cpo.CpoOrderBy;
+import org.synchronoss.cpo.jdbc.ValueObject;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -44,7 +45,7 @@ import org.testng.annotations.Test;
 public class OrderByTest {
 
   private CpoAdapter cpoAdapter = null;
-  private ArrayList<ValueObject> al = new ArrayList<>();
+  private final ArrayList<ValueObject> al = new ArrayList<>();
 
   public OrderByTest() {}
 
@@ -82,7 +83,6 @@ public class OrderByTest {
     String method = "tearDown:";
     try {
       cpoAdapter.deleteBeans(ValueObject.FG_DELETE_TESTORDERBYDELETE, al);
-
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -101,10 +101,10 @@ public class OrderByTest {
 
     try {
       CpoOrderBy cob = cpoAdapter.newOrderBy(marker, attribute, ascending, function);
-      assertEquals(marker, cob.getMarker());
-      assertEquals(attribute, cob.getAttribute());
-      assertEquals(ascending, cob.getAscending());
-      assertEquals(function, cob.getFunction());
+      assertEquals(cob.getMarker(), marker);
+      assertEquals(cob.getAttribute(), attribute);
+      assertEquals(cob.getAscending(), ascending);
+      assertEquals(cob.getFunction(), function);
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -167,10 +167,6 @@ public class OrderByTest {
     ValueObject vobj = ValueObjectFactory.createValueObject(-6);
     try {
       cpoAdapter.insertBean(ValueObject.FG_CREATE_TESTORDERBYINSERT, vobj);
-    } catch (Exception e) {
-      fail(method + e.getMessage());
-    }
-    try {
       CpoOrderBy cob = cpoAdapter.newOrderBy(ValueObject.ATTR_ID, true, "ABS(id)");
       Collection<CpoOrderBy> colCob = new ArrayList<>();
       colCob.add(cob);
@@ -182,13 +178,12 @@ public class OrderByTest {
       }
     } catch (Exception e) {
       fail(method + e.getMessage());
-    }
-
-    try {
-      cpoAdapter.deleteBean(ValueObject.FG_DELETE_TESTORDERBYDELETE, vobj);
-
-    } catch (Exception e) {
-      fail(method + e.getMessage());
+    } finally {
+      try {
+        cpoAdapter.deleteBean(ValueObject.FG_DELETE_TESTORDERBYDELETE, vobj);
+      } catch (Exception e) {
+        fail(method + e.getMessage());
+      }
     }
   }
 }

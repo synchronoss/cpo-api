@@ -1,4 +1,4 @@
-package org.synchronoss.cpo.jdbc;
+package org.synchronoss.cpo.jdbc.adapter;
 
 /*-
  * [[
@@ -29,6 +29,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.CpoAdapter;
 import org.synchronoss.cpo.CpoAdapterFactoryManager;
+import org.synchronoss.cpo.jdbc.ValueObject;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -168,8 +169,8 @@ public class ConstructorTest {
       assertNotNull(cpoAdapter, method + "cpoAdapter is null");
 
       // make sure the password is not in the name
-      assertTrue(
-          !cpoAdapter.getDataSourceName().contains(PASSWORDSTRING),
+      assertFalse(
+          cpoAdapter.getDataSourceName().contains(PASSWORDSTRING),
           "password is in datasource name");
 
       assertEquals(cpoAdapter.getBatchSize(), 100, "Default batch size should be 100");
@@ -194,8 +195,8 @@ public class ConstructorTest {
       assertNotNull(cpoAdapter, method + "cpoAdapter is null");
 
       // make sure the password is not in the name
-      assertTrue(
-          !cpoAdapter.getDataSourceName().contains(PASSWORDSTRING),
+      assertFalse(
+          cpoAdapter.getDataSourceName().contains(PASSWORDSTRING),
           "password is in datasource name");
 
       assertEquals(cpoAdapter.getBatchSize(), 100, "Default batch size should be 100");
@@ -220,8 +221,8 @@ public class ConstructorTest {
       assertNotNull(cpoAdapter, method + "cpoAdapter is null");
 
       // make sure the password is not in the name
-      assertTrue(
-          !cpoAdapter.getDataSourceName().contains(PASSWORDSTRING),
+      assertFalse(
+          cpoAdapter.getDataSourceName().contains(PASSWORDSTRING),
           "password is in datasource name");
 
       assertEquals(cpoAdapter.getBatchSize(), 100, "Default batch size should be 100");
@@ -246,8 +247,8 @@ public class ConstructorTest {
       assertNotNull(cpoAdapter, method + "cpoAdapter is null");
 
       // make sure the password is not in the name
-      assertTrue(
-          !cpoAdapter.getDataSourceName().contains(PASSWORDSTRING),
+      assertFalse(
+          cpoAdapter.getDataSourceName().contains(PASSWORDSTRING),
           "password is in datasource name");
 
       assertEquals(cpoAdapter.getBatchSize(), 100, "Default batch size should be 100");
@@ -272,8 +273,8 @@ public class ConstructorTest {
       assertNotNull(cpoAdapter, method + "cpoAdapter is null");
 
       // make sure the password is not in the name
-      assertTrue(
-          !cpoAdapter.getDataSourceName().contains(PASSWORDSTRING),
+      assertFalse(
+          cpoAdapter.getDataSourceName().contains(PASSWORDSTRING),
           "password is in datasource name");
 
       assertEquals(cpoAdapter.getBatchSize(), 100, "Default batch size should be 100");

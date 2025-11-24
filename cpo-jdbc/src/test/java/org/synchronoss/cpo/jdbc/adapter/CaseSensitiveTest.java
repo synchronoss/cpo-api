@@ -1,4 +1,4 @@
-package org.synchronoss.cpo.jdbc;
+package org.synchronoss.cpo.jdbc.adapter;
 
 /*-
  * [[
@@ -26,38 +26,31 @@ import static org.testng.Assert.*;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.List;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.CpoAdapter;
 import org.synchronoss.cpo.CpoAdapterFactoryManager;
-import org.synchronoss.cpo.CpoWhere;
-import org.synchronoss.cpo.enums.Comparison;
-import org.synchronoss.cpo.enums.Logical;
-import org.synchronoss.cpo.helper.ExceptionHelper;
-import org.synchronoss.cpo.jdbc.meta.JdbcCpoMetaDescriptor;
+import org.synchronoss.cpo.jdbc.CaseValueObject;
+import org.synchronoss.cpo.jdbc.CaseValueObjectBean;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
 /**
- * DeleteObjectTest is a test class for testing the JdbcAdapter deleteObject method
+ * InsertObjectTest is a test class for testing the insert api calls of cpo
  *
  * @author david berry
  */
-public class DeleteObjectTest {
+public class CaseSensitiveTest {
 
-  private static final Logger logger = LoggerFactory.getLogger(DeleteObjectTest.class);
-  private ArrayList<ValueObject> al = new ArrayList<>();
+  private final ArrayList<CaseValueObject> al = new ArrayList<>();
   private CpoAdapter cpoAdapter = null;
-  private JdbcCpoMetaDescriptor metaDescriptor = null;
+  private CpoAdapter readAdapter = null;
   private boolean isSupportsMillis = true;
 
-  public DeleteObjectTest() {}
+  public CaseSensitiveTest() {}
 
   /**
-   * <code>setUp</code> Load the datasource from the properties in the property file
+   * {@code setUp} Load the datasource from the properties in the property file
    * jdbc_en_US.properties
    *
    * @author david berry
@@ -70,20 +63,28 @@ public class DeleteObjectTest {
     isSupportsMillis = milliSupport;
 
     try {
-      cpoAdapter = CpoAdapterFactoryManager.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_JDBC);
+      cpoAdapter =
+          CpoAdapterFactoryManager.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_CASESENSITIVE);
       assertNotNull(cpoAdapter, method + "cpoAdapter is null");
-      metaDescriptor = (JdbcCpoMetaDescriptor) cpoAdapter.getCpoMetaDescriptor();
+    } catch (Exception e) {
+      fail(method + e.getMessage());
+    }
+    try {
+      readAdapter =
+          CpoAdapterFactoryManager.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_CASESENSITIVE);
+      assertNotNull(readAdapter, method + "readAdapter is null");
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
   }
 
   @Test
-  public void testDeleteObject() {
-    String method = "testDeleteObject:";
-    ValueObject valObj = ValueObjectFactory.createValueObject(5);
+  public void testCaseSensitiveObject() {
+    String method = "testCaseSensitiveObject:";
+    CaseValueObject valObj = new CaseValueObjectBean();
+    valObj.setId(5);
 
-    valObj.setAttrVarChar("testDelete");
+    valObj.setAttrVarChar("testCaseSensitiveObject");
     valObj.setAttrInteger(3);
     Timestamp ts = new Timestamp(System.currentTimeMillis());
 
@@ -100,29 +101,20 @@ public class DeleteObjectTest {
     try {
       cpoAdapter.insertBean(valObj);
     } catch (Exception e) {
-      logger.error(ExceptionHelper.getLocalizedMessage(e));
       fail(method + e.getMessage());
     }
 
-    // try the where on the delete, should delete 0
     try {
-      List<CpoWhere> cws = new ArrayList<>();
-      cws.add(cpoAdapter.newWhere(Logical.AND, ValueObject.ATTR_ID, Comparison.EQ, 2));
-      long deleted = cpoAdapter.deleteBean(ValueObject.FG_DELETE_NULL, valObj, cws, null, null);
-      assertEquals(0, deleted, "Should not have deleted anything");
-    } catch (Exception e) {
-      logger.error(ExceptionHelper.getLocalizedMessage(e));
-      fail(method + e.getMessage());
-    }
+      CaseValueObject vo =
+          readAdapter.retrieveBean(CaseValueObject.FG_RETRIEVE_NULL, valObj, valObj, null, null);
+      assertNotEquals(vo.getId(), valObj.getId(), "Ids should not match");
+      assertNotEquals(vo.getAttrInteger(), valObj.getAttrInteger(), "Integers should not match");
+      assertNotEquals(valObj.getAttrVarChar(), vo.getAttrVarChar(), "Strings should not match");
+      assertFalse(
+          valObj.getAttrDatetime().equals(vo.getAttrDatetime()), "Timestamps should not match");
+      assertFalse(vo.getAttrBit(), "boolean not stored correctly");
 
-    // try the where on the delete, should delete 1
-    try {
-      List<CpoWhere> cws = new ArrayList<>();
-      cws.add(cpoAdapter.newWhere(Logical.OR, ValueObject.ATTR_ID, Comparison.EQ, 2));
-      long deleted = cpoAdapter.deleteBean(ValueObject.FG_DELETE_NULL, valObj, cws, null, null);
-      assertEquals(1, deleted, "Should have deleted 1");
     } catch (Exception e) {
-      logger.error(ExceptionHelper.getLocalizedMessage(e));
       fail(method + e.getMessage());
     }
   }
@@ -134,9 +126,9 @@ public class DeleteObjectTest {
       cpoAdapter.deleteBeans(al);
 
     } catch (Exception e) {
-      logger.error(ExceptionHelper.getLocalizedMessage(e));
       fail(method + e.getMessage());
     }
     cpoAdapter = null;
+    readAdapter = null;
   }
 }

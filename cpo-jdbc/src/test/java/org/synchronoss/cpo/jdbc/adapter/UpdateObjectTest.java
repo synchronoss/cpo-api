@@ -1,4 +1,4 @@
-package org.synchronoss.cpo.jdbc;
+package org.synchronoss.cpo.jdbc.adapter;
 
 /*-
  * [[
@@ -26,27 +26,30 @@ import static org.testng.Assert.*;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.List;
 import org.synchronoss.cpo.CpoAdapter;
 import org.synchronoss.cpo.CpoAdapterFactoryManager;
-import org.synchronoss.cpo.jdbc.meta.JdbcCpoMetaDescriptor;
+import org.synchronoss.cpo.CpoWhere;
+import org.synchronoss.cpo.enums.Comparison;
+import org.synchronoss.cpo.enums.Logical;
+import org.synchronoss.cpo.jdbc.ValueObject;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
 /**
- * InheritanceTest is a test class for testing the polymorphic capabilites of CPO
+ * DeleteObjectTest is a test class for testing the JdbcAdapter deleteObject method
  *
  * @author david berry
  */
-public class InheritanceTest {
+public class UpdateObjectTest {
 
-  private ArrayList<ChildValueObject> al = new ArrayList<>();
+  private final ArrayList<ValueObject> al = new ArrayList<>();
   private CpoAdapter cpoAdapter = null;
-  private JdbcCpoMetaDescriptor metaDescriptor = null;
   private boolean isSupportsMillis = true;
 
-  public InheritanceTest() {}
+  public UpdateObjectTest() {}
 
   /**
    * <code>setUp</code> Load the datasource from the properties in the property file
@@ -64,19 +67,17 @@ public class InheritanceTest {
     try {
       cpoAdapter = CpoAdapterFactoryManager.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_JDBC);
       assertNotNull(cpoAdapter, method + "cpoAdapter is null");
-      metaDescriptor = (JdbcCpoMetaDescriptor) cpoAdapter.getCpoMetaDescriptor();
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
   }
 
   @Test
-  public void testInsertObject() {
-    String method = "testInsertObject:";
-    ChildValueObject valObj = new ChildValueObject();
+  public void testUpdateObject() {
+    String method = "testUpdateObject:";
+    ValueObject valObj = ValueObjectFactory.createValueObject(5);
 
-    valObj.setId(5);
-    valObj.setAttrVarChar("testInsert");
+    valObj.setAttrVarChar("testUpdate");
     valObj.setAttrInteger(3);
     Timestamp ts = new Timestamp(System.currentTimeMillis());
 
@@ -96,15 +97,22 @@ public class InheritanceTest {
       fail(method + e.getMessage());
     }
 
+    // try the where on the update, should update 0
     try {
-      ChildValueObject vo =
-          cpoAdapter.retrieveBean(ValueObject.FG_RETRIEVE_NULL, valObj, valObj, null, null);
-      assertEquals(vo.getId(), valObj.getId(), "Ids do not match");
-      assertEquals(vo.getAttrInteger(), valObj.getAttrInteger(), "Integers do not match");
-      assertEquals(vo.getAttrVarChar(), valObj.getAttrVarChar(), "Strings do not match");
-      assertEquals(vo.getAttrDatetime(), valObj.getAttrDatetime(), "Timestamps do not match");
-      assertTrue(vo.getAttrBit(), "boolean not stored correctly");
+      List<CpoWhere> cws = new ArrayList<>();
+      cws.add(cpoAdapter.newWhere(Logical.NONE, ValueObject.ATTR_ID, Comparison.EQ, 2));
+      long updated = cpoAdapter.updateBean(ValueObject.FG_UPDATE_NULL, valObj, cws, null, null);
+      assertEquals(updated, 0, "Should not have updated anything");
+    } catch (Exception e) {
+      fail(method + e.getMessage());
+    }
 
+    // try the where on the update, should update 1
+    try {
+      List<CpoWhere> cws = new ArrayList<>();
+      cws.add(cpoAdapter.newWhere(Logical.NONE, ValueObject.ATTR_ID, Comparison.EQ, 5));
+      long updated = cpoAdapter.updateBean(ValueObject.FG_UPDATE_NULL, valObj, cws, null, null);
+      assertEquals(updated, 1, "Should have updated 1");
     } catch (Exception e) {
       fail(method + e.getMessage());
     }

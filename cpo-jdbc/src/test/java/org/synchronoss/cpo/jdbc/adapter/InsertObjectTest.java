@@ -1,4 +1,4 @@
-package org.synchronoss.cpo.jdbc;
+package org.synchronoss.cpo.jdbc.adapter;
 
 /*-
  * [[
@@ -24,11 +24,13 @@ package org.synchronoss.cpo.jdbc;
 
 import static org.testng.Assert.*;
 
+import java.math.BigInteger;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.stream.Stream;
 import org.synchronoss.cpo.CpoAdapter;
 import org.synchronoss.cpo.CpoAdapterFactoryManager;
-import org.synchronoss.cpo.jdbc.meta.JdbcCpoMetaDescriptor;
+import org.synchronoss.cpo.jdbc.ValueObject;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Parameters;
@@ -39,15 +41,14 @@ import org.testng.annotations.Test;
  *
  * @author david berry
  */
-public class CaseSensitiveTest {
+public class InsertObjectTest {
 
-  private ArrayList<CaseValueObject> al = new ArrayList<>();
+  private final ArrayList<ValueObject> al = new ArrayList<>();
   private CpoAdapter cpoAdapter = null;
   private CpoAdapter readAdapter = null;
-  private JdbcCpoMetaDescriptor metaDescriptor = null;
   private boolean isSupportsMillis = true;
 
-  public CaseSensitiveTest() {}
+  public InsertObjectTest() {}
 
   /**
    * <code>setUp</code> Load the datasource from the properties in the property file
@@ -63,16 +64,13 @@ public class CaseSensitiveTest {
     isSupportsMillis = milliSupport;
 
     try {
-      cpoAdapter =
-          CpoAdapterFactoryManager.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_CASESENSITIVE);
+      cpoAdapter = CpoAdapterFactoryManager.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_JDBC);
       assertNotNull(cpoAdapter, method + "cpoAdapter is null");
-      metaDescriptor = (JdbcCpoMetaDescriptor) cpoAdapter.getCpoMetaDescriptor();
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
     try {
-      readAdapter =
-          CpoAdapterFactoryManager.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_CASESENSITIVE);
+      readAdapter = CpoAdapterFactoryManager.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_JDBC);
       assertNotNull(readAdapter, method + "readAdapter is null");
     } catch (Exception e) {
       fail(method + e.getMessage());
@@ -80,12 +78,11 @@ public class CaseSensitiveTest {
   }
 
   @Test
-  public void testCaseSensitiveObject() {
-    String method = "testCaseSensitiveObject:";
-    CaseValueObject valObj = new CaseValueObjectBean();
-    valObj.setId(5);
+  public void testInsertObject() {
+    String method = "testInsertObject:";
+    ValueObject valObj = ValueObjectFactory.createValueObject(5);
 
-    valObj.setAttrVarChar("testCaseSensitiveObject");
+    valObj.setAttrVarChar("testInsert");
     valObj.setAttrInteger(3);
     Timestamp ts = new Timestamp(System.currentTimeMillis());
 
@@ -97,6 +94,10 @@ public class CaseSensitiveTest {
 
     valObj.setAttrBit(true);
 
+    // test the setObject and getObject type
+    BigInteger bigInteger = BigInteger.valueOf(1234);
+    valObj.setAttrBigInt(bigInteger);
+
     al.add(valObj);
 
     try {
@@ -106,15 +107,47 @@ public class CaseSensitiveTest {
     }
 
     try {
-      CaseValueObject vo =
-          readAdapter.retrieveBean(CaseValueObject.FG_RETRIEVE_NULL, valObj, valObj, null, null);
-      assertNotEquals(vo.getId(), valObj.getId(), "Ids should not match");
-      assertNotEquals(vo.getAttrInteger(), valObj.getAttrInteger(), "Integers should not match");
-      assertNotEquals(valObj.getAttrVarChar(), vo.getAttrVarChar(), "Strings should not match");
-      assertFalse(
-          valObj.getAttrDatetime().equals(vo.getAttrDatetime()), "Timestamps should not match");
-      assertFalse(vo.getAttrBit(), "boolean not stored correctly");
+      ValueObject vo =
+          readAdapter.retrieveBean(ValueObject.FG_RETRIEVE_NULL, valObj, valObj, null, null);
+      assertEquals(vo.getId(), valObj.getId(), "Ids do not match");
+      assertEquals(vo.getAttrInteger(), valObj.getAttrInteger(), "Integers do not match");
+      assertEquals(vo.getAttrVarChar(), valObj.getAttrVarChar(), "Strings do not match");
+      assertEquals(vo.getAttrDatetime(), valObj.getAttrDatetime(), "Timestamps do not match");
+      assertTrue(vo.getAttrBit(), "boolean not stored correctly");
 
+    } catch (Exception e) {
+      fail(method + e.getMessage());
+    } finally {
+      try {
+        cpoAdapter.deleteBean(valObj);
+      } catch (Exception e) {
+        fail(method + e.getMessage());
+      }
+    }
+  }
+
+  @Test
+  public void testInsertObjects() {
+
+    String method = "testInsertObjects:";
+    ValueObject vo = ValueObjectFactory.createValueObject(61);
+    vo.setAttrVarChar("Test");
+    ArrayList<ValueObject> a2 = new ArrayList<>();
+    a2.add(vo);
+    a2.add(ValueObjectFactory.createValueObject(62));
+    a2.add(ValueObjectFactory.createValueObject(63));
+    a2.add(ValueObjectFactory.createValueObject(64));
+    al.addAll(a2);
+    try {
+      long inserts = cpoAdapter.insertBeans(a2);
+      assertEquals(inserts, 4, "inserts performed do not equal inserts requested");
+    } catch (Exception e) {
+      fail(method + e.getMessage());
+    }
+
+    try (Stream<ValueObject> beans = cpoAdapter.retrieveBeans(ValueObject.FG_LIST_NULL, vo); ) {
+      long count = beans.count();
+      assertEquals(count, a2.size(), "Number of beans is " + count);
     } catch (Exception e) {
       fail(method + e.getMessage());
     }

@@ -1,4 +1,4 @@
-package org.synchronoss.cpo.jdbc;
+package org.synchronoss.cpo.jdbc.adapter;
 
 /*-
  * [[
@@ -33,6 +33,9 @@ import org.synchronoss.cpo.CpoAdapter;
 import org.synchronoss.cpo.CpoAdapterFactoryManager;
 import org.synchronoss.cpo.CpoException;
 import org.synchronoss.cpo.helper.ExceptionHelper;
+import org.synchronoss.cpo.jdbc.LobValueObject;
+import org.synchronoss.cpo.jdbc.LobValueObjectBean;
+import org.synchronoss.cpo.jdbc.ValueObject;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 

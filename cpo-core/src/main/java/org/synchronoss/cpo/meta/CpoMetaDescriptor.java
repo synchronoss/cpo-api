@@ -25,7 +25,6 @@ package org.synchronoss.cpo.meta;
 import java.io.*;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -157,7 +156,7 @@ public class CpoMetaDescriptor extends CpoMetaDescriptorCache
 
   protected static CpoMetaDescriptor createUpdateInstance(
       String name, List<String> metaXmls, boolean caseSensitive) throws CpoException {
-    return createUpdateInstance(name, metaXmls.toArray(new String[metaXmls.size()]), caseSensitive);
+    return createUpdateInstance(name, metaXmls.toArray(new String[0]), caseSensitive);
   }
 
   protected static CpoMetaDescriptor createUpdateInstance(
@@ -167,30 +166,8 @@ public class CpoMetaDescriptor extends CpoMetaDescriptorCache
     var errBuilder = new StringBuilder();
 
     for (String metaXml : metaXmls) {
-      InputStream is = null;
 
-      // See if the file is a uri
-      try {
-        URL cpoConfigUrl = new URL(metaXml);
-        is = cpoConfigUrl.openStream();
-      } catch (IOException e) {
-        errBuilder.append("Uri Not Found: ").append(metaXml).append("\n");
-      }
-
-      // See if the file is a resource in the jar
-      if (is == null) is = CpoClassLoader.getResourceAsStream(metaXml);
-
-      if (is == null) {
-        errBuilder.append("Resource Not Found: ").append(metaXml).append("\n");
-        try {
-          // See if the file is a local file on the server
-          is = new FileInputStream(metaXml);
-        } catch (FileNotFoundException fnfe) {
-          errBuilder.append("File Not Found: ").append(metaXml).append("\n");
-          is = null;
-        }
-      }
-      try {
+      try (InputStream is = XmlBeansHelper.loadXmlStream(metaXml, errBuilder)) {
         CpoMetaDataDocument metaDataDoc;
         if (is == null) {
           // See if the config is sent in as a string
@@ -214,9 +191,6 @@ public class CpoMetaDescriptor extends CpoMetaDescriptorCache
           logger.debug("Getting the Class");
           Class<?> clazz = CpoClassLoader.forName(metaDescriptorClassName);
           logger.debug("Getting the Constructor");
-          if (clazz == null) {
-            logger.debug("clazz==null");
-          }
           Constructor<?> cons = clazz.getConstructor(String.class, boolean.class);
           logger.debug("Creating the instance");
           metaDescriptor = (CpoMetaDescriptor) cons.newInstance(name, caseSensitive);
@@ -293,16 +267,6 @@ public class CpoMetaDescriptor extends CpoMetaDescriptorCache
                 + metaDescriptorClassName
                 + ":"
                 + ExceptionHelper.getLocalizedMessage(cce));
-      } finally {
-        if (is != null) {
-          try {
-            is.close();
-          } catch (Exception e) {
-            if (logger.isTraceEnabled()) {
-              logger.trace(e.getLocalizedMessage());
-            }
-          }
-        }
       }
     }
 

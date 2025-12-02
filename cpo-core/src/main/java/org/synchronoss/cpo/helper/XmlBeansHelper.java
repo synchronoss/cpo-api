@@ -22,6 +22,11 @@ package org.synchronoss.cpo.helper;
  * ]]
  */
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 import java.util.ArrayList;
 import org.apache.xmlbeans.XmlError;
 import org.apache.xmlbeans.XmlObject;
@@ -56,5 +61,32 @@ public class XmlBeansHelper {
     xo.setSavePrettyPrint();
     xo.setUseDefaultNamespace();
     return xo;
+  }
+
+  public static InputStream loadXmlStream(String xmlStr, StringBuilder errorBuilder) {
+    InputStream is = null;
+    // See if the file is a uri
+    try {
+      URL cpoConfigUrl = new URL(xmlStr);
+      is = cpoConfigUrl.openStream();
+    } catch (IOException e) {
+      errorBuilder.append("Uri Not Found: ").append(xmlStr).append("\n");
+    }
+
+    // See if the file is a resource in the jar
+    if (is == null) is = CpoClassLoader.getResourceAsStream(xmlStr);
+
+    if (is == null) {
+      errorBuilder.append("Resource Not Found: ").append(xmlStr).append("\n");
+      try {
+        // See if the file is a local file on the server
+        is = new FileInputStream(xmlStr);
+      } catch (FileNotFoundException fnfe) {
+        errorBuilder.append("File Not Found: ").append(xmlStr).append("\n");
+        is = null;
+      }
+    }
+
+    return is;
   }
 }

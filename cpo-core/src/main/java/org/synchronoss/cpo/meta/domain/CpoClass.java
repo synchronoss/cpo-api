@@ -26,6 +26,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.concurrent.locks.ReentrantLock;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.CpoException;
@@ -43,6 +44,8 @@ public abstract class CpoClass extends CpoClassBean
   private static final long serialVersionUID = 1L;
 
   private static final Logger logger = LoggerFactory.getLogger(CpoClass.class);
+  private final ReentrantLock lock = new ReentrantLock();
+
   private Class<?> metaClass = null;
 
   /** javaMap contains a Map of CpoAttribute Objects the key is the javaName of the attribute */
@@ -177,24 +180,29 @@ public abstract class CpoClass extends CpoClassBean
     }
   }
 
-  public synchronized void loadRunTimeInfo(CpoMetaDescriptor metaDescriptor) throws CpoException {
-    if (metaClass == null) {
-      Class<?> tmpMetaClass = null;
+  public void loadRunTimeInfo(CpoMetaDescriptor metaDescriptor) throws CpoException {
+    lock.lock();
+    try {
+      if (metaClass == null) {
+        Class<?> tmpMetaClass = null;
 
-      try {
-        logger.debug("Loading runtimeinfo for " + getName());
-        tmpMetaClass = CpoClassLoader.forName(getName());
-      } catch (ClassNotFoundException cnfe) {
-        throw new CpoException(
-            "Class not found: " + getName() + ": " + ExceptionHelper.getLocalizedMessage(cnfe));
+        try {
+          logger.debug("Loading runtimeinfo for " + getName());
+          tmpMetaClass = CpoClassLoader.forName(getName());
+        } catch (ClassNotFoundException cnfe) {
+          throw new CpoException(
+              "Class not found: " + getName() + ": " + ExceptionHelper.getLocalizedMessage(cnfe));
+        }
+
+        for (CpoAttribute attribute : javaMap.values()) {
+          attribute.loadRunTimeInfo(metaDescriptor, tmpMetaClass);
+        }
+        logger.debug("Loaded runtimeinfo for " + getName());
+
+        metaClass = tmpMetaClass;
       }
-
-      for (CpoAttribute attribute : javaMap.values()) {
-        attribute.loadRunTimeInfo(metaDescriptor, tmpMetaClass);
-      }
-      logger.debug("Loaded runtimeinfo for " + getName());
-
-      metaClass = tmpMetaClass;
+    } finally {
+      lock.unlock();
     }
   }
 

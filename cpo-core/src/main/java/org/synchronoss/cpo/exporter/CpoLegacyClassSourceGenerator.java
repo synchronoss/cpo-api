@@ -40,10 +40,6 @@ public class CpoLegacyClassSourceGenerator extends CpoClassSourceGenerator {
     super(metaDescriptor);
   }
 
-  public String getClassName() {
-    return className;
-  }
-
   public String getSourceCode() {
     StringBuilder source = new StringBuilder();
 

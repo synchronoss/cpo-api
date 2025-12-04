@@ -27,8 +27,6 @@ import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.CpoException;
 import org.synchronoss.cpo.helper.ExceptionHelper;
 import org.synchronoss.cpo.jdbc.meta.JdbcMethodMapEntry;
-import org.synchronoss.cpo.jdbc.meta.JdbcMethodMapper;
-import org.synchronoss.cpo.meta.AbstractBindableCpoData;
 import org.synchronoss.cpo.meta.domain.CpoAttribute;
 import org.synchronoss.cpo.transform.CpoTransform;
 import org.synchronoss.cpo.transform.jdbc.JdbcCpoTransform;
@@ -38,7 +36,7 @@ import org.synchronoss.cpo.transform.jdbc.JdbcCpoTransform;
  *
  * @author dberry
  */
-public class JdbcPreparedStatementCpoData extends AbstractBindableCpoData {
+public class JdbcPreparedStatementCpoData extends AbstractStatementCpoData {
 
   private static final Logger logger = LoggerFactory.getLogger(JdbcPreparedStatementCpoData.class);
   private JdbcPreparedStatementFactory cpoStatementFactory = null;
@@ -58,40 +56,21 @@ public class JdbcPreparedStatementCpoData extends AbstractBindableCpoData {
 
   @Override
   public void invokeSetter(Object instanceObject) throws CpoException {
+    JdbcMethodMapEntry<?, ?> methodMapEntry = getJdbcMethodMapEntry(instanceObject);
     Logger localLogger =
         instanceObject == null ? logger : LoggerFactory.getLogger(instanceObject.getClass());
-    CpoAttribute cpoAttribute = getCpoAttribute();
-    Object param = transformOut(cpoAttribute.invokeGetter(instanceObject));
-    JdbcMethodMapEntry<?, ?> methodMapEntry =
-        JdbcMethodMapper.getJavaSqlMethod(getDataSetterParamType());
-    if (methodMapEntry == null) {
-      if (Object.class.isAssignableFrom(getDataSetterParamType())) {
-        methodMapEntry = JdbcMethodMapper.getJavaSqlMethod(Object.class);
-      }
-      if (methodMapEntry == null) {
-        throw new CpoException(
-            "Error Retrieving Jdbc Method for type: " + getDataSetterParamType().getName());
-      }
-    }
-    localLogger.debug(cpoAttribute.getDataName() + "=" + param);
     try {
-      switch (methodMapEntry.getMethodType()) {
-        case JdbcMethodMapEntry.METHOD_TYPE_BASIC:
-        case JdbcMethodMapEntry.METHOD_TYPE_OBJECT:
-        case JdbcMethodMapEntry.METHOD_TYPE_STREAM:
-        case JdbcMethodMapEntry.METHOD_TYPE_READER:
-        default:
-          methodMapEntry
-              .getBsSetter()
-              .invoke(cpoStatementFactory.getPreparedStatement(), getIndex(), param);
-          break;
-      }
+      Object param = transformOut(getCpoAttribute().invokeGetter(instanceObject));
+      localLogger.debug(getCpoAttribute().getDataName() + "=" + param);
+      methodMapEntry
+          .getBsSetter()
+          .invoke(cpoStatementFactory.getPreparedStatement(), getIndex(), param);
     } catch (Exception e) {
       throw new CpoException(
           "Error Invoking Jdbc Method: "
-              + cpoAttribute.getDataName()
+              + getCpoAttribute().getDataName()
               + ":"
-              + cpoAttribute.getJavaName()
+              + getCpoAttribute().getJavaName()
               + ":"
               + methodMapEntry.getBsSetter().getName()
               + ":"

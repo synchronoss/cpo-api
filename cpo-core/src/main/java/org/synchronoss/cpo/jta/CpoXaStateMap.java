@@ -31,14 +31,6 @@ public class CpoXaStateMap<T> {
   // map of all seen XIDs
   private final HashMap<Xid, CpoXaState<T>> xidStateMap = new HashMap<>();
 
-  // map of associated XAResources
-  private final HashMap<CpoBaseXaResource<T>, Xid> xaResourceMap = new HashMap<>();
-
-  // map of all assigned resources
-  public HashMap<CpoBaseXaResource<T>, Xid> getXaResourceMap() {
-    return xaResourceMap;
-  }
-
   // map of all xid State
   public HashMap<Xid, CpoXaState<T>> getXidStateMap() {
     return xidStateMap;

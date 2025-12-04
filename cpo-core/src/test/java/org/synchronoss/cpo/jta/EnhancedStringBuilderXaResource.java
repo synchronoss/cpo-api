@@ -41,6 +41,6 @@ public class EnhancedStringBuilderXaResource extends StringBuilderXaResource {
   public boolean isSameRM(XAResource xaResource) throws XAException {
     if (xaResource == null) throw new XAException(XAException.XAER_INVAL);
 
-    return xaResource instanceof EnhancedStringBuilderXaResource;
+    return xaResource instanceof EnhancedStringBuilderXaResource && this.equals(xaResource);
   }
 }

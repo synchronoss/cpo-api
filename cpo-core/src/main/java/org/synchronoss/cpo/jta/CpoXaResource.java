@@ -27,7 +27,7 @@ import javax.transaction.xa.XAResource;
 import javax.transaction.xa.Xid;
 
 /** Created by dberry on 11/8/15. */
-public interface CpoXaResource<T> extends XAResource {
+public interface CpoXaResource extends XAResource {
   /**
    * @param xid The id of the XAResource to close
    * @throws XAException An exception occurred closing the resource

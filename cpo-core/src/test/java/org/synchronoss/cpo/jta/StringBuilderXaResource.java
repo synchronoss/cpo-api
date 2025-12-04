@@ -24,9 +24,13 @@ package org.synchronoss.cpo.jta;
 
 import javax.transaction.xa.XAException;
 import javax.transaction.xa.XAResource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.synchronoss.cpo.CpoException;
 
 /** Created by dberry on 8/9/15. */
 public class StringBuilderXaResource extends CpoBaseXaResource<StringBuilder> {
+  private static final Logger logger = LoggerFactory.getLogger(StringBuilderXaResource.class);
 
   public StringBuilderXaResource() {
     super(new StringBuilder());
@@ -63,17 +67,27 @@ public class StringBuilderXaResource extends CpoBaseXaResource<StringBuilder> {
   public boolean isSameRM(XAResource xaResource) throws XAException {
     if (xaResource == null) throw new XAException(XAException.XAER_INVAL);
 
-    return xaResource instanceof StringBuilderXaResource;
+    return xaResource instanceof StringBuilderXaResource && this.equals(xaResource);
   }
 
   // StringBuilder Proxy methods
 
-  public StringBuilder append(Object obj) {
-    return getCurrentResource().append(String.valueOf(obj));
+  public StringBuilderXaResource append(Object obj) {
+    try {
+      accept((sb) -> sb.append(obj));
+    } catch (CpoException e) {
+      logger.error("Error appending", e);
+    }
+    return this;
   }
 
-  public StringBuilder append(String str) {
-    return getCurrentResource().append(str);
+  public StringBuilderXaResource append(String str) {
+    try {
+      accept((sb) -> sb.append(str));
+    } catch (CpoException e) {
+      logger.error("Error appending", e);
+    }
+    return this;
   }
 
   /**
@@ -89,195 +103,360 @@ public class StringBuilderXaResource extends CpoBaseXaResource<StringBuilder> {
    * <i>n</i>; otherwise, it is equal to the character at index <i>k-n</i> in the argument {@code
    * sb}.
    *
-   * @param sb the {@code StringBuffer} to append.
+   * @param stringBuffer the {@code StringBuffer} to append.
    * @return a reference to this object.
    */
-  public StringBuilder append(StringBuffer sb) {
-    return getCurrentResource().append(sb);
+  public StringBuilderXaResource append(StringBuffer stringBuffer) {
+    try {
+      accept((sb) -> sb.append(stringBuffer));
+    } catch (CpoException e) {
+      logger.error("Error appending", e);
+    }
+    return this;
   }
 
-  public StringBuilder append(CharSequence s) {
-    return getCurrentResource().append(s);
+  public StringBuilderXaResource append(CharSequence s) {
+    try {
+      accept((sb) -> sb.append(s));
+    } catch (CpoException e) {
+      logger.error("Error appending", e);
+    }
+    return this;
   }
 
   /**
    * @throws IndexOutOfBoundsException {@inheritDoc}
    */
-  public StringBuilder append(CharSequence s, int start, int end) {
-    return getCurrentResource().append(s, start, end);
+  public StringBuilderXaResource append(CharSequence s, int start, int end) {
+    try {
+      accept((sb) -> sb.append(s, start, end));
+    } catch (CpoException e) {
+      logger.error("Error appending", e);
+    }
+    return this;
   }
 
-  public StringBuilder append(char[] str) {
-    return getCurrentResource().append(str);
+  public StringBuilderXaResource append(char[] str) {
+    try {
+      accept((sb) -> sb.append(str));
+    } catch (CpoException e) {
+      logger.error("Error appending", e);
+    }
+    return this;
   }
 
   /**
    * @throws IndexOutOfBoundsException {@inheritDoc}
    */
-  public StringBuilder append(char[] str, int offset, int len) {
-    return getCurrentResource().append(str, offset, len);
+  public StringBuilderXaResource append(char[] str, int offset, int len) {
+    try {
+      accept((sb) -> sb.append(str, offset, len));
+    } catch (CpoException e) {
+      logger.error("Error appending", e);
+    }
+    return this;
   }
 
-  public StringBuilder append(boolean b) {
-    return getCurrentResource().append(b);
+  public StringBuilderXaResource append(boolean b) {
+    try {
+      accept((sb) -> sb.append(b));
+    } catch (CpoException e) {
+      logger.error("Error appending", e);
+    }
+    return this;
   }
 
-  public StringBuilder append(char c) {
-    return getCurrentResource().append(c);
+  public StringBuilderXaResource append(char c) {
+    try {
+      accept((sb) -> sb.append(c));
+    } catch (CpoException e) {
+      logger.error("Error appending", e);
+    }
+    return this;
   }
 
-  public StringBuilder append(int i) {
-    return getCurrentResource().append(i);
+  public StringBuilderXaResource append(int i) {
+    try {
+      accept((sb) -> sb.append(i));
+    } catch (CpoException e) {
+      logger.error("Error appending", e);
+    }
+    return this;
   }
 
-  public StringBuilder append(long lng) {
-    return getCurrentResource().append(lng);
+  public StringBuilderXaResource append(long lng) {
+    try {
+      accept((sb) -> sb.append(lng));
+    } catch (CpoException e) {
+      logger.error("Error appending", e);
+    }
+    return this;
   }
 
-  public StringBuilder append(float f) {
-    return getCurrentResource().append(f);
+  public StringBuilderXaResource append(float f) {
+    try {
+      accept((sb) -> sb.append(f));
+    } catch (CpoException e) {
+      logger.error("Error appending", e);
+    }
+    return this;
   }
 
-  public StringBuilder append(double d) {
-    return getCurrentResource().append(d);
+  public StringBuilderXaResource append(double d) {
+    try {
+      accept((sb) -> sb.append(d));
+    } catch (CpoException e) {
+      logger.error("Error appending", e);
+    }
+    return this;
   }
 
   /**
    * @since 1.5
    */
-  public StringBuilder appendCodePoint(int codePoint) {
-    return getCurrentResource().appendCodePoint(codePoint);
+  public StringBuilderXaResource appendCodePoint(int codePoint) {
+    try {
+      accept((sb) -> sb.appendCodePoint(codePoint));
+    } catch (CpoException e) {
+      logger.error("Error appending", e);
+    }
+    return this;
   }
 
   /**
    * @throws StringIndexOutOfBoundsException {@inheritDoc}
    */
-  public StringBuilder delete(int start, int end) {
-    return getCurrentResource().delete(start, end);
+  public StringBuilderXaResource delete(int start, int end) {
+    try {
+      accept((sb) -> sb.delete(start, end));
+    } catch (CpoException e) {
+      logger.error("Error appending", e);
+    }
+    return this;
   }
 
   /**
    * @throws StringIndexOutOfBoundsException {@inheritDoc}
    */
-  public StringBuilder deleteCharAt(int index) {
-    return getCurrentResource().deleteCharAt(index);
+  public StringBuilderXaResource deleteCharAt(int index) {
+    try {
+      accept((sb) -> sb.deleteCharAt(index));
+    } catch (CpoException e) {
+      logger.error("Error appending", e);
+    }
+    return this;
   }
 
   /**
    * @throws StringIndexOutOfBoundsException {@inheritDoc}
    */
-  public StringBuilder replace(int start, int end, String str) {
-    return getCurrentResource().replace(start, end, str);
+  public StringBuilderXaResource replace(int start, int end, String str) {
+    try {
+      accept((sb) -> sb.replace(start, end, str));
+    } catch (CpoException e) {
+      logger.error("Error appending", e);
+    }
+    return this;
   }
 
   /**
    * @throws StringIndexOutOfBoundsException {@inheritDoc}
    */
-  public StringBuilder insert(int index, char[] str, int offset, int len) {
-    return getCurrentResource().insert(index, str, offset, len);
+  public StringBuilderXaResource insert(int index, char[] str, int offset, int len) {
+    try {
+      accept((sb) -> sb.insert(index, str, offset, len));
+    } catch (CpoException e) {
+      logger.error("Error appending", e);
+    }
+    return this;
   }
 
   /**
    * @throws StringIndexOutOfBoundsException {@inheritDoc}
    */
-  public StringBuilder insert(int offset, Object obj) {
-    return getCurrentResource().insert(offset, obj);
+  public StringBuilderXaResource insert(int offset, Object obj) {
+    try {
+      accept((sb) -> sb.insert(offset, obj));
+    } catch (CpoException e) {
+      logger.error("Error appending", e);
+    }
+    return this;
   }
 
   /**
    * @throws StringIndexOutOfBoundsException {@inheritDoc}
    */
-  public StringBuilder insert(int offset, String str) {
-    return getCurrentResource().insert(offset, str);
+  public StringBuilderXaResource insert(int offset, String str) {
+    try {
+      accept((sb) -> sb.insert(offset, str));
+    } catch (CpoException e) {
+      logger.error("Error appending", e);
+    }
+    return this;
   }
 
   /**
    * @throws StringIndexOutOfBoundsException {@inheritDoc}
    */
-  public StringBuilder insert(int offset, char[] str) {
-    return getCurrentResource().insert(offset, str);
+  public StringBuilderXaResource insert(int offset, char[] str) {
+    try {
+      accept((sb) -> sb.insert(offset, str));
+    } catch (CpoException e) {
+      logger.error("Error appending", e);
+    }
+    return this;
   }
 
   /**
    * @throws IndexOutOfBoundsException {@inheritDoc}
    */
-  public StringBuilder insert(int dstOffset, CharSequence s) {
-    return getCurrentResource().insert(dstOffset, s);
+  public StringBuilderXaResource insert(int dstOffset, CharSequence s) {
+    try {
+      accept((sb) -> sb.insert(dstOffset, s));
+    } catch (CpoException e) {
+      logger.error("Error appending", e);
+    }
+    return this;
   }
 
   /**
    * @throws IndexOutOfBoundsException {@inheritDoc}
    */
-  public StringBuilder insert(int dstOffset, CharSequence s, int start, int end) {
-    return getCurrentResource().insert(dstOffset, s, start, end);
+  public StringBuilderXaResource insert(int dstOffset, CharSequence s, int start, int end) {
+    try {
+      accept((sb) -> sb.insert(dstOffset, s, start, end));
+    } catch (CpoException e) {
+      logger.error("Error appending", e);
+    }
+    return this;
   }
 
   /**
    * @throws StringIndexOutOfBoundsException {@inheritDoc}
    */
-  public StringBuilder insert(int offset, boolean b) {
-    return getCurrentResource().insert(offset, b);
+  public StringBuilderXaResource insert(int offset, boolean b) {
+    try {
+      accept((sb) -> sb.insert(offset, b));
+    } catch (CpoException e) {
+      logger.error("Error appending", e);
+    }
+    return this;
   }
 
   /**
    * @throws IndexOutOfBoundsException {@inheritDoc}
    */
-  public StringBuilder insert(int offset, char c) {
-    return getCurrentResource().insert(offset, c);
+  public StringBuilderXaResource insert(int offset, char c) {
+    try {
+      accept((sb) -> sb.insert(offset, c));
+    } catch (CpoException e) {
+      logger.error("Error appending", e);
+    }
+    return this;
   }
 
   /**
    * @throws StringIndexOutOfBoundsException {@inheritDoc}
    */
-  public StringBuilder insert(int offset, int i) {
-    return getCurrentResource().insert(offset, i);
+  public StringBuilderXaResource insert(int offset, int i) {
+    try {
+      accept((sb) -> sb.insert(offset, i));
+    } catch (CpoException e) {
+      logger.error("Error appending", e);
+    }
+    return this;
   }
 
   /**
    * @throws StringIndexOutOfBoundsException {@inheritDoc}
    */
-  public StringBuilder insert(int offset, long l) {
-    return getCurrentResource().insert(offset, l);
+  public StringBuilderXaResource insert(int offset, long l) {
+    try {
+      accept((sb) -> sb.insert(offset, l));
+    } catch (CpoException e) {
+      logger.error("Error appending", e);
+    }
+    return this;
   }
 
   /**
    * @throws StringIndexOutOfBoundsException {@inheritDoc}
    */
-  public StringBuilder insert(int offset, float f) {
-    return getCurrentResource().insert(offset, f);
+  public StringBuilderXaResource insert(int offset, float f) {
+    try {
+      accept((sb) -> sb.insert(offset, f));
+    } catch (CpoException e) {
+      logger.error("Error appending", e);
+    }
+    return this;
   }
 
   /**
    * @throws StringIndexOutOfBoundsException {@inheritDoc}
    */
-  public StringBuilder insert(int offset, double d) {
-    return getCurrentResource().insert(offset, d);
+  public StringBuilderXaResource insert(int offset, double d) {
+    try {
+      accept((sb) -> sb.insert(offset, d));
+    } catch (CpoException e) {
+      logger.error("Error appending", e);
+    }
+    return this;
   }
 
   public int indexOf(String str) {
-    return getCurrentResource().indexOf(str);
+    try {
+      return apply((sb) -> sb.indexOf(str));
+    } catch (CpoException e) {
+      logger.error("Error appending", e);
+      return -1;
+    }
   }
 
   public int indexOf(String str, int fromIndex) {
-    return getCurrentResource().indexOf(str, fromIndex);
+    try {
+      return apply((sb) -> sb.indexOf(str, fromIndex));
+    } catch (CpoException e) {
+      logger.error("Error appending", e);
+      return -1;
+    }
   }
 
   public int lastIndexOf(String str) {
-    return getCurrentResource().lastIndexOf(str);
+    try {
+      return apply((sb) -> sb.lastIndexOf(str));
+    } catch (CpoException e) {
+      logger.error("Error appending", e);
+      return -1;
+    }
   }
 
   public int lastIndexOf(String str, int fromIndex) {
-    return getCurrentResource().lastIndexOf(str, fromIndex);
+    try {
+      return apply((sb) -> sb.lastIndexOf(str, fromIndex));
+    } catch (CpoException e) {
+      logger.error("Error appending", e);
+      return -1;
+    }
   }
 
-  public StringBuilder reverse() {
-    return getCurrentResource().reverse();
+  public StringBuilderXaResource reverse() {
+    try {
+      accept(StringBuilder::reverse);
+    } catch (CpoException e) {
+      logger.error("Error appending", e);
+    }
+    return this;
   }
 
   @Override
   public String toString() {
     // Create a copy, don't share the array
-    return getCurrentResource().toString();
+    try {
+      return apply(StringBuilder::toString);
+    } catch (CpoException e) {
+      logger.error("Error appending", e);
+      return "";
+    }
   }
 
   /**
@@ -287,12 +466,17 @@ public class StringBuilderXaResource extends CpoBaseXaResource<StringBuilder> {
    * @return the number of <code>char</code>s in this sequence
    */
   int length() {
-    return getCurrentResource().length();
+    try {
+      return apply(StringBuilder::length);
+    } catch (CpoException e) {
+      logger.error("Error appending", e);
+      return 0;
+    }
   }
 
   /**
-   * Returns the <code>char</code> value at the specified index. An index ranges from zero to
-   * <tt>length() - 1</tt>. The first <code>char</code> value of the sequence is at index zero, the
+   * Returns the <code>char</code> value at the specified index. An index ranges from zero to <code>
+   * length() - 1</code>. The first <code>char</code> value of the sequence is at index zero, the
    * next at index one, and so on, as for array indexing.
    *
    * <p>If the <code>char</code> value specified by the index is a <a
@@ -301,28 +485,38 @@ public class StringBuilderXaResource extends CpoBaseXaResource<StringBuilder> {
    *
    * @param index the index of the <code>char</code> value to be returned
    * @return the specified <code>char</code> value
-   * @throws IndexOutOfBoundsException if the <tt>index</tt> argument is negative or not less than
-   *     <tt>length()</tt>
+   * @throws IndexOutOfBoundsException if the <code>index</code> argument is negative or not less
+   *     than <code>length()</code>
    */
   char charAt(int index) {
-    return getCurrentResource().charAt(index);
+    try {
+      return apply((sb) -> sb.charAt(index));
+    } catch (CpoException e) {
+      logger.error("Error appending", e);
+      return Character.UNASSIGNED;
+    }
   }
 
   /**
    * Returns a <code>CharSequence</code> that is a subsequence of this sequence. The subsequence
    * starts with the <code>char</code> value at the specified index and ends with the <code>char
-   * </code> value at index <tt>end - 1</tt>. The length (in <code>char</code>s) of the returned
-   * sequence is <tt>end - start</tt>, so if <tt>start == end</tt> then an empty sequence is
+   * </code> value at index <code>end - 1</code>. The length (in <code>char</code>s) of the returned
+   * sequence is <code>end - start</code>, so if <code>start == end</code> then an empty sequence is
    * returned.
    *
    * @param start the start index, inclusive
    * @param end the end index, exclusive
    * @return the specified subsequence
-   * @throws IndexOutOfBoundsException if <tt>start</tt> or <tt>end</tt> are negative, if
-   *     <tt>end</tt> is greater than <tt>length()</tt>, or if <tt>start</tt> is greater than
-   *     <tt>end</tt>
+   * @throws IndexOutOfBoundsException if <code>start</code> or <code>end</code> are negative, if
+   *     <code>end</code> is greater than <code>length()</code>, or if <code>start</code> is greater
+   *     than <code>end</code>
    */
   CharSequence subSequence(int start, int end) {
-    return getCurrentResource().subSequence(start, end);
+    try {
+      return apply((sb) -> sb.subSequence(start, end));
+    } catch (CpoException e) {
+      logger.error("Error appending", e);
+      return null;
+    }
   }
 }

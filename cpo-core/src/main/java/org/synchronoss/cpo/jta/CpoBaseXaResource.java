@@ -121,7 +121,8 @@ public abstract class CpoBaseXaResource<T> implements CpoXaResource {
           xid,
           (k, cpoXaState) -> {
             if (cpoXaState == null)
-              throw new RuntimeException(CpoXaError.createXAException(CpoXaError.XAER_NOTA, "Unknown XID"));
+              throw new RuntimeException(
+                  CpoXaError.createXAException(CpoXaError.XAER_NOTA, "Unknown XID"));
 
             // unassociate
             if (cpoXaState.getAssignedResourceManager() != null) {
@@ -173,9 +174,10 @@ public abstract class CpoBaseXaResource<T> implements CpoXaResource {
                 if (!cpoXaState.isSuccess()) {
                   rollbackResource((T) cpoXaState.getResource());
                   cpoXaState.setSuccess(true);
-                  throw new RuntimeException(CpoXaError.createXAException(
-                      CpoXaError.XA_RBROLLBACK,
-                      "Trying to commit an unsuccessful transaction. Transaction Rolled Back"));
+                  throw new RuntimeException(
+                      CpoXaError.createXAException(
+                          CpoXaError.XA_RBROLLBACK,
+                          "Trying to commit an unsuccessful transaction. Transaction Rolled Back"));
                 }
                 prepareResource((T) cpoXaState.getResource());
               }

@@ -103,7 +103,7 @@ public class CassandraMetaXmlObjectExporter extends CoreMetaXmlObjectExporter
       // ctCassandraArgument
       CtCassandraArgument ctCassandraArgument = CtCassandraArgument.Factory.newInstance();
 
-      ctCassandraArgument.setAttributeName(cpoArgument.getAttributeName());
+      ctCassandraArgument.setAttributeName(cpoArgument.getName());
 
       if (cpoArgument.getDescription() != null && cpoArgument.getDescription().length() > 0) {
         ctCassandraArgument.setDescription(cpoArgument.getDescription());

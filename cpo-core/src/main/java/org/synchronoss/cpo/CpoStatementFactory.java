@@ -22,12 +22,10 @@ package org.synchronoss.cpo;
  * ]]
  */
 
-import java.io.StringReader;
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 import java.util.Map.Entry;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.helper.ExceptionHelper;
 import org.synchronoss.cpo.meta.MethodMapEntry;
 import org.synchronoss.cpo.meta.MethodMapper;
@@ -35,6 +33,7 @@ import org.synchronoss.cpo.meta.domain.CpoArgument;
 import org.synchronoss.cpo.meta.domain.CpoAttribute;
 import org.synchronoss.cpo.meta.domain.CpoClass;
 import org.synchronoss.cpo.meta.domain.CpoFunction;
+import org.synchronoss.cpo.parser.BoundExpressionParser;
 
 /**
  * JdbcPreparedStatementFactory is the object that encapsulates the creation of the actual
@@ -46,9 +45,6 @@ public abstract class CpoStatementFactory implements CpoReleasable {
 
   /** Version Id for this class. */
   private static final long serialVersionUID = 1L;
-
-  /** DOCUMENT ME! */
-  private static final Logger logger = LoggerFactory.getLogger(CpoStatementFactory.class);
 
   private Logger localLogger = null;
 
@@ -201,41 +197,14 @@ public abstract class CpoStatementFactory implements CpoReleasable {
       while ((attrOffset = source.indexOf(marker, fromIndex)) != -1) {
         source.replace(attrOffset, attrOffset + mLength, replace);
         fromIndex = attrOffset + rLength;
-        bindValues.addAll(countBindMarkers(source.substring(0, attrOffset)), jwbBindValues);
+        bindValues.addAll(
+            BoundExpressionParser.getBindMarkerIndexes(source.substring(0, attrOffset)).size(),
+            jwbBindValues);
       }
     }
     // OUT.debug("ending string <"+source.toString()+">");
 
     return source;
-  }
-
-  private int countBindMarkers(String source) {
-    StringReader reader;
-    int rc;
-    int qMarks = 0;
-    boolean inDoubleQuotes = false;
-    boolean inSingleQuotes = false;
-
-    if (source != null) {
-      reader = new StringReader(source);
-
-      try {
-        do {
-          rc = reader.read();
-          if (((char) rc) == '\'') {
-            inSingleQuotes = !inSingleQuotes;
-          } else if (((char) rc) == '"') {
-            inDoubleQuotes = !inDoubleQuotes;
-          } else if (!inSingleQuotes && !inDoubleQuotes && ((char) rc) == '?') {
-            qMarks++;
-          }
-        } while (rc != -1);
-      } catch (Exception e) {
-        logger.error("error counting bind markers");
-      }
-    }
-
-    return qMarks;
   }
 
   /**

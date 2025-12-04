@@ -24,6 +24,7 @@ package org.synchronoss.cpo.exporter;
 
 import org.synchronoss.cpo.MetaVisitor;
 import org.synchronoss.cpo.meta.domain.CpoArgument;
+import org.synchronoss.cpo.meta.domain.CpoClass;
 import org.synchronoss.cpo.meta.domain.CpoFunction;
 import org.synchronoss.cpo.meta.domain.CpoFunctionGroup;
 
@@ -34,6 +35,16 @@ public abstract class AbstractMetaVisitor implements MetaVisitor {
   protected StringBuilder attributeStatics = new StringBuilder();
   protected StringBuilder functionGroupStatics = new StringBuilder();
   protected StringBuilder gettersSetters = new StringBuilder();
+
+  protected String buildPackageName(CpoClass cpoClass) {
+    StringBuilder header = new StringBuilder();
+    // generate class header
+    if (cpoClass.getName().lastIndexOf(".") != -1) {
+      String packageName = cpoClass.getName().substring(0, cpoClass.getName().lastIndexOf("."));
+      header.append("package ").append(packageName).append(";\n\n");
+    }
+    return header.toString();
+  }
 
   protected String buildGetterName(String attName) {
     // the getter name is get concatenated with the camel case of the attribute name

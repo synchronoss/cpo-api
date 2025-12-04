@@ -114,7 +114,7 @@ public class JdbcMetaXmlObjectExporter extends CoreMetaXmlObjectExporter
       // CtJdbcArgument
       CtJdbcArgument ctJdbcArgument = CtJdbcArgument.Factory.newInstance();
 
-      ctJdbcArgument.setAttributeName(jdbcArgument.getAttributeName());
+      ctJdbcArgument.setAttributeName(jdbcArgument.getName());
 
       if (jdbcArgument.getDescription() != null && jdbcArgument.getDescription().length() > 0) {
         ctJdbcArgument.setDescription(jdbcArgument.getDescription());

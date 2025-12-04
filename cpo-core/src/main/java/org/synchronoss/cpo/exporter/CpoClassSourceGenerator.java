@@ -152,10 +152,7 @@ public class CpoClassSourceGenerator extends AbstractMetaVisitor {
     String interfaceName = generateInterfaceName(cpoClass);
 
     // generate class header
-    if (cpoClass.getName().lastIndexOf(".") != -1) {
-      String packageName = cpoClass.getName().substring(0, cpoClass.getName().lastIndexOf("."));
-      header.append("package " + packageName + ";\n\n");
-    }
+    header.append(buildPackageName(cpoClass));
 
     // generate class declaration
     header.append(

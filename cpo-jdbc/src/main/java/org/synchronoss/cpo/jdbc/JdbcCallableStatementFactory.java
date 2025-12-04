@@ -100,12 +100,11 @@ public class JdbcCallableStatementFactory implements CpoReleasable {
           // The function will not know the type of the attribute on the result object, so look it
           // up now
           if (attribute == null) {
-            attribute =
-                (JdbcCpoAttribute) resultClass.getAttributeJava(argument.getAttributeName());
+            attribute = (JdbcCpoAttribute) resultClass.getAttributeJava(argument.getName());
             if (attribute == null) {
               throw new CpoException(
                   "Attribute <"
-                      + argument.getAttributeName()
+                      + argument.getName()
                       + "> does not exist on class <"
                       + resultClass.getName()
                       + ">");

@@ -587,11 +587,11 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
             JdbcCpoAttribute jdbcAttribute = jdbcArgument.getAttribute();
             if (jdbcAttribute == null) {
               jdbcAttribute =
-                  (JdbcCpoAttribute) resultClass.getAttributeJava(jdbcArgument.getAttributeName());
+                  (JdbcCpoAttribute) resultClass.getAttributeJava(jdbcArgument.getName());
               if (jdbcAttribute == null) {
                 throw new CpoException(
                     "Attribute <"
-                        + jdbcArgument.getAttributeName()
+                        + jdbcArgument.getName()
                         + "> does not exist on class <"
                         + resultClass.getName()
                         + ">");

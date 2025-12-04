@@ -90,32 +90,6 @@ public class CpoAttributeBean implements java.io.Serializable {
   }
 
   @Override
-  public int hashCode() {
-    int result = 0;
-    result = 31 * result + getClass().getName().hashCode();
-    result = 31 * result + (getJavaName() != null ? getJavaName().hashCode() : 0);
-    result = 31 * result + (getJavaType() != null ? getJavaType().hashCode() : 0);
-    result = 31 * result + (getDataName() != null ? getDataName().hashCode() : 0);
-    result = 31 * result + (getDataType() != null ? getDataType().hashCode() : 0);
-    result =
-        31 * result + (getTransformClassName() != null ? getTransformClassName().hashCode() : 0);
-    result = 31 * result + (getDescription() != null ? getDescription().hashCode() : 0);
-    return result;
-  }
-
-  @Override
-  public String toString() {
-    StringBuilder str = new StringBuilder();
-    str.append("javaName = " + getJavaName() + "\n");
-    str.append("javaType = " + getJavaType() + "\n");
-    str.append("dataName = " + getDataName() + "\n");
-    str.append("dataType = " + getDataType() + "\n");
-    str.append("transformClass = " + getTransformClassName() + "\n");
-    str.append("description = " + getDescription() + "\n");
-    return str.toString();
-  }
-
-  @Override
   public boolean equals(Object o) {
     if (this == o) return true;
 
@@ -146,5 +120,31 @@ public class CpoAttributeBean implements java.io.Serializable {
     return getDescription() != null
         ? getDescription().equals(that.getDescription())
         : that.getDescription() == null;
+  }
+
+  @Override
+  public int hashCode() {
+    int result = 0;
+    result = 31 * result + getClass().getName().hashCode();
+    result = 31 * result + (getJavaName() != null ? getJavaName().hashCode() : 0);
+    result = 31 * result + (getJavaType() != null ? getJavaType().hashCode() : 0);
+    result = 31 * result + (getDataName() != null ? getDataName().hashCode() : 0);
+    result = 31 * result + (getDataType() != null ? getDataType().hashCode() : 0);
+    result =
+        31 * result + (getTransformClassName() != null ? getTransformClassName().hashCode() : 0);
+    result = 31 * result + (getDescription() != null ? getDescription().hashCode() : 0);
+    return result;
+  }
+
+  @Override
+  public String toString() {
+    StringBuilder str = new StringBuilder();
+    str.append("javaName = " + getJavaName() + "\n");
+    str.append("javaType = " + getJavaType() + "\n");
+    str.append("dataName = " + getDataName() + "\n");
+    str.append("dataType = " + getDataType() + "\n");
+    str.append("transformClass = " + getTransformClassName() + "\n");
+    str.append("description = " + getDescription() + "\n");
+    return str.toString();
   }
 }

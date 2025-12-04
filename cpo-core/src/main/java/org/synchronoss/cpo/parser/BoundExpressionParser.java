@@ -61,36 +61,36 @@ public class BoundExpressionParser implements ExpressionParser {
    */
   @Override
   public int countArguments() {
-    return getArgumentIndexes().size();
+    return getBindMarkerIndexes(expression).size();
   }
 
-  private Collection<Integer> getArgumentIndexes() {
+  public static Collection<Integer> getBindMarkerIndexes(String source) {
     Collection<Integer> indexes = new ArrayList<>();
 
-    if (expression != null) {
-      StringReader reader = new StringReader(expression);
+    if (source == null || source.length() == 0) return indexes;
 
-      try {
+    StringReader reader = new StringReader(source);
 
-        int idx = 0;
-        int rc = -1;
-        boolean inDoubleQuotes = false;
-        boolean inSingleQuotes = false;
+    try {
 
-        do {
-          rc = reader.read();
-          if (((char) rc) == '\'') {
-            inSingleQuotes = !inSingleQuotes;
-          } else if (((char) rc) == '"') {
-            inDoubleQuotes = !inDoubleQuotes;
-          } else if (!inSingleQuotes && !inDoubleQuotes && ((char) rc) == '?') {
-            indexes.add(idx);
-          }
-          idx++;
-        } while (rc != -1);
-      } catch (Exception e) {
-        logger.error("error counting bind markers");
-      }
+      int idx = 0;
+      int rc;
+      boolean inDoubleQuotes = false;
+      boolean inSingleQuotes = false;
+
+      do {
+        rc = reader.read();
+        if (((char) rc) == '\'') {
+          inSingleQuotes = !inSingleQuotes;
+        } else if (((char) rc) == '"') {
+          inDoubleQuotes = !inDoubleQuotes;
+        } else if (!inSingleQuotes && !inDoubleQuotes && ((char) rc) == '?') {
+          indexes.add(idx);
+        }
+        idx++;
+      } while (rc != -1);
+    } catch (Exception e) {
+      logger.error("error counting bind markers");
     }
     return indexes;
   }
@@ -182,7 +182,7 @@ public class BoundExpressionParser implements ExpressionParser {
       // so we'll have to move left to right from the ? looking for the field name
 
       int startIdx = 0;
-      Collection<Integer> indexes = getArgumentIndexes();
+      Collection<Integer> indexes = getBindMarkerIndexes(expression);
       for (int qIdx : indexes) {
         String chunk = expression.substring(startIdx, qIdx);
 

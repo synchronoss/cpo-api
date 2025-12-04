@@ -63,20 +63,20 @@ public class CpoFunctionBean implements java.io.Serializable {
   }
 
   @Override
+  public String toString() {
+    StringBuilder str = new StringBuilder();
+    str.append("expression = " + getExpression() + "\n");
+    str.append("description = " + getDescription() + "\n");
+    return str.toString();
+  }
+
+  @Override
   public int hashCode() {
     int result = 0;
     result = 31 * result + getClass().getName().hashCode();
     result = 31 * result + (getExpression() != null ? getExpression().hashCode() : 0);
     result = 31 * result + (getDescription() != null ? getDescription().hashCode() : 0);
     return result;
-  }
-
-  @Override
-  public String toString() {
-    StringBuilder str = new StringBuilder();
-    str.append("expression = " + getExpression() + "\n");
-    str.append("description = " + getDescription() + "\n");
-    return str.toString();
   }
 
   @Override

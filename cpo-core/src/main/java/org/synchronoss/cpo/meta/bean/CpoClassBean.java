@@ -54,29 +54,6 @@ public class CpoClassBean implements java.io.Serializable {
   }
 
   @Override
-  public boolean equals(Object o) {
-    if (this == o) {
-      return true;
-    }
-    if (o == null || getClass() != o.getClass()) {
-      return false;
-    }
-
-    CpoClassBean that = (CpoClassBean) o;
-
-    if (getName() != null ? !getName().equals(that.getName()) : that.getName() != null) {
-      return false;
-    }
-    if (getDescription() != null
-        ? !getDescription().equals(that.getDescription())
-        : that.getDescription() != null) {
-      return false;
-    }
-
-    return true;
-  }
-
-  @Override
   public int hashCode() {
     int result = 0;
     result = 31 * result + getClass().getName().hashCode();
@@ -91,5 +68,21 @@ public class CpoClassBean implements java.io.Serializable {
     str.append("name = " + getName() + "\n");
     str.append("description = " + getDescription() + "\n");
     return str.toString();
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+
+    if (o == null || getClass() != o.getClass()) return false;
+
+    CpoClassBean that = (CpoClassBean) o;
+
+    if (getName() != null ? !getName().equals(that.getName()) : that.getName() != null)
+      return false;
+
+    return getDescription() != null
+        ? getDescription().equals(that.getDescription())
+        : that.getDescription() == null;
   }
 }

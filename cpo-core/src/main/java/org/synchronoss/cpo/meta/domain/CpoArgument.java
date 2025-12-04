@@ -22,9 +22,9 @@ package org.synchronoss.cpo.meta.domain;
  * ]]
  */
 
-import org.synchronoss.cpo.meta.bean.CpoArgumentBean;
+import org.synchronoss.cpo.meta.bean.CpoClassBean;
 
-public class CpoArgument extends CpoArgumentBean {
+public class CpoArgument extends CpoClassBean {
 
   private static final long serialVersionUID = 1L;
 
@@ -38,7 +38,7 @@ public class CpoArgument extends CpoArgumentBean {
 
   public void setAttribute(CpoAttribute attribute) {
     this.attribute = attribute;
-    if (attribute != null) setAttributeName(attribute.getJavaName());
+    if (attribute != null) setName(attribute.getJavaName());
   }
 
   @Override

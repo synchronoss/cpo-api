@@ -260,7 +260,7 @@ public abstract class AbstractCpoMetaAdapter implements CpoMetaAdapter {
   }
 
   protected void loadCpoArgument(CpoArgument cpoArgument, CtArgument ctArgument) {
-    cpoArgument.setAttributeName(ctArgument.getAttributeName());
+    cpoArgument.setName(ctArgument.getAttributeName());
     cpoArgument.setDescription(ctArgument.getDescription());
 
     cpoArgument.setAttribute(currentClass.getAttributeJava(ctArgument.getAttributeName()));

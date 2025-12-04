@@ -35,6 +35,9 @@ public class CpoFunctionBean implements java.io.Serializable {
 
   public CpoFunctionBean() {}
 
+  /*
+   * Getters and Setters
+   */
   public String getName() {
     return name;
   }
@@ -59,32 +62,12 @@ public class CpoFunctionBean implements java.io.Serializable {
     this.expression = expression;
   }
 
-  /*
-   * Getters and Setters
-   */
   @Override
-  public boolean equals(Object o) {
-    if (this == o) {
-      return true;
-    }
-    if (o == null || getClass() != o.getClass()) {
-      return false;
-    }
-
-    CpoFunctionBean that = (CpoFunctionBean) o;
-
-    if (getExpression() != null
-        ? !getExpression().equals(that.getExpression())
-        : that.getExpression() != null) {
-      return false;
-    }
-    if (getDescription() != null
-        ? !getDescription().equals(that.getDescription())
-        : that.getDescription() != null) {
-      return false;
-    }
-
-    return true;
+  public String toString() {
+    StringBuilder str = new StringBuilder();
+    str.append("expression = " + getExpression() + "\n");
+    str.append("description = " + getDescription() + "\n");
+    return str.toString();
   }
 
   @Override
@@ -97,10 +80,19 @@ public class CpoFunctionBean implements java.io.Serializable {
   }
 
   @Override
-  public String toString() {
-    StringBuilder str = new StringBuilder();
-    str.append("expression = " + getExpression() + "\n");
-    str.append("description = " + getDescription() + "\n");
-    return str.toString();
+  public boolean equals(Object o) {
+    if (this == o) return true;
+
+    if (o == null || getClass() != o.getClass()) return false;
+
+    CpoFunctionBean that = (CpoFunctionBean) o;
+
+    if (getExpression() != null
+        ? !getExpression().equals(that.getExpression())
+        : that.getExpression() != null) return false;
+
+    return getDescription() != null
+        ? getDescription().equals(that.getDescription())
+        : that.getDescription() == null;
   }
 }

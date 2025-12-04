@@ -22,34 +22,14 @@ package org.synchronoss.cpo.meta.bean;
  * ]]
  */
 
-public class CpoFunctionGroupBean implements java.io.Serializable {
-
-  private static final long serialVersionUID = 1L;
+public class CpoFunctionGroupBean extends CpoClassBean {
 
   /*
    * Properties
    */
-  private String name;
   private String type;
-  private String description;
 
   public CpoFunctionGroupBean() {}
-
-  public String getDescription() {
-    return description;
-  }
-
-  public void setDescription(String description) {
-    this.description = description;
-  }
-
-  public String getName() {
-    return name;
-  }
-
-  public void setName(String name) {
-    this.name = name;
-  }
 
   public String getType() {
     return type;
@@ -59,51 +39,32 @@ public class CpoFunctionGroupBean implements java.io.Serializable {
     this.type = type;
   }
 
-  /*
-   * Getters and Setters
-   */
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) {
-      return true;
-    }
-    if (o == null || getClass() != o.getClass()) {
-      return false;
-    }
-
-    CpoFunctionGroupBean that = (CpoFunctionGroupBean) o;
-
-    if (getName() != null ? !getName().equals(that.getName()) : that.getName() != null) {
-      return false;
-    }
-    if (getType() != null ? !getType().equals(that.getType()) : that.getType() != null) {
-      return false;
-    }
-    if (getDescription() != null
-        ? !getDescription().equals(that.getDescription())
-        : that.getDescription() != null) {
-      return false;
-    }
-
-    return true;
-  }
-
   @Override
   public int hashCode() {
     int result = 0;
-    result = 31 * result + getClass().getName().hashCode();
-    result = 31 * result + (getName() != null ? getName().hashCode() : 0);
+    result = 31 * result + super.hashCode();
     result = 31 * result + (getType() != null ? getType().hashCode() : 0);
-    result = 31 * result + (getDescription() != null ? getDescription().hashCode() : 0);
     return result;
   }
 
   @Override
   public String toString() {
     StringBuilder str = new StringBuilder();
-    str.append("name = " + getName() + "\n");
+    str.append(super.toString());
     str.append("type = " + getType() + "\n");
-    str.append("description = " + getDescription() + "\n");
     return str.toString();
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+
+    if (o == null || getClass() != o.getClass()) return false;
+
+    CpoFunctionGroupBean that = (CpoFunctionGroupBean) o;
+
+    if (!super.equals(that)) return false;
+
+    return getType() != null ? getType().equals(that.getType()) : that.getType() == null;
   }
 }

@@ -22,14 +22,10 @@ package org.synchronoss.cpo.jdbc;
  * ]]
  */
 
-import java.io.InputStream;
-import java.io.Reader;
 import java.lang.reflect.InvocationTargetException;
 import java.sql.CallableStatement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.synchronoss.cpo.CpoByteArrayInputStream;
-import org.synchronoss.cpo.CpoCharArrayReader;
 import org.synchronoss.cpo.CpoException;
 import org.synchronoss.cpo.helper.ExceptionHelper;
 import org.synchronoss.cpo.jdbc.meta.JdbcMethodMapEntry;
@@ -142,22 +138,10 @@ public class CallableStatementCpoData extends AbstractBindableCpoData {
       switch (jdbcMethodMapEntry.getMethodType()) {
         case JdbcMethodMapEntry.METHOD_TYPE_BASIC:
         case JdbcMethodMapEntry.METHOD_TYPE_OBJECT:
+        case JdbcMethodMapEntry.METHOD_TYPE_STREAM:
+        case JdbcMethodMapEntry.METHOD_TYPE_READER:
         default:
           jdbcMethodMapEntry.getCsSetter().invoke(jcsf.getCallableStatement(), getIndex(), param);
-          break;
-        case JdbcMethodMapEntry.METHOD_TYPE_STREAM:
-          CpoByteArrayInputStream cbais = CpoByteArrayInputStream.getCpoStream((InputStream) param);
-          // Get the length of the InputStream in param
-          jdbcMethodMapEntry
-              .getCsSetter()
-              .invoke(jcsf.getCallableStatement(), getIndex(), cbais, cbais.getLength());
-          break;
-        case JdbcMethodMapEntry.METHOD_TYPE_READER:
-          CpoCharArrayReader ccar = CpoCharArrayReader.getCpoReader((Reader) param);
-          // Get the length of the Reader in param
-          jdbcMethodMapEntry
-              .getCsSetter()
-              .invoke(jcsf.getCallableStatement(), getIndex(), ccar, ccar.getLength());
           break;
       }
     } catch (Exception e) {

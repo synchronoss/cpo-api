@@ -22,13 +22,9 @@ package org.synchronoss.cpo.exporter;
  * ]]
  */
 
-import org.synchronoss.cpo.MetaVisitor;
 import org.synchronoss.cpo.meta.CpoMetaDescriptor;
-import org.synchronoss.cpo.meta.domain.CpoArgument;
 import org.synchronoss.cpo.meta.domain.CpoAttribute;
 import org.synchronoss.cpo.meta.domain.CpoClass;
-import org.synchronoss.cpo.meta.domain.CpoFunction;
-import org.synchronoss.cpo.meta.domain.CpoFunctionGroup;
 
 /**
  * The CpoInterfaceSourceGenerator generates java source code to define the cpo interfaces.
@@ -36,17 +32,11 @@ import org.synchronoss.cpo.meta.domain.CpoFunctionGroup;
  * @author Michael Bellomo
  * @since 4/17/12
  */
-public class CpoInterfaceSourceGenerator implements MetaVisitor {
-
-  private static final String ATTR_PREFIX = "ATTR_";
-  private static final String FG_PREFIX = "FG_";
+public class CpoInterfaceSourceGenerator extends AbstractMetaVisitor {
 
   protected CpoMetaDescriptor metaDescriptor;
   protected String interfaceName = null;
   protected StringBuilder header = new StringBuilder();
-  protected StringBuilder attributeStatics = new StringBuilder();
-  protected StringBuilder functionGroupStatics = new StringBuilder();
-  protected StringBuilder gettersSetters = new StringBuilder();
   protected StringBuilder footer = new StringBuilder();
 
   public CpoInterfaceSourceGenerator(CpoMetaDescriptor metaDescriptor) {
@@ -127,27 +117,13 @@ public class CpoInterfaceSourceGenerator implements MetaVisitor {
 
     String attName = scrubName(cpoAttribute.getJavaName());
 
-    // the getter name is get concatenated with the camel case of the attribute name
-    String getterName;
-    String setterName;
-    if (attName.length() > 1) {
-      getterName = ("get" + attName.substring(0, 1).toUpperCase() + attName.substring(1) + "()");
-      setterName = ("set" + attName.substring(0, 1).toUpperCase() + attName.substring(1));
-    } else {
-      getterName = ("get" + attName.toUpperCase() + "()");
-      setterName = ("set" + attName.toUpperCase());
-    }
+    String getterName = buildGetterName(attName);
+    String setterName = buildSetterName(attName);
 
     String attClassName = cpoAttribute.getJavaType();
 
     // generate attribute statics
-    attributeStatics.append(
-        "  public final static String "
-            + ATTR_PREFIX
-            + attName.toUpperCase()
-            + " = \""
-            + attName
-            + "\";\n");
+    attributeStatics.append(buildAttributeStatic(attName));
 
     // generate getter
     gettersSetters.append("  public " + attClassName + " " + getterName + ";\n");
@@ -156,39 +132,5 @@ public class CpoInterfaceSourceGenerator implements MetaVisitor {
     gettersSetters.append(
         "  public void " + setterName + "(" + attClassName + " " + attName + ");\n");
     gettersSetters.append("\n");
-  }
-
-  @Override
-  public void visit(CpoFunctionGroup cpoFunctionGroup) {
-
-    // generate statics for function group
-    String fgName = cpoFunctionGroup.getName();
-    if (fgName == null) {
-      fgName = "NULL";
-    }
-    fgName = scrubName(fgName);
-
-    String staticName = FG_PREFIX + cpoFunctionGroup.getType() + "_" + fgName.toUpperCase();
-
-    if (cpoFunctionGroup.getName() == null) {
-      functionGroupStatics.append("  public final static String " + staticName + " = null;\n");
-    } else {
-      functionGroupStatics.append(
-          "  public final static String " + staticName + " = \"" + fgName + "\";\n");
-    }
-  }
-
-  @Override
-  public void visit(CpoFunction cpoFunction) {
-    // nothing to do
-  }
-
-  @Override
-  public void visit(CpoArgument cpoArgument) {
-    // nothing to do
-  }
-
-  protected String scrubName(String name) {
-    return name.replaceAll("[^0-9a-zA-Z_]", "_");
   }
 }

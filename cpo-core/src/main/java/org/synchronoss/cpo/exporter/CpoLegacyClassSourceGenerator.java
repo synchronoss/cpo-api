@@ -57,47 +57,8 @@ public class CpoLegacyClassSourceGenerator extends CpoClassSourceGenerator {
     source.append("\n");
     source.append("  /* Function group statics */\n");
     source.append(functionGroupStatics);
-    source.append("\n");
-    source.append("  /* Properties */\n");
-    source.append(properties);
-    source.append("\n");
-    source.append("  /* Constructor */\n");
-    source.append(constructor);
-    source.append("\n");
-    source.append("  /* Getters and Setters */\n");
-    source.append(gettersSetters);
 
-    // generate equals()
-    source.append("  public boolean equals(Object o) {\n");
-    source.append("    if (this == o)\n");
-    source.append("      return true;\n");
-    source.append("    if (o == null || getClass() != o.getClass())\n");
-    source.append("      return false;\n");
-    source.append("\n");
-    source.append("    " + className + " that = (" + className + ")o;\n");
-    source.append("\n");
-    source.append(equals);
-    source.append("\n");
-    source.append("    return true;\n");
-    source.append("  }\n\n");
-
-    // generate hashCode()
-    source.append("  public int hashCode() {\n");
-    source.append("    int result = 0;\n");
-    source.append("    result = 31 * result + getClass().getName().hashCode();\n");
-    source.append(hashCode);
-    source.append("    return result;\n");
-    source.append("  }\n\n");
-
-    // generate toString()
-    source.append("  public String toString() {\n");
-    source.append("    StringBuilder str = new StringBuilder();\n");
-    source.append(toString);
-    source.append("    return str.toString();\n");
-    source.append("  }\n");
-
-    source.append(footer);
-    source.append("\n");
+    appendClassBody(source);
 
     return source.toString();
   }

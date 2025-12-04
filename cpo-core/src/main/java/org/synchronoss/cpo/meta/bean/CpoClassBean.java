@@ -55,25 +55,18 @@ public class CpoClassBean implements java.io.Serializable {
 
   @Override
   public boolean equals(Object o) {
-    if (this == o) {
-      return true;
-    }
-    if (o == null || getClass() != o.getClass()) {
-      return false;
-    }
+    if (this == o) return true;
+
+    if (o == null || getClass() != o.getClass()) return false;
 
     CpoClassBean that = (CpoClassBean) o;
 
-    if (getName() != null ? !getName().equals(that.getName()) : that.getName() != null) {
+    if (getName() != null ? !getName().equals(that.getName()) : that.getName() != null)
       return false;
-    }
-    if (getDescription() != null
-        ? !getDescription().equals(that.getDescription())
-        : that.getDescription() != null) {
-      return false;
-    }
 
-    return true;
+    return getDescription() != null
+        ? getDescription().equals(that.getDescription())
+        : that.getDescription() == null;
   }
 
   @Override

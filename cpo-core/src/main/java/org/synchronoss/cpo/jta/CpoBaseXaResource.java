@@ -76,8 +76,7 @@ public abstract class CpoBaseXaResource<T> implements CpoXaResource {
   public <R> R apply(Function<T, R> function) throws CpoException {
     semaphore.acquireUninterruptibly();
     try {
-      var resource = getResource();
-      return function.apply(resource);
+      return function.apply(getResource());
     } catch (RuntimeException e) {
       if (e.getCause() instanceof CpoException) throw (CpoException) e.getCause();
       throw e;
@@ -89,8 +88,7 @@ public abstract class CpoBaseXaResource<T> implements CpoXaResource {
   public void accept(Consumer<T> consumer) throws CpoException {
     semaphore.acquireUninterruptibly();
     try {
-      var resource = getResource();
-      consumer.accept(resource);
+      consumer.accept(getResource());
     } catch (RuntimeException e) {
       if (e.getCause() instanceof CpoException) throw (CpoException) e.getCause();
       throw e;

@@ -38,6 +38,9 @@ public class CpoAttributeBean implements java.io.Serializable {
 
   public CpoAttributeBean() {}
 
+  /*
+   * Getters and Setters
+   */
   public String getDataName() {
     return dataName;
   }
@@ -86,54 +89,6 @@ public class CpoAttributeBean implements java.io.Serializable {
     this.transformClassName = transformClassName;
   }
 
-  /*
-   * Getters and Setters
-   */
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) {
-      return true;
-    }
-    if (o == null || getClass() != o.getClass()) {
-      return false;
-    }
-
-    CpoAttributeBean that = (CpoAttributeBean) o;
-
-    if (getJavaName() != null
-        ? !getJavaName().equals(that.getJavaName())
-        : that.getJavaName() != null) {
-      return false;
-    }
-    if (getJavaType() != null
-        ? !getJavaType().equals(that.getJavaType())
-        : that.getJavaType() != null) {
-      return false;
-    }
-    if (getDataName() != null
-        ? !getDataName().equals(that.getDataName())
-        : that.getDataName() != null) {
-      return false;
-    }
-    if (getDataType() != null
-        ? !getDataType().equals(that.getDataType())
-        : that.getDataType() != null) {
-      return false;
-    }
-    if (getTransformClassName() != null
-        ? !getTransformClassName().equals(that.getTransformClassName())
-        : that.getTransformClassName() != null) {
-      return false;
-    }
-    if (getDescription() != null
-        ? !getDescription().equals(that.getDescription())
-        : that.getDescription() != null) {
-      return false;
-    }
-
-    return true;
-  }
-
   @Override
   public int hashCode() {
     int result = 0;
@@ -158,5 +113,38 @@ public class CpoAttributeBean implements java.io.Serializable {
     str.append("transformClass = " + getTransformClassName() + "\n");
     str.append("description = " + getDescription() + "\n");
     return str.toString();
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+
+    if (o == null || getClass() != o.getClass()) return false;
+
+    CpoAttributeBean that = (CpoAttributeBean) o;
+
+    if (getJavaName() != null
+        ? !getJavaName().equals(that.getJavaName())
+        : that.getJavaName() != null) return false;
+
+    if (getJavaType() != null
+        ? !getJavaType().equals(that.getJavaType())
+        : that.getJavaType() != null) return false;
+
+    if (getDataName() != null
+        ? !getDataName().equals(that.getDataName())
+        : that.getDataName() != null) return false;
+
+    if (getDataType() != null
+        ? !getDataType().equals(that.getDataType())
+        : that.getDataType() != null) return false;
+
+    if (getTransformClassName() != null
+        ? !getTransformClassName().equals(that.getTransformClassName())
+        : that.getTransformClassName() != null) return false;
+
+    return getDescription() != null
+        ? getDescription().equals(that.getDescription())
+        : that.getDescription() == null;
   }
 }

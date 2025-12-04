@@ -401,7 +401,7 @@
                 <configuration>
                     <language>java</language>
                     <targetJdk>21</targetJdk>
-                    <minimumTokens>100</minimumTokens>
+                    <minimumTokens>75</minimumTokens>
                     <includes>
                         <include>**/*.java</include>
                     </includes>

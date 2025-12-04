@@ -35,6 +35,9 @@ public class CpoFunctionGroupBean implements java.io.Serializable {
 
   public CpoFunctionGroupBean() {}
 
+  /*
+   * Getters and Setters
+   */
   public String getDescription() {
     return description;
   }
@@ -59,28 +62,6 @@ public class CpoFunctionGroupBean implements java.io.Serializable {
     this.type = type;
   }
 
-  /*
-   * Getters and Setters
-   */
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) return true;
-
-    if (o == null || getClass() != o.getClass()) return false;
-
-    CpoFunctionGroupBean that = (CpoFunctionGroupBean) o;
-
-    if (getName() != null ? !getName().equals(that.getName()) : that.getName() != null)
-      return false;
-
-    if (getType() != null ? !getType().equals(that.getType()) : that.getType() != null)
-      return false;
-
-    return getDescription() != null
-        ? getDescription().equals(that.getDescription())
-        : that.getDescription() == null;
-  }
-
   @Override
   public int hashCode() {
     int result = 0;
@@ -98,5 +79,24 @@ public class CpoFunctionGroupBean implements java.io.Serializable {
     str.append("type = " + getType() + "\n");
     str.append("description = " + getDescription() + "\n");
     return str.toString();
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+
+    if (o == null || getClass() != o.getClass()) return false;
+
+    CpoFunctionGroupBean that = (CpoFunctionGroupBean) o;
+
+    if (getName() != null ? !getName().equals(that.getName()) : that.getName() != null)
+      return false;
+
+    if (getType() != null ? !getType().equals(that.getType()) : that.getType() != null)
+      return false;
+
+    return getDescription() != null
+        ? getDescription().equals(that.getDescription())
+        : that.getDescription() == null;
   }
 }

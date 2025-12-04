@@ -72,6 +72,21 @@ public class CallableStatementCpoData extends AbstractBindableCpoData {
   }
 
   @Override
+  public Object transformOut(Object attributeObject) throws CpoException {
+    Object retObj = attributeObject;
+    CpoTransform cpoTransform = getCpoAttribute().getCpoTransform();
+
+    if (cpoTransform != null) {
+      if (cpoTransform instanceof JdbcCpoTransform) {
+        retObj = ((JdbcCpoTransform) cpoTransform).transformOut(jcsf, attributeObject);
+      } else {
+        retObj = cpoTransform.transformOut(attributeObject);
+      }
+    }
+    return retObj;
+  }
+
+  @Override
   public Object invokeGetter() throws CpoException {
     Object javaObject = null;
     JdbcMethodMapEntry<?, ?> jdbcMethodMapEntry =
@@ -151,20 +166,5 @@ public class CallableStatementCpoData extends AbstractBindableCpoData {
               + ":"
               + ExceptionHelper.getLocalizedMessage(e));
     }
-  }
-
-  @Override
-  public Object transformOut(Object attributeObject) throws CpoException {
-    Object retObj = attributeObject;
-    CpoTransform cpoTransform = getCpoAttribute().getCpoTransform();
-
-    if (cpoTransform != null) {
-      if (cpoTransform instanceof JdbcCpoTransform) {
-        retObj = ((JdbcCpoTransform) cpoTransform).transformOut(jcsf, attributeObject);
-      } else {
-        retObj = cpoTransform.transformOut(attributeObject);
-      }
-    }
-    return retObj;
   }
 }

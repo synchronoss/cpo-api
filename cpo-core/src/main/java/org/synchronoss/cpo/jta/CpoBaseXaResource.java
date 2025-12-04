@@ -232,13 +232,11 @@ public abstract class CpoBaseXaResource<T> implements CpoXaResource {
             switch (flags) {
               case TMSUSPEND:
                 // You can only suspend an associated transaction
-                if (cpoXaState.getAssociation() == CpoXaState.XA_ASSOCIATED) {
-                  cpoXaState.setAssociation(CpoXaState.XA_SUSPENDED);
-                } else {
-                  throw new RuntimeException(
-                      CpoXaError.createXAException(
-                          CpoXaError.XAER_PROTO, "You can only suspend an associated XID"));
-                }
+                if (cpoXaState.getAssociation() != CpoXaState.XA_ASSOCIATED)
+                    throw new RuntimeException(
+                            CpoXaError.createXAException(
+                                    CpoXaError.XAER_PROTO, "You can only suspend an associated XID"));
+                cpoXaState.setAssociation(CpoXaState.XA_SUSPENDED);
                 break;
 
               // you can fail or succeed an associated or suspended trx

@@ -28,11 +28,12 @@
 
     <appender name="STDOUT" class="ConsoleAppender">
         <encoder class="PatternLayoutEncoder">
-            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} -%kvp- %msg%n</pattern>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{50} -%kvp- %msg%n</pattern>
         </encoder>
     </appender>
 
-    <logger name="org.synchronoss" level="INFO"/>
+    <logger name="org.synchronoss.cpo.core" level="TRACE"/>
+    <logger name="org.synchronoss.cpo.jdbc" level="INFO"/>
 
     <root level="INFO">
         <appender-ref ref="STDOUT"/>

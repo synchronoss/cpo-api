@@ -427,14 +427,7 @@ public class CassandraCpoAdapter extends CpoBaseAdapter<ClusterDataSource> {
           cpoClass
               .getFunctionGroup(adjustCrud(bean, crud, groupName, sess), groupName)
               .getFunctions();
-      localLogger.info(
-          "=================== Class=<"
-              + bean.getClass()
-              + "> Type=<"
-              + crud.operation
-              + "> Name=<"
-              + groupName
-              + "> =========================");
+      localLogger.info(buildCpoClassLogLine(bean.getClass(), crud, groupName));
 
       for (CpoFunction cpoFunction : cpoFunctions) {
         CassandraBoundStatementFactory boundStatementFactory =
@@ -442,15 +435,7 @@ public class CassandraCpoAdapter extends CpoBaseAdapter<ClusterDataSource> {
                 sess, this, cpoClass, cpoFunction, bean, wheres, orderBy, nativeExpressions);
         executeBoundStatement(sess, boundStatementFactory);
       }
-      localLogger.info(
-          "=================== "
-              + " Updates - Class=<"
-              + bean.getClass()
-              + "> Type=<"
-              + crud.operation
-              + "> Name=<"
-              + groupName
-              + "> =========================");
+      localLogger.info(buildExecutedLogLine(bean.getClass(), crud, groupName));
     } catch (Throwable t) {
       String msg =
           "ProcessUpdateGroup failed:"
@@ -533,14 +518,7 @@ public class CassandraCpoAdapter extends CpoBaseAdapter<ClusterDataSource> {
       localLogger = LoggerFactory.getLogger(cpoClass.getMetaClass());
 
       int numStatements = 0;
-      localLogger.info(
-          "=================== Class=<"
-              + beanInstance.getClass()
-              + "> Type=<"
-              + crud.operation
-              + "> Name=<"
-              + groupName
-              + "> =========================");
+      localLogger.info(buildCpoClassLogLine(beanInstance.getClass(), crud, groupName));
       ArrayList<CassandraBoundStatementFactory> statemetnFactories = new ArrayList<>();
       for (T bean : beans) {
         for (CpoFunction function : cpoFunctions) {
@@ -555,15 +533,7 @@ public class CassandraCpoAdapter extends CpoBaseAdapter<ClusterDataSource> {
       executeBatchStatements(sess, statemetnFactories);
 
       localLogger.info(
-          "=================== "
-              + numStatements
-              + " Updates - Class=<"
-              + beanInstance.getClass()
-              + "> Type=<"
-              + crud.operation
-              + "> Name=<"
-              + groupName
-              + "> =========================");
+          buildUpdatesLogLine(numStatements, beanInstance.getClass(), crud, groupName));
 
     } catch (Throwable t) {
       String msg =
@@ -653,14 +623,7 @@ public class CassandraCpoAdapter extends CpoBaseAdapter<ClusterDataSource> {
       List<CpoFunction> functions =
           cpoClass.getFunctionGroup(Crud.RETRIEVE, groupName).getFunctions();
 
-      localLogger.info(
-          "=================== Class=<"
-              + criteriaObj.getClass()
-              + "> Type=<"
-              + Crud.RETRIEVE.operation
-              + "> Name=<"
-              + groupName
-              + "> =========================");
+      localLogger.info(buildCpoClassLogLine(criteriaObj.getClass(), Crud.RETRIEVE, groupName));
 
       try {
         rObj = (T) bean.getClass().newInstance();
@@ -734,26 +697,11 @@ public class CassandraCpoAdapter extends CpoBaseAdapter<ClusterDataSource> {
       if (!recordsExist) {
         rObj = null;
         localLogger.info(
-            "=================== 0 Records - 0 Attributes - Class=<"
-                + criteriaObj.getClass()
-                + "> Type=<"
-                + Crud.RETRIEVE.operation
-                + "> Name=<"
-                + groupName
-                + "> =========================");
+            buildRecordsLogLine(0, 0, criteriaObj.getClass(), Crud.RETRIEVE, groupName));
       } else {
         localLogger.info(
-            "=================== "
-                + recordCount
-                + " Records - "
-                + attributesSet
-                + " Attributes - Class=<"
-                + criteriaObj.getClass()
-                + ">  Type=<"
-                + Crud.RETRIEVE.operation
-                + "> Name=<"
-                + groupName
-                + "> =========================");
+            buildRecordsLogLine(
+                recordCount, attributesSet, criteriaObj.getClass(), Crud.RETRIEVE, groupName));
       }
     } catch (Throwable t) {
       String msg = "processSelectGroup(T) failed: " + ExceptionHelper.getLocalizedMessage(t);
@@ -833,24 +781,10 @@ public class CassandraCpoAdapter extends CpoBaseAdapter<ClusterDataSource> {
       criteriaClass = metaDescriptor.getMetaClass(criteria);
       resultClass = metaDescriptor.getMetaClass(result);
       if (useRetrieve) {
-        localLogger.info(
-            "=================== Class=<"
-                + criteria.getClass()
-                + "> Type=<"
-                + Crud.RETRIEVE.operation
-                + "> Name=<"
-                + groupName
-                + "> =========================");
+        localLogger.info(buildCpoClassLogLine(criteria.getClass(), Crud.RETRIEVE, groupName));
         cpoFunctions = criteriaClass.getFunctionGroup(Crud.RETRIEVE, groupName).getFunctions();
       } else {
-        localLogger.info(
-            "=================== Class=<"
-                + criteria.getClass()
-                + "> Type=<"
-                + Crud.LIST.operation
-                + "> Name=<"
-                + groupName
-                + "> =========================");
+        localLogger.info(buildCpoClassLogLine(criteria.getClass(), Crud.LIST, groupName));
         cpoFunctions = criteriaClass.getFunctionGroup(Crud.LIST, groupName).getFunctions();
       }
 

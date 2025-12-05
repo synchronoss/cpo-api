@@ -700,14 +700,7 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
       List<CpoFunction> functions =
           cpoClass.getFunctionGroup(Crud.RETRIEVE, groupName).getFunctions();
 
-      localLogger.info(
-          "=================== Class=<"
-              + criteriaObj.getClass()
-              + "> Type=<"
-              + Crud.RETRIEVE.operation
-              + "> Name=<"
-              + groupName
-              + "> =========================");
+      localLogger.info(buildCpoClassLogLine(criteriaObj.getClass(), Crud.RETRIEVE, groupName));
 
       try {
         rObj = (T) bean.getClass().newInstance();
@@ -784,26 +777,11 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
       if (!recordsExist) {
         rObj = null;
         localLogger.info(
-            "=================== 0 Records - 0 Attributes - Class=<"
-                + criteriaObj.getClass()
-                + "> Type=<"
-                + Crud.RETRIEVE.operation
-                + "> Name=<"
-                + groupName
-                + "> =========================");
+            buildRecordsLogLine(0, 0, criteriaObj.getClass(), Crud.RETRIEVE, groupName));
       } else {
         localLogger.info(
-            "=================== "
-                + recordCount
-                + " Records - "
-                + attributesSet
-                + " Attributes - Class=<"
-                + criteriaObj.getClass()
-                + ">  Type=<"
-                + Crud.RETRIEVE.operation
-                + "> Name=<"
-                + groupName
-                + "> =========================");
+            buildRecordsLogLine(
+                recordCount, attributesSet, criteriaObj.getClass(), Crud.RETRIEVE, groupName));
       }
     } catch (Throwable t) {
       String msg = "processSeclectGroup(T bean) failed: " + ExceptionHelper.getLocalizedMessage(t);
@@ -891,24 +869,10 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
       criteriaClass = metaDescriptor.getMetaClass(criteria);
       resultClass = metaDescriptor.getMetaClass(result);
       if (useRetrieve) {
-        localLogger.info(
-            "=================== Class=<"
-                + criteria.getClass()
-                + "> Type=<"
-                + Crud.RETRIEVE.operation
-                + "> Name=<"
-                + groupName
-                + "> =========================");
+        localLogger.info(buildCpoClassLogLine(criteria.getClass(), Crud.RETRIEVE, groupName));
         cpoFunctions = criteriaClass.getFunctionGroup(Crud.RETRIEVE, groupName).getFunctions();
       } else {
-        localLogger.info(
-            "=================== Class=<"
-                + criteria.getClass()
-                + "> Type=<"
-                + Crud.LIST.operation
-                + "> Name=<"
-                + groupName
-                + "> =========================");
+        localLogger.info(buildCpoClassLogLine(criteria.getClass(), Crud.LIST, groupName));
         cpoFunctions = criteriaClass.getFunctionGroup(Crud.LIST, groupName).getFunctions();
       }
 
@@ -1073,14 +1037,7 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
           cpoClass
               .getFunctionGroup(adjustCrud(bean, crud, groupName, con), groupName)
               .getFunctions();
-      localLogger.info(
-          "=================== Class=<"
-              + bean.getClass()
-              + "> Type=<"
-              + crud.operation
-              + "> Name=<"
-              + groupName
-              + "> =========================");
+      localLogger.info(buildCpoClassLogLine(bean.getClass(), crud, groupName));
 
       int numRows = 0;
 
@@ -1093,16 +1050,7 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
         jpsf.release();
         ps.close();
       }
-      localLogger.info(
-          "=================== "
-              + numRows
-              + " Updates - Class=<"
-              + bean.getClass()
-              + "> Type=<"
-              + crud.operation
-              + "> Name=<"
-              + groupName
-              + "> =========================");
+      localLogger.info(buildUpdatesLogLine(numRows, bean.getClass(), crud, groupName));
 
       if (numRows > 0) {
         updateCount++;
@@ -1172,14 +1120,7 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
 
       // Only Batch if there is only one function
       if (cpoFunctions.size() == 1) {
-        localLogger.info(
-            "=================== BATCH - Class=<"
-                + firstBean.getClass()
-                + "> Type=<"
-                + crud.operation
-                + "> Name=<"
-                + groupName
-                + "> =========================");
+        localLogger.info(buildBatchLogLine(firstBean.getClass(), crud, groupName));
         cpoFunction = cpoFunctions.get(0);
         jpsf =
             new JdbcPreparedStatementFactory(
@@ -1198,25 +1139,9 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
         updateCount += executeBatch(ps);
         jpsf.release();
         ps.close();
-        localLogger.info(
-            "=================== BATCH - "
-                + updateCount
-                + " Updates - Class=<"
-                + firstBean.getClass()
-                + "> Type=<"
-                + crud.operation
-                + "> Name=<"
-                + groupName
-                + "> =========================");
+        localLogger.info(buildUpdatesLogLine(updateCount, firstBean.getClass(), crud, groupName));
       } else {
-        localLogger.info(
-            "=================== Class=<"
-                + firstBean.getClass()
-                + "> Type=<"
-                + crud.operation
-                + "> Name=<"
-                + groupName
-                + "> =========================");
+        localLogger.info(buildCpoClassLogLine(firstBean.getClass(), crud, groupName));
         for (T bean : beans) {
           for (CpoFunction function : cpoFunctions) {
             jpsf =
@@ -1228,16 +1153,7 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
             ps.close();
           }
         }
-        localLogger.info(
-            "=================== "
-                + updateCount
-                + " Updates - Class=<"
-                + firstBean.getClass()
-                + "> Type=<"
-                + crud.operation
-                + "> Name=<"
-                + groupName
-                + "> =========================");
+        localLogger.info(buildUpdatesLogLine(updateCount, firstBean.getClass(), crud, groupName));
       }
 
     } catch (Throwable t) {

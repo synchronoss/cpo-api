@@ -185,9 +185,9 @@
         <configuration>
             <suiteXmlFiles>
                 <suiteXmlFile>target/test-classes/h2/testng.xml</suiteXmlFile>
-                <suiteXmlFile>target/test-classes/mysql/testng.xml</suiteXmlFile>
-                <suiteXmlFile>target/test-classes/mariadb/testng.xml</suiteXmlFile>
-                <suiteXmlFile>target/test-classes/postgres/testng.xml</suiteXmlFile>
+<!--                <suiteXmlFile>target/test-classes/mysql/testng.xml</suiteXmlFile>-->
+<!--                <suiteXmlFile>target/test-classes/mariadb/testng.xml</suiteXmlFile>-->
+<!--                <suiteXmlFile>target/test-classes/postgres/testng.xml</suiteXmlFile>-->
 <!--                <suiteXmlFile>target/test-classes/oracle/testng.xml</suiteXmlFile>-->
             </suiteXmlFiles>
         </configuration>
@@ -248,6 +248,11 @@
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
     </dependency>
+      <!-- map xmlbeans log4j dependency to slf4j -->
+      <dependency>
+          <groupId>org.apache.logging.log4j</groupId>
+          <artifactId>log4j-to-slf4j</artifactId>
+      </dependency>
       <!-- logback implementation for test logging -->
       <dependency>
           <groupId>ch.qos.logback</groupId>

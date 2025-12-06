@@ -36,7 +36,7 @@
     produces JAVABEANs
   </description>
   <properties>
-    <oracleVersion> 23.26.0.0.0</oracleVersion>
+    <oracleVersion>23.26.0.0.0</oracleVersion>
     <mysqlVersion>9.5.0</mysqlVersion>
     <mariadbVersion>3.5.6</mariadbVersion>
     <h2Version>2.4.240</h2Version>
@@ -94,7 +94,7 @@
 
       <!--  Oracle Test properties  -->
       <oracle.type>oracle</oracle.type>
-      <oracle.image>gvenzl/oracle-xe:21.3.0-slim-faststart</oracle.image>
+      <oracle.image>gvenzl/oracle-xe:slim-faststart</oracle.image>
       <oracle.resources>src/test/resources/oracle</oracle.resources>
       <oracle.user>cpo</oracle.user>
       <oracle.pswd>cpo</oracle.pswd>
@@ -185,9 +185,9 @@
         <configuration>
             <suiteXmlFiles>
                 <suiteXmlFile>target/test-classes/h2/testng.xml</suiteXmlFile>
-<!--                <suiteXmlFile>target/test-classes/mysql/testng.xml</suiteXmlFile>-->
-<!--                <suiteXmlFile>target/test-classes/mariadb/testng.xml</suiteXmlFile>-->
-<!--                <suiteXmlFile>target/test-classes/postgres/testng.xml</suiteXmlFile>-->
+                <suiteXmlFile>target/test-classes/mysql/testng.xml</suiteXmlFile>
+                <suiteXmlFile>target/test-classes/mariadb/testng.xml</suiteXmlFile>
+                <suiteXmlFile>target/test-classes/postgres/testng.xml</suiteXmlFile>
 <!--                <suiteXmlFile>target/test-classes/oracle/testng.xml</suiteXmlFile>-->
             </suiteXmlFiles>
         </configuration>
@@ -275,9 +275,9 @@
     <!-- Oracle is provided because of the oracle transforms -->
     <dependency>
       <groupId>com.oracle.database.jdbc</groupId>
-      <artifactId>ojdbc8</artifactId>
+      <artifactId>ojdbc11</artifactId>
       <version>${oracleVersion}</version>
-      <scope>provided</scope>
+      <scope>test</scope>
     </dependency>
 
     <!-- database drivers for testing -->
@@ -338,31 +338,26 @@
     <dependency>
       <groupId>org.testcontainers</groupId>
       <artifactId>testcontainers</artifactId>
-      <version>${testContainersVersion}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.testcontainers</groupId>
-      <artifactId>mysql</artifactId>
-      <version>${testContainersVersion}</version>
+      <artifactId>testcontainers-mysql</artifactId>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.testcontainers</groupId>
-      <artifactId>mariadb</artifactId>
-      <version>${testContainersVersion}</version>
+      <artifactId>testcontainers-mariadb</artifactId>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.testcontainers</groupId>
-      <artifactId>postgresql</artifactId>
-      <version>${testContainersVersion}</version>
+      <artifactId>testcontainers-postgresql</artifactId>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.testcontainers</groupId>
-      <artifactId>oracle-xe</artifactId>
-      <version>${testContainersVersion}</version>
+      <artifactId>testcontainers-oracle-xe</artifactId>
       <scope>test</scope>
     </dependency>
     <dependency>

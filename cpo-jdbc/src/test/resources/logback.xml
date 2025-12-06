@@ -32,8 +32,7 @@
         </encoder>
     </appender>
 
-    <logger name="org.synchronoss.cpo.core" level="TRACE"/>
-    <logger name="org.synchronoss.cpo.jdbc" level="INFO"/>
+    <logger name="org.synchronoss.cpo" level="INFO"/>
 
     <root level="INFO">
         <appender-ref ref="STDOUT"/>

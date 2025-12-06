@@ -80,16 +80,6 @@ public class JdbcCpoAttribute extends CpoAttribute implements java.io.Serializab
     return dbColumn_;
   }
 
-  //  private void dumpMethod(Method m) {
-  //    logger.debug("========================");
-  //    logger.debug("===> Declaring Class: " + m.getDeclaringClass().getName());
-  //    logger.debug("===> Method Signature: " + m.toString());
-  //    logger.debug("===> Generic Signature: " + m.toGenericString());
-  //    logger.debug("===> Method isBridge: " + m.isBridge());
-  //    logger.debug("===> Method isSynthetic: " + m.isSynthetic());
-  //    logger.debug("========================");
-  //  }
-
   @Override
   protected void initTransformClass(CpoMetaDescriptor metaDescriptor) throws CpoException {
     super.initTransformClass(metaDescriptor);

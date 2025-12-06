@@ -595,4 +595,40 @@ public abstract class CpoBaseAdapter<D> extends CpoAdapterCache implements CpoAd
       Collection<CpoNativeFunction> nativeExpressions,
       boolean useRetrieve)
       throws CpoException;
+
+  private String buildClassInfo(Class<?> clazz, Crud crud, String groupName) {
+    return "Class=<"
+        + clazz.getSimpleName()
+        + "> Function=<"
+        + crud.operation
+        + "> Group=<"
+        + groupName
+        + "> ==========";
+  }
+
+  protected String buildCpoClassLogLine(Class<?> clazz, Crud crud, String groupName) {
+    return "========== " + buildClassInfo(clazz, crud, groupName);
+  }
+
+  protected String buildExecutedLogLine(Class<?> clazz, Crud crud, String groupName) {
+    return "========== Executed - " + buildClassInfo(clazz, crud, groupName);
+  }
+
+  protected String buildBatchLogLine(Class<?> clazz, Crud crud, String groupName) {
+    return "========== BATCH - " + buildClassInfo(clazz, crud, groupName);
+  }
+
+  protected String buildUpdatesLogLine(long updates, Class<?> clazz, Crud crud, String groupName) {
+    return "========== " + updates + " Updates - " + buildClassInfo(clazz, crud, groupName);
+  }
+
+  protected String buildRecordsLogLine(
+      long records, int attributes, Class<?> clazz, Crud crud, String groupName) {
+    return "========== "
+        + records
+        + " Records - "
+        + attributes
+        + " Attributes - "
+        + buildClassInfo(clazz, crud, groupName);
+  }
 }

@@ -126,6 +126,11 @@
             <version>${logbackVersion}</version>
             <scope>test</scope>
         </dependency>
+        <!-- map xmlbeans log4j dependency to slf4j -->
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-to-slf4j</artifactId>
+        </dependency>
         <dependency>
             <groupId>org.apache.xmlbeans</groupId>
             <artifactId>xmlbeans</artifactId>
@@ -144,13 +149,11 @@
         <dependency>
             <groupId>org.testcontainers</groupId>
             <artifactId>testcontainers</artifactId>
-            <version>${testContainersVersion}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.testcontainers</groupId>
-            <artifactId>cassandra</artifactId>
-            <version>${testContainersVersion}</version>
+            <artifactId>testcontainers-cassandra</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>

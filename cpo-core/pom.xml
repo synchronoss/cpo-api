@@ -49,6 +49,11 @@
         <groupId>javax.servlet</groupId>
         <artifactId>javax.servlet-api</artifactId>
     </dependency>
+      <!-- map xmlbeans log4j dependency to slf4j -->
+      <dependency>
+          <groupId>org.apache.logging.log4j</groupId>
+          <artifactId>log4j-to-slf4j</artifactId>
+      </dependency>
       <!-- logback implementation for test logging -->
       <dependency>
           <groupId>ch.qos.logback</groupId>

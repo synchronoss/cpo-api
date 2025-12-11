@@ -23,7 +23,7 @@ package org.synchronoss.cpo.exporter;
  */
 
 import org.synchronoss.cpo.MetaVisitor;
-import org.synchronoss.cpo.core.cpoCoreMeta.CpoMetaDataDocument;
+import org.synchronoss.cpo.cpometa.CtCpoMetaData;
 
 /**
  * XmlObject exporter for meta objects
@@ -33,5 +33,5 @@ import org.synchronoss.cpo.core.cpoCoreMeta.CpoMetaDataDocument;
  */
 public interface MetaXmlObjectExporter extends MetaVisitor {
 
-  CpoMetaDataDocument getCpoMetaDataDocument();
+  CtCpoMetaData getCpoMetaData();
 }

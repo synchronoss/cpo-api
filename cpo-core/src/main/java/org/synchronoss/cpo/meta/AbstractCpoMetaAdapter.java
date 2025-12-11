@@ -26,20 +26,9 @@ import java.util.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.CpoException;
-import org.synchronoss.cpo.core.cpoCoreMeta.CpoMetaDataDocument;
-import org.synchronoss.cpo.core.cpoCoreMeta.CtArgument;
-import org.synchronoss.cpo.core.cpoCoreMeta.CtAttribute;
-import org.synchronoss.cpo.core.cpoCoreMeta.CtClass;
-import org.synchronoss.cpo.core.cpoCoreMeta.CtFunction;
-import org.synchronoss.cpo.core.cpoCoreMeta.CtFunctionGroup;
+import org.synchronoss.cpo.cpometa.*;
 import org.synchronoss.cpo.enums.Crud;
-import org.synchronoss.cpo.meta.domain.CpoArgument;
-import org.synchronoss.cpo.meta.domain.CpoAttribute;
-import org.synchronoss.cpo.meta.domain.CpoClass;
-import org.synchronoss.cpo.meta.domain.CpoClassCaseInsensitive;
-import org.synchronoss.cpo.meta.domain.CpoClassCaseSensitive;
-import org.synchronoss.cpo.meta.domain.CpoFunction;
-import org.synchronoss.cpo.meta.domain.CpoFunctionGroup;
+import org.synchronoss.cpo.meta.domain.*;
 
 /**
  * @author dberry
@@ -163,9 +152,9 @@ public abstract class AbstractCpoMetaAdapter implements CpoMetaAdapter {
 
   protected abstract DataTypeMapper getDataTypeMapper();
 
-  protected void loadCpoMetaDataDocument(CpoMetaDataDocument metaDataDoc, boolean caseSensitive)
+  protected void loadCpoMetaDataDocument(CtCpoMetaData ctCpoMetaData, boolean caseSensitive)
       throws CpoException {
-    for (CtClass ctClass : metaDataDoc.getCpoMetaData().getCpoClassArray()) {
+    for (CtClass ctClass : ctCpoMetaData.getCpoClass()) {
 
       CpoClass cpoClass = getCpoClass(ctClass.getName());
       if (cpoClass == null) {
@@ -185,19 +174,28 @@ public abstract class AbstractCpoMetaAdapter implements CpoMetaAdapter {
 
     currentClass = cpoClass;
 
-    for (CtAttribute ctAttribute : ctClass.getCpoAttributeArray()) {
+    logger.debug("Loading " + ctClass.getCpoAttribute().size() + " attributes ");
+
+    for (var jaxbElement : ctClass.getCpoAttribute()) {
+      CtAttribute ctAttribute = jaxbElement.getValue();
+      logger.debug("ctAttribute: " + ctAttribute);
+      logger.debug("ctAttribute.getValue(): " + ctAttribute);
+      logger.debug("ctAttribute.getValue().getJavaName(): " + ctAttribute.getJavaName());
       CpoAttribute cpoAttribute = cpoClass.getAttributeJava(ctAttribute.getJavaName());
+      logger.debug("cpoAttribute: " + cpoAttribute);
 
       if (cpoAttribute == null) {
         cpoAttribute = createCpoAttribute();
+        logger.debug("loading attribute: " + ctAttribute.getJavaName());
         loadCpoAttribute(cpoAttribute, ctAttribute);
+        logger.debug("loaded attribute: " + ctAttribute.getJavaName());
         cpoClass.addAttribute(cpoAttribute);
       } else {
         loadCpoAttribute(cpoAttribute, ctAttribute);
       }
     }
 
-    for (CtFunctionGroup ctFunctionGroup : ctClass.getCpoFunctionGroupArray()) {
+    for (CtFunctionGroup ctFunctionGroup : ctClass.getCpoFunctionGroup()) {
       CpoFunctionGroup functionGroup = null;
 
       try {
@@ -235,12 +233,10 @@ public abstract class AbstractCpoMetaAdapter implements CpoMetaAdapter {
   protected void loadCpoFunctionGroup(
       CpoFunctionGroup cpoFunctionGroup, CtFunctionGroup ctFunctionGroup) {
     cpoFunctionGroup.setDescription(ctFunctionGroup.getDescription());
-    if (ctFunctionGroup.isSetName()) {
-      cpoFunctionGroup.setName(ctFunctionGroup.getName());
-    }
+    cpoFunctionGroup.setName(ctFunctionGroup.getName());
     cpoFunctionGroup.setType(ctFunctionGroup.getType().toString());
 
-    for (CtFunction ctFunction : ctFunctionGroup.getCpoFunctionArray()) {
+    for (CtFunction ctFunction : ctFunctionGroup.getCpoFunction()) {
       CpoFunction cpoFunction = createCpoFunction();
       cpoFunctionGroup.addFunction(cpoFunction);
       loadCpoFunction(cpoFunction, ctFunction);
@@ -252,10 +248,13 @@ public abstract class AbstractCpoMetaAdapter implements CpoMetaAdapter {
     cpoFunction.setExpression(ctFunction.getExpression());
     cpoFunction.setDescription(ctFunction.getDescription());
 
-    for (CtArgument ctArgument : ctFunction.getCpoArgumentArray()) {
+    for (var jaxbElement : ctFunction.getCpoArgument()) {
+      CtArgument ctArgument = jaxbElement.getValue();
       CpoArgument cpoArgument = createCpoArgument();
       cpoFunction.addArgument(cpoArgument);
+      logger.debug("loading argument: " + ctArgument.getAttributeName());
       loadCpoArgument(cpoArgument, ctArgument);
+      logger.debug("loaded argument: " + ctArgument.getAttributeName());
     }
   }
 

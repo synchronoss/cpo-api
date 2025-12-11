@@ -67,8 +67,10 @@ public class HotDeployTest {
     try {
       cpoAdapter = CpoAdapterFactoryManager.getCpoAdapter(JdbcStatics.ADAPTER_CONTEXT_JDBC);
       assertNotNull(cpoAdapter, method + "cpoAdapter is null");
+      var metaDescriptor = cpoAdapter.getCpoMetaDescriptor();
+      assertNotNull(metaDescriptor, method + "metaDescriptor is null");
       // lets save the existing config before we monkey with it
-      cpoAdapter.getCpoMetaDescriptor().export(metaFile);
+      metaDescriptor.export(metaFile);
     } catch (Exception e) {
       fail(method + e.getMessage());
     }

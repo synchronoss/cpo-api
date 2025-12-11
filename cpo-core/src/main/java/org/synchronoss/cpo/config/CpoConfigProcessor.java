@@ -24,7 +24,7 @@ package org.synchronoss.cpo.config;
 
 import org.synchronoss.cpo.CpoAdapterFactory;
 import org.synchronoss.cpo.CpoException;
-import org.synchronoss.cpo.core.cpoCoreConfig.CtDataSourceConfig;
+import org.synchronoss.cpo.cpoconfig.CtDataSourceConfig;
 
 /**
  * @author dberry

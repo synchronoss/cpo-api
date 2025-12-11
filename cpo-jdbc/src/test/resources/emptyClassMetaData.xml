@@ -19,7 +19,7 @@
   <http://www.gnu.org/licenses/lgpl-3.0.html>.
   ]]
   -->
-<cpoMetaData metaDescriptor="org.synchronoss.cpo.jdbc.meta.JdbcCpoMetaDescriptor" xmlns="http://www.synchronoss.org/cpo/core/CpoCoreMeta.xsd">
+<cpoMetaData metaDescriptor="org.synchronoss.cpo.jdbc.meta.JdbcCpoMetaDescriptor" xmlns="http://www.synchronoss.org/cpo/CpoMeta.xsd">
   <cpoClass name="org.synchronoss.cpo.jdbc.LobValueObject">
   </cpoClass>
   <cpoClass name="org.synchronoss.cpo.jdbc.ValueObject">

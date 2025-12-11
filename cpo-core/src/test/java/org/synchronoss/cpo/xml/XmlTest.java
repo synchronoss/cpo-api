@@ -1,8 +1,8 @@
-package org.synchronoss.cpo.cassandra;
+package org.synchronoss.cpo.xml;
 
 /*-
  * [[
- * cassandra
+ * core
  * ==
  * Copyright (C) 2003 - 2025 David E. Berry
  * ==
@@ -22,39 +22,22 @@ package org.synchronoss.cpo.cassandra;
  * ]]
  */
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.synchronoss.cpo.cpoconfig.CtCpoConfig;
+import org.synchronoss.cpo.CpoException;
+import org.synchronoss.cpo.cpometa.CtCpoMetaData;
 import org.synchronoss.cpo.helper.XmlHelper;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-/**
- * @author dberry
- */
-public class XmlValidationTest {
-
-  private static final Logger logger = LoggerFactory.getLogger(XmlValidationTest.class);
-  static final String CPO_CONFIG_XML = "/cpoConfig.xml";
-  static final String BAD_CPO_CONFIG_XML = "/badConfig.xml";
+public class XmlTest {
 
   @Test
-  public void testBadXml() {
+  public void testCpoMetaDataXml() throws CpoException {
     var errBuilder = new StringBuilder();
+    var metaXml = "testCoreMeta.xml";
 
-    CtCpoConfig cpoConfig =
+    CtCpoMetaData ctCpoMeta =
         XmlHelper.unmarshalXmlObject(
-            XmlHelper.CPO_CONFIG_XSD, BAD_CPO_CONFIG_XML, CtCpoConfig.class, errBuilder);
-    Assert.assertFalse(errBuilder.isEmpty(), "Should have received an error message");
-  }
-
-  @Test
-  public void testGoodXml() {
-    var errBuilder = new StringBuilder();
-
-    CtCpoConfig cpoConfig =
-        XmlHelper.unmarshalXmlObject(
-            XmlHelper.CPO_CONFIG_XSD, CPO_CONFIG_XML, CtCpoConfig.class, errBuilder);
+            XmlHelper.CPO_META_XSD, metaXml, CtCpoMetaData.class, errBuilder);
     Assert.assertTrue(
         errBuilder.isEmpty(),
         "Should not have received an error message: " + errBuilder.toString());

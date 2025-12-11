@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
-    xmlns="http://www.synchronoss.org/cpo/core/CpoCoreMeta.xsd"
-    targetNamespace="http://www.synchronoss.org/cpo/core/CpoCoreMeta.xsd"
+    xmlns="http://www.synchronoss.org/cpo/CpoMeta.xsd"
+    targetNamespace="http://www.synchronoss.org/cpo/CpoMeta.xsd"
     elementFormDefault="qualified">
     
     <xs:element name="cpoMetaData" type="ctCpoMetaData"/>
@@ -15,10 +15,10 @@
         <!-- used by cpo util to store the package name -->
         <xs:attribute name="defaultPackageName" type="xs:string" use="optional"/>
     </xs:complexType>
-    
+
     <xs:complexType name="ctClass">
         <xs:sequence>
-            <xs:element name="cpoAttribute" type="ctAttribute" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element ref="cpoAttribute" minOccurs="0" maxOccurs="unbounded"/>
             <xs:element name="cpoFunctionGroup" type="ctFunctionGroup" minOccurs="0" maxOccurs="unbounded"/>
             <xs:element name="description" type="xs:string" minOccurs="0"/>
         </xs:sequence>
@@ -46,7 +46,9 @@
       </xs:restriction>
     </xs:simpleType>
 
-    <xs:complexType name="ctAttribute" abstract="true" >
+    <xs:element name="cpoAttribute" type="ctAttribute"/>
+
+    <xs:complexType name="ctAttribute">
         <xs:sequence>
             <xs:element name="javaName" type="xs:string"/>
             <xs:element name="javaType" type="xs:string"/>
@@ -60,17 +62,80 @@
     <xs:complexType name="ctFunction">
         <xs:sequence>
             <xs:element name="expression" type="xs:string"/>
-            <xs:element name="cpoArgument" type="ctArgument" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element ref="cpoArgument" minOccurs="0" maxOccurs="unbounded"/>
             <xs:element name="description" type="xs:string" minOccurs="0"/>
         </xs:sequence>
         <xs:attribute name="name" type="xs:string" use="required"/>
     </xs:complexType>
-    
-    <xs:complexType name="ctArgument"  abstract="true">
-        <xs:choice>
+
+    <xs:element name="cpoArgument" type="ctArgument"/>
+
+    <xs:complexType name="ctArgument">
+        <xs:sequence>
             <xs:element name="attributeName" type="xs:string"/>
             <xs:element name="description" type="xs:string" minOccurs="0"/>
-        </xs:choice>
+        </xs:sequence>
     </xs:complexType>
-    
+
+    <!--  JDBC Definitions  -->
+
+    <xs:complexType name="ctJdbcAttribute" >
+        <xs:complexContent>
+            <xs:extension base="ctAttribute">
+                <xs:sequence>
+                    <xs:element name="dbTable" type="xs:string" minOccurs="0"/>
+                    <xs:element name="dbColumn" type="xs:string" minOccurs="0"/>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:element name="jdbcAttribute" type="ctJdbcAttribute" substitutionGroup="cpoAttribute"/>
+
+    <xs:complexType name="ctJdbcArgument">
+        <xs:complexContent>
+            <xs:extension base="ctArgument">
+                <xs:sequence minOccurs="0">
+                    <xs:element name="scope" default="IN" type="stArgumentScope">
+                    </xs:element>
+                    <xs:element name="typeInfo" type="xs:string" minOccurs="0" />
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:element name="jdbcArgument" type="ctJdbcArgument" substitutionGroup="cpoArgument"/>
+
+    <xs:simpleType name="stArgumentScope">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="IN"/>
+            <xs:enumeration value="OUT"/>
+            <xs:enumeration value="BOTH"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <!--  Cassandra Definitions  -->
+
+    <xs:element name="cassandraAttribute" type="ctCassandraAttribute" substitutionGroup="cpoAttribute"/>
+
+    <xs:complexType name="ctCassandraAttribute" >
+        <xs:complexContent>
+            <xs:extension base="ctAttribute">
+                <xs:sequence>
+                    <xs:element name="keyType" type="xs:string" minOccurs="0"/>
+                    <xs:element name="valueType" type="xs:string" minOccurs="0"/>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:element name="cassandraArgument" type="ctCassandraArgument" substitutionGroup="cpoArgument"/>
+
+    <xs:complexType name="ctCassandraArgument">
+        <xs:complexContent>
+            <xs:extension base="ctArgument">
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
 </xs:schema>

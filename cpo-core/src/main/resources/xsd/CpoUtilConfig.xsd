@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
   xmlns="http://www.synchronoss.org/cpo/util/CpoUtilConfig.xsd"
-  xmlns:core="http://www.synchronoss.org/cpo/core/CpoCoreConfig.xsd"
+  xmlns:core="http://www.synchronoss.org/cpo/CpoConfig.xsd"
   targetNamespace="http://www.synchronoss.org/cpo/util/CpoUtilConfig.xsd"
   elementFormDefault="qualified">
 
-  <xs:import namespace="http://www.synchronoss.org/cpo/core/CpoCoreConfig.xsd" schemaLocation="CpoCoreConfig.xsd"/>
+  <xs:import namespace="http://www.synchronoss.org/cpo/CpoConfig.xsd" schemaLocation="CpoConfig.xsd"/>
 
   <xs:element name="cpoUtilConfig" type="ctCpoUtilConfig" />
 

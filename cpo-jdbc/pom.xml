@@ -248,11 +248,6 @@
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
     </dependency>
-      <!-- map xmlbeans log4j dependency to slf4j -->
-      <dependency>
-          <groupId>org.apache.logging.log4j</groupId>
-          <artifactId>log4j-to-slf4j</artifactId>
-      </dependency>
       <!-- logback implementation for test logging -->
       <dependency>
           <groupId>ch.qos.logback</groupId>
@@ -266,11 +261,15 @@
           <version>${logbackVersion}</version>
           <scope>test</scope>
       </dependency>
-    <dependency>
-      <groupId>org.apache.xmlbeans</groupId>
-      <artifactId>xmlbeans</artifactId>
-    </dependency>
-
+      <dependency>
+          <groupId>jakarta.xml.bind</groupId>
+          <artifactId>jakarta.xml.bind-api</artifactId>
+      </dependency>
+      <dependency>
+          <groupId>org.glassfish.jaxb</groupId>
+          <artifactId>jaxb-runtime</artifactId>
+          <scope>runtime</scope>
+      </dependency>
 
     <!-- Oracle is provided because of the oracle transforms -->
     <dependency>

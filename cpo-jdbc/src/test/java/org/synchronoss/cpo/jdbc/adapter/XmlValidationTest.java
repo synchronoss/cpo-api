@@ -22,16 +22,9 @@ package org.synchronoss.cpo.jdbc.adapter;
  * ]]
  */
 
-import static org.testng.Assert.fail;
-
-import java.io.IOException;
-import java.io.InputStream;
-import org.apache.xmlbeans.XmlException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.synchronoss.cpo.core.cpoCoreConfig.CpoConfigDocument;
-import org.synchronoss.cpo.helper.CpoClassLoader;
-import org.synchronoss.cpo.helper.XmlBeansHelper;
+import org.synchronoss.cpo.cpoconfig.CtCpoConfig;
+import org.synchronoss.cpo.helper.XmlHelper;
+import org.testng.Assert;
 import org.testng.annotations.Test;
 
 /**
@@ -39,7 +32,6 @@ import org.testng.annotations.Test;
  */
 public class XmlValidationTest {
 
-  private static final Logger logger = LoggerFactory.getLogger(XmlValidationTest.class);
   static final String CPO_CONFIG_XML = "/h2/cpoConfig.xml";
   static final String BAD_CPO_CONFIG_XML = "/badConfig.xml";
 
@@ -47,37 +39,23 @@ public class XmlValidationTest {
 
   @Test
   public void testBadXml() {
-    InputStream is = CpoClassLoader.getResourceAsStream(BAD_CPO_CONFIG_XML);
+    var errBuilder = new StringBuilder();
 
-    try {
-      CpoConfigDocument configDoc = CpoConfigDocument.Factory.parse(is);
-      String errMsg = XmlBeansHelper.validateXml(configDoc);
-      if (errMsg == null) {
-        fail("Should have received an error message");
-      } else {
-        logger.debug(errMsg);
-      }
-    } catch (IOException ioe) {
-      fail("Could not read config xml");
-    } catch (XmlException xe) {
-      fail("Config xml was not well formed");
-    }
+    CtCpoConfig cpoConfig =
+        XmlHelper.unmarshalXmlObject(
+            XmlHelper.CPO_CONFIG_XSD, BAD_CPO_CONFIG_XML, CtCpoConfig.class, errBuilder);
+    Assert.assertFalse(errBuilder.isEmpty(), "Should have received an error message");
   }
 
   @Test
   public void testGoodXml() {
-    InputStream is = CpoClassLoader.getResourceAsStream(CPO_CONFIG_XML);
+    var errBuilder = new StringBuilder();
 
-    try {
-      CpoConfigDocument configDoc = CpoConfigDocument.Factory.parse(is);
-      String errMsg = XmlBeansHelper.validateXml(configDoc);
-      if (errMsg != null) {
-        fail("Should have received an error message:" + errMsg);
-      }
-    } catch (IOException ioe) {
-      fail("Could not read config xml");
-    } catch (XmlException xe) {
-      fail("Config xml was not well formed");
-    }
+    CtCpoConfig cpoConfig =
+        XmlHelper.unmarshalXmlObject(
+            XmlHelper.CPO_CONFIG_XSD, CPO_CONFIG_XML, CtCpoConfig.class, errBuilder);
+    Assert.assertTrue(
+        errBuilder.isEmpty(),
+        "Should not have received an error message: " + errBuilder.toString());
   }
 }

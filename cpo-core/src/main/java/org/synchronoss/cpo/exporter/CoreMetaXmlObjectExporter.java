@@ -23,20 +23,9 @@ package org.synchronoss.cpo.exporter;
  */
 
 import org.synchronoss.cpo.MetaVisitor;
-import org.synchronoss.cpo.core.cpoCoreMeta.CpoMetaDataDocument;
-import org.synchronoss.cpo.core.cpoCoreMeta.CtArgument;
-import org.synchronoss.cpo.core.cpoCoreMeta.CtAttribute;
-import org.synchronoss.cpo.core.cpoCoreMeta.CtClass;
-import org.synchronoss.cpo.core.cpoCoreMeta.CtCpoMetaData;
-import org.synchronoss.cpo.core.cpoCoreMeta.CtFunction;
-import org.synchronoss.cpo.core.cpoCoreMeta.CtFunctionGroup;
-import org.synchronoss.cpo.core.cpoCoreMeta.StFunctionGroupType;
+import org.synchronoss.cpo.cpometa.*;
 import org.synchronoss.cpo.meta.CpoMetaDescriptor;
-import org.synchronoss.cpo.meta.domain.CpoArgument;
-import org.synchronoss.cpo.meta.domain.CpoAttribute;
-import org.synchronoss.cpo.meta.domain.CpoClass;
-import org.synchronoss.cpo.meta.domain.CpoFunction;
-import org.synchronoss.cpo.meta.domain.CpoFunctionGroup;
+import org.synchronoss.cpo.meta.domain.*;
 
 /**
  * XmlObject exporter for meta objects
@@ -46,29 +35,31 @@ import org.synchronoss.cpo.meta.domain.CpoFunctionGroup;
  */
 public class CoreMetaXmlObjectExporter implements MetaXmlObjectExporter, MetaVisitor {
 
-  protected CpoMetaDataDocument cpoMetaDataDocument = null;
+  protected CtCpoMetaData ctCpoMetaData = null;
   protected CtClass currentCtClass;
   protected CtFunctionGroup currentCtFunctionGroup;
   protected CtFunction currentCtFunction;
+  protected ObjectFactory objectFactory = new ObjectFactory();
 
   public CoreMetaXmlObjectExporter(CpoMetaDescriptor metaDescriptor) {
-    cpoMetaDataDocument = CpoMetaDataDocument.Factory.newInstance();
-    CtCpoMetaData ctCpoMetaData = cpoMetaDataDocument.addNewCpoMetaData();
+    ctCpoMetaData = new CtCpoMetaData();
     ctCpoMetaData.setMetaDescriptor(metaDescriptor.getClass().getName());
     ctCpoMetaData.setDefaultPackageName(metaDescriptor.getDefaultPackageName());
   }
 
   @Override
-  public CpoMetaDataDocument getCpoMetaDataDocument() {
-    return cpoMetaDataDocument;
+  public CtCpoMetaData getCpoMetaData() {
+    return ctCpoMetaData;
   }
 
   @Override
   public void visit(CpoClass cpoClass) {
-    CtClass ctClass = cpoMetaDataDocument.getCpoMetaData().addNewCpoClass();
+    CtClass ctClass = new CtClass();
+    ctCpoMetaData.getCpoClass().add(ctClass);
+
     ctClass.setName(cpoClass.getName());
 
-    if (cpoClass.getDescription() != null && cpoClass.getDescription().length() > 0) {
+    if (cpoClass.getDescription() != null && !cpoClass.getDescription().isEmpty()) {
       ctClass.setDescription(cpoClass.getDescription());
     }
 
@@ -79,7 +70,9 @@ public class CoreMetaXmlObjectExporter implements MetaXmlObjectExporter, MetaVis
   @Override
   public void visit(CpoAttribute cpoAttribute) {
     if (currentCtClass != null) {
-      CtAttribute ctAttribute = currentCtClass.addNewCpoAttribute();
+      CtAttribute ctAttribute = new CtAttribute();
+      var jaxbElement = objectFactory.createCpoAttribute(ctAttribute);
+      currentCtClass.getCpoAttribute().add(jaxbElement);
 
       ctAttribute.setJavaName(cpoAttribute.getJavaName());
       ctAttribute.setJavaType(cpoAttribute.getJavaType());
@@ -87,11 +80,11 @@ public class CoreMetaXmlObjectExporter implements MetaXmlObjectExporter, MetaVis
       ctAttribute.setDataType(cpoAttribute.getDataType());
 
       if (cpoAttribute.getTransformClassName() != null
-          && cpoAttribute.getTransformClassName().length() > 0) {
+          && !cpoAttribute.getTransformClassName().isEmpty()) {
         ctAttribute.setTransformClass(cpoAttribute.getTransformClassName());
       }
 
-      if (cpoAttribute.getDescription() != null && cpoAttribute.getDescription().length() > 0) {
+      if (cpoAttribute.getDescription() != null && !cpoAttribute.getDescription().isEmpty()) {
         ctAttribute.setDescription(cpoAttribute.getDescription());
       }
     }
@@ -100,16 +93,17 @@ public class CoreMetaXmlObjectExporter implements MetaXmlObjectExporter, MetaVis
   @Override
   public void visit(CpoFunctionGroup cpoFunctionGroup) {
     if (currentCtClass != null) {
-      CtFunctionGroup ctFunctionGroup = currentCtClass.addNewCpoFunctionGroup();
+      CtFunctionGroup ctFunctionGroup = new CtFunctionGroup();
+      currentCtClass.getCpoFunctionGroup().add(ctFunctionGroup);
 
-      if (cpoFunctionGroup.getName() != null && cpoFunctionGroup.getName().length() > 0) {
+      if (cpoFunctionGroup.getName() != null && !cpoFunctionGroup.getName().isEmpty()) {
         ctFunctionGroup.setName(cpoFunctionGroup.getName());
       }
 
-      ctFunctionGroup.setType(StFunctionGroupType.Enum.forString(cpoFunctionGroup.getType()));
+      ctFunctionGroup.setType(StFunctionGroupType.fromValue(cpoFunctionGroup.getType()));
 
       if (cpoFunctionGroup.getDescription() != null
-          && cpoFunctionGroup.getDescription().length() > 0) {
+          && !cpoFunctionGroup.getDescription().isEmpty()) {
         ctFunctionGroup.setDescription(cpoFunctionGroup.getDescription());
       }
 
@@ -121,12 +115,13 @@ public class CoreMetaXmlObjectExporter implements MetaXmlObjectExporter, MetaVis
   @Override
   public void visit(CpoFunction cpoFunction) {
     if (currentCtFunctionGroup != null) {
-      CtFunction ctFunction = currentCtFunctionGroup.addNewCpoFunction();
+      CtFunction ctFunction = new CtFunction();
+      currentCtFunctionGroup.getCpoFunction().add(ctFunction);
 
       ctFunction.setName(cpoFunction.getName());
       ctFunction.setExpression(cpoFunction.getExpression());
 
-      if (cpoFunction.getDescription() != null && cpoFunction.getDescription().length() > 0) {
+      if (cpoFunction.getDescription() != null && !cpoFunction.getDescription().isEmpty()) {
         ctFunction.setDescription(cpoFunction.getDescription());
       }
 
@@ -138,11 +133,13 @@ public class CoreMetaXmlObjectExporter implements MetaXmlObjectExporter, MetaVis
   @Override
   public void visit(CpoArgument cpoArgument) {
     if (currentCtFunction != null) {
-      CtArgument ctArgument = currentCtFunction.addNewCpoArgument();
+      CtArgument ctArgument = new CtArgument();
+      var jaxbElement = objectFactory.createCpoArgument(ctArgument);
+      currentCtFunction.getCpoArgument().add(jaxbElement);
 
       ctArgument.setAttributeName(cpoArgument.getAttribute().getJavaName());
 
-      if (cpoArgument.getDescription() != null && cpoArgument.getDescription().length() > 0) {
+      if (cpoArgument.getDescription() != null && !cpoArgument.getDescription().isEmpty()) {
         ctArgument.setDescription(cpoArgument.getDescription());
       }
     }

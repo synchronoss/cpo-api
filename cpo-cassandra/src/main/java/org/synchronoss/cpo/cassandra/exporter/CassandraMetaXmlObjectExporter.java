@@ -22,11 +22,10 @@ package org.synchronoss.cpo.cassandra.exporter;
  * ]]
  */
 
-import org.synchronoss.cpo.cassandra.cpoCassandraMeta.CtCassandraArgument;
-import org.synchronoss.cpo.cassandra.cpoCassandraMeta.CtCassandraAttribute;
 import org.synchronoss.cpo.cassandra.meta.CassandraCpoAttribute;
-import org.synchronoss.cpo.core.cpoCoreMeta.CtArgument;
-import org.synchronoss.cpo.core.cpoCoreMeta.CtAttribute;
+import org.synchronoss.cpo.cpometa.CtCassandraArgument;
+import org.synchronoss.cpo.cpometa.CtCassandraAttribute;
+import org.synchronoss.cpo.cpometa.ObjectFactory;
 import org.synchronoss.cpo.exporter.CoreMetaXmlObjectExporter;
 import org.synchronoss.cpo.exporter.MetaXmlObjectExporter;
 import org.synchronoss.cpo.meta.CpoMetaDescriptor;
@@ -40,6 +39,9 @@ import org.synchronoss.cpo.meta.domain.CpoAttribute;
  */
 public class CassandraMetaXmlObjectExporter extends CoreMetaXmlObjectExporter
     implements MetaXmlObjectExporter {
+
+  private final ObjectFactory objectFactory = new ObjectFactory();
+
   /**
    * Constructs the CassandraMetaXmlObjectExporter
    *
@@ -64,7 +66,7 @@ public class CassandraMetaXmlObjectExporter extends CoreMetaXmlObjectExporter
 
       // CtClass.addNewCpoAttribute() can't be used here because it returns a CtAttribute, not a
       // CtJdbcAttribute
-      CtCassandraAttribute ctCassandraAttribute = CtCassandraAttribute.Factory.newInstance();
+      CtCassandraAttribute ctCassandraAttribute = new CtCassandraAttribute();
 
       ctCassandraAttribute.setJavaName(cassAttribute.getJavaName());
       ctCassandraAttribute.setJavaType(cassAttribute.getJavaType());
@@ -72,11 +74,11 @@ public class CassandraMetaXmlObjectExporter extends CoreMetaXmlObjectExporter
       ctCassandraAttribute.setDataType(cassAttribute.getDataType());
 
       if (cassAttribute.getTransformClassName() != null
-          && cassAttribute.getTransformClassName().length() > 0) {
+          && !cassAttribute.getTransformClassName().isEmpty()) {
         ctCassandraAttribute.setTransformClass(cassAttribute.getTransformClassName());
       }
 
-      if (cassAttribute.getDescription() != null && cassAttribute.getDescription().length() > 0) {
+      if (cassAttribute.getDescription() != null && !cassAttribute.getDescription().isEmpty()) {
         ctCassandraAttribute.setDescription(cassAttribute.getDescription());
       }
 
@@ -89,8 +91,9 @@ public class CassandraMetaXmlObjectExporter extends CoreMetaXmlObjectExporter
       }
 
       // add it to the class
-      CtAttribute ctAttribute = currentCtClass.addNewCpoAttribute();
-      ctAttribute.set(ctCassandraAttribute);
+      currentCtClass
+          .getCpoAttribute()
+          .add(objectFactory.createCassandraAttribute(ctCassandraAttribute));
     }
   }
 
@@ -101,16 +104,17 @@ public class CassandraMetaXmlObjectExporter extends CoreMetaXmlObjectExporter
 
       // CtFunction.addNewCpoArgument() can't be used here because it returns a CtArgument, not a
       // ctCassandraArgument
-      CtCassandraArgument ctCassandraArgument = CtCassandraArgument.Factory.newInstance();
+      CtCassandraArgument ctCassandraArgument = new CtCassandraArgument();
 
       ctCassandraArgument.setAttributeName(cpoArgument.getName());
 
-      if (cpoArgument.getDescription() != null && cpoArgument.getDescription().length() > 0) {
+      if (cpoArgument.getDescription() != null && !cpoArgument.getDescription().isEmpty()) {
         ctCassandraArgument.setDescription(cpoArgument.getDescription());
       }
 
-      CtArgument ctArgument = currentCtFunction.addNewCpoArgument();
-      ctArgument.set(ctCassandraArgument);
+      currentCtFunction
+          .getCpoArgument()
+          .add(objectFactory.createCassandraArgument(ctCassandraArgument));
     }
   }
 }

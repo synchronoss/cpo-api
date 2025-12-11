@@ -22,14 +22,14 @@ package org.synchronoss.cpo.jdbc.exporter;
  * ]]
  */
 
-import org.synchronoss.cpo.core.cpoCoreMeta.CtArgument;
-import org.synchronoss.cpo.core.cpoCoreMeta.CtAttribute;
+import org.synchronoss.cpo.cpometa.CtJdbcArgument;
+import org.synchronoss.cpo.cpometa.CtJdbcAttribute;
+import org.synchronoss.cpo.cpometa.ObjectFactory;
+import org.synchronoss.cpo.cpometa.StArgumentScope;
 import org.synchronoss.cpo.exporter.CoreMetaXmlObjectExporter;
 import org.synchronoss.cpo.exporter.MetaXmlObjectExporter;
 import org.synchronoss.cpo.jdbc.JdbcCpoArgument;
 import org.synchronoss.cpo.jdbc.JdbcCpoAttribute;
-import org.synchronoss.cpo.jdbc.cpoJdbcMeta.CtJdbcArgument;
-import org.synchronoss.cpo.jdbc.cpoJdbcMeta.CtJdbcAttribute;
 import org.synchronoss.cpo.meta.CpoMetaDescriptor;
 import org.synchronoss.cpo.meta.domain.CpoArgument;
 import org.synchronoss.cpo.meta.domain.CpoAttribute;
@@ -42,6 +42,8 @@ import org.synchronoss.cpo.meta.domain.CpoAttribute;
  */
 public class JdbcMetaXmlObjectExporter extends CoreMetaXmlObjectExporter
     implements MetaXmlObjectExporter {
+
+  protected ObjectFactory objectFactory = new ObjectFactory();
 
   /**
    * Constructs a JdbcMetaXmlObjectExporter object.
@@ -67,7 +69,10 @@ public class JdbcMetaXmlObjectExporter extends CoreMetaXmlObjectExporter
 
       // CtClass.addNewCpoAttribute() can't be used here because it returns a CtAttribute, not a
       // CtJdbcAttribute
-      CtJdbcAttribute ctJdbcAttribute = CtJdbcAttribute.Factory.newInstance();
+      CtJdbcAttribute ctJdbcAttribute = new CtJdbcAttribute();
+      var jaxbElement = objectFactory.createJdbcAttribute(ctJdbcAttribute);
+      // add it to the class
+      currentCtClass.getCpoAttribute().add(jaxbElement);
 
       ctJdbcAttribute.setJavaName(jdbcAttribute.getJavaName());
       ctJdbcAttribute.setJavaType(jdbcAttribute.getJavaType());
@@ -75,25 +80,21 @@ public class JdbcMetaXmlObjectExporter extends CoreMetaXmlObjectExporter
       ctJdbcAttribute.setDataType(jdbcAttribute.getDataType());
 
       if (jdbcAttribute.getTransformClassName() != null
-          && jdbcAttribute.getTransformClassName().length() > 0) {
+          && !jdbcAttribute.getTransformClassName().isEmpty()) {
         ctJdbcAttribute.setTransformClass(jdbcAttribute.getTransformClassName());
       }
 
-      if (jdbcAttribute.getDescription() != null && jdbcAttribute.getDescription().length() > 0) {
+      if (jdbcAttribute.getDescription() != null && !jdbcAttribute.getDescription().isEmpty()) {
         ctJdbcAttribute.setDescription(jdbcAttribute.getDescription());
       }
 
-      if (jdbcAttribute.getDbTable() != null && jdbcAttribute.getDbTable().length() > 0) {
+      if (jdbcAttribute.getDbTable() != null && !jdbcAttribute.getDbTable().isEmpty()) {
         ctJdbcAttribute.setDbTable(jdbcAttribute.getDbTable());
       }
 
-      if (jdbcAttribute.getDbColumn() != null && jdbcAttribute.getDbColumn().length() > 0) {
+      if (jdbcAttribute.getDbColumn() != null && !jdbcAttribute.getDbColumn().isEmpty()) {
         ctJdbcAttribute.setDbColumn(jdbcAttribute.getDbColumn());
       }
-
-      // add it to the class
-      CtAttribute ctAttribute = currentCtClass.addNewCpoAttribute();
-      ctAttribute.set(ctJdbcAttribute);
     }
   }
 
@@ -112,28 +113,27 @@ public class JdbcMetaXmlObjectExporter extends CoreMetaXmlObjectExporter
 
       // CtFunction.addNewCpoArgument() can't be used here because it returns a CtArgument, not a
       // CtJdbcArgument
-      CtJdbcArgument ctJdbcArgument = CtJdbcArgument.Factory.newInstance();
+      CtJdbcArgument ctJdbcArgument = new CtJdbcArgument();
+      var jaxbElement = objectFactory.createJdbcArgument(ctJdbcArgument);
+      currentCtFunction.getCpoArgument().add(jaxbElement);
 
       ctJdbcArgument.setAttributeName(jdbcArgument.getName());
 
-      if (jdbcArgument.getDescription() != null && jdbcArgument.getDescription().length() > 0) {
+      if (jdbcArgument.getDescription() != null && !jdbcArgument.getDescription().isEmpty()) {
         ctJdbcArgument.setDescription(jdbcArgument.getDescription());
       }
 
       if (jdbcArgument.isInParameter() && jdbcArgument.isOutParameter()) {
-        ctJdbcArgument.setScope(CtJdbcArgument.Scope.BOTH);
+        ctJdbcArgument.setScope(StArgumentScope.BOTH);
       } else if (jdbcArgument.isInParameter()) {
-        ctJdbcArgument.setScope(CtJdbcArgument.Scope.IN);
+        ctJdbcArgument.setScope(StArgumentScope.IN);
       } else if (jdbcArgument.isOutParameter()) {
-        ctJdbcArgument.setScope(CtJdbcArgument.Scope.OUT);
+        ctJdbcArgument.setScope(StArgumentScope.OUT);
       }
 
       if (jdbcArgument.getTypeInfo() != null && !jdbcArgument.getTypeInfo().isEmpty()) {
         ctJdbcArgument.setTypeInfo(jdbcArgument.getTypeInfo());
       }
-
-      CtArgument ctArgument = currentCtFunction.addNewCpoArgument();
-      ctArgument.set(ctJdbcArgument);
     }
   }
 }

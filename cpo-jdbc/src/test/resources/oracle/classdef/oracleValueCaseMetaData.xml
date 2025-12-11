@@ -19,7 +19,7 @@
   <http://www.gnu.org/licenses/lgpl-3.0.html>.
   ]]
   -->
-<cpoMetaData metaDescriptor="org.synchronoss.cpo.jdbc.meta.JdbcCpoMetaDescriptor" xmlns="http://www.synchronoss.org/cpo/core/CpoCoreMeta.xsd">
+<cpoMetaData metaDescriptor="org.synchronoss.cpo.jdbc.meta.JdbcCpoMetaDescriptor" xmlns="CpoMeta.xsd">
   <cpoClass name="org.synchronoss.cpo.jdbc.CaseValueObject">
       <cpoAttribute xsi:type="cpoj:ctJdbcAttribute" xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
           <javaName>attrBit</javaName>

@@ -21,10 +21,9 @@
   ]]
   -->
 
-<cpoConfig xmlns="http://www.synchronoss.org/cpo/core/CpoCoreConfig.xsd"
- xmlns:jdbc="http://www.synchronoss.org/cpo/jdbc/CpoJdbcConfig.xsd"
+<cpoConfig xmlns="http://www.synchronoss.org/cpo/CpoConfig.xsd"
  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
- xsi:schemaLocation="http://www.synchronoss.org/cpo/jdbc/CpoJdbcConfig.xsd file:../../main/xsd/CpoJdbcConfig.xsd"
+ xsi:schemaLocation="http://www.synchronoss.org/cpo/CpoConfig.xsd ../../../../cpo-core/src/main/resources/xsd/CpoConfig.xsd"
  defaultConfig="jdbc">
 
   <metaConfig name="jdbcMeta">
@@ -34,14 +33,14 @@
     <metaXml>/emptyMetaData.xml</metaXml>
   </metaConfig>
 
-   <dataConfig xsi:type="jdbc:ctJdbcConfig" name="jdbc">
+   <dataConfig xsi:type="ctJdbcConfig" name="jdbc">
       <metaDescriptorName>jdbcMeta</metaDescriptorName>
       <cpoConfigProcessor>org.synchronoss.cpo.jdbc.config.JdbcCpoConfigProcessor</cpoConfigProcessor>
-    <jdbc:readWriteConfig>
-         <!-- <jdbc:dataSourceClassName>${cpo.db.class}</jdbc:dataSourceClassName> -->
-         <jdbc:url>${cpo.db.url}</jdbc:url>
-         <jdbc:user>${cpo.db.user}</jdbc:user>
-     <jdbc:password>${cpo.db.pswd}</jdbc:password>
-    </jdbc:readWriteConfig>
+    <readWriteConfig>
+         <!-- <dataSourceClassName>${cpo.db.class}</dataSourceClassName> -->
+         <url>${cpo.db.url}</url>
+         <user>${cpo.db.user}</user>
+     <password>${cpo.db.pswd}</password>
+    </readWriteConfig>
   </dataConfig>
 </cpoConfig>

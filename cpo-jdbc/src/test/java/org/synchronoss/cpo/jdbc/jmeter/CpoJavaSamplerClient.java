@@ -33,10 +33,10 @@ import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.CpoAdapter;
 import org.synchronoss.cpo.CpoAdapterFactoryManager;
 import org.synchronoss.cpo.CpoException;
+import org.synchronoss.cpo.cpoconfig.CtJdbcConfig;
+import org.synchronoss.cpo.cpoconfig.CtJdbcReadWriteConfig;
 import org.synchronoss.cpo.jdbc.ValueObject;
 import org.synchronoss.cpo.jdbc.adapter.ValueObjectFactory;
-import org.synchronoss.cpo.jdbc.cpoJdbcConfig.CtJdbcConfig;
-import org.synchronoss.cpo.jdbc.cpoJdbcConfig.CtJdbcReadWriteConfig;
 import org.synchronoss.cpo.jdbc.meta.JdbcCpoMetaDescriptor;
 import org.synchronoss.cpo.meta.CpoMetaDescriptor;
 import org.testng.annotations.BeforeClass;
@@ -82,12 +82,13 @@ public class CpoJavaSamplerClient extends AbstractJavaSamplerClient {
                   "/oracle/classdef/oracleValueMetaData.xml",
                   true);
 
-      CtJdbcConfig jdbcConfig = CtJdbcConfig.Factory.newInstance();
+      CtJdbcConfig jdbcConfig = new CtJdbcConfig();
       jdbcConfig.setName(this.getClass().getName());
       jdbcConfig.setMetaDescriptorName(metaDescriptor.getName());
       jdbcConfig.setCpoConfigProcessor(CONFIG_PROCESSOR);
 
-      CtJdbcReadWriteConfig rwc = jdbcConfig.addNewReadWriteConfig();
+      CtJdbcReadWriteConfig rwc = new CtJdbcReadWriteConfig();
+      jdbcConfig.setReadWriteConfig(rwc);
       rwc.setUser(javaSamplerContext.getParameter(USER_NAME));
       rwc.setPassword(javaSamplerContext.getParameter(PASSWORD));
       rwc.setUrl(javaSamplerContext.getParameter(URL));

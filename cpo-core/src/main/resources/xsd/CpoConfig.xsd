@@ -1,0 +1,586 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    xmlns="http://www.synchronoss.org/cpo/CpoConfig.xsd"
+    targetNamespace="http://www.synchronoss.org/cpo/CpoConfig.xsd"
+    elementFormDefault="qualified">
+
+    <xs:element name="cpoConfig" type="ctCpoConfig"/>
+
+    <xs:element name="dataConfig" type="ctDataSourceConfig"/>
+
+    <xs:complexType name="ctCpoConfig">
+        <xs:sequence>
+            <xs:element name="metaConfig" type="ctMetaDescriptor" minOccurs="1" maxOccurs="unbounded"/>
+            <xs:element ref="dataConfig" minOccurs="1" maxOccurs="unbounded"/>
+        </xs:sequence>
+        <xs:attribute name="defaultConfig" type="xs:string">
+            <xs:annotation>
+                <xs:documentation>Specifies the name of the default configuration. If the default config does not exist, the first config in the file will be used.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+    </xs:complexType>
+
+    <xs:complexType name="ctDataSourceConfig">
+        <xs:sequence>
+            <xs:element name="metaDescriptorName" type="xs:string">
+                <xs:annotation>
+                    <xs:documentation>The Descriptor for the metadata to load up for the class</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="cpoConfigProcessor" type="xs:string">
+                <xs:annotation>
+                    <xs:documentation>This is the classname of a class that implements CpoConfigProcessor (ie, JdbcConfigProcessor, or CassandraConfigProcessor). The actual classname will be provided in the .xsd that defines the concrete config.</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
+        <xs:attribute name="name" type="xs:string" use="required">
+            <xs:annotation>
+                <xs:documentation>This is the context name to be used when requesting a CpoAdapter. The context name will be used to look up this config info and create the appropriate CpoAdapter</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="batchSize" type="xs:integer" default="100">
+            <xs:annotation>
+                <xs:documentation>The batchSize that cpo will use when sending data to the datasource</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="fetchSize" type="xs:integer" default="100">
+            <xs:annotation>
+                <xs:documentation>The fetchsize that the Streams will use when fetching data from the datasource. The datasource may require additional configuration to not fetch all the data at once.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+    </xs:complexType>
+
+    <xs:complexType name="ctMetaDescriptor">
+        <xs:sequence>
+            <xs:element name="metaXml" type="xs:string" minOccurs="1" maxOccurs="unbounded">
+                <xs:annotation>
+                    <xs:documentation>A list containing resource or filenames that contain meta information. If this descriptor was already defined in a previous config, then only the name needs to be supplied so that is can find the previously loaded files.</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
+        <xs:attribute name="name" type="xs:string" use="required">
+            <xs:annotation>
+                <xs:documentation>This is the descriptor name that will be used to identify this metadata from within CPO. Only one meta descriptor can have this name. Last in wins.</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="caseSensitive" type="xs:boolean" use="optional" default="true">
+            <xs:annotation>
+                <xs:documentation>This tells CPO whether to treat dataNames as caseSensitive or to ignore case. Default is caseSensitive=true</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+    </xs:complexType>
+
+    <!--  JDBC Definitions  -->
+
+    <xs:element name="jdbcConfig" type="ctJdbcConfig" substitutionGroup="dataConfig"/>
+
+    <xs:complexType name="ctJdbcConfig">
+        <xs:complexContent>
+            <xs:extension base="ctDataSourceConfig">
+                <xs:choice>
+                    <xs:element name="readWriteConfig" type="ctJdbcReadWriteConfig"/>
+                    <xs:sequence>
+                        <xs:element name="readConfig" type="ctJdbcReadWriteConfig"/>
+                        <xs:element name="writeConfig" type="ctJdbcReadWriteConfig"/>
+                    </xs:sequence>
+                </xs:choice>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="ctJdbcReadWriteConfig">
+        <xs:choice>
+            <xs:element name="jndiName" type="xs:string">
+                <xs:annotation>
+                    <xs:documentation>The jndi name of the datasource to use to connect to the target database</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:sequence>
+                <xs:choice>
+                    <xs:element name="dataSourceClassName" type="xs:string">
+                        <xs:annotation>
+                            <xs:documentation>The classname for the DataSource provided by the database vendor.
+                                Use a ConnectionPoolDataSource class if available or a DataSource class if not use a DataSource class.
+                                ie: com.mysql.jdbc.jdbc2.optional.MysqlConnectionPoolDataSource
+                                oracle.jdbc.pool.OracleConnectionPoolDataSource
+                                org.hsqldb.jdbc.JDBCDataSource
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="driverClassName" type="xs:string">
+                        <xs:annotation>
+                            <xs:documentation>Deprecated. Use dataSourceClassName. The classname for the jdbc driver provided by the database vendor.
+                                ie: oracle.jdbc.driver.OracleDriver
+                                com.mysql.jdbc.Driver
+                                org.hsqldb.jdbcDriver
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                </xs:choice>
+                <xs:element name="url" type="xs:string" minOccurs="1">
+                    <xs:annotation>
+                        <xs:documentation>This is the url to the jdbc database.</xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+                <xs:choice minOccurs="0">
+                    <xs:sequence>
+                        <xs:element name="user" type="xs:string">
+                            <xs:annotation>
+                                <xs:documentation>This is the user to log into the data source. If the user is supplied in the url, this element should not be included.</xs:documentation>
+                            </xs:annotation>
+                        </xs:element>
+                        <xs:element name="password" type="xs:string">
+                            <xs:annotation>
+                                <xs:documentation>This is the password to log into the data source. If the password is supplied in the url, this element should not be included.</xs:documentation>
+                            </xs:annotation>
+                        </xs:element>
+                    </xs:sequence>
+                    <xs:element name="property" type="ctProperty" maxOccurs="unbounded"/>
+                </xs:choice>
+            </xs:sequence>
+        </xs:choice>
+    </xs:complexType>
+
+    <xs:complexType name="ctProperty">
+        <xs:attribute name="name" type="xs:string" use="required"/>
+        <xs:attribute name="value" type="xs:string" use="required"/>
+    </xs:complexType>
+
+    <!--  Cassandra Definitions  -->
+
+    <xs:element name="cassandraConfig" type="ctCassandraConfig" substitutionGroup="dataConfig"/>
+
+    <xs:complexType name="ctCassandraConfig">
+        <xs:complexContent>
+            <xs:extension base="ctDataSourceConfig">
+                <xs:choice>
+                    <xs:element name="readWriteConfig" type="ctCassandraReadWriteConfig"/>
+                    <xs:sequence>
+                        <xs:element name="readConfig" type="ctCassandraReadWriteConfig"/>
+                        <xs:element name="writeConfig" type="ctCassandraReadWriteConfig"/>
+                    </xs:sequence>
+                </xs:choice>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="ctCassandraReadWriteConfig">
+        <xs:sequence>
+            <xs:element name="keySpace" type="xs:string" minOccurs="1">
+                <xs:annotation>
+                    <xs:documentation>
+                        This is the keyspace in the cluster that this config is pointing at.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="contactPoint" type="xs:string" maxOccurs="unbounded">
+                <xs:annotation>
+                    <xs:documentation>
+                        Adds a contact point aka the address of the node to connect to. Contact points are addresses of Cassandra nodes that the driver uses to discover the cluster topology.
+                        Only one contact point is required (the driver will retrieve the address of the other nodes automatically),
+                        but it is usually a good idea to provide more than one contact point, because if that single contact point is unavailable,
+                        the driver cannot initialize itself correctly.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="clusterName" type="xs:string" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>
+                        An optional name for the create cluster. Defaults to the name of the core:dataConfig
+                        Note: this is not related to the Cassandra cluster name (though you are free to provide the same name). See Cluster.getClusterName() for details.
+                        If you use this method and create more than one Cluster instance in the same JVM (which should be avoided unless you need to connect to multiple Cassandra clusters),
+                        you should make sure each Cluster instance get a unique name or you may have a problem with JMX reporting.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="maxSchemaAgreementWaitSeconds" type="xs:int" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>
+                        Sets the maximum time to wait for schema agreement before returning from a DDL query.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="port" type="xs:int" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>
+                        The port to use to connect to the Cassandra host. If not set through this method, the default port (9042) will be used instead.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="loadBalancingPolicy" type="xs:string" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>
+                        Configures the load balancing policy to use for the new cluster.
+                        Add in the fully qualified class name for a LoadBalancingPolicyFactory
+                        If no load balancing policy is set through this method, Policies.defaultLoadBalancingPolicy() will be used instead.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="reconnectionPolicy" type="xs:string" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>
+                        Configures the reconnection policy to use for the new cluster.
+                        Add in the fully qualified class name for a ReconnectionPolicyFactory
+                        If no reconnection policy is set through this method, Policies.DEFAULT_RECONNECTION_POLICY will be used instead.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="retryPolicy" type="xs:string" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>
+                        Configures the retry policy to use for the new cluster.
+                        Add in the fully qualified class name for a RetryPolicyFactory
+                        If no retry policy is set through this method, Policies.DEFAULT_RETRY_POLICY will be used instead.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:choice>
+                <xs:element name="credentials" type="ctCredentials" minOccurs="0">
+                    <xs:annotation>
+                        <xs:documentation>
+                            Uses the provided credentials when connecting to Cassandra hosts.
+                            This should be used if the Cassandra cluster has been configured to use the PasswordAuthenticator.
+                            If the the default AllowAllAuthenticator is used instead, using this method has no effect.
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+                <xs:element name="authProvider" type="xs:string" minOccurs="0">
+                    <xs:annotation>
+                        <xs:documentation>
+                            Use the specified AuthProvider when connecting to Cassandra hosts.
+                            Add in the fully qualified class name for a AuthProviderFactory
+                            Use this method when a custom authentication scheme is in place. You shouldn't call both this method and withCredentials
+                            on the same Builder instance as one will supercede the other
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+            </xs:choice>
+            <xs:element name="compression" type="stCompression" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>
+                        Sets the compression to use for the transport.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="protocolVersion" type="stProtocolVersion" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>
+                        The native protocol version to use.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="metrics" type="xs:boolean" default="true" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>
+                        Disables metrics collection for the created cluster (metrics are enabled by default otherwise).
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="sslOptions" type="xs:string" nillable="true" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>
+                        Enables the use of SSL for the created Cluster. The string is either nil which uses the default ssl or the full class path of a SSLOptionsFactory.
+                        Calling this method will use default SSL options (see SSLOptions.SSLOptions()). This is thus a shortcut for withSSL(new SSLOptions()).
+                        Note that if SSL is enabled, the driver will not connect to any Cassandra nodes that doesn't have SSL enabled and it is strongly advised to
+                        enable SSL on every Cassandra node if you plan on using SSL in the driver.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="initialListeners" type="xs:string" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>
+                        Register the provided listeners in the newly created cluster.
+                        Add in the fully qualified class name for a ListenerFactory
+                        Note: repeated calls to this method will override the previous ones.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="jmxReporting" type="xs:boolean" default="true" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>
+                        Disables JMX reporting of the metrics.
+                        JMX reporting is enabled by default (see Metrics) but can be disabled using this option. If metrics are disabled, this is a no-op.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="poolingOptions" type="ctPoolingOptions" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>
+                        Options related to connection pooling.
+                        The driver uses connections in an asynchronous manner, meaning that multiple requests can be submitted
+                        on the same connection at the same time. Therefore only a relatively small number of connections is needed.
+                        For each host, the driver uses a connection pool that may have a variable size (it will automatically adjust to the current load).
+
+                        With ProtocolVersion#V2 or below, there are at most 128 simultaneous requests per connection, so the pool defaults to a variable size.
+                        You will typically raise the maximum capacity by adding more connections with setMaxRequestsPerConnection(HostDistance, int).
+
+                        With ProtocolVersion#V3 or above, there are up to 32768 requests per connection, and the pool defaults to a fixed size of 1.
+                        You will typically raise the maximum capacity by allowing more simultaneous requests per connection
+                        (setMaxRequestsPerConnection(HostDistance, int)).
+
+                        All parameters can be separately set for LOCAL and REMOTE hosts (HostDistance). For IGNORED hosts, no connections are created so
+                        these settings cannot be changed.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="socketOptions" type="ctSocketOptions" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>
+                        Sets the SocketOptions to use for the newly created Cluster.
+                        If no socket options are set through this method, default socket options will be used.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="queryOptions" type="ctQueryOptions" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>
+                        Sets the QueryOptions to use for the newly created Cluster.
+                        If no query options are set through this method, default query options will be used.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="addressTranslater" type="xs:string" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>
+                        Configures the address translater to use for the new cluster.
+                        The string is full class path of a AddressTranslaterFactory.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="nettyOptions" type="xs:string" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>
+                        Set the NettyOptions to use for the newly created Cluster.
+                        The string is full class path of a NettyOptionsFactory.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="speculativeExecutionPolicy" type="xs:string" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>
+                        Configures the speculative execution policy to use for the new cluster.
+                        The string is full class path of a SpeculativeExecutionPolicyFactory.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="timestampGenerator" type="xs:string" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>
+                        Configures the generator that will produce the client-side timestamp sent with each query.
+                        The string is full class path of a TimestampGeneratorFactory.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="ctCredentials">
+        <xs:sequence>
+            <xs:element name="user" type="xs:string">
+                <xs:annotation>
+                    <xs:documentation>This is the user to log into the data source. If the user is supplied in the url, this element should not be included.</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="password" type="xs:string">
+                <xs:annotation>
+                    <xs:documentation>This is the password to log into the data source. If the password is supplied in the url, this element should not be included.</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:simpleType name="stCompression">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="LZ4"/>
+            <xs:enumeration value="NONE"/>
+            <xs:enumeration value="SNAPPY"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <!-- Protocol Version -->
+    <xs:simpleType name="stProtocolVersion">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="V1"/>
+            <xs:enumeration value="V2"/>
+            <xs:enumeration value="V3"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <!-- Pooling Options -->
+    <xs:complexType name="ctPoolingOptions">
+        <xs:sequence>
+            <xs:element name="connectionsPerHost" type="ctConnectionsPerHost" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>Sets the core and maximum number of connections per host in one call.</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="coreConnectionsPerHost" type="ctHostDistanceAndThreshold" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>Sets the core number of connections per host.</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="heartbeatIntervalSeconds" type="xs:int" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>Sets the heart beat interval, after which a message is sent on an idle connection to make sure it's still alive.</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="idleTimeoutSeconds" type="xs:int" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>Sets the timeout before an idle connection is removed.</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="maxConnectionsPerHost" type="ctHostDistanceAndThreshold" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>Sets the maximum number of connections per host.</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="maxRequestsPerConnection" type="ctHostDistanceAndThreshold" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>Sets the maximum number of requests per connection.</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="newConnectionThreshold" type="ctHostDistanceAndThreshold" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>Sets the threshold that triggers the creation of a new connection to a host.</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="poolTimeoutMillis" type="xs:int" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>Sets the timeout when trying to acquire a connection from a host's pool.</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="ctConnectionsPerHost">
+        <xs:sequence>
+            <xs:element name="distance" type="stHostDistance">
+                <xs:annotation>
+                    <xs:documentation>The HostDistance for which to set these threshold.</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="core" type="xs:int">
+                <xs:annotation>
+                    <xs:documentation>the core number of connections.</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="max" type="xs:int">
+                <xs:annotation>
+                    <xs:documentation>the max number of connections.</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="ctHostDistanceAndThreshold">
+        <xs:sequence>
+            <xs:element name="distance" type="stHostDistance">
+                <xs:annotation>
+                    <xs:documentation>The HostDistance for which to set these threshold.</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="threshold" type="xs:int">
+                <xs:annotation>
+                    <xs:documentation>the new threshold.</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:simpleType name="stHostDistance">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="IGNORED"/>
+            <xs:enumeration value="LOCAL"/>
+            <xs:enumeration value="REMOTE"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <!-- Query Options -->
+    <xs:complexType name="ctQueryOptions">
+        <xs:sequence>
+            <xs:element name="consistencyLevel" type="stConsistencyLevel" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>Sets the default consistency level to use for queries.</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="defaultIdempotence" type="xs:boolean" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>Sets the default idempotence for queries.</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="fetchSize" type="xs:int" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>Sets the default fetch size to use for SELECT queries.</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="serialConsistencyLevel" type="stConsistencyLevel" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>Sets the default serial consistency level to use for queries.</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:simpleType name="stConsistencyLevel">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="ALL"/>
+            <xs:enumeration value="ANY"/>
+            <xs:enumeration value="EACH_QUORUM"/>
+            <xs:enumeration value="LOCAL_ONE"/>
+            <xs:enumeration value="LOCAL_QUORUM"/>
+            <xs:enumeration value="LOCAL_SERIAL"/>
+            <xs:enumeration value="ONE"/>
+            <xs:enumeration value="QUORUM"/>
+            <xs:enumeration value="SERIAL"/>
+            <xs:enumeration value="THREE"/>
+            <xs:enumeration value="TWO"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <!-- Socket Options -->
+    <xs:complexType name="ctSocketOptions">
+        <xs:sequence>
+            <xs:element name="connectionTimeoutMillis" type="xs:int" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>Sets the connection timeout in milliseconds.</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="keepAlive" type="xs:boolean" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>Sets whether to enable TCP keepalive.</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="readTimeoutMillis" type="xs:int" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>Sets the per-host read timeout in milliseconds.</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="receiveBufferSize" type="xs:int" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>Sets a hint to the size of the underlying buffers for incoming network I/O.</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="reuseAddress" type="xs:boolean" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>Sets whether to enable reuse-address.</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="sendBufferSize" type="xs:int" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>Sets a hint to the size of the underlying buffers for outgoing network I/O.</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="soLinger" type="xs:int" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>Sets the linger-on-close timeout.</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="tcpNoDelay" type="xs:boolean" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>Sets whether to disable Nagle's algorithm.</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+
+</xs:schema>

@@ -21,7 +21,7 @@
   ]]
   -->
 
-<cpoMetaData xmlns="http://www.synchronoss.org/cpo/core/CpoCoreMeta.xsd"
+<cpoMetaData xmlns="http://www.synchronoss.org/cpo/CpoMeta.xsd"
              metaDescriptor="org.synchronoss.cpo.jdbc.meta.JdbcCpoMetaDescriptor">
   <cpoClass name="org.synchronoss.cpo.jdbc.ValueObject">
     <cpoFunctionGroup name="HotDeploySelect" type="LIST">

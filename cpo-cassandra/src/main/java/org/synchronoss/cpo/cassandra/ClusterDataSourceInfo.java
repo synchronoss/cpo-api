@@ -25,6 +25,7 @@ package org.synchronoss.cpo.cassandra;
 import com.datastax.driver.core.*;
 import com.datastax.driver.core.policies.*;
 import java.util.Collection;
+import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.AbstractDataSourceInfo;
@@ -37,7 +38,7 @@ import org.synchronoss.cpo.CpoException;
  */
 public class ClusterDataSourceInfo extends AbstractDataSourceInfo<ClusterDataSource> {
   private static final Logger logger = LoggerFactory.getLogger(ClusterDataSourceInfo.class);
-  private String[] contactPoints;
+  private List<String> contactPoints;
   private String keySpace;
   private String clusterName;
   private Integer maxSchemaAgreementWaitSeconds;
@@ -71,7 +72,11 @@ public class ClusterDataSourceInfo extends AbstractDataSourceInfo<ClusterDataSou
    * @param contactPoints The contact points
    */
   public ClusterDataSourceInfo(
-      String clusterName, String keySpace, String[] contactPoints, int fetchSize, int batchSize) {
+      String clusterName,
+      String keySpace,
+      List<String> contactPoints,
+      int fetchSize,
+      int batchSize) {
     super(buildDataSourceName(clusterName, keySpace, contactPoints), fetchSize, batchSize);
     this.keySpace = keySpace;
     this.clusterName = clusterName;
@@ -576,7 +581,7 @@ public class ClusterDataSourceInfo extends AbstractDataSourceInfo<ClusterDataSou
   }
 
   private static String buildDataSourceName(
-      String clusterName, String keySpace, String[] contactPoints) {
+      String clusterName, String keySpace, List<String> contactPoints) {
     StringBuilder sb = new StringBuilder();
     sb.append(clusterName);
     sb.append(keySpace);

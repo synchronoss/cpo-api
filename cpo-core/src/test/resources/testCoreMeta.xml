@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  [[
+  jdbc
+  ==
+  Copyright (C) 2003 - 2025 David E. Berry
+  ==
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU Lesser General Public License as
+  published by the Free Software Foundation, either version 3 of the
+  License, or (at your option) any later version.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Lesser Public License for more details.
+
+  You should have received a copy of the GNU General Lesser Public
+  License along with this program.  If not, see
+  <http://www.gnu.org/licenses/lgpl-3.0.html>.
+  ]]
+  -->
+<cpoMetaData metaDescriptor="org.synchronoss.cpo.jdbc.meta.JdbcCpoMetaDescriptor" defaultPackageName="" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.synchronoss.org/cpo/CpoMeta.xsd">
+    <cpoClass name="org.synchronoss.cpo.core.TestObject">
+        <cpoAttribute xsi:type="ctAttribute">
+            <javaName>bLob</javaName>
+            <javaType>byte[]</javaType>
+            <dataName>B_LOB</dataName>
+            <dataType>LONGVARBINARY</dataType>
+            <transformClass>org.synchronoss.cpo.transform.jdbc.TransformGZipBytes</transformClass>
+        </cpoAttribute>
+        <cpoAttribute xsi:type="ctAttribute">
+            <javaName>bLob2</javaName>
+            <javaType>byte[]</javaType>
+            <dataName>B_LOB2</dataName>
+            <dataType>LONGVARBINARY</dataType>
+        </cpoAttribute>
+        <cpoAttribute xsi:type="ctAttribute">
+            <javaName>lobId</javaName>
+            <javaType>int</javaType>
+            <dataName>LOB_ID</dataName>
+            <dataType>INTEGER</dataType>
+        </cpoAttribute>
+        <cpoAttribute xsi:type="ctAttribute">
+            <javaName>cLob</javaName>
+            <javaType>char[]</javaType>
+            <dataName>C_LOB</dataName>
+            <dataType>LONGVARCHAR</dataType>
+            <transformClass>org.synchronoss.cpo.transform.jdbc.TransformStringChar</transformClass>
+        </cpoAttribute>
+        <cpoFunctionGroup name="deleteLVO" type="DELETE">
+            <cpoFunction name="deleteLVO">
+                <expression>delete from lob_test where lob_id = ?</expression>
+                <cpoArgument xsi:type="ctArgument">
+                    <attributeName>lobId</attributeName>
+               </cpoArgument>
+            </cpoFunction>
+        </cpoFunctionGroup>
+        <cpoFunctionGroup name="createLVO" type="CREATE">
+            <cpoFunction name="createLVO">
+                <expression>insert into lob_test (lob_id, b_lob, c_lob, b_lob2) values (?,?,?,?)</expression>
+                <cpoArgument xsi:type="ctArgument">
+                    <attributeName>lobId</attributeName>
+                </cpoArgument>
+                <cpoArgument xsi:type="ctArgument">
+                    <attributeName>bLob</attributeName>
+                </cpoArgument>
+                <cpoArgument xsi:type="ctArgument">
+                    <attributeName>cLob</attributeName>
+                </cpoArgument>
+                <cpoArgument xsi:type="ctArgument">
+                    <attributeName>bLob2</attributeName>
+                </cpoArgument>
+            </cpoFunction>
+        </cpoFunctionGroup>
+        <cpoFunctionGroup name="updateLVO" type="UPDATE">
+            <cpoFunction name="updateLVO">
+                <expression>update lob_test set b_lob=?, c_lob=?, b_lob2=? where lob_id = ?</expression>
+                <cpoArgument xsi:type="ctArgument">
+                    <attributeName>bLob</attributeName>
+                </cpoArgument>
+                <cpoArgument xsi:type="ctArgument">
+                    <attributeName>cLob</attributeName>
+                </cpoArgument>
+                <cpoArgument xsi:type="ctArgument">
+                    <attributeName>bLob2</attributeName>
+                </cpoArgument>
+                <cpoArgument xsi:type="ctArgument">
+                    <attributeName>lobId</attributeName>
+                </cpoArgument>
+            </cpoFunction>
+        </cpoFunctionGroup>
+        <cpoFunctionGroup name="retrieveLVO" type="RETRIEVE">
+            <cpoFunction name="retrieveLVO">
+                <expression>select * from lob_test where lob_id = ?</expression>
+                <cpoArgument xsi:type="ctArgument">
+                    <attributeName>lobId</attributeName>
+                </cpoArgument>
+            </cpoFunction>
+        </cpoFunctionGroup>
+    </cpoClass>
+</cpoMetaData>

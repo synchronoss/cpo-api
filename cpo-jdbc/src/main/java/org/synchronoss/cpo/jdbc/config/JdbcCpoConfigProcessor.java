@@ -31,11 +31,11 @@ import org.synchronoss.cpo.CpoAdapterFactory;
 import org.synchronoss.cpo.CpoException;
 import org.synchronoss.cpo.DataSourceInfo;
 import org.synchronoss.cpo.config.CpoConfigProcessor;
-import org.synchronoss.cpo.core.cpoCoreConfig.CtDataSourceConfig;
+import org.synchronoss.cpo.cpoconfig.CtDataSourceConfig;
+import org.synchronoss.cpo.cpoconfig.CtJdbcConfig;
+import org.synchronoss.cpo.cpoconfig.CtJdbcReadWriteConfig;
+import org.synchronoss.cpo.cpoconfig.CtProperty;
 import org.synchronoss.cpo.jdbc.*;
-import org.synchronoss.cpo.jdbc.cpoJdbcConfig.CtJdbcConfig;
-import org.synchronoss.cpo.jdbc.cpoJdbcConfig.CtJdbcReadWriteConfig;
-import org.synchronoss.cpo.jdbc.cpoJdbcConfig.CtProperty;
 import org.synchronoss.cpo.jdbc.meta.JdbcCpoMetaDescriptor;
 import org.synchronoss.cpo.meta.CpoMetaDescriptor;
 
@@ -73,7 +73,7 @@ public class JdbcCpoConfigProcessor implements CpoConfigProcessor {
     int batchSize = jdbcConfig.getBatchSize().intValue();
 
     // build a datasource info
-    if (jdbcConfig.isSetReadWriteConfig()) {
+    if (jdbcConfig.getReadWriteConfig() != null) {
       DataSourceInfo dataSourceInfo =
           buildDataSourceInfo(jdbcConfig.getReadWriteConfig(), fetchSize, batchSize);
       cpoAdapterFactory =
@@ -95,26 +95,26 @@ public class JdbcCpoConfigProcessor implements CpoConfigProcessor {
       CtJdbcReadWriteConfig readWriteConfig, int fetchSize, int batchSize) throws CpoException {
     DataSourceInfo dataSourceInfo = null;
 
-    if (readWriteConfig.isSetJndiName()) {
+    if (readWriteConfig.getJndiName() != null) {
       dataSourceInfo =
           new JndiJdbcDataSourceInfo(readWriteConfig.getJndiName(), fetchSize, batchSize);
-    } else if (readWriteConfig.isSetDataSourceClassName()) {
+    } else if (readWriteConfig.getDataSourceClassName() != null) {
       SortedMap<String, String> props = new TreeMap<>();
 
-      if (readWriteConfig.isSetUrl()) {
+      if (readWriteConfig.getUrl() != null) {
         props.put(PROP_URL1, readWriteConfig.getUrl());
         props.put(PROP_URL2, readWriteConfig.getUrl());
       }
 
-      if (readWriteConfig.isSetUser()) {
+      if (readWriteConfig.getUser() != null) {
         props.put(PROP_USER, readWriteConfig.getUser());
       }
 
-      if (readWriteConfig.isSetPassword()) {
+      if (readWriteConfig.getPassword() != null) {
         props.put(PROP_PASSWORD, readWriteConfig.getPassword());
       }
 
-      for (CtProperty property : readWriteConfig.getPropertyArray()) {
+      for (CtProperty property : readWriteConfig.getProperty()) {
         props.put(property.getName(), property.getValue());
         logger.debug("Adding property " + property.getName() + "=" + property.getValue());
       }
@@ -122,8 +122,8 @@ public class JdbcCpoConfigProcessor implements CpoConfigProcessor {
       dataSourceInfo =
           new ClassJdbcDataSourceInfo(
               readWriteConfig.getDataSourceClassName(), props, fetchSize, batchSize);
-    } else if (readWriteConfig.isSetDriverClassName()) {
-      if (readWriteConfig.isSetUser()) {
+    } else if (readWriteConfig.getDriverClassName() != null) {
+      if (readWriteConfig.getUser() != null) {
         dataSourceInfo =
             new DriverJdbcDataSourceInfo(
                 readWriteConfig.getDriverClassName(),
@@ -132,9 +132,9 @@ public class JdbcCpoConfigProcessor implements CpoConfigProcessor {
                 readWriteConfig.getPassword(),
                 fetchSize,
                 batchSize);
-      } else if (readWriteConfig.getPropertyArray().length > 0) {
+      } else if (!readWriteConfig.getProperty().isEmpty()) {
         Properties props = new Properties();
-        for (CtProperty property : readWriteConfig.getPropertyArray()) {
+        for (CtProperty property : readWriteConfig.getProperty()) {
           props.put(property.getName(), property.getValue());
         }
         dataSourceInfo =

@@ -21,28 +21,28 @@
   ]]
   -->
 
-<cpoMetaData metaDescriptor="org.synchronoss.cpo.jdbc.meta.JdbcCpoMetaDescriptor" defaultPackageName="" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.synchronoss.org/cpo/core/CpoCoreMeta.xsd" xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd">
+<cpoMetaData metaDescriptor="org.synchronoss.cpo.jdbc.meta.JdbcCpoMetaDescriptor" defaultPackageName="" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.synchronoss.org/cpo/CpoMeta.xsd">
   <cpoClass name="org.synchronoss.cpo.jdbc.LobValueObject">
-    <cpoAttribute xsi:type="cpoj:ctJdbcAttribute">
+    <cpoAttribute xsi:type="ctJdbcAttribute">
       <javaName>bLob</javaName>
       <javaType>byte[]</javaType>
       <dataName>B_LOB</dataName>
       <dataType>LONGVARBINARY</dataType>
       <transformClass>org.synchronoss.cpo.transform.jdbc.TransformGZipBytes</transformClass>
     </cpoAttribute>
-    <cpoAttribute xsi:type="cpoj:ctJdbcAttribute">
+    <cpoAttribute xsi:type="ctJdbcAttribute">
       <javaName>bLob2</javaName>
       <javaType>byte[]</javaType>
       <dataName>B_LOB2</dataName>
       <dataType>LONGVARBINARY</dataType>
     </cpoAttribute>
-    <cpoAttribute xsi:type="cpoj:ctJdbcAttribute">
+    <cpoAttribute xsi:type="ctJdbcAttribute">
       <javaName>lobId</javaName>
       <javaType>int</javaType>
       <dataName>LOB_ID</dataName>
       <dataType>INTEGER</dataType>
     </cpoAttribute>
-    <cpoAttribute xsi:type="cpoj:ctJdbcAttribute">
+    <cpoAttribute xsi:type="ctJdbcAttribute">
       <javaName>cLob</javaName>
       <javaType>char[]</javaType>
       <dataName>C_LOB</dataName>
@@ -52,60 +52,60 @@
     <cpoFunctionGroup name="deleteLVO" type="DELETE">
       <cpoFunction name="deleteLVO">
         <expression>delete from lob_test where lob_id = ?</expression>
-        <cpoArgument xsi:type="cpoj:ctJdbcArgument">
+        <cpoArgument xsi:type="ctJdbcArgument">
           <attributeName>lobId</attributeName>
-          <cpoj:scope>IN</cpoj:scope>
+          <scope>IN</scope>
         </cpoArgument>
       </cpoFunction>
     </cpoFunctionGroup>
     <cpoFunctionGroup name="createLVO" type="CREATE">
       <cpoFunction name="createLVO">
         <expression>insert into lob_test (lob_id, b_lob, c_lob, b_lob2) values (?,?,?,?)</expression>
-        <cpoArgument xsi:type="cpoj:ctJdbcArgument">
+        <cpoArgument xsi:type="ctJdbcArgument">
           <attributeName>lobId</attributeName>
-          <cpoj:scope>IN</cpoj:scope>
+          <scope>IN</scope>
         </cpoArgument>
-        <cpoArgument xsi:type="cpoj:ctJdbcArgument">
+        <cpoArgument xsi:type="ctJdbcArgument">
           <attributeName>bLob</attributeName>
-          <cpoj:scope>IN</cpoj:scope>
+          <scope>IN</scope>
         </cpoArgument>
-        <cpoArgument xsi:type="cpoj:ctJdbcArgument">
+        <cpoArgument xsi:type="ctJdbcArgument">
           <attributeName>cLob</attributeName>
-          <cpoj:scope>IN</cpoj:scope>
+          <scope>IN</scope>
         </cpoArgument>
-        <cpoArgument xsi:type="cpoj:ctJdbcArgument">
+        <cpoArgument xsi:type="ctJdbcArgument">
           <attributeName>bLob2</attributeName>
-          <cpoj:scope>IN</cpoj:scope>
+          <scope>IN</scope>
         </cpoArgument>
       </cpoFunction>
     </cpoFunctionGroup>
     <cpoFunctionGroup name="updateLVO" type="UPDATE">
       <cpoFunction name="updateLVO">
         <expression>update lob_test set b_lob=?, c_lob=?, b_lob2=? where lob_id = ?</expression>
-        <cpoArgument xsi:type="cpoj:ctJdbcArgument">
+        <cpoArgument xsi:type="ctJdbcArgument">
           <attributeName>bLob</attributeName>
-          <cpoj:scope>IN</cpoj:scope>
+          <scope>IN</scope>
         </cpoArgument>
-        <cpoArgument xsi:type="cpoj:ctJdbcArgument">
+        <cpoArgument xsi:type="ctJdbcArgument">
           <attributeName>cLob</attributeName>
-          <cpoj:scope>IN</cpoj:scope>
+          <scope>IN</scope>
         </cpoArgument>
-        <cpoArgument xsi:type="cpoj:ctJdbcArgument">
+        <cpoArgument xsi:type="ctJdbcArgument">
           <attributeName>bLob2</attributeName>
-          <cpoj:scope>IN</cpoj:scope>
+          <scope>IN</scope>
         </cpoArgument>
-        <cpoArgument xsi:type="cpoj:ctJdbcArgument">
+        <cpoArgument xsi:type="ctJdbcArgument">
           <attributeName>lobId</attributeName>
-          <cpoj:scope>IN</cpoj:scope>
+          <scope>IN</scope>
         </cpoArgument>
       </cpoFunction>
     </cpoFunctionGroup>
     <cpoFunctionGroup name="retrieveLVO" type="RETRIEVE">
       <cpoFunction name="retrieveLVO">
         <expression>select * from lob_test where lob_id = ?</expression>
-        <cpoArgument xsi:type="cpoj:ctJdbcArgument">
+        <cpoArgument xsi:type="ctJdbcArgument">
           <attributeName>lobId</attributeName>
-          <cpoj:scope>IN</cpoj:scope>
+          <scope>IN</scope>
         </cpoArgument>
       </cpoFunction>
     </cpoFunctionGroup>

@@ -181,20 +181,6 @@
                     <version>3.5.4</version>
                 </plugin>
                 <plugin>
-                    <groupId>org.apache.xmlbeans</groupId>
-                    <artifactId>xmlbeans</artifactId>
-                    <version>5.3.0</version>
-                    <executions>
-                        <execution>
-                            <id>Build-XMLBeans</id>
-                            <phase>generate-sources</phase>
-                            <goals>
-                                <goal>compile</goal>
-                            </goals>
-                        </execution>
-                    </executions>
-                </plugin>
-                <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-site-plugin</artifactId>
                     <version>3.21.0</version>
@@ -443,12 +429,6 @@
                 <artifactId>testng</artifactId>
                 <version>7.11.0</version>
             </dependency>
-            <!-- map xmlbeans log4j dependency to slf4j -->
-            <dependency>
-                <groupId>org.apache.logging.log4j</groupId>
-                <artifactId>log4j-to-slf4j</artifactId>
-                <version>2.25.1</version>
-            </dependency>
             <dependency>
                 <groupId>org.slf4j</groupId>
                 <artifactId>slf4j-api</artifactId>
@@ -467,11 +447,15 @@
                 <scope>import</scope>
             </dependency>
             <dependency>
-                <groupId>org.apache.xmlbeans</groupId>
-                <artifactId>xmlbeans</artifactId>
-                <version>5.3.0</version>
+                <groupId>jakarta.xml.bind</groupId>
+                <artifactId>jakarta.xml.bind-api</artifactId>
+                <version>4.0.4</version>
             </dependency>
-        </dependencies>
+            <dependency>
+                <groupId>org.glassfish.jaxb</groupId>
+                <artifactId>jaxb-runtime</artifactId>
+                <version>4.0.6</version>
+            </dependency>        </dependencies>
     </dependencyManagement>
     <reporting>
         <plugins>
@@ -576,7 +560,7 @@
                     <doclint>all</doclint>
                     <failOnError>true</failOnError>
                     <excludePackageNames>
-                        org.synchronoss.cpo.cassandra.cpoCassandraConfig.*:org.synchronoss.cpo.cassandra.cpoCassandraMeta.*:org.synchronoss.cpo.jdbc.cpoJdbcMeta.*:org.synchronoss.cpo.jdbc.cpoJdbcConfig.*:org.synchronoss.cpo.core.cpoCoreMeta.*:org.synchronoss.cpo.core.cpoCoreConfig.*
+                        org.synchronoss.cpo.cassandra.cpoCassandraConfig.*:org.synchronoss.cpo.cassandra.cpoCassandraMeta.*:org.synchronoss.cpo.jdbc.cpoJdbcMeta.*:org.synchronoss.cpo.jdbc.cpoJdbcConfig.*:org.synchronoss.cpo.core.cpometa.*:org.synchronoss.cpo.core.cpoCoreConfig.*
                     </excludePackageNames>
                 </configuration>
                 <reportSets>

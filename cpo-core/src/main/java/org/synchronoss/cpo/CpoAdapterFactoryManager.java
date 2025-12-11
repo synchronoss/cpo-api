@@ -22,22 +22,18 @@ package org.synchronoss.cpo;
  * ]]
  */
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.util.concurrent.locks.ReentrantLock;
-import org.apache.xmlbeans.XmlException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.cache.CpoAdapterFactoryCache;
 import org.synchronoss.cpo.config.CpoConfigProcessor;
-import org.synchronoss.cpo.core.cpoCoreConfig.CpoConfigDocument;
-import org.synchronoss.cpo.core.cpoCoreConfig.CtCpoConfig;
-import org.synchronoss.cpo.core.cpoCoreConfig.CtDataSourceConfig;
-import org.synchronoss.cpo.core.cpoCoreConfig.CtMetaDescriptor;
+import org.synchronoss.cpo.cpoconfig.CtCpoConfig;
+import org.synchronoss.cpo.cpoconfig.CtDataSourceConfig;
+import org.synchronoss.cpo.cpoconfig.CtMetaDescriptor;
 import org.synchronoss.cpo.helper.CpoClassLoader;
 import org.synchronoss.cpo.helper.ExceptionHelper;
-import org.synchronoss.cpo.helper.XmlBeansHelper;
+import org.synchronoss.cpo.helper.XmlHelper;
 import org.synchronoss.cpo.jta.CpoXaResource;
 import org.synchronoss.cpo.meta.CpoMetaDescriptor;
 
@@ -115,68 +111,47 @@ public final class CpoAdapterFactoryManager extends CpoAdapterFactoryCache {
     lock.lock();
     try {
       var errBuilder = new StringBuilder();
-      try (InputStream is = XmlBeansHelper.loadXmlStream(cpoConfig, errBuilder)) {
-        CpoConfigDocument configDoc;
-        if (is == null) {
-          // See if the config is sent in as a string
-          try {
-            configDoc = CpoConfigDocument.Factory.parse(cpoConfig);
-          } catch (XmlException e) {
-            throw new CpoException(errBuilder.toString(), e);
-          }
-        } else {
-          configDoc = CpoConfigDocument.Factory.parse(is);
-        }
-
-        String errMsg = XmlBeansHelper.validateXml(configDoc);
-        if (errMsg != null) {
-          logger.error("Invalid CPO Config file: " + cpoConfig + ":" + errMsg);
-        } else {
-          logger.info("Processing Config File: " + cpoConfig);
-          // Moving the clear to here to make sure we get a good file before we just blow away all
-          // the
-          // adapters.
-          // We are doing a load clear all the caches first, in case the load gets called more than
-          // once.
-          CpoMetaDescriptor.clearAllInstances();
-          clearCpoAdapterFactoryCache();
-
-          CtCpoConfig ctCpoConfig = configDoc.getCpoConfig();
-
-          // Set the default context.
-          if (ctCpoConfig.isSetDefaultConfig()) {
-            defaultContext = ctCpoConfig.getDefaultConfig();
-          } else {
-            // make the first listed config the default.
-            defaultContext = ctCpoConfig.getDataConfigArray(0).getName();
-          }
-
-          for (CtMetaDescriptor metaDescriptor : ctCpoConfig.getMetaConfigArray()) {
-            boolean caseSensitive = true;
-            if (metaDescriptor.isSetCaseSensitive()) {
-              caseSensitive = metaDescriptor.getCaseSensitive();
-            }
-
-            // this will create and cache, so we don't need the return
-            CpoMetaDescriptor.getInstance(
-                metaDescriptor.getName(), metaDescriptor.getMetaXmlArray(), caseSensitive);
-          }
-
-          // now lets loop through all the adapters and get them cached.
-          for (CtDataSourceConfig dataSourceConfig : ctCpoConfig.getDataConfigArray()) {
-            CpoAdapterFactory cpoAdapterFactory = makeCpoAdapterFactory(dataSourceConfig);
-            if (cpoAdapterFactory != null) {
-              addCpoAdapterFactory(dataSourceConfig.getName(), cpoAdapterFactory);
-            }
-          }
-        }
-      } catch (IOException ioe) {
-        logger.error("Error reading " + cpoConfig + ": ", ioe);
-      } catch (XmlException xe) {
-        logger.error("Error processing " + cpoConfig + ": Invalid XML", xe);
-      } catch (CpoException ce) {
-        logger.error("Error processing " + cpoConfig + ": ", ce);
+      CtCpoConfig ctCpoConfig =
+          XmlHelper.unmarshalXmlObject(
+              XmlHelper.CPO_CONFIG_XSD, cpoConfig, CtCpoConfig.class, errBuilder);
+      if (!errBuilder.isEmpty()) {
+        throw new RuntimeException("Error parsing CPO config XML: " + errBuilder.toString());
       }
+      logger.info("Processing Config File: " + cpoConfig);
+      // Moving the clear to here to make sure we get a good file before we just blow away all
+      // the
+      // adapters.
+      // We are doing a load clear all the caches first, in case the load gets called more than
+      // once.
+      CpoMetaDescriptor.clearAllInstances();
+      clearCpoAdapterFactoryCache();
+
+      // Set the default context.
+      defaultContext = ctCpoConfig.getDefaultConfig();
+      if (defaultContext == null) {
+        // make the first listed config the default.
+        defaultContext = ctCpoConfig.getDataConfig().getFirst().getValue().getName();
+      }
+
+      for (CtMetaDescriptor metaDescriptor : ctCpoConfig.getMetaConfig()) {
+        boolean caseSensitive = true;
+        caseSensitive = metaDescriptor.isCaseSensitive();
+
+        // this will create and cache, so we don't need the return
+        CpoMetaDescriptor.getInstance(
+            metaDescriptor.getName(), metaDescriptor.getMetaXml(), caseSensitive);
+      }
+
+      // now lets loop through all the adapters and get them cached.
+      for (var jaxbElement : ctCpoConfig.getDataConfig()) {
+        CtDataSourceConfig dataSourceConfig = jaxbElement.getValue();
+        CpoAdapterFactory cpoAdapterFactory = makeCpoAdapterFactory(dataSourceConfig);
+        if (cpoAdapterFactory != null) {
+          addCpoAdapterFactory(dataSourceConfig.getName(), cpoAdapterFactory);
+        }
+      }
+    } catch (Exception e) {
+      logger.error("Error unmarshalling XML " + cpoConfig + ": ", e);
     } finally {
       lock.unlock();
     }

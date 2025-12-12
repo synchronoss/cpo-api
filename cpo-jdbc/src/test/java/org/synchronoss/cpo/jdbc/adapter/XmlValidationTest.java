@@ -22,8 +22,8 @@ package org.synchronoss.cpo.jdbc.adapter;
  * ]]
  */
 
+import org.synchronoss.cpo.core.helper.XmlHelper;
 import org.synchronoss.cpo.cpoconfig.CtCpoConfig;
-import org.synchronoss.cpo.helper.XmlHelper;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 

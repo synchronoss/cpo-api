@@ -30,7 +30,7 @@ import org.h2.tools.RunScript;
 import org.h2.tools.Server;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.synchronoss.cpo.CpoAdapterFactoryManager;
+import org.synchronoss.cpo.core.CpoAdapterFactoryManager;
 import org.testcontainers.containers.*;
 import org.testcontainers.utility.DockerImageName;
 import org.testng.ISuite;

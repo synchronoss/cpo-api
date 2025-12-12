@@ -28,13 +28,13 @@ import java.util.Collection;
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.synchronoss.cpo.*;
 import org.synchronoss.cpo.cassandra.meta.CassandraMethodMapper;
-import org.synchronoss.cpo.helper.ExceptionHelper;
-import org.synchronoss.cpo.meta.MethodMapper;
-import org.synchronoss.cpo.meta.domain.CpoAttribute;
-import org.synchronoss.cpo.meta.domain.CpoClass;
-import org.synchronoss.cpo.meta.domain.CpoFunction;
+import org.synchronoss.cpo.core.*;
+import org.synchronoss.cpo.core.helper.ExceptionHelper;
+import org.synchronoss.cpo.core.meta.MethodMapper;
+import org.synchronoss.cpo.core.meta.domain.CpoAttribute;
+import org.synchronoss.cpo.core.meta.domain.CpoClass;
+import org.synchronoss.cpo.core.meta.domain.CpoFunction;
 
 /**
  * CassandraBoundStatementFactory is the object that encapsulates the creation of the actual
@@ -67,7 +67,7 @@ public class CassandraBoundStatementFactory extends CpoStatementFactory implemen
    * @param orderBy A collection of orderbys to sort the objects
    * @param nativeQueries Additional sql to be embedded into the CpoFunction sql that is used to
    *     create the actual JDBC PreparedStatement
-   * @throws org.synchronoss.cpo.CpoException if a CPO error occurs
+   * @throws CpoException if a CPO error occurs
    */
   public <T> CassandraBoundStatementFactory(
       Session sess,

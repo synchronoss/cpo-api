@@ -22,10 +22,10 @@ package org.synchronoss.cpo.jdbc;
  * ]]
  */
 
-import org.synchronoss.cpo.BindableCpoWhere;
-import org.synchronoss.cpo.enums.Comparison;
-import org.synchronoss.cpo.enums.Logical;
-import org.synchronoss.cpo.meta.domain.CpoAttribute;
+import org.synchronoss.cpo.core.BindableCpoWhere;
+import org.synchronoss.cpo.core.enums.Comparison;
+import org.synchronoss.cpo.core.enums.Logical;
+import org.synchronoss.cpo.core.meta.domain.CpoAttribute;
 
 /**
  * Created with IntelliJ IDEA. User: dberry Date: 13/10/13 Time: 14:05 PM To change this template

@@ -24,17 +24,17 @@ package org.synchronoss.cpo.jdbc;
 
 import java.sql.CallableStatement;
 import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.synchronoss.cpo.CpoData;
-import org.synchronoss.cpo.CpoException;
-import org.synchronoss.cpo.CpoReleasable;
-import org.synchronoss.cpo.helper.ExceptionHelper;
-import org.synchronoss.cpo.meta.domain.CpoArgument;
-import org.synchronoss.cpo.meta.domain.CpoClass;
-import org.synchronoss.cpo.meta.domain.CpoFunction;
+import org.synchronoss.cpo.core.CpoData;
+import org.synchronoss.cpo.core.CpoException;
+import org.synchronoss.cpo.core.CpoReleasable;
+import org.synchronoss.cpo.core.meta.domain.CpoArgument;
+import org.synchronoss.cpo.core.meta.domain.CpoClass;
+import org.synchronoss.cpo.core.meta.domain.CpoFunction;
 
 /**
  * JdbcCallableStatementFactory is the object that encapsulates the creation of the actual
@@ -119,11 +119,8 @@ public class JdbcCallableStatementFactory implements CpoReleasable {
         j++;
       }
 
-    } catch (Exception e) {
-      localLogger.error(
-          "Error Instantiating JdbcCallableStatementFactory"
-              + ExceptionHelper.getLocalizedMessage(e));
-      throw new CpoException(e);
+    } catch (SQLException e) {
+      throw new CpoException("Error Instantiating JdbcCallableStatementFactory", e);
     }
   }
 

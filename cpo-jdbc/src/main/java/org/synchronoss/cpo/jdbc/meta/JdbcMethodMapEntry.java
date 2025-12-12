@@ -24,7 +24,7 @@ package org.synchronoss.cpo.jdbc.meta;
 
 import java.io.Serial;
 import java.lang.reflect.Method;
-import org.synchronoss.cpo.meta.MethodMapEntry;
+import org.synchronoss.cpo.core.meta.MethodMapEntry;
 
 /**
  * MethodMapEntry is a class defines the getters and setters for JDBC specific data classes

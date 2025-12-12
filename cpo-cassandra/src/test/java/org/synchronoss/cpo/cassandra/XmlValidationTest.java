@@ -24,8 +24,8 @@ package org.synchronoss.cpo.cassandra;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.synchronoss.cpo.core.helper.XmlHelper;
 import org.synchronoss.cpo.cpoconfig.CtCpoConfig;
-import org.synchronoss.cpo.helper.XmlHelper;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 

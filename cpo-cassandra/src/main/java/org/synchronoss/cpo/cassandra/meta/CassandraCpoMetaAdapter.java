@@ -33,15 +33,15 @@ import java.nio.ByteBuffer;
 import java.util.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.synchronoss.cpo.CpoException;
+import org.synchronoss.cpo.core.CpoException;
+import org.synchronoss.cpo.core.meta.AbstractCpoMetaAdapter;
+import org.synchronoss.cpo.core.meta.DataTypeMapEntry;
+import org.synchronoss.cpo.core.meta.DataTypeMapper;
+import org.synchronoss.cpo.core.meta.domain.CpoAttribute;
+import org.synchronoss.cpo.core.parser.BoundExpressionParser;
+import org.synchronoss.cpo.core.parser.ExpressionParser;
 import org.synchronoss.cpo.cpometa.CtAttribute;
 import org.synchronoss.cpo.cpometa.CtCassandraAttribute;
-import org.synchronoss.cpo.meta.AbstractCpoMetaAdapter;
-import org.synchronoss.cpo.meta.DataTypeMapEntry;
-import org.synchronoss.cpo.meta.DataTypeMapper;
-import org.synchronoss.cpo.meta.domain.CpoAttribute;
-import org.synchronoss.cpo.parser.BoundExpressionParser;
-import org.synchronoss.cpo.parser.ExpressionParser;
 
 /**
  * Created with IntelliJ IDEA. User: dberry Date: 9/10/13 Time: 08:14 AM To change this template use

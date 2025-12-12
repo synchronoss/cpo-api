@@ -33,20 +33,20 @@ import javax.naming.NamingException;
 import javax.sql.DataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.synchronoss.cpo.*;
-import org.synchronoss.cpo.enums.Comparison;
-import org.synchronoss.cpo.enums.Crud;
-import org.synchronoss.cpo.enums.Logical;
-import org.synchronoss.cpo.helper.ExceptionHelper;
+import org.synchronoss.cpo.core.*;
+import org.synchronoss.cpo.core.enums.Comparison;
+import org.synchronoss.cpo.core.enums.Crud;
+import org.synchronoss.cpo.core.enums.Logical;
+import org.synchronoss.cpo.core.helper.ExceptionHelper;
+import org.synchronoss.cpo.core.meta.CpoMetaDescriptor;
+import org.synchronoss.cpo.core.meta.DataTypeMapEntry;
+import org.synchronoss.cpo.core.meta.domain.CpoArgument;
+import org.synchronoss.cpo.core.meta.domain.CpoAttribute;
+import org.synchronoss.cpo.core.meta.domain.CpoClass;
+import org.synchronoss.cpo.core.meta.domain.CpoFunction;
 import org.synchronoss.cpo.jdbc.meta.JdbcCpoMetaDescriptor;
 import org.synchronoss.cpo.jdbc.meta.JdbcMethodMapper;
 import org.synchronoss.cpo.jdbc.meta.JdbcResultSetCpoData;
-import org.synchronoss.cpo.meta.CpoMetaDescriptor;
-import org.synchronoss.cpo.meta.DataTypeMapEntry;
-import org.synchronoss.cpo.meta.domain.CpoArgument;
-import org.synchronoss.cpo.meta.domain.CpoAttribute;
-import org.synchronoss.cpo.meta.domain.CpoClass;
-import org.synchronoss.cpo.meta.domain.CpoFunction;
 
 /**
  * JdbcCpoAdapter is an interface for a set of routines that are responsible for managing value
@@ -75,7 +75,7 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
    *
    * @param metaDescriptor This datasource that identifies the cpo metadata datasource
    * @param jdsiTrx The datasoruce that identifies the transaction database.
-   * @throws org.synchronoss.cpo.CpoException exception
+   * @throws CpoException exception
    */
   protected JdbcCpoAdapter(JdbcCpoMetaDescriptor metaDescriptor, DataSourceInfo<DataSource> jdsiTrx)
       throws CpoException {
@@ -94,7 +94,7 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
    *     transactions.
    * @param jdsiRead The datasource that identifies the transaction database for read-only
    *     transactions.
-   * @throws org.synchronoss.cpo.CpoException exception
+   * @throws CpoException exception
    */
   protected JdbcCpoAdapter(
       JdbcCpoMetaDescriptor metaDescriptor,
@@ -145,7 +145,6 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
 
       //      this.closeLocalConnection(c);
     } catch (Throwable t) {
-      logger.error(ExceptionHelper.getLocalizedMessage(t), t);
       throw new CpoException("Could Not Retrieve Database Metadata", t);
     } finally {
       closeLocalConnection(c);
@@ -181,7 +180,7 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
    * @param jdsiRead The datasource that identifies the transaction database for read-only
    *     transactions.
    * @return - A JdbcCpoAdapter
-   * @throws org.synchronoss.cpo.CpoException exception
+   * @throws CpoException exception
    */
   public static JdbcCpoAdapter getInstance(
       JdbcCpoMetaDescriptor metaDescriptor,
@@ -208,8 +207,6 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
       c = getReadConnection();
 
       objCount = existsBean(groupName, bean, c, wheres);
-    } catch (Exception e) {
-      throw new CpoException("existsBean(String, T) failed", e);
     } finally {
       closeLocalConnection(c);
     }
@@ -290,7 +287,6 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
       }
     } catch (SQLException e) {
       String msg = "existsBean(groupName, bean, con) failed:";
-      localLogger.error(msg, e);
       throw new CpoException(msg, e);
     } finally {
       resultSetClose(rs);
@@ -554,7 +550,7 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
               + ">=========================");
 
       try {
-        returnBean = (T) result.getClass().newInstance();
+        returnBean = (T) result.getClass().getDeclaredConstructor().newInstance();
       } catch (IllegalAccessException iae) {
         throw new CpoException("Unable to access the constructor of the Return Bean", iae);
       } catch (InstantiationException iae) {
@@ -703,7 +699,7 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
       localLogger.info(buildCpoClassLogLine(criteriaObj.getClass(), Crud.RETRIEVE, groupName));
 
       try {
-        rObj = (T) bean.getClass().newInstance();
+        rObj = (T) bean.getClass().getDeclaredConstructor().newInstance();
       } catch (IllegalAccessException iae) {
         localLogger.error(
             "=================== Could not access default constructor for Class=<"
@@ -909,7 +905,7 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
                     if (!finalRs.next()) return false;
                     T bean = null;
                     try {
-                      bean = (T) result.getClass().newInstance();
+                      bean = (T) result.getClass().getDeclaredConstructor().newInstance();
                     } catch (IllegalAccessException iae) {
                       localLogger.error(
                           "=================== Could not access default constructor for Class=<"

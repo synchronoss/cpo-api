@@ -28,7 +28,7 @@
       <javaType>byte[]</javaType>
       <dataName>B_LOB</dataName>
       <dataType>LONGVARBINARY</dataType>
-      <transformClass>org.synchronoss.cpo.transform.jdbc.TransformGZipBytes</transformClass>
+      <transformClass>org.synchronoss.cpo.jdbc.transform.TransformGZipBytes</transformClass>
     </cpoAttribute>
     <cpoAttribute xsi:type="ctJdbcAttribute">
       <javaName>bLob2</javaName>
@@ -47,7 +47,7 @@
       <javaType>char[]</javaType>
       <dataName>C_LOB</dataName>
       <dataType>LONGVARCHAR</dataType>
-      <transformClass>org.synchronoss.cpo.transform.jdbc.TransformStringChar</transformClass>
+      <transformClass>org.synchronoss.cpo.jdbc.transform.TransformStringChar</transformClass>
     </cpoAttribute>
     <cpoFunctionGroup name="deleteLVO" type="DELETE">
       <cpoFunction name="deleteLVO">

@@ -22,17 +22,17 @@ package org.synchronoss.cpo.jdbc.exporter;
  * ]]
  */
 
+import org.synchronoss.cpo.core.exporter.CoreMetaXmlObjectExporter;
+import org.synchronoss.cpo.core.exporter.MetaXmlObjectExporter;
+import org.synchronoss.cpo.core.meta.CpoMetaDescriptor;
+import org.synchronoss.cpo.core.meta.domain.CpoArgument;
+import org.synchronoss.cpo.core.meta.domain.CpoAttribute;
 import org.synchronoss.cpo.cpometa.CtJdbcArgument;
 import org.synchronoss.cpo.cpometa.CtJdbcAttribute;
 import org.synchronoss.cpo.cpometa.ObjectFactory;
 import org.synchronoss.cpo.cpometa.StArgumentScope;
-import org.synchronoss.cpo.exporter.CoreMetaXmlObjectExporter;
-import org.synchronoss.cpo.exporter.MetaXmlObjectExporter;
 import org.synchronoss.cpo.jdbc.JdbcCpoArgument;
 import org.synchronoss.cpo.jdbc.JdbcCpoAttribute;
-import org.synchronoss.cpo.meta.CpoMetaDescriptor;
-import org.synchronoss.cpo.meta.domain.CpoArgument;
-import org.synchronoss.cpo.meta.domain.CpoAttribute;
 
 /**
  * XmlObject exporter for jdbc meta objects

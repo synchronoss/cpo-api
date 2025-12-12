@@ -34,11 +34,11 @@ import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.plugins.annotations.ResolutionScope;
 import org.apache.maven.project.MavenProject;
-import org.synchronoss.cpo.exporter.CpoClassSourceGenerator;
-import org.synchronoss.cpo.exporter.CpoInterfaceSourceGenerator;
-import org.synchronoss.cpo.exporter.CpoLegacyClassSourceGenerator;
-import org.synchronoss.cpo.meta.CpoMetaDescriptor;
-import org.synchronoss.cpo.meta.domain.CpoClass;
+import org.synchronoss.cpo.core.exporter.CpoClassSourceGenerator;
+import org.synchronoss.cpo.core.exporter.CpoInterfaceSourceGenerator;
+import org.synchronoss.cpo.core.exporter.CpoLegacyClassSourceGenerator;
+import org.synchronoss.cpo.core.meta.CpoMetaDescriptor;
+import org.synchronoss.cpo.core.meta.domain.CpoClass;
 
 /** Plugin goal that will generate the cpo classes based on the xml configuration file */
 @Mojo(

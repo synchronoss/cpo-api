@@ -26,7 +26,7 @@
       <javaType>byte[]</javaType>
       <dataName>B_LOB</dataName>
       <dataType>BLOB</dataType>
-      <transformClass>org.synchronoss.cpo.transform.jdbc.TransformGZipBytes</transformClass>
+      <transformClass>org.synchronoss.cpo.jdbc.transform.TransformGZipBytes</transformClass>
     </cpoAttribute>
     <cpoAttribute xsi:type="cpoj:ctJdbcAttribute" xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
       <javaName>bLob2</javaName>
@@ -39,7 +39,7 @@
       <javaType>char[]</javaType>
       <dataName>C_LOB</dataName>
       <dataType>CLOB</dataType>
-      <transformClass>org.synchronoss.cpo.transform.jdbc.TransformCharArray</transformClass>
+      <transformClass>org.synchronoss.cpo.jdbc.transform.TransformCharArray</transformClass>
     </cpoAttribute>
     <cpoAttribute xsi:type="cpoj:ctJdbcAttribute" xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
       <javaName>lobId</javaName>

@@ -22,11 +22,11 @@ package org.synchronoss.cpo.cassandra;
  * ]]
  */
 
-import org.synchronoss.cpo.CpoAdapter;
-import org.synchronoss.cpo.CpoAdapterFactory;
-import org.synchronoss.cpo.CpoException;
-import org.synchronoss.cpo.CpoTrxAdapter;
-import org.synchronoss.cpo.jta.CpoXaResource;
+import org.synchronoss.cpo.core.CpoAdapter;
+import org.synchronoss.cpo.core.CpoAdapterFactory;
+import org.synchronoss.cpo.core.CpoException;
+import org.synchronoss.cpo.core.CpoTrxAdapter;
+import org.synchronoss.cpo.core.jta.CpoXaResource;
 
 /**
  * A factory for creating CassandraCpoAdapter

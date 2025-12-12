@@ -23,9 +23,9 @@ package org.synchronoss.cpo.jdbc;
  */
 
 import java.io.Serial;
-import org.synchronoss.cpo.CpoException;
-import org.synchronoss.cpo.meta.CpoMetaDescriptor;
-import org.synchronoss.cpo.meta.domain.CpoAttribute;
+import org.synchronoss.cpo.core.CpoException;
+import org.synchronoss.cpo.core.meta.CpoMetaDescriptor;
+import org.synchronoss.cpo.core.meta.domain.CpoAttribute;
 
 /**
  * JdbcCpoAttribute. A class that includes the Jdbc specifc attributes that are additional to the

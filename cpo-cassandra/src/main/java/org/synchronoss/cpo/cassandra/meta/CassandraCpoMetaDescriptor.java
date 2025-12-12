@@ -22,10 +22,10 @@ package org.synchronoss.cpo.cassandra.meta;
  * ]]
  */
 
-import org.synchronoss.cpo.CpoException;
 import org.synchronoss.cpo.cassandra.exporter.CassandraMetaXmlObjectExporter;
-import org.synchronoss.cpo.exporter.MetaXmlObjectExporter;
-import org.synchronoss.cpo.meta.CpoMetaDescriptor;
+import org.synchronoss.cpo.core.CpoException;
+import org.synchronoss.cpo.core.exporter.MetaXmlObjectExporter;
+import org.synchronoss.cpo.core.meta.CpoMetaDescriptor;
 
 /**
  * Created with IntelliJ IDEA. User: dberry Date: 9/10/13 Time: 07:56 AM To change this template use

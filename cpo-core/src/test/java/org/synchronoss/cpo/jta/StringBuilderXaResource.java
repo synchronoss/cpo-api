@@ -26,7 +26,8 @@ import javax.transaction.xa.XAException;
 import javax.transaction.xa.XAResource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.synchronoss.cpo.CpoException;
+import org.synchronoss.cpo.core.CpoException;
+import org.synchronoss.cpo.core.jta.CpoBaseXaResource;
 
 /** Created by dberry on 8/9/15. */
 public class StringBuilderXaResource extends CpoBaseXaResource<StringBuilder> {

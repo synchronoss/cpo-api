@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  [[
+  jdbc
+  ==
+  Copyright (C) 2003 - 2025 David E. Berry
+  ==
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU Lesser General Public License as
+  published by the Free Software Foundation, either version 3 of the
+  License, or (at your option) any later version.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Lesser Public License for more details.
+
+  You should have received a copy of the GNU General Lesser Public
+  License along with this program.  If not, see
+  <http://www.gnu.org/licenses/lgpl-3.0.html>.
+  ]]
+  -->
+<cpoMetaData metaDescriptor="org.synchronoss.cpo.jdbc.meta.JdbcCpoMetaDescriptor" defaultPackageName="" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.synchronoss.org/cpo/CpoMeta.xsd">
+    <cpoClass name="org.synchronoss.cpo.core.TestObject">
+        <cpoAttribute xsi:type="ctAttribute">
+            <javaName>idJava</javaName>
+            <javaType>java.lang.String</javaType>
+            <dataName>idData</dataName>
+            <dataType>stringData</dataType>
+        </cpoAttribute>
+        <cpoAttribute xsi:type="ctAttribute">
+            <javaName>nameJava</javaName>
+            <javaType>java.lang.String</javaType>
+            <dataName>nameData</dataName>
+            <dataType>stringData</dataType>
+        </cpoAttribute>
+        <cpoAttribute xsi:type="ctAttribute">
+            <javaName>ageJave</javaName>
+            <javaType>int</javaType>
+            <dataName>ageData</dataName>
+            <dataType>intData</dataType>
+        </cpoAttribute>
+        <cpoFunctionGroup name="deleteGroup" type="DELETE">
+            <cpoFunction name="deleteFunction">
+                <expression>delete from test_object where id = ?</expression>
+                <cpoArgument xsi:type="ctArgument">
+                    <attributeName>id</attributeName>
+               </cpoArgument>
+            </cpoFunction>
+        </cpoFunctionGroup>
+        <cpoFunctionGroup name="createGroup" type="CREATE">
+            <cpoFunction name="createFunction">
+                <expression>insert into test_object (id, name, age) values (?,?,?)</expression>
+                <cpoArgument xsi:type="ctArgument">
+                    <attributeName>id</attributeName>
+                </cpoArgument>
+                <cpoArgument xsi:type="ctArgument">
+                    <attributeName>name</attributeName>
+                </cpoArgument>
+                <cpoArgument xsi:type="ctArgument">
+                    <attributeName>age</attributeName>
+                </cpoArgument>
+            </cpoFunction>
+        </cpoFunctionGroup>
+        <cpoFunctionGroup name="updateGroup" type="UPDATE">
+            <cpoFunction name="updateFunction">
+                <expression>update test_object set id=?, name=?, age=? where id = ?</expression>
+                <cpoArgument xsi:type="ctArgument">
+                    <attributeName>id</attributeName>
+                </cpoArgument>
+                <cpoArgument xsi:type="ctArgument">
+                    <attributeName>name</attributeName>
+                </cpoArgument>
+                <cpoArgument xsi:type="ctArgument">
+                    <attributeName>age</attributeName>
+                </cpoArgument>
+                <cpoArgument xsi:type="ctArgument">
+                    <attributeName>id</attributeName>
+                </cpoArgument>
+            </cpoFunction>
+        </cpoFunctionGroup>
+        <cpoFunctionGroup name="retrieveGroup" type="RETRIEVE">
+            <cpoFunction name="retrieveFunction">
+                <expression>select * from test_object where id = ?</expression>
+                <cpoArgument xsi:type="ctArgument">
+                    <attributeName>id</attributeName>
+                </cpoArgument>
+            </cpoFunction>
+        </cpoFunctionGroup>
+    </cpoClass>
+</cpoMetaData>

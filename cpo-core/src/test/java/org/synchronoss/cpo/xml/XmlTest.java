@@ -22,9 +22,9 @@ package org.synchronoss.cpo.xml;
  * ]]
  */
 
-import org.synchronoss.cpo.CpoException;
+import org.synchronoss.cpo.core.CpoException;
+import org.synchronoss.cpo.core.helper.XmlHelper;
 import org.synchronoss.cpo.cpometa.CtCpoMetaData;
-import org.synchronoss.cpo.helper.XmlHelper;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -33,7 +33,7 @@ public class XmlTest {
   @Test
   public void testCpoMetaDataXml() throws CpoException {
     var errBuilder = new StringBuilder();
-    var metaXml = "testCoreMeta.xml";
+    var metaXml = "testMeta.xml";
 
     CtCpoMetaData ctCpoMeta =
         XmlHelper.unmarshalXmlObject(

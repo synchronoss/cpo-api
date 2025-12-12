@@ -24,14 +24,14 @@ package org.synchronoss.cpo.cassandra;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.synchronoss.cpo.CpoException;
 import org.synchronoss.cpo.cassandra.meta.CassandraMethodMapEntry;
 import org.synchronoss.cpo.cassandra.meta.CassandraMethodMapper;
 import org.synchronoss.cpo.cassandra.transform.CassandraCpoTransform;
-import org.synchronoss.cpo.helper.ExceptionHelper;
-import org.synchronoss.cpo.meta.AbstractBindableCpoData;
-import org.synchronoss.cpo.meta.domain.CpoAttribute;
-import org.synchronoss.cpo.transform.CpoTransform;
+import org.synchronoss.cpo.core.CpoException;
+import org.synchronoss.cpo.core.helper.ExceptionHelper;
+import org.synchronoss.cpo.core.meta.AbstractBindableCpoData;
+import org.synchronoss.cpo.core.meta.domain.CpoAttribute;
+import org.synchronoss.cpo.core.transform.CpoTransform;
 
 /**
  * Helps manage data transfer between the CPO object and the Cassandra bound statement

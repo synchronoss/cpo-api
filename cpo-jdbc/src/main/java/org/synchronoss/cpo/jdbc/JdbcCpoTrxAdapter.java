@@ -27,8 +27,8 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.synchronoss.cpo.CpoException;
-import org.synchronoss.cpo.CpoTrxAdapter;
+import org.synchronoss.cpo.core.CpoException;
+import org.synchronoss.cpo.core.CpoTrxAdapter;
 
 /** A transaction adapter that allows the user to control the commits and role backs */
 public class JdbcCpoTrxAdapter extends JdbcCpoAdapter implements CpoTrxAdapter {

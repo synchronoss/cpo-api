@@ -22,12 +22,12 @@ package org.synchronoss.cpo.jdbc;
  * ]]
  */
 
-import org.synchronoss.cpo.CpoAdapter;
-import org.synchronoss.cpo.CpoAdapterFactory;
-import org.synchronoss.cpo.CpoException;
-import org.synchronoss.cpo.CpoTrxAdapter;
+import org.synchronoss.cpo.core.CpoAdapter;
+import org.synchronoss.cpo.core.CpoAdapterFactory;
+import org.synchronoss.cpo.core.CpoException;
+import org.synchronoss.cpo.core.CpoTrxAdapter;
+import org.synchronoss.cpo.core.jta.CpoXaResource;
 import org.synchronoss.cpo.jdbc.jta.JdbcCpoXaAdapter;
-import org.synchronoss.cpo.jta.CpoXaResource;
 
 /** Created by dberry on 11/8/15. */
 public class JdbcCpoAdapterFactory implements CpoAdapterFactory {

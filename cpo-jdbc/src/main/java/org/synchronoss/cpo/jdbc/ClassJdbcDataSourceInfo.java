@@ -32,9 +32,9 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import javax.sql.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.synchronoss.cpo.CpoException;
-import org.synchronoss.cpo.helper.CpoClassLoader;
-import org.synchronoss.cpo.helper.ExceptionHelper;
+import org.synchronoss.cpo.core.CpoException;
+import org.synchronoss.cpo.core.helper.CpoClassLoader;
+import org.synchronoss.cpo.core.helper.ExceptionHelper;
 
 /**
  * Collects the info required to instantiate a DataSource from a JDBC Driver Provides the
@@ -98,7 +98,7 @@ public class ClassJdbcDataSourceInfo extends AbstractJdbcDataSource
     DataSource dataSource = null;
     try {
       Class dsClass = CpoClassLoader.forName(className);
-      CommonDataSource ds = (CommonDataSource) dsClass.newInstance();
+      CommonDataSource ds = (CommonDataSource) dsClass.getDeclaredConstructor().newInstance();
 
       if (ds instanceof ConnectionPoolDataSource) {
         this.poolDataSource = (ConnectionPoolDataSource) ds;
@@ -117,7 +117,7 @@ public class ClassJdbcDataSourceInfo extends AbstractJdbcDataSource
               + className
               + ":"
               + ExceptionHelper.getLocalizedMessage(ie));
-    } catch (IllegalAccessException iae) {
+    } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException iae) {
       throw new CpoException("Could Not Access Class: " + className, iae);
     }
 

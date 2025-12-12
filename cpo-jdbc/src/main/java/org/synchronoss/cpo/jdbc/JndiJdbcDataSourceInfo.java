@@ -24,8 +24,9 @@ package org.synchronoss.cpo.jdbc;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
+import javax.naming.NamingException;
 import javax.sql.DataSource;
-import org.synchronoss.cpo.CpoException;
+import org.synchronoss.cpo.core.CpoException;
 
 /**
  * Collects the info required to instantiate a DataSource stored as a JNDI Resource.
@@ -75,7 +76,7 @@ public class JndiJdbcDataSourceInfo extends AbstractJdbcDataSourceInfo {
         jndiCtx = new InitialContext();
       }
       datasource = (DataSource) jndiCtx.lookup(jndiName);
-    } catch (Exception e) {
+    } catch (NamingException e) {
       throw new CpoException("Error instantiating DataSource", e);
     }
     return datasource;

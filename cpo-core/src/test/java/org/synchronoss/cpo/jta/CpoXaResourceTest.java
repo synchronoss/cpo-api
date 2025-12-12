@@ -27,6 +27,7 @@ import static org.testng.Assert.*;
 import javax.transaction.xa.XAException;
 import javax.transaction.xa.XAResource;
 import javax.transaction.xa.Xid;
+import org.synchronoss.cpo.core.jta.CpoXaError;
 import org.testng.annotations.Test;
 
 /** Created by dberry on 8/9/15. */

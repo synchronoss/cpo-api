@@ -27,17 +27,17 @@ import java.util.SortedMap;
 import java.util.TreeMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.synchronoss.cpo.CpoAdapterFactory;
-import org.synchronoss.cpo.CpoException;
-import org.synchronoss.cpo.DataSourceInfo;
-import org.synchronoss.cpo.config.CpoConfigProcessor;
+import org.synchronoss.cpo.core.CpoAdapterFactory;
+import org.synchronoss.cpo.core.CpoException;
+import org.synchronoss.cpo.core.DataSourceInfo;
+import org.synchronoss.cpo.core.config.CpoConfigProcessor;
+import org.synchronoss.cpo.core.meta.CpoMetaDescriptor;
 import org.synchronoss.cpo.cpoconfig.CtDataSourceConfig;
 import org.synchronoss.cpo.cpoconfig.CtJdbcConfig;
 import org.synchronoss.cpo.cpoconfig.CtJdbcReadWriteConfig;
 import org.synchronoss.cpo.cpoconfig.CtProperty;
 import org.synchronoss.cpo.jdbc.*;
 import org.synchronoss.cpo.jdbc.meta.JdbcCpoMetaDescriptor;
-import org.synchronoss.cpo.meta.CpoMetaDescriptor;
 
 /**
  * Processes the cpoConfig.xml data for Jdbc

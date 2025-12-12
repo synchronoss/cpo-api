@@ -26,8 +26,8 @@ import static org.testng.Assert.*;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.synchronoss.cpo.CpoAdapter;
-import org.synchronoss.cpo.CpoAdapterFactoryManager;
+import org.synchronoss.cpo.core.CpoAdapter;
+import org.synchronoss.cpo.core.CpoAdapterFactoryManager;
 import org.synchronoss.cpo.jdbc.LobValueObject;
 import org.synchronoss.cpo.jdbc.meta.JdbcCpoMetaDescriptor;
 import org.testng.annotations.AfterClass;

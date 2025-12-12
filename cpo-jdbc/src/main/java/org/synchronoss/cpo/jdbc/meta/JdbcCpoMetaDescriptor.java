@@ -22,10 +22,10 @@ package org.synchronoss.cpo.jdbc.meta;
  * ]]
  */
 
-import org.synchronoss.cpo.CpoException;
-import org.synchronoss.cpo.exporter.MetaXmlObjectExporter;
+import org.synchronoss.cpo.core.CpoException;
+import org.synchronoss.cpo.core.exporter.MetaXmlObjectExporter;
+import org.synchronoss.cpo.core.meta.CpoMetaDescriptor;
 import org.synchronoss.cpo.jdbc.exporter.JdbcMetaXmlObjectExporter;
-import org.synchronoss.cpo.meta.CpoMetaDescriptor;
 
 /**
  * Process the Jdbc specific metadata from the xml metadata

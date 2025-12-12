@@ -25,9 +25,9 @@ package org.synchronoss.cpo.cassandra;
 import static org.testng.Assert.*;
 
 import java.util.*;
-import org.synchronoss.cpo.CpoAdapter;
-import org.synchronoss.cpo.CpoAdapterFactoryManager;
 import org.synchronoss.cpo.cassandra.meta.CassandraCpoMetaDescriptor;
+import org.synchronoss.cpo.core.CpoAdapter;
+import org.synchronoss.cpo.core.CpoAdapterFactoryManager;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;

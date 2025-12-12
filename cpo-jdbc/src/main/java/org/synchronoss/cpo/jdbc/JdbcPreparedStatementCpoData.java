@@ -22,14 +22,14 @@ package org.synchronoss.cpo.jdbc;
  * ]]
  */
 
+import java.lang.reflect.InvocationTargetException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.synchronoss.cpo.CpoException;
-import org.synchronoss.cpo.helper.ExceptionHelper;
+import org.synchronoss.cpo.core.CpoException;
+import org.synchronoss.cpo.core.meta.domain.CpoAttribute;
+import org.synchronoss.cpo.core.transform.CpoTransform;
 import org.synchronoss.cpo.jdbc.meta.JdbcMethodMapEntry;
-import org.synchronoss.cpo.meta.domain.CpoAttribute;
-import org.synchronoss.cpo.transform.CpoTransform;
-import org.synchronoss.cpo.transform.jdbc.JdbcCpoTransform;
+import org.synchronoss.cpo.jdbc.transform.JdbcCpoTransform;
 
 /**
  * The data handler for a prepared statement
@@ -65,7 +65,7 @@ public class JdbcPreparedStatementCpoData extends AbstractStatementCpoData {
       methodMapEntry
           .getBsSetter()
           .invoke(cpoStatementFactory.getPreparedStatement(), getIndex(), param);
-    } catch (Exception e) {
+    } catch (InvocationTargetException | IllegalAccessException e) {
       throw new CpoException(
           "Error Invoking Jdbc Method: "
               + getCpoAttribute().getDataName()
@@ -73,8 +73,8 @@ public class JdbcPreparedStatementCpoData extends AbstractStatementCpoData {
               + getCpoAttribute().getJavaName()
               + ":"
               + methodMapEntry.getBsSetter().getName()
-              + ":"
-              + ExceptionHelper.getLocalizedMessage(e));
+              + ":",
+          e);
     }
   }
 

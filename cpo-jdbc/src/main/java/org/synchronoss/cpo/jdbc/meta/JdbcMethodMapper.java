@@ -32,8 +32,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.synchronoss.cpo.CpoException;
-import org.synchronoss.cpo.meta.MethodMapper;
+import org.synchronoss.cpo.core.CpoException;
+import org.synchronoss.cpo.core.meta.MethodMapper;
 
 /**
  * MethodMapper is a class defines the getters and setters for all the JDBC specific data classes

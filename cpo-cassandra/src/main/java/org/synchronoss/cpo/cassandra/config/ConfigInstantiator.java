@@ -26,8 +26,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.synchronoss.cpo.CpoException;
-import org.synchronoss.cpo.helper.ExceptionHelper;
+import org.synchronoss.cpo.core.CpoException;
+import org.synchronoss.cpo.core.helper.ExceptionHelper;
 
 /**
  * Instantiates the Config file processor
@@ -53,7 +53,7 @@ public class ConfigInstantiator<T> {
     // Lets create the Factory
     try {
       Class factoryClass = Class.forName(className);
-      factoryMethodName = (FactoryMethodName) factoryClass.newInstance();
+      factoryMethodName = (FactoryMethodName) factoryClass.getDeclaredConstructor().newInstance();
       logger.debug("Created factory: " + className);
       Method factoryMethod = factoryClass.getMethod(factoryMethodName.getFactoryMethodName());
       return (T) factoryMethod.invoke(factoryMethodName);

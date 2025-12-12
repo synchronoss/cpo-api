@@ -29,17 +29,17 @@ import javax.transaction.xa.XAException;
 import javax.transaction.xa.XAResource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.synchronoss.cpo.*;
-import org.synchronoss.cpo.enums.Comparison;
-import org.synchronoss.cpo.enums.Logical;
-import org.synchronoss.cpo.helper.ExceptionHelper;
+import org.synchronoss.cpo.core.*;
+import org.synchronoss.cpo.core.enums.Comparison;
+import org.synchronoss.cpo.core.enums.Logical;
+import org.synchronoss.cpo.core.helper.ExceptionHelper;
+import org.synchronoss.cpo.core.jta.CpoBaseXaResource;
+import org.synchronoss.cpo.core.jta.CpoXaError;
+import org.synchronoss.cpo.core.meta.CpoMetaDescriptor;
+import org.synchronoss.cpo.core.meta.domain.CpoAttribute;
 import org.synchronoss.cpo.jdbc.JdbcCpoAdapter;
 import org.synchronoss.cpo.jdbc.JdbcCpoAdapterFactory;
 import org.synchronoss.cpo.jdbc.JdbcCpoTrxAdapter;
-import org.synchronoss.cpo.jta.CpoBaseXaResource;
-import org.synchronoss.cpo.jta.CpoXaError;
-import org.synchronoss.cpo.meta.CpoMetaDescriptor;
-import org.synchronoss.cpo.meta.domain.CpoAttribute;
 
 /**
  * A JdbcCpoXaAdapter wraps the XAResource processing around a JdbcCpoTrxAdapter.

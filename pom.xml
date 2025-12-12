@@ -188,21 +188,6 @@
                         <skipDeploy>true</skipDeploy>
                     </configuration>
                 </plugin>
-                <plugin>
-                    <groupId>org.jacoco</groupId>
-                    <artifactId>jacoco-maven-plugin</artifactId>
-                    <version>0.8.14</version>
-                    <configuration>
-                        <destFile>${project.build.directory}/jacoco.exec</destFile>
-                        <dataFile>${project.build.directory}/jacoco.exec</dataFile>
-                        <outputDirectory>${project.reporting.outputDirectory}/jacoco</outputDirectory>
-                    </configuration>
-                </plugin>
-                <plugin>
-                    <groupId>org.codehaus.mojo</groupId>
-                    <artifactId>sonar-maven-plugin</artifactId>
-                    <version>5.2.0.4988</version>
-                </plugin>
             </plugins>
         </pluginManagement>
         <plugins>
@@ -346,36 +331,49 @@
                     </execution>
                 </executions>
             </plugin>
-            <!-- This JACOCO Configuration generates the test coverage results for Sonar -->
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
+                <version>0.8.14</version>
                 <executions>
-                    <!-- This section is for the units -->
                     <execution>
-                        <id>default-prepare-agent</id>
+                        <id>jacoco-initialize</id>
                         <goals>
                             <goal>prepare-agent</goal>
                         </goals>
                     </execution>
                     <execution>
-                        <id>default-report</id>
+                        <id>jacoco-report</id>
+                        <phase>test</phase>
                         <goals>
                             <goal>report</goal>
                         </goals>
                     </execution>
-                    <!-- This section is for the integration tests -->
                     <execution>
-                        <id>default-prepare-agent-integration</id>
+                        <id>check-coverage</id>
                         <goals>
-                            <goal>prepare-agent-integration</goal>
+                            <goal>check</goal>
                         </goals>
-                    </execution>
-                    <execution>
-                        <id>default-report-integration</id>
-                        <goals>
-                            <goal>report-integration</goal>
-                        </goals>
+                        <configuration>
+                            <rules>
+                                <!-- Rule 1: Enforce project-wide limits -->
+                                <rule>
+                                    <element>BUNDLE</element>
+                                    <limits>
+                                        <limit>
+                                            <counter>LINE</counter>
+                                            <value>COVEREDRATIO</value>
+                                            <minimum>0.00</minimum>
+                                        </limit>
+                                        <limit>
+                                            <counter>BRANCH</counter>
+                                            <value>COVEREDRATIO</value>
+                                            <minimum>0.00</minimum>
+                                        </limit>
+                                    </limits>
+                                </rule>
+                            </rules>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>

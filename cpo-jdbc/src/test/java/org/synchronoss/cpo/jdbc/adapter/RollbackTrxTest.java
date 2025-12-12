@@ -25,10 +25,10 @@ package org.synchronoss.cpo.jdbc.adapter;
 import static org.testng.Assert.*;
 
 import java.util.ArrayList;
-import org.synchronoss.cpo.CpoAdapterFactoryManager;
-import org.synchronoss.cpo.CpoException;
-import org.synchronoss.cpo.CpoTrxAdapter;
-import org.synchronoss.cpo.helper.ExceptionHelper;
+import org.synchronoss.cpo.core.CpoAdapterFactoryManager;
+import org.synchronoss.cpo.core.CpoException;
+import org.synchronoss.cpo.core.CpoTrxAdapter;
+import org.synchronoss.cpo.core.helper.ExceptionHelper;
 import org.synchronoss.cpo.jdbc.ValueObject;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;

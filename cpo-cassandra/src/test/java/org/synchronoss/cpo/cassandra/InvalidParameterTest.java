@@ -29,10 +29,10 @@ import java.util.Collection;
 import java.util.stream.Stream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.synchronoss.cpo.CpoAdapter;
-import org.synchronoss.cpo.CpoAdapterFactoryManager;
-import org.synchronoss.cpo.CpoException;
-import org.synchronoss.cpo.helper.ExceptionHelper;
+import org.synchronoss.cpo.core.CpoAdapter;
+import org.synchronoss.cpo.core.CpoAdapterFactoryManager;
+import org.synchronoss.cpo.core.CpoException;
+import org.synchronoss.cpo.core.helper.ExceptionHelper;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 

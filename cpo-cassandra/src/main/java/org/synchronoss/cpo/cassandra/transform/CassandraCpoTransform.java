@@ -22,9 +22,9 @@ package org.synchronoss.cpo.cassandra.transform;
  * ]]
  */
 
-import org.synchronoss.cpo.CpoException;
 import org.synchronoss.cpo.cassandra.CassandraBoundStatementFactory;
-import org.synchronoss.cpo.transform.CpoTransform;
+import org.synchronoss.cpo.core.CpoException;
+import org.synchronoss.cpo.core.transform.CpoTransform;
 
 /**
  * Custom transforms of Java classes to Datasource classes

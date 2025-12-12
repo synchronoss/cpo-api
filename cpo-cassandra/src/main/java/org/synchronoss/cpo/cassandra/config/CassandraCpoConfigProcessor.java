@@ -27,15 +27,15 @@ import com.datastax.driver.core.policies.*;
 import java.util.Collection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.synchronoss.cpo.CpoAdapterFactory;
-import org.synchronoss.cpo.CpoException;
 import org.synchronoss.cpo.cassandra.CassandraCpoAdapter;
 import org.synchronoss.cpo.cassandra.CassandraCpoAdapterFactory;
 import org.synchronoss.cpo.cassandra.ClusterDataSourceInfo;
 import org.synchronoss.cpo.cassandra.meta.CassandraCpoMetaDescriptor;
-import org.synchronoss.cpo.config.CpoConfigProcessor;
+import org.synchronoss.cpo.core.CpoAdapterFactory;
+import org.synchronoss.cpo.core.CpoException;
+import org.synchronoss.cpo.core.config.CpoConfigProcessor;
+import org.synchronoss.cpo.core.meta.CpoMetaDescriptor;
 import org.synchronoss.cpo.cpoconfig.*;
-import org.synchronoss.cpo.meta.CpoMetaDescriptor;
 
 /**
  * CassandraCpoConfigProcessor processes the datasource configuration file for cassandra. It pulls
@@ -55,7 +55,7 @@ public class CassandraCpoConfigProcessor implements CpoConfigProcessor {
     CpoAdapterFactory cpoAdapterFactory = null;
 
     if (cpoConfig == null || !(cpoConfig instanceof CtCassandraConfig)) {
-      throw new CpoException("Invalid Jdbc Configuration Information");
+      throw new CpoException("Invalid Cassandra Configuration Information");
     }
 
     CtCassandraConfig cassandraConfig = (CtCassandraConfig) cpoConfig;

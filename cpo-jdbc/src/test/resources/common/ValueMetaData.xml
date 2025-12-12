@@ -133,7 +133,7 @@
       <javaType>int</javaType>
       <dataName>ATTR_INTEGER</dataName>
       <dataType>INTEGER</dataType>
-      <transformClass>org.synchronoss.cpo.transform.jdbc.TransformNoOp</transformClass>
+      <transformClass>org.synchronoss.cpo.jdbc.transform.TransformNoOp</transformClass>
     </cpoAttribute>
       <cpoAttribute xsi:type="ctJdbcAttribute">
           <javaName>attrNumeric</javaName>

@@ -23,7 +23,7 @@ package org.synchronoss.cpo.jdbc;
  */
 
 import java.io.Serial;
-import org.synchronoss.cpo.meta.domain.CpoArgument;
+import org.synchronoss.cpo.core.meta.domain.CpoArgument;
 
 /**
  * JdbcCpoArgument is a class that defines the arguments to a JDBC expression

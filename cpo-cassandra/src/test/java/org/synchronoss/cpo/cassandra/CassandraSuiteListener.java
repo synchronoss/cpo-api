@@ -27,7 +27,7 @@ import com.github.terma.javaniotcpproxy.TcpProxy;
 import com.github.terma.javaniotcpproxy.TcpProxyConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.synchronoss.cpo.CpoAdapterFactoryManager;
+import org.synchronoss.cpo.core.CpoAdapterFactoryManager;
 import org.testcontainers.cassandra.CassandraContainer;
 import org.testcontainers.utility.DockerImageName;
 import org.testng.ISuite;

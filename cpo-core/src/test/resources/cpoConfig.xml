@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  [[
+  jdbc
+  ==
+  Copyright (C) 2003 - 2025 David E. Berry
+  ==
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU Lesser General Public License as
+  published by the Free Software Foundation, either version 3 of the
+  License, or (at your option) any later version.
+  
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Lesser Public License for more details.
+  
+  You should have received a copy of the GNU General Lesser Public
+  License along with this program.  If not, see
+  <http://www.gnu.org/licenses/lgpl-3.0.html>.
+  ]]
+  -->
+
+<cpoConfig xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xsi:schemaLocation="http://www.synchronoss.org/cpo/CpoConfig.xsd ../../../src/main/resources/xsd/CpoConfig.xsd"
+ xmlns="http://www.synchronoss.org/cpo/CpoConfig.xsd"
+ defaultConfig="jdbc">
+
+  <metaConfig name="test">
+    <metaXml>/testMeta.xml</metaXml>
+  </metaConfig>
+
+  <metaConfig name="jdbcMeta">
+    <metaXml>/emptyClassMetaData.xml</metaXml>
+    <metaXml>/common/ValueMetaData.xml</metaXml>
+    <metaXml>/common/LobMetaData.xml</metaXml>
+    <metaXml>/emptyMetaData.xml</metaXml>
+  </metaConfig>
+
+
+   <dataConfig xsi:type="ctJdbcConfig" name="test">
+    <metaDescriptorName>testMeta</metaDescriptorName>
+    <cpoConfigProcessor>org.synchronoss.cpo.jdbc.config.JdbcCpoConfigProcessor</cpoConfigProcessor>
+    <readWriteConfig>
+      <dataSourceClassName>${h2.class}</dataSourceClassName>
+      <url>${h2.url}</url>
+      <property name="user" value="${h2.user}"/>
+      <property name="password" value="${h2.pswd}"/>
+    </readWriteConfig>
+  </dataConfig>
+     <dataConfig xsi:type="ctJdbcConfig" name="caseSensitive">
+    <metaDescriptorName>caseSensitive</metaDescriptorName>
+    <cpoConfigProcessor>org.synchronoss.cpo.jdbc.config.JdbcCpoConfigProcessor</cpoConfigProcessor>
+    <readWriteConfig>
+      <dataSourceClassName>${h2.class}</dataSourceClassName>
+      <url>${h2.url}</url>
+      <property name="user" value="${h2.user}"/>
+      <property name="password" value="${h2.pswd}"/>
+    </readWriteConfig>
+  </dataConfig>
+   <dataConfig xsi:type="ctJdbcConfig" name="caseInsensitive">
+    <metaDescriptorName>caseInsensitive</metaDescriptorName>
+    <cpoConfigProcessor>org.synchronoss.cpo.jdbc.config.JdbcCpoConfigProcessor</cpoConfigProcessor>
+    <readWriteConfig>
+      <dataSourceClassName>${h2.class}</dataSourceClassName>
+      <url>${h2.url}</url>
+      <property name="user" value="${h2.user}"/>
+      <property name="password" value="${h2.pswd}"/>
+    </readWriteConfig>
+  </dataConfig>
+
+ <dataConfig xsi:type="ctJdbcConfig" name="driver">
+  <metaDescriptorName>jdbcMeta</metaDescriptorName>
+  <cpoConfigProcessor>org.synchronoss.cpo.jdbc.config.JdbcCpoConfigProcessor</cpoConfigProcessor>
+   <readWriteConfig>
+    <driverClassName>${h2.driver}</driverClassName>
+    <url>${h2.url}</url>
+    <user>${h2.user}</user>
+    <password>${h2.pswd}</password>
+   </readWriteConfig>
+ </dataConfig>
+ <dataConfig xsi:type="ctJdbcConfig" name="driverUrlOnly">
+  <metaDescriptorName>jdbcMeta</metaDescriptorName>
+  <cpoConfigProcessor>org.synchronoss.cpo.jdbc.config.JdbcCpoConfigProcessor</cpoConfigProcessor>
+   <readWriteConfig>
+    <driverClassName>${h2.driver}</driverClassName>
+    <url>${h2.userurl}</url>
+   </readWriteConfig>
+ </dataConfig>
+ <dataConfig xsi:type="ctJdbcConfig" name="driverProp">
+  <metaDescriptorName>jdbcMeta</metaDescriptorName>
+  <cpoConfigProcessor>org.synchronoss.cpo.jdbc.config.JdbcCpoConfigProcessor</cpoConfigProcessor>
+  <readWriteConfig>
+   <driverClassName>${h2.driver}</driverClassName>
+   <url>${h2.url}</url>
+   <property name="user" value="${h2.user}"/>
+   <property name="password" value="${h2.pswd}"/>
+  </readWriteConfig>
+ </dataConfig>
+ <dataConfig xsi:type="ctJdbcConfig" name="class">
+  <metaDescriptorName>jdbcMeta</metaDescriptorName>
+  <cpoConfigProcessor>org.synchronoss.cpo.jdbc.config.JdbcCpoConfigProcessor</cpoConfigProcessor>
+  <readWriteConfig>
+    <dataSourceClassName>${h2.class}</dataSourceClassName>
+    <url>${h2.url}</url>
+    <property name="user" value="${h2.user}"/>
+    <property name="password" value="${h2.pswd}"/>
+  </readWriteConfig>
+ </dataConfig>
+ <dataConfig xsi:type="ctJdbcConfig" name="classProp">
+  <metaDescriptorName>jdbcMeta</metaDescriptorName>
+  <cpoConfigProcessor>org.synchronoss.cpo.jdbc.config.JdbcCpoConfigProcessor</cpoConfigProcessor>
+  <readWriteConfig>
+    <dataSourceClassName>${h2.class}</dataSourceClassName>
+    <url>${h2.url}</url>
+    <property name="user" value="${h2.user}"/>
+    <property name="password" value="${h2.pswd}"/>
+  </readWriteConfig>
+ </dataConfig>
+<!-- <dataConfig xsi:type="ctJdbcConfig" name="jndi">
+  <metaDescriptorName>jdbcMeta</metaDescriptorName>
+  <cpoConfigProcessor>org.synchronoss.cpo.jdbc.config.JdbcCpoConfigProcessor</cpoConfigProcessor>
+  <readWriteConfig>
+   <jndiName>${h2.jndi}</jndiName>
+  </readWriteConfig>
+ </dataConfig>-->
+ <dataConfig xsi:type="ctJdbcConfig" name="driverdriver">
+  <metaDescriptorName>jdbcMeta</metaDescriptorName>
+  <cpoConfigProcessor>org.synchronoss.cpo.jdbc.config.JdbcCpoConfigProcessor</cpoConfigProcessor>
+  <readConfig>
+   <driverClassName>${h2.driver}</driverClassName>
+   <url>${h2.url}</url>
+   <user>${h2.user}</user>
+   <password>${h2.pswd}</password>
+  </readConfig>
+  <writeConfig>
+   <driverClassName>${h2.driver}</driverClassName>
+   <url>${h2.url}</url>
+   <user>${h2.user}</user>
+   <password>${h2.pswd}</password>
+  </writeConfig>
+ </dataConfig>
+ <dataConfig xsi:type="ctJdbcConfig" name="classclass">
+  <metaDescriptorName>jdbcMeta</metaDescriptorName>
+  <cpoConfigProcessor>org.synchronoss.cpo.jdbc.config.JdbcCpoConfigProcessor</cpoConfigProcessor>
+  <readConfig>
+   <dataSourceClassName>${h2.class}</dataSourceClassName>
+   <url>${h2.url}</url>
+   <property name="user" value="${h2.user}"/>
+   <property name="password" value="${h2.pswd}"/>
+  </readConfig>
+  <writeConfig>
+   <dataSourceClassName>${h2.class}</dataSourceClassName>
+   <url>${h2.url}</url>
+   <property name="user" value="${h2.user}"/>
+   <property name="password" value="${h2.pswd}"/>
+  </writeConfig>
+ </dataConfig>
+ <dataConfig xsi:type="ctJdbcConfig" name="driverclass">
+  <metaDescriptorName>jdbcMeta</metaDescriptorName>
+  <cpoConfigProcessor>org.synchronoss.cpo.jdbc.config.JdbcCpoConfigProcessor</cpoConfigProcessor>
+  <readConfig>
+   <driverClassName>${h2.driver}</driverClassName>
+   <url>${h2.url}</url>
+   <user>${h2.user}</user>
+   <password>${h2.pswd}</password>
+  </readConfig>
+  <writeConfig>
+   <dataSourceClassName>${h2.class}</dataSourceClassName>
+   <url>${h2.url}</url><property name="user" value="${h2.user}"/>
+   <property name="password" value="${h2.pswd}"/>
+  </writeConfig>
+ </dataConfig>
+ <dataConfig xsi:type="ctJdbcConfig" name="classdriver">
+  <metaDescriptorName>jdbcMeta</metaDescriptorName>
+  <cpoConfigProcessor>org.synchronoss.cpo.jdbc.config.JdbcCpoConfigProcessor</cpoConfigProcessor>
+  <readConfig>
+   <dataSourceClassName>${h2.class}</dataSourceClassName>
+   <url>${h2.url}</url>
+    <property name="user" value="${h2.user}"/>
+    <property name="password" value="${h2.pswd}"/>
+  </readConfig>
+  <writeConfig>
+   <driverClassName>${h2.driver}</driverClassName>
+   <url>${h2.url}</url>
+   <user>${h2.user}</user>
+   <password>${h2.pswd}</password>
+  </writeConfig>
+ </dataConfig>
+ </cpoConfig>

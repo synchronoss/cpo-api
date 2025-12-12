@@ -23,24 +23,25 @@ package org.synchronoss.cpo.cassandra;
  */
 
 import com.datastax.driver.core.*;
+import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.synchronoss.cpo.*;
 import org.synchronoss.cpo.cassandra.meta.CassandraCpoAttribute;
 import org.synchronoss.cpo.cassandra.meta.CassandraCpoMetaDescriptor;
 import org.synchronoss.cpo.cassandra.meta.CassandraMethodMapper;
 import org.synchronoss.cpo.cassandra.meta.CassandraResultSetCpoData;
-import org.synchronoss.cpo.enums.Crud;
-import org.synchronoss.cpo.helper.ExceptionHelper;
-import org.synchronoss.cpo.meta.CpoMetaDescriptor;
-import org.synchronoss.cpo.meta.DataTypeMapEntry;
-import org.synchronoss.cpo.meta.domain.CpoAttribute;
-import org.synchronoss.cpo.meta.domain.CpoClass;
-import org.synchronoss.cpo.meta.domain.CpoFunction;
+import org.synchronoss.cpo.core.*;
+import org.synchronoss.cpo.core.enums.Crud;
+import org.synchronoss.cpo.core.helper.ExceptionHelper;
+import org.synchronoss.cpo.core.meta.CpoMetaDescriptor;
+import org.synchronoss.cpo.core.meta.DataTypeMapEntry;
+import org.synchronoss.cpo.core.meta.domain.CpoAttribute;
+import org.synchronoss.cpo.core.meta.domain.CpoClass;
+import org.synchronoss.cpo.core.meta.domain.CpoFunction;
 
 /**
  * CassandraCpoAdapter is an interface for a set of routines that are responsible for managing value
@@ -626,7 +627,7 @@ public class CassandraCpoAdapter extends CpoBaseAdapter<ClusterDataSource> {
       localLogger.info(buildCpoClassLogLine(criteriaObj.getClass(), Crud.RETRIEVE, groupName));
 
       try {
-        rObj = (T) bean.getClass().newInstance();
+        rObj = (T) bean.getClass().getDeclaredConstructor().newInstance();
       } catch (IllegalAccessException iae) {
         localLogger.error(
             "=================== Could not access default constructor for Class=<"
@@ -821,16 +822,27 @@ public class CassandraCpoAdapter extends CpoBaseAdapter<ClusterDataSource> {
                     Row row = rs.one();
                     T bean = null;
                     try {
-                      bean = (T) result.getClass().newInstance();
+                      bean = (T) result.getClass().getDeclaredConstructor().newInstance();
                     } catch (IllegalAccessException iae) {
-                      localLogger.error(
-                          "=================== Could not access default constructor for Class=<"
+                      String msg =
+                          "Could not access default constructor for Class=<"
                               + result.getClass()
-                              + "> ==================");
-                      throw new CpoException(
-                          "Unable to access the constructor of the Return bean", iae);
+                              + ">";
+                      throw new CpoException(msg, iae);
                     } catch (InstantiationException iae) {
-                      throw new CpoException("Unable to instantiate Return bean", iae);
+                      throw new CpoException(
+                          "Unable to instantiate Return bean for Class=<" + result.getClass() + ">",
+                          iae);
+                    } catch (InvocationTargetException e) {
+                      throw new CpoException(
+                          "Unable to invoke constructor for Return bean Class=<"
+                              + result.getClass()
+                              + ">",
+                          e);
+                    } catch (NoSuchMethodException e) {
+                      throw new CpoException(
+                          "Constructor not found for Return bean Class=<" + result.getClass() + ">",
+                          e);
                     }
 
                     for (int k = 0; k < columnCount; k++) {

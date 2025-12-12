@@ -27,7 +27,7 @@ import static org.testng.Assert.fail;
 
 import java.text.ParseException;
 import java.util.List;
-import org.synchronoss.cpo.parser.BoundExpressionParser;
+import org.synchronoss.cpo.core.parser.BoundExpressionParser;
 import org.testng.annotations.Test;
 
 // TODO - add more units for single quotes, double quotes, inner selects, etc

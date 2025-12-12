@@ -22,11 +22,11 @@ package org.synchronoss.cpo.jdbc;
  * ]]
  */
 
-import org.synchronoss.cpo.CpoException;
+import org.synchronoss.cpo.core.CpoException;
+import org.synchronoss.cpo.core.meta.AbstractBindableCpoData;
+import org.synchronoss.cpo.core.meta.domain.CpoAttribute;
 import org.synchronoss.cpo.jdbc.meta.JdbcMethodMapEntry;
 import org.synchronoss.cpo.jdbc.meta.JdbcMethodMapper;
-import org.synchronoss.cpo.meta.AbstractBindableCpoData;
-import org.synchronoss.cpo.meta.domain.CpoAttribute;
 
 public abstract class AbstractStatementCpoData extends AbstractBindableCpoData {
 

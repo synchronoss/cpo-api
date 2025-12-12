@@ -25,7 +25,7 @@ package org.synchronoss.cpo.jdbc;
 import java.util.Properties;
 import java.util.SortedMap;
 import java.util.TreeMap;
-import org.synchronoss.cpo.AbstractDataSourceInfo;
+import org.synchronoss.cpo.core.AbstractDataSourceInfo;
 
 /**
  * A class used for collecting the properties to instantiate the datasource

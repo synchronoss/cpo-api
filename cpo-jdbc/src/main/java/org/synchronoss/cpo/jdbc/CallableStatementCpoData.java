@@ -26,13 +26,13 @@ import java.lang.reflect.InvocationTargetException;
 import java.sql.CallableStatement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.synchronoss.cpo.CpoException;
-import org.synchronoss.cpo.helper.ExceptionHelper;
+import org.synchronoss.cpo.core.CpoException;
+import org.synchronoss.cpo.core.helper.ExceptionHelper;
+import org.synchronoss.cpo.core.meta.domain.CpoAttribute;
+import org.synchronoss.cpo.core.transform.CpoTransform;
 import org.synchronoss.cpo.jdbc.meta.JdbcMethodMapEntry;
 import org.synchronoss.cpo.jdbc.meta.JdbcMethodMapper;
-import org.synchronoss.cpo.meta.domain.CpoAttribute;
-import org.synchronoss.cpo.transform.CpoTransform;
-import org.synchronoss.cpo.transform.jdbc.JdbcCpoTransform;
+import org.synchronoss.cpo.jdbc.transform.JdbcCpoTransform;
 
 /**
  * A class that builds constructs and executes callable statements
@@ -117,14 +117,8 @@ public class CallableStatementCpoData extends AbstractStatementCpoData {
           break;
       }
       javaObject = transformIn(javaObject);
-    } catch (IllegalAccessException iae) {
-      logger.debug(
-          "Error Invoking CallableStatement Method: " + ExceptionHelper.getLocalizedMessage(iae));
-      throw new CpoException(iae);
-    } catch (InvocationTargetException ite) {
-      logger.debug(
-          "Error Invoking CallableStatement Method: " + ExceptionHelper.getLocalizedMessage(ite));
-      throw new CpoException(ite.getCause());
+    } catch (IllegalAccessException | InvocationTargetException ie) {
+      throw new CpoException("Error Invoking CallableStatement Method: ", ie);
     }
 
     return javaObject;

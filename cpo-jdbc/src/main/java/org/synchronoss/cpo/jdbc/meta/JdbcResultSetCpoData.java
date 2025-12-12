@@ -23,10 +23,10 @@ package org.synchronoss.cpo.jdbc.meta;
  */
 
 import java.lang.reflect.InvocationTargetException;
-import org.synchronoss.cpo.meta.MethodMapEntry;
-import org.synchronoss.cpo.meta.MethodMapper;
-import org.synchronoss.cpo.meta.ResultSetCpoData;
-import org.synchronoss.cpo.meta.domain.CpoAttribute;
+import org.synchronoss.cpo.core.meta.MethodMapEntry;
+import org.synchronoss.cpo.core.meta.MethodMapper;
+import org.synchronoss.cpo.core.meta.ResultSetCpoData;
+import org.synchronoss.cpo.core.meta.domain.CpoAttribute;
 
 /** Result set data getter helper */
 public class JdbcResultSetCpoData extends ResultSetCpoData {

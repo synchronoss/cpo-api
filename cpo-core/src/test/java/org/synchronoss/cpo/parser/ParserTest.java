@@ -27,6 +27,8 @@ import static org.testng.Assert.*;
 import java.text.ParseException;
 import java.util.Arrays;
 import java.util.List;
+import org.synchronoss.cpo.core.parser.BoundExpressionParser;
+import org.synchronoss.cpo.core.parser.ExpressionParser;
 import org.testng.annotations.Test;
 
 public class ParserTest {

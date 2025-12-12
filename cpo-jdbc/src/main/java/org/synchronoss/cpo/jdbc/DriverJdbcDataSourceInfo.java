@@ -27,8 +27,8 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
 import javax.sql.DataSource;
-import org.synchronoss.cpo.CpoException;
-import org.synchronoss.cpo.helper.CpoClassLoader;
+import org.synchronoss.cpo.core.CpoException;
+import org.synchronoss.cpo.core.helper.CpoClassLoader;
 
 /**
  * Collects the info required to instantiate a DataSource from a JDBC Driver Provides the

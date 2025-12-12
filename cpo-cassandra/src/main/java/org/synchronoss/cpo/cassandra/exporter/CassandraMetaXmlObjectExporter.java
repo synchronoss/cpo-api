@@ -23,14 +23,14 @@ package org.synchronoss.cpo.cassandra.exporter;
  */
 
 import org.synchronoss.cpo.cassandra.meta.CassandraCpoAttribute;
+import org.synchronoss.cpo.core.exporter.CoreMetaXmlObjectExporter;
+import org.synchronoss.cpo.core.exporter.MetaXmlObjectExporter;
+import org.synchronoss.cpo.core.meta.CpoMetaDescriptor;
+import org.synchronoss.cpo.core.meta.domain.CpoArgument;
+import org.synchronoss.cpo.core.meta.domain.CpoAttribute;
 import org.synchronoss.cpo.cpometa.CtCassandraArgument;
 import org.synchronoss.cpo.cpometa.CtCassandraAttribute;
 import org.synchronoss.cpo.cpometa.ObjectFactory;
-import org.synchronoss.cpo.exporter.CoreMetaXmlObjectExporter;
-import org.synchronoss.cpo.exporter.MetaXmlObjectExporter;
-import org.synchronoss.cpo.meta.CpoMetaDescriptor;
-import org.synchronoss.cpo.meta.domain.CpoArgument;
-import org.synchronoss.cpo.meta.domain.CpoAttribute;
 
 /**
  * Exports the Cassandra metadata

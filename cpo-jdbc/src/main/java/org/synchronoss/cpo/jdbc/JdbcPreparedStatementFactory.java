@@ -29,13 +29,12 @@ import java.util.Collection;
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.synchronoss.cpo.*;
-import org.synchronoss.cpo.helper.ExceptionHelper;
+import org.synchronoss.cpo.core.*;
+import org.synchronoss.cpo.core.meta.MethodMapper;
+import org.synchronoss.cpo.core.meta.domain.CpoAttribute;
+import org.synchronoss.cpo.core.meta.domain.CpoClass;
+import org.synchronoss.cpo.core.meta.domain.CpoFunction;
 import org.synchronoss.cpo.jdbc.meta.JdbcMethodMapper;
-import org.synchronoss.cpo.meta.MethodMapper;
-import org.synchronoss.cpo.meta.domain.CpoAttribute;
-import org.synchronoss.cpo.meta.domain.CpoClass;
-import org.synchronoss.cpo.meta.domain.CpoFunction;
 
 /**
  * JdbcPreparedStatementFactory is the object that encapsulates the creation of the actual
@@ -97,13 +96,8 @@ public class JdbcPreparedStatementFactory extends CpoStatementFactory implements
       ps_.setFetchSize(jca.getFetchSize());
       setBindValues(bindValues);
     } catch (SQLException se) {
-      getLocalLogger()
-          .error(
-              "Error Instantiating JdbcPreparedStatementFactory SQL=<"
-                  + sql
-                  + ">"
-                  + ExceptionHelper.getLocalizedMessage(se));
-      throw new CpoException(se);
+      throw new CpoException(
+          "Error Instantiating JdbcPreparedStatementFactory SQL=<" + sql + ">", se);
     }
   }
 

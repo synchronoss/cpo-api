@@ -25,11 +25,11 @@ package org.synchronoss.cpo.cassandra.meta;
 import java.io.Serial;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.synchronoss.cpo.CpoException;
-import org.synchronoss.cpo.helper.CpoClassLoader;
-import org.synchronoss.cpo.helper.ExceptionHelper;
-import org.synchronoss.cpo.meta.CpoMetaDescriptor;
-import org.synchronoss.cpo.meta.domain.CpoAttribute;
+import org.synchronoss.cpo.core.CpoException;
+import org.synchronoss.cpo.core.helper.CpoClassLoader;
+import org.synchronoss.cpo.core.helper.ExceptionHelper;
+import org.synchronoss.cpo.core.meta.CpoMetaDescriptor;
+import org.synchronoss.cpo.core.meta.domain.CpoAttribute;
 
 /**
  * JdbcCpoAttribute. A class that includes the Jdbc specifc attributes that are additional to the

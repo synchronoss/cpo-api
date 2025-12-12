@@ -24,8 +24,8 @@ package org.synchronoss.cpo.cassandra.transform;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.synchronoss.cpo.CpoException;
 import org.synchronoss.cpo.cassandra.CassandraBoundStatementFactory;
+import org.synchronoss.cpo.core.CpoException;
 
 /**
  * This is an example of a transform that does nothing. It is used to test the mechanics of the

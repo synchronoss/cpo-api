@@ -76,7 +76,7 @@
       <javaType>int</javaType>
       <dataName>attr_INTEGER</dataName>
       <dataType>INTEGER</dataType>
-      <transformClass>org.synchronoss.cpo.transform.jdbc.TransformNoOp</transformClass>
+      <transformClass>org.synchronoss.cpo.jdbc.transform.TransformNoOp</transformClass>
     </cpoAttribute>
     <cpoAttribute xsi:type="cpoj:ctJdbcAttribute" xmlns:cpoj="http://www.synchronoss.org/cpo/jdbc/CpoJdbcMeta.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
       <javaName>attrNumeric</javaName>

@@ -40,10 +40,12 @@ to only have to keep the configuration information up to date. Cpo-plugin will t
 ---
 Building CPO
 =
-- Install Docker Desktop or Ranchr Desktop
-  - The integration tests use testcontainers which run in a vm. 
+- Install Java 21+
+- Install Maven 3.9.0+
+- Install Docker Desktop or Rancher Desktop
+  - The integration tests use testcontainers which run in a local vm. 
 - Clone the repository
-  - <code>git clone git@github.com:synchronoss/cpo-api.git</code>
+  - ```git clone git@github.com:synchronoss/cpo-api.git```
 - Run the build
   - mvn install
 - If all goes well:

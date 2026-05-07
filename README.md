@@ -37,6 +37,7 @@ It provides a graphical user interface for configuring CPO. It also provides too
 
 CPO also comes with a maven plugin which will generate the cpo interfaces and/or beans at build time. This allows the developer 
 to only have to keep the configuration information up to date. Cpo-plugin will then manage the classes.
+
 ---
 Building CPO
 =

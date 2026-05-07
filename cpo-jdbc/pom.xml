@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+<?xml version="1.0" ?>
 <!--
   #%L
   cpo
@@ -20,7 +20,11 @@
   <http://www.gnu.org/licenses/lgpl-3.0.html>.
   #L%
   -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project
+    xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd"
+>
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.synchronoss.cpo</groupId>
   <artifactId>cpo-jdbc</artifactId>
@@ -32,15 +36,16 @@
     <version>6.0.0-SNAPSHOT</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
-  <description>CPO is a persistence layer that is thin wrapper around JDBC that consumes and
+  <description
+    >CPO is a persistence layer that is thin wrapper around JDBC that consumes and
     produces JAVABEANs
   </description>
   <properties>
     <oracleVersion>23.26.0.0.0</oracleVersion>
-    <mysqlVersion>9.5.0</mysqlVersion>
-    <mariadbVersion>3.5.6</mariadbVersion>
+    <mysqlVersion>9.7.0</mysqlVersion>
+    <mariadbVersion>3.5.8</mariadbVersion>
     <h2Version>2.4.240</h2Version>
-    <postgresVersion>42.7.8</postgresVersion>
+    <postgresVersion>42.7.11</postgresVersion>
 
       <!--  MySQL Test properties  -->
       <mysql.type>mysql</mysql.type>
@@ -51,8 +56,10 @@
       <mysql.host>localhost</mysql.host>
       <mysql.port>3306</mysql.port>
       <mysql.database>cpo</mysql.database>
-      <mysql.url>jdbc:mysql://${mysql.host}:${mysql.port}/${mysql.database}?noAccessToProcedureBodies=true&amp;amp;useCursorFetch=true</mysql.url>
-      <mysql.userurl>jdbc:mysql://${mysql.host}:${mysql.port}/${mysql.database}?user=${mysql.user}&amp;amp;password=${mysql.pswd}&amp;amp;noAccessToProcedureBodies=true&amp;amp;useCursorFetch=true</mysql.userurl>
+      <mysql.url
+        >jdbc:mysql://${mysql.host}:${mysql.port}/${mysql.database}?noAccessToProcedureBodies=true&amp;amp;useCursorFetch=true</mysql.url>
+      <mysql.userurl
+        >jdbc:mysql://${mysql.host}:${mysql.port}/${mysql.database}?user=${mysql.user}&amp;amp;password=${mysql.pswd}&amp;amp;noAccessToProcedureBodies=true&amp;amp;useCursorFetch=true</mysql.userurl>
       <mysql.driver>com.mysql.cj.jdbc.Driver</mysql.driver>
       <mysql.blobsupport>true</mysql.blobsupport>
       <mysql.callsupport>true</mysql.callsupport>
@@ -76,8 +83,10 @@
       <mariadb.host>localhost</mariadb.host>
       <mariadb.port>3306</mariadb.port>
       <mariadb.database>cpo</mariadb.database>
-      <mariadb.url>jdbc:mariadb://${mariadb.host}:${mariadb.port}/${mariadb.database}?useCursorFetch=true&amp;amp;cachePrepStmts=true&amp;amp;useServerPrepStmts=true&amp;amp;prepStmtCacheSize=250&amp;amp;prepStmtCacheSqlLimit=2048</mariadb.url>
-      <mariadb.userurl>jdbc:mariadb://${mariadb.host}:${mariadb.port}/${mariadb.database}?user=${mariadb.user}&amp;amp;password=${mariadb.pswd}&amp;amp;useCursorFetch=true&amp;amp;cachePrepStmts=true&amp;amp;useServerPrepStmts=true&amp;amp;prepStmtCacheSize=250&amp;amp;prepStmtCacheSqlLimit=2048</mariadb.userurl>
+      <mariadb.url
+        >jdbc:mariadb://${mariadb.host}:${mariadb.port}/${mariadb.database}?useCursorFetch=true&amp;amp;cachePrepStmts=true&amp;amp;useServerPrepStmts=true&amp;amp;prepStmtCacheSize=250&amp;amp;prepStmtCacheSqlLimit=2048</mariadb.url>
+      <mariadb.userurl
+        >jdbc:mariadb://${mariadb.host}:${mariadb.port}/${mariadb.database}?user=${mariadb.user}&amp;amp;password=${mariadb.pswd}&amp;amp;useCursorFetch=true&amp;amp;cachePrepStmts=true&amp;amp;useServerPrepStmts=true&amp;amp;prepStmtCacheSize=250&amp;amp;prepStmtCacheSqlLimit=2048</mariadb.userurl>
       <mariadb.driver>org.mariadb.jdbc.Driver</mariadb.driver>
       <mariadb.blobsupport>true</mariadb.blobsupport>
       <mariadb.callsupport>true</mariadb.callsupport>
@@ -89,7 +98,8 @@
       <mariadb.jndi>java:/comp/env/jdbc/cpodatasource</mariadb.jndi>
       <mariadb.class>org.mariadb.jdbc.MariaDbPoolDataSource</mariadb.class>
       <mariadb.valueMeta>/common/ValueMetaData.xml</mariadb.valueMeta>
-      <mariadb.valueCaseMeta>/common/ValueCaseMetaData.xml</mariadb.valueCaseMeta>
+      <mariadb.valueCaseMeta
+        >/common/ValueCaseMetaData.xml</mariadb.valueCaseMeta>
       <mariadb.lobMeta>/common/LobMetaData.xml</mariadb.lobMeta>
 
       <!--  Oracle Test properties  -->
@@ -101,8 +111,10 @@
       <oracle.host>localhost</oracle.host>
       <oracle.port>1521</oracle.port>
       <oracle.database>cpo</oracle.database>
-      <oracle.url>jdbc:oracle:thin:@${oracle.host}:${oracle.port}:${oracle.database}</oracle.url>
-      <oracle.userurl>jdbc:oracle:thin:${oracle.user}/${oracle.pswd}@${oracle.host}:${oracle.port}:${oracle.database}</oracle.userurl>
+      <oracle.url
+        >jdbc:oracle:thin:@${oracle.host}:${oracle.port}:${oracle.database}</oracle.url>
+      <oracle.userurl
+        >jdbc:oracle:thin:${oracle.user}/${oracle.pswd}@${oracle.host}:${oracle.port}:${oracle.database}</oracle.userurl>
       <oracle.driver>oracle.jdbc.driver.OracleDriver</oracle.driver>
       <oracle.blobsupport>true</oracle.blobsupport>
       <oracle.callsupport>true</oracle.callsupport>
@@ -112,9 +124,12 @@
       <oracle.xasupport>true</oracle.xasupport>
       <oracle.cpoConfig>oracle/cpoConfig.xml</oracle.cpoConfig>
       <oracle.jndi>cpodatasource</oracle.jndi>
-      <oracle.class>oracle.jdbc.pool.OracleConnectionPoolDataSource</oracle.class>
-      <oracle.valueMeta>/oracle/classdef/oracleValueMetaData.xml</oracle.valueMeta>
-      <oracle.valueCaseMeta>/oracle/classdef/oracleValueCaseMetaData.xml</oracle.valueCaseMeta>
+      <oracle.class
+        >oracle.jdbc.pool.OracleConnectionPoolDataSource</oracle.class>
+      <oracle.valueMeta
+        >/oracle/classdef/oracleValueMetaData.xml</oracle.valueMeta>
+      <oracle.valueCaseMeta
+        >/oracle/classdef/oracleValueCaseMetaData.xml</oracle.valueCaseMeta>
       <oracle.lobMeta>/oracle/classdef/oracleLobMetaData.xml</oracle.lobMeta>
 <!--      <oracle.valueMeta>/common/ValueMetaData.xml</oracle.valueMeta>-->
 <!--      <oracle.valueCaseMeta>/common/ValueCaseMetaData.xml</oracle.valueCaseMeta>-->
@@ -130,14 +145,16 @@
       <h2.port>9123</h2.port>
       <h2.database>cpo</h2.database>
       <h2.url>jdbc:h2:tcp://${h2.host}:${h2.port}/${h2.database}</h2.url>
-      <h2.userurl>jdbc:h2:tcp://${h2.host}:${h2.port}/${h2.database};user=${h2.user};password=${h2.pswd}</h2.userurl>
+      <h2.userurl
+        >jdbc:h2:tcp://${h2.host}:${h2.port}/${h2.database};user=${h2.user};password=${h2.pswd}</h2.userurl>
       <h2.driver>org.h2.Driver</h2.driver>
       <h2.blobsupport>true</h2.blobsupport>
       <h2.callsupport>true</h2.callsupport>
       <h2.select4update>false</h2.select4update>
       <h2.millisupport>true</h2.millisupport>
       <h2.xasupport>true</h2.xasupport>
-      <h2.initScript>${basedir}/target/test-classes/h2/initDB.sql</h2.initScript>
+      <h2.initScript
+        >${basedir}/target/test-classes/h2/initDB.sql</h2.initScript>
       <h2.cpoConfig>h2/cpoConfig.xml</h2.cpoConfig>
       <h2.jndi>cpodatasource</h2.jndi>
       <h2.class>org.h2.jdbcx.JdbcDataSource</h2.class>
@@ -154,8 +171,10 @@
       <postgres.host>localhost</postgres.host>
       <postgres.port>5432</postgres.port>
       <postgres.database>cpo</postgres.database>
-      <postgres.url>jdbc:postgresql://${postgres.host}:${postgres.port}/${postgres.database}</postgres.url>
-      <postgres.userurl>jdbc:postgresql://${postgres.host}:${postgres.port}/${postgres.database}?user=${postgres.user}&amp;amp;password=${postgres.pswd}&amp;amp;stringtype=unspecified</postgres.userurl>
+      <postgres.url
+        >jdbc:postgresql://${postgres.host}:${postgres.port}/${postgres.database}</postgres.url>
+      <postgres.userurl
+        >jdbc:postgresql://${postgres.host}:${postgres.port}/${postgres.database}?user=${postgres.user}&amp;amp;password=${postgres.pswd}&amp;amp;stringtype=unspecified</postgres.userurl>
       <postgres.driver>org.postgresql.Driver</postgres.driver>
       <postgres.blobsupport>true</postgres.blobsupport>
       <postgres.callsupport>true</postgres.callsupport>
@@ -165,9 +184,11 @@
       <postgres.initScript>postgres/initDB.sql</postgres.initScript>
       <postgres.cpoConfig>postgres/cpoConfig.xml</postgres.cpoConfig>
       <postgres.jndi>java:/comp/env/jdbc/cpodatasource</postgres.jndi>
-      <postgres.class>org.postgresql.ds.PGConnectionPoolDataSource</postgres.class>
+      <postgres.class
+        >org.postgresql.ds.PGConnectionPoolDataSource</postgres.class>
       <postgres.valueMeta>/common/ValueMetaData.xml</postgres.valueMeta>
-      <postgres.valueCaseMeta>/common/ValueCaseMetaData.xml</postgres.valueCaseMeta>
+      <postgres.valueCaseMeta
+        >/common/ValueCaseMetaData.xml</postgres.valueCaseMeta>
       <postgres.lobMeta>/common/LobMetaData.xml</postgres.lobMeta>
   </properties>
   <build>
@@ -185,9 +206,12 @@
         <configuration>
             <suiteXmlFiles>
                 <suiteXmlFile>target/test-classes/h2/testng.xml</suiteXmlFile>
-                <suiteXmlFile>target/test-classes/mysql/testng.xml</suiteXmlFile>
-                <suiteXmlFile>target/test-classes/mariadb/testng.xml</suiteXmlFile>
-                <suiteXmlFile>target/test-classes/postgres/testng.xml</suiteXmlFile>
+                <suiteXmlFile
+                        >target/test-classes/mysql/testng.xml</suiteXmlFile>
+                <suiteXmlFile
+                        >target/test-classes/mariadb/testng.xml</suiteXmlFile>
+                <suiteXmlFile
+                        >target/test-classes/postgres/testng.xml</suiteXmlFile>
 <!--                <suiteXmlFile>target/test-classes/oracle/testng.xml</suiteXmlFile>-->
             </suiteXmlFiles>
         </configuration>
@@ -221,7 +245,8 @@
               <goal>generatejavasource</goal>
             </goals>
             <configuration>
-                <cpoConfig>${basedir}/src/test/resources/common/*.xml</cpoConfig>
+                <cpoConfig
+                            >${basedir}/src/test/resources/common/*.xml</cpoConfig>
 <!--                <cpoConfig>${basedir}/src/test/resources/oracle/classdef/*.xml</cpoConfig>-->
               <generateClass>true</generateClass>
               <generateInterface>true</generateInterface>

@@ -76,7 +76,10 @@
       <mariadb.host>localhost</mariadb.host>
       <mariadb.port>3306</mariadb.port>
       <mariadb.database>cpo</mariadb.database>
-      <mariadb.url>jdbc:mariadb://${mariadb.host}:${mariadb.port}/${mariadb.database}?useCursorFetch=true&amp;amp;cachePrepStmts=true&amp;amp;useServerPrepStmts=true&amp;amp;prepStmtCacheSize=250&amp;amp;prepStmtCacheSqlLimit=2048</mariadb.url>
+      <!-- server-side prepared statement caching combined with cursor fetch leaves stale
+           cursor state on cached statements, which MariaDB reports as error 1020 ("Record
+           has changed since last read") on later writes; keep only cursor fetch, like mysql -->
+      <mariadb.url>jdbc:mariadb://${mariadb.host}:${mariadb.port}/${mariadb.database}?useCursorFetch=true</mariadb.url>
       <mariadb.userurl>jdbc:mariadb://${mariadb.host}:${mariadb.port}/${mariadb.database}?user=${mariadb.user}&amp;amp;password=${mariadb.pswd}&amp;amp;useCursorFetch=true&amp;amp;cachePrepStmts=true&amp;amp;useServerPrepStmts=true&amp;amp;prepStmtCacheSize=250&amp;amp;prepStmtCacheSqlLimit=2048</mariadb.userurl>
       <mariadb.driver>org.mariadb.jdbc.Driver</mariadb.driver>
       <mariadb.blobsupport>true</mariadb.blobsupport>

@@ -155,7 +155,7 @@ public class CassandraCpoConfigProcessor implements CpoConfigProcessor {
     if (readWriteConfig.getCredentials() != null) {
       clusterInfo.setHasCredentials(true);
       clusterInfo.setUserName(readWriteConfig.getCredentials().getUser());
-      clusterInfo.setPassword(readWriteConfig.getCredentials().getUser());
+      clusterInfo.setPassword(readWriteConfig.getCredentials().getPassword());
     }
 
     // add addressTranslater
@@ -205,9 +205,11 @@ public class CassandraCpoConfigProcessor implements CpoConfigProcessor {
       clusterInfo.setUseJmxReporting(readWriteConfig.isJmxReporting());
 
     // add protocolVersion
+    // the JAXB enum's name (V_3) differs from its XML value (V3), which is what the
+    // driver's enum uses, so the value must be used for the lookup
     if (readWriteConfig.getProtocolVersion() != null)
       clusterInfo.setProtocolVersion(
-          ProtocolVersion.valueOf(readWriteConfig.getProtocolVersion().toString()));
+          ProtocolVersion.valueOf(readWriteConfig.getProtocolVersion().value()));
 
     // add pooling options
     if (readWriteConfig.getPoolingOptions() != null)

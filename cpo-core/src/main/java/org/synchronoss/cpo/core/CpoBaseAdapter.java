@@ -313,10 +313,12 @@ public abstract class CpoBaseAdapter<D> extends CpoAdapterCache implements CpoAd
       Collection<CpoOrderBy> orderBy,
       Collection<CpoNativeFunction> nativeExpressions)
       throws CpoException {
-    var optionalT =
-        processSelectGroup(groupName, criteria, result, wheres, orderBy, nativeExpressions, true)
-            .findFirst();
-    return optionalT.orElse(null);
+    // findFirst() short-circuits, so the stream must be closed to release the
+    // datastore resources backing it (statement, result set, pooled connection)
+    try (Stream<T> beans =
+        processSelectGroup(groupName, criteria, result, wheres, orderBy, nativeExpressions, true)) {
+      return beans.findFirst().orElse(null);
+    }
   }
 
   @Override

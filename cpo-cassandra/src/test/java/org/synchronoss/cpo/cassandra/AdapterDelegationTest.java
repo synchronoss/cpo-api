@@ -407,6 +407,66 @@ public class AdapterDelegationTest {
       assertNotNull(
           cpoAdapter.getCpoAttributes("select * from value_object"),
           method + "getCpoAttributes is null");
+
+      // an empty expression yields an empty attribute list
+      assertTrue(cpoAdapter.getCpoAttributes("").isEmpty(), method + "empty expression");
+
+      // columns aliased CPO_ATTRIBUTE/CPO_VALUE take the name-value pair path
+      assertNotNull(
+          cpoAdapter.getCpoAttributes(
+              "select attr_varchar as cpo_attribute, attr_int as cpo_value from value_object"),
+          method + "cpo_attribute/cpo_value query failed");
+    } catch (Exception e) {
+      fail(method + ExceptionHelper.getLocalizedMessage(e));
+    }
+  }
+
+  /** Null criteria beans are rejected by the retrieve path. */
+  @Test
+  public void testNullCriteriaRejected() {
+    expectThrows(
+        CpoException.class,
+        () -> cpoAdapter.retrieveBeans(ValueObject.FG_LIST_NULL, (ValueObject) null));
+    expectThrows(
+        CpoException.class,
+        () ->
+            cpoAdapter.retrieveBeans(
+                ValueObject.FG_LIST_NULL,
+                ValueObjectFactory.createValueObject(),
+                (ValueObject) null));
+    expectThrows(CpoException.class, () -> cpoAdapter.insertBean((ValueObject) null));
+    try {
+      assertTrue(cpoAdapter.getCpoAttributes(null).isEmpty(), "null expression");
+    } catch (CpoException acceptable) {
+      // acceptable: null expression may be rejected outright
+    }
+  }
+
+  /** No-op native expressions and empty clause collections walk the statement builder. */
+  @Test
+  public void testNativeExpressionAndEmptyCollectionVariants() throws Exception {
+    String method = "testNativeExpressionAndEmptyCollectionVariants:";
+    ValueObject vo = ValueObjectFactory.createValueObject(96);
+    al.add(vo);
+
+    try {
+      cpoAdapter.insertBean(vo);
+
+      // marker-less expressions get appended to the CQL, so only null/empty ones are no-ops
+      List<CpoNativeFunction> natives = new ArrayList<>();
+      natives.add(new CpoNativeFunction(null, null));
+      natives.add(new CpoNativeFunction("__NO_SUCH_MARKER__", ""));
+
+      try (Stream<ValueObject> s =
+          cpoAdapter.retrieveBeans(
+              ValueObject.FG_LIST_NULL,
+              ValueObjectFactory.createValueObject(),
+              ValueObjectFactory.createValueObject(),
+              new ArrayList<CpoWhere>(),
+              new ArrayList<CpoOrderBy>(),
+              natives)) {
+        assertEquals(s.count(), 1);
+      }
     } catch (Exception e) {
       fail(method + ExceptionHelper.getLocalizedMessage(e));
     }

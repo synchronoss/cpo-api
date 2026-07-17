@@ -1,8 +1,8 @@
-package org.synchronoss.cpo.cassandra.config;
+package org.synchronoss.cpo.core.meta;
 
 /*-
  * [[
- * cassandra
+ * core
  * ==
  * Copyright (C) 2003 - 2025 David E. Berry
  * ==
@@ -22,31 +22,17 @@ package org.synchronoss.cpo.cassandra.config;
  * ]]
  */
 
-import com.datastax.driver.core.policies.LoadBalancingPolicy;
+import org.synchronoss.cpo.core.CpoException;
 
-/**
- * Factory to construct a LoadBalancingPolicy
- *
- * @author dberry
- */
-public abstract class LoadBalancingPolicyFactory implements FactoryMethodName {
+/** A minimal concrete meta descriptor for core meta tests. */
+public class CoreTestMetaDescriptor extends CpoMetaDescriptor {
 
-  /** Constructs a LoadBalancingPolicyFactory */
-  public LoadBalancingPolicyFactory() {}
-
-  /**
-   * Get the factory method name
-   *
-   * @return The method name
-   */
-  public String getFactoryMethodName() {
-    return "createLoadBalancingPolicy";
+  public CoreTestMetaDescriptor(String name, boolean caseSensitive) throws CpoException {
+    super(name, caseSensitive);
   }
 
-  /**
-   * Create the LoadBalancingPolicy
-   *
-   * @return The LoadBalancingPolicy
-   */
-  public abstract LoadBalancingPolicy createLoadBalancingPolicy();
+  @Override
+  protected Class<?> getMetaAdapterClass() throws CpoException {
+    return CoreTestMetaAdapter.class;
+  }
 }

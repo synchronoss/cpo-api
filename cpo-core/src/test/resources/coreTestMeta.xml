@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  [[
+  plugin
+  ==
+  Copyright (C) 2003 - 2025 David E. Berry
+  ==
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU Lesser General Public License as
+  published by the Free Software Foundation, either version 3 of the
+  License, or (at your option) any later version.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Lesser Public License for more details.
+
+  You should have received a copy of the GNU General Lesser Public
+  License along with this program.  If not, see
+  <http://www.gnu.org/licenses/lgpl-3.0.html>.
+  ]]
+  -->
+<cpoMetaData metaDescriptor="org.synchronoss.cpo.core.meta.CoreTestMetaDescriptor" defaultPackageName="" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.synchronoss.org/cpo/CpoMeta.xsd">
+    <cpoClass name="org.synchronoss.cpo.core.meta.CoreTestBean">
+        <cpoAttribute xsi:type="ctAttribute">
+            <javaName>id</javaName>
+            <javaType>java.lang.String</javaType>
+            <dataName>id</dataName>
+            <dataType>VARCHAR</dataType>
+        </cpoAttribute>
+        <cpoAttribute xsi:type="ctAttribute">
+            <javaName>name</javaName>
+            <javaType>java.lang.String</javaType>
+            <dataName>name</dataName>
+            <dataType>VARCHAR</dataType>
+        </cpoAttribute>
+        <cpoAttribute xsi:type="ctAttribute">
+            <javaName>age</javaName>
+            <javaType>int</javaType>
+            <dataName>age</dataName>
+            <dataType>INT</dataType>
+        </cpoAttribute>
+        <cpoAttribute xsi:type="ctAttribute">
+            <javaName>data</javaName>
+            <javaType>byte[]</javaType>
+            <dataName>data</dataName>
+            <dataType>VARCHAR</dataType>
+        </cpoAttribute>
+        <cpoFunctionGroup name="createGroup" type="CREATE">
+            <cpoFunction name="createFunction">
+                <expression>insert into test_bean (id, name, age) values (?,?,?)</expression>
+                <cpoArgument xsi:type="ctArgument">
+                    <attributeName>id</attributeName>
+                </cpoArgument>
+                <cpoArgument xsi:type="ctArgument">
+                    <attributeName>name</attributeName>
+                </cpoArgument>
+                <cpoArgument xsi:type="ctArgument">
+                    <attributeName>age</attributeName>
+                </cpoArgument>
+            </cpoFunction>
+        </cpoFunctionGroup>
+        <cpoFunctionGroup name="listGroup" type="LIST">
+            <cpoFunction name="listFunction">
+                <expression>select id, name, age from test_bean</expression>
+            </cpoFunction>
+        </cpoFunctionGroup>
+    </cpoClass>
+</cpoMetaData>

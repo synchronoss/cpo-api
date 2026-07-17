@@ -1,8 +1,8 @@
-package org.synchronoss.cpo.cassandra.config;
+package org.synchronoss.cpo.core.meta;
 
 /*-
  * [[
- * cassandra
+ * core
  * ==
  * Copyright (C) 2003 - 2025 David E. Berry
  * ==
@@ -22,31 +22,44 @@ package org.synchronoss.cpo.cassandra.config;
  * ]]
  */
 
-import com.datastax.driver.core.policies.LoadBalancingPolicy;
+/** A simple bean matching the class declared in coreTestMeta.xml. */
+public class CoreTestBean {
+  private String id;
+  private String name;
+  private int age;
+  private byte[] data;
 
-/**
- * Factory to construct a LoadBalancingPolicy
- *
- * @author dberry
- */
-public abstract class LoadBalancingPolicyFactory implements FactoryMethodName {
+  public CoreTestBean() {}
 
-  /** Constructs a LoadBalancingPolicyFactory */
-  public LoadBalancingPolicyFactory() {}
-
-  /**
-   * Get the factory method name
-   *
-   * @return The method name
-   */
-  public String getFactoryMethodName() {
-    return "createLoadBalancingPolicy";
+  public String getId() {
+    return id;
   }
 
-  /**
-   * Create the LoadBalancingPolicy
-   *
-   * @return The LoadBalancingPolicy
-   */
-  public abstract LoadBalancingPolicy createLoadBalancingPolicy();
+  public void setId(String id) {
+    this.id = id;
+  }
+
+  public String getName() {
+    return name;
+  }
+
+  public void setName(String name) {
+    this.name = name;
+  }
+
+  public int getAge() {
+    return age;
+  }
+
+  public void setAge(int age) {
+    this.age = age;
+  }
+
+  public byte[] getData() {
+    return data;
+  }
+
+  public void setData(byte[] data) {
+    this.data = data;
+  }
 }

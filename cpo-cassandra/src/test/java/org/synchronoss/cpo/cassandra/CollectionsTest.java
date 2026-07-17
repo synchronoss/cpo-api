@@ -38,6 +38,9 @@ import org.testng.annotations.Test;
  * @author david berry
  */
 public class CollectionsTest {
+
+  // unique id base so this class's rows never collide with another test class's
+  private static final int IDB = 200000;
   private CpoAdapter cpoAdapter = null;
   private CpoAdapter readAdapter = null;
   private CassandraCpoMetaDescriptor metaDescriptor = null;
@@ -74,7 +77,7 @@ public class CollectionsTest {
   public void testList() {
     String method = "testList";
     String testString = "Test String!!!";
-    ValueObject valObj = ValueObjectFactory.createValueObject(0);
+    ValueObject valObj = ValueObjectFactory.createValueObject(IDB + 0);
     List<String> testList = new ArrayList<String>();
     testList.add(testString);
 
@@ -99,7 +102,7 @@ public class CollectionsTest {
   public void testSet() {
     String method = "testList";
     String testString = "One,Two,Three";
-    ValueObject valObj = ValueObjectFactory.createValueObject(1);
+    ValueObject valObj = ValueObjectFactory.createValueObject(IDB + 1);
     Set<String> testSet = new TreeSet<String>();
     testSet.add(testString);
 
@@ -125,7 +128,7 @@ public class CollectionsTest {
     String method = "testList";
     String testKey = "CT";
     String testValue = "Hartford";
-    ValueObject valObj = ValueObjectFactory.createValueObject(2);
+    ValueObject valObj = ValueObjectFactory.createValueObject(IDB + 2);
     Map<String, String> testMap = new HashMap<>();
     testMap.put(testKey, testValue);
 

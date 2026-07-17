@@ -45,6 +45,9 @@ import org.testng.annotations.Test;
  */
 public class BigRetrieveTest {
 
+  // unique id base so this class's rows never collide with another test class's
+  private static final int IDB = 200000;
+
   private static final Logger logger = LoggerFactory.getLogger(BigRetrieveTest.class);
   private ArrayList<ValueObject> al = new ArrayList<>();
   private CpoAdapter cpoAdapter = null;
@@ -86,7 +89,7 @@ public class BigRetrieveTest {
     cpoAdapter.setBatchSize(1000);
 
     for (int i = 0; i < numInserts; i++) {
-      al.add(ValueObjectFactory.createValueObject(i));
+      al.add(ValueObjectFactory.createValueObject(IDB + i));
     }
 
     try {
@@ -120,7 +123,10 @@ public class BigRetrieveTest {
       ValueObject valObj = ValueObjectFactory.createValueObject();
       try (Stream<ValueObject> beans =
           cpoAdapter.retrieveBeans(ValueObject.FG_LIST_NULL, valObj); ) {
-        long count = beans.count();
+        long count =
+            beans
+                .filter(b -> Math.abs(b.getId()) >= IDB && Math.abs(b.getId()) < IDB + 100000)
+                .count();
         assertEquals(count, al.size(), "Number of beans is " + count);
       }
     } catch (Exception e) {

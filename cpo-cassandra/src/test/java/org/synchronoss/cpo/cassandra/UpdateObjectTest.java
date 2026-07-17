@@ -45,6 +45,9 @@ import org.testng.annotations.Test;
  */
 public class UpdateObjectTest {
 
+  // unique id base so this class's rows never collide with another test class's
+  private static final int IDB = 1100000;
+
   private ArrayList<ValueObject> al = new ArrayList<>();
   private CpoAdapter cpoAdapter = null;
   private CassandraCpoMetaDescriptor metaDescriptor = null;
@@ -72,7 +75,7 @@ public class UpdateObjectTest {
   @Test
   public void testUpdateObject() {
     String method = "testUpdateObject:";
-    ValueObject valObj = ValueObjectFactory.createValueObject(5);
+    ValueObject valObj = ValueObjectFactory.createValueObject(IDB + 5);
 
     valObj.setAttrVarChar("testUpdate");
     valObj.setAttrInt(3);
@@ -97,7 +100,7 @@ public class UpdateObjectTest {
     // try the where on the update, should update 0
     try {
       List<CpoWhere> cws = new ArrayList<>();
-      cws.add(cpoAdapter.newWhere(Logical.NONE, "id", Comparison.EQ, 2));
+      cws.add(cpoAdapter.newWhere(Logical.NONE, "id", Comparison.EQ, IDB + 2));
       valObj.setAttrInt(4);
       cpoAdapter.updateBean(null, valObj, cws, null, null);
       ValueObject rObj = cpoAdapter.retrieveBean(valObj);
@@ -111,7 +114,7 @@ public class UpdateObjectTest {
     // try the where on the update, should update 1
     try {
       List<CpoWhere> cws = new ArrayList<>();
-      cws.add(cpoAdapter.newWhere(Logical.NONE, "id", Comparison.EQ, 5));
+      cws.add(cpoAdapter.newWhere(Logical.NONE, "id", Comparison.EQ, IDB + 5));
       cpoAdapter.updateBean(null, valObj, cws, null, null);
       ValueObject rObj = cpoAdapter.retrieveBean(valObj);
       assertEquals(rObj.getAttrInt(), valObj.getAttrInt(), "It should be equal since it updated");

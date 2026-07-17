@@ -47,6 +47,9 @@ import org.testng.annotations.Test;
 
 /** Created by dberry on 12/8/15. */
 public class JdbcXaResourceTest {
+
+  // unique id base so this class's rows never collide with another test class's
+  private static final int IDB = 2600000;
   private static final Logger logger = LoggerFactory.getLogger(JdbcXaResourceTest.class);
   private CpoAdapter cpoAdapter = null;
   private JdbcCpoXaAdapter cpoXaAdapter1 = null;
@@ -104,8 +107,8 @@ public class JdbcXaResourceTest {
   public void testCoordination() {
     if (isXaSupported) {
       String method = "testCoordination:";
-      ValueObject valObj1 = ValueObjectFactory.createValueObject(1);
-      ValueObject valObj2 = ValueObjectFactory.createValueObject(2);
+      ValueObject valObj1 = ValueObjectFactory.createValueObject(IDB + 1);
+      ValueObject valObj2 = ValueObjectFactory.createValueObject(IDB + 2);
       al.add(valObj1);
       al.add(valObj2);
 
@@ -133,12 +136,15 @@ public class JdbcXaResourceTest {
         ValueObject valObj = ValueObjectFactory.createValueObject();
         try (Stream<ValueObject> beans =
             cpoXaAdapter1.retrieveBeans(ValueObject.FG_LIST_NULL, valObj, colCob)) {
-          var list = beans.toList();
+          var list =
+              beans
+                  .filter(b -> Math.abs(b.getId()) >= IDB && Math.abs(b.getId()) < IDB + 100000)
+                  .toList();
           var rvo = list.getFirst();
-          assertEquals(rvo.getId(), 1, "1 != " + rvo.getId());
+          assertEquals(rvo.getId(), IDB + 1, "1 != " + rvo.getId());
           assertEquals(list.size(), 2, "list size is " + list.size());
-          assertEquals(list.get(0).getId(), 1, "ValuObject(1) is missing");
-          assertEquals(list.get(1).getId(), 2, "ValuObject(2) is missing");
+          assertEquals(list.get(0).getId(), IDB + 1, "ValuObject(1) is missing");
+          assertEquals(list.get(1).getId(), IDB + 2, "ValuObject(2) is missing");
           assertEquals(cpoXaAdapter1.deleteBeans(al), 2);
         }
       } catch (Exception e) {
@@ -163,8 +169,8 @@ public class JdbcXaResourceTest {
   public void testRollback() {
     if (isXaSupported) {
       String method = "testRollback:";
-      ValueObject valObj1 = ValueObjectFactory.createValueObject(1);
-      ValueObject valObj2 = ValueObjectFactory.createValueObject(2);
+      ValueObject valObj1 = ValueObjectFactory.createValueObject(IDB + 1);
+      ValueObject valObj2 = ValueObjectFactory.createValueObject(IDB + 2);
       al.add(valObj1);
       al.add(valObj2);
 
@@ -188,7 +194,10 @@ public class JdbcXaResourceTest {
         ValueObject valObj = ValueObjectFactory.createValueObject();
         try (Stream<ValueObject> beans =
             cpoAdapter.retrieveBeans(ValueObject.FG_LIST_NULL, valObj)) {
-          var list = beans.toList();
+          var list =
+              beans
+                  .filter(b -> Math.abs(b.getId()) >= IDB && Math.abs(b.getId()) < IDB + 100000)
+                  .toList();
           assertTrue(list.isEmpty(), "list SHOULD BE EMPTY");
         }
       } catch (Exception e) {
@@ -213,7 +222,7 @@ public class JdbcXaResourceTest {
   public void testRecover() {
     if (isXaSupported) {
       String method = "testRecover:";
-      ValueObject valObj = ValueObjectFactory.createValueObject(1);
+      ValueObject valObj = ValueObjectFactory.createValueObject(IDB + 1);
       al.add(valObj);
 
       Xid xid = new MyXid(100, new byte[] {0x01}, new byte[] {0x02});
@@ -290,7 +299,7 @@ public class JdbcXaResourceTest {
   public void testSuspendableTx() throws Exception {
     if (isXaSupported) {
       String method = "testSuspendableTx:";
-      ValueObject valObj = ValueObjectFactory.createValueObject(1);
+      ValueObject valObj = ValueObjectFactory.createValueObject(IDB + 1);
       al.add(valObj);
 
       Xid xid = new MyXid(100, new byte[] {0x01}, new byte[] {0x02});
@@ -330,7 +339,7 @@ public class JdbcXaResourceTest {
   public void testCommit() {
     if (isXaSupported) {
       String method = "testCommit:";
-      ValueObject valObj = ValueObjectFactory.createValueObject(1);
+      ValueObject valObj = ValueObjectFactory.createValueObject(IDB + 1);
       al.add(valObj);
       int ret;
 
@@ -369,7 +378,7 @@ public class JdbcXaResourceTest {
   public void testRollback2() {
     if (isXaSupported) {
       String method = "testRollback2:";
-      ValueObject valObj = ValueObjectFactory.createValueObject(1);
+      ValueObject valObj = ValueObjectFactory.createValueObject(IDB + 1);
       al.add(valObj);
       int ret;
 
@@ -407,9 +416,9 @@ public class JdbcXaResourceTest {
   public void testSuspend() {
     if (isXaSupported) {
       String method = "testSuspend:";
-      ValueObject valObj1 = ValueObjectFactory.createValueObject(1);
-      ValueObject valObj2 = ValueObjectFactory.createValueObject(2);
-      ValueObject valObj3 = ValueObjectFactory.createValueObject(3);
+      ValueObject valObj1 = ValueObjectFactory.createValueObject(IDB + 1);
+      ValueObject valObj2 = ValueObjectFactory.createValueObject(IDB + 2);
+      ValueObject valObj3 = ValueObjectFactory.createValueObject(IDB + 3);
       al.add(valObj1);
       al.add(valObj2);
       al.add(valObj3);
@@ -438,7 +447,10 @@ public class JdbcXaResourceTest {
         ValueObject valObj = ValueObjectFactory.createValueObject();
         try (Stream<ValueObject> beans =
             cpoAdapter.retrieveBeans(ValueObject.FG_LIST_NULL, valObj)) {
-          var list = beans.toList();
+          var list =
+              beans
+                  .filter(b -> Math.abs(b.getId()) >= IDB && Math.abs(b.getId()) < IDB + 100000)
+                  .toList();
           assertEquals(list.size(), 1, "list size is " + list.size());
           assertEquals(list.getFirst().getId(), valObj2.getId(), "valObj2 is missing");
         }
@@ -459,8 +471,8 @@ public class JdbcXaResourceTest {
   public void testMultiTrx() {
     if (isXaSupported) {
       String method = "testMultiTrx:";
-      ValueObject valObj1 = ValueObjectFactory.createValueObject(1);
-      ValueObject valObj2 = ValueObjectFactory.createValueObject(2);
+      ValueObject valObj1 = ValueObjectFactory.createValueObject(IDB + 1);
+      ValueObject valObj2 = ValueObjectFactory.createValueObject(IDB + 2);
       al.add(valObj1);
       al.add(valObj2);
       int ret;
@@ -494,7 +506,10 @@ public class JdbcXaResourceTest {
         ValueObject valObj = ValueObjectFactory.createValueObject();
         try (Stream<ValueObject> beans =
             cpoAdapter.retrieveBeans(ValueObject.FG_LIST_NULL, valObj)) {
-          var list = beans.toList();
+          var list =
+              beans
+                  .filter(b -> Math.abs(b.getId()) >= IDB && Math.abs(b.getId()) < IDB + 100000)
+                  .toList();
           assertEquals(list.size(), 1, "list size is " + list.size());
           assertEquals(list.getFirst().getId(), valObj1.getId(), "valObj2 is missing");
         }
@@ -519,8 +534,8 @@ public class JdbcXaResourceTest {
   public void testJoin() {
     if (isXaSupported) {
       String method = "testJoin:";
-      ValueObject valObj1 = ValueObjectFactory.createValueObject(1);
-      ValueObject valObj2 = ValueObjectFactory.createValueObject(2);
+      ValueObject valObj1 = ValueObjectFactory.createValueObject(IDB + 1);
+      ValueObject valObj2 = ValueObjectFactory.createValueObject(IDB + 2);
       al.add(valObj1);
       al.add(valObj2);
       int ret;
@@ -549,7 +564,10 @@ public class JdbcXaResourceTest {
         ValueObject valObj = ValueObjectFactory.createValueObject();
         try (Stream<ValueObject> beans =
             cpoAdapter.retrieveBeans(ValueObject.FG_LIST_NULL, valObj)) {
-          var list = beans.toList();
+          var list =
+              beans
+                  .filter(b -> Math.abs(b.getId()) >= IDB && Math.abs(b.getId()) < IDB + 100000)
+                  .toList();
           assertEquals(list.size(), 2, "list size is " + list.size());
         }
       } catch (Exception e) {
@@ -569,9 +587,9 @@ public class JdbcXaResourceTest {
   public void testRecover2() {
     if (isXaSupported) {
       String method = "testRecover2:";
-      ValueObject valObj1 = ValueObjectFactory.createValueObject(1);
-      ValueObject valObj2 = ValueObjectFactory.createValueObject(2);
-      ValueObject valObj3 = ValueObjectFactory.createValueObject(3);
+      ValueObject valObj1 = ValueObjectFactory.createValueObject(IDB + 1);
+      ValueObject valObj2 = ValueObjectFactory.createValueObject(IDB + 2);
+      ValueObject valObj3 = ValueObjectFactory.createValueObject(IDB + 3);
       al.add(valObj1);
       al.add(valObj2);
       al.add(valObj3);

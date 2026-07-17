@@ -48,6 +48,9 @@ import org.testng.annotations.Test;
  */
 public class DeleteObjectTest {
 
+  // unique id base so this class's rows never collide with another test class's
+  private static final int IDB = 800000;
+
   private static final Logger logger = LoggerFactory.getLogger(DeleteObjectTest.class);
   private final ArrayList<ValueObject> al = new ArrayList<>();
   private CpoAdapter cpoAdapter = null;
@@ -79,7 +82,7 @@ public class DeleteObjectTest {
   @Test
   public void testDeleteObject() {
     String method = "testDeleteObject:";
-    ValueObject valObj = ValueObjectFactory.createValueObject(5);
+    ValueObject valObj = ValueObjectFactory.createValueObject(IDB + 5);
 
     valObj.setAttrVarChar("testDelete");
     valObj.setAttrInteger(3);
@@ -105,7 +108,7 @@ public class DeleteObjectTest {
     // try the where on the delete, should delete 0
     try {
       List<CpoWhere> cws = new ArrayList<>();
-      cws.add(cpoAdapter.newWhere(Logical.AND, ValueObject.ATTR_ID, Comparison.EQ, 2));
+      cws.add(cpoAdapter.newWhere(Logical.AND, ValueObject.ATTR_ID, Comparison.EQ, IDB + 2));
       long deleted = cpoAdapter.deleteBean(ValueObject.FG_DELETE_NULL, valObj, cws, null, null);
       assertEquals(deleted, 0, "Should not have deleted anything");
     } catch (Exception e) {
@@ -116,7 +119,7 @@ public class DeleteObjectTest {
     // try the where on the delete, should delete 1
     try {
       List<CpoWhere> cws = new ArrayList<>();
-      cws.add(cpoAdapter.newWhere(Logical.OR, ValueObject.ATTR_ID, Comparison.EQ, 2));
+      cws.add(cpoAdapter.newWhere(Logical.OR, ValueObject.ATTR_ID, Comparison.EQ, IDB + 2));
       long deleted = cpoAdapter.deleteBean(ValueObject.FG_DELETE_NULL, valObj, cws, null, null);
       assertEquals(deleted, 1, "Should have deleted 1");
     } catch (Exception e) {

@@ -40,6 +40,9 @@ import org.testng.annotations.Test;
  */
 public class OrderByTest {
 
+  // unique id base so this class's rows never collide with another test class's
+  private static final int IDB = 900000;
+
   private CpoAdapter cpoAdapter = null;
   private ArrayList<ValueObject> al = new ArrayList<>();
 
@@ -61,11 +64,11 @@ public class OrderByTest {
       fail(method + e.getMessage());
     }
 
-    al.add(ValueObjectFactory.createValueObject(1));
-    al.add(ValueObjectFactory.createValueObject(2));
-    al.add(ValueObjectFactory.createValueObject(3));
-    al.add(ValueObjectFactory.createValueObject(4));
-    al.add(ValueObjectFactory.createValueObject(5));
+    al.add(ValueObjectFactory.createValueObject(IDB + 1));
+    al.add(ValueObjectFactory.createValueObject(IDB + 2));
+    al.add(ValueObjectFactory.createValueObject(IDB + 3));
+    al.add(ValueObjectFactory.createValueObject(IDB + 4));
+    al.add(ValueObjectFactory.createValueObject(IDB + 5));
     try {
       cpoAdapter.insertBeans("TestOrderByInsert", al);
     } catch (Exception e) {
@@ -168,7 +171,7 @@ public class OrderByTest {
     //    String method = "testOrderByAscending:";
     //    Collection<ValueObject> col;
     //
-    //    ValueObject vobj = ValueObjectFactory.createValueObject(-6);
+    //    ValueObject vobj = ValueObjectFactory.createValueObject(IDB + -6);
     //    try {
     //      cpoAdapter.insertObject("TestOrderByInsert", vobj);
     //    } catch (Exception e) {

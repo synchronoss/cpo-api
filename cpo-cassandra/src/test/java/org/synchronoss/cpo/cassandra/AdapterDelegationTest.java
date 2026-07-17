@@ -46,6 +46,9 @@ import org.testng.annotations.Test;
  * delegation coverage of the JDBC XA adapter tests.
  */
 public class AdapterDelegationTest {
+
+  // unique id base so this class's rows never collide with another test class's
+  private static final int IDB = 100000;
   private CpoAdapter cpoAdapter = null;
   private final ArrayList<ValueObject> al = new ArrayList<>();
 
@@ -78,13 +81,13 @@ public class AdapterDelegationTest {
   @Test
   public void testInsertAndExistsDelegation() {
     String method = "testInsertAndExistsDelegation:";
-    ValueObject vo1 = ValueObjectFactory.createValueObject(61);
-    ValueObject vo2 = ValueObjectFactory.createValueObject(62);
-    ValueObject vo3 = ValueObjectFactory.createValueObject(63);
-    ValueObject vo4 = ValueObjectFactory.createValueObject(64);
-    ValueObject vo5 = ValueObjectFactory.createValueObject(65);
-    ValueObject vo6 = ValueObjectFactory.createValueObject(66);
-    ValueObject vo7 = ValueObjectFactory.createValueObject(67);
+    ValueObject vo1 = ValueObjectFactory.createValueObject(IDB + 61);
+    ValueObject vo2 = ValueObjectFactory.createValueObject(IDB + 62);
+    ValueObject vo3 = ValueObjectFactory.createValueObject(IDB + 63);
+    ValueObject vo4 = ValueObjectFactory.createValueObject(IDB + 64);
+    ValueObject vo5 = ValueObjectFactory.createValueObject(IDB + 65);
+    ValueObject vo6 = ValueObjectFactory.createValueObject(IDB + 66);
+    ValueObject vo7 = ValueObjectFactory.createValueObject(IDB + 67);
     vo3.setAttrInt(3);
     al.add(vo1);
     al.add(vo2);
@@ -127,8 +130,8 @@ public class AdapterDelegationTest {
   @Test
   public void testRetrieveDelegation() {
     String method = "testRetrieveDelegation:";
-    ValueObject vo1 = ValueObjectFactory.createValueObject(71);
-    ValueObject vo2 = ValueObjectFactory.createValueObject(72);
+    ValueObject vo1 = ValueObjectFactory.createValueObject(IDB + 71);
+    ValueObject vo2 = ValueObjectFactory.createValueObject(IDB + 72);
     al.add(vo1);
     al.add(vo2);
 
@@ -138,23 +141,23 @@ public class AdapterDelegationTest {
       beans.add(vo2);
       cpoAdapter.insertBeans(beans);
 
-      CpoWhere where = cpoAdapter.newWhere(Logical.NONE, "id", Comparison.EQ, 71);
+      CpoWhere where = cpoAdapter.newWhere(Logical.NONE, "id", Comparison.EQ, IDB + 71);
       Collection<CpoWhere> wheres = new ArrayList<>();
-      wheres.add(cpoAdapter.newWhere(Logical.NONE, "id", Comparison.EQ, 71));
+      wheres.add(cpoAdapter.newWhere(Logical.NONE, "id", Comparison.EQ, IDB + 71));
       ValueObject criteria = ValueObjectFactory.createValueObject();
 
       // retrieveBean overloads
       assertNotNull(
-          cpoAdapter.retrieveBean(ValueObjectFactory.createValueObject(71)),
+          cpoAdapter.retrieveBean(ValueObjectFactory.createValueObject(IDB + 71)),
           method + "retrieveBean(bean) returned null");
       assertNotNull(
           cpoAdapter.retrieveBean(
-              ValueObject.FG_RETRIEVE_NULL, ValueObjectFactory.createValueObject(71)),
+              ValueObject.FG_RETRIEVE_NULL, ValueObjectFactory.createValueObject(IDB + 71)),
           method + "retrieveBean(group, bean) returned null");
       assertNotNull(
           cpoAdapter.retrieveBean(
               ValueObject.FG_RETRIEVE_NULL,
-              ValueObjectFactory.createValueObject(71),
+              ValueObjectFactory.createValueObject(IDB + 71),
               (Collection<CpoWhere>) null,
               (Collection<CpoOrderBy>) null,
               (Collection<CpoNativeFunction>) null),
@@ -162,7 +165,7 @@ public class AdapterDelegationTest {
       assertNotNull(
           cpoAdapter.retrieveBean(
               ValueObject.FG_RETRIEVE_NULL,
-              ValueObjectFactory.createValueObject(71),
+              ValueObjectFactory.createValueObject(IDB + 71),
               ValueObjectFactory.createValueObject(),
               null,
               null),
@@ -170,7 +173,7 @@ public class AdapterDelegationTest {
       assertNotNull(
           cpoAdapter.retrieveBean(
               ValueObject.FG_RETRIEVE_NULL,
-              ValueObjectFactory.createValueObject(71),
+              ValueObjectFactory.createValueObject(IDB + 71),
               ValueObjectFactory.createValueObject(),
               null,
               null,
@@ -179,25 +182,35 @@ public class AdapterDelegationTest {
 
       // retrieveBeans overloads
       try (Stream<ValueObject> s = cpoAdapter.retrieveBeans(ValueObject.FG_LIST_NULL, criteria)) {
-        assertEquals(s.count(), 2);
+        assertEquals(
+            s.filter(b -> Math.abs(b.getId()) >= IDB && Math.abs(b.getId()) < IDB + 100000).count(),
+            2);
       }
       try (Stream<ValueObject> s =
           cpoAdapter.retrieveBeans(ValueObject.FG_LIST_TESTWHERERETRIEVE, criteria, where, null)) {
-        assertEquals(s.count(), 1);
+        assertEquals(
+            s.filter(b -> Math.abs(b.getId()) >= IDB && Math.abs(b.getId()) < IDB + 100000).count(),
+            1);
       }
       try (Stream<ValueObject> s =
           cpoAdapter.retrieveBeans(
               ValueObject.FG_LIST_NULL, criteria, (Collection<CpoOrderBy>) null)) {
-        assertEquals(s.count(), 2);
+        assertEquals(
+            s.filter(b -> Math.abs(b.getId()) >= IDB && Math.abs(b.getId()) < IDB + 100000).count(),
+            2);
       }
       try (Stream<ValueObject> s =
           cpoAdapter.retrieveBeans(ValueObject.FG_LIST_TESTWHERERETRIEVE, criteria, wheres, null)) {
-        assertEquals(s.count(), 1);
+        assertEquals(
+            s.filter(b -> Math.abs(b.getId()) >= IDB && Math.abs(b.getId()) < IDB + 100000).count(),
+            1);
       }
       try (Stream<ValueObject> s =
           cpoAdapter.retrieveBeans(
               ValueObject.FG_LIST_NULL, criteria, ValueObjectFactory.createValueObject())) {
-        assertEquals(s.count(), 2);
+        assertEquals(
+            s.filter(b -> Math.abs(b.getId()) >= IDB && Math.abs(b.getId()) < IDB + 100000).count(),
+            2);
       }
       try (Stream<ValueObject> s =
           cpoAdapter.retrieveBeans(
@@ -206,7 +219,9 @@ public class AdapterDelegationTest {
               ValueObjectFactory.createValueObject(),
               where,
               null)) {
-        assertEquals(s.count(), 1);
+        assertEquals(
+            s.filter(b -> Math.abs(b.getId()) >= IDB && Math.abs(b.getId()) < IDB + 100000).count(),
+            1);
       }
       try (Stream<ValueObject> s =
           cpoAdapter.retrieveBeans(
@@ -215,7 +230,9 @@ public class AdapterDelegationTest {
               ValueObjectFactory.createValueObject(),
               wheres,
               null)) {
-        assertEquals(s.count(), 1);
+        assertEquals(
+            s.filter(b -> Math.abs(b.getId()) >= IDB && Math.abs(b.getId()) < IDB + 100000).count(),
+            1);
       }
       try (Stream<ValueObject> s =
           cpoAdapter.retrieveBeans(
@@ -225,7 +242,9 @@ public class AdapterDelegationTest {
               null,
               null,
               null)) {
-        assertEquals(s.count(), 2);
+        assertEquals(
+            s.filter(b -> Math.abs(b.getId()) >= IDB && Math.abs(b.getId()) < IDB + 100000).count(),
+            2);
       }
     } catch (Exception e) {
       fail(method + ExceptionHelper.getLocalizedMessage(e));
@@ -236,12 +255,12 @@ public class AdapterDelegationTest {
   @Test
   public void testUpdateAndDeleteDelegation() {
     String method = "testUpdateAndDeleteDelegation:";
-    ValueObject vo1 = ValueObjectFactory.createValueObject(81);
-    ValueObject vo2 = ValueObjectFactory.createValueObject(82);
-    ValueObject vo3 = ValueObjectFactory.createValueObject(83);
-    ValueObject vo4 = ValueObjectFactory.createValueObject(84);
-    ValueObject vo5 = ValueObjectFactory.createValueObject(85);
-    ValueObject vo6 = ValueObjectFactory.createValueObject(86);
+    ValueObject vo1 = ValueObjectFactory.createValueObject(IDB + 81);
+    ValueObject vo2 = ValueObjectFactory.createValueObject(IDB + 82);
+    ValueObject vo3 = ValueObjectFactory.createValueObject(IDB + 83);
+    ValueObject vo4 = ValueObjectFactory.createValueObject(IDB + 84);
+    ValueObject vo5 = ValueObjectFactory.createValueObject(IDB + 85);
+    ValueObject vo6 = ValueObjectFactory.createValueObject(IDB + 86);
     al.add(vo1);
     al.add(vo2);
     al.add(vo3);
@@ -256,16 +275,16 @@ public class AdapterDelegationTest {
       // WHERE clause — CQL requires one, so updates only work with programmatic wheres.
       vo1.setAttrInt(9);
       Collection<CpoWhere> cws = new ArrayList<>();
-      cws.add(cpoAdapter.newWhere(Logical.NONE, "id", Comparison.EQ, 81));
+      cws.add(cpoAdapter.newWhere(Logical.NONE, "id", Comparison.EQ, IDB + 81));
       cpoAdapter.updateBean(ValueObject.FG_UPDATE_NULL, vo1, cws, null, null);
 
       List<ValueObject> updBeans = new ArrayList<>();
       updBeans.add(vo1);
       Collection<CpoWhere> cws2 = new ArrayList<>();
-      cws2.add(cpoAdapter.newWhere(Logical.NONE, "id", Comparison.EQ, 81));
+      cws2.add(cpoAdapter.newWhere(Logical.NONE, "id", Comparison.EQ, IDB + 81));
       cpoAdapter.updateBeans(ValueObject.FG_UPDATE_NULL, updBeans, cws2, null, null);
 
-      ValueObject rvo = cpoAdapter.retrieveBean(ValueObjectFactory.createValueObject(81));
+      ValueObject rvo = cpoAdapter.retrieveBean(ValueObjectFactory.createValueObject(IDB + 81));
       assertEquals(rvo.getAttrInt(), 9, method + "update did not stick");
 
       // without wheres the missing WHERE clause must surface as a CpoException
@@ -311,10 +330,10 @@ public class AdapterDelegationTest {
   @Test
   public void testUpsertDelegation() {
     String method = "testUpsertDelegation:";
-    ValueObject vo1 = ValueObjectFactory.createValueObject(91);
-    ValueObject vo2 = ValueObjectFactory.createValueObject(92);
-    ValueObject vo3 = ValueObjectFactory.createValueObject(93);
-    ValueObject vo4 = ValueObjectFactory.createValueObject(94);
+    ValueObject vo1 = ValueObjectFactory.createValueObject(IDB + 91);
+    ValueObject vo2 = ValueObjectFactory.createValueObject(IDB + 92);
+    ValueObject vo3 = ValueObjectFactory.createValueObject(IDB + 93);
+    ValueObject vo4 = ValueObjectFactory.createValueObject(IDB + 94);
     al.add(vo1);
     al.add(vo2);
     al.add(vo3);
@@ -348,7 +367,7 @@ public class AdapterDelegationTest {
   /** Execute functions are not supported in Cassandra; every overload must say so. */
   @Test
   public void testExecuteUnsupported() {
-    ValueObject vo = ValueObjectFactory.createValueObject(95);
+    ValueObject vo = ValueObjectFactory.createValueObject(IDB + 95);
     expectThrows(UnsupportedOperationException.class, () -> cpoAdapter.executeBean(vo));
     expectThrows(UnsupportedOperationException.class, () -> cpoAdapter.executeBean("AnyGroup", vo));
     expectThrows(
@@ -446,7 +465,7 @@ public class AdapterDelegationTest {
   @Test
   public void testNativeExpressionAndEmptyCollectionVariants() throws Exception {
     String method = "testNativeExpressionAndEmptyCollectionVariants:";
-    ValueObject vo = ValueObjectFactory.createValueObject(96);
+    ValueObject vo = ValueObjectFactory.createValueObject(IDB + 96);
     al.add(vo);
 
     try {
@@ -465,7 +484,9 @@ public class AdapterDelegationTest {
               new ArrayList<CpoWhere>(),
               new ArrayList<CpoOrderBy>(),
               natives)) {
-        assertEquals(s.count(), 1);
+        assertEquals(
+            s.filter(b -> Math.abs(b.getId()) >= IDB && Math.abs(b.getId()) < IDB + 100000).count(),
+            1);
       }
     } catch (Exception e) {
       fail(method + ExceptionHelper.getLocalizedMessage(e));

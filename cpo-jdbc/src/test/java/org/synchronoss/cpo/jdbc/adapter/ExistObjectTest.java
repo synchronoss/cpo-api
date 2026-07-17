@@ -45,6 +45,9 @@ import org.testng.annotations.Test;
  */
 public class ExistObjectTest {
 
+  // unique id base so this class's rows never collide with another test class's
+  private static final int IDB = 1100000;
+
   private static final Logger logger = LoggerFactory.getLogger(ExistObjectTest.class);
   private CpoAdapter cpoAdapter = null;
 
@@ -67,7 +70,7 @@ public class ExistObjectTest {
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
-    ValueObject vo = ValueObjectFactory.createValueObject(1);
+    ValueObject vo = ValueObjectFactory.createValueObject(IDB + 1);
     vo.setAttrVarChar("WHERE");
 
     try {
@@ -84,7 +87,7 @@ public class ExistObjectTest {
     String method = "testExistObject:";
 
     try {
-      ValueObject valObj = ValueObjectFactory.createValueObject(1);
+      ValueObject valObj = ValueObjectFactory.createValueObject(IDB + 1);
       long count = cpoAdapter.existsBean(valObj);
       assertEquals(count, 1, "Object not Found");
     } catch (Exception e) {
@@ -92,7 +95,7 @@ public class ExistObjectTest {
     }
 
     try {
-      ValueObject valObj = ValueObjectFactory.createValueObject(5);
+      ValueObject valObj = ValueObjectFactory.createValueObject(IDB + 5);
       long count = cpoAdapter.existsBean(valObj);
       assertEquals(count, 0, "Object Found");
     } catch (Exception e) {
@@ -105,7 +108,7 @@ public class ExistObjectTest {
     String method = "testExistObjectWhere:";
 
     try {
-      ValueObject valObj = ValueObjectFactory.createValueObject(1);
+      ValueObject valObj = ValueObjectFactory.createValueObject(IDB + 1);
       CpoWhere where =
           cpoAdapter.newWhere(Logical.AND, ValueObject.ATTR_ATTRVARCHAR, Comparison.EQ, "WHERE");
       ArrayList<CpoWhere> wheres = new ArrayList<>();
@@ -117,7 +120,7 @@ public class ExistObjectTest {
     }
 
     try {
-      ValueObject valObj = ValueObjectFactory.createValueObject(1);
+      ValueObject valObj = ValueObjectFactory.createValueObject(IDB + 1);
       CpoWhere where =
           cpoAdapter.newWhere(Logical.AND, ValueObject.ATTR_ATTRVARCHAR, Comparison.EQ, "NOWHERE");
       ArrayList<CpoWhere> wheres = new ArrayList<>();
@@ -131,7 +134,7 @@ public class ExistObjectTest {
 
   @AfterClass
   public void tearDown() {
-    ValueObject vo = ValueObjectFactory.createValueObject(1);
+    ValueObject vo = ValueObjectFactory.createValueObject(IDB + 1);
     try {
       long count = cpoAdapter.deleteBean(vo);
       assertEquals(count, 1, "Should be deleted");

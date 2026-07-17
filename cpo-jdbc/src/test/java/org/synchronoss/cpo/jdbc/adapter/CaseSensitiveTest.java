@@ -42,6 +42,9 @@ import org.testng.annotations.Test;
  */
 public class CaseSensitiveTest {
 
+  // unique id base so this class's rows never collide with another test class's
+  private static final int IDB = 600000;
+
   private final ArrayList<CaseValueObject> al = new ArrayList<>();
   private CpoAdapter cpoAdapter = null;
   private CpoAdapter readAdapter = null;
@@ -82,7 +85,7 @@ public class CaseSensitiveTest {
   public void testCaseSensitiveObject() {
     String method = "testCaseSensitiveObject:";
     CaseValueObject valObj = new CaseValueObjectBean();
-    valObj.setId(5);
+    valObj.setId(IDB + 5);
 
     valObj.setAttrVarChar("testCaseSensitiveObject");
     valObj.setAttrInteger(3);

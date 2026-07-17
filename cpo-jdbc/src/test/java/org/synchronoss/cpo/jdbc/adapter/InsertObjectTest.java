@@ -43,6 +43,9 @@ import org.testng.annotations.Test;
  */
 public class InsertObjectTest {
 
+  // unique id base so this class's rows never collide with another test class's
+  private static final int IDB = 1400000;
+
   private final ArrayList<ValueObject> al = new ArrayList<>();
   private CpoAdapter cpoAdapter = null;
   private CpoAdapter readAdapter = null;
@@ -80,7 +83,7 @@ public class InsertObjectTest {
   @Test
   public void testInsertObject() {
     String method = "testInsertObject:";
-    ValueObject valObj = ValueObjectFactory.createValueObject(5);
+    ValueObject valObj = ValueObjectFactory.createValueObject(IDB + 5);
 
     valObj.setAttrVarChar("testInsert");
     valObj.setAttrInteger(3);
@@ -130,13 +133,13 @@ public class InsertObjectTest {
   public void testInsertObjects() {
 
     String method = "testInsertObjects:";
-    ValueObject vo = ValueObjectFactory.createValueObject(61);
+    ValueObject vo = ValueObjectFactory.createValueObject(IDB + 61);
     vo.setAttrVarChar("Test");
     ArrayList<ValueObject> a2 = new ArrayList<>();
     a2.add(vo);
-    a2.add(ValueObjectFactory.createValueObject(62));
-    a2.add(ValueObjectFactory.createValueObject(63));
-    a2.add(ValueObjectFactory.createValueObject(64));
+    a2.add(ValueObjectFactory.createValueObject(IDB + 62));
+    a2.add(ValueObjectFactory.createValueObject(IDB + 63));
+    a2.add(ValueObjectFactory.createValueObject(IDB + 64));
     al.addAll(a2);
     try {
       long inserts = cpoAdapter.insertBeans(a2);
@@ -146,7 +149,10 @@ public class InsertObjectTest {
     }
 
     try (Stream<ValueObject> beans = cpoAdapter.retrieveBeans(ValueObject.FG_LIST_NULL, vo); ) {
-      long count = beans.count();
+      long count =
+          beans
+              .filter(b -> Math.abs(b.getId()) >= IDB && Math.abs(b.getId()) < IDB + 100000)
+              .count();
       assertEquals(count, a2.size(), "Number of beans is " + count);
     } catch (Exception e) {
       fail(method + e.getMessage());

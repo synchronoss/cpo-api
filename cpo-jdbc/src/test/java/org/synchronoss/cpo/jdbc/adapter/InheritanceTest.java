@@ -41,6 +41,9 @@ import org.testng.annotations.Test;
  */
 public class InheritanceTest {
 
+  // unique id base so this class's rows never collide with another test class's
+  private static final int IDB = 1300000;
+
   private ArrayList<ChildValueObject> al = new ArrayList<>();
   private CpoAdapter cpoAdapter = null;
   private boolean isSupportsMillis = true;
@@ -73,7 +76,7 @@ public class InheritanceTest {
     String method = "testInsertObject:";
     ChildValueObject valObj = new ChildValueObject();
 
-    valObj.setId(5);
+    valObj.setId(IDB + 5);
     valObj.setAttrVarChar("testInsert");
     valObj.setAttrInteger(3);
     Timestamp ts = new Timestamp(System.currentTimeMillis());

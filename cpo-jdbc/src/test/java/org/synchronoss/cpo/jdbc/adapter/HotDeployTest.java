@@ -46,6 +46,9 @@ import org.testng.annotations.Test;
  * @author david berry
  */
 public class HotDeployTest {
+
+  // unique id base so this class's rows never collide with another test class's
+  private static final int IDB = 1200000;
   private static final Logger logger = LoggerFactory.getLogger(HotDeployTest.class);
   private CpoAdapter cpoAdapter = null;
   private final ArrayList<ValueObject> al = new ArrayList<>();
@@ -74,16 +77,16 @@ public class HotDeployTest {
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
-    ValueObject vo = ValueObjectFactory.createValueObject(1);
+    ValueObject vo = ValueObjectFactory.createValueObject(IDB + 1);
     vo.setAttrVarChar("Test");
     vo.setAttrSmallInt((short) 1);
     vo.setAttrInteger(1);
     al.add(vo);
-    al.add(ValueObjectFactory.createValueObject(2));
-    al.add(ValueObjectFactory.createValueObject(3));
-    al.add(ValueObjectFactory.createValueObject(4));
-    al.add(ValueObjectFactory.createValueObject(5));
-    al.add(ValueObjectFactory.createValueObject(-6));
+    al.add(ValueObjectFactory.createValueObject(IDB + 2));
+    al.add(ValueObjectFactory.createValueObject(IDB + 3));
+    al.add(ValueObjectFactory.createValueObject(IDB + 4));
+    al.add(ValueObjectFactory.createValueObject(IDB + 5));
+    al.add(ValueObjectFactory.createValueObject(-(IDB + 6)));
     try {
       cpoAdapter.insertBeans(ValueObject.FG_CREATE_TESTORDERBYINSERT, al);
     } catch (Exception e) {
@@ -102,12 +105,18 @@ public class HotDeployTest {
       // make sure the default retrieve works
       try (Stream<ValueObject> beans =
           cpoAdapter.retrieveBeans(ValueObject.FG_LIST_NULL, valObj, valObj); ) {
-        long count = beans.count();
+        long count =
+            beans
+                .filter(b -> Math.abs(b.getId()) >= IDB && Math.abs(b.getId()) < IDB + 100000)
+                .count();
         assertEquals(count, 6, "Number of beans is " + count);
       }
 
       try (Stream<ValueObject> beans = cpoAdapter.retrieveBeans("HotDeploySelect", valObj); ) {
-        long count = beans.count();
+        long count =
+            beans
+                .filter(b -> Math.abs(b.getId()) >= IDB && Math.abs(b.getId()) < IDB + 100000)
+                .count();
         fail(method + "Test got to unreachable code " + count);
       }
     } catch (Exception e) {
@@ -119,21 +128,27 @@ public class HotDeployTest {
       metaFiles.add("/hotDeployMetaData.xml");
       cpoAdapter.getCpoMetaDescriptor().refreshDescriptorMeta(metaFiles);
 
-      ValueObject valObj = ValueObjectFactory.createValueObject(2);
+      ValueObject valObj = ValueObjectFactory.createValueObject(IDB + 2);
 
       // make sure the default retrieve still works
       List<ValueObject> list1;
       // make sure the default retrieve still works
       try (Stream<ValueObject> beans =
           cpoAdapter.retrieveBeans(ValueObject.FG_LIST_NULL, valObj, valObj); ) {
-        list1 = beans.toList();
+        list1 =
+            beans
+                .filter(b -> Math.abs(b.getId()) >= IDB && Math.abs(b.getId()) < IDB + 100000)
+                .toList();
       }
       assertNotNull(list1);
       assertEquals(list1.size(), 6, "Number of beans is " + list1.size());
 
       List<ValueObject> list2;
       try (Stream<ValueObject> beans = cpoAdapter.retrieveBeans("HotDeploySelect", valObj); ) {
-        list2 = beans.toList();
+        list2 =
+            beans
+                .filter(b -> Math.abs(b.getId()) >= IDB && Math.abs(b.getId()) < IDB + 100000)
+                .toList();
       }
       assertNotNull(list2);
       assertEquals(list2.size(), 6, "Number of beans is " + list2.size());
@@ -159,12 +174,18 @@ public class HotDeployTest {
 
       try (Stream<ValueObject> beans =
           cpoAdapter.retrieveBeans(ValueObject.FG_LIST_NULL, valObj, valObj); ) {
-        long count = beans.count();
+        long count =
+            beans
+                .filter(b -> Math.abs(b.getId()) >= IDB && Math.abs(b.getId()) < IDB + 100000)
+                .count();
         assertEquals(count, 6, "Number of beans is " + count);
       }
 
       try (Stream<ValueObject> beans = cpoAdapter.retrieveBeans("HotDeploySelect", valObj); ) {
-        long count = beans.count();
+        long count =
+            beans
+                .filter(b -> Math.abs(b.getId()) >= IDB && Math.abs(b.getId()) < IDB + 100000)
+                .count();
         fail(method + "Test got to unreachable code " + count);
       }
     } catch (Exception e) {
@@ -176,11 +197,14 @@ public class HotDeployTest {
       metaFiles.add("/hotDeployMetaData.xml");
       cpoAdapter.getCpoMetaDescriptor().refreshDescriptorMeta(metaFiles, true);
 
-      ValueObject valObj = ValueObjectFactory.createValueObject(2);
+      ValueObject valObj = ValueObjectFactory.createValueObject(IDB + 2);
 
       try (Stream<ValueObject> beans =
           cpoAdapter.retrieveBeans(ValueObject.FG_LIST_NULL, valObj, valObj); ) {
-        long count = beans.count();
+        long count =
+            beans
+                .filter(b -> Math.abs(b.getId()) >= IDB && Math.abs(b.getId()) < IDB + 100000)
+                .count();
         assertEquals(count, 6, "Number of beans is " + count);
         fail(method + "Test got to unreachable code " + count);
       } catch (CpoException ce) {
@@ -188,8 +212,10 @@ public class HotDeployTest {
       }
 
       try (Stream<ValueObject> beans = cpoAdapter.retrieveBeans("HotDeploySelect", valObj); ) {
+        // the overwrite meta maps no attributes, so ids are unreadable and the count
+        // cannot be scoped to this class's rows; other classes' rows may add to it
         long count = beans.count();
-        assertEquals(count, 6, "Number of beans is " + count);
+        assertTrue(count >= 6, "Number of beans is " + count);
       }
     } catch (Exception e) {
       String msg = ExceptionHelper.getLocalizedMessage(e);

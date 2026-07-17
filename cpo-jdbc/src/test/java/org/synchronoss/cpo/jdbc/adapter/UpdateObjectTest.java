@@ -45,6 +45,9 @@ import org.testng.annotations.Test;
  */
 public class UpdateObjectTest {
 
+  // unique id base so this class's rows never collide with another test class's
+  private static final int IDB = 2300000;
+
   private final ArrayList<ValueObject> al = new ArrayList<>();
   private CpoAdapter cpoAdapter = null;
   private boolean isSupportsMillis = true;
@@ -75,7 +78,7 @@ public class UpdateObjectTest {
   @Test
   public void testUpdateObject() {
     String method = "testUpdateObject:";
-    ValueObject valObj = ValueObjectFactory.createValueObject(5);
+    ValueObject valObj = ValueObjectFactory.createValueObject(IDB + 5);
 
     valObj.setAttrVarChar("testUpdate");
     valObj.setAttrInteger(3);
@@ -100,7 +103,7 @@ public class UpdateObjectTest {
     // try the where on the update, should update 0
     try {
       List<CpoWhere> cws = new ArrayList<>();
-      cws.add(cpoAdapter.newWhere(Logical.NONE, ValueObject.ATTR_ID, Comparison.EQ, 2));
+      cws.add(cpoAdapter.newWhere(Logical.NONE, ValueObject.ATTR_ID, Comparison.EQ, IDB + 2));
       long updated = cpoAdapter.updateBean(ValueObject.FG_UPDATE_NULL, valObj, cws, null, null);
       assertEquals(updated, 0, "Should not have updated anything");
     } catch (Exception e) {
@@ -110,7 +113,7 @@ public class UpdateObjectTest {
     // try the where on the update, should update 1
     try {
       List<CpoWhere> cws = new ArrayList<>();
-      cws.add(cpoAdapter.newWhere(Logical.NONE, ValueObject.ATTR_ID, Comparison.EQ, 5));
+      cws.add(cpoAdapter.newWhere(Logical.NONE, ValueObject.ATTR_ID, Comparison.EQ, IDB + 5));
       long updated = cpoAdapter.updateBean(ValueObject.FG_UPDATE_NULL, valObj, cws, null, null);
       assertEquals(updated, 1, "Should have updated 1");
     } catch (Exception e) {

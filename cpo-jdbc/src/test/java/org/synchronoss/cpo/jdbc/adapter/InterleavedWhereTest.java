@@ -44,6 +44,9 @@ import org.testng.annotations.Test;
  */
 public class InterleavedWhereTest {
 
+  // unique id base so this class's rows never collide with another test class's
+  private static final int IDB = 1500000;
+
   private CpoAdapter cpoAdapter = null;
   private final ArrayList<ValueObject> al = new ArrayList<>();
 
@@ -64,17 +67,17 @@ public class InterleavedWhereTest {
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
-    ValueObject vo1 = ValueObjectFactory.createValueObject(1);
+    ValueObject vo1 = ValueObjectFactory.createValueObject(IDB + 1);
     vo1.setAttrVarChar("Test");
     vo1.setAttrBit(true);
     al.add(vo1);
 
-    ValueObject vo3 = ValueObjectFactory.createValueObject(3);
+    ValueObject vo3 = ValueObjectFactory.createValueObject(IDB + 3);
     vo3.setAttrVarChar("Test");
     vo3.setAttrBit(true);
     al.add(vo3);
 
-    ValueObject vo5 = ValueObjectFactory.createValueObject(5);
+    ValueObject vo5 = ValueObjectFactory.createValueObject(IDB + 5);
     vo5.setAttrVarChar("Test");
     vo5.setAttrBit(true);
     al.add(vo5);
@@ -107,13 +110,13 @@ public class InterleavedWhereTest {
     CpoWhere cw1 = null;
 
     try {
-      ValueObject valObj = ValueObjectFactory.createValueObject(1);
+      ValueObject valObj = ValueObjectFactory.createValueObject(IDB + 1);
       valObj.setAttrBit(true);
       valObj.setAttrVarChar("Test");
       Collection<Integer> inColl = new ArrayList<>();
-      inColl.add(1);
-      inColl.add(3);
-      inColl.add(5);
+      inColl.add(IDB + 1);
+      inColl.add(IDB + 3);
+      inColl.add(IDB + 5);
 
       cw = cpoAdapter.newWhere(Logical.AND, ValueObject.ATTR_ID, Comparison.IN, inColl);
 

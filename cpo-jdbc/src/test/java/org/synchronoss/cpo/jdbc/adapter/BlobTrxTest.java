@@ -43,6 +43,9 @@ import org.testng.annotations.Test;
  */
 public class BlobTrxTest {
 
+  // unique id base so this class's rows never collide with another test class's
+  private static final int IDB = 400000;
+
   private static final Logger logger = LoggerFactory.getLogger(BlobTrxTest.class);
   private static int BLOB_SIZE = 64999;
   private CpoAdapter cpoAdapter = null;
@@ -94,7 +97,7 @@ public class BlobTrxTest {
         testBlob2[i] = (byte) (((int) 'z') - (i % 26));
       }
 
-      LobValueObject lvo = LobValueObjectFactory.createLobValueObject(1, testBlob, testClob);
+      LobValueObject lvo = LobValueObjectFactory.createLobValueObject(IDB + 1, testBlob, testClob);
       LobValueObject lvo2 = null;
 
       lvo.setBLob2(testBlob2);
@@ -175,7 +178,7 @@ public class BlobTrxTest {
         testBlob2[i] = (byte) (((int) 'z') - (i % 26));
       }
 
-      LobValueObject lvo = LobValueObjectFactory.createLobValueObject(1, testBlob, testClob);
+      LobValueObject lvo = LobValueObjectFactory.createLobValueObject(IDB + 1, testBlob, testClob);
       LobValueObject lvo2 = null;
 
       lvo.setBLob2(testBlob2);
@@ -270,7 +273,7 @@ public class BlobTrxTest {
       testBlob = new byte[1];
       testBlob2 = new byte[1];
 
-      LobValueObject lvo = LobValueObjectFactory.createLobValueObject(1, testBlob, testClob);
+      LobValueObject lvo = LobValueObjectFactory.createLobValueObject(IDB + 1, testBlob, testClob);
       LobValueObject lvo2 = null;
 
       lvo.setBLob2(testBlob2);
@@ -346,7 +349,7 @@ public class BlobTrxTest {
 
     if (isSupportsBlobs) {
 
-      LobValueObject lvo = LobValueObjectFactory.createLobValueObject(1, null, null);
+      LobValueObject lvo = LobValueObjectFactory.createLobValueObject(IDB + 1, null, null);
       LobValueObject lvo2 = null;
 
       lvo.setBLob2(null);

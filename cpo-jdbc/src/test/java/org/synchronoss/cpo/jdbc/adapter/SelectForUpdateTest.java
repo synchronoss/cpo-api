@@ -45,6 +45,9 @@ import org.testng.annotations.Test;
  */
 public class SelectForUpdateTest {
 
+  // unique id base so this class's rows never collide with another test class's
+  private static final int IDB = 2200000;
+
   private static final Logger logger = LoggerFactory.getLogger(SelectForUpdateTest.class);
   private CpoAdapter cpoAdapter = null;
   private CpoTrxAdapter trxAdapter = null;
@@ -72,8 +75,8 @@ public class SelectForUpdateTest {
     } catch (Exception e) {
       logger.debug(ExceptionHelper.getLocalizedMessage(e));
     }
-    ValueObject vo = ValueObjectFactory.createValueObject(1);
-    ValueObject vo2 = ValueObjectFactory.createValueObject(2);
+    ValueObject vo = ValueObjectFactory.createValueObject(IDB + 1);
+    ValueObject vo2 = ValueObjectFactory.createValueObject(IDB + 2);
     try {
       trxAdapter.insertBean(vo);
       trxAdapter.insertBean(vo2);
@@ -91,8 +94,8 @@ public class SelectForUpdateTest {
   @AfterClass
   public void tearDown() {
     String method = "tearDown:";
-    ValueObject vo = ValueObjectFactory.createValueObject(1);
-    ValueObject vo2 = ValueObjectFactory.createValueObject(2);
+    ValueObject vo = ValueObjectFactory.createValueObject(IDB + 1);
+    ValueObject vo2 = ValueObjectFactory.createValueObject(IDB + 2);
     try {
       trxAdapter.deleteBean(vo);
       trxAdapter.deleteBean(vo2);
@@ -117,7 +120,7 @@ public class SelectForUpdateTest {
   public void testSelect4UpdateSingleObject() {
     if (isSupportsSelect4Update) {
       String method = "testSelect4UpdateSingleObject:";
-      ValueObject vo2 = ValueObjectFactory.createValueObject(1);
+      ValueObject vo2 = ValueObjectFactory.createValueObject(IDB + 1);
 
       try {
         trxAdapter.retrieveBean(ValueObject.FG_RETRIEVE_SELECTFORUPDATE, vo2);
@@ -165,7 +168,7 @@ public class SelectForUpdateTest {
   public void testSelect4UpdateExists() {
     if (isSupportsSelect4Update) {
       String method = "testSelect4UpdateExists:";
-      ValueObject vo2 = ValueObjectFactory.createValueObject(1);
+      ValueObject vo2 = ValueObjectFactory.createValueObject(IDB + 1);
 
       try {
         long count = trxAdapter.existsBean(ValueObject.FG_EXIST_SELECTFORUPDATEEXISTZERO, vo2);

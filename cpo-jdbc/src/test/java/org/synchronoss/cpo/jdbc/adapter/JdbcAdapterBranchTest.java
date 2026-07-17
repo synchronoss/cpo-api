@@ -42,6 +42,9 @@ import org.testng.annotations.Test;
 /** Branch-focused tests for JdbcCpoAdapter batch, empty-input, and attribute-query paths. */
 public class JdbcAdapterBranchTest {
 
+  // unique id base so this class's rows never collide with another test class's
+  private static final int IDB = 1600000;
+
   private CpoAdapter cpoAdapter = null;
   private final ArrayList<ValueObject> al = new ArrayList<>();
 
@@ -82,7 +85,7 @@ public class JdbcAdapterBranchTest {
       cpoAdapter.setBatchSize(3);
       List<ValueObject> beans = new ArrayList<>();
       for (int i = 121; i <= 127; i++) {
-        ValueObject vo = ValueObjectFactory.createValueObject(i);
+        ValueObject vo = ValueObjectFactory.createValueObject(IDB + i);
         beans.add(vo);
         al.add(vo);
       }
@@ -97,8 +100,8 @@ public class JdbcAdapterBranchTest {
   @Test
   public void testMultiBeanUpsertLoop() throws Exception {
     // upserts never batch, so multiple beans walk the per-bean function loop
-    ValueObject vo1 = ValueObjectFactory.createValueObject(131);
-    ValueObject vo2 = ValueObjectFactory.createValueObject(132);
+    ValueObject vo1 = ValueObjectFactory.createValueObject(IDB + 131);
+    ValueObject vo2 = ValueObjectFactory.createValueObject(IDB + 132);
     al.add(vo1);
     al.add(vo2);
     List<ValueObject> beans = new ArrayList<>();
@@ -115,7 +118,7 @@ public class JdbcAdapterBranchTest {
     assertTrue(cpoAdapter.getCpoAttributes("").isEmpty(), "empty expression yields no attributes");
 
     // columns aliased CPO_ATTRIBUTE/CPO_VALUE take the name-value pair path
-    ValueObject vo = ValueObjectFactory.createValueObject(141);
+    ValueObject vo = ValueObjectFactory.createValueObject(IDB + 141);
     vo.setAttrVarChar("notAnAttributeName");
     al.add(vo);
     cpoAdapter.insertBean(vo);
@@ -136,7 +139,7 @@ public class JdbcAdapterBranchTest {
         () ->
             cpoAdapter.retrieveBean(
                 ValueObject.FG_RETRIEVE_NULL,
-                ValueObjectFactory.createValueObject(1),
+                ValueObjectFactory.createValueObject(IDB + 1),
                 (ValueObject) null,
                 null,
                 null));
@@ -146,7 +149,7 @@ public class JdbcAdapterBranchTest {
 
   @Test
   public void testNativeExpressionAndEmptyCollectionVariants() throws Exception {
-    ValueObject vo = ValueObjectFactory.createValueObject(161);
+    ValueObject vo = ValueObjectFactory.createValueObject(IDB + 161);
     al.add(vo);
     cpoAdapter.insertBean(vo);
 
@@ -164,7 +167,11 @@ public class JdbcAdapterBranchTest {
             new ArrayList<CpoWhere>(),
             new ArrayList<CpoOrderBy>(),
             natives)) {
-      assertEquals(beans.count(), 1);
+      assertEquals(
+          beans
+              .filter(b -> Math.abs(b.getId()) >= IDB && Math.abs(b.getId()) < IDB + 100000)
+              .count(),
+          1);
     }
   }
 
@@ -173,7 +180,7 @@ public class JdbcAdapterBranchTest {
     // a RETRIEVE whose result set is (CPO_ATTRIBUTE, CPO_VALUE) pairs populates the bean
     // from name-value rows instead of positional columns
     var metaDescriptor = cpoAdapter.getCpoMetaDescriptor();
-    var voClass = metaDescriptor.getMetaClass(ValueObjectFactory.createValueObject(0));
+    var voClass = metaDescriptor.getMetaClass(ValueObjectFactory.createValueObject(IDB + 0));
 
     var group = metaDescriptor.createCpoFunctionGroup();
     group.setName("AttrValuePair");
@@ -190,25 +197,26 @@ public class JdbcAdapterBranchTest {
     voClass.addFunctionGroup(group);
 
     try {
-      ValueObject known = ValueObjectFactory.createValueObject(171);
+      ValueObject known = ValueObjectFactory.createValueObject(IDB + 171);
       known.setAttrVarChar("ATTR_INTEGER");
       known.setAttrInteger(42);
       al.add(known);
       cpoAdapter.insertBean(known);
 
       ValueObject retrieved =
-          cpoAdapter.retrieveBean("AttrValuePair", ValueObjectFactory.createValueObject(171));
+          cpoAdapter.retrieveBean("AttrValuePair", ValueObjectFactory.createValueObject(IDB + 171));
       assertNotNull(retrieved, "pair-style retrieve should return a bean");
       assertEquals(
           retrieved.getAttrInteger(), 42, "value should be applied to the named attribute");
 
       // a row naming an unknown attribute is skipped without failing
-      ValueObject unknown = ValueObjectFactory.createValueObject(172);
+      ValueObject unknown = ValueObjectFactory.createValueObject(IDB + 172);
       unknown.setAttrVarChar("NO_SUCH_ATTRIBUTE");
       al.add(unknown);
       cpoAdapter.insertBean(unknown);
       assertNotNull(
-          cpoAdapter.retrieveBean("AttrValuePair", ValueObjectFactory.createValueObject(172)));
+          cpoAdapter.retrieveBean(
+              "AttrValuePair", ValueObjectFactory.createValueObject(IDB + 172)));
     } finally {
       voClass.removeFunctionGroup(group);
     }
@@ -221,10 +229,10 @@ public class JdbcAdapterBranchTest {
     Level originalLevel = cpoLogger.getLevel();
     try {
       cpoLogger.setLevel(Level.TRACE);
-      ValueObject vo = ValueObjectFactory.createValueObject(151);
+      ValueObject vo = ValueObjectFactory.createValueObject(IDB + 151);
       al.add(vo);
       cpoAdapter.insertBean(vo);
-      assertNotNull(cpoAdapter.retrieveBean(ValueObjectFactory.createValueObject(151)));
+      assertNotNull(cpoAdapter.retrieveBean(ValueObjectFactory.createValueObject(IDB + 151)));
       cpoAdapter.deleteBean(vo);
       al.clear();
     } finally {

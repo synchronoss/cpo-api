@@ -42,6 +42,9 @@ import org.testng.annotations.Test;
  */
 public class ExecuteTrxTest {
 
+  // unique id base so this class's rows never collide with another test class's
+  private static final int IDB = 1000000;
+
   private static final Logger logger = LoggerFactory.getLogger(ExecuteTrxTest.class);
   //  private CpoAdapter cpoAdapter = null;
   private CpoTrxAdapter trxAdapter = null;
@@ -85,7 +88,7 @@ public class ExecuteTrxTest {
   public void testExecuteTrx() {
     if (isSupportsCalls) {
       String method = "testExecuteTrx:";
-      ValueObject vo = ValueObjectFactory.createValueObject(1);
+      ValueObject vo = ValueObjectFactory.createValueObject(IDB + 1);
       vo.setAttrInteger(3);
       ValueObject rvo;
 
@@ -104,7 +107,7 @@ public class ExecuteTrxTest {
       }
 
       try {
-        vo = ValueObjectFactory.createValueObject(1);
+        vo = ValueObjectFactory.createValueObject(IDB + 1);
         vo.setAttrSmallInt((short) 3);
         rvo = trxAdapter.executeBean(ValueObject.FG_EXECUTE_TESTEXECUTEOBJECTNOTRANSFORM, vo);
         trxAdapter.commit();
@@ -127,7 +130,7 @@ public class ExecuteTrxTest {
   public void testExecute2() {
     if (isSupportsCalls) {
       String method = "testExecuteObject:";
-      ValueObject vo = ValueObjectFactory.createValueObject(1);
+      ValueObject vo = ValueObjectFactory.createValueObject(IDB + 1);
       vo.setAttrInteger(3);
       ValueObject rvo;
 

@@ -56,6 +56,9 @@ import org.testng.annotations.Test;
  * transaction) mode, plus the global-transaction commit/rollback/isClosed paths.
  */
 public class JdbcXaAdapterDelegationTest {
+
+  // unique id base so this class's rows never collide with another test class's
+  private static final int IDB = 2500000;
   private static final Logger logger = LoggerFactory.getLogger(JdbcXaAdapterDelegationTest.class);
   private CpoAdapter cpoAdapter = null;
   private JdbcCpoXaAdapter cpoXaAdapter = null;
@@ -103,13 +106,13 @@ public class JdbcXaAdapterDelegationTest {
   @Test
   public void testInsertAndExistsDelegation() {
     String method = "testInsertAndExistsDelegation:";
-    ValueObject vo1 = ValueObjectFactory.createValueObject(1);
-    ValueObject vo2 = ValueObjectFactory.createValueObject(2);
-    ValueObject vo3 = ValueObjectFactory.createValueObject(3);
-    ValueObject vo4 = ValueObjectFactory.createValueObject(4);
-    ValueObject vo5 = ValueObjectFactory.createValueObject(5);
-    ValueObject vo6 = ValueObjectFactory.createValueObject(6);
-    ValueObject vo7 = ValueObjectFactory.createValueObject(7);
+    ValueObject vo1 = ValueObjectFactory.createValueObject(IDB + 1);
+    ValueObject vo2 = ValueObjectFactory.createValueObject(IDB + 2);
+    ValueObject vo3 = ValueObjectFactory.createValueObject(IDB + 3);
+    ValueObject vo4 = ValueObjectFactory.createValueObject(IDB + 4);
+    ValueObject vo5 = ValueObjectFactory.createValueObject(IDB + 5);
+    ValueObject vo6 = ValueObjectFactory.createValueObject(IDB + 6);
+    ValueObject vo7 = ValueObjectFactory.createValueObject(IDB + 7);
     al.add(vo1);
     al.add(vo2);
     al.add(vo3);
@@ -142,7 +145,7 @@ public class JdbcXaAdapterDelegationTest {
 
       // the EXIST expression already has a WHERE clause, so extra wheres must use Logical.AND
       Collection<CpoWhere> wheres = new ArrayList<>();
-      wheres.add(cpoXaAdapter.newWhere(Logical.AND, ValueObject.ATTR_ID, Comparison.EQ, 3));
+      wheres.add(cpoXaAdapter.newWhere(Logical.AND, ValueObject.ATTR_ID, Comparison.EQ, IDB + 3));
       assertEquals(cpoXaAdapter.existsBean(ValueObject.FG_EXIST_NULL, vo3, wheres), 1);
     } catch (Exception e) {
       fail(method + ExceptionHelper.getLocalizedMessage(e));
@@ -153,8 +156,8 @@ public class JdbcXaAdapterDelegationTest {
   @Test
   public void testRetrieveDelegation() {
     String method = "testRetrieveDelegation:";
-    ValueObject vo1 = ValueObjectFactory.createValueObject(1);
-    ValueObject vo2 = ValueObjectFactory.createValueObject(2);
+    ValueObject vo1 = ValueObjectFactory.createValueObject(IDB + 1);
+    ValueObject vo2 = ValueObjectFactory.createValueObject(IDB + 2);
     al.add(vo1);
     al.add(vo2);
 
@@ -167,23 +170,23 @@ public class JdbcXaAdapterDelegationTest {
       Collection<CpoOrderBy> orderBy = new ArrayList<>();
       orderBy.add(cpoXaAdapter.newOrderBy(ValueObject.ATTR_ID, true));
       Collection<CpoWhere> wheres = new ArrayList<>();
-      wheres.add(cpoXaAdapter.newWhere(Logical.NONE, ValueObject.ATTR_ID, Comparison.GT, 0));
-      CpoWhere where = cpoXaAdapter.newWhere(Logical.NONE, ValueObject.ATTR_ID, Comparison.GT, 0);
+      wheres.add(cpoXaAdapter.newWhere(Logical.NONE, ValueObject.ATTR_ID, Comparison.GT, IDB));
+      CpoWhere where = cpoXaAdapter.newWhere(Logical.NONE, ValueObject.ATTR_ID, Comparison.GT, IDB);
       ValueObject criteria = ValueObjectFactory.createValueObject();
 
       // retrieveBean overloads
-      ValueObject rvo = cpoXaAdapter.retrieveBean(ValueObjectFactory.createValueObject(1));
+      ValueObject rvo = cpoXaAdapter.retrieveBean(ValueObjectFactory.createValueObject(IDB + 1));
       assertNotNull(rvo, method + "retrieveBean(bean) returned null");
 
       rvo =
           cpoXaAdapter.retrieveBean(
-              ValueObject.FG_RETRIEVE_NULL, ValueObjectFactory.createValueObject(1));
+              ValueObject.FG_RETRIEVE_NULL, ValueObjectFactory.createValueObject(IDB + 1));
       assertNotNull(rvo, method + "retrieveBean(group, bean) returned null");
 
       rvo =
           cpoXaAdapter.retrieveBean(
               ValueObject.FG_RETRIEVE_NULL,
-              ValueObjectFactory.createValueObject(1),
+              ValueObjectFactory.createValueObject(IDB + 1),
               (Collection<CpoWhere>) null,
               (Collection<CpoOrderBy>) null,
               (Collection<CpoNativeFunction>) null);
@@ -192,7 +195,7 @@ public class JdbcXaAdapterDelegationTest {
       rvo =
           cpoXaAdapter.retrieveBean(
               ValueObject.FG_RETRIEVE_NULL,
-              ValueObjectFactory.createValueObject(1),
+              ValueObjectFactory.createValueObject(IDB + 1),
               ValueObjectFactory.createValueObject(),
               null,
               null);
@@ -201,7 +204,7 @@ public class JdbcXaAdapterDelegationTest {
       rvo =
           cpoXaAdapter.retrieveBean(
               ValueObject.FG_RETRIEVE_NULL,
-              ValueObjectFactory.createValueObject(1),
+              ValueObjectFactory.createValueObject(IDB + 1),
               ValueObjectFactory.createValueObject(),
               null,
               null,
@@ -210,24 +213,34 @@ public class JdbcXaAdapterDelegationTest {
 
       // retrieveBeans overloads
       try (Stream<ValueObject> s = cpoXaAdapter.retrieveBeans(ValueObject.FG_LIST_NULL, criteria)) {
-        assertEquals(s.count(), 2);
+        assertEquals(
+            s.filter(b -> Math.abs(b.getId()) >= IDB && Math.abs(b.getId()) < IDB + 100000).count(),
+            2);
       }
       try (Stream<ValueObject> s =
           cpoXaAdapter.retrieveBeans(ValueObject.FG_LIST_NULL, criteria, where, orderBy)) {
-        assertEquals(s.count(), 2);
+        assertEquals(
+            s.filter(b -> Math.abs(b.getId()) >= IDB && Math.abs(b.getId()) < IDB + 100000).count(),
+            2);
       }
       try (Stream<ValueObject> s =
           cpoXaAdapter.retrieveBeans(ValueObject.FG_LIST_NULL, criteria, orderBy)) {
-        assertEquals(s.count(), 2);
+        assertEquals(
+            s.filter(b -> Math.abs(b.getId()) >= IDB && Math.abs(b.getId()) < IDB + 100000).count(),
+            2);
       }
       try (Stream<ValueObject> s =
           cpoXaAdapter.retrieveBeans(ValueObject.FG_LIST_NULL, criteria, wheres, orderBy)) {
-        assertEquals(s.count(), 2);
+        assertEquals(
+            s.filter(b -> Math.abs(b.getId()) >= IDB && Math.abs(b.getId()) < IDB + 100000).count(),
+            2);
       }
       try (Stream<ValueObject> s =
           cpoXaAdapter.retrieveBeans(
               ValueObject.FG_LIST_NULL, criteria, ValueObjectFactory.createValueObject())) {
-        assertEquals(s.count(), 2);
+        assertEquals(
+            s.filter(b -> Math.abs(b.getId()) >= IDB && Math.abs(b.getId()) < IDB + 100000).count(),
+            2);
       }
       try (Stream<ValueObject> s =
           cpoXaAdapter.retrieveBeans(
@@ -236,7 +249,9 @@ public class JdbcXaAdapterDelegationTest {
               ValueObjectFactory.createValueObject(),
               where,
               orderBy)) {
-        assertEquals(s.count(), 2);
+        assertEquals(
+            s.filter(b -> Math.abs(b.getId()) >= IDB && Math.abs(b.getId()) < IDB + 100000).count(),
+            2);
       }
       try (Stream<ValueObject> s =
           cpoXaAdapter.retrieveBeans(
@@ -245,7 +260,9 @@ public class JdbcXaAdapterDelegationTest {
               ValueObjectFactory.createValueObject(),
               wheres,
               orderBy)) {
-        assertEquals(s.count(), 2);
+        assertEquals(
+            s.filter(b -> Math.abs(b.getId()) >= IDB && Math.abs(b.getId()) < IDB + 100000).count(),
+            2);
       }
       try (Stream<ValueObject> s =
           cpoXaAdapter.retrieveBeans(
@@ -255,7 +272,9 @@ public class JdbcXaAdapterDelegationTest {
               wheres,
               orderBy,
               null)) {
-        assertEquals(s.count(), 2);
+        assertEquals(
+            s.filter(b -> Math.abs(b.getId()) >= IDB && Math.abs(b.getId()) < IDB + 100000).count(),
+            2);
       }
     } catch (Exception e) {
       fail(method + ExceptionHelper.getLocalizedMessage(e));
@@ -266,12 +285,12 @@ public class JdbcXaAdapterDelegationTest {
   @Test
   public void testUpdateAndDeleteDelegation() {
     String method = "testUpdateAndDeleteDelegation:";
-    ValueObject vo1 = ValueObjectFactory.createValueObject(1);
-    ValueObject vo2 = ValueObjectFactory.createValueObject(2);
-    ValueObject vo3 = ValueObjectFactory.createValueObject(3);
-    ValueObject vo4 = ValueObjectFactory.createValueObject(4);
-    ValueObject vo5 = ValueObjectFactory.createValueObject(5);
-    ValueObject vo6 = ValueObjectFactory.createValueObject(6);
+    ValueObject vo1 = ValueObjectFactory.createValueObject(IDB + 1);
+    ValueObject vo2 = ValueObjectFactory.createValueObject(IDB + 2);
+    ValueObject vo3 = ValueObjectFactory.createValueObject(IDB + 3);
+    ValueObject vo4 = ValueObjectFactory.createValueObject(IDB + 4);
+    ValueObject vo5 = ValueObjectFactory.createValueObject(IDB + 5);
+    ValueObject vo6 = ValueObjectFactory.createValueObject(IDB + 6);
     al.add(vo1);
     al.add(vo2);
     al.add(vo3);
@@ -281,20 +300,25 @@ public class JdbcXaAdapterDelegationTest {
 
     try {
       // The null UPDATE group's expression has no WHERE clause and updates every row in the
-      // table, so each update variant is exercised with exactly one row present.
+      // table. With other classes' rows coexisting, only the wheres-scoped update variant
+      // can be exercised without corrupting foreign data.
       assertEquals(cpoXaAdapter.insertBean(vo1), 1);
 
       vo1.setAttrVarChar("updated");
-      assertEquals(cpoXaAdapter.updateBean(vo1), 1);
-      assertEquals(cpoXaAdapter.updateBean(ValueObject.FG_UPDATE_NULL, vo1), 1);
-      assertEquals(cpoXaAdapter.updateBean(ValueObject.FG_UPDATE_NULL, vo1, null, null, null), 1);
+      Collection<CpoWhere> updWheres = new ArrayList<>();
+      updWheres.add(
+          cpoXaAdapter.newWhere(Logical.NONE, ValueObject.ATTR_ID, Comparison.EQ, IDB + 1));
+      assertEquals(
+          cpoXaAdapter.updateBean(ValueObject.FG_UPDATE_NULL, vo1, updWheres, null, null), 1);
 
       List<ValueObject> updBeans = new ArrayList<>();
       updBeans.add(vo1);
-      assertEquals(cpoXaAdapter.updateBeans(updBeans), 1);
-      assertEquals(cpoXaAdapter.updateBeans(ValueObject.FG_UPDATE_NULL, updBeans), 1);
+      Collection<CpoWhere> updWheres2 = new ArrayList<>();
+      updWheres2.add(
+          cpoXaAdapter.newWhere(Logical.NONE, ValueObject.ATTR_ID, Comparison.EQ, IDB + 1));
       assertEquals(
-          cpoXaAdapter.updateBeans(ValueObject.FG_UPDATE_NULL, updBeans, null, null, null), 1);
+          cpoXaAdapter.updateBeans(ValueObject.FG_UPDATE_NULL, updBeans, updWheres2, null, null),
+          1);
 
       // delete overloads
       assertEquals(cpoXaAdapter.deleteBean(vo1), 1);
@@ -325,26 +349,38 @@ public class JdbcXaAdapterDelegationTest {
     }
   }
 
-  /** Exercises the upsertBean/upsertBeans overloads; the first call inserts, the rest update. */
+  /**
+   * Exercises the upsertBean/upsertBeans overloads. Each call uses a fresh id so only the insert
+   * branch runs; the update branch would hit the WHERE-less null UPDATE group, which updates every
+   * row in the shared table.
+   */
   @Test
   public void testUpsertDelegation() {
     String method = "testUpsertDelegation:";
-    ValueObject vo = ValueObjectFactory.createValueObject(1);
-    al.add(vo);
+    ValueObject vo1 = ValueObjectFactory.createValueObject(IDB + 11);
+    ValueObject vo2 = ValueObjectFactory.createValueObject(IDB + 12);
+    ValueObject vo3 = ValueObjectFactory.createValueObject(IDB + 13);
+    ValueObject vo4 = ValueObjectFactory.createValueObject(IDB + 14);
+    al.add(vo1);
+    al.add(vo2);
+    al.add(vo3);
+    al.add(vo4);
 
     try {
-      assertEquals(cpoXaAdapter.upsertBean(vo), 1);
-      assertEquals(cpoXaAdapter.existsBean(vo), 1, method + "upserted bean should exist");
+      assertEquals(cpoXaAdapter.upsertBean(vo1), 1);
+      assertEquals(cpoXaAdapter.existsBean(vo1), 1, method + "upserted bean should exist");
 
-      vo.setAttrVarChar("updated");
-      assertEquals(cpoXaAdapter.upsertBean((String) null, vo), 1);
+      assertEquals(cpoXaAdapter.upsertBean((String) null, vo2), 1);
+      assertEquals(cpoXaAdapter.existsBean(vo2), 1);
 
-      List<ValueObject> beans = new ArrayList<>();
-      beans.add(vo);
-      assertEquals(cpoXaAdapter.upsertBeans(beans), 1);
-      assertEquals(cpoXaAdapter.upsertBeans((String) null, beans), 1);
+      List<ValueObject> beans3 = new ArrayList<>();
+      beans3.add(vo3);
+      assertEquals(cpoXaAdapter.upsertBeans(beans3), 1);
 
-      assertEquals(cpoXaAdapter.existsBean(vo), 1, method + "bean should still exist once");
+      List<ValueObject> beans4 = new ArrayList<>();
+      beans4.add(vo4);
+      assertEquals(cpoXaAdapter.upsertBeans((String) null, beans4), 1);
+      assertEquals(cpoXaAdapter.existsBean(vo4), 1);
     } catch (Exception e) {
       fail(method + ExceptionHelper.getLocalizedMessage(e));
     }
@@ -359,17 +395,17 @@ public class JdbcXaAdapterDelegationTest {
     // must surface a CpoException regardless of CallableStatement support.
     expectThrows(
         CpoException.class,
-        () -> cpoXaAdapter.executeBean(ValueObjectFactory.createValueObject(1)));
+        () -> cpoXaAdapter.executeBean(ValueObjectFactory.createValueObject(IDB + 1)));
 
     if (isSupportsCalls) {
       try {
-        ValueObject vo = ValueObjectFactory.createValueObject(1);
+        ValueObject vo = ValueObjectFactory.createValueObject(IDB + 1);
         vo.setAttrInteger(3);
         ValueObject rvo = cpoXaAdapter.executeBean(ValueObject.FG_EXECUTE_TESTEXECUTEOBJECT, vo);
         assertNotNull(rvo, method + "Returned Value object is null");
         assertEquals(rvo.getAttrDouble(), 27, "power(3,3)=" + rvo.getAttrDouble());
 
-        vo = ValueObjectFactory.createValueObject(1);
+        vo = ValueObjectFactory.createValueObject(IDB + 1);
         vo.setAttrInteger(3);
         rvo = cpoXaAdapter.executeBean(ValueObject.FG_EXECUTE_TESTEXECUTEOBJECT, vo, vo);
         assertNotNull(rvo, method + "Returned Value object is null");
@@ -473,8 +509,8 @@ public class JdbcXaAdapterDelegationTest {
   public void testGlobalTrxCommitAndRollback() {
     if (isXaSupported) {
       String method = "testGlobalTrxCommitAndRollback:";
-      ValueObject vo1 = ValueObjectFactory.createValueObject(1);
-      ValueObject vo2 = ValueObjectFactory.createValueObject(2);
+      ValueObject vo1 = ValueObjectFactory.createValueObject(IDB + 1);
+      ValueObject vo2 = ValueObjectFactory.createValueObject(IDB + 2);
       al.add(vo1);
       al.add(vo2);
 

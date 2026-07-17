@@ -41,6 +41,9 @@ import org.testng.annotations.Test;
  */
 public class RollbackTrxTest {
 
+  // unique id base matching the hardcoded ids in this class's meta rollback groups
+  private static final int IDB = 2100000;
+
   private CpoTrxAdapter trxAdapter = null;
 
   /** Creates a new RollbackTest object. */
@@ -60,7 +63,7 @@ public class RollbackTrxTest {
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
-    ValueObject vo = ValueObjectFactory.createValueObject(1);
+    ValueObject vo = ValueObjectFactory.createValueObject(IDB + 1);
     vo.setAttrVarChar("Test");
     try {
       trxAdapter.insertBean(vo);
@@ -77,7 +80,7 @@ public class RollbackTrxTest {
   /** DOCUMENT ME! */
   @AfterClass
   public void tearDown() {
-    ValueObject vo = ValueObjectFactory.createValueObject(1);
+    ValueObject vo = ValueObjectFactory.createValueObject(IDB + 1);
     try {
       trxAdapter.deleteBean(vo);
       trxAdapter.commit();
@@ -99,8 +102,8 @@ public class RollbackTrxTest {
   @Test
   public void testTrxRollbackProcessUpdateCollection() {
     String method = "testTrxRollbackProcessUpdateCollection:";
-    ValueObject vo = ValueObjectFactory.createValueObject(2);
-    ValueObject vo2 = ValueObjectFactory.createValueObject(1);
+    ValueObject vo = ValueObjectFactory.createValueObject(IDB + 2);
+    ValueObject vo2 = ValueObjectFactory.createValueObject(IDB + 1);
     ArrayList<ValueObject> al = new ArrayList<>();
 
     al.add(vo);
@@ -129,9 +132,9 @@ public class RollbackTrxTest {
   @Test
   public void testTrxSingleRollback() {
     String method = "testTrxSingleRollback:";
-    ValueObject vo = ValueObjectFactory.createValueObject(2);
+    ValueObject vo = ValueObjectFactory.createValueObject(IDB + 2);
     try {
-      trxAdapter.insertBean(ValueObject.FG_CREATE_TESTSINGLEROLLBACK, vo);
+      trxAdapter.insertBean("TestSingleRollbackTrx", vo);
       trxAdapter.commit();
       fail(method + "Insert should have thrown an exception");
     } catch (Exception e) {

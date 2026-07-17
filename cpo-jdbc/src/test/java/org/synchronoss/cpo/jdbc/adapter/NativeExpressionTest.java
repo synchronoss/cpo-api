@@ -42,6 +42,9 @@ import org.testng.annotations.Test;
  */
 public class NativeExpressionTest {
 
+  // unique id base so this class's rows never collide with another test class's
+  private static final int IDB = 1700000;
+
   private CpoAdapter cpoAdapter = null;
   private final ArrayList<ValueObject> al = new ArrayList<>();
 
@@ -61,15 +64,15 @@ public class NativeExpressionTest {
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
-    ValueObject vo = ValueObjectFactory.createValueObject(1);
+    ValueObject vo = ValueObjectFactory.createValueObject(IDB + 1);
     vo.setAttrVarChar("Test");
     vo.setAttrSmallInt((short) 1);
     al.add(vo);
-    al.add(ValueObjectFactory.createValueObject(2));
-    al.add(ValueObjectFactory.createValueObject(3));
-    al.add(ValueObjectFactory.createValueObject(4));
-    al.add(ValueObjectFactory.createValueObject(5));
-    al.add(ValueObjectFactory.createValueObject(-6));
+    al.add(ValueObjectFactory.createValueObject(IDB + 2));
+    al.add(ValueObjectFactory.createValueObject(IDB + 3));
+    al.add(ValueObjectFactory.createValueObject(IDB + 4));
+    al.add(ValueObjectFactory.createValueObject(IDB + 5));
+    al.add(ValueObjectFactory.createValueObject(-(IDB + 6)));
     try {
       cpoAdapter.insertBeans(ValueObject.FG_CREATE_TESTORDERBYINSERT, al);
     } catch (Exception e) {
@@ -98,13 +101,18 @@ public class NativeExpressionTest {
     try {
       ArrayList<CpoNativeFunction> cnqAl = new ArrayList<>();
 
-      cnqAl.add(new CpoNativeFunction("__CPO_WHERE__", "WHERE id IN (2,3)"));
+      cnqAl.add(
+          new CpoNativeFunction(
+              "__CPO_WHERE__", "WHERE id IN (" + (IDB + 2) + "," + (IDB + 3) + ")"));
 
-      ValueObject valObj = ValueObjectFactory.createValueObject(3);
+      ValueObject valObj = ValueObjectFactory.createValueObject(IDB + 3);
       try (Stream<ValueObject> beans =
           cpoAdapter.retrieveBeans(
               ValueObject.FG_LIST_TESTWHERERETRIEVE, valObj, valObj, null, null, cnqAl); ) {
-        long count = beans.count();
+        long count =
+            beans
+                .filter(b -> Math.abs(b.getId()) >= IDB && Math.abs(b.getId()) < IDB + 100000)
+                .count();
         assertEquals(count, 2, "Number of beans is " + count);
       }
     } catch (Exception e) {
@@ -121,13 +129,18 @@ public class NativeExpressionTest {
     try {
       ArrayList<CpoNativeFunction> cnqAl = new ArrayList<>();
 
-      cnqAl.add(new CpoNativeFunction("__CPO_WHERE__", "WHERE ID = 2 OR ID = 3"));
+      cnqAl.add(
+          new CpoNativeFunction(
+              "__CPO_WHERE__", "WHERE ID = " + (IDB + 2) + " OR ID = " + (IDB + 3)));
 
-      ValueObject valObj = ValueObjectFactory.createValueObject(3);
+      ValueObject valObj = ValueObjectFactory.createValueObject(IDB + 3);
       try (Stream<ValueObject> beans =
           cpoAdapter.retrieveBeans(
               ValueObject.FG_LIST_TESTWHERERETRIEVE, valObj, valObj, null, null, cnqAl); ) {
-        long count = beans.count();
+        long count =
+            beans
+                .filter(b -> Math.abs(b.getId()) >= IDB && Math.abs(b.getId()) < IDB + 100000)
+                .count();
         assertEquals(count, 2, "Number of beans is " + count);
       }
     } catch (Exception e) {
@@ -145,11 +158,14 @@ public class NativeExpressionTest {
 
       cnqAl.add(new CpoNativeFunction("__CPO_WHERE__", null));
 
-      ValueObject valObj = ValueObjectFactory.createValueObject(3);
+      ValueObject valObj = ValueObjectFactory.createValueObject(IDB + 3);
       try (Stream<ValueObject> beans =
           cpoAdapter.retrieveBeans(
               ValueObject.FG_LIST_TESTWHERERETRIEVE, valObj, valObj, null, null, cnqAl); ) {
-        long count = beans.count();
+        long count =
+            beans
+                .filter(b -> Math.abs(b.getId()) >= IDB && Math.abs(b.getId()) < IDB + 100000)
+                .count();
         assertEquals(count, 6, "Number of beans is " + count);
       }
     } catch (Exception e) {

@@ -34,7 +34,7 @@
     <listeners>
         <listener class-name="org.synchronoss.cpo.cassandra.CassandraSuiteListener"/>
     </listeners>
-    <test name="Cassandra Tests" verbose="2" group-by-instances="true">
+    <test name="Cassandra Tests" verbose="2">
         <packages>
             <package name="org.synchronoss.cpo.cassandra.*" />
         </packages>

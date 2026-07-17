@@ -38,7 +38,7 @@
     <listeners>
         <listener class-name="org.synchronoss.cpo.jdbc.JdbcSuiteListener"/>
     </listeners>
-    <test name="${h2.type} Jdbc Tests" verbose="2" group-by-instances="true">
+    <test name="${h2.type} Jdbc Tests" verbose="2">
         <packages>
             <package name="org.synchronoss.cpo.jdbc.*" />
         </packages>

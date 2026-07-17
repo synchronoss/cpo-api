@@ -34,8 +34,8 @@ import org.synchronoss.cpo.core.CpoAdapterFactoryManager;
 import org.synchronoss.cpo.core.CpoException;
 import org.synchronoss.cpo.core.CpoTrxAdapter;
 import org.synchronoss.cpo.jdbc.ValueObject;
-import org.testng.annotations.AfterClass;
-import org.testng.annotations.BeforeClass;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
@@ -62,7 +62,7 @@ public class RetrieveBeanTest {
    * @author david berry
    * @version '$Id: RetrieveBeanTest.java,v 1.6 2006/01/30 19:09:23 dberry Exp $'
    */
-  @BeforeClass
+  @BeforeMethod
   public void setUp() {
     String method = "setUp:";
 
@@ -72,6 +72,7 @@ public class RetrieveBeanTest {
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
+    al.clear();
     ValueObject vo = ValueObjectFactory.createValueObject(IDB + 1);
     vo.setAttrVarChar("Test");
     al.add(vo);
@@ -284,7 +285,7 @@ public class RetrieveBeanTest {
     }
   }
 
-  @AfterClass
+  @AfterMethod
   public void tearDown() {
     String method = "tearDown:";
     try {
@@ -292,6 +293,8 @@ public class RetrieveBeanTest {
 
     } catch (Exception e) {
       fail(method + e.getMessage());
+    } finally {
+      al.clear();
     }
     cpoAdapter = null;
   }

@@ -34,9 +34,43 @@
     <listeners>
         <listener class-name="org.synchronoss.cpo.cassandra.CassandraSuiteListener"/>
     </listeners>
-    <test name="Cassandra Tests" verbose="2">
-        <packages>
-            <package name="org.synchronoss.cpo.cassandra.*" />
-        </packages>
+    <!--
+      Test classes are listed explicitly (instead of a package wildcard) so the
+      shared-state mutators below can be kept out of the parallel run. A new test
+      class must be added to one of the two lists or it will not be run.
+      -->
+    <test name="Cassandra Parallel Tests" verbose="2" parallel="classes" thread-count="4">
+        <classes>
+            <class name="org.synchronoss.cpo.cassandra.AdapterDelegationTest"/>
+            <class name="org.synchronoss.cpo.cassandra.BlobTest"/>
+            <class name="org.synchronoss.cpo.cassandra.ClusterDataSourceInfoTest"/>
+            <class name="org.synchronoss.cpo.cassandra.CollectionsTest"/>
+            <class name="org.synchronoss.cpo.cassandra.ConstructorTest"/>
+            <class name="org.synchronoss.cpo.cassandra.DeleteObjectTest"/>
+            <class name="org.synchronoss.cpo.cassandra.EntityTest"/>
+            <class name="org.synchronoss.cpo.cassandra.ExistObjectTest"/>
+            <class name="org.synchronoss.cpo.cassandra.InheritanceTest"/>
+            <class name="org.synchronoss.cpo.cassandra.InsertObjectTest"/>
+            <class name="org.synchronoss.cpo.cassandra.InvalidParameterTest"/>
+            <class name="org.synchronoss.cpo.cassandra.NativeExpressionTest"/>
+            <class name="org.synchronoss.cpo.cassandra.OrderByTest"/>
+            <class name="org.synchronoss.cpo.cassandra.UpdateObjectTest"/>
+            <class name="org.synchronoss.cpo.cassandra.WhereTest"/>
+            <class name="org.synchronoss.cpo.cassandra.XmlValidationTest"/>
+            <class name="org.synchronoss.cpo.cassandra.config.CassandraCpoConfigProcessorTest"/>
+            <class name="org.synchronoss.cpo.cassandra.config.ConfigFactoryTest"/>
+        </classes>
+    </test>
+    <!--
+      These classes mutate state shared across test classes (the global meta
+      descriptor, or the cached adapter's fetch size) and must run
+      single-threaded, after the parallel block.
+      -->
+    <test name="Cassandra Serialized Tests" verbose="2">
+        <classes>
+            <class name="org.synchronoss.cpo.cassandra.HotDeployTest"/>
+            <class name="org.synchronoss.cpo.cassandra.RetrieveBeanTest"/>
+            <class name="org.synchronoss.cpo.cassandra.exporter.CassandraMetaExportTest"/>
+        </classes>
     </test>
 </suite>

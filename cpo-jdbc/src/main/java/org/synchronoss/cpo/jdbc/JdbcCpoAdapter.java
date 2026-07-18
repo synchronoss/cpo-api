@@ -154,10 +154,10 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
       // do all the tests here
       batchUpdatesSupported_ = dmd.supportsBatchUpdates();
 
-      //      this.closeLocalConnection(c);
     } catch (Throwable t) {
       throw new CpoException("Could Not Retrieve Database Metadata", t);
     } finally {
+      commitLocalConnection(c);
       closeLocalConnection(c);
     }
   }
@@ -219,6 +219,9 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
 
       objCount = existsBean(groupName, bean, c, wheres);
     } finally {
+      // the read connection runs with autocommit off; commit before returning it to the
+      // pool or the open transaction pins a stale snapshot for the next borrower
+      commitLocalConnection(c);
       closeLocalConnection(c);
     }
 
@@ -822,11 +825,11 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
     } catch (Exception e) {
       // Any exception has to try to rollback the work;
       rollbackLocalConnection(con);
+      closeLocalConnection(con);
       ExceptionHelper.reThrowCpoException(
           e,
           "processSelectGroup(String groupName, C criteria, T result,C poWhere where,"
               + " Collection orderBy, boolean useRetrieve) failed");
-      closeLocalConnection(con);
     }
     return Stream.empty();
   }
@@ -1337,6 +1340,7 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
       } finally {
         resultSetClose(rs);
         statementClose(ps);
+        commitLocalConnection(c);
         closeLocalConnection(c);
       }
     }

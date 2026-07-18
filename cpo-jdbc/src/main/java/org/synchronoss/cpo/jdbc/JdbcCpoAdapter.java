@@ -157,7 +157,8 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
     } catch (Throwable t) {
       throw new CpoException("Could Not Retrieve Database Metadata", t);
     } finally {
-      commitLocalConnection(c);
+      // terminate the read-only transaction before pooling the connection (see existsBean)
+      rollbackLocalConnection(c);
       closeLocalConnection(c);
     }
   }
@@ -219,9 +220,12 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
 
       objCount = existsBean(groupName, bean, c, wheres);
     } finally {
-      // the read connection runs with autocommit off; commit before returning it to the
-      // pool or the open transaction pins a stale snapshot for the next borrower
-      commitLocalConnection(c);
+      // The read connection runs with autocommit off (required for cursor-based fetch), so
+      // this read-only transaction must still be terminated before the connection returns
+      // to the pool. Otherwise the open transaction pins a stale MVCC snapshot (and holds
+      // any FOR UPDATE locks) for the next borrower. Rollback is used because no data was
+      // changed; it releases the snapshot and locks just like commit would.
+      rollbackLocalConnection(c);
       closeLocalConnection(c);
     }
 
@@ -1340,7 +1344,8 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
       } finally {
         resultSetClose(rs);
         statementClose(ps);
-        commitLocalConnection(c);
+        // terminate the read-only transaction before pooling the connection (see existsBean)
+        rollbackLocalConnection(c);
         closeLocalConnection(c);
       }
     }

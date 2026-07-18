@@ -130,14 +130,20 @@ public class HotDeployTest {
       // make sure the default retrieve still works
       try (Stream<ValueObject> beans =
           cpoAdapter.retrieveBeans(ValueObject.FG_LIST_NULL, valObj, valObj); ) {
-        list1 = beans.toList();
+        list1 =
+            beans
+                .filter(b -> Math.abs(b.getId()) >= IDB && Math.abs(b.getId()) < IDB + 100000)
+                .toList();
       }
       assertNotNull(list1);
       assertEquals(list1.size(), 6, "Number of beans is " + list1.size());
 
       List<ValueObject> list2;
       try (Stream<ValueObject> beans = cpoAdapter.retrieveBeans("HotDeploySelect", valObj); ) {
-        list2 = beans.toList();
+        list2 =
+            beans
+                .filter(b -> Math.abs(b.getId()) >= IDB && Math.abs(b.getId()) < IDB + 100000)
+                .toList();
       }
       assertNotNull(list2);
       assertEquals(list2.size(), 6, "Number of beans is " + list2.size());

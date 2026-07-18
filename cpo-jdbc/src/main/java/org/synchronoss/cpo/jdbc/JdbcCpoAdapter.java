@@ -22,8 +22,19 @@ package org.synchronoss.cpo.jdbc;
  * ]]
  */
 
-import java.sql.*;
-import java.util.*;
+import java.sql.CallableStatement;
+import java.sql.Connection;
+import java.sql.DatabaseMetaData;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Spliterator;
+import java.util.Spliterators;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
@@ -143,10 +154,11 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
       // do all the tests here
       batchUpdatesSupported_ = dmd.supportsBatchUpdates();
 
-      //      this.closeLocalConnection(c);
     } catch (Throwable t) {
       throw new CpoException("Could Not Retrieve Database Metadata", t);
     } finally {
+      // terminate the read-only transaction before pooling the connection (see existsBean)
+      rollbackLocalConnection(c);
       closeLocalConnection(c);
     }
   }
@@ -208,6 +220,12 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
 
       objCount = existsBean(groupName, bean, c, wheres);
     } finally {
+      // The read connection runs with autocommit off (required for cursor-based fetch), so
+      // this read-only transaction must still be terminated before the connection returns
+      // to the pool. Otherwise the open transaction pins a stale MVCC snapshot (and holds
+      // any FOR UPDATE locks) for the next borrower. Rollback is used because no data was
+      // changed; it releases the snapshot and locks just like commit would.
+      rollbackLocalConnection(c);
       closeLocalConnection(c);
     }
 
@@ -811,11 +829,11 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
     } catch (Exception e) {
       // Any exception has to try to rollback the work;
       rollbackLocalConnection(con);
+      closeLocalConnection(con);
       ExceptionHelper.reThrowCpoException(
           e,
           "processSelectGroup(String groupName, C criteria, T result,C poWhere where,"
               + " Collection orderBy, boolean useRetrieve) failed");
-      closeLocalConnection(con);
     }
     return Stream.empty();
   }
@@ -1326,6 +1344,8 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
       } finally {
         resultSetClose(rs);
         statementClose(ps);
+        // terminate the read-only transaction before pooling the connection (see existsBean)
+        rollbackLocalConnection(c);
         closeLocalConnection(c);
       }
     }

@@ -568,14 +568,14 @@ public class ClusterDataSourceInfo extends AbstractDataSourceInfo<ClusterDataSou
     if (socketOptions != null) clusterBuilder.withSocketOptions(socketOptions);
 
     // add SpeculativeExecutionPolicy
-    if (speculativeExecutionPolicy == null)
+    if (speculativeExecutionPolicy != null)
       clusterBuilder.withSpeculativeExecutionPolicy(speculativeExecutionPolicy);
 
     // add SSL
     if (sslOptions != null) clusterBuilder.withSSL(sslOptions);
 
     // add TimestampGenerator
-    if (timestampGenerator == null) clusterBuilder.withTimestampGenerator(timestampGenerator);
+    if (timestampGenerator != null) clusterBuilder.withTimestampGenerator(timestampGenerator);
 
     return new ClusterDataSource(clusterBuilder.build(), keySpace);
   }

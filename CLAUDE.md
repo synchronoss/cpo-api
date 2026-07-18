@@ -8,7 +8,7 @@ CPO (Class Persistence Object) API is a Java persistence library that maps JavaB
 
 ## Build Commands
 
-**Prerequisites**: Java 21+, Maven 3.9+, Docker (for integration tests via Testcontainers)
+**Prerequisites**: Java 25+, Maven 3.9+, Docker (for integration tests via Testcontainers)
 
 ```bash
 # Full build including integration tests
@@ -37,8 +37,11 @@ mvn spotless:check
 # Run PMD/CPD static analysis only
 mvn pmd:check pmd:cpd-check -pl cpo-core
 
-# Generate JaCoCo coverage report
-mvn test jacoco:report -pl cpo-core
+# Generate the aggregate JaCoCo coverage report (all modules combined)
+mvn verify   # report lands in cpo-coverage/target/site/jacoco-aggregate/index.html
+
+# Generate a per-module JaCoCo report (informational only)
+mvn test jacoco:report -pl cpo-jdbc
 ```
 
 ## Code Quality Enforcement
@@ -47,7 +50,7 @@ The build enforces these checks at compile/test phases — violations fail the b
 
 - **Spotless** (Google Java Format, `process-sources` phase): auto-formats Java. Run `mvn spotless:apply` before committing to avoid CI failures.
 - **PMD + CPD** (`compile` phase): static analysis and copy-paste detection. Minimum token threshold is 55.
-- **JaCoCo** (`test` phase): requires 80% instruction, line, and branch coverage per module.
+- **JaCoCo** (`verify` phase, `cpo-coverage` module): coverage is measured and enforced on the **aggregate** of all module tests, not per module — cpo-core is mostly interfaces, so its coverage comes from the cpo-jdbc/cpo-cassandra tests that exercise it. Minimums (80% instruction, line, and branch) are set by the `coverage.instruction.minimum`, `coverage.line.minimum`, and `coverage.branch.minimum` properties in the root pom. JAXB-generated packages (`cpoconfig`, `cpometa`, `cpoutilconfig`) are excluded from coverage.
 - **License headers**: `license-maven-plugin` enforces LGPL v3 headers in all Java files. Headers use `[[` / `]]` delimiters and `==` section separator (not the standard `%L` / `%%`).
 
 ## Module Architecture
@@ -57,6 +60,8 @@ cpo-core        — Persistence-agnostic interfaces, meta model, config, cache
 cpo-jdbc        — JDBC implementation of cpo-core
 cpo-cassandra   — Cassandra 3.x native driver implementation
 cpo-plugin      — Maven plugin that code-generates CPO interfaces/beans at build time
+cpo-coverage    — Build-internal module (built last): merges all modules' JaCoCo data,
+                  produces the aggregate report, and enforces coverage minimums. Never published.
 ```
 
 ### Core Abstractions (cpo-core)
@@ -107,6 +112,6 @@ Multiple meta XML files are merged per `metaConfig`, enabling the polymorphic ov
 ## Key Conventions
 
 - All source files must carry the LGPL v3 license header using `[[` / `]]` delimiters; the license plugin enforces this at build time. Add headers with `mvn license:update-file-header`.
-- Java 21 language level; `--release 21` in compiler config.
+- Java 25 language level; `--release 25` in compiler config.
 - JAXB-generated classes under `org.synchronoss.cpo.*config.*` and `org.synchronoss.cpo.*meta.*` subpackages (the generated ones) are excluded from Javadoc and should not be edited by hand.
 - The `cpo-plugin` module generates Java interfaces and bean classes from CPO meta XML at build time — edit the XML config, not the generated sources.

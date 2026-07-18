@@ -50,6 +50,9 @@ import org.testng.annotations.Test;
  */
 public class CriteriaObjectTest {
 
+  // unique id base so this class's rows never collide with another test class's
+  private static final int IDB = 700000;
+
   private static final Logger logger = LoggerFactory.getLogger(CriteriaObjectTest.class);
   private CpoAdapter cpoAdapter = null;
   private final ArrayList<ValueObject> al = new ArrayList<>();
@@ -76,18 +79,18 @@ public class CriteriaObjectTest {
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
-    ValueObject vo = ValueObjectFactory.createValueObject(1);
+    ValueObject vo = ValueObjectFactory.createValueObject(IDB + 1);
     vo.setAttrVarChar("Test");
     al.add(vo);
-    al.add(ValueObjectFactory.createValueObject(2));
-    al.add(ValueObjectFactory.createValueObject(3));
-    al.add(ValueObjectFactory.createValueObject(4));
-    al.add(ValueObjectFactory.createValueObject(5));
-    al.add(ValueObjectFactory.createValueObject(6));
-    al.add(ValueObjectFactory.createValueObject(7));
-    al.add(ValueObjectFactory.createValueObject(8));
-    al.add(ValueObjectFactory.createValueObject(9));
-    al.add(ValueObjectFactory.createValueObject(10));
+    al.add(ValueObjectFactory.createValueObject(IDB + 2));
+    al.add(ValueObjectFactory.createValueObject(IDB + 3));
+    al.add(ValueObjectFactory.createValueObject(IDB + 4));
+    al.add(ValueObjectFactory.createValueObject(IDB + 5));
+    al.add(ValueObjectFactory.createValueObject(IDB + 6));
+    al.add(ValueObjectFactory.createValueObject(IDB + 7));
+    al.add(ValueObjectFactory.createValueObject(IDB + 8));
+    al.add(ValueObjectFactory.createValueObject(IDB + 9));
+    al.add(ValueObjectFactory.createValueObject(IDB + 10));
     try {
       cpoAdapter.insertBeans(ValueObjectBean.FG_CREATE_TESTORDERBYINSERT, al);
     } catch (Exception e) {
@@ -101,8 +104,8 @@ public class CriteriaObjectTest {
 
     try {
       CriteriaObject critObject = new CriteriaObjectBean();
-      critObject.setMinId(3);
-      critObject.setMaxId(7);
+      critObject.setMinId(IDB + 3);
+      critObject.setMaxId(IDB + 7);
       try (Stream<ValueObject> beans =
           cpoAdapter.retrieveBeans(
               CriteriaObject.FG_LIST_SELECTBETWEEN, critObject, new ValueObjectBean()); ) {
@@ -120,8 +123,8 @@ public class CriteriaObjectTest {
 
     try {
       CriteriaObject critObject = new CriteriaObjectBean();
-      critObject.setMinId(3);
-      critObject.setMaxId(7);
+      critObject.setMinId(IDB + 3);
+      critObject.setMaxId(IDB + 7);
       CpoWhere cw = cpoAdapter.newWhere();
       CpoWhere cw1 =
           cpoAdapter.newWhere(Logical.NONE, CriteriaObject.ATTR_MINID, Comparison.GT, critObject);

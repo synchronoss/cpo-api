@@ -43,6 +43,9 @@ import org.testng.annotations.Test;
  */
 public class WhereTest {
 
+  // unique id base so this class's rows never collide with another test class's
+  private static final int IDB = 1200000;
+
   private CpoAdapter cpoAdapter = null;
   private ArrayList<ValueObject> al = new ArrayList<>();
 
@@ -62,16 +65,16 @@ public class WhereTest {
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
-    ValueObject vo = ValueObjectFactory.createValueObject(1);
+    ValueObject vo = ValueObjectFactory.createValueObject(IDB + 1);
     vo.setAttrVarChar("Test");
     vo.setAttrInt(1);
     vo.setAttrBigInt(1);
     al.add(vo);
-    al.add(ValueObjectFactory.createValueObject(2));
-    al.add(ValueObjectFactory.createValueObject(3));
-    al.add(ValueObjectFactory.createValueObject(4));
-    al.add(ValueObjectFactory.createValueObject(5));
-    al.add(ValueObjectFactory.createValueObject(-6));
+    al.add(ValueObjectFactory.createValueObject(IDB + 2));
+    al.add(ValueObjectFactory.createValueObject(IDB + 3));
+    al.add(ValueObjectFactory.createValueObject(IDB + 4));
+    al.add(ValueObjectFactory.createValueObject(IDB + 5));
+    al.add(ValueObjectFactory.createValueObject(-(IDB + 6)));
     try {
       cpoAdapter.insertBeans("TestOrderByInsert", al);
     } catch (Exception e) {
@@ -100,12 +103,15 @@ public class WhereTest {
     try {
       ValueObject valObj = ValueObjectFactory.createValueObject();
       cw = cpoAdapter.newWhere(Logical.NONE, "id", Comparison.EQ, null);
-      cw.setStaticValue("3");
+      cw.setStaticValue(String.valueOf(IDB + 3));
       ArrayList<CpoWhere> wheres = new ArrayList<>();
       wheres.add(cw);
       try (Stream<ValueObject> beans =
           cpoAdapter.retrieveBeans(ValueObject.FG_LIST_TESTWHERERETRIEVE, valObj, wheres, null)) {
-        long count = beans.count();
+        long count =
+            beans
+                .filter(b -> Math.abs(b.getId()) >= IDB && Math.abs(b.getId()) < IDB + 100000)
+                .count();
         assertEquals(count, 1, "Number of beans is " + count);
       }
     } catch (Exception e) {
@@ -120,14 +126,17 @@ public class WhereTest {
     CpoWhere cw;
 
     try {
-      ValueObject valObj = ValueObjectFactory.createValueObject(3);
+      ValueObject valObj = ValueObjectFactory.createValueObject(IDB + 3);
       cw = cpoAdapter.newWhere(Logical.NONE, "id", Comparison.EQ, valObj);
 
       ArrayList<CpoWhere> wheres = new ArrayList<>();
       wheres.add(cw);
       try (Stream<ValueObject> beans =
           cpoAdapter.retrieveBeans(ValueObject.FG_LIST_TESTWHERERETRIEVE, valObj, wheres, null)) {
-        long count = beans.count();
+        long count =
+            beans
+                .filter(b -> Math.abs(b.getId()) >= IDB && Math.abs(b.getId()) < IDB + 100000)
+                .count();
         assertEquals(count, 1, "Number of beans is " + count);
       }
     } catch (Exception e) {
@@ -142,14 +151,17 @@ public class WhereTest {
     CpoWhere cw;
 
     try {
-      ValueObject valObj = ValueObjectFactory.createValueObject(3);
+      ValueObject valObj = ValueObjectFactory.createValueObject(IDB + 3);
       cw = cpoAdapter.newWhere(Logical.NONE, "id", Comparison.EQ, valObj);
 
       ArrayList<CpoWhere> wheres = new ArrayList<>();
       wheres.add(cw);
       try (Stream<ValueObject> beans =
           cpoAdapter.retrieveBeans(ValueObject.FG_RETRIEVE_NULL, valObj, wheres, null)) {
-        long count = beans.count();
+        long count =
+            beans
+                .filter(b -> Math.abs(b.getId()) >= IDB && Math.abs(b.getId()) < IDB + 100000)
+                .count();
         assertEquals(count, 1, "Number of beans is " + count);
       }
     } catch (Exception e) {
@@ -167,10 +179,13 @@ public class WhereTest {
     Collection<ValueObject> col = null;
 
     try {
-      ValueObject valObj = ValueObjectFactory.createValueObject(3);
+      ValueObject valObj = ValueObjectFactory.createValueObject(IDB + 3);
       try (Stream<ValueObject> beans =
           cpoAdapter.retrieveBeans(ValueObject.FG_LIST_TESTWHERERETRIEVE, valObj)) {
-        long count = beans.count();
+        long count =
+            beans
+                .filter(b -> Math.abs(b.getId()) >= IDB && Math.abs(b.getId()) < IDB + 100000)
+                .count();
         assertEquals(count, 6, "Number of beans is " + count);
       }
     } catch (Exception e) {
@@ -183,9 +198,9 @@ public class WhereTest {
     String method = "testAndWhere:";
 
     try {
-      ValueObject valObj = ValueObjectFactory.createValueObject(1);
+      ValueObject valObj = ValueObjectFactory.createValueObject(IDB + 1);
       CpoWhere cw = cpoAdapter.newWhere();
-      CpoWhere cw1 = cpoAdapter.newWhere(Logical.NONE, "id", Comparison.EQ, 1);
+      CpoWhere cw1 = cpoAdapter.newWhere(Logical.NONE, "id", Comparison.EQ, IDB + 1);
       CpoWhere cw2 = cpoAdapter.newWhere(Logical.AND, "attrInt", Comparison.EQ, 1);
 
       cw.addWhere(cw1);
@@ -195,7 +210,10 @@ public class WhereTest {
       wheres.add(cw);
       try (Stream<ValueObject> beans =
           cpoAdapter.retrieveBeans(ValueObject.FG_LIST_TESTWHERERETRIEVE, valObj, wheres, null)) {
-        long count = beans.count();
+        long count =
+            beans
+                .filter(b -> Math.abs(b.getId()) >= IDB && Math.abs(b.getId()) < IDB + 100000)
+                .count();
         assertEquals(count, 1, "Number of beans is " + count);
       }
     } catch (Exception e) {
@@ -208,7 +226,7 @@ public class WhereTest {
     String method = "testMultipleBindWhere:";
 
     try {
-      ValueObject valObj = ValueObjectFactory.createValueObject(1);
+      ValueObject valObj = ValueObjectFactory.createValueObject(IDB + 1);
       valObj.setAttrInt(1);
 
       CpoWhere cw = cpoAdapter.newWhere();
@@ -222,7 +240,10 @@ public class WhereTest {
       wheres.add(cw);
       try (Stream<ValueObject> beans =
           cpoAdapter.retrieveBeans(ValueObject.FG_LIST_TESTWHERERETRIEVE, valObj, wheres, null)) {
-        long count = beans.count();
+        long count =
+            beans
+                .filter(b -> Math.abs(b.getId()) >= IDB && Math.abs(b.getId()) < IDB + 100000)
+                .count();
         assertEquals(count, 1, "Number of beans is " + count);
       }
     } catch (Exception e) {
@@ -235,10 +256,10 @@ public class WhereTest {
     String method = "testNonAttributeWhere:";
 
     try {
-      ValueObject valObj = ValueObjectFactory.createValueObject(1);
+      ValueObject valObj = ValueObjectFactory.createValueObject(IDB + 1);
 
       CpoWhere cw = cpoAdapter.newWhere();
-      CpoWhere cw1 = cpoAdapter.newWhere(Logical.NONE, "id", Comparison.EQ, 1);
+      CpoWhere cw1 = cpoAdapter.newWhere(Logical.NONE, "id", Comparison.EQ, IDB + 1);
 
       cw.addWhere(cw1);
 
@@ -246,7 +267,10 @@ public class WhereTest {
       wheres.add(cw);
       try (Stream<ValueObject> beans =
           cpoAdapter.retrieveBeans(ValueObject.FG_LIST_TESTWHERERETRIEVE, valObj, wheres, null)) {
-        long count = beans.count();
+        long count =
+            beans
+                .filter(b -> Math.abs(b.getId()) >= IDB && Math.abs(b.getId()) < IDB + 100000)
+                .count();
         assertEquals(count, 1, "Number of beans is " + count);
       }
     } catch (Exception e) {
@@ -259,11 +283,11 @@ public class WhereTest {
     String method = "testNonAttributeWhere:";
 
     try {
-      ValueObject valObj = ValueObjectFactory.createValueObject(1);
+      ValueObject valObj = ValueObjectFactory.createValueObject(IDB + 1);
 
       CpoWhere cw = cpoAdapter.newWhere();
       CpoWhere cw1 = cpoAdapter.newWhere(Logical.NONE, "id", Comparison.IN, null);
-      cw1.setStaticValue("(1,3,5)");
+      cw1.setStaticValue("(" + (IDB + 1) + "," + (IDB + 3) + "," + (IDB + 5) + ")");
 
       cw.addWhere(cw1);
 
@@ -271,7 +295,10 @@ public class WhereTest {
       wheres.add(cw);
       try (Stream<ValueObject> beans =
           cpoAdapter.retrieveBeans(ValueObject.FG_LIST_TESTWHERERETRIEVE, valObj, wheres, null)) {
-        long count = beans.count();
+        long count =
+            beans
+                .filter(b -> Math.abs(b.getId()) >= IDB && Math.abs(b.getId()) < IDB + 100000)
+                .count();
         assertEquals(count, 3, "Number of beans is " + count);
       }
     } catch (Exception e) {
@@ -284,11 +311,11 @@ public class WhereTest {
     String method = "testNonAttributeWhere:";
 
     try {
-      ValueObject valObj = ValueObjectFactory.createValueObject(1);
+      ValueObject valObj = ValueObjectFactory.createValueObject(IDB + 1);
       Collection<Integer> inColl = new ArrayList<>();
-      inColl.add(1);
-      inColl.add(3);
-      inColl.add(5);
+      inColl.add(IDB + 1);
+      inColl.add(IDB + 3);
+      inColl.add(IDB + 5);
 
       CpoWhere cw = cpoAdapter.newWhere();
       CpoWhere cw1 = cpoAdapter.newWhere(Logical.NONE, "id", Comparison.IN, inColl);
@@ -299,7 +326,10 @@ public class WhereTest {
       wheres.add(cw);
       try (Stream<ValueObject> beans =
           cpoAdapter.retrieveBeans(ValueObject.FG_LIST_TESTWHERERETRIEVE, valObj, wheres, null)) {
-        long count = beans.count();
+        long count =
+            beans
+                .filter(b -> Math.abs(b.getId()) >= IDB && Math.abs(b.getId()) < IDB + 100000)
+                .count();
         assertEquals(count, 3, "Number of beans is " + count);
       }
     } catch (Exception e) {
@@ -312,11 +342,11 @@ public class WhereTest {
     String method = "testNonAttributeWhere:";
 
     try {
-      ValueObject valObj = ValueObjectFactory.createValueObject(1);
+      ValueObject valObj = ValueObjectFactory.createValueObject(IDB + 1);
       Collection<Integer> inColl = new ArrayList<>();
-      inColl.add(1);
-      inColl.add(3);
-      inColl.add(5);
+      inColl.add(IDB + 1);
+      inColl.add(IDB + 3);
+      inColl.add(IDB + 5);
 
       CpoWhere cw = cpoAdapter.newWhere();
       CpoWhere cw1 = cpoAdapter.newWhere(Logical.NONE, "id", Comparison.IN, inColl);
@@ -327,7 +357,10 @@ public class WhereTest {
       wheres.add(cw);
       try (Stream<ValueObject> beans =
           cpoAdapter.retrieveBeans(ValueObject.FG_LIST_TESTWHERERETRIEVE, valObj, wheres, null)) {
-        long count = beans.count();
+        long count =
+            beans
+                .filter(b -> Math.abs(b.getId()) >= IDB && Math.abs(b.getId()) < IDB + 100000)
+                .count();
         assertEquals(count, 3, "Number of beans is " + count);
       }
     } catch (Exception e) {

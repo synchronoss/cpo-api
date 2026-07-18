@@ -286,10 +286,18 @@
     </cpoFunctionGroup>
     <cpoFunctionGroup name="TestSingleRollback" type="CREATE">
       <cpoFunction name="TestSingleRollback1">
-        <expression>insert into value_object (id, attr_varchar) values (2,'Test')</expression>
+        <expression>insert into value_object (id, attr_varchar) values (2000002,'Test')</expression>
       </cpoFunction>
       <cpoFunction name="TestSingleRollback2">
-        <expression>insert into value_object (id, attr_varchar) values (1,'Test')</expression>
+        <expression>insert into value_object (id, attr_varchar) values (2000001,'Test')</expression>
+      </cpoFunction>
+    </cpoFunctionGroup>
+    <cpoFunctionGroup name="TestSingleRollbackTrx" type="CREATE">
+      <cpoFunction name="TestSingleRollback1">
+        <expression>insert into value_object (id, attr_varchar) values (2100002,'Test')</expression>
+      </cpoFunction>
+      <cpoFunction name="TestSingleRollback2">
+        <expression>insert into value_object (id, attr_varchar) values (2100001,'Test')</expression>
       </cpoFunction>
     </cpoFunctionGroup>
     <cpoFunctionGroup type="DELETE">

@@ -44,6 +44,9 @@ import org.testng.annotations.Test;
  */
 public class RetrieveBeanTest {
 
+  // unique id base so this class's rows never collide with another test class's
+  private static final int IDB = 1000000;
+
   private static final Logger logger = LoggerFactory.getLogger(RetrieveBeanTest.class);
   private CpoAdapter cpoAdapter = null;
   private ArrayList<ValueObject> al = new ArrayList<>();
@@ -65,18 +68,18 @@ public class RetrieveBeanTest {
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
-    ValueObject vo = ValueObjectFactory.createValueObject(1);
+    ValueObject vo = ValueObjectFactory.createValueObject(IDB + 1);
     vo.setAttrVarChar("Test");
     al.add(vo);
-    al.add(ValueObjectFactory.createValueObject(2));
-    al.add(ValueObjectFactory.createValueObject(3));
-    al.add(ValueObjectFactory.createValueObject(4));
-    al.add(ValueObjectFactory.createValueObject(5));
-    al.add(ValueObjectFactory.createValueObject(6));
-    al.add(ValueObjectFactory.createValueObject(7));
-    al.add(ValueObjectFactory.createValueObject(8));
-    al.add(ValueObjectFactory.createValueObject(9));
-    al.add(ValueObjectFactory.createValueObject(10));
+    al.add(ValueObjectFactory.createValueObject(IDB + 2));
+    al.add(ValueObjectFactory.createValueObject(IDB + 3));
+    al.add(ValueObjectFactory.createValueObject(IDB + 4));
+    al.add(ValueObjectFactory.createValueObject(IDB + 5));
+    al.add(ValueObjectFactory.createValueObject(IDB + 6));
+    al.add(ValueObjectFactory.createValueObject(IDB + 7));
+    al.add(ValueObjectFactory.createValueObject(IDB + 8));
+    al.add(ValueObjectFactory.createValueObject(IDB + 9));
+    al.add(ValueObjectFactory.createValueObject(IDB + 10));
     try {
       cpoAdapter.insertBeans("TestOrderByInsert", al);
     } catch (Exception e) {
@@ -93,7 +96,10 @@ public class RetrieveBeanTest {
       ValueObject valObj = ValueObjectFactory.createValueObject();
       try (Stream<ValueObject> beans =
           cpoAdapter.retrieveBeans(ValueObject.FG_LIST_NULL, valObj); ) {
-        long count = beans.count();
+        long count =
+            beans
+                .filter(b -> Math.abs(b.getId()) >= IDB && Math.abs(b.getId()) < IDB + 100000)
+                .count();
         assertEquals(count, al.size(), "Number of beans is " + count);
       }
     } catch (Exception e) {
@@ -110,7 +116,10 @@ public class RetrieveBeanTest {
       ValueObject valObj = ValueObjectFactory.createValueObject();
       try (Stream<ValueObject> beans =
           cpoAdapter.retrieveBeans(ValueObject.FG_LIST_NULL, valObj); ) {
-        long count = beans.count();
+        long count =
+            beans
+                .filter(b -> Math.abs(b.getId()) >= IDB && Math.abs(b.getId()) < IDB + 100000)
+                .count();
         assertEquals(count, al.size(), "Number of beans is " + count);
       }
     } catch (Exception e) {
@@ -136,10 +145,12 @@ public class RetrieveBeanTest {
       try (Stream<ValueObject> beans =
           cpoAdapter.retrieveBeans(ValueObject.FG_LIST_NULL, valObj, valObj, null, null, null); ) {
         AtomicInteger count = new AtomicInteger();
-        beans.forEach(
-            bean -> {
-              count.getAndIncrement();
-            });
+        beans
+            .filter(b -> Math.abs(b.getId()) >= IDB && Math.abs(b.getId()) < IDB + 100000)
+            .forEach(
+                bean -> {
+                  count.getAndIncrement();
+                });
         assertEquals(count.get(), al.size(), "Number of beans is " + count);
       }
       cpoAdapter.setFetchSize(oldSize);
@@ -153,7 +164,7 @@ public class RetrieveBeanTest {
   public void testRetrieveBean() {
 
     String method = "testRetrieveBean:";
-    ValueObject vo = ValueObjectFactory.createValueObject(1);
+    ValueObject vo = ValueObjectFactory.createValueObject(IDB + 1);
     ValueObject rvo;
 
     try {
@@ -173,7 +184,7 @@ public class RetrieveBeanTest {
   public void testNullRetrieveBean() {
 
     String method = "testNullRetrieveBean:";
-    ValueObject vo = ValueObjectFactory.createValueObject(100);
+    ValueObject vo = ValueObjectFactory.createValueObject(IDB + 100);
     ValueObject rvo;
 
     try {

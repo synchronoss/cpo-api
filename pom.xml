@@ -33,6 +33,7 @@
         <module>cpo-jdbc</module>
         <module>cpo-cassandra</module>
         <module>cpo-plugin</module>
+        <module>cpo-coverage</module>
     </modules>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -40,6 +41,10 @@
          <slf4jVersion>2.0.17</slf4jVersion>
         <logbackVersion>1.5.20</logbackVersion>
         <github.global.server>cpo-github</github.global.server>
+        <!-- Coverage minimums enforced against the aggregate of all module tests (see cpo-coverage) -->
+        <coverage.instruction.minimum>0.80</coverage.instruction.minimum>
+        <coverage.line.minimum>0.80</coverage.line.minimum>
+        <coverage.branch.minimum>0.80</coverage.branch.minimum>
     </properties>
 
     <name>cpo</name>
@@ -349,32 +354,9 @@
                             <goal>report</goal>
                         </goals>
                     </execution>
-                    <execution>
-                        <id>check-coverage</id>
-                        <goals>
-                            <goal>check</goal>
-                        </goals>
-                        <configuration>
-                            <rules>
-                                <!-- Rule 1: Enforce project-wide limits -->
-                                <rule>
-                                    <element>BUNDLE</element>
-                                    <limits>
-                                        <limit>
-                                            <counter>LINE</counter>
-                                            <value>COVEREDRATIO</value>
-                                            <minimum>0.00</minimum>
-                                        </limit>
-                                        <limit>
-                                            <counter>BRANCH</counter>
-                                            <value>COVEREDRATIO</value>
-                                            <minimum>0.00</minimum>
-                                        </limit>
-                                    </limits>
-                                </rule>
-                            </rules>
-                        </configuration>
-                    </execution>
+                    <!-- Coverage is enforced against the aggregate of all module tests
+                         in the cpo-coverage module, not per module. cpo-core is mostly
+                         interfaces exercised by the implementation modules' tests. -->
                 </executions>
             </plugin>
             <plugin>

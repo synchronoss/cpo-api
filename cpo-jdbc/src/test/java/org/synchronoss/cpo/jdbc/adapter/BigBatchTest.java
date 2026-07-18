@@ -43,6 +43,9 @@ import org.testng.annotations.Test;
  */
 public class BigBatchTest {
 
+  // unique id base so this class's rows never collide with another test class's
+  private static final int IDB = 100000;
+
   private static final Logger logger = LoggerFactory.getLogger(BigBatchTest.class);
   private ArrayList<ValueObject> al = new ArrayList<>();
   private CpoAdapter cpoAdapter = null;
@@ -85,7 +88,7 @@ public class BigBatchTest {
     cpoAdapter.setBatchSize(10000);
 
     for (int i = 0; i < numInserts; i++) {
-      al.add(ValueObjectFactory.createValueObject(id++));
+      al.add(ValueObjectFactory.createValueObject(IDB + id++));
     }
 
     try {

@@ -29,7 +29,7 @@ import com.datastax.driver.core.policies.LoadBalancingPolicy;
  *
  * @author dberry
  */
-public abstract class LoadBalancingPolicyFactory {
+public abstract class LoadBalancingPolicyFactory implements FactoryMethodName {
 
   /** Constructs a LoadBalancingPolicyFactory */
   public LoadBalancingPolicyFactory() {}

@@ -40,6 +40,9 @@ import org.testng.annotations.Test;
  */
 public class InheritanceTest {
 
+  // unique id base so this class's rows never collide with another test class's
+  private static final int IDB = 600000;
+
   private ArrayList<ChildValueObject> al = new ArrayList<>();
   private CpoAdapter cpoAdapter = null;
   private CassandraCpoMetaDescriptor metaDescriptor = null;
@@ -69,7 +72,7 @@ public class InheritanceTest {
     String method = "testInsertObject:";
     ChildValueObject valObj = new ChildValueObject();
 
-    valObj.setId(5);
+    valObj.setId(IDB + 5);
     valObj.setAttrVarChar("testInsert");
     valObj.setAttrInt(3);
     Date ts = new Date(System.currentTimeMillis());

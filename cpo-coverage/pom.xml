@@ -1,0 +1,183 @@
+<?xml version="1.0"?>
+<!--
+  #%L
+  cpo-coverage
+  %%
+  Copyright (C) 2003 - 2025 David E. Berry
+  %%
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU Lesser General Public License as
+  published by the Free Software Foundation, either version 3 of the
+  License, or (at your option) any later version.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Lesser Public License for more details.
+
+  You should have received a copy of the GNU General Lesser Public
+  License along with this program.  If not, see
+  <http://www.gnu.org/licenses/lgpl-3.0.html>.
+  #L%
+  -->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>cpo-coverage</artifactId>
+    <packaging>jar</packaging>
+
+    <parent>
+        <groupId>org.synchronoss.cpo</groupId>
+        <artifactId>cpo</artifactId>
+        <version>6.0.0-SNAPSHOT</version>
+    </parent>
+
+    <name>cpo-coverage</name>
+    <description>
+        Build-internal module that aggregates JaCoCo coverage across all CPO modules and
+        enforces the coverage minimums against the merged execution data. This lets tests
+        in cpo-jdbc and cpo-cassandra count toward the coverage of the cpo-core interfaces
+        they implement. This module produces no artifact of its own and is never published.
+    </description>
+
+    <properties>
+        <!-- nothing is built here; keep the placeholder jar out of repositories -->
+        <maven.install.skip>true</maven.install.skip>
+        <maven.deploy.skip>true</maven.deploy.skip>
+        <gpg.skip>true</gpg.skip>
+        <skipPublishing>true</skipPublishing>
+    </properties>
+
+    <!-- Depending on every module makes this build last in the reactor (so all
+         jacoco.exec files exist) and feeds report-aggregate its class/source sets. -->
+    <dependencies>
+        <dependency>
+            <groupId>org.synchronoss.cpo</groupId>
+            <artifactId>cpo-core</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.synchronoss.cpo</groupId>
+            <artifactId>cpo-jdbc</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.synchronoss.cpo</groupId>
+            <artifactId>cpo-cassandra</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.synchronoss.cpo</groupId>
+            <artifactId>cpo-plugin</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>merge-coverage-data</id>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                            <goal>merge</goal>
+                        </goals>
+                        <configuration>
+                            <fileSets>
+                                <fileSet>
+                                    <directory>${project.basedir}/..</directory>
+                                    <includes>
+                                        <include>*/target/jacoco.exec</include>
+                                    </includes>
+                                </fileSet>
+                            </fileSets>
+                            <destFile>${project.build.directory}/aggregate.exec</destFile>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>aggregate-report</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>report-aggregate</goal>
+                        </goals>
+                        <configuration>
+                            <title>CPO Aggregate Coverage</title>
+                            <excludes>
+                                <!-- JAXB-generated classes -->
+                                <exclude>org/synchronoss/cpo/cpoconfig/**</exclude>
+                                <exclude>org/synchronoss/cpo/cpometa/**</exclude>
+                                <exclude>org/synchronoss/cpo/util/cpoutilconfig/**</exclude>
+                                <!-- maven-plugin-plugin generated help mojo -->
+                                <exclude>org/synchronoss/cpo/plugin/HelpMojo*</exclude>
+                            </excludes>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>check-aggregate-coverage</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                        <configuration>
+                            <dataFile>${project.build.directory}/aggregate.exec</dataFile>
+                            <excludes>
+                                <!-- JAXB-generated classes -->
+                                <exclude>org/synchronoss/cpo/cpoconfig/**</exclude>
+                                <exclude>org/synchronoss/cpo/cpometa/**</exclude>
+                                <exclude>org/synchronoss/cpo/util/cpoutilconfig/**</exclude>
+                                <!-- maven-plugin-plugin generated help mojo -->
+                                <exclude>org/synchronoss/cpo/plugin/HelpMojo*</exclude>
+                            </excludes>
+                            <rules>
+                                <rule>
+                                    <element>BUNDLE</element>
+                                    <limits>
+                                        <limit>
+                                            <counter>INSTRUCTION</counter>
+                                            <value>COVEREDRATIO</value>
+                                            <minimum>${coverage.instruction.minimum}</minimum>
+                                        </limit>
+                                        <limit>
+                                            <counter>LINE</counter>
+                                            <value>COVEREDRATIO</value>
+                                            <minimum>${coverage.line.minimum}</minimum>
+                                        </limit>
+                                        <limit>
+                                            <counter>BRANCH</counter>
+                                            <value>COVEREDRATIO</value>
+                                            <minimum>${coverage.branch.minimum}</minimum>
+                                        </limit>
+                                    </limits>
+                                </rule>
+                            </rules>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <!-- jacoco:check only analyzes this module's outputDirectory, so the
+                             module classes are unpacked into it after packaging. The unpack
+                             runs post-package so the placeholder jar itself stays empty. -->
+                        <id>unpack-module-classes</id>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                            <goal>unpack-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <includeGroupIds>org.synchronoss.cpo</includeGroupIds>
+                            <outputDirectory>${project.build.outputDirectory}</outputDirectory>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>

@@ -44,6 +44,9 @@ import org.testng.annotations.Test;
  */
 public class ExistObjectTest {
 
+  // unique id base so this class's rows never collide with another test class's
+  private static final int IDB = 400000;
+
   private static final Logger logger = LoggerFactory.getLogger(ExistObjectTest.class);
   private CpoAdapter cpoAdapter = null;
 
@@ -64,7 +67,7 @@ public class ExistObjectTest {
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
-    ValueObject vo = ValueObjectFactory.createValueObject(1);
+    ValueObject vo = ValueObjectFactory.createValueObject(IDB + 1);
     vo.setAttrInt(3);
 
     try {
@@ -80,7 +83,7 @@ public class ExistObjectTest {
     String method = "testExistObject:";
 
     try {
-      ValueObject valObj = ValueObjectFactory.createValueObject(1);
+      ValueObject valObj = ValueObjectFactory.createValueObject(IDB + 1);
       long count = cpoAdapter.existsBean(valObj);
       assertEquals(count, 1, "Object not Found");
     } catch (Exception e) {
@@ -88,7 +91,7 @@ public class ExistObjectTest {
     }
 
     try {
-      ValueObject valObj = ValueObjectFactory.createValueObject(5);
+      ValueObject valObj = ValueObjectFactory.createValueObject(IDB + 5);
       long count = cpoAdapter.existsBean(valObj);
       assertEquals(count, 0, "Object Found");
     } catch (Exception e) {
@@ -101,7 +104,7 @@ public class ExistObjectTest {
     String method = "testExistObject:";
 
     try {
-      ValueObject valObj = ValueObjectFactory.createValueObject(1);
+      ValueObject valObj = ValueObjectFactory.createValueObject(IDB + 1);
       CpoWhere where = cpoAdapter.newWhere(Logical.AND, "attrInt", Comparison.EQ, 3);
       ArrayList<CpoWhere> wheres = new ArrayList<>();
       wheres.add(where);
@@ -112,7 +115,7 @@ public class ExistObjectTest {
     }
 
     try {
-      ValueObject valObj = ValueObjectFactory.createValueObject(1);
+      ValueObject valObj = ValueObjectFactory.createValueObject(IDB + 1);
       CpoWhere where = cpoAdapter.newWhere(Logical.AND, "attrInt", Comparison.EQ, 5);
       ArrayList<CpoWhere> wheres = new ArrayList<>();
       wheres.add(where);
@@ -125,7 +128,7 @@ public class ExistObjectTest {
 
   @AfterClass
   public void tearDown() {
-    ValueObject vo = ValueObjectFactory.createValueObject(1);
+    ValueObject vo = ValueObjectFactory.createValueObject(IDB + 1);
     try {
       cpoAdapter.deleteBean(vo);
     } catch (Exception e) {

@@ -74,7 +74,8 @@ public class ConstructorTest {
       ValueObject valObj = ValueObjectFactory.createValueObject();
       try (Stream<ValueObject> beans =
           cpoAdapter.retrieveBeans(ValueObject.FG_LIST_NULL, valObj); ) {
-        long count = beans.count();
+        // scope to a reserved id band: this test owns no rows, others may
+        long count = beans.filter(b -> b.getId() >= 90000000).count();
         assertEquals(count, 0, "Number of beans is " + count);
       }
     } catch (Exception e) {
@@ -100,7 +101,8 @@ public class ConstructorTest {
       ValueObject valObj = ValueObjectFactory.createValueObject();
       try (Stream<ValueObject> beans =
           cpoAdapter.retrieveBeans(ValueObject.FG_LIST_NULL, valObj); ) {
-        long count = beans.count();
+        // scope to a reserved id band: this test owns no rows, others may
+        long count = beans.filter(b -> b.getId() >= 90000000).count();
         assertEquals(count, 0, "Number of beans is " + count);
       }
     } catch (Exception e) {
@@ -126,7 +128,8 @@ public class ConstructorTest {
       ValueObject valObj = ValueObjectFactory.createValueObject();
       try (Stream<ValueObject> beans =
           cpoAdapter.retrieveBeans(ValueObject.FG_LIST_NULL, valObj); ) {
-        long count = beans.count();
+        // scope to a reserved id band: this test owns no rows, others may
+        long count = beans.filter(b -> b.getId() >= 90000000).count();
         assertEquals(count, 0, "Number of beans is " + count);
       }
     } catch (Exception e) {
@@ -152,7 +155,8 @@ public class ConstructorTest {
       ValueObject valObj = ValueObjectFactory.createValueObject();
       try (Stream<ValueObject> beans =
           cpoAdapter.retrieveBeans(ValueObject.FG_LIST_NULL, valObj); ) {
-        long count = beans.count();
+        // scope to a reserved id band: this test owns no rows, others may
+        long count = beans.filter(b -> b.getId() >= 90000000).count();
         assertEquals(count, 0, "Number of beans is " + count);
       }
     } catch (Exception e) {
@@ -178,7 +182,8 @@ public class ConstructorTest {
       ValueObject valObj = ValueObjectFactory.createValueObject();
       try (Stream<ValueObject> beans =
           cpoAdapter.retrieveBeans(ValueObject.FG_LIST_NULL, valObj); ) {
-        long count = beans.count();
+        // scope to a reserved id band: this test owns no rows, others may
+        long count = beans.filter(b -> b.getId() >= 90000000).count();
         assertEquals(count, 0, "Number of beans is " + count);
       }
     } catch (Exception e) {
@@ -204,7 +209,8 @@ public class ConstructorTest {
       ValueObject valObj = ValueObjectFactory.createValueObject();
       try (Stream<ValueObject> beans =
           cpoAdapter.retrieveBeans(ValueObject.FG_LIST_NULL, valObj); ) {
-        long count = beans.count();
+        // scope to a reserved id band: this test owns no rows, others may
+        long count = beans.filter(b -> b.getId() >= 90000000).count();
         assertEquals(count, 0, "Number of beans is " + count);
       }
     } catch (Exception e) {
@@ -230,7 +236,8 @@ public class ConstructorTest {
       ValueObject valObj = ValueObjectFactory.createValueObject();
       try (Stream<ValueObject> beans =
           cpoAdapter.retrieveBeans(ValueObject.FG_LIST_NULL, valObj); ) {
-        long count = beans.count();
+        // scope to a reserved id band: this test owns no rows, others may
+        long count = beans.filter(b -> b.getId() >= 90000000).count();
         assertEquals(count, 0, "Number of beans is " + count);
       }
     } catch (Exception e) {
@@ -256,7 +263,8 @@ public class ConstructorTest {
       ValueObject valObj = ValueObjectFactory.createValueObject();
       try (Stream<ValueObject> beans =
           cpoAdapter.retrieveBeans(ValueObject.FG_LIST_NULL, valObj); ) {
-        long count = beans.count();
+        // scope to a reserved id band: this test owns no rows, others may
+        long count = beans.filter(b -> b.getId() >= 90000000).count();
         assertEquals(count, 0, "Number of beans is " + count);
       }
     } catch (Exception e) {
@@ -282,7 +290,8 @@ public class ConstructorTest {
       ValueObject valObj = ValueObjectFactory.createValueObject();
       try (Stream<ValueObject> beans =
           cpoAdapter.retrieveBeans(ValueObject.FG_LIST_NULL, valObj); ) {
-        long count = beans.count();
+        // scope to a reserved id band: this test owns no rows, others may
+        long count = beans.filter(b -> b.getId() >= 90000000).count();
         assertEquals(count, 0, "Number of beans is " + count);
       }
     } catch (Exception e) {

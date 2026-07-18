@@ -42,6 +42,9 @@ import org.testng.annotations.Test;
  */
 public class ExecuteTest {
 
+  // unique id base so this class's rows never collide with another test class's
+  private static final int IDB = 900000;
+
   private static final Logger logger = LoggerFactory.getLogger(ExecuteTest.class);
   private CpoAdapter cpoAdapter = null;
   private boolean isSupportsCalls = true;
@@ -78,7 +81,7 @@ public class ExecuteTest {
   public void testExecute() {
     if (isSupportsCalls) {
       String method = "testExecute:";
-      ValueObject vo = ValueObjectFactory.createValueObject(1);
+      ValueObject vo = ValueObjectFactory.createValueObject(IDB + 1);
       vo.setAttrInteger(3);
       ValueObject rvo;
 
@@ -92,7 +95,7 @@ public class ExecuteTest {
       }
 
       try {
-        vo = ValueObjectFactory.createValueObject(1);
+        vo = ValueObjectFactory.createValueObject(IDB + 1);
         vo.setAttrSmallInt((short) 3);
         rvo = cpoAdapter.executeBean(ValueObject.FG_EXECUTE_TESTEXECUTEOBJECTNOTRANSFORM, vo);
         assertNotNull(method + "Returned Value object is null");
@@ -110,7 +113,7 @@ public class ExecuteTest {
   public void testExecute2() {
     if (isSupportsCalls) {
       String method = "testExecuteObject:";
-      ValueObject vo = ValueObjectFactory.createValueObject(1);
+      ValueObject vo = ValueObjectFactory.createValueObject(IDB + 1);
       vo.setAttrInteger(3);
       ValueObject rvo;
 

@@ -45,6 +45,9 @@ import org.testng.annotations.Test;
  */
 public class DeleteObjectTest {
 
+  // unique id base so this class's rows never collide with another test class's
+  private static final int IDB = 300000;
+
   private static final Logger logger = LoggerFactory.getLogger(DeleteObjectTest.class);
   private ArrayList<ValueObject> al = new ArrayList<>();
   private CpoAdapter cpoAdapter = null;
@@ -73,7 +76,7 @@ public class DeleteObjectTest {
   @Test
   public void testDeleteObject() {
     String method = "testDeleteObject:";
-    ValueObject valObj = ValueObjectFactory.createValueObject(5);
+    ValueObject valObj = ValueObjectFactory.createValueObject(IDB + 5);
 
     valObj.setAttrVarChar("testDelete");
     valObj.setAttrInt(3);

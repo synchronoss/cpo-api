@@ -44,6 +44,9 @@ import org.testng.annotations.Test;
  */
 public class OrderByTest {
 
+  // unique id base so this class's rows never collide with another test class's
+  private static final int IDB = 1800000;
+
   private CpoAdapter cpoAdapter = null;
   private final ArrayList<ValueObject> al = new ArrayList<>();
 
@@ -65,11 +68,11 @@ public class OrderByTest {
       fail(method + e.getMessage());
     }
 
-    al.add(ValueObjectFactory.createValueObject(1));
-    al.add(ValueObjectFactory.createValueObject(2));
-    al.add(ValueObjectFactory.createValueObject(3));
-    al.add(ValueObjectFactory.createValueObject(4));
-    al.add(ValueObjectFactory.createValueObject(5));
+    al.add(ValueObjectFactory.createValueObject(IDB + 1));
+    al.add(ValueObjectFactory.createValueObject(IDB + 2));
+    al.add(ValueObjectFactory.createValueObject(IDB + 3));
+    al.add(ValueObjectFactory.createValueObject(IDB + 4));
+    al.add(ValueObjectFactory.createValueObject(IDB + 5));
     try {
       cpoAdapter.insertBeans(ValueObject.FG_CREATE_TESTORDERBYINSERT, al);
     } catch (Exception e) {
@@ -126,8 +129,10 @@ public class OrderByTest {
       ValueObject valObj = ValueObjectFactory.createValueObject();
       try (Stream<ValueObject> beans =
           cpoAdapter.retrieveBeans(ValueObject.FG_LIST_TESTORDERBYRETRIEVE, valObj, colCob); ) {
-        AtomicInteger id = new AtomicInteger(1);
-        beans.forEach(bean -> assertEquals(bean.getId(), id.getAndIncrement()));
+        AtomicInteger id = new AtomicInteger(IDB + 1);
+        beans
+            .filter(b -> Math.abs(b.getId()) >= IDB && Math.abs(b.getId()) < IDB + 100000)
+            .forEach(bean -> assertEquals(bean.getId(), id.getAndIncrement()));
       }
     } catch (Exception e) {
       fail(method + e.getMessage());
@@ -151,8 +156,10 @@ public class OrderByTest {
       ValueObject valObj = ValueObjectFactory.createValueObject();
       try (Stream<ValueObject> beans =
           cpoAdapter.retrieveBeans(ValueObject.FG_LIST_TESTORDERBYRETRIEVE, valObj, colCob); ) {
-        AtomicInteger id = new AtomicInteger(5);
-        beans.forEach(bean -> assertEquals(bean.getId(), id.getAndDecrement()));
+        AtomicInteger id = new AtomicInteger(IDB + 5);
+        beans
+            .filter(b -> Math.abs(b.getId()) >= IDB && Math.abs(b.getId()) < IDB + 100000)
+            .forEach(bean -> assertEquals(bean.getId(), id.getAndDecrement()));
       }
     } catch (Exception e) {
       fail(method + e.getMessage());
@@ -164,7 +171,7 @@ public class OrderByTest {
     String method = "testOrderByFunction:";
     Collection<ValueObject> col;
 
-    ValueObject vobj = ValueObjectFactory.createValueObject(-6);
+    ValueObject vobj = ValueObjectFactory.createValueObject(IDB + -6);
     try {
       cpoAdapter.insertBean(ValueObject.FG_CREATE_TESTORDERBYINSERT, vobj);
       CpoOrderBy cob = cpoAdapter.newOrderBy(ValueObject.ATTR_ID, true, "ABS(id)");
@@ -173,8 +180,10 @@ public class OrderByTest {
       ValueObject valObj = ValueObjectFactory.createValueObject();
       try (Stream<ValueObject> beans =
           cpoAdapter.retrieveBeans(ValueObject.FG_LIST_TESTORDERBYRETRIEVE, valObj, colCob); ) {
-        AtomicInteger id = new AtomicInteger(1);
-        beans.forEach(bean -> assertEquals(Math.abs(bean.getId()), id.getAndIncrement()));
+        AtomicInteger id = new AtomicInteger(IDB + 1);
+        beans
+            .filter(b -> Math.abs(b.getId()) >= IDB && Math.abs(b.getId()) < IDB + 100000)
+            .forEach(bean -> assertEquals(Math.abs(bean.getId()), id.getAndIncrement()));
       }
     } catch (Exception e) {
       fail(method + e.getMessage());

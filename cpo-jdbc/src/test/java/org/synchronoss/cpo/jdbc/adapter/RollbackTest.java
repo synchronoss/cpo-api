@@ -39,6 +39,9 @@ import org.testng.annotations.Test;
  */
 public class RollbackTest {
 
+  // unique id base matching the hardcoded ids in this class's meta rollback groups
+  private static final int IDB = 2000000;
+
   private CpoAdapter cpoAdapter = null;
 
   public RollbackTest() {}
@@ -57,7 +60,7 @@ public class RollbackTest {
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
-    ValueObject vo = ValueObjectFactory.createValueObject(1);
+    ValueObject vo = ValueObjectFactory.createValueObject(IDB + 1);
     try {
       cpoAdapter.insertBean(vo);
     } catch (Exception e) {
@@ -68,7 +71,7 @@ public class RollbackTest {
   /** DOCUMENT ME! */
   @AfterClass
   public void tearDown() {
-    ValueObject vo = ValueObjectFactory.createValueObject(1);
+    ValueObject vo = ValueObjectFactory.createValueObject(IDB + 1);
     try {
       cpoAdapter.deleteBean(vo);
     } catch (Exception e) {
@@ -80,8 +83,8 @@ public class RollbackTest {
   @Test
   public void testRollbackProcessUpdateCollection() {
     String method = "testRollbackProcessUpdateCollection:";
-    ValueObject vo = ValueObjectFactory.createValueObject(2);
-    ValueObject vo2 = ValueObjectFactory.createValueObject(1);
+    ValueObject vo = ValueObjectFactory.createValueObject(IDB + 2);
+    ValueObject vo2 = ValueObjectFactory.createValueObject(IDB + 1);
     ArrayList<ValueObject> al = new ArrayList<>();
 
     al.add(vo);
@@ -104,7 +107,7 @@ public class RollbackTest {
   @Test
   public void testSingleRollback() {
     String method = "testSingleRollback:";
-    ValueObject vo = ValueObjectFactory.createValueObject(2);
+    ValueObject vo = ValueObjectFactory.createValueObject(IDB + 2);
     try {
       cpoAdapter.insertBean(ValueObject.FG_CREATE_TESTSINGLEROLLBACK, vo);
       fail(method + "Insert should have thrown an exception");

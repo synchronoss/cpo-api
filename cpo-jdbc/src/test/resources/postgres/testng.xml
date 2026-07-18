@@ -39,48 +39,56 @@
         <listener class-name="org.synchronoss.cpo.jdbc.JdbcSuiteListener"/>
     </listeners>
     <!--
-      Test classes are listed explicitly (instead of a package wildcard) so the
-      shared-state mutators below can be kept out of the parallel run. A new test
-      class must be added to one of the two lists or it will not be run.
+      The package wildcard picks up every test class automatically, so a new test
+      class runs in this parallel block by default. Classes that mutate shared state
+      are subtracted here via method excludes and listed in the serialized test below.
       -->
     <test name="${postgres.type} Jdbc Parallel Tests" verbose="2" parallel="classes" thread-count="4">
+        <packages>
+            <package name="org.synchronoss.cpo.jdbc.*"/>
+        </packages>
         <classes>
-            <class name="org.synchronoss.cpo.jdbc.ClassJdbcDataSourceInfoPoolTest"/>
-            <class name="org.synchronoss.cpo.jdbc.JndiJdbcDataSourceInfoTest"/>
-            <class name="org.synchronoss.cpo.jdbc.adapter.BlobTest"/>
-            <class name="org.synchronoss.cpo.jdbc.adapter.BlobTrxTest"/>
-            <class name="org.synchronoss.cpo.jdbc.adapter.CaseInsensitiveTest"/>
-            <class name="org.synchronoss.cpo.jdbc.adapter.CaseSensitiveTest"/>
-            <class name="org.synchronoss.cpo.jdbc.adapter.ConstructorTest"/>
-            <class name="org.synchronoss.cpo.jdbc.adapter.CriteriaObjectTest"/>
-            <class name="org.synchronoss.cpo.jdbc.adapter.DeleteObjectTest"/>
-            <class name="org.synchronoss.cpo.jdbc.adapter.EntityTest"/>
-            <class name="org.synchronoss.cpo.jdbc.adapter.ExecuteTest"/>
-            <class name="org.synchronoss.cpo.jdbc.adapter.ExecuteTrxTest"/>
-            <class name="org.synchronoss.cpo.jdbc.adapter.ExistObjectTest"/>
-            <class name="org.synchronoss.cpo.jdbc.adapter.InheritanceTest"/>
-            <class name="org.synchronoss.cpo.jdbc.adapter.InsertObjectTest"/>
-            <class name="org.synchronoss.cpo.jdbc.adapter.InterleavedWhereTest"/>
-            <class name="org.synchronoss.cpo.jdbc.adapter.InvalidParameterTest"/>
-            <class name="org.synchronoss.cpo.jdbc.adapter.NativeExpressionTest"/>
-            <class name="org.synchronoss.cpo.jdbc.adapter.OrderByTest"/>
-            <class name="org.synchronoss.cpo.jdbc.adapter.RollbackTest"/>
-            <class name="org.synchronoss.cpo.jdbc.adapter.RollbackTrxTest"/>
-            <class name="org.synchronoss.cpo.jdbc.adapter.UpdateObjectTest"/>
-            <class name="org.synchronoss.cpo.jdbc.adapter.WhereTest"/>
-            <class name="org.synchronoss.cpo.jdbc.adapter.XmlValidationTest"/>
-            <class name="org.synchronoss.cpo.jdbc.config.JdbcCpoConfigProcessorTest"/>
-            <class name="org.synchronoss.cpo.jdbc.exporter.ExporterTest"/>
-            <class name="org.synchronoss.cpo.jdbc.jta.JdbcXaAdapterDelegationTest"/>
-            <class name="org.synchronoss.cpo.jdbc.jta.JdbcXaResourceTest"/>
-            <class name="org.synchronoss.cpo.jdbc.parser.BoundExpressionParserTest"/>
-            <class name="org.synchronoss.cpo.jdbc.transform.TransformTest"/>
+            <class name="org.synchronoss.cpo.jdbc.adapter.BigBatchTest"> <!-- runs in the serialized test below -->
+                <methods>
+                    <exclude name=".*"/>
+                </methods>
+            </class>
+            <class name="org.synchronoss.cpo.jdbc.adapter.BigRetrieveTest"> <!-- runs in the serialized test below -->
+                <methods>
+                    <exclude name=".*"/>
+                </methods>
+            </class>
+            <class name="org.synchronoss.cpo.jdbc.adapter.HotDeployTest"> <!-- runs in the serialized test below -->
+                <methods>
+                    <exclude name=".*"/>
+                </methods>
+            </class>
+            <class name="org.synchronoss.cpo.jdbc.adapter.JdbcAdapterBranchTest"> <!-- runs in the serialized test below -->
+                <methods>
+                    <exclude name=".*"/>
+                </methods>
+            </class>
+            <class name="org.synchronoss.cpo.jdbc.adapter.RetrieveBeanTest"> <!-- runs in the serialized test below -->
+                <methods>
+                    <exclude name=".*"/>
+                </methods>
+            </class>
+            <class name="org.synchronoss.cpo.jdbc.adapter.SelectForUpdateTest"> <!-- runs in the serialized test below -->
+                <methods>
+                    <exclude name=".*"/>
+                </methods>
+            </class>
+            <class name="org.synchronoss.cpo.jdbc.exporter.JdbcMetaExportTest"> <!-- runs in the serialized test below -->
+                <methods>
+                    <exclude name=".*"/>
+                </methods>
+            </class>
         </classes>
     </test>
     <!--
       These classes mutate state shared across test classes (the global meta
-      descriptor, or the cached adapter's fetch/batch size) and must run
-      single-threaded, after the parallel block.
+      descriptor, the cached adapter's fetch/batch size, or table-wide select-for-update
+      locks) and must run single-threaded, after the parallel block.
       -->
     <test name="${postgres.type} Jdbc Serialized Tests" verbose="2">
         <classes>

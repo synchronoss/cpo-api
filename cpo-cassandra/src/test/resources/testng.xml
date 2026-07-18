@@ -35,30 +35,30 @@
         <listener class-name="org.synchronoss.cpo.cassandra.CassandraSuiteListener"/>
     </listeners>
     <!--
-      Test classes are listed explicitly (instead of a package wildcard) so the
-      shared-state mutators below can be kept out of the parallel run. A new test
-      class must be added to one of the two lists or it will not be run.
+      The package wildcard picks up every test class automatically, so a new test
+      class runs in this parallel block by default. Classes that mutate shared state
+      are subtracted here via method excludes and listed in the serialized test below.
       -->
     <test name="Cassandra Parallel Tests" verbose="2" parallel="classes" thread-count="4">
+        <packages>
+            <package name="org.synchronoss.cpo.cassandra.*"/>
+        </packages>
         <classes>
-            <class name="org.synchronoss.cpo.cassandra.AdapterDelegationTest"/>
-            <class name="org.synchronoss.cpo.cassandra.BlobTest"/>
-            <class name="org.synchronoss.cpo.cassandra.ClusterDataSourceInfoTest"/>
-            <class name="org.synchronoss.cpo.cassandra.CollectionsTest"/>
-            <class name="org.synchronoss.cpo.cassandra.ConstructorTest"/>
-            <class name="org.synchronoss.cpo.cassandra.DeleteObjectTest"/>
-            <class name="org.synchronoss.cpo.cassandra.EntityTest"/>
-            <class name="org.synchronoss.cpo.cassandra.ExistObjectTest"/>
-            <class name="org.synchronoss.cpo.cassandra.InheritanceTest"/>
-            <class name="org.synchronoss.cpo.cassandra.InsertObjectTest"/>
-            <class name="org.synchronoss.cpo.cassandra.InvalidParameterTest"/>
-            <class name="org.synchronoss.cpo.cassandra.NativeExpressionTest"/>
-            <class name="org.synchronoss.cpo.cassandra.OrderByTest"/>
-            <class name="org.synchronoss.cpo.cassandra.UpdateObjectTest"/>
-            <class name="org.synchronoss.cpo.cassandra.WhereTest"/>
-            <class name="org.synchronoss.cpo.cassandra.XmlValidationTest"/>
-            <class name="org.synchronoss.cpo.cassandra.config.CassandraCpoConfigProcessorTest"/>
-            <class name="org.synchronoss.cpo.cassandra.config.ConfigFactoryTest"/>
+            <class name="org.synchronoss.cpo.cassandra.HotDeployTest"> <!-- runs in the serialized test below -->
+                <methods>
+                    <exclude name=".*"/>
+                </methods>
+            </class>
+            <class name="org.synchronoss.cpo.cassandra.RetrieveBeanTest"> <!-- runs in the serialized test below -->
+                <methods>
+                    <exclude name=".*"/>
+                </methods>
+            </class>
+            <class name="org.synchronoss.cpo.cassandra.exporter.CassandraMetaExportTest"> <!-- runs in the serialized test below -->
+                <methods>
+                    <exclude name=".*"/>
+                </methods>
+            </class>
         </classes>
     </test>
     <!--

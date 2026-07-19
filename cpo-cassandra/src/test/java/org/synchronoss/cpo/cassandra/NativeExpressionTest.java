@@ -72,7 +72,7 @@ public class NativeExpressionTest {
     al.add(ValueObjectFactory.createValueObject(IDB + 3));
     al.add(ValueObjectFactory.createValueObject(IDB + 4));
     al.add(ValueObjectFactory.createValueObject(IDB + 5));
-    al.add(ValueObjectFactory.createValueObject(IDB + -6));
+    al.add(ValueObjectFactory.createValueObject(-(IDB + 6)));
     try {
       cpoAdapter.insertBeans("TestOrderByInsert", al);
     } catch (Exception e) {

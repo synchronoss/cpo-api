@@ -80,11 +80,28 @@ public class ClassJdbcDataSourceInfo extends AbstractJdbcDataSource
   }
 
   private Connection getPooledConnection() throws SQLException {
+    // A cached connection's physical link may have died while it sat in the free pool,
+    // so validate on borrow and discard the dead ones instead of handing them out.
     PooledConnection pooledConn;
-    if ((pooledConn = freeConnections.poll()) == null) {
-      pooledConn = poolDataSource.getPooledConnection();
-      pooledConn.addConnectionEventListener(this);
+    while ((pooledConn = freeConnections.poll()) != null) {
+      try {
+        Connection conn = pooledConn.getConnection();
+        if (!conn.isClosed()) {
+          usedConnections.add(pooledConn);
+          return conn;
+        }
+      } catch (SQLException se) {
+        logger.debug("Discarding dead pooled connection", se);
+      }
+      pooledConn.removeConnectionEventListener(this);
+      try {
+        pooledConn.close();
+      } catch (SQLException se) {
+        logger.debug("Error closing dead pooled connection", se);
+      }
     }
+    pooledConn = poolDataSource.getPooledConnection();
+    pooledConn.addConnectionEventListener(this);
     usedConnections.add(pooledConn);
     return pooledConn.getConnection();
   }
@@ -105,6 +122,11 @@ public class ClassJdbcDataSourceInfo extends AbstractJdbcDataSource
       Class dsClass = CpoClassLoader.forName(className);
       CommonDataSource ds = (CommonDataSource) dsClass.getDeclaredConstructor().newInstance();
 
+      // The ConnectionPoolDataSource must be a pure PooledConnection factory: a
+      // datasource with its own internal pool (e.g. MariaDbPoolDataSource) also
+      // reclaims closed connections, so both pools would hand out the same physical
+      // connection to different callers. Configure such classes' factory variant
+      // (e.g. MariaDbDataSource) instead.
       if (ds instanceof ConnectionPoolDataSource) {
         this.poolDataSource = (ConnectionPoolDataSource) ds;
         dataSource = this;
@@ -167,8 +189,18 @@ public class ClassJdbcDataSourceInfo extends AbstractJdbcDataSource
   }
 
   private void setClassProperties(CommonDataSource ds, SortedMap<String, String> properties) {
+    // The url must be set last: some datasources (e.g. MariaDbPoolDataSource) eagerly
+    // initialize their connection pool when the url is set, so all other properties,
+    // in particular the credentials, must already be in place.
     for (String key : properties.keySet()) {
-      setObjectProperty(ds, key, properties.get(key));
+      if (!"url".equalsIgnoreCase(key)) {
+        setObjectProperty(ds, key, properties.get(key));
+      }
+    }
+    for (String key : properties.keySet()) {
+      if ("url".equalsIgnoreCase(key)) {
+        setObjectProperty(ds, key, properties.get(key));
+      }
     }
   }
 

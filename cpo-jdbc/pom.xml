@@ -87,7 +87,10 @@
       <mariadb.initScript>mariadb/initDB.sql</mariadb.initScript>
       <mariadb.cpoConfig>mariadb/cpoConfig.xml</mariadb.cpoConfig>
       <mariadb.jndi>java:/comp/env/jdbc/cpodatasource</mariadb.jndi>
-      <mariadb.class>org.mariadb.jdbc.MariaDbPoolDataSource</mariadb.class>
+      <!-- MariaDbDataSource, not MariaDbPoolDataSource: CPO pools PooledConnections
+           itself, and MariaDbPoolDataSource's internal pool would reclaim the same
+           connections, handing one physical connection to two callers -->
+      <mariadb.class>org.mariadb.jdbc.MariaDbDataSource</mariadb.class>
       <mariadb.valueMeta>/common/ValueMetaData.xml</mariadb.valueMeta>
       <mariadb.valueCaseMeta>/common/ValueCaseMetaData.xml</mariadb.valueCaseMeta>
       <mariadb.lobMeta>/common/LobMetaData.xml</mariadb.lobMeta>

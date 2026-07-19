@@ -171,7 +171,7 @@ public class OrderByTest {
     String method = "testOrderByFunction:";
     Collection<ValueObject> col;
 
-    ValueObject vobj = ValueObjectFactory.createValueObject(IDB + -6);
+    ValueObject vobj = ValueObjectFactory.createValueObject(-(IDB + 6));
     try {
       cpoAdapter.insertBean(ValueObject.FG_CREATE_TESTORDERBYINSERT, vobj);
       CpoOrderBy cob = cpoAdapter.newOrderBy(ValueObject.ATTR_ID, true, "ABS(id)");

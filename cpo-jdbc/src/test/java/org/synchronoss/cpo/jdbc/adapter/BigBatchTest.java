@@ -81,7 +81,9 @@ public class BigBatchTest {
 
     String method = "testTooManyInserts:";
     int numInserts = 100000;
-    int id = numInserts;
+    // start at 0 so all ids stay inside this class's IDB band; starting at numInserts
+    // would put every row in the next band (BigRetrieveTest's)
+    int id = 0;
 
     int oldBatchSize = cpoAdapter.getBatchSize();
     assertEquals(oldBatchSize, 100);

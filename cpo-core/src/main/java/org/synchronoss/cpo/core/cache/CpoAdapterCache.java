@@ -22,8 +22,8 @@ package org.synchronoss.cpo.core.cache;
  * ]]
  */
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import org.synchronoss.cpo.core.CpoAdapter;
 
 /**
@@ -31,7 +31,8 @@ import org.synchronoss.cpo.core.CpoAdapter;
  */
 public class CpoAdapterCache {
 
-  private static final Map<String, CpoAdapter> adapterMap = new HashMap<>();
+  // ConcurrentHashMap: adapters are cached lazily from concurrent getInstance() calls
+  private static final Map<String, CpoAdapter> adapterMap = new ConcurrentHashMap<>();
 
   protected static CpoAdapter findCpoAdapter(String adapterKey) {
     CpoAdapter adapter = null;

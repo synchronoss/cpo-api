@@ -22,8 +22,8 @@ package org.synchronoss.cpo.core.cache;
  * ]]
  */
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import org.synchronoss.cpo.core.CpoAdapterFactory;
 
 /**
@@ -31,7 +31,8 @@ import org.synchronoss.cpo.core.CpoAdapterFactory;
  */
 public class CpoAdapterFactoryCache {
 
-  private static final Map<String, CpoAdapterFactory> adapterMap = new HashMap<>();
+  // ConcurrentHashMap: read on the hot lookup path while loadAdapters() repopulates concurrently
+  private static final Map<String, CpoAdapterFactory> adapterMap = new ConcurrentHashMap<>();
 
   protected static CpoAdapterFactory findCpoAdapterFactory(String adapterKey) {
     CpoAdapterFactory adapter = null;

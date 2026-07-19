@@ -256,11 +256,11 @@ public class BindableCpoWhere extends Node implements CpoWhere {
   }
 
   private String getAttributeName(
-      CpoAttribute jdbcAttribute, String leftAttribute, String rightAttribute) {
+      CpoAttribute attribute, String leftAttribute, String rightAttribute) {
     String attrName = null;
 
-    if (jdbcAttribute != null) {
-      attrName = jdbcAttribute.getJavaName();
+    if (attribute != null) {
+      attrName = attribute.getJavaName();
     }
 
     if (attrName == null && leftAttribute != null) {
@@ -320,9 +320,9 @@ public class BindableCpoWhere extends Node implements CpoWhere {
 
     if (function != null && !function.isEmpty()) {
       while ((attrOffset = function.indexOf(match, fromIndex)) != -1) {
-        sb.append(function.substring(0, attrOffset));
+        sb.append(function, fromIndex, attrOffset);
         sb.append(value);
-        fromIndex += attrOffset + match.length();
+        fromIndex = attrOffset + match.length();
       }
       sb.append(function.substring(fromIndex));
     }

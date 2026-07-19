@@ -28,7 +28,8 @@ import java.util.Map;
 import org.synchronoss.cpo.core.CpoException;
 
 /**
- * MethodMapper is a class defines the getters and setters for all the JDBC specific data classes
+ * MethodMapper maps java classes to the datastore-specific getter and setter methods used to bind
+ * them. Each datastore implementation registers its own entries.
  *
  * @author david berry
  */

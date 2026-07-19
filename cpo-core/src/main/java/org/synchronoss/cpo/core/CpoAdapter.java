@@ -748,7 +748,10 @@ public interface CpoAdapter extends java.io.Serializable {
    * @param bean This is a bean that has been defined within the metadata of the datasource. If the
    *     class is not defined an exception will be thrown. This bean will be searched for inside the
    *     datasource.
-   * @return The number of beans that exist in the datasource that match the specified bean
+   * @return The number of beans that exist in the datasource that match the specified bean. An
+   *     EXIST function must either return a count as a single row with a single numeric column
+   *     (count(*) style) or return one row per matching bean; a single-row result with one numeric
+   *     column is always interpreted as a count
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
   <T> long existsBean(T bean) throws CpoException;
@@ -790,7 +793,10 @@ public interface CpoAdapter extends java.io.Serializable {
    * @param bean This is a bean that has been defined within the metadata of the datasource. If the
    *     class is not defined an exception will be thrown. This bean will be searched for inside the
    *     datasource.
-   * @return The number of beans that exist in the datasource that match the specified bean
+   * @return The number of beans that exist in the datasource that match the specified bean. An
+   *     EXIST function must either return a count as a single row with a single numeric column
+   *     (count(*) style) or return one row per matching bean; a single-row result with one numeric
+   *     column is always interpreted as a count
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
   <T> long existsBean(String groupName, T bean) throws CpoException;
@@ -835,7 +841,10 @@ public interface CpoAdapter extends java.io.Serializable {
    *     datasource.
    * @param wheres A collection of CpoWhere beans that pass in run-time constraints to the function
    *     that performs the exist operation
-   * @return The number of beans that exist in the datasource that match the specified bean
+   * @return The number of beans that exist in the datasource that match the specified bean. An
+   *     EXIST function must either return a count as a single row with a single numeric column
+   *     (count(*) style) or return one row per matching bean; a single-row result with one numeric
+   *     column is always interpreted as a count
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
   <T> long existsBean(String groupName, T bean, Collection<CpoWhere> wheres) throws CpoException;
@@ -1243,9 +1252,11 @@ public interface CpoAdapter extends java.io.Serializable {
    *     the class is not defined an exception will be thrown. If the bean does not exist in the
    *     datasource, an exception will be thrown. This bean is used to specify the parameters used
    *     to retrieve the collection of beans.
-   * @return A collection of beans will be returned that meet the criteria specified by obj. The
-   *     beans will be of the same type as the bean that was passed in. If no beans match the
-   *     criteria, an empty collection will be returned
+   * @return A stream of beans that meet the criteria specified by obj. The beans will be of the
+   *     same type as the bean that was passed in. If no beans match the criteria, an empty stream
+   *     will be returned. The stream is backed by open datastore resources (statement, result set,
+   *     and connection) that are released only when the stream is closed; terminal operations do
+   *     not close it. Always close the returned stream, preferably with try-with-resources.
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
   <C> Stream<C> retrieveBeans(String groupName, C criteria) throws CpoException;
@@ -1264,9 +1275,11 @@ public interface CpoAdapter extends java.io.Serializable {
    * @param where A CpoWhere bean that defines the constraints that should be used when retrieving
    *     beans
    * @param orderBy The CpoOrderBy bean that defines the order in which beans should be returned
-   * @return A collection of beans will be returned that meet the criteria specified by obj. The
-   *     beans will be of the same type as the bean that was passed in. If no beans match the
-   *     criteria, an empty collection will be returned
+   * @return A stream of beans that meet the criteria specified by obj. The beans will be of the
+   *     same type as the bean that was passed in. If no beans match the criteria, an empty stream
+   *     will be returned. The stream is backed by open datastore resources (statement, result set,
+   *     and connection) that are released only when the stream is closed; terminal operations do
+   *     not close it. Always close the returned stream, preferably with try-with-resources.
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
   <C> Stream<C> retrieveBeans(
@@ -1285,9 +1298,11 @@ public interface CpoAdapter extends java.io.Serializable {
    *     datasource, an exception will be thrown. This bean is used to specify the parameters used
    *     to retrieve the collection of beans.
    * @param orderBy The CpoOrderBy bean that defines the order in which beans should be returned
-   * @return A collection of beans will be returned that meet the criteria specified by obj. The
-   *     beans will be of the same type as the bean that was passed in. If no beans match the
-   *     criteria, an empty collection will be returned
+   * @return A stream of beans that meet the criteria specified by obj. The beans will be of the
+   *     same type as the bean that was passed in. If no beans match the criteria, an empty stream
+   *     will be returned. The stream is backed by open datastore resources (statement, result set,
+   *     and connection) that are released only when the stream is closed; terminal operations do
+   *     not close it. Always close the returned stream, preferably with try-with-resources.
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
   <C> Stream<C> retrieveBeans(String groupName, C criteria, Collection<CpoOrderBy> orderBy)
@@ -1307,9 +1322,11 @@ public interface CpoAdapter extends java.io.Serializable {
    * @param wheres A collection of CpoWhere beans that define the constraints that should be used
    *     when retrieving beans
    * @param orderBy The CpoOrderBy bean that defines the order in which beans should be returned
-   * @return A collection of beans will be returned that meet the criteria specified by obj. The
-   *     beans will be of the same type as the bean that was passed in. If no beans match the
-   *     criteria, an empty collection will be returned
+   * @return A stream of beans that meet the criteria specified by obj. The beans will be of the
+   *     same type as the bean that was passed in. If no beans match the criteria, an empty stream
+   *     will be returned. The stream is backed by open datastore resources (statement, result set,
+   *     and connection) that are released only when the stream is closed; terminal operations do
+   *     not close it. Always close the returned stream, preferably with try-with-resources.
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
   <C> Stream<C> retrieveBeans(
@@ -1332,9 +1349,11 @@ public interface CpoAdapter extends java.io.Serializable {
    *     the class is not defined an exception will be thrown. If the bean does not exist in the
    *     datasource, an exception will be thrown. This bean is used to specify the bean type that
    *     will be returned in the collection.
-   * @return A stream of beans will be returned that meet the criteria specified by obj. The beans
-   *     will be of the same type as the bean that was passed in. If no beans match the criteria, an
-   *     empty collection will be returned
+   * @return A stream of beans that meet the criteria specified by obj. The beans will be of the
+   *     same type as the bean that was passed in. If no beans match the criteria, an empty stream
+   *     will be returned. The stream is backed by open datastore resources (statement, result set,
+   *     and connection) that are released only when the stream is closed; terminal operations do
+   *     not close it. Always close the returned stream, preferably with try-with-resources.
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
   <T, C> Stream<T> retrieveBeans(String groupName, C criteria, T result) throws CpoException;
@@ -1358,9 +1377,11 @@ public interface CpoAdapter extends java.io.Serializable {
    * @param where A CpoWhere bean that defines the constraints that should be used when retrieving
    *     beans
    * @param orderBy The CpoOrderBy bean that defines the order in which beans should be returned
-   * @return A stream of beans will be returned that meet the criteria specified by obj. The beans
-   *     will be of the same type as the bean that was passed in. If no beans match the criteria, an
-   *     empty collection will be returned
+   * @return A stream of beans that meet the criteria specified by obj. The beans will be of the
+   *     same type as the bean that was passed in. If no beans match the criteria, an empty stream
+   *     will be returned. The stream is backed by open datastore resources (statement, result set,
+   *     and connection) that are released only when the stream is closed; terminal operations do
+   *     not close it. Always close the returned stream, preferably with try-with-resources.
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
   <T, C> Stream<T> retrieveBeans(
@@ -1386,9 +1407,11 @@ public interface CpoAdapter extends java.io.Serializable {
    * @param wheres A collection of CpoWhere beans that define the constraints that should be used
    *     when retrieving beans
    * @param orderBy The CpoOrderBy bean that defines the order in which beans should be returned
-   * @return A stream of beans will be returned that meet the criteria specified by obj. The beans
-   *     will be of the same type as the bean that was passed in. If no beans match the criteria, an
-   *     empty collection will be returned
+   * @return A stream of beans that meet the criteria specified by obj. The beans will be of the
+   *     same type as the bean that was passed in. If no beans match the criteria, an empty stream
+   *     will be returned. The stream is backed by open datastore resources (statement, result set,
+   *     and connection) that are released only when the stream is closed; terminal operations do
+   *     not close it. Always close the returned stream, preferably with try-with-resources.
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
   <T, C> Stream<T> retrieveBeans(
@@ -1420,9 +1443,11 @@ public interface CpoAdapter extends java.io.Serializable {
    * @param orderBy The CpoOrderBy bean that defines the order in which beans should be returned
    * @param nativeExpressions Native expression that will be used to augment the expression stored
    *     in the metadata. This text will be embedded at run-time
-   * @return A stream of beans will be returned that meet the criteria specified by obj. The beans
-   *     will be of the same type as the bean that was passed in. If no beans match the criteria, an
-   *     empty collection will be returned
+   * @return A stream of beans that meet the criteria specified by obj. The beans will be of the
+   *     same type as the bean that was passed in. If no beans match the criteria, an empty stream
+   *     will be returned. The stream is backed by open datastore resources (statement, result set,
+   *     and connection) that are released only when the stream is closed; terminal operations do
+   *     not close it. Always close the returned stream, preferably with try-with-resources.
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
   <T, C> Stream<T> retrieveBeans(

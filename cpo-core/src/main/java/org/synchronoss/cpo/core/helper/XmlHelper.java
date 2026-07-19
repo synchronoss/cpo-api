@@ -25,44 +25,52 @@ package org.synchronoss.cpo.core.helper;
 import jakarta.xml.bind.*;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.InputStream;
-import java.net.URL;
+import java.net.URI;
+import java.nio.file.Paths;
 import javax.xml.XMLConstants;
+import javax.xml.parsers.SAXParserFactory;
+import javax.xml.transform.sax.SAXSource;
 import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.xml.sax.InputSource;
+import org.xml.sax.XMLReader;
 
 /**
  * @author dberry
  */
 public class XmlHelper {
+  private static final Logger logger = LoggerFactory.getLogger(XmlHelper.class);
   public static final String CPO_META_XSD = "xsd/CpoMeta.xsd";
   public static final String CPO_CONFIG_XSD = "xsd/CpoConfig.xsd";
 
   public static InputStream loadXmlStream(String xmlStr, StringBuilder errorBuilder) {
-    InputStream is = null;
     int errBuilderLen = errorBuilder.length();
+    InputStream is = null;
 
-    // See if the file is a uri
-    try {
-      URL cpoConfigUrl = new URL(xmlStr);
-      is = cpoConfigUrl.openStream();
-    } catch (IOException e) {
-      errorBuilder.append("Uri Not Found: ").append(xmlStr).append("\n");
-    }
-
-    // See if the file is a resource in the jar
-    if (is == null) is = CpoClassLoader.getResourceAsStream(xmlStr);
-
-    if (is == null) {
-      errorBuilder.append("Resource Not Found: ").append(xmlStr).append("\n");
+    // Only classpath resources and local files (plain paths or file: urls) are
+    // supported; remote urls are deliberately not fetched so a hostile CPO_CONFIG
+    // value cannot pull config from the network.
+    if (xmlStr.regionMatches(true, 0, "file:", 0, 5)) {
       try {
-        // See if the file is a local file on the server
-        is = new FileInputStream(xmlStr);
-      } catch (FileNotFoundException fnfe) {
+        is = new FileInputStream(Paths.get(URI.create(xmlStr)).toFile());
+      } catch (Exception e) {
         errorBuilder.append("File Not Found: ").append(xmlStr).append("\n");
-        is = null;
+      }
+    } else {
+      is = CpoClassLoader.getResourceAsStream(xmlStr);
+
+      if (is == null) {
+        errorBuilder.append("Resource Not Found: ").append(xmlStr).append("\n");
+        try {
+          // See if the file is a local file on the server
+          is = new FileInputStream(xmlStr);
+        } catch (FileNotFoundException fnfe) {
+          errorBuilder.append("File Not Found: ").append(xmlStr).append("\n");
+        }
       }
     }
     if (is != null) errorBuilder.setLength(errBuilderLen);
@@ -81,6 +89,8 @@ public class XmlHelper {
         var xmlStream = loadXmlStream(xml, errorBuilder)) {
       StreamSource configSource = new StreamSource(xsdStream);
       SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+      trySetSchemaFeature(schemaFactory, XMLConstants.FEATURE_SECURE_PROCESSING, true);
+      trySetSchemaProperty(schemaFactory, XMLConstants.ACCESS_EXTERNAL_DTD, "");
       Schema schema = schemaFactory.newSchema(configSource);
 
       JAXBContext jaxbContext = JAXBContext.newInstance(objClass);
@@ -100,7 +110,23 @@ public class XmlHelper {
                 return true; // Return true to continue processing, false to stop
               });
 
-      Object xmlObject = unmarshaller.unmarshal(xmlStream);
+      // Parse through a hardened SAX reader: DOCTYPE and external entities are
+      // rejected so untrusted config/meta XML cannot trigger XXE or entity expansion.
+      // Each knob is applied best-effort because the resolved parser implementation
+      // (JDK-internal vs standalone Xerces) recognizes different subsets of them.
+      SAXParserFactory saxParserFactory = SAXParserFactory.newInstance();
+      saxParserFactory.setNamespaceAware(true);
+      trySetSaxFeature(saxParserFactory, XMLConstants.FEATURE_SECURE_PROCESSING, true);
+      trySetSaxFeature(
+          saxParserFactory, "http://apache.org/xml/features/disallow-doctype-decl", true);
+      trySetSaxFeature(
+          saxParserFactory, "http://xml.org/sax/features/external-general-entities", false);
+      trySetSaxFeature(
+          saxParserFactory, "http://xml.org/sax/features/external-parameter-entities", false);
+      XMLReader xmlReader = saxParserFactory.newSAXParser().getXMLReader();
+
+      Object xmlObject =
+          unmarshaller.unmarshal(new SAXSource(xmlReader, new InputSource(xmlStream)));
       @SuppressWarnings("unchecked")
       T obj =
           (xmlObject instanceof JAXBElement)
@@ -112,5 +138,29 @@ public class XmlHelper {
       errorBuilder.append("Could not reading config xml " + xml + "or xsd " + xsd + "\n");
     }
     return null;
+  }
+
+  private static void trySetSaxFeature(SAXParserFactory factory, String feature, boolean value) {
+    try {
+      factory.setFeature(feature, value);
+    } catch (Exception e) {
+      logger.debug("XML parser does not support feature " + feature);
+    }
+  }
+
+  private static void trySetSchemaFeature(SchemaFactory factory, String feature, boolean value) {
+    try {
+      factory.setFeature(feature, value);
+    } catch (Exception e) {
+      logger.debug("Schema factory does not support feature " + feature);
+    }
+  }
+
+  private static void trySetSchemaProperty(SchemaFactory factory, String property, String value) {
+    try {
+      factory.setProperty(property, value);
+    } catch (Exception e) {
+      logger.debug("Schema factory does not support property " + property);
+    }
   }
 }

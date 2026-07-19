@@ -177,7 +177,8 @@ public class CassandraCpoAdapter extends CpoBaseAdapter<ClusterDataSource> {
    *     class is not defined an exception will be thrown.
    * @param session The session with which to check if the bean exists
    * @param wheres A collection of CpoWheres used to find the T
-   * @return The int value of the first column returned in the record set
+   * @return The number of matching beans: for a single-row result with one bigint column the column
+   *     value is returned (count(*) style), otherwise the number of rows returned
    * @throws CpoException Thrown if the Function Group has a function count != 1
    */
   protected <T> long existsBean(
@@ -208,17 +209,12 @@ public class CassandraCpoAdapter extends CpoBaseAdapter<ClusterDataSource> {
         boundStatementFactory.release();
         ColumnDefinitions columnDefinitions = rs.getColumnDefinitions();
 
-        // see if they are using the count(*) logic
-        if (columnDefinitions.size() == 1) {
+        // A single-row result whose one column is a bigint (what count(*) returns) is
+        // interpreted as a count style EXIST function; everything else is counted row by row.
+        if (columnDefinitions.size() == 1 && isCountResult(columnDefinitions.getType(0))) {
           Row next = rs.one();
           if (next != null) {
-            try {
-              qCount = next.getLong(0); // get the number of beans
-              // that exist
-            } catch (Exception e) {
-              // Exists result not an int so bail to record counter
-              qCount = 1;
-            }
+            qCount = next.getLong(0); // the number of beans that exist
             next = rs.one();
             if (next != null) {
               // EXIST function has more than one record so not a count(*)
@@ -238,6 +234,11 @@ public class CassandraCpoAdapter extends CpoBaseAdapter<ClusterDataSource> {
     }
 
     return count;
+  }
+
+  private static boolean isCountResult(DataType type) {
+    DataType.Name typeName = type.getName();
+    return typeName == DataType.Name.BIGINT || typeName == DataType.Name.COUNTER;
   }
 
   /**

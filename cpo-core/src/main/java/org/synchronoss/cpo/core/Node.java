@@ -26,6 +26,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicLong;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -47,6 +48,14 @@ public class Node implements Serializable, Cloneable, Comparable<Node> {
   private static final Logger logger = LoggerFactory.getLogger(Node.class);
 
   private static final int CHILD_NODE = 0;
+
+  private static final AtomicLong SERIAL_SOURCE = new AtomicLong();
+
+  /**
+   * Creation-order serial backing the default natural ordering; see {@link #compareTo(Node)}.
+   * Deserialized nodes keep the serial they were created with.
+   */
+  private final long nodeSerial = SERIAL_SOURCE.incrementAndGet();
 
   /** The parent node for this Node */
   private Node parent = null;
@@ -547,23 +556,24 @@ public class Node implements Serializable, Cloneable, Comparable<Node> {
     return thisClone;
   }
 
+  /**
+   * Default natural ordering: creation order. Ordering by creation serial (rather than identity
+   * hash code) keeps the Comparable contract — it never reports two distinct live nodes as equal,
+   * so sorted collections and {@link #addChildSort(Node)} behave deterministically. Subclasses with
+   * a meaningful value ordering should override this.
+   */
   @Override
   public int compareTo(Node o) {
-
-    int rc;
-
-    if (this.hashCode() < o.hashCode()) {
-      rc = -1;
-    } else if (this.hashCode() > o.hashCode()) {
-      rc = 1;
-    } else {
-      rc = 0;
-    }
-
-    return rc;
+    return Long.compare(nodeSerial, o.nodeSerial);
   }
 
-  public boolean equals(Node o) {
+  @Override
+  public boolean equals(Object o) {
     return this == o;
+  }
+
+  @Override
+  public int hashCode() {
+    return System.identityHashCode(this);
   }
 }

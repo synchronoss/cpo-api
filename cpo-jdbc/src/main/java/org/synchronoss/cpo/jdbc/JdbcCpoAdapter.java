@@ -30,6 +30,7 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Types;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -242,7 +243,8 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
    *     class is not defined an exception will be thrown.
    * @param con The datasource Connection with which to check if the bean exists
    * @param wheres A collection of where clauses
-   * @return The int value of the first column returned in the record set
+   * @return The number of matching beans: for a single-row result with one numeric column the
+   *     column value is returned (count(*) style), otherwise the number of rows returned
    * @throws CpoException exception will be thrown if the Function Group has a function count != 1
    */
   protected <T> long existsBean(
@@ -277,15 +279,10 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
         jpsf.release();
         rsmd = rs.getMetaData();
 
-        // see if they are using the count(*) logic
-        if (rsmd.getColumnCount() == 1 && rs.next()) {
-          try {
-            qCount = rs.getLong(1); // get the number of beans
-            // that exist
-          } catch (Exception e) {
-            // Exists result not an int so bail to record counter
-            qCount = 1;
-          }
+        // A single-row result with one numeric column is interpreted as a count(*)
+        // style EXIST function; everything else is counted row by row.
+        if (rsmd.getColumnCount() == 1 && isCountResult(rsmd.getColumnType(1)) && rs.next()) {
+          qCount = rs.getLong(1); // the number of beans that exist
           if (rs.next()) {
             // EXIST function has more than one record so not a count(*)
             qCount = 2;
@@ -312,6 +309,19 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
     }
 
     return objCount;
+  }
+
+  private static boolean isCountResult(int sqlType) {
+    return switch (sqlType) {
+      case Types.BIGINT,
+          Types.INTEGER,
+          Types.NUMERIC,
+          Types.DECIMAL,
+          Types.SMALLINT,
+          Types.TINYINT ->
+          true;
+      default -> false;
+    };
   }
 
   @Override

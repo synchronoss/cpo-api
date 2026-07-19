@@ -256,11 +256,11 @@ public class BindableCpoWhere extends Node implements CpoWhere {
   }
 
   private String getAttributeName(
-      CpoAttribute jdbcAttribute, String leftAttribute, String rightAttribute) {
+      CpoAttribute attribute, String leftAttribute, String rightAttribute) {
     String attrName = null;
 
-    if (jdbcAttribute != null) {
-      attrName = jdbcAttribute.getJavaName();
+    if (attribute != null) {
+      attrName = attribute.getJavaName();
     }
 
     if (attrName == null && leftAttribute != null) {

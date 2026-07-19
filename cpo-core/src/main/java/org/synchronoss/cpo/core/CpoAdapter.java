@@ -748,7 +748,10 @@ public interface CpoAdapter extends java.io.Serializable {
    * @param bean This is a bean that has been defined within the metadata of the datasource. If the
    *     class is not defined an exception will be thrown. This bean will be searched for inside the
    *     datasource.
-   * @return The number of beans that exist in the datasource that match the specified bean
+   * @return The number of beans that exist in the datasource that match the specified bean. An
+   *     EXIST function must either return a count as a single row with a single numeric column
+   *     (count(*) style) or return one row per matching bean; a single-row result with one numeric
+   *     column is always interpreted as a count
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
   <T> long existsBean(T bean) throws CpoException;
@@ -790,7 +793,10 @@ public interface CpoAdapter extends java.io.Serializable {
    * @param bean This is a bean that has been defined within the metadata of the datasource. If the
    *     class is not defined an exception will be thrown. This bean will be searched for inside the
    *     datasource.
-   * @return The number of beans that exist in the datasource that match the specified bean
+   * @return The number of beans that exist in the datasource that match the specified bean. An
+   *     EXIST function must either return a count as a single row with a single numeric column
+   *     (count(*) style) or return one row per matching bean; a single-row result with one numeric
+   *     column is always interpreted as a count
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
   <T> long existsBean(String groupName, T bean) throws CpoException;
@@ -835,7 +841,10 @@ public interface CpoAdapter extends java.io.Serializable {
    *     datasource.
    * @param wheres A collection of CpoWhere beans that pass in run-time constraints to the function
    *     that performs the exist operation
-   * @return The number of beans that exist in the datasource that match the specified bean
+   * @return The number of beans that exist in the datasource that match the specified bean. An
+   *     EXIST function must either return a count as a single row with a single numeric column
+   *     (count(*) style) or return one row per matching bean; a single-row result with one numeric
+   *     column is always interpreted as a count
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
   <T> long existsBean(String groupName, T bean, Collection<CpoWhere> wheres) throws CpoException;

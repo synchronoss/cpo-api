@@ -39,8 +39,8 @@ import org.synchronoss.cpo.core.meta.domain.CpoFunction;
 import org.synchronoss.cpo.core.parser.BoundExpressionParser;
 
 /**
- * JdbcPreparedStatementFactory is the object that encapsulates the creation of the actual
- * PreparedStatement for the JDBC driver.
+ * CpoStatementFactory is the base class that encapsulates the creation of the native statement for
+ * the target datastore from the meta expression, where clauses, and order-by clauses.
  *
  * @author david berry
  */

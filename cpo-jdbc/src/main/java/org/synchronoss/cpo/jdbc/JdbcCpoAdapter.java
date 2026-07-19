@@ -24,7 +24,6 @@ package org.synchronoss.cpo.jdbc;
 
 import java.sql.CallableStatement;
 import java.sql.Connection;
-import java.sql.DatabaseMetaData;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
@@ -75,7 +74,8 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
 
   private Context context_ = null;
 
-  private boolean batchUpdatesSupported_ = false;
+  /** The capabilities of the database behind this adapter, probed once at construction. */
+  private final JdbcDatabaseCapabilities capabilities;
 
   /** How this adapter obtains and releases its connections; see JdbcConnectionStrategy. */
   private JdbcConnectionStrategy connectionStrategy;
@@ -98,7 +98,7 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
     setReadDataSource(jdsiTrx.getDataSource());
     this.connectionStrategy =
         new JdbcPooledConnectionStrategy(getReadDataSource(), getWriteDataSource());
-    processDatabaseMetaData();
+    this.capabilities = JdbcDatabaseCapabilities.probe(connectionStrategy);
   }
 
   /**
@@ -122,7 +122,7 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
     setReadDataSource(jdsiRead.getDataSource());
     this.connectionStrategy =
         new JdbcPooledConnectionStrategy(getReadDataSource(), getWriteDataSource());
-    processDatabaseMetaData();
+    this.capabilities = JdbcDatabaseCapabilities.probe(connectionStrategy);
   }
 
   /**
@@ -137,7 +137,7 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
         jdbcCpoAdapter.getFetchSize(),
         jdbcCpoAdapter.getBatchSize());
     this.metaDescriptor = (JdbcCpoMetaDescriptor) jdbcCpoAdapter.getCpoMetaDescriptor();
-    batchUpdatesSupported_ = jdbcCpoAdapter.isBatchUpdatesSupported();
+    this.capabilities = jdbcCpoAdapter.capabilities;
     setWriteDataSource(jdbcCpoAdapter.getWriteDataSource());
     setReadDataSource(jdbcCpoAdapter.getReadDataSource());
     this.connectionStrategy =
@@ -168,25 +168,7 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
    * @return true if batch updates are supported
    */
   protected boolean isBatchUpdatesSupported() {
-    return batchUpdatesSupported_;
-  }
-
-  private void processDatabaseMetaData() throws CpoException {
-    Connection c = null;
-    try {
-      c = getReadConnection();
-      DatabaseMetaData dmd = c.getMetaData();
-
-      // do all the tests here
-      batchUpdatesSupported_ = dmd.supportsBatchUpdates();
-
-    } catch (Throwable t) {
-      throw new CpoException("Could Not Retrieve Database Metadata", t);
-    } finally {
-      // terminate the read-only transaction before pooling the connection (see existsBean)
-      rollbackLocalConnection(c);
-      closeLocalConnection(c);
-    }
+    return capabilities.batchUpdatesSupported();
   }
 
   /**
@@ -1247,7 +1229,7 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
 
     if (beans.isEmpty()) return updateCount;
 
-    if (batchUpdatesSupported_ && !Crud.UPSERT.equals(crud)) {
+    if (capabilities.batchUpdatesSupported() && !Crud.UPSERT.equals(crud)) {
       updateCount =
           processBatchUpdateGroup(beans, crud, groupName, wheres, orderBy, nativeExpressions, con);
     } else {

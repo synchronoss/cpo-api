@@ -88,7 +88,11 @@
     <!--
       These classes mutate state shared across test classes (the global meta
       descriptor, the cached adapter's fetch/batch size, or table-wide select-for-update
-      locks) and must run single-threaded, after the parallel block.
+      locks) and must run single-threaded, after the parallel block. Note that the
+      fetch/batch size mutators (RetrieveBeanTest, Big*Test) cannot run parallel even
+      though ConstructorTest asserts sizes on differently-named contexts: adapters are
+      cached by metaDescriptor + dataSourceName, so the jdbc/class/classProp contexts
+      all share one adapter instance.
       -->
     <test name="${mariadb.type} Jdbc Serialized Tests" verbose="2">
         <classes>

@@ -64,7 +64,9 @@
     <!--
       These classes mutate state shared across test classes (the global meta
       descriptor, or the cached adapter's fetch size) and must run
-      single-threaded, after the parallel block.
+      single-threaded, after the parallel block. RetrieveBeanTest must stay here
+      because ConstructorTest asserts getFetchSize()/getBatchSize() == 100 on the
+      same shared default-context adapter that RetrieveBeanTest temporarily mutates.
       -->
     <test name="Cassandra Serialized Tests" verbose="2">
         <classes>

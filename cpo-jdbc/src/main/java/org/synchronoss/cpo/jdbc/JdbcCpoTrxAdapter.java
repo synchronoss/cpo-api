@@ -38,9 +38,8 @@ public class JdbcCpoTrxAdapter extends JdbcCpoAdapter implements CpoTrxAdapter {
 
   private static final Logger logger = LoggerFactory.getLogger(JdbcCpoTrxAdapter.class);
 
-  /** DOCUMENT ME! */
-  // Default Connection. Only used JdbcCpoTrxAdapter
-  private Connection writeConnection_ = null;
+  /** Pins one connection for the life of the transaction; all reads and writes share it. */
+  private final JdbcPinnedConnectionStrategy pinnedStrategy;
 
   /**
    * Creates a JdbcCpoTrxAdapter from a jdbcCpoAdapter
@@ -50,6 +49,8 @@ public class JdbcCpoTrxAdapter extends JdbcCpoAdapter implements CpoTrxAdapter {
    */
   protected JdbcCpoTrxAdapter(JdbcCpoAdapter jdbcCpoAdapter) throws CpoException {
     super(jdbcCpoAdapter);
+    pinnedStrategy = new JdbcPinnedConnectionStrategy(getConnectionStrategy());
+    setConnectionStrategy(pinnedStrategy);
   }
 
   @Override
@@ -87,7 +88,7 @@ public class JdbcCpoTrxAdapter extends JdbcCpoAdapter implements CpoTrxAdapter {
     boolean closed = false;
 
     try {
-      closed = (writeConnection_ == null || writeConnection_.isClosed());
+      closed = pinnedStrategy.isConnectionClosed();
     } catch (Exception e) {
       throw new CpoException(e.getMessage());
     }
@@ -120,7 +121,7 @@ public class JdbcCpoTrxAdapter extends JdbcCpoAdapter implements CpoTrxAdapter {
         logger.trace(e.getLocalizedMessage());
       }
     } finally {
-      setStaticConnection(null);
+      pinnedStrategy.clearConnection();
     }
   }
 
@@ -131,52 +132,7 @@ public class JdbcCpoTrxAdapter extends JdbcCpoAdapter implements CpoTrxAdapter {
    * @throws CpoException - an error occurred
    */
   protected Connection getStaticConnection() throws CpoException {
-    if (writeConnection_ == null) {
-      // enable lazy loading and automatic connection creating for re-using and adapter after
-      // closing it
-      writeConnection_ = super.getWriteConnection();
-    }
-    return writeConnection_;
+    // lazy loading enables re-using an adapter after closing it
+    return pinnedStrategy.getConnection();
   }
-
-  private void setStaticConnection(Connection c) {
-    writeConnection_ = c;
-  }
-
-  @Override
-  protected Connection getReadConnection() throws CpoException {
-    return getStaticConnection();
-  }
-
-  @Override
-  protected Connection getWriteConnection() throws CpoException {
-    return getStaticConnection();
-  }
-
-  /**
-   * Closes a local connection. A CpoTrxAdapter allows the user to manage the transaction so <code>
-   * closeLocalConnection</code> does nothing
-   *
-   * @param connection The connection to be closed
-   */
-  @Override
-  protected void closeLocalConnection(Connection connection) {}
-
-  /**
-   * Commits a local connection. A CpoTrxAdapter allows the user to manage the transaction so <code>
-   * commitLocalConnection</code> does nothing
-   *
-   * @param connection The connection to be committed
-   */
-  @Override
-  protected void commitLocalConnection(Connection connection) {}
-
-  /**
-   * Rollbacks a local connection. A CpoTrxAdapter allows the user to manage the transaction so
-   * <code>rollbackLocalConnection</code> does nothing
-   *
-   * @param connection The connection to be rolled back
-   */
-  @Override
-  protected void rollbackLocalConnection(Connection connection) {}
 }

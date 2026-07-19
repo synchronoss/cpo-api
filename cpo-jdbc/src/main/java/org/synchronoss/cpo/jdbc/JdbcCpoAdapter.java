@@ -75,9 +75,10 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
 
   private Context context_ = null;
 
-  private boolean invalidReadConnection_ = false;
-
   private boolean batchUpdatesSupported_ = false;
+
+  /** How this adapter obtains and releases its connections; see JdbcConnectionStrategy. */
+  private JdbcConnectionStrategy connectionStrategy;
 
   /** CpoMetaDescriptor allows you to get the metadata for a class. */
   private JdbcCpoMetaDescriptor metaDescriptor = null;
@@ -95,6 +96,8 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
     this.metaDescriptor = metaDescriptor;
     setWriteDataSource(jdsiTrx.getDataSource());
     setReadDataSource(jdsiTrx.getDataSource());
+    this.connectionStrategy =
+        new JdbcPooledConnectionStrategy(getReadDataSource(), getWriteDataSource());
     processDatabaseMetaData();
   }
 
@@ -117,6 +120,8 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
     this.metaDescriptor = metaDescriptor;
     setWriteDataSource(jdsiWrite.getDataSource());
     setReadDataSource(jdsiRead.getDataSource());
+    this.connectionStrategy =
+        new JdbcPooledConnectionStrategy(getReadDataSource(), getWriteDataSource());
     processDatabaseMetaData();
   }
 
@@ -135,6 +140,26 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
     batchUpdatesSupported_ = jdbcCpoAdapter.isBatchUpdatesSupported();
     setWriteDataSource(jdbcCpoAdapter.getWriteDataSource());
     setReadDataSource(jdbcCpoAdapter.getReadDataSource());
+    this.connectionStrategy =
+        new JdbcPooledConnectionStrategy(getReadDataSource(), getWriteDataSource());
+  }
+
+  /**
+   * Gets the connection strategy this adapter uses
+   *
+   * @return The connection strategy
+   */
+  JdbcConnectionStrategy getConnectionStrategy() {
+    return connectionStrategy;
+  }
+
+  /**
+   * Replaces the connection strategy; used by JdbcCpoTrxAdapter to pin a transaction connection
+   *
+   * @param connectionStrategy The connection strategy to use
+   */
+  void setConnectionStrategy(JdbcConnectionStrategy connectionStrategy) {
+    this.connectionStrategy = connectionStrategy;
   }
 
   /**
@@ -408,32 +433,7 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
    * @throws CpoException An error has occurred.
    */
   protected Connection getReadConnection() throws CpoException {
-    Connection connection;
-
-    try {
-      if (!invalidReadConnection_) {
-        connection = getReadDataSource().getConnection();
-      } else {
-        connection = getWriteDataSource().getConnection();
-      }
-      connection.setAutoCommit(false);
-    } catch (Exception e) {
-      invalidReadConnection_ = true;
-
-      String msg = "getReadConnection(): failed";
-      logger.error(msg, e);
-
-      try {
-        connection = getWriteDataSource().getConnection();
-        connection.setAutoCommit(false);
-      } catch (SQLException e2) {
-        msg = "getWriteConnection(): failed";
-        logger.error(msg, e2);
-        throw new CpoException(msg, e2);
-      }
-    }
-
-    return connection;
+    return connectionStrategy.getReadConnection();
   }
 
   /**
@@ -443,18 +443,7 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
    * @throws CpoException An error has occurred.
    */
   protected Connection getWriteConnection() throws CpoException {
-    Connection connection;
-
-    try {
-      connection = getWriteDataSource().getConnection();
-      connection.setAutoCommit(false);
-    } catch (SQLException e) {
-      String msg = "getWriteConnection(): failed";
-      logger.error(msg, e);
-      throw new CpoException(msg, e);
-    }
-
-    return connection;
+    return connectionStrategy.getWriteConnection();
   }
 
   /**
@@ -463,15 +452,7 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
    * @param connection The connection to close
    */
   protected void closeLocalConnection(Connection connection) {
-    try {
-      if (connection != null && !connection.isClosed()) {
-        connection.close();
-      }
-    } catch (SQLException e) {
-      if (logger.isTraceEnabled()) {
-        logger.trace(e.getMessage());
-      }
-    }
+    connectionStrategy.closeLocalConnection(connection);
   }
 
   /**
@@ -480,15 +461,7 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
    * @param connection The connection to commit
    */
   protected void commitLocalConnection(Connection connection) {
-    try {
-      if (connection != null) {
-        connection.commit();
-      }
-    } catch (SQLException e) {
-      if (logger.isTraceEnabled()) {
-        logger.trace(e.getMessage());
-      }
-    }
+    connectionStrategy.commitLocalConnection(connection);
   }
 
   /**
@@ -497,15 +470,7 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
    * @param connection The connection to rollback
    */
   protected void rollbackLocalConnection(Connection connection) {
-    try {
-      if (connection != null) {
-        connection.rollback();
-      }
-    } catch (Exception e) {
-      if (logger.isTraceEnabled()) {
-        logger.trace(e.getMessage());
-      }
-    }
+    connectionStrategy.rollbackLocalConnection(connection);
   }
 
   @Override

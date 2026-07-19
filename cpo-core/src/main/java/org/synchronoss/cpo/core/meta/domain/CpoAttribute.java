@@ -159,14 +159,15 @@ public class CpoAttribute extends CpoAttributeBean {
     try {
       setter_.invoke(instanceObject, cpoData.invokeGetter());
     } catch (IllegalAccessException | InvocationTargetException | IllegalArgumentException e) {
-      localLogger.debug(
+      String msg =
           "Error Invoking Setter Method: "
               + getDataName()
               + ":"
               + getJavaName()
               + ":"
-              + setterName_
-              + ExceptionHelper.getLocalizedMessage(e));
+              + setterName_;
+      localLogger.debug(msg + ExceptionHelper.getLocalizedMessage(e));
+      throw new CpoException(msg, e);
     }
   }
 

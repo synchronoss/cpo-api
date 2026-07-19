@@ -8,7 +8,7 @@ CPO (Class Persistence Object) API is a Java persistence library that maps JavaB
 
 ## Build Commands
 
-**Prerequisites**: Java 25+, Maven 3.9+, Docker (for integration tests via Testcontainers)
+**Prerequisites**: Java 21+, Maven 3.9+, Docker (for integration tests via Testcontainers)
 
 ```bash
 # Full build including integration tests
@@ -112,6 +112,6 @@ Multiple meta XML files are merged per `metaConfig`, enabling the polymorphic ov
 ## Key Conventions
 
 - All source files must carry the LGPL v3 license header using `[[` / `]]` delimiters; the license plugin enforces this at build time. Add headers with `mvn license:update-file-header`.
-- Java 25 language level; `--release 25` in compiler config.
+- Java 21 language level; `--release 21` in compiler config (kept at the older LTS for broader community support).
 - JAXB-generated classes under `org.synchronoss.cpo.*config.*` and `org.synchronoss.cpo.*meta.*` subpackages (the generated ones) are excluded from Javadoc and should not be edited by hand.
 - The `cpo-plugin` module generates Java interfaces and bean classes from CPO meta XML at build time — edit the XML config, not the generated sources.

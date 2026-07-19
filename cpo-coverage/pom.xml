@@ -91,7 +91,9 @@
                                 <fileSet>
                                     <directory>${project.basedir}/..</directory>
                                     <includes>
-                                        <include>*/target/jacoco.exec</include>
+                                        <!-- jacoco.exec from a local reactor run, plus per-suite
+                                             jacoco-<suite>.exec files restored by the CI coverage job -->
+                                        <include>*/target/jacoco*.exec</include>
                                     </includes>
                                 </fileSet>
                             </fileSets>

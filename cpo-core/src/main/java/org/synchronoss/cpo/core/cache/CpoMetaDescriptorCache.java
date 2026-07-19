@@ -23,8 +23,8 @@ package org.synchronoss.cpo.core.cache;
  */
 
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import org.synchronoss.cpo.core.meta.CpoMetaDescriptor;
 
 /**
@@ -32,7 +32,8 @@ import org.synchronoss.cpo.core.meta.CpoMetaDescriptor;
  */
 public class CpoMetaDescriptorCache {
 
-  private static final Map<String, CpoMetaDescriptor> metaDescriptorMap = new HashMap<>();
+  // ConcurrentHashMap: read during query processing while hot-deploy reloads descriptors
+  private static final Map<String, CpoMetaDescriptor> metaDescriptorMap = new ConcurrentHashMap<>();
 
   protected static CpoMetaDescriptor findCpoMetaDescriptor(String adapterKey) {
     CpoMetaDescriptor metaDescriptor = null;

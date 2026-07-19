@@ -1194,14 +1194,23 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
 
   private long executeBatch(PreparedStatement ps) throws SQLException {
     long updateCount = 0;
+    int failedCount = 0;
     int[] updates = ps.executeBatch();
     for (int update : updates) {
-      if (update < 0 && update == PreparedStatement.SUCCESS_NO_INFO) {
+      if (update == PreparedStatement.SUCCESS_NO_INFO) {
         // something updated but we do not know what or how many so default to one.
         updateCount++;
+      } else if (update == PreparedStatement.EXECUTE_FAILED) {
+        // some drivers report per-statement failure here instead of throwing
+        // BatchUpdateException
+        failedCount++;
       } else {
         updateCount += update;
       }
+    }
+    if (failedCount > 0) {
+      throw new SQLException(
+          failedCount + " of " + updates.length + " statements in the batch failed to execute");
     }
     return updateCount;
   }

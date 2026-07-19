@@ -320,9 +320,9 @@ public class BindableCpoWhere extends Node implements CpoWhere {
 
     if (function != null && !function.isEmpty()) {
       while ((attrOffset = function.indexOf(match, fromIndex)) != -1) {
-        sb.append(function.substring(0, attrOffset));
+        sb.append(function, fromIndex, attrOffset);
         sb.append(value);
-        fromIndex += attrOffset + match.length();
+        fromIndex = attrOffset + match.length();
       }
       sb.append(function.substring(fromIndex));
     }

@@ -29,14 +29,32 @@ on:
   workflow_dispatch:
 
 jobs:
-  build_and_test:
+  #
+  # One job per test suite so a flaky database container only fails its own
+  # leg, failures are attributable at a glance, and the suites run in parallel.
+  # Each job uploads its JaCoCo execution data for the aggregate coverage job.
+  #
+  test:
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - suite: core
+            test-command: mvn --batch-mode test -pl cpo-core,cpo-plugin -Dgpg.skip
+          - suite: h2
+            test-command: mvn --batch-mode test -pl cpo-jdbc -Dgpg.skip -Dsurefire.suiteXmlFiles=target/test-classes/h2/testng.xml
+          - suite: mysql
+            test-command: mvn --batch-mode test -pl cpo-jdbc -Dgpg.skip -Dsurefire.suiteXmlFiles=target/test-classes/mysql/testng.xml
+          - suite: mariadb
+            test-command: mvn --batch-mode test -pl cpo-jdbc -Dgpg.skip -Dsurefire.suiteXmlFiles=target/test-classes/mariadb/testng.xml
+          - suite: postgres
+            test-command: mvn --batch-mode test -pl cpo-jdbc -Dgpg.skip -Dsurefire.suiteXmlFiles=target/test-classes/postgres/testng.xml
+          - suite: cassandra
+            test-command: mvn --batch-mode test -pl cpo-cassandra -Dgpg.skip
     steps:
-      #
-      # Set up the environment 
-      #
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
       - name: Set up JDK
@@ -44,9 +62,50 @@ jobs:
         with:
           java-version: '21'
           distribution: 'corretto'
-      #
-      # Import the gpg key
-      #
+          cache: maven
+      # Install all modules first: the cpo-plugin codegen execution in cpo-jdbc
+      # resolves cpo-plugin and cpo-jdbc from the local repository, so a clean
+      # runner needs the reactor installed before module-scoped test runs work.
+      - name: Build modules (tests skipped)
+        run: mvn --batch-mode install -DskipTests -Dgpg.skip
+      - name: Run ${{ matrix.suite }} tests
+        run: ${{ matrix.test-command }}
+      # Stage the execution data under module-prefixed names so the coverage job
+      # can restore every file to the right module after a flattening download.
+      - name: Stage JaCoCo execution data
+        run: |
+          mkdir -p jacoco-out
+          for f in */target/jacoco.exec; do
+            [ -f "$f" ] || continue
+            module=${f%%/*}
+            cp "$f" "jacoco-out/${module}-jacoco-${{ matrix.suite }}.exec"
+          done
+      - name: Upload JaCoCo execution data
+        uses: actions/upload-artifact@v4
+        with:
+          name: jacoco-${{ matrix.suite }}
+          path: jacoco-out/*.exec
+          if-no-files-found: error
+
+  #
+  # Merges every suite's JaCoCo data and enforces the aggregate coverage
+  # minimums (cpo-coverage), without rerunning any tests. Also keeps the
+  # artifact signing check from the previous single-job workflow.
+  #
+  coverage:
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'corretto'
+          cache: maven
       - name: Import GPG key
         uses: crazy-max/ghaction-import-gpg@v6
         with:
@@ -54,6 +113,21 @@ jobs:
           passphrase: ${{ secrets.GPG_PASSPHRASE }} # Optional, if your key has a passphrase
           git_user_signingkey: true # Configure Git to use this key for signing
           git_commit_gpgsign: true # Enable GPG signing for commits
-      - name: Verify CPO
-        id: All
-        run: mvn verify
+      - name: Download JaCoCo execution data
+        uses: actions/download-artifact@v4
+        with:
+          pattern: jacoco-*
+          merge-multiple: true
+          path: jacoco-data
+      # Restore each suite's execution data into its module's target directory,
+      # where the cpo-coverage merge picks up */target/jacoco*.exec.
+      - name: Restore JaCoCo execution data
+        run: |
+          for f in jacoco-data/*.exec; do
+            base=$(basename "$f" .exec)
+            module=${base%%-jacoco-*}
+            mkdir -p "$module/target"
+            cp "$f" "$module/target/${base#"$module"-}.exec"
+          done
+      - name: Verify with aggregate coverage
+        run: mvn --batch-mode verify -DskipTests

@@ -328,6 +328,16 @@
           <groupId>org.apache.logging.log4j</groupId>
           <artifactId>log4j-slf4j-impl</artifactId>
         </exclusion>
+        <!-- Keep the standalone Xerces parser and the JAXP-shadowing xml-apis jar off the
+             test classpath so all suites resolve the JDK-internal XML parser -->
+        <exclusion>
+          <groupId>xerces</groupId>
+          <artifactId>xercesImpl</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>xml-apis</groupId>
+          <artifactId>xml-apis</artifactId>
+        </exclusion>
       </exclusions>
       <scope>test</scope>
     </dependency>

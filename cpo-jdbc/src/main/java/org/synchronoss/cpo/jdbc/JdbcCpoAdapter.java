@@ -1096,20 +1096,9 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
         jpsf =
             new JdbcPreparedStatementFactory(
                 con, this, jmc, cpoFunction, firstBean, wheres, orderBy, nativeExpressions);
-        ps = jpsf.getPreparedStatement();
-        ps.addBatch();
-        int batchCount = 1;
-        for (T bean : beans.subList(1, beans.size())) {
-          //          jpsf.bindParameters(beans[j]);
-          jpsf.setBindValues(jpsf.getBindValues(cpoFunction, bean));
-          ps.addBatch();
-          if (getBatchSize() > 0 && ++batchCount % getBatchSize() == 0) {
-            updateCount += executeBatch(ps);
-          }
-        }
-        updateCount += executeBatch(ps);
+        updateCount =
+            new JdbcBatchExecutor(getBatchSize()).executeBatchedUpdates(jpsf, cpoFunction, beans);
         jpsf.release();
-        ps.close();
         localLogger.info(buildUpdatesLogLine(updateCount, firstBean.getClass(), crud, groupName));
       } else {
         localLogger.info(buildCpoClassLogLine(firstBean.getClass(), crud, groupName));
@@ -1146,29 +1135,6 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
       }
     }
 
-    return updateCount;
-  }
-
-  private long executeBatch(PreparedStatement ps) throws SQLException {
-    long updateCount = 0;
-    int failedCount = 0;
-    int[] updates = ps.executeBatch();
-    for (int update : updates) {
-      if (update == PreparedStatement.SUCCESS_NO_INFO) {
-        // something updated but we do not know what or how many so default to one.
-        updateCount++;
-      } else if (update == PreparedStatement.EXECUTE_FAILED) {
-        // some drivers report per-statement failure here instead of throwing
-        // BatchUpdateException
-        failedCount++;
-      } else {
-        updateCount += update;
-      }
-    }
-    if (failedCount > 0) {
-      throw new SQLException(
-          failedCount + " of " + updates.length + " statements in the batch failed to execute");
-    }
     return updateCount;
   }
 

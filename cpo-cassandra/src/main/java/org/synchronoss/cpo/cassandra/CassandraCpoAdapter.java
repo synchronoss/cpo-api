@@ -62,7 +62,8 @@ public class CassandraCpoAdapter extends CpoBaseAdapter<ClusterDataSource> {
   /** CpoMetaDescriptor allows you to get the metadata for a class. */
   private CassandraCpoMetaDescriptor metaDescriptor = null;
 
-  private boolean invalidReadSession = false;
+  /** How this adapter obtains its sessions; see CassandraSessionStrategy. */
+  private final CassandraSessionStrategy sessionStrategy;
 
   private static int unknownModifyCount = -1;
 
@@ -80,6 +81,7 @@ public class CassandraCpoAdapter extends CpoBaseAdapter<ClusterDataSource> {
     this.metaDescriptor = metaDescriptor;
     setWriteDataSource(jdsiTrx.getDataSource());
     setReadDataSource(jdsiTrx.getDataSource());
+    this.sessionStrategy = new CassandraSessionStrategy(getReadDataSource(), getWriteDataSource());
   }
 
   /**
@@ -101,6 +103,7 @@ public class CassandraCpoAdapter extends CpoBaseAdapter<ClusterDataSource> {
     this.metaDescriptor = metaDescriptor;
     setWriteDataSource(jdsiWrite.getDataSource());
     setReadDataSource(jdsiRead.getDataSource());
+    this.sessionStrategy = new CassandraSessionStrategy(getReadDataSource(), getWriteDataSource());
   }
 
   /**
@@ -258,24 +261,7 @@ public class CassandraCpoAdapter extends CpoBaseAdapter<ClusterDataSource> {
    * @throws CpoException An exception occurred
    */
   protected Session getReadSession() throws CpoException {
-    Session session;
-
-    try {
-      if (!invalidReadSession) {
-        session = getReadDataSource().getSession();
-      } else {
-        session = getWriteDataSource().getSession();
-      }
-    } catch (Exception e) {
-      invalidReadSession = true;
-
-      String msg = "getReadConnection(): failed";
-      logger.error(msg, e);
-
-      session = getWriteSession();
-    }
-
-    return session;
+    return sessionStrategy.getReadSession();
   }
 
   /**
@@ -285,17 +271,7 @@ public class CassandraCpoAdapter extends CpoBaseAdapter<ClusterDataSource> {
    * @throws CpoException An exception occurred
    */
   protected Session getWriteSession() throws CpoException {
-    Session session;
-
-    try {
-      session = getWriteDataSource().getSession();
-    } catch (Throwable t) {
-      String msg = "getWriteConnection(): failed";
-      logger.error(msg, t);
-      throw new CpoException(msg, t);
-    }
-
-    return session;
+    return sessionStrategy.getWriteSession();
   }
 
   /**

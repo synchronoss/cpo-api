@@ -84,7 +84,16 @@ Multiple meta XML files are merged per `metaConfig`, enabling the polymorphic ov
 
 ### JDBC Implementation (cpo-jdbc)
 
-- `JdbcCpoAdapter` / `JdbcCpoTrxAdapter` — concrete JDBC implementations.
+- `JdbcCpoAdapter` / `JdbcCpoTrxAdapter` — concrete JDBC implementations. The adapter delegates
+  cross-cutting concerns to package-private collaborators: `JdbcConnectionStrategy` (connection
+  lifecycle — `JdbcPooledConnectionStrategy` per-call checkout vs `JdbcPinnedConnectionStrategy`
+  one pinned connection per transaction, injected by `JdbcCpoTrxAdapter`),
+  `JdbcDatabaseCapabilities` (DatabaseMetaData capability flags probed once at construction), and
+  `JdbcBatchExecutor` (batch chunking and update-count mechanics). `CassandraSessionStrategy`
+  mirrors the session-acquisition shape in cpo-cassandra (concrete class, no per-call release —
+  Cassandra sessions are long-lived). The lifecycle seam is deliberately NOT generalized into
+  cpo-core: the JDBC and Cassandra semantics differ too much (transactional release vs none), and
+  cpo-core never touches connections itself. Revisit if a third datastore is added.
 - `JdbcCpoMetaDescriptor` — JDBC-specific meta with `JdbcMethodMapper` for SQL type mappings.
 - `JdbcPreparedStatementFactory` / `JdbcCallableStatementFactory` — build `PreparedStatement`/`CallableStatement` from meta.
 - `JdbcCpoTransform` — interface for custom type transforms; built-ins: `TransformClob`, `TransformGZipBytes`, `TransformTimestampToCalendar`, etc.

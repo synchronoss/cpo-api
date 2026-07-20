@@ -218,9 +218,12 @@
                 <executions>
                     <execution>
                         <goals>
-                            <goal>apply</goal>
+                            <!-- check, not apply: the build must FAIL on unformatted source (locally
+                                 and in every CI job) rather than silently reformat its own workspace.
+                                 Run `mvn spotless:apply` to fix a failure. -->
+                            <goal>check</goal>
                         </goals>
-                        <phase>process-sources</phase> <!-- Or validate, or any other suitable phase -->
+                        <phase>process-sources</phase>
                    </execution>
                 </executions>
             </plugin>

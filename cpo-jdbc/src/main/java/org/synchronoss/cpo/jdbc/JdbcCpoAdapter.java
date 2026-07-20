@@ -24,7 +24,6 @@ package org.synchronoss.cpo.jdbc;
 
 import java.sql.CallableStatement;
 import java.sql.Connection;
-import java.sql.DatabaseMetaData;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
@@ -75,9 +74,11 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
 
   private Context context_ = null;
 
-  private boolean invalidReadConnection_ = false;
+  /** The capabilities of the database behind this adapter, probed once at construction. */
+  private final JdbcDatabaseCapabilities capabilities;
 
-  private boolean batchUpdatesSupported_ = false;
+  /** How this adapter obtains and releases its connections; see JdbcConnectionStrategy. */
+  private JdbcConnectionStrategy connectionStrategy;
 
   /** CpoMetaDescriptor allows you to get the metadata for a class. */
   private JdbcCpoMetaDescriptor metaDescriptor = null;
@@ -95,7 +96,9 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
     this.metaDescriptor = metaDescriptor;
     setWriteDataSource(jdsiTrx.getDataSource());
     setReadDataSource(jdsiTrx.getDataSource());
-    processDatabaseMetaData();
+    this.connectionStrategy =
+        new JdbcPooledConnectionStrategy(getReadDataSource(), getWriteDataSource());
+    this.capabilities = JdbcDatabaseCapabilities.probe(connectionStrategy);
   }
 
   /**
@@ -117,7 +120,9 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
     this.metaDescriptor = metaDescriptor;
     setWriteDataSource(jdsiWrite.getDataSource());
     setReadDataSource(jdsiRead.getDataSource());
-    processDatabaseMetaData();
+    this.connectionStrategy =
+        new JdbcPooledConnectionStrategy(getReadDataSource(), getWriteDataSource());
+    this.capabilities = JdbcDatabaseCapabilities.probe(connectionStrategy);
   }
 
   /**
@@ -132,9 +137,29 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
         jdbcCpoAdapter.getFetchSize(),
         jdbcCpoAdapter.getBatchSize());
     this.metaDescriptor = (JdbcCpoMetaDescriptor) jdbcCpoAdapter.getCpoMetaDescriptor();
-    batchUpdatesSupported_ = jdbcCpoAdapter.isBatchUpdatesSupported();
+    this.capabilities = jdbcCpoAdapter.capabilities;
     setWriteDataSource(jdbcCpoAdapter.getWriteDataSource());
     setReadDataSource(jdbcCpoAdapter.getReadDataSource());
+    this.connectionStrategy =
+        new JdbcPooledConnectionStrategy(getReadDataSource(), getWriteDataSource());
+  }
+
+  /**
+   * Gets the connection strategy this adapter uses
+   *
+   * @return The connection strategy
+   */
+  JdbcConnectionStrategy getConnectionStrategy() {
+    return connectionStrategy;
+  }
+
+  /**
+   * Replaces the connection strategy; used by JdbcCpoTrxAdapter to pin a transaction connection
+   *
+   * @param connectionStrategy The connection strategy to use
+   */
+  void setConnectionStrategy(JdbcConnectionStrategy connectionStrategy) {
+    this.connectionStrategy = connectionStrategy;
   }
 
   /**
@@ -143,25 +168,7 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
    * @return true if batch updates are supported
    */
   protected boolean isBatchUpdatesSupported() {
-    return batchUpdatesSupported_;
-  }
-
-  private void processDatabaseMetaData() throws CpoException {
-    Connection c = null;
-    try {
-      c = getReadConnection();
-      DatabaseMetaData dmd = c.getMetaData();
-
-      // do all the tests here
-      batchUpdatesSupported_ = dmd.supportsBatchUpdates();
-
-    } catch (Throwable t) {
-      throw new CpoException("Could Not Retrieve Database Metadata", t);
-    } finally {
-      // terminate the read-only transaction before pooling the connection (see existsBean)
-      rollbackLocalConnection(c);
-      closeLocalConnection(c);
-    }
+    return capabilities.batchUpdatesSupported();
   }
 
   /**
@@ -408,32 +415,7 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
    * @throws CpoException An error has occurred.
    */
   protected Connection getReadConnection() throws CpoException {
-    Connection connection;
-
-    try {
-      if (!invalidReadConnection_) {
-        connection = getReadDataSource().getConnection();
-      } else {
-        connection = getWriteDataSource().getConnection();
-      }
-      connection.setAutoCommit(false);
-    } catch (Exception e) {
-      invalidReadConnection_ = true;
-
-      String msg = "getReadConnection(): failed";
-      logger.error(msg, e);
-
-      try {
-        connection = getWriteDataSource().getConnection();
-        connection.setAutoCommit(false);
-      } catch (SQLException e2) {
-        msg = "getWriteConnection(): failed";
-        logger.error(msg, e2);
-        throw new CpoException(msg, e2);
-      }
-    }
-
-    return connection;
+    return connectionStrategy.getReadConnection();
   }
 
   /**
@@ -443,18 +425,7 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
    * @throws CpoException An error has occurred.
    */
   protected Connection getWriteConnection() throws CpoException {
-    Connection connection;
-
-    try {
-      connection = getWriteDataSource().getConnection();
-      connection.setAutoCommit(false);
-    } catch (SQLException e) {
-      String msg = "getWriteConnection(): failed";
-      logger.error(msg, e);
-      throw new CpoException(msg, e);
-    }
-
-    return connection;
+    return connectionStrategy.getWriteConnection();
   }
 
   /**
@@ -463,15 +434,7 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
    * @param connection The connection to close
    */
   protected void closeLocalConnection(Connection connection) {
-    try {
-      if (connection != null && !connection.isClosed()) {
-        connection.close();
-      }
-    } catch (SQLException e) {
-      if (logger.isTraceEnabled()) {
-        logger.trace(e.getMessage());
-      }
-    }
+    connectionStrategy.closeLocalConnection(connection);
   }
 
   /**
@@ -480,15 +443,7 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
    * @param connection The connection to commit
    */
   protected void commitLocalConnection(Connection connection) {
-    try {
-      if (connection != null) {
-        connection.commit();
-      }
-    } catch (SQLException e) {
-      if (logger.isTraceEnabled()) {
-        logger.trace(e.getMessage());
-      }
-    }
+    connectionStrategy.commitLocalConnection(connection);
   }
 
   /**
@@ -497,15 +452,7 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
    * @param connection The connection to rollback
    */
   protected void rollbackLocalConnection(Connection connection) {
-    try {
-      if (connection != null) {
-        connection.rollback();
-      }
-    } catch (Exception e) {
-      if (logger.isTraceEnabled()) {
-        logger.trace(e.getMessage());
-      }
-    }
+    connectionStrategy.rollbackLocalConnection(connection);
   }
 
   @Override
@@ -1149,20 +1096,9 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
         jpsf =
             new JdbcPreparedStatementFactory(
                 con, this, jmc, cpoFunction, firstBean, wheres, orderBy, nativeExpressions);
-        ps = jpsf.getPreparedStatement();
-        ps.addBatch();
-        int batchCount = 1;
-        for (T bean : beans.subList(1, beans.size())) {
-          //          jpsf.bindParameters(beans[j]);
-          jpsf.setBindValues(jpsf.getBindValues(cpoFunction, bean));
-          ps.addBatch();
-          if (getBatchSize() > 0 && ++batchCount % getBatchSize() == 0) {
-            updateCount += executeBatch(ps);
-          }
-        }
-        updateCount += executeBatch(ps);
+        updateCount =
+            new JdbcBatchExecutor(getBatchSize()).executeBatchedUpdates(jpsf, cpoFunction, beans);
         jpsf.release();
-        ps.close();
         localLogger.info(buildUpdatesLogLine(updateCount, firstBean.getClass(), crud, groupName));
       } else {
         localLogger.info(buildCpoClassLogLine(firstBean.getClass(), crud, groupName));
@@ -1199,29 +1135,6 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
       }
     }
 
-    return updateCount;
-  }
-
-  private long executeBatch(PreparedStatement ps) throws SQLException {
-    long updateCount = 0;
-    int failedCount = 0;
-    int[] updates = ps.executeBatch();
-    for (int update : updates) {
-      if (update == PreparedStatement.SUCCESS_NO_INFO) {
-        // something updated but we do not know what or how many so default to one.
-        updateCount++;
-      } else if (update == PreparedStatement.EXECUTE_FAILED) {
-        // some drivers report per-statement failure here instead of throwing
-        // BatchUpdateException
-        failedCount++;
-      } else {
-        updateCount += update;
-      }
-    }
-    if (failedCount > 0) {
-      throw new SQLException(
-          failedCount + " of " + updates.length + " statements in the batch failed to execute");
-    }
     return updateCount;
   }
 
@@ -1282,7 +1195,7 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
 
     if (beans.isEmpty()) return updateCount;
 
-    if (batchUpdatesSupported_ && !Crud.UPSERT.equals(crud)) {
+    if (capabilities.batchUpdatesSupported() && !Crud.UPSERT.equals(crud)) {
       updateCount =
           processBatchUpdateGroup(beans, crud, groupName, wheres, orderBy, nativeExpressions, con);
     } else {

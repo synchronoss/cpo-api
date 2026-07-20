@@ -48,7 +48,7 @@ mvn test jacoco:report -pl cpo-jdbc
 
 The build enforces these checks at compile/test phases — violations fail the build:
 
-- **Spotless** (Google Java Format, `process-sources` phase): auto-formats Java. Run `mvn spotless:apply` before committing to avoid CI failures.
+- **Spotless** (Google Java Format, `spotless:check` at the `process-sources` phase): the build FAILS on unformatted Java — it does not auto-format. Run `mvn spotless:apply` to fix formatting before building/committing.
 - **PMD + CPD** (`compile` phase): static analysis and copy-paste detection. Minimum token threshold is 55.
 - **JaCoCo** (`verify` phase, `cpo-coverage` module): coverage is measured and enforced on the **aggregate** of all module tests, not per module — cpo-core is mostly interfaces, so its coverage comes from the cpo-jdbc/cpo-cassandra tests that exercise it. Minimums (80% instruction, line, and branch) are set by the `coverage.instruction.minimum`, `coverage.line.minimum`, and `coverage.branch.minimum` properties in the root pom. JAXB-generated packages (`cpoconfig`, `cpometa`, `cpoutilconfig`) are excluded from coverage.
 - **License headers**: `license-maven-plugin` enforces LGPL v3 headers in all Java files. Headers use `[[` / `]]` delimiters and `==` section separator (not the standard `%L` / `%%`).
@@ -84,7 +84,16 @@ Multiple meta XML files are merged per `metaConfig`, enabling the polymorphic ov
 
 ### JDBC Implementation (cpo-jdbc)
 
-- `JdbcCpoAdapter` / `JdbcCpoTrxAdapter` — concrete JDBC implementations.
+- `JdbcCpoAdapter` / `JdbcCpoTrxAdapter` — concrete JDBC implementations. The adapter delegates
+  cross-cutting concerns to package-private collaborators: `JdbcConnectionStrategy` (connection
+  lifecycle — `JdbcPooledConnectionStrategy` per-call checkout vs `JdbcPinnedConnectionStrategy`
+  one pinned connection per transaction, injected by `JdbcCpoTrxAdapter`),
+  `JdbcDatabaseCapabilities` (DatabaseMetaData capability flags probed once at construction), and
+  `JdbcBatchExecutor` (batch chunking and update-count mechanics). `CassandraSessionStrategy`
+  mirrors the session-acquisition shape in cpo-cassandra (concrete class, no per-call release —
+  Cassandra sessions are long-lived). The lifecycle seam is deliberately NOT generalized into
+  cpo-core: the JDBC and Cassandra semantics differ too much (transactional release vs none), and
+  cpo-core never touches connections itself. Revisit if a third datastore is added.
 - `JdbcCpoMetaDescriptor` — JDBC-specific meta with `JdbcMethodMapper` for SQL type mappings.
 - `JdbcPreparedStatementFactory` / `JdbcCallableStatementFactory` — build `PreparedStatement`/`CallableStatement` from meta.
 - `JdbcCpoTransform` — interface for custom type transforms; built-ins: `TransformClob`, `TransformGZipBytes`, `TransformTimestampToCalendar`, etc.

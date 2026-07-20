@@ -139,12 +139,17 @@ public class BigRetrieveTest {
   @AfterClass
   public void tearDown() {
     String method = "tearDown:";
+    // the default batch size of 100 turns the bulk delete into many small network round trips
+    int oldBatchSize = cpoAdapter.getBatchSize();
+    cpoAdapter.setBatchSize(10000);
     try {
       cpoAdapter.deleteBeans(al);
 
     } catch (Exception e) {
       logger.error(ExceptionHelper.getLocalizedMessage(e));
       fail(method + e.getMessage());
+    } finally {
+      cpoAdapter.setBatchSize(oldBatchSize);
     }
     cpoAdapter = null;
   }

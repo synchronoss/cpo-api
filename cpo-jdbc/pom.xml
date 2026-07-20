@@ -51,8 +51,8 @@
       <mysql.host>localhost</mysql.host>
       <mysql.port>3306</mysql.port>
       <mysql.database>cpo</mysql.database>
-      <mysql.url>jdbc:mysql://${mysql.host}:${mysql.port}/${mysql.database}?noAccessToProcedureBodies=true&amp;amp;useCursorFetch=true</mysql.url>
-      <mysql.userurl>jdbc:mysql://${mysql.host}:${mysql.port}/${mysql.database}?user=${mysql.user}&amp;amp;password=${mysql.pswd}&amp;amp;noAccessToProcedureBodies=true&amp;amp;useCursorFetch=true</mysql.userurl>
+      <mysql.url>jdbc:mysql://${mysql.host}:${mysql.port}/${mysql.database}?noAccessToProcedureBodies=true&amp;amp;useCursorFetch=true&amp;amp;rewriteBatchedStatements=true</mysql.url>
+      <mysql.userurl>jdbc:mysql://${mysql.host}:${mysql.port}/${mysql.database}?user=${mysql.user}&amp;amp;password=${mysql.pswd}&amp;amp;noAccessToProcedureBodies=true&amp;amp;useCursorFetch=true&amp;amp;rewriteBatchedStatements=true</mysql.userurl>
       <mysql.driver>com.mysql.cj.jdbc.Driver</mysql.driver>
       <mysql.blobsupport>true</mysql.blobsupport>
       <mysql.callsupport>true</mysql.callsupport>
@@ -76,8 +76,8 @@
       <mariadb.host>localhost</mariadb.host>
       <mariadb.port>3306</mariadb.port>
       <mariadb.database>cpo</mariadb.database>
-      <mariadb.url>jdbc:mariadb://${mariadb.host}:${mariadb.port}/${mariadb.database}?useCursorFetch=true&amp;amp;cachePrepStmts=true&amp;amp;useServerPrepStmts=true&amp;amp;prepStmtCacheSize=250&amp;amp;prepStmtCacheSqlLimit=2048</mariadb.url>
-      <mariadb.userurl>jdbc:mariadb://${mariadb.host}:${mariadb.port}/${mariadb.database}?user=${mariadb.user}&amp;amp;password=${mariadb.pswd}&amp;amp;useCursorFetch=true&amp;amp;cachePrepStmts=true&amp;amp;useServerPrepStmts=true&amp;amp;prepStmtCacheSize=250&amp;amp;prepStmtCacheSqlLimit=2048</mariadb.userurl>
+      <mariadb.url>jdbc:mariadb://${mariadb.host}:${mariadb.port}/${mariadb.database}?useCursorFetch=true&amp;amp;cachePrepStmts=true&amp;amp;useServerPrepStmts=true&amp;amp;prepStmtCacheSize=250&amp;amp;prepStmtCacheSqlLimit=2048&amp;amp;useBulkStmts=true</mariadb.url>
+      <mariadb.userurl>jdbc:mariadb://${mariadb.host}:${mariadb.port}/${mariadb.database}?user=${mariadb.user}&amp;amp;password=${mariadb.pswd}&amp;amp;useCursorFetch=true&amp;amp;cachePrepStmts=true&amp;amp;useServerPrepStmts=true&amp;amp;prepStmtCacheSize=250&amp;amp;prepStmtCacheSqlLimit=2048&amp;amp;useBulkStmts=true</mariadb.userurl>
       <mariadb.driver>org.mariadb.jdbc.Driver</mariadb.driver>
       <mariadb.blobsupport>true</mariadb.blobsupport>
       <mariadb.callsupport>true</mariadb.callsupport>
@@ -157,8 +157,8 @@
       <postgres.host>localhost</postgres.host>
       <postgres.port>5432</postgres.port>
       <postgres.database>cpo</postgres.database>
-      <postgres.url>jdbc:postgresql://${postgres.host}:${postgres.port}/${postgres.database}</postgres.url>
-      <postgres.userurl>jdbc:postgresql://${postgres.host}:${postgres.port}/${postgres.database}?user=${postgres.user}&amp;amp;password=${postgres.pswd}&amp;amp;stringtype=unspecified</postgres.userurl>
+      <postgres.url>jdbc:postgresql://${postgres.host}:${postgres.port}/${postgres.database}?reWriteBatchedInserts=true</postgres.url>
+      <postgres.userurl>jdbc:postgresql://${postgres.host}:${postgres.port}/${postgres.database}?user=${postgres.user}&amp;amp;password=${postgres.pswd}&amp;amp;stringtype=unspecified&amp;amp;reWriteBatchedInserts=true</postgres.userurl>
       <postgres.driver>org.postgresql.Driver</postgres.driver>
       <postgres.blobsupport>true</postgres.blobsupport>
       <postgres.callsupport>true</postgres.callsupport>

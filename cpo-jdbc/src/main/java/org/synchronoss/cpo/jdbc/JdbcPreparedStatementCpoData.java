@@ -61,7 +61,7 @@ public class JdbcPreparedStatementCpoData extends AbstractStatementCpoData {
         instanceObject == null ? logger : LoggerFactory.getLogger(instanceObject.getClass());
     try {
       Object param = transformOut(getCpoAttribute().invokeGetter(instanceObject));
-      localLogger.debug(getCpoAttribute().getDataName() + "=" + param);
+      localLogger.debug("{}={}", getCpoAttribute().getDataName(), param);
       methodMapEntry
           .getBsSetter()
           .invoke(cpoStatementFactory.getPreparedStatement(), getIndex(), param);

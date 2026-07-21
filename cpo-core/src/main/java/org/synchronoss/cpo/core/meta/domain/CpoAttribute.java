@@ -54,6 +54,8 @@ public class CpoAttribute extends CpoAttributeBean {
   private CpoTransform cpoTransform = null;
   private Method transformInMethod = null;
   private Method transformOutMethod = null;
+  // cached because Method.getParameterTypes() clones its array on every call
+  private Class<?> transformInParamType = null;
 
   public CpoAttribute() {}
 
@@ -67,6 +69,10 @@ public class CpoAttribute extends CpoAttributeBean {
 
   public Method getTransformOutMethod() {
     return transformOutMethod;
+  }
+
+  public Class<?> getTransformInParamType() {
+    return transformInParamType;
   }
 
   public Class<?> getSetterParamType() {
@@ -153,12 +159,11 @@ public class CpoAttribute extends CpoAttributeBean {
   }
 
   public void invokeSetter(Object instanceObject, CpoData cpoData) throws CpoException {
-    Logger localLogger =
-        instanceObject == null ? logger : LoggerFactory.getLogger(instanceObject.getClass());
-
     try {
       setter_.invoke(instanceObject, cpoData.invokeGetter());
     } catch (IllegalAccessException | InvocationTargetException | IllegalArgumentException e) {
+      Logger localLogger =
+          instanceObject == null ? logger : LoggerFactory.getLogger(instanceObject.getClass());
       String msg =
           "Error Invoking Setter Method: "
               + getDataName()
@@ -172,11 +177,10 @@ public class CpoAttribute extends CpoAttributeBean {
   }
 
   public Object invokeGetter(Object obj) throws CpoException {
-    Logger localLogger = obj == null ? logger : LoggerFactory.getLogger(obj.getClass());
-
     try {
       return getGetter().invoke(obj, (Object[]) null);
     } catch (IllegalAccessException | InvocationTargetException e) {
+      Logger localLogger = LoggerFactory.getLogger(obj.getClass());
       String msg = "invokeGetter: Could not invoke getter for " + obj.getClass();
       localLogger.debug(msg);
       throw new CpoException(msg, e);
@@ -312,6 +316,7 @@ public class CpoAttribute extends CpoAttributeBean {
         List<Method> methods = findMethods(transformClass, TRANSFORM_IN_NAME, 1, true);
         if (methods.size() > 0) {
           transformInMethod = methods.get(0);
+          transformInParamType = transformInMethod.getParameterTypes()[0];
         }
         methods = findMethods(transformClass, TRANSFORM_OUT_NAME, 1, true);
         if (methods.size() > 0) {

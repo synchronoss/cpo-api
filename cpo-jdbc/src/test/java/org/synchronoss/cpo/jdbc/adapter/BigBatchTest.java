@@ -118,12 +118,17 @@ public class BigBatchTest {
   @AfterClass
   public void tearDown() {
     String method = "tearDown:";
+    // the default batch size of 100 turns 100,000 deletes into 1,000 network round trips
+    int oldBatchSize = cpoAdapter.getBatchSize();
+    cpoAdapter.setBatchSize(10000);
     try {
       cpoAdapter.deleteBeans(al);
 
     } catch (Exception e) {
       logger.error(ExceptionHelper.getLocalizedMessage(e));
       fail(method + e.getMessage());
+    } finally {
+      cpoAdapter.setBatchSize(oldBatchSize);
     }
     cpoAdapter = null;
   }

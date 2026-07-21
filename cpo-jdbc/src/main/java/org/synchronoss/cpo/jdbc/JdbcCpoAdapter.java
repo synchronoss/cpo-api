@@ -22,6 +22,7 @@ package org.synchronoss.cpo.jdbc;
  * ]]
  */
 
+import java.lang.reflect.Constructor;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -870,6 +871,17 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
         attributes[k] = (JdbcCpoAttribute) resultClass.getAttributeData(rsmd.getColumnLabel(k));
       }
 
+      // resolved once per query, not once per row: the bean constructor and one reusable
+      // data wrapper per column (the wrapper's result set, attribute, and index are fixed)
+      Constructor<?> resultConstructor = result.getClass().getDeclaredConstructor();
+      JdbcResultSetCpoData[] columnData = new JdbcResultSetCpoData[columnCount + 1];
+      for (int k = 1; k <= columnCount; k++) {
+        if (attributes[k] != null) {
+          columnData[k] =
+              new JdbcResultSetCpoData(JdbcMethodMapper.getMethodMapper(), rs, attributes[k], k);
+        }
+      }
+
       ResultSet finalRs = rs;
       PreparedStatement finalPs = ps;
       return StreamSupport.stream(
@@ -880,7 +892,7 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
                     if (!finalRs.next()) return false;
                     T bean = null;
                     try {
-                      bean = (T) result.getClass().getDeclaredConstructor().newInstance();
+                      bean = (T) resultConstructor.newInstance();
                     } catch (IllegalAccessException iae) {
                       localLogger.error(
                           "=================== Could not access default constructor for Class=<"
@@ -893,11 +905,8 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
                     }
 
                     for (int k = 1; k <= columnCount; k++) {
-                      if (attributes[k] != null) {
-                        attributes[k].invokeSetter(
-                            bean,
-                            new JdbcResultSetCpoData(
-                                JdbcMethodMapper.getMethodMapper(), finalRs, attributes[k], k));
+                      if (columnData[k] != null) {
+                        attributes[k].invokeSetter(bean, columnData[k]);
                       }
                     }
                     action.accept(bean);

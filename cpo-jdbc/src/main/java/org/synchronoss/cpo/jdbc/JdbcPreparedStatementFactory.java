@@ -89,7 +89,7 @@ public class JdbcPreparedStatementFactory extends CpoStatementFactory implements
     String sql =
         buildSql(criteria, function.getExpression(), wheres, orderBy, nativeQueries, bindValues);
 
-    getLocalLogger().debug("CpoFunction SQL = <" + sql + ">");
+    getLocalLogger().debug("CpoFunction SQL = <{}>", sql);
 
     try {
       ps_ = conn.prepareStatement(sql);

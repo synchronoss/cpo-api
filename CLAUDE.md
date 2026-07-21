@@ -96,6 +96,14 @@ Multiple meta XML files are merged per `metaConfig`, enabling the polymorphic ov
   cpo-core never touches connections itself. Revisit if a third datastore is added.
 - `JdbcCpoMetaDescriptor` — JDBC-specific meta with `JdbcMethodMapper` for SQL type mappings.
 - `JdbcPreparedStatementFactory` / `JdbcCallableStatementFactory` — build `PreparedStatement`/`CallableStatement` from meta.
+- Single-object CRUD builds and prepares its statement on every call. There is deliberately NO
+  CPO-level `PreparedStatement` cache (decided 2026-07): statement caching belongs to the
+  driver/pool layer, which keys on the physical connection below the pool — a framework cache above
+  pooled connection proxies mis-keys and must intercept close/eviction, and a hit would only save
+  the ~µs a driver-cache hit already costs while execute/commit round trips dominate each op.
+  Recommend driver cache/batch flags instead (see README "Performance Tuning"). If profiling ever
+  shows `buildSql` cost, cache the built SQL string on `CpoFunction` (static case — no dynamic
+  wheres/orderBy/native expressions), not statements.
 - `JdbcCpoTransform` — interface for custom type transforms; built-ins: `TransformClob`, `TransformGZipBytes`, `TransformTimestampToCalendar`, etc.
 - DataSource configuration supports three modes: `dataSourceClassName` (connection pool), `driverClassName` (raw JDBC), `jndiName` (JNDI lookup). Both `readWriteConfig` (single pool) and separate `readConfig`/`writeConfig` (read/write split) are supported.
 

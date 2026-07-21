@@ -29,8 +29,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Created with IntelliJ IDEA. User: dberry Date: 10/10/13 Time: 21:33 PM To change this template
- * use File | Settings | File Templates.
+ * Maps datastore data types, identified by either a {@code java.sql.Types} constant or a native
+ * type name, to their {@link DataTypeMapEntry}. Lookups that don't match a registered type fall
+ * back to the map's default entry.
  */
 public class DataTypeMapper {
 
@@ -42,6 +43,12 @@ public class DataTypeMapper {
   // Do not allow default constructor
   private DataTypeMapper() {}
 
+  /**
+   * Creates a data type mapper with the given fallback entry for unrecognized types.
+   *
+   * @param defaultDataTypeMapEntry the entry to return when a lookup finds no registered type
+   * @throws IllegalArgumentException if {@code defaultDataTypeMapEntry} is {@code null}
+   */
   public DataTypeMapper(DataTypeMapEntry<?> defaultDataTypeMapEntry) {
     if (defaultDataTypeMapEntry == null) {
       throw new IllegalArgumentException();
@@ -49,12 +56,24 @@ public class DataTypeMapper {
     this.defaultDataTypeMapEntry = defaultDataTypeMapEntry;
   }
 
+  /**
+   * Registers a data type entry, indexed by both its type code and its name.
+   *
+   * @param dtme the data type entry to register
+   */
   public void addDataTypeEntry(DataTypeMapEntry<?> dtme) {
     dataTypeIntMap.put(dtme.getDataTypeInt(), dtme);
     dataTypeNameMap.put(dtme.getDataTypeName(), dtme);
     logger.debug("Added DataType " + dtme.getDataTypeName());
   }
 
+  /**
+   * Gets the data type entry registered under the given type code, or the default entry if none is
+   * registered.
+   *
+   * @param dataTypeInt the datastore type code
+   * @return the matching data type entry, or the default entry
+   */
   public DataTypeMapEntry<?> getDataTypeMapEntry(int dataTypeInt) {
     DataTypeMapEntry<?> dataTypeMapEntry = dataTypeIntMap.get(dataTypeInt);
 
@@ -65,6 +84,13 @@ public class DataTypeMapper {
     return dataTypeMapEntry;
   }
 
+  /**
+   * Gets the data type entry registered under the given type name, or the default entry if none is
+   * registered.
+   *
+   * @param dataTypeName the datastore type name
+   * @return the matching data type entry, or the default entry
+   */
   public DataTypeMapEntry<?> getDataTypeMapEntry(String dataTypeName) {
     DataTypeMapEntry<?> dataTypeMapEntry = dataTypeNameMap.get(dataTypeName);
 
@@ -75,6 +101,13 @@ public class DataTypeMapper {
     return dataTypeMapEntry;
   }
 
+  /**
+   * Gets the type code for the data type registered under the given name, or the default entry's
+   * type code if none is registered.
+   *
+   * @param dataTypeName the datastore type name
+   * @return the matching (or default) type code
+   */
   public int getDataTypeInt(String dataTypeName) {
     DataTypeMapEntry<?> dataTypeMapEntry = dataTypeNameMap.get(dataTypeName);
 
@@ -85,10 +118,24 @@ public class DataTypeMapper {
     return dataTypeMapEntry.getDataTypeInt();
   }
 
+  /**
+   * Gets the Java class for the data type registered under the given type code, or the default
+   * entry's Java class if none is registered.
+   *
+   * @param dataTypeInt the datastore type code
+   * @return the matching (or default) Java class
+   */
   public Class<?> getDataTypeJavaClass(int dataTypeInt) {
     return getDataTypeJavaClass(Integer.valueOf(dataTypeInt));
   }
 
+  /**
+   * Gets the Java class for the data type registered under the given type code, or the default
+   * entry's Java class if none is registered.
+   *
+   * @param dataTypeInt the datastore type code
+   * @return the matching (or default) Java class
+   */
   public Class<?> getDataTypeJavaClass(Integer dataTypeInt) {
     DataTypeMapEntry<?> dataTypeMapEntry = dataTypeIntMap.get(dataTypeInt);
 
@@ -99,6 +146,13 @@ public class DataTypeMapper {
     return dataTypeMapEntry.getJavaClass();
   }
 
+  /**
+   * Gets the Java class for the data type registered under the given name, or the default entry's
+   * Java class if none is registered.
+   *
+   * @param dataTypeName the datastore type name
+   * @return the matching (or default) Java class
+   */
   public Class<?> getDataTypeJavaClass(String dataTypeName) {
     DataTypeMapEntry<?> dataTypeMapEntry = dataTypeNameMap.get(dataTypeName);
 
@@ -109,6 +163,11 @@ public class DataTypeMapper {
     return dataTypeMapEntry.getJavaClass();
   }
 
+  /**
+   * Gets the names of all registered data types.
+   *
+   * @return a list of registered data type names
+   */
   public List<String> getDataTypeNames() {
     ArrayList<String> al = new ArrayList<>();
     // need to put the keySet into an arraylist. The inner class is not serializable

@@ -29,7 +29,13 @@ import org.synchronoss.cpo.core.CpoTrxAdapter;
 import org.synchronoss.cpo.core.jta.CpoXaResource;
 import org.synchronoss.cpo.jdbc.jta.JdbcCpoXaAdapter;
 
-/** Created by dberry on 11/8/15. */
+/**
+ * JDBC implementation of {@link CpoAdapterFactory}, vending {@link JdbcCpoAdapter},
+ * transaction-scoped {@link JdbcCpoTrxAdapter}, and {@link JdbcCpoXaAdapter} instances backed by a
+ * single underlying {@link JdbcCpoAdapter}.
+ *
+ * @author dberry
+ */
 public class JdbcCpoAdapterFactory implements CpoAdapterFactory {
 
   private JdbcCpoAdapter jdbcCpoAdapter = null;

@@ -32,10 +32,16 @@ public class ChildNodeException extends Exception {
   /** Version Id for this class. */
   private static final long serialVersionUID = 1L;
 
+  /**
+   * Creates an exception with the given detail message.
+   *
+   * @param message the detail message
+   */
   public ChildNodeException(String message) {
     super(message);
   }
 
+  /** Creates an exception with no detail message. */
   public ChildNodeException() {
     super();
   }

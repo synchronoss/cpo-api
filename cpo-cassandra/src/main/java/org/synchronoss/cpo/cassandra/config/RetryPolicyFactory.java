@@ -25,8 +25,9 @@ package org.synchronoss.cpo.cassandra.config;
 import com.datastax.driver.core.policies.RetryPolicy;
 
 /**
- * Created with IntelliJ IDEA. User: dberry Date: 10/10/13 Time: 07:57 AM To change this template
- * use File | Settings | File Templates.
+ * FactoryMethod for creating a Cassandra RetryPolicy
+ *
+ * @author dberry
  */
 public abstract class RetryPolicyFactory implements FactoryMethodName {
 

@@ -32,6 +32,7 @@ import org.synchronoss.cpo.core.meta.domain.CpoClass;
  */
 public interface CpoOrderBy {
 
+  /** Default marker string searched for and replaced by the generated order-by expression. */
   String DEFAULT_MARKER = "__CPO_ORDERBY__";
 
   /**
@@ -68,9 +69,12 @@ public interface CpoOrderBy {
   String getMarker();
 
   /**
-   * @param cpoClass The cpoClass
+   * Builds the native (SQL/CQL) order-by fragment for this clause against the given class's
+   * attribute-to-column mapping.
+   *
+   * @param cpoClass the class metadata used to resolve the attribute to a datastore column
    * @return the string that will be added into the expression
-   * @throws CpoException an exception
+   * @throws CpoException if the attribute cannot be resolved against {@code cpoClass}
    */
   String toString(CpoClass cpoClass) throws CpoException;
 }

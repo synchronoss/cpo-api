@@ -22,6 +22,13 @@ package org.synchronoss.cpo.core.meta.bean;
  * ]]
  */
 
+/**
+ * Plain-data holder for a name and description, the common base for the CPO metadata bean classes
+ * ({@code CpoClass}, {@code CpoArgument}, {@code CpoFunctionGroup}) that all identify themselves
+ * primarily by name.
+ *
+ * @author dberry
+ */
 public class CpoClassBean implements java.io.Serializable {
 
   private static final long serialVersionUID = 1L;
@@ -29,26 +36,51 @@ public class CpoClassBean implements java.io.Serializable {
   /*
    * Properties
    */
+  /** The name of this metadata element. */
   private String name;
+
+  /** The description of this metadata element. */
   private String description;
 
+  /** Creates an empty instance. */
   public CpoClassBean() {}
 
   /*
    * Getters and Setters
    */
+
+  /**
+   * Gets the name of this metadata element.
+   *
+   * @return the name
+   */
   public String getName() {
     return this.name;
   }
 
+  /**
+   * Sets the name of this metadata element.
+   *
+   * @param name the name
+   */
   public void setName(String name) {
     this.name = name;
   }
 
+  /**
+   * Gets the human-readable description of this metadata element, as loaded from the meta XML.
+   *
+   * @return the description, or {@code null} if none was specified
+   */
   public String getDescription() {
     return description;
   }
 
+  /**
+   * Sets the human-readable description of this metadata element.
+   *
+   * @param description the description
+   */
   public void setDescription(String description) {
     this.description = description;
   }

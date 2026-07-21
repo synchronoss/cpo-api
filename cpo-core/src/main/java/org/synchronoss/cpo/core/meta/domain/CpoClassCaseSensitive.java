@@ -22,12 +22,21 @@ package org.synchronoss.cpo.core.meta.domain;
  * ]]
  */
 
+/**
+ * {@link CpoClass} variant whose datastore-name lookups are case-sensitive: attribute data names
+ * are used as map keys exactly as configured.
+ *
+ * @author dberry
+ */
 public class CpoClassCaseSensitive extends CpoClass {
   /** Version Id for this class. */
   private static final long serialVersionUID = 1L;
 
+  /** Creates an empty instance. */
   public CpoClassCaseSensitive() {}
 
+  /** {@inheritDoc} */
+  @Override
   public CpoAttribute getAttributeData(String dataName) {
     if (dataName == null) {
       return null;
@@ -35,11 +44,13 @@ public class CpoClassCaseSensitive extends CpoClass {
     return getDataMap().get(dataName);
   }
 
+  /** {@inheritDoc} */
   @Override
   public void addDataNameToMap(String dataName, CpoAttribute cpoAttribute) {
     getDataMap().put(dataName, cpoAttribute);
   }
 
+  /** {@inheritDoc} */
   @Override
   public void removeDataNameFromMap(String dataName) {
     getDataMap().remove(dataName);

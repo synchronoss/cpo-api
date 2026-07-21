@@ -40,17 +40,32 @@ import org.synchronoss.cpo.core.exporter.CpoLegacyClassSourceGenerator;
 import org.synchronoss.cpo.core.meta.CpoMetaDescriptor;
 import org.synchronoss.cpo.core.meta.domain.CpoClass;
 
-/** Plugin goal that will generate the cpo classes based on the xml configuration file */
+/**
+ * Maven goal ({@code cpo:generatejavasource}) that reads one or more CPO meta XML files and
+ * generates the corresponding Java interface and/or class source files, adding the generated
+ * directory to the project's compile (or test-compile) source roots.
+ *
+ * <p>Which source kinds are generated is controlled by {@link #generateInterface} and {@link
+ * #generateClass}; when only a class is generated (no interface), {@link
+ * CpoLegacyClassSourceGenerator} is used instead of {@link CpoClassSourceGenerator} so the class
+ * stands alone without an accompanying interface.
+ */
 @Mojo(
     name = "generatejavasource",
     requiresDependencyResolution = ResolutionScope.COMPILE_PLUS_RUNTIME,
     defaultPhase = LifecyclePhase.GENERATE_SOURCES)
 public class GenerateJavaSources extends AbstractMojo {
 
+  /** Creates the mojo. Maven populates its {@code @Parameter} fields via reflection. */
+  public GenerateJavaSources() {}
+
+  /** The values {@link #scope} may take. */
   private enum Scopes {
+    /** Generate sources into {@link #testOutputDir} and register them as test sources. */
     test
   }
 
+  /** Path to the CPO meta XML file (or a wildcard pattern matching one or more files). */
   @Parameter(property = "cpoConfig", required = true)
   private String cpoConfig;
 
@@ -68,15 +83,19 @@ public class GenerateJavaSources extends AbstractMojo {
       defaultValue = "${project.build.directory}/generated-test-sources/cpo")
   private String testOutputDir;
 
+  /** Which source root to generate into: {@code compile} (default) or {@code test}. */
   @Parameter(property = "scope", required = true, defaultValue = "compile")
   private String scope;
 
+  /** A regular expression; only CPO classes whose name matches it are generated. */
   @Parameter(property = "filter", defaultValue = ".*")
   private String filter;
 
+  /** Whether to generate a Java interface for each matching CPO class. */
   @Parameter(property = "generateInterface", defaultValue = "false")
   private boolean generateInterface = false;
 
+  /** Whether to generate a Java class for each matching CPO class. */
   @Parameter(property = "generateClass", defaultValue = "true")
   private boolean generateClass = true;
 
@@ -84,9 +103,20 @@ public class GenerateJavaSources extends AbstractMojo {
   @Parameter(defaultValue = "${project}", readonly = true)
   protected MavenProject project;
 
+  /** File extension appended to generated source file names. */
   private final String JAVA_EXT = ".java";
+
+  /** A unique name for the {@link CpoMetaDescriptor} instance loaded by this execution. */
   private final String META_DESCRIPTOR_NAME = "Generator-" + System.currentTimeMillis();
 
+  /**
+   * Loads the configured CPO meta XML file(s), and for each matching {@link CpoClass} generates the
+   * requested interface and/or class source file under the configured output directory.
+   *
+   * @throws MojoExecutionException if neither {@link #generateInterface} nor {@link #generateClass}
+   *     is set, the config file/directory can't be found, an output directory can't be created, or
+   *     source generation otherwise fails
+   */
   public void execute() throws MojoExecutionException {
     getLog().info("Cpo config: " + cpoConfig);
 

@@ -25,8 +25,9 @@ package org.synchronoss.cpo.cassandra.config;
 import com.datastax.driver.core.NettyOptions;
 
 /**
- * Created with IntelliJ IDEA. User: dberry Date: 10/10/13 Time: 07:57 AM To change this template
- * use File | Settings | File Templates.
+ * FactoryMethod for creating a Cassandra NettyOptions
+ *
+ * @author dberry
  */
 public abstract class NettyOptionsFactory implements FactoryMethodName {
 

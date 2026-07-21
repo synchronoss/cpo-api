@@ -65,7 +65,7 @@ public class CassandraMetaXmlObjectExporter extends CoreMetaXmlObjectExporter
     if (currentCtClass != null) {
 
       // CtClass.addNewCpoAttribute() can't be used here because it returns a CtAttribute, not a
-      // CtJdbcAttribute
+      // CtCassandraAttribute
       CtCassandraAttribute ctCassandraAttribute = new CtCassandraAttribute();
 
       ctCassandraAttribute.setJavaName(cassAttribute.getJavaName());

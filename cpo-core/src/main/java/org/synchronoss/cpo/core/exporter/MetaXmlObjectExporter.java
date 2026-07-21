@@ -33,5 +33,10 @@ import org.synchronoss.cpo.cpometa.CtCpoMetaData;
  */
 public interface MetaXmlObjectExporter extends MetaVisitor {
 
+  /**
+   * Gets the exported meta data document built up by visiting the meta model.
+   *
+   * @return the exported {@link CtCpoMetaData}
+   */
   CtCpoMetaData getCpoMetaData();
 }

@@ -115,6 +115,12 @@ public class Node implements Serializable, Cloneable, Comparable<Node> {
     allowChildren = ac;
   }
 
+  /**
+   * Gets whether this node is allowed to have children.
+   *
+   * @return {@code true} if this node may have children (it is a composite node), {@code false} if
+   *     it is a leaf-only component node
+   */
   public boolean getAllowChildren() {
     return this.allowChildren;
   }
@@ -237,6 +243,14 @@ public class Node implements Serializable, Cloneable, Comparable<Node> {
     addChildSort(node, null);
   }
 
+  /**
+   * Adds a child to the linked-list of children for this node, inserting it in sorted order.
+   *
+   * @param node the node to be added as a child of this node
+   * @param c the comparator used to determine sort order, or {@code null} to use the nodes' natural
+   *     ordering ({@link #compareTo(Node)})
+   * @throws ChildNodeException throws an exception if this node is not allowed to have children
+   */
   public void addChildSort(Node node, Comparator<Node> c) throws ChildNodeException {
     if (node != null) {
       if (!allowChildren) {
@@ -494,6 +508,8 @@ public class Node implements Serializable, Cloneable, Comparable<Node> {
   }
 
   /**
+   * Counts the immediate children of this node.
+   *
    * @return the count of children
    */
   public int getChildCount() {
@@ -513,7 +529,9 @@ public class Node implements Serializable, Cloneable, Comparable<Node> {
   }
 
   /**
-   * @return The list of child nodes
+   * Collects the immediate children of this node into a list, in sibling order.
+   *
+   * @return the list of child nodes
    */
   public List<Node> getChildList() {
     Node currNode;

@@ -27,7 +27,8 @@ import org.synchronoss.cpo.jdbc.JdbcCallableStatementFactory;
 import org.synchronoss.cpo.jdbc.JdbcPreparedStatementFactory;
 
 /**
- * Converts a java.sql.Blob from a jdbc datasource to a byte[] and from a byte[] to a java.sql.Blob
+ * Converts a String from a jdbc datasource to a char[] and from a char[] to a String in a
+ * datasource
  *
  * @author david berry
  */

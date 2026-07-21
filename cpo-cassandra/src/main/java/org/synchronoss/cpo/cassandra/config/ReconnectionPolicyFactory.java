@@ -25,8 +25,9 @@ package org.synchronoss.cpo.cassandra.config;
 import com.datastax.driver.core.policies.ReconnectionPolicy;
 
 /**
- * Created with IntelliJ IDEA. User: dberry Date: 10/10/13 Time: 07:56 AM To change this template
- * use File | Settings | File Templates.
+ * FactoryMethod for creating a Cassandra ReconnectionPolicy
+ *
+ * @author dberry
  */
 public abstract class ReconnectionPolicyFactory implements FactoryMethodName {
 

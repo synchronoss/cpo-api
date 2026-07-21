@@ -28,8 +28,11 @@ import org.synchronoss.cpo.core.enums.Logical;
 import org.synchronoss.cpo.core.meta.domain.CpoAttribute;
 
 /**
- * Created with IntelliJ IDEA. User: dberry Date: 13/10/13 Time: 14:05 PM To change this template
- * use File | Settings | File Templates.
+ * JDBC implementation of {@link BindableCpoWhere}, resolving a where clause attribute to its
+ * qualified {@code table.column} (or bare column) name using the attribute's {@link
+ * JdbcCpoAttribute} metadata.
+ *
+ * @author david berry
  */
 public class JdbcCpoWhere extends BindableCpoWhere {
   /** Version Id for this class. */

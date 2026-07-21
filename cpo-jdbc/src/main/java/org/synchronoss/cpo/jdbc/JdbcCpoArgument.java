@@ -38,7 +38,11 @@ public class JdbcCpoArgument extends CpoArgument implements java.io.Serializable
   private static final String IN_PARAMETER = "IN";
   private static final String OUT_PARAMETER = "OUT";
   private static final String INOUT_PARAMETER = "BOTH";
+
+  /** The parameter scope of this argument: {@code IN}, {@code OUT}, or {@code BOTH}. */
   private String scope = null;
+
+  /** The native (JDBC-specific) type info for this argument. */
   private String typeInfo = null;
 
   /** Construct a JdbcCpoArgument */
@@ -46,6 +50,7 @@ public class JdbcCpoArgument extends CpoArgument implements java.io.Serializable
     super();
   }
 
+  /** {@inheritDoc} */
   @Override
   public JdbcCpoAttribute getAttribute() {
     return (JdbcCpoAttribute) super.getAttribute();

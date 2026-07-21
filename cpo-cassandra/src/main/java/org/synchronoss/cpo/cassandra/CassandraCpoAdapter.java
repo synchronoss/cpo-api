@@ -49,8 +49,8 @@ import org.synchronoss.cpo.core.meta.domain.CpoClass;
 import org.synchronoss.cpo.core.meta.domain.CpoFunction;
 
 /**
- * CassandraCpoAdapter is an interface for a set of routines that are responsible for managing value
- * beans from a datasource.
+ * CassandraCpoAdapter is the Cassandra implementation of {@link CpoAdapter}, a set of routines that
+ * are responsible for managing value beans from a Cassandra datasource.
  *
  * @author dberry
  */
@@ -72,7 +72,7 @@ public class CassandraCpoAdapter extends CpoBaseAdapter<ClusterDataSource> {
    * Creates a CassandraCpoAdapter.
    *
    * @param metaDescriptor This datasource that identifies the cpo metadata datasource
-   * @param jdsiTrx The datasoruce that identifies the transaction database.
+   * @param jdsiTrx The datasource that identifies the transaction database.
    * @throws CpoException An error occured
    */
   protected CassandraCpoAdapter(
@@ -183,7 +183,7 @@ public class CassandraCpoAdapter extends CpoBaseAdapter<ClusterDataSource> {
    * @param wheres A collection of CpoWheres used to find the T
    * @return The number of matching beans: for a single-row result with one bigint column the column
    *     value is returned (count(*) style), otherwise the number of rows returned
-   * @throws CpoException Thrown if the Function Group has a function count != 1
+   * @throws CpoException if an error occurs executing the EXIST functions for this bean
    */
   protected <T> long existsBean(
       String groupName, T bean, Session session, Collection<CpoWhere> wheres) throws CpoException {

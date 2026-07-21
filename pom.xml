@@ -364,6 +364,42 @@
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>3.12.0</version>
+                <configuration>
+                    <source>21</source>
+                    <!-- "public" (javadoc's own -public scope flag) restricts what's documented
+                         AND doclint-checked to public API surface; doclint's "all" then enforces
+                         the missing/html/syntax/reference/accessibility groups within that scope. -->
+                    <show>public</show>
+                    <doclint>all</doclint>
+                    <failOnError>true</failOnError>
+                    <failOnWarnings>true</failOnWarnings>
+                    <quiet>true</quiet>
+                    <excludePackageNames>
+                        org.synchronoss.cpo.cassandra.cpoCassandraConfig:org.synchronoss.cpo.cassandra.cpoCassandraConfig.*:org.synchronoss.cpo.cassandra.cpoCassandraMeta:org.synchronoss.cpo.cassandra.cpoCassandraMeta.*:org.synchronoss.cpo.jdbc.cpoJdbcMeta:org.synchronoss.cpo.jdbc.cpoJdbcMeta.*:org.synchronoss.cpo.jdbc.cpoJdbcConfig:org.synchronoss.cpo.jdbc.cpoJdbcConfig.*:org.synchronoss.cpo.cpometa:org.synchronoss.cpo.cpometa.*:org.synchronoss.cpo.cpoconfig:org.synchronoss.cpo.cpoconfig.*:org.synchronoss.cpo.util.cpoutilconfig:org.synchronoss.cpo.util.cpoutilconfig.*
+                    </excludePackageNames>
+                    <!-- maven-plugin-plugin's generated HelpMojo lands in the hand-written
+                         org.synchronoss.cpo.plugin package, so it can't be filtered by package
+                         name; exclude it by path instead. -->
+                    <sourceFileExcludes>
+                        <sourceFileExclude>**/HelpMojo.java</sourceFileExclude>
+                    </sourceFileExcludes>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>enforce-javadoc</id>
+                        <!-- Bound into the normal build (not just `mvn site`) so missing/malformed
+                             javadoc on public API fails `mvn install` the same way Spotless/PMD do. -->
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>javadoc</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-pmd-plugin</artifactId>
                 <version>3.28.0</version>
                 <configuration>
@@ -539,12 +575,15 @@
                 <version>3.12.0</version>
                 <configuration>
                     <source>21</source>
-                    <show>package</show>
+                    <show>public</show>
                     <doclint>all</doclint>
                     <failOnError>true</failOnError>
                     <excludePackageNames>
-                        org.synchronoss.cpo.cassandra.cpoCassandraConfig.*:org.synchronoss.cpo.cassandra.cpoCassandraMeta.*:org.synchronoss.cpo.jdbc.cpoJdbcMeta.*:org.synchronoss.cpo.jdbc.cpoJdbcConfig.*:org.synchronoss.cpo.core.cpometa.*:org.synchronoss.cpo.core.cpoCoreConfig.*
+                        org.synchronoss.cpo.cassandra.cpoCassandraConfig:org.synchronoss.cpo.cassandra.cpoCassandraConfig.*:org.synchronoss.cpo.cassandra.cpoCassandraMeta:org.synchronoss.cpo.cassandra.cpoCassandraMeta.*:org.synchronoss.cpo.jdbc.cpoJdbcMeta:org.synchronoss.cpo.jdbc.cpoJdbcMeta.*:org.synchronoss.cpo.jdbc.cpoJdbcConfig:org.synchronoss.cpo.jdbc.cpoJdbcConfig.*:org.synchronoss.cpo.cpometa:org.synchronoss.cpo.cpometa.*:org.synchronoss.cpo.cpoconfig:org.synchronoss.cpo.cpoconfig.*:org.synchronoss.cpo.util.cpoutilconfig:org.synchronoss.cpo.util.cpoutilconfig.*
                     </excludePackageNames>
+                    <sourceFileExcludes>
+                        <sourceFileExclude>**/HelpMojo.java</sourceFileExclude>
+                    </sourceFileExcludes>
                 </configuration>
                 <reportSets>
                     <reportSet>

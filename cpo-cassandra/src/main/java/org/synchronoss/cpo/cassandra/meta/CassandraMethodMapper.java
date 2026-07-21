@@ -41,7 +41,8 @@ import org.synchronoss.cpo.core.CpoException;
 import org.synchronoss.cpo.core.meta.MethodMapper;
 
 /**
- * MethodMapper is a class defines the getters and setters for all the JDBC specific data classes
+ * CassandraMethodMapper is a class that defines the getters and setters for all the
+ * Cassandra-specific data classes
  *
  * @author david berry
  */

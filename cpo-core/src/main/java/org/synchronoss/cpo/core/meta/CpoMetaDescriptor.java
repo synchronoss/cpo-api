@@ -50,6 +50,18 @@ import org.synchronoss.cpo.cpometa.CtCpoMetaData;
 import org.synchronoss.cpo.cpometa.ObjectFactory;
 
 /**
+ * {@code CpoMetaDescriptor} is the runtime, named handle on a loaded CPO metadata source: it owns
+ * the datastore-specific {@link AbstractCpoMetaAdapter} that holds the actual {@link CpoClass}
+ * metadata, and delegates the {@link CpoMetaAdapter} contract to it. Instances are singletons per
+ * name, cached in the inherited {@link CpoMetaDescriptorCache} and looked up/created via the static
+ * {@code getInstance}/{@code createUpdateInstance} factory methods rather than constructed
+ * directly.
+ *
+ * <p>A descriptor can be built up from one or more meta XML documents (via {@link
+ * #getInstance(String, List, boolean)} and friends); loading multiple documents into the same named
+ * descriptor merges their {@link CpoClass} definitions, which is what enables the polymorphic
+ * override pattern described in the project documentation.
+ *
  * @author dberry
  */
 public class CpoMetaDescriptor extends CpoMetaDescriptorCache
@@ -104,22 +116,57 @@ public class CpoMetaDescriptor extends CpoMetaDescriptorCache
     throw new CpoException("getMetaAdapterClass() must be implemented");
   }
 
+  /**
+   * Gets whether {@code metaDescriptor} is registered in the descriptor cache under its own name.
+   *
+   * @param metaDescriptor the descriptor to check
+   * @return {@code true} if a descriptor with the same name is currently cached, {@code false}
+   *     otherwise
+   */
   public static boolean isValidMetaDescriptor(CpoMetaDescriptor metaDescriptor) {
     return findCpoMetaDescriptor(metaDescriptor.getName()) != null;
   }
 
+  /**
+   * Gets the already-loaded descriptor registered under the given name.
+   *
+   * @param name the descriptor name
+   * @return the cached descriptor, or {@code null} if none is registered under {@code name}
+   * @throws CpoException if the descriptor cannot be looked up
+   */
   public static CpoMetaDescriptor getInstance(String name) throws CpoException {
     return findCpoMetaDescriptor(name);
   }
 
+  /**
+   * Removes the descriptor registered under the given name from the cache.
+   *
+   * @param name the descriptor name
+   * @throws CpoException if the descriptor cannot be removed
+   */
   public static void removeInstance(String name) throws CpoException {
     removeCpoMetaDescriptor(name);
   }
 
+  /**
+   * Removes all descriptors from the cache.
+   *
+   * @throws CpoException if the cache cannot be cleared
+   */
   public static void clearAllInstances() throws CpoException {
     clearCpoMetaDescriptorCache();
   }
 
+  /**
+   * Gets the descriptor registered under {@code name}, creating and loading it from a single meta
+   * XML document if it does not already exist.
+   *
+   * @param name the descriptor name
+   * @param metaXml the meta XML document (or classpath/file reference) to load
+   * @param caseSensitive whether attribute data names should be matched case-sensitively
+   * @return the loaded (or previously cached) descriptor
+   * @throws CpoException if the meta XML cannot be parsed or loaded
+   */
   public static CpoMetaDescriptor getInstance(String name, String metaXml, boolean caseSensitive)
       throws CpoException {
     List<String> metaXmls = new ArrayList<>();
@@ -127,27 +174,70 @@ public class CpoMetaDescriptor extends CpoMetaDescriptorCache
     return createUpdateInstance(name, metaXmls, caseSensitive);
   }
 
+  /**
+   * Gets the descriptor registered under {@code name}, creating and loading it from one or more
+   * meta XML documents if it does not already exist. Loading multiple documents into the same
+   * descriptor merges their class definitions.
+   *
+   * @param name the descriptor name
+   * @param metaXmls the meta XML documents (or classpath/file references) to load, in order
+   * @param caseSensitive whether attribute data names should be matched case-sensitively
+   * @return the loaded (or previously cached) descriptor
+   * @throws CpoException if the meta XML cannot be parsed or loaded
+   */
   public static CpoMetaDescriptor getInstance(
       String name, List<String> metaXmls, boolean caseSensitive) throws CpoException {
     return createUpdateInstance(name, metaXmls, caseSensitive);
   }
 
+  /**
+   * Gets the descriptor registered under {@code name}, creating and loading it from one or more
+   * meta XML documents if it does not already exist. Loading multiple documents into the same
+   * descriptor merges their class definitions.
+   *
+   * @param name the descriptor name
+   * @param metaXmls the meta XML documents (or classpath/file references) to load, in order
+   * @param caseSensitive whether attribute data names should be matched case-sensitively
+   * @return the loaded (or previously cached) descriptor
+   * @throws CpoException if the meta XML cannot be parsed or loaded
+   */
   public static CpoMetaDescriptor getInstance(String name, String[] metaXmls, boolean caseSensitive)
       throws CpoException {
     return createUpdateInstance(name, metaXmls, caseSensitive);
   }
 
   /**
+   * Gets the names of all meta descriptors currently loaded.
+   *
    * @return A collection of names of all meta descriptors currently loaded
    */
   public static Collection<String> getCpoMetaDescriptorNames() {
     return CpoMetaDescriptorCache.getCpoMetaDescriptorNames();
   }
 
+  /**
+   * Hot-reloads the descriptor registered under {@code name} by merging in the given meta XML
+   * documents, if that descriptor is currently loaded. A no-op if no descriptor is registered under
+   * {@code name}.
+   *
+   * @param name the descriptor name
+   * @param metaXmls the meta XML documents (or classpath/file references) to (re)load
+   * @throws CpoException if the meta XML cannot be parsed or loaded
+   */
   public static void refreshDescriptorMeta(String name, List<String> metaXmls) throws CpoException {
     refreshDescriptorMeta(name, metaXmls, false);
   }
 
+  /**
+   * Hot-reloads the descriptor registered under {@code name} by merging in (or, if {@code
+   * overwrite} is set, replacing with) the given meta XML documents, if that descriptor is
+   * currently loaded. A no-op if no descriptor is registered under {@code name}.
+   *
+   * @param name the descriptor name
+   * @param metaXmls the meta XML documents (or classpath/file references) to (re)load
+   * @param overwrite whether to discard the descriptor's existing classes before loading
+   * @throws CpoException if the meta XML cannot be parsed or loaded
+   */
   public static void refreshDescriptorMeta(String name, List<String> metaXmls, boolean overwrite)
       throws CpoException {
     CpoMetaDescriptor metaDescriptor = findCpoMetaDescriptor(name);
@@ -156,10 +246,24 @@ public class CpoMetaDescriptor extends CpoMetaDescriptorCache
     }
   }
 
+  /**
+   * Hot-reloads this descriptor by merging in the given meta XML documents.
+   *
+   * @param metaXmls the meta XML documents (or classpath/file references) to (re)load
+   * @throws CpoException if the meta XML cannot be parsed or loaded
+   */
   public void refreshDescriptorMeta(List<String> metaXmls) throws CpoException {
     refreshDescriptorMeta(metaXmls, false);
   }
 
+  /**
+   * Hot-reloads this descriptor by merging in (or, if {@code overwrite} is set, replacing with) the
+   * given meta XML documents.
+   *
+   * @param metaXmls the meta XML documents (or classpath/file references) to (re)load
+   * @param overwrite whether to discard this descriptor's existing classes before loading
+   * @throws CpoException if the meta XML cannot be parsed or loaded
+   */
   public void refreshDescriptorMeta(List<String> metaXmls, boolean overwrite) throws CpoException {
     if (overwrite) {
       getCpoMetaAdapter().removeAllCpoClass();
@@ -276,6 +380,7 @@ public class CpoMetaDescriptor extends CpoMetaDescriptorCache
     return metaAdapter;
   }
 
+  /** {@inheritDoc} */
   @Override
   public <T> CpoClass getMetaClass(T bean) throws CpoException {
     CpoClass cpoClass = getCpoMetaAdapter().getMetaClass(bean);
@@ -286,79 +391,146 @@ public class CpoMetaDescriptor extends CpoMetaDescriptorCache
     return cpoClass;
   }
 
+  /** {@inheritDoc} */
   @Override
   public List<CpoClass> getCpoClasses() throws CpoException {
     return getCpoMetaAdapter().getCpoClasses();
   }
 
+  /**
+   * Adds a {@link CpoClass} to this descriptor's metadata.
+   *
+   * @param cpoClass the class metadata to add
+   * @throws CpoException if the class cannot be added
+   */
   public void addCpoClass(CpoClass cpoClass) throws CpoException {
     getCpoMetaAdapter().addCpoClass(cpoClass);
   }
 
+  /**
+   * Removes a {@link CpoClass} from this descriptor's metadata.
+   *
+   * @param cpoClass the class metadata to remove
+   * @throws CpoException if the class cannot be removed
+   */
   public void removeCpoClass(CpoClass cpoClass) throws CpoException {
     getCpoMetaAdapter().removeCpoClass(cpoClass);
   }
 
+  /** {@inheritDoc} */
   @Override
   public ExpressionParser getExpressionParser() throws CpoException {
     return getCpoMetaAdapter().getExpressionParser();
   }
 
+  /** {@inheritDoc} */
   @Override
   public String getDataTypeName(CpoAttribute attribute) throws CpoException {
     return getCpoMetaAdapter().getDataTypeName(attribute);
   }
 
+  /** {@inheritDoc} */
   @Override
   public Class<?> getDataTypeJavaClass(CpoAttribute attribute) throws CpoException {
     return getCpoMetaAdapter().getDataTypeJavaClass(attribute);
   }
 
+  /** {@inheritDoc} */
   @Override
   public int getDataTypeInt(String dataTypeName) throws CpoException {
     return getCpoMetaAdapter().getDataTypeInt(dataTypeName);
   }
 
+  /** {@inheritDoc} */
   @Override
   public DataTypeMapEntry<?> getDataTypeMapEntry(int dataTypeInt) throws CpoException {
     return getCpoMetaAdapter().getDataTypeMapEntry(dataTypeInt);
   }
 
+  /** {@inheritDoc} */
   @Override
   public List<String> getAllowableDataTypes() throws CpoException {
     return getCpoMetaAdapter().getAllowableDataTypes();
   }
 
+  /**
+   * Creates a new, empty {@link CpoClass} of the concrete type appropriate for this descriptor's
+   * case-sensitivity setting.
+   *
+   * @return a new, unpopulated class metadata instance
+   * @throws CpoException if the instance cannot be created
+   */
   public CpoClass createCpoClass() throws CpoException {
     return getCpoMetaAdapter().createCpoClass(caseSensitive);
   }
 
+  /**
+   * Creates a new, empty {@link CpoAttribute}.
+   *
+   * @return a new, unpopulated attribute metadata instance
+   * @throws CpoException if the instance cannot be created
+   */
   public CpoAttribute createCpoAttribute() throws CpoException {
     return getCpoMetaAdapter().createCpoAttribute();
   }
 
+  /**
+   * Creates a new, empty {@link CpoFunctionGroup}.
+   *
+   * @return a new, unpopulated function group metadata instance
+   * @throws CpoException if the instance cannot be created
+   */
   public CpoFunctionGroup createCpoFunctionGroup() throws CpoException {
     return getCpoMetaAdapter().createCpoFunctionGroup();
   }
 
+  /**
+   * Creates a new, empty {@link CpoFunction}.
+   *
+   * @return a new, unpopulated function metadata instance
+   * @throws CpoException if the instance cannot be created
+   */
   public CpoFunction createCpoFunction() throws CpoException {
     return getCpoMetaAdapter().createCpoFunction();
   }
 
+  /**
+   * Creates a new, empty {@link CpoArgument}.
+   *
+   * @return a new, unpopulated argument metadata instance
+   * @throws CpoException if the instance cannot be created
+   */
   public CpoArgument createCpoArgument() throws CpoException {
     return getCpoMetaAdapter().createCpoArgument();
   }
 
+  /**
+   * Gets the default Java package name used by the CPO tooling (e.g. {@code cpo-plugin} code
+   * generation) when a meta XML document does not otherwise specify one.
+   *
+   * @return the default package name, or {@code null} if none has been set
+   */
   public String getDefaultPackageName() {
     return defaultPackageName;
   }
 
+  /**
+   * Sets the default Java package name used by the CPO tooling. A {@code null} argument is ignored,
+   * leaving any previously set value unchanged.
+   *
+   * @param packageName the default package name
+   */
   public void setDefaultPackageName(String packageName) {
     if (packageName != null) {
       defaultPackageName = packageName;
     }
   }
 
+  /**
+   * Gets the name this descriptor is registered under.
+   *
+   * @return the descriptor name
+   */
   public String getName() {
     return name;
   }
@@ -392,6 +564,8 @@ public class CpoMetaDescriptor extends CpoMetaDescriptorCache
     return marshaller;
   }
 
+  /** {@inheritDoc} */
+  @Override
   public final void export(File file) throws CpoException {
     try {
       CtCpoMetaData ctCpoMetaData = buildCpoMetaData();
@@ -402,6 +576,8 @@ public class CpoMetaDescriptor extends CpoMetaDescriptorCache
     }
   }
 
+  /** {@inheritDoc} */
+  @Override
   public final void export(Writer writer) throws CpoException {
     try {
       CtCpoMetaData ctCpoMetaData = buildCpoMetaData();
@@ -412,6 +588,8 @@ public class CpoMetaDescriptor extends CpoMetaDescriptorCache
     }
   }
 
+  /** {@inheritDoc} */
+  @Override
   public final void export(OutputStream outputStream) throws CpoException {
     try {
       CtCpoMetaData ctCpoMetaData = buildCpoMetaData();
@@ -422,6 +600,11 @@ public class CpoMetaDescriptor extends CpoMetaDescriptorCache
     }
   }
 
+  /**
+   * Gets whether this descriptor matches attribute data names case-sensitively.
+   *
+   * @return {@code true} if data names are matched case-sensitively, {@code false} otherwise
+   */
   public boolean isCaseSensitive() {
     return caseSensitive;
   }

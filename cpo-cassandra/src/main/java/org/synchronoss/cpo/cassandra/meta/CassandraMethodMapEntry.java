@@ -27,7 +27,8 @@ import java.lang.reflect.Method;
 import org.synchronoss.cpo.core.meta.MethodMapEntry;
 
 /**
- * MethodMapEntry is a class defines the getters and setters for JDBC specific data classes
+ * CassandraMethodMapEntry is a class that defines the getters and setters for Cassandra-specific
+ * data classes
  *
  * @author david berry
  * @param <D> The datasource class

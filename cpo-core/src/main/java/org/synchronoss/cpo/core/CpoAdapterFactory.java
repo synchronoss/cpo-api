@@ -24,11 +24,40 @@ package org.synchronoss.cpo.core;
 
 import org.synchronoss.cpo.core.jta.CpoXaResource;
 
-/** Created by dberry on 11/8/15. */
+/**
+ * Creates {@link CpoAdapter} instances (plain, transactional, or XA) for a single named data source
+ * configuration.
+ *
+ * <p>Implementations are obtained from {@code CpoAdapterFactoryManager} by config name; each
+ * factory is bound to one {@code dataConfig} entry from {@code cpoConfig.xml}.
+ *
+ * @author dberry
+ */
 public interface CpoAdapterFactory {
+
+  /**
+   * Gets a {@link CpoAdapter} that manages its own connections per call (no explicit transaction
+   * control).
+   *
+   * @return a usable {@link CpoAdapter}
+   * @throws CpoException if the adapter cannot be created
+   */
   CpoAdapter getCpoAdapter() throws CpoException;
 
+  /**
+   * Gets a {@link CpoTrxAdapter} pinned to a single connection/session for explicit transaction
+   * control (commit/rollback/close).
+   *
+   * @return a usable {@link CpoTrxAdapter}
+   * @throws CpoException if the adapter cannot be created
+   */
   CpoTrxAdapter getCpoTrxAdapter() throws CpoException;
 
+  /**
+   * Gets a {@link CpoXaResource} that participates in a JTA-managed distributed transaction.
+   *
+   * @return a usable {@link CpoXaResource}
+   * @throws CpoException if the resource cannot be created
+   */
   CpoXaResource getCpoXaAdapter() throws CpoException;
 }

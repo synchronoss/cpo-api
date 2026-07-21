@@ -25,6 +25,10 @@ package org.synchronoss.cpo.core;
 import org.synchronoss.cpo.core.meta.domain.CpoAttribute;
 
 /**
+ * {@code BindAttribute} pairs a single bind value produced while walking a {@link CpoWhere} tree
+ * (see {@link BindableWhereBuilder}) with either the resolved {@link CpoAttribute} it belongs to,
+ * or, when no matching bean attribute exists, the raw attribute name it was addressed by.
+ *
  * @author david.berry
  */
 public class BindAttribute {
@@ -33,24 +37,54 @@ public class BindAttribute {
   private Object bindObject = null;
   private String name = null;
 
+  /**
+   * Creates an instance bound to a resolved bean attribute.
+   *
+   * @param cpoAttribute the attribute this value should be bound to
+   * @param bindObject the value to bind
+   */
   public BindAttribute(CpoAttribute cpoAttribute, Object bindObject) {
     this.cpoAttribute = cpoAttribute;
     this.bindObject = bindObject;
   }
 
+  /**
+   * Creates an instance for a value that has no matching bean attribute, identified instead by name
+   * (for example, a raw column name used directly in a where clause).
+   *
+   * @param name the attribute or column name this value should be bound to
+   * @param bindObject the value to bind
+   */
   public BindAttribute(String name, Object bindObject) {
     this.name = name;
     this.bindObject = bindObject;
   }
 
+  /**
+   * Gets the resolved bean attribute this value should be bound to.
+   *
+   * @return the bean attribute, or {@code null} if this instance was created with a raw name
+   *     instead
+   */
   public CpoAttribute getCpoAttribute() {
     return cpoAttribute;
   }
 
+  /**
+   * Gets the value to bind.
+   *
+   * @return the bind value
+   */
   public Object getBindObject() {
     return bindObject;
   }
 
+  /**
+   * Gets the raw attribute or column name this value should be bound to.
+   *
+   * @return the name, or {@code null} if this instance was created with a resolved {@link
+   *     CpoAttribute} instead
+   */
   public String getName() {
     return name;
   }

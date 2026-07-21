@@ -25,10 +25,28 @@ package org.synchronoss.cpo.core.helper;
 import org.synchronoss.cpo.core.CpoException;
 
 /**
+ * Static helpers for extracting readable messages from a {@link Throwable} and for normalizing
+ * arbitrary exceptions into {@link CpoException}.
+ *
+ * <p>{@code getMessage}/{@code getLocalizedMessage} fall back to the exception's {@link
+ * Throwable#getCause() cause} when the exception itself carries no message, since CPO frequently
+ * wraps lower-level exceptions (e.g. {@code SQLException}) whose message lives on the cause.
+ *
  * @author dberry
  */
 public class ExceptionHelper {
 
+  private ExceptionHelper() {
+    // hidden constructor: this class only exposes static helpers
+  }
+
+  /**
+   * Gets the message of the given exception, falling back to its cause's message when the exception
+   * itself has none.
+   *
+   * @param e the exception to extract a message from; if {@code null} an empty string is returned
+   * @return the exception's message, its cause's message, or {@code ""} if neither is present
+   */
   public static String getMessage(Throwable e) {
     String msg = "";
 
@@ -43,6 +61,15 @@ public class ExceptionHelper {
     return msg;
   }
 
+  /**
+   * Gets the localized message of the given exception, falling back to its cause's localized
+   * message when the exception itself has none.
+   *
+   * @param e the exception to extract a localized message from; if {@code null} an empty string is
+   *     returned
+   * @return the exception's localized message, its cause's localized message, or {@code ""} if
+   *     neither is present
+   */
   public static String getLocalizedMessage(Throwable e) {
     String msg = "";
 
@@ -57,6 +84,15 @@ public class ExceptionHelper {
     return msg;
   }
 
+  /**
+   * Rethrows {@code e} as a {@link CpoException}: if it already is one it is rethrown unchanged,
+   * otherwise it is wrapped in a new {@code CpoException} with the given message.
+   *
+   * @param e the exception to rethrow or wrap
+   * @param message the message to use when {@code e} must be wrapped; ignored if {@code e} is
+   *     already a {@link CpoException}
+   * @throws CpoException always, either {@code e} itself or a new instance wrapping it
+   */
   public static void reThrowCpoException(Throwable e, String message) throws CpoException {
     if (e instanceof CpoException) {
       throw (CpoException) e;

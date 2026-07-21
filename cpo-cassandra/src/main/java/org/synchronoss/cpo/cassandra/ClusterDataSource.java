@@ -57,10 +57,20 @@ public class ClusterDataSource {
     return session;
   }
 
+  /**
+   * Gets the Cassandra cluster this data source connects to.
+   *
+   * @return the Cassandra cluster
+   */
   public Cluster getCluster() {
     return cluster;
   }
 
+  /**
+   * Gets the keyspace this data source's session is connected to.
+   *
+   * @return the keyspace name
+   */
   public String getKeySpace() {
     return keySpace;
   }

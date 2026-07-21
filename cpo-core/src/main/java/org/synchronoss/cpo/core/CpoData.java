@@ -23,15 +23,47 @@ package org.synchronoss.cpo.core;
  */
 
 /**
+ * {@code CpoData} is the binding between a single bean attribute and the mechanics needed to move
+ * its value into and out of the datastore: invoking the bean's getter/setter reflectively and
+ * applying any configured {@code CpoTransform} on the way in or out.
+ *
  * @author dberry
  */
 public interface CpoData {
 
+  /**
+   * Invokes the bean's getter for the bound attribute.
+   *
+   * @return the value returned by the attribute's getter
+   * @throws CpoException if the getter cannot be invoked
+   */
   Object invokeGetter() throws CpoException;
 
+  /**
+   * Invokes the bean's setter for the bound attribute.
+   *
+   * @param instanceObject the value to pass to the attribute's setter
+   * @throws CpoException if the setter cannot be invoked
+   */
   void invokeSetter(Object instanceObject) throws CpoException;
 
+  /**
+   * Transforms a value read from the datastore into the form expected by the bean attribute,
+   * applying the attribute's configured transform (if any).
+   *
+   * @param datasourceObject the raw value read from the datastore
+   * @return the value to pass to the bean's setter, transformed if a transform is configured
+   * @throws CpoException if the transform fails
+   */
   Object transformIn(Object datasourceObject) throws CpoException;
 
+  /**
+   * Transforms a value read from the bean attribute into the form expected by the datastore,
+   * applying the attribute's configured transform (if any).
+   *
+   * @param attributeObject the raw value read from the bean's getter
+   * @return the value to bind to the datastore statement, transformed if a transform is configured
+   * @throws CpoException if the transform fails
+   */
   Object transformOut(Object attributeObject) throws CpoException;
 }

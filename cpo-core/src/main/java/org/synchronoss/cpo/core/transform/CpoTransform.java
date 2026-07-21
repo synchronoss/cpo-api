@@ -25,12 +25,33 @@ package org.synchronoss.cpo.core.transform;
 import org.synchronoss.cpo.core.CpoException;
 
 /**
+ * {@code CpoTransform} converts an attribute's value between the raw form stored/read at the
+ * datastore and the form exposed on the Java bean, e.g. clob-to-string or gzip compression.
+ * Implementations are configured per-attribute in the meta XML and instantiated reflectively, so
+ * they must provide a public no-arg constructor.
+ *
+ * @param <D> the raw datastore-side type
+ * @param <J> the Java bean-side type
  * @author Michael Bellomo
  * @since 9/19/10
  */
 public interface CpoTransform<D, J> {
 
+  /**
+   * Converts a raw datastore value into the bean-side representation.
+   *
+   * @param inObject the raw value read from the datastore
+   * @return the value to set on the bean attribute
+   * @throws CpoException if the value cannot be converted
+   */
   J transformIn(D inObject) throws CpoException;
 
+  /**
+   * Converts a bean attribute's value into the raw datastore-side representation.
+   *
+   * @param attributeObject the value read from the bean attribute
+   * @return the value to bind to the datastore
+   * @throws CpoException if the value cannot be converted
+   */
   D transformOut(J attributeObject) throws CpoException;
 }

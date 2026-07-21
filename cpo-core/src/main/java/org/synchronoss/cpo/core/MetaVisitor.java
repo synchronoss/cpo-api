@@ -36,27 +36,37 @@ import org.synchronoss.cpo.core.meta.domain.CpoFunctionGroup;
 public interface MetaVisitor {
 
   /**
-   * @param cpoClass The class to be visited
+   * Visits a class node in the meta model.
+   *
+   * @param cpoClass the class to be visited
    */
   void visit(CpoClass cpoClass);
 
   /**
-   * @param cpoAttribute The attribute to be visited
+   * Visits an attribute node in the meta model.
+   *
+   * @param cpoAttribute the attribute to be visited
    */
   void visit(CpoAttribute cpoAttribute);
 
   /**
-   * @param cpoFunctionGroup The function group to be visited
+   * Visits a function group node in the meta model.
+   *
+   * @param cpoFunctionGroup the function group to be visited
    */
   void visit(CpoFunctionGroup cpoFunctionGroup);
 
   /**
-   * @param cpoFunction The function to be visited
+   * Visits a function node in the meta model.
+   *
+   * @param cpoFunction the function to be visited
    */
   void visit(CpoFunction cpoFunction);
 
   /**
-   * @param cpoArgument The argument to be visited
+   * Visits an argument node in the meta model.
+   *
+   * @param cpoArgument the argument to be visited
    */
   void visit(CpoArgument cpoArgument);
 }

@@ -24,33 +24,96 @@ package org.synchronoss.cpo.core.jta;
 
 import javax.transaction.xa.XAException;
 
-/** The XA Error Codes used by Cpo */
+/**
+ * The XA error codes used by Cpo, mirroring the {@code int} constants declared on {@link
+ * XAException} so error codes can be passed around as a type-safe enum instead of a bare {@code
+ * int}.
+ *
+ * @author dberry
+ */
 public enum CpoXaError {
-  XA_RBBASE(XAException.XA_RBBASE), // public static final int XA_RBBASE = 100;
-  XA_RBROLLBACK(XAException.XA_RBROLLBACK), // public static final int XA_RBROLLBACK = 100;
-  XA_RBCOMMFAIL(XAException.XA_RBCOMMFAIL), // public static final int XA_RBCOMMFAIL = 101;
-  XA_RBDEADLOCK(XAException.XA_RBDEADLOCK), // public static final int XA_RBDEADLOCK = 102;
-  XA_RBINTEGRITY(XAException.XA_RBINTEGRITY), // public static final int XA_RBINTEGRITY = 103;
-  XA_RBOTHER(XAException.XA_RBOTHER), // public static final int XA_RBOTHER = 104;
-  XA_RBPROTO(XAException.XA_RBPROTO), // public static final int XA_RBPROTO = 105;
-  XA_RBTIMEOUT(XAException.XA_RBTIMEOUT), // public static final int XA_RBTIMEOUT = 106;
-  XA_RBTRANSIENT(XAException.XA_RBTRANSIENT), // public static final int XA_RBTRANSIENT = 107;
-  XA_RBEND(XAException.XA_RBEND), // public static final int XA_RBEND = 107;
-  XA_NOMIGRATE(XAException.XA_NOMIGRATE), // public static final int XA_NOMIGRATE = 9;
-  XA_HEURHAZ(XAException.XA_HEURHAZ), // public static final int XA_HEURHAZ = 8;
-  XA_HEURCOM(XAException.XA_HEURCOM), // public static final int XA_HEURCOM = 7;
-  XA_HEURRB(XAException.XA_HEURRB), // public static final int XA_HEURRB = 6;
-  XA_HEURMIX(XAException.XA_HEURMIX), // public static final int XA_HEURMIX = 5;
-  XA_RETRY(XAException.XA_RETRY), // public static final int XA_RETRY = 4;
-  XA_RDONLY(XAException.XA_RDONLY), // public static final int XA_RDONLY = 3;
-  XAER_ASYNC(XAException.XAER_ASYNC), // public static final int XAER_ASYNC = -2;
-  XAER_RMERR(XAException.XAER_RMERR), // public static final int XAER_RMERR = -3;
-  XAER_NOTA(XAException.XAER_NOTA), // public static final int XAER_NOTA = -4;
-  XAER_INVAL(XAException.XAER_INVAL), // public static final int XAER_INVAL = -5;
-  XAER_PROTO(XAException.XAER_PROTO), // public static final int XAER_PROTO = -6;
-  XAER_RMFAIL(XAException.XAER_RMFAIL), // public static final int XAER_RMFAIL = -7;
-  XAER_DUPID(XAException.XAER_DUPID), // public static final int XAER_DUPID = -8;
-  XAER_OUTSIDE(XAException.XAER_OUTSIDE); // public static final int XAER_OUTSIDE = -9;
+  /** Mirrors {@link XAException#XA_RBBASE}: the inclusive lower bound of the rollback codes. */
+  XA_RBBASE(XAException.XA_RBBASE),
+  /**
+   * Mirrors {@link XAException#XA_RBROLLBACK}: the rollback was caused by an unspecified reason.
+   */
+  XA_RBROLLBACK(XAException.XA_RBROLLBACK),
+  /**
+   * Mirrors {@link XAException#XA_RBCOMMFAIL}: the rollback was caused by a communication failure.
+   */
+  XA_RBCOMMFAIL(XAException.XA_RBCOMMFAIL),
+  /** Mirrors {@link XAException#XA_RBDEADLOCK}: a deadlock was detected. */
+  XA_RBDEADLOCK(XAException.XA_RBDEADLOCK),
+  /**
+   * Mirrors {@link XAException#XA_RBINTEGRITY}: a condition that violates the integrity of the
+   * resource was detected.
+   */
+  XA_RBINTEGRITY(XAException.XA_RBINTEGRITY),
+  /**
+   * Mirrors {@link XAException#XA_RBOTHER}: the resource manager rolled back for a reason not on
+   * this list.
+   */
+  XA_RBOTHER(XAException.XA_RBOTHER),
+  /** Mirrors {@link XAException#XA_RBPROTO}: a protocol error occurred in the resource manager. */
+  XA_RBPROTO(XAException.XA_RBPROTO),
+  /** Mirrors {@link XAException#XA_RBTIMEOUT}: a transaction branch took too long. */
+  XA_RBTIMEOUT(XAException.XA_RBTIMEOUT),
+  /** Mirrors {@link XAException#XA_RBTRANSIENT}: may retry the transaction branch. */
+  XA_RBTRANSIENT(XAException.XA_RBTRANSIENT),
+  /** Mirrors {@link XAException#XA_RBEND}: the inclusive upper bound of the rollback codes. */
+  XA_RBEND(XAException.XA_RBEND),
+  /**
+   * Mirrors {@link XAException#XA_NOMIGRATE}: resumption must occur where the suspension occurred.
+   */
+  XA_NOMIGRATE(XAException.XA_NOMIGRATE),
+  /**
+   * Mirrors {@link XAException#XA_HEURHAZ}: the transaction branch may have been heuristically
+   * completed.
+   */
+  XA_HEURHAZ(XAException.XA_HEURHAZ),
+  /**
+   * Mirrors {@link XAException#XA_HEURCOM}: the transaction branch has been heuristically
+   * committed.
+   */
+  XA_HEURCOM(XAException.XA_HEURCOM),
+  /**
+   * Mirrors {@link XAException#XA_HEURRB}: the transaction branch has been heuristically rolled
+   * back.
+   */
+  XA_HEURRB(XAException.XA_HEURRB),
+  /**
+   * Mirrors {@link XAException#XA_HEURMIX}: the transaction branch has been heuristically committed
+   * and rolled back.
+   */
+  XA_HEURMIX(XAException.XA_HEURMIX),
+  /** Mirrors {@link XAException#XA_RETRY}: routine returned with no effect and may be reissued. */
+  XA_RETRY(XAException.XA_RETRY),
+  /**
+   * Mirrors {@link XAException#XA_RDONLY}: the transaction branch was read-only and has been
+   * committed.
+   */
+  XA_RDONLY(XAException.XA_RDONLY),
+  /** Mirrors {@link XAException#XAER_ASYNC}: an asynchronous operation is already outstanding. */
+  XAER_ASYNC(XAException.XAER_ASYNC),
+  /** Mirrors {@link XAException#XAER_RMERR}: a resource manager error occurred. */
+  XAER_RMERR(XAException.XAER_RMERR),
+  /** Mirrors {@link XAException#XAER_NOTA}: the {@code Xid} is not valid. */
+  XAER_NOTA(XAException.XAER_NOTA),
+  /** Mirrors {@link XAException#XAER_INVAL}: invalid arguments were given. */
+  XAER_INVAL(XAException.XAER_INVAL),
+  /** Mirrors {@link XAException#XAER_PROTO}: the routine was invoked in an improper context. */
+  XAER_PROTO(XAException.XAER_PROTO),
+  /**
+   * Mirrors {@link XAException#XAER_RMFAIL}: the resource manager has failed and is unavailable.
+   */
+  XAER_RMFAIL(XAException.XAER_RMFAIL),
+  /** Mirrors {@link XAException#XAER_DUPID}: the {@code Xid} already exists. */
+  XAER_DUPID(XAException.XAER_DUPID),
+  /**
+   * Mirrors {@link XAException#XAER_OUTSIDE}: the resource manager is doing work outside a global
+   * transaction.
+   */
+  XAER_OUTSIDE(XAException.XAER_OUTSIDE);
 
   private final int xaErrorCode;
 
@@ -59,6 +122,9 @@ public enum CpoXaError {
   }
 
   /**
+   * Builds an {@link XAException} carrying a message that embeds this error code's name and numeric
+   * value alongside the caller-supplied detail text.
+   *
    * @param errCode The error code for the XAException
    * @param errString The message for the XAException
    * @return The XAException

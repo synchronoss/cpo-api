@@ -31,6 +31,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
+ * {@link ExpressionParser} implementation for native expressions that use positional {@code ?} bind
+ * markers (the common JDBC/CQL convention). Parses {@code INSERT} statements by matching the
+ * column-list and values-list parentheses, and all other statement types by scanning left of each
+ * {@code ?} for the preceding column/attribute token.
+ *
  * @author Michael Bellomo
  * @since 10/20/2008
  */
@@ -43,27 +48,35 @@ public class BoundExpressionParser implements ExpressionParser {
 
   private String expression;
 
+  /** Creates a parser with no expression set. Call {@link #setExpression(String)} before use. */
   public BoundExpressionParser() {}
 
+  /** {@inheritDoc} */
   @Override
   public String getExpression() {
     return expression;
   }
 
+  /** {@inheritDoc} */
+  @Override
   public void setExpression(String expression) {
     this.expression = expression;
   }
 
-  /**
-   * Returns the count of the bind markers in the expression
-   *
-   * @return the number of bind markers
-   */
+  /** {@inheritDoc} */
   @Override
   public int countArguments() {
     return getBindMarkerIndexes(expression).size();
   }
 
+  /**
+   * Finds the character offsets of every unquoted {@code ?} bind marker in {@code source}. Markers
+   * inside single- or double-quoted literals are ignored.
+   *
+   * @param source the expression to scan, may be {@code null} or empty
+   * @return the offsets of each bind marker, in order; empty if {@code source} is {@code null} or
+   *     empty
+   */
   public static Collection<Integer> getBindMarkerIndexes(String source) {
     Collection<Integer> indexes = new ArrayList<>();
 
@@ -96,10 +109,12 @@ public class BoundExpressionParser implements ExpressionParser {
   }
 
   /**
-   * Returns a list of columns from the expression for each bind marker
+   * {@inheritDoc}
    *
-   * @return List of Strings for the columns for the bind markers
-   * @throws ParseException thrown if the expression cannot be parsed
+   * <p>Supports two expression shapes: {@code INSERT INTO table(col1, col2...) VALUES(val1,
+   * val2...)}, parsed by matching the column-list and values-list parentheses; and any other
+   * expression of the form {@code ...col1 = ?, col2 = ?...}, parsed by scanning left from each
+   * {@code ?} for the preceding column/attribute token.
    */
   @Override
   public List<String> parse() throws ParseException {

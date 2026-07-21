@@ -22,6 +22,14 @@ package org.synchronoss.cpo.core.meta.bean;
  * ]]
  */
 
+/**
+ * Plain-data holder for the fields of a CPO attribute as loaded from meta XML: the Java-side
+ * name/type, the datastore-side name/type, and an optional {@code CpoTransform} class name. {@link
+ * org.synchronoss.cpo.core.meta.domain.CpoAttribute} extends this with the runtime behavior
+ * (reflective getter/setter resolution, transform instantiation, etc).
+ *
+ * @author dberry
+ */
 public class CpoAttributeBean implements java.io.Serializable {
 
   private static final long serialVersionUID = 1L;
@@ -29,62 +37,137 @@ public class CpoAttributeBean implements java.io.Serializable {
   /*
    * Properties
    */
+  /** The name of the Java bean property. */
   private String javaName;
+
+  /** The fully-qualified Java type of the bean property. */
   private String javaType;
+
+  /** The name of the datastore-side column/field. */
   private String dataName;
+
+  /** The native datastore type of the column/field. */
   private String dataType;
+
+  /** The fully-qualified class name of a custom {@code CpoTransform}, if any. */
   private String transformClassName;
+
+  /** The description of this attribute. */
   private String description;
 
+  /** Creates an empty instance. */
   public CpoAttributeBean() {}
 
   /*
    * Getters and Setters
    */
+
+  /**
+   * Gets the name of the datastore-side column/field this attribute binds to.
+   *
+   * @return the datastore-side name
+   */
   public String getDataName() {
     return dataName;
   }
 
+  /**
+   * Sets the name of the datastore-side column/field this attribute binds to.
+   *
+   * @param dataName the datastore-side name
+   */
   public void setDataName(String dataName) {
     this.dataName = dataName;
   }
 
+  /**
+   * Gets the name of the native datastore data type of this attribute.
+   *
+   * @return the native data type name
+   */
   public String getDataType() {
     return dataType;
   }
 
+  /**
+   * Sets the name of the native datastore data type of this attribute.
+   *
+   * @param dataType the native data type name
+   */
   public void setDataType(String dataType) {
     this.dataType = dataType;
   }
 
+  /**
+   * Gets the human-readable description of this attribute, as loaded from the meta XML.
+   *
+   * @return the description, or {@code null} if none was specified
+   */
   public String getDescription() {
     return description;
   }
 
+  /**
+   * Sets the human-readable description of this attribute.
+   *
+   * @param description the description
+   */
   public void setDescription(String description) {
     this.description = description;
   }
 
+  /**
+   * Gets the name of the JavaBean property this attribute binds to.
+   *
+   * @return the JavaBean property name
+   */
   public String getJavaName() {
     return javaName;
   }
 
+  /**
+   * Sets the name of the JavaBean property this attribute binds to.
+   *
+   * @param javaName the JavaBean property name
+   */
   public void setJavaName(String javaName) {
     this.javaName = javaName;
   }
 
+  /**
+   * Gets the Java type name of the bound JavaBean property.
+   *
+   * @return the Java type name
+   */
   public String getJavaType() {
     return javaType;
   }
 
+  /**
+   * Sets the Java type name of the bound JavaBean property.
+   *
+   * @param javaType the Java type name
+   */
   public void setJavaType(String javaType) {
     this.javaType = javaType;
   }
 
+  /**
+   * Gets the fully-qualified class name of the {@code CpoTransform} to apply to this attribute's
+   * value, if any.
+   *
+   * @return the transform class name, or {@code null} if no transform is configured
+   */
   public String getTransformClassName() {
     return transformClassName;
   }
 
+  /**
+   * Sets the fully-qualified class name of the {@code CpoTransform} to apply to this attribute's
+   * value.
+   *
+   * @param transformClassName the transform class name
+   */
   public void setTransformClassName(String transformClassName) {
     this.transformClassName = transformClassName;
   }

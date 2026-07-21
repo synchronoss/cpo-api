@@ -27,6 +27,12 @@ import org.synchronoss.cpo.core.CpoException;
 import org.synchronoss.cpo.core.meta.domain.CpoAttribute;
 
 /**
+ * Base {@link org.synchronoss.cpo.core.CpoData} implementation for reading a bound attribute's
+ * value out of a datastore result row (e.g. a JDBC {@code ResultSet} or Cassandra {@code Row}).
+ * Resolves the appropriate {@link MethodMapEntry} for the attribute's data type on first use and
+ * caches it, since it cannot change across invocations of the same bound instance; datastore
+ * implementations supply the actual reflective invocation via {@link #invokeGetterImpl}.
+ *
  * @author dberry
  */
 public abstract class ResultSetCpoData extends AbstractBindableCpoData {
@@ -37,6 +43,14 @@ public abstract class ResultSetCpoData extends AbstractBindableCpoData {
   // per column the mapper lookup happens once per query instead of once per cell
   private MethodMapEntry<?, ?> resolvedMethodMapEntry = null;
 
+  /**
+   * Creates an instance bound to a single column/attribute of the given result row.
+   *
+   * @param methodMapper the mapper used to resolve the getter method for the attribute's data type
+   * @param rs the datastore-specific result row object (e.g. {@code ResultSet} or {@code Row})
+   * @param cpoAttribute the attribute this instance reads
+   * @param index the positional index (e.g. column index) of this binding
+   */
   public ResultSetCpoData(
       MethodMapper<?> methodMapper, Object rs, CpoAttribute cpoAttribute, int index) {
     super(cpoAttribute, index);
@@ -44,14 +58,35 @@ public abstract class ResultSetCpoData extends AbstractBindableCpoData {
     this.rs = rs;
   }
 
+  /**
+   * Gets the datastore-specific result row object this instance reads from.
+   *
+   * @return the result row object (e.g. {@code ResultSet} or {@code Row})
+   */
   public Object getRs() {
     return rs;
   }
 
+  /**
+   * Invokes the datastore-specific getter method to read the raw value for the given attribute.
+   *
+   * @param cpoAttribute the attribute being read
+   * @param methodMapEntry the resolved method map entry for the attribute's data type
+   * @return the raw value read from the result row, before {@code transformIn} is applied
+   * @throws IllegalAccessException if the getter method cannot be accessed
+   * @throws InvocationTargetException if the getter method throws
+   */
   protected abstract Object invokeGetterImpl(
       CpoAttribute cpoAttribute, MethodMapEntry<?, ?> methodMapEntry)
       throws IllegalAccessException, InvocationTargetException;
 
+  /**
+   * {@inheritDoc}
+   *
+   * <p>Resolves (and caches) the {@link MethodMapEntry} for the attribute's data getter return
+   * type, invokes the datastore-specific getter via {@link #invokeGetterImpl}, and applies the
+   * attribute's transform.
+   */
   @Override
   public Object invokeGetter() throws CpoException {
     Object javaObject;

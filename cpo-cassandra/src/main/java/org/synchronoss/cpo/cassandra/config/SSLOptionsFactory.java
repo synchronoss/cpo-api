@@ -22,11 +22,12 @@ package org.synchronoss.cpo.cassandra.config;
  * ]]
  */
 
-import com.datastax.driver.core.SocketOptions;
+import com.datastax.driver.core.SSLOptions;
 
 /**
- * Created with IntelliJ IDEA. User: dberry Date: 10/10/13 Time: 07:58 AM To change this template
- * use File | Settings | File Templates.
+ * FactoryMethod for creating Cassandra SSLOptions
+ *
+ * @author dberry
  */
 public abstract class SSLOptionsFactory implements FactoryMethodName {
 
@@ -43,9 +44,9 @@ public abstract class SSLOptionsFactory implements FactoryMethodName {
   }
 
   /**
-   * Create the SocketOptions
+   * Create the SSLOptions
    *
-   * @return The SocketOptions
+   * @return The SSLOptions
    */
-  public abstract SocketOptions createSSLOptions();
+  public abstract SSLOptions createSSLOptions();
 }

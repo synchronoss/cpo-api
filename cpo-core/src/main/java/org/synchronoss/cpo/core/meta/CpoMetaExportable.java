@@ -28,6 +28,9 @@ import java.io.Writer;
 import org.synchronoss.cpo.core.CpoException;
 
 /**
+ * {@code CpoMetaExportable} is implemented by metadata sources that can serialize their loaded
+ * {@code CpoClass} metadata back out to a CPO meta XML document.
+ *
  * @author dberry
  */
 public interface CpoMetaExportable {

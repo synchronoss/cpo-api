@@ -38,7 +38,7 @@ import org.synchronoss.cpo.core.meta.domain.CpoFunction;
 
 /**
  * CassandraBoundStatementFactory is the object that encapsulates the creation of the actual
- * PreparedStatement for the JDBC driver.
+ * Cassandra {@link BoundStatement} used to execute a CpoFunction against the datastax driver.
  *
  * @author david berry
  */
@@ -52,21 +52,21 @@ public class CassandraBoundStatementFactory extends CpoStatementFactory implemen
   private BoundStatement boundStatement;
 
   /**
-   * Used to build the PreparedStatement that is used by CPO to create the actual JDBC
-   * PreparedStatement. The constructor is called by the internal CPO framework. This is not to be
-   * used by users of CPO. Programmers that build Transforms may need to use this object to get
-   * access to the actual connection.
+   * Used to build the Cassandra {@link BoundStatement} that CPO executes for a given CpoFunction.
+   * The constructor is called by the internal CPO framework. This is not to be used by users of
+   * CPO. Programmers that build Transforms may need to use this object to get access to the actual
+   * bound statement.
    *
    * @param <T> The type of the object being bound
-   * @param sess The actual jdbc connection that will be used to create the callable statement.
-   * @param cassandraCpoAdapter The JdbcCpoAdapter that is controlling this transaction
+   * @param sess The Cassandra session that will be used to prepare and bind the statement.
+   * @param cassandraCpoAdapter The CassandraCpoAdapter that is controlling this transaction
    * @param criteria The object that will be used to look up the cpo metadata
    * @param function The CpoFunction that is being executed
    * @param bean The bean that is being acted upon
    * @param wheres A collection of wheres to find the object
    * @param orderBy A collection of orderbys to sort the objects
-   * @param nativeQueries Additional sql to be embedded into the CpoFunction sql that is used to
-   *     create the actual JDBC PreparedStatement
+   * @param nativeQueries Additional CQL to be embedded into the CpoFunction CQL that is used to
+   *     create the actual Cassandra BoundStatement
    * @throws CpoException if a CPO error occurs
    */
   public <T> CassandraBoundStatementFactory(
@@ -104,17 +104,12 @@ public class CassandraBoundStatementFactory extends CpoStatementFactory implemen
 
   @Override
   protected MethodMapper getMethodMapper() {
-    return CassandraMethodMapper
-        .getMethodMapper(); // To change body of implemented methods use File | Settings | File
-    // Templates.
+    return CassandraMethodMapper.getMethodMapper();
   }
 
   @Override
   protected CpoData getCpoData(CpoAttribute cpoAttribute, int index) {
-    return new CassandraBoundStatementCpoData(
-        this,
-        cpoAttribute,
-        index); // To change body of implemented methods use File | Settings | File Templates.
+    return new CassandraBoundStatementCpoData(this, cpoAttribute, index);
   }
 
   @Override

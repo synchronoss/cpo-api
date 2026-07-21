@@ -65,6 +65,8 @@ public class ClassJdbcDataSourceInfo extends AbstractJdbcDataSource
    *
    * @param className The classname of a class that implements datasource
    * @param properties - The connection properties for connecting to the database
+   * @param fetchSize the number of rows to fetch per round trip on a retrieve
+   * @param batchSize the number of statements to batch together before executing
    */
   public ClassJdbcDataSourceInfo(
       String className, SortedMap<String, String> properties, int fetchSize, int batchSize) {

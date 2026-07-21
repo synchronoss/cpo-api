@@ -25,13 +25,25 @@ package org.synchronoss.cpo.core.jta;
 import java.util.HashMap;
 import javax.transaction.xa.Xid;
 
-/** Created by dberry on 8/9/15. */
+/**
+ * Simple holder for a {@link Xid}-to-{@link CpoXaState} map, one per family of XA resources.
+ *
+ * @param <T> the type of the underlying resource tracked by the held {@link CpoXaState} entries
+ * @author dberry
+ */
 public class CpoXaStateMap<T> {
 
   // map of all seen XIDs
   private final HashMap<Xid, CpoXaState<T>> xidStateMap = new HashMap<>();
 
-  // map of all xid State
+  /** Constructs an empty state map. */
+  public CpoXaStateMap() {}
+
+  /**
+   * Gets the map of all transaction branches currently tracked.
+   *
+   * @return the map of all transaction branches currently tracked, keyed by {@link Xid}
+   */
   public HashMap<Xid, CpoXaState<T>> getXidStateMap() {
     return xidStateMap;
   }

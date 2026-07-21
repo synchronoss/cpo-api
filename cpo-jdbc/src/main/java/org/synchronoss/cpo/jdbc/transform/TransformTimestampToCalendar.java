@@ -29,8 +29,8 @@ import org.synchronoss.cpo.jdbc.JdbcCallableStatementFactory;
 import org.synchronoss.cpo.jdbc.JdbcPreparedStatementFactory;
 
 /**
- * This is an example of a transform that does nothing. It is used to test the mechanics of the
- * transform logic within CPO.
+ * Converts a {@code java.sql.Timestamp} from a jdbc datasource to a {@code java.util.Calendar} and
+ * from a {@code java.util.Calendar} to a {@code java.sql.Timestamp} in a datasource.
  *
  * @author david berry
  */

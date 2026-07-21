@@ -40,13 +40,40 @@ import org.xml.sax.InputSource;
 import org.xml.sax.XMLReader;
 
 /**
+ * Static helpers for locating and safely unmarshalling CPO's XML configuration and meta data files.
+ *
+ * <p>{@link #loadXmlStream} resolves an XML source by classpath resource, {@code file:} URL, or
+ * plain filesystem path — never over the network, so a hostile {@code CPO_CONFIG} value cannot pull
+ * configuration from a remote host. {@link #unmarshalXmlObject} then parses and schema-validates
+ * that XML through a hardened SAX/JAXB pipeline with DOCTYPE declarations and external entities
+ * disabled, to prevent XXE and entity-expansion attacks from untrusted config or meta XML.
+ *
  * @author dberry
  */
 public class XmlHelper {
   private static final Logger logger = LoggerFactory.getLogger(XmlHelper.class);
+
+  private XmlHelper() {
+    // hidden constructor: this class only exposes static helpers
+  }
+
+  /** Classpath-relative location of the CPO meta data XML schema. */
   public static final String CPO_META_XSD = "xsd/CpoMeta.xsd";
+
+  /** Classpath-relative location of the CPO config XML schema. */
   public static final String CPO_CONFIG_XSD = "xsd/CpoConfig.xsd";
 
+  /**
+   * Resolves {@code xmlStr} to an open {@link InputStream}, trying (in order) a {@code file:} URL,
+   * a classpath resource, and finally a plain filesystem path. Remote URLs are deliberately not
+   * supported.
+   *
+   * @param xmlStr the classpath resource name, {@code file:} URL, or filesystem path to load
+   * @param errorBuilder buffer that error details are appended to when the source cannot be
+   *     resolved; left unchanged on success
+   * @return an open stream for {@code xmlStr}, or {@code null} if it could not be resolved by any
+   *     of the supported means
+   */
   public static InputStream loadXmlStream(String xmlStr, StringBuilder errorBuilder) {
     int errBuilderLen = errorBuilder.length();
     InputStream is = null;
@@ -78,11 +105,30 @@ public class XmlHelper {
     return is;
   }
 
+  /**
+   * Configures a JAXB {@link Marshaller} with CPO's standard output settings: UTF-8 encoding and
+   * formatted (indented) output.
+   *
+   * @param marshaller the marshaller to configure
+   * @throws PropertyException if the marshaller does not support one of the properties being set
+   */
   public static void setMarshallerProperties(Marshaller marshaller) throws PropertyException {
     marshaller.setProperty(Marshaller.JAXB_ENCODING, "UTF-8");
     marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
   }
 
+  /**
+   * Loads, schema-validates, and unmarshals an XML document into an instance of {@code objClass},
+   * using a hardened SAX parser (DOCTYPE and external entities disabled) to guard against XXE and
+   * entity-expansion attacks from untrusted input.
+   *
+   * @param <T> the JAXB-bound type to unmarshal into
+   * @param xsd the classpath resource, {@code file:} URL, or path of the XSD to validate against
+   * @param xml the classpath resource, {@code file:} URL, or path of the XML document to parse
+   * @param objClass the JAXB-bound class to unmarshal the document into
+   * @param errorBuilder buffer that validation and I/O error details are appended to
+   * @return the unmarshalled object, or {@code null} if the XSD/XML could not be loaded or parsed
+   */
   public static <T> T unmarshalXmlObject(
       String xsd, String xml, Class<T> objClass, StringBuilder errorBuilder) {
     try (var xsdStream = loadXmlStream(xsd, errorBuilder);

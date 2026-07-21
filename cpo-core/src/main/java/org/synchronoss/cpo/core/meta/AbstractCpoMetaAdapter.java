@@ -35,6 +35,12 @@ import org.synchronoss.cpo.core.meta.domain.*;
 import org.synchronoss.cpo.cpometa.*;
 
 /**
+ * Base {@link CpoMetaAdapter} implementation that maintains the in-memory map of loaded {@link
+ * CpoClass} metadata and the shared logic for loading that metadata from the JAXB-bound {@code Ct*}
+ * classes produced by unmarshalling a CPO meta XML document. Datastore-specific subclasses supply
+ * the {@link DataTypeMapper} and the concrete {@link CpoClass}/{@link CpoAttribute}/{@link
+ * CpoFunctionGroup}/{@link CpoFunction}/{@link CpoArgument} factory methods.
+ *
  * @author dberry
  */
 public abstract class AbstractCpoMetaAdapter implements CpoMetaAdapter {
@@ -51,11 +57,10 @@ public abstract class AbstractCpoMetaAdapter implements CpoMetaAdapter {
   }
 
   /**
-   * DOCUMENT ME!
+   * {@inheritDoc}
    *
-   * @param bean DOCUMENT ME!
-   * @return DOCUMENT ME!
-   * @throws CpoException DOCUMENT ME!
+   * <p>Looks up the metadata by {@code bean}'s exact class name first, then walks up the
+   * superclass/interface hierarchy until a match is found.
    */
   @Override
   public <T> CpoClass getMetaClass(T bean) throws CpoException {
@@ -101,6 +106,7 @@ public abstract class AbstractCpoMetaAdapter implements CpoMetaAdapter {
     return superClassList;
   }
 
+  /** {@inheritDoc} */
   @Override
   public List<CpoClass> getCpoClasses() {
     List<CpoClass> result = new ArrayList<>();
@@ -108,6 +114,7 @@ public abstract class AbstractCpoMetaAdapter implements CpoMetaAdapter {
     return result;
   }
 
+  /** {@inheritDoc} */
   @Override
   public String getDataTypeName(CpoAttribute attribute) {
     String clazzName = getDataTypeJavaClass(attribute).getName();
@@ -122,6 +129,7 @@ public abstract class AbstractCpoMetaAdapter implements CpoMetaAdapter {
     return clazzName;
   }
 
+  /** {@inheritDoc} */
   @Override
   public Class<?> getDataTypeJavaClass(CpoAttribute attribute) {
     Class<?> clazz = String.class;
@@ -139,21 +147,29 @@ public abstract class AbstractCpoMetaAdapter implements CpoMetaAdapter {
     return clazz;
   }
 
+  /** {@inheritDoc} */
   @Override
   public int getDataTypeInt(String dataTypeName) throws CpoException {
     return getDataTypeMapper().getDataTypeInt(dataTypeName);
   }
 
+  /** {@inheritDoc} */
   @Override
   public DataTypeMapEntry<?> getDataTypeMapEntry(int dataTypeInt) throws CpoException {
     return getDataTypeMapper().getDataTypeMapEntry(dataTypeInt);
   }
 
+  /** {@inheritDoc} */
   @Override
   public List<String> getAllowableDataTypes() throws CpoException {
     return getDataTypeMapper().getDataTypeNames();
   }
 
+  /**
+   * Gets the datastore-specific data type mapper used to resolve native data types to Java classes.
+   *
+   * @return the data type mapper for this meta adapter
+   */
   protected abstract DataTypeMapper getDataTypeMapper();
 
   protected void loadCpoMetaDataDocument(CtCpoMetaData ctCpoMetaData, boolean caseSensitive)

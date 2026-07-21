@@ -22,6 +22,7 @@ package org.synchronoss.cpo.core.enums;
  * ]]
  */
 
+/** The kinds of operation a CPO function group can perform against a datasource. */
 public enum Crud {
   /**
    * Identifies the operation to be processed by the CPO. CREATE signifies that the CPO will try to

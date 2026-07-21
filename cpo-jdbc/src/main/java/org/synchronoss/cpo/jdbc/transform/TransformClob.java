@@ -83,7 +83,7 @@ public class TransformClob implements JdbcCpoTransform<Clob, char[]> {
    *     able to work with closeable items
    * @param attributeObject The object that represents the attribute being persisted.
    * @return The object to be stored in the datasource
-   * @throws CpoException TransformClob
+   * @throws CpoException if the char array cannot be wrapped as a {@link SerialClob}
    */
   @Override
   public Clob transformOut(JdbcPreparedStatementFactory jpsf, char[] attributeObject)

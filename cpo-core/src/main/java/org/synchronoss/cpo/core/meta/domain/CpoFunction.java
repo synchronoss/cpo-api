@@ -28,25 +28,52 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.core.meta.bean.CpoFunctionBean;
 
+/**
+ * Runtime metadata for a single CPO function: extends {@link CpoFunctionBean}'s name/expression/
+ * description with the ordered list of {@link CpoArgument}s bound to the function's positional bind
+ * markers.
+ *
+ * @author dberry
+ */
 public class CpoFunction extends CpoFunctionBean {
 
   private static final long serialVersionUID = 1L;
 
   private static final Logger logger = LoggerFactory.getLogger(CpoFunction.class);
+
+  /** The arguments bound to this function's bind markers, in bind-marker order. */
   List<CpoArgument> arguments = new ArrayList<>();
 
+  /** Creates an empty instance. */
   public CpoFunction() {}
 
+  /**
+   * Gets the arguments bound to this function's bind markers, in bind-marker order.
+   *
+   * @return the bound arguments
+   */
   public List<CpoArgument> getArguments() {
     return arguments;
   }
 
+  /**
+   * Appends an argument to this function's argument list. A no-op if {@code argument} is {@code
+   * null}.
+   *
+   * @param argument the argument to add
+   */
   public void addArgument(CpoArgument argument) {
     if (argument != null) {
       arguments.add(argument);
     }
   }
 
+  /**
+   * Removes an argument from this function's argument list.
+   *
+   * @param argument the argument to remove
+   * @return {@code true} if the argument was found and removed, {@code false} otherwise
+   */
   public boolean removeArgument(CpoArgument argument) {
     if (argument != null) {
       return arguments.remove(argument);
@@ -54,6 +81,13 @@ public class CpoFunction extends CpoFunctionBean {
     return false;
   }
 
+  /**
+   * Removes the argument at the given position in this function's argument list.
+   *
+   * @param index the position of the argument to remove
+   * @return {@code true} if {@code index} was in range and the argument was removed, {@code false}
+   *     otherwise
+   */
   public boolean removeArgument(int index) {
     if (index >= 0 && index < arguments.size()) {
       return arguments.remove(index) != null;
@@ -62,10 +96,12 @@ public class CpoFunction extends CpoFunctionBean {
   }
 
   /**
-   * DOCUMENT ME!
+   * Builds a diagnostic string describing {@code function}'s argument list: each argument's bound
+   * attribute Java type, for debugging/logging purposes.
    *
-   * @param function DOCUMENT ME!
-   * @return DOCUMENT ME!
+   * @param function the function whose arguments should be described, may be {@code null}
+   * @return a diagnostic description of the argument list, or {@code " null function."} if {@code
+   *     function} is {@code null}
    */
   public String parameterToString(CpoFunction function) {
     List<CpoArgument> args;
@@ -108,11 +144,22 @@ public class CpoFunction extends CpoFunctionBean {
     return sb.toString();
   }
 
+  /**
+   * {@inheritDoc}
+   *
+   * <p>Returns this function's {@link #getName() name}.
+   */
   @Override
   public String toString() {
     return this.getName();
   }
 
+  /**
+   * Gets the full field-by-field string representation of this function, as produced by {@link
+   * CpoFunctionBean#toString()}.
+   *
+   * @return the full string representation
+   */
   public String toStringFull() {
     return super.toString();
   }

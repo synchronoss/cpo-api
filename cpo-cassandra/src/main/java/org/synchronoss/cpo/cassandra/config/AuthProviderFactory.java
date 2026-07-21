@@ -25,7 +25,7 @@ package org.synchronoss.cpo.cassandra.config;
 import com.datastax.driver.core.AuthProvider;
 
 /**
- * Gets the method name for creating an AuthProvider
+ * FactoryMethod for creating a Cassandra AuthProvider
  *
  * @author dberry
  */

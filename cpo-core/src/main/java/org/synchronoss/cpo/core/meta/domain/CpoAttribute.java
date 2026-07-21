@@ -37,6 +37,15 @@ import org.synchronoss.cpo.core.meta.CpoMetaDescriptor;
 import org.synchronoss.cpo.core.meta.bean.CpoAttributeBean;
 import org.synchronoss.cpo.core.transform.CpoTransform;
 
+/**
+ * Runtime metadata for a single JavaBean-to-datastore attribute binding: extends {@link
+ * CpoAttributeBean}'s plain configuration data with the reflectively-resolved getter/setter {@link
+ * Method}s and, if configured, the {@link CpoTransform} instance and its transform methods. {@link
+ * #loadRunTimeInfo(CpoMetaDescriptor, Class)} performs that resolution against a concrete bean
+ * class and must be called before the getter/setter/transform accessors are used.
+ *
+ * @author dberry
+ */
 public class CpoAttribute extends CpoAttributeBean {
 
   private static final long serialVersionUID = 1L;
@@ -44,41 +53,91 @@ public class CpoAttribute extends CpoAttributeBean {
   private static final Logger logger = LoggerFactory.getLogger(CpoAttribute.class);
   protected static final String TRANSFORM_IN_NAME = "transformIn";
   protected static final String TRANSFORM_OUT_NAME = "transformOut";
+
+  /** The resolved name of the bean getter method. */
   private String getterName_ = null;
+
+  /** The resolved name of the bean setter method. */
   private String setterName_ = null;
+
+  /** The reflectively-resolved bean getter method. */
   private Method getter_ = null;
+
+  /** The reflectively-resolved bean setter method. */
   private Method setter_ = null;
+
+  /** The native datastore type code for this attribute. */
   private int dataTypeInt = Integer.MIN_VALUE;
 
   // Transform attributes
+  /** The configured transform instance, if any. */
   private CpoTransform cpoTransform = null;
+
+  /** The resolved {@link #TRANSFORM_IN_NAME} method on {@link #cpoTransform}, if any. */
   private Method transformInMethod = null;
+
+  /** The resolved {@link #TRANSFORM_OUT_NAME} method on {@link #cpoTransform}, if any. */
   private Method transformOutMethod = null;
+
   // cached because Method.getParameterTypes() clones its array on every call
+  /** The parameter type of {@link #transformInMethod}, cached to avoid repeated reflection. */
   private Class<?> transformInParamType = null;
 
+  /** Creates an empty instance. Call {@link #loadRunTimeInfo} before use. */
   public CpoAttribute() {}
 
+  /**
+   * Gets the transform instance configured for this attribute, if any.
+   *
+   * @param <D> the transform's datastore-side type
+   * @param <J> the transform's Java-side type
+   * @return the configured transform, or {@code null} if none is configured
+   */
   public <D, J> CpoTransform<D, J> getCpoTransform() {
     return cpoTransform;
   }
 
+  /**
+   * Gets the resolved {@code transformIn} method of the configured transform.
+   *
+   * @return the {@code transformIn} method, or {@code null} if no transform is configured
+   */
   public Method getTransformInMethod() {
     return transformInMethod;
   }
 
+  /**
+   * Gets the resolved {@code transformOut} method of the configured transform.
+   *
+   * @return the {@code transformOut} method, or {@code null} if no transform is configured
+   */
   public Method getTransformOutMethod() {
     return transformOutMethod;
   }
 
+  /**
+   * Gets the parameter type of the configured transform's {@code transformIn} method.
+   *
+   * @return the {@code transformIn} parameter type, or {@code null} if no transform is configured
+   */
   public Class<?> getTransformInParamType() {
     return transformInParamType;
   }
 
+  /**
+   * Gets the parameter type expected by the bean's setter method.
+   *
+   * @return the setter's parameter type
+   */
   public Class<?> getSetterParamType() {
     return getter_.getReturnType();
   }
 
+  /**
+   * Gets the return type of the bean's getter method.
+   *
+   * @return the getter's return type
+   */
   public Class<?> getGetterReturnType() {
     return getter_.getReturnType();
   }
@@ -115,10 +174,20 @@ public class CpoAttribute extends CpoAttributeBean {
     setterName_ = setterName;
   }
 
+  /**
+   * Sets the integer identifier of this attribute's native data type.
+   *
+   * @param dataTypeInt the native data type identifier
+   */
   public void setDataTypeInt(int dataTypeInt) {
     this.dataTypeInt = dataTypeInt;
   }
 
+  /**
+   * Gets the integer identifier of this attribute's native data type.
+   *
+   * @return the native data type identifier
+   */
   public int getDataTypeInt() {
     return this.dataTypeInt;
   }
@@ -158,6 +227,13 @@ public class CpoAttribute extends CpoAttributeBean {
     return methodName.toString();
   }
 
+  /**
+   * Invokes the bean's setter method, passing the value read from {@code cpoData}.
+   *
+   * @param instanceObject the bean instance to set the value on
+   * @param cpoData the source of the value, via {@link CpoData#invokeGetter()}
+   * @throws CpoException if the setter cannot be invoked
+   */
   public void invokeSetter(Object instanceObject, CpoData cpoData) throws CpoException {
     try {
       setter_.invoke(instanceObject, cpoData.invokeGetter());
@@ -176,6 +252,13 @@ public class CpoAttribute extends CpoAttributeBean {
     }
   }
 
+  /**
+   * Invokes the bean's getter method to read this attribute's value.
+   *
+   * @param obj the bean instance to read the value from
+   * @return the value returned by the bean's getter
+   * @throws CpoException if the getter cannot be invoked
+   */
   public Object invokeGetter(Object obj) throws CpoException {
     try {
       return getGetter().invoke(obj, (Object[]) null);
@@ -197,6 +280,16 @@ public class CpoAttribute extends CpoAttributeBean {
     logger.trace("========================");
   }
 
+  /**
+   * Gets whether one of {@code clazz}/{@code paramClass} is a primitive type and the other is its
+   * corresponding wrapper class (e.g. {@code int}/{@code Integer}), determined heuristically by
+   * name and by checking for a wrapper constructor that accepts the primitive.
+   *
+   * @param clazz one of the two classes being compared
+   * @param paramClass the other class being compared
+   * @return {@code true} if exactly one of the two is primitive and it is assignable to/from the
+   *     other via boxing, {@code false} otherwise
+   */
   public static boolean isPrimitiveAssignableFrom(Class<?> clazz, Class<?> paramClass) {
 
     // check to see if one is primitive and one is a possible wrapper
@@ -233,6 +326,18 @@ public class CpoAttribute extends CpoAttributeBean {
     return false;
   }
 
+  /**
+   * Resolves this attribute's reflective getter/setter methods against {@code metaClass}, and
+   * instantiates and resolves its configured transform (if any) via {@code metaDescriptor}. Must be
+   * called before {@link #invokeGetter(Object)}, {@link #invokeSetter(Object, CpoData)}, or any of
+   * the getter/setter/transform accessor methods are used.
+   *
+   * @param metaDescriptor the owning descriptor, used to instantiate the transform class
+   * @param metaClass the concrete bean class to resolve the getter/setter against, or {@code null}
+   *     to skip getter/setter resolution
+   * @throws CpoException if the transform cannot be instantiated, or the getter/setter cannot be
+   *     found
+   */
   public void loadRunTimeInfo(CpoMetaDescriptor metaDescriptor, Class<?> metaClass)
       throws CpoException {
     StringBuilder failedMessage = new StringBuilder();
@@ -333,6 +438,12 @@ public class CpoAttribute extends CpoAttributeBean {
     return this.getJavaName();
   }
 
+  /**
+   * Gets the full field-by-field string representation of this attribute, as produced by {@link
+   * CpoAttributeBean#toString()}.
+   *
+   * @return the full string representation
+   */
   public String toStringFull() {
     return super.toString();
   }

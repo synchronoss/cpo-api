@@ -31,5 +31,11 @@ package org.synchronoss.cpo.core;
  */
 public interface MetaDFVisitable {
 
+  /**
+   * Accepts a visitor, depth-first: this node is visited, then each child accepts the visitor in
+   * turn.
+   *
+   * @param visitor the visitor to accept
+   */
   void acceptMetaDFVisitor(MetaVisitor visitor);
 }

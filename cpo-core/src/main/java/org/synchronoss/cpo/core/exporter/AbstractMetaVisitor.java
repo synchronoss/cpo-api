@@ -28,6 +28,17 @@ import org.synchronoss.cpo.core.meta.domain.CpoClass;
 import org.synchronoss.cpo.core.meta.domain.CpoFunction;
 import org.synchronoss.cpo.core.meta.domain.CpoFunctionGroup;
 
+/**
+ * Base class for {@link MetaVisitor} implementations that generate Java source (interfaces,
+ * classes) from {@link CpoClass} meta model objects.
+ *
+ * <p>Subclasses drive code generation by visiting the meta model depth-first; this class supplies
+ * the shared naming helpers (getter/setter/static-field names) and text buffers ({@link
+ * #attributeStatics}, {@link #functionGroupStatics}, {@link #gettersSetters}) that the visit
+ * methods accumulate generated source into.
+ *
+ * @author Michael Bellomo
+ */
 public abstract class AbstractMetaVisitor implements MetaVisitor {
   protected static final String ATTR_PREFIX = "ATTR_";
   protected static final String FG_PREFIX = "FG_";
@@ -35,6 +46,9 @@ public abstract class AbstractMetaVisitor implements MetaVisitor {
   protected StringBuilder attributeStatics = new StringBuilder();
   protected StringBuilder functionGroupStatics = new StringBuilder();
   protected StringBuilder gettersSetters = new StringBuilder();
+
+  /** Constructs a visitor with empty generated-source buffers. */
+  protected AbstractMetaVisitor() {}
 
   protected String buildPackageName(CpoClass cpoClass) {
     StringBuilder header = new StringBuilder();

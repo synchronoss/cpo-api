@@ -29,8 +29,9 @@ import org.synchronoss.cpo.core.meta.domain.CpoAttribute;
 import org.synchronoss.cpo.core.meta.domain.CpoClass;
 
 /**
- * BindableCpoWhere is an interface for specifying the sort order in which objects are returned from
- * the Datasource.
+ * Default {@link CpoWhere} implementation: a bindable where-clause node that is also a {@link
+ * Node}, allowing leaf comparisons to be chained into branches via {@link #addWhere(CpoWhere)} and
+ * rendered to native SQL/CQL text via {@link #toString(CpoClass)}.
  *
  * @author david berry
  */
@@ -55,18 +56,50 @@ public class BindableCpoWhere extends Node implements CpoWhere {
     "AND", // LOGIC_AND
     "OR" // LOGIC_OR
   };
+
+  /** The comparison operator applied between the attribute and value. */
   private Comparison comparison = Comparison.NONE;
+
+  /** The logical operator joining this clause to the next one added via {@link #addWhere}. */
   private Logical logical = Logical.NONE;
+
+  /** The left-hand bean attribute name. */
   private String attribute = null;
+
+  /** The right-hand bean attribute name, when comparing two attributes. */
   private String rightAttribute = null;
+
+  /** The literal comparison value. */
   private Object value = null;
+
+  /** Native function applied to the left-hand attribute before comparison. */
   private String attributeFunction = null;
+
+  /** Native function applied to the right-hand attribute before comparison. */
   private String rightAttributeFunction = null;
+
+  /** Native function applied to the comparison value before comparison. */
   private String valueFunction = null;
+
+  /** Whether the comparison result is negated. */
   private boolean not = false;
+
+  /** A literal, unescaped value inserted directly into the native expression. */
   private String staticValue_ = null;
+
+  /** The name of this where clause node. */
   private String name = "__CPO_WHERE__";
 
+  /**
+   * Creates a leaf where clause comparing the named attribute to a literal value, joined to a
+   * subsequent clause (if any) by the given logical operator.
+   *
+   * @param <T> the type of the comparison value
+   * @param logical the logical operator joining this clause to the next one added
+   * @param attr the name of the bean attribute to compare
+   * @param comp the comparison operator to apply
+   * @param value the value to compare the attribute against
+   */
   public <T> BindableCpoWhere(Logical logical, String attr, Comparison comp, T value) {
     setLogical(logical);
     setAttribute(attr);
@@ -74,6 +107,17 @@ public class BindableCpoWhere extends Node implements CpoWhere {
     setValue(value);
   }
 
+  /**
+   * Creates a leaf where clause comparing the named attribute to a literal value, optionally
+   * negated, joined to a subsequent clause (if any) by the given logical operator.
+   *
+   * @param <T> the type of the comparison value
+   * @param logical the logical operator joining this clause to the next one added
+   * @param attr the name of the bean attribute to compare
+   * @param comp the comparison operator to apply
+   * @param value the value to compare the attribute against
+   * @param not {@code true} to negate the comparison, {@code false} otherwise
+   */
   public <T> BindableCpoWhere(Logical logical, String attr, Comparison comp, T value, boolean not) {
     setLogical(logical);
     setAttribute(attr);
@@ -82,78 +126,102 @@ public class BindableCpoWhere extends Node implements CpoWhere {
     setNot(not);
   }
 
+  /** Creates an empty where clause with no comparison, attribute, or value set. */
   public BindableCpoWhere() {}
 
+  /** {@inheritDoc} */
   @Override
   public void setComparison(Comparison comparison) {
     this.comparison = comparison;
   }
 
+  /** {@inheritDoc} */
   @Override
   public Comparison getComparison() {
     return this.comparison;
   }
 
+  /** {@inheritDoc} */
   @Override
   public void setLogical(Logical logical) {
     this.logical = logical;
   }
 
+  /** {@inheritDoc} */
   @Override
   public Logical getLogical() {
     return this.logical;
   }
 
+  /** {@inheritDoc} */
   @Override
   public void setAttribute(String s) {
     this.attribute = s;
   }
 
+  /** {@inheritDoc} */
   @Override
   public String getAttribute() {
     return this.attribute;
   }
 
+  /** {@inheritDoc} */
   @Override
   public void setRightAttribute(String s) {
     this.rightAttribute = s;
   }
 
+  /** {@inheritDoc} */
   @Override
   public String getRightAttribute() {
     return this.rightAttribute;
   }
 
+  /** {@inheritDoc} */
   @Override
   public void setValue(Object s) {
     this.value = s;
   }
 
+  /** {@inheritDoc} */
   @Override
   public Object getValue() {
     return this.value;
   }
 
+  /** {@inheritDoc} */
   @Override
   public void setStaticValue(String staticValue) {
     this.staticValue_ = staticValue;
   }
 
+  /** {@inheritDoc} */
   @Override
   public String getStaticValue() {
     return this.staticValue_;
   }
 
+  /** {@inheritDoc} */
   @Override
   public boolean getNot() {
     return this.not;
   }
 
+  /** {@inheritDoc} */
   @Override
   public void setNot(boolean b) {
     this.not = b;
   }
 
+  /**
+   * Builds the native (SQL/CQL) fragment for this where clause against the given class's
+   * attribute-to-column mapping. Unlike {@link #toString()}, this resolves attribute names to
+   * datastore column names and does not require the class to declare the attribute (unresolved
+   * names are used verbatim, e.g. as raw column names).
+   *
+   * @param cpoClass the class metadata used to resolve attributes to datastore columns
+   * @return the native expression fragment for this clause
+   */
   public String toString(CpoClass cpoClass) {
     StringBuilder sb = new StringBuilder();
     CpoAttribute cpoAttribute = null;
@@ -274,6 +342,12 @@ public class BindableCpoWhere extends Node implements CpoWhere {
     return attrName;
   }
 
+  /**
+   * {@inheritDoc}
+   *
+   * <p>The added clause must itself be a {@link Node} (all built-in {@code CpoWhere}
+   * implementations are); it is attached as a child node of this instance.
+   */
   @Override
   public void addWhere(CpoWhere cw) throws CpoException {
     try {
@@ -283,31 +357,37 @@ public class BindableCpoWhere extends Node implements CpoWhere {
     }
   }
 
+  /** {@inheritDoc} */
   @Override
   public void setAttributeFunction(String s) {
     this.attributeFunction = s;
   }
 
+  /** {@inheritDoc} */
   @Override
   public String getAttributeFunction() {
     return this.attributeFunction;
   }
 
+  /** {@inheritDoc} */
   @Override
   public void setValueFunction(String s) {
     this.valueFunction = s;
   }
 
+  /** {@inheritDoc} */
   @Override
   public String getValueFunction() {
     return this.valueFunction;
   }
 
+  /** {@inheritDoc} */
   @Override
   public void setRightAttributeFunction(String s) {
     this.rightAttributeFunction = s;
   }
 
+  /** {@inheritDoc} */
   @Override
   public String getRightAttributeFunction() {
     return this.rightAttributeFunction;
@@ -330,15 +410,24 @@ public class BindableCpoWhere extends Node implements CpoWhere {
     return sb.toString();
   }
 
+  /**
+   * Gets the datastore column name for the given attribute. Subclasses may override this to further
+   * qualify the column name (e.g. with a table alias).
+   *
+   * @param attribute the attribute to resolve
+   * @return the datastore column name for {@code attribute}
+   */
   protected String buildColumnName(CpoAttribute attribute) {
     return attribute.getDataName();
   }
 
+  /** {@inheritDoc} */
   @Override
   public String getName() {
     return name;
   }
 
+  /** {@inheritDoc} */
   @Override
   public void setName(String name) {
     this.name = name;

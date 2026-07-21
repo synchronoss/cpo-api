@@ -22,19 +22,39 @@ package org.synchronoss.cpo.core.meta.bean;
  * ]]
  */
 
+/**
+ * Plain-data holder for the fields of a CPO function group as loaded from meta XML: the group's
+ * name (inherited from {@link CpoClassBean}) and its CRUD type (INSERT, RETRIEVE, UPDATE, DELETE,
+ * EXIST, EXECUTE). {@link org.synchronoss.cpo.core.meta.domain.CpoFunctionGroup} extends this with
+ * the runtime behavior (its list of functions).
+ *
+ * @author dberry
+ */
 public class CpoFunctionGroupBean extends CpoClassBean {
 
   /*
    * Properties
    */
+  /** The CRUD type of this function group (e.g. {@code INSERT}, {@code RETRIEVE}). */
   private String type;
 
+  /** Creates an empty instance. */
   public CpoFunctionGroupBean() {}
 
+  /**
+   * Gets the CRUD type of this function group (e.g. {@code INSERT}, {@code RETRIEVE}).
+   *
+   * @return the CRUD type name
+   */
   public String getType() {
     return type;
   }
 
+  /**
+   * Sets the CRUD type of this function group.
+   *
+   * @param type the CRUD type name
+   */
   public void setType(String type) {
     this.type = type;
   }

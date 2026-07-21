@@ -26,9 +26,17 @@ import javax.transaction.xa.XAException;
 import javax.transaction.xa.XAResource;
 import javax.transaction.xa.Xid;
 
-/** Created by dberry on 11/8/15. */
+/**
+ * A JTA {@link XAResource} that additionally allows the resource for a specific transaction branch
+ * to be closed directly, without waiting for {@code commit}/{@code rollback}/{@code forget}.
+ *
+ * @author dberry
+ */
 public interface CpoXaResource extends XAResource {
+
   /**
+   * Closes the resource associated with the given transaction branch.
+   *
    * @param xid The id of the XAResource to close
    * @throws XAException An exception occurred closing the resource
    */

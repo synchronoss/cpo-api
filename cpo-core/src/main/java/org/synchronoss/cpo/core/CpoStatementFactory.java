@@ -59,23 +59,39 @@ public abstract class CpoStatementFactory implements CpoReleasable {
     // hidden constructor
   }
 
+  /**
+   * Constructs a statement factory that logs to the given logger.
+   *
+   * @param localLogger the logger to use for statement-building diagnostics
+   */
   public CpoStatementFactory(Logger localLogger) {
     this.localLogger = localLogger;
   }
 
+  /**
+   * Gets the logger used for statement-building diagnostics.
+   *
+   * @return the logger used for statement-building diagnostics
+   */
   public Logger getLocalLogger() {
     return localLogger;
   }
 
   /**
-   * DOCUMENT ME!
+   * Builds the final native statement text by combining the meta expression with dynamic where
+   * clauses, order-by clauses, and native expressions, substituting them at their markers when
+   * present or appending them otherwise.
    *
-   * @param cpoClass DOCUMENT ME!
-   * @param sql DOCUMENT ME!
-   * @param wheres DOCUMENT ME!
-   * @param orderBy DOCUMENT ME!
-   * @return DOCUMENT ME!
-   * @throws CpoException DOCUMENT ME!
+   * @param <T> the type of the JavaBean the wheres/orderBy are evaluated against
+   * @param cpoClass the meta class describing the bean being queried
+   * @param sql the base native expression from the meta data
+   * @param wheres dynamic where clauses to merge into the statement; may be {@code null}
+   * @param orderBy dynamic order-by clauses to merge into the statement; may be {@code null}
+   * @param nativeQueries native expressions to merge into the statement; may be {@code null}
+   * @param bindValues list that bind values contributed by the dynamic wheres are appended to, in
+   *     statement parameter order
+   * @return the fully assembled native statement text
+   * @throws CpoException if a where clause could not be translated to native syntax
    */
   protected <T> String buildSql(
       CpoClass cpoClass,
@@ -200,6 +216,8 @@ public abstract class CpoStatementFactory implements CpoReleasable {
   /**
    * Adds a releasable object to this object. The release method on the releasable will be called
    * when the PreparedStatement is executed.
+   *
+   * @param releasable the releasable to register; if {@code null} the call is a no-op
    */
   public void AddReleasable(CpoReleasable releasable) {
     if (releasable != null) {
@@ -226,6 +244,11 @@ public abstract class CpoStatementFactory implements CpoReleasable {
   /**
    * Called by the CPO Framework. Binds all the attibutes from the class for the CPO meta parameters
    * and the parameters from the dynamic where.
+   *
+   * @param function the meta function whose arguments describe the parameters to bind
+   * @param obj the bean instance to pull argument attribute values from
+   * @return the ordered list of bind values for {@code function}'s arguments
+   * @throws CpoException if one of {@code function}'s arguments is {@code null}
    */
   public List<BindAttribute> getBindValues(CpoFunction function, Object obj) throws CpoException {
     List<BindAttribute> bindValues = new ArrayList<>();
@@ -242,6 +265,10 @@ public abstract class CpoStatementFactory implements CpoReleasable {
   /**
    * Called by the CPO Framework. Binds all the attibutes from the class for the CPO meta parameters
    * and the parameters from the dynamic where.
+   *
+   * @param bindValues the bind values to apply to the underlying statement, in parameter order; if
+   *     {@code null} the call is a no-op
+   * @throws CpoException if a value could not be bound to the underlying statement
    */
   public void setBindValues(Collection<BindAttribute> bindValues) throws CpoException {
 

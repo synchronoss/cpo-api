@@ -45,7 +45,12 @@ public class XmlExporterServlet extends HttpServlet {
 
   private static final String HTML_CONTENT_TYPE = "text/html";
   private static final String XML_CONTENT_TYPE = "text/xml";
+
+  /** Name of the request parameter that identifies which meta descriptor to export. */
   public static final String PARAM_META_DESCRIPTOR_NAME = "metaDescriptorName";
+
+  /** Constructs the servlet. */
+  public XmlExporterServlet() {}
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response)

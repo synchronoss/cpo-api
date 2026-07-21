@@ -38,12 +38,22 @@ import org.synchronoss.cpo.cpoconfig.CtDataSourceConfig;
 import org.synchronoss.cpo.cpoconfig.CtMetaDescriptor;
 
 /**
+ * {@code CpoAdapterFactoryManager} is the static entry point applications use to obtain {@link
+ * CpoAdapter}, {@link CpoTrxAdapter}, and {@link CpoXaResource} instances by named configuration
+ * context. On class initialization (and whenever {@link #loadAdapters()} is called again) it reads
+ * {@code cpoConfig.xml} from the classpath, or the path named by the {@code CPO_CONFIG} system
+ * property or environment variable, and builds a {@link CpoAdapterFactory} for each declared {@code
+ * dataConfig} entry.
+ *
  * @author dberry
  */
 public final class CpoAdapterFactoryManager extends CpoAdapterFactoryCache {
   private static final Logger logger = LoggerFactory.getLogger(CpoAdapterFactoryManager.class);
   private static final ReentrantLock lock = new ReentrantLock();
+
+  /** Name of the system property / environment variable that overrides the config file path. */
   public static final String CPO_CONFIG = "CPO_CONFIG";
+
   private static final String CPO_CONFIG_XML = "/cpoConfig.xml";
   private static String defaultContext = null;
 
@@ -51,10 +61,27 @@ public final class CpoAdapterFactoryManager extends CpoAdapterFactoryCache {
     loadAdapters();
   }
 
+  /** Not instantiable; all members are static. */
+  private CpoAdapterFactoryManager() {}
+
+  /**
+   * Gets the {@link CpoAdapter} for the default configuration context.
+   *
+   * @return the default CpoAdapter
+   * @throws CpoException if the adapter cannot be created
+   */
   public static CpoAdapter getCpoAdapter() throws CpoException {
     return getCpoAdapter(defaultContext);
   }
 
+  /**
+   * Gets the {@link CpoAdapter} for the named configuration context.
+   *
+   * @param context the name of the {@code dataConfig} entry to use, as declared in {@code
+   *     cpoConfig.xml}
+   * @return the CpoAdapter for {@code context}, or {@code null} if no factory is registered for it
+   * @throws CpoException if the adapter cannot be created
+   */
   public static CpoAdapter getCpoAdapter(String context) throws CpoException {
     CpoAdapter cpoAdapter = null;
     CpoAdapterFactory cpoAdapterFactory = findCpoAdapterFactory(context);
@@ -64,10 +91,25 @@ public final class CpoAdapterFactoryManager extends CpoAdapterFactoryCache {
     return cpoAdapter;
   }
 
+  /**
+   * Gets a {@link CpoTrxAdapter} for the default configuration context.
+   *
+   * @return the default CpoTrxAdapter
+   * @throws CpoException if the adapter cannot be created
+   */
   public static CpoTrxAdapter getCpoTrxAdapter() throws CpoException {
     return getCpoTrxAdapter(defaultContext);
   }
 
+  /**
+   * Gets a {@link CpoTrxAdapter} for the named configuration context.
+   *
+   * @param context the name of the {@code dataConfig} entry to use, as declared in {@code
+   *     cpoConfig.xml}
+   * @return the CpoTrxAdapter for {@code context}, or {@code null} if no factory is registered for
+   *     it
+   * @throws CpoException if the adapter cannot be created
+   */
   public static CpoTrxAdapter getCpoTrxAdapter(String context) throws CpoException {
     CpoTrxAdapter cpoTrxAdapter = null;
     CpoAdapterFactory cpoAdapterFactory = findCpoAdapterFactory(context);
@@ -77,10 +119,25 @@ public final class CpoAdapterFactoryManager extends CpoAdapterFactoryCache {
     return cpoTrxAdapter;
   }
 
+  /**
+   * Gets the {@link CpoXaResource} for the default configuration context.
+   *
+   * @return the default CpoXaResource
+   * @throws CpoException if the adapter cannot be created
+   */
   public static CpoXaResource getCpoXaAdapter() throws CpoException {
     return getCpoXaAdapter(defaultContext);
   }
 
+  /**
+   * Gets the {@link CpoXaResource} for the named configuration context.
+   *
+   * @param context the name of the {@code dataConfig} entry to use, as declared in {@code
+   *     cpoConfig.xml}
+   * @return the CpoXaResource for {@code context}, or {@code null} if no factory is registered for
+   *     it
+   * @throws CpoException if the adapter cannot be created
+   */
   public static CpoXaResource getCpoXaAdapter(String context) throws CpoException {
     CpoXaResource cpoXaResource = null;
     CpoAdapterFactory cpoAdapterFactory = findCpoAdapterFactory(context);
@@ -157,6 +214,15 @@ public final class CpoAdapterFactoryManager extends CpoAdapterFactoryCache {
     }
   }
 
+  /**
+   * Instantiates the {@code dataSourceConfig}'s configured {@code CpoConfigProcessor} and uses it
+   * to build a {@link CpoAdapterFactory} for that datasource.
+   *
+   * @param dataSourceConfig the datasource configuration to process
+   * @return the resulting adapter factory
+   * @throws CpoException if the configured processor class cannot be located, instantiated, or
+   *     invoked
+   */
   public static CpoAdapterFactory makeCpoAdapterFactory(CtDataSourceConfig dataSourceConfig)
       throws CpoException {
     CpoAdapterFactory cpoAdapterFactory = null;

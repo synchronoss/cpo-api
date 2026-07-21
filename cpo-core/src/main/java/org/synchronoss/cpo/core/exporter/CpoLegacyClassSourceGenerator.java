@@ -36,6 +36,12 @@ import org.synchronoss.cpo.core.meta.domain.CpoClass;
  */
 public class CpoLegacyClassSourceGenerator extends CpoClassSourceGenerator {
 
+  /**
+   * Constructs a generator for the given meta descriptor.
+   *
+   * @param metaDescriptor the meta descriptor whose classes will be visited and generated as legacy
+   *     (non-interface-implementing) Java class source
+   */
   public CpoLegacyClassSourceGenerator(CpoMetaDescriptor metaDescriptor) {
     super(metaDescriptor);
   }

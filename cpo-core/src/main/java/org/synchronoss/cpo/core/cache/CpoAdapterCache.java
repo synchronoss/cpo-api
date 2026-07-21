@@ -27,6 +27,13 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.synchronoss.cpo.core.CpoAdapter;
 
 /**
+ * Process-wide cache of {@link CpoAdapter} instances keyed by adapter name.
+ *
+ * <p>{@code CpoBaseAdapter} extends this class so that concrete adapter implementations (JDBC,
+ * Cassandra, etc.) share a single lookup/registration point without duplicating cache logic. The
+ * backing map is a {@link ConcurrentHashMap} because adapters are looked up and lazily registered
+ * concurrently from multiple threads.
+ *
  * @author dberry
  */
 public class CpoAdapterCache {
@@ -34,6 +41,15 @@ public class CpoAdapterCache {
   // ConcurrentHashMap: adapters are cached lazily from concurrent getInstance() calls
   private static final Map<String, CpoAdapter> adapterMap = new ConcurrentHashMap<>();
 
+  /** Constructs an instance; the cache itself is static and shared by all instances. */
+  protected CpoAdapterCache() {}
+
+  /**
+   * Looks up a previously cached adapter by key.
+   *
+   * @param adapterKey the adapter's cache key; {@code null} always yields a miss
+   * @return the cached {@link CpoAdapter}, or {@code null} if none is registered under that key
+   */
   protected static CpoAdapter findCpoAdapter(String adapterKey) {
     CpoAdapter adapter = null;
 
@@ -44,6 +60,15 @@ public class CpoAdapterCache {
     return adapter;
   }
 
+  /**
+   * Registers an adapter under the given key, replacing any adapter previously registered there.
+   *
+   * @param adapterKey the cache key to register the adapter under; if {@code null} the call is a
+   *     no-op
+   * @param adapter the adapter to cache; if {@code null} the call is a no-op
+   * @return the adapter previously registered under {@code adapterKey}, or {@code null} if there
+   *     was none
+   */
   protected static CpoAdapter addCpoAdapter(String adapterKey, CpoAdapter adapter) {
     CpoAdapter oldAdapter = null;
 

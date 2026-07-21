@@ -30,9 +30,11 @@ import org.synchronoss.cpo.core.meta.domain.CpoAttribute;
 import org.synchronoss.cpo.core.meta.domain.CpoClass;
 
 /**
- * BindableWhereBuilder is an interface for specifying the sort order in which objects are returned
- * from the Datasource.
+ * A {@link NodeVisitor} that walks a {@link BindableCpoWhere} tree and, as a side effect of the
+ * traversal, accumulates both the rendered native (SQL/CQL) where-clause text and the ordered list
+ * of {@link BindAttribute} values that must be bound to its parameter placeholders.
  *
+ * @param <T> unused type parameter, retained for compatibility with existing callers
  * @author david berry
  */
 public class BindableWhereBuilder<T> implements NodeVisitor {
@@ -41,10 +43,21 @@ public class BindableWhereBuilder<T> implements NodeVisitor {
   private CpoClass cpoClass = null;
   private Collection<BindAttribute> bindValues = new ArrayList<>();
 
+  /**
+   * Gets the native where-clause text accumulated so far by visiting the tree.
+   *
+   * @return the rendered where-clause text
+   */
   public String getWhereClause() {
     return whereClause.toString();
   }
 
+  /**
+   * Gets the bind values accumulated so far by visiting the tree, in the order their placeholders
+   * appear in {@link #getWhereClause()}.
+   *
+   * @return the ordered bind values
+   */
   public Collection<BindAttribute> getBindValues() {
     return this.bindValues;
   }
@@ -52,6 +65,11 @@ public class BindableWhereBuilder<T> implements NodeVisitor {
   @SuppressWarnings("unused")
   private BindableWhereBuilder() {}
 
+  /**
+   * Creates a builder that resolves attributes against the given class while visiting a where tree.
+   *
+   * @param cpoClass the class metadata used to resolve attributes to datastore columns
+   */
   public BindableWhereBuilder(CpoClass cpoClass) {
     this.cpoClass = cpoClass;
   }

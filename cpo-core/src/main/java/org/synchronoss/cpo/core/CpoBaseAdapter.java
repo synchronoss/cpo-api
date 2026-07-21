@@ -57,6 +57,13 @@ public abstract class CpoBaseAdapter<D> extends CpoAdapterCache implements CpoAd
   /** The batchSize used when updating the datasource */
   private int batchSize = 0;
 
+  /**
+   * Constructs the adapter with the given data source name and default fetch/batch sizes.
+   *
+   * @param dataSourceName the name of the datasource this adapter is bound to
+   * @param fetchSize the default fetch size to use when reading from the datasource
+   * @param batchSize the default batch size to use when writing to the datasource
+   */
   public CpoBaseAdapter(String dataSourceName, int fetchSize, int batchSize) {
     this.dataSourceName = dataSourceName;
     this.fetchSize = fetchSize;

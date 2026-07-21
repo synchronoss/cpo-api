@@ -26,8 +26,9 @@ import org.synchronoss.cpo.core.meta.domain.CpoAttribute;
 import org.synchronoss.cpo.core.meta.domain.CpoClass;
 
 /**
- * BindableCpoOrderBy is an interface for specifying the sort order in which objects are returned
- * from the Datasource.
+ * Default {@link CpoOrderBy} implementation: an immutable, bindable sort clause on a single
+ * attribute, optionally wrapped in a native datastore function and associated with a custom marker
+ * for multi-clause substitution.
  *
  * @author david berry
  */
@@ -41,12 +42,26 @@ public class BindableCpoOrderBy implements CpoOrderBy {
   @SuppressWarnings("unused")
   private BindableCpoOrderBy() {}
 
+  /**
+   * Creates an order-by clause on the given attribute using the {@link #DEFAULT_MARKER}.
+   *
+   * @param attr the name of the attribute to sort by
+   * @param asc {@code true} to sort ascending, {@code false} to sort descending
+   */
   public BindableCpoOrderBy(String attr, boolean asc) {
     ascending = asc;
     attribute = attr;
     function = null;
   }
 
+  /**
+   * Creates an order-by clause on the given attribute using a custom marker, for use when more than
+   * one order-by expression must be substituted into the same native expression.
+   *
+   * @param marker the marker string this clause replaces in the expression
+   * @param attr the name of the attribute to sort by
+   * @param asc {@code true} to sort ascending, {@code false} to sort descending
+   */
   public BindableCpoOrderBy(String marker, String attr, boolean asc) {
     this.marker = marker;
     ascending = asc;
@@ -54,12 +69,32 @@ public class BindableCpoOrderBy implements CpoOrderBy {
     function = null;
   }
 
+  /**
+   * Creates an order-by clause on the given attribute, wrapped in a native datastore function,
+   * using the {@link #DEFAULT_MARKER}.
+   *
+   * @param attr the name of the attribute to sort by
+   * @param asc {@code true} to sort ascending, {@code false} to sort descending
+   * @param func the native function expression to apply to the attribute (e.g. {@code
+   *     "upper(attribute_name)"})
+   */
   public BindableCpoOrderBy(String attr, boolean asc, String func) {
     ascending = asc;
     attribute = attr;
     function = func;
   }
 
+  /**
+   * Creates an order-by clause on the given attribute, wrapped in a native datastore function,
+   * using a custom marker, for use when more than one order-by expression must be substituted into
+   * the same native expression.
+   *
+   * @param marker the marker string this clause replaces in the expression
+   * @param attr the name of the attribute to sort by
+   * @param asc {@code true} to sort ascending, {@code false} to sort descending
+   * @param func the native function expression to apply to the attribute (e.g. {@code
+   *     "upper(attribute_name)"})
+   */
   public BindableCpoOrderBy(String marker, String attr, boolean asc, String func) {
     this.marker = marker;
     ascending = asc;
@@ -67,41 +102,25 @@ public class BindableCpoOrderBy implements CpoOrderBy {
     function = func;
   }
 
-  /**
-   * Gets the boolean that determines if the objects will be returned from from the CpoAdapter in
-   * Ascending order or Descending order
-   *
-   * @return boolean true if it is to sort in Ascensing Order false if it is to be sorted in
-   *     Descending Order
-   */
+  /** {@inheritDoc} */
   @Override
   public boolean getAscending() {
     return this.ascending;
   }
 
-  /**
-   * Gets the name of the attribute that is to be used to sort the results from the CpoAdapter.
-   *
-   * @return String The name of the attribute
-   */
+  /** {@inheritDoc} */
   @Override
   public String getAttribute() {
     return this.attribute;
   }
 
-  /**
-   * Gets a string representing a datasource specific function call that must be applied to the
-   * attribute that will be used for sorting.
-   *
-   * <p>i.e. - "upper(attribute_name)"
-   *
-   * @return String The name of the function
-   */
+  /** {@inheritDoc} */
   @Override
   public String getFunction() {
     return this.function;
   }
 
+  /** {@inheritDoc} */
   @Override
   public String toString(CpoClass cpoClass) throws CpoException {
     StringBuilder sb = new StringBuilder();
@@ -140,6 +159,7 @@ public class BindableCpoOrderBy implements CpoOrderBy {
     return sb.toString();
   }
 
+  /** {@inheritDoc} */
   @Override
   public String getMarker() {
     return marker;

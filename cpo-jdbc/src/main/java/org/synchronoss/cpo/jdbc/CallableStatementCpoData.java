@@ -35,7 +35,8 @@ import org.synchronoss.cpo.jdbc.meta.JdbcMethodMapper;
 import org.synchronoss.cpo.jdbc.transform.JdbcCpoTransform;
 
 /**
- * A class that builds constructs and executes callable statements
+ * Moves a bound attribute's value to or from a JDBC {@link CallableStatement} IN/OUT parameter,
+ * applying any configured {@link JdbcCpoTransform} along the way.
  *
  * @author dberry
  */

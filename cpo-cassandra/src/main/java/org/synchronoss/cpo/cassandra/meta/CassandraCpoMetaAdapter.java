@@ -48,8 +48,11 @@ import org.synchronoss.cpo.cpometa.CtAttribute;
 import org.synchronoss.cpo.cpometa.CtCassandraAttribute;
 
 /**
- * Created with IntelliJ IDEA. User: dberry Date: 9/10/13 Time: 08:14 AM To change this template use
- * File | Settings | File Templates.
+ * CassandraCpoMetaAdapter is the Cassandra-specific {@link AbstractCpoMetaAdapter}. It supplies the
+ * CQL {@link DataTypeMapper}, the {@link BoundExpressionParser} used to parse Cassandra meta
+ * expressions, and builds {@link CassandraCpoAttribute} instances for each mapped attribute.
+ *
+ * @author dberry
  */
 public class CassandraCpoMetaAdapter extends AbstractCpoMetaAdapter {
   private static final Logger logger = LoggerFactory.getLogger(CassandraCpoMetaAdapter.class);

@@ -41,8 +41,7 @@ import org.synchronoss.cpo.cpoconfig.*;
  * CassandraCpoConfigProcessor processes the datasource configuration file for cassandra. It pulls
  * out all the information needed to configure a cluster for use within the application.
  *
- * <p>User: dberry Date: 9/10/13 Time: 08:20 AM To change this template use File | Settings | File
- * Templates.
+ * @author dberry
  */
 public class CassandraCpoConfigProcessor implements CpoConfigProcessor {
   private static final Logger logger = LoggerFactory.getLogger(CassandraCpoConfigProcessor.class);
@@ -105,7 +104,7 @@ public class CassandraCpoConfigProcessor implements CpoConfigProcessor {
    * @param dataConfigName The name of the data config
    * @param readWriteConfig The configuration information
    * @return A ClusterDataSourceInfo Object
-   * @throws CpoException
+   * @throws CpoException if a configured policy/provider class cannot be instantiated
    */
   private ClusterDataSourceInfo buildDataSourceInfo(
       String dataConfigName,

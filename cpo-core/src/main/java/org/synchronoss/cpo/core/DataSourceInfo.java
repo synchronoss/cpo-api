@@ -32,23 +32,32 @@ package org.synchronoss.cpo.core;
 public interface DataSourceInfo<T> {
 
   /**
-   * @return Returns the dataSourceName.
+   * Gets the configured name of this datasource, as declared in {@code cpoConfig.xml}.
+   *
+   * @return the dataSourceName
    */
   String getDataSourceName();
 
   /**
-   * @return Returns the fetchSize for this datasource.
+   * Gets the number of rows the driver should fetch per round-trip when reading result sets from
+   * this datasource.
+   *
+   * @return the fetchSize for this datasource
    */
   int getFetchSize();
 
   /**
-   * @return Returns the batchSize for this datasource.
+   * Gets the number of statements to accumulate before executing a batch against this datasource.
+   *
+   * @return the batchSize for this datasource
    */
   int getBatchSize();
 
   /**
-   * @return Returns the DataSource
-   * @throws CpoException Cannot find the datasource
+   * Gets the underlying datasource object, creating it on first access.
+   *
+   * @return the datasource
+   * @throws CpoException if the datasource cannot be found or created
    */
   T getDataSource() throws CpoException;
 }

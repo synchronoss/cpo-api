@@ -28,12 +28,31 @@ import org.synchronoss.cpo.core.meta.domain.CpoAttribute;
 import org.synchronoss.cpo.jdbc.meta.JdbcMethodMapEntry;
 import org.synchronoss.cpo.jdbc.meta.JdbcMethodMapper;
 
+/**
+ * Base for {@link org.synchronoss.cpo.core.CpoData} implementations backed by a JDBC {@code
+ * Statement} subtype, resolving the {@link JdbcMethodMapEntry} used to bind/read a bound
+ * attribute's value.
+ */
 public abstract class AbstractStatementCpoData extends AbstractBindableCpoData {
 
+  /**
+   * Creates an instance for the given bound attribute and bind-marker index.
+   *
+   * @param cpoAttribute the attribute this instance moves values for
+   * @param index the bind-marker index within the statement
+   */
   public AbstractStatementCpoData(CpoAttribute cpoAttribute, int index) {
     super(cpoAttribute, index);
   }
 
+  /**
+   * Resolves the {@link JdbcMethodMapEntry} used to move this attribute's value to/from a JDBC
+   * statement.
+   *
+   * @param instanceObject unused; retained for the overriding subclasses' call sites
+   * @return the resolved method map entry
+   * @throws CpoException if no entry can be resolved for the attribute's setter parameter type
+   */
   protected JdbcMethodMapEntry<?, ?> getJdbcMethodMapEntry(Object instanceObject)
       throws CpoException {
     JdbcMethodMapEntry<?, ?> methodMapEntry =

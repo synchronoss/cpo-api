@@ -26,17 +26,32 @@ import org.synchronoss.cpo.core.AbstractCpoData;
 import org.synchronoss.cpo.core.meta.domain.CpoAttribute;
 
 /**
+ * Base {@link org.synchronoss.cpo.core.CpoData} implementation for datastore bindings that are
+ * addressed by a positional index (e.g. a JDBC parameter or column index) in addition to the {@link
+ * CpoAttribute} they move data for.
+ *
  * @author dberry
  */
 public abstract class AbstractBindableCpoData extends AbstractCpoData {
 
   private int index = -1;
 
+  /**
+   * Creates an instance bound to the given attribute and positional index.
+   *
+   * @param cpoAttribute the attribute this instance moves data for
+   * @param index the positional index (e.g. parameter or column index) of this binding
+   */
   public AbstractBindableCpoData(CpoAttribute cpoAttribute, int index) {
     super(cpoAttribute);
     this.index = index;
   }
 
+  /**
+   * Gets the positional index of this binding.
+   *
+   * @return the positional index (e.g. parameter or column index) of this binding
+   */
   public int getIndex() {
     return index;
   }

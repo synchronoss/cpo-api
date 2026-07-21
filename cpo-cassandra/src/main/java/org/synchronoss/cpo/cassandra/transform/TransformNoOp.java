@@ -64,11 +64,12 @@ public class TransformNoOp implements CassandraCpoTransform<Integer, Integer> {
    * of the attrOut parameter and the type of the return value must change to match the types being
    * converted. Reflection is used to true everything up at runtime.
    *
-   * <p>e.g public Blob transformOut(JdbcPreparedStatementFactory jpsf, byte[] attrOut) would be the
-   * signature for converting a byte[] stored in the bean into a Blob object for the datasource.
+   * <p>e.g public ByteBuffer transformOut(CassandraBoundStatementFactory cbsf, byte[] attrOut)
+   * would be the signature for converting a byte[] stored in the bean into a ByteBuffer for the
+   * datasource.
    *
-   * @param cbsf a reference to the JdbcPreparedStatementFactory. This is necessary as some DBMSs
-   *     (ORACLE) that require access to the connection to deal with certain datatypes.
+   * @param cbsf a reference to the CassandraBoundStatementFactory. This is necessary for Transforms
+   *     that need access to the bound statement/session to deal with certain datatypes.
    * @param attrOut The attribute object that needs to get transformed into the db representation
    * @return The object to be stored in the datasource
    * @throws CpoException An error occurred

@@ -47,7 +47,7 @@ public class JdbcPreparedStatementFactory extends CpoStatementFactory implements
   /** Version Id for this class. */
   private static final long serialVersionUID = 1L;
 
-  /** DOCUMENT ME! */
+  /** Fallback logger used when no bean is available to derive a class-named logger from. */
   private static final Logger logger = LoggerFactory.getLogger(JdbcPreparedStatementFactory.class);
 
   private PreparedStatement ps_ = null;
@@ -66,8 +66,8 @@ public class JdbcPreparedStatementFactory extends CpoStatementFactory implements
    * @param criteria The object that will be used to look up the cpo metadata
    * @param function The CpoFunction that is being executed
    * @param bean The bean that is being acted upon
-   * @param wheres DOCUMENT ME!
-   * @param orderBy DOCUMENT ME!
+   * @param wheres A collection of where clauses to be embedded into the CpoFunction sql
+   * @param orderBy A collection of order-by clauses to be embedded into the CpoFunction sql
    * @param nativeQueries Additional sql to be embedded into the CpoFunction sql that is used to
    *     create the actual JDBC PreparedStatement
    * @throws CpoException if a CPO error occurs
@@ -103,17 +103,12 @@ public class JdbcPreparedStatementFactory extends CpoStatementFactory implements
 
   @Override
   protected MethodMapper getMethodMapper() {
-    return JdbcMethodMapper
-        .getMethodMapper(); // To change body of implemented methods use File | Settings | File
-    // Templates.
+    return JdbcMethodMapper.getMethodMapper();
   }
 
   @Override
   protected CpoData getCpoData(CpoAttribute cpoAttribute, int index) {
-    return new JdbcPreparedStatementCpoData(
-        this,
-        cpoAttribute,
-        index); // To change body of implemented methods use File | Settings | File Templates.
+    return new JdbcPreparedStatementCpoData(this, cpoAttribute, index);
   }
 
   @Override

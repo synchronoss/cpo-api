@@ -31,7 +31,22 @@ import javax.transaction.xa.XAException;
 import javax.transaction.xa.Xid;
 import org.synchronoss.cpo.core.CpoException;
 
-/** Created by dberry on 3/9/15. */
+/**
+ * Base {@link CpoXaResource} implementation that tracks per-{@link Xid} state for a family of XA
+ * resources and drives the JTA two-phase-commit protocol against a subclass-supplied local resource
+ * of type {@code T} (e.g. a JDBC {@code Connection}).
+ *
+ * <p>Each concrete subclass (e.g. a JDBC or Cassandra XA resource) shares one XID-state map per
+ * subclass, keyed by {@link Class#getName()}, because every {@code XAResource} instance
+ * representing the same kind of resource must see the same in-flight transaction branches.
+ * Subclasses supply the resource-lifecycle primitives ({@link #createNewResource}, {@link
+ * #prepareResource}, {@link #commitResource}, {@link #rollbackResource}, {@link #closeResource});
+ * this class implements the {@link javax.transaction.xa.XAResource} state machine
+ * (start/end/prepare/commit/rollback/recover) on top of them.
+ *
+ * @param <T> the type of the underlying local resource each transaction branch is associated with
+ * @author dberry
+ */
 public abstract class CpoBaseXaResource<T> implements CpoXaResource {
 
   /**
@@ -50,6 +65,13 @@ public abstract class CpoBaseXaResource<T> implements CpoXaResource {
 
   private final ConcurrentHashMap<Xid, CpoXaState<?>> xidStateMap = getXidStateMap();
 
+  /**
+   * Constructs a resource manager backed by the given local (non-XA) resource, used whenever no
+   * transaction branch is currently associated with this instance.
+   *
+   * @param localResource the resource to use outside of an XA transaction branch; must not be
+   *     {@code null}
+   */
   public CpoBaseXaResource(T localResource) {
     this.localResource = Objects.requireNonNull(localResource);
   }
@@ -73,6 +95,17 @@ public abstract class CpoBaseXaResource<T> implements CpoXaResource {
         : cpoXaState.getResource() == null ? localResource : cpoXaState.getResource();
   }
 
+  /**
+   * Applies {@code function} to the resource currently associated with this instance (the
+   * transaction branch's resource if one is associated, otherwise the local resource), serialized
+   * against concurrent calls on this instance.
+   *
+   * @param <R> the type returned by {@code function}
+   * @param function the operation to run against the current resource
+   * @return the value returned by {@code function}
+   * @throws CpoException if {@code function} threw a {@link CpoException}, unwrapped from its
+   *     {@link RuntimeException} wrapper
+   */
   public <R> R apply(Function<T, R> function) throws CpoException {
     semaphore.acquireUninterruptibly();
     try {
@@ -85,6 +118,15 @@ public abstract class CpoBaseXaResource<T> implements CpoXaResource {
     }
   }
 
+  /**
+   * Applies {@code consumer} to the resource currently associated with this instance (the
+   * transaction branch's resource if one is associated, otherwise the local resource), serialized
+   * against concurrent calls on this instance.
+   *
+   * @param consumer the operation to run against the current resource
+   * @throws CpoException if {@code consumer} threw a {@link CpoException}, unwrapped from its
+   *     {@link RuntimeException} wrapper
+   */
   public void accept(Consumer<T> consumer) throws CpoException {
     semaphore.acquireUninterruptibly();
     try {

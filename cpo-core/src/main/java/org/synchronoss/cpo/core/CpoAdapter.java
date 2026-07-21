@@ -1759,6 +1759,9 @@ public interface CpoAdapter extends java.io.Serializable {
   void setBatchSize(int batchsize);
 
   /**
+   * Gets the {@link CpoAttribute} definitions matching a comma-separated expression of attribute
+   * names, as declared in the meta data for this bean's class.
+   *
    * @param expression An expression defining the CpoAttributes that you want
    * @return A list of CpoAttributes
    * @throws CpoException Thrown if there are errors accessing the datasource

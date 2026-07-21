@@ -31,6 +31,7 @@ import org.synchronoss.cpo.core.CpoException;
  * MethodMapper maps java classes to the datastore-specific getter and setter methods used to bind
  * them. Each datastore implementation registers its own entries.
  *
+ * @param <T> the concrete {@link MethodMapEntry} type registered by the datastore implementation
  * @author david berry
  */
 public class MethodMapper<T extends MethodMapEntry<?, ?>> implements Serializable, Cloneable {
@@ -38,12 +39,28 @@ public class MethodMapper<T extends MethodMapEntry<?, ?>> implements Serializabl
   /** Version Id for this class. */
   private static final long serialVersionUID = 1L;
 
+  /** Registered entries, keyed by the Java class they move values for. */
   private Map<Class<?>, T> dataMethodMap = new HashMap<>();
 
+  /** Creates an empty mapper with no registered entries. */
+  public MethodMapper() {}
+
+  /**
+   * Gets the method map entry registered for the given Java class.
+   *
+   * @param c the Java class to look up
+   * @return the entry registered for {@code c}, or {@code null} if none is registered
+   * @throws CpoException if the entry cannot be retrieved
+   */
   public T getDataMethodMapEntry(Class<?> c) throws CpoException {
     return dataMethodMap.get(c);
   }
 
+  /**
+   * Registers a method map entry, keyed by its {@link MethodMapEntry#getJavaClass()}.
+   *
+   * @param dataMethodMapEntry the entry to register
+   */
   public void addMethodMapEntry(T dataMethodMapEntry) {
     dataMethodMap.put(dataMethodMapEntry.getJavaClass(), dataMethodMapEntry);
   }

@@ -34,6 +34,18 @@ import java.io.InputStream;
  */
 public final class CpoClassLoader {
 
+  private CpoClassLoader() {
+    // hidden constructor: this class only exposes static helpers
+  }
+
+  /**
+   * Loads a classpath resource, first via this class's own classloader, then falling back to the
+   * current thread's context classloader.
+   *
+   * @param name the resource name to load
+   * @return an open stream for the resource, or {@code null} if it could not be found by either
+   *     classloader
+   */
   public static InputStream getResourceAsStream(String name) {
     InputStream is = CpoClassLoader.class.getResourceAsStream(name);
     if (is == null) {
@@ -42,6 +54,14 @@ public final class CpoClassLoader {
     return is;
   }
 
+  /**
+   * Loads a class by name, first via the normal {@link Class#forName(String)} lookup, then falling
+   * back to the current thread's context classloader.
+   *
+   * @param className the fully qualified name of the class to load
+   * @return the loaded {@link Class}
+   * @throws ClassNotFoundException if the class could not be found by either classloader
+   */
   public static Class<?> forName(String className) throws ClassNotFoundException {
     Class<?> clazz = null;
     try {

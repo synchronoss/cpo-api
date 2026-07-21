@@ -70,6 +70,8 @@ public class ClusterDataSourceInfo extends AbstractDataSourceInfo<ClusterDataSou
    * @param clusterName The cluster name
    * @param keySpace The keyspace
    * @param contactPoints The contact points
+   * @param fetchSize the number of rows to fetch per round trip on a retrieve
+   * @param batchSize the number of statements to batch together before executing
    */
   public ClusterDataSourceInfo(
       String clusterName,

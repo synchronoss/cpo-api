@@ -61,8 +61,8 @@ import org.synchronoss.cpo.jdbc.meta.JdbcMethodMapper;
 import org.synchronoss.cpo.jdbc.meta.JdbcResultSetCpoData;
 
 /**
- * JdbcCpoAdapter is an interface for a set of routines that are responsible for managing value
- * beans from a jdbc datasource.
+ * JdbcCpoAdapter is the JDBC implementation of {@link org.synchronoss.cpo.core.CpoAdapter}, a set
+ * of routines that are responsible for managing value beans from a jdbc datasource.
  *
  * @author david berry
  */
@@ -73,6 +73,7 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
 
   private static final Logger logger = LoggerFactory.getLogger(JdbcCpoAdapter.class);
 
+  /** The JNDI context used to resolve a {@code jndiName}-configured data source, if any. */
   private Context context_ = null;
 
   /** The capabilities of the database behind this adapter, probed once at construction. */
@@ -496,7 +497,8 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
    *     datasource, an exception will be thrown. This bean defines the bean type that will be
    *     returned in the
    * @return A result bean populate with the OUT arguments
-   * @throws CpoException DOCUMENT ME!
+   * @throws CpoException if the criteria or result bean's metadata cannot be resolved, the callable
+   *     statement fails to execute, or the result bean cannot be instantiated
    */
   protected <T, C> T processExecuteGroup(String groupName, C criteria, T result, Connection conn)
       throws CpoException {

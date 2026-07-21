@@ -26,8 +26,9 @@ import static org.testng.Assert.*;
 
 import com.datastax.driver.core.AuthProvider;
 import com.datastax.driver.core.Host;
+import com.datastax.driver.core.JdkSSLOptions;
 import com.datastax.driver.core.NettyOptions;
-import com.datastax.driver.core.SocketOptions;
+import com.datastax.driver.core.SSLOptions;
 import com.datastax.driver.core.policies.AddressTranslator;
 import com.datastax.driver.core.policies.ConstantReconnectionPolicy;
 import com.datastax.driver.core.policies.DefaultRetryPolicy;
@@ -93,8 +94,8 @@ public class ConfigFactoryTest {
     public TestSSLOptionsFactory() {}
 
     @Override
-    public SocketOptions createSSLOptions() {
-      return new SocketOptions();
+    public SSLOptions createSSLOptions() {
+      return JdkSSLOptions.builder().build();
     }
   }
 
@@ -161,8 +162,8 @@ public class ConfigFactoryTest {
         new ConfigInstantiator<AuthProvider>().instantiate(TestAuthProviderFactory.class.getName())
             instanceof AuthProvider);
     assertTrue(
-        new ConfigInstantiator<SocketOptions>().instantiate(TestSSLOptionsFactory.class.getName())
-            instanceof SocketOptions);
+        new ConfigInstantiator<SSLOptions>().instantiate(TestSSLOptionsFactory.class.getName())
+            instanceof SSLOptions);
     assertTrue(
         new ConfigInstantiator<NettyOptions>().instantiate(TestNettyOptionsFactory.class.getName())
             instanceof NettyOptions);

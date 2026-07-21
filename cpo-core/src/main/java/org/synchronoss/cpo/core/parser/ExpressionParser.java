@@ -26,6 +26,10 @@ import java.text.ParseException;
 import java.util.List;
 
 /**
+ * {@code ExpressionParser} extracts bind-marker information from a native (SQL/CQL) function
+ * expression, letting CPO figure out which bean attribute each positional bind marker in the
+ * expression corresponds to.
+ *
  * @author Michael Bellomo
  */
 public interface ExpressionParser {

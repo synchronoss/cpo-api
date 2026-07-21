@@ -31,13 +31,16 @@ import org.synchronoss.cpo.core.CpoException;
  */
 public class TransformStringByte implements CpoTransform<byte[], String> {
 
+  /** Creates an instance. */
   public TransformStringByte() {}
 
+  /** {@inheritDoc} */
   @Override
   public String transformIn(byte[] bytes) throws CpoException {
     return bytes == null ? null : new String(bytes);
   }
 
+  /** {@inheritDoc} */
   @Override
   public byte[] transformOut(String str) throws CpoException {
     return str == null ? null : str.getBytes();

@@ -24,28 +24,59 @@ package org.synchronoss.cpo.core.meta.domain;
 
 import org.synchronoss.cpo.core.meta.bean.CpoClassBean;
 
+/**
+ * Represents a single bound argument of a {@link CpoFunction}: a reference to the {@link
+ * CpoAttribute} whose value is supplied for one of the function's bind markers. Setting the
+ * attribute also takes this argument's {@link #getName() name} from the attribute's Java name.
+ *
+ * @author dberry
+ */
 public class CpoArgument extends CpoClassBean {
 
   private static final long serialVersionUID = 1L;
 
+  /** The attribute bound to this argument. */
   CpoAttribute attribute = null;
 
+  /** Creates an empty instance. */
   public CpoArgument() {}
 
+  /**
+   * Gets the attribute bound to this argument.
+   *
+   * @return the bound attribute
+   */
   public CpoAttribute getAttribute() {
     return attribute;
   }
 
+  /**
+   * Sets the attribute bound to this argument, and updates this argument's name to match the
+   * attribute's Java name.
+   *
+   * @param attribute the attribute to bind
+   */
   public void setAttribute(CpoAttribute attribute) {
     this.attribute = attribute;
     if (attribute != null) setName(attribute.getJavaName());
   }
 
+  /**
+   * {@inheritDoc}
+   *
+   * <p>Returns this argument's {@link #getDescription() description}.
+   */
   @Override
   public String toString() {
     return this.getDescription();
   }
 
+  /**
+   * Gets the full field-by-field string representation of this argument, as produced by {@link
+   * CpoClassBean#toString()}.
+   *
+   * @return the full string representation
+   */
   public String toStringFull() {
     return super.toString();
   }

@@ -38,7 +38,10 @@ public class JdbcCpoAttribute extends CpoAttribute implements java.io.Serializab
   /** Version Id for this class. */
   @Serial private static final long serialVersionUID = 1L;
 
+  /** The database table this attribute's column belongs to. */
   private String dbTable_ = null;
+
+  /** The database column this attribute is bound to. */
   private String dbColumn_ = null;
 
   /** Constructs a JdbcCpoAttribute */

@@ -22,6 +22,13 @@ package org.synchronoss.cpo.core.meta.bean;
  * ]]
  */
 
+/**
+ * Plain-data holder for the fields of a CPO function as loaded from meta XML: its name, native
+ * expression (SQL/CQL), and description. {@link org.synchronoss.cpo.core.meta.domain.CpoFunction}
+ * extends this with the runtime behavior (bound arguments).
+ *
+ * @author dberry
+ */
 public class CpoFunctionBean implements java.io.Serializable {
 
   private static final long serialVersionUID = 1L;
@@ -29,35 +36,72 @@ public class CpoFunctionBean implements java.io.Serializable {
   /*
    * Properties
    */
+  /** The name of this function. */
   private String name;
+
+  /** The native (SQL/CQL) expression this function evaluates to. */
   private String expression;
+
+  /** The description of this function. */
   private String description;
 
+  /** Creates an empty instance. */
   public CpoFunctionBean() {}
 
   /*
    * Getters and Setters
    */
+
+  /**
+   * Gets the name of this function.
+   *
+   * @return the function name
+   */
   public String getName() {
     return name;
   }
 
+  /**
+   * Sets the name of this function.
+   *
+   * @param name the function name
+   */
   public void setName(String name) {
     this.name = name;
   }
 
+  /**
+   * Gets the human-readable description of this function, as loaded from the meta XML.
+   *
+   * @return the description, or {@code null} if none was specified
+   */
   public String getDescription() {
     return description;
   }
 
+  /**
+   * Sets the human-readable description of this function.
+   *
+   * @param description the description
+   */
   public void setDescription(String description) {
     this.description = description;
   }
 
+  /**
+   * Gets the native (SQL/CQL) expression executed by this function.
+   *
+   * @return the native expression
+   */
   public String getExpression() {
     return expression;
   }
 
+  /**
+   * Sets the native (SQL/CQL) expression executed by this function.
+   *
+   * @param expression the native expression
+   */
   public void setExpression(String expression) {
     this.expression = expression;
   }

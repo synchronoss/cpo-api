@@ -32,8 +32,8 @@ import org.synchronoss.cpo.core.meta.CpoMetaDescriptor;
 import org.synchronoss.cpo.core.meta.domain.CpoAttribute;
 
 /**
- * JdbcCpoAttribute. A class that includes the Jdbc specifc attributes that are additional to the
- * CpoAttribute attributes
+ * CassandraCpoAttribute. A class that includes the Cassandra-specific attributes (map/collection
+ * key and value types) that are additional to the {@link CpoAttribute} attributes.
  *
  * @author david berry
  */
@@ -44,9 +44,16 @@ public class CassandraCpoAttribute extends CpoAttribute implements java.io.Seria
   /** Version Id for this class. */
   @Serial private static final long serialVersionUID = 1L;
 
+  /** The native Cassandra type name of a map attribute's key, e.g. {@code text}. */
   private String keyType_ = null;
+
+  /** The native Cassandra type name of a map/collection attribute's value. */
   private String valueType_ = null;
+
+  /** The Java class corresponding to {@link #keyType_}. */
   private Class<?> keyTypeClass = null;
+
+  /** The Java class corresponding to {@link #valueType_}. */
   private Class<?> valueTypeClass = null;
 
   /** Constructs the CassandraCpoAttribute */

@@ -41,6 +41,12 @@ public class CoreMetaXmlObjectExporter implements MetaXmlObjectExporter, MetaVis
   protected CtFunction currentCtFunction;
   protected ObjectFactory objectFactory = new ObjectFactory();
 
+  /**
+   * Constructs an exporter that builds a {@link CtCpoMetaData} document for the given meta
+   * descriptor.
+   *
+   * @param metaDescriptor the meta descriptor whose class hierarchy will be visited and exported
+   */
   public CoreMetaXmlObjectExporter(CpoMetaDescriptor metaDescriptor) {
     ctCpoMetaData = new CtCpoMetaData();
     ctCpoMetaData.setMetaDescriptor(metaDescriptor.getClass().getName());

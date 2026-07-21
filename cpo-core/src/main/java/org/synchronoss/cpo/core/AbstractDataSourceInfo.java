@@ -25,8 +25,12 @@ package org.synchronoss.cpo.core;
 import java.util.concurrent.locks.ReentrantLock;
 
 /**
- * Created with IntelliJ IDEA. User: dberry Date: 9/10/13 Time: 12:51 PM To change this template use
- * File | Settings | File Templates.
+ * Base {@link DataSourceInfo} implementation that holds the common name/fetchSize/batchSize
+ * configuration and lazily creates the underlying datasource object on first access, guarding
+ * creation with a lock so concurrent callers cannot race to create it twice.
+ *
+ * @param <T> the type of the underlying datasource object
+ * @author dberry
  */
 public abstract class AbstractDataSourceInfo<T> implements DataSourceInfo<T> {
   private T dataSource = null;
@@ -37,29 +41,53 @@ public abstract class AbstractDataSourceInfo<T> implements DataSourceInfo<T> {
   // Make sure DataSource creation is thread safe.
   private final ReentrantLock lock = new ReentrantLock();
 
+  /**
+   * Creates an instance with the given configuration. The underlying datasource object itself is
+   * not created until {@link #getDataSource()} is first called.
+   *
+   * @param dataSourceName the configured name of this datasource
+   * @param fetchSize the number of rows to fetch per round-trip
+   * @param batchSize the number of statements to accumulate before executing a batch
+   */
   public AbstractDataSourceInfo(String dataSourceName, int fetchSize, int batchSize) {
     this.dataSourceName = dataSourceName;
     this.fetchSize = fetchSize;
     this.batchSize = batchSize;
   }
 
+  /**
+   * Creates the underlying datasource object. Called at most once, the first time {@link
+   * #getDataSource()} is invoked.
+   *
+   * @return the newly created datasource object
+   * @throws CpoException if the datasource cannot be created
+   */
   protected abstract T createDataSource() throws CpoException;
 
+  /** {@inheritDoc} */
   @Override
   public String getDataSourceName() {
     return dataSourceName;
   }
 
+  /** {@inheritDoc} */
   @Override
   public int getFetchSize() {
     return fetchSize;
   }
 
+  /** {@inheritDoc} */
   @Override
   public int getBatchSize() {
     return batchSize;
   }
 
+  /**
+   * {@inheritDoc}
+   *
+   * <p>The datasource object is created lazily on first call via {@link #createDataSource()} and
+   * cached for subsequent calls; creation is synchronized to be thread-safe.
+   */
   @Override
   public T getDataSource() throws CpoException {
     lock.lock();

@@ -28,8 +28,11 @@ import org.synchronoss.cpo.core.exporter.MetaXmlObjectExporter;
 import org.synchronoss.cpo.core.meta.CpoMetaDescriptor;
 
 /**
- * Created with IntelliJ IDEA. User: dberry Date: 9/10/13 Time: 07:56 AM To change this template use
- * File | Settings | File Templates.
+ * CassandraCpoMetaDescriptor is the Cassandra implementation of {@link CpoMetaDescriptor}. It
+ * points CPO at the {@link CassandraCpoMetaAdapter} used to load the meta configuration and at the
+ * {@link CassandraMetaXmlObjectExporter} used to export it back to XML.
+ *
+ * @author dberry
  */
 public class CassandraCpoMetaDescriptor extends CpoMetaDescriptor {
 

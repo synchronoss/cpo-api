@@ -42,6 +42,8 @@ public abstract class AbstractJdbcDataSourceInfo extends AbstractDataSourceInfo 
    * Constructs a AbstractJdbcDataSourceInfo
    *
    * @param dataSourceName - The name of the datasource to instantiate,
+   * @param fetchSize the number of rows to fetch per round trip on a retrieve
+   * @param batchSize the number of statements to batch together before executing
    */
   public AbstractJdbcDataSourceInfo(String dataSourceName, int fetchSize, int batchSize) {
     super(dataSourceName, fetchSize, batchSize);
@@ -52,6 +54,8 @@ public abstract class AbstractJdbcDataSourceInfo extends AbstractDataSourceInfo 
    *
    * @param className - The DataSource className from the Driver.
    * @param properties - The list of properties to be passed to the driver
+   * @param fetchSize the number of rows to fetch per round trip on a retrieve
+   * @param batchSize the number of statements to batch together before executing
    */
   public AbstractJdbcDataSourceInfo(
       String className, SortedMap<String, String> properties, int fetchSize, int batchSize) {
@@ -63,6 +67,8 @@ public abstract class AbstractJdbcDataSourceInfo extends AbstractDataSourceInfo 
    *
    * @param className - The DataSource className from the Driver.
    * @param properties - The list of properties to be passed to the driver
+   * @param fetchSize the number of rows to fetch per round trip on a retrieve
+   * @param batchSize the number of statements to batch together before executing
    */
   public AbstractJdbcDataSourceInfo(
       String className, Properties properties, int fetchSize, int batchSize) {

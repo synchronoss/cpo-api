@@ -26,8 +26,10 @@ import com.datastax.driver.core.Host;
 import java.util.Collection;
 
 /**
- * Created with IntelliJ IDEA. User: dberry Date: 10/10/13 Time: 07:58 AM To change this template
- * use File | Settings | File Templates.
+ * FactoryMethod for creating the collection of Host.StateListener to register with the Cassandra
+ * cluster
+ *
+ * @author dberry
  */
 public abstract class ListenerFactory implements FactoryMethodName {
 

@@ -27,9 +27,22 @@ import org.synchronoss.cpo.core.CpoException;
 import org.synchronoss.cpo.cpoconfig.CtDataSourceConfig;
 
 /**
+ * Builds a {@link CpoAdapterFactory} from a single {@code dataConfig} entry parsed out of {@code
+ * cpoConfig.xml}.
+ *
+ * <p>Implementations are datastore-specific (JDBC, Cassandra, etc.); each knows how to translate
+ * its {@link CtDataSourceConfig} JAXB binding into a working factory for that datastore.
+ *
  * @author dberry
  */
 public interface CpoConfigProcessor {
 
+  /**
+   * Processes a single data source configuration and builds the adapter factory it describes.
+   *
+   * @param cpoConfig the JAXB-bound {@code dataConfig} element to process
+   * @return a {@link CpoAdapterFactory} configured per {@code cpoConfig}
+   * @throws CpoException if the configuration is invalid or the factory cannot be built
+   */
   CpoAdapterFactory processCpoConfig(CtDataSourceConfig cpoConfig) throws CpoException;
 }

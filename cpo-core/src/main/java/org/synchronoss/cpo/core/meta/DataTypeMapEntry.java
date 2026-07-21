@@ -25,6 +25,7 @@ package org.synchronoss.cpo.core.meta;
 /**
  * DataTypeMapEntry is a class that defines the mapping of datasource datatypes to java types
  *
+ * @param <T> the Java type this entry maps a native data type to
  * @author david berry
  */
 public class DataTypeMapEntry<T> implements java.io.Serializable, Cloneable {
@@ -32,31 +33,65 @@ public class DataTypeMapEntry<T> implements java.io.Serializable, Cloneable {
   /** Version Id for this class. */
   private static final long serialVersionUID = 1L;
 
+  /** The integer identifier of the native data type. */
   private int dataTypeInt = Integer.MIN_VALUE;
+
+  /** The name of the native data type. */
   private String dataTypeName = null;
+
+  /** The Java class values of this data type are represented as. */
   private Class<T> javaClass = null;
 
   @SuppressWarnings("unused")
   private DataTypeMapEntry() {}
 
+  /**
+   * Creates an entry mapping a native data type to a Java class.
+   *
+   * @param dataTypeInt the integer identifier of the native data type
+   * @param dataTypeName the name of the native data type
+   * @param javaClass the Java class values of this data type are represented as
+   */
   public DataTypeMapEntry(int dataTypeInt, String dataTypeName, Class<T> javaClass) {
     this.dataTypeInt = dataTypeInt;
     this.dataTypeName = dataTypeName;
     this.javaClass = javaClass;
   }
 
+  /**
+   * Gets the integer identifier of the native data type.
+   *
+   * @return the native data type's integer identifier
+   */
   public int getDataTypeInt() {
     return dataTypeInt;
   }
 
+  /**
+   * Gets the name of the native data type.
+   *
+   * @return the native data type's name
+   */
   public String getDataTypeName() {
     return dataTypeName;
   }
 
+  /**
+   * Gets the Java class values of this data type are represented as.
+   *
+   * @return the mapped Java class
+   */
   public Class<T> getJavaClass() {
     return javaClass;
   }
 
+  /**
+   * Converts a {@code SNAKE_CASE} native data type name to {@code camelCase}, e.g. for use as a
+   * generated Java identifier.
+   *
+   * @param dataTypeName the native data type name to convert
+   * @return the camel-cased equivalent of {@code dataTypeName}
+   */
   public String makeJavaName(String dataTypeName) {
     dataTypeName = dataTypeName.toLowerCase();
 

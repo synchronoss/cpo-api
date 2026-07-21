@@ -86,13 +86,6 @@
         <system>GitHub Actions</system>
         <url>https://github.com/synchronoss/cpo-api/actions</url>
     </ciManagement>
-    <distributionManagement>
-        <site>
-            <id>cpo-github</id>
-            <name>Deployment through GitHub's site deployment plugin</name>
-            <url>site</url>
-        </site>
-    </distributionManagement>
     <issueManagement>
         <system>GitHub</system>
         <url>https://github.com/synchronoss/cpo-api/issues</url>
@@ -320,26 +313,6 @@
                 </executions>
             </plugin>
             <plugin>
-                <groupId>com.github.github</groupId>
-                <artifactId>site-maven-plugin</artifactId>
-                <version>0.12</version>
-                <configuration>
-                    <message>Creating site for ${project.artifactId}, ${project.version}</message>
-                    <!-- this does the trick to place every module in the correct subfolder -->
-                    <path>${project.distributionManagement.site.url}</path>
-                    <merge>true</merge>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>github-site</id>
-                        <goals>
-                            <goal>site</goal>
-                        </goals>
-                        <phase>site-deploy</phase>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
                 <version>0.8.14</version>
@@ -561,7 +534,7 @@
                                     </tag>
                                     <tag>
                                         <matchString>@deprecated</matchString>
-                                        <matchType>ignorecase</matchType>
+                                        <matchType>ignoreCase</matchType>
                                     </tag>
                                 </tags>
                             </tagClass>

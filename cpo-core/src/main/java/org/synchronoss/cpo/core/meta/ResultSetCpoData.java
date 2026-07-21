@@ -33,6 +33,9 @@ public abstract class ResultSetCpoData extends AbstractBindableCpoData {
 
   private Object rs = null;
   MethodMapper<?> methodMapper;
+  // resolved on first use; the attribute's data type never changes, so with one instance
+  // per column the mapper lookup happens once per query instead of once per cell
+  private MethodMapEntry<?, ?> resolvedMethodMapEntry = null;
 
   public ResultSetCpoData(
       MethodMapper<?> methodMapper, Object rs, CpoAttribute cpoAttribute, int index) {
@@ -52,16 +55,19 @@ public abstract class ResultSetCpoData extends AbstractBindableCpoData {
   @Override
   public Object invokeGetter() throws CpoException {
     Object javaObject;
-    MethodMapEntry<?, ?> methodMapEntry =
-        methodMapper.getDataMethodMapEntry(getDataGetterReturnType());
+    MethodMapEntry<?, ?> methodMapEntry = resolvedMethodMapEntry;
     if (methodMapEntry == null) {
-      if (Object.class.isAssignableFrom(getDataGetterReturnType())) {
-        methodMapEntry = methodMapper.getDataMethodMapEntry(Object.class);
-      }
+      methodMapEntry = methodMapper.getDataMethodMapEntry(getDataGetterReturnType());
       if (methodMapEntry == null) {
-        throw new CpoException(
-            "Error Retrieving Jdbc Method for type: " + getDataGetterReturnType().getName());
+        if (Object.class.isAssignableFrom(getDataGetterReturnType())) {
+          methodMapEntry = methodMapper.getDataMethodMapEntry(Object.class);
+        }
+        if (methodMapEntry == null) {
+          throw new CpoException(
+              "Error Retrieving Jdbc Method for type: " + getDataGetterReturnType().getName());
+        }
       }
+      resolvedMethodMapEntry = methodMapEntry;
     }
 
     try {

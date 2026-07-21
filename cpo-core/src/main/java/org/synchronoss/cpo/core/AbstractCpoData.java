@@ -76,7 +76,7 @@ public abstract class AbstractCpoData implements CpoData {
   public Class<?> getDataGetterReturnType() {
     Class<?> returnClass = cpoAttribute.getSetterParamType();
     if (cpoAttribute.getCpoTransform() != null) {
-      returnClass = cpoAttribute.getTransformInMethod().getParameterTypes()[0];
+      returnClass = cpoAttribute.getTransformInParamType();
     }
     return returnClass;
   }

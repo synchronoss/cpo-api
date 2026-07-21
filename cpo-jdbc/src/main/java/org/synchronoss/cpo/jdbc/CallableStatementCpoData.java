@@ -130,7 +130,8 @@ public class CallableStatementCpoData extends AbstractStatementCpoData {
         instanceObject == null ? logger : LoggerFactory.getLogger(instanceObject.getClass());
     CpoAttribute cpoAttribute = getCpoAttribute();
     Object param = transformOut(cpoAttribute.invokeGetter(instanceObject));
-    localLogger.info(cpoAttribute.getDataName() + "=" + param);
+    // per-attribute bind values are debug detail, not operational info
+    localLogger.debug("{}={}", cpoAttribute.getDataName(), param);
     JdbcMethodMapEntry<?, ?> jdbcMethodMapEntry = getJdbcMethodMapEntry(instanceObject);
     try {
       jdbcMethodMapEntry.getCsSetter().invoke(jcsf.getCallableStatement(), getIndex(), param);

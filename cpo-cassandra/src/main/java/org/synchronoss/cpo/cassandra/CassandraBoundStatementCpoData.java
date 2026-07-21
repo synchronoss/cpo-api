@@ -69,7 +69,8 @@ public class CassandraBoundStatementCpoData extends AbstractBindableCpoData {
       throw new CpoException(
           "Error Retrieveing Cassandra Method for type: " + getDataSetterParamType().getName());
     }
-    localLogger.info(cpoAttribute.getDataName() + "=" + param);
+    // per-attribute bind values are debug detail, not operational info
+    localLogger.debug("{}={}", cpoAttribute.getDataName(), param);
     try {
       switch (methodMapEntry.getMethodType()) {
         case CassandraMethodMapEntry.METHOD_TYPE_BASIC:

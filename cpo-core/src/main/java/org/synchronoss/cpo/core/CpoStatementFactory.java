@@ -262,9 +262,9 @@ public abstract class CpoStatementFactory implements CpoReleasable {
         if (jsm != null) {
           try {
             if (cpoAttribute == null) {
-              localLogger.debug(bindAttr.getName() + "=" + bindObject);
+              localLogger.debug("{}={}", bindAttr.getName(), bindObject);
             } else {
-              localLogger.debug(cpoAttribute.getDataName() + "=" + bindObject);
+              localLogger.debug("{}={}", cpoAttribute.getDataName(), bindObject);
             }
             jsm.getBsSetter().invoke(this.getBindableStatement(), index++, bindObject);
           } catch (IllegalAccessException iae) {

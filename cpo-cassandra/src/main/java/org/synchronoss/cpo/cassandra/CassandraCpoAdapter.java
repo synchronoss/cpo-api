@@ -23,6 +23,7 @@ package org.synchronoss.cpo.cassandra;
  */
 
 import com.datastax.driver.core.*;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -793,6 +794,15 @@ public class CassandraCpoAdapter extends CpoBaseAdapter<ClusterDataSource> {
         attributes[k] = resultClass.getAttributeData(columnDefs.getName(k));
       }
 
+      // resolved once per query, not once per row
+      Constructor<?> resultConstructor;
+      try {
+        resultConstructor = result.getClass().getDeclaredConstructor();
+      } catch (NoSuchMethodException e) {
+        throw new CpoException(
+            "Constructor not found for Return bean Class=<" + result.getClass() + ">", e);
+      }
+
       CassandraBoundStatementFactory finalBoundStatementFactory = boundStatementFactory;
       return StreamSupport.stream(
               new Spliterators.AbstractSpliterator<T>(Long.MAX_VALUE, Spliterator.ORDERED) {
@@ -803,7 +813,7 @@ public class CassandraCpoAdapter extends CpoBaseAdapter<ClusterDataSource> {
                     Row row = rs.one();
                     T bean = null;
                     try {
-                      bean = (T) result.getClass().getDeclaredConstructor().newInstance();
+                      bean = (T) resultConstructor.newInstance();
                     } catch (IllegalAccessException iae) {
                       String msg =
                           "Could not access default constructor for Class=<"
@@ -819,10 +829,6 @@ public class CassandraCpoAdapter extends CpoBaseAdapter<ClusterDataSource> {
                           "Unable to invoke constructor for Return bean Class=<"
                               + result.getClass()
                               + ">",
-                          e);
-                    } catch (NoSuchMethodException e) {
-                      throw new CpoException(
-                          "Constructor not found for Return bean Class=<" + result.getClass() + ">",
                           e);
                     }
 

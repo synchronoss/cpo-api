@@ -43,6 +43,9 @@
       <item name="Continuous Builds" href="http://continuous.synchronoss.net:8111/viewType.html?buildTypeId=bt2"/>
     </links>
     <menu ref="parent" inherit="top" />
+    <menu name="Documentation" inherit="top">
+      <item name="Performance Tuning" href="performance-tuning.html"/>
+    </menu>
     <menu ref="modules" inherit="top" />
     <menu ref="reports" inherit="top" />
     <menu name="Related Links" inherit="top">

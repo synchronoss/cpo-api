@@ -3,6 +3,8 @@ cpo-api
 
 [![CI](https://github.com/synchronoss/cpo-api/actions/workflows/mvn-linux.yml/badge.svg)](https://github.com/synchronoss/cpo-api/actions/workflows/mvn-linux.yml)
 ![License](https://img.shields.io/github/license/synchronoss/cpo-api.svg)
+[![Maven Central](https://img.shields.io/maven-central/v/org.synchronoss.cpo/cpo-core.svg)](https://central.sonatype.com/artifact/org.synchronoss.cpo/cpo-core)
+[![Documentation](https://img.shields.io/badge/docs-website-blue.svg)](https://synchronoss.github.io/cpo-api/)
 
 Class Persistence Object (CPO) Application Programming Interface (API).
 
@@ -39,33 +41,55 @@ CPO also comes with a maven plugin which will generate the cpo interfaces and/or
 to only have to keep the configuration information up to date. Cpo-plugin will then manage the classes.
 
 ---
+Modules
+=
+
+| Module | Description |
+| --- | --- |
+| [cpo-core](cpo-core) | Persistence-agnostic interfaces, meta model, config, cache. Start here — `CpoAdapter` is the primary entry point for application code. |
+| [cpo-jdbc](cpo-jdbc) | JDBC implementation of cpo-core, for any relational database with a JDBC driver. |
+| [cpo-cassandra](cpo-cassandra) | Cassandra 3.x native driver implementation. |
+| [cpo-plugin](cpo-plugin) | Maven plugin that code-generates CPO interfaces/beans from meta XML at build time. |
+
+Full API and per-module reports (Javadoc, coverage, static analysis) are published at
+[synchronoss.github.io/cpo-api](https://synchronoss.github.io/cpo-api/).
+
+---
+Example Usage
+=
+```java
+// Obtain the CpoAdapter for the default context, as declared in cpoConfig.xml
+CpoAdapter cpo = CpoAdapterFactoryManager.getCpoAdapter();
+
+// Insert a new bean
+Employee employee = new Employee();
+employee.setId(UUID.randowUUID());
+employee.setName("Ada Lovelace");
+employee.setDepartment("Engineering");
+cpo.insertBean(employee);
+
+// Retrieve it back by primary key
+Employee criteria = new Employee();
+criteria.setId(employee.getId());
+Employee found = cpo.retrieveBean(criteria);
+
+// Stream every bean matching a named function group
+try (Stream<Employee> engineers = cpo.retrieveBeans("ByDepartment", criteria)) {
+  engineers.forEach(System.out::println);
+}
+```
+
+`Employee` here is a plain JavaBean; the mapping between its properties and your datastore's native
+SQL/CQL expressions lives entirely in an external meta XML file (or is generated for you by
+cpo-plugin), never in annotations on the bean itself. For complete, config-wired examples backed by
+a real database, see the test suites under `cpo-jdbc/src/test` (H2) and `cpo-cassandra/src/test`.
+
+---
 Performance Tuning
 =
-CPO executes your native expressions through the standard driver APIs, so most throughput tuning
-happens in the JDBC driver configuration rather than in CPO itself.
-
-- Enable driver-side batch rewriting. `insertBeans`/`deleteBeans`/`updateBeans` use JDBC batching,
-  but several drivers still send each batched statement as its own network round trip unless told
-  otherwise:
-  - MySQL: `rewriteBatchedStatements=true`
-  - MariaDB: `useBulkStmts=true`
-  - PostgreSQL: `reWriteBatchedInserts=true` (rewrites inserts only)
-- Enable your driver's prepared-statement cache. CPO deliberately does not cache
-  `PreparedStatement`s (see below) — use the driver or pool cache instead:
-  - MySQL/MariaDB: `cachePrepStmts=true&useServerPrepStmts=true&prepStmtCacheSize=250&prepStmtCacheSqlLimit=2048`
-  - PostgreSQL: built in (`prepareThreshold`, server-prepares after 5 uses)
-  - Oracle: `oracle.jdbc.implicitStatementCacheSize=<n>`
-  - SQL Server: `disableStatementPooling=false;statementPoolingCacheSize=<n>`
-  - H2: caches parsed statements per session automatically
-- Raise the batch size for bulk operations. `CpoAdapter.setBatchSize` defaults to 100; large
-  `insertBeans`/`deleteBeans` calls benefit from batch sizes in the thousands.
-
-Why CPO does not cache PreparedStatements: a framework-level cache would sit above the connection
-pool, where connections are proxy objects — it would mis-key on the physical connection, would have
-to intercept close and pool eviction, and at best would save the microsecond that a driver-cache
-hit already costs, while the execute and commit round trips dominate every operation. Statement
-caching belongs to the driver, which implements it correctly one layer down. (This is the same
-reasoning HikariCP gives for not shipping statement pooling.)
+See [Performance Tuning](https://synchronoss.github.io/cpo-api/performance-tuning.html) on the
+project site for driver batching/statement-cache settings and why CPO deliberately does not cache
+`PreparedStatement`s itself.
 
 ---
 Building CPO

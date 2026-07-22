@@ -29,13 +29,14 @@ import org.synchronoss.cpo.core.meta.domain.CpoAttribute;
  * (see {@link BindableWhereBuilder}) with either the resolved {@link CpoAttribute} it belongs to,
  * or, when no matching bean attribute exists, the raw attribute name it was addressed by.
  *
+ * @param cpoAttribute the resolved bean attribute this value should be bound to, or {@code null} if
+ *     this instance was created with a raw name instead
+ * @param bindObject the value to bind
+ * @param name the raw attribute or column name this value should be bound to, or {@code null} if
+ *     this instance was created with a resolved {@link CpoAttribute} instead
  * @author david.berry
  */
-public class BindAttribute {
-
-  private CpoAttribute cpoAttribute = null;
-  private Object bindObject = null;
-  private String name = null;
+public record BindAttribute(CpoAttribute cpoAttribute, Object bindObject, String name) {
 
   /**
    * Creates an instance bound to a resolved bean attribute.
@@ -44,8 +45,7 @@ public class BindAttribute {
    * @param bindObject the value to bind
    */
   public BindAttribute(CpoAttribute cpoAttribute, Object bindObject) {
-    this.cpoAttribute = cpoAttribute;
-    this.bindObject = bindObject;
+    this(cpoAttribute, bindObject, null);
   }
 
   /**
@@ -56,36 +56,6 @@ public class BindAttribute {
    * @param bindObject the value to bind
    */
   public BindAttribute(String name, Object bindObject) {
-    this.name = name;
-    this.bindObject = bindObject;
-  }
-
-  /**
-   * Gets the resolved bean attribute this value should be bound to.
-   *
-   * @return the bean attribute, or {@code null} if this instance was created with a raw name
-   *     instead
-   */
-  public CpoAttribute getCpoAttribute() {
-    return cpoAttribute;
-  }
-
-  /**
-   * Gets the value to bind.
-   *
-   * @return the bind value
-   */
-  public Object getBindObject() {
-    return bindObject;
-  }
-
-  /**
-   * Gets the raw attribute or column name this value should be bound to.
-   *
-   * @return the name, or {@code null} if this instance was created with a resolved {@link
-   *     CpoAttribute} instead
-   */
-  public String getName() {
-    return name;
+    this(null, bindObject, name);
   }
 }

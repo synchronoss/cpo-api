@@ -162,7 +162,7 @@ public class CassandraCpoAdapter extends CpoBaseAdapter<ClusterDataSource> {
     try {
       session = getReadSession();
 
-      objCount = existsBean(query.getGroupName(), bean, session, query.getWheres());
+      objCount = existsBean(query.groupName(), bean, session, query.wheres());
     } catch (Exception e) {
       throw new CpoException("existsBeans(CpoQuery, T) failed", e);
     }
@@ -298,9 +298,9 @@ public class CassandraCpoAdapter extends CpoBaseAdapter<ClusterDataSource> {
 
           DataTypeMapEntry<?> dataTypeMapEntry =
               metaDescriptor.getDataTypeMapEntry(columnDefs.getType(i).getName().ordinal());
-          attribute.setDataType(dataTypeMapEntry.getDataTypeName());
-          attribute.setDataTypeInt(dataTypeMapEntry.getDataTypeInt());
-          attribute.setJavaType(dataTypeMapEntry.getJavaClass().getName());
+          attribute.setDataType(dataTypeMapEntry.dataTypeName());
+          attribute.setDataTypeInt(dataTypeMapEntry.dataTypeInt());
+          attribute.setJavaType(dataTypeMapEntry.javaClass().getName());
           attribute.setJavaName(dataTypeMapEntry.makeJavaName(columnDefs.getName(i)));
 
           attributes.add(attribute);

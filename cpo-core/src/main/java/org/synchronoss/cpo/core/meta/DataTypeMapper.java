@@ -62,9 +62,9 @@ public class DataTypeMapper {
    * @param dtme the data type entry to register
    */
   public void addDataTypeEntry(DataTypeMapEntry<?> dtme) {
-    dataTypeIntMap.put(dtme.getDataTypeInt(), dtme);
-    dataTypeNameMap.put(dtme.getDataTypeName(), dtme);
-    logger.debug("Added DataType " + dtme.getDataTypeName());
+    dataTypeIntMap.put(dtme.dataTypeInt(), dtme);
+    dataTypeNameMap.put(dtme.dataTypeName(), dtme);
+    logger.debug("Added DataType " + dtme.dataTypeName());
   }
 
   /**
@@ -115,7 +115,7 @@ public class DataTypeMapper {
       dataTypeMapEntry = defaultDataTypeMapEntry;
     }
 
-    return dataTypeMapEntry.getDataTypeInt();
+    return dataTypeMapEntry.dataTypeInt();
   }
 
   /**
@@ -143,7 +143,7 @@ public class DataTypeMapper {
       dataTypeMapEntry = defaultDataTypeMapEntry;
     }
 
-    return dataTypeMapEntry.getJavaClass();
+    return dataTypeMapEntry.javaClass();
   }
 
   /**
@@ -160,7 +160,7 @@ public class DataTypeMapper {
       dataTypeMapEntry = defaultDataTypeMapEntry;
     }
 
-    return dataTypeMapEntry.getJavaClass();
+    return dataTypeMapEntry.javaClass();
   }
 
   /**

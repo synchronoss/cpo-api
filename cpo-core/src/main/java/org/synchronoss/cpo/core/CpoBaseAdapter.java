@@ -114,10 +114,10 @@ public abstract class CpoBaseAdapter<D> extends CpoAdapterCache implements CpoAd
     return processUpdateGroup(
         bean,
         Crud.CREATE,
-        query.getGroupName(),
-        query.getWheres(),
-        query.getOrderBys(),
-        query.getNativeExpressions());
+        query.groupName(),
+        query.wheres(),
+        query.orderBys(),
+        query.nativeExpressions());
   }
 
   @Override
@@ -125,10 +125,10 @@ public abstract class CpoBaseAdapter<D> extends CpoAdapterCache implements CpoAd
     return processUpdateGroup(
         beans,
         Crud.CREATE,
-        query.getGroupName(),
-        query.getWheres(),
-        query.getOrderBys(),
-        query.getNativeExpressions());
+        query.groupName(),
+        query.wheres(),
+        query.orderBys(),
+        query.nativeExpressions());
   }
 
   @Override
@@ -136,10 +136,10 @@ public abstract class CpoBaseAdapter<D> extends CpoAdapterCache implements CpoAd
     return processUpdateGroup(
         bean,
         Crud.DELETE,
-        query.getGroupName(),
-        query.getWheres(),
-        query.getOrderBys(),
-        query.getNativeExpressions());
+        query.groupName(),
+        query.wheres(),
+        query.orderBys(),
+        query.nativeExpressions());
   }
 
   @Override
@@ -147,10 +147,10 @@ public abstract class CpoBaseAdapter<D> extends CpoAdapterCache implements CpoAd
     return processUpdateGroup(
         beans,
         Crud.DELETE,
-        query.getGroupName(),
-        query.getWheres(),
-        query.getOrderBys(),
-        query.getNativeExpressions());
+        query.groupName(),
+        query.wheres(),
+        query.orderBys(),
+        query.nativeExpressions());
   }
 
   @Override
@@ -158,10 +158,10 @@ public abstract class CpoBaseAdapter<D> extends CpoAdapterCache implements CpoAd
     return processUpdateGroup(
         bean,
         Crud.UPDATE,
-        query.getGroupName(),
-        query.getWheres(),
-        query.getOrderBys(),
-        query.getNativeExpressions());
+        query.groupName(),
+        query.wheres(),
+        query.orderBys(),
+        query.nativeExpressions());
   }
 
   @Override
@@ -169,10 +169,10 @@ public abstract class CpoBaseAdapter<D> extends CpoAdapterCache implements CpoAd
     return processUpdateGroup(
         beans,
         Crud.UPDATE,
-        query.getGroupName(),
-        query.getWheres(),
-        query.getOrderBys(),
-        query.getNativeExpressions());
+        query.groupName(),
+        query.wheres(),
+        query.orderBys(),
+        query.nativeExpressions());
   }
 
   @Override
@@ -180,10 +180,10 @@ public abstract class CpoBaseAdapter<D> extends CpoAdapterCache implements CpoAd
     return processUpdateGroup(
         bean,
         Crud.UPSERT,
-        query.getGroupName(),
-        query.getWheres(),
-        query.getOrderBys(),
-        query.getNativeExpressions());
+        query.groupName(),
+        query.wheres(),
+        query.orderBys(),
+        query.nativeExpressions());
   }
 
   @Override
@@ -191,25 +191,21 @@ public abstract class CpoBaseAdapter<D> extends CpoAdapterCache implements CpoAd
     return processUpdateGroup(
         beans,
         Crud.UPSERT,
-        query.getGroupName(),
-        query.getWheres(),
-        query.getOrderBys(),
-        query.getNativeExpressions());
+        query.groupName(),
+        query.wheres(),
+        query.orderBys(),
+        query.nativeExpressions());
   }
 
   @Override
   public <T, C> T executeBean(CpoQuery query, C criteria, T result) throws CpoException {
-    return processExecuteGroup(query.getGroupName(), criteria, result);
+    return processExecuteGroup(query.groupName(), criteria, result);
   }
 
   @Override
   public <T> T retrieveBean(CpoQuery query, T bean) throws CpoException {
     return processSelectGroup(
-        bean,
-        query.getGroupName(),
-        query.getWheres(),
-        query.getOrderBys(),
-        query.getNativeExpressions());
+        bean, query.groupName(), query.wheres(), query.orderBys(), query.nativeExpressions());
   }
 
   @Override
@@ -218,12 +214,12 @@ public abstract class CpoBaseAdapter<D> extends CpoAdapterCache implements CpoAd
     // datastore resources backing it (statement, result set, pooled connection)
     try (Stream<T> beans =
         processSelectGroup(
-            query.getGroupName(),
+            query.groupName(),
             criteria,
             result,
-            query.getWheres(),
-            query.getOrderBys(),
-            query.getNativeExpressions(),
+            query.wheres(),
+            query.orderBys(),
+            query.nativeExpressions(),
             true)) {
       return beans.findFirst().orElse(null);
     }
@@ -232,12 +228,12 @@ public abstract class CpoBaseAdapter<D> extends CpoAdapterCache implements CpoAd
   @Override
   public <T, C> Stream<T> retrieveBeans(CpoQuery query, C criteria, T result) throws CpoException {
     return processSelectGroup(
-        query.getGroupName(),
+        query.groupName(),
         criteria,
         result,
-        query.getWheres(),
-        query.getOrderBys(),
-        query.getNativeExpressions(),
+        query.wheres(),
+        query.orderBys(),
+        query.nativeExpressions(),
         false);
   }
 

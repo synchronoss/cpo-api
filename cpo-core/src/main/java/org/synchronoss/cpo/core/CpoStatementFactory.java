@@ -278,8 +278,8 @@ public abstract class CpoStatementFactory implements CpoReleasable {
       // runs through the bind attributes and binds them to the prepared statement
       // They must be in correct order.
       for (BindAttribute bindAttr : bindValues) {
-        Object bindObject = bindAttr.getBindObject();
-        CpoAttribute cpoAttribute = bindAttr.getCpoAttribute();
+        Object bindObject = bindAttr.bindObject();
+        CpoAttribute cpoAttribute = bindAttr.cpoAttribute();
 
         // check to see if we are getting a cpo value object or an object that
         // can be put directly in the statement (String, BigDecimal, etc)
@@ -289,7 +289,7 @@ public abstract class CpoStatementFactory implements CpoReleasable {
         if (jsm != null) {
           try {
             if (cpoAttribute == null) {
-              localLogger.debug("{}={}", bindAttr.getName(), bindObject);
+              localLogger.debug("{}={}", bindAttr.name(), bindObject);
             } else {
               localLogger.debug("{}={}", cpoAttribute.getDataName(), bindObject);
             }

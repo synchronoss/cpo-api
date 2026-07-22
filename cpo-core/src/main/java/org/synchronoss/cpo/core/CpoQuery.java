@@ -41,37 +41,23 @@ import java.util.List;
  *     adapter.retrieveBeans(CpoQuery.group("byDept").where(w).orderBy(ob), criteria);
  * }</pre>
  *
+ * @param groupName The function group name; null selects the default group
+ * @param wheres The run-time where constraints, in the order added
+ * @param orderBys The orderings, in the order added
+ * @param nativeExpressions The native expressions, in the order added
  * @author david berry
  */
-public final class CpoQuery implements Serializable {
+public record CpoQuery(
+    String groupName,
+    List<CpoWhere> wheres,
+    List<CpoOrderBy> orderBys,
+    List<CpoNativeFunction> nativeExpressions)
+    implements Serializable {
 
   /** Version Id for this class. */
   private static final long serialVersionUID = 1L;
 
   private static final CpoQuery DEFAULT_GROUP = new CpoQuery(null, List.of(), List.of(), List.of());
-
-  /** The function group name; null selects the default group */
-  private final String groupName;
-
-  /** The run-time where constraints, in the order added */
-  private final List<CpoWhere> wheres;
-
-  /** The orderings, in the order added */
-  private final List<CpoOrderBy> orderBys;
-
-  /** The native expressions, in the order added */
-  private final List<CpoNativeFunction> nativeExpressions;
-
-  private CpoQuery(
-      String groupName,
-      List<CpoWhere> wheres,
-      List<CpoOrderBy> orderBys,
-      List<CpoNativeFunction> nativeExpressions) {
-    this.groupName = groupName;
-    this.wheres = wheres;
-    this.orderBys = orderBys;
-    this.nativeExpressions = nativeExpressions;
-  }
 
   /**
    * A query against the named function group.
@@ -159,42 +145,6 @@ public final class CpoQuery implements Serializable {
     if (nativeExpressions == null || nativeExpressions.isEmpty()) return this;
     return new CpoQuery(
         groupName, wheres, orderBys, appendAll(this.nativeExpressions, nativeExpressions));
-  }
-
-  /**
-   * The function group name
-   *
-   * @return The group name, or null for the default group
-   */
-  public String getGroupName() {
-    return groupName;
-  }
-
-  /**
-   * The where constraints
-   *
-   * @return An unmodifiable list, never null
-   */
-  public List<CpoWhere> getWheres() {
-    return wheres;
-  }
-
-  /**
-   * The orderings
-   *
-   * @return An unmodifiable list, never null
-   */
-  public List<CpoOrderBy> getOrderBys() {
-    return orderBys;
-  }
-
-  /**
-   * The native expressions
-   *
-   * @return An unmodifiable list, never null
-   */
-  public List<CpoNativeFunction> getNativeExpressions() {
-    return nativeExpressions;
   }
 
   private static <E> List<E> append(List<E> list, E element) {

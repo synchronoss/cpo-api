@@ -66,7 +66,8 @@ cpo-coverage    — Build-internal module (built last): merges all modules' JaCo
 
 ### Core Abstractions (cpo-core)
 
-- **`CpoAdapter`** — primary interface for CRUD operations (`insertObject`, `retrieveBean`, `updateObject`, `deleteObject`, `retrieveBeans` returning `Stream<T>`). Entry point for application code.
+- **`CpoAdapter`** — primary interface for CRUD operations (`insertBean`, `retrieveBean`, `updateBean`, `deleteBean`, `upsertBean`, `existsBean`, `executeBean`, `retrieveBeans` returning `Stream<T>`). Entry point for application code. Every operation has a canonical form taking a `CpoQuery` plus 1-2 arg convenience defaults; there are no clause-bearing positional overloads.
+- **`CpoQuery`** — immutable parameter object carrying a function group name plus run-time where/order-by/native-expression clauses (`CpoQuery.group("g").where(w).orderBy(o)`). Built once, shareable across threads.
 - **`CpoTrxAdapter`** — extends `CpoAdapter` with explicit transaction control; obtained from `CpoAdapter.getCpoTrxAdapter()`.
 - **`CpoAdapterFactory`** — creates `CpoAdapter` instances from a named config context.
 - **`CpoAdapterFactoryManager`** — singleton cache that loads `cpoConfig.xml` from the classpath (env var `CPO_CONFIG` overrides path) and vends `CpoAdapterFactory` instances by config name.

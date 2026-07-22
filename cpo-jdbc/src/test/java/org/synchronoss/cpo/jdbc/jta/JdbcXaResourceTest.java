@@ -35,6 +35,7 @@ import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.core.CpoAdapter;
 import org.synchronoss.cpo.core.CpoAdapterFactoryManager;
 import org.synchronoss.cpo.core.CpoOrderBy;
+import org.synchronoss.cpo.core.CpoQuery;
 import org.synchronoss.cpo.core.helper.ExceptionHelper;
 import org.synchronoss.cpo.core.jta.CpoXaError;
 import org.synchronoss.cpo.jdbc.ValueObject;
@@ -135,7 +136,8 @@ public class JdbcXaResourceTest {
 
         ValueObject valObj = ValueObjectFactory.createValueObject();
         try (Stream<ValueObject> beans =
-            cpoXaAdapter1.retrieveBeans(ValueObject.FG_LIST_NULL, valObj, colCob)) {
+            cpoXaAdapter1.retrieveBeans(
+                CpoQuery.group(ValueObject.FG_LIST_NULL).orderBys(colCob), valObj)) {
           var list =
               beans
                   .filter(b -> Math.abs(b.getId()) >= IDB && Math.abs(b.getId()) < IDB + 100000)

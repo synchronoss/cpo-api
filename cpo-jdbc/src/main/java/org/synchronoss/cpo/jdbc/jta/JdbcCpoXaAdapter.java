@@ -22,7 +22,6 @@ package org.synchronoss.cpo.jdbc.jta;
  * ]]
  */
 
-import java.util.Collection;
 import java.util.List;
 import java.util.stream.Stream;
 import javax.transaction.xa.XAException;
@@ -143,12 +142,15 @@ public class JdbcCpoXaAdapter extends CpoBaseXaResource<JdbcCpoAdapter> implemen
         });
   }
 
+  // Every CpoAdapter operation is routed through apply() so the XA state machine picks the
+  // correct resource manager for the calling thread. Only the canonical CpoQuery forms are
+  // delegated; the convenience overloads are interface defaults that funnel through these.
   @Override
-  public <T> long insertBean(T bean) throws CpoException {
+  public <T> long insertBean(CpoQuery query, T bean) throws CpoException {
     return apply(
         (cpo) -> {
           try {
-            return cpo.insertBean(bean);
+            return cpo.insertBean(query, bean);
           } catch (CpoException e) {
             throw new RuntimeException(e);
           }
@@ -156,11 +158,11 @@ public class JdbcCpoXaAdapter extends CpoBaseXaResource<JdbcCpoAdapter> implemen
   }
 
   @Override
-  public <T> long insertBean(String groupName, T bean) throws CpoException {
+  public <T> long insertBeans(CpoQuery query, List<T> beans) throws CpoException {
     return apply(
         (cpo) -> {
           try {
-            return cpo.insertBean(groupName, bean);
+            return cpo.insertBeans(query, beans);
           } catch (CpoException e) {
             throw new RuntimeException(e);
           }
@@ -168,17 +170,11 @@ public class JdbcCpoXaAdapter extends CpoBaseXaResource<JdbcCpoAdapter> implemen
   }
 
   @Override
-  public <T> long insertBean(
-      String groupName,
-      T bean,
-      Collection<CpoWhere> wheres,
-      Collection<CpoOrderBy> orderBy,
-      Collection<CpoNativeFunction> nativeExpressions)
-      throws CpoException {
+  public <T> long deleteBean(CpoQuery query, T bean) throws CpoException {
     return apply(
         (cpo) -> {
           try {
-            return cpo.insertBean(groupName, bean, wheres, orderBy, nativeExpressions);
+            return cpo.deleteBean(query, bean);
           } catch (CpoException e) {
             throw new RuntimeException(e);
           }
@@ -186,11 +182,11 @@ public class JdbcCpoXaAdapter extends CpoBaseXaResource<JdbcCpoAdapter> implemen
   }
 
   @Override
-  public <T> long insertBeans(List<T> beans) throws CpoException {
+  public <T> long deleteBeans(CpoQuery query, List<T> beans) throws CpoException {
     return apply(
         (cpo) -> {
           try {
-            return cpo.insertBeans(beans);
+            return cpo.deleteBeans(query, beans);
           } catch (CpoException e) {
             throw new RuntimeException(e);
           }
@@ -198,11 +194,11 @@ public class JdbcCpoXaAdapter extends CpoBaseXaResource<JdbcCpoAdapter> implemen
   }
 
   @Override
-  public <T> long insertBeans(String groupName, List<T> beans) throws CpoException {
+  public <T> long updateBean(CpoQuery query, T bean) throws CpoException {
     return apply(
         (cpo) -> {
           try {
-            return cpo.insertBeans(groupName, beans);
+            return cpo.updateBean(query, bean);
           } catch (CpoException e) {
             throw new RuntimeException(e);
           }
@@ -210,17 +206,11 @@ public class JdbcCpoXaAdapter extends CpoBaseXaResource<JdbcCpoAdapter> implemen
   }
 
   @Override
-  public <T> long insertBeans(
-      String groupName,
-      List<T> beans,
-      Collection<CpoWhere> wheres,
-      Collection<CpoOrderBy> orderBy,
-      Collection<CpoNativeFunction> nativeExpressions)
-      throws CpoException {
+  public <T> long updateBeans(CpoQuery query, List<T> beans) throws CpoException {
     return apply(
         (cpo) -> {
           try {
-            return cpo.insertBeans(groupName, beans, wheres, orderBy, nativeExpressions);
+            return cpo.updateBeans(query, beans);
           } catch (CpoException e) {
             throw new RuntimeException(e);
           }
@@ -228,11 +218,11 @@ public class JdbcCpoXaAdapter extends CpoBaseXaResource<JdbcCpoAdapter> implemen
   }
 
   @Override
-  public <T> long deleteBean(T bean) throws CpoException {
+  public <T> long upsertBean(CpoQuery query, T bean) throws CpoException {
     return apply(
         (cpo) -> {
           try {
-            return cpo.deleteBean(bean);
+            return cpo.upsertBean(query, bean);
           } catch (CpoException e) {
             throw new RuntimeException(e);
           }
@@ -240,11 +230,11 @@ public class JdbcCpoXaAdapter extends CpoBaseXaResource<JdbcCpoAdapter> implemen
   }
 
   @Override
-  public <T> long deleteBean(String groupName, T bean) throws CpoException {
+  public <T> long upsertBeans(CpoQuery query, List<T> beans) throws CpoException {
     return apply(
         (cpo) -> {
           try {
-            return cpo.deleteBean(groupName, bean);
+            return cpo.upsertBeans(query, beans);
           } catch (CpoException e) {
             throw new RuntimeException(e);
           }
@@ -252,17 +242,11 @@ public class JdbcCpoXaAdapter extends CpoBaseXaResource<JdbcCpoAdapter> implemen
   }
 
   @Override
-  public <T> long deleteBean(
-      String groupName,
-      T bean,
-      Collection<CpoWhere> wheres,
-      Collection<CpoOrderBy> orderBy,
-      Collection<CpoNativeFunction> nativeExpressions)
-      throws CpoException {
+  public <T> long existsBean(CpoQuery query, T bean) throws CpoException {
     return apply(
         (cpo) -> {
           try {
-            return cpo.deleteBean(groupName, bean, wheres, orderBy, nativeExpressions);
+            return cpo.existsBean(query, bean);
           } catch (CpoException e) {
             throw new RuntimeException(e);
           }
@@ -270,11 +254,11 @@ public class JdbcCpoXaAdapter extends CpoBaseXaResource<JdbcCpoAdapter> implemen
   }
 
   @Override
-  public <T> long deleteBeans(List<T> beans) throws CpoException {
+  public <T, C> T executeBean(CpoQuery query, C criteria, T result) throws CpoException {
     return apply(
         (cpo) -> {
           try {
-            return cpo.deleteBeans(beans);
+            return cpo.executeBean(query, criteria, result);
           } catch (CpoException e) {
             throw new RuntimeException(e);
           }
@@ -282,11 +266,11 @@ public class JdbcCpoXaAdapter extends CpoBaseXaResource<JdbcCpoAdapter> implemen
   }
 
   @Override
-  public <T> long deleteBeans(String groupName, List<T> beans) throws CpoException {
+  public <T> T retrieveBean(CpoQuery query, T bean) throws CpoException {
     return apply(
         (cpo) -> {
           try {
-            return cpo.deleteBeans(groupName, beans);
+            return cpo.retrieveBean(query, bean);
           } catch (CpoException e) {
             throw new RuntimeException(e);
           }
@@ -294,17 +278,11 @@ public class JdbcCpoXaAdapter extends CpoBaseXaResource<JdbcCpoAdapter> implemen
   }
 
   @Override
-  public <T> long deleteBeans(
-      String groupName,
-      List<T> beans,
-      Collection<CpoWhere> wheres,
-      Collection<CpoOrderBy> orderBy,
-      Collection<CpoNativeFunction> nativeExpressions)
-      throws CpoException {
+  public <T, C> T retrieveBean(CpoQuery query, C criteria, T result) throws CpoException {
     return apply(
         (cpo) -> {
           try {
-            return cpo.deleteBeans(groupName, beans, wheres, orderBy, nativeExpressions);
+            return cpo.retrieveBean(query, criteria, result);
           } catch (CpoException e) {
             throw new RuntimeException(e);
           }
@@ -312,72 +290,11 @@ public class JdbcCpoXaAdapter extends CpoBaseXaResource<JdbcCpoAdapter> implemen
   }
 
   @Override
-  public <T> T executeBean(T bean) throws CpoException {
+  public <T, C> Stream<T> retrieveBeans(CpoQuery query, C criteria, T result) throws CpoException {
     return apply(
         (cpo) -> {
           try {
-            return cpo.executeBean(bean);
-          } catch (CpoException e) {
-            throw new RuntimeException(e);
-          }
-        });
-  }
-
-  @Override
-  public <T> T executeBean(String groupName, T bean) throws CpoException {
-    return apply(
-        (cpo) -> {
-          try {
-            return cpo.executeBean(groupName, bean);
-          } catch (CpoException e) {
-            throw new RuntimeException(e);
-          }
-        });
-  }
-
-  @Override
-  public <T, C> T executeBean(String groupName, C criteria, T result) throws CpoException {
-    return apply(
-        (cpo) -> {
-          try {
-            return cpo.executeBean(groupName, criteria, result);
-          } catch (CpoException e) {
-            throw new RuntimeException(e);
-          }
-        });
-  }
-
-  @Override
-  public <T> long existsBean(T bean) throws CpoException {
-    return apply(
-        (cpo) -> {
-          try {
-            return cpo.existsBean(bean);
-          } catch (CpoException e) {
-            throw new RuntimeException(e);
-          }
-        });
-  }
-
-  @Override
-  public <T> long existsBean(String groupName, T bean) throws CpoException {
-    return apply(
-        (cpo) -> {
-          try {
-            return cpo.existsBean(groupName, bean);
-          } catch (CpoException e) {
-            throw new RuntimeException(e);
-          }
-        });
-  }
-
-  @Override
-  public <T> long existsBean(String groupName, T bean, Collection<CpoWhere> wheres)
-      throws CpoException {
-    return apply(
-        (cpo) -> {
-          try {
-            return cpo.existsBean(groupName, bean, wheres);
+            return cpo.retrieveBeans(query, criteria, result);
           } catch (CpoException e) {
             throw new RuntimeException(e);
           }
@@ -450,336 +367,6 @@ public class JdbcCpoXaAdapter extends CpoBaseXaResource<JdbcCpoAdapter> implemen
   public <T> CpoWhere newWhere(Logical logical, String attr, Comparison comp, T value, boolean not)
       throws CpoException {
     return apply((cpo) -> cpo.newWhere(logical, attr, comp, value, not));
-  }
-
-  @Override
-  public <T> long upsertBean(T bean) throws CpoException {
-    return apply(
-        (cpo) -> {
-          try {
-            return cpo.upsertBean(bean);
-          } catch (CpoException e) {
-            throw new RuntimeException(e);
-          }
-        });
-  }
-
-  @Override
-  public <T> long upsertBean(String groupName, T bean) throws CpoException {
-    return apply(
-        (cpo) -> {
-          try {
-            return cpo.upsertBean(groupName, bean);
-          } catch (CpoException e) {
-            throw new RuntimeException(e);
-          }
-        });
-  }
-
-  @Override
-  public <T> long upsertBeans(List<T> beans) throws CpoException {
-    return apply(
-        (cpo) -> {
-          try {
-            return cpo.upsertBeans(beans);
-          } catch (CpoException e) {
-            throw new RuntimeException(e);
-          }
-        });
-  }
-
-  @Override
-  public <T> long upsertBeans(String groupName, List<T> beans) throws CpoException {
-    return apply(
-        (cpo) -> {
-          try {
-            return cpo.upsertBeans(groupName, beans);
-          } catch (CpoException e) {
-            throw new RuntimeException(e);
-          }
-        });
-  }
-
-  @Override
-  public <T> T retrieveBean(T bean) throws CpoException {
-    return apply(
-        (cpo) -> {
-          try {
-            return cpo.retrieveBean(bean);
-          } catch (CpoException e) {
-            throw new RuntimeException(e);
-          }
-        });
-  }
-
-  @Override
-  public <T> T retrieveBean(String groupName, T bean) throws CpoException {
-    return apply(
-        (cpo) -> {
-          try {
-            return cpo.retrieveBean(groupName, bean);
-          } catch (CpoException e) {
-            throw new RuntimeException(e);
-          }
-        });
-  }
-
-  @Override
-  public <T> T retrieveBean(
-      String groupName,
-      T bean,
-      Collection<CpoWhere> wheres,
-      Collection<CpoOrderBy> orderBy,
-      Collection<CpoNativeFunction> nativeExpressions)
-      throws CpoException {
-    return apply(
-        (cpo) -> {
-          try {
-            return cpo.retrieveBean(groupName, bean, wheres, orderBy, nativeExpressions);
-          } catch (CpoException e) {
-            throw new RuntimeException(e);
-          }
-        });
-  }
-
-  @Override
-  public <T, C> T retrieveBean(
-      String groupName,
-      C criteria,
-      T result,
-      Collection<CpoWhere> wheres,
-      Collection<CpoOrderBy> orderBy)
-      throws CpoException {
-    return apply(
-        (cpo) -> {
-          try {
-            return cpo.retrieveBean(groupName, criteria, result, wheres, orderBy);
-          } catch (CpoException e) {
-            throw new RuntimeException(e);
-          }
-        });
-  }
-
-  @Override
-  public <T, C> T retrieveBean(
-      String groupName,
-      C criteria,
-      T result,
-      Collection<CpoWhere> wheres,
-      Collection<CpoOrderBy> orderBy,
-      Collection<CpoNativeFunction> nativeExpressions)
-      throws CpoException {
-    return apply(
-        (cpo) -> {
-          try {
-            return cpo.retrieveBean(
-                groupName, criteria, result, wheres, orderBy, nativeExpressions);
-          } catch (CpoException e) {
-            throw new RuntimeException(e);
-          }
-        });
-  }
-
-  @Override
-  public <C> Stream<C> retrieveBeans(String groupName, C criteria) throws CpoException {
-    return apply(
-        (cpo) -> {
-          try {
-            return cpo.retrieveBeans(groupName, criteria);
-          } catch (CpoException e) {
-            throw new RuntimeException(e);
-          }
-        });
-  }
-
-  @Override
-  public <C> Stream<C> retrieveBeans(
-      String groupName, C criteria, CpoWhere where, Collection<CpoOrderBy> orderBy)
-      throws CpoException {
-    return apply(
-        (cpo) -> {
-          try {
-            return cpo.retrieveBeans(groupName, criteria, where, orderBy);
-          } catch (CpoException e) {
-            throw new RuntimeException(e);
-          }
-        });
-  }
-
-  @Override
-  public <C> Stream<C> retrieveBeans(String groupName, C criteria, Collection<CpoOrderBy> orderBy)
-      throws CpoException {
-    return apply(
-        (cpo) -> {
-          try {
-            return cpo.retrieveBeans(groupName, criteria, orderBy);
-          } catch (CpoException e) {
-            throw new RuntimeException(e);
-          }
-        });
-  }
-
-  @Override
-  public <C> Stream<C> retrieveBeans(
-      String groupName, C criteria, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy)
-      throws CpoException {
-    return apply(
-        (cpo) -> {
-          try {
-            return cpo.retrieveBeans(groupName, criteria, wheres, orderBy);
-          } catch (CpoException e) {
-            throw new RuntimeException(e);
-          }
-        });
-  }
-
-  @Override
-  public <T, C> Stream<T> retrieveBeans(String groupName, C criteria, T result)
-      throws CpoException {
-    return apply(
-        (cpo) -> {
-          try {
-            return cpo.retrieveBeans(groupName, criteria, result);
-          } catch (CpoException e) {
-            throw new RuntimeException(e);
-          }
-        });
-  }
-
-  @Override
-  public <T, C> Stream<T> retrieveBeans(
-      String groupName, C criteria, T result, CpoWhere where, Collection<CpoOrderBy> orderBy)
-      throws CpoException {
-    return apply(
-        (cpo) -> {
-          try {
-            return cpo.retrieveBeans(groupName, criteria, result, where, orderBy);
-          } catch (CpoException e) {
-            throw new RuntimeException(e);
-          }
-        });
-  }
-
-  @Override
-  public <T, C> Stream<T> retrieveBeans(
-      String groupName,
-      C criteria,
-      T result,
-      Collection<CpoWhere> wheres,
-      Collection<CpoOrderBy> orderBy)
-      throws CpoException {
-    return apply(
-        (cpo) -> {
-          try {
-            return cpo.retrieveBeans(groupName, criteria, result, wheres, orderBy);
-          } catch (CpoException e) {
-            throw new RuntimeException(e);
-          }
-        });
-  }
-
-  @Override
-  public <T, C> Stream<T> retrieveBeans(
-      String groupName,
-      C criteria,
-      T result,
-      Collection<CpoWhere> wheres,
-      Collection<CpoOrderBy> orderBy,
-      Collection<CpoNativeFunction> nativeExpressions)
-      throws CpoException {
-    return apply(
-        (cpo) -> {
-          try {
-            return cpo.retrieveBeans(
-                groupName, criteria, result, wheres, orderBy, nativeExpressions);
-          } catch (CpoException e) {
-            throw new RuntimeException(e);
-          }
-        });
-  }
-
-  @Override
-  public <T> long updateBean(T bean) throws CpoException {
-    return apply(
-        (cpo) -> {
-          try {
-            return cpo.updateBean(bean);
-          } catch (CpoException e) {
-            throw new RuntimeException(e);
-          }
-        });
-  }
-
-  @Override
-  public <T> long updateBean(String groupName, T bean) throws CpoException {
-    return apply(
-        (cpo) -> {
-          try {
-            return cpo.updateBean(groupName, bean);
-          } catch (CpoException e) {
-            throw new RuntimeException(e);
-          }
-        });
-  }
-
-  @Override
-  public <T> long updateBean(
-      String groupName,
-      T bean,
-      Collection<CpoWhere> wheres,
-      Collection<CpoOrderBy> orderBy,
-      Collection<CpoNativeFunction> nativeExpressions)
-      throws CpoException {
-    return apply(
-        (cpo) -> {
-          try {
-            return cpo.updateBean(groupName, bean, wheres, orderBy, nativeExpressions);
-          } catch (CpoException e) {
-            throw new RuntimeException(e);
-          }
-        });
-  }
-
-  @Override
-  public <T> long updateBeans(List<T> beans) throws CpoException {
-    return apply(
-        (cpo) -> {
-          try {
-            return cpo.updateBeans(beans);
-          } catch (CpoException e) {
-            throw new RuntimeException(e);
-          }
-        });
-  }
-
-  @Override
-  public <T> long updateBeans(String groupName, List<T> beans) throws CpoException {
-    return apply(
-        (cpo) -> {
-          try {
-            return cpo.updateBeans(groupName, beans);
-          } catch (CpoException e) {
-            throw new RuntimeException(e);
-          }
-        });
-  }
-
-  @Override
-  public <T> long updateBeans(
-      String groupName,
-      List<T> beans,
-      Collection<CpoWhere> wheres,
-      Collection<CpoOrderBy> orderBy,
-      Collection<CpoNativeFunction> nativeExpressions)
-      throws CpoException {
-    return apply(
-        (cpo) -> {
-          try {
-            return cpo.updateBeans(groupName, beans, wheres, orderBy, nativeExpressions);
-          } catch (CpoException e) {
-            throw new RuntimeException(e);
-          }
-        });
   }
 
   @Override

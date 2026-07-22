@@ -29,6 +29,7 @@ import java.util.Collection;
 import java.util.stream.Stream;
 import org.synchronoss.cpo.core.CpoAdapter;
 import org.synchronoss.cpo.core.CpoAdapterFactoryManager;
+import org.synchronoss.cpo.core.CpoQuery;
 import org.synchronoss.cpo.core.CpoWhere;
 import org.synchronoss.cpo.core.enums.Comparison;
 import org.synchronoss.cpo.core.enums.Logical;
@@ -107,7 +108,8 @@ public class WhereTest {
       ArrayList<CpoWhere> wheres = new ArrayList<>();
       wheres.add(cw);
       try (Stream<ValueObject> beans =
-          cpoAdapter.retrieveBeans(ValueObject.FG_LIST_TESTWHERERETRIEVE, valObj, wheres, null)) {
+          cpoAdapter.retrieveBeans(
+              CpoQuery.group(ValueObject.FG_LIST_TESTWHERERETRIEVE).wheres(wheres), valObj)) {
         long count =
             beans
                 .filter(b -> Math.abs(b.getId()) >= IDB && Math.abs(b.getId()) < IDB + 100000)
@@ -132,7 +134,8 @@ public class WhereTest {
       ArrayList<CpoWhere> wheres = new ArrayList<>();
       wheres.add(cw);
       try (Stream<ValueObject> beans =
-          cpoAdapter.retrieveBeans(ValueObject.FG_LIST_TESTWHERERETRIEVE, valObj, wheres, null)) {
+          cpoAdapter.retrieveBeans(
+              CpoQuery.group(ValueObject.FG_LIST_TESTWHERERETRIEVE).wheres(wheres), valObj)) {
         long count =
             beans
                 .filter(b -> Math.abs(b.getId()) >= IDB && Math.abs(b.getId()) < IDB + 100000)
@@ -157,7 +160,8 @@ public class WhereTest {
       ArrayList<CpoWhere> wheres = new ArrayList<>();
       wheres.add(cw);
       try (Stream<ValueObject> beans =
-          cpoAdapter.retrieveBeans(ValueObject.FG_RETRIEVE_NULL, valObj, wheres, null)) {
+          cpoAdapter.retrieveBeans(
+              CpoQuery.group(ValueObject.FG_RETRIEVE_NULL).wheres(wheres), valObj)) {
         long count =
             beans
                 .filter(b -> Math.abs(b.getId()) >= IDB && Math.abs(b.getId()) < IDB + 100000)
@@ -209,7 +213,8 @@ public class WhereTest {
       ArrayList<CpoWhere> wheres = new ArrayList<>();
       wheres.add(cw);
       try (Stream<ValueObject> beans =
-          cpoAdapter.retrieveBeans(ValueObject.FG_LIST_TESTWHERERETRIEVE, valObj, wheres, null)) {
+          cpoAdapter.retrieveBeans(
+              CpoQuery.group(ValueObject.FG_LIST_TESTWHERERETRIEVE).wheres(wheres), valObj)) {
         long count =
             beans
                 .filter(b -> Math.abs(b.getId()) >= IDB && Math.abs(b.getId()) < IDB + 100000)
@@ -239,7 +244,8 @@ public class WhereTest {
       ArrayList<CpoWhere> wheres = new ArrayList<>();
       wheres.add(cw);
       try (Stream<ValueObject> beans =
-          cpoAdapter.retrieveBeans(ValueObject.FG_LIST_TESTWHERERETRIEVE, valObj, wheres, null)) {
+          cpoAdapter.retrieveBeans(
+              CpoQuery.group(ValueObject.FG_LIST_TESTWHERERETRIEVE).wheres(wheres), valObj)) {
         long count =
             beans
                 .filter(b -> Math.abs(b.getId()) >= IDB && Math.abs(b.getId()) < IDB + 100000)
@@ -266,7 +272,8 @@ public class WhereTest {
       ArrayList<CpoWhere> wheres = new ArrayList<>();
       wheres.add(cw);
       try (Stream<ValueObject> beans =
-          cpoAdapter.retrieveBeans(ValueObject.FG_LIST_TESTWHERERETRIEVE, valObj, wheres, null)) {
+          cpoAdapter.retrieveBeans(
+              CpoQuery.group(ValueObject.FG_LIST_TESTWHERERETRIEVE).wheres(wheres), valObj)) {
         long count =
             beans
                 .filter(b -> Math.abs(b.getId()) >= IDB && Math.abs(b.getId()) < IDB + 100000)
@@ -294,7 +301,8 @@ public class WhereTest {
       ArrayList<CpoWhere> wheres = new ArrayList<>();
       wheres.add(cw);
       try (Stream<ValueObject> beans =
-          cpoAdapter.retrieveBeans(ValueObject.FG_LIST_TESTWHERERETRIEVE, valObj, wheres, null)) {
+          cpoAdapter.retrieveBeans(
+              CpoQuery.group(ValueObject.FG_LIST_TESTWHERERETRIEVE).wheres(wheres), valObj)) {
         long count =
             beans
                 .filter(b -> Math.abs(b.getId()) >= IDB && Math.abs(b.getId()) < IDB + 100000)
@@ -325,7 +333,8 @@ public class WhereTest {
       ArrayList<CpoWhere> wheres = new ArrayList<>();
       wheres.add(cw);
       try (Stream<ValueObject> beans =
-          cpoAdapter.retrieveBeans(ValueObject.FG_LIST_TESTWHERERETRIEVE, valObj, wheres, null)) {
+          cpoAdapter.retrieveBeans(
+              CpoQuery.group(ValueObject.FG_LIST_TESTWHERERETRIEVE).wheres(wheres), valObj)) {
         long count =
             beans
                 .filter(b -> Math.abs(b.getId()) >= IDB && Math.abs(b.getId()) < IDB + 100000)
@@ -356,7 +365,8 @@ public class WhereTest {
       ArrayList<CpoWhere> wheres = new ArrayList<>();
       wheres.add(cw);
       try (Stream<ValueObject> beans =
-          cpoAdapter.retrieveBeans(ValueObject.FG_LIST_TESTWHERERETRIEVE, valObj, wheres, null)) {
+          cpoAdapter.retrieveBeans(
+              CpoQuery.group(ValueObject.FG_LIST_TESTWHERERETRIEVE).wheres(wheres), valObj)) {
         long count =
             beans
                 .filter(b -> Math.abs(b.getId()) >= IDB && Math.abs(b.getId()) < IDB + 100000)

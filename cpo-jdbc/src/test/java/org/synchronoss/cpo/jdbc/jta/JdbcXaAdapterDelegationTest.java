@@ -36,8 +36,8 @@ import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.core.CpoAdapter;
 import org.synchronoss.cpo.core.CpoAdapterFactoryManager;
 import org.synchronoss.cpo.core.CpoException;
-import org.synchronoss.cpo.core.CpoNativeFunction;
 import org.synchronoss.cpo.core.CpoOrderBy;
+import org.synchronoss.cpo.core.CpoQuery;
 import org.synchronoss.cpo.core.CpoWhere;
 import org.synchronoss.cpo.core.enums.Comparison;
 import org.synchronoss.cpo.core.enums.Logical;
@@ -124,7 +124,7 @@ public class JdbcXaAdapterDelegationTest {
     try {
       assertEquals(cpoXaAdapter.insertBean(vo1), 1);
       assertEquals(cpoXaAdapter.insertBean(ValueObject.FG_CREATE_NULL, vo2), 1);
-      assertEquals(cpoXaAdapter.insertBean(ValueObject.FG_CREATE_NULL, vo3, null, null, null), 1);
+      assertEquals(cpoXaAdapter.insertBean(CpoQuery.group(ValueObject.FG_CREATE_NULL), vo3), 1);
 
       List<ValueObject> beans1 = new ArrayList<>();
       beans1.add(vo4);
@@ -137,8 +137,7 @@ public class JdbcXaAdapterDelegationTest {
       List<ValueObject> beans3 = new ArrayList<>();
       beans3.add(vo6);
       beans3.add(vo7);
-      assertEquals(
-          cpoXaAdapter.insertBeans(ValueObject.FG_CREATE_NULL, beans3, null, null, null), 2);
+      assertEquals(cpoXaAdapter.insertBeans(CpoQuery.group(ValueObject.FG_CREATE_NULL), beans3), 2);
 
       assertEquals(cpoXaAdapter.existsBean(vo1), 1);
       assertEquals(cpoXaAdapter.existsBean(ValueObject.FG_EXIST_NULL, vo2), 1);
@@ -146,7 +145,9 @@ public class JdbcXaAdapterDelegationTest {
       // the EXIST expression already has a WHERE clause, so extra wheres must use Logical.AND
       Collection<CpoWhere> wheres = new ArrayList<>();
       wheres.add(cpoXaAdapter.newWhere(Logical.AND, ValueObject.ATTR_ID, Comparison.EQ, IDB + 3));
-      assertEquals(cpoXaAdapter.existsBean(ValueObject.FG_EXIST_NULL, vo3, wheres), 1);
+      assertEquals(
+          cpoXaAdapter.existsBean(CpoQuery.group(ValueObject.FG_EXIST_NULL).wheres(wheres), vo3),
+          1);
     } catch (Exception e) {
       fail(method + ExceptionHelper.getLocalizedMessage(e));
     }
@@ -185,31 +186,16 @@ public class JdbcXaAdapterDelegationTest {
 
       rvo =
           cpoXaAdapter.retrieveBean(
-              ValueObject.FG_RETRIEVE_NULL,
-              ValueObjectFactory.createValueObject(IDB + 1),
-              (Collection<CpoWhere>) null,
-              (Collection<CpoOrderBy>) null,
-              (Collection<CpoNativeFunction>) null);
-      assertNotNull(rvo, method + "retrieveBean(group, bean, wheres, orderBy, native) is null");
+              CpoQuery.group(ValueObject.FG_RETRIEVE_NULL),
+              ValueObjectFactory.createValueObject(IDB + 1));
+      assertNotNull(rvo, method + "retrieveBean(query, bean) is null");
 
       rvo =
           cpoXaAdapter.retrieveBean(
-              ValueObject.FG_RETRIEVE_NULL,
+              CpoQuery.group(ValueObject.FG_RETRIEVE_NULL),
               ValueObjectFactory.createValueObject(IDB + 1),
-              ValueObjectFactory.createValueObject(),
-              null,
-              null);
-      assertNotNull(rvo, method + "retrieveBean(group, criteria, result, wheres, orderBy) is null");
-
-      rvo =
-          cpoXaAdapter.retrieveBean(
-              ValueObject.FG_RETRIEVE_NULL,
-              ValueObjectFactory.createValueObject(IDB + 1),
-              ValueObjectFactory.createValueObject(),
-              null,
-              null,
-              null);
-      assertNotNull(rvo, method + "retrieveBean 6-arg criteria overload is null");
+              ValueObjectFactory.createValueObject());
+      assertNotNull(rvo, method + "retrieveBean(query, criteria, result) is null");
 
       // retrieveBeans overloads
       try (Stream<ValueObject> s = cpoXaAdapter.retrieveBeans(ValueObject.FG_LIST_NULL, criteria)) {
@@ -218,19 +204,23 @@ public class JdbcXaAdapterDelegationTest {
             2);
       }
       try (Stream<ValueObject> s =
-          cpoXaAdapter.retrieveBeans(ValueObject.FG_LIST_NULL, criteria, where, orderBy)) {
+          cpoXaAdapter.retrieveBeans(
+              CpoQuery.group(ValueObject.FG_LIST_NULL).where(where).orderBys(orderBy), criteria)) {
         assertEquals(
             s.filter(b -> Math.abs(b.getId()) >= IDB && Math.abs(b.getId()) < IDB + 100000).count(),
             2);
       }
       try (Stream<ValueObject> s =
-          cpoXaAdapter.retrieveBeans(ValueObject.FG_LIST_NULL, criteria, orderBy)) {
+          cpoXaAdapter.retrieveBeans(
+              CpoQuery.group(ValueObject.FG_LIST_NULL).orderBys(orderBy), criteria)) {
         assertEquals(
             s.filter(b -> Math.abs(b.getId()) >= IDB && Math.abs(b.getId()) < IDB + 100000).count(),
             2);
       }
       try (Stream<ValueObject> s =
-          cpoXaAdapter.retrieveBeans(ValueObject.FG_LIST_NULL, criteria, wheres, orderBy)) {
+          cpoXaAdapter.retrieveBeans(
+              CpoQuery.group(ValueObject.FG_LIST_NULL).wheres(wheres).orderBys(orderBy),
+              criteria)) {
         assertEquals(
             s.filter(b -> Math.abs(b.getId()) >= IDB && Math.abs(b.getId()) < IDB + 100000).count(),
             2);
@@ -244,34 +234,18 @@ public class JdbcXaAdapterDelegationTest {
       }
       try (Stream<ValueObject> s =
           cpoXaAdapter.retrieveBeans(
-              ValueObject.FG_LIST_NULL,
+              CpoQuery.group(ValueObject.FG_LIST_NULL).where(where).orderBys(orderBy),
               criteria,
-              ValueObjectFactory.createValueObject(),
-              where,
-              orderBy)) {
+              ValueObjectFactory.createValueObject())) {
         assertEquals(
             s.filter(b -> Math.abs(b.getId()) >= IDB && Math.abs(b.getId()) < IDB + 100000).count(),
             2);
       }
       try (Stream<ValueObject> s =
           cpoXaAdapter.retrieveBeans(
-              ValueObject.FG_LIST_NULL,
+              CpoQuery.group(ValueObject.FG_LIST_NULL).wheres(wheres).orderBys(orderBy),
               criteria,
-              ValueObjectFactory.createValueObject(),
-              wheres,
-              orderBy)) {
-        assertEquals(
-            s.filter(b -> Math.abs(b.getId()) >= IDB && Math.abs(b.getId()) < IDB + 100000).count(),
-            2);
-      }
-      try (Stream<ValueObject> s =
-          cpoXaAdapter.retrieveBeans(
-              ValueObject.FG_LIST_NULL,
-              criteria,
-              ValueObjectFactory.createValueObject(),
-              wheres,
-              orderBy,
-              null)) {
+              ValueObjectFactory.createValueObject())) {
         assertEquals(
             s.filter(b -> Math.abs(b.getId()) >= IDB && Math.abs(b.getId()) < IDB + 100000).count(),
             2);
@@ -309,7 +283,9 @@ public class JdbcXaAdapterDelegationTest {
       updWheres.add(
           cpoXaAdapter.newWhere(Logical.NONE, ValueObject.ATTR_ID, Comparison.EQ, IDB + 1));
       assertEquals(
-          cpoXaAdapter.updateBean(ValueObject.FG_UPDATE_NULL, vo1, updWheres, null, null), 1);
+          cpoXaAdapter.updateBean(
+              CpoQuery.group(ValueObject.FG_UPDATE_NULL).wheres(updWheres), vo1),
+          1);
 
       List<ValueObject> updBeans = new ArrayList<>();
       updBeans.add(vo1);
@@ -317,7 +293,8 @@ public class JdbcXaAdapterDelegationTest {
       updWheres2.add(
           cpoXaAdapter.newWhere(Logical.NONE, ValueObject.ATTR_ID, Comparison.EQ, IDB + 1));
       assertEquals(
-          cpoXaAdapter.updateBeans(ValueObject.FG_UPDATE_NULL, updBeans, updWheres2, null, null),
+          cpoXaAdapter.updateBeans(
+              CpoQuery.group(ValueObject.FG_UPDATE_NULL).wheres(updWheres2), updBeans),
           1);
 
       // delete overloads
@@ -327,7 +304,7 @@ public class JdbcXaAdapterDelegationTest {
       assertEquals(cpoXaAdapter.deleteBean(ValueObject.FG_DELETE_NULL, vo2), 1);
 
       assertEquals(cpoXaAdapter.insertBean(vo3), 1);
-      assertEquals(cpoXaAdapter.deleteBean(ValueObject.FG_DELETE_NULL, vo3, null, null, null), 1);
+      assertEquals(cpoXaAdapter.deleteBean(CpoQuery.group(ValueObject.FG_DELETE_NULL), vo3), 1);
 
       assertEquals(cpoXaAdapter.insertBean(vo4), 1);
       List<ValueObject> delBeans1 = new ArrayList<>();
@@ -343,7 +320,7 @@ public class JdbcXaAdapterDelegationTest {
       List<ValueObject> delBeans3 = new ArrayList<>();
       delBeans3.add(vo6);
       assertEquals(
-          cpoXaAdapter.deleteBeans(ValueObject.FG_DELETE_NULL, delBeans3, null, null, null), 1);
+          cpoXaAdapter.deleteBeans(CpoQuery.group(ValueObject.FG_DELETE_NULL), delBeans3), 1);
     } catch (Exception e) {
       fail(method + ExceptionHelper.getLocalizedMessage(e));
     }
@@ -407,7 +384,9 @@ public class JdbcXaAdapterDelegationTest {
 
         vo = ValueObjectFactory.createValueObject(IDB + 1);
         vo.setAttrInteger(3);
-        rvo = cpoXaAdapter.executeBean(ValueObject.FG_EXECUTE_TESTEXECUTEOBJECT, vo, vo);
+        rvo =
+            cpoXaAdapter.executeBean(
+                CpoQuery.group(ValueObject.FG_EXECUTE_TESTEXECUTEOBJECT), vo, vo);
         assertNotNull(rvo, method + "Returned Value object is null");
         assertEquals(rvo.getAttrDouble(), 27, "power(3,3)=" + rvo.getAttrDouble());
       } catch (Exception e) {

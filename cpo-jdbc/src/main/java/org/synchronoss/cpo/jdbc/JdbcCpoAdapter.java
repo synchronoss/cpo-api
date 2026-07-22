@@ -220,15 +220,14 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
   }
 
   @Override
-  public <T> long existsBean(String groupName, T bean, Collection<CpoWhere> wheres)
-      throws CpoException {
+  public <T> long existsBean(CpoQuery query, T bean) throws CpoException {
     Connection c = null;
     long objCount = -1;
 
     try {
       c = getReadConnection();
 
-      objCount = existsBean(groupName, bean, c, wheres);
+      objCount = existsBean(query.getGroupName(), bean, c, query.getWheres());
     } finally {
       // The read connection runs with autocommit off (required for cursor-based fetch), so
       // this read-only transaction must still be terminated before the connection returns

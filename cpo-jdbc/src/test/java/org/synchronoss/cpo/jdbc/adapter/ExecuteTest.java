@@ -28,6 +28,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.core.CpoAdapter;
 import org.synchronoss.cpo.core.CpoAdapterFactoryManager;
+import org.synchronoss.cpo.core.CpoQuery;
 import org.synchronoss.cpo.core.helper.ExceptionHelper;
 import org.synchronoss.cpo.jdbc.ValueObject;
 import org.testng.annotations.AfterClass;
@@ -118,7 +119,9 @@ public class ExecuteTest {
       ValueObject rvo;
 
       try {
-        rvo = cpoAdapter.executeBean(ValueObject.FG_EXECUTE_TESTEXECUTEOBJECT, vo, vo);
+        rvo =
+            cpoAdapter.executeBean(
+                CpoQuery.group(ValueObject.FG_EXECUTE_TESTEXECUTEOBJECT), vo, vo);
         assertNotNull(method + "Returned Value object is null");
         assertEquals(rvo.getAttrDouble(), 27, "power(3,3)=" + rvo.getAttrDouble());
       } catch (Exception e) {

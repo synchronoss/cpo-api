@@ -32,6 +32,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.core.CpoAdapter;
 import org.synchronoss.cpo.core.CpoAdapterFactoryManager;
+import org.synchronoss.cpo.core.CpoQuery;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
@@ -143,7 +144,7 @@ public class RetrieveBeanTest {
       var oldSize = cpoAdapter.getFetchSize();
       cpoAdapter.setFetchSize(fetchSize);
       try (Stream<ValueObject> beans =
-          cpoAdapter.retrieveBeans(ValueObject.FG_LIST_NULL, valObj, valObj, null, null, null); ) {
+          cpoAdapter.retrieveBeans(CpoQuery.group(ValueObject.FG_LIST_NULL), valObj, valObj); ) {
         AtomicInteger count = new AtomicInteger();
         beans
             .filter(b -> Math.abs(b.getId()) >= IDB && Math.abs(b.getId()) < IDB + 100000)

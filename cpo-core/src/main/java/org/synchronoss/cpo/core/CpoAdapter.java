@@ -22,7 +22,6 @@ package org.synchronoss.cpo.core;
  * ]]
  */
 
-import java.util.Collection;
 import java.util.List;
 import java.util.stream.Stream;
 import org.synchronoss.cpo.core.enums.Comparison;
@@ -35,1686 +34,643 @@ import org.synchronoss.cpo.core.meta.domain.CpoAttribute;
  * Updating, and Deleting (CRUD) value beans within a datasource.
  *
  * <p>CpoAdapter is an interface that acts as a common facade for different datasources. It is
- * conceivable that an CpoAdapter can be implemented for JDBC, CSV, XML, LDAP, and more datasources
- * producing classes such as JdbcCpoAdapter, CsvCpoAdapter, XmlCpoAdapter, LdapCpoAdapter, etc.
+ * conceivable that an CpoAdapter can be implemented for JDBC, CSV, XML, LDAP, and more datasources.
+ *
+ * <p>Every operation exists in a canonical form taking a {@link CpoQuery} — which carries the
+ * function group name and any run-time where constraints, orderings, and native expressions — plus
+ * convenience forms for the common no-clause cases. Example:
+ *
+ * <pre>{@code
+ * CpoWhere where = adapter.newWhere(Logical.NONE, "id", Comparison.EQ, 42);
+ * try (Stream<SomeBean> beans =
+ *     adapter.retrieveBeans(CpoQuery.group("byId").where(where), criteria)) {
+ *   beans.forEach(...);
+ * }
+ * }</pre>
  *
  * @author david berry
  */
 public interface CpoAdapter extends java.io.Serializable {
 
+  // ==================================== INSERT ====================================
+
   /**
-   * Creates the bean in the datasource. The assumption is that the bean does not exist in the
-   * datasource. This method creates and stores the bean in the datasource.
-   *
-   * <pre>Example:
-   * {@code
-   * class SomeBean so = new SomeBean();
-   * class CpoAdapter cpo = null;
-   *  try {
-   *    cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));
-   *  } catch (CpoException ce) {
-   *    // Handle the error
-   *    cpo = null;
-   *  }
-   *  if (cpo!=null) {
-   *    so.setId(1);
-   *    so.setName("SomeName");
-   *    try{
-   *      cpo.insertBean(so);
-   *    } catch (CpoException ce) {
-   *      // Handle the error
-   *    }
-   *  }
-   * }
-   * </pre>
+   * Creates the bean in the datasource using the query's CREATE function group. The assumption is
+   * that the bean does not exist in the datasource.
    *
    * @param <T> The type of the JavaBean
-   * @param bean This is a bean that has been defined within the metadata of the datasource. If the
-   *     class is not defined an exception will be thrown.
+   * @param query The function group and clauses to apply
+   * @param bean A bean defined within the metadata of the datasource
    * @return The number of beans created in the datasource
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
-  <T> long insertBean(T bean) throws CpoException;
+  <T> long insertBean(CpoQuery query, T bean) throws CpoException;
 
   /**
-   * Creates the bean in the datasource. The assumption is that the bean does not exist in the
-   * datasource. This method creates and stores the bean in the datasource
-   *
-   * <pre>Example:
-   * {@code
-   *
-   * class SomeBean so = new SomeBean();
-   * class CpoAdapter cpo = null;
-   *
-   *  try {
-   *    cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));
-   *  } catch (CpoException ce) {
-   *    // Handle the error
-   *    cpo = null;
-   *  }
-   *  if (cpo!=null) {
-   *    so.setId(1);
-   *    so.setName("SomeName");
-   *    try{
-   *      cpo.insertBean("IDNameInsert",so);
-   *    } catch (CpoException ce) {
-   *      // Handle the error
-   *    }
-   *  }
-   *
-   * }
-   * </pre>
+   * Creates the beans in the datasource using the query's CREATE function group, batching where the
+   * datasource supports it. This is an all-or-nothing transaction: if one bean fails, no beans are
+   * created.
    *
    * @param <T> The type of the JavaBean
-   * @param groupName The String groupName of the CREATE Function Group that will be used to create
-   *     the bean in the datasource. null signifies that the default rules will be used which is
-   *     equivalent to insertBean(Bea bean);
-   * @param bean This is a bean that has been defined within the metadata of the datasource. If the
-   *     class is not defined an exception will be thrown.
+   * @param query The function group and clauses to apply
+   * @param beans The beans to create
    * @return The number of beans created in the datasource
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
-  <T> long insertBean(String groupName, T bean) throws CpoException;
+  <T> long insertBeans(CpoQuery query, List<T> beans) throws CpoException;
 
   /**
-   * Creates the bean in the datasource. The assumption is that the bean does not exist in the
-   * datasource. This method creates and stores the bean in the datasource
-   *
-   * <pre>Example:
-   * {@code
-   * class SomeBean so = new SomeBean();
-   * class CpoAdapter cpo = null;
-   *
-   * try {
-   * 	cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));
-   * } catch (CpoException ce) {
-   * 	// Handle the error
-   * 	cpo = null;
-   * }
-   *
-   * if (cpo!=null) {
-   * 	so.setId(1);
-   * 	so.setName("SomeName");
-   * 	try{
-   * 		cpo.insertBean("IDNameInsert",so);
-   *  } catch (CpoException ce) {
-   * 		// Handle the error
-   *  }
-   * }
-   * }
-   * </pre>
+   * Creates the bean in the datasource using the default CREATE function group.
    *
    * @param <T> The type of the JavaBean
-   * @param groupName The String groupName of the CREATE Function Group that will be used to create
-   *     the bean in the datasource. null signifies that the default rules will be used which is
-   *     equivalent to insertBean(Bea bean);
-   * @param bean This is a bean that has been defined within the metadata of the datasource. If the
-   *     class is not defined an exception will be thrown.
-   * @param wheres A collection of CpoWhere beans that define the constraints that should be used
-   *     when retrieving beans
-   * @param orderBy The CpoOrderBy bean that defines the order in which beans should be returned
-   * @param nativeExpressions Native expression that will be used to augment the expression stored
-   *     in the metadata. This text will be embedded at run-time
+   * @param bean A bean defined within the metadata of the datasource
    * @return The number of beans created in the datasource
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
-  <T> long insertBean(
-      String groupName,
-      T bean,
-      Collection<CpoWhere> wheres,
-      Collection<CpoOrderBy> orderBy,
-      Collection<CpoNativeFunction> nativeExpressions)
-      throws CpoException;
+  default <T> long insertBean(T bean) throws CpoException {
+    return insertBean(CpoQuery.defaultGroup(), bean);
+  }
 
   /**
-   * Iterates through a collection of beans, creates and stores them in the datasource. The
-   * assumption is that the beans contained in the collection do not exist in the datasource.
-   *
-   * <p>This method creates and stores the beans in the datasource. The beans in the collection will
-   * be treated as one transaction, assuming the datasource supports transactions.
-   *
-   * <p>This means that if one of the beans fail being created in the datasource then the CpoAdapter
-   * will stop processing the remainder of the collection and rollback all the beans created thus
-   * far. Rollback is on the underlying datasource's support of rollback.
-   *
-   * <pre>Example:
-   * {@code
-   * class SomeBean so = null;
-   * class CpoAdapter cpo = null;
-   *  try {
-   *    cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));
-   *  } catch (CpoException ce) {
-   *    // Handle the error
-   *    cpo = null;
-   *  }
-   *
-   *  if (cpo!=null) {
-   *    ArrayList al = new ArrayList();
-   *    for (int i=0; i<3; i++){
-   *      so = new SomeBean();
-   *      so.setId(1);
-   *      so.setName("SomeName");
-   *      al.add(so);
-   *    }
-   *    try{
-   *      cpo.insertBeans(al);
-   *    } catch (CpoException ce) {
-   *      // Handle the error
-   *    }
-   *  }
-   * }
-   * </pre>
+   * Creates the bean in the datasource using the named CREATE function group.
    *
    * @param <T> The type of the JavaBean
-   * @param beans This is a collection of beans that have been defined within the metadata of the
-   *     datasource. If the class is not defined an exception will be thrown.
+   * @param groupName The CREATE function group name; null signifies the default group
+   * @param bean A bean defined within the metadata of the datasource
    * @return The number of beans created in the datasource
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
-  <T> long insertBeans(List<T> beans) throws CpoException;
+  default <T> long insertBean(String groupName, T bean) throws CpoException {
+    return insertBean(CpoQuery.group(groupName), bean);
+  }
 
   /**
-   * Iterates through a collection of beans, creates and stores them in the datasource. The
-   * assumption is that the beans contained in the collection do not exist in the datasource.
-   *
-   * <p>This method creates and stores the beans in the datasource. The beans in the collection will
-   * be treated as one transaction, assuming the datasource supports transactions.
-   *
-   * <p>This means that if one of the beans fail being created in the datasource then the CpoAdapter
-   * should stop processing the remainder of the collection, and if supported, rollback all the
-   * beans created thus far.
-   *
-   * <pre>Example:
-   * {@code
-   * class SomeBean so = null;
-   * class CpoAdapter cpo = null;
-   *  try {
-   *    cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));
-   *  } catch (CpoException ce) {
-   *    // Handle the error
-   *    cpo = null;
-   *  }
-   *  if (cpo!=null) {
-   *    ArrayList al = new ArrayList();
-   *    for (int i=0; i<3; i++){
-   *      so = new SomeBean();
-   *      so.setId(1);
-   *      so.setName("SomeName");
-   *      al.add(so);
-   *    }
-   *    try{
-   *      cpo.insertBeans("IdNameInsert",al);
-   *    } catch (CpoException ce) {
-   *      // Handle the error
-   *    }
-   *  }
-   * }
-   * </pre>
+   * Creates the beans in the datasource using the default CREATE function group.
    *
    * @param <T> The type of the JavaBean
-   * @param groupName The String groupName of the CREATE Function Group that will be used to create
-   *     the bean in the datasource. null signifies that the default rules will be used.
-   * @param beans This is a collection of beans that have been defined within the metadata of the
-   *     datasource. If the class is not defined an exception will be thrown.
+   * @param beans The beans to create
    * @return The number of beans created in the datasource
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
-  <T> long insertBeans(String groupName, List<T> beans) throws CpoException;
+  default <T> long insertBeans(List<T> beans) throws CpoException {
+    return insertBeans(CpoQuery.defaultGroup(), beans);
+  }
 
   /**
-   * Iterates through a collection of beans, creates and stores them in the datasource. The
-   * assumption is that the beans contained in the collection do not exist in the datasource.
-   *
-   * <p>This method creates and stores the beans in the datasource. The beans in the collection will
-   * be treated as one transaction, assuming the datasource supports transactions.
-   *
-   * <p>This means that if one of the beans fail being created in the datasource then the CpoAdapter
-   * should stop processing the remainder of the collection, and if supported, rollback all the
-   * beans created thus far.
-   *
-   * <pre>Example:
-   * {@code
-   * class SomeBean so = null;
-   * class CpoAdapter cpo = null;
-   * try {
-   * 	cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));
-   * } catch (CpoException ce) {
-   * 	// Handle the error
-   * 	cpo = null;
-   * }
-   * if (cpo!=null) {
-   * 	ArrayList al = new ArrayList();
-   * 	for (int i=0; i<3; i++){
-   * 		so = new SomeBean();
-   * 		so.setId(1);
-   * 		so.setName("SomeName");
-   * 		al.add(so);
-   *  }
-   * 	try{
-   * 		cpo.insertBeans("IdNameInsert",al);
-   *  } catch (CpoException ce) {
-   * 		// Handle the error
-   *  }
-   * }
-   * }
-   * </pre>
+   * Creates the beans in the datasource using the named CREATE function group.
    *
    * @param <T> The type of the JavaBean
-   * @param groupName The String groupName of the CREATE Function Group that will be used to create
-   *     the bean in the datasource. null signifies that the default rules will be used.
-   * @param beans This is a collection of beans that have been defined within the metadata of the
-   *     datasource. If the class is not defined an exception will be thrown.
-   * @param wheres A collection of CpoWhere beans that define the constraints that should be used
-   *     when retrieving beans
-   * @param orderBy The CpoOrderBy bean that defines the order in which beans should be returned
-   * @param nativeExpressions Native expression that will be used to augment the expression stored
-   *     in the metadata. This text will be embedded at run-time
+   * @param groupName The CREATE function group name; null signifies the default group
+   * @param beans The beans to create
    * @return The number of beans created in the datasource
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
-  <T> long insertBeans(
-      String groupName,
-      List<T> beans,
-      Collection<CpoWhere> wheres,
-      Collection<CpoOrderBy> orderBy,
-      Collection<CpoNativeFunction> nativeExpressions)
-      throws CpoException;
+  default <T> long insertBeans(String groupName, List<T> beans) throws CpoException {
+    return insertBeans(CpoQuery.group(groupName), beans);
+  }
+
+  // ==================================== DELETE ====================================
 
   /**
-   * Removes the bean from the datasource. The assumption is that the bean exists in the datasource.
-   * This method stores the bean in the datasource
-   *
-   * <pre>Example:
-   * {@code
-   * class SomeBean so = new SomeBean();
-   * class CpoAdapter cpo = null;
-   *  try {
-   *    cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));
-   *  } catch (CpoException ce) {
-   *    // Handle the error
-   *    cpo = null;
-   *  }
-   *  if (cpo!=null) {
-   *    so.setId(1);
-   *    so.setName("SomeName");
-   *    try{
-   *      cpo.deleteBean(so);
-   *    } catch (CpoException ce) {
-   *      // Handle the error
-   *    }
-   *  }
-   * }
-   * </pre>
+   * Removes the bean from the datasource using the query's DELETE function group. The assumption is
+   * that the bean exists in the datasource.
    *
    * @param <T> The type of the JavaBean
-   * @param bean This is a bean that has been defined within the metadata of the datasource. If the
-   *     class is not defined an exception will be thrown. If the bean does not exist in the
-   *     datasource an exception will be thrown.
+   * @param query The function group and clauses to apply
+   * @param bean A bean defined within the metadata of the datasource
    * @return The number of beans deleted from the datasource
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
-  <T> long deleteBean(T bean) throws CpoException;
+  <T> long deleteBean(CpoQuery query, T bean) throws CpoException;
 
   /**
-   * Removes the bean from the datasource. The assumption is that the bean exists in the datasource.
-   * This method stores the bean in the datasource
-   *
-   * <pre>Example:
-   * {@code
-   * class SomeBean so = new SomeBean();
-   * class CpoAdapter cpo = null;
-   *  try {
-   *    cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));
-   *  } catch (CpoException ce) {
-   *    // Handle the error
-   *    cpo = null;
-   *  }
-   *  if (cpo!=null) {
-   *    so.setId(1);
-   *    so.setName("SomeName");
-   *    try{
-   *      cpo.deleteBean("DeleteById",so);
-   *    } catch (CpoException ce) {
-   *      // Handle the error
-   *    }
-   *  }
-   * }
-   * </pre>
+   * Removes the beans from the datasource using the query's DELETE function group, batching where
+   * the datasource supports it. This is an all-or-nothing transaction: if one bean fails, no beans
+   * are deleted.
    *
    * @param <T> The type of the JavaBean
-   * @param groupName The String groupName of the DELETE Function Group that will be used to create
-   *     the bean in the datasource. null signifies that the default rules will be used.
-   * @param bean This is a bean that has been defined within the metadata of the datasource. If the
-   *     class is not defined an exception will be thrown. If the bean does not exist in the
-   *     datasource an exception will be thrown.
+   * @param query The function group and clauses to apply
+   * @param beans The beans to delete
    * @return The number of beans deleted from the datasource
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
-  <T> long deleteBean(String groupName, T bean) throws CpoException;
+  <T> long deleteBeans(CpoQuery query, List<T> beans) throws CpoException;
 
   /**
-   * Removes the bean from the datasource. The assumption is that the bean exists in the datasource.
-   * This method stores the bean in the datasource
-   *
-   * <pre>Example:
-   * {@code
-   * class SomeBean so = new SomeBean();
-   * class CpoAdapter cpo = null;
-   * try {
-   * 	cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));
-   * } catch (CpoException ce) {
-   * 	// Handle the error
-   * 	cpo = null;
-   * }
-   * if (cpo!=null) {
-   * 	so.setId(1);
-   * 	so.setName("SomeName");
-   * 	try{
-   * 		cpo.deleteBean("DeleteById",so);
-   *  } catch (CpoException ce) {
-   * 	// Handle the error
-   *  }
-   * }
-   * }
-   * </pre>
+   * Removes the bean from the datasource using the default DELETE function group.
    *
    * @param <T> The type of the JavaBean
-   * @param groupName The String groupName of the DELETE Function Group that will be used to create
-   *     the bean in the datasource. null signifies that the default rules will be used.
-   * @param bean This is a bean that has been defined within the metadata of the datasource. If the
-   *     class is not defined an exception will be thrown. If the bean does not exist in the
-   *     datasource an exception will be thrown.
-   * @param wheres A collection of CpoWhere beans that define the constraints that should be used
-   *     when retrieving beans
-   * @param orderBy The CpoOrderBy bean that defines the order in which beans should be returned
-   * @param nativeExpressions Native expression that will be used to augment the expression stored
-   *     in the metadata. This text will be embedded at run-time
+   * @param bean A bean defined within the metadata of the datasource
    * @return The number of beans deleted from the datasource
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
-  <T> long deleteBean(
-      String groupName,
-      T bean,
-      Collection<CpoWhere> wheres,
-      Collection<CpoOrderBy> orderBy,
-      Collection<CpoNativeFunction> nativeExpressions)
-      throws CpoException;
+  default <T> long deleteBean(T bean) throws CpoException {
+    return deleteBean(CpoQuery.defaultGroup(), bean);
+  }
 
   /**
-   * Removes the beans contained in the collection from the datasource. The assumption is that the
-   * bean exists in the datasource. This method stores the beans contained in the collection in the
-   * datasource. The beans in the collection will be treated as one transaction, assuming the
-   * datasource supports transactions.
-   *
-   * <p>This means that if one of the beans fail being deleted in the datasource then the CpoAdapter
-   * should stop processing the remainder of the collection, and if supported, rollback all the
-   * beans deleted thus far.
-   *
-   * <pre>Example:
-   * {@code
-   * class SomeBean so = null;
-   * class CpoAdapter cpo = null;
-   *  try {
-   *    cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));
-   *  } catch (CpoException ce) {
-   *    // Handle the error
-   *    cpo = null;
-   *  }
-   *  if (cpo!=null) {
-   *    ArrayList al = new ArrayList();
-   *    for (int i=0; i<3; i++){
-   *      so = new SomeBean();
-   *      so.setId(1);
-   *      so.setName("SomeName");
-   *      al.add(so);
-   *    }
-   *    try{
-   *      cpo.deleteBeans(al);
-   *    } catch (CpoException ce) {
-   *      // Handle the error
-   *    }
-   *  }
-   * }
-   * </pre>
+   * Removes the bean from the datasource using the named DELETE function group.
    *
    * @param <T> The type of the JavaBean
-   * @param beans This is a collection of beans that have been defined within the metadata of the
-   *     datasource. If the class is not defined an exception will be thrown.
+   * @param groupName The DELETE function group name; null signifies the default group
+   * @param bean A bean defined within the metadata of the datasource
    * @return The number of beans deleted from the datasource
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
-  <T> long deleteBeans(List<T> beans) throws CpoException;
+  default <T> long deleteBean(String groupName, T bean) throws CpoException {
+    return deleteBean(CpoQuery.group(groupName), bean);
+  }
 
   /**
-   * Removes the beans contained in the collection from the datasource. The assumption is that the
-   * bean exists in the datasource. This method stores the beans contained in the collection in the
-   * datasource. The beans in the collection will be treated as one transaction, assuming the
-   * datasource supports transactions.
-   *
-   * <p>This means that if one of the beans fail being deleted in the datasource then the CpoAdapter
-   * should stop processing the remainder of the collection, and if supported, rollback all the
-   * beans deleted thus far.
-   *
-   * <pre>Example:
-   * {@code
-   * class SomeBean so = null;
-   * class CpoAdapter cpo = null;
-   *  try {
-   *    cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));
-   *  } catch (CpoException ce) {
-   *    // Handle the error
-   *    cpo = null;
-   *  }
-   *  if (cpo!=null) {
-   *    ArrayList al = new ArrayList();
-   *    for (int i=0; i<3; i++){
-   *      so = new SomeBean();
-   *      so.setId(1);
-   *      so.setName("SomeName");
-   *      al.add(so);
-   *    }
-   *    try{
-   *        cpo.deleteBeans("IdNameDelete",al);
-   *    } catch (CpoException ce) {
-   *        // Handle the error
-   *    }
-   *  }
-   * }
-   * </pre>
+   * Removes the beans from the datasource using the default DELETE function group.
    *
    * @param <T> The type of the JavaBean
-   * @param groupName The String groupName of the DELETE Function Group that will be used to create
-   *     the bean in the datasource. null signifies that the default rules will be used.
-   * @param beans This is a collection of beans that have been defined within the metadata of the
-   *     datasource. If the class is not defined an exception will be thrown.
+   * @param beans The beans to delete
    * @return The number of beans deleted from the datasource
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
-  <T> long deleteBeans(String groupName, List<T> beans) throws CpoException;
+  default <T> long deleteBeans(List<T> beans) throws CpoException {
+    return deleteBeans(CpoQuery.defaultGroup(), beans);
+  }
 
   /**
-   * Removes the beans contained in the collection from the datasource. The assumption is that the
-   * bean exists in the datasource. This method stores the beans contained in the collection in the
-   * datasource. The beans in the collection will be treated as one transaction, assuming the
-   * datasource supports transactions.
-   *
-   * <p>This means that if one of the beans fail being deleted in the datasource then the CpoAdapter
-   * should stop processing the remainder of the collection, and if supported, rollback all the
-   * beans deleted thus far.
-   *
-   * <pre>Example:
-   * {@code
-   * class SomeBean so = null;
-   * class CpoAdapter cpo = null;
-   * try {
-   * 	cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));
-   * } catch (CpoException ce) {
-   * 	// Handle the error
-   * 	cpo = null;
-   * }
-   * if (cpo!=null) {
-   * 	ArrayList al = new ArrayList();
-   * 	for (int i=0; i<3; i++){
-   * 		so = new SomeBean();
-   * 		so.setId(1);
-   * 		so.setName("SomeName");
-   * 		al.add(so);
-   *  }
-   * 	try{
-   * 		cpo.deleteBeans("IdNameDelete",al);
-   *  } catch (CpoException ce) {
-   * 		// Handle the error
-   *  }
-   * }
-   * }
-   * </pre>
+   * Removes the beans from the datasource using the named DELETE function group.
    *
    * @param <T> The type of the JavaBean
-   * @param groupName The String groupName of the DELETE Function Group that will be used to create
-   *     the bean in the datasource. null signifies that the default rules will be used.
-   * @param beans This is a collection of beans that have been defined within the metadata of the
-   *     datasource. If the class is not defined an exception will be thrown.
-   * @param wheres A collection of CpoWhere beans that define the constraints that should be used
-   *     when retrieving beans
-   * @param orderBy The CpoOrderBy bean that defines the order in which beans should be returned
-   * @param nativeExpressions Native expression that will be used to augment the expression stored
-   *     in the metadata. This text will be embedded at run-time
+   * @param groupName The DELETE function group name; null signifies the default group
+   * @param beans The beans to delete
    * @return The number of beans deleted from the datasource
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
-  <T> long deleteBeans(
-      String groupName,
-      List<T> beans,
-      Collection<CpoWhere> wheres,
-      Collection<CpoOrderBy> orderBy,
-      Collection<CpoNativeFunction> nativeExpressions)
-      throws CpoException;
+  default <T> long deleteBeans(String groupName, List<T> beans) throws CpoException {
+    return deleteBeans(CpoQuery.group(groupName), beans);
+  }
+
+  // ==================================== UPDATE ====================================
 
   /**
-   * Executes a bean whose metadata will call an executable within the datasource. It is assumed
-   * that the executable bean exists in the metadatasource. If the executable does not exist, an
-   * exception will be thrown.
-   *
-   * <pre>Example:
-   * {@code
-   * class SomeBean so = new SomeBean();
-   * class CpoAdapter cpo = null;
-   *  try {
-   *    cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));
-   *  } catch (CpoException ce) {
-   *    // Handle the error
-   *    cpo = null;
-   *  }
-   *  if (cpo!=null) {
-   *    so.setId(1);
-   *    so.setName("SomeName");
-   *    try{
-   *      cpo.executeBean(so);
-   *    } catch (CpoException ce) {
-   *      // Handle the error
-   *    }
-   *  }
-   * }
-   * </pre>
+   * Updates the bean in the datasource using the query's UPDATE function group. The assumption is
+   * that the bean exists in the datasource.
    *
    * @param <T> The type of the JavaBean
-   * @param bean This is a bean that has been defined within the metadata of the datasource. If the
-   *     class is not defined an exception will be thrown. If the bean does not exist in the
-   *     datasource, an exception will be thrown. This bean is used to populate the IN parameters
-   *     used to execute the datasource bean.
-   *     <p>A bean of this type will be created and filled with the returned data from the
-   *     value_bean. This newly created bean will be returned from this method.
-   * @return A bean populated with the OUT parameters returned from the executable bean
+   * @param query The function group and clauses to apply
+   * @param bean A bean defined within the metadata of the datasource
+   * @return The number of beans updated in the datasource
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
-  <T> T executeBean(T bean) throws CpoException;
+  <T> long updateBean(CpoQuery query, T bean) throws CpoException;
 
   /**
-   * Executes a bean whose metadata will call an executable within the datasource. It is assumed
-   * that the executable bean exists in the metadata source. If the executable does not exist, an
-   * exception will be thrown.
-   *
-   * <pre>Example:
-   * {@code
-   * class SomeBean so = new SomeBean();
-   * class CpoAdapter cpo = null;
-   *  try {
-   *    cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));
-   *  } catch (CpoException ce) {
-   *    // Handle the error
-   *    cpo = null;
-   *  }
-   *  if (cpo!=null) {
-   *    so.setId(1);
-   *    so.setName("SomeName");
-   *    try{
-   *      cpo.executeBean("execNotifyProc",so);
-   *    } catch (CpoException ce) {
-   *      // Handle the error
-   *    }
-   *  }
-   * }
-   * </pre>
+   * Updates the beans in the datasource using the query's UPDATE function group, batching where the
+   * datasource supports it. This is an all-or-nothing transaction: if one bean fails, no beans are
+   * updated.
    *
    * @param <T> The type of the JavaBean
-   * @param groupName The filter groupName which tells the datasource which beans should be
-   *     returned. The groupName also signifies what data in the bean will be populated.
-   * @param bean This is a bean that has been defined within the metadata of the datasource. If the
-   *     class is not defined an exception will be thrown. If the bean does not exist in the
-   *     datasource, an exception will be thrown. This bean is used to populate the IN parameters
-   *     used to retrieve the collection of beans. This bean defines the bean type that will be
-   *     returned in the collection and contain the result set data or the OUT Parameters.
-   * @return A result bean populate with the OUT parameters
+   * @param query The function group and clauses to apply
+   * @param beans The beans to update
+   * @return The number of beans updated in the datasource
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
-  <T> T executeBean(String groupName, T bean) throws CpoException;
+  <T> long updateBeans(CpoQuery query, List<T> beans) throws CpoException;
 
   /**
-   * Executes a bean that represents an executable bean within the datasource. It is assumed that
-   * the bean exists in the datasource. If the bean does not exist, an exception will be thrown
+   * Updates the bean in the datasource using the default UPDATE function group.
    *
-   * <pre>Example:
-   * {@code
-   * class SomeBean so = new SomeBean();
-   * class SomeResult sr = new SomeResult();
-   * class CpoAdapter cpo = null;
-   *  try {
-   *    cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));
-   *  } catch (CpoException ce) {
-   *    // Handle the error
-   *    cpo = null;
-   *  }
-   *  if (cpo!=null) {
-   *    so.setId(1);
-   *    so.setName("SomeName");
-   *    try{
-   *      sr = (SomeResult)cpo.executeBean("execNotifyProc",so, sr);
-   *    } catch (CpoException ce) {
-   *      // Handle the error
-   *    }
-   *  }
-   * }
-   * </pre>
+   * @param <T> The type of the JavaBean
+   * @param bean A bean defined within the metadata of the datasource
+   * @return The number of beans updated in the datasource
+   * @throws CpoException Thrown if there are errors accessing the datasource
+   */
+  default <T> long updateBean(T bean) throws CpoException {
+    return updateBean(CpoQuery.defaultGroup(), bean);
+  }
+
+  /**
+   * Updates the bean in the datasource using the named UPDATE function group.
    *
-   * @param <T> The type of the return JavaBean
+   * @param <T> The type of the JavaBean
+   * @param groupName The UPDATE function group name; null signifies the default group
+   * @param bean A bean defined within the metadata of the datasource
+   * @return The number of beans updated in the datasource
+   * @throws CpoException Thrown if there are errors accessing the datasource
+   */
+  default <T> long updateBean(String groupName, T bean) throws CpoException {
+    return updateBean(CpoQuery.group(groupName), bean);
+  }
+
+  /**
+   * Updates the beans in the datasource using the default UPDATE function group.
+   *
+   * @param <T> The type of the JavaBean
+   * @param beans The beans to update
+   * @return The number of beans updated in the datasource
+   * @throws CpoException Thrown if there are errors accessing the datasource
+   */
+  default <T> long updateBeans(List<T> beans) throws CpoException {
+    return updateBeans(CpoQuery.defaultGroup(), beans);
+  }
+
+  /**
+   * Updates the beans in the datasource using the named UPDATE function group.
+   *
+   * @param <T> The type of the JavaBean
+   * @param groupName The UPDATE function group name; null signifies the default group
+   * @param beans The beans to update
+   * @return The number of beans updated in the datasource
+   * @throws CpoException Thrown if there are errors accessing the datasource
+   */
+  default <T> long updateBeans(String groupName, List<T> beans) throws CpoException {
+    return updateBeans(CpoQuery.group(groupName), beans);
+  }
+
+  // ==================================== UPSERT ====================================
+
+  /**
+   * Inserts or updates the bean using the query's UPSERT function group: the EXIST function decides
+   * whether the CREATE or UPDATE function is executed.
+   *
+   * @param <T> The type of the JavaBean
+   * @param query The function group and clauses to apply
+   * @param bean A bean defined within the metadata of the datasource
+   * @return The number of beans upserted in the datasource
+   * @throws CpoException Thrown if there are errors accessing the datasource, or if the EXIST
+   *     function matches more than one record
+   */
+  <T> long upsertBean(CpoQuery query, T bean) throws CpoException;
+
+  /**
+   * Inserts or updates the beans using the query's UPSERT function group: for each bean the EXIST
+   * function decides whether the CREATE or UPDATE function is executed.
+   *
+   * @param <T> The type of the JavaBean
+   * @param query The function group and clauses to apply
+   * @param beans The beans to upsert
+   * @return The number of beans upserted in the datasource
+   * @throws CpoException Thrown if there are errors accessing the datasource, or if the EXIST
+   *     function matches more than one record
+   */
+  <T> long upsertBeans(CpoQuery query, List<T> beans) throws CpoException;
+
+  /**
+   * Inserts or updates the bean using the default UPSERT function group.
+   *
+   * @param <T> The type of the JavaBean
+   * @param bean A bean defined within the metadata of the datasource
+   * @return The number of beans upserted in the datasource
+   * @throws CpoException Thrown if there are errors accessing the datasource, or if the EXIST
+   *     function matches more than one record
+   */
+  default <T> long upsertBean(T bean) throws CpoException {
+    return upsertBean(CpoQuery.defaultGroup(), bean);
+  }
+
+  /**
+   * Inserts or updates the bean using the named UPSERT function group.
+   *
+   * @param <T> The type of the JavaBean
+   * @param groupName The UPSERT function group name; null signifies the default group
+   * @param bean A bean defined within the metadata of the datasource
+   * @return The number of beans upserted in the datasource
+   * @throws CpoException Thrown if there are errors accessing the datasource, or if the EXIST
+   *     function matches more than one record
+   */
+  default <T> long upsertBean(String groupName, T bean) throws CpoException {
+    return upsertBean(CpoQuery.group(groupName), bean);
+  }
+
+  /**
+   * Inserts or updates the beans using the default UPSERT function group.
+   *
+   * @param <T> The type of the JavaBean
+   * @param beans The beans to upsert
+   * @return The number of beans upserted in the datasource
+   * @throws CpoException Thrown if there are errors accessing the datasource, or if the EXIST
+   *     function matches more than one record
+   */
+  default <T> long upsertBeans(List<T> beans) throws CpoException {
+    return upsertBeans(CpoQuery.defaultGroup(), beans);
+  }
+
+  /**
+   * Inserts or updates the beans using the named UPSERT function group.
+   *
+   * @param <T> The type of the JavaBean
+   * @param groupName The UPSERT function group name; null signifies the default group
+   * @param beans The beans to upsert
+   * @return The number of beans upserted in the datasource
+   * @throws CpoException Thrown if there are errors accessing the datasource, or if the EXIST
+   *     function matches more than one record
+   */
+  default <T> long upsertBeans(String groupName, List<T> beans) throws CpoException {
+    return upsertBeans(CpoQuery.group(groupName), beans);
+  }
+
+  // ==================================== EXISTS ====================================
+
+  /**
+   * Checks whether beans matching the given bean exist in the datasource, using the query's EXIST
+   * function group and where constraints.
+   *
+   * @param <T> The type of the JavaBean
+   * @param query The function group and clauses to apply
+   * @param bean The bean to search for in the datasource
+   * @return The number of beans that exist in the datasource that match the specified bean. An
+   *     EXIST function must either return a count as a single row with a single numeric column
+   *     (count(*) style) or return one row per matching bean; a single-row result with one numeric
+   *     column is always interpreted as a count
+   * @throws CpoException Thrown if there are errors accessing the datasource
+   */
+  <T> long existsBean(CpoQuery query, T bean) throws CpoException;
+
+  /**
+   * Checks whether beans matching the given bean exist, using the default EXIST function group.
+   *
+   * @param <T> The type of the JavaBean
+   * @param bean The bean to search for in the datasource
+   * @return The number of beans that exist in the datasource that match the specified bean
+   * @throws CpoException Thrown if there are errors accessing the datasource
+   */
+  default <T> long existsBean(T bean) throws CpoException {
+    return existsBean(CpoQuery.defaultGroup(), bean);
+  }
+
+  /**
+   * Checks whether beans matching the given bean exist, using the named EXIST function group.
+   *
+   * @param <T> The type of the JavaBean
+   * @param groupName The EXIST function group name; null signifies the default group
+   * @param bean The bean to search for in the datasource
+   * @return The number of beans that exist in the datasource that match the specified bean
+   * @throws CpoException Thrown if there are errors accessing the datasource
+   */
+  default <T> long existsBean(String groupName, T bean) throws CpoException {
+    return existsBean(CpoQuery.group(groupName), bean);
+  }
+
+  // ==================================== EXECUTE ====================================
+
+  /**
+   * Executes the EXECUTE function group identified by the query — typically a stored procedure —
+   * using the criteria bean to populate the IN arguments and the result bean type for the OUT
+   * arguments.
+   *
+   * @param <T> The type of the result JavaBean
    * @param <C> The type of the criteria JavaBean
-   * @param groupName The String groupName of the EXECUTE Function Group that will be used to create
-   *     the bean in the datasource. null signifies that the default rules will be used.
-   * @param criteria This is a bean that has been defined within the metadata of the datasource. If
-   *     the class is not defined an exception will be thrown. If the bean does not exist in the
-   *     datasource, an exception will be thrown. This bean is used to populate the IN parameters
-   *     used to retrieve the collection of beans.
-   * @param result This is a bean that has been defined within the metadata of the datasource. If
-   *     the class is not defined an exception will be thrown. If the bean does not exist in the
-   *     datasource, an exception will be thrown. This bean defines the bean type that will be
-   *     created, filled with the return data and returned from this method.
-   * @return A bean populated with the out parameters
+   * @param query The function group to execute
+   * @param criteria A bean defined within the metadata of the datasource used to populate the IN
+   *     arguments
+   * @param result A bean defined within the metadata of the datasource that defines the bean type
+   *     populated with the OUT arguments
+   * @return A result bean populated with the OUT arguments
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
-  <T, C> T executeBean(String groupName, C criteria, T result) throws CpoException;
+  <T, C> T executeBean(CpoQuery query, C criteria, T result) throws CpoException;
 
   /**
-   * The CpoAdapter will check to see if this bean exists in the datasource.
-   *
-   * <pre>Example:
-   * {@code
-   * class SomeBean so = new SomeBean();
-   * long count = 0;
-   * class CpoAdapter cpo = null;
-   *  try {
-   *    cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));
-   *  } catch (CpoException ce) {
-   *    // Handle the error
-   *    cpo = null;
-   *  }
-   *  if (cpo!=null) {
-   *    so.setId(1);
-   *    so.setName("SomeName");
-   *    try{
-   *      count = cpo.existsBean(so);
-   *      if (count>0) {
-   *             // bean exists
-   *      } else {
-   *        // bean does not exist
-   *      }
-   *    } catch (CpoException ce) {
-   *      // Handle the error
-   *    }
-   *  }
-   * }
-   * </pre>
+   * Executes the default EXECUTE function group with the bean as both criteria and result.
    *
    * @param <T> The type of the JavaBean
-   * @param bean This is a bean that has been defined within the metadata of the datasource. If the
-   *     class is not defined an exception will be thrown. This bean will be searched for inside the
-   *     datasource.
-   * @return The number of beans that exist in the datasource that match the specified bean. An
-   *     EXIST function must either return a count as a single row with a single numeric column
-   *     (count(*) style) or return one row per matching bean; a single-row result with one numeric
-   *     column is always interpreted as a count
+   * @param bean The bean used for the IN arguments and populated with the OUT arguments
+   * @return A result bean populated with the OUT arguments
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
-  <T> long existsBean(T bean) throws CpoException;
+  default <T> T executeBean(T bean) throws CpoException {
+    return executeBean(CpoQuery.defaultGroup(), bean, bean);
+  }
 
   /**
-   * The CpoAdapter will check to see if this bean exists in the datasource.
-   *
-   * <pre>Example:
-   * {@code
-   * class SomeBean so = new SomeBean();
-   * long count = 0;
-   * class CpoAdapter cpo = null;
-   *  try {
-   *    cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));
-   *  } catch (CpoException ce) {
-   *    // Handle the error
-   *    cpo = null;
-   *  }
-   *  if (cpo!=null) {
-   *    so.setId(1);
-   *    so.setName("SomeName");
-   *    try{
-   *      count = cpo.existsBean("SomeExistCheck",so);
-   *      if (count>0) {
-   *        // bean exists
-   *      } else {
-   *        // bean does not exist
-   *      }
-   *    } catch (CpoException ce) {
-   *      // Handle the error
-   *    }
-   *  }
-   * }
-   * </pre>
+   * Executes the named EXECUTE function group with the bean as both criteria and result.
    *
    * @param <T> The type of the JavaBean
-   * @param groupName The String groupName of the EXISTS Function Group that will be used to create
-   *     the bean in the datasource. null signifies that the default rules will be used.
-   * @param bean This is a bean that has been defined within the metadata of the datasource. If the
-   *     class is not defined an exception will be thrown. This bean will be searched for inside the
-   *     datasource.
-   * @return The number of beans that exist in the datasource that match the specified bean. An
-   *     EXIST function must either return a count as a single row with a single numeric column
-   *     (count(*) style) or return one row per matching bean; a single-row result with one numeric
-   *     column is always interpreted as a count
+   * @param groupName The EXECUTE function group name; null signifies the default group
+   * @param bean The bean used for the IN arguments and populated with the OUT arguments
+   * @return A result bean populated with the OUT arguments
    * @throws CpoException Thrown if there are errors accessing the datasource
    */
-  <T> long existsBean(String groupName, T bean) throws CpoException;
+  default <T> T executeBean(String groupName, T bean) throws CpoException {
+    return executeBean(CpoQuery.group(groupName), bean, bean);
+  }
+
+  // ==================================== RETRIEVE ====================================
 
   /**
-   * The CpoAdapter will check to see if this bean exists in the datasource.
-   *
-   * <pre>Example:
-   * {@code
-   * class SomeBean so = new SomeBean();
-   * long count = 0;
-   * class CpoAdapter cpo = null;
-   *  try {
-   *    cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));
-   *  } catch (CpoException ce) {
-   *    // Handle the error
-   *    cpo = null;
-   *  }
-   *  if (cpo!=null) {
-   *    so.setId(1);
-   *    so.setName("SomeName");
-   *    try{
-   *      CpoWhere where = cpo.newCpoWhere(Logical.NONE, id, Comparison.EQ);
-   *      count = cpo.existsBean("SomeExistCheck",so, where);
-   *      if (count>0) {
-   *        // bean exists
-   *      } else {
-   *        // bean does not exist
-   *      }
-   *    } catch (CpoException ce) {
-   *      // Handle the error
-   *    }
-   *  }
-   * }
-   * </pre>
+   * Retrieves a single bean from the datasource using the query's RETRIEVE function group, with the
+   * given bean supplying the search criteria and receiving the result. If the function returns more
+   * than one row, an exception is thrown.
    *
    * @param <T> The type of the JavaBean
-   * @param groupName The String groupName of the EXISTS Function Group that will be used to create
-   *     the bean in the datasource. null signifies that the default rules will be used.
-   * @param bean This is a bean that has been defined within the metadata of the datasource. If the
-   *     class is not defined an exception will be thrown. This bean will be searched for inside the
-   *     datasource.
-   * @param wheres A collection of CpoWhere beans that pass in run-time constraints to the function
-   *     that performs the exist operation
-   * @return The number of beans that exist in the datasource that match the specified bean. An
-   *     EXIST function must either return a count as a single row with a single numeric column
-   *     (count(*) style) or return one row per matching bean; a single-row result with one numeric
-   *     column is always interpreted as a count
-   * @throws CpoException Thrown if there are errors accessing the datasource
+   * @param query The function group and clauses to apply
+   * @param bean A bean defined within the metadata of the datasource whose attributes supply the
+   *     search criteria
+   * @return A populated bean of the same type as the bean passed in, or null if no beans match
+   * @throws CpoException Thrown if there are errors accessing the datasource or more than one row
+   *     is returned
    */
-  <T> long existsBean(String groupName, T bean, Collection<CpoWhere> wheres) throws CpoException;
+  <T> T retrieveBean(CpoQuery query, T bean) throws CpoException;
 
   /**
-   * newOrderBy allows you to dynamically change the order of the beans in the resulting collection.
-   * This allows you to apply user input in determining the order of the collection
+   * Retrieves the first bean produced by the query's RETRIEVE function group, using separate
+   * criteria and result beans.
    *
-   * @param attribute The name of the attribute from the JavaBean that will be sorted.
-   * @param ascending If true, sort ascending. If false sort descending.
-   * @return A CpoOrderBy bean to be passed into retrieveBeans.
+   * @param <T> The type of the result JavaBean
+   * @param <C> The type of the criteria JavaBean
+   * @param query The function group and clauses to apply
+   * @param criteria A bean defined within the metadata of the datasource that supplies the
+   *     retrieval parameters
+   * @param result A bean defined within the metadata of the datasource that specifies the returned
+   *     bean type
+   * @return A bean of the same type as the result parameter, or null if no beans match
    * @throws CpoException Thrown if there are errors accessing the datasource
+   */
+  <T, C> T retrieveBean(CpoQuery query, C criteria, T result) throws CpoException;
+
+  /**
+   * Retrieves a single bean using the default RETRIEVE function group; the bean supplies the search
+   * criteria and receives the result.
+   *
+   * @param <T> The type of the JavaBean
+   * @param bean A bean defined within the metadata of the datasource whose attributes supply the
+   *     search criteria
+   * @return A populated bean of the same type as the bean passed in, or null if no beans match
+   * @throws CpoException Thrown if there are errors accessing the datasource or more than one row
+   *     is returned
+   */
+  default <T> T retrieveBean(T bean) throws CpoException {
+    return retrieveBean(CpoQuery.defaultGroup(), bean);
+  }
+
+  /**
+   * Retrieves a single bean using the named RETRIEVE function group; the bean supplies the search
+   * criteria and receives the result.
+   *
+   * @param <T> The type of the JavaBean
+   * @param groupName The RETRIEVE function group name; null signifies the default group
+   * @param bean A bean defined within the metadata of the datasource whose attributes supply the
+   *     search criteria
+   * @return A populated bean of the same type as the bean passed in, or null if no beans match
+   * @throws CpoException Thrown if there are errors accessing the datasource or more than one row
+   *     is returned
+   */
+  default <T> T retrieveBean(String groupName, T bean) throws CpoException {
+    return retrieveBean(CpoQuery.group(groupName), bean);
+  }
+
+  /**
+   * Retrieves beans from the datasource using the query's LIST function group, with separate
+   * criteria and result beans.
+   *
+   * @param <T> The type of the result JavaBean
+   * @param <C> The type of the criteria JavaBean
+   * @param query The function group and clauses to apply
+   * @param criteria A bean defined within the metadata of the datasource that supplies the
+   *     retrieval parameters
+   * @param result A bean defined within the metadata of the datasource that specifies the returned
+   *     bean type
+   * @return A stream of beans that meet the criteria; empty if none match. The stream is backed by
+   *     open datastore resources (statement, result set, and connection) that are released only
+   *     when the stream is closed; terminal operations do not close it. Always close the returned
+   *     stream, preferably with try-with-resources.
+   * @throws CpoException Thrown if there are errors accessing the datasource
+   */
+  <T, C> Stream<T> retrieveBeans(CpoQuery query, C criteria, T result) throws CpoException;
+
+  /**
+   * Retrieves beans from the datasource using the query's LIST function group; the criteria bean
+   * type is also the result type.
+   *
+   * @param <C> The type of the criteria JavaBean
+   * @param query The function group and clauses to apply
+   * @param criteria A bean defined within the metadata of the datasource that supplies the
+   *     retrieval parameters
+   * @return A stream of beans that meet the criteria; empty if none match. The stream is backed by
+   *     open datastore resources (statement, result set, and connection) that are released only
+   *     when the stream is closed; terminal operations do not close it. Always close the returned
+   *     stream, preferably with try-with-resources.
+   * @throws CpoException Thrown if there are errors accessing the datasource
+   */
+  default <C> Stream<C> retrieveBeans(CpoQuery query, C criteria) throws CpoException {
+    return retrieveBeans(query, criteria, criteria);
+  }
+
+  /**
+   * Retrieves beans using the named LIST function group; the criteria bean type is also the result
+   * type.
+   *
+   * @param <C> The type of the criteria JavaBean
+   * @param groupName The LIST function group name; null signifies the default group
+   * @param criteria A bean defined within the metadata of the datasource that supplies the
+   *     retrieval parameters
+   * @return A stream of beans that meet the criteria; empty if none match. Always close the
+   *     returned stream, preferably with try-with-resources.
+   * @throws CpoException Thrown if there are errors accessing the datasource
+   */
+  default <C> Stream<C> retrieveBeans(String groupName, C criteria) throws CpoException {
+    return retrieveBeans(CpoQuery.group(groupName), criteria, criteria);
+  }
+
+  /**
+   * Retrieves beans using the named LIST function group with separate criteria and result beans.
+   *
+   * @param <T> The type of the result JavaBean
+   * @param <C> The type of the criteria JavaBean
+   * @param groupName The LIST function group name; null signifies the default group
+   * @param criteria A bean defined within the metadata of the datasource that supplies the
+   *     retrieval parameters
+   * @param result A bean defined within the metadata of the datasource that specifies the returned
+   *     bean type
+   * @return A stream of beans that meet the criteria; empty if none match. Always close the
+   *     returned stream, preferably with try-with-resources.
+   * @throws CpoException Thrown if there are errors accessing the datasource
+   */
+  default <T, C> Stream<T> retrieveBeans(String groupName, C criteria, T result)
+      throws CpoException {
+    return retrieveBeans(CpoQuery.group(groupName), criteria, result);
+  }
+
+  // ==================================== FACTORIES ====================================
+
+  /**
+   * Creates a CpoOrderBy for the attribute and direction.
+   *
+   * @param attribute The metadata attribute name to order by
+   * @param ascending true for ascending, false for descending
+   * @return A CpoOrderBy
+   * @throws CpoException An error occurred creating the CpoOrderBy
    */
   CpoOrderBy newOrderBy(String attribute, boolean ascending) throws CpoException;
 
   /**
-   * newOrderBy allows you to dynamically change the order of the beans in the resulting collection.
-   * This allows you to apply user input in determining the order of the collection
+   * Creates a CpoOrderBy bound to a marker within the expression.
    *
-   * @param marker the marker that will be replaced in the expression with the string representation
-   *     of this orderBy
-   * @param attribute The name of the attribute from the JavaBean that will be sorted.
-   * @param ascending If true, sort ascending. If false sort descending.
-   * @return A CpoOrderBy bean to be passed into retrieveBeans.
-   * @throws CpoException Thrown if there are errors accessing the datasource
+   * @param marker The marker in the expression that this order-by replaces
+   * @param attribute The metadata attribute name to order by
+   * @param ascending true for ascending, false for descending
+   * @return A CpoOrderBy
+   * @throws CpoException An error occurred creating the CpoOrderBy
    */
   CpoOrderBy newOrderBy(String marker, String attribute, boolean ascending) throws CpoException;
 
   /**
-   * newOrderBy allows you to dynamically change the order of the beans in the resulting collection.
-   * This allows you to apply user input in determining the order of the collection
+   * Creates a CpoOrderBy applying a datasource function to the attribute.
    *
-   * @param attribute The name of the attribute from the JavaBean that will be sorted.
-   * @param ascending If true, sort ascending. If false sort descending.
-   * @param function A string which represents a datasource function that will be called on the
-   *     attribute. must be contained in the function string. The attribute name will be replaced at
-   *     run-time with its datasource counterpart
-   * @return A CpoOrderBy bean to be passed into retrieveBeans.
-   * @throws CpoException Thrown if there are errors accessing the datasource
+   * @param attribute The metadata attribute name to order by
+   * @param ascending true for ascending, false for descending
+   * @param function A datasource function to apply to the attribute
+   * @return A CpoOrderBy
+   * @throws CpoException An error occurred creating the CpoOrderBy
    */
   CpoOrderBy newOrderBy(String attribute, boolean ascending, String function) throws CpoException;
 
   /**
-   * newOrderBy allows you to dynamically change the order of the beans in the resulting collection.
-   * This allows you to apply user input in determining the order of the collection
+   * Creates a CpoOrderBy bound to a marker, applying a datasource function to the attribute.
    *
-   * @param marker the marker that will be replaced in the expression with the string representation
-   *     of this orderBy
-   * @param attribute The name of the attribute from the JavaBean that will be sorted.
-   * @param ascending If true, sort ascending. If false sort descending.
-   * @param function A string which represents a datasource function that will be called on the
-   *     attribute. must be contained in the function string. The attribute name will be replaced at
-   *     run-time with its datasource counterpart
-   * @return A CpoOrderBy bean to be passed into retrieveBeans.
-   * @throws CpoException Thrown if there are errors accessing the datasource
+   * @param marker The marker in the expression that this order-by replaces
+   * @param attribute The metadata attribute name to order by
+   * @param ascending true for ascending, false for descending
+   * @param function A datasource function to apply to the attribute
+   * @return A CpoOrderBy
+   * @throws CpoException An error occurred creating the CpoOrderBy
    */
   CpoOrderBy newOrderBy(String marker, String attribute, boolean ascending, String function)
       throws CpoException;
 
   /**
-   * Creates a new CpoWhere bean
+   * Creates an empty CpoWhere.
    *
    * @return A CpoWhere
-   * @throws CpoException Thrown if there are errors accessing the datasource
+   * @throws CpoException An error occurred creating the CpoWhere
    */
   CpoWhere newWhere() throws CpoException;
 
   /**
-   * Creates a new CpoWhere bean
+   * Creates a CpoWhere comparing the attribute to the value.
    *
-   * @param <T> The type of the bean
-   * @param logical The logical operator
-   * @param attr The attribute name to compare
-   * @param comp The compare operator
-   * @param value The value to compare the attribute to.
+   * @param <T> The type of the value
+   * @param logical How this where combines with the preceding where (AND, OR, NONE)
+   * @param attr The metadata attribute name to constrain
+   * @param comp The comparison operator
+   * @param value The value to compare against
    * @return A CpoWhere
-   * @throws CpoException Thrown if there are errors accessing the datasource
+   * @throws CpoException An error occurred creating the CpoWhere
    */
   <T> CpoWhere newWhere(Logical logical, String attr, Comparison comp, T value) throws CpoException;
 
   /**
-   * Creates a new CpoWhere bean
+   * Creates a CpoWhere comparing the attribute to the value, optionally negated.
    *
-   * @param <T> The type of the bean
-   * @param logical The logical operator
-   * @param attr The attribute name to compare
-   * @param comp The compare operator
-   * @param value The value to compare the attribute to.
-   * @param not negate the compare
+   * @param <T> The type of the value
+   * @param logical How this where combines with the preceding where (AND, OR, NONE)
+   * @param attr The metadata attribute name to constrain
+   * @param comp The comparison operator
+   * @param value The value to compare against
+   * @param not true to negate the comparison
    * @return A CpoWhere
-   * @throws CpoException Thrown if there are errors accessing the datasource
+   * @throws CpoException An error occurred creating the CpoWhere
    */
   <T> CpoWhere newWhere(Logical logical, String attr, Comparison comp, T value, boolean not)
       throws CpoException;
 
-  /**
-   * Upserts the bean into the datasource. The CpoAdapter will check to see if this bean exists in
-   * the datasource. If it exists, the bean is updated in the datasource If the bean does not exist,
-   * then it is created in the datasource. This method stores the bean in the datasource. This
-   * method uses the default EXISTS, CREATE, and UPDATE Function Groups specified for this bean.
-   *
-   * <pre>Example:
-   * {@code
-   * class SomeBean so = new SomeBean();
-   * class CpoAdapter cpo = null;
-   *  try {
-   *    cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));
-   *  } catch (CpoException ce) {
-   *    // Handle the error
-   *    cpo = null;
-   *  }
-   *  if (cpo!=null) {
-   *    so.setId(1);
-   *    so.setName("SomeName");
-   *    try{
-   *      cpo.upsertBean(so);
-   *    } catch (CpoException ce) {
-   *      // Handle the error
-   *    }
-   *  }
-   * }
-   * </pre>
-   *
-   * @param <T> The type of the JavaBean
-   * @param bean This is a bean that has been defined within the metadata of the datasource. If the
-   *     class is not defined an exception will be thrown.
-   * @return A count of the number of beans upserted
-   * @throws CpoException Thrown if there are errors accessing the datasource
-   * @see #existsBean
-   * @see #insertBean
-   * @see #updateBean
-   */
-  <T> long upsertBean(T bean) throws CpoException;
-
-  /**
-   * Upserts the bean into the datasource. The CpoAdapter will check to see if this bean exists in
-   * the datasource. If it exists, the bean is updated in the datasource If the bean does not exist,
-   * then it is created in the datasource. This method stores the bean in the datasource.
-   *
-   * <pre>Example:
-   * {@code
-   * class SomeBean so = new SomeBean();
-   * class CpoAdapter cpo = null;
-   *  try {
-   *    cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));
-   *  } catch (CpoException ce) {
-   *    // Handle the error
-   *    cpo = null;
-   *  }
-   *  if (cpo!=null) {
-   *    so.setId(1);
-   *    so.setName("SomeName");
-   *    try{
-   *      cpo.upsertBean("upsertSomeBean",so);
-   *    } catch (CpoException ce) {
-   *      // Handle the error
-   *    }
-   *  }
-   * }
-   * </pre>
-   *
-   * @param <T> The type of the JavaBean
-   * @param groupName The groupName which identifies which EXISTS, INSERT, and UPDATE Function
-   *     Groups to execute to upsert the bean.
-   * @param bean This is a bean that has been defined within the metadata of the datasource. If the
-   *     class is not defined an exception will be thrown.
-   * @return A count of the number of beans upserted
-   * @throws CpoException Thrown if there are errors accessing the datasource
-   * @see #existsBean
-   * @see #insertBean
-   * @see #updateBean
-   */
-  <T> long upsertBean(String groupName, T bean) throws CpoException;
-
-  /**
-   * Upserts a collection of beans into the datasource. The CpoAdapter will check to see if this
-   * bean exists in the datasource. If it exists, the bean is updated in the datasource If the bean
-   * does not exist, then it is created in the datasource. This method stores the bean in the
-   * datasource. The beans in the collection will be treated as one transaction, meaning that if one
-   * of the beans fail being inserted or updated in the datasource then the entire collection will
-   * be rolled back.
-   *
-   * <pre>Example:
-   * {@code
-   * class SomeBean so = null;
-   * class CpoAdapter cpo = null;
-   *  try {
-   *    cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));
-   *  } catch (CpoException ce) {
-   *    // Handle the error
-   *    cpo = null;
-   *  }
-   *  if (cpo!=null) {
-   *    ArrayList al = new ArrayList();
-   *    for (int i=0; i<3; i++){
-   *      so = new SomeBean();
-   *      so.setId(1);
-   *      so.setName("SomeName");
-   *      al.add(so);
-   *    }
-   *    try{
-   *      cpo.upsertBeans(al);
-   *    } catch (CpoException ce) {
-   *      // Handle the error
-   *    }
-   *  }
-   * }
-   * </pre>
-   *
-   * @param <T> The type of the JavaBean
-   * @param beans This is a collection of beans that have been defined within the metadata of the
-   *     datasource. If the class is not defined an exception will be thrown.
-   * @return DOCUMENT ME!
-   * @throws CpoException Thrown if there are errors accessing the datasource
-   * @see #existsBean
-   * @see #insertBean
-   * @see #updateBean
-   */
-  <T> long upsertBeans(List<T> beans) throws CpoException;
-
-  /**
-   * Upserts a collection of beans into the datasource. The CpoAdapter will check to see if this
-   * bean exists in the datasource. If it exists, the bean is updated in the datasource If the bean
-   * does not exist, then it is created in the datasource. This method stores the bean in the
-   * datasource. The beans in the collection will be treated as one transaction, meaning that if one
-   * of the beans fail being inserted or updated in the datasource then the entire collection will
-   * be rolled back.
-   *
-   * <pre>Example:
-   * {@code
-   * class SomeBean so = null;
-   * class CpoAdapter cpo = null;
-   *  try {
-   *    cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));
-   *  } catch (CpoException ce) {
-   *    // Handle the error
-   *    cpo = null;
-   *  }
-   *  if (cpo!=null) {
-   *    ArrayList al = new ArrayList();
-   *    for (int i=0; i<3; i++){
-   *      so = new SomeBean();
-   *      so.setId(1);
-   *      so.setName("SomeName");
-   *      al.add(so);
-   *    }
-   *    try{
-   *      cpo.upsertBeans("myUpsert",al);
-   *    } catch (CpoException ce) {
-   *      // Handle the error
-   *    }
-   *  }
-   * }
-   * </pre>
-   *
-   * @param <T> The type of the JavaBean
-   * @param groupName The groupName which identifies which EXISTS, INSERT, and UPDATE Function
-   *     Groups to execute to upsert the bean.
-   * @param beans This is a collection of beans that have been defined within the metadata of the
-   *     datasource. If the class is not defined an exception will be thrown.
-   * @return DOCUMENT ME!
-   * @throws CpoException Thrown if there are errors accessing the datasource
-   * @see #existsBean
-   * @see #insertBean
-   * @see #updateBean
-   */
-  <T> long upsertBeans(String groupName, List<T> beans) throws CpoException;
-
-  /**
-   * Retrieves the bean from the datasource. The assumption is that the bean exists in the
-   * datasource. If the retrieve function defined for these beans returns more than one row, an
-   * exception will be thrown.
-   *
-   * @param <T> The type of the JavaBean
-   * @param bean This is a bean that has been defined within the metadata of the datasource. If the
-   *     class is not defined an exception will be thrown. If the bean does not exist in the
-   *     datasource, an exception will be thrown. The input bean is used to specify the search
-   *     criteria, the output bean is populated with the results of the function.
-   * @return A bean of the same type as the result parameter that is filled in as specified the
-   *     metadata for the retrieve.
-   * @throws CpoException Thrown if there are errors accessing the datasource
-   */
-  <T> T retrieveBean(T bean) throws CpoException;
-
-  /**
-   * Retrieves the bean from the datasource. The assumption is that the bean exists in the
-   * datasource. If the retrieve function defined for this beans returns more than one row, an
-   * exception will be thrown.
-   *
-   * @param <T> The type of the JavaBean
-   * @param groupName DOCUMENT ME!
-   * @param bean This is a bean that has been defined within the metadata of the datasource. If the
-   *     class is not defined an exception will be thrown. If the bean does not exist in the
-   *     datasource, an exception will be thrown. The input bean is used to specify the search
-   *     criteria, the output bean is populated with the results of the function.
-   * @return A bean of the same type as the result parameter that is filled in as specified the
-   *     metadata for the retrieve.
-   * @throws CpoException Thrown if there are errors accessing the datasource
-   */
-  <T> T retrieveBean(String groupName, T bean) throws CpoException;
-
-  /**
-   * Retrieves the bean from the datasource. The assumption is that the bean exists in the
-   * datasource. If the retrieve function defined for this beans returns more than one row, an
-   * exception will be thrown.
-   *
-   * @param <T> the type of the JavaBean
-   * @param groupName DOCUMENT ME!
-   * @param bean This is a bean that has been defined within the metadata of the datasource. If the
-   *     class is not defined an exception will be thrown. If the bean does not exist in the
-   *     datasource, an exception will be thrown. The input bean is used to specify the search
-   *     criteria, the output bean is populated with the results of the function.
-   * @param wheres A collection of CpoWhere beans that define the constraints that should be used
-   *     when retrieving beans
-   * @param orderBy The CpoOrderBy bean that defines the order in which beans should be returned
-   * @param nativeExpressions Native expression that will be used to augment the expression stored
-   *     in the metadata. This text will be embedded at run-time
-   * @return A bean of the same type as the result parameter that is filled in as specified the
-   *     metadata for the retrieve.
-   * @throws CpoException Thrown if there are errors accessing the datasource
-   */
-  <T> T retrieveBean(
-      String groupName,
-      T bean,
-      Collection<CpoWhere> wheres,
-      Collection<CpoOrderBy> orderBy,
-      Collection<CpoNativeFunction> nativeExpressions)
-      throws CpoException;
-
-  /**
-   * Retrieves the bean from the datasource. The assumption is that the bean exists in the
-   * datasource. If the retrieve function defined for this beans returns more than one row, an
-   * exception will be thrown.
-   *
-   * @param <T> The type of the return JavaBean
-   * @param <C> The type of the criteria JavaBean
-   * @param groupName The filter groupName which tells the datasource which beans should be
-   *     returned. The groupName also signifies what data in the bean will be populated.
-   * @param criteria This is a bean that has been defined within the metadata of the datasource. If
-   *     the class is not defined an exception will be thrown. If the bean does not exist in the
-   *     datasource, an exception will be thrown. This bean is used to specify the parameters used
-   *     to retrieve the collection of beans.
-   * @param result This is a bean that has been defined within the metadata of the datasource. If
-   *     the class is not defined an exception will be thrown. If the bean does not exist in the
-   *     datasource, an exception will be thrown. This bean is used to specify the bean type that
-   *     will be returned in the collection.
-   * @param wheres A collection of CpoWhere beans that define the constraints that should be used
-   *     when retrieving beans
-   * @param orderBy The CpoOrderBy bean that defines the order in which beans should be returned
-   * @return A bean of the same type as the result parameter that is filled in as specified the
-   *     metadata for the retrieve.
-   * @throws CpoException Thrown if there are errors accessing the datasource
-   */
-  <T, C> T retrieveBean(
-      String groupName,
-      C criteria,
-      T result,
-      Collection<CpoWhere> wheres,
-      Collection<CpoOrderBy> orderBy)
-      throws CpoException;
-
-  /**
-   * Retrieves the bean from the datasource. The assumption is that the bean exists in the
-   * datasource. If the retrieve function defined for this beans returns more than one row, an
-   * exception will be thrown.
-   *
-   * @param <T> The type of the return JavaBean
-   * @param <C> The type of the criteria JavaBean
-   * @param groupName The filter groupName which tells the datasource which beans should be
-   *     returned. The groupName also signifies what data in the bean will be populated.
-   * @param criteria This is a bean that has been defined within the metadata of the datasource. If
-   *     the class is not defined an exception will be thrown. If the bean does not exist in the
-   *     datasource, an exception will be thrown. This bean is used to specify the parameters used
-   *     to retrieve the collection of beans.
-   * @param result This is a bean that has been defined within the metadata of the datasource. If
-   *     the class is not defined an exception will be thrown. If the bean does not exist in the
-   *     datasource, an exception will be thrown. This bean is used to specify the bean type that
-   *     will be returned in the collection.
-   * @param wheres A collection of CpoWhere beans that define the constraints that should be used
-   *     when retrieving beans
-   * @param orderBy The CpoOrderBy bean that defines the order in which beans should be returned
-   * @param nativeExpressions Native expression that will be used to augment the expression stored
-   *     in the metadata. This text will be embedded at run-time
-   * @return A bean of the same type as the result parameter that is filled in as specified the
-   *     metadata for the retrieve.
-   * @throws CpoException Thrown if there are errors accessing the datasource
-   */
-  <T, C> T retrieveBean(
-      String groupName,
-      C criteria,
-      T result,
-      Collection<CpoWhere> wheres,
-      Collection<CpoOrderBy> orderBy,
-      Collection<CpoNativeFunction> nativeExpressions)
-      throws CpoException;
-
-  /**
-   * Retrieves the bean from the datasource. The assumption is that the bean exists in the
-   * datasource.
-   *
-   * @param <C> the type of the criteria JavaBean
-   * @param groupName The filter groupName which tells the datasource which beans should be
-   *     returned. The groupName also signifies what data in the bean will be populated.
-   * @param criteria This is a bean that has been defined within the metadata of the datasource. If
-   *     the class is not defined an exception will be thrown. If the bean does not exist in the
-   *     datasource, an exception will be thrown. This bean is used to specify the parameters used
-   *     to retrieve the collection of beans.
-   * @return A stream of beans that meet the criteria specified by obj. The beans will be of the
-   *     same type as the bean that was passed in. If no beans match the criteria, an empty stream
-   *     will be returned. The stream is backed by open datastore resources (statement, result set,
-   *     and connection) that are released only when the stream is closed; terminal operations do
-   *     not close it. Always close the returned stream, preferably with try-with-resources.
-   * @throws CpoException Thrown if there are errors accessing the datasource
-   */
-  <C> Stream<C> retrieveBeans(String groupName, C criteria) throws CpoException;
-
-  /**
-   * Retrieves the bean from the datasource. The assumption is that the bean exists in the
-   * datasource.
-   *
-   * @param <C> the type of the criteria JavaBean
-   * @param groupName The filter groupName which tells the datasource which beans should be
-   *     returned. The groupName also signifies what data in the bean will be populated.
-   * @param criteria This is a bean that has been defined within the metadata of the datasource. If
-   *     the class is not defined an exception will be thrown. If the bean does not exist in the
-   *     datasource, an exception will be thrown. This bean is used to specify the parameters used
-   *     to retrieve the collection of beans.
-   * @param where A CpoWhere bean that defines the constraints that should be used when retrieving
-   *     beans
-   * @param orderBy The CpoOrderBy bean that defines the order in which beans should be returned
-   * @return A stream of beans that meet the criteria specified by obj. The beans will be of the
-   *     same type as the bean that was passed in. If no beans match the criteria, an empty stream
-   *     will be returned. The stream is backed by open datastore resources (statement, result set,
-   *     and connection) that are released only when the stream is closed; terminal operations do
-   *     not close it. Always close the returned stream, preferably with try-with-resources.
-   * @throws CpoException Thrown if there are errors accessing the datasource
-   */
-  <C> Stream<C> retrieveBeans(
-      String groupName, C criteria, CpoWhere where, Collection<CpoOrderBy> orderBy)
-      throws CpoException;
-
-  /**
-   * Retrieves the bean from the datasource. The assumption is that the bean exists in the
-   * datasource.
-   *
-   * @param <C> the type of the criteria JavaBean
-   * @param groupName The filter groupName which tells the datasource which beans should be
-   *     returned. The groupName also signifies what data in the bean will be populated.
-   * @param criteria This is a bean that has been defined within the metadata of the datasource. If
-   *     the class is not defined an exception will be thrown. If the bean does not exist in the
-   *     datasource, an exception will be thrown. This bean is used to specify the parameters used
-   *     to retrieve the collection of beans.
-   * @param orderBy The CpoOrderBy bean that defines the order in which beans should be returned
-   * @return A stream of beans that meet the criteria specified by obj. The beans will be of the
-   *     same type as the bean that was passed in. If no beans match the criteria, an empty stream
-   *     will be returned. The stream is backed by open datastore resources (statement, result set,
-   *     and connection) that are released only when the stream is closed; terminal operations do
-   *     not close it. Always close the returned stream, preferably with try-with-resources.
-   * @throws CpoException Thrown if there are errors accessing the datasource
-   */
-  <C> Stream<C> retrieveBeans(String groupName, C criteria, Collection<CpoOrderBy> orderBy)
-      throws CpoException;
-
-  /**
-   * Retrieves the bean from the datasource. The assumption is that the bean exists in the
-   * datasource.
-   *
-   * @param <C> the type of the criteria JavaBean
-   * @param groupName The filter groupName which tells the datasource which beans should be
-   *     returned. The groupName also signifies what data in the bean will be populated.
-   * @param criteria This is a bean that has been defined within the metadata of the datasource. If
-   *     the class is not defined an exception will be thrown. If the bean does not exist in the
-   *     datasource, an exception will be thrown. This bean is used to specify the parameters used
-   *     to retrieve the collection of beans.
-   * @param wheres A collection of CpoWhere beans that define the constraints that should be used
-   *     when retrieving beans
-   * @param orderBy The CpoOrderBy bean that defines the order in which beans should be returned
-   * @return A stream of beans that meet the criteria specified by obj. The beans will be of the
-   *     same type as the bean that was passed in. If no beans match the criteria, an empty stream
-   *     will be returned. The stream is backed by open datastore resources (statement, result set,
-   *     and connection) that are released only when the stream is closed; terminal operations do
-   *     not close it. Always close the returned stream, preferably with try-with-resources.
-   * @throws CpoException Thrown if there are errors accessing the datasource
-   */
-  <C> Stream<C> retrieveBeans(
-      String groupName, C criteria, Collection<CpoWhere> wheres, Collection<CpoOrderBy> orderBy)
-      throws CpoException;
-
-  /**
-   * Retrieves the bean from the datasource. The assumption is that the bean exists in the
-   * datasource.
-   *
-   * @param <T> The type of the return JavaBean
-   * @param <C> The type of the criteria JavaBean
-   * @param groupName The filter groupName which tells the datasource which beans should be
-   *     returned. The groupName also signifies what data in the bean will be populated.
-   * @param criteria This is a bean that has been defined within the metadata of the datasource. If
-   *     the class is not defined an exception will be thrown. If the bean does not exist in the
-   *     datasource, an exception will be thrown. This bean is used to specify the parameters used
-   *     to retrieve the collection of beans.
-   * @param result This is a bean that has been defined within the metadata of the datasource. If
-   *     the class is not defined an exception will be thrown. If the bean does not exist in the
-   *     datasource, an exception will be thrown. This bean is used to specify the bean type that
-   *     will be returned in the collection.
-   * @return A stream of beans that meet the criteria specified by obj. The beans will be of the
-   *     same type as the bean that was passed in. If no beans match the criteria, an empty stream
-   *     will be returned. The stream is backed by open datastore resources (statement, result set,
-   *     and connection) that are released only when the stream is closed; terminal operations do
-   *     not close it. Always close the returned stream, preferably with try-with-resources.
-   * @throws CpoException Thrown if there are errors accessing the datasource
-   */
-  <T, C> Stream<T> retrieveBeans(String groupName, C criteria, T result) throws CpoException;
-
-  /**
-   * Retrieves the bean from the datasource. The assumption is that the bean exists in the
-   * datasource.
-   *
-   * @param <T> The type of the return JavaBean
-   * @param <C> The type of the criteria JavaBean
-   * @param groupName The filter groupName which tells the datasource which beans should be
-   *     returned. The groupName also signifies what data in the bean will be populated.
-   * @param criteria This is a bean that has been defined within the metadata of the datasource. If
-   *     the class is not defined an exception will be thrown. If the bean does not exist in the
-   *     datasource, an exception will be thrown. This bean is used to specify the parameters used
-   *     to retrieve the collection of beans.
-   * @param result This is a bean that has been defined within the metadata of the datasource. If
-   *     the class is not defined an exception will be thrown. If the bean does not exist in the
-   *     datasource, an exception will be thrown. This bean is used to specify the bean type that
-   *     will be returned in the collection.
-   * @param where A CpoWhere bean that defines the constraints that should be used when retrieving
-   *     beans
-   * @param orderBy The CpoOrderBy bean that defines the order in which beans should be returned
-   * @return A stream of beans that meet the criteria specified by obj. The beans will be of the
-   *     same type as the bean that was passed in. If no beans match the criteria, an empty stream
-   *     will be returned. The stream is backed by open datastore resources (statement, result set,
-   *     and connection) that are released only when the stream is closed; terminal operations do
-   *     not close it. Always close the returned stream, preferably with try-with-resources.
-   * @throws CpoException Thrown if there are errors accessing the datasource
-   */
-  <T, C> Stream<T> retrieveBeans(
-      String groupName, C criteria, T result, CpoWhere where, Collection<CpoOrderBy> orderBy)
-      throws CpoException;
-
-  /**
-   * Retrieves the bean from the datasource. The assumption is that the bean exists in the
-   * datasource.
-   *
-   * @param <T> The type of the return JavaBean
-   * @param <C> The type of the criteria JavaBean
-   * @param groupName The filter groupName which tells the datasource which beans should be
-   *     returned. The groupName also signifies what data in the bean will be populated.
-   * @param criteria This is a bean that has been defined within the metadata of the datasource. If
-   *     the class is not defined an exception will be thrown. If the bean does not exist in the
-   *     datasource, an exception will be thrown. This bean is used to specify the parameters used
-   *     to retrieve the collection of beans.
-   * @param result This is a bean that has been defined within the metadata of the datasource. If
-   *     the class is not defined an exception will be thrown. If the bean does not exist in the
-   *     datasource, an exception will be thrown. This bean is used to specify the bean type that
-   *     will be returned in the collection.
-   * @param wheres A collection of CpoWhere beans that define the constraints that should be used
-   *     when retrieving beans
-   * @param orderBy The CpoOrderBy bean that defines the order in which beans should be returned
-   * @return A stream of beans that meet the criteria specified by obj. The beans will be of the
-   *     same type as the bean that was passed in. If no beans match the criteria, an empty stream
-   *     will be returned. The stream is backed by open datastore resources (statement, result set,
-   *     and connection) that are released only when the stream is closed; terminal operations do
-   *     not close it. Always close the returned stream, preferably with try-with-resources.
-   * @throws CpoException Thrown if there are errors accessing the datasource
-   */
-  <T, C> Stream<T> retrieveBeans(
-      String groupName,
-      C criteria,
-      T result,
-      Collection<CpoWhere> wheres,
-      Collection<CpoOrderBy> orderBy)
-      throws CpoException;
-
-  /**
-   * Retrieves the bean from the datasource. The assumption is that the bean exists in the
-   * datasource.
-   *
-   * @param <T> The type of the return JavaBean
-   * @param <C> The type of the criteria JavaBean
-   * @param groupName The filter groupName which tells the datasource which beans should be
-   *     returned. The groupName also signifies what data in the bean will be populated.
-   * @param criteria This is a bean that has been defined within the metadata of the datasource. If
-   *     the class is not defined an exception will be thrown. If the bean does not exist in the
-   *     datasource, an exception will be thrown. This bean is used to specify the parameters used
-   *     to retrieve the collection of beans.
-   * @param result This is a bean that has been defined within the metadata of the datasource. If
-   *     the class is not defined an exception will be thrown. If the bean does not exist in the
-   *     datasource, an exception will be thrown. This bean is used to specify the bean type that
-   *     will be returned in the collection.
-   * @param wheres A collection of CpoWhere beans that define the constraints that should be used
-   *     when retrieving beans
-   * @param orderBy The CpoOrderBy bean that defines the order in which beans should be returned
-   * @param nativeExpressions Native expression that will be used to augment the expression stored
-   *     in the metadata. This text will be embedded at run-time
-   * @return A stream of beans that meet the criteria specified by obj. The beans will be of the
-   *     same type as the bean that was passed in. If no beans match the criteria, an empty stream
-   *     will be returned. The stream is backed by open datastore resources (statement, result set,
-   *     and connection) that are released only when the stream is closed; terminal operations do
-   *     not close it. Always close the returned stream, preferably with try-with-resources.
-   * @throws CpoException Thrown if there are errors accessing the datasource
-   */
-  <T, C> Stream<T> retrieveBeans(
-      String groupName,
-      C criteria,
-      T result,
-      Collection<CpoWhere> wheres,
-      Collection<CpoOrderBy> orderBy,
-      Collection<CpoNativeFunction> nativeExpressions)
-      throws CpoException;
-
-  /**
-   * Update the bean in the datasource. The CpoAdapter will check to see if the bean exists in the
-   * datasource. If it exists then the bean will be updated. If it does not exist, an exception will
-   * be thrown
-   *
-   * <pre>Example:
-   * {@code
-   * class SomeBean so = new SomeBean();
-   * class CpoAdapter cpo = null;
-   *  try {
-   *    cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));
-   *  } catch (CpoException ce) {
-   *    // Handle the error
-   *    cpo = null;
-   *  }
-   *  if (cpo!=null) {
-   *    so.setId(1);
-   *    so.setName("SomeName");
-   *    try{
-   *      cpo.updateBean(so);
-   *    } catch (CpoException ce) {
-   *      // Handle the error
-   *    }
-   *  }
-   * }
-   * </pre>
-   *
-   * @param <T> The type of the JavaBean
-   * @param bean This is a bean that has been defined within the metadata of the datasource. If the
-   *     class is not defined an exception will be thrown.
-   * @return The number of beans updated in the datasource
-   * @throws CpoException Thrown if there are errors accessing the datasource
-   */
-  <T> long updateBean(T bean) throws CpoException;
-
-  /**
-   * Update the bean in the datasource. The CpoAdapter will check to see if the bean exists in the
-   * datasource. If it exists then the bean will be updated. If it does not exist, an exception will
-   * be thrown
-   *
-   * <pre>Example:
-   * {@code
-   * class SomeBean so = new SomeBean();
-   * class CpoAdapter cpo = null;
-   *  try {
-   *    cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));
-   *  } catch (CpoException ce) {
-   *    // Handle the error
-   *    cpo = null;
-   *  }
-   *  if (cpo!=null) {
-   *    so.setId(1);
-   *    so.setName("SomeName");
-   *    try{
-   *      cpo.updateBean("updateSomeBean",so);
-   *    } catch (CpoException ce) {
-   *      // Handle the error
-   *    }
-   *  }
-   * }
-   * </pre>
-   *
-   * @param <T> The type of the JavaBean
-   * @param groupName The String groupName of the UPDATE Function Group that will be used to create
-   *     the bean in the datasource. null signifies that the default rules will be used.
-   * @param bean This is a bean that has been defined within the metadata of the datasource. If the
-   *     class is not defined an exception will be thrown.
-   * @return The number of beans updated in the datasource
-   * @throws CpoException Thrown if there are errors accessing the datasource
-   */
-  <T> long updateBean(String groupName, T bean) throws CpoException;
-
-  /**
-   * Update the bean in the datasource. The CpoAdapter will check to see if the bean exists in the
-   * datasource. If it exists then the bean will be updated. If it does not exist, an exception will
-   * be thrown
-   *
-   * <pre>Example:
-   * {@code
-   * class SomeBean so = new SomeBean();
-   * class CpoAdapter cpo = null;
-   * try {
-   * 	cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));
-   * } catch (CpoException ce) {
-   * 	// Handle the error
-   * 	cpo = null;
-   * }
-   * if (cpo!=null) {
-   * 	so.setId(1);
-   * 	so.setName("SomeName");
-   * 	try{
-   * 		cpo.updateBean("updateSomeBean",so);
-   *  } catch (CpoException ce) {
-   * 		// Handle the error
-   *  }
-   * }
-   * }
-   * </pre>
-   *
-   * @param <T> The type of the JavaBean
-   * @param groupName The String groupName of the UPDATE Function Group that will be used to create
-   *     the bean in the datasource. null signifies that the default rules will be used.
-   * @param bean This is a bean that has been defined within the metadata of the datasource. If the
-   *     class is not defined an exception will be thrown.
-   * @param wheres A collection of CpoWhere beans to be used by the function
-   * @param orderBy A collection of CpoOrderBy beans to be used by the function
-   * @param nativeExpressions A collection of CpoNativeFunction beans to be used by the function
-   * @return The number of beans updated in the datasource
-   * @throws CpoException Thrown if there are errors accessing the datasource
-   */
-  <T> long updateBean(
-      String groupName,
-      T bean,
-      Collection<CpoWhere> wheres,
-      Collection<CpoOrderBy> orderBy,
-      Collection<CpoNativeFunction> nativeExpressions)
-      throws CpoException;
-
-  /**
-   * Updates a collection of beans in the datasource. The assumption is that the beans contained in
-   * the collection exist in the datasource. This method stores the bean in the datasource. The
-   * beans in the collection will be treated as one transaction, meaning that if one of the beans
-   * fail being updated in the datasource then the entire collection will be rolled back, if
-   * supported by the datasource.
-   *
-   * <pre>Example:
-   * {@code
-   * class SomeBean so = null;
-   * class CpoAdapter cpo = null;
-   *  try {
-   *    cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));
-   *  } catch (CpoException ce) {
-   *    // Handle the error
-   *    cpo = null;
-   *  }
-   *  if (cpo!=null) {
-   *    ArrayList al = new ArrayList();
-   *    for (int i=0; i<3; i++){
-   *      so = new SomeBean();
-   *      so.setId(1);
-   *      so.setName("SomeName");
-   *      al.add(so);
-   *    }
-   *    try{
-   *      cpo.updateBeans(al);
-   *    } catch (CpoException ce) {
-   *      // Handle the error
-   *    }
-   *  }
-   * }
-   * </pre>
-   *
-   * @param <T> The type of the JavaBean
-   * @param beans This is a collection of beans that have been defined within the metadata of the
-   *     datasource. If the class is not defined an exception will be thrown.
-   * @return The number of beans updated in the datasource
-   * @throws CpoException Thrown if there are errors accessing the datasource
-   */
-  <T> long updateBeans(List<T> beans) throws CpoException;
-
-  /**
-   * Updates a collection of beans in the datasource. The assumption is that the beans contained in
-   * the collection exist in the datasource. This method stores the bean in the datasource. The
-   * beans in the collection will be treated as one transaction, meaning that if one of the beans
-   * fail being updated in the datasource then the entire collection will be rolled back, if
-   * supported by the datasource.
-   *
-   * <pre>Example:
-   * {@code
-   * class SomeBean so = null;
-   * class CpoAdapter cpo = null;
-   *  try {
-   *    cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));
-   *  } catch (CpoException ce) {
-   *    // Handle the error
-   *    cpo = null;
-   *  }
-   *  if (cpo!=null) {
-   *    ArrayList al = new ArrayList();
-   *    for (int i=0; i<3; i++){
-   *      so = new SomeBean();
-   *      so.setId(1);
-   *      so.setName("SomeName");
-   *      al.add(so);
-   *    }
-   *      try{
-   *        cpo.updateBeans("myUpdate",al);
-   *      } catch (CpoException ce) {
-   *        // Handle the error
-   *      }
-   *  }
-   * }
-   * </pre>
-   *
-   * @param <T> The type of the JavaBean
-   * @param groupName The String groupName of the UPDATE Function Group that will be used to create
-   *     the bean in the datasource. null signifies that the default rules will be used.
-   * @param beans This is a collection of beans that have been defined within the metadata of the
-   *     datasource. If the class is not defined an exception will be thrown.
-   * @return The number of beans updated in the datasource
-   * @throws CpoException Thrown if there are errors accessing the datasource
-   */
-  <T> long updateBeans(String groupName, List<T> beans) throws CpoException;
-
-  /**
-   * Updates a collection of beans in the datasource. The assumption is that the beans contained in
-   * the collection exist in the datasource. This method stores the bean in the datasource. The
-   * beans in the collection will be treated as one transaction, meaning that if one of the beans
-   * fail being updated in the datasource then the entire collection will be rolled back, if
-   * supported by the datasource.
-   *
-   * <pre>Example:
-   * {@code
-   * class SomeBean so = null;
-   * class CpoAdapter cpo = null;
-   * try {
-   * 	cpo = new JdbcCpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));
-   * } catch (CpoException ce) {
-   * 	// Handle the error
-   * 	cpo = null;
-   * }
-   * if (cpo!=null) {
-   * 	ArrayList al = new ArrayList();
-   * 	for (int i=0; i<3; i++){
-   * 		so = new SomeBean();
-   * 		so.setId(1);
-   * 		so.setName("SomeName");
-   * 		al.add(so);
-   *  }
-   * 	try{
-   * 		cpo.updateBeans("myUpdate",al);
-   *  } catch (CpoException ce) {
-   * 		// Handle the error
-   *  }
-   * }
-   * }
-   * </pre>
-   *
-   * @param <T> The type of the JavaBean
-   * @param groupName The String groupName of the UPDATE Function Group that will be used to create
-   *     the bean in the datasource. null signifies that the default rules will be used.
-   * @param beans This is a collection of beans that have been defined within the metadata of the
-   *     datasource. If the class is not defined an exception will be thrown.
-   * @param wheres A collection of CpoWhere beans to be used by the function
-   * @param orderBy A collection of CpoOrderBy beans to be used by the function
-   * @param nativeExpressions A collection of CpoNativeFunction beans to be used by the function
-   * @return The number of beans updated in the datasource
-   * @throws CpoException Thrown if there are errors accessing the datasource
-   */
-  <T> long updateBeans(
-      String groupName,
-      List<T> beans,
-      Collection<CpoWhere> wheres,
-      Collection<CpoOrderBy> orderBy,
-      Collection<CpoNativeFunction> nativeExpressions)
-      throws CpoException;
+  // ==================================== ACCESSORS ====================================
 
   /**
    * Get the CpoMetaDescriptor

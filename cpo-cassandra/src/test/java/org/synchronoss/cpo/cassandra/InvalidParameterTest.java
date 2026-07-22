@@ -104,7 +104,7 @@ public class InvalidParameterTest {
     Collection<ValueObject> col = null;
 
     try {
-      ValueObject valObj = cpoAdapter.retrieveBean(null, null);
+      ValueObject valObj = cpoAdapter.retrieveBean((String) null, (ValueObject) null);
       fail(method + "Test got to unreachable code");
     } catch (CpoException ce) {
       // This is what I am expecting so let it go
@@ -121,7 +121,7 @@ public class InvalidParameterTest {
 
     try {
       ValueObject valObj = null;
-      cpoAdapter.insertBean(null, valObj);
+      cpoAdapter.insertBean((String) null, valObj);
       fail(method + "Test got to unreachable code");
     } catch (CpoException ce) {
       // This is what I am expecting so let it go

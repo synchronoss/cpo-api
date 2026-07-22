@@ -227,7 +227,7 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
     try {
       c = getReadConnection();
 
-      objCount = existsBean(query.getGroupName(), bean, c, query.getWheres());
+      objCount = existsBean(query.groupName(), bean, c, query.wheres());
     } finally {
       // The read connection runs with autocommit off (required for cursor-based fetch), so
       // this read-only transaction must still be terminated before the connection returns
@@ -1273,9 +1273,9 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
 
           DataTypeMapEntry<?> dataTypeMapEntry =
               metaDescriptor.getDataTypeMapEntry(rsmd.getColumnType(i));
-          attribute.setDataType(dataTypeMapEntry.getDataTypeName());
-          attribute.setDataTypeInt(dataTypeMapEntry.getDataTypeInt());
-          attribute.setJavaType(dataTypeMapEntry.getJavaClass().getName());
+          attribute.setDataType(dataTypeMapEntry.dataTypeName());
+          attribute.setDataTypeInt(dataTypeMapEntry.dataTypeInt());
+          attribute.setJavaType(dataTypeMapEntry.javaClass().getName());
           attribute.setJavaName(dataTypeMapEntry.makeJavaName(rsmd.getColumnLabel(i)));
 
           attributes.add(attribute);

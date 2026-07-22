@@ -93,7 +93,7 @@ public class CpoMetaDescriptorTest {
     assertEquals(descriptor.getDataTypeName(idAttr), "java.lang.String");
     assertEquals(descriptor.getDataTypeJavaClass(idAttr), String.class);
     assertEquals(descriptor.getDataTypeInt("INT"), 1);
-    assertEquals(descriptor.getDataTypeMapEntry(1).getDataTypeName(), "INT");
+    assertEquals(descriptor.getDataTypeMapEntry(1).dataTypeName(), "INT");
     assertTrue(descriptor.getAllowableDataTypes().contains("INT"));
 
     assertNotNull(descriptor.getExpressionParser());

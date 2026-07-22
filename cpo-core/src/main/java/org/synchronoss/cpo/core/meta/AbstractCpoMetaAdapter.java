@@ -141,7 +141,7 @@ public abstract class AbstractCpoMetaAdapter implements CpoMetaAdapter {
     } else if (attribute.getGetterReturnType() != null) {
       clazz = attribute.getGetterReturnType();
     } else if (dataTypeMapEntry != null) {
-      clazz = dataTypeMapEntry.getJavaClass();
+      clazz = dataTypeMapEntry.javaClass();
     }
 
     return clazz;

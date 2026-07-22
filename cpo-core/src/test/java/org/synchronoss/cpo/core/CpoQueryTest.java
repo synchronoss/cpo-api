@@ -37,14 +37,14 @@ public class CpoQueryTest {
 
   @Test
   public void testGroupFactories() {
-    assertNull(CpoQuery.defaultGroup().getGroupName());
-    assertNull(CpoQuery.group(null).getGroupName(), "null group is the default group");
-    assertEquals(CpoQuery.group("g").getGroupName(), "g");
+    assertNull(CpoQuery.defaultGroup().groupName());
+    assertNull(CpoQuery.group(null).groupName(), "null group is the default group");
+    assertEquals(CpoQuery.group("g").groupName(), "g");
 
     CpoQuery empty = CpoQuery.defaultGroup();
-    assertTrue(empty.getWheres().isEmpty());
-    assertTrue(empty.getOrderBys().isEmpty());
-    assertTrue(empty.getNativeExpressions().isEmpty());
+    assertTrue(empty.wheres().isEmpty());
+    assertTrue(empty.orderBys().isEmpty());
+    assertTrue(empty.nativeExpressions().isEmpty());
   }
 
   @Test
@@ -65,10 +65,10 @@ public class CpoQueryTest {
             .nativeExpression(n1)
             .nativeExpressions(List.of(n2));
 
-    assertEquals(query.getGroupName(), "g");
-    assertEquals(query.getWheres(), List.of(w1, w2));
-    assertEquals(query.getOrderBys(), List.of(o1, o2));
-    assertEquals(query.getNativeExpressions(), List.of(n1, n2));
+    assertEquals(query.groupName(), "g");
+    assertEquals(query.wheres(), List.of(w1, w2));
+    assertEquals(query.orderBys(), List.of(o1, o2));
+    assertEquals(query.nativeExpressions(), List.of(n1, n2));
   }
 
   @Test
@@ -94,9 +94,9 @@ public class CpoQueryTest {
     CpoQuery extended = original.where(w);
 
     assertNotSame(extended, original);
-    assertTrue(original.getWheres().isEmpty(), "the original query must be unchanged");
-    assertEquals(extended.getWheres(), List.of(w));
-    assertEquals(extended.getGroupName(), "g", "the group carries over to the extended query");
+    assertTrue(original.wheres().isEmpty(), "the original query must be unchanged");
+    assertEquals(extended.wheres(), List.of(w));
+    assertEquals(extended.groupName(), "g", "the group carries over to the extended query");
   }
 
   @Test
@@ -104,12 +104,12 @@ public class CpoQueryTest {
     CpoQuery query = CpoQuery.group("g").where(new BindableCpoWhere());
 
     expectThrows(
-        UnsupportedOperationException.class, () -> query.getWheres().add(new BindableCpoWhere()));
+        UnsupportedOperationException.class, () -> query.wheres().add(new BindableCpoWhere()));
     expectThrows(
         UnsupportedOperationException.class,
-        () -> query.getOrderBys().add(new BindableCpoOrderBy("attr", true)));
+        () -> query.orderBys().add(new BindableCpoOrderBy("attr", true)));
     expectThrows(
         UnsupportedOperationException.class,
-        () -> query.getNativeExpressions().add(new CpoNativeFunction()));
+        () -> query.nativeExpressions().add(new CpoNativeFunction()));
   }
 }

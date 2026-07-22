@@ -38,24 +38,24 @@ public class DataTypeMapperTest {
   @Test
   public void testLookupByInt() {
     DataTypeMapper mapper = newMapper();
-    assertEquals(mapper.getDataTypeMapEntry(1).getDataTypeName(), "INT");
+    assertEquals(mapper.getDataTypeMapEntry(1).dataTypeName(), "INT");
     assertEquals(mapper.getDataTypeJavaClass(1), int.class);
     assertEquals(mapper.getDataTypeJavaClass(Integer.valueOf(1)), int.class);
 
     // unknown ints fall back to the default entry
-    assertEquals(mapper.getDataTypeMapEntry(99).getDataTypeName(), "VARCHAR");
+    assertEquals(mapper.getDataTypeMapEntry(99).dataTypeName(), "VARCHAR");
     assertEquals(mapper.getDataTypeJavaClass(99), String.class);
   }
 
   @Test
   public void testLookupByName() {
     DataTypeMapper mapper = newMapper();
-    assertEquals(mapper.getDataTypeMapEntry("INT").getDataTypeInt(), 1);
+    assertEquals(mapper.getDataTypeMapEntry("INT").dataTypeInt(), 1);
     assertEquals(mapper.getDataTypeInt("INT"), 1);
     assertEquals(mapper.getDataTypeJavaClass("INT"), int.class);
 
     // unknown names fall back to the default entry
-    assertEquals(mapper.getDataTypeMapEntry("NOPE").getDataTypeName(), "VARCHAR");
+    assertEquals(mapper.getDataTypeMapEntry("NOPE").dataTypeName(), "VARCHAR");
     assertEquals(mapper.getDataTypeInt("NOPE"), 0);
     assertEquals(mapper.getDataTypeJavaClass("NOPE"), String.class);
   }
@@ -70,9 +70,9 @@ public class DataTypeMapperTest {
   @Test
   public void testDataTypeMapEntry() throws Exception {
     DataTypeMapEntry<String> entry = new DataTypeMapEntry<>(7, "TEXT", String.class);
-    assertEquals(entry.getDataTypeInt(), 7);
-    assertEquals(entry.getDataTypeName(), "TEXT");
-    assertEquals(entry.getJavaClass(), String.class);
+    assertEquals(entry.dataTypeInt(), 7);
+    assertEquals(entry.dataTypeName(), "TEXT");
+    assertEquals(entry.javaClass(), String.class);
     assertNotNull(entry.toString());
   }
 }

@@ -3,7 +3,7 @@
   #%L
   cpo
   %%
-  Copyright (C) 2003 - 2025 David E. Berry
+  Copyright (C) 2003 - 2026 Exaxis LLC, Synchronoss Technologies Inc
   %%
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU Lesser General Public License as
@@ -284,13 +284,14 @@
                 <version>2.7.0</version> <!-- Use the latest stable version -->
                 <configuration>
                     <inceptionYear>${project.inceptionYear}</inceptionYear>
-                    <organizationName>David E. Berry</organizationName>
+                    <organizationName>Exaxis LLC, Synchronoss Technologies Inc</organizationName>
                     <licenseName>lgpl_v3</licenseName>
                     <failOnMissingLicense>true</failOnMissingLicense>
                     <failOnMissingHeader>true</failOnMissingHeader>
                     <processStartTag>[[</processStartTag>
                     <sectionDelimiter>==</sectionDelimiter>
                     <processEndTag>]]</processEndTag>
+                    <canUpdateCopyright>true</canUpdateCopyright>
                     <!-- Other configurations as needed -->
                 </configuration>
                 <executions>

@@ -4,7 +4,7 @@ package org.synchronoss.cpo.core.enums;
  * [[
  * core
  * ==
- * Copyright (C) 2003 - 2025 David E. Berry
+ * Copyright (C) 2003 - 2026 Exaxis LLC, Synchronoss Technologies Inc
  * ==
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as

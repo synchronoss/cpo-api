@@ -28,6 +28,7 @@ import java.util.*;
 import org.synchronoss.cpo.cassandra.meta.CassandraCpoMetaDescriptor;
 import org.synchronoss.cpo.core.CpoAdapter;
 import org.synchronoss.cpo.core.CpoAdapterFactoryManager;
+import org.synchronoss.cpo.core.CpoQuery;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -91,7 +92,7 @@ public class CollectionsTest {
     }
 
     try {
-      ValueObject vo = readAdapter.retrieveBean(null, valObj, valObj, null, null);
+      ValueObject vo = readAdapter.retrieveBean(CpoQuery.defaultGroup(), valObj, valObj);
       assertEquals(vo.getAttrList().get(0), testString, "Strings do not match");
     } catch (Exception e) {
       fail(method + e.getMessage());
@@ -116,7 +117,7 @@ public class CollectionsTest {
     }
 
     try {
-      ValueObject vo = readAdapter.retrieveBean(null, valObj, valObj, null, null);
+      ValueObject vo = readAdapter.retrieveBean(CpoQuery.defaultGroup(), valObj, valObj);
       assertTrue(vo.getAttrSet().contains(testString), "Set does not contain the teststring");
     } catch (Exception e) {
       fail(method + e.getMessage());
@@ -142,7 +143,7 @@ public class CollectionsTest {
     }
 
     try {
-      ValueObject vo = readAdapter.retrieveBean(null, valObj, valObj, null, null);
+      ValueObject vo = readAdapter.retrieveBean(CpoQuery.defaultGroup(), valObj, valObj);
       assertEquals(vo.getAttrMap().get(testKey), testValue, "Strings do not match");
     } catch (Exception e) {
       fail(method + e.getMessage());

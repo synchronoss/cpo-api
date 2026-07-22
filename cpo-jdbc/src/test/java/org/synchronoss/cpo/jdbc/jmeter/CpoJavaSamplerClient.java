@@ -33,6 +33,7 @@ import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.core.CpoAdapter;
 import org.synchronoss.cpo.core.CpoAdapterFactoryManager;
 import org.synchronoss.cpo.core.CpoException;
+import org.synchronoss.cpo.core.CpoQuery;
 import org.synchronoss.cpo.core.meta.CpoMetaDescriptor;
 import org.synchronoss.cpo.cpoconfig.CtJdbcConfig;
 import org.synchronoss.cpo.cpoconfig.CtJdbcReadWriteConfig;
@@ -132,7 +133,7 @@ public class CpoJavaSamplerClient extends AbstractJavaSamplerClient {
       cpoAdapter.insertBean(valueObject);
       ValueObject vo =
           cpoAdapter.retrieveBean(
-              ValueObject.FG_RETRIEVE_NULL, valueObject, valueObject, null, null);
+              CpoQuery.group(ValueObject.FG_RETRIEVE_NULL), valueObject, valueObject);
       result.setSuccessful(vo != null && vo.getId() == valueObject.getId());
     } catch (CpoException ex) {
       logger.error(ex.getMessage(), ex);

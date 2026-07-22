@@ -29,6 +29,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.core.CpoAdapter;
 import org.synchronoss.cpo.core.CpoAdapterFactoryManager;
+import org.synchronoss.cpo.core.CpoQuery;
 import org.synchronoss.cpo.core.CpoWhere;
 import org.synchronoss.cpo.core.enums.Comparison;
 import org.synchronoss.cpo.core.enums.Logical;
@@ -108,7 +109,7 @@ public class ExistObjectTest {
       CpoWhere where = cpoAdapter.newWhere(Logical.AND, "attrInt", Comparison.EQ, 3);
       ArrayList<CpoWhere> wheres = new ArrayList<>();
       wheres.add(where);
-      long count = cpoAdapter.existsBean(null, valObj, wheres);
+      long count = cpoAdapter.existsBean(CpoQuery.defaultGroup().wheres(wheres), valObj);
       assertEquals(count, 1, "Object not Found");
     } catch (Exception e) {
       fail(method + e.getMessage());
@@ -119,7 +120,7 @@ public class ExistObjectTest {
       CpoWhere where = cpoAdapter.newWhere(Logical.AND, "attrInt", Comparison.EQ, 5);
       ArrayList<CpoWhere> wheres = new ArrayList<>();
       wheres.add(where);
-      long count = cpoAdapter.existsBean(null, valObj, wheres);
+      long count = cpoAdapter.existsBean(CpoQuery.defaultGroup().wheres(wheres), valObj);
       assertEquals(count, 0, "Object Found");
     } catch (Exception e) {
       fail(method + e.getMessage());

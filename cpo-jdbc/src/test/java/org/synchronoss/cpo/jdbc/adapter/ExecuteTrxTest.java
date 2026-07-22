@@ -27,6 +27,7 @@ import static org.testng.Assert.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.core.CpoAdapterFactoryManager;
+import org.synchronoss.cpo.core.CpoQuery;
 import org.synchronoss.cpo.core.CpoTrxAdapter;
 import org.synchronoss.cpo.core.helper.ExceptionHelper;
 import org.synchronoss.cpo.jdbc.ValueObject;
@@ -135,7 +136,9 @@ public class ExecuteTrxTest {
       ValueObject rvo;
 
       try {
-        rvo = trxAdapter.executeBean(ValueObject.FG_EXECUTE_TESTEXECUTEOBJECT, vo, vo);
+        rvo =
+            trxAdapter.executeBean(
+                CpoQuery.group(ValueObject.FG_EXECUTE_TESTEXECUTEOBJECT), vo, vo);
         trxAdapter.commit();
         assertNotNull(method + "Returned Value object is null");
         assertEquals(rvo.getAttrDouble(), 27, "power(3,3)=" + rvo.getAttrDouble());

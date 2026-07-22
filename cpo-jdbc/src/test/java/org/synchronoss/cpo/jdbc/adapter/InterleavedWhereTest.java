@@ -29,6 +29,7 @@ import java.util.Collection;
 import java.util.stream.Stream;
 import org.synchronoss.cpo.core.CpoAdapter;
 import org.synchronoss.cpo.core.CpoAdapterFactoryManager;
+import org.synchronoss.cpo.core.CpoQuery;
 import org.synchronoss.cpo.core.CpoWhere;
 import org.synchronoss.cpo.core.enums.Comparison;
 import org.synchronoss.cpo.core.enums.Logical;
@@ -123,7 +124,8 @@ public class InterleavedWhereTest {
       ArrayList<CpoWhere> wheres = new ArrayList<>();
       wheres.add(cw);
       try (Stream<ValueObject> beans =
-          cpoAdapter.retrieveBeans(ValueObject.FG_LIST_INTERLEAVEDWHERE, valObj, wheres, null); ) {
+          cpoAdapter.retrieveBeans(
+              CpoQuery.group(ValueObject.FG_LIST_INTERLEAVEDWHERE).wheres(wheres), valObj); ) {
         long count = beans.count();
         assertEquals(count, 3, "Number of beans is " + count);
       }

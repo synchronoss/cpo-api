@@ -29,6 +29,7 @@ import java.util.ArrayList;
 import java.util.List;
 import org.synchronoss.cpo.core.CpoAdapter;
 import org.synchronoss.cpo.core.CpoAdapterFactoryManager;
+import org.synchronoss.cpo.core.CpoQuery;
 import org.synchronoss.cpo.core.CpoWhere;
 import org.synchronoss.cpo.core.enums.Comparison;
 import org.synchronoss.cpo.core.enums.Logical;
@@ -104,7 +105,8 @@ public class UpdateObjectTest {
     try {
       List<CpoWhere> cws = new ArrayList<>();
       cws.add(cpoAdapter.newWhere(Logical.NONE, ValueObject.ATTR_ID, Comparison.EQ, IDB + 2));
-      long updated = cpoAdapter.updateBean(ValueObject.FG_UPDATE_NULL, valObj, cws, null, null);
+      long updated =
+          cpoAdapter.updateBean(CpoQuery.group(ValueObject.FG_UPDATE_NULL).wheres(cws), valObj);
       assertEquals(updated, 0, "Should not have updated anything");
     } catch (Exception e) {
       fail(method + e.getMessage());
@@ -114,7 +116,8 @@ public class UpdateObjectTest {
     try {
       List<CpoWhere> cws = new ArrayList<>();
       cws.add(cpoAdapter.newWhere(Logical.NONE, ValueObject.ATTR_ID, Comparison.EQ, IDB + 5));
-      long updated = cpoAdapter.updateBean(ValueObject.FG_UPDATE_NULL, valObj, cws, null, null);
+      long updated =
+          cpoAdapter.updateBean(CpoQuery.group(ValueObject.FG_UPDATE_NULL).wheres(cws), valObj);
       assertEquals(updated, 1, "Should have updated 1");
     } catch (Exception e) {
       fail(method + e.getMessage());

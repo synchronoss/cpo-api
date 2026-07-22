@@ -32,6 +32,7 @@ import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.core.CpoAdapter;
 import org.synchronoss.cpo.core.CpoAdapterFactoryManager;
 import org.synchronoss.cpo.core.CpoException;
+import org.synchronoss.cpo.core.CpoQuery;
 import org.synchronoss.cpo.core.CpoTrxAdapter;
 import org.synchronoss.cpo.jdbc.ValueObject;
 import org.testng.annotations.AfterClass;
@@ -237,7 +238,7 @@ public class RetrieveBeanTest {
       var oldSize = cpoAdapter.getFetchSize();
       cpoAdapter.setFetchSize(fetchSize);
       try (Stream<ValueObject> beans =
-          cpoAdapter.retrieveBeans(ValueObject.FG_LIST_NULL, valObj, valObj, null, null, null); ) {
+          cpoAdapter.retrieveBeans(CpoQuery.group(ValueObject.FG_LIST_NULL), valObj, valObj); ) {
         long count =
             beans
                 .filter(b -> Math.abs(b.getId()) >= IDB && Math.abs(b.getId()) < IDB + 100000)

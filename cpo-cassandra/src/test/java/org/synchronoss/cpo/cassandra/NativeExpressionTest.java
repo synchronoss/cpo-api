@@ -30,6 +30,7 @@ import java.util.stream.Stream;
 import org.synchronoss.cpo.core.CpoAdapter;
 import org.synchronoss.cpo.core.CpoAdapterFactoryManager;
 import org.synchronoss.cpo.core.CpoNativeFunction;
+import org.synchronoss.cpo.core.CpoQuery;
 import org.synchronoss.cpo.core.CpoWhere;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
@@ -109,7 +110,9 @@ public class NativeExpressionTest {
       ValueObject valObj = ValueObjectFactory.createValueObject(IDB + 3);
       try (Stream<ValueObject> beans =
           cpoAdapter.retrieveBeans(
-              ValueObject.FG_LIST_TESTWHERERETRIEVE, valObj, valObj, null, null, cnqAl); ) {
+              CpoQuery.group(ValueObject.FG_LIST_TESTWHERERETRIEVE).nativeExpressions(cnqAl),
+              valObj,
+              valObj); ) {
         long count =
             beans
                 .filter(b -> Math.abs(b.getId()) >= IDB && Math.abs(b.getId()) < IDB + 100000)

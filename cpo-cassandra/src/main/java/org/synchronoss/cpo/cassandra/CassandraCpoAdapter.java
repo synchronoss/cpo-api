@@ -155,17 +155,16 @@ public class CassandraCpoAdapter extends CpoBaseAdapter<ClusterDataSource> {
   }
 
   @Override
-  public <T> long existsBean(String groupName, T bean, Collection<CpoWhere> wheres)
-      throws CpoException {
+  public <T> long existsBean(CpoQuery query, T bean) throws CpoException {
     Session session = null;
     long objCount = -1;
 
     try {
       session = getReadSession();
 
-      objCount = existsBean(groupName, bean, session, wheres);
+      objCount = existsBean(query.getGroupName(), bean, session, query.getWheres());
     } catch (Exception e) {
-      throw new CpoException("existsBeans(String, T) failed", e);
+      throw new CpoException("existsBeans(CpoQuery, T) failed", e);
     }
 
     return objCount;

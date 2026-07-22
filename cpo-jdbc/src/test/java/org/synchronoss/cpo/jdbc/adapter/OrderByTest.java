@@ -32,6 +32,7 @@ import java.util.stream.Stream;
 import org.synchronoss.cpo.core.CpoAdapter;
 import org.synchronoss.cpo.core.CpoAdapterFactoryManager;
 import org.synchronoss.cpo.core.CpoOrderBy;
+import org.synchronoss.cpo.core.CpoQuery;
 import org.synchronoss.cpo.jdbc.ValueObject;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
@@ -128,7 +129,8 @@ public class OrderByTest {
       colCob.add(cob1);
       ValueObject valObj = ValueObjectFactory.createValueObject();
       try (Stream<ValueObject> beans =
-          cpoAdapter.retrieveBeans(ValueObject.FG_LIST_TESTORDERBYRETRIEVE, valObj, colCob); ) {
+          cpoAdapter.retrieveBeans(
+              CpoQuery.group(ValueObject.FG_LIST_TESTORDERBYRETRIEVE).orderBys(colCob), valObj); ) {
         AtomicInteger id = new AtomicInteger(IDB + 1);
         beans
             .filter(b -> Math.abs(b.getId()) >= IDB && Math.abs(b.getId()) < IDB + 100000)
@@ -155,7 +157,8 @@ public class OrderByTest {
       colCob.add(cob2);
       ValueObject valObj = ValueObjectFactory.createValueObject();
       try (Stream<ValueObject> beans =
-          cpoAdapter.retrieveBeans(ValueObject.FG_LIST_TESTORDERBYRETRIEVE, valObj, colCob); ) {
+          cpoAdapter.retrieveBeans(
+              CpoQuery.group(ValueObject.FG_LIST_TESTORDERBYRETRIEVE).orderBys(colCob), valObj); ) {
         AtomicInteger id = new AtomicInteger(IDB + 5);
         beans
             .filter(b -> Math.abs(b.getId()) >= IDB && Math.abs(b.getId()) < IDB + 100000)
@@ -179,7 +182,8 @@ public class OrderByTest {
       colCob.add(cob);
       ValueObject valObj = ValueObjectFactory.createValueObject();
       try (Stream<ValueObject> beans =
-          cpoAdapter.retrieveBeans(ValueObject.FG_LIST_TESTORDERBYRETRIEVE, valObj, colCob); ) {
+          cpoAdapter.retrieveBeans(
+              CpoQuery.group(ValueObject.FG_LIST_TESTORDERBYRETRIEVE).orderBys(colCob), valObj); ) {
         AtomicInteger id = new AtomicInteger(IDB + 1);
         beans
             .filter(b -> Math.abs(b.getId()) >= IDB && Math.abs(b.getId()) < IDB + 100000)

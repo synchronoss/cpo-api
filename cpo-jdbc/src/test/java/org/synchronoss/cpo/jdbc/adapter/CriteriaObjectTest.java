@@ -30,6 +30,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.core.CpoAdapter;
 import org.synchronoss.cpo.core.CpoAdapterFactoryManager;
+import org.synchronoss.cpo.core.CpoQuery;
 import org.synchronoss.cpo.core.CpoWhere;
 import org.synchronoss.cpo.core.enums.Comparison;
 import org.synchronoss.cpo.core.enums.Logical;
@@ -138,11 +139,9 @@ public class CriteriaObjectTest {
       wheres.add(cw);
       try (Stream<ValueObject> beans =
           cpoAdapter.retrieveBeans(
-              CriteriaObject.FG_LIST_SELECTALL,
+              CpoQuery.group(CriteriaObject.FG_LIST_SELECTALL).wheres(wheres),
               critObject,
-              new ValueObjectBean(),
-              wheres,
-              null); ) {
+              new ValueObjectBean()); ) {
         long count = beans.count();
         assertEquals(count, 3, "Number of beans is " + count);
       }
@@ -163,7 +162,9 @@ public class CriteriaObjectTest {
       try {
         rvo =
             cpoAdapter.executeBean(
-                CriteriaObject.FG_EXECUTE_EXECUTECRITERIA, critObject, new ValueObjectBean());
+                CpoQuery.group(CriteriaObject.FG_EXECUTE_EXECUTECRITERIA),
+                critObject,
+                new ValueObjectBean());
         assertNotNull(rvo, method + "Returned Value object is null");
         assertEquals(rvo.getAttrDouble(), 27, "power(3,3)=" + rvo.getAttrDouble());
       } catch (Exception e) {

@@ -30,6 +30,7 @@ import java.util.stream.Stream;
 import org.synchronoss.cpo.cassandra.meta.CassandraCpoMetaDescriptor;
 import org.synchronoss.cpo.core.CpoAdapter;
 import org.synchronoss.cpo.core.CpoAdapterFactoryManager;
+import org.synchronoss.cpo.core.CpoQuery;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -100,7 +101,7 @@ public class InsertObjectTest {
     }
 
     try {
-      ValueObject vo = readAdapter.retrieveBean(null, valObj, valObj, null, null);
+      ValueObject vo = readAdapter.retrieveBean(CpoQuery.defaultGroup(), valObj, valObj);
       assertEquals(vo.getId(), valObj.getId(), "Ids do not match");
       assertEquals(vo.getAttrInt(), valObj.getAttrInt(), "Integers do not match");
       assertEquals(vo.getAttrVarChar(), valObj.getAttrVarChar(), "Strings do not match");

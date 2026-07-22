@@ -28,6 +28,7 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import org.synchronoss.cpo.core.CpoAdapter;
 import org.synchronoss.cpo.core.CpoAdapterFactoryManager;
+import org.synchronoss.cpo.core.CpoQuery;
 import org.synchronoss.cpo.jdbc.CaseValueObject;
 import org.synchronoss.cpo.jdbc.CaseValueObjectBean;
 import org.testng.annotations.AfterClass;
@@ -109,7 +110,8 @@ public class CaseSensitiveTest {
 
     try {
       CaseValueObject vo =
-          readAdapter.retrieveBean(CaseValueObject.FG_RETRIEVE_NULL, valObj, valObj, null, null);
+          readAdapter.retrieveBean(
+              CpoQuery.group(CaseValueObject.FG_RETRIEVE_NULL), valObj, valObj);
       assertNotEquals(vo.getId(), valObj.getId(), "Ids should not match");
       assertNotEquals(vo.getAttrInteger(), valObj.getAttrInteger(), "Integers should not match");
       assertNotEquals(valObj.getAttrVarChar(), vo.getAttrVarChar(), "Strings should not match");

@@ -33,6 +33,7 @@ import org.synchronoss.cpo.core.CpoAdapterFactoryManager;
 import org.synchronoss.cpo.core.CpoException;
 import org.synchronoss.cpo.core.CpoNativeFunction;
 import org.synchronoss.cpo.core.CpoOrderBy;
+import org.synchronoss.cpo.core.CpoQuery;
 import org.synchronoss.cpo.core.CpoWhere;
 import org.synchronoss.cpo.jdbc.ValueObject;
 import org.testng.annotations.AfterMethod;
@@ -138,11 +139,9 @@ public class JdbcAdapterBranchTest {
         CpoException.class,
         () ->
             cpoAdapter.retrieveBean(
-                ValueObject.FG_RETRIEVE_NULL,
+                CpoQuery.group(ValueObject.FG_RETRIEVE_NULL),
                 ValueObjectFactory.createValueObject(IDB + 1),
-                (ValueObject) null,
-                null,
-                null));
+                (ValueObject) null));
     expectThrows(CpoException.class, () -> cpoAdapter.insertBean((ValueObject) null));
     assertTrue(cpoAdapter.getCpoAttributes(null).isEmpty(), "null expression yields no attributes");
   }
@@ -161,12 +160,12 @@ public class JdbcAdapterBranchTest {
     // empty (not null) where and orderBy collections exercise the empty-clause branches
     try (var beans =
         cpoAdapter.retrieveBeans(
-            ValueObject.FG_LIST_NULL,
+            CpoQuery.group(ValueObject.FG_LIST_NULL)
+                .wheres(new ArrayList<CpoWhere>())
+                .orderBys(new ArrayList<CpoOrderBy>())
+                .nativeExpressions(natives),
             ValueObjectFactory.createValueObject(),
-            ValueObjectFactory.createValueObject(),
-            new ArrayList<CpoWhere>(),
-            new ArrayList<CpoOrderBy>(),
-            natives)) {
+            ValueObjectFactory.createValueObject())) {
       assertEquals(
           beans
               .filter(b -> Math.abs(b.getId()) >= IDB && Math.abs(b.getId()) < IDB + 100000)

@@ -31,6 +31,7 @@ import java.util.List;
 import org.synchronoss.cpo.cassandra.meta.CassandraCpoMetaDescriptor;
 import org.synchronoss.cpo.core.CpoAdapter;
 import org.synchronoss.cpo.core.CpoAdapterFactoryManager;
+import org.synchronoss.cpo.core.CpoQuery;
 import org.synchronoss.cpo.core.CpoWhere;
 import org.synchronoss.cpo.core.enums.Comparison;
 import org.synchronoss.cpo.core.enums.Logical;
@@ -102,7 +103,7 @@ public class UpdateObjectTest {
       List<CpoWhere> cws = new ArrayList<>();
       cws.add(cpoAdapter.newWhere(Logical.NONE, "id", Comparison.EQ, IDB + 2));
       valObj.setAttrInt(4);
-      cpoAdapter.updateBean(null, valObj, cws, null, null);
+      cpoAdapter.updateBean(CpoQuery.defaultGroup().wheres(cws), valObj);
       ValueObject rObj = cpoAdapter.retrieveBean(valObj);
       assertTrue(
           rObj.getAttrInt() != valObj.getAttrInt(),
@@ -115,7 +116,7 @@ public class UpdateObjectTest {
     try {
       List<CpoWhere> cws = new ArrayList<>();
       cws.add(cpoAdapter.newWhere(Logical.NONE, "id", Comparison.EQ, IDB + 5));
-      cpoAdapter.updateBean(null, valObj, cws, null, null);
+      cpoAdapter.updateBean(CpoQuery.defaultGroup().wheres(cws), valObj);
       ValueObject rObj = cpoAdapter.retrieveBean(valObj);
       assertEquals(rObj.getAttrInt(), valObj.getAttrInt(), "It should be equal since it updated");
     } catch (Exception e) {

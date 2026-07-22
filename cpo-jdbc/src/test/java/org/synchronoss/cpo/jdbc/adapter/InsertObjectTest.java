@@ -30,6 +30,7 @@ import java.util.ArrayList;
 import java.util.stream.Stream;
 import org.synchronoss.cpo.core.CpoAdapter;
 import org.synchronoss.cpo.core.CpoAdapterFactoryManager;
+import org.synchronoss.cpo.core.CpoQuery;
 import org.synchronoss.cpo.jdbc.ValueObject;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
@@ -111,7 +112,7 @@ public class InsertObjectTest {
 
     try {
       ValueObject vo =
-          readAdapter.retrieveBean(ValueObject.FG_RETRIEVE_NULL, valObj, valObj, null, null);
+          readAdapter.retrieveBean(CpoQuery.group(ValueObject.FG_RETRIEVE_NULL), valObj, valObj);
       assertEquals(vo.getId(), valObj.getId(), "Ids do not match");
       assertEquals(vo.getAttrInteger(), valObj.getAttrInteger(), "Integers do not match");
       assertEquals(vo.getAttrVarChar(), valObj.getAttrVarChar(), "Strings do not match");

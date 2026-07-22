@@ -208,11 +208,8 @@ public class ClassJdbcDataSourceInfo extends AbstractJdbcDataSource
 
   private void setObjectProperty(Object obj, String key, String value) {
     String methodName = "set" + key.substring(0, 1).toUpperCase() + key.substring(1);
-    logger.debug("Calling " + methodName + "(" + value + ")");
-    try {
-      Method setter = obj.getClass().getMethod(methodName, String.class);
-      setter.invoke(obj, value);
-    } catch (NoSuchMethodException nsme) {
+    Method setter = findSetter(obj.getClass(), methodName, key);
+    if (setter == null) {
       logger.error(
           "=========>>> Could not find setter Method:"
               + methodName
@@ -220,10 +217,32 @@ public class ClassJdbcDataSourceInfo extends AbstractJdbcDataSource
               + key
               + " please check the java docs for "
               + obj.getClass().getName());
+      return;
+    }
+    logger.debug("Calling " + setter.getName() + "(" + value + ")");
+    try {
+      setter.invoke(obj, value);
     } catch (InvocationTargetException ite) {
-      logger.error("Error Invoking setter Method:" + methodName, ite);
+      logger.error("Error Invoking setter Method:" + setter.getName(), ite);
     } catch (IllegalAccessException iae) {
-      logger.error("Error accessing setter Method:" + methodName, iae);
+      logger.error("Error accessing setter Method:" + setter.getName(), iae);
+    }
+  }
+
+  private Method findSetter(Class<?> clazz, String methodName, String key) {
+    try {
+      return clazz.getMethod(methodName, String.class);
+    } catch (NoSuchMethodException nsme) {
+      // Oracle's OracleDataSource exposes setURL (all-caps URL) rather than the
+      // JavaBean-standard setUrl every other supported driver uses.
+      if ("url".equalsIgnoreCase(key)) {
+        try {
+          return clazz.getMethod("setURL", String.class);
+        } catch (NoSuchMethodException nsme2) {
+          return null;
+        }
+      }
+      return null;
     }
   }
 

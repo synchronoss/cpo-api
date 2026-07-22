@@ -38,7 +38,7 @@
     <properties>
         <cassandra.initScript>initDB.cql</cassandra.initScript>
         <cassandra.cpoConfig>cpoConfig.xml</cassandra.cpoConfig>
-        <cassandra.image>cassandra:3.11.19</cassandra.image>
+        <cassandra.image>cassandra:4.1.5</cassandra.image>
         <cassandra.contactPoint>127.0.0.1</cassandra.contactPoint>
         <cassandra.keyspace>cpokeyspace</cassandra.keyspace>
         <cassandra.metaXml>${project.baseUri}target/test-classes/cassandraMetaData.xml</cassandra.metaXml>
@@ -127,9 +127,9 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>com.datastax.cassandra</groupId>
-            <artifactId>cassandra-driver-core</artifactId>
-            <version>3.11.5</version>
+            <groupId>org.apache.cassandra</groupId>
+            <artifactId>java-driver-core</artifactId>
+            <version>4.19.2</version>
         </dependency>
         <!-- Testcontainers' shaded Docker client relocates jackson-databind/jackson-core but
              still references the unshaded com.fasterxml.jackson.annotation classes, so this

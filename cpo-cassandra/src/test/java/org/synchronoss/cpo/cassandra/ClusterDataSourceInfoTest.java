@@ -24,19 +24,7 @@ package org.synchronoss.cpo.cassandra;
 
 import static org.testng.Assert.*;
 
-import com.datastax.driver.core.AuthProvider;
-import com.datastax.driver.core.NettyOptions;
-import com.datastax.driver.core.PoolingOptions;
-import com.datastax.driver.core.ProtocolOptions;
-import com.datastax.driver.core.ProtocolVersion;
-import com.datastax.driver.core.QueryOptions;
-import com.datastax.driver.core.SocketOptions;
-import com.datastax.driver.core.TimestampGenerator;
-import com.datastax.driver.core.policies.ConstantReconnectionPolicy;
-import com.datastax.driver.core.policies.ConstantSpeculativeExecutionPolicy;
-import com.datastax.driver.core.policies.DefaultRetryPolicy;
-import com.datastax.driver.core.policies.IdentityTranslator;
-import com.datastax.driver.core.policies.RoundRobinPolicy;
+import com.datastax.oss.driver.api.core.auth.ProgrammaticPlainTextAuthProvider;
 import java.util.List;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Parameters;
@@ -47,6 +35,8 @@ import org.testng.annotations.Test;
  * tests connect through the suite's TCP proxy to the Cassandra test container.
  */
 public class ClusterDataSourceInfoTest {
+
+  private static final String LOCAL_DATACENTER = "datacenter1";
 
   private String contactPoint;
   private int nativePort;
@@ -68,6 +58,7 @@ public class ClusterDataSourceInfoTest {
     ClusterDataSourceInfo info =
         new ClusterDataSourceInfo("testCluster", keySpace, List.of(contactPoint), 10, 20);
     info.setPort(nativePort);
+    info.setLocalDatacenter(LOCAL_DATACENTER);
     return info;
   }
 
@@ -88,32 +79,40 @@ public class ClusterDataSourceInfoTest {
     info.setClusterName("otherCluster");
     assertEquals(info.getClusterName(), "otherCluster");
 
+    info.setLocalDatacenter(LOCAL_DATACENTER);
+    assertEquals(info.getLocalDatacenter(), LOCAL_DATACENTER);
+
     info.setMaxSchemaAgreementWaitSeconds(30);
     assertEquals(info.getMaxSchemaAgreementWaitSeconds(), Integer.valueOf(30));
 
-    info.setNettyOptions(NettyOptions.DEFAULT_INSTANCE);
-    assertSame(info.getNettyOptions(), NettyOptions.DEFAULT_INSTANCE);
-
-    IdentityTranslator translator = new IdentityTranslator();
-    info.setAddressTranslater(translator);
-    assertSame(info.getAddressTranslator(), translator);
+    info.setAddressTranslatorClassName(
+        "com.datastax.oss.driver.internal.core.addresstranslation.PassThroughAddressTranslator");
+    assertEquals(
+        info.getAddressTranslatorClassName(),
+        "com.datastax.oss.driver.internal.core.addresstranslation.PassThroughAddressTranslator");
 
     info.setPort(9042);
     assertEquals(info.getPort(), 9042);
 
-    info.setProtocolVersion(ProtocolVersion.V3);
-    assertEquals(info.getProtocolVersion(), ProtocolVersion.V3);
+    info.setProtocolVersion("V4");
+    assertEquals(info.getProtocolVersion(), "V4");
 
-    RoundRobinPolicy lbp = new RoundRobinPolicy();
-    info.setLoadBalancingPolicy(lbp);
-    assertSame(info.getLoadBalancingPolicy(), lbp);
+    info.setLoadBalancingPolicyClassName(
+        "com.datastax.oss.driver.internal.core.loadbalancing.DefaultLoadBalancingPolicy");
+    assertEquals(
+        info.getLoadBalancingPolicyClassName(),
+        "com.datastax.oss.driver.internal.core.loadbalancing.DefaultLoadBalancingPolicy");
 
-    ConstantReconnectionPolicy rp = new ConstantReconnectionPolicy(1000);
-    info.setReconnectionPolicy(rp);
-    assertSame(info.getReconnectionPolicy(), rp);
+    info.setReconnectionPolicyClassName(
+        "com.datastax.oss.driver.internal.core.connection.ConstantReconnectionPolicy");
+    assertEquals(
+        info.getReconnectionPolicyClassName(),
+        "com.datastax.oss.driver.internal.core.connection.ConstantReconnectionPolicy");
 
-    info.setRetryPolicy(DefaultRetryPolicy.INSTANCE);
-    assertSame(info.getRetryPolicy(), DefaultRetryPolicy.INSTANCE);
+    info.setRetryPolicyClassName("com.datastax.oss.driver.internal.core.retry.DefaultRetryPolicy");
+    assertEquals(
+        info.getRetryPolicyClassName(),
+        "com.datastax.oss.driver.internal.core.retry.DefaultRetryPolicy");
 
     info.setHasCredentials(true);
     assertTrue(info.hasCredentials());
@@ -122,17 +121,19 @@ public class ClusterDataSourceInfoTest {
     info.setPassword("pass");
     assertEquals(info.getPassword(), "pass");
 
-    info.setAuthProvider(AuthProvider.NONE);
-    assertSame(info.getAuthProvider(), AuthProvider.NONE);
+    ProgrammaticPlainTextAuthProvider authProvider =
+        new ProgrammaticPlainTextAuthProvider("user", "pass");
+    info.setAuthProvider(authProvider);
+    assertSame(info.getAuthProvider(), authProvider);
 
-    info.setCompressionType(ProtocolOptions.Compression.NONE);
-    assertEquals(info.getCompressionType(), ProtocolOptions.Compression.NONE);
+    info.setCompressionType("none");
+    assertEquals(info.getCompressionType(), "none");
 
     info.setUseMetrics(Boolean.FALSE);
     assertEquals(info.getUseMetrics(), Boolean.FALSE);
 
-    info.setSslOptions(null);
-    assertNull(info.getSslOptions());
+    info.setSslEngineFactory(null);
+    assertNull(info.getSslEngineFactory());
 
     info.setListeners(List.of());
     assertTrue(info.getListeners().isEmpty());
@@ -140,27 +141,44 @@ public class ClusterDataSourceInfoTest {
     info.setUseJmxReporting(Boolean.FALSE);
     assertEquals(info.getUseJmxReporting(), Boolean.FALSE);
 
-    PoolingOptions po = new PoolingOptions();
-    info.setPoolingOptions(po);
-    assertSame(info.getPoolingOptions(), po);
+    info.setConnectionPoolLocalSize(2);
+    assertEquals(info.getConnectionPoolLocalSize(), Integer.valueOf(2));
 
-    SocketOptions so = new SocketOptions();
-    info.setSocketOptions(so);
-    assertSame(info.getSocketOptions(), so);
+    info.setConnectionPoolRemoteSize(1);
+    assertEquals(info.getConnectionPoolRemoteSize(), Integer.valueOf(1));
 
-    QueryOptions qo = new QueryOptions();
-    info.setQueryOptions(qo);
-    assertSame(info.getQueryOptions(), qo);
+    info.setHeartbeatIntervalSeconds(30);
+    assertEquals(info.getHeartbeatIntervalSeconds(), Integer.valueOf(30));
 
-    ConstantSpeculativeExecutionPolicy sep = new ConstantSpeculativeExecutionPolicy(100, 2);
-    info.setSpeculativeExecutionPolicy(sep);
-    assertSame(info.getSpeculativeExecutionPolicy(), sep);
+    info.setConnectTimeoutMillis(5000);
+    assertEquals(info.getConnectTimeoutMillis(), Integer.valueOf(5000));
 
-    TimestampGenerator tg =
-        com.datastax.driver.core.AtomicMonotonicTimestampGenerator.class.cast(
-            new com.datastax.driver.core.AtomicMonotonicTimestampGenerator());
-    info.setTimestampGenerator(tg);
-    assertSame(info.getTimestampGenerator(), tg);
+    info.setTcpNoDelay(Boolean.TRUE);
+    assertEquals(info.getTcpNoDelay(), Boolean.TRUE);
+
+    info.setConsistencyLevel("LOCAL_ONE");
+    assertEquals(info.getConsistencyLevel(), "LOCAL_ONE");
+
+    info.setSerialConsistencyLevel("LOCAL_SERIAL");
+    assertEquals(info.getSerialConsistencyLevel(), "LOCAL_SERIAL");
+
+    info.setDefaultIdempotence(Boolean.TRUE);
+    assertEquals(info.getDefaultIdempotence(), Boolean.TRUE);
+
+    info.setPageSize(500);
+    assertEquals(info.getPageSize(), Integer.valueOf(500));
+
+    info.setSpeculativeExecutionPolicyClassName(
+        "com.datastax.oss.driver.internal.core.specex.NoSpeculativeExecutionPolicy");
+    assertEquals(
+        info.getSpeculativeExecutionPolicyClassName(),
+        "com.datastax.oss.driver.internal.core.specex.NoSpeculativeExecutionPolicy");
+
+    info.setTimestampGeneratorClassName(
+        "com.datastax.oss.driver.internal.core.time.AtomicTimestampGenerator");
+    assertEquals(
+        info.getTimestampGeneratorClassName(),
+        "com.datastax.oss.driver.internal.core.time.AtomicTimestampGenerator");
   }
 
   @Test
@@ -169,35 +187,42 @@ public class ClusterDataSourceInfoTest {
     ClusterDataSource ds = info.getDataSource();
     assertNotNull(ds);
     assertEquals(ds.getKeySpace(), keySpace);
-    assertNotNull(ds.getCluster());
+    assertNotNull(ds.getSession());
     assertSame(info.getDataSource(), ds, "data source is cached");
-    ds.getCluster().close();
+    ds.getSession().close();
   }
 
   @Test
   public void testCreateDataSourceWithAllOptions() throws Exception {
     ClusterDataSourceInfo info = newLiveInfo();
     info.setMaxSchemaAgreementWaitSeconds(20);
-    info.setNettyOptions(NettyOptions.DEFAULT_INSTANCE);
-    info.setAddressTranslater(new IdentityTranslator());
-    info.setLoadBalancingPolicy(new RoundRobinPolicy());
-    info.setReconnectionPolicy(new ConstantReconnectionPolicy(1000));
-    info.setRetryPolicy(DefaultRetryPolicy.INSTANCE);
+    info.setAddressTranslatorClassName(
+        "com.datastax.oss.driver.internal.core.addresstranslation.PassThroughAddressTranslator");
+    info.setLoadBalancingPolicyClassName(
+        "com.datastax.oss.driver.internal.core.loadbalancing.DefaultLoadBalancingPolicy");
+    info.setReconnectionPolicyClassName(
+        "com.datastax.oss.driver.internal.core.connection.ConstantReconnectionPolicy");
+    info.setRetryPolicyClassName("com.datastax.oss.driver.internal.core.retry.DefaultRetryPolicy");
     info.setHasCredentials(true);
     info.setUserName("user");
     info.setPassword("pass");
-    info.setCompressionType(ProtocolOptions.Compression.NONE);
+    info.setCompressionType("none");
     info.setUseMetrics(Boolean.FALSE);
     info.setUseJmxReporting(Boolean.FALSE);
-    info.setPoolingOptions(new PoolingOptions());
-    info.setSocketOptions(new SocketOptions());
-    info.setQueryOptions(new QueryOptions());
-    info.setSpeculativeExecutionPolicy(new ConstantSpeculativeExecutionPolicy(100, 2));
-    info.setTimestampGenerator(new com.datastax.driver.core.AtomicMonotonicTimestampGenerator());
+    info.setConnectionPoolLocalSize(1);
+    info.setConnectTimeoutMillis(5000);
+    info.setTcpNoDelay(Boolean.TRUE);
+    info.setConsistencyLevel("LOCAL_ONE");
+    info.setDefaultIdempotence(Boolean.TRUE);
+    info.setPageSize(500);
+    info.setSpeculativeExecutionPolicyClassName(
+        "com.datastax.oss.driver.internal.core.specex.NoSpeculativeExecutionPolicy");
+    info.setTimestampGeneratorClassName(
+        "com.datastax.oss.driver.internal.core.time.AtomicTimestampGenerator");
 
     ClusterDataSource ds = info.getDataSource();
     assertNotNull(ds);
-    assertEquals(ds.getCluster().getClusterName(), "testCluster");
-    ds.getCluster().close();
+    assertEquals(ds.getKeySpace(), keySpace);
+    ds.getSession().close();
   }
 }

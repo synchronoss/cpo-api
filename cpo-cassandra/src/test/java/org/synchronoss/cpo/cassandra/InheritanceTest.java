@@ -24,8 +24,8 @@ package org.synchronoss.cpo.cassandra;
 
 import static org.testng.Assert.*;
 
+import java.time.Instant;
 import java.util.ArrayList;
-import java.util.Date;
 import org.synchronoss.cpo.cassandra.meta.CassandraCpoMetaDescriptor;
 import org.synchronoss.cpo.core.CpoAdapter;
 import org.synchronoss.cpo.core.CpoAdapterFactoryManager;
@@ -76,7 +76,7 @@ public class InheritanceTest {
     valObj.setId(IDB + 5);
     valObj.setAttrVarChar("testInsert");
     valObj.setAttrInt(3);
-    Date ts = new Date(System.currentTimeMillis());
+    Instant ts = Instant.ofEpochMilli(System.currentTimeMillis());
 
     //    if (!metaDescriptor.isSupportsMillis()) {
     //      ts.setNanos(0);
@@ -99,10 +99,7 @@ public class InheritanceTest {
       assertEquals(vo.getId(), valObj.getId(), "Ids do not match");
       assertEquals(vo.getAttrInt(), valObj.getAttrInt(), "Integers do not match");
       assertEquals(vo.getAttrVarChar(), valObj.getAttrVarChar(), "Strings do not match");
-      assertEquals(
-          vo.getAttrTimestamp().getTime(),
-          valObj.getAttrTimestamp().getTime(),
-          "Timestamps do not match");
+      assertEquals(vo.getAttrTimestamp(), valObj.getAttrTimestamp(), "Timestamps do not match");
       assertTrue(vo.getAttrBool(), "boolean not stored correctly");
     } catch (Exception e) {
       fail(method + e.getMessage());

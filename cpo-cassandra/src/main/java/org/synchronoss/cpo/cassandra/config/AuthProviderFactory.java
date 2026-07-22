@@ -22,7 +22,7 @@ package org.synchronoss.cpo.cassandra.config;
  * ]]
  */
 
-import com.datastax.driver.core.AuthProvider;
+import com.datastax.oss.driver.api.core.auth.AuthProvider;
 
 /**
  * FactoryMethod for creating a Cassandra AuthProvider

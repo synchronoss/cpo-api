@@ -22,8 +22,9 @@ package org.synchronoss.cpo.cassandra.config;
  * ]]
  */
 
-import com.datastax.driver.core.*;
-import com.datastax.driver.core.policies.*;
+import com.datastax.oss.driver.api.core.auth.AuthProvider;
+import com.datastax.oss.driver.api.core.metadata.NodeStateListener;
+import com.datastax.oss.driver.api.core.ssl.SslEngineFactory;
 import java.util.Collection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,7 +40,7 @@ import org.synchronoss.cpo.cpoconfig.*;
 
 /**
  * CassandraCpoConfigProcessor processes the datasource configuration file for cassandra. It pulls
- * out all the information needed to configure a cluster for use within the application.
+ * out all the information needed to configure a session for use within the application.
  *
  * @author dberry
  */
@@ -123,6 +124,9 @@ public class CassandraCpoConfigProcessor implements CpoConfigProcessor {
     // add clusterName
     clusterInfo.setClusterName(readWriteConfig.getClusterName());
 
+    // add localDatacenter
+    clusterInfo.setLocalDatacenter(readWriteConfig.getLocalDatacenter());
+
     // add maxSchemaAgreementWaitSeconds
     clusterInfo.setMaxSchemaAgreementWaitSeconds(
         readWriteConfig.getMaxSchemaAgreementWaitSeconds());
@@ -130,25 +134,21 @@ public class CassandraCpoConfigProcessor implements CpoConfigProcessor {
     // add port
     if (readWriteConfig.getPort() != null) clusterInfo.setPort(readWriteConfig.getPort());
 
-    // add loadBalancing
+    // add loadBalancing: driver 4.x instantiates the policy class itself, so the XML string is
+    // passed straight through as the implementation class name
     if (readWriteConfig.getLoadBalancingPolicy() != null
         && !readWriteConfig.getLoadBalancingPolicy().isBlank()) {
-      clusterInfo.setLoadBalancingPolicy(
-          new ConfigInstantiator<LoadBalancingPolicy>()
-              .instantiate(readWriteConfig.getLoadBalancingPolicy()));
+      clusterInfo.setLoadBalancingPolicyClassName(readWriteConfig.getLoadBalancingPolicy());
     }
 
     // add reconnectionPolicy
     if (readWriteConfig.getReconnectionPolicy() != null
         && !readWriteConfig.getReconnectionPolicy().isBlank())
-      clusterInfo.setReconnectionPolicy(
-          new ConfigInstantiator<ReconnectionPolicy>()
-              .instantiate(readWriteConfig.getReconnectionPolicy()));
+      clusterInfo.setReconnectionPolicyClassName(readWriteConfig.getReconnectionPolicy());
 
     // add retryPolicy
     if (readWriteConfig.getRetryPolicy() != null && !readWriteConfig.getRetryPolicy().isBlank())
-      clusterInfo.setRetryPolicy(
-          new ConfigInstantiator<RetryPolicy>().instantiate(readWriteConfig.getRetryPolicy()));
+      clusterInfo.setRetryPolicyClassName(readWriteConfig.getRetryPolicy());
 
     // add credentials
     if (readWriteConfig.getCredentials() != null) {
@@ -160,42 +160,37 @@ public class CassandraCpoConfigProcessor implements CpoConfigProcessor {
     // add addressTranslater
     if (readWriteConfig.getAddressTranslater() != null
         && !readWriteConfig.getAddressTranslater().isBlank())
-      clusterInfo.setAddressTranslater(
-          new ConfigInstantiator<AddressTranslator>()
-              .instantiate(readWriteConfig.getAddressTranslater()));
+      clusterInfo.setAddressTranslatorClassName(readWriteConfig.getAddressTranslater());
 
-    // add AuthProvider
+    // add AuthProvider: still built via the CPO factory pattern since CqlSessionBuilder accepts
+    // a pre-built AuthProvider instance directly
     if (readWriteConfig.getAuthProvider() != null && !readWriteConfig.getAuthProvider().isBlank())
       clusterInfo.setAuthProvider(
           new ConfigInstantiator<AuthProvider>().instantiate(readWriteConfig.getAuthProvider()));
 
     // add Compression
     if (readWriteConfig.getCompression() != null)
-      clusterInfo.setCompressionType(
-          ProtocolOptions.Compression.valueOf(readWriteConfig.getCompression().toString()));
-
-    // add NettyOptions
-    if (readWriteConfig.getNettyOptions() != null && !readWriteConfig.getNettyOptions().isBlank())
-      clusterInfo.setNettyOptions(
-          new ConfigInstantiator<NettyOptions>().instantiate(readWriteConfig.getNettyOptions()));
+      clusterInfo.setCompressionType(readWriteConfig.getCompression().toString().toLowerCase());
 
     // add Metrics
     if (readWriteConfig.isMetrics() != null) clusterInfo.setUseMetrics(readWriteConfig.isMetrics());
 
-    // add SSL
+    // add SSL: still built via the CPO factory pattern since CqlSessionBuilder accepts a
+    // pre-built SslEngineFactory instance directly
     if (readWriteConfig.getSslOptions() != null
         && readWriteConfig.getSslOptions().getValue() != null
         && !readWriteConfig.getSslOptions().getValue().isBlank()) {
-      clusterInfo.setSslOptions(
-          new ConfigInstantiator<SSLOptions>()
+      clusterInfo.setSslEngineFactory(
+          new ConfigInstantiator<SslEngineFactory>()
               .instantiate(readWriteConfig.getSslOptions().getValue()));
     }
 
-    // add Listeners
+    // add Listeners: still built via the CPO factory pattern since CqlSessionBuilder accepts
+    // pre-built NodeStateListener instances directly
     if (readWriteConfig.getInitialListeners() != null
         && !readWriteConfig.getInitialListeners().isBlank()) {
       clusterInfo.setListeners(
-          new ConfigInstantiator<Collection<Host.StateListener>>()
+          new ConfigInstantiator<Collection<NodeStateListener>>()
               .instantiate(readWriteConfig.getInitialListeners()));
     }
 
@@ -205,136 +200,100 @@ public class CassandraCpoConfigProcessor implements CpoConfigProcessor {
 
     // add protocolVersion
     // the JAXB enum's name (V_3) differs from its XML value (V3), which is what the
-    // driver's enum uses, so the value must be used for the lookup
+    // driver's config expects, so the value must be used for the lookup
     if (readWriteConfig.getProtocolVersion() != null)
-      clusterInfo.setProtocolVersion(
-          ProtocolVersion.valueOf(readWriteConfig.getProtocolVersion().value()));
+      clusterInfo.setProtocolVersion(readWriteConfig.getProtocolVersion().value());
 
     // add pooling options
     if (readWriteConfig.getPoolingOptions() != null)
-      clusterInfo.setPoolingOptions(buildPoolingOptions(readWriteConfig.getPoolingOptions()));
+      applyPoolingOptions(clusterInfo, readWriteConfig.getPoolingOptions());
 
     // add socket options
     if (readWriteConfig.getSocketOptions() != null)
-      clusterInfo.setSocketOptions(buildSocketOptions(readWriteConfig.getSocketOptions()));
+      applySocketOptions(clusterInfo, readWriteConfig.getSocketOptions());
 
     // add query Options
     if (readWriteConfig.getQueryOptions() != null)
-      clusterInfo.setQueryOptions(buildQueryOptions(readWriteConfig.getQueryOptions()));
+      applyQueryOptions(clusterInfo, readWriteConfig.getQueryOptions());
 
     // add speculativeExecutionPolicy
     if (readWriteConfig.getSpeculativeExecutionPolicy() != null
         && !readWriteConfig.getSpeculativeExecutionPolicy().isBlank())
-      clusterInfo.setSpeculativeExecutionPolicy(
-          new ConfigInstantiator<SpeculativeExecutionPolicy>()
-              .instantiate(readWriteConfig.getSpeculativeExecutionPolicy()));
+      clusterInfo.setSpeculativeExecutionPolicyClassName(
+          readWriteConfig.getSpeculativeExecutionPolicy());
 
     // add TimestampGenerator
     if (readWriteConfig.getTimestampGenerator() != null
         && !readWriteConfig.getTimestampGenerator().isBlank())
-      clusterInfo.setTimestampGenerator(
-          new ConfigInstantiator<TimestampGenerator>()
-              .instantiate(readWriteConfig.getTimestampGenerator()));
+      clusterInfo.setTimestampGeneratorClassName(readWriteConfig.getTimestampGenerator());
 
     logger.debug("Created DataSourceInfo: " + clusterInfo);
     return clusterInfo;
   }
 
-  private PoolingOptions buildPoolingOptions(CtPoolingOptions ctPoolingOptions) {
-    PoolingOptions poolingOptions = new PoolingOptions();
-
-    if (ctPoolingOptions.getConnectionsPerHost() != null) {
-      CtConnectionsPerHost cph = ctPoolingOptions.getConnectionsPerHost();
-      poolingOptions.setConnectionsPerHost(
-          HostDistance.valueOf(cph.getDistance().toString()), cph.getCore(), cph.getMax());
+  /**
+   * Applies the pooling options onto the ClusterDataSourceInfo. Driver 4.x has no core/max-per-host
+   * distinction, connection-request-threshold, or pool-checkout-timeout equivalent, so
+   * connectionsPerHost/coreConnectionsPerHost/maxRequestsPerConnection/newConnectionThreshold/
+   * poolTimeoutMillis have no target and are dropped with a debug log.
+   */
+  private void applyPoolingOptions(ClusterDataSourceInfo clusterInfo, CtPoolingOptions options) {
+    if (options.getConnectionsPerHost() != null) {
+      CtConnectionsPerHost cph = options.getConnectionsPerHost();
+      if ("LOCAL".equalsIgnoreCase(cph.getDistance().toString()))
+        clusterInfo.setConnectionPoolLocalSize(cph.getMax());
+      else if ("REMOTE".equalsIgnoreCase(cph.getDistance().toString()))
+        clusterInfo.setConnectionPoolRemoteSize(cph.getMax());
     }
 
-    if (ctPoolingOptions.getCoreConnectionsPerHost() != null) {
-      CtHostDistanceAndThreshold hdt = ctPoolingOptions.getCoreConnectionsPerHost();
-      poolingOptions.setCoreConnectionsPerHost(
-          HostDistance.valueOf(hdt.getDistance().toString()), hdt.getThreshold());
-    }
+    if (options.getHeartbeatIntervalSeconds() != null)
+      clusterInfo.setHeartbeatIntervalSeconds(options.getHeartbeatIntervalSeconds());
 
-    if (ctPoolingOptions.getHeartbeatIntervalSeconds() != null) {
-      poolingOptions.setHeartbeatIntervalSeconds(ctPoolingOptions.getHeartbeatIntervalSeconds());
-    }
-
-    if (ctPoolingOptions.getIdleTimeoutSeconds() != null) {
-      poolingOptions.setIdleTimeoutSeconds(ctPoolingOptions.getIdleTimeoutSeconds());
-    }
-
-    if (ctPoolingOptions.getMaxConnectionsPerHost() != null) {
-      CtHostDistanceAndThreshold hdt = ctPoolingOptions.getMaxConnectionsPerHost();
-      poolingOptions.setMaxConnectionsPerHost(
-          HostDistance.valueOf(hdt.getDistance().toString()), hdt.getThreshold());
-    }
-
-    if (ctPoolingOptions.getMaxRequestsPerConnection() != null) {
-      CtHostDistanceAndThreshold hdt = ctPoolingOptions.getMaxRequestsPerConnection();
-      poolingOptions.setMaxRequestsPerConnection(
-          HostDistance.valueOf(hdt.getDistance().toString()), hdt.getThreshold());
-    }
-
-    if (ctPoolingOptions.getNewConnectionThreshold() != null) {
-      CtHostDistanceAndThreshold hdt = ctPoolingOptions.getNewConnectionThreshold();
-      poolingOptions.setNewConnectionThreshold(
-          HostDistance.valueOf(hdt.getDistance().toString()), hdt.getThreshold());
-    }
-
-    if (ctPoolingOptions.getPoolTimeoutMillis() != null) {
-      poolingOptions.setPoolTimeoutMillis(ctPoolingOptions.getPoolTimeoutMillis());
-    }
-
-    return poolingOptions;
+    if (options.getCoreConnectionsPerHost() != null
+        || options.getMaxConnectionsPerHost() != null
+        || options.getMaxRequestsPerConnection() != null
+        || options.getNewConnectionThreshold() != null
+        || options.getIdleTimeoutSeconds() != null
+        || options.getPoolTimeoutMillis() != null)
+      logger.debug(
+          "coreConnectionsPerHost/maxConnectionsPerHost/maxRequestsPerConnection/"
+              + "newConnectionThreshold/idleTimeoutSeconds/poolTimeoutMillis have no driver 4.x"
+              + " equivalent; ignoring.");
   }
 
-  private QueryOptions buildQueryOptions(CtQueryOptions ctQueryOptions) {
-    QueryOptions queryOptions = new QueryOptions();
+  /**
+   * Applies the socket options onto the ClusterDataSourceInfo. Driver 4.x's read-timeout equivalent
+   * is the global request timeout (not a socket option), and
+   * keepAlive/receiveBufferSize/reuseAddress/sendBufferSize/soLinger have no confirmed driver 4.x
+   * config equivalent, so they are dropped with a debug log.
+   */
+  private void applySocketOptions(ClusterDataSourceInfo clusterInfo, CtSocketOptions options) {
+    if (options.getConnectionTimeoutMillis() != null)
+      clusterInfo.setConnectTimeoutMillis(options.getConnectionTimeoutMillis());
 
-    if (ctQueryOptions.getConsistencyLevel() != null)
-      queryOptions.setConsistencyLevel(
-          ConsistencyLevel.valueOf(ctQueryOptions.getConsistencyLevel().toString()));
+    if (options.isTcpNoDelay() != null) clusterInfo.setTcpNoDelay(options.isTcpNoDelay());
 
-    if (ctQueryOptions.isDefaultIdempotence() != null)
-      queryOptions.setDefaultIdempotence(ctQueryOptions.isDefaultIdempotence());
-
-    if (ctQueryOptions.getFetchSize() != null)
-      queryOptions.setFetchSize(ctQueryOptions.getFetchSize());
-
-    if (ctQueryOptions.getSerialConsistencyLevel() != null)
-      queryOptions.setSerialConsistencyLevel(
-          ConsistencyLevel.valueOf(ctQueryOptions.getSerialConsistencyLevel().toString()));
-
-    return queryOptions;
+    if (options.getReadTimeoutMillis() != null
+        || options.isKeepAlive() != null
+        || options.getReceiveBufferSize() != null
+        || options.isReuseAddress() != null
+        || options.getSendBufferSize() != null
+        || options.getSoLinger() != null)
+      logger.debug(
+          "readTimeoutMillis/keepAlive/receiveBufferSize/reuseAddress/sendBufferSize/soLinger"
+              + " have no driver 4.x equivalent; ignoring.");
   }
 
-  private SocketOptions buildSocketOptions(CtSocketOptions ctSocketOptions) {
-    SocketOptions socketOptions = new SocketOptions();
+  private void applyQueryOptions(ClusterDataSourceInfo clusterInfo, CtQueryOptions options) {
+    if (options.getConsistencyLevel() != null)
+      clusterInfo.setConsistencyLevel(options.getConsistencyLevel().toString());
 
-    if (ctSocketOptions.getConnectionTimeoutMillis() != null)
-      socketOptions.setConnectTimeoutMillis(ctSocketOptions.getConnectionTimeoutMillis());
+    if (options.isDefaultIdempotence() != null)
+      clusterInfo.setDefaultIdempotence(options.isDefaultIdempotence());
 
-    if (ctSocketOptions.isKeepAlive() != null)
-      socketOptions.setKeepAlive(ctSocketOptions.isKeepAlive());
+    if (options.getFetchSize() != null) clusterInfo.setPageSize(options.getFetchSize());
 
-    if (ctSocketOptions.getReadTimeoutMillis() != null)
-      socketOptions.setReadTimeoutMillis(ctSocketOptions.getReadTimeoutMillis());
-
-    if (ctSocketOptions.getReceiveBufferSize() != null)
-      socketOptions.setReceiveBufferSize(ctSocketOptions.getReceiveBufferSize());
-
-    if (ctSocketOptions.isReuseAddress() != null)
-      socketOptions.setReuseAddress(ctSocketOptions.isReuseAddress());
-
-    if (ctSocketOptions.getSendBufferSize() != null)
-      socketOptions.setSendBufferSize(ctSocketOptions.getSendBufferSize());
-
-    if (ctSocketOptions.getSoLinger() != null)
-      socketOptions.setSoLinger(ctSocketOptions.getSoLinger());
-
-    if (ctSocketOptions.isTcpNoDelay() != null)
-      socketOptions.setTcpNoDelay(ctSocketOptions.isTcpNoDelay());
-
-    return socketOptions;
+    if (options.getSerialConsistencyLevel() != null)
+      clusterInfo.setSerialConsistencyLevel(options.getSerialConsistencyLevel().toString());
   }
 }

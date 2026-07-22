@@ -186,10 +186,16 @@
             <xs:element name="clusterName" type="xs:string" minOccurs="0">
                 <xs:annotation>
                     <xs:documentation>
-                        An optional name for the create cluster. Defaults to the name of the core:dataConfig
-                        Note: this is not related to the Cassandra cluster name (though you are free to provide the same name). See Cluster.getClusterName() for details.
-                        If you use this method and create more than one Cluster instance in the same JVM (which should be avoided unless you need to connect to multiple Cassandra clusters),
-                        you should make sure each Cluster instance get a unique name or you may have a problem with JMX reporting.
+                        An optional name for the created session. Defaults to the name of the core:dataConfig.
+                        Note: this is not related to any Cassandra cluster name.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="localDatacenter" type="xs:string" minOccurs="1">
+                <xs:annotation>
+                    <xs:documentation>
+                        The datacenter that is considered "local" for this session, e.g. "datacenter1". Required
+                        by the driver's default load balancing policy whenever contact points are supplied.
                     </xs:documentation>
                 </xs:annotation>
             </xs:element>
@@ -210,27 +216,33 @@
             <xs:element name="loadBalancingPolicy" type="xs:string" minOccurs="0">
                 <xs:annotation>
                     <xs:documentation>
-                        Configures the load balancing policy to use for the new cluster.
-                        Add in the fully qualified class name for a LoadBalancingPolicyFactory
-                        If no load balancing policy is set through this method, Policies.defaultLoadBalancingPolicy() will be used instead.
+                        Configures the load balancing policy to use for the new session.
+                        The fully qualified class name of a driver LoadBalancingPolicy implementation
+                        (com.datastax.oss.driver.api.core.loadbalancing.LoadBalancingPolicy). The driver
+                        instantiates this class itself via a (DriverContext, String profileName) constructor.
+                        If not set, the driver's default load balancing policy is used instead.
                     </xs:documentation>
                 </xs:annotation>
             </xs:element>
             <xs:element name="reconnectionPolicy" type="xs:string" minOccurs="0">
                 <xs:annotation>
                     <xs:documentation>
-                        Configures the reconnection policy to use for the new cluster.
-                        Add in the fully qualified class name for a ReconnectionPolicyFactory
-                        If no reconnection policy is set through this method, Policies.DEFAULT_RECONNECTION_POLICY will be used instead.
+                        Configures the reconnection policy to use for the new session.
+                        The fully qualified class name of a driver ReconnectionPolicy implementation
+                        (com.datastax.oss.driver.api.core.connection.ReconnectionPolicy). The driver
+                        instantiates this class itself via a (DriverContext) constructor.
+                        If not set, the driver's default reconnection policy is used instead.
                     </xs:documentation>
                 </xs:annotation>
             </xs:element>
             <xs:element name="retryPolicy" type="xs:string" minOccurs="0">
                 <xs:annotation>
                     <xs:documentation>
-                        Configures the retry policy to use for the new cluster.
-                        Add in the fully qualified class name for a RetryPolicyFactory
-                        If no retry policy is set through this method, Policies.DEFAULT_RETRY_POLICY will be used instead.
+                        Configures the retry policy to use for the new session.
+                        The fully qualified class name of a driver RetryPolicy implementation
+                        (com.datastax.oss.driver.api.core.retry.RetryPolicy). The driver instantiates this
+                        class itself via a (DriverContext, String profileName) constructor.
+                        If not set, the driver's default retry policy is used instead.
                     </xs:documentation>
                 </xs:annotation>
             </xs:element>
@@ -279,18 +291,21 @@
             <xs:element name="sslOptions" type="xs:string" nillable="true" minOccurs="0">
                 <xs:annotation>
                     <xs:documentation>
-                        Enables the use of SSL for the created Cluster. The string is either nil which uses the default ssl or the full class path of a SSLOptionsFactory.
-                        Calling this method will use default SSL options (see SSLOptions.SSLOptions()). This is thus a shortcut for withSSL(new SSLOptions()).
-                        Note that if SSL is enabled, the driver will not connect to any Cassandra nodes that doesn't have SSL enabled and it is strongly advised to
-                        enable SSL on every Cassandra node if you plan on using SSL in the driver.
+                        Enables the use of SSL for the created session. The string is either nil which uses the
+                        default SslEngineFactory, or the full class path of a SSLOptionsFactory (a CPO factory
+                        class producing a com.datastax.oss.driver.api.core.ssl.SslEngineFactory instance).
+                        Note that if SSL is enabled, the driver will not connect to any Cassandra nodes that doesn't
+                        have SSL enabled and it is strongly advised to enable SSL on every Cassandra node if you
+                        plan on using SSL in the driver.
                     </xs:documentation>
                 </xs:annotation>
             </xs:element>
             <xs:element name="initialListeners" type="xs:string" minOccurs="0">
                 <xs:annotation>
                     <xs:documentation>
-                        Register the provided listeners in the newly created cluster.
-                        Add in the fully qualified class name for a ListenerFactory
+                        Register the provided node state listeners in the newly created session.
+                        Add in the fully qualified class name for a ListenerFactory (a CPO factory class
+                        producing a Collection of com.datastax.oss.driver.api.core.metadata.NodeStateListener).
                         Note: repeated calls to this method will override the previous ones.
                     </xs:documentation>
                 </xs:annotation>
@@ -342,24 +357,20 @@
             <xs:element name="addressTranslater" type="xs:string" minOccurs="0">
                 <xs:annotation>
                     <xs:documentation>
-                        Configures the address translater to use for the new cluster.
-                        The string is full class path of a AddressTranslaterFactory.
-                    </xs:documentation>
-                </xs:annotation>
-            </xs:element>
-            <xs:element name="nettyOptions" type="xs:string" minOccurs="0">
-                <xs:annotation>
-                    <xs:documentation>
-                        Set the NettyOptions to use for the newly created Cluster.
-                        The string is full class path of a NettyOptionsFactory.
+                        Configures the address translator to use for the new session.
+                        The fully qualified class name of a driver AddressTranslator implementation
+                        (com.datastax.oss.driver.api.core.addresstranslation.AddressTranslator). The driver
+                        instantiates this class itself via a (DriverContext) constructor.
                     </xs:documentation>
                 </xs:annotation>
             </xs:element>
             <xs:element name="speculativeExecutionPolicy" type="xs:string" minOccurs="0">
                 <xs:annotation>
                     <xs:documentation>
-                        Configures the speculative execution policy to use for the new cluster.
-                        The string is full class path of a SpeculativeExecutionPolicyFactory.
+                        Configures the speculative execution policy to use for the new session.
+                        The fully qualified class name of a driver SpeculativeExecutionPolicy implementation
+                        (com.datastax.oss.driver.api.core.specex.SpeculativeExecutionPolicy). The driver
+                        instantiates this class itself via a (DriverContext, String profileName) constructor.
                     </xs:documentation>
                 </xs:annotation>
             </xs:element>
@@ -367,7 +378,9 @@
                 <xs:annotation>
                     <xs:documentation>
                         Configures the generator that will produce the client-side timestamp sent with each query.
-                        The string is full class path of a TimestampGeneratorFactory.
+                        The fully qualified class name of a driver TimestampGenerator implementation
+                        (com.datastax.oss.driver.api.core.time.TimestampGenerator). The driver instantiates this
+                        class itself via a (DriverContext) constructor.
                     </xs:documentation>
                 </xs:annotation>
             </xs:element>

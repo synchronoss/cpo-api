@@ -24,10 +24,6 @@ package org.synchronoss.cpo.cassandra.config;
 
 import static org.testng.Assert.*;
 
-import com.datastax.driver.core.AtomicMonotonicTimestampGenerator;
-import com.datastax.driver.core.TimestampGenerator;
-import com.datastax.driver.core.policies.ConstantSpeculativeExecutionPolicy;
-import com.datastax.driver.core.policies.SpeculativeExecutionPolicy;
 import java.math.BigInteger;
 import org.synchronoss.cpo.cassandra.meta.CassandraCpoMetaDescriptor;
 import org.synchronoss.cpo.core.CpoAdapterFactory;
@@ -53,31 +49,7 @@ import org.testng.annotations.Test;
 /** Tests CassandraCpoConfigProcessor with minimal, maximal, and split configurations. */
 public class CassandraCpoConfigProcessorTest {
 
-  public static class TestSpeculativeExecutionPolicyFactory implements FactoryMethodName {
-    public TestSpeculativeExecutionPolicyFactory() {}
-
-    @Override
-    public String getFactoryMethodName() {
-      return "createPolicy";
-    }
-
-    public SpeculativeExecutionPolicy createPolicy() {
-      return new ConstantSpeculativeExecutionPolicy(500, 1);
-    }
-  }
-
-  public static class TestTimestampGeneratorFactory implements FactoryMethodName {
-    public TestTimestampGeneratorFactory() {}
-
-    @Override
-    public String getFactoryMethodName() {
-      return "createGenerator";
-    }
-
-    public TimestampGenerator createGenerator() {
-      return new AtomicMonotonicTimestampGenerator();
-    }
-  }
+  private static final String LOCAL_DATACENTER = "datacenter1";
 
   private String contactPoint;
   private int nativePort;
@@ -105,6 +77,7 @@ public class CassandraCpoConfigProcessorTest {
     CtCassandraReadWriteConfig rw = new CtCassandraReadWriteConfig();
     rw.setKeySpace(keySpace);
     rw.getContactPoint().add(contactPoint);
+    rw.setLocalDatacenter(LOCAL_DATACENTER);
     rw.setPort(nativePort);
     return rw;
   }
@@ -132,25 +105,28 @@ public class CassandraCpoConfigProcessorTest {
     CtCassandraReadWriteConfig rw = minimalRwConfig();
     rw.setClusterName("maximalCluster");
     rw.setMaxSchemaAgreementWaitSeconds(15);
-    rw.setLoadBalancingPolicy(ConfigFactoryTest.TestLoadBalancingPolicyFactory.class.getName());
-    rw.setReconnectionPolicy(ConfigFactoryTest.TestReconnectionPolicyFactory.class.getName());
-    rw.setRetryPolicy(ConfigFactoryTest.TestRetryPolicyFactory.class.getName());
+    rw.setLoadBalancingPolicy(
+        "com.datastax.oss.driver.internal.core.loadbalancing.DefaultLoadBalancingPolicy");
+    rw.setReconnectionPolicy(
+        "com.datastax.oss.driver.internal.core.connection.ConstantReconnectionPolicy");
+    rw.setRetryPolicy("com.datastax.oss.driver.internal.core.retry.DefaultRetryPolicy");
 
     CtCredentials credentials = new CtCredentials();
     credentials.setUser("cpoUser");
     credentials.setPassword("cpoPass");
     rw.setCredentials(credentials);
 
-    rw.setAddressTranslater(ConfigFactoryTest.TestAddressTranslatorFactory.class.getName());
+    rw.setAddressTranslater(
+        "com.datastax.oss.driver.internal.core.addresstranslation.PassThroughAddressTranslator");
     rw.setAuthProvider(ConfigFactoryTest.TestAuthProviderFactory.class.getName());
     rw.setCompression(StCompression.NONE);
-    rw.setNettyOptions(ConfigFactoryTest.TestNettyOptionsFactory.class.getName());
     rw.setMetrics(Boolean.FALSE);
     rw.setInitialListeners(ConfigFactoryTest.TestListenerFactory.class.getName());
     rw.setJmxReporting(Boolean.FALSE);
     rw.setProtocolVersion(StProtocolVersion.V_3);
-    rw.setSpeculativeExecutionPolicy(TestSpeculativeExecutionPolicyFactory.class.getName());
-    rw.setTimestampGenerator(TestTimestampGeneratorFactory.class.getName());
+    rw.setSpeculativeExecutionPolicy(
+        "com.datastax.oss.driver.internal.core.specex.NoSpeculativeExecutionPolicy");
+    rw.setTimestampGenerator("com.datastax.oss.driver.internal.core.time.AtomicTimestampGenerator");
 
     CtPoolingOptions pooling = new CtPoolingOptions();
     CtConnectionsPerHost cph = new CtConnectionsPerHost();
@@ -222,7 +198,6 @@ public class CassandraCpoConfigProcessorTest {
     rw.setRetryPolicy("");
     rw.setAddressTranslater("");
     rw.setAuthProvider("");
-    rw.setNettyOptions("");
     rw.setInitialListeners("");
     rw.setSpeculativeExecutionPolicy("");
     rw.setTimestampGenerator("");

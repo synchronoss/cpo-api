@@ -22,9 +22,24 @@ package org.synchronoss.cpo.cassandra;
  * ]]
  */
 
-import com.datastax.driver.core.*;
-import com.datastax.driver.core.policies.*;
+import com.datastax.oss.driver.api.core.CqlSession;
+import com.datastax.oss.driver.api.core.CqlSessionBuilder;
+import com.datastax.oss.driver.api.core.addresstranslation.AddressTranslator;
+import com.datastax.oss.driver.api.core.auth.AuthProvider;
+import com.datastax.oss.driver.api.core.config.DefaultDriverOption;
+import com.datastax.oss.driver.api.core.config.DriverConfigLoader;
+import com.datastax.oss.driver.api.core.config.ProgrammaticDriverConfigLoaderBuilder;
+import com.datastax.oss.driver.api.core.connection.ReconnectionPolicy;
+import com.datastax.oss.driver.api.core.loadbalancing.LoadBalancingPolicy;
+import com.datastax.oss.driver.api.core.metadata.NodeStateListener;
+import com.datastax.oss.driver.api.core.retry.RetryPolicy;
+import com.datastax.oss.driver.api.core.specex.SpeculativeExecutionPolicy;
+import com.datastax.oss.driver.api.core.ssl.SslEngineFactory;
+import com.datastax.oss.driver.api.core.time.TimestampGenerator;
+import java.net.InetSocketAddress;
+import java.time.Duration;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,31 +53,38 @@ import org.synchronoss.cpo.core.CpoException;
  */
 public class ClusterDataSourceInfo extends AbstractDataSourceInfo<ClusterDataSource> {
   private static final Logger logger = LoggerFactory.getLogger(ClusterDataSourceInfo.class);
-  private List<String> contactPoints;
-  private String keySpace;
+
+  private final List<String> contactPoints;
+  private final String keySpace;
   private String clusterName;
+  private String localDatacenter;
   private Integer maxSchemaAgreementWaitSeconds;
-  private NettyOptions nettyOptions;
   private Integer port;
-  private ProtocolVersion protocolVersion;
-  private AddressTranslator addressTranslator;
-  private LoadBalancingPolicy loadBalancingPolicy;
-  private ReconnectionPolicy reconnectionPolicy;
-  private RetryPolicy retryPolicy;
+  private String protocolVersion;
+  private String addressTranslatorClassName;
+  private String loadBalancingPolicyClassName;
+  private String reconnectionPolicyClassName;
+  private String retryPolicyClassName;
   private boolean credentials;
   private String userName;
   private String password;
   private AuthProvider authProvider;
-  private ProtocolOptions.Compression compressionType;
+  private String compressionType;
   private Boolean useMetrics;
-  private SSLOptions sslOptions;
-  private Collection<Host.StateListener> listeners;
+  private SslEngineFactory sslEngineFactory;
+  private Collection<NodeStateListener> listeners;
   private Boolean useJmxReporting;
-  private PoolingOptions poolingOptions;
-  private SocketOptions socketOptions;
-  private QueryOptions queryOptions;
-  private SpeculativeExecutionPolicy speculativeExecutionPolicy;
-  private TimestampGenerator timestampGenerator;
+  private Integer connectionPoolLocalSize;
+  private Integer connectionPoolRemoteSize;
+  private Integer heartbeatIntervalSeconds;
+  private Integer connectTimeoutMillis;
+  private Boolean tcpNoDelay;
+  private String consistencyLevel;
+  private String serialConsistencyLevel;
+  private Boolean defaultIdempotence;
+  private Integer pageSize;
+  private String speculativeExecutionPolicyClassName;
+  private String timestampGeneratorClassName;
 
   /**
    * Constructs a ClusterDataSourceInfo
@@ -104,39 +126,23 @@ public class ClusterDataSourceInfo extends AbstractDataSourceInfo<ClusterDataSou
   }
 
   /**
-   * Get the NettyOptions
+   * Get the AddressTranslator implementation class name
    *
-   * @return NettyOptions
+   * @return The fully qualified AddressTranslator implementation class name
    */
-  public NettyOptions getNettyOptions() {
-    return nettyOptions;
+  public String getAddressTranslatorClassName() {
+    return addressTranslatorClassName;
   }
 
   /**
-   * Set the NettyOptions
+   * Set the AddressTranslator implementation class name. The driver instantiates this class itself
+   * via a (DriverContext) constructor.
    *
-   * @param nettyOptions The NettyOptions
+   * @param addressTranslatorClassName The fully qualified AddressTranslator implementation class
+   *     name
    */
-  public void setNettyOptions(NettyOptions nettyOptions) {
-    this.nettyOptions = nettyOptions;
-  }
-
-  /**
-   * Get the AddressTranslator
-   *
-   * @return The AddressTranslator
-   */
-  public AddressTranslator getAddressTranslator() {
-    return addressTranslator;
-  }
-
-  /**
-   * Set the AddressTranslator
-   *
-   * @param addressTranslator The AddressTranslator
-   */
-  public void setAddressTranslater(AddressTranslator addressTranslator) {
-    this.addressTranslator = addressTranslator;
+  public void setAddressTranslatorClassName(String addressTranslatorClassName) {
+    this.addressTranslatorClassName = addressTranslatorClassName;
   }
 
   /**
@@ -149,7 +155,9 @@ public class ClusterDataSourceInfo extends AbstractDataSourceInfo<ClusterDataSou
   }
 
   /**
-   * Set the cluster name
+   * Set the cluster name. Note: driver 4.x has no session-level equivalent of the old
+   * Cluster.Builder#withClusterName; this value is retained only for the CPO datasource display
+   * name and is not passed to the driver.
    *
    * @param clusterName The cluster name
    */
@@ -164,6 +172,25 @@ public class ClusterDataSourceInfo extends AbstractDataSourceInfo<ClusterDataSou
    */
   public String getKeySpace() {
     return keySpace;
+  }
+
+  /**
+   * Get the local datacenter, required by the driver's default load balancing policy whenever
+   * contact points are supplied.
+   *
+   * @return The local datacenter name
+   */
+  public String getLocalDatacenter() {
+    return localDatacenter;
+  }
+
+  /**
+   * Set the local datacenter
+   *
+   * @param localDatacenter The local datacenter name
+   */
+  public void setLocalDatacenter(String localDatacenter) {
+    this.localDatacenter = localDatacenter;
   }
 
   /**
@@ -185,57 +212,62 @@ public class ClusterDataSourceInfo extends AbstractDataSourceInfo<ClusterDataSou
   }
 
   /**
-   * Get the LoadBalancingPolicy
+   * Get the LoadBalancingPolicy implementation class name
    *
-   * @return The LoadBalancingPolicy
+   * @return The fully qualified LoadBalancingPolicy implementation class name
    */
-  public LoadBalancingPolicy getLoadBalancingPolicy() {
-    return loadBalancingPolicy;
+  public String getLoadBalancingPolicyClassName() {
+    return loadBalancingPolicyClassName;
   }
 
   /**
-   * Set the LoadBalancingPolicy
+   * Set the LoadBalancingPolicy implementation class name. The driver instantiates this class
+   * itself via a (DriverContext, String profileName) constructor.
    *
-   * @param loadBalancingPolicy The LoadBalancingPolicy
+   * @param loadBalancingPolicyClassName The fully qualified LoadBalancingPolicy implementation
+   *     class name
    */
-  public void setLoadBalancingPolicy(LoadBalancingPolicy loadBalancingPolicy) {
-    this.loadBalancingPolicy = loadBalancingPolicy;
+  public void setLoadBalancingPolicyClassName(String loadBalancingPolicyClassName) {
+    this.loadBalancingPolicyClassName = loadBalancingPolicyClassName;
   }
 
   /**
-   * Get the ReconnectionPolicy
+   * Get the ReconnectionPolicy implementation class name
    *
-   * @return The ReconnectionPolicy
+   * @return The fully qualified ReconnectionPolicy implementation class name
    */
-  public ReconnectionPolicy getReconnectionPolicy() {
-    return reconnectionPolicy;
+  public String getReconnectionPolicyClassName() {
+    return reconnectionPolicyClassName;
   }
 
   /**
-   * Set the ReconnectionPolicy
+   * Set the ReconnectionPolicy implementation class name. The driver instantiates this class itself
+   * via a (DriverContext) constructor.
    *
-   * @param reconnectionPolicy The ReconnectionPolicy
+   * @param reconnectionPolicyClassName The fully qualified ReconnectionPolicy implementation class
+   *     name
    */
-  public void setReconnectionPolicy(ReconnectionPolicy reconnectionPolicy) {
-    this.reconnectionPolicy = reconnectionPolicy;
+  public void setReconnectionPolicyClassName(String reconnectionPolicyClassName) {
+    this.reconnectionPolicyClassName = reconnectionPolicyClassName;
   }
 
   /**
-   * Get the RetryPolicy
+   * Get the RetryPolicy implementation class name
    *
-   * @return The RetryPolicy
+   * @return The fully qualified RetryPolicy implementation class name
    */
-  public RetryPolicy getRetryPolicy() {
-    return retryPolicy;
+  public String getRetryPolicyClassName() {
+    return retryPolicyClassName;
   }
 
   /**
-   * Set the RetryPolicy
+   * Set the RetryPolicy implementation class name. The driver instantiates this class itself via a
+   * (DriverContext, String profileName) constructor.
    *
-   * @param retryPolicy The RetryPolicy
+   * @param retryPolicyClassName The fully qualified RetryPolicy implementation class name
    */
-  public void setRetryPolicy(RetryPolicy retryPolicy) {
-    this.retryPolicy = retryPolicy;
+  public void setRetryPolicyClassName(String retryPolicyClassName) {
+    this.retryPolicyClassName = retryPolicyClassName;
   }
 
   /**
@@ -313,18 +345,18 @@ public class ClusterDataSourceInfo extends AbstractDataSourceInfo<ClusterDataSou
   /**
    * Get the compression type
    *
-   * @return - ProtocolOptions.Compression
+   * @return - the protocol compression name ("lz4", "snappy", or "none")
    */
-  public ProtocolOptions.Compression getCompressionType() {
+  public String getCompressionType() {
     return compressionType;
   }
 
   /**
    * Set the compression type
    *
-   * @param compressionType - ProtocolOptions.Compression
+   * @param compressionType - the protocol compression name ("lz4", "snappy", or "none")
    */
-  public void setCompressionType(ProtocolOptions.Compression compressionType) {
+  public void setCompressionType(String compressionType) {
     this.compressionType = compressionType;
   }
 
@@ -347,38 +379,38 @@ public class ClusterDataSourceInfo extends AbstractDataSourceInfo<ClusterDataSou
   }
 
   /**
-   * Get the SSLOptions
+   * Get the SslEngineFactory
    *
-   * @return - The SSLOptions
+   * @return - The SslEngineFactory
    */
-  public SSLOptions getSslOptions() {
-    return sslOptions;
+  public SslEngineFactory getSslEngineFactory() {
+    return sslEngineFactory;
   }
 
   /**
-   * Set the SSLOptions
+   * Set the SslEngineFactory
    *
-   * @param sslOptions - The SSLOptions
+   * @param sslEngineFactory - The SslEngineFactory
    */
-  public void setSslOptions(SSLOptions sslOptions) {
-    this.sslOptions = sslOptions;
+  public void setSslEngineFactory(SslEngineFactory sslEngineFactory) {
+    this.sslEngineFactory = sslEngineFactory;
   }
 
   /**
-   * Get the Host.StateListeners
+   * Get the NodeStateListeners
    *
-   * @return - A collection of Host.StateListeners
+   * @return - A collection of NodeStateListeners
    */
-  public Collection<Host.StateListener> getListeners() {
+  public Collection<NodeStateListener> getListeners() {
     return listeners;
   }
 
   /**
-   * Set the Host.StateListeners
+   * Set the NodeStateListeners
    *
-   * @param listeners - A collection of Host.StateListeners
+   * @param listeners - A collection of NodeStateListeners
    */
-  public void setListeners(Collection<Host.StateListener> listeners) {
+  public void setListeners(Collection<NodeStateListener> listeners) {
     this.listeners = listeners;
   }
 
@@ -392,7 +424,9 @@ public class ClusterDataSourceInfo extends AbstractDataSourceInfo<ClusterDataSou
   }
 
   /**
-   * Set the useJmxReporting flag
+   * Set the useJmxReporting flag. Driver 4.x has no built-in JMX reporter (it requires the optional
+   * java-driver-metrics-jmx module, which isn't on the classpath here), so setting this true only
+   * logs a warning.
    *
    * @param useJmxReporting - The useJmxReporting flag
    */
@@ -401,185 +435,348 @@ public class ClusterDataSourceInfo extends AbstractDataSourceInfo<ClusterDataSou
   }
 
   /**
-   * Get the PoolingOptions
+   * Get the local connection pool size
    *
-   * @return - The PoolingOptions
+   * @return - the local connection pool size
    */
-  public PoolingOptions getPoolingOptions() {
-    return poolingOptions;
+  public Integer getConnectionPoolLocalSize() {
+    return connectionPoolLocalSize;
   }
 
   /**
-   * Set the PoolingOptions
+   * Set the local connection pool size
    *
-   * @param poolingOptions - The PoolingOptions
+   * @param connectionPoolLocalSize - the local connection pool size
    */
-  public void setPoolingOptions(PoolingOptions poolingOptions) {
-    this.poolingOptions = poolingOptions;
+  public void setConnectionPoolLocalSize(Integer connectionPoolLocalSize) {
+    this.connectionPoolLocalSize = connectionPoolLocalSize;
   }
 
   /**
-   * Get the SocketOptions
+   * Get the remote connection pool size
    *
-   * @return - The SocketOptions
+   * @return - the remote connection pool size
    */
-  public SocketOptions getSocketOptions() {
-    return socketOptions;
+  public Integer getConnectionPoolRemoteSize() {
+    return connectionPoolRemoteSize;
   }
 
   /**
-   * Set the SocketOptions
+   * Set the remote connection pool size
    *
-   * @param socketOptions - The SocketOptions
+   * @param connectionPoolRemoteSize - the remote connection pool size
    */
-  public void setSocketOptions(SocketOptions socketOptions) {
-    this.socketOptions = socketOptions;
+  public void setConnectionPoolRemoteSize(Integer connectionPoolRemoteSize) {
+    this.connectionPoolRemoteSize = connectionPoolRemoteSize;
   }
 
   /**
-   * Get the QueryOptions
+   * Get the heartbeat interval, in seconds
    *
-   * @return - The QueryOptions
+   * @return - the heartbeat interval in seconds
    */
-  public QueryOptions getQueryOptions() {
-    return queryOptions;
+  public Integer getHeartbeatIntervalSeconds() {
+    return heartbeatIntervalSeconds;
   }
 
   /**
-   * Set the QueryOptions
+   * Set the heartbeat interval, in seconds
    *
-   * @param queryOptions - The QueryOptions
+   * @param heartbeatIntervalSeconds - the heartbeat interval in seconds
    */
-  public void setQueryOptions(QueryOptions queryOptions) {
-    this.queryOptions = queryOptions;
+  public void setHeartbeatIntervalSeconds(Integer heartbeatIntervalSeconds) {
+    this.heartbeatIntervalSeconds = heartbeatIntervalSeconds;
   }
 
   /**
-   * Get the SpeculativeExecutionPolicy
+   * Get the connect timeout, in milliseconds
    *
-   * @return - The SpeculativeExecutionPolicy
+   * @return - the connect timeout in milliseconds
    */
-  public SpeculativeExecutionPolicy getSpeculativeExecutionPolicy() {
-    return speculativeExecutionPolicy;
+  public Integer getConnectTimeoutMillis() {
+    return connectTimeoutMillis;
   }
 
   /**
-   * Set the SpeculativeExecutionPolicy
+   * Set the connect timeout, in milliseconds
    *
-   * @param speculativeExecutionPolicy - The SpeculativeExecutionPolicy
+   * @param connectTimeoutMillis - the connect timeout in milliseconds
    */
-  public void setSpeculativeExecutionPolicy(SpeculativeExecutionPolicy speculativeExecutionPolicy) {
-    this.speculativeExecutionPolicy = speculativeExecutionPolicy;
+  public void setConnectTimeoutMillis(Integer connectTimeoutMillis) {
+    this.connectTimeoutMillis = connectTimeoutMillis;
   }
 
   /**
-   * Get the TimestampGenerator
+   * Get the tcpNoDelay flag
    *
-   * @return - The TimestampGenerator
+   * @return - the tcpNoDelay flag
    */
-  public TimestampGenerator getTimestampGenerator() {
-    return timestampGenerator;
+  public Boolean getTcpNoDelay() {
+    return tcpNoDelay;
   }
 
   /**
-   * Set the TimestampGenerator
+   * Set the tcpNoDelay flag
    *
-   * @param timestampGenerator - The TimestampGenerator
+   * @param tcpNoDelay - the tcpNoDelay flag
    */
-  public void setTimestampGenerator(TimestampGenerator timestampGenerator) {
-    this.timestampGenerator = timestampGenerator;
+  public void setTcpNoDelay(Boolean tcpNoDelay) {
+    this.tcpNoDelay = tcpNoDelay;
   }
 
   /**
-   * Get the ProtocolVersion
+   * Get the request consistency level name
    *
-   * @return - The ProtocolVersion
+   * @return - the request consistency level name
    */
-  public ProtocolVersion getProtocolVersion() {
+  public String getConsistencyLevel() {
+    return consistencyLevel;
+  }
+
+  /**
+   * Set the request consistency level name (e.g. "LOCAL_ONE")
+   *
+   * @param consistencyLevel - the request consistency level name
+   */
+  public void setConsistencyLevel(String consistencyLevel) {
+    this.consistencyLevel = consistencyLevel;
+  }
+
+  /**
+   * Get the request serial consistency level name
+   *
+   * @return - the request serial consistency level name
+   */
+  public String getSerialConsistencyLevel() {
+    return serialConsistencyLevel;
+  }
+
+  /**
+   * Set the request serial consistency level name (e.g. "LOCAL_SERIAL")
+   *
+   * @param serialConsistencyLevel - the request serial consistency level name
+   */
+  public void setSerialConsistencyLevel(String serialConsistencyLevel) {
+    this.serialConsistencyLevel = serialConsistencyLevel;
+  }
+
+  /**
+   * Get the defaultIdempotence flag
+   *
+   * @return - the defaultIdempotence flag
+   */
+  public Boolean getDefaultIdempotence() {
+    return defaultIdempotence;
+  }
+
+  /**
+   * Set the defaultIdempotence flag
+   *
+   * @param defaultIdempotence - the defaultIdempotence flag
+   */
+  public void setDefaultIdempotence(Boolean defaultIdempotence) {
+    this.defaultIdempotence = defaultIdempotence;
+  }
+
+  /**
+   * Get the default request page size
+   *
+   * @return - the default request page size
+   */
+  public Integer getPageSize() {
+    return pageSize;
+  }
+
+  /**
+   * Set the default request page size
+   *
+   * @param pageSize - the default request page size
+   */
+  public void setPageSize(Integer pageSize) {
+    this.pageSize = pageSize;
+  }
+
+  /**
+   * Get the SpeculativeExecutionPolicy implementation class name
+   *
+   * @return - The fully qualified SpeculativeExecutionPolicy implementation class name
+   */
+  public String getSpeculativeExecutionPolicyClassName() {
+    return speculativeExecutionPolicyClassName;
+  }
+
+  /**
+   * Set the SpeculativeExecutionPolicy implementation class name. The driver instantiates this
+   * class itself via a (DriverContext, String profileName) constructor.
+   *
+   * @param speculativeExecutionPolicyClassName - The fully qualified SpeculativeExecutionPolicy
+   *     implementation class name
+   */
+  public void setSpeculativeExecutionPolicyClassName(String speculativeExecutionPolicyClassName) {
+    this.speculativeExecutionPolicyClassName = speculativeExecutionPolicyClassName;
+  }
+
+  /**
+   * Get the TimestampGenerator implementation class name
+   *
+   * @return - The fully qualified TimestampGenerator implementation class name
+   */
+  public String getTimestampGeneratorClassName() {
+    return timestampGeneratorClassName;
+  }
+
+  /**
+   * Set the TimestampGenerator implementation class name. The driver instantiates this class itself
+   * via a (DriverContext) constructor.
+   *
+   * @param timestampGeneratorClassName - The fully qualified TimestampGenerator implementation
+   *     class name
+   */
+  public void setTimestampGeneratorClassName(String timestampGeneratorClassName) {
+    this.timestampGeneratorClassName = timestampGeneratorClassName;
+  }
+
+  /**
+   * Get the ProtocolVersion name
+   *
+   * @return - the protocol version name (e.g. "V4")
+   */
+  public String getProtocolVersion() {
     return protocolVersion;
   }
 
   /**
-   * Set the ProtocolVersion
+   * Set the ProtocolVersion name
    *
-   * @param protocolVersion - ProtocolVersion
+   * @param protocolVersion - the protocol version name (e.g. "V4")
    */
-  public void setProtocolVersion(ProtocolVersion protocolVersion) {
+  public void setProtocolVersion(String protocolVersion) {
     this.protocolVersion = protocolVersion;
   }
 
   @Override
   protected ClusterDataSource createDataSource() throws CpoException {
-    Cluster.Builder clusterBuilder = Cluster.builder();
+    ProgrammaticDriverConfigLoaderBuilder configLoaderBuilder =
+        DriverConfigLoader.programmaticBuilder();
 
-    // add the contact points
-    for (String s : contactPoints) clusterBuilder.addContactPoint(s);
+    if (loadBalancingPolicyClassName != null)
+      configLoaderBuilder.withClass(
+          DefaultDriverOption.LOAD_BALANCING_POLICY_CLASS,
+          loadPolicyClass(loadBalancingPolicyClassName, LoadBalancingPolicy.class));
 
-    // add addressTranslater
-    if (addressTranslator != null) clusterBuilder.withAddressTranslator(addressTranslator);
+    if (reconnectionPolicyClassName != null)
+      configLoaderBuilder.withClass(
+          DefaultDriverOption.RECONNECTION_POLICY_CLASS,
+          loadPolicyClass(reconnectionPolicyClassName, ReconnectionPolicy.class));
 
-    // add AuthProvider
-    if (authProvider != null) clusterBuilder.withAuthProvider(authProvider);
+    if (retryPolicyClassName != null)
+      configLoaderBuilder.withClass(
+          DefaultDriverOption.RETRY_POLICY_CLASS,
+          loadPolicyClass(retryPolicyClassName, RetryPolicy.class));
 
-    // add clusterName
-    if (clusterName != null) clusterBuilder.withClusterName(clusterName);
+    if (addressTranslatorClassName != null)
+      configLoaderBuilder.withClass(
+          DefaultDriverOption.ADDRESS_TRANSLATOR_CLASS,
+          loadPolicyClass(addressTranslatorClassName, AddressTranslator.class));
 
-    // add Compression
-    if (compressionType != null) clusterBuilder.withCompression(compressionType);
+    if (speculativeExecutionPolicyClassName != null)
+      configLoaderBuilder.withClass(
+          DefaultDriverOption.SPECULATIVE_EXECUTION_POLICY_CLASS,
+          loadPolicyClass(speculativeExecutionPolicyClassName, SpeculativeExecutionPolicy.class));
 
-    // add credentials
-    if (hasCredentials()) clusterBuilder.withCredentials(userName, password);
+    if (timestampGeneratorClassName != null)
+      configLoaderBuilder.withClass(
+          DefaultDriverOption.TIMESTAMP_GENERATOR_CLASS,
+          loadPolicyClass(timestampGeneratorClassName, TimestampGenerator.class));
 
-    // add Listeners
-    if (listeners != null && !listeners.isEmpty()) clusterBuilder.withInitialListeners(listeners);
+    if (compressionType != null)
+      configLoaderBuilder.withString(DefaultDriverOption.PROTOCOL_COMPRESSION, compressionType);
 
-    // add loadBalancing
-    if (loadBalancingPolicy != null) clusterBuilder.withLoadBalancingPolicy(loadBalancingPolicy);
+    if (protocolVersion != null)
+      configLoaderBuilder.withString(DefaultDriverOption.PROTOCOL_VERSION, protocolVersion);
 
-    // add maxSchemaAgreementWaitSeconds
+    if (connectionPoolLocalSize != null)
+      configLoaderBuilder.withInt(
+          DefaultDriverOption.CONNECTION_POOL_LOCAL_SIZE, connectionPoolLocalSize);
+
+    if (connectionPoolRemoteSize != null)
+      configLoaderBuilder.withInt(
+          DefaultDriverOption.CONNECTION_POOL_REMOTE_SIZE, connectionPoolRemoteSize);
+
+    if (heartbeatIntervalSeconds != null)
+      configLoaderBuilder.withDuration(
+          DefaultDriverOption.HEARTBEAT_INTERVAL, Duration.ofSeconds(heartbeatIntervalSeconds));
+
+    if (connectTimeoutMillis != null)
+      configLoaderBuilder.withDuration(
+          DefaultDriverOption.CONNECTION_CONNECT_TIMEOUT, Duration.ofMillis(connectTimeoutMillis));
+
+    if (tcpNoDelay != null)
+      configLoaderBuilder.withBoolean(DefaultDriverOption.SOCKET_TCP_NODELAY, tcpNoDelay);
+
+    if (consistencyLevel != null)
+      configLoaderBuilder.withString(DefaultDriverOption.REQUEST_CONSISTENCY, consistencyLevel);
+
+    if (serialConsistencyLevel != null)
+      configLoaderBuilder.withString(
+          DefaultDriverOption.REQUEST_SERIAL_CONSISTENCY, serialConsistencyLevel);
+
+    if (defaultIdempotence != null)
+      configLoaderBuilder.withBoolean(
+          DefaultDriverOption.REQUEST_DEFAULT_IDEMPOTENCE, defaultIdempotence);
+
+    if (pageSize != null)
+      configLoaderBuilder.withInt(DefaultDriverOption.REQUEST_PAGE_SIZE, pageSize);
+
     if (maxSchemaAgreementWaitSeconds != null)
-      clusterBuilder.withMaxSchemaAgreementWaitSeconds(maxSchemaAgreementWaitSeconds);
+      configLoaderBuilder.withDuration(
+          DefaultDriverOption.CONTROL_CONNECTION_AGREEMENT_TIMEOUT,
+          Duration.ofSeconds(maxSchemaAgreementWaitSeconds));
 
-    // add NettyOptions
-    if (nettyOptions != null) clusterBuilder.withNettyOptions(nettyOptions);
+    if (useMetrics != null && !useMetrics) {
+      configLoaderBuilder.withStringList(
+          DefaultDriverOption.METRICS_SESSION_ENABLED, Collections.emptyList());
+      configLoaderBuilder.withStringList(
+          DefaultDriverOption.METRICS_NODE_ENABLED, Collections.emptyList());
+    }
 
-    // add JMX Reporting
-    if (useJmxReporting != null && !useJmxReporting) clusterBuilder.withoutJMXReporting();
+    if (useJmxReporting != null && useJmxReporting)
+      logger.warn(
+          "jmxReporting was requested, but the driver 4.x JMX metrics extension "
+              + "(java-driver-metrics-jmx) is not on the classpath; ignoring.");
 
-    // add Metrics
-    if (useMetrics != null && !useMetrics) clusterBuilder.withoutMetrics();
+    CqlSessionBuilder sessionBuilder = CqlSession.builder();
 
-    // add pooling options
-    if (poolingOptions != null) clusterBuilder.withPoolingOptions(poolingOptions);
+    for (String contactPoint : contactPoints)
+      sessionBuilder.addContactPoint(
+          new InetSocketAddress(contactPoint, port != null ? port : 9042));
 
-    // add port
-    if (port != null) clusterBuilder.withPort(port);
+    if (localDatacenter != null) sessionBuilder.withLocalDatacenter(localDatacenter);
 
-    if (protocolVersion != null) clusterBuilder.withProtocolVersion(protocolVersion);
+    if (keySpace != null) sessionBuilder.withKeyspace(keySpace);
 
-    // add query options
-    if (queryOptions != null) clusterBuilder.withQueryOptions(queryOptions);
+    if (hasCredentials()) sessionBuilder.withAuthCredentials(userName, password);
 
-    // add reconnectionPolicy
-    if (reconnectionPolicy != null) clusterBuilder.withReconnectionPolicy(reconnectionPolicy);
+    if (authProvider != null) sessionBuilder.withAuthProvider(authProvider);
 
-    // add retryPolicy
-    if (retryPolicy != null) clusterBuilder.withRetryPolicy(retryPolicy);
+    if (sslEngineFactory != null) sessionBuilder.withSslEngineFactory(sslEngineFactory);
 
-    // add socket options
-    if (socketOptions != null) clusterBuilder.withSocketOptions(socketOptions);
+    if (listeners != null)
+      for (NodeStateListener listener : listeners) sessionBuilder.addNodeStateListener(listener);
 
-    // add SpeculativeExecutionPolicy
-    if (speculativeExecutionPolicy != null)
-      clusterBuilder.withSpeculativeExecutionPolicy(speculativeExecutionPolicy);
+    sessionBuilder.withConfigLoader(configLoaderBuilder.build());
 
-    // add SSL
-    if (sslOptions != null) clusterBuilder.withSSL(sslOptions);
+    return new ClusterDataSource(sessionBuilder.build(), keySpace);
+  }
 
-    // add TimestampGenerator
-    if (timestampGenerator != null) clusterBuilder.withTimestampGenerator(timestampGenerator);
-
-    return new ClusterDataSource(clusterBuilder.build(), keySpace);
+  @SuppressWarnings("unchecked")
+  private static <T> Class<? extends T> loadPolicyClass(String className, Class<T> type)
+      throws CpoException {
+    try {
+      return Class.forName(className).asSubclass(type);
+    } catch (ClassNotFoundException e) {
+      throw new CpoException("Unable to load policy class: " + className, e);
+    }
   }
 
   private static String buildDataSourceName(

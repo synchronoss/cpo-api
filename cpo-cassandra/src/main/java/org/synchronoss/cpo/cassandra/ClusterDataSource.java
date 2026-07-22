@@ -22,48 +22,35 @@ package org.synchronoss.cpo.cassandra;
  * ]]
  */
 
-import com.datastax.driver.core.Cluster;
-import com.datastax.driver.core.Session;
+import com.datastax.oss.driver.api.core.CqlSession;
 
 /**
- * Represents a Cassandra Cluster
+ * Represents a Cassandra session
  *
  * @author dberry
  */
 public class ClusterDataSource {
-  private Cluster cluster = null;
-
   private String keySpace = null;
-  private Session session = null;
+  private CqlSession session = null;
 
   private ClusterDataSource() {}
 
   /**
    * Construct a ClusterDataSource
    *
-   * @param cluster The cassandra cluster
+   * @param session The cassandra session, already built with the keyspace applied
    * @param keySpace The keyspace
    */
-  public ClusterDataSource(Cluster cluster, String keySpace) {
-    this.cluster = cluster;
-    this.keySpace = keySpace;
-
-    if (cluster == null) throw new IllegalArgumentException("Cluster cannot be null");
+  public ClusterDataSource(CqlSession session, String keySpace) {
+    if (session == null) throw new IllegalArgumentException("CqlSession cannot be null");
     if (keySpace == null) throw new IllegalArgumentException("KeySpace cannot be null");
-    session = cluster.connect(keySpace);
+
+    this.session = session;
+    this.keySpace = keySpace;
   }
 
-  Session getSession() {
+  CqlSession getSession() {
     return session;
-  }
-
-  /**
-   * Gets the Cassandra cluster this data source connects to.
-   *
-   * @return the Cassandra cluster
-   */
-  public Cluster getCluster() {
-    return cluster;
   }
 
   /**

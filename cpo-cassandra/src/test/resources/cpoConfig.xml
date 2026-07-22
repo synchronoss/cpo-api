@@ -42,6 +42,7 @@
     <readWriteConfig>
       <keySpace>${cassandra.keyspace}</keySpace>
       <contactPoint>${cassandra.contactPoint}</contactPoint>
+      <localDatacenter>datacenter1</localDatacenter>
       <port>${cassandra.nativeport}</port>
       <poolingOptions></poolingOptions>
       <socketOptions></socketOptions>
@@ -54,6 +55,7 @@
    <readWriteConfig>
      <keySpace>${cassandra.keyspace}</keySpace>
      <contactPoint>${cassandra.contactPoint}</contactPoint>
+     <localDatacenter>datacenter1</localDatacenter>
      <port>${cassandra.nativeport}</port>
    </readWriteConfig>
  </dataConfig>
@@ -63,6 +65,7 @@
    <readWriteConfig>
      <keySpace>${cassandra.keyspace}</keySpace>
      <contactPoint>${cassandra.contactPoint}</contactPoint>
+     <localDatacenter>datacenter1</localDatacenter>
      <port>${cassandra.nativeport}</port>
    </readWriteConfig>
  </dataConfig>

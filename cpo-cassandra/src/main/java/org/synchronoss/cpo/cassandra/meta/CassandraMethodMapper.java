@@ -22,8 +22,10 @@ package org.synchronoss.cpo.cassandra.meta;
  * ]]
  */
 
-import com.datastax.driver.core.BoundStatement;
-import com.datastax.driver.core.Row;
+import com.datastax.oss.driver.api.core.cql.BoundStatement;
+import com.datastax.oss.driver.api.core.cql.Row;
+import com.datastax.oss.driver.api.core.data.TupleValue;
+import com.datastax.oss.driver.api.core.data.UdtValue;
 import java.io.Serial;
 import java.io.Serializable;
 import java.lang.reflect.Method;
@@ -31,6 +33,8 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.net.InetAddress;
 import java.nio.ByteBuffer;
+import java.time.Instant;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -106,8 +110,8 @@ public class CassandraMethodMapper implements Serializable, Cloneable {
             CassandraMethodMapEntry.METHOD_TYPE_BASIC,
             ByteBuffer.class,
             ByteBuffer.class,
-            "getBytes",
-            "setBytes"));
+            "getByteBuffer",
+            "setByteBuffer"));
     mapper.addMethodMapEntry(
         makeCassandraMethodMapEntry(
             CassandraMethodMapEntry.METHOD_TYPE_BASIC,
@@ -118,17 +122,17 @@ public class CassandraMethodMapper implements Serializable, Cloneable {
     mapper.addMethodMapEntry(
         makeCassandraMethodMapEntry(
             CassandraMethodMapEntry.METHOD_TYPE_BASIC,
-            com.datastax.driver.core.LocalDate.class,
-            com.datastax.driver.core.LocalDate.class,
-            "getDate",
-            "setDate"));
+            LocalDate.class,
+            LocalDate.class,
+            "getLocalDate",
+            "setLocalDate"));
     mapper.addMethodMapEntry(
         makeCassandraMethodMapEntry(
             CassandraMethodMapEntry.METHOD_TYPE_BASIC,
             BigDecimal.class,
             BigDecimal.class,
-            "getDecimal",
-            "setDecimal"));
+            "getBigDecimal",
+            "setBigDecimal"));
     mapper.addMethodMapEntry(
         makeCassandraMethodMapEntry(
             CassandraMethodMapEntry.METHOD_TYPE_BASIC,
@@ -162,8 +166,8 @@ public class CassandraMethodMapper implements Serializable, Cloneable {
             CassandraMethodMapEntry.METHOD_TYPE_BASIC,
             InetAddress.class,
             InetAddress.class,
-            "getInet",
-            "setInet"));
+            "getInetAddress",
+            "setInetAddress"));
     mapper.addMethodMapEntry(
         makeCassandraMethodMapEntry(
             CassandraMethodMapEntry.METHOD_TYPE_BASIC, int.class, int.class, "getInt", "setInt"));
@@ -221,38 +225,38 @@ public class CassandraMethodMapper implements Serializable, Cloneable {
     mapper.addMethodMapEntry(
         makeCassandraMethodMapEntry(
             CassandraMethodMapEntry.METHOD_TYPE_BASIC,
-            java.util.Date.class,
-            java.util.Date.class,
-            "getTimestamp",
-            "setTimestamp"));
+            Instant.class,
+            Instant.class,
+            "getInstant",
+            "setInstant"));
     mapper.addMethodMapEntry(
         makeCassandraMethodMapEntry(
             CassandraMethodMapEntry.METHOD_TYPE_BASIC,
-            com.datastax.driver.core.TupleValue.class,
-            com.datastax.driver.core.TupleValue.class,
+            TupleValue.class,
+            TupleValue.class,
             "getTupleValue",
             "setTupleValue"));
     mapper.addMethodMapEntry(
         makeCassandraMethodMapEntry(
             CassandraMethodMapEntry.METHOD_TYPE_BASIC,
-            com.datastax.driver.core.UDTValue.class,
-            com.datastax.driver.core.UDTValue.class,
-            "getUDTValue",
-            "setUDTValue"));
+            UdtValue.class,
+            UdtValue.class,
+            "getUdtValue",
+            "setUdtValue"));
     mapper.addMethodMapEntry(
         makeCassandraMethodMapEntry(
             CassandraMethodMapEntry.METHOD_TYPE_BASIC,
             UUID.class,
             UUID.class,
-            "getUUID",
-            "setUUID"));
+            "getUuid",
+            "setUuid"));
     mapper.addMethodMapEntry(
         makeCassandraMethodMapEntry(
             CassandraMethodMapEntry.METHOD_TYPE_BASIC,
             BigInteger.class,
             BigInteger.class,
-            "getVarint",
-            "setVarint"));
+            "getBigInteger",
+            "setBigInteger"));
 
     return mapper;
   }
@@ -274,18 +278,40 @@ public class CassandraMethodMapper implements Serializable, Cloneable {
       String setterName)
       throws IllegalArgumentException {
     Method rsGetter = loadGetter(methodType, rsc, getterName);
-    Method bsSetter = loadSetter(bsc, datasourceMethodClass, setterName);
+    Method bsSetter = loadSetter(methodType, bsc, datasourceMethodClass, setterName);
 
     return new CassandraMethodMapEntry(
         methodType, javaClass, datasourceMethodClass, rsGetter, bsSetter);
   }
 
+  /**
+   * Loads the SetterMethod for the Datasource class. Collection setters (METHOD_TYPE_ONE/TWO) take
+   * one or two extra {@code Class} parameters describing the element type(s), mirroring the shape
+   * of {@link #loadGetter(int, Class, String)} -- driver 4.x's {@code SettableByIndex} has no plain
+   * {@code setList(int, List)} overload, only the element-type-qualified ones.
+   */
   private static <M, D> Method loadSetter(
-      Class<M> methodClass, Class<D> datasourceClass, String setterName)
+      int methodType, Class<M> methodClass, Class<D> datasourceClass, String setterName)
       throws IllegalArgumentException {
     Method setter;
     try {
-      setter = methodClass.getMethod(setterName, new Class[] {int.class, datasourceClass});
+      switch (methodType) {
+        case CassandraMethodMapEntry.METHOD_TYPE_BASIC:
+          setter = methodClass.getMethod(setterName, new Class[] {int.class, datasourceClass});
+          break;
+        case CassandraMethodMapEntry.METHOD_TYPE_ONE:
+          setter =
+              methodClass.getMethod(
+                  setterName, new Class[] {int.class, datasourceClass, Class.class});
+          break;
+        case CassandraMethodMapEntry.METHOD_TYPE_TWO:
+          setter =
+              methodClass.getMethod(
+                  setterName, new Class[] {int.class, datasourceClass, Class.class, Class.class});
+          break;
+        default:
+          throw new IllegalArgumentException("Illegal Method Type:" + methodType);
+      }
     } catch (NoSuchMethodException nsme) {
       logger.error("Error loading Setter" + setterName, nsme);
       throw new IllegalArgumentException(nsme);

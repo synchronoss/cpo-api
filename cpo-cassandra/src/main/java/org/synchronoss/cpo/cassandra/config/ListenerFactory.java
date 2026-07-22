@@ -22,12 +22,12 @@ package org.synchronoss.cpo.cassandra.config;
  * ]]
  */
 
-import com.datastax.driver.core.Host;
+import com.datastax.oss.driver.api.core.metadata.NodeStateListener;
 import java.util.Collection;
 
 /**
- * FactoryMethod for creating the collection of Host.StateListener to register with the Cassandra
- * cluster
+ * FactoryMethod for creating the collection of NodeStateListener to register with the Cassandra
+ * session
  *
  * @author dberry
  */
@@ -48,7 +48,7 @@ public abstract class ListenerFactory implements FactoryMethodName {
   /**
    * Create the listeners
    *
-   * @return A collection of Host.StateListener
+   * @return A collection of NodeStateListener
    */
-  public abstract Collection<Host.StateListener> createListeners();
+  public abstract Collection<NodeStateListener> createListeners();
 }

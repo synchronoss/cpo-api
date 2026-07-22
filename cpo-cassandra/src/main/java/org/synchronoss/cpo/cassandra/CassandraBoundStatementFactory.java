@@ -22,8 +22,9 @@ package org.synchronoss.cpo.cassandra;
  * ]]
  */
 
-import com.datastax.driver.core.BoundStatement;
-import com.datastax.driver.core.Session;
+import com.datastax.oss.driver.api.core.CqlSession;
+import com.datastax.oss.driver.api.core.cql.BoundStatement;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 import java.util.List;
 import org.slf4j.Logger;
@@ -31,6 +32,7 @@ import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.cassandra.meta.CassandraMethodMapper;
 import org.synchronoss.cpo.core.*;
 import org.synchronoss.cpo.core.helper.ExceptionHelper;
+import org.synchronoss.cpo.core.meta.MethodMapEntry;
 import org.synchronoss.cpo.core.meta.MethodMapper;
 import org.synchronoss.cpo.core.meta.domain.CpoAttribute;
 import org.synchronoss.cpo.core.meta.domain.CpoClass;
@@ -70,7 +72,7 @@ public class CassandraBoundStatementFactory extends CpoStatementFactory implemen
    * @throws CpoException if a CPO error occurs
    */
   public <T> CassandraBoundStatementFactory(
-      Session sess,
+      CqlSession sess,
       CassandraCpoAdapter cassandraCpoAdapter,
       CpoClass criteria,
       CpoFunction function,
@@ -89,7 +91,7 @@ public class CassandraBoundStatementFactory extends CpoStatementFactory implemen
     getLocalLogger().debug("CpoFunction SQL = <" + sql + ">");
     try {
       boundStatement = sess.prepare(sql).bind();
-      boundStatement.setFetchSize(cassandraCpoAdapter.getFetchSize());
+      boundStatement = boundStatement.setPageSize(cassandraCpoAdapter.getFetchSize());
       setBindValues(bindValues);
     } catch (Throwable t) {
       getLocalLogger()
@@ -105,6 +107,53 @@ public class CassandraBoundStatementFactory extends CpoStatementFactory implemen
   @Override
   protected MethodMapper getMethodMapper() {
     return CassandraMethodMapper.getMethodMapper();
+  }
+
+  /**
+   * Binds dynamic where-clause values (raw datastore-typed literals, not backed by a CpoAttribute)
+   * directly to the BoundStatement. Overridden from {@link CpoStatementFactory#setBindValues}
+   * because that base implementation invokes the setter and discards its return value, which is
+   * correct for JDBC's mutating {@code PreparedStatement} but silently drops the bind value on
+   * driver 4.x's immutable {@code BoundStatement} -- every {@code setXxx(index, value)} call there
+   * returns a new instance that must be written back.
+   *
+   * @param bindValues the bind values to apply to the underlying statement, in parameter order; if
+   *     {@code null} the call is a no-op
+   * @throws CpoException if a value could not be bound to the underlying statement
+   */
+  @Override
+  public void setBindValues(Collection<BindAttribute> bindValues) throws CpoException {
+    if (bindValues == null) {
+      return;
+    }
+
+    int index = getStartingIndex();
+
+    for (BindAttribute bindAttr : bindValues) {
+      Object bindObject = bindAttr.bindObject();
+      CpoAttribute cpoAttribute = bindAttr.cpoAttribute();
+
+      MethodMapEntry<?, ?> jsm = getMethodMapper().getDataMethodMapEntry(bindObject.getClass());
+
+      if (jsm != null) {
+        getLocalLogger()
+            .debug(
+                "{}={}",
+                cpoAttribute == null ? bindAttr.name() : cpoAttribute.getDataName(),
+                bindObject);
+        try {
+          boundStatement =
+              (BoundStatement) jsm.getBsSetter().invoke(boundStatement, index++, bindObject);
+        } catch (IllegalAccessException iae) {
+          throw new CpoException("Error Accessing Prepared Statement Setter: ", iae);
+        } catch (InvocationTargetException ite) {
+          throw new CpoException("Error Invoking Prepared Statement Setter: ", ite);
+        }
+      } else {
+        CpoData cpoData = getCpoData(cpoAttribute, index++);
+        cpoData.invokeSetter(bindObject);
+      }
+    }
   }
 
   @Override
@@ -129,5 +178,16 @@ public class CassandraBoundStatementFactory extends CpoStatementFactory implemen
    */
   public BoundStatement getBoundStatement() {
     return boundStatement;
+  }
+
+  /**
+   * Replaces the BoundStatement held by this factory. Driver 4.x's BoundStatement is immutable:
+   * every {@code setXxx(index, value)} call returns a new instance rather than mutating in place,
+   * so each bind-value assignment must write its result back here.
+   *
+   * @param boundStatement The new BoundStatement instance
+   */
+  void setBoundStatement(BoundStatement boundStatement) {
+    this.boundStatement = boundStatement;
   }
 }

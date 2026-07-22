@@ -158,7 +158,7 @@ public class GenerateJavaSources extends AbstractMojo {
       String fileName = cpoConfig.substring(filenameStart + 1);
       getLog().info("Filename: " + fileName);
 
-      FileFilter fileFilter = new WildcardFileFilter(fileName);
+      FileFilter fileFilter = WildcardFileFilter.builder().setWildcards(fileName).get();
       File foundFiles[] = dir.listFiles(fileFilter);
       if (foundFiles == null || foundFiles.length == 0) {
         throw new MojoExecutionException("Could not find file: " + cpoConfig);

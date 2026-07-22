@@ -49,10 +49,10 @@ public class JdbcMethodMapEntry<J, D> extends MethodMapEntry<J, D>
   public static final int METHOD_TYPE_OBJECT = 3;
 
   /** The {@code CallableStatement} getter method used to read an OUT parameter's value. */
-  private Method csGetter = null;
+  private transient Method csGetter = null;
 
   /** The {@code CallableStatement} setter method used to register an IN parameter's type. */
-  private Method csSetter = null;
+  private transient Method csSetter = null;
 
   /**
    * Constructs a JdbcMethodMapEntry

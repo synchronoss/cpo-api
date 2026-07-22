@@ -73,7 +73,7 @@ public abstract class CpoBaseAdapter<D> extends CpoAdapterCache implements CpoAd
     return readDataSource;
   }
 
-  protected void setReadDataSource(D readDataSource) {
+  protected final void setReadDataSource(D readDataSource) {
     this.readDataSource = readDataSource;
   }
 
@@ -81,7 +81,7 @@ public abstract class CpoBaseAdapter<D> extends CpoAdapterCache implements CpoAd
     return writeDataSource;
   }
 
-  protected void setWriteDataSource(D writeDataSource) {
+  protected final void setWriteDataSource(D writeDataSource) {
     this.writeDataSource = writeDataSource;
   }
 

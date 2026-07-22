@@ -74,13 +74,13 @@ public class JdbcCpoAdapter extends CpoBaseAdapter<DataSource> {
   private static final Logger logger = LoggerFactory.getLogger(JdbcCpoAdapter.class);
 
   /** The JNDI context used to resolve a {@code jndiName}-configured data source, if any. */
-  private Context context_ = null;
+  private transient Context context_ = null;
 
   /** The capabilities of the database behind this adapter, probed once at construction. */
   private final JdbcDatabaseCapabilities capabilities;
 
   /** How this adapter obtains and releases its connections; see JdbcConnectionStrategy. */
-  private JdbcConnectionStrategy connectionStrategy;
+  private transient JdbcConnectionStrategy connectionStrategy;
 
   /** CpoMetaDescriptor allows you to get the metadata for a class. */
   private JdbcCpoMetaDescriptor metaDescriptor = null;

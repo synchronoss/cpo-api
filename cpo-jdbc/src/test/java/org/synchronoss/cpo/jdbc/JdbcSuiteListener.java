@@ -31,7 +31,11 @@ import org.h2.tools.Server;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.core.CpoAdapterFactoryManager;
-import org.testcontainers.containers.*;
+import org.testcontainers.containers.JdbcDatabaseContainer;
+import org.testcontainers.containers.OracleContainer;
+import org.testcontainers.mariadb.MariaDBContainer;
+import org.testcontainers.mysql.MySQLContainer;
+import org.testcontainers.postgresql.PostgreSQLContainer;
 import org.testcontainers.utility.DockerImageName;
 import org.testng.ISuite;
 import org.testng.ISuiteListener;
@@ -123,19 +127,19 @@ public class JdbcSuiteListener implements ISuiteListener {
     logger.debug("Creating a container for:" + dbType);
     switch (dbType) {
       case MYSQL:
-        return new MySQLContainer<>(DockerImageName.parse(image))
+        return new MySQLContainer(DockerImageName.parse(image))
             .withInitScript(initScript)
             .withUsername(dbUser)
             .withPassword(dbPswd)
             .withDatabaseName(dbName);
       case MARIADB:
-        return new MariaDBContainer<>(DockerImageName.parse(image))
+        return new MariaDBContainer(DockerImageName.parse(image))
             .withInitScript(initScript)
             .withUsername(dbUser)
             .withPassword(dbPswd)
             .withDatabaseName(dbName);
       case POSTGRES:
-        return new PostgreSQLContainer<>(DockerImageName.parse(image))
+        return new PostgreSQLContainer(DockerImageName.parse(image))
             .withInitScript(initScript)
             .withUsername(dbUser)
             .withPassword(dbPswd)

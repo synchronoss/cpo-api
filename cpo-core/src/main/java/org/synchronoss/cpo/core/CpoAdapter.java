@@ -41,12 +41,16 @@ import org.synchronoss.cpo.core.meta.domain.CpoAttribute;
  * convenience forms for the common no-clause cases. Example:
  *
  * <pre>{@code
- * CpoWhere where = adapter.newWhere(Logical.NONE, "id", Comparison.EQ, 42);
+ * CpoAdapter cpo = CpoAdapterFactoryManager.getCpoAdapter("myContext");
+ * CpoWhere where = cpo.newWhere(Logical.NONE, "id", Comparison.EQ, 42);
  * try (Stream<SomeBean> beans =
- *     adapter.retrieveBeans(CpoQuery.group("byId").where(where), criteria)) {
+ *     cpo.retrieveBeans(CpoQuery.group("byId").where(where), criteria)) {
  *   beans.forEach(...);
  * }
  * }</pre>
+ *
+ * <p>The examples on the methods below assume a {@code cpo} adapter obtained as above and a {@code
+ * SomeBean} class mapped in the meta data.
  *
  * @author david berry
  */
@@ -57,6 +61,13 @@ public interface CpoAdapter extends java.io.Serializable {
   /**
    * Creates the bean in the datasource using the query's CREATE function group. The assumption is
    * that the bean does not exist in the datasource.
+   *
+   * <pre>{@code
+   * SomeBean bean = new SomeBean();
+   * bean.setId(1);
+   * bean.setName("SomeName");
+   * cpo.insertBean(CpoQuery.group("createBean"), bean);
+   * }</pre>
    *
    * @param <T> The type of the JavaBean
    * @param query The function group and clauses to apply
@@ -71,6 +82,11 @@ public interface CpoAdapter extends java.io.Serializable {
    * datasource supports it. This is an all-or-nothing transaction: if one bean fails, no beans are
    * created.
    *
+   * <pre>{@code
+   * List<SomeBean> beans = List.of(bean1, bean2);
+   * long created = cpo.insertBeans(CpoQuery.group("createBean"), beans);
+   * }</pre>
+   *
    * @param <T> The type of the JavaBean
    * @param query The function group and clauses to apply
    * @param beans The beans to create
@@ -81,6 +97,10 @@ public interface CpoAdapter extends java.io.Serializable {
 
   /**
    * Creates the bean in the datasource using the default CREATE function group.
+   *
+   * <pre>{@code
+   * cpo.insertBean(bean);
+   * }</pre>
    *
    * @param <T> The type of the JavaBean
    * @param bean A bean defined within the metadata of the datasource
@@ -93,6 +113,10 @@ public interface CpoAdapter extends java.io.Serializable {
 
   /**
    * Creates the bean in the datasource using the named CREATE function group.
+   *
+   * <pre>{@code
+   * cpo.insertBean("createBean", bean);
+   * }</pre>
    *
    * @param <T> The type of the JavaBean
    * @param groupName The CREATE function group name; null signifies the default group
@@ -107,6 +131,10 @@ public interface CpoAdapter extends java.io.Serializable {
   /**
    * Creates the beans in the datasource using the default CREATE function group.
    *
+   * <pre>{@code
+   * cpo.insertBeans(beans);
+   * }</pre>
+   *
    * @param <T> The type of the JavaBean
    * @param beans The beans to create
    * @return The number of beans created in the datasource
@@ -118,6 +146,10 @@ public interface CpoAdapter extends java.io.Serializable {
 
   /**
    * Creates the beans in the datasource using the named CREATE function group.
+   *
+   * <pre>{@code
+   * cpo.insertBeans("createBean", beans);
+   * }</pre>
    *
    * @param <T> The type of the JavaBean
    * @param groupName The CREATE function group name; null signifies the default group
@@ -135,6 +167,12 @@ public interface CpoAdapter extends java.io.Serializable {
    * Removes the bean from the datasource using the query's DELETE function group. The assumption is
    * that the bean exists in the datasource.
    *
+   * <pre>{@code
+   * SomeBean bean = new SomeBean();
+   * bean.setId(1);
+   * cpo.deleteBean(CpoQuery.group("deleteBean"), bean);
+   * }</pre>
+   *
    * @param <T> The type of the JavaBean
    * @param query The function group and clauses to apply
    * @param bean A bean defined within the metadata of the datasource
@@ -148,6 +186,10 @@ public interface CpoAdapter extends java.io.Serializable {
    * the datasource supports it. This is an all-or-nothing transaction: if one bean fails, no beans
    * are deleted.
    *
+   * <pre>{@code
+   * long deleted = cpo.deleteBeans(CpoQuery.group("deleteBean"), beans);
+   * }</pre>
+   *
    * @param <T> The type of the JavaBean
    * @param query The function group and clauses to apply
    * @param beans The beans to delete
@@ -158,6 +200,10 @@ public interface CpoAdapter extends java.io.Serializable {
 
   /**
    * Removes the bean from the datasource using the default DELETE function group.
+   *
+   * <pre>{@code
+   * cpo.deleteBean(bean);
+   * }</pre>
    *
    * @param <T> The type of the JavaBean
    * @param bean A bean defined within the metadata of the datasource
@@ -170,6 +216,10 @@ public interface CpoAdapter extends java.io.Serializable {
 
   /**
    * Removes the bean from the datasource using the named DELETE function group.
+   *
+   * <pre>{@code
+   * cpo.deleteBean("deleteBean", bean);
+   * }</pre>
    *
    * @param <T> The type of the JavaBean
    * @param groupName The DELETE function group name; null signifies the default group
@@ -184,6 +234,10 @@ public interface CpoAdapter extends java.io.Serializable {
   /**
    * Removes the beans from the datasource using the default DELETE function group.
    *
+   * <pre>{@code
+   * cpo.deleteBeans(beans);
+   * }</pre>
+   *
    * @param <T> The type of the JavaBean
    * @param beans The beans to delete
    * @return The number of beans deleted from the datasource
@@ -195,6 +249,10 @@ public interface CpoAdapter extends java.io.Serializable {
 
   /**
    * Removes the beans from the datasource using the named DELETE function group.
+   *
+   * <pre>{@code
+   * cpo.deleteBeans("deleteBean", beans);
+   * }</pre>
    *
    * @param <T> The type of the JavaBean
    * @param groupName The DELETE function group name; null signifies the default group
@@ -212,6 +270,13 @@ public interface CpoAdapter extends java.io.Serializable {
    * Updates the bean in the datasource using the query's UPDATE function group. The assumption is
    * that the bean exists in the datasource.
    *
+   * <pre>{@code
+   * SomeBean bean = new SomeBean();
+   * bean.setId(1);
+   * bean.setName("NewName");
+   * cpo.updateBean(CpoQuery.group("updateBean"), bean);
+   * }</pre>
+   *
    * @param <T> The type of the JavaBean
    * @param query The function group and clauses to apply
    * @param bean A bean defined within the metadata of the datasource
@@ -225,6 +290,10 @@ public interface CpoAdapter extends java.io.Serializable {
    * datasource supports it. This is an all-or-nothing transaction: if one bean fails, no beans are
    * updated.
    *
+   * <pre>{@code
+   * long updated = cpo.updateBeans(CpoQuery.group("updateBean"), beans);
+   * }</pre>
+   *
    * @param <T> The type of the JavaBean
    * @param query The function group and clauses to apply
    * @param beans The beans to update
@@ -235,6 +304,10 @@ public interface CpoAdapter extends java.io.Serializable {
 
   /**
    * Updates the bean in the datasource using the default UPDATE function group.
+   *
+   * <pre>{@code
+   * cpo.updateBean(bean);
+   * }</pre>
    *
    * @param <T> The type of the JavaBean
    * @param bean A bean defined within the metadata of the datasource
@@ -247,6 +320,10 @@ public interface CpoAdapter extends java.io.Serializable {
 
   /**
    * Updates the bean in the datasource using the named UPDATE function group.
+   *
+   * <pre>{@code
+   * cpo.updateBean("updateBean", bean);
+   * }</pre>
    *
    * @param <T> The type of the JavaBean
    * @param groupName The UPDATE function group name; null signifies the default group
@@ -261,6 +338,10 @@ public interface CpoAdapter extends java.io.Serializable {
   /**
    * Updates the beans in the datasource using the default UPDATE function group.
    *
+   * <pre>{@code
+   * cpo.updateBeans(beans);
+   * }</pre>
+   *
    * @param <T> The type of the JavaBean
    * @param beans The beans to update
    * @return The number of beans updated in the datasource
@@ -272,6 +353,10 @@ public interface CpoAdapter extends java.io.Serializable {
 
   /**
    * Updates the beans in the datasource using the named UPDATE function group.
+   *
+   * <pre>{@code
+   * cpo.updateBeans("updateBean", beans);
+   * }</pre>
    *
    * @param <T> The type of the JavaBean
    * @param groupName The UPDATE function group name; null signifies the default group
@@ -289,6 +374,13 @@ public interface CpoAdapter extends java.io.Serializable {
    * Inserts or updates the bean using the query's UPSERT function group: the EXIST function decides
    * whether the CREATE or UPDATE function is executed.
    *
+   * <pre>{@code
+   * SomeBean bean = new SomeBean();
+   * bean.setId(1);
+   * bean.setName("SomeName");
+   * cpo.upsertBean(CpoQuery.group("upsertBean"), bean); // inserts or updates as needed
+   * }</pre>
+   *
    * @param <T> The type of the JavaBean
    * @param query The function group and clauses to apply
    * @param bean A bean defined within the metadata of the datasource
@@ -302,6 +394,10 @@ public interface CpoAdapter extends java.io.Serializable {
    * Inserts or updates the beans using the query's UPSERT function group: for each bean the EXIST
    * function decides whether the CREATE or UPDATE function is executed.
    *
+   * <pre>{@code
+   * long upserted = cpo.upsertBeans(CpoQuery.group("upsertBean"), beans);
+   * }</pre>
+   *
    * @param <T> The type of the JavaBean
    * @param query The function group and clauses to apply
    * @param beans The beans to upsert
@@ -313,6 +409,10 @@ public interface CpoAdapter extends java.io.Serializable {
 
   /**
    * Inserts or updates the bean using the default UPSERT function group.
+   *
+   * <pre>{@code
+   * cpo.upsertBean(bean);
+   * }</pre>
    *
    * @param <T> The type of the JavaBean
    * @param bean A bean defined within the metadata of the datasource
@@ -326,6 +426,10 @@ public interface CpoAdapter extends java.io.Serializable {
 
   /**
    * Inserts or updates the bean using the named UPSERT function group.
+   *
+   * <pre>{@code
+   * cpo.upsertBean("upsertBean", bean);
+   * }</pre>
    *
    * @param <T> The type of the JavaBean
    * @param groupName The UPSERT function group name; null signifies the default group
@@ -341,6 +445,10 @@ public interface CpoAdapter extends java.io.Serializable {
   /**
    * Inserts or updates the beans using the default UPSERT function group.
    *
+   * <pre>{@code
+   * cpo.upsertBeans(beans);
+   * }</pre>
+   *
    * @param <T> The type of the JavaBean
    * @param beans The beans to upsert
    * @return The number of beans upserted in the datasource
@@ -353,6 +461,10 @@ public interface CpoAdapter extends java.io.Serializable {
 
   /**
    * Inserts or updates the beans using the named UPSERT function group.
+   *
+   * <pre>{@code
+   * cpo.upsertBeans("upsertBean", beans);
+   * }</pre>
    *
    * @param <T> The type of the JavaBean
    * @param groupName The UPSERT function group name; null signifies the default group
@@ -371,6 +483,14 @@ public interface CpoAdapter extends java.io.Serializable {
    * Checks whether beans matching the given bean exist in the datasource, using the query's EXIST
    * function group and where constraints.
    *
+   * <pre>{@code
+   * CpoWhere where = cpo.newWhere(Logical.NONE, "id", Comparison.EQ, 1);
+   * long count = cpo.existsBean(CpoQuery.group("existsBean").where(where), bean);
+   * if (count > 0) {
+   *   // the bean exists
+   * }
+   * }</pre>
+   *
    * @param <T> The type of the JavaBean
    * @param query The function group and clauses to apply
    * @param bean The bean to search for in the datasource
@@ -385,6 +505,10 @@ public interface CpoAdapter extends java.io.Serializable {
   /**
    * Checks whether beans matching the given bean exist, using the default EXIST function group.
    *
+   * <pre>{@code
+   * long count = cpo.existsBean(bean);
+   * }</pre>
+   *
    * @param <T> The type of the JavaBean
    * @param bean The bean to search for in the datasource
    * @return The number of beans that exist in the datasource that match the specified bean
@@ -396,6 +520,10 @@ public interface CpoAdapter extends java.io.Serializable {
 
   /**
    * Checks whether beans matching the given bean exist, using the named EXIST function group.
+   *
+   * <pre>{@code
+   * long count = cpo.existsBean("existsBean", bean);
+   * }</pre>
    *
    * @param <T> The type of the JavaBean
    * @param groupName The EXIST function group name; null signifies the default group
@@ -414,6 +542,11 @@ public interface CpoAdapter extends java.io.Serializable {
    * using the criteria bean to populate the IN arguments and the result bean type for the OUT
    * arguments.
    *
+   * <pre>{@code
+   * SomeResult result =
+   *     cpo.executeBean(CpoQuery.group("calculateTotals"), criteria, new SomeResult());
+   * }</pre>
+   *
    * @param <T> The type of the result JavaBean
    * @param <C> The type of the criteria JavaBean
    * @param query The function group to execute
@@ -429,6 +562,10 @@ public interface CpoAdapter extends java.io.Serializable {
   /**
    * Executes the default EXECUTE function group with the bean as both criteria and result.
    *
+   * <pre>{@code
+   * SomeBean result = cpo.executeBean(bean);
+   * }</pre>
+   *
    * @param <T> The type of the JavaBean
    * @param bean The bean used for the IN arguments and populated with the OUT arguments
    * @return A result bean populated with the OUT arguments
@@ -440,6 +577,10 @@ public interface CpoAdapter extends java.io.Serializable {
 
   /**
    * Executes the named EXECUTE function group with the bean as both criteria and result.
+   *
+   * <pre>{@code
+   * SomeBean result = cpo.executeBean("calculateTotals", bean);
+   * }</pre>
    *
    * @param <T> The type of the JavaBean
    * @param groupName The EXECUTE function group name; null signifies the default group
@@ -458,6 +599,12 @@ public interface CpoAdapter extends java.io.Serializable {
    * given bean supplying the search criteria and receiving the result. If the function returns more
    * than one row, an exception is thrown.
    *
+   * <pre>{@code
+   * SomeBean criteria = new SomeBean();
+   * criteria.setId(1);
+   * SomeBean bean = cpo.retrieveBean(CpoQuery.group("retrieveBean"), criteria);
+   * }</pre>
+   *
    * @param <T> The type of the JavaBean
    * @param query The function group and clauses to apply
    * @param bean A bean defined within the metadata of the datasource whose attributes supply the
@@ -471,6 +618,11 @@ public interface CpoAdapter extends java.io.Serializable {
   /**
    * Retrieves the first bean produced by the query's RETRIEVE function group, using separate
    * criteria and result beans.
+   *
+   * <pre>{@code
+   * SomeResult result =
+   *     cpo.retrieveBean(CpoQuery.group("retrieveResult"), criteria, new SomeResult());
+   * }</pre>
    *
    * @param <T> The type of the result JavaBean
    * @param <C> The type of the criteria JavaBean
@@ -488,6 +640,10 @@ public interface CpoAdapter extends java.io.Serializable {
    * Retrieves a single bean using the default RETRIEVE function group; the bean supplies the search
    * criteria and receives the result.
    *
+   * <pre>{@code
+   * SomeBean bean = cpo.retrieveBean(criteria);
+   * }</pre>
+   *
    * @param <T> The type of the JavaBean
    * @param bean A bean defined within the metadata of the datasource whose attributes supply the
    *     search criteria
@@ -502,6 +658,10 @@ public interface CpoAdapter extends java.io.Serializable {
   /**
    * Retrieves a single bean using the named RETRIEVE function group; the bean supplies the search
    * criteria and receives the result.
+   *
+   * <pre>{@code
+   * SomeBean bean = cpo.retrieveBean("retrieveBean", criteria);
+   * }</pre>
    *
    * @param <T> The type of the JavaBean
    * @param groupName The RETRIEVE function group name; null signifies the default group
@@ -518,6 +678,18 @@ public interface CpoAdapter extends java.io.Serializable {
   /**
    * Retrieves beans from the datasource using the query's LIST function group, with separate
    * criteria and result beans.
+   *
+   * <pre>{@code
+   * CpoWhere where = cpo.newWhere(Logical.NONE, "dept", Comparison.EQ, "sales");
+   * CpoOrderBy orderBy = cpo.newOrderBy("name", true);
+   * try (Stream<SomeResult> beans =
+   *     cpo.retrieveBeans(
+   *         CpoQuery.group("listResults").where(where).orderBy(orderBy),
+   *         criteria,
+   *         new SomeResult())) {
+   *   beans.forEach(...);
+   * }
+   * }</pre>
    *
    * @param <T> The type of the result JavaBean
    * @param <C> The type of the criteria JavaBean
@@ -538,6 +710,14 @@ public interface CpoAdapter extends java.io.Serializable {
    * Retrieves beans from the datasource using the query's LIST function group; the criteria bean
    * type is also the result type.
    *
+   * <pre>{@code
+   * CpoWhere where = cpo.newWhere(Logical.NONE, "dept", Comparison.EQ, "sales");
+   * try (Stream<SomeBean> beans =
+   *     cpo.retrieveBeans(CpoQuery.group("listBeans").where(where), criteria)) {
+   *   beans.forEach(...);
+   * }
+   * }</pre>
+   *
    * @param <C> The type of the criteria JavaBean
    * @param query The function group and clauses to apply
    * @param criteria A bean defined within the metadata of the datasource that supplies the
@@ -556,6 +736,12 @@ public interface CpoAdapter extends java.io.Serializable {
    * Retrieves beans using the named LIST function group; the criteria bean type is also the result
    * type.
    *
+   * <pre>{@code
+   * try (Stream<SomeBean> beans = cpo.retrieveBeans("listBeans", criteria)) {
+   *   beans.forEach(...);
+   * }
+   * }</pre>
+   *
    * @param <C> The type of the criteria JavaBean
    * @param groupName The LIST function group name; null signifies the default group
    * @param criteria A bean defined within the metadata of the datasource that supplies the
@@ -570,6 +756,13 @@ public interface CpoAdapter extends java.io.Serializable {
 
   /**
    * Retrieves beans using the named LIST function group with separate criteria and result beans.
+   *
+   * <pre>{@code
+   * try (Stream<SomeResult> beans =
+   *     cpo.retrieveBeans("listResults", criteria, new SomeResult())) {
+   *   beans.forEach(...);
+   * }
+   * }</pre>
    *
    * @param <T> The type of the result JavaBean
    * @param <C> The type of the criteria JavaBean
@@ -591,6 +784,10 @@ public interface CpoAdapter extends java.io.Serializable {
 
   /**
    * Creates a CpoOrderBy for the attribute and direction.
+   *
+   * <pre>{@code
+   * CpoOrderBy byNameAscending = cpo.newOrderBy("name", true);
+   * }</pre>
    *
    * @param attribute The metadata attribute name to order by
    * @param ascending true for ascending, false for descending
@@ -637,6 +834,10 @@ public interface CpoAdapter extends java.io.Serializable {
   /**
    * Creates an empty CpoWhere.
    *
+   * <pre>{@code
+   * CpoWhere where = cpo.newWhere();
+   * }</pre>
+   *
    * @return A CpoWhere
    * @throws CpoException An error occurred creating the CpoWhere
    */
@@ -644,6 +845,10 @@ public interface CpoAdapter extends java.io.Serializable {
 
   /**
    * Creates a CpoWhere comparing the attribute to the value.
+   *
+   * <pre>{@code
+   * CpoWhere where = cpo.newWhere(Logical.NONE, "id", Comparison.EQ, 42);
+   * }</pre>
    *
    * @param <T> The type of the value
    * @param logical How this where combines with the preceding where (AND, OR, NONE)

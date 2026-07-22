@@ -166,7 +166,6 @@
                     <configuration>
                         <release>21</release>
                         <compilerArgs>
-<!--                            <arg>-Werror</arg>-->
                             <arg>-Xlint:all</arg>
                         </compilerArgs>
                         <showDeprecation>true</showDeprecation>

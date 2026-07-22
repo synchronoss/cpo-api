@@ -104,8 +104,11 @@
       <oracle.host>localhost</oracle.host>
       <oracle.port>1521</oracle.port>
       <oracle.database>cpo</oracle.database>
-      <oracle.url>jdbc:oracle:thin:@${oracle.host}:${oracle.port}:${oracle.database}</oracle.url>
-      <oracle.userurl>jdbc:oracle:thin:${oracle.user}/${oracle.pswd}@${oracle.host}:${oracle.port}:${oracle.database}</oracle.userurl>
+      <!-- Testcontainers' gvenzl/oracle-xe image creates ${oracle.database} as a pluggable
+           database, reachable only by service name (host:port/service), not by the legacy
+           SID syntax (host:port:SID) -->
+      <oracle.url>jdbc:oracle:thin:@${oracle.host}:${oracle.port}/${oracle.database}</oracle.url>
+      <oracle.userurl>jdbc:oracle:thin:${oracle.user}/${oracle.pswd}@${oracle.host}:${oracle.port}/${oracle.database}</oracle.userurl>
       <oracle.driver>oracle.jdbc.driver.OracleDriver</oracle.driver>
       <oracle.blobsupport>true</oracle.blobsupport>
       <oracle.callsupport>true</oracle.callsupport>
@@ -119,9 +122,6 @@
       <oracle.valueMeta>/oracle/classdef/oracleValueMetaData.xml</oracle.valueMeta>
       <oracle.valueCaseMeta>/oracle/classdef/oracleValueCaseMetaData.xml</oracle.valueCaseMeta>
       <oracle.lobMeta>/oracle/classdef/oracleLobMetaData.xml</oracle.lobMeta>
-<!--      <oracle.valueMeta>/common/ValueMetaData.xml</oracle.valueMeta>-->
-<!--      <oracle.valueCaseMeta>/common/ValueCaseMetaData.xml</oracle.valueCaseMeta>-->
-<!--      <oracle.lobMeta>/common/LobMetaData.xml</oracle.lobMeta>-->
 
       <!--  H2 Test properties  -->
       <h2.type>h2</h2.type>
@@ -137,7 +137,7 @@
       <h2.driver>org.h2.Driver</h2.driver>
       <h2.blobsupport>true</h2.blobsupport>
       <h2.callsupport>true</h2.callsupport>
-      <h2.select4update>false</h2.select4update>
+      <h2.select4update>true</h2.select4update>
       <h2.millisupport>true</h2.millisupport>
       <h2.xasupport>true</h2.xasupport>
       <h2.initScript>${basedir}/target/test-classes/h2/initDB.sql</h2.initScript>
@@ -177,13 +177,6 @@
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-release-plugin</artifactId>
-        <configuration>
-          <arguments>${release.arguments}</arguments>
-        </configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
         <configuration>
             <suiteXmlFiles>
@@ -191,7 +184,7 @@
                 <suiteXmlFile>target/test-classes/mysql/testng.xml</suiteXmlFile>
                 <suiteXmlFile>target/test-classes/mariadb/testng.xml</suiteXmlFile>
                 <suiteXmlFile>target/test-classes/postgres/testng.xml</suiteXmlFile>
-<!--                <suiteXmlFile>target/test-classes/oracle/testng.xml</suiteXmlFile>-->
+                <suiteXmlFile>target/test-classes/oracle/testng.xml</suiteXmlFile>
             </suiteXmlFiles>
         </configuration>
       </plugin>
@@ -225,7 +218,6 @@
             </goals>
             <configuration>
                 <cpoConfig>${basedir}/src/test/resources/common/*.xml</cpoConfig>
-<!--                <cpoConfig>${basedir}/src/test/resources/oracle/classdef/*.xml</cpoConfig>-->
               <generateClass>true</generateClass>
               <generateInterface>true</generateInterface>
               <scope>test</scope>
@@ -263,15 +255,6 @@
           <artifactId>logback-classic</artifactId>
           <version>${logbackVersion}</version>
           <scope>test</scope>
-      </dependency>
-      <dependency>
-          <groupId>jakarta.xml.bind</groupId>
-          <artifactId>jakarta.xml.bind-api</artifactId>
-      </dependency>
-      <dependency>
-          <groupId>org.glassfish.jaxb</groupId>
-          <artifactId>jaxb-runtime</artifactId>
-          <scope>runtime</scope>
       </dependency>
 
     <!-- Oracle is provided because of the oracle transforms -->
@@ -370,12 +353,6 @@
     <dependency>
       <groupId>org.testcontainers</groupId>
       <artifactId>testcontainers-oracle-xe</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.locationtech.jts</groupId>
-      <artifactId>jts-core</artifactId>
-      <version>1.20.0</version>
       <scope>test</scope>
     </dependency>
   </dependencies>

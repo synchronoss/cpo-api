@@ -127,18 +127,17 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>jakarta.xml.bind</groupId>
-            <artifactId>jakarta.xml.bind-api</artifactId>
-        </dependency>
-        <dependency>
             <groupId>com.datastax.cassandra</groupId>
             <artifactId>cassandra-driver-core</artifactId>
             <version>3.11.5</version>
         </dependency>
+        <!-- Testcontainers' shaded Docker client relocates jackson-databind/jackson-core but
+             still references the unshaded com.fasterxml.jackson.annotation classes, so this
+             must stay on the classpath even though no cpo-cassandra source imports it directly -->
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-annotations</artifactId>
-            <version>3.0-rc5</version>
+            <version>2.19.2</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -155,6 +154,7 @@
             <groupId>com.github.terma</groupId>
             <artifactId>javaniotcpproxy</artifactId>
             <version>1.6</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 </project>

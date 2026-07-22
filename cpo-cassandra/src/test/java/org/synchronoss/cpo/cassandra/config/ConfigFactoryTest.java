@@ -26,8 +26,8 @@ import static org.testng.Assert.*;
 
 import com.datastax.driver.core.AuthProvider;
 import com.datastax.driver.core.Host;
-import com.datastax.driver.core.JdkSSLOptions;
 import com.datastax.driver.core.NettyOptions;
+import com.datastax.driver.core.RemoteEndpointAwareJdkSSLOptions;
 import com.datastax.driver.core.SSLOptions;
 import com.datastax.driver.core.policies.AddressTranslator;
 import com.datastax.driver.core.policies.ConstantReconnectionPolicy;
@@ -95,7 +95,7 @@ public class ConfigFactoryTest {
 
     @Override
     public SSLOptions createSSLOptions() {
-      return JdkSSLOptions.builder().build();
+      return RemoteEndpointAwareJdkSSLOptions.builder().build();
     }
   }
 

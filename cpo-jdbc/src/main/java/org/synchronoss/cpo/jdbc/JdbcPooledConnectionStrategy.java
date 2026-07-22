@@ -44,8 +44,8 @@ class JdbcPooledConnectionStrategy implements JdbcConnectionStrategy {
 
   private static final Logger logger = LoggerFactory.getLogger(JdbcPooledConnectionStrategy.class);
 
-  private final DataSource readDataSource;
-  private final DataSource writeDataSource;
+  private final transient DataSource readDataSource;
+  private final transient DataSource writeDataSource;
   private boolean invalidReadDataSource = false;
 
   /**

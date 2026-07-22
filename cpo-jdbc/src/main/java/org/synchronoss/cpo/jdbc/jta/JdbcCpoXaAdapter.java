@@ -75,7 +75,7 @@ public class JdbcCpoXaAdapter extends CpoBaseXaResource<JdbcCpoAdapter> implemen
   private static final Logger logger = LoggerFactory.getLogger(JdbcCpoXaAdapter.class);
 
   /** The factory used to create/retrieve the underlying {@link JdbcCpoAdapter}. */
-  private JdbcCpoAdapterFactory jdbcCpoAdapterFactory;
+  private transient JdbcCpoAdapterFactory jdbcCpoAdapterFactory;
 
   /**
    * Construct a JdbcCpoXaAdapter

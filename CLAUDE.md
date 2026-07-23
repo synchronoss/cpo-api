@@ -72,7 +72,11 @@ cpo-coverage    — Build-internal module (built last): merges all modules' JaCo
 - **`CpoAdapterFactory`** — creates `CpoAdapter` instances from a named config context.
 - **`CpoAdapterFactoryManager`** — singleton cache that loads `cpoConfig.xml` from the classpath (env var `CPO_CONFIG` overrides path) and vends `CpoAdapterFactory` instances by config name.
 - **`CpoMetaDescriptor`** — holds the JavaBean-to-datastore mapping (attributes, function groups, SQL/CQL expressions) loaded from meta XML files.
-- **`CpoWhere` / `CpoOrderBy`** — programmatic query clause builders.
+- **`CpoWhere` / `CpoOrderBy`** — programmatic query clause builders. Prefer `CpoAdapter.whereBuilder()`
+  (returns a `CpoWhereBuilder`) over hand-assembling a `CpoWhere` tree with `newWhere`/`addWhere`/
+  `setLogical` — the fluent `.where(attr, comp, val).and(...)`/`.or(group -> ...)` chain derives
+  correct `Logical` placement, including nested AND/OR groups via `CpoWhereGroup`, instead of
+  requiring it be set by hand on both leaves and group containers.
 - **`CpoStatementFactory`** — builds datastore-specific prepared statements from `CpoMetaDescriptor` data.
 - **`DataTypeMapper` / `MethodMapper`** — reflective bridges that map Java types and getter/setter methods to datastore types.
 

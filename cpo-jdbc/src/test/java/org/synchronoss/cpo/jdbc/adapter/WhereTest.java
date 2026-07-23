@@ -34,7 +34,6 @@ import org.synchronoss.cpo.core.CpoOrderBy;
 import org.synchronoss.cpo.core.CpoQuery;
 import org.synchronoss.cpo.core.CpoWhere;
 import org.synchronoss.cpo.core.enums.Comparison;
-import org.synchronoss.cpo.core.enums.Logical;
 import org.synchronoss.cpo.jdbc.ValueObject;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
@@ -110,8 +109,12 @@ public class WhereTest {
 
     try {
       ValueObject valObj = ValueObjectFactory.createValueObject();
-      cw = cpoAdapter.newWhere(Logical.NONE, ValueObject.ATTR_ID, Comparison.GT, null);
-      cw.setStaticValue(String.valueOf(IDB + 3));
+      cw =
+          cpoAdapter
+              .whereBuilder()
+              .where(ValueObject.ATTR_ID, Comparison.GT, null)
+              .staticValue(String.valueOf(IDB + 3))
+              .build();
       ArrayList<CpoWhere> wheres = new ArrayList<>();
       wheres.add(cw);
       try (Stream<ValueObject> beans =
@@ -136,7 +139,11 @@ public class WhereTest {
 
     try {
       BigInteger bigInt = BigInteger.valueOf(IDB + 1);
-      cw = cpoAdapter.newWhere(Logical.NONE, ValueObject.ATTR_ATTRBIGINT, Comparison.EQ, bigInt);
+      cw =
+          cpoAdapter
+              .whereBuilder()
+              .where(ValueObject.ATTR_ATTRBIGINT, Comparison.EQ, bigInt)
+              .build();
 
       ArrayList<CpoWhere> wheres = new ArrayList<>();
       wheres.add(cw);
@@ -163,7 +170,7 @@ public class WhereTest {
 
     try {
       ValueObject valObj = ValueObjectFactory.createValueObject(IDB + 3);
-      cw = cpoAdapter.newWhere(Logical.NONE, ValueObject.ATTR_ID, Comparison.GT, valObj);
+      cw = cpoAdapter.whereBuilder().where(ValueObject.ATTR_ID, Comparison.GT, valObj).build();
 
       ArrayList<CpoWhere> wheres = new ArrayList<>();
       wheres.add(cw);
@@ -189,7 +196,7 @@ public class WhereTest {
 
     try {
       ValueObject valObj = ValueObjectFactory.createValueObject(IDB + 3);
-      cw = cpoAdapter.newWhere(Logical.NONE, ValueObject.ATTR_ID, Comparison.GT, valObj);
+      cw = cpoAdapter.whereBuilder().where(ValueObject.ATTR_ID, Comparison.GT, valObj).build();
 
       ArrayList<CpoWhere> wheres = new ArrayList<>();
       wheres.add(cw);
@@ -238,18 +245,20 @@ public class WhereTest {
 
     try {
       ValueObject valObj = ValueObjectFactory.createValueObject(-(IDB + 6));
-      cw = cpoAdapter.newWhere();
-      cw.addWhere(cpoAdapter.newWhere(Logical.NONE, ValueObject.ATTR_ID, Comparison.EQ, valObj));
+      ValueObject valObjOr1 = ValueObjectFactory.createValueObject(IDB + 2);
+      ValueObject valObjOr2 = ValueObjectFactory.createValueObject(IDB + 3);
+      cw =
+          cpoAdapter
+              .whereBuilder()
+              .where(ValueObject.ATTR_ID, Comparison.EQ, valObj)
+              .or(
+                  g ->
+                      g.where(ValueObject.ATTR_ID, Comparison.EQ, valObjOr1)
+                          .or(ValueObject.ATTR_ID, Comparison.EQ, valObjOr2))
+              .build();
 
-      CpoWhere cwAnd = cpoAdapter.newWhere();
-      cwAnd.setLogical(Logical.OR);
-      valObj = ValueObjectFactory.createValueObject(IDB + 2);
-      cwAnd.addWhere(cpoAdapter.newWhere(Logical.NONE, ValueObject.ATTR_ID, Comparison.EQ, valObj));
-      valObj = ValueObjectFactory.createValueObject(IDB + 3);
-      cwAnd.addWhere(cpoAdapter.newWhere(Logical.OR, ValueObject.ATTR_ID, Comparison.EQ, valObj));
-
-      cw.addWhere(cwAnd);
       wheres.add(cw);
+      valObj = valObjOr2;
       try (Stream<ValueObject> beans =
           cpoAdapter.retrieveBeans(
               CpoQuery.group(ValueObject.FG_LIST_TESTWHERERETRIEVE).wheres(wheres), valObj)) {
@@ -272,7 +281,11 @@ public class WhereTest {
 
     try {
       ValueObject valObj = ValueObjectFactory.createValueObject(IDB + 3);
-      cw = cpoAdapter.newWhere(Logical.NONE, ValueObject.ATTR_ATTRCHAR, Comparison.ISNULL, null);
+      cw =
+          cpoAdapter
+              .whereBuilder()
+              .where(ValueObject.ATTR_ATTRCHAR, Comparison.ISNULL, null)
+              .build();
 
       ArrayList<CpoWhere> wheres = new ArrayList<>();
       wheres.add(cw);
@@ -298,8 +311,12 @@ public class WhereTest {
 
     try {
       ValueObject valObj = ValueObjectFactory.createValueObject(IDB + 6);
-      cw = cpoAdapter.newWhere(Logical.NONE, ValueObject.ATTR_ID, Comparison.EQ, valObj);
-      cw.setAttributeFunction("ABS(id)");
+      cw =
+          cpoAdapter
+              .whereBuilder()
+              .where(ValueObject.ATTR_ID, Comparison.EQ, valObj)
+              .attributeFunction("ABS(id)")
+              .build();
 
       ArrayList<CpoWhere> wheres = new ArrayList<>();
       wheres.add(cw);
@@ -327,8 +344,12 @@ public class WhereTest {
 
     try {
       ValueObject valObj = ValueObjectFactory.createValueObject(-(IDB + 1));
-      cw = cpoAdapter.newWhere(Logical.NONE, ValueObject.ATTR_ID, Comparison.EQ, valObj, false);
-      cw.setValueFunction("abs(id)");
+      cw =
+          cpoAdapter
+              .whereBuilder()
+              .where(ValueObject.ATTR_ID, Comparison.EQ, valObj, false)
+              .valueFunction("abs(id)")
+              .build();
 
       ArrayList<CpoWhere> wheres = new ArrayList<>();
       wheres.add(cw);
@@ -354,15 +375,12 @@ public class WhereTest {
 
     try {
       ValueObject valObj = ValueObjectFactory.createValueObject(IDB + 3);
-      CpoWhere cw = cpoAdapter.newWhere();
-      CpoWhere cw1 =
-          cpoAdapter.newWhere(Logical.NONE, ValueObject.ATTR_ATTRCHAR, Comparison.ISNULL, null);
-      CpoWhere cw2 =
-          cpoAdapter.newWhere(
-              Logical.AND, ValueObject.ATTR_ATTRCHAR, Comparison.ISNULL, null, true);
-
-      cw.addWhere(cw1);
-      cw.addWhere(cw2);
+      CpoWhere cw =
+          cpoAdapter
+              .whereBuilder()
+              .where(ValueObject.ATTR_ATTRCHAR, Comparison.ISNULL, null)
+              .and(ValueObject.ATTR_ATTRCHAR, Comparison.ISNULL, null, true)
+              .build();
 
       ArrayList<CpoWhere> wheres = new ArrayList<>();
       wheres.add(cw);
@@ -376,12 +394,12 @@ public class WhereTest {
         assertEquals(count, 0, "Number of beans is " + count);
       }
 
-      cw = cpoAdapter.newWhere();
-      cw1 = cpoAdapter.newWhere(Logical.NONE, ValueObject.ATTR_ATTRCHAR, Comparison.ISNULL, null);
-      cw2 = cpoAdapter.newWhere(Logical.AND, ValueObject.ATTR_ID, Comparison.EQ, valObj);
-
-      cw.addWhere(cw1);
-      cw.addWhere(cw2);
+      cw =
+          cpoAdapter
+              .whereBuilder()
+              .where(ValueObject.ATTR_ATTRCHAR, Comparison.ISNULL, null)
+              .and(ValueObject.ATTR_ID, Comparison.EQ, valObj)
+              .build();
 
       wheres.clear();
       wheres.add(cw);
@@ -405,13 +423,13 @@ public class WhereTest {
 
     try {
       ValueObject valObj = ValueObjectFactory.createValueObject(IDB + 3);
-      CpoWhere cw = cpoAdapter.newWhere();
-      CpoWhere cw1 = cpoAdapter.newWhere(Logical.NONE, ValueObject.ATTR_ID, Comparison.EQ, null);
-      CpoWhere cw2 = cpoAdapter.newWhere(Logical.OR, ValueObject.ATTR_ID, Comparison.EQ, valObj);
-
-      cw1.setStaticValue(String.valueOf(IDB + 2));
-      cw.addWhere(cw1);
-      cw.addWhere(cw2);
+      CpoWhere cw =
+          cpoAdapter
+              .whereBuilder()
+              .where(ValueObject.ATTR_ID, Comparison.EQ, null)
+              .staticValue(String.valueOf(IDB + 2))
+              .or(ValueObject.ATTR_ID, Comparison.EQ, valObj)
+              .build();
 
       ArrayList<CpoWhere> wheres = new ArrayList<>();
       wheres.add(cw);
@@ -425,13 +443,13 @@ public class WhereTest {
         assertEquals(count, 2, "Number of beans is " + count);
       }
 
-      cw = cpoAdapter.newWhere();
-      cw1 = cpoAdapter.newWhere(Logical.NONE, ValueObject.ATTR_ID, Comparison.EQ, null);
-      cw2 = cpoAdapter.newWhere(Logical.OR, ValueObject.ATTR_ID, Comparison.EQ, valObj, true);
-
-      cw1.setStaticValue(String.valueOf(IDB + 3));
-      cw.addWhere(cw1);
-      cw.addWhere(cw2);
+      cw =
+          cpoAdapter
+              .whereBuilder()
+              .where(ValueObject.ATTR_ID, Comparison.EQ, null)
+              .staticValue(String.valueOf(IDB + 3))
+              .or(ValueObject.ATTR_ID, Comparison.EQ, valObj, true)
+              .build();
 
       wheres.clear();
       wheres.add(cw);
@@ -455,13 +473,14 @@ public class WhereTest {
 
     try {
       ValueObject valObj = ValueObjectFactory.createValueObject(-(IDB + 1));
-      CpoWhere cw = cpoAdapter.newWhere();
-      cw.setAttribute("id");
-      cw.setRightAttribute("attrBigInt");
-      cw.setAttributeFunction("ABS(id)");
-      cw.setComparison(Comparison.EQ);
-      cw.setRightAttributeFunction("ABS(attrBigInt)");
-      cw.setLogical(Logical.NONE);
+      CpoWhere cw =
+          cpoAdapter
+              .whereBuilder()
+              .where("id", Comparison.EQ, null)
+              .compareToAttribute("attrBigInt")
+              .attributeFunction("ABS(id)")
+              .rightAttributeFunction("ABS(attrBigInt)")
+              .build();
 
       ArrayList<CpoWhere> wheres = new ArrayList<>();
       wheres.add(cw);
@@ -487,11 +506,12 @@ public class WhereTest {
 
     try {
       ValueObject valObj = ValueObjectFactory.createValueObject(-(IDB + 1));
-      CpoWhere cw = cpoAdapter.newWhere();
-      cw.setAttribute("id");
-      cw.setRightAttribute("attrBigInt");
-      cw.setComparison(Comparison.EQ);
-      cw.setLogical(Logical.NONE);
+      CpoWhere cw =
+          cpoAdapter
+              .whereBuilder()
+              .where("id", Comparison.EQ, null)
+              .compareToAttribute("attrBigInt")
+              .build();
 
       try (Stream<ValueObject> beans =
           cpoAdapter.retrieveBeans(
@@ -517,13 +537,12 @@ public class WhereTest {
       ValueObject valObj = ValueObjectFactory.createValueObject(IDB + 1);
       valObj.setAttrVarChar("Test");
 
-      CpoWhere cw = cpoAdapter.newWhere();
-      CpoWhere cw1 =
-          cpoAdapter.newWhere(Logical.NONE, ValueObject.ATTR_ATTRVARCHAR, Comparison.EQ, valObj);
-      CpoWhere cw2 = cpoAdapter.newWhere(Logical.AND, ValueObject.ATTR_ID, Comparison.EQ, valObj);
-
-      cw.addWhere(cw1);
-      cw.addWhere(cw2);
+      CpoWhere cw =
+          cpoAdapter
+              .whereBuilder()
+              .where(ValueObject.ATTR_ATTRVARCHAR, Comparison.EQ, valObj)
+              .and(ValueObject.ATTR_ID, Comparison.EQ, valObj)
+              .build();
 
       ArrayList<CpoWhere> wheres = new ArrayList<>();
       wheres.add(cw);
@@ -549,13 +568,12 @@ public class WhereTest {
       ValueObject valObj = ValueObjectFactory.createValueObject(IDB + 1);
       valObj.setAttrVarChar("T%");
 
-      CpoWhere cw = cpoAdapter.newWhere();
-      CpoWhere cw1 =
-          cpoAdapter.newWhere(Logical.NONE, ValueObject.ATTR_ATTRVARCHAR, Comparison.LIKE, valObj);
-      CpoWhere cw2 = cpoAdapter.newWhere(Logical.AND, ValueObject.ATTR_ID, Comparison.EQ, valObj);
-
-      cw.addWhere(cw1);
-      cw.addWhere(cw2);
+      CpoWhere cw =
+          cpoAdapter
+              .whereBuilder()
+              .where(ValueObject.ATTR_ATTRVARCHAR, Comparison.LIKE, valObj)
+              .and(ValueObject.ATTR_ID, Comparison.EQ, valObj)
+              .build();
 
       ArrayList<CpoWhere> wheres = new ArrayList<>();
       wheres.add(cw);
@@ -581,13 +599,12 @@ public class WhereTest {
       ValueObject valObj = ValueObjectFactory.createValueObject(IDB + 1);
       valObj.setAttrVarChar("T%");
 
-      CpoWhere cw = cpoAdapter.newWhere();
-      CpoWhere cw1 =
-          cpoAdapter.newWhere(Logical.NONE, ValueObject.ATTR_ATTRVARCHAR, Comparison.LIKE, "T%");
-      CpoWhere cw2 = cpoAdapter.newWhere(Logical.AND, ValueObject.ATTR_ID, Comparison.EQ, IDB + 1);
-
-      cw.addWhere(cw1);
-      cw.addWhere(cw2);
+      CpoWhere cw =
+          cpoAdapter
+              .whereBuilder()
+              .where(ValueObject.ATTR_ATTRVARCHAR, Comparison.LIKE, "T%")
+              .and(ValueObject.ATTR_ID, Comparison.EQ, IDB + 1)
+              .build();
 
       ArrayList<CpoWhere> wheres = new ArrayList<>();
       wheres.add(cw);
@@ -612,10 +629,8 @@ public class WhereTest {
     try {
       ValueObject valObj = ValueObjectFactory.createValueObject(IDB + 1);
 
-      CpoWhere cw = cpoAdapter.newWhere();
-      CpoWhere cw1 = cpoAdapter.newWhere(Logical.NONE, "value_object.id", Comparison.LT, IDB + 1);
-
-      cw.addWhere(cw1);
+      CpoWhere cw =
+          cpoAdapter.whereBuilder().where("value_object.id", Comparison.LT, IDB + 1).build();
 
       ArrayList<CpoWhere> wheres = new ArrayList<>();
       wheres.add(cw);
@@ -640,11 +655,12 @@ public class WhereTest {
     try {
       ValueObject valObj = ValueObjectFactory.createValueObject(IDB + 1);
 
-      CpoWhere cw = cpoAdapter.newWhere();
-      CpoWhere cw1 = cpoAdapter.newWhere(Logical.NONE, ValueObject.ATTR_ID, Comparison.IN, null);
-      cw1.setStaticValue("(" + (IDB + 1) + "," + (IDB + 3) + "," + (IDB + 5) + ")");
-
-      cw.addWhere(cw1);
+      CpoWhere cw =
+          cpoAdapter
+              .whereBuilder()
+              .where(ValueObject.ATTR_ID, Comparison.IN, null)
+              .staticValue("(" + (IDB + 1) + "," + (IDB + 3) + "," + (IDB + 5) + ")")
+              .build();
 
       ArrayList<CpoWhere> wheres = new ArrayList<>();
       wheres.add(cw);
@@ -673,10 +689,8 @@ public class WhereTest {
       inColl.add(IDB + 3);
       inColl.add(IDB + 5);
 
-      CpoWhere cw = cpoAdapter.newWhere();
-      CpoWhere cw1 = cpoAdapter.newWhere(Logical.NONE, ValueObject.ATTR_ID, Comparison.IN, inColl);
-
-      cw.addWhere(cw1);
+      CpoWhere cw =
+          cpoAdapter.whereBuilder().where(ValueObject.ATTR_ID, Comparison.IN, inColl).build();
 
       ArrayList<CpoWhere> wheres = new ArrayList<>();
       wheres.add(cw);
@@ -712,15 +726,16 @@ public class WhereTest {
       inColl3.add(IDB + 5);
       inColl3.add(-(IDB + 6));
 
-      //      CpoWhere cw = cpoAdapter.newWhere();
-      CpoWhere cw1 = cpoAdapter.newWhere(Logical.NONE, ValueObject.ATTR_ID, Comparison.IN, inColl1);
-      CpoWhere cw2 = cpoAdapter.newWhere(Logical.OR, ValueObject.ATTR_ID, Comparison.IN, inColl2);
-      CpoWhere cw3 = cpoAdapter.newWhere(Logical.OR, ValueObject.ATTR_ID, Comparison.IN, inColl3);
+      CpoWhere cw =
+          cpoAdapter
+              .whereBuilder()
+              .where(ValueObject.ATTR_ID, Comparison.IN, inColl1)
+              .or(ValueObject.ATTR_ID, Comparison.IN, inColl2)
+              .or(ValueObject.ATTR_ID, Comparison.IN, inColl3)
+              .build();
 
       ArrayList<CpoWhere> wheres = new ArrayList<>();
-      wheres.add(cw1);
-      wheres.add(cw2);
-      wheres.add(cw3);
+      wheres.add(cw);
       try (Stream<ValueObject> beans =
           cpoAdapter.retrieveBeans(
               CpoQuery.group(ValueObject.FG_LIST_TESTORDERBYRETRIEVE).wheres(wheres), valObj)) {
@@ -746,10 +761,8 @@ public class WhereTest {
       inColl.add(IDB + 3);
       inColl.add(IDB + 5);
 
-      CpoWhere cw = cpoAdapter.newWhere();
-      CpoWhere cw1 = cpoAdapter.newWhere(Logical.NONE, "value_object.id", Comparison.IN, inColl);
-
-      cw.addWhere(cw1);
+      CpoWhere cw =
+          cpoAdapter.whereBuilder().where("value_object.id", Comparison.IN, inColl).build();
 
       ArrayList<CpoWhere> wheres = new ArrayList<>();
       wheres.add(cw);
@@ -777,10 +790,13 @@ public class WhereTest {
 
       // Without the correct parens, this will return multiple rows for a retrieveBean which is a
       // failure
-      CpoWhere cw1 = cpoAdapter.newWhere();
-      cw1.setLogical(Logical.AND);
-      cw1.addWhere(cpoAdapter.newWhere(Logical.NONE, ValueObject.ATTR_ID, Comparison.EQ, IDB + 1));
-      cw1.addWhere(cpoAdapter.newWhere(Logical.OR, ValueObject.ATTR_ID, Comparison.EQ, IDB + 3));
+      CpoWhere cw1 =
+          cpoAdapter
+              .startAnd(
+                  g ->
+                      g.where(ValueObject.ATTR_ID, Comparison.EQ, IDB + 1)
+                          .or(ValueObject.ATTR_ID, Comparison.EQ, IDB + 3))
+              .build();
 
       ArrayList<CpoWhere> wheres = new ArrayList<>();
       ArrayList<CpoOrderBy> orderBys = new ArrayList<>();
@@ -808,10 +824,13 @@ public class WhereTest {
 
       // Without the correct parens, this will return multiple rows for a retrieveBean which is a
       // failure
-      CpoWhere cw1 = cpoAdapter.newWhere();
-      cw1.setLogical(Logical.AND);
-      cw1.addWhere(cpoAdapter.newWhere(Logical.NONE, ValueObject.ATTR_ID, Comparison.EQ, IDB + 1));
-      cw1.addWhere(cpoAdapter.newWhere(Logical.OR, ValueObject.ATTR_ID, Comparison.EQ, IDB + 3));
+      CpoWhere cw1 =
+          cpoAdapter
+              .startAnd(
+                  g ->
+                      g.where(ValueObject.ATTR_ID, Comparison.EQ, IDB + 1)
+                          .or(ValueObject.ATTR_ID, Comparison.EQ, IDB + 3))
+              .build();
 
       ArrayList<CpoWhere> wheres = new ArrayList<>();
       ArrayList<CpoOrderBy> orderBys = new ArrayList<>();

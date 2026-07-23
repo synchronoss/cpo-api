@@ -35,6 +35,7 @@ import org.synchronoss.cpo.core.CpoNativeFunction;
 import org.synchronoss.cpo.core.CpoOrderBy;
 import org.synchronoss.cpo.core.CpoQuery;
 import org.synchronoss.cpo.core.CpoWhere;
+import org.synchronoss.cpo.core.CpoWhereBuilder;
 import org.synchronoss.cpo.core.enums.Comparison;
 import org.synchronoss.cpo.core.enums.Logical;
 import org.synchronoss.cpo.core.helper.ExceptionHelper;
@@ -119,8 +120,12 @@ public class AdapterDelegationTest {
       assertEquals(cpoAdapter.existsBean(vo1), 1, method + "vo1 should exist");
       assertEquals(cpoAdapter.existsBean(ValueObject.FG_EXIST_NULL, vo2), 1);
 
+      // FG_EXIST_NULL's expression already has a baked-in "where id = ?" with no marker, so
+      // this must interleave via startAnd(), which returns the flat AND-joined leaf directly
+      // instead of wrapping it in a root that would render its own leading "WHERE" -- producing
+      // invalid CQL with two WHERE keywords.
       Collection<CpoWhere> wheres = new ArrayList<>();
-      wheres.add(cpoAdapter.newWhere(Logical.AND, "attrInt", Comparison.EQ, 3));
+      wheres.add(cpoAdapter.startAnd("attrInt", Comparison.EQ, 3).build());
       assertEquals(
           cpoAdapter.existsBean(CpoQuery.group(ValueObject.FG_EXIST_NULL).wheres(wheres), vo3), 1);
     } catch (Exception e) {
@@ -143,9 +148,10 @@ public class AdapterDelegationTest {
       beans.add(vo2);
       cpoAdapter.insertBeans(beans);
 
-      CpoWhere where = cpoAdapter.newWhere(Logical.NONE, "id", Comparison.EQ, IDB + 71);
+      CpoWhere where =
+          CpoWhereBuilder.start(cpoAdapter).where("id", Comparison.EQ, IDB + 71).build();
       Collection<CpoWhere> wheres = new ArrayList<>();
-      wheres.add(cpoAdapter.newWhere(Logical.NONE, "id", Comparison.EQ, IDB + 71));
+      wheres.add(CpoWhereBuilder.start(cpoAdapter).where("id", Comparison.EQ, IDB + 71).build());
       ValueObject criteria = ValueObjectFactory.createValueObject();
 
       // retrieveBean overloads
@@ -257,13 +263,13 @@ public class AdapterDelegationTest {
       // WHERE clause — CQL requires one, so updates only work with programmatic wheres.
       vo1.setAttrInt(9);
       Collection<CpoWhere> cws = new ArrayList<>();
-      cws.add(cpoAdapter.newWhere(Logical.NONE, "id", Comparison.EQ, IDB + 81));
+      cws.add(CpoWhereBuilder.start(cpoAdapter).where("id", Comparison.EQ, IDB + 81).build());
       cpoAdapter.updateBean(CpoQuery.group(ValueObject.FG_UPDATE_NULL).wheres(cws), vo1);
 
       List<ValueObject> updBeans = new ArrayList<>();
       updBeans.add(vo1);
       Collection<CpoWhere> cws2 = new ArrayList<>();
-      cws2.add(cpoAdapter.newWhere(Logical.NONE, "id", Comparison.EQ, IDB + 81));
+      cws2.add(CpoWhereBuilder.start(cpoAdapter).where("id", Comparison.EQ, IDB + 81).build());
       cpoAdapter.updateBeans(CpoQuery.group(ValueObject.FG_UPDATE_NULL).wheres(cws2), updBeans);
 
       ValueObject rvo = cpoAdapter.retrieveBean(ValueObjectFactory.createValueObject(IDB + 81));

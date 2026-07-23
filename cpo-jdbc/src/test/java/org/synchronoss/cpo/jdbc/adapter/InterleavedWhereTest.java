@@ -32,7 +32,6 @@ import org.synchronoss.cpo.core.CpoAdapterFactoryManager;
 import org.synchronoss.cpo.core.CpoQuery;
 import org.synchronoss.cpo.core.CpoWhere;
 import org.synchronoss.cpo.core.enums.Comparison;
-import org.synchronoss.cpo.core.enums.Logical;
 import org.synchronoss.cpo.jdbc.ValueObject;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
@@ -119,7 +118,7 @@ public class InterleavedWhereTest {
       inColl.add(IDB + 3);
       inColl.add(IDB + 5);
 
-      cw = cpoAdapter.newWhere(Logical.AND, ValueObject.ATTR_ID, Comparison.IN, inColl);
+      cw = cpoAdapter.startAnd(ValueObject.ATTR_ID, Comparison.IN, inColl).build();
 
       ArrayList<CpoWhere> wheres = new ArrayList<>();
       wheres.add(cw);

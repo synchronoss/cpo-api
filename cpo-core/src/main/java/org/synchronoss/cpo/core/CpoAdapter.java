@@ -42,7 +42,7 @@ import org.synchronoss.cpo.core.meta.domain.CpoAttribute;
  *
  * <pre>{@code
  * CpoAdapter cpo = CpoAdapterFactoryManager.getCpoAdapter("myContext");
- * CpoWhere where = cpo.newWhere(Logical.NONE, "id", Comparison.EQ, 42);
+ * CpoWhere where = cpo.whereBuilder().where("id", Comparison.EQ, 42).build();
  * try (Stream<SomeBean> beans =
  *     cpo.retrieveBeans(CpoQuery.group("byId").where(where), criteria)) {
  *   beans.forEach(...);
@@ -484,7 +484,7 @@ public interface CpoAdapter extends java.io.Serializable {
    * function group and where constraints.
    *
    * <pre>{@code
-   * CpoWhere where = cpo.newWhere(Logical.NONE, "id", Comparison.EQ, 1);
+   * CpoWhere where = cpo.whereBuilder().where("id", Comparison.EQ, 1).build();
    * long count = cpo.existsBean(CpoQuery.group("existsBean").where(where), bean);
    * if (count > 0) {
    *   // the bean exists
@@ -680,7 +680,7 @@ public interface CpoAdapter extends java.io.Serializable {
    * criteria and result beans.
    *
    * <pre>{@code
-   * CpoWhere where = cpo.newWhere(Logical.NONE, "dept", Comparison.EQ, "sales");
+   * CpoWhere where = cpo.whereBuilder().where("dept", Comparison.EQ, "sales").build();
    * CpoOrderBy orderBy = cpo.newOrderBy("name", true);
    * try (Stream<SomeResult> beans =
    *     cpo.retrieveBeans(
@@ -711,7 +711,7 @@ public interface CpoAdapter extends java.io.Serializable {
    * type is also the result type.
    *
    * <pre>{@code
-   * CpoWhere where = cpo.newWhere(Logical.NONE, "dept", Comparison.EQ, "sales");
+   * CpoWhere where = cpo.whereBuilder().where("dept", Comparison.EQ, "sales").build();
    * try (Stream<SomeBean> beans =
    *     cpo.retrieveBeans(CpoQuery.group("listBeans").where(where), criteria)) {
    *   beans.forEach(...);
@@ -874,6 +874,118 @@ public interface CpoAdapter extends java.io.Serializable {
    */
   <T> CpoWhere newWhere(Logical logical, String attr, Comparison comp, T value, boolean not)
       throws CpoException;
+
+  /**
+   * Starts a fluent {@link CpoWhereBuilder} chain for assembling a {@link CpoWhere} tree, including
+   * nested AND/OR groups, without hand-placing {@link Logical} operators.
+   *
+   * <pre>{@code
+   * CpoWhere where = cpo.whereBuilder()
+   *     .where("id", Comparison.EQ, 42)
+   *     .and(g -> g.where("dept", Comparison.EQ, "sales").or("dept", Comparison.EQ, "marketing"))
+   *     .build();
+   * }</pre>
+   *
+   * @return a new CpoWhereBuilder with no conditions yet
+   * @throws CpoException An error occurred creating the underlying CpoWhere
+   */
+  default CpoWhereBuilder whereBuilder() throws CpoException {
+    return CpoWhereBuilder.start(this);
+  }
+
+  /**
+   * Starts a {@link CpoWhereBuilder} chain whose sole top-level condition is joined by AND, for
+   * interleaving with a query whose own expression already supplies a base WHERE clause. Equivalent
+   * to {@code cpo.whereBuilder().and(attr, comp, value)}.
+   *
+   * @param <T> The type of the value
+   * @param attr the name of the bean attribute to compare
+   * @param comp the comparison operator to apply
+   * @param value the value to compare the attribute against
+   * @return a new CpoWhereBuilder with that one condition already added
+   * @throws CpoException An error occurred creating the underlying CpoWhere
+   */
+  default <T> CpoWhereBuilder startAnd(String attr, Comparison comp, T value) throws CpoException {
+    return CpoWhereBuilder.startAnd(this, attr, comp, value);
+  }
+
+  /**
+   * Starts a {@link CpoWhereBuilder} chain whose sole top-level condition is joined by AND,
+   * optionally negated, for interleaving with a query whose own expression already supplies a base
+   * WHERE clause. Equivalent to {@code cpo.whereBuilder().and(attr, comp, value, not)}.
+   *
+   * @param <T> The type of the value
+   * @param attr the name of the bean attribute to compare
+   * @param comp the comparison operator to apply
+   * @param value the value to compare the attribute against
+   * @param not {@code true} to negate the comparison
+   * @return a new CpoWhereBuilder with that one condition already added
+   * @throws CpoException An error occurred creating the underlying CpoWhere
+   */
+  default <T> CpoWhereBuilder startAnd(String attr, Comparison comp, T value, boolean not)
+      throws CpoException {
+    return CpoWhereBuilder.startAnd(this, attr, comp, value, not);
+  }
+
+  /**
+   * Starts a {@link CpoWhereBuilder} chain whose sole top-level condition is a nested group joined
+   * by AND, for interleaving with a query whose own expression already supplies a base WHERE
+   * clause. Equivalent to {@code cpo.whereBuilder().and(group)}.
+   *
+   * @param group populates the group's conditions
+   * @return a new CpoWhereBuilder with that one group already added
+   * @throws CpoException An error occurred creating the underlying CpoWhere or its conditions
+   */
+  default CpoWhereBuilder startAnd(CpoWhereGroup group) throws CpoException {
+    return CpoWhereBuilder.startAnd(this, group);
+  }
+
+  /**
+   * Starts a {@link CpoWhereBuilder} chain whose sole top-level condition is joined by OR, for
+   * interleaving with a query whose own expression already supplies a base WHERE clause. Equivalent
+   * to {@code cpo.whereBuilder().or(attr, comp, value)}.
+   *
+   * @param <T> The type of the value
+   * @param attr the name of the bean attribute to compare
+   * @param comp the comparison operator to apply
+   * @param value the value to compare the attribute against
+   * @return a new CpoWhereBuilder with that one condition already added
+   * @throws CpoException An error occurred creating the underlying CpoWhere
+   */
+  default <T> CpoWhereBuilder startOr(String attr, Comparison comp, T value) throws CpoException {
+    return CpoWhereBuilder.startOr(this, attr, comp, value);
+  }
+
+  /**
+   * Starts a {@link CpoWhereBuilder} chain whose sole top-level condition is joined by OR,
+   * optionally negated, for interleaving with a query whose own expression already supplies a base
+   * WHERE clause. Equivalent to {@code cpo.whereBuilder().or(attr, comp, value, not)}.
+   *
+   * @param <T> The type of the value
+   * @param attr the name of the bean attribute to compare
+   * @param comp the comparison operator to apply
+   * @param value the value to compare the attribute against
+   * @param not {@code true} to negate the comparison
+   * @return a new CpoWhereBuilder with that one condition already added
+   * @throws CpoException An error occurred creating the underlying CpoWhere
+   */
+  default <T> CpoWhereBuilder startOr(String attr, Comparison comp, T value, boolean not)
+      throws CpoException {
+    return CpoWhereBuilder.startOr(this, attr, comp, value, not);
+  }
+
+  /**
+   * Starts a {@link CpoWhereBuilder} chain whose sole top-level condition is a nested group joined
+   * by OR, for interleaving with a query whose own expression already supplies a base WHERE clause.
+   * Equivalent to {@code cpo.whereBuilder().or(group)}.
+   *
+   * @param group populates the group's conditions
+   * @return a new CpoWhereBuilder with that one group already added
+   * @throws CpoException An error occurred creating the underlying CpoWhere or its conditions
+   */
+  default CpoWhereBuilder startOr(CpoWhereGroup group) throws CpoException {
+    return CpoWhereBuilder.startOr(this, group);
+  }
 
   // ==================================== ACCESSORS ====================================
 

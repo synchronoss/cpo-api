@@ -135,7 +135,7 @@
     </cpoAttribute>
     <cpoAttribute xsi:type="ctCassandraAttribute">
       <javaName>attrTimestamp</javaName>
-      <javaType>java.util.Date</javaType>
+      <javaType>java.time.Instant</javaType>
       <dataName>attr_timestamp</dataName>
       <dataType>TIMESTAMP</dataType>
     </cpoAttribute>

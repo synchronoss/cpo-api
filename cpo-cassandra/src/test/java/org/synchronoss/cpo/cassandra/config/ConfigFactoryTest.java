@@ -24,69 +24,40 @@ package org.synchronoss.cpo.cassandra.config;
 
 import static org.testng.Assert.*;
 
-import com.datastax.driver.core.AuthProvider;
-import com.datastax.driver.core.Host;
-import com.datastax.driver.core.NettyOptions;
-import com.datastax.driver.core.RemoteEndpointAwareJdkSSLOptions;
-import com.datastax.driver.core.SSLOptions;
-import com.datastax.driver.core.policies.AddressTranslator;
-import com.datastax.driver.core.policies.ConstantReconnectionPolicy;
-import com.datastax.driver.core.policies.DefaultRetryPolicy;
-import com.datastax.driver.core.policies.IdentityTranslator;
-import com.datastax.driver.core.policies.LoadBalancingPolicy;
-import com.datastax.driver.core.policies.ReconnectionPolicy;
-import com.datastax.driver.core.policies.RetryPolicy;
-import com.datastax.driver.core.policies.RoundRobinPolicy;
+import com.datastax.oss.driver.api.core.auth.AuthProvider;
+import com.datastax.oss.driver.api.core.auth.ProgrammaticPlainTextAuthProvider;
+import com.datastax.oss.driver.api.core.metadata.EndPoint;
+import com.datastax.oss.driver.api.core.metadata.Node;
+import com.datastax.oss.driver.api.core.metadata.NodeStateListener;
+import com.datastax.oss.driver.api.core.metadata.schema.AggregateMetadata;
+import com.datastax.oss.driver.api.core.metadata.schema.FunctionMetadata;
+import com.datastax.oss.driver.api.core.metadata.schema.KeyspaceMetadata;
+import com.datastax.oss.driver.api.core.metadata.schema.SchemaChangeListener;
+import com.datastax.oss.driver.api.core.metadata.schema.TableMetadata;
+import com.datastax.oss.driver.api.core.metadata.schema.ViewMetadata;
+import com.datastax.oss.driver.api.core.ssl.SslEngineFactory;
+import com.datastax.oss.driver.api.core.type.UserDefinedType;
 import java.util.Collection;
 import java.util.List;
+import javax.net.ssl.SSLEngine;
 import org.synchronoss.cpo.core.CpoException;
 import org.testng.annotations.Test;
 
-/** Unit tests for the config factory base classes and the ConfigInstantiator. */
+/**
+ * Unit tests for the config factory base classes that still wrap driver instances (AuthProvider,
+ * SslEngineFactory, NodeStateListener) and the ConfigInstantiator. LoadBalancingPolicy,
+ * ReconnectionPolicy, RetryPolicy, AddressTranslator, SpeculativeExecutionPolicy, and
+ * TimestampGenerator no longer go through a CPO factory wrapper: driver 4.x instantiates those
+ * itself from a plain class name, exercised end-to-end in ClusterDataSourceInfoTest instead.
+ */
 public class ConfigFactoryTest {
-
-  public static class TestRetryPolicyFactory extends RetryPolicyFactory {
-    public TestRetryPolicyFactory() {}
-
-    @Override
-    public RetryPolicy createRetryPolicy() {
-      return DefaultRetryPolicy.INSTANCE;
-    }
-  }
-
-  public static class TestReconnectionPolicyFactory extends ReconnectionPolicyFactory {
-    public TestReconnectionPolicyFactory() {}
-
-    @Override
-    public ReconnectionPolicy createReconnectionPolicy() {
-      return new ConstantReconnectionPolicy(1000);
-    }
-  }
-
-  public static class TestLoadBalancingPolicyFactory extends LoadBalancingPolicyFactory {
-    public TestLoadBalancingPolicyFactory() {}
-
-    @Override
-    public LoadBalancingPolicy createLoadBalancingPolicy() {
-      return new RoundRobinPolicy();
-    }
-  }
-
-  public static class TestAddressTranslatorFactory extends AddressTranslatorFactory {
-    public TestAddressTranslatorFactory() {}
-
-    @Override
-    public AddressTranslator createAddressTranslator() {
-      return new IdentityTranslator();
-    }
-  }
 
   public static class TestAuthProviderFactory extends AuthProviderFactory {
     public TestAuthProviderFactory() {}
 
     @Override
     public AuthProvider createAuthProvider() {
-      return AuthProvider.NONE;
+      return new ProgrammaticPlainTextAuthProvider("user", "pass");
     }
   }
 
@@ -94,17 +65,16 @@ public class ConfigFactoryTest {
     public TestSSLOptionsFactory() {}
 
     @Override
-    public SSLOptions createSSLOptions() {
-      return RemoteEndpointAwareJdkSSLOptions.builder().build();
-    }
-  }
+    public SslEngineFactory createSSLOptions() {
+      return new SslEngineFactory() {
+        @Override
+        public SSLEngine newSslEngine(EndPoint remoteEndpoint) {
+          return null;
+        }
 
-  public static class TestNettyOptionsFactory extends NettyOptionsFactory {
-    public TestNettyOptionsFactory() {}
-
-    @Override
-    public NettyOptions createNettyOptions() {
-      return NettyOptions.DEFAULT_INSTANCE;
+        @Override
+        public void close() {}
+      };
     }
   }
 
@@ -112,64 +82,130 @@ public class ConfigFactoryTest {
     public TestListenerFactory() {}
 
     @Override
-    public Collection<Host.StateListener> createListeners() {
-      return List.of();
+    public Collection<NodeStateListener> createListeners() {
+      return List.of(
+          new NodeStateListener() {
+            @Override
+            public void onAdd(Node node) {}
+
+            @Override
+            public void onUp(Node node) {}
+
+            @Override
+            public void onDown(Node node) {}
+
+            @Override
+            public void onRemove(Node node) {}
+
+            @Override
+            public void close() {}
+          });
     }
   }
 
-  public static class ThrowingRetryPolicyFactory extends RetryPolicyFactory {
-    public ThrowingRetryPolicyFactory() {}
+  public static class TestSchemaChangeListenerFactory extends SchemaChangeListenerFactory {
+    public TestSchemaChangeListenerFactory() {}
 
     @Override
-    public RetryPolicy createRetryPolicy() {
+    public Collection<SchemaChangeListener> createSchemaChangeListeners() {
+      return List.of(
+          new SchemaChangeListener() {
+            @Override
+            public void onKeyspaceCreated(KeyspaceMetadata keyspace) {}
+
+            @Override
+            public void onKeyspaceDropped(KeyspaceMetadata keyspace) {}
+
+            @Override
+            public void onKeyspaceUpdated(KeyspaceMetadata current, KeyspaceMetadata previous) {}
+
+            @Override
+            public void onTableCreated(TableMetadata table) {}
+
+            @Override
+            public void onTableDropped(TableMetadata table) {}
+
+            @Override
+            public void onTableUpdated(TableMetadata current, TableMetadata previous) {}
+
+            @Override
+            public void onUserDefinedTypeCreated(UserDefinedType type) {}
+
+            @Override
+            public void onUserDefinedTypeDropped(UserDefinedType type) {}
+
+            @Override
+            public void onUserDefinedTypeUpdated(
+                UserDefinedType current, UserDefinedType previous) {}
+
+            @Override
+            public void onFunctionCreated(FunctionMetadata function) {}
+
+            @Override
+            public void onFunctionDropped(FunctionMetadata function) {}
+
+            @Override
+            public void onFunctionUpdated(FunctionMetadata current, FunctionMetadata previous) {}
+
+            @Override
+            public void onAggregateCreated(AggregateMetadata aggregate) {}
+
+            @Override
+            public void onAggregateDropped(AggregateMetadata aggregate) {}
+
+            @Override
+            public void onAggregateUpdated(AggregateMetadata current, AggregateMetadata previous) {}
+
+            @Override
+            public void onViewCreated(ViewMetadata view) {}
+
+            @Override
+            public void onViewDropped(ViewMetadata view) {}
+
+            @Override
+            public void onViewUpdated(ViewMetadata current, ViewMetadata previous) {}
+
+            @Override
+            public void close() {}
+          });
+    }
+  }
+
+  public static class ThrowingAuthProviderFactory extends AuthProviderFactory {
+    public ThrowingAuthProviderFactory() {}
+
+    @Override
+    public AuthProvider createAuthProvider() {
       throw new IllegalStateException("factory blew up");
     }
   }
 
   @Test
   public void testFactoryMethodNames() {
-    assertEquals(new TestRetryPolicyFactory().getFactoryMethodName(), "createRetryPolicy");
-    assertEquals(
-        new TestReconnectionPolicyFactory().getFactoryMethodName(), "createReconnectionPolicy");
-    assertEquals(
-        new TestLoadBalancingPolicyFactory().getFactoryMethodName(), "createLoadBalancingPolicy");
-    assertEquals(
-        new TestAddressTranslatorFactory().getFactoryMethodName(), "createAddressTranslator");
     assertEquals(new TestAuthProviderFactory().getFactoryMethodName(), "createAuthProvider");
     assertEquals(new TestSSLOptionsFactory().getFactoryMethodName(), "createSSLOptions");
-    assertEquals(new TestNettyOptionsFactory().getFactoryMethodName(), "createNettyOptions");
     assertEquals(new TestListenerFactory().getFactoryMethodName(), "createListeners");
+    assertEquals(
+        new TestSchemaChangeListenerFactory().getFactoryMethodName(),
+        "createSchemaChangeListeners");
   }
 
   @Test
   public void testInstantiateHappyPaths() throws Exception {
     assertTrue(
-        new ConfigInstantiator<RetryPolicy>().instantiate(TestRetryPolicyFactory.class.getName())
-            instanceof RetryPolicy);
-    assertTrue(
-        new ConfigInstantiator<ReconnectionPolicy>()
-                .instantiate(TestReconnectionPolicyFactory.class.getName())
-            instanceof ReconnectionPolicy);
-    assertTrue(
-        new ConfigInstantiator<LoadBalancingPolicy>()
-                .instantiate(TestLoadBalancingPolicyFactory.class.getName())
-            instanceof LoadBalancingPolicy);
-    assertTrue(
-        new ConfigInstantiator<AddressTranslator>()
-                .instantiate(TestAddressTranslatorFactory.class.getName())
-            instanceof AddressTranslator);
-    assertTrue(
         new ConfigInstantiator<AuthProvider>().instantiate(TestAuthProviderFactory.class.getName())
             instanceof AuthProvider);
     assertTrue(
-        new ConfigInstantiator<SSLOptions>().instantiate(TestSSLOptionsFactory.class.getName())
-            instanceof SSLOptions);
+        new ConfigInstantiator<SslEngineFactory>()
+                .instantiate(TestSSLOptionsFactory.class.getName())
+            instanceof SslEngineFactory);
     assertTrue(
-        new ConfigInstantiator<NettyOptions>().instantiate(TestNettyOptionsFactory.class.getName())
-            instanceof NettyOptions);
-    assertTrue(
-        new ConfigInstantiator<Collection<Host.StateListener>>()
+        new ConfigInstantiator<Collection<NodeStateListener>>()
                 .instantiate(TestListenerFactory.class.getName())
+            instanceof Collection);
+    assertTrue(
+        new ConfigInstantiator<Collection<SchemaChangeListener>>()
+                .instantiate(TestSchemaChangeListenerFactory.class.getName())
             instanceof Collection);
   }
 
@@ -185,11 +221,11 @@ public class ConfigFactoryTest {
 
     // an abstract factory cannot be instantiated
     expectThrows(
-        CpoException.class, () -> instantiator.instantiate(RetryPolicyFactory.class.getName()));
+        CpoException.class, () -> instantiator.instantiate(AuthProviderFactory.class.getName()));
 
     // the factory method itself throws
     expectThrows(
         CpoException.class,
-        () -> instantiator.instantiate(ThrowingRetryPolicyFactory.class.getName()));
+        () -> instantiator.instantiate(ThrowingAuthProviderFactory.class.getName()));
   }
 }

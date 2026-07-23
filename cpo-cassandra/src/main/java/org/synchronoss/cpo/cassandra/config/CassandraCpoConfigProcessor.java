@@ -22,14 +22,19 @@ package org.synchronoss.cpo.cassandra.config;
  * ]]
  */
 
-import com.datastax.driver.core.*;
-import com.datastax.driver.core.policies.*;
+import com.datastax.oss.driver.api.core.auth.AuthProvider;
+import com.datastax.oss.driver.api.core.metadata.NodeStateListener;
+import com.datastax.oss.driver.api.core.metadata.schema.SchemaChangeListener;
+import com.datastax.oss.driver.api.core.ssl.SslEngineFactory;
 import java.util.Collection;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.cassandra.CassandraCpoAdapter;
 import org.synchronoss.cpo.cassandra.CassandraCpoAdapterFactory;
 import org.synchronoss.cpo.cassandra.ClusterDataSourceInfo;
+import org.synchronoss.cpo.cassandra.HistogramOptions;
 import org.synchronoss.cpo.cassandra.meta.CassandraCpoMetaDescriptor;
 import org.synchronoss.cpo.core.CpoAdapterFactory;
 import org.synchronoss.cpo.core.CpoException;
@@ -39,7 +44,7 @@ import org.synchronoss.cpo.cpoconfig.*;
 
 /**
  * CassandraCpoConfigProcessor processes the datasource configuration file for cassandra. It pulls
- * out all the information needed to configure a cluster for use within the application.
+ * out all the information needed to configure a session for use within the application.
  *
  * @author dberry
  */
@@ -120,221 +125,344 @@ public class CassandraCpoConfigProcessor implements CpoConfigProcessor {
             fetchSize,
             batchSize);
 
-    // add clusterName
     clusterInfo.setClusterName(readWriteConfig.getClusterName());
-
-    // add maxSchemaAgreementWaitSeconds
+    clusterInfo.setLocalDatacenter(readWriteConfig.getLocalDatacenter());
+    clusterInfo.setApplicationName(readWriteConfig.getApplicationName());
+    clusterInfo.setApplicationVersion(readWriteConfig.getApplicationVersion());
     clusterInfo.setMaxSchemaAgreementWaitSeconds(
         readWriteConfig.getMaxSchemaAgreementWaitSeconds());
+    clusterInfo.setSchemaAgreementIntervalMillis(
+        readWriteConfig.getSchemaAgreementIntervalMillis());
+    clusterInfo.setSchemaAgreementWarnOnFailure(readWriteConfig.isSchemaAgreementWarnOnFailure());
+    clusterInfo.setControlConnectionTimeoutMillis(
+        readWriteConfig.getControlConnectionTimeoutMillis());
 
-    // add port
     if (readWriteConfig.getPort() != null) clusterInfo.setPort(readWriteConfig.getPort());
 
-    // add loadBalancing
-    if (readWriteConfig.getLoadBalancingPolicy() != null
-        && !readWriteConfig.getLoadBalancingPolicy().isBlank()) {
-      clusterInfo.setLoadBalancingPolicy(
-          new ConfigInstantiator<LoadBalancingPolicy>()
-              .instantiate(readWriteConfig.getLoadBalancingPolicy()));
-    }
+    clusterInfo.setRequestTimeoutMillis(readWriteConfig.getRequestTimeoutMillis());
 
-    // add reconnectionPolicy
-    if (readWriteConfig.getReconnectionPolicy() != null
-        && !readWriteConfig.getReconnectionPolicy().isBlank())
-      clusterInfo.setReconnectionPolicy(
-          new ConfigInstantiator<ReconnectionPolicy>()
-              .instantiate(readWriteConfig.getReconnectionPolicy()));
+    // driver 4.x instantiates load-balancing/reconnection/retry/address-translator/speculative
+    // -execution/timestamp-generator classes itself, so the XML string is passed straight through
+    // as the implementation class name (no CPO factory wrapper for these)
+    if (isNotBlank(readWriteConfig.getLoadBalancingPolicy()))
+      clusterInfo.setLoadBalancingPolicyClassName(readWriteConfig.getLoadBalancingPolicy());
+    applyLoadBalancingOptions(clusterInfo, readWriteConfig.getLoadBalancingOptions());
 
-    // add retryPolicy
-    if (readWriteConfig.getRetryPolicy() != null && !readWriteConfig.getRetryPolicy().isBlank())
-      clusterInfo.setRetryPolicy(
-          new ConfigInstantiator<RetryPolicy>().instantiate(readWriteConfig.getRetryPolicy()));
+    if (isNotBlank(readWriteConfig.getReconnectionPolicy()))
+      clusterInfo.setReconnectionPolicyClassName(readWriteConfig.getReconnectionPolicy());
+    clusterInfo.setReconnectionBaseDelayMillis(readWriteConfig.getReconnectionBaseDelayMillis());
+    clusterInfo.setReconnectionMaxDelayMillis(readWriteConfig.getReconnectionMaxDelayMillis());
+    clusterInfo.setReconnectOnInit(readWriteConfig.isReconnectOnInit());
 
-    // add credentials
+    if (isNotBlank(readWriteConfig.getRetryPolicy()))
+      clusterInfo.setRetryPolicyClassName(readWriteConfig.getRetryPolicy());
+
     if (readWriteConfig.getCredentials() != null) {
       clusterInfo.setHasCredentials(true);
       clusterInfo.setUserName(readWriteConfig.getCredentials().getUser());
       clusterInfo.setPassword(readWriteConfig.getCredentials().getPassword());
     }
 
-    // add addressTranslater
-    if (readWriteConfig.getAddressTranslater() != null
-        && !readWriteConfig.getAddressTranslater().isBlank())
-      clusterInfo.setAddressTranslater(
-          new ConfigInstantiator<AddressTranslator>()
-              .instantiate(readWriteConfig.getAddressTranslater()));
+    if (isNotBlank(readWriteConfig.getAddressTranslater()))
+      clusterInfo.setAddressTranslatorClassName(readWriteConfig.getAddressTranslater());
+    applyAddressTranslatorOptions(clusterInfo, readWriteConfig.getAddressTranslatorOptions());
 
-    // add AuthProvider
-    if (readWriteConfig.getAuthProvider() != null && !readWriteConfig.getAuthProvider().isBlank())
+    // AuthProvider: still built via the CPO factory pattern since CqlSessionBuilder accepts a
+    // pre-built AuthProvider instance directly
+    if (isNotBlank(readWriteConfig.getAuthProvider()))
       clusterInfo.setAuthProvider(
           new ConfigInstantiator<AuthProvider>().instantiate(readWriteConfig.getAuthProvider()));
 
-    // add Compression
     if (readWriteConfig.getCompression() != null)
-      clusterInfo.setCompressionType(
-          ProtocolOptions.Compression.valueOf(readWriteConfig.getCompression().toString()));
+      clusterInfo.setCompressionType(readWriteConfig.getCompression().toString().toLowerCase());
 
-    // add NettyOptions
-    if (readWriteConfig.getNettyOptions() != null && !readWriteConfig.getNettyOptions().isBlank())
-      clusterInfo.setNettyOptions(
-          new ConfigInstantiator<NettyOptions>().instantiate(readWriteConfig.getNettyOptions()));
+    if (readWriteConfig.getProtocolVersion() != null)
+      clusterInfo.setProtocolVersion(readWriteConfig.getProtocolVersion().value());
+    clusterInfo.setProtocolMaxFrameLengthBytes(readWriteConfig.getProtocolMaxFrameLengthBytes());
 
-    // add Metrics
-    if (readWriteConfig.isMetrics() != null) clusterInfo.setUseMetrics(readWriteConfig.isMetrics());
-
-    // add SSL
+    // SSL: a custom SSLOptionsFactory still uses the CPO factory pattern (CqlSessionBuilder
+    // accepts a pre-built SslEngineFactory instance directly); sslEngineOptions is a declarative
+    // alternative that configures the driver's built-in DefaultSslEngineFactory instead
     if (readWriteConfig.getSslOptions() != null
         && readWriteConfig.getSslOptions().getValue() != null
         && !readWriteConfig.getSslOptions().getValue().isBlank()) {
-      clusterInfo.setSslOptions(
-          new ConfigInstantiator<SSLOptions>()
+      clusterInfo.setSslEngineFactory(
+          new ConfigInstantiator<SslEngineFactory>()
               .instantiate(readWriteConfig.getSslOptions().getValue()));
     }
+    applySslEngineOptions(clusterInfo, readWriteConfig.getSslEngineOptions());
 
-    // add Listeners
-    if (readWriteConfig.getInitialListeners() != null
-        && !readWriteConfig.getInitialListeners().isBlank()) {
+    // Listeners: still built via the CPO factory pattern since CqlSessionBuilder accepts
+    // pre-built NodeStateListener/SchemaChangeListener instances directly
+    if (isNotBlank(readWriteConfig.getInitialListeners())) {
       clusterInfo.setListeners(
-          new ConfigInstantiator<Collection<Host.StateListener>>()
+          new ConfigInstantiator<Collection<NodeStateListener>>()
               .instantiate(readWriteConfig.getInitialListeners()));
     }
+    if (isNotBlank(readWriteConfig.getSchemaChangeListeners())) {
+      clusterInfo.setSchemaChangeListeners(
+          new ConfigInstantiator<Collection<SchemaChangeListener>>()
+              .instantiate(readWriteConfig.getSchemaChangeListeners()));
+    }
 
-    // add JMX Reporting
-    if (readWriteConfig.isJmxReporting() != null)
-      clusterInfo.setUseJmxReporting(readWriteConfig.isJmxReporting());
+    applyMetricsOptions(clusterInfo, readWriteConfig.getMetricsOptions());
 
-    // add protocolVersion
-    // the JAXB enum's name (V_3) differs from its XML value (V3), which is what the
-    // driver's enum uses, so the value must be used for the lookup
-    if (readWriteConfig.getProtocolVersion() != null)
-      clusterInfo.setProtocolVersion(
-          ProtocolVersion.valueOf(readWriteConfig.getProtocolVersion().value()));
-
-    // add pooling options
     if (readWriteConfig.getPoolingOptions() != null)
-      clusterInfo.setPoolingOptions(buildPoolingOptions(readWriteConfig.getPoolingOptions()));
+      applyPoolingOptions(clusterInfo, readWriteConfig.getPoolingOptions());
 
-    // add socket options
     if (readWriteConfig.getSocketOptions() != null)
-      clusterInfo.setSocketOptions(buildSocketOptions(readWriteConfig.getSocketOptions()));
+      applySocketOptions(clusterInfo, readWriteConfig.getSocketOptions());
 
-    // add query Options
     if (readWriteConfig.getQueryOptions() != null)
-      clusterInfo.setQueryOptions(buildQueryOptions(readWriteConfig.getQueryOptions()));
+      applyQueryOptions(clusterInfo, readWriteConfig.getQueryOptions());
 
-    // add speculativeExecutionPolicy
-    if (readWriteConfig.getSpeculativeExecutionPolicy() != null
-        && !readWriteConfig.getSpeculativeExecutionPolicy().isBlank())
-      clusterInfo.setSpeculativeExecutionPolicy(
-          new ConfigInstantiator<SpeculativeExecutionPolicy>()
-              .instantiate(readWriteConfig.getSpeculativeExecutionPolicy()));
+    if (isNotBlank(readWriteConfig.getSpeculativeExecutionPolicy()))
+      clusterInfo.setSpeculativeExecutionPolicyClassName(
+          readWriteConfig.getSpeculativeExecutionPolicy());
+    clusterInfo.setSpeculativeExecutionMaxExecutions(
+        readWriteConfig.getSpeculativeExecutionMaxExecutions());
+    clusterInfo.setSpeculativeExecutionDelayMillis(
+        readWriteConfig.getSpeculativeExecutionDelayMillis());
 
-    // add TimestampGenerator
-    if (readWriteConfig.getTimestampGenerator() != null
-        && !readWriteConfig.getTimestampGenerator().isBlank())
-      clusterInfo.setTimestampGenerator(
-          new ConfigInstantiator<TimestampGenerator>()
-              .instantiate(readWriteConfig.getTimestampGenerator()));
+    if (isNotBlank(readWriteConfig.getTimestampGenerator()))
+      clusterInfo.setTimestampGeneratorClassName(readWriteConfig.getTimestampGenerator());
+    applyTimestampGeneratorOptions(clusterInfo, readWriteConfig.getTimestampGeneratorOptions());
+
+    applyRequestOptions(clusterInfo, readWriteConfig.getRequestOptions());
+    applyRequestTrackerOptions(clusterInfo, readWriteConfig.getRequestTrackerOptions());
+    applyThrottlerOptions(clusterInfo, readWriteConfig.getThrottlerOptions());
+    applyMetadataOptions(clusterInfo, readWriteConfig.getMetadataOptions());
+    applyPreparedStatementOptions(clusterInfo, readWriteConfig.getPreparedStatementOptions());
+    applyNettyOptions(clusterInfo, readWriteConfig.getNettyOptions());
+
+    clusterInfo.setCoalescerIntervalMicros(readWriteConfig.getCoalescerIntervalMicros());
+    clusterInfo.setCoalescerMaxRuns(readWriteConfig.getCoalescerMaxRuns());
+    clusterInfo.setSessionLeakThreshold(readWriteConfig.getSessionLeakThreshold());
+    clusterInfo.setResolveContactPoints(readWriteConfig.isResolveContactPoints());
 
     logger.debug("Created DataSourceInfo: " + clusterInfo);
     return clusterInfo;
   }
 
-  private PoolingOptions buildPoolingOptions(CtPoolingOptions ctPoolingOptions) {
-    PoolingOptions poolingOptions = new PoolingOptions();
-
-    if (ctPoolingOptions.getConnectionsPerHost() != null) {
-      CtConnectionsPerHost cph = ctPoolingOptions.getConnectionsPerHost();
-      poolingOptions.setConnectionsPerHost(
-          HostDistance.valueOf(cph.getDistance().toString()), cph.getCore(), cph.getMax());
-    }
-
-    if (ctPoolingOptions.getCoreConnectionsPerHost() != null) {
-      CtHostDistanceAndThreshold hdt = ctPoolingOptions.getCoreConnectionsPerHost();
-      poolingOptions.setCoreConnectionsPerHost(
-          HostDistance.valueOf(hdt.getDistance().toString()), hdt.getThreshold());
-    }
-
-    if (ctPoolingOptions.getHeartbeatIntervalSeconds() != null) {
-      poolingOptions.setHeartbeatIntervalSeconds(ctPoolingOptions.getHeartbeatIntervalSeconds());
-    }
-
-    if (ctPoolingOptions.getIdleTimeoutSeconds() != null) {
-      poolingOptions.setIdleTimeoutSeconds(ctPoolingOptions.getIdleTimeoutSeconds());
-    }
-
-    if (ctPoolingOptions.getMaxConnectionsPerHost() != null) {
-      CtHostDistanceAndThreshold hdt = ctPoolingOptions.getMaxConnectionsPerHost();
-      poolingOptions.setMaxConnectionsPerHost(
-          HostDistance.valueOf(hdt.getDistance().toString()), hdt.getThreshold());
-    }
-
-    if (ctPoolingOptions.getMaxRequestsPerConnection() != null) {
-      CtHostDistanceAndThreshold hdt = ctPoolingOptions.getMaxRequestsPerConnection();
-      poolingOptions.setMaxRequestsPerConnection(
-          HostDistance.valueOf(hdt.getDistance().toString()), hdt.getThreshold());
-    }
-
-    if (ctPoolingOptions.getNewConnectionThreshold() != null) {
-      CtHostDistanceAndThreshold hdt = ctPoolingOptions.getNewConnectionThreshold();
-      poolingOptions.setNewConnectionThreshold(
-          HostDistance.valueOf(hdt.getDistance().toString()), hdt.getThreshold());
-    }
-
-    if (ctPoolingOptions.getPoolTimeoutMillis() != null) {
-      poolingOptions.setPoolTimeoutMillis(ctPoolingOptions.getPoolTimeoutMillis());
-    }
-
-    return poolingOptions;
+  private static boolean isNotBlank(String value) {
+    return value != null && !value.isBlank();
   }
 
-  private QueryOptions buildQueryOptions(CtQueryOptions ctQueryOptions) {
-    QueryOptions queryOptions = new QueryOptions();
+  private void applyLoadBalancingOptions(
+      ClusterDataSourceInfo clusterInfo, CtLoadBalancingOptions options) {
+    if (options == null) return;
 
-    if (ctQueryOptions.getConsistencyLevel() != null)
-      queryOptions.setConsistencyLevel(
-          ConsistencyLevel.valueOf(ctQueryOptions.getConsistencyLevel().toString()));
-
-    if (ctQueryOptions.isDefaultIdempotence() != null)
-      queryOptions.setDefaultIdempotence(ctQueryOptions.isDefaultIdempotence());
-
-    if (ctQueryOptions.getFetchSize() != null)
-      queryOptions.setFetchSize(ctQueryOptions.getFetchSize());
-
-    if (ctQueryOptions.getSerialConsistencyLevel() != null)
-      queryOptions.setSerialConsistencyLevel(
-          ConsistencyLevel.valueOf(ctQueryOptions.getSerialConsistencyLevel().toString()));
-
-    return queryOptions;
+    clusterInfo.setLoadBalancingSlowReplicaAvoidance(options.isSlowReplicaAvoidance());
+    clusterInfo.setLoadBalancingDistanceEvaluatorClassName(options.getDistanceEvaluatorClass());
+    clusterInfo.setDcFailoverMaxNodesPerRemoteDc(options.getDcFailoverMaxNodesPerRemoteDc());
+    clusterInfo.setDcFailoverAllowForLocalConsistencyLevels(
+        options.isDcFailoverAllowForLocalConsistencyLevels());
+    if (!options.getDcFailoverPreferredRemoteDc().isEmpty())
+      clusterInfo.setDcFailoverPreferredRemoteDcs(options.getDcFailoverPreferredRemoteDc());
   }
 
-  private SocketOptions buildSocketOptions(CtSocketOptions ctSocketOptions) {
-    SocketOptions socketOptions = new SocketOptions();
+  private void applyAddressTranslatorOptions(
+      ClusterDataSourceInfo clusterInfo, CtAddressTranslatorOptions options) {
+    if (options == null) return;
 
-    if (ctSocketOptions.getConnectionTimeoutMillis() != null)
-      socketOptions.setConnectTimeoutMillis(ctSocketOptions.getConnectionTimeoutMillis());
+    clusterInfo.setAddressTranslatorAdvertisedHostname(options.getAdvertisedHostname());
+    clusterInfo.setAddressTranslatorDefaultAddress(options.getDefaultAddress());
+    clusterInfo.setAddressTranslatorResolveAddresses(options.isResolveAddresses());
+    if (!options.getSubnetAddress().isEmpty()) {
+      Map<String, String> subnetAddresses = new LinkedHashMap<>();
+      for (CtSubnetAddress subnetAddress : options.getSubnetAddress())
+        subnetAddresses.put(subnetAddress.getCidr(), subnetAddress.getAddress());
+      clusterInfo.setAddressTranslatorSubnetAddresses(subnetAddresses);
+    }
+  }
 
-    if (ctSocketOptions.isKeepAlive() != null)
-      socketOptions.setKeepAlive(ctSocketOptions.isKeepAlive());
+  private void applySslEngineOptions(
+      ClusterDataSourceInfo clusterInfo, CtSslEngineOptions options) {
+    if (options == null) return;
 
-    if (ctSocketOptions.getReadTimeoutMillis() != null)
-      socketOptions.setReadTimeoutMillis(ctSocketOptions.getReadTimeoutMillis());
+    if (!options.getCipherSuite().isEmpty())
+      clusterInfo.setSslCipherSuites(options.getCipherSuite());
+    clusterInfo.setSslHostnameValidation(options.isHostnameValidation());
+    clusterInfo.setSslAllowDnsReverseLookupSan(options.isAllowDnsReverseLookupSan());
+    clusterInfo.setSslTruststorePath(options.getTruststorePath());
+    clusterInfo.setSslTruststorePassword(options.getTruststorePassword());
+    clusterInfo.setSslKeystorePath(options.getKeystorePath());
+    clusterInfo.setSslKeystorePassword(options.getKeystorePassword());
+    clusterInfo.setSslKeystoreReloadIntervalMinutes(options.getKeystoreReloadIntervalMinutes());
+  }
 
-    if (ctSocketOptions.getReceiveBufferSize() != null)
-      socketOptions.setReceiveBufferSize(ctSocketOptions.getReceiveBufferSize());
+  private void applyTimestampGeneratorOptions(
+      ClusterDataSourceInfo clusterInfo, CtTimestampGeneratorOptions options) {
+    if (options == null) return;
 
-    if (ctSocketOptions.isReuseAddress() != null)
-      socketOptions.setReuseAddress(ctSocketOptions.isReuseAddress());
+    clusterInfo.setTimestampGeneratorForceJavaClock(options.isForceJavaClock());
+    clusterInfo.setTimestampGeneratorDriftWarningThresholdMillis(
+        options.getDriftWarningThresholdMillis());
+    clusterInfo.setTimestampGeneratorDriftWarningIntervalSeconds(
+        options.getDriftWarningIntervalSeconds());
+  }
 
-    if (ctSocketOptions.getSendBufferSize() != null)
-      socketOptions.setSendBufferSize(ctSocketOptions.getSendBufferSize());
+  private void applyRequestOptions(ClusterDataSourceInfo clusterInfo, CtRequestOptions options) {
+    if (options == null) return;
 
-    if (ctSocketOptions.getSoLinger() != null)
-      socketOptions.setSoLinger(ctSocketOptions.getSoLinger());
+    clusterInfo.setRequestWarnIfSetKeyspace(options.isWarnIfSetKeyspace());
+    clusterInfo.setRequestLogWarnings(options.isLogWarnings());
+    clusterInfo.setRequestTraceAttempts(options.getTraceAttempts());
+    clusterInfo.setRequestTraceIntervalMillis(options.getTraceIntervalMillis());
+    if (options.getTraceConsistencyLevel() != null)
+      clusterInfo.setRequestTraceConsistencyLevel(options.getTraceConsistencyLevel().toString());
+  }
 
-    if (ctSocketOptions.isTcpNoDelay() != null)
-      socketOptions.setTcpNoDelay(ctSocketOptions.isTcpNoDelay());
+  private void applyRequestTrackerOptions(
+      ClusterDataSourceInfo clusterInfo, CtRequestTrackerOptions options) {
+    if (options == null) return;
 
-    return socketOptions;
+    if (!options.getRequestTrackerClass().isEmpty())
+      clusterInfo.setRequestTrackerClasses(options.getRequestTrackerClass());
+    clusterInfo.setRequestLoggerSuccessEnabled(options.isRequestLoggerSuccessEnabled());
+    clusterInfo.setRequestLoggerSlowThresholdMillis(options.getRequestLoggerSlowThresholdMillis());
+    clusterInfo.setRequestLoggerSlowEnabled(options.isRequestLoggerSlowEnabled());
+    clusterInfo.setRequestLoggerErrorEnabled(options.isRequestLoggerErrorEnabled());
+    clusterInfo.setRequestLoggerMaxQueryLength(options.getRequestLoggerMaxQueryLength());
+    clusterInfo.setRequestLoggerShowValues(options.isRequestLoggerShowValues());
+    clusterInfo.setRequestLoggerMaxValueLength(options.getRequestLoggerMaxValueLength());
+    clusterInfo.setRequestLoggerMaxValues(options.getRequestLoggerMaxValues());
+    clusterInfo.setRequestLoggerShowStackTraces(options.isRequestLoggerShowStackTraces());
+  }
+
+  private void applyThrottlerOptions(
+      ClusterDataSourceInfo clusterInfo, CtThrottlerOptions options) {
+    if (options == null) return;
+
+    clusterInfo.setThrottlerClassName(options.getThrottlerClass());
+    clusterInfo.setThrottlerMaxQueueSize(options.getMaxQueueSize());
+    clusterInfo.setThrottlerMaxConcurrentRequests(options.getMaxConcurrentRequests());
+    clusterInfo.setThrottlerMaxRequestsPerSecond(options.getMaxRequestsPerSecond());
+    clusterInfo.setThrottlerDrainIntervalMillis(options.getDrainIntervalMillis());
+  }
+
+  private void applyMetadataOptions(ClusterDataSourceInfo clusterInfo, CtMetadataOptions options) {
+    if (options == null) return;
+
+    clusterInfo.setMetadataSchemaEnabled(options.isSchemaEnabled());
+    if (!options.getSchemaRefreshedKeyspace().isEmpty())
+      clusterInfo.setMetadataSchemaRefreshedKeyspaces(options.getSchemaRefreshedKeyspace());
+    clusterInfo.setMetadataSchemaRequestTimeoutMillis(options.getSchemaRequestTimeoutMillis());
+    clusterInfo.setMetadataSchemaRequestPageSize(options.getSchemaRequestPageSize());
+    clusterInfo.setMetadataSchemaWindowMillis(options.getSchemaWindowMillis());
+    clusterInfo.setMetadataSchemaMaxEvents(options.getSchemaMaxEvents());
+    clusterInfo.setMetadataTopologyWindowMillis(options.getTopologyWindowMillis());
+    clusterInfo.setMetadataTopologyMaxEvents(options.getTopologyMaxEvents());
+    clusterInfo.setMetadataTokenMapEnabled(options.isTokenMapEnabled());
+  }
+
+  private void applyPreparedStatementOptions(
+      ClusterDataSourceInfo clusterInfo, CtPreparedStatementOptions options) {
+    if (options == null) return;
+
+    clusterInfo.setPrepareOnAllNodes(options.isPrepareOnAllNodes());
+    clusterInfo.setReprepareEnabled(options.isReprepareEnabled());
+    clusterInfo.setReprepareCheckSystemTable(options.isReprepareCheckSystemTable());
+    clusterInfo.setReprepareMaxStatements(options.getReprepareMaxStatements());
+    clusterInfo.setReprepareMaxParallelism(options.getReprepareMaxParallelism());
+    clusterInfo.setReprepareTimeoutMillis(options.getReprepareTimeoutMillis());
+    clusterInfo.setPreparedCacheWeakValues(options.isPreparedCacheWeakValues());
+  }
+
+  private void applyNettyOptions(ClusterDataSourceInfo clusterInfo, CtNettyOptions options) {
+    if (options == null) return;
+
+    clusterInfo.setNettyDaemonThreads(options.isDaemonThreads());
+    clusterInfo.setNettyIoGroupSize(options.getIoGroupSize());
+    clusterInfo.setNettyIoGroupShutdownQuietPeriodSeconds(
+        options.getIoGroupShutdownQuietPeriodSeconds());
+    clusterInfo.setNettyIoGroupShutdownTimeoutSeconds(options.getIoGroupShutdownTimeoutSeconds());
+    clusterInfo.setNettyAdminGroupSize(options.getAdminGroupSize());
+    clusterInfo.setNettyAdminGroupShutdownQuietPeriodSeconds(
+        options.getAdminGroupShutdownQuietPeriodSeconds());
+    clusterInfo.setNettyAdminGroupShutdownTimeoutSeconds(
+        options.getAdminGroupShutdownTimeoutSeconds());
+    clusterInfo.setNettyTimerTickDurationMillis(options.getTimerTickDurationMillis());
+    clusterInfo.setNettyTimerTicksPerWheel(options.getTimerTicksPerWheel());
+  }
+
+  private void applyMetricsOptions(ClusterDataSourceInfo clusterInfo, CtMetricsOptions options) {
+    if (options == null) return;
+
+    clusterInfo.setMetricsFactoryClassName(options.getFactoryClass());
+    clusterInfo.setMetricsIdGeneratorClassName(options.getIdGeneratorClass());
+    clusterInfo.setMetricsIdGeneratorPrefix(options.getIdGeneratorPrefix());
+    clusterInfo.setMetricsGenerateAggregableHistograms(options.isGenerateAggregableHistograms());
+    if (!options.getSessionEnabled().isEmpty())
+      clusterInfo.setMetricsSessionEnabled(options.getSessionEnabled());
+    if (!options.getNodeEnabled().isEmpty())
+      clusterInfo.setMetricsNodeEnabled(options.getNodeEnabled());
+    clusterInfo.setMetricsNodeExpireAfterMinutes(options.getNodeExpireAfterMinutes());
+    clusterInfo.setMetricsSessionCqlRequests(toHistogramOptions(options.getSessionCqlRequests()));
+    clusterInfo.setMetricsSessionThrottlingDelay(
+        toHistogramOptions(options.getSessionThrottlingDelay()));
+    clusterInfo.setMetricsNodeCqlMessages(toHistogramOptions(options.getNodeCqlMessages()));
+  }
+
+  private HistogramOptions toHistogramOptions(CtHistogramOptions ctHistogramOptions) {
+    if (ctHistogramOptions == null) return null;
+
+    HistogramOptions histogramOptions = new HistogramOptions();
+    histogramOptions.setHighestLatencyMillis(ctHistogramOptions.getHighestLatencyMillis());
+    histogramOptions.setLowestLatencyMillis(ctHistogramOptions.getLowestLatencyMillis());
+    histogramOptions.setSignificantDigits(ctHistogramOptions.getSignificantDigits());
+    histogramOptions.setRefreshIntervalMinutes(ctHistogramOptions.getRefreshIntervalMinutes());
+    if (!ctHistogramOptions.getSloMillis().isEmpty())
+      histogramOptions.setSloMillis(ctHistogramOptions.getSloMillis());
+    if (!ctHistogramOptions.getPublishPercentile().isEmpty())
+      histogramOptions.setPublishPercentiles(ctHistogramOptions.getPublishPercentile());
+    return histogramOptions;
+  }
+
+  /**
+   * Applies the pooling options onto the ClusterDataSourceInfo.
+   *
+   * @param clusterInfo the ClusterDataSourceInfo to configure
+   * @param options the pooling options from the XML config
+   */
+  private void applyPoolingOptions(ClusterDataSourceInfo clusterInfo, CtPoolingOptions options) {
+    clusterInfo.setConnectionPoolLocalSize(options.getConnectionPoolLocalSize());
+    clusterInfo.setConnectionPoolRemoteSize(options.getConnectionPoolRemoteSize());
+    clusterInfo.setHeartbeatIntervalSeconds(options.getHeartbeatIntervalSeconds());
+    clusterInfo.setHeartbeatTimeoutSeconds(options.getHeartbeatTimeoutSeconds());
+    clusterInfo.setConnectInitQueryTimeoutMillis(options.getConnectInitQueryTimeoutMillis());
+    clusterInfo.setSetKeyspaceTimeoutMillis(options.getSetKeyspaceTimeoutMillis());
+    clusterInfo.setMaxRequestsPerConnection(options.getMaxRequestsPerConnection());
+    clusterInfo.setMaxOrphanRequests(options.getMaxOrphanRequests());
+    clusterInfo.setWarnOnInitError(options.isWarnOnInitError());
+  }
+
+  /**
+   * Applies the socket options onto the ClusterDataSourceInfo.
+   *
+   * @param clusterInfo the ClusterDataSourceInfo to configure
+   * @param options the socket options from the XML config
+   */
+  private void applySocketOptions(ClusterDataSourceInfo clusterInfo, CtSocketOptions options) {
+    clusterInfo.setConnectTimeoutMillis(options.getConnectionTimeoutMillis());
+    clusterInfo.setTcpNoDelay(options.isTcpNoDelay());
+    clusterInfo.setSocketKeepAlive(options.isKeepAlive());
+    clusterInfo.setSocketReuseAddress(options.isReuseAddress());
+    clusterInfo.setSocketLingerIntervalSeconds(options.getSoLinger());
+    clusterInfo.setSocketReceiveBufferSize(options.getReceiveBufferSize());
+    clusterInfo.setSocketSendBufferSize(options.getSendBufferSize());
+  }
+
+  private void applyQueryOptions(ClusterDataSourceInfo clusterInfo, CtQueryOptions options) {
+    if (options.getConsistencyLevel() != null)
+      clusterInfo.setConsistencyLevel(options.getConsistencyLevel().toString());
+
+    if (options.isDefaultIdempotence() != null)
+      clusterInfo.setDefaultIdempotence(options.isDefaultIdempotence());
+
+    if (options.getFetchSize() != null) clusterInfo.setPageSize(options.getFetchSize());
+
+    if (options.getSerialConsistencyLevel() != null)
+      clusterInfo.setSerialConsistencyLevel(options.getSerialConsistencyLevel().toString());
   }
 }

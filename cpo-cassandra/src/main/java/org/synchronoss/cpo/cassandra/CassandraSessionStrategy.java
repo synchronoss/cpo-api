@@ -22,7 +22,7 @@ package org.synchronoss.cpo.cassandra;
  * ]]
  */
 
-import com.datastax.driver.core.Session;
+import com.datastax.oss.driver.api.core.CqlSession;
 import java.io.Serializable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -65,8 +65,8 @@ class CassandraSessionStrategy implements Serializable {
    * @return A Session bean for reading
    * @throws CpoException An exception occurred
    */
-  Session getReadSession() throws CpoException {
-    Session session;
+  CqlSession getReadSession() throws CpoException {
+    CqlSession session;
 
     try {
       if (!invalidReadSession) {
@@ -92,8 +92,8 @@ class CassandraSessionStrategy implements Serializable {
    * @return A Session bean for writing
    * @throws CpoException An exception occurred
    */
-  Session getWriteSession() throws CpoException {
-    Session session;
+  CqlSession getWriteSession() throws CpoException {
+    CqlSession session;
 
     try {
       session = writeDataSource.getSession();

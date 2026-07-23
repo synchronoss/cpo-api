@@ -186,17 +186,65 @@
             <xs:element name="clusterName" type="xs:string" minOccurs="0">
                 <xs:annotation>
                     <xs:documentation>
-                        An optional name for the create cluster. Defaults to the name of the core:dataConfig
-                        Note: this is not related to the Cassandra cluster name (though you are free to provide the same name). See Cluster.getClusterName() for details.
-                        If you use this method and create more than one Cluster instance in the same JVM (which should be avoided unless you need to connect to multiple Cassandra clusters),
-                        you should make sure each Cluster instance get a unique name or you may have a problem with JMX reporting.
+                        An optional name for the created session (driver option basic.session-name / SESSION_NAME).
+                        Defaults to the name of the core:dataConfig. Used as a log/metrics prefix; if absent the
+                        driver generates one. Note: this is not related to any Cassandra cluster name.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="localDatacenter" type="xs:string" minOccurs="1">
+                <xs:annotation>
+                    <xs:documentation>
+                        The datacenter that is considered "local" for this session, e.g. "datacenter1". Required
+                        by the driver's default load balancing policy whenever contact points are supplied.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="applicationName" type="xs:string" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>
+                        The name of the application using the session, sent in the STARTUP protocol message
+                        for each new connection (SessionBuilder#withApplicationName).
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="applicationVersion" type="xs:string" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>
+                        The version of the application using the session, sent in the STARTUP protocol message
+                        for each new connection (SessionBuilder#withApplicationVersion).
                     </xs:documentation>
                 </xs:annotation>
             </xs:element>
             <xs:element name="maxSchemaAgreementWaitSeconds" type="xs:int" minOccurs="0">
                 <xs:annotation>
                     <xs:documentation>
-                        Sets the maximum time to wait for schema agreement before returning from a DDL query.
+                        The timeout after which schema agreement fails (advanced.control-connection.schema-agreement.timeout
+                        / CONTROL_CONNECTION_AGREEMENT_TIMEOUT).
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="schemaAgreementIntervalMillis" type="xs:long" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>
+                        The interval between each schema agreement check attempt
+                        (advanced.control-connection.schema-agreement.interval / CONTROL_CONNECTION_AGREEMENT_INTERVAL).
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="schemaAgreementWarnOnFailure" type="xs:boolean" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>
+                        Whether to log a warning if schema agreement fails
+                        (advanced.control-connection.schema-agreement.warn-on-failure / CONTROL_CONNECTION_AGREEMENT_WARN).
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="controlConnectionTimeoutMillis" type="xs:long" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>
+                        How long the driver waits for responses to control queries, e.g. fetching the list of
+                        nodes or refreshing the schema (advanced.control-connection.timeout / CONTROL_CONNECTION_TIMEOUT).
                     </xs:documentation>
                 </xs:annotation>
             </xs:element>
@@ -207,30 +255,76 @@
                     </xs:documentation>
                 </xs:annotation>
             </xs:element>
+            <xs:element name="requestTimeoutMillis" type="xs:long" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>
+                        How long the driver waits for a request to complete; a global limit on the duration of a
+                        session.execute() call, including any internal retries (basic.request.timeout / REQUEST_TIMEOUT).
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
             <xs:element name="loadBalancingPolicy" type="xs:string" minOccurs="0">
                 <xs:annotation>
                     <xs:documentation>
-                        Configures the load balancing policy to use for the new cluster.
-                        Add in the fully qualified class name for a LoadBalancingPolicyFactory
-                        If no load balancing policy is set through this method, Policies.defaultLoadBalancingPolicy() will be used instead.
+                        Configures the load balancing policy to use for the new session.
+                        The fully qualified class name of a driver LoadBalancingPolicy implementation
+                        (com.datastax.oss.driver.api.core.loadbalancing.LoadBalancingPolicy). The driver
+                        instantiates this class itself via a (DriverContext, String profileName) constructor.
+                        If not set, the driver's default load balancing policy is used instead.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="loadBalancingOptions" type="ctLoadBalancingOptions" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>
+                        Additional tuning options for the load balancing policy (slow-replica avoidance,
+                        custom distance evaluator, and cross-datacenter failover).
                     </xs:documentation>
                 </xs:annotation>
             </xs:element>
             <xs:element name="reconnectionPolicy" type="xs:string" minOccurs="0">
                 <xs:annotation>
                     <xs:documentation>
-                        Configures the reconnection policy to use for the new cluster.
-                        Add in the fully qualified class name for a ReconnectionPolicyFactory
-                        If no reconnection policy is set through this method, Policies.DEFAULT_RECONNECTION_POLICY will be used instead.
+                        Configures the reconnection policy to use for the new session.
+                        The fully qualified class name of a driver ReconnectionPolicy implementation
+                        (com.datastax.oss.driver.api.core.connection.ReconnectionPolicy). The driver
+                        instantiates this class itself via a (DriverContext) constructor.
+                        If not set, the driver's default reconnection policy is used instead.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="reconnectionBaseDelayMillis" type="xs:long" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>
+                        The base/only delay used by the built-in ExponentialReconnectionPolicy/ConstantReconnectionPolicy
+                        (advanced.reconnection-policy.base-delay / RECONNECTION_BASE_DELAY).
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="reconnectionMaxDelayMillis" type="xs:long" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>
+                        The maximum delay used by the built-in ExponentialReconnectionPolicy
+                        (advanced.reconnection-policy.max-delay / RECONNECTION_MAX_DELAY).
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="reconnectOnInit" type="xs:boolean" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>
+                        Whether to schedule reconnection attempts if all contact points are unreachable on the
+                        first initialization attempt (advanced.reconnect-on-init / RECONNECT_ON_INIT).
                     </xs:documentation>
                 </xs:annotation>
             </xs:element>
             <xs:element name="retryPolicy" type="xs:string" minOccurs="0">
                 <xs:annotation>
                     <xs:documentation>
-                        Configures the retry policy to use for the new cluster.
-                        Add in the fully qualified class name for a RetryPolicyFactory
-                        If no retry policy is set through this method, Policies.DEFAULT_RETRY_POLICY will be used instead.
+                        Configures the retry policy to use for the new session.
+                        The fully qualified class name of a driver RetryPolicy implementation
+                        (com.datastax.oss.driver.api.core.retry.RetryPolicy). The driver instantiates this
+                        class itself via a (DriverContext, String profileName) constructor.
+                        If not set, the driver's default retry policy is used instead.
                     </xs:documentation>
                 </xs:annotation>
             </xs:element>
@@ -269,97 +363,129 @@
                     </xs:documentation>
                 </xs:annotation>
             </xs:element>
-            <xs:element name="metrics" type="xs:boolean" default="true" minOccurs="0">
+            <xs:element name="protocolMaxFrameLengthBytes" type="xs:long" minOccurs="0">
                 <xs:annotation>
                     <xs:documentation>
-                        Disables metrics collection for the created cluster (metrics are enabled by default otherwise).
+                        The maximum length of the frames supported by the driver; requests beyond this limit fail
+                        with an exception (advanced.protocol.max-frame-length / PROTOCOL_MAX_FRAME_LENGTH).
                     </xs:documentation>
                 </xs:annotation>
             </xs:element>
             <xs:element name="sslOptions" type="xs:string" nillable="true" minOccurs="0">
                 <xs:annotation>
                     <xs:documentation>
-                        Enables the use of SSL for the created Cluster. The string is either nil which uses the default ssl or the full class path of a SSLOptionsFactory.
-                        Calling this method will use default SSL options (see SSLOptions.SSLOptions()). This is thus a shortcut for withSSL(new SSLOptions()).
-                        Note that if SSL is enabled, the driver will not connect to any Cassandra nodes that doesn't have SSL enabled and it is strongly advised to
-                        enable SSL on every Cassandra node if you plan on using SSL in the driver.
+                        Enables the use of SSL for the created session. The string is either nil which uses the
+                        default SslEngineFactory, or the full class path of a SSLOptionsFactory (a CPO factory
+                        class producing a com.datastax.oss.driver.api.core.ssl.SslEngineFactory instance).
+                        Note that if SSL is enabled, the driver will not connect to any Cassandra nodes that doesn't
+                        have SSL enabled and it is strongly advised to enable SSL on every Cassandra node if you
+                        plan on using SSL in the driver. Mutually exclusive in practice with sslEngineOptions
+                        below (a custom factory takes precedence over declarative options).
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="sslEngineOptions" type="ctSslEngineOptions" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>
+                        Declarative configuration for the driver's built-in DefaultSslEngineFactory, as an
+                        alternative to writing a custom SSLOptionsFactory (advanced.ssl-engine-factory.*).
                     </xs:documentation>
                 </xs:annotation>
             </xs:element>
             <xs:element name="initialListeners" type="xs:string" minOccurs="0">
                 <xs:annotation>
                     <xs:documentation>
-                        Register the provided listeners in the newly created cluster.
-                        Add in the fully qualified class name for a ListenerFactory
+                        Register the provided node state listeners in the newly created session.
+                        Add in the fully qualified class name for a ListenerFactory (a CPO factory class
+                        producing a Collection of com.datastax.oss.driver.api.core.metadata.NodeStateListener).
                         Note: repeated calls to this method will override the previous ones.
                     </xs:documentation>
                 </xs:annotation>
             </xs:element>
-            <xs:element name="jmxReporting" type="xs:boolean" default="true" minOccurs="0">
+            <xs:element name="schemaChangeListeners" type="xs:string" minOccurs="0">
                 <xs:annotation>
                     <xs:documentation>
-                        Disables JMX reporting of the metrics.
-                        JMX reporting is enabled by default (see Metrics) but can be disabled using this option. If metrics are disabled, this is a no-op.
+                        Register the provided schema change listeners in the newly created session.
+                        Add in the fully qualified class name for a SchemaChangeListenerFactory (a CPO factory
+                        class producing a Collection of
+                        com.datastax.oss.driver.api.core.metadata.schema.SchemaChangeListener).
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="metricsOptions" type="ctMetricsOptions" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>
+                        Configures which session- and node-level metrics the driver collects, and how (metrics
+                        factory, id generation, and per-metric histogram tuning). Metrics are disabled by
+                        default unless at least one metric name is listed in sessionEnabled/nodeEnabled.
                     </xs:documentation>
                 </xs:annotation>
             </xs:element>
             <xs:element name="poolingOptions" type="ctPoolingOptions" minOccurs="0">
                 <xs:annotation>
                     <xs:documentation>
-                        Options related to connection pooling.
-                        The driver uses connections in an asynchronous manner, meaning that multiple requests can be submitted
-                        on the same connection at the same time. Therefore only a relatively small number of connections is needed.
-                        For each host, the driver uses a connection pool that may have a variable size (it will automatically adjust to the current load).
-
-                        With ProtocolVersion#V2 or below, there are at most 128 simultaneous requests per connection, so the pool defaults to a variable size.
-                        You will typically raise the maximum capacity by adding more connections with setMaxRequestsPerConnection(HostDistance, int).
-
-                        With ProtocolVersion#V3 or above, there are up to 32768 requests per connection, and the pool defaults to a fixed size of 1.
-                        You will typically raise the maximum capacity by allowing more simultaneous requests per connection
-                        (setMaxRequestsPerConnection(HostDistance, int)).
-
-                        All parameters can be separately set for LOCAL and REMOTE hosts (HostDistance). For IGNORED hosts, no connections are created so
-                        these settings cannot be changed.
+                        Options related to connection pooling and per-connection request limits
+                        (advanced.connection.*).
                     </xs:documentation>
                 </xs:annotation>
             </xs:element>
             <xs:element name="socketOptions" type="ctSocketOptions" minOccurs="0">
                 <xs:annotation>
                     <xs:documentation>
-                        Sets the SocketOptions to use for the newly created Cluster.
-                        If no socket options are set through this method, default socket options will be used.
+                        Sets the socket-level options to use for connections to Cassandra nodes (advanced.socket.*).
                     </xs:documentation>
                 </xs:annotation>
             </xs:element>
             <xs:element name="queryOptions" type="ctQueryOptions" minOccurs="0">
                 <xs:annotation>
                     <xs:documentation>
-                        Sets the QueryOptions to use for the newly created Cluster.
-                        If no query options are set through this method, default query options will be used.
+                        Sets the default request-level options (consistency, paging, idempotence) for the session.
                     </xs:documentation>
                 </xs:annotation>
             </xs:element>
             <xs:element name="addressTranslater" type="xs:string" minOccurs="0">
                 <xs:annotation>
                     <xs:documentation>
-                        Configures the address translater to use for the new cluster.
-                        The string is full class path of a AddressTranslaterFactory.
+                        Configures the address translator to use for the new session.
+                        The fully qualified class name of a driver AddressTranslator implementation
+                        (com.datastax.oss.driver.api.core.addresstranslation.AddressTranslator). The driver
+                        instantiates this class itself via a (DriverContext) constructor.
                     </xs:documentation>
                 </xs:annotation>
             </xs:element>
-            <xs:element name="nettyOptions" type="xs:string" minOccurs="0">
+            <xs:element name="addressTranslatorOptions" type="ctAddressTranslatorOptions" minOccurs="0">
                 <xs:annotation>
                     <xs:documentation>
-                        Set the NettyOptions to use for the newly created Cluster.
-                        The string is full class path of a NettyOptionsFactory.
+                        Configuration for the driver's built-in address translators (FixedHostNameAddressTranslator,
+                        SubnetAddressTranslator), as an alternative to a fully custom translator class.
                     </xs:documentation>
                 </xs:annotation>
             </xs:element>
             <xs:element name="speculativeExecutionPolicy" type="xs:string" minOccurs="0">
                 <xs:annotation>
                     <xs:documentation>
-                        Configures the speculative execution policy to use for the new cluster.
-                        The string is full class path of a SpeculativeExecutionPolicyFactory.
+                        Configures the speculative execution policy to use for the new session.
+                        The fully qualified class name of a driver SpeculativeExecutionPolicy implementation
+                        (com.datastax.oss.driver.api.core.specex.SpeculativeExecutionPolicy). The driver
+                        instantiates this class itself via a (DriverContext, String profileName) constructor.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="speculativeExecutionMaxExecutions" type="xs:int" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>
+                        The maximum number of executions (including the initial one), used by the built-in
+                        ConstantSpeculativeExecutionPolicy (advanced.speculative-execution-policy.max-executions
+                        / SPECULATIVE_EXECUTION_MAX).
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="speculativeExecutionDelayMillis" type="xs:long" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>
+                        The delay between each speculative execution, used by the built-in
+                        ConstantSpeculativeExecutionPolicy (advanced.speculative-execution-policy.delay
+                        / SPECULATIVE_EXECUTION_DELAY).
                     </xs:documentation>
                 </xs:annotation>
             </xs:element>
@@ -367,8 +493,537 @@
                 <xs:annotation>
                     <xs:documentation>
                         Configures the generator that will produce the client-side timestamp sent with each query.
-                        The string is full class path of a TimestampGeneratorFactory.
+                        The fully qualified class name of a driver TimestampGenerator implementation
+                        (com.datastax.oss.driver.api.core.time.TimestampGenerator). The driver instantiates this
+                        class itself via a (DriverContext) constructor.
                     </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="timestampGeneratorOptions" type="ctTimestampGeneratorOptions" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>
+                        Additional tuning options for the built-in timestamp generators (clock source and
+                        drift-warning thresholds).
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="requestOptions" type="ctRequestOptions" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>
+                        Miscellaneous per-request behavior options: keyspace-switch warnings, server-warning
+                        logging, and query trace fetching.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="requestTrackerOptions" type="ctRequestTrackerOptions" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>
+                        Registers request trackers (advanced.request-tracker.classes) and configures the
+                        built-in RequestLogger tracker.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="throttlerOptions" type="ctThrottlerOptions" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>
+                        Configures the session-wide request throttler (advanced.throttler.*): concurrency
+                        limiting, rate limiting, or a custom implementation.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="metadataOptions" type="ctMetadataOptions" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>
+                        Configures schema and topology metadata refresh behavior (advanced.metadata.*).
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="preparedStatementOptions" type="ctPreparedStatementOptions" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>
+                        Configures prepared-statement re-preparation and caching behavior
+                        (advanced.prepared-statements.*).
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="nettyOptions" type="ctNettyOptions" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>
+                        Declarative tuning for the driver's internal Netty event loop groups and timer
+                        (advanced.netty.*). Unlike the removed NettyOptionsFactory (driver 3.x), these values
+                        are plain config, not a pluggable NettyOptions implementation.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="coalescerIntervalMicros" type="xs:long" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>
+                        The reschedule interval for the component that coalesces writes on connections
+                        (advanced.coalescer.reschedule-interval / COALESCER_INTERVAL). Expert-level tuning;
+                        the driver's default is fine for almost all use cases.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="coalescerMaxRuns" type="xs:int" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>
+                        The maximum number of coalescing runs per reschedule interval (COALESCER_MAX_RUNS).
+                        Expert-level tuning.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="sessionLeakThreshold" type="xs:int" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>
+                        The maximum number of live sessions allowed to coexist in this JVM before the driver
+                        logs a leak warning for every new session (advanced.session-leak.threshold
+                        / SESSION_LEAK_THRESHOLD).
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="resolveContactPoints" type="xs:boolean" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>
+                        Whether to resolve the addresses passed as contact points once at startup (true), or
+                        re-resolve them on every connection attempt (false) -- useful in containerized
+                        environments where DNS records change (advanced.resolve-contact-points
+                        / RESOLVE_CONTACT_POINTS).
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+
+    <!-- Load Balancing Options -->
+    <xs:complexType name="ctLoadBalancingOptions">
+        <xs:sequence>
+            <xs:element name="slowReplicaAvoidance" type="xs:boolean" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>
+                        Whether DefaultLoadBalancingPolicy orders replicas by responsiveness/uptime (true) or
+                        simply shuffles them (false) (basic.load-balancing-policy.slow-replica-avoidance).
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="distanceEvaluatorClass" type="xs:string" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>
+                        Fully qualified class name of a custom NodeDistanceEvaluator, constructed by the driver
+                        via a (DriverContext, String profileName) constructor
+                        (advanced.load-balancing-policy.evaluator.class / LOAD_BALANCING_DISTANCE_EVALUATOR_CLASS).
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="dcFailoverMaxNodesPerRemoteDc" type="xs:int" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>
+                        The maximum number of nodes to contact in each remote datacenter for cross-datacenter
+                        failover; 0 (the default) disables failover
+                        (advanced.load-balancing-policy.dc-failover.max-nodes-per-remote-dc).
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="dcFailoverAllowForLocalConsistencyLevels" type="xs:boolean" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>
+                        Whether cross-datacenter failover is allowed for requests using a local consistency
+                        level (LOCAL_ONE, LOCAL_QUORUM, LOCAL_SERIAL).
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="dcFailoverPreferredRemoteDc" type="xs:string" minOccurs="0" maxOccurs="unbounded">
+                <xs:annotation>
+                    <xs:documentation>
+                        An ordered remote datacenter name to prefer when building a failover query plan; repeat
+                        for multiple datacenters, in preference order.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+
+    <!-- SSL Engine Options (declarative alternative to a custom SSLOptionsFactory) -->
+    <xs:complexType name="ctSslEngineOptions">
+        <xs:sequence>
+            <xs:element name="cipherSuite" type="xs:string" minOccurs="0" maxOccurs="unbounded">
+                <xs:annotation>
+                    <xs:documentation>A cipher suite to enable; repeat for multiple suites.</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="hostnameValidation" type="xs:boolean" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>Whether to validate that the server certificate's hostname matches.</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="allowDnsReverseLookupSan" type="xs:boolean" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>Whether to allow a DNS reverse lookup for SAN addresses when contact points are literal IPs.</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="truststorePath" type="xs:string" minOccurs="0"/>
+            <xs:element name="truststorePassword" type="xs:string" minOccurs="0"/>
+            <xs:element name="keystorePath" type="xs:string" minOccurs="0"/>
+            <xs:element name="keystorePassword" type="xs:string" minOccurs="0"/>
+            <xs:element name="keystoreReloadIntervalMinutes" type="xs:long" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>How often to reload the keystore from keystorePath; if absent, it is never reloaded.</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+
+    <!-- Address Translator Options (declarative alternative to a fully custom translator) -->
+    <xs:complexType name="ctAddressTranslatorOptions">
+        <xs:sequence>
+            <xs:element name="advertisedHostname" type="xs:string" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>Used only with FixedHostNameAddressTranslator.</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="subnetAddress" type="ctSubnetAddress" minOccurs="0" maxOccurs="unbounded">
+                <xs:annotation>
+                    <xs:documentation>Used only with SubnetAddressTranslator; repeat for multiple subnets.</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="defaultAddress" type="xs:string" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>Used only with SubnetAddressTranslator: the address to translate to when no subnet matches.</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="resolveAddresses" type="xs:boolean" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>Whether to resolve addresses once on initialization (true) or on each node (re-)connection (false).</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="ctSubnetAddress">
+        <xs:sequence>
+            <xs:element name="cidr" type="xs:string">
+                <xs:annotation>
+                    <xs:documentation>A CIDR block, e.g. "100.64.0.0/15".</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="address" type="xs:string">
+                <xs:annotation>
+                    <xs:documentation>The "host:port" to translate matching addresses to.</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+
+    <!-- Timestamp Generator Options -->
+    <xs:complexType name="ctTimestampGeneratorOptions">
+        <xs:sequence>
+            <xs:element name="forceJavaClock" type="xs:boolean" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>Whether to force the driver to use Java's millisecond-precision system clock instead of the native microsecond-precision clock.</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="driftWarningThresholdMillis" type="xs:long" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>How far in the future timestamps may drift before a warning is logged; 0 disables the warning.</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="driftWarningIntervalSeconds" type="xs:long" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>How often the drift warning is re-logged while timestamps keep drifting above the threshold.</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+
+    <!-- Request Options -->
+    <xs:complexType name="ctRequestOptions">
+        <xs:sequence>
+            <xs:element name="warnIfSetKeyspace" type="xs:boolean" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>Whether a warning is logged when a request changes the session's active keyspace (advanced.request.warn-if-set-keyspace).</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="logWarnings" type="xs:boolean" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>Whether server-generated query warnings are logged by the driver (advanced.request.log-warnings).</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="traceAttempts" type="xs:int" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>How many times the driver retries fetching a query trace if it is not ready yet.</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="traceIntervalMillis" type="xs:long" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>The interval between each query trace fetch attempt.</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="traceConsistencyLevel" type="stConsistencyLevel" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>The consistency level to use when fetching query traces.</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+
+    <!-- Request Tracker Options -->
+    <xs:complexType name="ctRequestTrackerOptions">
+        <xs:sequence>
+            <xs:element name="requestTrackerClass" type="xs:string" minOccurs="0" maxOccurs="unbounded">
+                <xs:annotation>
+                    <xs:documentation>
+                        Fully qualified class name of a RequestTracker to register; repeat for multiple
+                        trackers. The driver provides RequestLogger out of the box (configured below).
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="requestLoggerSuccessEnabled" type="xs:boolean" minOccurs="0"/>
+            <xs:element name="requestLoggerSlowThresholdMillis" type="xs:long" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>The threshold above which a successful request is classified as "slow".</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="requestLoggerSlowEnabled" type="xs:boolean" minOccurs="0"/>
+            <xs:element name="requestLoggerErrorEnabled" type="xs:boolean" minOccurs="0"/>
+            <xs:element name="requestLoggerMaxQueryLength" type="xs:int" minOccurs="0"/>
+            <xs:element name="requestLoggerShowValues" type="xs:boolean" minOccurs="0"/>
+            <xs:element name="requestLoggerMaxValueLength" type="xs:int" minOccurs="0"/>
+            <xs:element name="requestLoggerMaxValues" type="xs:int" minOccurs="0"/>
+            <xs:element name="requestLoggerShowStackTraces" type="xs:boolean" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <!-- Request Throttler Options -->
+    <xs:complexType name="ctThrottlerOptions">
+        <xs:sequence>
+            <xs:element name="throttlerClass" type="xs:string" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>
+                        Fully qualified class name of a RequestThrottler implementation, constructed by the
+                        driver via a (DriverContext) constructor. The driver provides
+                        PassThroughRequestThrottler (default, no throttling), ConcurrencyLimitingRequestThrottler,
+                        and RateLimitingRequestThrottler out of the box.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="maxQueueSize" type="xs:int" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>The maximum number of requests that can be enqueued once the throttling threshold is exceeded.</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="maxConcurrentRequests" type="xs:int" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>Used only by ConcurrencyLimitingRequestThrottler.</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="maxRequestsPerSecond" type="xs:int" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>Used only by RateLimitingRequestThrottler.</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="drainIntervalMillis" type="xs:long" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>Used only by RateLimitingRequestThrottler: how often the throttler attempts to dequeue requests.</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+
+    <!-- Metadata Options -->
+    <xs:complexType name="ctMetadataOptions">
+        <xs:sequence>
+            <xs:element name="schemaEnabled" type="xs:boolean" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>Whether schema metadata (Session.getMetadata().getKeyspaces()) is enabled.</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="schemaRefreshedKeyspace" type="xs:string" minOccurs="0" maxOccurs="unbounded">
+                <xs:annotation>
+                    <xs:documentation>
+                        A keyspace name-matching rule for which schema/token metadata is maintained (exact
+                        inclusion, "!"-prefixed exact exclusion, "/regex/" inclusion, or "!/regex/" exclusion);
+                        repeat for multiple rules. If none are given, all keyspaces are included.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="schemaRequestTimeoutMillis" type="xs:long" minOccurs="0"/>
+            <xs:element name="schemaRequestPageSize" type="xs:int" minOccurs="0"/>
+            <xs:element name="schemaWindowMillis" type="xs:long" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>The debounce window for coalescing bursts of schema-change events.</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="schemaMaxEvents" type="xs:int" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>The maximum number of schema-change events to accumulate before forcing a refresh.</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="topologyWindowMillis" type="xs:long" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>The debounce window for coalescing bursts of topology events.</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="topologyMaxEvents" type="xs:int" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>The maximum number of topology events to accumulate before forcing propagation.</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="tokenMapEnabled" type="xs:boolean" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>Whether token metadata (Session.getMetadata().getTokenMap()) is enabled.</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+
+    <!-- Prepared Statement Options -->
+    <xs:complexType name="ctPreparedStatementOptions">
+        <xs:sequence>
+            <xs:element name="prepareOnAllNodes" type="xs:boolean" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>Whether Session.prepare() calls are re-sent to all other active nodes after succeeding on the first one.</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="reprepareEnabled" type="xs:boolean" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>Whether the driver re-prepares statements on a node that just came back up or joined the cluster.</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="reprepareCheckSystemTable" type="xs:boolean" minOccurs="0"/>
+            <xs:element name="reprepareMaxStatements" type="xs:int" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>The maximum number of statements to reprepare; 0 or negative means no limit.</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="reprepareMaxParallelism" type="xs:int" minOccurs="0"/>
+            <xs:element name="reprepareTimeoutMillis" type="xs:long" minOccurs="0"/>
+            <xs:element name="preparedCacheWeakValues" type="xs:boolean" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>Whether the driver-side prepared statement cache uses weak references for its values.</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+
+    <!-- Netty Options (declarative; see ctCassandraReadWriteConfig#nettyOptions documentation) -->
+    <xs:complexType name="ctNettyOptions">
+        <xs:sequence>
+            <xs:element name="daemonThreads" type="xs:boolean" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>Whether the driver's internal threads are daemon threads.</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="ioGroupSize" type="xs:int" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>The number of I/O threads; 0 means availableProcessors() * 2.</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="ioGroupShutdownQuietPeriodSeconds" type="xs:int" minOccurs="0"/>
+            <xs:element name="ioGroupShutdownTimeoutSeconds" type="xs:int" minOccurs="0"/>
+            <xs:element name="adminGroupSize" type="xs:int" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>The number of admin threads (cluster events, metadata refresh, reconnection scheduling).</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="adminGroupShutdownQuietPeriodSeconds" type="xs:int" minOccurs="0"/>
+            <xs:element name="adminGroupShutdownTimeoutSeconds" type="xs:int" minOccurs="0"/>
+            <xs:element name="timerTickDurationMillis" type="xs:long" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>How often the request-timeout/speculative-execution timer wakes up to check for expired tasks.</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="timerTicksPerWheel" type="xs:int" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>The size of the timer's hashed wheel.</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+
+    <!-- Metrics Options -->
+    <xs:complexType name="ctMetricsOptions">
+        <xs:sequence>
+            <xs:element name="factoryClass" type="xs:string" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>
+                        The metrics library to use: "DefaultMetricsFactory"/"DropwizardMetricsFactory" (default),
+                        "MicrometerMetricsFactory", "MicroProfileMetricsFactory", "NoopMetricsFactory" to force
+                        disable, or a custom fully qualified MetricsFactory class name.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="idGeneratorClass" type="xs:string" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>"DefaultMetricIdGenerator" (name-only, e.g. for Dropwizard) or "TaggingMetricIdGenerator" (name+tags, e.g. for Micrometer).</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="idGeneratorPrefix" type="xs:string" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>An optional prefix prepended to every generated metric name.</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="generateAggregableHistograms" type="xs:boolean" minOccurs="0"/>
+            <xs:element name="sessionEnabled" type="xs:string" minOccurs="0" maxOccurs="unbounded">
+                <xs:annotation>
+                    <xs:documentation>
+                        The name of a session-level metric to enable (e.g. "cql-requests", "bytes-sent",
+                        "connected-nodes"); repeat for multiple metrics. All session metrics are disabled by
+                        default.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="nodeEnabled" type="xs:string" minOccurs="0" maxOccurs="unbounded">
+                <xs:annotation>
+                    <xs:documentation>
+                        The name of a node-level metric to enable (e.g. "cql-messages", "pool.open-connections");
+                        repeat for multiple metrics. All node metrics are disabled by default.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="nodeExpireAfterMinutes" type="xs:long" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>How long to keep a node's metrics registered after it leaves the cluster.</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="sessionCqlRequests" type="ctHistogramOptions" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>Histogram tuning for the "cql-requests" session metric, if enabled.</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="sessionThrottlingDelay" type="ctHistogramOptions" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>Histogram tuning for the "throttling.delay" session metric, if enabled.</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="nodeCqlMessages" type="ctHistogramOptions" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>Histogram tuning for the "cql-messages" node metric, if enabled.</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="ctHistogramOptions">
+        <xs:sequence>
+            <xs:element name="highestLatencyMillis" type="xs:long" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>The largest latency expected to be recorded; used to scale internal data structures.</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="lowestLatencyMillis" type="xs:long" minOccurs="0"/>
+            <xs:element name="significantDigits" type="xs:int" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>The number of significant decimal digits of resolution (Dropwizard: 0-5).</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="refreshIntervalMinutes" type="xs:long" minOccurs="0"/>
+            <xs:element name="sloMillis" type="xs:long" minOccurs="0" maxOccurs="unbounded">
+                <xs:annotation>
+                    <xs:documentation>A service-level-objective latency boundary to guarantee in the histogram; repeat for multiple boundaries (Micrometer only).</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="publishPercentile" type="xs:double" minOccurs="0" maxOccurs="unbounded">
+                <xs:annotation>
+                    <xs:documentation>A percentile (0.0-1.0) to publish as its own time series; repeat for multiple percentiles (Micrometer only).</xs:documentation>
                 </xs:annotation>
             </xs:element>
         </xs:sequence>
@@ -403,20 +1058,28 @@
             <xs:enumeration value="V1"/>
             <xs:enumeration value="V2"/>
             <xs:enumeration value="V3"/>
+            <xs:enumeration value="V4"/>
+            <xs:enumeration value="V5"/>
         </xs:restriction>
     </xs:simpleType>
 
-    <!-- Pooling Options -->
+    <!--
+      Pooling Options. Driver 4.x has no per-HostDistance core/max distinction, connection-request
+      threshold, or pool-checkout-timeout concept (removed: connectionsPerHost, coreConnectionsPerHost,
+      maxConnectionsPerHost, newConnectionThreshold, idleTimeoutSeconds, poolTimeoutMillis); the pool
+      is just a flat size per distance (local/remote), and per-connection request limits are a single
+      global value, not per-distance.
+    -->
     <xs:complexType name="ctPoolingOptions">
         <xs:sequence>
-            <xs:element name="connectionsPerHost" type="ctConnectionsPerHost" minOccurs="0">
+            <xs:element name="connectionPoolLocalSize" type="xs:int" minOccurs="0">
                 <xs:annotation>
-                    <xs:documentation>Sets the core and maximum number of connections per host in one call.</xs:documentation>
+                    <xs:documentation>The number of connections in the pool for a node in the local datacenter (advanced.connection.pool.local.size).</xs:documentation>
                 </xs:annotation>
             </xs:element>
-            <xs:element name="coreConnectionsPerHost" type="ctHostDistanceAndThreshold" minOccurs="0">
+            <xs:element name="connectionPoolRemoteSize" type="xs:int" minOccurs="0">
                 <xs:annotation>
-                    <xs:documentation>Sets the core number of connections per host.</xs:documentation>
+                    <xs:documentation>The number of connections in the pool for a node outside the local datacenter (advanced.connection.pool.remote.size).</xs:documentation>
                 </xs:annotation>
             </xs:element>
             <xs:element name="heartbeatIntervalSeconds" type="xs:int" minOccurs="0">
@@ -424,76 +1087,38 @@
                     <xs:documentation>Sets the heart beat interval, after which a message is sent on an idle connection to make sure it's still alive.</xs:documentation>
                 </xs:annotation>
             </xs:element>
-            <xs:element name="idleTimeoutSeconds" type="xs:int" minOccurs="0">
+            <xs:element name="heartbeatTimeoutSeconds" type="xs:int" minOccurs="0">
                 <xs:annotation>
-                    <xs:documentation>Sets the timeout before an idle connection is removed.</xs:documentation>
+                    <xs:documentation>How long the driver waits for the response to a heartbeat before considering it failed (advanced.heartbeat.timeout).</xs:documentation>
                 </xs:annotation>
             </xs:element>
-            <xs:element name="maxConnectionsPerHost" type="ctHostDistanceAndThreshold" minOccurs="0">
+            <xs:element name="connectInitQueryTimeoutMillis" type="xs:long" minOccurs="0">
                 <xs:annotation>
-                    <xs:documentation>Sets the maximum number of connections per host.</xs:documentation>
+                    <xs:documentation>The timeout for internal queries run just after a connection is opened (advanced.connection.init-query-timeout).</xs:documentation>
                 </xs:annotation>
             </xs:element>
-            <xs:element name="maxRequestsPerConnection" type="ctHostDistanceAndThreshold" minOccurs="0">
+            <xs:element name="setKeyspaceTimeoutMillis" type="xs:long" minOccurs="0">
                 <xs:annotation>
-                    <xs:documentation>Sets the maximum number of requests per connection.</xs:documentation>
+                    <xs:documentation>The timeout used when the driver changes the active keyspace on a connection at runtime (advanced.connection.set-keyspace-timeout).</xs:documentation>
                 </xs:annotation>
             </xs:element>
-            <xs:element name="newConnectionThreshold" type="ctHostDistanceAndThreshold" minOccurs="0">
+            <xs:element name="maxRequestsPerConnection" type="xs:int" minOccurs="0">
                 <xs:annotation>
-                    <xs:documentation>Sets the threshold that triggers the creation of a new connection to a host.</xs:documentation>
+                    <xs:documentation>The maximum number of requests that can execute concurrently on a single connection; must be positive and less than 32768 (advanced.connection.max-requests-per-connection).</xs:documentation>
                 </xs:annotation>
             </xs:element>
-            <xs:element name="poolTimeoutMillis" type="xs:int" minOccurs="0">
+            <xs:element name="maxOrphanRequests" type="xs:int" minOccurs="0">
                 <xs:annotation>
-                    <xs:documentation>Sets the timeout when trying to acquire a connection from a host's pool.</xs:documentation>
+                    <xs:documentation>The maximum number of "orphaned" (timed-out but still unacknowledged) requests before a connection is closed and replaced; must be lower than maxRequestsPerConnection (advanced.connection.max-orphan-requests).</xs:documentation>
                 </xs:annotation>
             </xs:element>
-        </xs:sequence>
-    </xs:complexType>
-
-    <xs:complexType name="ctConnectionsPerHost">
-        <xs:sequence>
-            <xs:element name="distance" type="stHostDistance">
+            <xs:element name="warnOnInitError" type="xs:boolean" minOccurs="0">
                 <xs:annotation>
-                    <xs:documentation>The HostDistance for which to set these threshold.</xs:documentation>
-                </xs:annotation>
-            </xs:element>
-            <xs:element name="core" type="xs:int">
-                <xs:annotation>
-                    <xs:documentation>the core number of connections.</xs:documentation>
-                </xs:annotation>
-            </xs:element>
-            <xs:element name="max" type="xs:int">
-                <xs:annotation>
-                    <xs:documentation>the max number of connections.</xs:documentation>
+                    <xs:documentation>Whether to log non-fatal errors when the driver tries to open a new connection (advanced.connection.warn-on-init-error).</xs:documentation>
                 </xs:annotation>
             </xs:element>
         </xs:sequence>
     </xs:complexType>
-
-    <xs:complexType name="ctHostDistanceAndThreshold">
-        <xs:sequence>
-            <xs:element name="distance" type="stHostDistance">
-                <xs:annotation>
-                    <xs:documentation>The HostDistance for which to set these threshold.</xs:documentation>
-                </xs:annotation>
-            </xs:element>
-            <xs:element name="threshold" type="xs:int">
-                <xs:annotation>
-                    <xs:documentation>the new threshold.</xs:documentation>
-                </xs:annotation>
-            </xs:element>
-        </xs:sequence>
-    </xs:complexType>
-
-    <xs:simpleType name="stHostDistance">
-        <xs:restriction base="xs:string">
-            <xs:enumeration value="IGNORED"/>
-            <xs:enumeration value="LOCAL"/>
-            <xs:enumeration value="REMOTE"/>
-        </xs:restriction>
-    </xs:simpleType>
 
     <!-- Query Options -->
     <xs:complexType name="ctQueryOptions">
@@ -548,11 +1173,6 @@
             <xs:element name="keepAlive" type="xs:boolean" minOccurs="0">
                 <xs:annotation>
                     <xs:documentation>Sets whether to enable TCP keepalive.</xs:documentation>
-                </xs:annotation>
-            </xs:element>
-            <xs:element name="readTimeoutMillis" type="xs:int" minOccurs="0">
-                <xs:annotation>
-                    <xs:documentation>Sets the per-host read timeout in milliseconds.</xs:documentation>
                 </xs:annotation>
             </xs:element>
             <xs:element name="receiveBufferSize" type="xs:int" minOccurs="0">

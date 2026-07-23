@@ -22,7 +22,16 @@ package org.synchronoss.cpo.cassandra;
  * ]]
  */
 
-import com.datastax.driver.core.*;
+import com.datastax.oss.driver.api.core.CqlSession;
+import com.datastax.oss.driver.api.core.cql.BatchStatement;
+import com.datastax.oss.driver.api.core.cql.BatchType;
+import com.datastax.oss.driver.api.core.cql.BatchableStatement;
+import com.datastax.oss.driver.api.core.cql.BoundStatement;
+import com.datastax.oss.driver.api.core.cql.ColumnDefinitions;
+import com.datastax.oss.driver.api.core.cql.ResultSet;
+import com.datastax.oss.driver.api.core.cql.Row;
+import com.datastax.oss.driver.api.core.type.DataType;
+import com.datastax.oss.driver.api.core.type.DataTypes;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
@@ -156,7 +165,7 @@ public class CassandraCpoAdapter extends CpoBaseAdapter<ClusterDataSource> {
 
   @Override
   public <T> long existsBean(CpoQuery query, T bean) throws CpoException {
-    Session session = null;
+    CqlSession session = null;
     long objCount = -1;
 
     try {
@@ -185,7 +194,8 @@ public class CassandraCpoAdapter extends CpoBaseAdapter<ClusterDataSource> {
    * @throws CpoException if an error occurs executing the EXIST functions for this bean
    */
   protected <T> long existsBean(
-      String groupName, T bean, Session session, Collection<CpoWhere> wheres) throws CpoException {
+      String groupName, T bean, CqlSession session, Collection<CpoWhere> wheres)
+      throws CpoException {
     long count = 0;
     Logger localLogger = logger;
 
@@ -214,7 +224,7 @@ public class CassandraCpoAdapter extends CpoBaseAdapter<ClusterDataSource> {
 
         // A single-row result whose one column is a bigint (what count(*) returns) is
         // interpreted as a count style EXIST function; everything else is counted row by row.
-        if (columnDefinitions.size() == 1 && isCountResult(columnDefinitions.getType(0))) {
+        if (columnDefinitions.size() == 1 && isCountResult(columnDefinitions.get(0).getType())) {
           Row next = rs.one();
           if (next != null) {
             qCount = next.getLong(0); // the number of beans that exist
@@ -240,8 +250,7 @@ public class CassandraCpoAdapter extends CpoBaseAdapter<ClusterDataSource> {
   }
 
   private static boolean isCountResult(DataType type) {
-    DataType.Name typeName = type.getName();
-    return typeName == DataType.Name.BIGINT || typeName == DataType.Name.COUNTER;
+    return type.equals(DataTypes.BIGINT) || type.equals(DataTypes.COUNTER);
   }
 
   /**
@@ -257,20 +266,20 @@ public class CassandraCpoAdapter extends CpoBaseAdapter<ClusterDataSource> {
   /**
    * getReadSession returns the read session for Cassandra
    *
-   * @return A Session bean for reading
+   * @return A CqlSession bean for reading
    * @throws CpoException An exception occurred
    */
-  protected Session getReadSession() throws CpoException {
+  protected CqlSession getReadSession() throws CpoException {
     return sessionStrategy.getReadSession();
   }
 
   /**
    * getWriteSession returns the write session for Cassandra
    *
-   * @return A Session bean for writing
+   * @return A CqlSession bean for writing
    * @throws CpoException An exception occurred
    */
-  protected Session getWriteSession() throws CpoException {
+  protected CqlSession getWriteSession() throws CpoException {
     return sessionStrategy.getWriteSession();
   }
 
@@ -286,7 +295,7 @@ public class CassandraCpoAdapter extends CpoBaseAdapter<ClusterDataSource> {
     List<CpoAttribute> attributes = new ArrayList<>();
 
     if (expression != null && !expression.isEmpty()) {
-      Session session;
+      CqlSession session;
       ResultSet rs;
       try {
         session = getWriteSession();
@@ -294,14 +303,15 @@ public class CassandraCpoAdapter extends CpoBaseAdapter<ClusterDataSource> {
         ColumnDefinitions columnDefs = rs.getColumnDefinitions();
         for (int i = 0; i < columnDefs.size(); i++) {
           CpoAttribute attribute = new CassandraCpoAttribute();
-          attribute.setDataName(columnDefs.getName(i));
+          String columnName = columnDefs.get(i).getName().asInternal();
+          attribute.setDataName(columnName);
 
           DataTypeMapEntry<?> dataTypeMapEntry =
-              metaDescriptor.getDataTypeMapEntry(columnDefs.getType(i).getName().ordinal());
+              metaDescriptor.getDataTypeMapEntry(columnDefs.get(i).getType().getProtocolCode());
           attribute.setDataType(dataTypeMapEntry.dataTypeName());
           attribute.setDataTypeInt(dataTypeMapEntry.dataTypeInt());
           attribute.setJavaType(dataTypeMapEntry.javaClass().getName());
-          attribute.setJavaName(dataTypeMapEntry.makeJavaName(columnDefs.getName(i)));
+          attribute.setJavaName(dataTypeMapEntry.makeJavaName(columnName));
 
           attributes.add(attribute);
         }
@@ -314,19 +324,19 @@ public class CassandraCpoAdapter extends CpoBaseAdapter<ClusterDataSource> {
   }
 
   private ResultSet executeBatchStatements(
-      Session session, ArrayList<CassandraBoundStatementFactory> statementFactories)
+      CqlSession session, ArrayList<CassandraBoundStatementFactory> statementFactories)
       throws Exception {
     ResultSet resultSet;
 
-    ArrayList<BoundStatement> boundStatements = new ArrayList<>(statementFactories.size());
+    ArrayList<BatchableStatement<?>> boundStatements = new ArrayList<>(statementFactories.size());
 
     for (CassandraBoundStatementFactory factory : statementFactories) {
       boundStatements.add(factory.getBoundStatement());
     }
 
     try {
-      BatchStatement batchStatement = new BatchStatement();
-      batchStatement.addAll(boundStatements);
+      BatchStatement batchStatement =
+          BatchStatement.builder(BatchType.LOGGED).addStatements(boundStatements).build();
       resultSet = session.execute(batchStatement);
     } finally {
       for (CassandraBoundStatementFactory factory : statementFactories) {
@@ -337,7 +347,7 @@ public class CassandraCpoAdapter extends CpoBaseAdapter<ClusterDataSource> {
   }
 
   private ResultSet executeBoundStatement(
-      Session session, CassandraBoundStatementFactory boundStatementFactory) throws Exception {
+      CqlSession session, CassandraBoundStatementFactory boundStatementFactory) throws Exception {
     ResultSet resultSet;
     try {
       resultSet = session.execute(boundStatementFactory.getBoundStatement());
@@ -356,7 +366,7 @@ public class CassandraCpoAdapter extends CpoBaseAdapter<ClusterDataSource> {
       Collection<CpoOrderBy> orderBy,
       Collection<CpoNativeFunction> nativeExpressions)
       throws CpoException {
-    Session sess = null;
+    CqlSession sess = null;
     long updateCount = 0;
 
     try {
@@ -393,7 +403,7 @@ public class CassandraCpoAdapter extends CpoBaseAdapter<ClusterDataSource> {
       Collection<CpoWhere> wheres,
       Collection<CpoOrderBy> orderBy,
       Collection<CpoNativeFunction> nativeExpressions,
-      Session sess)
+      CqlSession sess)
       throws CpoException {
     Logger localLogger = bean == null ? logger : LoggerFactory.getLogger(bean.getClass());
     CpoClass cpoClass;
@@ -444,7 +454,7 @@ public class CassandraCpoAdapter extends CpoBaseAdapter<ClusterDataSource> {
       Collection<CpoOrderBy> orderBy,
       Collection<CpoNativeFunction> nativeExpressions)
       throws CpoException {
-    Session sess;
+    CqlSession sess;
     long updateCount = 0;
 
     try {
@@ -481,7 +491,7 @@ public class CassandraCpoAdapter extends CpoBaseAdapter<ClusterDataSource> {
       Collection<CpoWhere> wheres,
       Collection<CpoOrderBy> orderBy,
       Collection<CpoNativeFunction> nativeExpressions,
-      Session sess)
+      CqlSession sess)
       throws CpoException {
     CpoClass cpoClass;
     List<CpoFunction> cpoFunctions;
@@ -548,7 +558,7 @@ public class CassandraCpoAdapter extends CpoBaseAdapter<ClusterDataSource> {
       Collection<CpoOrderBy> orderBy,
       Collection<CpoNativeFunction> nativeExpressions)
       throws CpoException {
-    Session session = null;
+    CqlSession session = null;
     T result = null;
 
     try {
@@ -585,7 +595,7 @@ public class CassandraCpoAdapter extends CpoBaseAdapter<ClusterDataSource> {
       Collection<CpoWhere> wheres,
       Collection<CpoOrderBy> orderBy,
       Collection<CpoNativeFunction> nativeExpressions,
-      Session sess)
+      CqlSession sess)
       throws CpoException {
     T criteriaObj = bean;
     boolean recordsExist = false;
@@ -634,8 +644,8 @@ public class CassandraCpoAdapter extends CpoBaseAdapter<ClusterDataSource> {
         ColumnDefinitions columnDefs = rs.getColumnDefinitions();
 
         if ((columnDefs.size() == 2)
-            && "CPO_ATTRIBUTE".equalsIgnoreCase(columnDefs.getName(1))
-            && "CPO_VALUE".equalsIgnoreCase(columnDefs.getName(2))) {
+            && "CPO_ATTRIBUTE".equalsIgnoreCase(columnDefs.get(1).getName().asInternal())
+            && "CPO_VALUE".equalsIgnoreCase(columnDefs.get(2).getName().asInternal())) {
           for (Row row : rs) {
             recordsExist = true;
             recordCount++;
@@ -650,27 +660,30 @@ public class CassandraCpoAdapter extends CpoBaseAdapter<ClusterDataSource> {
               attributesSet++;
             }
           }
-        } else if (!rs.isExhausted()) {
-          recordsExist = true;
-          recordCount++;
+        } else {
           Row row = rs.one();
-          for (int k = 0; k < columnDefs.size(); k++) {
-            CassandraCpoAttribute attribute =
-                (CassandraCpoAttribute) cpoClass.getAttributeData(columnDefs.getName(k));
+          if (row != null) {
+            recordsExist = true;
+            recordCount++;
+            for (int k = 0; k < columnDefs.size(); k++) {
+              CassandraCpoAttribute attribute =
+                  (CassandraCpoAttribute)
+                      cpoClass.getAttributeData(columnDefs.get(k).getName().asInternal());
 
-            if (attribute != null) {
-              attribute.invokeSetter(
-                  rObj,
-                  new CassandraResultSetCpoData(
-                      CassandraMethodMapper.getMethodMapper(), row, attribute, k));
-              attributesSet++;
+              if (attribute != null) {
+                attribute.invokeSetter(
+                    rObj,
+                    new CassandraResultSetCpoData(
+                        CassandraMethodMapper.getMethodMapper(), row, attribute, k));
+                attributesSet++;
+              }
             }
-          }
 
-          if (rs.one() != null) {
-            String msg = "processSelectGroup(T, String) failed: Multiple Records Returned";
-            localLogger.error(msg);
-            throw new CpoException(msg);
+            if (rs.one() != null) {
+              String msg = "processSelectGroup(T, String) failed: Multiple Records Returned";
+              localLogger.error(msg);
+              throw new CpoException(msg);
+            }
           }
         }
         criteriaObj = rObj;
@@ -704,7 +717,7 @@ public class CassandraCpoAdapter extends CpoBaseAdapter<ClusterDataSource> {
       Collection<CpoNativeFunction> nativeExpressions,
       boolean useRetrieve)
       throws CpoException {
-    Session session = null;
+    CqlSession session = null;
 
     try {
       session = getReadSession();
@@ -742,7 +755,7 @@ public class CassandraCpoAdapter extends CpoBaseAdapter<ClusterDataSource> {
       Collection<CpoWhere> wheres,
       Collection<CpoOrderBy> orderBy,
       Collection<CpoNativeFunction> nativeExpressions,
-      Session sess,
+      CqlSession sess,
       boolean useRetrieve)
       throws CpoException {
     Logger localLogger = criteria == null ? logger : LoggerFactory.getLogger(criteria.getClass());
@@ -790,7 +803,7 @@ public class CassandraCpoAdapter extends CpoBaseAdapter<ClusterDataSource> {
       attributes = new CpoAttribute[columnCount];
 
       for (int k = 0; k < columnCount; k++) {
-        attributes[k] = resultClass.getAttributeData(columnDefs.getName(k));
+        attributes[k] = resultClass.getAttributeData(columnDefs.get(k).getName().asInternal());
       }
 
       // resolved once per query, not once per row
@@ -808,8 +821,8 @@ public class CassandraCpoAdapter extends CpoBaseAdapter<ClusterDataSource> {
                 @Override
                 public boolean tryAdvance(Consumer<? super T> action) {
                   try {
-                    if (rs.isExhausted()) return false;
                     Row row = rs.one();
+                    if (row == null) return false;
                     T bean = null;
                     try {
                       bean = (T) resultConstructor.newInstance();
@@ -859,7 +872,7 @@ public class CassandraCpoAdapter extends CpoBaseAdapter<ClusterDataSource> {
       if (boundStatementFactory != null) boundStatementFactory.release();
       String msg =
           "processSelectGroup(String groupName, C criteria, T result, CpoWhere where,"
-              + " Collection orderBy, Session sess) failed. Error:";
+              + " Collection orderBy, CqlSession sess) failed. Error:";
       localLogger.error(msg, t);
       throw new CpoException(msg, t);
     }
@@ -878,7 +891,7 @@ public class CassandraCpoAdapter extends CpoBaseAdapter<ClusterDataSource> {
    * @return The selected group groupName
    * @throws CpoException An exception occurred
    */
-  protected <T> Crud adjustCrud(T bean, Crud crud, String groupName, Session session)
+  protected <T> Crud adjustCrud(T bean, Crud crud, String groupName, CqlSession session)
       throws CpoException {
     Crud retType = crud;
     long objCount;

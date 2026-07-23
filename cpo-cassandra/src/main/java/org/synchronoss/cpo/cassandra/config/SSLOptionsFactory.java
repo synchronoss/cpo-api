@@ -22,10 +22,10 @@ package org.synchronoss.cpo.cassandra.config;
  * ]]
  */
 
-import com.datastax.driver.core.SSLOptions;
+import com.datastax.oss.driver.api.core.ssl.SslEngineFactory;
 
 /**
- * FactoryMethod for creating Cassandra SSLOptions
+ * FactoryMethod for creating a Cassandra SslEngineFactory
  *
  * @author dberry
  */
@@ -44,9 +44,9 @@ public abstract class SSLOptionsFactory implements FactoryMethodName {
   }
 
   /**
-   * Create the SSLOptions
+   * Create the SslEngineFactory
    *
-   * @return The SSLOptions
+   * @return The SslEngineFactory
    */
-  public abstract SSLOptions createSSLOptions();
+  public abstract SslEngineFactory createSSLOptions();
 }

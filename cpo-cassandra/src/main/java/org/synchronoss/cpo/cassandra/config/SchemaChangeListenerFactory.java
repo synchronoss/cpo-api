@@ -22,31 +22,33 @@ package org.synchronoss.cpo.cassandra.config;
  * ]]
  */
 
-import com.datastax.driver.core.policies.RetryPolicy;
+import com.datastax.oss.driver.api.core.metadata.schema.SchemaChangeListener;
+import java.util.Collection;
 
 /**
- * FactoryMethod for creating a Cassandra RetryPolicy
+ * FactoryMethod for creating the collection of SchemaChangeListener to register with the Cassandra
+ * session
  *
  * @author dberry
  */
-public abstract class RetryPolicyFactory implements FactoryMethodName {
+public abstract class SchemaChangeListenerFactory implements FactoryMethodName {
 
-  /** Constructs a RetryPolicyFactory */
-  public RetryPolicyFactory() {}
+  /** Constructs a SchemaChangeListenerFactory */
+  public SchemaChangeListenerFactory() {}
 
   /**
-   * Get the factory method name
+   * Gets the factory method name
    *
-   * @return The method name
+   * @return The factory method name
    */
   public String getFactoryMethodName() {
-    return "createRetryPolicy";
+    return "createSchemaChangeListeners";
   }
 
   /**
-   * Create the RetryPolicy
+   * Create the listeners
    *
-   * @return The RetryPolicy
+   * @return A collection of SchemaChangeListener
    */
-  public abstract RetryPolicy createRetryPolicy();
+  public abstract Collection<SchemaChangeListener> createSchemaChangeListeners();
 }

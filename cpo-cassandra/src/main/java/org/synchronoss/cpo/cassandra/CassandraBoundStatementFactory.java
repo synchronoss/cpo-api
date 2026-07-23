@@ -22,8 +22,9 @@ package org.synchronoss.cpo.cassandra;
  * ]]
  */
 
-import com.datastax.driver.core.BoundStatement;
-import com.datastax.driver.core.Session;
+import com.datastax.oss.driver.api.core.CqlSession;
+import com.datastax.oss.driver.api.core.cql.BoundStatement;
+import com.datastax.oss.driver.api.core.cql.PreparedStatement;
 import java.util.Collection;
 import java.util.List;
 import org.slf4j.Logger;
@@ -49,6 +50,7 @@ public class CassandraBoundStatementFactory extends CpoStatementFactory implemen
 
   private static final Logger logger =
       LoggerFactory.getLogger(CassandraBoundStatementFactory.class);
+  private final PreparedStatement preparedStatement;
   private BoundStatement boundStatement;
 
   /**
@@ -70,7 +72,7 @@ public class CassandraBoundStatementFactory extends CpoStatementFactory implemen
    * @throws CpoException if a CPO error occurs
    */
   public <T> CassandraBoundStatementFactory(
-      Session sess,
+      CqlSession sess,
       CassandraCpoAdapter cassandraCpoAdapter,
       CpoClass criteria,
       CpoFunction function,
@@ -88,9 +90,9 @@ public class CassandraBoundStatementFactory extends CpoStatementFactory implemen
 
     getLocalLogger().debug("CpoFunction SQL = <" + sql + ">");
     try {
-      boundStatement = sess.prepare(sql).bind();
-      boundStatement.setFetchSize(cassandraCpoAdapter.getFetchSize());
+      preparedStatement = sess.prepare(sql);
       setBindValues(bindValues);
+      boundStatement = boundStatement.setPageSize(cassandraCpoAdapter.getFetchSize());
     } catch (Throwable t) {
       getLocalLogger()
           .error(
@@ -105,6 +107,49 @@ public class CassandraBoundStatementFactory extends CpoStatementFactory implemen
   @Override
   protected MethodMapper getMethodMapper() {
     return CassandraMethodMapper.getMethodMapper();
+  }
+
+  /**
+   * Binds every value in a single call, rather than one call per bind variable. Overridden from
+   * {@link CpoStatementFactory#setBindValues} because driver 4.x's {@code BoundStatement} is
+   * immutable -- every individual {@code setXxx(index, value)} call returns a new instance instead
+   * of mutating in place -- so building the full value array once and calling {@link
+   * PreparedStatement#bind(Object...)} is both simpler and avoids that pitfall entirely.
+   *
+   * @param bindValues the bind values to apply to the underlying statement, in parameter order;
+   *     {@code null} is treated as no bind values
+   * @throws CpoException if a value could not be resolved for binding
+   */
+  @Override
+  public void setBindValues(Collection<BindAttribute> bindValues) throws CpoException {
+    Object[] values = new Object[bindValues == null ? 0 : bindValues.size()];
+
+    if (bindValues != null) {
+      int i = 0;
+      for (BindAttribute bindAttr : bindValues) {
+        Object bindObject = bindAttr.bindObject();
+        CpoAttribute cpoAttribute = bindAttr.cpoAttribute();
+
+        if (getMethodMapper().getDataMethodMapEntry(bindObject.getClass()) != null) {
+          // a raw datastore-typed literal (e.g. a dynamic where-clause value): bind as-is
+          getLocalLogger()
+              .debug(
+                  "{}={}",
+                  cpoAttribute == null ? bindAttr.name() : cpoAttribute.getDataName(),
+                  bindObject);
+          values[i] = bindObject;
+        } else {
+          // bindObject is the bean; extract and transform the attribute's value
+          CpoData cpoData = getCpoData(cpoAttribute, i);
+          Object param = cpoData.transformOut(cpoAttribute.invokeGetter(bindObject));
+          getLocalLogger().debug("{}={}", cpoAttribute.getDataName(), param);
+          values[i] = param;
+        }
+        i++;
+      }
+    }
+
+    boundStatement = preparedStatement.bind(values);
   }
 
   @Override
@@ -129,5 +174,17 @@ public class CassandraBoundStatementFactory extends CpoStatementFactory implemen
    */
   public BoundStatement getBoundStatement() {
     return boundStatement;
+  }
+
+  /**
+   * Replaces the BoundStatement held by this factory. Driver 4.x's BoundStatement is immutable:
+   * every {@code setXxx(index, value)} call returns a new instance rather than mutating in place,
+   * so callers that individually adjust a single bound value (e.g. paging) must write the result
+   * back here.
+   *
+   * @param boundStatement The new BoundStatement instance
+   */
+  void setBoundStatement(BoundStatement boundStatement) {
+    this.boundStatement = boundStatement;
   }
 }

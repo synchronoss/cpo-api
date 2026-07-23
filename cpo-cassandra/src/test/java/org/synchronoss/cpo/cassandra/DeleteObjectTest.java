@@ -25,9 +25,8 @@ package org.synchronoss.cpo.cassandra;
 import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.fail;
 
-import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.ArrayList;
-import java.util.Date;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.cassandra.meta.CassandraCpoMetaDescriptor;
@@ -80,7 +79,7 @@ public class DeleteObjectTest {
 
     valObj.setAttrVarChar("testDelete");
     valObj.setAttrInt(3);
-    Date ts = new Timestamp(System.currentTimeMillis());
+    Instant ts = Instant.ofEpochMilli(System.currentTimeMillis());
 
     //    if (!metaDescriptor.isSupportsMillis()) {
     //      ts.setNanos(0);

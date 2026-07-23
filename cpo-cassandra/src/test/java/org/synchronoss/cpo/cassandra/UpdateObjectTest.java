@@ -24,9 +24,8 @@ package org.synchronoss.cpo.cassandra;
 
 import static org.testng.Assert.*;
 
-import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import org.synchronoss.cpo.cassandra.meta.CassandraCpoMetaDescriptor;
 import org.synchronoss.cpo.core.CpoAdapter;
@@ -80,7 +79,7 @@ public class UpdateObjectTest {
 
     valObj.setAttrVarChar("testUpdate");
     valObj.setAttrInt(3);
-    Date ts = new Timestamp(System.currentTimeMillis());
+    Instant ts = Instant.ofEpochMilli(System.currentTimeMillis());
 
     //    if (!metaDescriptor.isSupportsMillis()) {
     //      ts.setNanos(0);

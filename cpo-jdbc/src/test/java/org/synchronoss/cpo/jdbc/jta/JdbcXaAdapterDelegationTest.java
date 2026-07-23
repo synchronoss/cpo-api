@@ -145,7 +145,10 @@ public class JdbcXaAdapterDelegationTest {
 
       // the EXIST expression already has a WHERE clause, so extra wheres must interleave via AND
       Collection<CpoWhere> wheres = new ArrayList<>();
-      wheres.add(cpoXaAdapter.startAnd(ValueObject.ATTR_ID, Comparison.EQ, IDB + 3).build());
+      wheres.add(
+          CpoWhereBuilder.start(cpoXaAdapter)
+              .and(ValueObject.ATTR_ID, Comparison.EQ, IDB + 3)
+              .build());
       assertEquals(
           cpoXaAdapter.existsBean(CpoQuery.group(ValueObject.FG_EXIST_NULL).wheres(wheres), vo3),
           1);

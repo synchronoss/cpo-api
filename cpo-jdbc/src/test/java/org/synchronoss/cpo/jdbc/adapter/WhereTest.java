@@ -33,6 +33,7 @@ import org.synchronoss.cpo.core.CpoAdapterFactoryManager;
 import org.synchronoss.cpo.core.CpoOrderBy;
 import org.synchronoss.cpo.core.CpoQuery;
 import org.synchronoss.cpo.core.CpoWhere;
+import org.synchronoss.cpo.core.CpoWhereBuilder;
 import org.synchronoss.cpo.core.enums.Comparison;
 import org.synchronoss.cpo.jdbc.ValueObject;
 import org.testng.annotations.AfterClass;
@@ -791,8 +792,8 @@ public class WhereTest {
       // Without the correct parens, this will return multiple rows for a retrieveBean which is a
       // failure
       CpoWhere cw1 =
-          cpoAdapter
-              .startAnd(
+          CpoWhereBuilder.start(cpoAdapter)
+              .and(
                   g ->
                       g.where(ValueObject.ATTR_ID, Comparison.EQ, IDB + 1)
                           .or(ValueObject.ATTR_ID, Comparison.EQ, IDB + 3))
@@ -825,8 +826,8 @@ public class WhereTest {
       // Without the correct parens, this will return multiple rows for a retrieveBean which is a
       // failure
       CpoWhere cw1 =
-          cpoAdapter
-              .startAnd(
+          CpoWhereBuilder.start(cpoAdapter)
+              .and(
                   g ->
                       g.where(ValueObject.ATTR_ID, Comparison.EQ, IDB + 1)
                           .or(ValueObject.ATTR_ID, Comparison.EQ, IDB + 3))

@@ -53,8 +53,8 @@ import org.synchronoss.cpo.core.enums.Logical;
  * an always-true placeholder condition), and a run-time where must be interleaved onto it with an
  * explicit {@code AND}/{@code OR} rather than starting fresh. For that case, start the chain with
  * {@link #and(String, Comparison, Object)}/{@link #or(String, Comparison, Object)} (or their
- * group-taking overloads) instead of {@code where()} — or use the {@link #startAnd} / {@link
- * #startOr} convenience factories, which are equivalent to {@code start(adapter).and(...)} / {@code
+ * group-taking overloads) instead of {@code where()} — or use the {@code and()} / {@code or()}
+ * convenience factories, which are equivalent to {@code start(adapter).and(...)} / {@code
  * start(adapter).or(...)}:
  *
  * <pre>{@code
@@ -93,110 +93,6 @@ public final class CpoWhereBuilder {
    */
   public static CpoWhereBuilder start(CpoAdapter adapter) throws CpoException {
     return new CpoWhereBuilder(adapter);
-  }
-
-  /**
-   * Starts a chain whose sole top-level condition is joined by AND, for interleaving with a query
-   * whose own expression already supplies a base WHERE clause. Equivalent to {@code
-   * start(adapter).and(attr, comp, value)}.
-   *
-   * @param <T> the type of the comparison value
-   * @param adapter the adapter used to create the underlying {@link CpoWhere} nodes
-   * @param attr the name of the bean attribute to compare
-   * @param comp the comparison operator to apply
-   * @param value the value to compare the attribute against
-   * @return a new builder with that one condition already added
-   * @throws CpoException if the underlying where clause cannot be created
-   */
-  public static <T> CpoWhereBuilder startAnd(
-      CpoAdapter adapter, String attr, Comparison comp, T value) throws CpoException {
-    return start(adapter).and(attr, comp, value);
-  }
-
-  /**
-   * Starts a chain whose sole top-level condition is joined by AND, optionally negated, for
-   * interleaving with a query whose own expression already supplies a base WHERE clause. Equivalent
-   * to {@code start(adapter).and(attr, comp, value, not)}.
-   *
-   * @param <T> the type of the comparison value
-   * @param adapter the adapter used to create the underlying {@link CpoWhere} nodes
-   * @param attr the name of the bean attribute to compare
-   * @param comp the comparison operator to apply
-   * @param value the value to compare the attribute against
-   * @param not {@code true} to negate the comparison
-   * @return a new builder with that one condition already added
-   * @throws CpoException if the underlying where clause cannot be created
-   */
-  public static <T> CpoWhereBuilder startAnd(
-      CpoAdapter adapter, String attr, Comparison comp, T value, boolean not) throws CpoException {
-    return start(adapter).and(attr, comp, value, not);
-  }
-
-  /**
-   * Starts a chain whose sole top-level condition is a nested group joined by AND, for interleaving
-   * with a query whose own expression already supplies a base WHERE clause. Equivalent to {@code
-   * start(adapter).and(group)}.
-   *
-   * @param adapter the adapter used to create the underlying {@link CpoWhere} nodes
-   * @param group populates the group's conditions
-   * @return a new builder with that one group already added
-   * @throws CpoException if the group or its conditions cannot be created
-   */
-  public static CpoWhereBuilder startAnd(CpoAdapter adapter, CpoWhereGroup group)
-      throws CpoException {
-    return start(adapter).and(group);
-  }
-
-  /**
-   * Starts a chain whose sole top-level condition is joined by OR, for interleaving with a query
-   * whose own expression already supplies a base WHERE clause. Equivalent to {@code
-   * start(adapter).or(attr, comp, value)}.
-   *
-   * @param <T> the type of the comparison value
-   * @param adapter the adapter used to create the underlying {@link CpoWhere} nodes
-   * @param attr the name of the bean attribute to compare
-   * @param comp the comparison operator to apply
-   * @param value the value to compare the attribute against
-   * @return a new builder with that one condition already added
-   * @throws CpoException if the underlying where clause cannot be created
-   */
-  public static <T> CpoWhereBuilder startOr(
-      CpoAdapter adapter, String attr, Comparison comp, T value) throws CpoException {
-    return start(adapter).or(attr, comp, value);
-  }
-
-  /**
-   * Starts a chain whose sole top-level condition is joined by OR, optionally negated, for
-   * interleaving with a query whose own expression already supplies a base WHERE clause. Equivalent
-   * to {@code start(adapter).or(attr, comp, value, not)}.
-   *
-   * @param <T> the type of the comparison value
-   * @param adapter the adapter used to create the underlying {@link CpoWhere} nodes
-   * @param attr the name of the bean attribute to compare
-   * @param comp the comparison operator to apply
-   * @param value the value to compare the attribute against
-   * @param not {@code true} to negate the comparison
-   * @return a new builder with that one condition already added
-   * @throws CpoException if the underlying where clause cannot be created
-   */
-  public static <T> CpoWhereBuilder startOr(
-      CpoAdapter adapter, String attr, Comparison comp, T value, boolean not) throws CpoException {
-    return start(adapter).or(attr, comp, value, not);
-  }
-
-  /**
-   * Starts a chain whose sole top-level condition is a nested group joined by OR, for interleaving
-   * with a query whose own expression already supplies a base WHERE clause. Equivalent to {@code
-   * start(adapter).or(group)}.
-   *
-   * @param adapter the adapter used to create the underlying {@link CpoWhere} nodes
-   * @param group populates the group's conditions
-   * @return a new builder with that one group already added
-   * @throws CpoException if the group or its conditions cannot be created
-   */
-  public static CpoWhereBuilder startOr(CpoAdapter adapter, CpoWhereGroup group)
-      throws CpoException {
-    return start(adapter).or(group);
   }
 
   private void requireNotAfterSoleInterleavedCondition() {

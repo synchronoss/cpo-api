@@ -121,11 +121,11 @@ public class AdapterDelegationTest {
       assertEquals(cpoAdapter.existsBean(ValueObject.FG_EXIST_NULL, vo2), 1);
 
       // FG_EXIST_NULL's expression already has a baked-in "where id = ?" with no marker, so
-      // this must interleave via startAnd(), which returns the flat AND-joined leaf directly
+      // this must interleave via .nd(), which returns the flat AND-joined leaf directly
       // instead of wrapping it in a root that would render its own leading "WHERE" -- producing
       // invalid CQL with two WHERE keywords.
       Collection<CpoWhere> wheres = new ArrayList<>();
-      wheres.add(cpoAdapter.startAnd("attrInt", Comparison.EQ, 3).build());
+      wheres.add(CpoWhereBuilder.start(cpoAdapter).and("attrInt", Comparison.EQ, 3).build());
       assertEquals(
           cpoAdapter.existsBean(CpoQuery.group(ValueObject.FG_EXIST_NULL).wheres(wheres), vo3), 1);
     } catch (Exception e) {

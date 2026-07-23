@@ -22,29 +22,24 @@ package org.synchronoss.cpo.cassandra;
  * ]]
  */
 
-import com.datastax.oss.driver.api.core.cql.BoundStatement;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.synchronoss.cpo.cassandra.meta.CassandraCpoAttribute;
-import org.synchronoss.cpo.cassandra.meta.CassandraMethodMapEntry;
-import org.synchronoss.cpo.cassandra.meta.CassandraMethodMapper;
 import org.synchronoss.cpo.cassandra.transform.CassandraCpoTransform;
 import org.synchronoss.cpo.core.CpoException;
-import org.synchronoss.cpo.core.helper.ExceptionHelper;
 import org.synchronoss.cpo.core.meta.AbstractBindableCpoData;
 import org.synchronoss.cpo.core.meta.domain.CpoAttribute;
 import org.synchronoss.cpo.core.transform.CpoTransform;
 
 /**
- * Helps manage data transfer between the CPO object and the Cassandra bound statement
+ * Helps manage data transfer between the CPO object and the Cassandra bound statement. Bind values
+ * are actually applied in {@link CassandraBoundStatementFactory#setBindValues}, which builds the
+ * whole value array and binds it in a single {@code PreparedStatement.bind(Object...)} call; this
+ * class only supplies the transform half of the contract (see {@link #transformOut(Object)}), used
+ * to resolve each attribute's value before it goes into that array.
  *
  * @author dberry
  */
 public class CassandraBoundStatementCpoData extends AbstractBindableCpoData {
 
-  private static final Logger logger =
-      LoggerFactory.getLogger(CassandraBoundStatementCpoData.class);
-  private CassandraBoundStatementFactory cpoStatementFactory = null;
+  private final CassandraBoundStatementFactory cpoStatementFactory;
 
   /**
    * Constructs the CassandraBoundStatementCpoData
@@ -57,70 +52,6 @@ public class CassandraBoundStatementCpoData extends AbstractBindableCpoData {
       CassandraBoundStatementFactory cpoStatementFactory, CpoAttribute cpoAttribute, int index) {
     super(cpoAttribute, index);
     this.cpoStatementFactory = cpoStatementFactory;
-  }
-
-  @Override
-  public void invokeSetter(Object instanceObject) throws CpoException {
-    Logger localLogger =
-        instanceObject == null ? logger : LoggerFactory.getLogger(instanceObject.getClass());
-    CpoAttribute cpoAttribute = getCpoAttribute();
-    Object param = transformOut(cpoAttribute.invokeGetter(instanceObject));
-    CassandraMethodMapEntry<?, ?> methodMapEntry =
-        CassandraMethodMapper.getDatasourceMethod(getDataSetterParamType());
-    if (methodMapEntry == null) {
-      throw new CpoException(
-          "Error Retrieveing Cassandra Method for type: " + getDataSetterParamType().getName());
-    }
-    // per-attribute bind values are debug detail, not operational info
-    localLogger.debug("{}={}", cpoAttribute.getDataName(), param);
-    try {
-      // BoundStatement is immutable in driver 4.x: every setter returns a new instance that must
-      // be written back onto the factory, or the bind value is silently dropped.
-      BoundStatement current = cpoStatementFactory.getBoundStatement();
-      BoundStatement updated;
-      switch (methodMapEntry.getMethodType()) {
-        case CassandraMethodMapEntry.METHOD_TYPE_BASIC:
-          updated =
-              (BoundStatement) methodMapEntry.getBsSetter().invoke(current, getIndex(), param);
-          break;
-        case CassandraMethodMapEntry.METHOD_TYPE_ONE:
-          {
-            CassandraCpoAttribute cassandraCpoAttribute = (CassandraCpoAttribute) cpoAttribute;
-            updated =
-                (BoundStatement)
-                    methodMapEntry
-                        .getBsSetter()
-                        .invoke(
-                            current, getIndex(), param, cassandraCpoAttribute.getValueTypeClass());
-          }
-          break;
-        case CassandraMethodMapEntry.METHOD_TYPE_TWO:
-          {
-            CassandraCpoAttribute cassandraCpoAttribute = (CassandraCpoAttribute) cpoAttribute;
-            updated =
-                (BoundStatement)
-                    methodMapEntry
-                        .getBsSetter()
-                        .invoke(
-                            current,
-                            getIndex(),
-                            param,
-                            cassandraCpoAttribute.getKeyTypeClass(),
-                            cassandraCpoAttribute.getValueTypeClass());
-          }
-          break;
-        default:
-          throw new CpoException(
-              "Invalid CassandraMethodMapEntry MetthodType: " + methodMapEntry.getMethodType());
-      }
-      cpoStatementFactory.setBoundStatement(updated);
-    } catch (Exception e) {
-      throw new CpoException(
-          "Error Invoking Cassandra Method: "
-              + methodMapEntry.getBsSetter().getName()
-              + ":"
-              + ExceptionHelper.getLocalizedMessage(e));
-    }
   }
 
   @Override

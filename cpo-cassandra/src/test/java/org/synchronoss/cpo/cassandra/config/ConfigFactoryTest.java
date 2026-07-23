@@ -29,7 +29,14 @@ import com.datastax.oss.driver.api.core.auth.ProgrammaticPlainTextAuthProvider;
 import com.datastax.oss.driver.api.core.metadata.EndPoint;
 import com.datastax.oss.driver.api.core.metadata.Node;
 import com.datastax.oss.driver.api.core.metadata.NodeStateListener;
+import com.datastax.oss.driver.api.core.metadata.schema.AggregateMetadata;
+import com.datastax.oss.driver.api.core.metadata.schema.FunctionMetadata;
+import com.datastax.oss.driver.api.core.metadata.schema.KeyspaceMetadata;
+import com.datastax.oss.driver.api.core.metadata.schema.SchemaChangeListener;
+import com.datastax.oss.driver.api.core.metadata.schema.TableMetadata;
+import com.datastax.oss.driver.api.core.metadata.schema.ViewMetadata;
 import com.datastax.oss.driver.api.core.ssl.SslEngineFactory;
+import com.datastax.oss.driver.api.core.type.UserDefinedType;
 import java.util.Collection;
 import java.util.List;
 import javax.net.ssl.SSLEngine;
@@ -96,6 +103,74 @@ public class ConfigFactoryTest {
     }
   }
 
+  public static class TestSchemaChangeListenerFactory extends SchemaChangeListenerFactory {
+    public TestSchemaChangeListenerFactory() {}
+
+    @Override
+    public Collection<SchemaChangeListener> createSchemaChangeListeners() {
+      return List.of(
+          new SchemaChangeListener() {
+            @Override
+            public void onKeyspaceCreated(KeyspaceMetadata keyspace) {}
+
+            @Override
+            public void onKeyspaceDropped(KeyspaceMetadata keyspace) {}
+
+            @Override
+            public void onKeyspaceUpdated(KeyspaceMetadata current, KeyspaceMetadata previous) {}
+
+            @Override
+            public void onTableCreated(TableMetadata table) {}
+
+            @Override
+            public void onTableDropped(TableMetadata table) {}
+
+            @Override
+            public void onTableUpdated(TableMetadata current, TableMetadata previous) {}
+
+            @Override
+            public void onUserDefinedTypeCreated(UserDefinedType type) {}
+
+            @Override
+            public void onUserDefinedTypeDropped(UserDefinedType type) {}
+
+            @Override
+            public void onUserDefinedTypeUpdated(
+                UserDefinedType current, UserDefinedType previous) {}
+
+            @Override
+            public void onFunctionCreated(FunctionMetadata function) {}
+
+            @Override
+            public void onFunctionDropped(FunctionMetadata function) {}
+
+            @Override
+            public void onFunctionUpdated(FunctionMetadata current, FunctionMetadata previous) {}
+
+            @Override
+            public void onAggregateCreated(AggregateMetadata aggregate) {}
+
+            @Override
+            public void onAggregateDropped(AggregateMetadata aggregate) {}
+
+            @Override
+            public void onAggregateUpdated(AggregateMetadata current, AggregateMetadata previous) {}
+
+            @Override
+            public void onViewCreated(ViewMetadata view) {}
+
+            @Override
+            public void onViewDropped(ViewMetadata view) {}
+
+            @Override
+            public void onViewUpdated(ViewMetadata current, ViewMetadata previous) {}
+
+            @Override
+            public void close() {}
+          });
+    }
+  }
+
   public static class ThrowingAuthProviderFactory extends AuthProviderFactory {
     public ThrowingAuthProviderFactory() {}
 
@@ -110,6 +185,9 @@ public class ConfigFactoryTest {
     assertEquals(new TestAuthProviderFactory().getFactoryMethodName(), "createAuthProvider");
     assertEquals(new TestSSLOptionsFactory().getFactoryMethodName(), "createSSLOptions");
     assertEquals(new TestListenerFactory().getFactoryMethodName(), "createListeners");
+    assertEquals(
+        new TestSchemaChangeListenerFactory().getFactoryMethodName(),
+        "createSchemaChangeListeners");
   }
 
   @Test
@@ -124,6 +202,10 @@ public class ConfigFactoryTest {
     assertTrue(
         new ConfigInstantiator<Collection<NodeStateListener>>()
                 .instantiate(TestListenerFactory.class.getName())
+            instanceof Collection);
+    assertTrue(
+        new ConfigInstantiator<Collection<SchemaChangeListener>>()
+                .instantiate(TestSchemaChangeListenerFactory.class.getName())
             instanceof Collection);
   }
 

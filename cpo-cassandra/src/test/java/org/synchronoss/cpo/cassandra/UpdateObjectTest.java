@@ -32,7 +32,6 @@ import org.synchronoss.cpo.core.CpoAdapter;
 import org.synchronoss.cpo.core.CpoAdapterFactoryManager;
 import org.synchronoss.cpo.core.CpoQuery;
 import org.synchronoss.cpo.core.CpoWhere;
-import org.synchronoss.cpo.core.CpoWhereBuilder;
 import org.synchronoss.cpo.core.enums.Comparison;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
@@ -100,7 +99,7 @@ public class UpdateObjectTest {
     // try the where on the update, should update 0
     try {
       List<CpoWhere> cws = new ArrayList<>();
-      cws.add(CpoWhereBuilder.start(cpoAdapter).where("id", Comparison.EQ, IDB + 2).build());
+      cws.add(cpoAdapter.whereBuilder().where("id", Comparison.EQ, IDB + 2).build());
       valObj.setAttrInt(4);
       cpoAdapter.updateBean(CpoQuery.defaultGroup().wheres(cws), valObj);
       ValueObject rObj = cpoAdapter.retrieveBean(valObj);
@@ -114,7 +113,7 @@ public class UpdateObjectTest {
     // try the where on the update, should update 1
     try {
       List<CpoWhere> cws = new ArrayList<>();
-      cws.add(CpoWhereBuilder.start(cpoAdapter).where("id", Comparison.EQ, IDB + 5).build());
+      cws.add(cpoAdapter.whereBuilder().where("id", Comparison.EQ, IDB + 5).build());
       cpoAdapter.updateBean(CpoQuery.defaultGroup().wheres(cws), valObj);
       ValueObject rObj = cpoAdapter.retrieveBean(valObj);
       assertEquals(rObj.getAttrInt(), valObj.getAttrInt(), "It should be equal since it updated");

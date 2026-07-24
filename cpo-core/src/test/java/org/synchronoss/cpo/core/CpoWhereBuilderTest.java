@@ -138,7 +138,8 @@ public class CpoWhereBuilderTest {
   @Test
   public void testFlatAndChain() throws CpoException {
     CpoWhere where =
-        CpoWhereBuilder.start(cpoAdapter)
+        cpoAdapter
+            .whereBuilder()
             .where("id", Comparison.EQ, 1)
             .and("id", Comparison.EQ, 2)
             .and("id", Comparison.EQ, 3)
@@ -152,10 +153,7 @@ public class CpoWhereBuilderTest {
   @Test
   public void testFlatOrChain() throws CpoException {
     CpoWhere where =
-        CpoWhereBuilder.start(cpoAdapter)
-            .where("id", Comparison.EQ, 1)
-            .or("id", Comparison.EQ, 2)
-            .build();
+        cpoAdapter.whereBuilder().where("id", Comparison.EQ, 1).or("id", Comparison.EQ, 2).build();
 
     String clause = renderClause(where);
     assertTrue(clause.contains("OR"), clause);
@@ -165,7 +163,8 @@ public class CpoWhereBuilderTest {
   @Test
   public void testNestedGroup() throws CpoException {
     CpoWhere where =
-        CpoWhereBuilder.start(cpoAdapter)
+        cpoAdapter
+            .whereBuilder()
             .where("id", Comparison.EQ, 1)
             .and(g -> g.where("id", Comparison.EQ, 2).or("id", Comparison.EQ, 3))
             .build();
@@ -178,7 +177,7 @@ public class CpoWhereBuilderTest {
 
   @Test
   public void testNegation() throws CpoException {
-    CpoWhere where = CpoWhereBuilder.start(cpoAdapter).where("id", Comparison.EQ, 1, true).build();
+    CpoWhere where = cpoAdapter.whereBuilder().where("id", Comparison.EQ, 1, true).build();
 
     String clause = renderClause(where);
     assertTrue(clause.contains("NOT"), clause);
@@ -187,7 +186,8 @@ public class CpoWhereBuilderTest {
   @Test
   public void testCompareToAttribute() throws CpoException {
     CpoWhere where =
-        CpoWhereBuilder.start(cpoAdapter)
+        cpoAdapter
+            .whereBuilder()
             .where("id", Comparison.EQ, null)
             .compareToAttribute("name")
             .build();
@@ -200,24 +200,23 @@ public class CpoWhereBuilderTest {
   @Test
   public void testAttributeAndValueFunction() throws CpoException {
     CpoWhere where =
-        CpoWhereBuilder.start(cpoAdapter)
+        cpoAdapter
+            .whereBuilder()
             .where("id", Comparison.EQ, 1)
             .attributeFunction("UPPER(id)")
             .build();
     assertTrue(renderClause(where).contains("UPPER"));
 
     CpoWhere where2 =
-        CpoWhereBuilder.start(cpoAdapter)
-            .where("id", Comparison.EQ, 1)
-            .valueFunction("UPPER(id)")
-            .build();
+        cpoAdapter.whereBuilder().where("id", Comparison.EQ, 1).valueFunction("UPPER(id)").build();
     assertTrue(renderClause(where2).contains("UPPER"));
   }
 
   @Test
   public void testRightAttributeFunction() throws CpoException {
     CpoWhere where =
-        CpoWhereBuilder.start(cpoAdapter)
+        cpoAdapter
+            .whereBuilder()
             .where("id", Comparison.EQ, null)
             .compareToAttribute("name")
             .rightAttributeFunction("LOWER(name)")
@@ -231,10 +230,7 @@ public class CpoWhereBuilderTest {
   @Test
   public void testStaticValue() throws CpoException {
     CpoWhere where =
-        CpoWhereBuilder.start(cpoAdapter)
-            .where("id", Comparison.EQ, null)
-            .staticValue("42")
-            .build();
+        cpoAdapter.whereBuilder().where("id", Comparison.EQ, null).staticValue("42").build();
 
     String clause = renderClause(where);
     assertTrue(clause.contains("42"), clause);
@@ -243,31 +239,31 @@ public class CpoWhereBuilderTest {
 
   @Test
   public void testModifierBeforeConditionThrows() throws CpoException {
-    CpoWhereBuilder builder = CpoWhereBuilder.start(cpoAdapter);
+    CpoWhereBuilder builder = cpoAdapter.whereBuilder();
     assertThrows(IllegalStateException.class, () -> builder.compareToAttribute("id"));
   }
 
   @Test
   public void testWhereCalledTwiceThrows() throws CpoException {
-    CpoWhereBuilder builder = CpoWhereBuilder.start(cpoAdapter).where("id", Comparison.EQ, 1);
+    CpoWhereBuilder builder = cpoAdapter.whereBuilder().where("id", Comparison.EQ, 1);
     assertThrows(IllegalStateException.class, () -> builder.where("id", Comparison.EQ, 2));
   }
 
   @Test
   public void testBuildWithNoConditionsThrows() throws CpoException {
-    CpoWhereBuilder builder = CpoWhereBuilder.start(cpoAdapter);
+    CpoWhereBuilder builder = cpoAdapter.whereBuilder();
     assertThrows(IllegalStateException.class, builder::build);
   }
 
   @Test
   public void testEmptyGroupThrows() throws CpoException {
-    CpoWhereBuilder builder = CpoWhereBuilder.start(cpoAdapter).where("id", Comparison.EQ, 1);
+    CpoWhereBuilder builder = cpoAdapter.whereBuilder().where("id", Comparison.EQ, 1);
     assertThrows(IllegalStateException.class, () -> builder.and(g -> {}));
   }
 
   @Test
   public void testStartAndInterleavesWithoutLeadingWhere() throws CpoException {
-    CpoWhere where = CpoWhereBuilder.start(cpoAdapter).and("id", Comparison.EQ, 1).build();
+    CpoWhere where = cpoAdapter.whereBuilder().and("id", Comparison.EQ, 1).build();
 
     String clause = renderClause(where);
     assertTrue(clause.contains("AND"), clause);
@@ -276,7 +272,7 @@ public class CpoWhereBuilderTest {
 
   @Test
   public void testStartOrInterleavesWithoutLeadingWhere() throws CpoException {
-    CpoWhere where = CpoWhereBuilder.start(cpoAdapter).or("id", Comparison.EQ, 1).build();
+    CpoWhere where = cpoAdapter.whereBuilder().or("id", Comparison.EQ, 1).build();
 
     String clause = renderClause(where);
     assertTrue(clause.contains("OR"), clause);
@@ -286,7 +282,8 @@ public class CpoWhereBuilderTest {
   @Test
   public void testStartAndWithGroupInterleavesWithoutLeadingWhere() throws CpoException {
     CpoWhere where =
-        CpoWhereBuilder.start(cpoAdapter)
+        cpoAdapter
+            .whereBuilder()
             .and(g -> g.where("id", Comparison.EQ, 1).or("id", Comparison.EQ, 3))
             .build();
 
@@ -299,13 +296,13 @@ public class CpoWhereBuilderTest {
 
   @Test
   public void testSecondTopLevelConditionAfterStartAndThrows() throws CpoException {
-    CpoWhereBuilder builder = CpoWhereBuilder.start(cpoAdapter).and("id", Comparison.EQ, 1);
+    CpoWhereBuilder builder = cpoAdapter.whereBuilder().and("id", Comparison.EQ, 1);
     assertThrows(IllegalStateException.class, () -> builder.and("id", Comparison.EQ, 2));
   }
 
   @Test
   public void testWhereAfterStartAndThrows() throws CpoException {
-    CpoWhereBuilder builder = CpoWhereBuilder.start(cpoAdapter).and("id", Comparison.EQ, 1);
+    CpoWhereBuilder builder = cpoAdapter.whereBuilder().and("id", Comparison.EQ, 1);
     assertThrows(IllegalStateException.class, () -> builder.where("id", Comparison.EQ, 2));
   }
 }

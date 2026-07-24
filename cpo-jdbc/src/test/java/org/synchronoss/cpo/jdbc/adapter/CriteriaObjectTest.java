@@ -32,7 +32,6 @@ import org.synchronoss.cpo.core.CpoAdapter;
 import org.synchronoss.cpo.core.CpoAdapterFactoryManager;
 import org.synchronoss.cpo.core.CpoQuery;
 import org.synchronoss.cpo.core.CpoWhere;
-import org.synchronoss.cpo.core.CpoWhereBuilder;
 import org.synchronoss.cpo.core.enums.Comparison;
 import org.synchronoss.cpo.core.helper.ExceptionHelper;
 import org.synchronoss.cpo.jdbc.CriteriaObject;
@@ -127,7 +126,8 @@ public class CriteriaObjectTest {
       critObject.setMinId(IDB + 3);
       critObject.setMaxId(IDB + 7);
       CpoWhere cw =
-          CpoWhereBuilder.start(cpoAdapter)
+          cpoAdapter
+              .whereBuilder()
               .where(CriteriaObject.ATTR_MINID, Comparison.GT, critObject)
               .and(CriteriaObject.ATTR_MAXID, Comparison.LT, critObject)
               .build();

@@ -39,7 +39,6 @@ import org.synchronoss.cpo.core.CpoException;
 import org.synchronoss.cpo.core.CpoOrderBy;
 import org.synchronoss.cpo.core.CpoQuery;
 import org.synchronoss.cpo.core.CpoWhere;
-import org.synchronoss.cpo.core.CpoWhereBuilder;
 import org.synchronoss.cpo.core.enums.Comparison;
 import org.synchronoss.cpo.core.enums.Logical;
 import org.synchronoss.cpo.core.helper.ExceptionHelper;
@@ -146,9 +145,7 @@ public class JdbcXaAdapterDelegationTest {
       // the EXIST expression already has a WHERE clause, so extra wheres must interleave via AND
       Collection<CpoWhere> wheres = new ArrayList<>();
       wheres.add(
-          CpoWhereBuilder.start(cpoXaAdapter)
-              .and(ValueObject.ATTR_ID, Comparison.EQ, IDB + 3)
-              .build());
+          cpoAdapter.whereBuilder().and(ValueObject.ATTR_ID, Comparison.EQ, IDB + 3).build());
       assertEquals(
           cpoXaAdapter.existsBean(CpoQuery.group(ValueObject.FG_EXIST_NULL).wheres(wheres), vo3),
           1);
@@ -175,14 +172,9 @@ public class JdbcXaAdapterDelegationTest {
       Collection<CpoOrderBy> orderBy = new ArrayList<>();
       orderBy.add(cpoXaAdapter.newOrderBy(ValueObject.ATTR_ID, true));
       Collection<CpoWhere> wheres = new ArrayList<>();
-      wheres.add(
-          CpoWhereBuilder.start(cpoXaAdapter)
-              .where(ValueObject.ATTR_ID, Comparison.GT, IDB)
-              .build());
+      wheres.add(cpoAdapter.whereBuilder().where(ValueObject.ATTR_ID, Comparison.GT, IDB).build());
       CpoWhere where =
-          CpoWhereBuilder.start(cpoXaAdapter)
-              .where(ValueObject.ATTR_ID, Comparison.GT, IDB)
-              .build();
+          cpoAdapter.whereBuilder().where(ValueObject.ATTR_ID, Comparison.GT, IDB).build();
       ValueObject criteria = ValueObjectFactory.createValueObject();
 
       // retrieveBean overloads
@@ -291,9 +283,7 @@ public class JdbcXaAdapterDelegationTest {
       vo1.setAttrVarChar("updated");
       Collection<CpoWhere> updWheres = new ArrayList<>();
       updWheres.add(
-          CpoWhereBuilder.start(cpoXaAdapter)
-              .where(ValueObject.ATTR_ID, Comparison.EQ, IDB + 1)
-              .build());
+          cpoAdapter.whereBuilder().where(ValueObject.ATTR_ID, Comparison.EQ, IDB + 1).build());
       assertEquals(
           cpoXaAdapter.updateBean(
               CpoQuery.group(ValueObject.FG_UPDATE_NULL).wheres(updWheres), vo1),
@@ -303,9 +293,7 @@ public class JdbcXaAdapterDelegationTest {
       updBeans.add(vo1);
       Collection<CpoWhere> updWheres2 = new ArrayList<>();
       updWheres2.add(
-          CpoWhereBuilder.start(cpoXaAdapter)
-              .where(ValueObject.ATTR_ID, Comparison.EQ, IDB + 1)
-              .build());
+          cpoAdapter.whereBuilder().where(ValueObject.ATTR_ID, Comparison.EQ, IDB + 1).build());
       assertEquals(
           cpoXaAdapter.updateBeans(
               CpoQuery.group(ValueObject.FG_UPDATE_NULL).wheres(updWheres2), updBeans),

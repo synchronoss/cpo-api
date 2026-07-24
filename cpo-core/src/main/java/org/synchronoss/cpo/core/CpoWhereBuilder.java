@@ -35,11 +35,14 @@ import org.synchronoss.cpo.core.enums.Logical;
  * protection. This builder derives the correct placement from the order methods are called:
  *
  * <pre>{@code
- * CpoWhere where = CpoWhereBuilder.start(cpoAdapter)
+ * CpoWhere where = cpoAdapter.whereBuilder()
  *     .where("id", Comparison.EQ, valObj)
  *     .and(g -> g.where("id", Comparison.EQ, valObj2).or("id", Comparison.EQ, valObj3))
  *     .build();
  * }</pre>
+ *
+ * <p>{@link CpoAdapter#whereBuilder()} is the usual entry point; {@link #create} is the underlying
+ * static factory it delegates to.
  *
  * <p>{@code where()} must be the first condition in a chain; {@code and()}/{@code or()} add
  * subsequent conditions or nested groups. Modifier methods ({@link #compareToAttribute}, {@link
@@ -53,12 +56,10 @@ import org.synchronoss.cpo.core.enums.Logical;
  * an always-true placeholder condition), and a run-time where must be interleaved onto it with an
  * explicit {@code AND}/{@code OR} rather than starting fresh. For that case, start the chain with
  * {@link #and(String, Comparison, Object)}/{@link #or(String, Comparison, Object)} (or their
- * group-taking overloads) instead of {@code where()} — or use the {@code and()} / {@code or()}
- * convenience factories, which are equivalent to {@code start(adapter).and(...)} / {@code
- * start(adapter).or(...)}:
+ * group-taking overloads) instead of {@code where()}:
  *
  * <pre>{@code
- * CpoWhere where = CpoWhereBuilder.startAnd(cpoAdapter, "id", Comparison.EQ, valObj).build();
+ * CpoWhere where = cpoAdapter.whereBuilder().and("id", Comparison.EQ, valObj).build();
  * }</pre>
  *
  * A chain started this way must contain exactly that one top-level condition or group (nest further
@@ -85,13 +86,14 @@ public final class CpoWhereBuilder {
   }
 
   /**
-   * Starts a new where-clause chain.
+   * Creates a new CpoWhereBuilder. Most callers should use {@link CpoAdapter#whereBuilder()}
+   * instead, which delegates here.
    *
    * @param adapter the adapter used to create the underlying {@link CpoWhere} nodes
    * @return a new builder with no conditions yet
    * @throws CpoException if the underlying where clause cannot be created
    */
-  public static CpoWhereBuilder start(CpoAdapter adapter) throws CpoException {
+  public static CpoWhereBuilder create(CpoAdapter adapter) throws CpoException {
     return new CpoWhereBuilder(adapter);
   }
 

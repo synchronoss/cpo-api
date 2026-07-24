@@ -890,7 +890,7 @@ public interface CpoAdapter extends java.io.Serializable {
    * @throws CpoException An error occurred creating the underlying CpoWhere
    */
   default CpoWhereBuilder whereBuilder() throws CpoException {
-    return CpoWhereBuilder.start(this);
+    return CpoWhereBuilder.create(this);
   }
 
   // ==================================== ACCESSORS ====================================

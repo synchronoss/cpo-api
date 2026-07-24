@@ -25,7 +25,7 @@
 
     <groupId>org.synchronoss.cpo</groupId>
     <artifactId>cpo</artifactId>
-    <version>6.1.0</version>
+    <version>6.1.1-SNAPSHOT</version>
     <packaging>pom</packaging>
     <modules>
         <module>cpo-core</module>

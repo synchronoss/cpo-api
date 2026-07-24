@@ -29,7 +29,7 @@
     <parent>
         <groupId>org.synchronoss.cpo</groupId>
         <artifactId>cpo</artifactId>
-        <version>6.1.1-SNAPSHOT</version>
+        <version>6.2.0</version>
     </parent>
 
     <name>cpo-coverage</name>

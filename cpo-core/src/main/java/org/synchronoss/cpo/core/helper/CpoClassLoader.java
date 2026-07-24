@@ -23,6 +23,7 @@ package org.synchronoss.cpo.core.helper;
  */
 
 import java.io.InputStream;
+import java.net.URL;
 
 /**
  * This is a proxy class designed to handle the different classloaders needed when running in a
@@ -52,6 +53,21 @@ public final class CpoClassLoader {
       is = Thread.currentThread().getContextClassLoader().getResourceAsStream(name);
     }
     return is;
+  }
+
+  /**
+   * Resolves a classpath resource to a {@link URL}, first via this class's own classloader, then
+   * falling back to the current thread's context classloader.
+   *
+   * @param name the resource name to resolve
+   * @return the resource's URL, or {@code null} if it could not be found by either classloader
+   */
+  public static URL getResource(String name) {
+    URL url = CpoClassLoader.class.getResource(name);
+    if (url == null) {
+      url = Thread.currentThread().getContextClassLoader().getResource(name);
+    }
+    return url;
   }
 
   /**

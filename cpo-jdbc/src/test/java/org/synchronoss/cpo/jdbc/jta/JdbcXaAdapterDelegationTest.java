@@ -142,9 +142,10 @@ public class JdbcXaAdapterDelegationTest {
       assertEquals(cpoXaAdapter.existsBean(vo1), 1);
       assertEquals(cpoXaAdapter.existsBean(ValueObject.FG_EXIST_NULL, vo2), 1);
 
-      // the EXIST expression already has a WHERE clause, so extra wheres must use Logical.AND
+      // the EXIST expression already has a WHERE clause, so extra wheres must interleave via AND
       Collection<CpoWhere> wheres = new ArrayList<>();
-      wheres.add(cpoXaAdapter.newWhere(Logical.AND, ValueObject.ATTR_ID, Comparison.EQ, IDB + 3));
+      wheres.add(
+          cpoAdapter.whereBuilder().and(ValueObject.ATTR_ID, Comparison.EQ, IDB + 3).build());
       assertEquals(
           cpoXaAdapter.existsBean(CpoQuery.group(ValueObject.FG_EXIST_NULL).wheres(wheres), vo3),
           1);
@@ -171,8 +172,9 @@ public class JdbcXaAdapterDelegationTest {
       Collection<CpoOrderBy> orderBy = new ArrayList<>();
       orderBy.add(cpoXaAdapter.newOrderBy(ValueObject.ATTR_ID, true));
       Collection<CpoWhere> wheres = new ArrayList<>();
-      wheres.add(cpoXaAdapter.newWhere(Logical.NONE, ValueObject.ATTR_ID, Comparison.GT, IDB));
-      CpoWhere where = cpoXaAdapter.newWhere(Logical.NONE, ValueObject.ATTR_ID, Comparison.GT, IDB);
+      wheres.add(cpoAdapter.whereBuilder().where(ValueObject.ATTR_ID, Comparison.GT, IDB).build());
+      CpoWhere where =
+          cpoAdapter.whereBuilder().where(ValueObject.ATTR_ID, Comparison.GT, IDB).build();
       ValueObject criteria = ValueObjectFactory.createValueObject();
 
       // retrieveBean overloads
@@ -281,7 +283,7 @@ public class JdbcXaAdapterDelegationTest {
       vo1.setAttrVarChar("updated");
       Collection<CpoWhere> updWheres = new ArrayList<>();
       updWheres.add(
-          cpoXaAdapter.newWhere(Logical.NONE, ValueObject.ATTR_ID, Comparison.EQ, IDB + 1));
+          cpoAdapter.whereBuilder().where(ValueObject.ATTR_ID, Comparison.EQ, IDB + 1).build());
       assertEquals(
           cpoXaAdapter.updateBean(
               CpoQuery.group(ValueObject.FG_UPDATE_NULL).wheres(updWheres), vo1),
@@ -291,7 +293,7 @@ public class JdbcXaAdapterDelegationTest {
       updBeans.add(vo1);
       Collection<CpoWhere> updWheres2 = new ArrayList<>();
       updWheres2.add(
-          cpoXaAdapter.newWhere(Logical.NONE, ValueObject.ATTR_ID, Comparison.EQ, IDB + 1));
+          cpoAdapter.whereBuilder().where(ValueObject.ATTR_ID, Comparison.EQ, IDB + 1).build());
       assertEquals(
           cpoXaAdapter.updateBeans(
               CpoQuery.group(ValueObject.FG_UPDATE_NULL).wheres(updWheres2), updBeans),

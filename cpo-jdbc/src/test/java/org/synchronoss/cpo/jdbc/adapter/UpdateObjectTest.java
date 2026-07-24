@@ -32,7 +32,6 @@ import org.synchronoss.cpo.core.CpoAdapterFactoryManager;
 import org.synchronoss.cpo.core.CpoQuery;
 import org.synchronoss.cpo.core.CpoWhere;
 import org.synchronoss.cpo.core.enums.Comparison;
-import org.synchronoss.cpo.core.enums.Logical;
 import org.synchronoss.cpo.jdbc.ValueObject;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
@@ -104,7 +103,7 @@ public class UpdateObjectTest {
     // try the where on the update, should update 0
     try {
       List<CpoWhere> cws = new ArrayList<>();
-      cws.add(cpoAdapter.newWhere(Logical.NONE, ValueObject.ATTR_ID, Comparison.EQ, IDB + 2));
+      cws.add(cpoAdapter.whereBuilder().where(ValueObject.ATTR_ID, Comparison.EQ, IDB + 2).build());
       long updated =
           cpoAdapter.updateBean(CpoQuery.group(ValueObject.FG_UPDATE_NULL).wheres(cws), valObj);
       assertEquals(updated, 0, "Should not have updated anything");
@@ -115,7 +114,7 @@ public class UpdateObjectTest {
     // try the where on the update, should update 1
     try {
       List<CpoWhere> cws = new ArrayList<>();
-      cws.add(cpoAdapter.newWhere(Logical.NONE, ValueObject.ATTR_ID, Comparison.EQ, IDB + 5));
+      cws.add(cpoAdapter.whereBuilder().where(ValueObject.ATTR_ID, Comparison.EQ, IDB + 5).build());
       long updated =
           cpoAdapter.updateBean(CpoQuery.group(ValueObject.FG_UPDATE_NULL).wheres(cws), valObj);
       assertEquals(updated, 1, "Should have updated 1");

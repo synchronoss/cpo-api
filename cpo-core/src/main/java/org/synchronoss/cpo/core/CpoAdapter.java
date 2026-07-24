@@ -42,7 +42,7 @@ import org.synchronoss.cpo.core.meta.domain.CpoAttribute;
  *
  * <pre>{@code
  * CpoAdapter cpo = CpoAdapterFactoryManager.getCpoAdapter("myContext");
- * CpoWhere where = cpo.newWhere(Logical.NONE, "id", Comparison.EQ, 42);
+ * CpoWhere where = cpo.whereBuilder().where("id", Comparison.EQ, 42).build();
  * try (Stream<SomeBean> beans =
  *     cpo.retrieveBeans(CpoQuery.group("byId").where(where), criteria)) {
  *   beans.forEach(...);
@@ -484,7 +484,7 @@ public interface CpoAdapter extends java.io.Serializable {
    * function group and where constraints.
    *
    * <pre>{@code
-   * CpoWhere where = cpo.newWhere(Logical.NONE, "id", Comparison.EQ, 1);
+   * CpoWhere where = cpo.whereBuilder().where("id", Comparison.EQ, 1).build();
    * long count = cpo.existsBean(CpoQuery.group("existsBean").where(where), bean);
    * if (count > 0) {
    *   // the bean exists
@@ -680,7 +680,7 @@ public interface CpoAdapter extends java.io.Serializable {
    * criteria and result beans.
    *
    * <pre>{@code
-   * CpoWhere where = cpo.newWhere(Logical.NONE, "dept", Comparison.EQ, "sales");
+   * CpoWhere where = cpo.whereBuilder().where("dept", Comparison.EQ, "sales").build();
    * CpoOrderBy orderBy = cpo.newOrderBy("name", true);
    * try (Stream<SomeResult> beans =
    *     cpo.retrieveBeans(
@@ -711,7 +711,7 @@ public interface CpoAdapter extends java.io.Serializable {
    * type is also the result type.
    *
    * <pre>{@code
-   * CpoWhere where = cpo.newWhere(Logical.NONE, "dept", Comparison.EQ, "sales");
+   * CpoWhere where = cpo.whereBuilder().where("dept", Comparison.EQ, "sales").build();
    * try (Stream<SomeBean> beans =
    *     cpo.retrieveBeans(CpoQuery.group("listBeans").where(where), criteria)) {
    *   beans.forEach(...);
@@ -874,6 +874,24 @@ public interface CpoAdapter extends java.io.Serializable {
    */
   <T> CpoWhere newWhere(Logical logical, String attr, Comparison comp, T value, boolean not)
       throws CpoException;
+
+  /**
+   * Starts a fluent {@link CpoWhereBuilder} chain for assembling a {@link CpoWhere} tree, including
+   * nested AND/OR groups, without hand-placing {@link Logical} operators.
+   *
+   * <pre>{@code
+   * CpoWhere where = cpo.whereBuilder()
+   *     .where("id", Comparison.EQ, 42)
+   *     .and(g -> g.where("dept", Comparison.EQ, "sales").or("dept", Comparison.EQ, "marketing"))
+   *     .build();
+   * }</pre>
+   *
+   * @return a new CpoWhereBuilder with no conditions yet
+   * @throws CpoException An error occurred creating the underlying CpoWhere
+   */
+  default CpoWhereBuilder whereBuilder() throws CpoException {
+    return CpoWhereBuilder.create(this);
+  }
 
   // ==================================== ACCESSORS ====================================
 

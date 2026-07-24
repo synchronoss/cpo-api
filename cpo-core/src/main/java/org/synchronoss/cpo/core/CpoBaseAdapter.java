@@ -346,36 +346,22 @@ public abstract class CpoBaseAdapter<D> extends CpoAdapterCache implements CpoAd
   /**
    * The CpoAdapter will check to see if this object exists in the datasource.
    *
-   * <pre>Example:
-   * {@code
-   * class SomeObject so = new SomeObject();
-   * long count = 0;
-   * class CpoAdapter cpo = null;
-   *
-   *  try {
-   *    cpo = new CpoAdapter(new JdbcDataSourceInfo(driver, url, user, password,1,1,false));
-   *  } catch (CpoException ce) {
-   *    // Handle the error
-   *    cpo = null;
-   *  }
-   *
-   *  if (cpo!=null) {
-   *    so.setId(1);
-   *    so.setName("SomeName");
-   *    try{
-   *      CpoWhere where = cpo.newCpoWhere(Logical.NONE, id, Comparison.EQ);
-   *      count = cpo.existsObject("SomeExistCheck",so, where);
-   *      if (count>0) {
-   *        // object exists
-   *      } else {
-   *        // object does not exist
-   *      }
-   *    } catch (CpoException ce) {
-   *      // Handle the error
-   *    }
-   *  }
+   * <pre>{@code
+   * SomeObject so = new SomeObject();
+   * so.setId(1);
+   * so.setName("SomeName");
+   * try {
+   *   CpoWhere where = cpo.whereBuilder().where("id", Comparison.EQ, 1).build();
+   *   long count = cpo.existsBean(CpoQuery.group("SomeExistCheck").where(where), so);
+   *   if (count > 0) {
+   *     // object exists
+   *   } else {
+   *     // object does not exist
+   *   }
+   * } catch (CpoException ce) {
+   *   // Handle the error
    * }
-   * </pre>
+   * }</pre>
    *
    * @param query The function group and clauses to apply
    * @param bean This is an object that has been defined within the metadata of the datasource. If

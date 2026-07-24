@@ -32,7 +32,6 @@ import org.synchronoss.cpo.core.CpoAdapterFactoryManager;
 import org.synchronoss.cpo.core.CpoQuery;
 import org.synchronoss.cpo.core.CpoWhere;
 import org.synchronoss.cpo.core.enums.Comparison;
-import org.synchronoss.cpo.core.enums.Logical;
 import org.synchronoss.cpo.core.helper.ExceptionHelper;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
@@ -105,8 +104,12 @@ public class ExistObjectTest {
     String method = "testExistObject:";
 
     try {
+      // defaultGroup()'s EXIST expression already has a baked-in "where id = ?" with no marker,
+      // so this must interleave via .and(), which returns the flat AND-joined leaf directly
+      // instead of wrapping it in a root that would render its own leading "WHERE" -- producing
+      // invalid CQL with two WHERE keywords.
       ValueObject valObj = ValueObjectFactory.createValueObject(IDB + 1);
-      CpoWhere where = cpoAdapter.newWhere(Logical.AND, "attrInt", Comparison.EQ, 3);
+      CpoWhere where = cpoAdapter.whereBuilder().and("attrInt", Comparison.EQ, 3).build();
       ArrayList<CpoWhere> wheres = new ArrayList<>();
       wheres.add(where);
       long count = cpoAdapter.existsBean(CpoQuery.defaultGroup().wheres(wheres), valObj);
@@ -117,7 +120,7 @@ public class ExistObjectTest {
 
     try {
       ValueObject valObj = ValueObjectFactory.createValueObject(IDB + 1);
-      CpoWhere where = cpoAdapter.newWhere(Logical.AND, "attrInt", Comparison.EQ, 5);
+      CpoWhere where = cpoAdapter.whereBuilder().and("attrInt", Comparison.EQ, 5).build();
       ArrayList<CpoWhere> wheres = new ArrayList<>();
       wheres.add(where);
       long count = cpoAdapter.existsBean(CpoQuery.defaultGroup().wheres(wheres), valObj);

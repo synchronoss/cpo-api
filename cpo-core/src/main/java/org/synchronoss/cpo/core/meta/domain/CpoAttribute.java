@@ -61,23 +61,23 @@ public class CpoAttribute extends CpoAttributeBean {
   private String setterName_ = null;
 
   /** The reflectively-resolved bean getter method. */
-  private Method getter_ = null;
+  private transient Method getter_ = null;
 
   /** The reflectively-resolved bean setter method. */
-  private Method setter_ = null;
+  private transient Method setter_ = null;
 
   /** The native datastore type code for this attribute. */
   private int dataTypeInt = Integer.MIN_VALUE;
 
   // Transform attributes
   /** The configured transform instance, if any. */
-  private CpoTransform cpoTransform = null;
+  private transient CpoTransform<?, ?> cpoTransform = null;
 
   /** The resolved {@link #TRANSFORM_IN_NAME} method on {@link #cpoTransform}, if any. */
-  private Method transformInMethod = null;
+  private transient Method transformInMethod = null;
 
   /** The resolved {@link #TRANSFORM_OUT_NAME} method on {@link #cpoTransform}, if any. */
-  private Method transformOutMethod = null;
+  private transient Method transformOutMethod = null;
 
   // cached because Method.getParameterTypes() clones its array on every call
   /** The parameter type of {@link #transformInMethod}, cached to avoid repeated reflection. */
@@ -94,7 +94,7 @@ public class CpoAttribute extends CpoAttributeBean {
    * @return the configured transform, or {@code null} if none is configured
    */
   public <D, J> CpoTransform<D, J> getCpoTransform() {
-    return cpoTransform;
+    return (CpoTransform<D, J>) cpoTransform;
   }
 
   /**
@@ -417,7 +417,7 @@ public class CpoAttribute extends CpoAttributeBean {
       }
 
       if (transformObject instanceof CpoTransform) {
-        cpoTransform = (CpoTransform) transformObject;
+        cpoTransform = (CpoTransform<?, ?>) transformObject;
         List<Method> methods = findMethods(transformClass, TRANSFORM_IN_NAME, 1, true);
         if (methods.size() > 0) {
           transformInMethod = methods.get(0);

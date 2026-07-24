@@ -236,7 +236,6 @@ public class CassandraCpoConfigProcessor implements CpoConfigProcessor {
     applyNettyOptions(clusterInfo, readWriteConfig.getNettyOptions());
 
     clusterInfo.setCoalescerIntervalMicros(readWriteConfig.getCoalescerIntervalMicros());
-    clusterInfo.setCoalescerMaxRuns(readWriteConfig.getCoalescerMaxRuns());
     clusterInfo.setSessionLeakThreshold(readWriteConfig.getSessionLeakThreshold());
     clusterInfo.setResolveContactPoints(readWriteConfig.isResolveContactPoints());
 

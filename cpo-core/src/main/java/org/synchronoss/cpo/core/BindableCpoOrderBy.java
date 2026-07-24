@@ -39,7 +39,6 @@ public class BindableCpoOrderBy implements CpoOrderBy {
   private String function;
   private String marker = DEFAULT_MARKER;
 
-  @SuppressWarnings("unused")
   private BindableCpoOrderBy() {}
 
   /**

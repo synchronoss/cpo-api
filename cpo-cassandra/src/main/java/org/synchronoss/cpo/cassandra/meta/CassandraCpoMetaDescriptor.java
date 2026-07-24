@@ -48,7 +48,7 @@ public class CassandraCpoMetaDescriptor extends CpoMetaDescriptor {
   }
 
   @Override
-  protected Class getMetaAdapterClass() throws CpoException {
+  protected Class<CassandraCpoMetaAdapter> getMetaAdapterClass() throws CpoException {
     return CassandraCpoMetaAdapter.class;
   }
 

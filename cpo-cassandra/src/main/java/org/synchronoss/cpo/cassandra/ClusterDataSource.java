@@ -53,6 +53,11 @@ public class ClusterDataSource {
     return session;
   }
 
+  /** Closes the underlying Cassandra session. */
+  void close() {
+    session.close();
+  }
+
   /**
    * Gets the keyspace this data source's session is connected to.
    *

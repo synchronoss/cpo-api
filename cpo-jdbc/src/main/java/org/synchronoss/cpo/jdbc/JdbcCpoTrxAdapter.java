@@ -31,7 +31,7 @@ import org.synchronoss.cpo.core.CpoException;
 import org.synchronoss.cpo.core.CpoTrxAdapter;
 
 /** A transaction adapter that allows the user to control the commits and role backs */
-public class JdbcCpoTrxAdapter extends JdbcCpoAdapter implements CpoTrxAdapter {
+public final class JdbcCpoTrxAdapter extends JdbcCpoAdapter implements CpoTrxAdapter {
 
   /** Version Id for this class. */
   @Serial private static final long serialVersionUID = 1L;

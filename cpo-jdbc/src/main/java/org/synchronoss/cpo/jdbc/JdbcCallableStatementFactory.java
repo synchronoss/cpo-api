@@ -42,12 +42,11 @@ import org.synchronoss.cpo.core.meta.domain.CpoFunction;
  *
  * @author david berry
  */
-public class JdbcCallableStatementFactory implements CpoReleasable {
+public final class JdbcCallableStatementFactory implements CpoReleasable {
 
   private static final Logger logger = LoggerFactory.getLogger(JdbcCallableStatementFactory.class);
   private CallableStatement cs_ = null;
 
-  @SuppressWarnings("unused")
   private JdbcCallableStatementFactory() {}
 
   private List<CpoReleasable> releasables = new ArrayList<>();

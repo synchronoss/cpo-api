@@ -52,7 +52,7 @@ public class ConfigInstantiator<T> {
 
     // Lets create the Factory
     try {
-      Class factoryClass = Class.forName(className);
+      Class<?> factoryClass = Class.forName(className);
       factoryMethodName = (FactoryMethodName) factoryClass.getDeclaredConstructor().newInstance();
       logger.debug("Created factory: " + className);
       Method factoryMethod = factoryClass.getMethod(factoryMethodName.getFactoryMethodName());

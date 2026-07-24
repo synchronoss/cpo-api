@@ -37,6 +37,7 @@ public class NodeTest {
 
   /** A node with a stable ordering value for the sorted-add tests. */
   private static class ValueNode extends Node {
+    private static final long serialVersionUID = 1L;
     private final int value;
 
     ValueNode(int value) {

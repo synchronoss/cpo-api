@@ -32,6 +32,9 @@ package org.synchronoss.cpo.core.meta.bean;
  */
 public class CpoFunctionGroupBean extends CpoClassBean {
 
+  /** Version Id for this class. */
+  private static final long serialVersionUID = 1L;
+
   /*
    * Properties
    */

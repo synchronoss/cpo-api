@@ -57,6 +57,14 @@ public final class CpoAdapterFactoryManager extends CpoAdapterFactoryCache {
   private static final String CPO_CONFIG_XML = "/cpoConfig.xml";
   private static String defaultContext = null;
 
+  // Tracks the last config actually loaded so a caller's explicit loadAdapters() immediately
+  // following this class's own static initializer - both targeting the same config, e.g. a test
+  // suite listener setting the CPO_CONFIG system property and then loading - collapses into a
+  // single real load instead of two. Without this, every adapter built by the redundant second
+  // load (e.g. CassandraCpoAdapter, which opens a real CqlSession per datasource) is immediately
+  // orphaned rather than reused, leaking the resource the first load already created.
+  private static String lastLoadedCpoConfig = null;
+
   static {
     loadAdapters();
   }
@@ -167,6 +175,10 @@ public final class CpoAdapterFactoryManager extends CpoAdapterFactoryCache {
   private static void loadAdapters(String cpoConfig) {
     lock.lock();
     try {
+      if (cpoConfig.equals(lastLoadedCpoConfig)) {
+        return;
+      }
+
       var errBuilder = new StringBuilder();
       CtCpoConfig ctCpoConfig =
           XmlHelper.unmarshalXmlObject(
@@ -207,6 +219,7 @@ public final class CpoAdapterFactoryManager extends CpoAdapterFactoryCache {
           addCpoAdapterFactory(dataSourceConfig.getName(), cpoAdapterFactory);
         }
       }
+      lastLoadedCpoConfig = cpoConfig;
     } catch (Exception e) {
       logger.error("Error unmarshalling XML " + cpoConfig + ": ", e);
     } finally {

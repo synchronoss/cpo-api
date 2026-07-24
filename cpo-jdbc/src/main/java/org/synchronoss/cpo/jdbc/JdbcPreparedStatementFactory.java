@@ -34,6 +34,7 @@ import org.synchronoss.cpo.core.meta.MethodMapper;
 import org.synchronoss.cpo.core.meta.domain.CpoAttribute;
 import org.synchronoss.cpo.core.meta.domain.CpoClass;
 import org.synchronoss.cpo.core.meta.domain.CpoFunction;
+import org.synchronoss.cpo.jdbc.meta.JdbcMethodMapEntry;
 import org.synchronoss.cpo.jdbc.meta.JdbcMethodMapper;
 
 /**
@@ -42,7 +43,8 @@ import org.synchronoss.cpo.jdbc.meta.JdbcMethodMapper;
  *
  * @author david berry
  */
-public class JdbcPreparedStatementFactory extends CpoStatementFactory implements CpoReleasable {
+public final class JdbcPreparedStatementFactory extends CpoStatementFactory
+    implements CpoReleasable {
 
   /** Version Id for this class. */
   private static final long serialVersionUID = 1L;
@@ -102,7 +104,7 @@ public class JdbcPreparedStatementFactory extends CpoStatementFactory implements
   }
 
   @Override
-  protected MethodMapper getMethodMapper() {
+  protected MethodMapper<JdbcMethodMapEntry<?, ?>> getMethodMapper() {
     return JdbcMethodMapper.getMethodMapper();
   }
 

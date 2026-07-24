@@ -564,14 +564,6 @@
                     </xs:documentation>
                 </xs:annotation>
             </xs:element>
-            <xs:element name="coalescerMaxRuns" type="xs:int" minOccurs="0">
-                <xs:annotation>
-                    <xs:documentation>
-                        The maximum number of coalescing runs per reschedule interval (COALESCER_MAX_RUNS).
-                        Expert-level tuning.
-                    </xs:documentation>
-                </xs:annotation>
-            </xs:element>
             <xs:element name="sessionLeakThreshold" type="xs:int" minOccurs="0">
                 <xs:annotation>
                     <xs:documentation>

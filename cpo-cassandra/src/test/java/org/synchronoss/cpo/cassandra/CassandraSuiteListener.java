@@ -28,6 +28,7 @@ import com.github.terma.javaniotcpproxy.TcpProxyConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.core.CpoAdapterFactoryManager;
+import org.synchronoss.cpo.core.CpoException;
 import org.testcontainers.cassandra.CassandraContainer;
 import org.testcontainers.utility.DockerImageName;
 import org.testng.ISuite;
@@ -86,6 +87,23 @@ public class CassandraSuiteListener implements ISuiteListener {
 
   @Override
   public void onFinish(ISuite suite) {
+    for (String context :
+        new String[] {
+          CassandraStatics.ADAPTER_CONTEXT_DEFAULT,
+          CassandraStatics.ADAPTER_CONTEXT_CASESENSITIVE,
+          CassandraStatics.ADAPTER_CONTEXT_CASEINSENSITIVE
+        }) {
+      try {
+        CassandraCpoAdapter adapter =
+            (CassandraCpoAdapter) CpoAdapterFactoryManager.getCpoAdapter(context);
+        if (adapter != null) {
+          adapter.close();
+        }
+      } catch (CpoException e) {
+        logger.warn("Failed to close Cassandra adapter for context " + context, e);
+      }
+    }
+
     if (tcpProxy != null) tcpProxy.shutdown();
     if (cassandraContainer != null) cassandraContainer.close();
     logger.debug("onFinish");

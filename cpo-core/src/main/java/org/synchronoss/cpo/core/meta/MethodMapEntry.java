@@ -47,15 +47,14 @@ public class MethodMapEntry<J, D> implements java.io.Serializable, Cloneable {
   private Class<D> datasourceMethodClass = null;
 
   /** The getter method used to read the value from the datastore. */
-  private Method rsGetter = null;
+  private transient Method rsGetter = null;
 
   /** The setter method used to write the value to the datastore. */
-  private Method bsSetter = null;
+  private transient Method bsSetter = null;
 
   /** The method type of this entry, e.g. {@link #METHOD_TYPE_BASIC}. */
   private int methodType = METHOD_TYPE_BASIC;
 
-  @SuppressWarnings("unused")
   private MethodMapEntry() {}
 
   /**

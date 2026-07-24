@@ -60,6 +60,10 @@ public class ClusterDataSourceInfoTest {
         new ClusterDataSourceInfo("testCluster", keySpace, List.of(contactPoint), 10, 20);
     info.setPort(nativePort);
     info.setLocalDatacenter(LOCAL_DATACENTER);
+    // Every test in this class builds its own real, short-lived CqlSession via getDataSource();
+    // running several concurrently (parallel="classes") pushes the driver's process-wide session
+    // count past its default advisory threshold of 4 and logs a false-positive leak warning.
+    info.setSessionLeakThreshold(20);
     return info;
   }
 
@@ -490,9 +494,6 @@ public class ClusterDataSourceInfoTest {
     info.setCoalescerIntervalMicros(10L);
     assertEquals(info.getCoalescerIntervalMicros(), Long.valueOf(10L));
 
-    info.setCoalescerMaxRuns(5);
-    assertEquals(info.getCoalescerMaxRuns(), Integer.valueOf(5));
-
     info.setSessionLeakThreshold(4);
     assertEquals(info.getSessionLeakThreshold(), Integer.valueOf(4));
 
@@ -637,7 +638,6 @@ public class ClusterDataSourceInfoTest {
     info.setNettyTimerTickDurationMillis(100L);
     info.setNettyTimerTicksPerWheel(2048);
     info.setCoalescerIntervalMicros(10L);
-    info.setCoalescerMaxRuns(5);
     info.setSessionLeakThreshold(10);
     info.setResolveContactPoints(Boolean.TRUE);
     info.setSchemaChangeListeners(List.of());

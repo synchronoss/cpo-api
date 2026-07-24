@@ -265,8 +265,8 @@ public class CpoClassSourceGenerator extends AbstractMetaVisitor {
     toString.append("    str.append(\"" + attName + " = \" + " + getterName + " + \"\\n\");\n");
   }
 
-  private Class getAttributeClass(String className) {
-    Class clazz = String.class;
+  private Class<?> getAttributeClass(String className) {
+    Class<?> clazz = String.class;
 
     try {
       switch (className) {

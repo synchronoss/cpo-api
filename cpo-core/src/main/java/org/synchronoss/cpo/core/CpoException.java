@@ -30,6 +30,9 @@ package org.synchronoss.cpo.core;
  */
 public class CpoException extends Exception {
 
+  /** Version Id for this class. */
+  private static final long serialVersionUID = 1L;
+
   /** Constructs a <code>CpoException</code> with no specified detail message. */
   public CpoException() {
     super();

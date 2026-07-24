@@ -69,7 +69,7 @@ public abstract class CpoBaseAdapter<D> extends CpoAdapterCache implements CpoAd
     this.batchSize = batchSize;
   }
 
-  protected D getReadDataSource() {
+  protected final D getReadDataSource() {
     return readDataSource;
   }
 
@@ -77,7 +77,7 @@ public abstract class CpoBaseAdapter<D> extends CpoAdapterCache implements CpoAd
     this.readDataSource = readDataSource;
   }
 
-  protected D getWriteDataSource() {
+  protected final D getWriteDataSource() {
     return writeDataSource;
   }
 

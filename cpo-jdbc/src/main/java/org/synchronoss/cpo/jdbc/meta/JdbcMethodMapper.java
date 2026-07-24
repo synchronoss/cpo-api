@@ -347,7 +347,7 @@ public class JdbcMethodMapper implements java.io.Serializable, Cloneable {
    *
    * @return MethodMapper
    */
-  public static MethodMapper getMethodMapper() {
+  public static MethodMapper<JdbcMethodMapEntry<?, ?>> getMethodMapper() {
     return methodMapper;
   }
 
@@ -374,10 +374,11 @@ public class JdbcMethodMapper implements java.io.Serializable, Cloneable {
     try {
       if (methodType == JdbcMethodMapEntry.METHOD_TYPE_BASIC
           || methodType == JdbcMethodMapEntry.METHOD_TYPE_OBJECT) {
-        setter = methodClass.getMethod(setterName, new Class[] {int.class, datasourceClass});
+        setter = methodClass.getMethod(setterName, new Class<?>[] {int.class, datasourceClass});
       } else {
         setter =
-            methodClass.getMethod(setterName, new Class[] {int.class, datasourceClass, int.class});
+            methodClass.getMethod(
+                setterName, new Class<?>[] {int.class, datasourceClass, int.class});
       }
 
     } catch (NoSuchMethodException nsme) {
@@ -392,9 +393,9 @@ public class JdbcMethodMapper implements java.io.Serializable, Cloneable {
     Method getter;
     try {
       if (methodType == JdbcMethodMapEntry.METHOD_TYPE_OBJECT) {
-        getter = methodClass.getMethod(getterName, new Class[] {int.class, Class.class});
+        getter = methodClass.getMethod(getterName, new Class<?>[] {int.class, Class.class});
       } else {
-        getter = methodClass.getMethod(getterName, new Class[] {int.class});
+        getter = methodClass.getMethod(getterName, new Class<?>[] {int.class});
       }
     } catch (NoSuchMethodException nsme) {
       logger.error("Error loading Getter" + getterName, nsme);

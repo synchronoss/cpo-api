@@ -47,6 +47,7 @@
       <poolingOptions></poolingOptions>
       <socketOptions></socketOptions>
       <queryOptions></queryOptions>
+      <sessionLeakThreshold>20</sessionLeakThreshold>
      </readWriteConfig>
   </dataConfig>
   <dataConfig xsi:type="ctCassandraConfig" name="caseSensitive">
@@ -57,6 +58,7 @@
      <contactPoint>${cassandra.contactPoint}</contactPoint>
      <localDatacenter>datacenter1</localDatacenter>
      <port>${cassandra.nativeport}</port>
+     <sessionLeakThreshold>20</sessionLeakThreshold>
    </readWriteConfig>
  </dataConfig>
   <dataConfig xsi:type="ctCassandraConfig" name="caseInsensitive">
@@ -67,6 +69,7 @@
      <contactPoint>${cassandra.contactPoint}</contactPoint>
      <localDatacenter>datacenter1</localDatacenter>
      <port>${cassandra.nativeport}</port>
+     <sessionLeakThreshold>20</sessionLeakThreshold>
    </readWriteConfig>
  </dataConfig>
  </cpoConfig>

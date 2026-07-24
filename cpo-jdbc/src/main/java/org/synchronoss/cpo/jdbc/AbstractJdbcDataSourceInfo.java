@@ -25,6 +25,7 @@ package org.synchronoss.cpo.jdbc;
 import java.util.Properties;
 import java.util.SortedMap;
 import java.util.TreeMap;
+import javax.sql.DataSource;
 import org.synchronoss.cpo.core.AbstractDataSourceInfo;
 
 /**
@@ -32,7 +33,7 @@ import org.synchronoss.cpo.core.AbstractDataSourceInfo;
  *
  * @author dberry
  */
-public abstract class AbstractJdbcDataSourceInfo extends AbstractDataSourceInfo {
+public abstract class AbstractJdbcDataSourceInfo extends AbstractDataSourceInfo<DataSource> {
   // common password strings
   private static final String PASSWORD = "password";
   private static final String PASSWD = "passwd";

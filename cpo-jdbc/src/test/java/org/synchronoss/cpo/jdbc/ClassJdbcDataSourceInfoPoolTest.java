@@ -102,7 +102,7 @@ public class ClassJdbcDataSourceInfoPoolTest {
   @Test
   public void testPooledConnectionLifecycle() throws Exception {
     ClassJdbcDataSourceInfo info = pooledInfo();
-    DataSource ds = (DataSource) info.getDataSource();
+    DataSource ds = info.getDataSource();
     assertSame(ds, info, "pooled mode uses the info object itself as the DataSource");
 
     // check out two connections, return one, and check out again to reuse the free one
@@ -141,7 +141,7 @@ public class ClassJdbcDataSourceInfoPoolTest {
     ClassJdbcDataSourceInfo info =
         new ClassJdbcDataSourceInfo(PlainDataSource.class.getName(), props, 10, 10);
 
-    DataSource ds = (DataSource) info.getDataSource();
+    DataSource ds = info.getDataSource();
     assertNotSame(ds, info, "plain mode returns the datasource directly");
     try (Connection connection = ds.getConnection()) {
       assertFalse(connection.isClosed());

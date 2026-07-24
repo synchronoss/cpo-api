@@ -42,7 +42,7 @@ public class CpoFunction extends CpoFunctionBean {
   private static final Logger logger = LoggerFactory.getLogger(CpoFunction.class);
 
   /** The arguments bound to this function's bind markers, in bind-marker order. */
-  List<CpoArgument> arguments = new ArrayList<>();
+  ArrayList<CpoArgument> arguments = new ArrayList<>();
 
   /** Creates an empty instance. */
   public CpoFunction() {}

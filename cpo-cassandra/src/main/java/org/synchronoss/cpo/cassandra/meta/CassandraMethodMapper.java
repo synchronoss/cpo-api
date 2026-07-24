@@ -75,7 +75,7 @@ public class CassandraMethodMapper implements Serializable, Cloneable {
    */
   public static CassandraMethodMapEntry<?, ?> getDatasourceMethod(Class<?> clazz)
       throws CpoException {
-    return (CassandraMethodMapEntry) methodMapper.getDataMethodMapEntry(clazz);
+    return methodMapper.getDataMethodMapEntry(clazz);
   }
 
   private static MethodMapper<CassandraMethodMapEntry<?, ?>> initMethodMapper()
@@ -198,18 +198,18 @@ public class CassandraMethodMapper implements Serializable, Cloneable {
    *
    * @return A MethodMapper
    */
-  public static MethodMapper getMethodMapper() {
+  public static MethodMapper<CassandraMethodMapEntry<?, ?>> getMethodMapper() {
     return methodMapper;
   }
 
-  private static <T> CassandraMethodMapEntry makeCassandraMethodMapEntry(
+  private static <T> CassandraMethodMapEntry<T, T> makeCassandraMethodMapEntry(
       int methodType, Class<T> javaClass, Class<T> datasourceMethodClass, String getterName)
       throws IllegalArgumentException {
     Method rsGetter = loadGetter(methodType, rsc, getterName);
 
     // no BoundStatement setter Method is resolved: bind values are applied via a single
     // PreparedStatement.bind(Object...) call, not per-attribute reflective setter invocation
-    return new CassandraMethodMapEntry(
+    return new CassandraMethodMapEntry<>(
         methodType, javaClass, datasourceMethodClass, rsGetter, null);
   }
 
@@ -229,14 +229,15 @@ public class CassandraMethodMapper implements Serializable, Cloneable {
     try {
       switch (methodType) {
         case CassandraMethodMapEntry.METHOD_TYPE_BASIC:
-          getter = methodClass.getMethod(getterName, new Class[] {int.class});
+          getter = methodClass.getMethod(getterName, new Class<?>[] {int.class});
           break;
         case CassandraMethodMapEntry.METHOD_TYPE_ONE:
-          getter = methodClass.getMethod(getterName, new Class[] {int.class, Class.class});
+          getter = methodClass.getMethod(getterName, new Class<?>[] {int.class, Class.class});
           break;
         case CassandraMethodMapEntry.METHOD_TYPE_TWO:
           getter =
-              methodClass.getMethod(getterName, new Class[] {int.class, Class.class, Class.class});
+              methodClass.getMethod(
+                  getterName, new Class<?>[] {int.class, Class.class, Class.class});
           break;
         default:
           throw new IllegalArgumentException("Illegal Method Type:" + methodType);

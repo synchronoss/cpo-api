@@ -160,10 +160,10 @@ public class CassandraCpoAttribute extends CpoAttribute implements java.io.Seria
    * @return The Clazz
    * @throws CpoException An errror occurred
    */
-  protected Class getTypeClass(
+  protected Class<?> getTypeClass(
       String className, String attributeName, String contextName, String contextType)
       throws CpoException {
-    Class contextClass = null;
+    Class<?> contextClass = null;
     try {
       if (contextName != null) {
         logger.debug(

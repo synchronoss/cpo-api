@@ -186,7 +186,6 @@ public class ClusterDataSourceInfo extends AbstractDataSourceInfo<ClusterDataSou
   private Long nettyTimerTickDurationMillis;
   private Integer nettyTimerTicksPerWheel;
   private Long coalescerIntervalMicros;
-  private Integer coalescerMaxRuns;
   private Integer sessionLeakThreshold;
   private Boolean resolveContactPoints;
 
@@ -2530,24 +2529,6 @@ public class ClusterDataSourceInfo extends AbstractDataSourceInfo<ClusterDataSou
   }
 
   /**
-   * Get the maximum number of coalescing runs per reschedule interval
-   *
-   * @return the max coalescing runs
-   */
-  public Integer getCoalescerMaxRuns() {
-    return coalescerMaxRuns;
-  }
-
-  /**
-   * Set the maximum number of coalescing runs per reschedule interval. Expert-level tuning.
-   *
-   * @param coalescerMaxRuns the max coalescing runs
-   */
-  public void setCoalescerMaxRuns(Integer coalescerMaxRuns) {
-    this.coalescerMaxRuns = coalescerMaxRuns;
-  }
-
-  /**
    * Get the maximum number of live sessions allowed to coexist in this JVM before a leak warning is
    * logged
    *
@@ -3126,9 +3107,6 @@ public class ClusterDataSourceInfo extends AbstractDataSourceInfo<ClusterDataSou
     if (coalescerIntervalMicros != null)
       configLoaderBuilder.withLong(DefaultDriverOption.COALESCER_INTERVAL, coalescerIntervalMicros);
 
-    if (coalescerMaxRuns != null)
-      configLoaderBuilder.withInt(DefaultDriverOption.COALESCER_MAX_RUNS, coalescerMaxRuns);
-
     if (sessionLeakThreshold != null)
       configLoaderBuilder.withInt(DefaultDriverOption.SESSION_LEAK_THRESHOLD, sessionLeakThreshold);
 
@@ -3204,7 +3182,6 @@ public class ClusterDataSourceInfo extends AbstractDataSourceInfo<ClusterDataSou
       configLoaderBuilder.withDoubleList(publishPercentilesOption, options.getPublishPercentiles());
   }
 
-  @SuppressWarnings("unchecked")
   private static <T> Class<? extends T> loadPolicyClass(String className, Class<T> type)
       throws CpoException {
     try {

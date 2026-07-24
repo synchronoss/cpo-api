@@ -29,6 +29,7 @@ import java.util.Collection;
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.synchronoss.cpo.cassandra.meta.CassandraMethodMapEntry;
 import org.synchronoss.cpo.cassandra.meta.CassandraMethodMapper;
 import org.synchronoss.cpo.core.*;
 import org.synchronoss.cpo.core.helper.ExceptionHelper;
@@ -43,7 +44,8 @@ import org.synchronoss.cpo.core.meta.domain.CpoFunction;
  *
  * @author david berry
  */
-public class CassandraBoundStatementFactory extends CpoStatementFactory implements CpoReleasable {
+public final class CassandraBoundStatementFactory extends CpoStatementFactory
+    implements CpoReleasable {
 
   /** Version Id for this class. */
   private static final long serialVersionUID = 1L;
@@ -105,7 +107,7 @@ public class CassandraBoundStatementFactory extends CpoStatementFactory implemen
   }
 
   @Override
-  protected MethodMapper getMethodMapper() {
+  protected MethodMapper<CassandraMethodMapEntry<?, ?>> getMethodMapper() {
     return CassandraMethodMapper.getMethodMapper();
   }
 

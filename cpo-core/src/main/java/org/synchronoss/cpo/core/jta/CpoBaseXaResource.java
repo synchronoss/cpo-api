@@ -87,7 +87,6 @@ public abstract class CpoBaseXaResource<T> implements CpoXaResource {
   protected abstract void closeResource(T xaResource) throws XAException;
 
   private T getResource() {
-    @SuppressWarnings("unchecked")
     CpoXaState<T> cpoXaState =
         associatedXid == null ? null : (CpoXaState<T>) xidStateMap.get(associatedXid);
     return cpoXaState == null
@@ -156,7 +155,6 @@ public abstract class CpoBaseXaResource<T> implements CpoXaResource {
    * @param xid of the global transaction
    * @throws XAException An error has occurred.
    */
-  @SuppressWarnings("unchecked")
   public void close(Xid xid) throws XAException {
     try {
       xidStateMap.compute(
@@ -198,7 +196,6 @@ public abstract class CpoBaseXaResource<T> implements CpoXaResource {
    *     resource manager has rolled back the branch's work and has released all held resources.
    */
   @Override
-  @SuppressWarnings("unchecked")
   public void commit(Xid xid, boolean onePhase) throws XAException {
     try {
       xidStateMap.compute(
@@ -345,7 +342,6 @@ public abstract class CpoBaseXaResource<T> implements CpoXaResource {
    *     XAER_RMFAIL, XAER_NOTA, XAER_INVAL, or XAER_PROTO.
    */
   @Override
-  @SuppressWarnings("unchecked")
   public int prepare(Xid xid) throws XAException {
     try {
       xidStateMap.compute(
@@ -413,7 +409,6 @@ public abstract class CpoBaseXaResource<T> implements CpoXaResource {
    *     one of the XA_RB* exceptions. Upon return, the resource manager has rolled back the
    *     branch's work and has released all held resources.
    */
-  @SuppressWarnings("unchecked")
   @Override
   public void rollback(Xid xid) throws XAException {
     try {
@@ -470,7 +465,6 @@ public abstract class CpoBaseXaResource<T> implements CpoXaResource {
    *     XAER_RMFAIL, XAER_DUPID, XAER_OUTSIDE, XAER_NOTA, XAER_INVAL, or XAER_PROTO.
    */
   @Override
-  @SuppressWarnings("unchecked")
   public void start(Xid xid, int flags) throws XAException {
     try {
       xidStateMap.compute(

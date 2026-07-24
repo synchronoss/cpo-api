@@ -24,7 +24,6 @@ package org.synchronoss.cpo.core.meta;
 
 import java.io.Serializable;
 import java.util.HashMap;
-import java.util.Map;
 import org.synchronoss.cpo.core.CpoException;
 
 /**
@@ -40,7 +39,7 @@ public class MethodMapper<T extends MethodMapEntry<?, ?>> implements Serializabl
   private static final long serialVersionUID = 1L;
 
   /** Registered entries, keyed by the Java class they move values for. */
-  private Map<Class<?>, T> dataMethodMap = new HashMap<>();
+  private HashMap<Class<?>, T> dataMethodMap = new HashMap<>();
 
   /** Creates an empty mapper with no registered entries. */
   public MethodMapper() {}

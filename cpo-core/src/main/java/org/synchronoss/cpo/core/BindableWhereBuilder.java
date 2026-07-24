@@ -62,7 +62,6 @@ public class BindableWhereBuilder<T> implements NodeVisitor {
     return this.bindValues;
   }
 
-  @SuppressWarnings("unused")
   private BindableWhereBuilder() {}
 
   /**

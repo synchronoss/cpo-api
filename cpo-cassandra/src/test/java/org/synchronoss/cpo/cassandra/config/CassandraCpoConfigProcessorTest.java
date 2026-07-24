@@ -88,6 +88,10 @@ public class CassandraCpoConfigProcessorTest {
     rw.getContactPoint().add(contactPoint);
     rw.setLocalDatacenter(LOCAL_DATACENTER);
     rw.setPort(nativePort);
+    // Every test in this class builds its own real CqlSession via processCpoConfig(); running
+    // several concurrently (parallel="classes") pushes the driver's process-wide session count
+    // past its default advisory threshold of 4 and logs a false-positive leak warning.
+    rw.setSessionLeakThreshold(20);
     return rw;
   }
 

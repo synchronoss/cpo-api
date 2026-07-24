@@ -608,4 +608,16 @@ public class CpoMetaDescriptor extends CpoMetaDescriptorCache
   public boolean isCaseSensitive() {
     return caseSensitive;
   }
+
+  /**
+   * Returns a stable, name-based representation. Callers (e.g. {@code CassandraCpoAdapter}'s
+   * adapter-cache key) concatenate a descriptor into a cache key string, so this must stay
+   * consistent across reloads that rebuild a new {@code CpoMetaDescriptor} instance for the same
+   * name - the default identity-hash {@code Object.toString()} would otherwise mint a new key on
+   * every reload and orphan the previous instance's resources instead of replacing it.
+   */
+  @Override
+  public String toString() {
+    return getClass().getName() + "[name=" + name + "]";
+  }
 }

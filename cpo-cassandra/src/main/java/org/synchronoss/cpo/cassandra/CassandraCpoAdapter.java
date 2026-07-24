@@ -63,7 +63,7 @@ import org.synchronoss.cpo.core.meta.domain.CpoFunction;
  *
  * @author dberry
  */
-public class CassandraCpoAdapter extends CpoBaseAdapter<ClusterDataSource> {
+public final class CassandraCpoAdapter extends CpoBaseAdapter<ClusterDataSource> {
   /** Version Id for this class. */
   private static final long serialVersionUID = 1L;
 
@@ -114,6 +114,18 @@ public class CassandraCpoAdapter extends CpoBaseAdapter<ClusterDataSource> {
     setWriteDataSource(jdsiWrite.getDataSource());
     setReadDataSource(jdsiRead.getDataSource());
     this.sessionStrategy = new CassandraSessionStrategy(getReadDataSource(), getWriteDataSource());
+  }
+
+  /**
+   * Closes the underlying Cassandra session(s) held by this adapter. Package-private: intended for
+   * test suite teardown ({@code CassandraSuiteListener}); ordinary CPO usage has no equivalent
+   * lifecycle hook since a Cassandra session is meant to live for the process's lifetime.
+   */
+  void close() {
+    getReadDataSource().close();
+    if (getWriteDataSource() != getReadDataSource()) {
+      getWriteDataSource().close();
+    }
   }
 
   /**

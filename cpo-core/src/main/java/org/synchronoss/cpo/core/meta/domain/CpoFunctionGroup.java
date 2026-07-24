@@ -37,7 +37,7 @@ public class CpoFunctionGroup extends CpoFunctionGroupBean implements Comparable
   private static final long serialVersionUID = 1L;
 
   /** The functions in this group. */
-  List<CpoFunction> functions = new ArrayList<>();
+  ArrayList<CpoFunction> functions = new ArrayList<>();
 
   /** Creates an empty instance. */
   public CpoFunctionGroup() {}

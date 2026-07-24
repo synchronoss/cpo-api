@@ -173,11 +173,10 @@ public class XmlHelper {
 
       Object xmlObject =
           unmarshaller.unmarshal(new SAXSource(xmlReader, new InputSource(xmlStream)));
-      @SuppressWarnings("unchecked")
       T obj =
           (xmlObject instanceof JAXBElement)
-              ? (T) ((JAXBElement<?>) xmlObject).getValue()
-              : (T) xmlObject;
+              ? objClass.cast(((JAXBElement<?>) xmlObject).getValue())
+              : objClass.cast(xmlObject);
 
       return obj;
     } catch (Exception e) {

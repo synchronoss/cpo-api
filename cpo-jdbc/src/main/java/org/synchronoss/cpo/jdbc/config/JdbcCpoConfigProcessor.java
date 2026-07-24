@@ -25,6 +25,7 @@ package org.synchronoss.cpo.jdbc.config;
 import java.util.Properties;
 import java.util.SortedMap;
 import java.util.TreeMap;
+import javax.sql.DataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.synchronoss.cpo.core.CpoAdapterFactory;
@@ -74,14 +75,14 @@ public class JdbcCpoConfigProcessor implements CpoConfigProcessor {
 
     // build a datasource info
     if (jdbcConfig.getReadWriteConfig() != null) {
-      DataSourceInfo dataSourceInfo =
+      DataSourceInfo<DataSource> dataSourceInfo =
           buildDataSourceInfo(jdbcConfig.getReadWriteConfig(), fetchSize, batchSize);
       cpoAdapterFactory =
           new JdbcCpoAdapterFactory(JdbcCpoAdapter.getInstance(metaDescriptor, dataSourceInfo));
     } else {
-      DataSourceInfo readDataSourceInfo =
+      DataSourceInfo<DataSource> readDataSourceInfo =
           buildDataSourceInfo(jdbcConfig.getReadConfig(), fetchSize, batchSize);
-      DataSourceInfo writeDataSourceInfo =
+      DataSourceInfo<DataSource> writeDataSourceInfo =
           buildDataSourceInfo(jdbcConfig.getWriteConfig(), fetchSize, batchSize);
       cpoAdapterFactory =
           new JdbcCpoAdapterFactory(
@@ -91,9 +92,9 @@ public class JdbcCpoConfigProcessor implements CpoConfigProcessor {
     return cpoAdapterFactory;
   }
 
-  private DataSourceInfo buildDataSourceInfo(
+  private DataSourceInfo<DataSource> buildDataSourceInfo(
       CtJdbcReadWriteConfig readWriteConfig, int fetchSize, int batchSize) throws CpoException {
-    DataSourceInfo dataSourceInfo = null;
+    DataSourceInfo<DataSource> dataSourceInfo = null;
 
     if (readWriteConfig.getJndiName() != null) {
       dataSourceInfo =

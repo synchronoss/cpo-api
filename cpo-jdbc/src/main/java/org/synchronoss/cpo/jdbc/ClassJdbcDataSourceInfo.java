@@ -47,7 +47,7 @@ import org.synchronoss.cpo.core.helper.ExceptionHelper;
  *
  * @author dberry
  */
-public class ClassJdbcDataSourceInfo extends AbstractJdbcDataSource
+public final class ClassJdbcDataSourceInfo extends AbstractJdbcDataSource
     implements ConnectionEventListener, AutoCloseable {
   private static final Cleaner cleaner = Cleaner.create();
 
@@ -121,7 +121,7 @@ public class ClassJdbcDataSourceInfo extends AbstractJdbcDataSource
   protected DataSource createDataSource() throws CpoException {
     DataSource dataSource = null;
     try {
-      Class dsClass = CpoClassLoader.forName(className);
+      Class<?> dsClass = CpoClassLoader.forName(className);
       CommonDataSource ds = (CommonDataSource) dsClass.getDeclaredConstructor().newInstance();
 
       // The ConnectionPoolDataSource must be a pure PooledConnection factory: a

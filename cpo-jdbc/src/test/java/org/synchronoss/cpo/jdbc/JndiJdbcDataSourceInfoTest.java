@@ -71,7 +71,7 @@ public class JndiJdbcDataSourceInfoTest {
     assertEquals(info.getFetchSize(), 10);
     assertEquals(info.getBatchSize(), 20);
 
-    DataSource ds = (DataSource) info.getDataSource();
+    DataSource ds = info.getDataSource();
     assertSame(ds, h2DataSource, "lookup should return the bound DataSource");
 
     // the created DataSource is cached; a second call returns the same instance

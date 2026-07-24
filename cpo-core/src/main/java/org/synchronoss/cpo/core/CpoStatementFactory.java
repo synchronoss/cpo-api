@@ -309,7 +309,7 @@ public abstract class CpoStatementFactory implements CpoReleasable {
     }
   }
 
-  protected abstract MethodMapper getMethodMapper();
+  protected abstract MethodMapper<? extends MethodMapEntry<?, ?>> getMethodMapper();
 
   protected abstract CpoData getCpoData(CpoAttribute cpoAttribute, int index);
 

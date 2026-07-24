@@ -60,16 +60,16 @@ public abstract class CpoClass extends CpoClassBean
   private Class<?> metaClass = null;
 
   /** javaMap contains a Map of CpoAttribute Objects the key is the javaName of the attribute */
-  private Map<String, CpoAttribute> javaMap = new HashMap<>();
+  private HashMap<String, CpoAttribute> javaMap = new HashMap<>();
 
   /** dataMap contains a Map of CpoAttribute Objects the key is the dataName of the attribute */
-  private Map<String, CpoAttribute> dataMap = new HashMap<>();
+  private HashMap<String, CpoAttribute> dataMap = new HashMap<>();
 
   /**
    * functionGroups is a hashMap that contains a hashMap of CpoFunctionGroup Lists that are used by
    * this bean to create and retrieve it into a datasource.
    */
-  private Map<String, CpoFunctionGroup> functionGroups = new HashMap<>();
+  private HashMap<String, CpoFunctionGroup> functionGroups = new HashMap<>();
 
   /** Creates an empty instance. */
   public CpoClass() {}

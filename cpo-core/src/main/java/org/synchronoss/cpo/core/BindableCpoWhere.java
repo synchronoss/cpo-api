@@ -131,7 +131,7 @@ public class BindableCpoWhere extends Node implements CpoWhere {
 
   /** {@inheritDoc} */
   @Override
-  public void setComparison(Comparison comparison) {
+  public final void setComparison(Comparison comparison) {
     this.comparison = comparison;
   }
 
@@ -143,7 +143,7 @@ public class BindableCpoWhere extends Node implements CpoWhere {
 
   /** {@inheritDoc} */
   @Override
-  public void setLogical(Logical logical) {
+  public final void setLogical(Logical logical) {
     this.logical = logical;
   }
 
@@ -155,7 +155,7 @@ public class BindableCpoWhere extends Node implements CpoWhere {
 
   /** {@inheritDoc} */
   @Override
-  public void setAttribute(String s) {
+  public final void setAttribute(String s) {
     this.attribute = s;
   }
 
@@ -179,7 +179,7 @@ public class BindableCpoWhere extends Node implements CpoWhere {
 
   /** {@inheritDoc} */
   @Override
-  public void setValue(Object s) {
+  public final void setValue(Object s) {
     this.value = s;
   }
 
@@ -209,7 +209,7 @@ public class BindableCpoWhere extends Node implements CpoWhere {
 
   /** {@inheritDoc} */
   @Override
-  public void setNot(boolean b) {
+  public final void setNot(boolean b) {
     this.not = b;
   }
 
@@ -286,7 +286,7 @@ public class BindableCpoWhere extends Node implements CpoWhere {
                   getAttributeName(cpoAttribute, getAttribute(), getRightAttribute()),
                   "?"));
         } else if (getComparison() == Comparison.IN && getValue() instanceof Collection) {
-          Collection coll = (Collection) getValue();
+          Collection<?> coll = (Collection<?>) getValue();
           sb.append("(");
           if (coll.size() > 0) {
             sb.append("?"); // add the parameter, we will bind it later.

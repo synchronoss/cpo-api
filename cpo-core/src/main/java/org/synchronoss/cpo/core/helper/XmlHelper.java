@@ -23,10 +23,12 @@ package org.synchronoss.cpo.core.helper;
  */
 
 import jakarta.xml.bind.*;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.net.URI;
+import java.net.URL;
 import java.nio.file.Paths;
 import javax.xml.XMLConstants;
 import javax.xml.parsers.SAXParserFactory;
@@ -106,6 +108,27 @@ public class XmlHelper {
   }
 
   /**
+   * Resolves {@code xmlStr} to a system ID (base URI) usable by a {@link StreamSource}, so that an
+   * XSD loaded via {@link #loadXmlStream} can resolve its own relative {@code <xs:import
+   * schemaLocation="...">} references (e.g. {@code CpoUtilConfig.xsd} importing {@code
+   * CpoConfig.xsd} from the same classpath location). Follows the same resolution order as {@link
+   * #loadXmlStream}.
+   *
+   * @param xmlStr the classpath resource name, {@code file:} URL, or filesystem path to resolve
+   * @return a system ID for {@code xmlStr}; never {@code null}
+   */
+  private static String resolveSystemId(String xmlStr) {
+    if (xmlStr.regionMatches(true, 0, "file:", 0, 5)) {
+      return xmlStr;
+    }
+    URL url = CpoClassLoader.getResource(xmlStr);
+    if (url != null) {
+      return url.toString();
+    }
+    return new File(xmlStr).toURI().toString();
+  }
+
+  /**
    * Configures a JAXB {@link Marshaller} with CPO's standard output settings: UTF-8 encoding and
    * formatted (indented) output.
    *
@@ -134,9 +157,15 @@ public class XmlHelper {
     try (var xsdStream = loadXmlStream(xsd, errorBuilder);
         var xmlStream = loadXmlStream(xml, errorBuilder)) {
       StreamSource configSource = new StreamSource(xsdStream);
+      configSource.setSystemId(resolveSystemId(xsd));
       SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
       trySetSchemaFeature(schemaFactory, XMLConstants.FEATURE_SECURE_PROCESSING, true);
       trySetSchemaProperty(schemaFactory, XMLConstants.ACCESS_EXTERNAL_DTD, "");
+      // Schemas ship inside cpo-core's own jar/classpath and may <xs:import> a sibling schema
+      // (e.g. CpoUtilConfig.xsd importing CpoConfig.xsd) - allow the schema compiler to resolve
+      // those local, trusted imports. This is separate from - and does not relax - the XXE
+      // hardening below on the untrusted XML *document* being parsed.
+      trySetSchemaProperty(schemaFactory, XMLConstants.ACCESS_EXTERNAL_SCHEMA, "file,jar");
       Schema schema = schemaFactory.newSchema(configSource);
 
       JAXBContext jaxbContext = JAXBContext.newInstance(objClass);
@@ -172,7 +201,7 @@ public class XmlHelper {
       XMLReader xmlReader = saxParserFactory.newSAXParser().getXMLReader();
 
       Object xmlObject =
-          unmarshaller.unmarshal(new SAXSource(xmlReader, new InputSource(xmlStream)));
+          unmarshaller.unmarshal(new SAXSource(xmlReader, new InputSource(xmlStream)), objClass);
       @SuppressWarnings("unchecked")
       T obj =
           (xmlObject instanceof JAXBElement)

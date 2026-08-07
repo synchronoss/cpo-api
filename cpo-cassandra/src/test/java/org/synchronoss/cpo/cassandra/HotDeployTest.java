@@ -46,6 +46,10 @@ import org.testng.annotations.Test;
  */
 public class HotDeployTest {
 
+  // hotDeployMetaData.xml sits outside cpo-plugin's codegen glob (it would generate a colliding
+  // second ValueObject if included), so there's no generated FG_* constant for this group.
+  private static final String HOT_DEPLOY_SELECT = "HotDeploySelect";
+
   // unique id base so this class's rows never collide with another test class's
   private static final int IDB = 500000;
   private static final Logger logger = LoggerFactory.getLogger(HotDeployTest.class);
@@ -83,7 +87,7 @@ public class HotDeployTest {
     al.add(ValueObjectFactory.createValueObject(IDB + 5));
     al.add(ValueObjectFactory.createValueObject(-(IDB + 6)));
     try {
-      cpoAdapter.insertBeans("TestOrderByInsert", al);
+      cpoAdapter.insertBeans(ValueObject.FG_CREATE_TESTORDERBYINSERT, al);
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -107,7 +111,7 @@ public class HotDeployTest {
         assertEquals(count, 6, "Number of beans is " + count);
       }
 
-      try (Stream<ValueObject> beans = cpoAdapter.retrieveBeans("HotDeploySelect", valObj); ) {
+      try (Stream<ValueObject> beans = cpoAdapter.retrieveBeans(HOT_DEPLOY_SELECT, valObj); ) {
         long count =
             beans
                 .filter(b -> Math.abs(b.getId()) >= IDB && Math.abs(b.getId()) < IDB + 100000)
@@ -139,7 +143,7 @@ public class HotDeployTest {
       assertEquals(list1.size(), 6, "Number of beans is " + list1.size());
 
       List<ValueObject> list2;
-      try (Stream<ValueObject> beans = cpoAdapter.retrieveBeans("HotDeploySelect", valObj); ) {
+      try (Stream<ValueObject> beans = cpoAdapter.retrieveBeans(HOT_DEPLOY_SELECT, valObj); ) {
         list2 =
             beans
                 .filter(b -> Math.abs(b.getId()) >= IDB && Math.abs(b.getId()) < IDB + 100000)
@@ -176,7 +180,7 @@ public class HotDeployTest {
         assertEquals(count, 6, "Number of beans is " + count);
       }
 
-      try (Stream<ValueObject> beans = cpoAdapter.retrieveBeans("HotDeploySelect", valObj); ) {
+      try (Stream<ValueObject> beans = cpoAdapter.retrieveBeans(HOT_DEPLOY_SELECT, valObj); ) {
         long count =
             beans
                 .filter(b -> Math.abs(b.getId()) >= IDB && Math.abs(b.getId()) < IDB + 100000)
@@ -206,7 +210,7 @@ public class HotDeployTest {
         // do nothing, this is expected
       }
 
-      try (Stream<ValueObject> beans = cpoAdapter.retrieveBeans("HotDeploySelect", valObj); ) {
+      try (Stream<ValueObject> beans = cpoAdapter.retrieveBeans(HOT_DEPLOY_SELECT, valObj); ) {
         // the overwrite meta maps no attributes, so ids are unreadable and the count
         // cannot be scoped to this class's rows; other classes' rows may add to it
         long count = beans.count();

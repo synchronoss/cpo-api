@@ -37,8 +37,8 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <currentVersion>${project.version}</currentVersion>
-         <slf4jVersion>2.0.17</slf4jVersion>
-        <logbackVersion>1.5.20</logbackVersion>
+        <slf4jVersion>2.0.18</slf4jVersion>
+        <logbackVersion>1.6.1</logbackVersion>
         <github.global.server>cpo-github</github.global.server>
         <!-- Coverage minimums enforced against the aggregate of all module tests (see cpo-coverage) -->
         <coverage.instruction.minimum>0.80</coverage.instruction.minimum>

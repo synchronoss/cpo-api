@@ -82,7 +82,7 @@ public class RetrieveBeanTest {
     al.add(ValueObjectFactory.createValueObject(IDB + 9));
     al.add(ValueObjectFactory.createValueObject(IDB + 10));
     try {
-      cpoAdapter.insertBeans("TestOrderByInsert", al);
+      cpoAdapter.insertBeans(ValueObject.FG_CREATE_TESTORDERBYINSERT, al);
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -200,7 +200,7 @@ public class RetrieveBeanTest {
   public void tearDown() {
     String method = "tearDown:";
     try {
-      cpoAdapter.deleteBeans("TestOrderByDelete", al);
+      cpoAdapter.deleteBeans(ValueObject.FG_DELETE_TESTORDERBYDELETE, al);
 
     } catch (Exception e) {
       fail(method + e.getMessage());

@@ -87,21 +87,21 @@ public class BlobTest {
     lvo.setAttrBlob2(testBlob2);
 
     try {
-      cpoAdapter.deleteBean("deleteLVO", lvo);
+      cpoAdapter.deleteBean(ValueObject.FG_DELETE_DELETELVO, lvo);
     } catch (Exception ie) {
       logger.error("error deleting lob");
       fail(ie.getMessage());
     }
 
     try {
-      cpoAdapter.insertBean("createLVO", lvo);
+      cpoAdapter.insertBean(ValueObject.FG_CREATE_CREATELVO, lvo);
     } catch (Exception ie) {
       logger.error("error inserting lob", ie);
       fail(ie.getMessage());
     }
 
     try {
-      lvo2 = cpoAdapter.retrieveBean("retrieveLVO", lvo);
+      lvo2 = cpoAdapter.retrieveBean(ValueObject.FG_RETRIEVE_RETRIEVELVO, lvo);
       ByteBuffer blob1 = lvo.getAttrBlob();
       ByteBuffer blob2 = lvo2.getAttrBlob();
 
@@ -113,8 +113,8 @@ public class BlobTest {
 
     try {
       lvo2.setAttrBlob(testBlob2);
-      cpoAdapter.updateBean("updateLVO", lvo2);
-      lvo2 = cpoAdapter.retrieveBean("retrieveLVO", lvo);
+      cpoAdapter.updateBean(ValueObject.FG_UPDATE_UPDATELVO, lvo2);
+      lvo2 = cpoAdapter.retrieveBean(ValueObject.FG_RETRIEVE_RETRIEVELVO, lvo);
       ByteBuffer blob1 = testBlob2;
       ByteBuffer blob2 = lvo2.getAttrBlob();
 
@@ -144,21 +144,21 @@ public class BlobTest {
     lvo.setAttrBlob2(testBlob2);
 
     try {
-      cpoAdapter.deleteBean("deleteLVO", lvo);
+      cpoAdapter.deleteBean(ValueObject.FG_DELETE_DELETELVO, lvo);
     } catch (Exception ie) {
       logger.error("error deleting lob");
       fail(ie.getMessage());
     }
 
     try {
-      cpoAdapter.insertBean("createLVO", lvo);
+      cpoAdapter.insertBean(ValueObject.FG_CREATE_CREATELVO, lvo);
     } catch (Exception ie) {
       logger.error("error inserting lob", ie);
       fail(ie.getMessage());
     }
 
     try {
-      lvo2 = cpoAdapter.retrieveBean("retrieveLVO", lvo);
+      lvo2 = cpoAdapter.retrieveBean(ValueObject.FG_RETRIEVE_RETRIEVELVO, lvo);
       ByteBuffer blob1 = lvo.getAttrBlob2();
       ByteBuffer blob2 = lvo2.getAttrBlob2();
 
@@ -170,8 +170,8 @@ public class BlobTest {
 
     try {
       lvo2.setAttrBlob2(testBlob);
-      cpoAdapter.updateBean("updateLVO", lvo2);
-      lvo2 = cpoAdapter.retrieveBean("retrieveLVO", lvo);
+      cpoAdapter.updateBean(ValueObject.FG_UPDATE_UPDATELVO, lvo2);
+      lvo2 = cpoAdapter.retrieveBean(ValueObject.FG_RETRIEVE_RETRIEVELVO, lvo);
       ByteBuffer blob1 = testBlob;
       ByteBuffer blob2 = lvo2.getAttrBlob2();
 
@@ -217,21 +217,21 @@ public class BlobTest {
     lvo.setAttrBlob2(testBlob2);
 
     try {
-      cpoAdapter.deleteBean("deleteLVO", lvo);
+      cpoAdapter.deleteBean(ValueObject.FG_DELETE_DELETELVO, lvo);
     } catch (Exception ie) {
       logger.error("error deleting lob");
       fail(ie.getMessage());
     }
 
     try {
-      cpoAdapter.insertBean("createLVO", lvo);
+      cpoAdapter.insertBean(ValueObject.FG_CREATE_CREATELVO, lvo);
     } catch (Exception ie) {
       logger.error("error inserting lob", ie);
       fail(ie.getMessage());
     }
 
     try {
-      lvo2 = cpoAdapter.retrieveBean("retrieveLVO", lvo);
+      lvo2 = cpoAdapter.retrieveBean(ValueObject.FG_RETRIEVE_RETRIEVELVO, lvo);
       ByteBuffer blob1 = lvo.getAttrBlob();
       ByteBuffer blob2 = lvo2.getAttrBlob();
 
@@ -246,8 +246,8 @@ public class BlobTest {
 
     try {
       lvo2.setAttrBlob(testBlob2);
-      cpoAdapter.updateBean("updateLVO", lvo2);
-      lvo2 = cpoAdapter.retrieveBean("retrieveLVO", lvo);
+      cpoAdapter.updateBean(ValueObject.FG_UPDATE_UPDATELVO, lvo2);
+      lvo2 = cpoAdapter.retrieveBean(ValueObject.FG_RETRIEVE_RETRIEVELVO, lvo);
       ByteBuffer blob1 = testBlob2;
       ByteBuffer blob2 = lvo2.getAttrBlob();
 
@@ -270,21 +270,21 @@ public class BlobTest {
     lvo.setAttrBlob2(null);
 
     try {
-      cpoAdapter.deleteBean("deleteLVO", lvo);
+      cpoAdapter.deleteBean(ValueObject.FG_DELETE_DELETELVO, lvo);
     } catch (Exception ie) {
       logger.error("error deleting lob");
       fail(ie.getMessage());
     }
 
     try {
-      cpoAdapter.insertBean("createLVO", lvo);
+      cpoAdapter.insertBean(ValueObject.FG_CREATE_CREATELVO, lvo);
     } catch (Exception ie) {
       logger.error("error inserting lob", ie);
       fail(ie.getMessage());
     }
 
     try {
-      lvo2 = cpoAdapter.retrieveBean("retrieveLVO", lvo);
+      lvo2 = cpoAdapter.retrieveBean(ValueObject.FG_RETRIEVE_RETRIEVELVO, lvo);
 
       assertNull(lvo2.getAttrBlob());
       assertNull(lvo2.getAttrBlob2());
@@ -295,8 +295,8 @@ public class BlobTest {
 
     try {
       lvo2.setAttrBlob(null);
-      cpoAdapter.updateBean("updateLVO", lvo2);
-      lvo2 = cpoAdapter.retrieveBean("retrieveLVO", lvo);
+      cpoAdapter.updateBean(ValueObject.FG_UPDATE_UPDATELVO, lvo2);
+      lvo2 = cpoAdapter.retrieveBean(ValueObject.FG_RETRIEVE_RETRIEVELVO, lvo);
 
       assertNull(lvo2.getAttrBlob());
       assertNull(lvo2.getAttrBlob2());

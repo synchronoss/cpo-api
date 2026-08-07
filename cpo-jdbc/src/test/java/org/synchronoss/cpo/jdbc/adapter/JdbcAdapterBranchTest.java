@@ -43,6 +43,9 @@ import org.testng.annotations.Test;
 /** Branch-focused tests for JdbcCpoAdapter batch, empty-input, and attribute-query paths. */
 public class JdbcAdapterBranchTest {
 
+  // group is constructed at runtime below (not backed by meta XML), so there's no generated FG_*
+  private static final String ATTR_VALUE_PAIR = "AttrValuePair";
+
   // unique id base so this class's rows never collide with another test class's
   private static final int IDB = 1600000;
 
@@ -182,7 +185,7 @@ public class JdbcAdapterBranchTest {
     var voClass = metaDescriptor.getMetaClass(ValueObjectFactory.createValueObject(IDB + 0));
 
     var group = metaDescriptor.createCpoFunctionGroup();
-    group.setName("AttrValuePair");
+    group.setName(ATTR_VALUE_PAIR);
     group.setType("RETRIEVE");
     var function = metaDescriptor.createCpoFunction();
     function.setName("attrValuePairFunction");
@@ -203,7 +206,7 @@ public class JdbcAdapterBranchTest {
       cpoAdapter.insertBean(known);
 
       ValueObject retrieved =
-          cpoAdapter.retrieveBean("AttrValuePair", ValueObjectFactory.createValueObject(IDB + 171));
+          cpoAdapter.retrieveBean(ATTR_VALUE_PAIR, ValueObjectFactory.createValueObject(IDB + 171));
       assertNotNull(retrieved, "pair-style retrieve should return a bean");
       assertEquals(
           retrieved.getAttrInteger(), 42, "value should be applied to the named attribute");
@@ -215,7 +218,7 @@ public class JdbcAdapterBranchTest {
       cpoAdapter.insertBean(unknown);
       assertNotNull(
           cpoAdapter.retrieveBean(
-              "AttrValuePair", ValueObjectFactory.createValueObject(IDB + 172)));
+              ATTR_VALUE_PAIR, ValueObjectFactory.createValueObject(IDB + 172)));
     } finally {
       voClass.removeFunctionGroup(group);
     }

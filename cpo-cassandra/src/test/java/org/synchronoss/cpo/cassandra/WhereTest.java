@@ -77,7 +77,7 @@ public class WhereTest {
     al.add(ValueObjectFactory.createValueObject(IDB + 5));
     al.add(ValueObjectFactory.createValueObject(-(IDB + 6)));
     try {
-      cpoAdapter.insertBeans("TestOrderByInsert", al);
+      cpoAdapter.insertBeans(ValueObject.FG_CREATE_TESTORDERBYINSERT, al);
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -88,7 +88,7 @@ public class WhereTest {
   public void tearDown() {
     String method = "tearDown:";
     try {
-      cpoAdapter.deleteBeans("TestOrderByDelete", al);
+      cpoAdapter.deleteBeans(ValueObject.FG_DELETE_TESTORDERBYDELETE, al);
     } catch (Exception e) {
       fail(method + e.getMessage());
     }

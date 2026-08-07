@@ -44,6 +44,10 @@ public class CpoMetaDescriptorTest {
   private static final String META_XML = "coreTestMeta.xml";
   private static final String BEAN_CLASS = "org.synchronoss.cpo.core.meta.CoreTestBean";
 
+  // cpo-core can't run cpo-plugin on itself (chicken-and-egg build order), so there's no
+  // generated FG_* constant here - mirrors coreTestMeta.xml's <cpoFunctionGroup name="createGroup">
+  private static final String FG_CREATE_CREATEGROUP = "createGroup";
+
   @AfterClass
   public void tearDown() throws Exception {
     CpoMetaDescriptor.clearAllInstances();
@@ -111,7 +115,8 @@ public class CpoMetaDescriptorTest {
     CpoClass cpoClass = descriptor.getCpoClasses().get(0);
 
     assertTrue(
-        cpoClass.existsFunctionGroup(org.synchronoss.cpo.core.enums.Crud.CREATE, "createGroup"));
+        cpoClass.existsFunctionGroup(
+            org.synchronoss.cpo.core.enums.Crud.CREATE, FG_CREATE_CREATEGROUP));
     assertFalse(cpoClass.existsFunctionGroup(org.synchronoss.cpo.core.enums.Crud.DELETE, "nope"));
     expectThrows(
         CpoException.class,
@@ -183,7 +188,8 @@ public class CpoMetaDescriptorTest {
     descriptor.export(writer);
     String xml = writer.toString();
     assertTrue(xml.contains(BEAN_CLASS), "exported XML should contain the class name");
-    assertTrue(xml.contains("createGroup"), "exported XML should contain the function group");
+    assertTrue(
+        xml.contains(FG_CREATE_CREATEGROUP), "exported XML should contain the function group");
 
     ByteArrayOutputStream baos = new ByteArrayOutputStream();
     descriptor.export(baos);

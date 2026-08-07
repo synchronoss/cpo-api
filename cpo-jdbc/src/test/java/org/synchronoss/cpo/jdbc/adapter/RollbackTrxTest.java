@@ -134,7 +134,7 @@ public class RollbackTrxTest {
     String method = "testTrxSingleRollback:";
     ValueObject vo = ValueObjectFactory.createValueObject(IDB + 2);
     try {
-      trxAdapter.insertBean("TestSingleRollbackTrx", vo);
+      trxAdapter.insertBean(ValueObject.FG_CREATE_TESTSINGLEROLLBACKTRX, vo);
       trxAdapter.commit();
       fail(method + "Insert should have thrown an exception");
     } catch (Exception e) {

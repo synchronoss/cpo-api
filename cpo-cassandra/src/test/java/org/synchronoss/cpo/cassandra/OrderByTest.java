@@ -70,7 +70,7 @@ public class OrderByTest {
     al.add(ValueObjectFactory.createValueObject(IDB + 4));
     al.add(ValueObjectFactory.createValueObject(IDB + 5));
     try {
-      cpoAdapter.insertBeans("TestOrderByInsert", al);
+      cpoAdapter.insertBeans(ValueObject.FG_CREATE_TESTORDERBYINSERT, al);
     } catch (Exception e) {
       fail(method + e.getMessage());
     }
@@ -80,7 +80,7 @@ public class OrderByTest {
   public void tearDown() {
     String method = "tearDown:";
     try {
-      cpoAdapter.deleteBeans("TestOrderByDelete", al);
+      cpoAdapter.deleteBeans(ValueObject.FG_DELETE_TESTORDERBYDELETE, al);
     } catch (Exception e) {
       fail(method + e.getMessage());
     }

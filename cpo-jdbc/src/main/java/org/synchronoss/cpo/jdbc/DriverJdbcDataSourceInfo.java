@@ -23,7 +23,7 @@ package org.synchronoss.cpo.jdbc;
  */
 
 import java.sql.Connection;
-import java.sql.DriverManager;
+import java.sql.Driver;
 import java.sql.SQLException;
 import java.util.Properties;
 import javax.sql.DataSource;
@@ -46,6 +46,7 @@ public class DriverJdbcDataSourceInfo extends AbstractJdbcDataSource {
   private String username = null;
   private String password = null;
   private Properties properties = null;
+  private Driver driver = null;
 
   /**
    * Creates a DriverJdbcDataSourceInfo from a Jdbc Driver
@@ -117,19 +118,30 @@ public class DriverJdbcDataSourceInfo extends AbstractJdbcDataSource {
   }
 
   private Connection makeNewConnection() throws SQLException {
-    Connection connection = null;
+    // Connect through the resolved Driver instance directly rather than DriverManager: the
+    // driver may have been loaded by a classloader (e.g. a tool's user-configurable custom
+    // classpath) that isn't an ancestor of this class's own classloader, in which case
+    // DriverManager.getConnection() silently ignores it ("No suitable driver found") even
+    // though the class loaded and registered itself successfully.
+    Connection connection;
     switch (connectionType) {
       case URL_CONNECTION:
-        connection = DriverManager.getConnection(url);
+        connection = driver.connect(url, new Properties());
         break;
       case URL_PROPS_CONNECTION:
-        connection = DriverManager.getConnection(url, properties);
+        connection = driver.connect(url, properties);
         break;
       case URL_USER_PASSWORD_CONNECTION:
-        connection = DriverManager.getConnection(url, username, password);
+        Properties userPassProps = new Properties();
+        userPassProps.setProperty("user", username);
+        userPassProps.setProperty("password", password);
+        connection = driver.connect(url, userPassProps);
         break;
       default:
         throw new SQLException("Invalid Connection Type");
+    }
+    if (connection == null) {
+      throw new SQLException("Driver " + driver + " does not accept URL " + url);
     }
     return connection;
   }
@@ -143,11 +155,12 @@ public class DriverJdbcDataSourceInfo extends AbstractJdbcDataSource {
     return info.toString();
   }
 
-  private void loadDriver(String driver) throws CpoException {
+  private void loadDriver(String driverClassName) throws CpoException {
     try {
-      CpoClassLoader.forName(driver);
-    } catch (ClassNotFoundException cnfe) {
-      throw new CpoException("Could Not Load Driver" + driver);
+      Class<?> driverClass = CpoClassLoader.forName(driverClassName);
+      driver = (Driver) driverClass.getDeclaredConstructor().newInstance();
+    } catch (Exception ex) {
+      throw new CpoException("Could Not Load Driver" + driverClassName, ex);
     }
   }
 }

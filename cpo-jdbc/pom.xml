@@ -38,7 +38,7 @@
   <properties>
     <oracleVersion>23.26.0.0.0</oracleVersion>
     <mysqlVersion>9.7.0</mysqlVersion>
-    <mariadbVersion>3.5.8</mariadbVersion>
+    <mariadbVersion>3.5.9</mariadbVersion>
     <h2Version>2.4.240</h2Version>
     <postgresVersion>42.7.13</postgresVersion>
 
